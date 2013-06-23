@@ -1,0 +1,260 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+  <artifactId>webapp</artifactId>
+  <packaging>war</packaging>
+  <name>Forge &amp; Illusion - Web App</name>
+  <description>Forge &amp; Illusion - Web Application</description>
+  <parent>
+    <groupId>fi.foyt.fni</groupId>
+    <artifactId>parent</artifactId>
+    <version>2.1.9-SNAPSHOT</version>
+  </parent>
+  
+  <dependencies>
+    <!-- JBoss -->
+  
+    <dependency>
+      <groupId>org.jboss.spec</groupId>
+      <artifactId>jboss-javaee-6.0</artifactId>
+      <type>pom</type>
+      <scope>provided</scope>
+    </dependency>
+    
+    <!-- CDI -->
+    
+    <dependency>
+      <groupId>javax.enterprise</groupId>
+      <artifactId>cdi-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <!-- EJB -->
+    
+    <dependency>
+      <groupId>org.jboss.spec.javax.ejb</groupId>
+      <artifactId>jboss-ejb-api_3.1_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <!-- Xalan -->
+    
+    <dependency>
+      <groupId>org.apache.xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <!-- PrettyFaces -->
+    
+    <dependency>
+      <groupId>com.ocpsoft</groupId>
+      <artifactId>prettyfaces-jsf2</artifactId>
+    </dependency>
+    
+    <!-- Hibernate -->
+    
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <type>jar</type>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-search</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-infinispan</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <!-- Apache Commons -->
+
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+    
+    <!-- FnI -->
+
+    <dependency>
+  	  <groupId>fi.foyt.fni</groupId>
+  	  <artifactId>persistence</artifactId>
+    </dependency>
+    
+    <!-- GData -->
+
+    <dependency>
+      <groupId>com.google.gdata</groupId>
+      <artifactId>gdata-core</artifactId>
+      <version>1.46.0</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.google.gdata</groupId>
+      <artifactId>gdata-docs</artifactId>
+      <version>1.46.0</version>
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.google.gdata</groupId>
+      <artifactId>gdata-media</artifactId>
+      <version>1.46.0</version>
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.google.gdata</groupId>
+      <artifactId>gdata-client</artifactId>
+      <version>1.46.0</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.google.collections</groupId>
+      <artifactId>google-collections</artifactId>
+      <version>1.0</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- Scribe -->
+
+    <dependency>
+      <groupId>org.scribe</groupId>
+      <artifactId>scribe</artifactId>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- Flying Saucer -->
+
+    <dependency>
+      <groupId>org.xhtmlrenderer</groupId>
+      <artifactId>flying-saucer-pdf-itext5</artifactId>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+  
+    <!-- CSS Parser -->
+       
+    <dependency>
+      <groupId>net.sourceforge.cssparser</groupId>
+      <artifactId>cssparser</artifactId>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+    
+    <!-- CKC Connector -->
+
+    <dependency>
+      <groupId>fi.foyt.ckc</groupId>
+      <artifactId>connector</artifactId>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- Diff patch match -->
+
+    <dependency>
+      <groupId>diff_match_patch</groupId>
+      <artifactId>diff_match_patch</artifactId>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- NGram -->
+
+    <dependency>
+      <groupId>de.spieleck.app.ngramj</groupId>
+      <artifactId>cngram</artifactId>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- JTidy -->
+
+    <dependency>
+      <groupId>net.sf.jtidy</groupId>
+      <artifactId>jtidy</artifactId>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+  
+  <repositories>
+    <!-- JBoss -->
+  
+    <repository>
+      <id>repository.jboss.org-public</id>
+      <name>JBoss repository</name>
+      <url>https://repository.jboss.org/nexus/content/groups/public</url>
+    </repository>
+   
+    <!-- Diff-patch-match -->
+  
+    <repository>
+      <id>google-diff-patch-match</id>
+      <name>google-diff-patch-match</name>
+      <url>http://google-diff-match-patch.googlecode.com/svn/trunk/maven/</url>
+    </repository>
+    
+    <!-- CKC -->
+
+    <repository>
+      <id>ckc-plugin-googlecode</id>
+      <name>CKC Maven Repository</name>
+      <url>http://ckc-plugin.googlecode.com/svn/repository</url>
+    </repository>
+    
+    <!-- GData -->
+    
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>otavanopisto-thirdparty</id>
+      <name>Otavan Opisto 3rd Party</name>
+      <url>http://maven.otavanopisto.fi:7070/nexus/content/repositories/thirdparty/</url>
+    </repository>
+    
+    <!-- CNGram -->
+    
+    <repository>
+      <id>ObjectWEB</id>
+      <name>ObjectWEB</name>
+      <url>http://maven.ow2.org/maven2/</url>
+    </repository>
+  </repositories>
+
+</project>

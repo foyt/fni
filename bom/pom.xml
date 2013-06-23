@@ -1,0 +1,147 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>fi.foyt.fni</groupId>
+  <artifactId>bom</artifactId>
+  <version>2.1.9-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Forge &amp; Illusion - BOM</name>
+  <description>Forge &amp; Illusion - Bill Of Materials</description>
+
+  <properties>
+    <fni.version>2.1.9-SNAPSHOT</fni.version>
+    <commons-lang3.version>3.1</commons-lang3.version>
+    <hibenate-search.version>4.3.0.Final</hibenate-search.version>
+    <instrumentation-hibernate.version>4.0.1.Final</instrumentation-hibernate.version>
+    <prettyfaces-jsf2.version>3.3.3</prettyfaces-jsf2.version>
+    <jboss-javaee-6.0.version>3.0.2.Final</jboss-javaee-6.0.version>
+    <xalan.version>2.7.1-1.jbossorg</xalan.version>
+    <commons-fileupload.version>1.3</commons-fileupload.version>
+    <commons-compress.version>1.5</commons-compress.version>
+    <scribe.version>1.3.3</scribe.version>
+    <flying-saucer-pdf-itext5.version>9.0.2</flying-saucer-pdf-itext5.version>
+    <diff_match_patch.version>current</diff_match_patch.version>
+    <cngram.version>1.0-0.060327</cngram.version>
+    <jtidy.version>r938</jtidy.version>
+    <ckc-connector.version>0.0.4</ckc-connector.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- FnI -->
+
+      <dependency>
+        <groupId>fi.foyt.fni</groupId>
+        <artifactId>persistence</artifactId>
+        <version>${fni.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>fi.foyt.fni</groupId>
+        <artifactId>rest</artifactId>
+        <version>${fni.version}</version>
+      </dependency>
+
+      <!-- JBoss -->
+
+      <dependency>
+        <groupId>org.jboss.spec</groupId>
+        <artifactId>jboss-javaee-6.0</artifactId>
+        <version>${jboss-javaee-6.0.version}</version>
+        <type>pom</type>
+      </dependency>
+
+      <!-- Xalan -->
+
+      <dependency>
+        <groupId>org.apache.xalan</groupId>
+        <artifactId>xalan</artifactId>
+        <version>${xalan.version}</version>
+      </dependency>
+  
+      <!-- Apache Commons -->
+  
+      <dependency>
+        <groupId>commons-fileupload</groupId>
+        <artifactId>commons-fileupload</artifactId>
+        <version>${commons-fileupload.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${commons-lang3.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-compress</artifactId>
+        <version>${commons-compress.version}</version>
+      </dependency>
+
+      <!-- Hibenate -->
+
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-search</artifactId>
+        <version>${hibenate-search.version}</version>
+      </dependency>
+
+      <!-- PrettyFaces -->
+
+      <dependency>
+        <groupId>com.ocpsoft</groupId>
+        <artifactId>prettyfaces-jsf2</artifactId>
+        <version>${prettyfaces-jsf2.version}</version>
+      </dependency>
+
+      <!-- Scribe -->
+  
+      <dependency>
+        <groupId>org.scribe</groupId>
+        <artifactId>scribe</artifactId>
+        <version>${scribe.version}</version>
+      </dependency>
+
+      <!-- Flying Saucer -->
+  
+      <dependency>
+        <groupId>org.xhtmlrenderer</groupId>
+        <artifactId>flying-saucer-pdf-itext5</artifactId>
+        <version>${flying-saucer-pdf-itext5.version}</version>
+      </dependency>
+
+      <!-- Diff patch match -->
+  
+      <dependency>
+        <groupId>diff_match_patch</groupId>
+        <artifactId>diff_match_patch</artifactId>
+        <version>${diff_match_patch.version}</version>
+      </dependency>
+
+      <!-- NGram -->
+  
+      <dependency>
+        <groupId>de.spieleck.app.ngramj</groupId>
+        <artifactId>cngram</artifactId>
+        <version>1.0-0.060327</version>
+      </dependency>
+
+      <!-- JTidy -->
+  
+      <dependency>
+        <groupId>net.sf.jtidy</groupId>
+        <artifactId>jtidy</artifactId>
+        <version>${jtidy.version}</version>
+      </dependency>
+      
+      <!-- CKC Connector -->
+      
+      <dependency>
+        <groupId>fi.foyt.ckc</groupId>
+        <artifactId>connector</artifactId>
+        <version>${ckc-connector.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+</project>
