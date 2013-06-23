@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="/WEB-INF/templates/store.xhtml">
+ 
+    <ui:define name="pageTitle">
+      #{locales['store.index.pageTitle']}
+    </ui:define>
+    
+    <ui:define name="content">
+      <div id="storeIndex">
+        <div class="storeProductsList">
+          <div class="storeProductsListTitle">Most Recent Products</div>
+          <div class="storeProductsListContents">
+          
+            <ui:repeat var="product" value="#{storeIndexViewBackingBean.recentProducts}">
+              <div class="storeProductListProduct">
+                <div class="storeProductListProductImageContainer">
+                  <div class="storeProductListProductImageInnerContainer">
+                    <h:graphicImage value="/store/productImage?productImageId=#{product.defaultImage.id}" height="128"/>
+                  </div>
+                </div>
+                <div class="storeProductListProductName">#{product.name}</div>
+                <div class="storeProductListProductTags">
+                  <ui:repeat var="tag" value="#{product.tags}">
+                    <div class="storeProductListProductTag"><a href="#">#{tag.text}</a></div>
+                  </ui:repeat>
+                </div>
+                <div class="storeProductListProductDescription">
+                  <h:outputText value="#{product.description}" escape="false"/>
+                </div>        
+                <div class="storeProductListProductDetails">
+                  <div class="storeProductListProductDetail">
+                    <h:outputFormat value="#{locales['store.index.productPrice']}">
+                      <f:param value="#{storeIndexViewBackingBean.formatProductPrice(product.price)}"/>
+                    </h:outputFormat>
+                  </div>
+                </div>
+                
+                <div class="storeProductListProductActionsContainer">
+                  <h:panelGroup layout="block" class="storeProductListProductAction" rendered="#{product.downloadable}">
+                    <a href="javascript:void(null);">Download Free PDF</a>
+                  </h:panelGroup>
+  
+                  <h:panelGroup layout="block" class="storeProductListProductAction" rendered="#{product.purchable}">
+                    <a href="javascript:void(null);">Add to Shopping Cart</a>
+                  </h:panelGroup>
+                </div>
+              </div>  
+            </ui:repeat>
+          </div>
+        </div>
+      </div>
+      <div id="storeSidebar">
+        <ui:include src="/store/fragments/shoppingcart.xhtml" />
+        <ui:include src="/store/fragments/categories.xhtml" />
+      </div>
+    </ui:define>
+
+</ui:composition>

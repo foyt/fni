@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html">
+
+  <ui:fragment rendered="#{output eq 'HTML'}">
+    <div class="formField formTextField">
+      <div class="formFieldLabelContainer">
+        <label for="#{id}">
+          #{label}        
+        </label>
+      </div>
+      <div class="formFieldEditorContainer">
+        <ui:fragment rendered="#{disabled}">
+          <input type="text" id="#{id}" name="#{id}" class="#{classes}" disabled="disabled" value="#{value}"/>
+        </ui:fragment>
+
+        <ui:fragment rendered="#{!disabled}">
+          <input type="text" id="#{id}" name="#{id}" class="#{classes}" value="#{value}"/>
+        </ui:fragment>
+      </div>
+    </div>
+  </ui:fragment>
+  
+  <ui:fragment rendered="#{output eq 'JSF'}">
+    <div class="formField formTextField">
+      <div class="formFieldLabelContainer">
+        <h:outputLabel for="#{id}">
+          #{label}        
+        </h:outputLabel>
+      </div>
+      <div class="formFieldEditorContainer">
+        <h:inputText id="#{id}" name="#{name}" class="#{classes}" disabled="#{disabled}" value="#{value}" converter="#{converter}"/>
+      </div>
+    </div>
+  </ui:fragment>  
+
+</ui:composition>

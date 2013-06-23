@@ -1,0 +1,356 @@
+@charset "UTF-8";
+
+#siteFooterBackground {
+  left: 48px;
+}
+
+#indexSidebarWrapper {
+  min-height: 885px;
+  float: left;
+  width: 410px;
+  position: relative;
+}
+
+#indexSidebarContent {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  padding-top: 25px;
+  padding-right: 25px;
+}
+
+#indexSidebarBackground {
+  background: #fff;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 48px;
+  z-index: 1;
+}
+
+#frontPageArticle {
+  background: #fff;
+  width: 705px;
+  min-height: 860px;
+  float: right;
+  padding-right: 15px;
+  padding-top: 25px;
+  position: relative;
+}
+
+#frontPageArticle>h1{
+  padding-left:15px;
+}
+
+.frontPageArticleTopArrow {
+  background: url('../gfx/layout/content_flow_toparrow.gif') no-repeat;
+  height: 10px;
+}
+
+.frontPageArticleContent {
+  background: #f7f7f7;
+  padding: 15px;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+  max-height: 780px;
+  overflow: auto;
+}
+
+.frontPageArticleLoading {
+  background-position: center 90px;
+  background-repeat: no-repeat; 
+  background-image: url('../gfx/layout/loader-black-64x64.gif');
+  background-color: #fff;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  opacity: 0.75;
+}
+
+.defaultArticleLink {
+  background-image: url("../gfx/icons/16x16/actions/article-set-default.png");
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center;
+  float: right;
+}
+
+#siteHeaderWrapper.indexHeaderWrapper {
+  background: url('../gfx/layout/header_background.png') no-repeat;
+  width: 1130px;
+  height: 253px;
+  clear: both;
+  margin-top: 20px;
+  position: relative;
+}
+
+.indexHeaderBigFont {
+  font-family: 'Yanone Kaffeesatz', 'Trebuchet MS', Arial;
+  font-size: 20px;
+}
+
+#indexHeaderLogin a,#indexHeaderGuestLogin a, #indexHeaderUserInfo a {
+  text-decoration: none;
+  color: #fff;
+}
+
+#indexHeaderLogin a:hover,#indexHeaderGuestLogin a:hover, #indexHeaderUserInfo a:hover {
+  text-decoration: none;
+  color: #000;
+}
+
+#indexHeaderLoginRegisterWrapper, #indexHeaderUserInfoWrapper {
+  position: absolute;
+  height: 145px;
+  right: 15px;
+  bottom: 15px;
+  left: 830px;
+}
+
+#indexHeaderLogin {
+  width: 220px;
+  height: 45px;
+  background: url(../gfx/icons/48x48/actions/login.png) left center no-repeat #8dace3;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  color: #fff;
+  font-family: 'PT Sans', 'Trebuchet MS', Arial;
+  font-size: 14px;
+  padding: 10px 10px 10px 55px;
+}
+
+#indexHeaderGuestLogin {
+  width: 220px;
+  height: 45px;
+  background: #8dace3;
+  margin-top: 15px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  background: url(../gfx/icons/48x48/actions/login-guest.png) left center no-repeat #8dace3;
+  color: #fff;
+  font-family: 'PT Sans', 'Trebuchet MS', Arial;
+  font-size: 14px;
+  padding: 10px 10px 10px 55px;
+}
+
+#indexHeaderUserInfo {
+  width: 207px;
+  height: 125px;
+  background: #8dace3;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  color: #fff;
+  font-family: 'PT Sans', 'Trebuchet MS', Arial;
+  font-size: 14px;
+  padding: 10px 10px 10px 68px; 
+}
+
+#indexHeaderUserInfoWrapper img {
+  float: left;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.indexHeaderNoProfileImage {
+  width: 45px;
+  height: 45px;  
+  background: url(../gfx/icons/48x48/emblems/user-anonymous.png) left center no-repeat #8dace3;
+  display: inline-block;
+  margin-top: 10px;
+  margin-left: 10px;
+  float: left;
+}
+
+/* 
+ *  GUI Specific Rules : SIDEBAR WIDGETS
+ *
+ */
+.siderbarWidgetIconContainer {
+  background: #fff;
+  height: 98px;
+  width: 98px;
+  position: absolute;
+  border-radius: 49px;
+  -moz-border-radius: 49px;
+  -webkit-border-radius: 49px;
+}
+
+.indexSiderbarWidgetContentContainer {
+  padding-left: 48px;
+  padding-top: 10px;
+}
+
+.indexSiderbarWidgetContent {
+  line-height: 1.4em;
+  font-family: 'trebuchet MS', Arial;
+}
+
+.indexSiderbarWidgetContentContainer h1 {
+  padding-left: 30px;
+}
+
+#indexSideBarWidgetWhatIsWrapper {
+  min-height: 100px;
+  margin-bottom: 10px;
+}
+
+#indexSideBarWidgetWhatIsIcon {
+  background: url('../gfx/icons/custom/what_is.png') #fff no-repeat;
+}
+
+#indexWhatIsContentWrapper {
+  position: relative;
+  z-index: 2;
+}
+
+#indexWhatIsContent {
+  background: #3b3b3b;
+  color: #fff;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding: 10px;
+  border: 3px solid #fff;
+  margin-left: 15px;
+}
+
+#indexSideBarWidgetTechnicalAnnouncementsWrapper {
+  min-height: 100px;
+  margin-bottom: 10px;
+}
+
+#indexSideBarWidgetTechnicalAnnouncementsIcon {
+  background: url('../gfx/icons/custom/latest_technical_announcements.png') #fff no-repeat;
+}
+
+#indexTechnicalAnnouncementsContentWrapper {
+  position: relative;
+  z-index: 2;
+}
+
+#indexTechnicalAnnouncementsContent {
+  background: #f1f2f0;
+  color: #fff;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding: 10px;
+  border: 3px solid #fff;
+  margin-left: 15px;
+}
+
+#indexTechnicalAnnouncementsContent ul {
+  padding: 0;
+  margin: 0 0 0 20px;
+  list-style-type: none;
+  list-style-image: url('../gfx/icons/custom/list_arrow_orange.gif');
+}
+
+#indexTechnicalAnnouncementsContent ul li a {
+  font-family: 'Trebuchet MS', Arial;
+  font-size: 12px;
+  text-decoration: none;
+  color: #3b3b3b;
+  padding: 0px 4px 0px 2px;
+}
+
+#indexTechnicalAnnouncementsContent ul li a:hover {
+  color: #b28202;
+}
+
+#indexSideBarWidgetLastestPublicationsWrapper {
+  min-height: 100px;
+  margin-bottom: 10px;
+}
+
+#indexSideBarWidgetLastestPublicationsIcon {
+  background: url('../gfx/icons/custom/latest_publications.png') #fff
+    no-repeat;
+}
+
+#indexLastestPublicationsContentWrapper {
+  position: relative;
+  z-index: 2;
+}
+
+#indexLastestPublicationsContent {
+  background: #b6c9ed;
+  color: #fff;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding: 10px;
+  border: 3px solid #fff;
+  margin-left: 15px;
+}
+
+#indexLastestPublicationsContent ul {
+  padding: 0;
+  margin: 0 0 0 20px;
+  list-style-type: none;
+  list-style-image: url('../gfx/icons/custom/list_arrow_green.gif');
+}
+
+#indexLastestPublicationsContent ul li a {
+  font-family: 'Trebuchet MS', Arial;
+  font-size: 12px;
+  text-decoration: none;
+  color: #3b3b3b;
+  padding: 0px 4px 0px 2px;
+}
+
+#indexLastestPublicationsContent ul li a:hover {
+  color: #fff;
+}
+
+#indexSideBarWidgetLastestArticlesWrapper {
+  min-height: 100px;
+  margin-bottom: 10px;
+}
+
+#indexSideBarWidgetLastestArticlesIcon {
+  background: url('../gfx/icons/custom/latest_articles.png') #fff
+    no-repeat;
+}
+
+#indexLastestArticlesContentWrapper {
+  position: relative;
+  z-index: 2;
+}
+
+#indexLastestArticlesContent {
+  background: #b6c9ed;
+  color: #fff;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding: 10px;
+  border: 3px solid #fff;
+  margin-left: 15px;
+}
+
+#indexLastestArticlesContent ul {
+  padding: 0;
+  margin: 0 0 0 20px;
+  list-style-type: none;
+  list-style-image: url('../gfx/icons/custom/list_arrow_blue.gif');
+}
+
+#indexLastestArticlesContent ul li a {
+  font-family: 'Trebuchet MS', Arial;
+  font-size: 12px;
+  text-decoration: none;
+  color: #3b3b3b;
+  padding: 0px 4px 0px 2px;
+}
+
+#indexLastestArticlesContent ul li a:hover {
+  color: #fff;
+}

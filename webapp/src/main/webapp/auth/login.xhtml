@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="/WEB-INF/templates/auth.xhtml">
+ 
+    <ui:define name="metadata">   
+      <f:event type="preRenderView" listener="#{loginViewBackingBean.preRenderViewListener}"/>
+    </ui:define>
+    
+    <ui:define name="pageTitle">
+      #{locales['auth.login.pageTitle']}
+    </ui:define>
+    
+    <ui:define name="content">
+      <h:outputScript name="scripts/jshash/md5-min.js" target="head"/>
+      <h:outputScript name="scripts/gui/auth/index.js" target="head"/>
+      <h:outputScript name="scripts/gui/auth/forgotpassworddialog.js" target="head"/>
+      <h:outputScript name="scripts/gui/auth/resetpassworddialog.js" target="head"/>
+      <h:outputScript target="head">
+        var viewController = new IndexViewController();
+      
+        Event.observe(document, "dom:loaded", function (event) {
+          viewController.setup();
+        });
+        
+        Event.observe(window, "beforeunload", function (event) {
+          viewController.destroy();
+        });
+      </h:outputScript>
+      
+      <div class="loginContainer">
+        <div class="internalLoginContainer">
+          <h2>
+            #{locales['auth.login.forgeAndIllusionLoginTitle']}
+          </h2>
+          <div class="internalLoginFormContainer">
+
+            <ui:decorate template="/fragments/form.xhtml">
+              <ui:param name="id" value="login" />
+              <ui:param name="output" value="JSF" />
+              <ui:param name="onsubmit" value="$('login:passwordEncrypted').value = hex_md5($('login:password').value)"/>
+  
+              <ui:define name="fields">
+                <ui:include src="/fragments/form_textfield.xhtml">
+                  <ui:param name="output" value="JSF"/>
+                  <ui:param name="id" value="username" />
+                  <ui:param name="label" value="#{locales['auth.login.emailTitle']}" />
+                  <ui:param name="classes" value="required email" />
+                </ui:include>        
+  
+                <ui:include src="/fragments/form_passwordfield.xhtml">
+                  <ui:param name="output" value="JSF"/>
+                  <ui:param name="id" value="password" />
+                  <ui:param name="classes" value="required" />
+                  <ui:param name="label" value="#{locales['auth.login.passwordTitle']}" />
+                </ui:include>   
+                
+                <ui:include src="/fragments/form_hiddenfield.xhtml">
+                  <ui:param name="output" value="JSF"/>
+                  <ui:param name="id" value="passwordEncrypted" />
+                </ui:include>   
+              </ui:define>
+              
+              <ui:define name="buttons">
+                <h:commandButton id="login-loginButton" value="#{locales['auth.login.loginButton']}" class="formvalid" action="#{loginViewBackingBean.formLogin}"/>
+              </ui:define>
+            </ui:decorate>
+
+            <a href="javascript:void(null);" id="forgotPasswordLink">#{locales['auth.login.forgotPassword']}</a>
+          </div>
+     
+        </div>
+        
+        <div class="registerContainer">
+          <h2>
+            #{locales['auth.login.createAccountTitle']}
+          </h2>
+          <div class="registerFormContainer">
+            <ui:decorate template="/fragments/form.xhtml">
+              <ui:param name="id" value="register" />
+              <ui:param name="output" value="HTML" />
+
+              <ui:define name="fields">
+                <ui:include src="/fragments/form_textfield.xhtml">
+                  <ui:param name="output" value="HTML"/>
+                  <ui:param name="id" value="register-firstName" />
+                  <ui:param name="label" value="#{locales['auth.login.firstNameTitle']}" />
+                  <ui:param name="classes" value="required" />
+                </ui:include>     
+                
+                <ui:include src="/fragments/form_textfield.xhtml">
+                  <ui:param name="output" value="HTML"/>
+                  <ui:param name="id" value="register-lastName" />
+                  <ui:param name="label" value="#{locales['auth.login.lastNameTitle']}" />
+                  <ui:param name="classes" value="required" />
+                </ui:include>   
+                
+                <ui:include src="/fragments/form_textfield.xhtml">
+                  <ui:param name="output" value="HTML"/>
+                  <ui:param name="id" value="register-email" />
+                  <ui:param name="label" value="#{locales['auth.login.emailTitle']}" />
+                  <ui:param name="classes" value="required email" />
+                </ui:include>   
+                
+                <ui:include src="/fragments/form_passwordfield.xhtml">
+                  <ui:param name="output" value="HTML"/>
+                  <ui:param name="id" value="register-password1" />
+                  <ui:param name="label" value="#{locales['auth.login.passwordTitle']}" />
+                  <ui:param name="classes" value="required equals equals-register-password2" />
+                </ui:include> 
+                
+                <ui:include src="/fragments/form_passwordfield.xhtml">
+                  <ui:param name="output" value="HTML"/>
+                  <ui:param name="id" value="register-password2" />
+                  <ui:param name="label" value="#{locales['auth.login.retypePasswordTitle']}" />
+                  <ui:param name="classes" value="required equals equals-register-password1" />
+                </ui:include>      
+              </ui:define>
+              
+              <ui:define name="buttons">
+                <ui:include src="/fragments/form_submitfield.xhtml">
+                  <ui:param name="output" value="HTML"/>
+                  <ui:param name="id" value="register-registerButton" />
+                  <ui:param name="text" value="#{locales['auth.login.registerButton']}" />
+                  <ui:param name="classes" value="formvalid" />
+                </ui:include>    
+              </ui:define>
+            </ui:decorate>
+          </div>
+        </div>
+        
+        <div class="externalLoginContainer">
+          <h2>
+            #{locales['auth.login.externalLoginTitle']}
+          </h2>
+          <div class="externalLoginFormContainer">
+            <div class="loginLinkContainer loginGoogleContainer">
+              <a class="loginLink loginGoogleLink" href="?loginMethod=GOOGLE"> 
+                <span class="loginIcon loginGoogleIcon">&#160;</span> 
+                <span class="loginText loginGoogleText">#{locales['auth.login.loginWithGoogle']}</span>
+              </a>
+            </div>
+      
+            <div class="loginLinkContainer loginYahoooContainer">
+              <a class="loginLink loginYahoooLink" href="?loginMethod=YAHOO"> 
+                <span class="loginIcon loginYahooIcon">&#160;</span> 
+                <span class="loginText loginYahooText">#{locales['auth.login.loginWithYahoo']}</span>
+              </a>
+            </div>
+      
+            <div class="loginLinkContainer loginFacebookContainer">
+              <a class="loginLink loginFacebookLink" href="?loginMethod=FACEBOOK"> 
+                <span class="loginIcon loginFacebookIcon">&#160;</span> 
+                <span class="loginText loginFacebookText">#{locales['auth.login.loginWithFacebook']}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </ui:define>
+
+</ui:composition>

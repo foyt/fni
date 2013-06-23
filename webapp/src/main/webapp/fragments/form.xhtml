@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html">
+
+  <ui:fragment rendered="#{output eq 'HTML'}">
+    <form id="#{id}" autocomplete="#{!empty(autocomplete) ? autocomplete : 'on'}" onsubmit="#{onsubmit}">
+      <div class="stackedLayoutContainer">
+        <fieldset class="formFields stackedLayoutFieldsContainer">
+          <ui:insert name="fields"/>
+        </fieldset>
+        <fieldset class="formButtons stackedLayoutButtonsContainer">
+          <ui:insert name="buttons"/>
+        </fieldset>
+      </div>
+    </form>
+  </ui:fragment>
+  
+  <ui:fragment rendered="#{output eq 'JSF'}">
+    <h:form id="#{id}" onsubmit="#{onsubmit}">
+      <div class="stackedLayoutContainer">
+        <fieldset class="formFields stackedLayoutFieldsContainer">
+          <ui:insert name="fields"/>
+        </fieldset>
+        <fieldset class="formButtons stackedLayoutButtonsContainer">
+          <ui:insert name="buttons"/>
+        </fieldset>
+      </div>
+    </h:form>
+  </ui:fragment>
+  
+</ui:composition>

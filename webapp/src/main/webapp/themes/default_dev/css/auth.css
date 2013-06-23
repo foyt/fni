@@ -1,0 +1,72 @@
+@charset "UTF-8";
+
+.loginContainer {
+  background: none repeat scroll 0 0 #FFFFFF;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin-top: 20px;
+  min-height: 783px;
+  padding: 8px;
+} 
+
+.loginContainer .internalLoginContainer, .loginContainer .registerContainer, .loginContainer .externalLoginContainer {
+  background: #fdfdfd;
+  border-radius: 4px;
+  padding: 8px;
+  border: 1px solid #f6f6f6;
+  margin-bottom: 8px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.loginContainer .internalLoginContainer {
+  margin-right: 5px;	
+}
+
+.loginContainer .registerContainer {
+  margin-left: 5px,
+}
+
+.loginContainer .internalLoginContainer, .loginContainer .registerContainer {
+  width: 534px;
+  min-height: 343px;
+}
+
+.loginIcon  {
+  width: 56px;  
+  height: 56px;
+  display: inline-block;
+  display:table-cell;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.loginText { 
+  font-size: 20px;
+  vertical-align: middle;
+  display:table-cell;
+  padding-left: 8px;
+  width: 1038px;
+}
+
+.loginLink {
+  text-decoration: none;
+  display: table-row;
+}
+
+.loginLinkContainer:hover {
+  background: #eee;
+  border-radius: 4px;
+}
+
+.loginGoogleIcon {
+  background-image: url('../gfx/icons/48x48/actions/login-google.png');
+}
+
+.loginYahooIcon {
+  background-image: url('../gfx/icons/48x48/actions/login-yahoo.png');
+}
+
+.loginFacebookIcon {
+  background-image: url('../gfx/icons/48x48/actions/login-facebook.png');
+}

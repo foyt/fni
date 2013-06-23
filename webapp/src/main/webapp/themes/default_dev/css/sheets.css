@@ -1,0 +1,127 @@
+@CHARSET "UTF-8";
+
+/* Sheet Builder */
+
+.sheetBuilderDraggingButton {
+  background-color: #fafafa;
+  width: 46px;
+  height: 32px;
+  border: 1px solid #999;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  background-image: url("../gfx/icons/24x24/actions/sheet-add-text-field.png");
+  z-index: 9999;
+}
+
+.sheetBuilderToolbar {
+  width: 120px;
+  height: 300px;
+  position: absolute;
+  top: 120px;
+  left: 120px;
+  background: #fefefe;
+  border: 1px solid #ddd;
+}
+
+.sheetBuilderToolbarButton {
+  background-color: #fafafa;
+  width: 46px;
+  height: 32px;
+  margin-top: 8px;
+  margin-left: 8px;
+  border: 1px solid #999;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+}
+
+.sheetBuilderToolbarButtonText {
+  background-image: url("../gfx/icons/24x24/actions/sheet-add-text-field.png");
+}
+
+.sheetBuilderToolbarButtonSelect {
+  background-image: url("../gfx/icons/24x24/actions/sheet-add-select-field.png");
+}
+
+.sheetBuilderToolbarButtonNumber {
+  background-image: url("../gfx/icons/24x24/actions/sheet-add-number-field.png");
+}
+
+.sheetBuilderToolbarButtonMemo {
+  background-image: url("../gfx/icons/24x24/actions/sheet-add-memo-field.png");
+}
+
+.sheetBuilderToolbarButtonList {
+  background-image: url("../gfx/icons/24x24/actions/sheet-add-list-field.png");
+}
+
+/* Sheet */
+
+.sheet {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  width: 100%;
+  height: 100%;
+  border-collapse:separate;
+  border-spacing: 8px;
+  /* TODO: Remove: */ empty-cells:hide;
+}
+
+.sheetRow {
+}
+
+.sheetCell {
+  background: #fefefe;
+  height: 30px; 
+  border-radius: 3px;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
+  padding: 4px;
+  vertical-align: top;
+}
+
+.sheetCell:hover {
+  background: #fafafa;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
+}
+
+.sheetCellContent {
+  position: relative; 
+}
+
+.sheetCellEditButtonContainer {
+  display: none;
+}
+
+.sheet:hover .sheetCellEditButtonContainer {
+  position: absolute;
+  width: 100%;
+  display: block;
+}
+
+.sheetCellEditButton {
+  position: absolute; 
+  background-color: #fefefe;
+  background-image: url('../gfx/icons/22x22/actions/sheet-cell-edit.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 22px;
+  height: 22px; 
+  right: 0px;
+  top: 0px;
+  cursor: pointer;
+} 
+
+.sheetCellComponentLabel {
+  font-weight: bold; 
+  font-family: 'Yanone Kaffeesatz','Trebuchet MS',Arial;
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.sheetCellComponent .sheetCellComponentMemo {
+   resize: none;
+}

@@ -1,0 +1,76 @@
+@charset "UTF-8";
+
+#siteContentWrapper {    
+  background: none repeat scroll 0 0 #FFFFFF;
+  border-radius: 5px;
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40px;
+  padding: 16px;
+  display: table;
+  border: 1px solid #666;
+}
+
+.errorContainer h1 {
+  margin-bottom: 16px;
+}
+
+.errorContainer p.descriptionContainer {
+  font-style: italic;
+}
+
+.errorContainer p.hintContainer {
+  color: #666;
+}
+
+.errorPage403 .imageContainer {
+  background-image: url('../gfx/layout/error-403.png');
+  width: 277px;
+  height: 350px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  float: right;
+}
+
+.errorPage404 .imageContainer {
+  background-image: url('../gfx/layout/error-404.png');
+  width: 257px;
+  height: 298px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  float: right;
+}
+
+.errorPage500 .imageContainer {
+  background-image: url('../gfx/layout/error-500.png');
+  width: 257px;
+  height: 350px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  float: right;
+}
+
+.errorPage500 #siteContentWrapper {
+  
+}
+
+.errorPage500 .stackTraceContainer {
+  position: relative;
+  height: 600px;
+  width: 610px; 
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.errorPage500 .stackTrace {
+  overflow: scroll;
+  position: absolute;
+  right: 0px;
+  left: 0px;
+  height: 570px;
+}
+
+.errorPage500 .stackTraceContainer:hover {
+  background-color: rgba(255, 255, 255, 0.95);
+
+}

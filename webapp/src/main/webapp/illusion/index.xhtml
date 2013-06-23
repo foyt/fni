@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    template="/WEB-INF/templates/illusion.xhtml">
+    
+    <ui:define name="content">
+      <h:outputScript name="scripts/pdgrid/pdgrid-uncompressed.js" target="head"/>
+      <h:outputScript name="scripts/fnisvgdom/fnisvgdom-uncompressed.js" target="head"/>
+      <h:outputScript name="scripts/canvg/rgbcolor.js" target="head"/>
+      <h:outputScript name="scripts/canvg/canvg.js" target="head"/>
+      <h:outputScript name="scripts/gui/illusion/uploadmaptiledialog.js" target="head"/>
+      <h:outputScript name="scripts/gui/illusion/map.js" target="head"/>
+      <h:outputScript name="scripts/gui/illusion/index.js" target="head"/>
+      <h:outputScript name="scripts/gui/illusion/sheets.js" target="head"/>
+    
+<!-- 
+      <div id="illusionMenuContainer">
+        <div class="illusionMenuButton">
+          <div class="illusionMenuButtonText">
+            #{locales['illusion.indexPage.sheetsButtonText']}
+          </div>
+        </div>
+        <div class="illusionMenuButton">
+          <div class="illusionMenuButtonText">
+            #{locales['illusion.indexPage.mapsButtonText']}
+          </div>
+        </div>
+        <div class="illusionMenuButton">
+          <div class="illusionMenuButtonText">
+            #{locales['illusion.indexPage.materialsButtonText']}
+          </div>
+        </div>
+        <div class="illusionMenuButton">
+          <div class="illusionMenuButtonText">
+            #{locales['illusion.indexPage.calculationsButtonText']}
+          </div>
+        </div>
+        <div class="illusionMenuButton">
+          <div class="illusionMenuButtonText">
+            #{locales['illusion.indexPage.logsButtonText']}
+          </div>
+        </div>
+      </div>
+-->    
+      <div id="illusionWorkspace">
+        <div id="illusionWorkspaceBackground"> </div>
+        <div id="illusionWorkspaceContent"> </div>
+      </div>
+    </ui:define>
+
+</ui:composition>

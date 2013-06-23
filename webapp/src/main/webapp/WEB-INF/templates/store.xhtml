@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets" >
+
+  <f:view locale="#{sessionController.locale}">
+    <ui:insert name="metadata"/>
+  
+    <h:head>
+      <title>
+        <ui:insert name="pageTitle"></ui:insert>
+      </title>
+
+      <ui:include src="/fragments/view_head_generic.xhtml" />
+      <ui:include src="/fragments/view_head_generic_scripts.xhtml" />
+
+      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/default_dev/css/common.css"/>
+      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/default_dev/css/store.css"/>
+      
+    </h:head>
+    <h:body styleClass="siteBodyWrapper"> 
+      <div id="siteWrapper">
+        <div id="siteLayoutWrapper">
+          
+          <!-- Site's Menu bar -->
+          <ui:include src="/fragments/view_sitemenubar.xhtml" />
+    
+          <!-- Site's Header -->
+          <div id="siteHeaderWrapper" class="authHeaderWrapper"></div>
+          
+          <!-- Site's Content -->
+          <div id="siteContentWrapper">
+            <ui:insert name="content"></ui:insert>
+            <div class="clearFloating"></div>
+          </div>
+    
+          <!-- Site's Footer -->
+          <ui:include src="/fragments/view_sitefooter.xhtml" />
+        </div>
+      </div>
+    </h:body>
+  </f:view>
+</html>

@@ -1,0 +1,12 @@
+@CHARSET "UTF-8";
+
+/**
+  z-index mapping
+  
+  500  - tool specific menus  
+  999  - site menu widget content
+  1000 - site menu widget buttons
+  1999 - dialog overlay
+  2000 - dialogs
+  9999 - tooltip
+**/

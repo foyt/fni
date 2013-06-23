@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html">
+
+  <script type="text/javascript">
+    var CONTEXTPATH = '#{request.contextPath}';
+    var THEMEPATH = '#{request.contextPath}/themes/default_dev/';
+  </script>
+    
+  <h:outputScript name="scripts/prototype/prototype.js"/>
+  <h:outputScript name="scripts/scripty2/s2.js"/><h:outputScript name="scripts/pfvlib/pfvlib.js" />      
+  <h:outputScript name="scripts/cookie/cookie.js"/>
+  <h:outputScript name="scripts/prototype-datepicker-widget/datepicker.js"/>
+  <h:outputScript name="scripts/ckeditor/ckeditor.js"/>
+  <h:outputScript name="scripts/gui/forge/ckconfig.js"/>
+  <h:outputScript name="scripts/fnievents/fnievents.js"/>
+  <h:outputScript name="scripts/fnilocale/fnilocale.js"/>
+  <h:outputScript name="scripts/gui/common/notificationqueue.js"/>
+  <h:outputScript name="scripts/gui/common/jsonutils.js"/>
+  <h:outputScript name="scripts/gui/common/api.js"/>
+  <h:outputScript name="scripts/gui/common/tooltip.js"/>
+  <h:outputScript name="scripts/gui/common/tooltipcontroller.js"/>
+  <h:outputScript name="scripts/gui/common/selectautocompleter.js"/>
+  <h:outputScript name="scripts/gui/common/modaldialogcontroller.js"/>
+  <h:outputScript name="scripts/gui/common/confirmdialogcontroller.js"/>
+  <h:outputScript name="scripts/gui/common/guicomponent.js"/>
+  <h:outputScript name="scripts/gui/common/sitemenubarcontroller.js"/>
+  <h:outputScript name="scripts/gui/common/messagesmenubarwidget.js"/>
+  <h:outputScript name="scripts/gui/common/chatmenubarwidget.js"/>
+  <h:outputScript name="scripts/gui/common/friendsmenubarwidget.js"/>
+  <h:outputScript name="scripts/gui/common/guicomponent.js"/>
+  <h:outputScript name="scripts/gui/common/uploadcomponent.js"/>
+  <h:outputScript name="scripts/gui/common/treecomponent.js"/>
+  <h:outputScript name="scripts/gui/common/viewmessages.js"/>
+  
+  <h:outputScript>
+    function _addNotification(severity, message) {
+      var className = 'errorMessage';
+      
+      switch (severity) {
+        case 'INFO':
+          className = 'infoMessage';
+        break;
+        case 'WARNING':
+          className = 'warningMessage';
+        break;
+        case 'SERIOUS':
+          className = 'errorMessage';
+        break;
+        case 'CRITICAL':
+          className = 'errorMessage';
+        break;
+      }
+      
+      getNotificationQueue().addNotification(new NotificationMessage({
+        text: message,
+        className: className 
+      }));
+    }
+  
+    function viewNotifications() { 
+      <ui:repeat var="notification" value="#{notifications}">
+        _addNotification("#{notification.severity}", "#{notification.message}");
+      </ui:repeat>
+    }
+    
+    function fireActionEvent(action, actionParameters) {
+      var parameters = new Hash();
+      
+      document.fire("fni:action", {
+        action: action,
+        parameters: actionParameters
+      });
+    }
+    
+    function fireActionEvents() {
+      <ui:repeat var="action" value="#{actions}">
+        var parameters = new Hash();
+        <ui:repeat var="parameterName" value="#{action.parameters.keySet().toArray()}">
+          parameters.set("#{parameterName}", "#{action.parameters.get(parameterName)}");
+        </ui:repeat>
+        
+        fireActionEvent("#{action.action}", parameters);
+      </ui:repeat>  
+    }
+  </h:outputScript>
+  
+  <h:outputScript>
+    window.siteMenuBarController = new SiteMenuBarController();
+    window.isLoggedIn = function () {
+      return #{sessionController.loggedIn};
+    }
+    
+    window.getLocale = function() {
+      if (window._locale == undefined) {
+        window._locale = new fni.locale.FNILocale();
+        window._locale.loadLocale("#{sessionController.locale}", "#{request.contextPath}/generic/javascriptlocales.json?locale=#{sessionController.locale}");
+        window._locale.setLocale("#{sessionController.locale}");
+      }
+      
+      return window._locale;
+    }
+    
+    document.observe("dom:loaded", function() {
+      window.siteMenuBarController.setup();
+      
+      initTooltip();
+      initializeValidation(); 
+      viewNotifications();
+      fireActionEvents();
+    });
+    
+    Event.observe(window, 'unload', function() {
+      window.siteMenuBarController.destroy();
+    });
+  </h:outputScript>
+</ui:composition>   

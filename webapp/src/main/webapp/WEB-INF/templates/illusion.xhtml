@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:c="http://java.sun.com/jsp/jstl/core"
+  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets" >
+
+  <f:view locale="#{sessionController.locale}">
+  
+    <h:head>
+      <title>#{locales['illusion.indexPage.pageTitle']}</title>
+      <ui:include src="/fragments/view_head_generic.xhtml" />
+      <ui:include src="/fragments/view_head_generic_scripts.xhtml" />
+
+      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/default_dev/css/common.css"/>
+      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/default_dev/css/illusion.css"/>
+  
+      <script type="text/javascript">
+        var CONTEXTPATH = '#{request.contextPath}';
+        var THEMEPATH = '#{request.contextPath}/themes/default_dev/';
+        var ILLUSION_SESSION_ID = #{illusionSessionController.session ne null ? illusionSessionController.session.id : "null"};
+      </script>
+      
+    </h:head>
+    <h:body styleClass="siteBodyWrapper"> 
+      <div id="siteWrapper">
+        <div id="siteLayoutWrapper">
+          
+          <!-- Site's Menu bar -->
+          <div id="siteMenuBar">
+            <div id="siteMenuBarFirstColumn">
+              <div class="siteMenuBarWidget" id="siteMenuBarWidgetIndex"><a href="#{request.contextPath}/">#{locales['generic.header.menuBarWidgetIndexLabel']}</a></div>
+              <div class="siteMenuBarWidget" id="siteMenuBarWidgetForge"><a href="#{request.contextPath}/forge/">#{locales['generic.header.menuBarWidgetForgeLabel']}</a></div>
+              <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetIllusion"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetIllusionLabel']}</a></div>
+              <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetStore"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetStoreLabel']}</a></div>
+              <div class="siteMenuBarWidget" id="siteMenuBarWidgetForum"><a href="#{request.contextPath}/forum/">#{locales['generic.header.menuBarWidgetForumLabel']}</a></div>
+            </div>
+            <div id="siteMenuBarSecondColumn">
+              <c:choose>
+                <c:when test="#{(sessionController.loggedIn) and (sessionController.loggedUserRole ne 'GUEST')}">
+                  <div class="siteMenuBarWidget" id="siteMenuBarWidgetMessages">
+                    <a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetMessagesLabel']}</a>
+                    <c:if test="#{messageController.newMessages}">
+                      <div class="siteMenuBarWidgetNotification">#{messageController.newMessageCount}</div>
+                    </c:if>
+                  </div>
+                </c:when>
+                <c:otherwise>
+                  <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetMessages">
+                    <a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetMessagesLabel']}</a>
+                    <c:if test="#{messageController.newMessages}">
+                      <div class="siteMenuBarWidgetNotification">#{messageController.newMessageCount}</div>
+                    </c:if>
+                  </div>
+                </c:otherwise>
+              </c:choose>
+            
+              <div class="siteMenuBarWidget" id="siteMenuBarWidgetChat"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetChatLabel']}</a></div>
+              <div class="siteMenuBarWidget" id="siteMenuBarWidgetFriends"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetFriendsLabel']}</a></div>
+              <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetCalendar"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetCalendarLabel']}</a></div>
+            
+              <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetMessagesContent">
+          
+                <div id="siteMenuBarWidgetMessagesFoldersContainer">
+                  <div id="siteMenuBarWidgetMessagesButtonsContainer">
+                    <input type="submit" id="siteMenuBarWidgetMessagesComposeButton" value="#{locales['generic.header.menuBarWidgetMessagesComposeMessageLabel']}"/>
+                  </div>
+                
+                  <div id="siteMenuBarWidgetMessagesSpecialFoldersContainer">
+                    <div class="siteMenuBarWidgetMessagesFolder siteMenuBarWidgetMessagesSelectedFolder" id="siteMenuBarWidgetMessagesInboxFolder">
+                      <input type="hidden" name="folderId" value="INBOX"/>
+                      <div class="siteMenuBarWidgetMessagesFolderIcon"></div>
+                      <div class="siteMenuBarWidgetMessagesFolderName">#{locales['generic.header.menuBarWidgetMessagesInboxFolder']}</div>
+                      <div class="siteMenuBarWidgetMessagesFolderUnread">#{messageController.newMessageCount}</div>
+                    </div>
+                    
+                    <div class="siteMenuBarWidgetMessagesFolder" id="siteMenuBarWidgetMessagesStarredFolder">
+                      <input type="hidden" name="folderId" value="STARRED"/>
+                      <div class="siteMenuBarWidgetMessagesFolderIcon"></div>
+                      <div class="siteMenuBarWidgetMessagesFolderName">#{locales['generic.header.menuBarWidgetMessagesStarredFolder']}</div>
+                    </div>
+                    
+                    <div class="siteMenuBarWidgetMessagesFolder" id="siteMenuBarWidgetMessagesOutboxFolder">
+                      <input type="hidden" name="folderId" value="OUTBOX"/>
+                      <div class="siteMenuBarWidgetMessagesFolderIcon"></div>
+                      <div class="siteMenuBarWidgetMessagesFolderName">#{locales['generic.header.menuBarWidgetMessagesSentFolder']}</div>
+                    </div>
+                    
+                    <div class="siteMenuBarWidgetMessagesFolder" id="siteMenuBarWidgetMessagesTrashFolder">
+                      <input type="hidden" name="folderId" value="TRASH"/>
+                      <div class="siteMenuBarWidgetMessagesFolderIcon"></div>
+                      <div class="siteMenuBarWidgetMessagesFolderName">#{locales['generic.header.menuBarWidgetMessagesTrashFolder']}</div>
+                    </div>
+                  </div>
+          
+                  <div id="siteMenuBarWidgetMessagesCustomFoldersContainer"></div>
+                </div>
+                
+                <div id="siteMenuBarWidgetMessagesWorkareaContainer">
+                </div>
+             
+              </div>
+            
+              <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetChatContent">
+                <div id="siteMenuBarWidgetChatTabsContainer">
+                  <div class="siteMenuBarWidgetChatInstructions">
+                    <div class="siteMenuBarWidgetChatWelcomeTitle">
+                      #{locales['generic.header.menuBarWidgetChatWelcomeTitle']}
+                    </div>
+                    <div class="siteMenuBarWidgetChatWelcomeText">
+                      #{locales['generic.header.menuBarWidgetChatWelcomeText']}
+                    </div>
+                  </div>
+                  <ul>
+                  </ul>
+                </div>
+                
+                <div id="siteMenuBarWidgetChatOnlineFriendsContainer">
+                  <div class="siteMenuBarWidgetChatNoFriendsOnline">
+                    #{locales['generic.header.menuBarWidgetChatNoFriendsOnline']}
+                  </div>
+                </div>
+              </div>
+              
+          
+              <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetFriendsContent">
+                <div class="siteMenuBarWidgetFriendsTabsContainer">
+                  <ul> 
+                    <li><a href="#sitemenubarfriendswidget-suggest">#{locales['generic.header.menuBarWidgetFriendsSuggestTabLabel']}</a></li>
+                    <li><a href="#sitemenubarfriendswidget-add">#{locales['generic.header.menuBarWidgetFriendsAddTabLabel']}</a></li>
+                    <li><a href="#sitemenubarfriendswidget-list">#{locales['generic.header.menuBarWidgetFriendsListTabLabel']}</a></li>
+                  </ul>
+                  
+                  <div id="sitemenubarfriendswidget-suggest">
+                    <div class="sitemenubarfriendswidgetSuggestContent">
+                    
+                    </div>
+                    <a class="sitemenubarfriendswidgetSuggestMore" href="javascript:void(null);">
+                      #{locales['generic.header.menuBarWidgetFriendsSuggestMore']}
+                    </a>
+                  </div>
+                  <div id="sitemenubarfriendswidget-add">
+                    <div class="siteMenuBarFriendsWidgetInviteFriendsProvider" id="siteMenuBarFriendsWidgetInviteFriendsProviderEmail">
+                      <div class="siteMenuBarFriendsWidgetInviteFriendsProviderInfo">
+                        <div class="siteMenuBarFriendsWidgetInviteFriendsProviderImage"></div>
+                        <div class="siteMenuBarFriendsWidgetInviteFriendsProviderText">#{locales['generic.header.menuBarWidgetFriendsAddByEmail']}</div>
+                      </div>
+                      <div class="siteMenuBarFriendsWidgetInviteFriendsProviderOptions" style="display: none">
+                         <form onsubmit="return false;">
+                           #{locales['generic.header.menuBarWidgetFriendsAddByEmailAddress']}
+                           <input type="text" name="emailAddress" class="required email"/>
+                           <input type="submit" name="addByEmail" class="formvalid" value="#{locales['generic.header.menuBarWidgetFriendsAddByEmailProceed']}"/>
+                         </form>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="sitemenubarfriendswidget-list">
+                  </div>
+                </div>
+              </div>
+              
+            
+              <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetCalendarContent"></div>
+              
+            </div>
+            <div id="siteMenuBarThirdColumn">
+              <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetSearch"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetSearchLabel']}</a></div>
+              <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetHelp"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetHelpLabel']}</a></div>
+              <div class="siteMenuBarWidget" id="siteMenuBarWidgetLocale"><a href="javascript:void(null);">#{fn:toUpperCase(sessionController.locale.language)}</a></div>
+              
+              <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetSearchContent">
+                <span>#{locales['generic.header.menuBarWidgetSearchText']}</span>
+                <div class="siteMenuBarWidgetSearchInputContainer">
+                  <input class="siteMenuBarWidgetSearchInput" type="text" name="searchText" value="consect"/>
+                </div>
+                <span>#{locales['generic.header.menuBarWidgetResultsTitle']}</span>
+                <div id="siteMenuBarWidgetSearchResultsContainer">
+                  <ul>
+                    <li><a href="javascript:void(null);" class="siteMenuBarWidgetSearchResultTitle">Lorem ipsum</a>Lorem ipsum <span class="match">consec</span>tetur dolor sit amet, <span class="match">consec</span>tetur adipiscing e...</li>
+                    <li><a href="javascript:void(null);" class="siteMenuBarWidgetSearchResultTitle">Lorem ipsum</a>Lorem ipsum <span class="match">consec</span>tetur dolor sit amet, <span class="match">consec</span>tetur adipiscing e...</li>
+                    <li><a href="javascript:void(null);" class="siteMenuBarWidgetSearchResultTitle">Lorem ipsum</a>Lorem ipsum <span class="match">consec</span>tetur dolor sit amet, <span class="match">consec</span>tetur adipiscing e...</li>
+                  </ul>
+                </div>
+              </div>           
+              
+              <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetHelpContent">
+                <ul>
+                  <li>
+                    <a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetHelpContents']}</a>
+                  </li>
+                  <li>
+                    <a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetHelpAbout']}</a>
+                  </li>
+                </ul>
+              </div> 
+              
+              <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetLocaleContent">
+                <span>#{locales['generic.header.menuBarWidgetLocaleSelectText']}</span>
+                
+                <ul>
+                  <li>
+                    <span>#{locales['generic.header.menuBarWidgetLocaleFinnish']}</span>
+                    <input type="hidden" name="locale" value="fi_FI"/>
+                  </li>
+                  <li>
+                    <span>#{locales['generic.header.menuBarWidgetLocaleEnglish']}</span>
+                    <input type="hidden" name="locale" value="en_US"/>
+                  </li>
+                </ul>
+              </div>
+              
+            </div>
+          </div>     
+    
+          <!-- Site's Header -->
+          <div id="siteHeaderWrapper" class="illusionHeaderWrapper">
+          
+          </div>
+          
+          <!-- Site's Content -->
+          <div id="siteContentWrapper">
+            <ui:insert name="content"></ui:insert>
+            <div class="clearFloating"></div>
+          </div>
+    
+          <!-- Site's Footer -->
+          
+          <div id="siteFooterWrapper">
+            <div id="siteFooterBackground"></div>
+            <a id="siteFooterTwitterIcon" class="siteFooterIconContainer" target="_blank" href="https://twitter.com/forgeillusion"></a>
+            <a id="siteFooterFacebookIcon" class="siteFooterIconContainer" target="_blank" href="https://www.facebook.com/pages/Forge-Illusion/82322819727"></a>
+            <a id="siteFooterRSSIcon" class="siteFooterIconContainer" target="_blank"></a>
+            <a id="siteFooterGoogleCodeIcon" class="siteFooterIconContainer" target="_blank" href="http://code.google.com/p/fni/"></a>
+          </div>  
+          
+          <div id="siteFooterTextWrapper">
+            <div class="siteFooterTextContainer"><a href="https://twitter.com/forgeillusion">#{locales['generic.footer.followUsTwitter']}</a></div>
+            <div class="siteFooterTextContainer"><a href="https://www.facebook.com/pages/Forge-Illusion/82322819727">#{locales['generic.footer.followUsFacebook']}</a></div>
+            <div class="siteFooterTextContainer">#{locales['generic.footer.followUsRSS']}</div>
+            <div class="siteFooterTextContainer"><a href="http://code.google.com/p/fni/">#{locales['generic.footer.followUsGoogleCode']}</a></div>
+            <div class="siteFooterTextContainer followUsText">#{locales['generic.footer.followUs']}</div>
+          </div>  
+    
+          <c:if test="#{!empty(analyticsController.webPropertyId)}">
+            <script type="text/javascript">
+              var _gaq = _gaq || [];
+              _gaq.push(['_setAccount', '#{analyticsController.webPropertyId}']);
+              _gaq.push(['_trackPageview']);
+            
+              (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+              })();
+            
+            </script>
+          </c:if>
+        </div>
+      </div>
+    </h:body>
+  </f:view>
+</html>

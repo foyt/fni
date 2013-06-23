@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html">
+  <div id="storeShoppingCart">
+    <div id="storeShoppingCartTitle">Shopping Cart</div>
+  
+    <div id="storeShoppingCartButtons">
+      <a id="viewCartButton" href="${pageContext.request.contextPath}/store/viewcart.page">View</a>
+    </div>
+  
+    <div class="storeShoppingCartContentsContainer">
+  
+      <div class="storeShoppingCartItems">
+  
+        <div class="storeShoppingCartItemContainer">
+          <div class="storeShoppingCartItemCount">1 x</div>
+          <div class="storeShoppingCartItemName">Quisque at nisl ac nisi dignissim grav...</div>
+          <div class="storeShoppingCartItemPrice">EUR 5.00</div>
+        </div>
+  
+      </div>
+  
+      <div class="storeShoppingCartSummaryContainer">
+        <div class="storeShoppingCartTotalTitleContainer">
+          <div class="storeShoppingCartTotalTitle">Total</div>
+        </div>
+        <div class="storeShoppingCartTotal">EUR 5.00</div>
+      </div>
+    </div>
+    
+  </div>
+</ui:composition>

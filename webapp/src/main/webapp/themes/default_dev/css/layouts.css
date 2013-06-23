@@ -1,0 +1,29 @@
+@CHARSET "UTF-8";
+
+/* Column layout */
+
+.columnLayoutContainer {
+  clear: both;
+}
+
+.columnLayoutColumn {
+  float: left;
+}
+
+.layoutMarginSmall {
+  margin: 4px;
+}
+
+.layoutMarginMedium {
+  margin: 8px;
+}
+
+.layoutMarginLarge {
+  margin: 16px;
+}
+
+/* Stacked layout */
+
+.stackedLayoutButtonsContainer .formSubmitField {
+   display: inline-block;
+}

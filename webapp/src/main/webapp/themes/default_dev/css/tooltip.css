@@ -1,0 +1,29 @@
+.tooltip {
+	position: absolute;
+	z-index: 9999;
+	color: #fff;
+	cursor: default;
+}
+
+.tooltipContentContainer {
+	background: #50668b;
+	font-size: 12px;
+	width: auto;
+	height: auto;
+	position: relative;
+	margin: 1px;
+	border-radius: 5px;
+}
+
+.tooltipInnerContentContainer {
+	display: table-cell;
+	max-width: 250px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+.tooltipContent {
+	text-align: center;
+}

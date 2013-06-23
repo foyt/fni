@@ -1,0 +1,61 @@
+<pretty-config xmlns="http://ocpsoft.org/prettyfaces/3.3.3"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://ocpsoft.org/prettyfaces/3.3.3 
+	http://ocpsoft.org/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.3.xsd">
+
+  	<url-mapping id="index">
+	  <pattern value="/" />
+      <view-id value="/index.jsf" />
+	</url-mapping>
+	
+	<url-mapping id="forge-index">
+	  <pattern value="/forge/" />
+	  <view-id value="/forge/index.page" />
+	</url-mapping>
+	<rewrite match="^/forge$" substitute="/forge/"/>
+	<rewrite match="^/forge([\?\#])(.*)" substitute="/forge/$1$2"/>
+	
+	<url-mapping id="illusion-index">
+	  <pattern value="/illusion/" />
+	  <view-id value="/illusion/index.jsf" />
+	</url-mapping>
+	<rewrite match="^/illusion$" substitute="/illusion/"/>
+	<rewrite match="^/illusion([\?\#])(.*)" substitute="/illusion/$1$2"/>
+
+  	<url-mapping id="forum-index">
+	  <pattern value="/forum/" />
+	  <view-id value="/forum/index.page" />
+	</url-mapping>
+	<rewrite match="^/forum$" substitute="/forum/"/>
+	<rewrite match="^/forum([\?\#])(.*)" substitute="/forum/$1$2"/>
+ 
+  	<url-mapping id="forum-forum">
+	  <pattern value="/forum/#{forumUrlName}" />
+	  <view-id value="/forum/viewforum.page" />
+	</url-mapping>
+	
+	<url-mapping id="forum-topic">
+	  <pattern value="/forum/#{forumUrlName}/#{topicUrlName}" />
+	  <view-id value="/forum/viewtopic.page" />
+	</url-mapping>
+	
+	<url-mapping id="store-index">
+	  <pattern value="/store/" />
+	  <view-id value="/store/index.jsf" />
+	</url-mapping>
+	<rewrite match="^/store$" substitute="/store/"/>
+	<rewrite match="^/store([\?\#])(.*)" substitute="/store/$1$2"/>
+	
+	<url-mapping id="auth-login">
+	  <pattern value="/login/" />
+	  <view-id value="/auth/login.jsf" />
+	</url-mapping>	
+	<rewrite match="^/login$" substitute="/login/"/>
+	<rewrite match="^/login([\?\#])(.*)" substitute="/login/$1$2"/>
+
+	<url-mapping id="user-profile">
+	  <pattern value="/users/#{userId}" />
+	  <view-id value="/userprofile.page" />
+	</url-mapping>	
+
+</pretty-config>
