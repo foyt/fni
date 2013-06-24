@@ -23,6 +23,8 @@
     <cngram.version>1.0-0.060327</cngram.version>
     <jtidy.version>r938</jtidy.version>
     <ckc-connector.version>0.0.4</ckc-connector.version>
+    <google-api-services-drive.version>v2-rev77-1.15.0-rc</google-api-services-drive.version>
+    <google-http-client-jackson.version>1.15.0-rc</google-http-client-jackson.version>
   </properties>
 
   <dependencyManagement>
@@ -141,6 +143,21 @@
         <artifactId>connector</artifactId>
         <version>${ckc-connector.version}</version>
       </dependency>
+
+      <!-- Google Drive API -->      
+    
+      <dependency>
+        <groupId>com.google.apis</groupId>
+        <artifactId>google-api-services-drive</artifactId>
+        <version>${google-api-services-drive.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>com.google.http-client</groupId>
+        <artifactId>google-http-client-jackson</artifactId>
+        <version>${google-http-client-jackson.version}</version>
+      </dependency>
+      
     </dependencies>
   </dependencyManagement>
 

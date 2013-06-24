@@ -55,23 +55,42 @@
 			              </div>      
 			            </c:if>
 			            
-			            <c:forEach var="documentEntry" items="${documentEntries}">
-		                <c:choose>
-		                  <c:when test="${documentEntry.type eq 'FOLDER'}">
-		                    <div class="importGoogleDocumentsEntry ${documentEntry.type}">
-		                      <div class="importGoogleDocumentsEntrySelect"><input type="checkbox" disabled="disabled"/></div>
-		                      <div class="importGoogleDocumentsEntryIcon"></div>
-		                      <a class="importGoogleDocumentsEntryTitle" href="${pageContext.request.contextPath}/forge/importgoogledocumentsdialog.page?folderId=${documentEntry.id}">${documentEntry.title}</a>
-		                    </div>   
-		                  </c:when>
-		                  <c:otherwise>
-		                    <div class="importGoogleDocumentsEntry ${documentEntry.type}">
-		                      <div class="importGoogleDocumentsEntrySelect"><input type="checkbox" id="entry-${documentEntry.id}" name="entryIds" value="${documentEntry.id}"/></div>
-		                      <div class="importGoogleDocumentsEntryIcon"></div>
-		                      <label for="entry-${documentEntry.id}" class="importGoogleDocumentsEntryTitle">${documentEntry.title}</label>
-		                    </div>            
-		                  </c:otherwise>
-		                </c:choose>
+			            <c:forEach var="file" items="${files}">
+  		                <c:choose>
+  		                  <c:when test="${file.mimeType eq 'application/vnd.google-apps.folder'}">
+  		                    <div class="importGoogleDocumentsEntry FOLDER">
+  		                      <div class="importGoogleDocumentsEntrySelect"><input type="checkbox" disabled="disabled"/></div>
+  		                      <div class="importGoogleDocumentsEntryIcon"></div>
+  		                      <a class="importGoogleDocumentsEntryTitle" href="${pageContext.request.contextPath}/forge/importgoogledocumentsdialog.page?folderId=${file.id}">${file.title}</a>
+  		                    </div>   
+  		                  </c:when>
+  		                  <c:otherwise>
+                        
+                            <c:choose>
+                              <c:when test="${file.mimeType eq 'application/vnd.google-apps.document'}">
+                                <c:set var="icon" value="DOCUMENT"/>
+                              </c:when>
+                              
+                              <c:when test="${file.mimeType eq 'application/vnd.google-apps.presentation'}">
+                                <c:set var="icon" value="PRESENTATION"/>
+                              </c:when>
+                              
+                              <c:when test="${file.mimeType eq 'application/vnd.google-apps.spreadsheet'}">
+                                <c:set var="icon" value="SPREADSHEET"/>
+                              </c:when>
+                              
+                              <c:when test="${file.mimeType eq 'application/vnd.google-apps.drawing'}">
+                                <c:set var="icon" value="DRAWING"/>
+                              </c:when>
+                            </c:choose>
+                        
+  		                    <div class="importGoogleDocumentsEntry ${icon}">
+  		                      <div class="importGoogleDocumentsEntrySelect"><input type="checkbox" id="entry-${file.id}" name="entryIds" value="${file.id}"/></div>
+  		                      <div class="importGoogleDocumentsEntryIcon"></div>
+  		                      <label for="entry-${file.id}" class="importGoogleDocumentsEntryTitle">${file.title}</label>
+  		                    </div>            
+  		                  </c:otherwise>
+  		                </c:choose>
 		              </c:forEach>
 	              </div>
 	            </fieldset>

@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
   <artifactId>webapp</artifactId>
   <packaging>war</packaging>
   <name>Forge &amp; Illusion - Web App</name>
@@ -112,42 +112,6 @@
   	  <artifactId>persistence</artifactId>
     </dependency>
     
-    <!-- GData -->
-
-    <dependency>
-      <groupId>com.google.gdata</groupId>
-      <artifactId>gdata-core</artifactId>
-      <version>1.46.0</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.google.gdata</groupId>
-      <artifactId>gdata-docs</artifactId>
-      <version>1.46.0</version>
-      <scope>compile</scope>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.google.gdata</groupId>
-      <artifactId>gdata-media</artifactId>
-      <version>1.46.0</version>
-      <scope>compile</scope>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.google.gdata</groupId>
-      <artifactId>gdata-client</artifactId>
-      <version>1.46.0</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.google.collections</groupId>
-      <artifactId>google-collections</artifactId>
-      <version>1.0</version>
-      <type>jar</type>
-      <scope>compile</scope>
-    </dependency>
-
     <!-- Scribe -->
 
     <dependency>
@@ -210,6 +174,22 @@
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
+
+    <!-- Google Drive API -->
+
+    <dependency>
+      <groupId>com.google.apis</groupId>
+      <artifactId>google-api-services-drive</artifactId>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.google.http-client</groupId>
+      <artifactId>google-http-client-jackson</artifactId>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
   
   <repositories>
@@ -236,18 +216,7 @@
       <name>CKC Maven Repository</name>
       <url>http://ckc-plugin.googlecode.com/svn/repository</url>
     </repository>
-    
-    <!-- GData -->
-    
-    <repository>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>otavanopisto-thirdparty</id>
-      <name>Otavan Opisto 3rd Party</name>
-      <url>http://maven.otavanopisto.fi:7070/nexus/content/repositories/thirdparty/</url>
-    </repository>
-    
+
     <!-- CNGram -->
     
     <repository>

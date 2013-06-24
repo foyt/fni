@@ -1,10 +1,9 @@
 package fi.foyt.fni.api;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,6 +17,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.activation.MimeTypeParseException;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
@@ -43,7 +43,6 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.lucene.analysis.Analyzer;
@@ -61,12 +60,6 @@ import org.apache.lucene.util.Version;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 
-import com.google.gdata.data.docs.DocumentEntry;
-import com.google.gdata.data.docs.DrawingEntry;
-import com.google.gdata.data.extensions.Image;
-import com.google.gdata.util.AuthenticationException;
-import com.google.gdata.util.ServiceException;
-
 import fi.foyt.fni.api.beans.CompactMaterialBean;
 import fi.foyt.fni.api.beans.CompleteMaterialBean;
 import fi.foyt.fni.api.events.MaterialSharedEvent;
@@ -75,7 +68,6 @@ import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.MaterialTypeComparator;
 import fi.foyt.fni.materials.TitleComparator;
 import fi.foyt.fni.persistence.dao.DAO;
-import fi.foyt.fni.persistence.dao.common.LanguageDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.FileDAO;
 import fi.foyt.fni.persistence.dao.materials.FolderDAO;
@@ -87,11 +79,11 @@ import fi.foyt.fni.persistence.dao.materials.PdfDAO;
 import fi.foyt.fni.persistence.dao.materials.UserMaterialRoleDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageDAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
-import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.File;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.GoogleDocument;
+import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.materials.MaterialRole;
@@ -108,15 +100,8 @@ import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.upload.MonitoredDiskFileItemFactory;
 import fi.foyt.fni.upload.UploadInfo;
 import fi.foyt.fni.upload.UploadInfoFile;
-import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.fileupload.FileData;
 import fi.foyt.fni.utils.fileupload.FileUploadUtils;
-import fi.foyt.fni.utils.gdocs.GoogleDocumentsClient;
-import fi.foyt.fni.utils.gdocs.GoogleDocumentsUtils;
-import fi.foyt.fni.utils.gdocs.GooleDocumentsException;
-import fi.foyt.fni.utils.html.GuessedLanguage;
-import fi.foyt.fni.utils.html.HtmlUtils;
-import fi.foyt.fni.utils.images.ImageUtils;
 import fi.foyt.fni.utils.search.SearchResult;
 
 @Path("/materials/-")
@@ -189,11 +174,9 @@ public class MaterialsAllRESTService extends RESTService {
 	
 	@Inject
 	@DAO
-	private LanguageDAO languageDAO;
-	
-	@Inject
-	@DAO
 	private PdfDAO pdfDAO;
+	
+	
 	
 	@GET
 	@Path ("/{FOLDERID}/list") 
@@ -559,8 +542,6 @@ public class MaterialsAllRESTService extends RESTService {
 			}
     }
 	
-		GoogleDocumentsClient documentsClient = null;
-
 		List<Material> materials = new ArrayList<Material>();
 		try {
 			for (FileData fileData : fileDatas) {
@@ -568,80 +549,15 @@ public class MaterialsAllRESTService extends RESTService {
 					UploadInfoFile fileInfo = uploadInfo.getFileInfo(fileData.getFieldName());
 					// TODO: Processed pct
 					fileInfo.setProcessed(50d);
-	
-					if (fileData.getContentType().startsWith("image/")) {
-						if (fileData.getContentType().equals("image/svg") || fileData.getContentType().equals("image/svg+xml")) {
-							materials.add(createVectorImage(parentFolder, loggedUser, new String(fileData.getData(), "UTF-8"), fileData.getFileName()));
-						} else {
-							if (fileData.getContentType().equals("image/png")) {
-  							materials.add(createImage(parentFolder, loggedUser, fileData.getData(), fileData.getContentType(), fileData.getFileName()));
-						  } else {
-  							materials.add(uploadImage(parentFolder, loggedUser, fileData));
-							}
-						}
-					} else {
-	  				com.google.gdata.data.docs.DocumentListEntry.MediaType mediaType = GoogleDocumentsUtils.getMediaTypeByMimeType(fileData.getContentType());
-	  				if (mediaType == null) {
-	  					mediaType = GoogleDocumentsUtils.getMediaTypeByFileName(fileData.getFileName());
-	  				}
-	  				
-	  				if (mediaType == null) {
-							materials.add(createFile(parentFolder, loggedUser, fileData.getData(), fileData.getContentType(), fileData.getFileName()));
-	  				}
-	  				
-	  				switch (mediaType) {
-	  				  case PDF:
-	  				  	materials.add(uploadPdf(parentFolder, loggedUser, fileData));
-	  				  break;
-	  				  case TXT:
-	  				  	materials.add(uploadText(parentFolder, loggedUser, fileData));
-	  				  break;
-	  				  case HTML:
-	  				  case HTM:
-	  				  	materials.add(uploadHtml(parentFolder, loggedUser, fileData));
-	  				  break;
-	  				  case ODT:
-	  				  case SXW:
-	  				  case DOC:
-	  				  case DOCX:
-	  				  case RTF:
-		  					materials.add(uploadDocument(parentFolder, loggedUser, documentsClient, mediaType, fileData));
-	  				  break;
-	  				  case PPS:
-	  				  case PPT:
-	  				  	// TODO: Warning: presentation
-		  					materials.add(uploadDocument(parentFolder, loggedUser, documentsClient, mediaType, fileData));
-	  				  break;
-		  				case XLS:
-		  				case XLSX:
-		  				case ODS:
-		  				case CSV:
-		  				case TAB:
-		  				case TSV:
-	  				  	// TODO: Warning, spreadsheet
-		  					materials.add(uploadDocument(parentFolder, loggedUser, documentsClient, mediaType, fileData));
-	  				  break;
-		  				case WMF:
-		  					materials.add(uploadWmf(parentFolder, loggedUser, documentsClient, mediaType, fileData));
-		  			  break;
-	  				  default:
-								materials.add(createFile(parentFolder, loggedUser, fileData.getData(), fileData.getContentType(), fileData.getFileName()));
-	  				  break;
-	  				}
-					}
-					
+					materials.add(materialController.createMaterial(parentFolder, loggedUser, fileData));
+
 					fileInfo.setProcessed(100d);
 					fileInfo.setStatus(UploadInfoFile.Status.COMPLETE);
   			}
 			}
-		} catch (AuthenticationException e) {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ApiMessages.getText(browserLocale, "error.materials.googledocuments.googleAuthenticationError")).build();
-		} catch (IOException e) {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ApiMessages.getText(browserLocale, "error.materials.googledocuments.googleCommunicationError")).build();
-		} catch (ServiceException e) {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ApiMessages.getText(browserLocale, "error.materials.googledocuments.googleRequestError")).build();
-		} catch (GooleDocumentsException e) {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ApiMessages.getText(browserLocale, "error.materials.googledocuments.googleDocumentsError")).build();
+		} catch (MimeTypeParseException | IOException | GeneralSecurityException e) {
+			logger.log(Level.SEVERE, "File uploading failed", e);
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ApiMessages.getText(browserLocale, "error.materials.uploadingFailed")).build();
 		}
 		
 		Map<String, List<CompleteMaterialBean>> result = new HashMap<String, List<CompleteMaterialBean>>();
@@ -834,108 +750,4 @@ public class MaterialsAllRESTService extends RESTService {
   	
   	return result;
   }
-
-	private Material createFile(Folder parentFolder, User loggedUser, byte[] data, String contentType, String title) {
-		String urlName = materialController.getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
-		Date now = new Date();
-
-		return fileDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, contentType, MaterialPublicity.PRIVATE);
-  }
-
-	private Material uploadWmf(Folder parentFolder, User loggedUser, GoogleDocumentsClient documentsClient, com.google.gdata.data.docs.DocumentListEntry.MediaType mediaType, FileData fileData) throws IOException, ServiceException, GooleDocumentsException {
-		if (documentsClient == null) {
-			String adminUsername = systemSettingsController.getSetting("materials.googleDocs.username");
-			String adminPassword = systemSettingsController.getSetting("materials.googleDocs.password");
-			documentsClient = GoogleDocumentsUtils.createClient(adminUsername, adminPassword);
-		}
-
-		DrawingEntry drawingEntry = documentsClient.uploadDrawing(fileData.getData(), mediaType, fileData.getFileName());
-		String drawingId = documentsClient.getResourceIdSuffix(drawingEntry.getId());
-		ByteArrayOutputStream svgStream = new ByteArrayOutputStream();
-		documentsClient.downloadDrawing(drawingId, svgStream, "svg");
-		byte[] data = svgStream.toByteArray();
-		svgStream.close();
-		documentsClient.trashObject(drawingId, true);
-
-		return createVectorImage(parentFolder, loggedUser, new String(data, "UTF-8"), fileData.getFileName());
-  }
-
-	private Material uploadImage(Folder parentFolder, User loggedUser, FileData fileData) throws AuthenticationException, IOException {
-		TypedData imageData = ImageUtils.convertToPng(fileData);
-		return createImage(parentFolder, loggedUser, imageData.getData(), imageData.getContentType(), fileData.getFileName());
-  }
-	
-	private Material createImage(Folder parentFolder, User loggedUser, byte[] data, String contentType, String title) {
-		Date now = new Date();
-		String urlName = materialController.getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
-		return imageDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, contentType, MaterialPublicity.PRIVATE);
-  }
-	
-	private Material createVectorImage(Folder parentFolder, User loggedUser, String data, String title) {
-		String urlName = materialController.getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
-	  return vectorImageDAO.create(loggedUser, null, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
-  }
-
-	private Material uploadPdf(Folder parentFolder, User loggedUser, FileData fileData) {
-		return createPdf(parentFolder, loggedUser, fileData.getData(), fileData.getFileName());
-	}
-
-	private Material uploadHtml(Folder parentFolder, User loggedUser, FileData fileData) throws UnsupportedEncodingException {
-		String data = new String(fileData.getData(), "UTF");
-		return createDocument(parentFolder, loggedUser, data, fileData.getFileName());
-  }
-
-	private Material uploadText(Folder parentFolder, User loggedUser, FileData fileData) throws UnsupportedEncodingException {
-  	
-		String title = fileData.getFileName();
-		String bodyContent = StringEscapeUtils.escapeHtml4(new String(fileData.getData(), "UTF-8")); 
-		bodyContent = bodyContent.replaceAll("\n", "<br/>");
-    String data = HtmlUtils.getAsHtmlText(title, bodyContent);
-
-		return createDocument(parentFolder, loggedUser, data, title);
-  }
-
-	private Material uploadDocument(Folder parentFolder, User loggedUser, GoogleDocumentsClient documentsClient, com.google.gdata.data.docs.DocumentListEntry.MediaType mediaType, FileData fileData) throws IOException, ServiceException, GooleDocumentsException {
-		if (documentsClient == null) {
-			String adminUsername = systemSettingsController.getSetting("materials.googleDocs.username");
-			String adminPassword = systemSettingsController.getSetting("materials.googleDocs.password");
-			documentsClient = GoogleDocumentsUtils.createClient(adminUsername, adminPassword);
-		}
-
-		DocumentEntry documentEntry = documentsClient.uploadDocument(fileData.getData(), mediaType, fileData.getFileName());
-		String documentId = documentsClient.getResourceIdSuffix(documentEntry.getId());
-		ByteArrayOutputStream htmlStream = new ByteArrayOutputStream();
-		documentsClient.downloadDocument(documentId, htmlStream, "html");
-		String data = new String(htmlStream.toByteArray(), "UTF-8");
-		htmlStream.close();
-		documentsClient.trashObject(documentId, true);
-
-		return createDocument(parentFolder, loggedUser, data, fileData.getFileName());
-	}
-	
-	private Material createDocument(Folder parentFolder, User loggedUser, String data, String title) {
-		List<GuessedLanguage> guessedLanguages;
-		Language language = null;
-		try {
-			guessedLanguages = HtmlUtils.getGuessedLanguages(data, 0.2);
-			if (guessedLanguages.size() > 0) {
-				String languageCode = guessedLanguages.get(0).getLanguageCode();
-				language = languageDAO.findByIso2(languageCode);
-			}
-		} catch (IOException e) {
-			// It's really not very serious if language detection fails.
-			logger.log(Level.WARNING, "Language detection failed", e);
-		}
-		
-		String urlName = materialController.getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
-
-		return documentDAO.create(loggedUser, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
-	}
-	
-	private Material createPdf(Folder parentFolder, User loggedUser, byte[] data, String title) {
-		String urlName = materialController.getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
-		Date now = new Date();
-
-		return pdfDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
-	}
 }

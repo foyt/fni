@@ -1,11 +1,15 @@
 package fi.foyt.fni.materials;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
@@ -14,9 +18,15 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
+
+import fi.foyt.fni.drive.DriveManager;
 import fi.foyt.fni.persistence.dao.DAO;
+import fi.foyt.fni.persistence.dao.common.LanguageDAO;
 import fi.foyt.fni.persistence.dao.materials.BinaryDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentRevisionDAO;
@@ -37,6 +47,7 @@ import fi.foyt.fni.persistence.dao.materials.UserMaterialRoleDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageRevisionDAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
+import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
 import fi.foyt.fni.persistence.model.materials.DropboxFile;
@@ -46,6 +57,7 @@ import fi.foyt.fni.persistence.model.materials.GoogleDocumentType;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.ImageSize;
 import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.materials.MaterialRole;
 import fi.foyt.fni.persistence.model.materials.MaterialTag;
 import fi.foyt.fni.persistence.model.materials.MaterialThumbnail;
@@ -59,6 +71,10 @@ import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.materials.VectorImageRevision;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.utils.data.TypedData;
+import fi.foyt.fni.utils.fileupload.FileData;
+import fi.foyt.fni.utils.html.GuessedLanguage;
+import fi.foyt.fni.utils.html.HtmlUtils;
+import fi.foyt.fni.utils.images.ImageUtils;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @RequestScoped
@@ -69,6 +85,13 @@ public class MaterialController {
   private static final long DEFAULT_MATERIAL_SIZE = 2048;
   private static final long DEFAULT_QUOTA = 1024 * 1024 * 10;
 
+  @Inject
+	private Logger logger;
+	
+	@Inject
+	@DAO
+	private LanguageDAO languageDAO;
+	
   @Inject
   @DAO
   private MaterialDAO materialDAO;
@@ -148,6 +171,9 @@ public class MaterialController {
   @Inject
   @DAO
   private VectorImageRevisionDAO vectorImageRevisionDAO;
+  
+  @Inject
+  private DriveManager driveManager;
 
   public String getMaterialMimeType(Material material) {
     switch (material.getType()) {
@@ -522,6 +548,133 @@ public class MaterialController {
     
     return null;
 	}
+	
+	public Material createMaterial(Folder parentFolder, User user, FileData fileData) throws MimeTypeParseException, IOException, GeneralSecurityException {
+		MimeType mimeType = parseMimeType(fileData.getContentType());
+
+		if ("image".equals(mimeType.getPrimaryType())) {
+			if ("svg".equals(mimeType.getSubType())||"svg+xml".equals(mimeType.getSubType())) {
+				return createVectorImage(parentFolder, user, new String(fileData.getData(), "UTF-8"), fileData.getFileName());
+			} else {
+				if (fileData.getContentType().equals("image/png")) {
+					return createImage(parentFolder, user, fileData.getData(), fileData.getContentType(), fileData.getFileName());
+			  } else {
+			  	return uploadImage(parentFolder, user, fileData);
+				}
+			}
+		} else {
+			switch (mimeType.getBaseType()) {
+				case "application/pdf":
+					return uploadPdf(parentFolder, user, fileData);
+				case "text/plain":
+					return uploadText(parentFolder, user, fileData);
+				case "text/html":
+				case "application/xhtml+xml":
+					return uploadHtml(parentFolder, user, fileData);
+				case "application/vnd.oasis.opendocument.text":
+				case "application/vnd.sun.xml.writer":
+				case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+				case "application/msword":
+				case "application/x-mswrite":
+				case "application/rtf":
+				case "text/richtext":
+					return uploadDocument(parentFolder, user, fileData);
+				case "application/vnd.openxmlformats-officedocument.presentationml.slideshow":
+				case "application/vnd.ms-powerpoint":
+			  	// TODO: Warning: presentation
+					return uploadDocument(parentFolder, user, fileData);
+				case "application/vnd.ms-excel":
+				case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+				case "application/vnd.oasis.opendocument.spreadsheet":
+				case "text/csv":
+				case "text/tab-separated-values":
+				  // TODO: Warning, spreadsheet
+					return uploadDocument(parentFolder, user, fileData);
+			}
+		}
+		
+		return createFile(parentFolder, user, fileData.getData(), fileData.getContentType(), fileData.getFileName());
+	}
+	
+	private Material createFile(Folder parentFolder, User loggedUser, byte[] data, String contentType, String title) {
+		String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
+		Date now = new Date();
+
+		return fileDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, contentType, MaterialPublicity.PRIVATE);
+  }
+
+	private Material uploadImage(Folder parentFolder, User loggedUser, FileData fileData) throws IOException {
+		TypedData imageData = ImageUtils.convertToPng(fileData);
+		return createImage(parentFolder, loggedUser, imageData.getData(), imageData.getContentType(), fileData.getFileName());
+  }
+	
+	private Material createImage(Folder parentFolder, User loggedUser, byte[] data, String contentType, String title) {
+		Date now = new Date();
+		String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
+		return imageDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, contentType, MaterialPublicity.PRIVATE);
+  }
+	
+	private Material createVectorImage(Folder parentFolder, User loggedUser, String data, String title) {
+		String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
+	  return vectorImageDAO.create(loggedUser, null, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
+  }
+
+	private Material uploadPdf(Folder parentFolder, User loggedUser, FileData fileData) {
+		return createPdf(parentFolder, loggedUser, fileData.getData(), fileData.getFileName());
+	}
+
+	private Material uploadHtml(Folder parentFolder, User loggedUser, FileData fileData) throws UnsupportedEncodingException {
+		String data = new String(fileData.getData(), "UTF");
+		return createDocument(parentFolder, loggedUser, data, fileData.getFileName());
+  }
+
+	private Material uploadText(Folder parentFolder, User loggedUser, FileData fileData) throws UnsupportedEncodingException {
+  	
+		String title = fileData.getFileName();
+		String bodyContent = StringEscapeUtils.escapeHtml4(new String(fileData.getData(), "UTF-8")); 
+		bodyContent = bodyContent.replaceAll("\n", "<br/>");
+    String data = HtmlUtils.getAsHtmlText(title, bodyContent);
+
+		return createDocument(parentFolder, loggedUser, data, title);
+  }
+
+	private Material uploadDocument(Folder parentFolder, User loggedUser, FileData fileData) throws IOException, GeneralSecurityException {
+		Drive drive = driveManager.getSystemDrive();
+		
+		File file = driveManager.insertFile(drive, fileData.getFileName(), null, fileData.getContentType(), null, true, fileData.getData());
+		try { 
+			TypedData htmlData = driveManager.exportFile(drive, file, "text/html");
+			return createDocument(parentFolder, loggedUser, new String(htmlData.getData(), "UTF-8"), fileData.getFileName());
+		} finally {
+		  driveManager.deleteFile(drive, file);
+		}
+	}
+	
+	private Material createDocument(Folder parentFolder, User loggedUser, String data, String title) {
+		List<GuessedLanguage> guessedLanguages;
+		Language language = null;
+		try {
+			guessedLanguages = HtmlUtils.getGuessedLanguages(data, 0.2);
+			if (guessedLanguages.size() > 0) {
+				String languageCode = guessedLanguages.get(0).getLanguageCode();
+				language = languageDAO.findByIso2(languageCode);
+			}
+		} catch (IOException e) {
+			// It's really not very serious if language detection fails.
+			logger.log(Level.WARNING, "Language detection failed", e);
+		}
+		
+		String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
+
+		return documentDAO.create(loggedUser, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
+	}
+	
+	private Material createPdf(Folder parentFolder, User loggedUser, byte[] data, String title) {
+		String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
+		Date now = new Date();
+
+		return pdfDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
+	}
 
   private MaterialArchetype getDropboxFileArchetype(DropboxFile material) {
     return getArchetypeByMimeType(material.getMimeType());
@@ -544,6 +697,8 @@ public class MaterialController {
         return MaterialArchetype.PRESENTATION;
       case SPREADSHEET:
         return MaterialArchetype.SPREADSHEET;
+			case FILE:
+				return MaterialArchetype.FILE;
     }
 
     return MaterialArchetype.FILE;
@@ -586,4 +741,35 @@ public class MaterialController {
       deleteMaterial(childMaterial, user);
     }
   }
+
+	public GoogleDocument findGoogleDocumentByCreatorAndDocumentId(User creator, String documentId) {
+		return googleDocumentDAO.findByCreatorAndDocumentId(creator, documentId);
+	}
+
+	public GoogleDocument createGoogleDocument(User creator, Language language, Folder parentFolder, String title, String documentId, String mimeType, MaterialPublicity publicity) {
+		String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, title);
+		
+		GoogleDocumentType documentType = GoogleDocumentType.FILE;
+		
+		switch (mimeType) {
+			case "application/vnd.google-apps.drawing":
+				documentType = GoogleDocumentType.DRAWING;
+			break;
+			case "application/vnd.google-apps.spreadsheet":
+				documentType = GoogleDocumentType.SPREADSHEET;
+		  break;
+			case "application/vnd.google-apps.presentation":
+				documentType = GoogleDocumentType.PRESENTATION;
+		  break;
+			case "application/vnd.google-apps.document":
+				documentType = GoogleDocumentType.DOCUMENT;
+			break;
+		}
+		
+		return googleDocumentDAO.create(creator, language, parentFolder, urlName, title, documentId, documentType, publicity);
+	}
+
+	public GoogleDocument findGoogleDocumentById(Long id) {
+		return googleDocumentDAO.findById(id);
+	}
 }
