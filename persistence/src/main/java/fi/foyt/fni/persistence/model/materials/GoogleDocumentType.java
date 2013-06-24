@@ -5,5 +5,6 @@ public enum GoogleDocumentType {
   PRESENTATION, 
   SPREADSHEET, 
   FOLDER,
-  DRAWING
+  DRAWING,
+  FILE
 }
