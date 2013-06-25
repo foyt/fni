@@ -3,7 +3,6 @@ package fi.foyt.fni.view;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -19,26 +18,6 @@ import fi.foyt.fni.utils.servlet.RequestUtils;
 public abstract class AbstractViewServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 2501078339886319673L;
-
-	protected synchronized Mutex getMutex(String sessionId) {
-		Mutex mutex = mutexMap.get(sessionId);
-		if (mutex == null) {
-			mutex = new Mutex();
-			mutexMap.put(sessionId, mutex);
-		} 
-		
-		mutex.incRefCount();
-
-		return mutex;
-	}
-
-	protected synchronized void releaseMutex(String sessionId, Mutex mutex) {
-		mutex.decRefCount();
-
-		if (mutex.getRefCount() <= 0) {
-			mutexMap.remove(sessionId);
-		}
-	}
 
 	protected void handleRedirect(HttpServletResponse response, String redirectUrl, boolean permanent) {
 		response.setStatus(permanent ? HttpServletResponse.SC_MOVED_PERMANENTLY : HttpServletResponse.SC_TEMPORARY_REDIRECT);
@@ -104,24 +83,5 @@ public abstract class AbstractViewServlet extends HttpServlet {
 			response.setContentType("text/html; charset=utf-8");
 			request.getRequestDispatcher("/jsp/generic/error-403.jsp").include(request, response);
 		}
-	}
-	
-	private Map<String, Mutex> mutexMap = new HashMap<>();
-	
-	protected class Mutex {
-		
-		public void incRefCount() {
-			refCount++;
-		};
-		
-		public void decRefCount() {
-			refCount--;
-		}
-		
-		public int getRefCount() {
-			return refCount;
-		}
-		
-		private int refCount;
 	}
 }

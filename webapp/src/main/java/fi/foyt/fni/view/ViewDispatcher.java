@@ -31,49 +31,41 @@ public class ViewDispatcher extends AbstractViewServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, java.io.IOException {
 		logger.info(request.getMethod() + " - request into " + request.getRequestURI());
-			
-		String sessionId = request.getSession().getId();
-		Mutex mutex = getMutex(sessionId); 
-		try {
-  		synchronized (mutex) {
-    		String controllerName = RequestUtils.stripPrecedingSlash(RequestUtils.stripCtxPath(request.getContextPath(), request.getRequestURI()));
-    
-    		ViewController viewController = viewControllerMapper.getViewController(controllerName);
-    		if (viewController != null) {
-    			ViewControllerContext viewControllerContext = new ViewControllerContext(new DefaultParameterHandler(request), request, response, getServletContext());
-    
-    			try {
-    				if (viewController.checkPermissions(viewControllerContext)) {
-    					viewController.execute(viewControllerContext);
-    
-    					if (!StringUtils.isBlank(viewControllerContext.getRedirectURL())) {
-    						handleRedirect(response, viewControllerContext.getRedirectURL(), viewControllerContext.getRedirectPermanent());
-    					} else if (!StringUtils.isBlank(viewControllerContext.getIncludeJSP())) {
-    						request.setAttribute("jsVariables", viewControllerContext.getJsVariables());
-    						handleIncludeJsp(request, response, viewControllerContext.getIncludeJSP());
-    					} else if (viewControllerContext.getData() != null) {
-    						handleData(request, response, viewControllerContext.getData());
-    					}
-    				} else {
-    					handleForbidden(request, response, sessionController.isLoggedIn());
-    				}
-    			} catch (NotFoundException e) {
-    				handleNotFound(request, response);
-    			} catch (EJBException e) {
-    				if (NotFoundException.class.isInstance(e.getCause())) {
-    					handleNotFound(request, response);
-    				} else {
-      				handleInternalError(request, response, e);
-    				}
-    			} catch (Exception e) {
-    				handleInternalError(request, response, e);
-    			}
-    		} else {
-    			handleNotFound(request, response);
-    		}
-  		}
-		} finally {
-  		releaseMutex(sessionId, mutex);
+
+		String controllerName = RequestUtils.stripPrecedingSlash(RequestUtils.stripCtxPath(request.getContextPath(), request.getRequestURI()));
+
+		ViewController viewController = viewControllerMapper.getViewController(controllerName);
+		if (viewController != null) {
+			ViewControllerContext viewControllerContext = new ViewControllerContext(new DefaultParameterHandler(request), request, response, getServletContext());
+
+			try {
+				if (viewController.checkPermissions(viewControllerContext)) {
+					viewController.execute(viewControllerContext);
+
+					if (!StringUtils.isBlank(viewControllerContext.getRedirectURL())) {
+						handleRedirect(response, viewControllerContext.getRedirectURL(), viewControllerContext.getRedirectPermanent());
+					} else if (!StringUtils.isBlank(viewControllerContext.getIncludeJSP())) {
+						request.setAttribute("jsVariables", viewControllerContext.getJsVariables());
+						handleIncludeJsp(request, response, viewControllerContext.getIncludeJSP());
+					} else if (viewControllerContext.getData() != null) {
+						handleData(request, response, viewControllerContext.getData());
+					}
+				} else {
+					handleForbidden(request, response, sessionController.isLoggedIn());
+				}
+			} catch (NotFoundException e) {
+				handleNotFound(request, response);
+			} catch (EJBException e) {
+				if (NotFoundException.class.isInstance(e.getCause())) {
+					handleNotFound(request, response);
+				} else {
+  				handleInternalError(request, response, e);
+				}
+			} catch (Exception e) {
+				handleInternalError(request, response, e);
+			}
+		} else {
+			handleNotFound(request, response);
 		}
 	}
 	
