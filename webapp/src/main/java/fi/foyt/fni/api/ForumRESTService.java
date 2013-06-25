@@ -113,7 +113,9 @@ public class ForumRESTService extends RESTService {
     forumPostDAO.create(forumTopic, loggedUser, now, now, content, 0l);
     
     return Response.ok(
-      CompleteForumTopicBean.fromEntity(forumTopic)
+    	new ApiResult<>(
+        CompleteForumTopicBean.fromEntity(forumTopic)
+      )
     ).build();
   }
 
