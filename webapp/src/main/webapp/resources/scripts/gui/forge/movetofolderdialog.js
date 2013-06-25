@@ -51,14 +51,14 @@ MoveToFolderDialogController = Class.create(ModalDialogController, {
     return this._options.materialId;
   },
   destroy: function ($super) {
-    Event.stopObserving(this.getDialog().content.down('.moveToFolderDialogCreateFolderButton'), "click", this._createFolderClickListener);
+    Event.stopObserving(this._createFolderButton, "click", this._createFolderClickListener);
     
     $super();
   },
   setup: function ($super, callback) {
     $super(callback);
     var treeContainerElement = this.getDialog().content.down('.namedTreeContainer');
-    var createFolderButton = this.getDialog().content.down('.moveToFolderDialogCreateFolderButton');
+    this._createFolderButton = this.getDialog().content.down('.moveToFolderDialogCreateFolderButton');
     
     this._treeComponent = new TreeComponent({});
     var homeNode = new MoveToFolderDialogController_FolderNode({
@@ -70,7 +70,7 @@ MoveToFolderDialogController = Class.create(ModalDialogController, {
     this._treeComponent.addChildNode(homeNode);
     treeContainerElement.appendChild(this._treeComponent.domNode);
     
-    Event.observe(createFolderButton, "click", this._createFolderClickListener);
+    Event.observe(this._createFolderButton, "click", this._createFolderClickListener);
   },
   _createContent: function () {
     var contentContainer = new Element("div", {
