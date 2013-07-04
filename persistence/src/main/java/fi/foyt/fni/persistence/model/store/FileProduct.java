@@ -8,6 +8,14 @@ import javax.persistence.PrimaryKeyJoinColumn;
 @PrimaryKeyJoinColumn (name="id")
 public class FileProduct extends Product {
 
+	public FileProductFile getFile() {
+		return file;
+	}
+	
+	public void setFile(FileProductFile file) {
+		this.file = file;
+	}
+	
 	@ManyToOne
 	private FileProductFile file;
 }
