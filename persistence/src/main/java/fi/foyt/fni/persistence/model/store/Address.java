@@ -1,4 +1,4 @@
-package fi.foyt.fni.persistence.model.common;
+package fi.foyt.fni.persistence.model.store;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang3.StringUtils;
+
+import fi.foyt.fni.persistence.model.common.Country;
 
 @Entity
 public class Address {

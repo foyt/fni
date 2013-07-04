@@ -1,4 +1,4 @@
-package fi.foyt.fni.persistence.model.common;
+package fi.foyt.fni.persistence.model.store;
 
 public enum AddressType {
   DELIVERY,
