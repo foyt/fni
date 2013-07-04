@@ -1,0 +1,16 @@
+Icon	 Iconset	 Path	Notes
+/128x128/actions/store-noimage.png	 Crystal Clear	/128x128/apps/warehouse.png	
+/32x32/actions/store-create-product.png	 Crystal Clear	 /32x32/apps/package.png	
+		 /32x32/apps/kaddressbook.png	
+		 /32x32/actions/playlist.png	
+		 /32x32/devices/camera.png	
+/22x22/places/forge.png			
+/22x22/places/forum.png			
+/22x22/places/illusion.png			
+/22x22/places/illusion_gray.png			Coverted to grayscale
+/22x22/places/index.png			
+/22x22/places/store.png			
+/22x22/places/store_gray.png			Coverted to grayscale
+/22x22/actions/store-cart.png			
+/22x22/actions/store-categories.png			
+/22x22/actions/store-recent-products.png			

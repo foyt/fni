@@ -1,0 +1,14 @@
+.dialog-section {
+  padding: 8px;
+  margin-bottom: 4px; 
+  background-color: rgba(220, 220, 220, 0.1);
+  border-radius: 4px;
+  font-family: 'Trebuchet MS', Arial;
+  border: 1px solid rgba(200, 200, 200, 0.1);
+}
+
+.dialog-section label {
+  display: inline-block;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
