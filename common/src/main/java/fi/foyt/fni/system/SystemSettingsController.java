@@ -46,6 +46,10 @@ public class SystemSettingsController {
 		return LocaleUtils.toLocale(setting);
 	}
 
+	public Locale getDefaultLocale() {
+		return getLocaleSetting("system.defaultLocale");
+	}
+
 	public void updateSetting(String name, String value) {
 		SystemSetting systemSetting = systemSettingDAO.findByName(name);
 		if (systemSetting == null)

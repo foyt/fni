@@ -102,5 +102,4 @@ public class SessionController {
   private Long loggedUserId = null;
   private Locale locale = null;
   private Long loggedUserTokenId;
-
 }
