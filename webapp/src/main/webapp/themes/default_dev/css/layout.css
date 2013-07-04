@@ -849,6 +849,7 @@ body.siteBodyWrapper { /* Wraps the whole site and provides background-color */
   padding-top: 4px;
   padding-right: 15px;
   padding-bottom: 4px;
+  text-transform: uppercase;
 }
 
 /* Search */
