@@ -350,9 +350,10 @@
      */
     $(document).on('click', '.product-delete', function (event) {
       var productId = $(this).data('product-id');
+      var productTitle = $(this).closest('.store-product').find('.storeProductListProductName').html();
       
       renderDustTemplate('/store/dust/productdeletedialog.dust', {
-        title: "Tuotetitteli"
+        title: productTitle
       }, function(err, out) {
         if (err) {
           // Proper error handling
@@ -361,7 +362,10 @@
           var buttons = new Object();
           
           buttons['Delete'] = function() {
-            $(this).dialog("close");
+            api.store(false).products.destroy(productId).done($.proxy(function () {
+              reloadProductList();
+              $(this).dialog("close");
+            }, this));
           };
 
           buttons['Cancel'] = function() {

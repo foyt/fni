@@ -135,6 +135,14 @@
       <name>JBoss Repository</name>
       <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
     </repository>
+
+    <!-- CNGram -->
+    
+    <repository>
+      <id>ObjectWEB</id>
+      <name>ObjectWEB</name>
+      <url>http://maven.ow2.org/maven2/</url>
+    </repository>
   </repositories>
   
 </project>
