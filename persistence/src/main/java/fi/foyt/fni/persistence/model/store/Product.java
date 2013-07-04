@@ -25,6 +25,14 @@ public class Product {
   public Long getId() {
     return id;
   }
+  
+  public Boolean getPublished() {
+		return published;
+	}
+  
+  public void setPublished(Boolean published) {
+		this.published = published;
+	}
 
   public MultilingualString getName() {
 		return name;
@@ -93,6 +101,10 @@ public class Product {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  
+  @NotNull
+  @Column (nullable = false, columnDefinition = "BIT")
+  private Boolean published;
 
   @OneToOne
   private MultilingualString name;
