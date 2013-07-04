@@ -10,4 +10,40 @@
     <version>2.1.9-SNAPSHOT</version>
   </parent>
 
+  <dependencies>
+  
+    <!-- JBoss -->
+  
+    <dependency>
+      <groupId>org.jboss.spec</groupId>
+      <artifactId>jboss-javaee-6.0</artifactId>
+      <type>pom</type>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-multipart-provider</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>fi.foyt.fni</groupId>
+      <artifactId>persistence</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>fi.foyt.fni</groupId>
+      <artifactId>common</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <type>jar</type>
+    </dependency>
+    
+  </dependencies>
+
+
 </project>
