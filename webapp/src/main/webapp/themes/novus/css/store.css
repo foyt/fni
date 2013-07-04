@@ -536,6 +536,10 @@
   opacity: 1;
 }
 
+.store-product-admin-actions-container .product-edit {
+  background-image: url("../gfx/icons/32x32/actions/store-edit-product.png");
+}
+
 .store-product-admin-actions-container .product-attach-book-file-action  {
   background-image: url("../gfx/icons/32x32/actions/store-attach-book.png");
 }

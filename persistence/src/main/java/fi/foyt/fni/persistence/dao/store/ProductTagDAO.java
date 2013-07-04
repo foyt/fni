@@ -40,4 +40,18 @@ public class ProductTagDAO extends GenericDAO<ProductTag> {
     
     return entityManager.createQuery(criteria).getResultList();
   }
+
+	public List<Product> listProductsByStoreTags(List<StoreTag> storeTags) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Product> criteria = criteriaBuilder.createQuery(Product.class);
+    Root<ProductTag> root = criteria.from(ProductTag.class);
+    criteria.select(root.get(ProductTag_.product));
+    criteria.where(
+    	root.get(ProductTag_.tag).in(storeTags)
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+	}
 }
