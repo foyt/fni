@@ -1,62 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    template="/WEB-INF/templates/store.xhtml">
- 
-    <ui:define name="pageTitle">
-      #{locales['store.index.pageTitle']}
-    </ui:define>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/store.xhtml">
+
+  <ui:define name="pageTitle">#{locales['store.index.pageTitle']}</ui:define>
+  <ui:define name="head">
+    <h:outputScript name="scripts/gui/store/index.js"></h:outputScript>
     
-    <ui:define name="content">
-      <div id="storeIndex">
-        <div class="storeProductsList">
-          <div class="storeProductsListTitle">Most Recent Products</div>
-          <div class="storeProductsListContents">
-          
-            <ui:repeat var="product" value="#{storeIndexViewBackingBean.recentProducts}">
-              <div class="storeProductListProduct">
-                <div class="storeProductListProductImageContainer">
-                  <div class="storeProductListProductImageInnerContainer">
-                    <h:graphicImage value="/store/productImage?productImageId=#{product.defaultImage.id}" height="128"/>
-                  </div>
-                </div>
-                <div class="storeProductListProductName">#{product.name}</div>
-                <div class="storeProductListProductTags">
-                  <ui:repeat var="tag" value="#{product.tags}">
-                    <div class="storeProductListProductTag"><a href="#">#{tag.text}</a></div>
-                  </ui:repeat>
-                </div>
-                <div class="storeProductListProductDescription">
-                  <h:outputText value="#{product.description}" escape="false"/>
-                </div>        
-                <div class="storeProductListProductDetails">
-                  <div class="storeProductListProductDetail">
-                    <h:outputFormat value="#{locales['store.index.productPrice']}">
-                      <f:param value="#{storeIndexViewBackingBean.formatProductPrice(product.price)}"/>
-                    </h:outputFormat>
-                  </div>
-                </div>
-                
-                <div class="storeProductListProductActionsContainer">
-                  <h:panelGroup layout="block" class="storeProductListProductAction" rendered="#{product.downloadable}">
-                    <a href="javascript:void(null);">Download Free PDF</a>
-                  </h:panelGroup>
-  
-                  <h:panelGroup layout="block" class="storeProductListProductAction" rendered="#{product.purchable}">
-                    <a href="javascript:void(null);">Add to Shopping Cart</a>
-                  </h:panelGroup>
-                </div>
-              </div>  
-            </ui:repeat>
+    <!-- jQuery File Upload -->
+
+    <h:outputScript name="scripts/load-image/load-image.min.js"/>
+    <h:outputScript name="scripts/canvas-to-blob/canvas-to-blob.min.js"/>
+    <h:outputScript name="scripts/jquery.fileupload/jquery.iframe-transport.js"></h:outputScript>
+    <h:outputScript name="scripts/jquery.fileupload/jquery.fileupload.js"></h:outputScript>
+    <h:outputScript name="scripts/jquery.fileupload/jquery.fileupload-process.js"></h:outputScript>
+    <h:outputScript name="scripts/jquery.fileupload/jquery.fileupload-image.js"></h:outputScript>
+    
+    <!-- jQuery Magnific-Popup  -->
+    
+    <h:outputScript name="scripts/jquery.magnific-popup/jquery.magnific-popup.min.js"/>
+    <h:outputStylesheet name="scripts/jquery.magnific-popup/magnific-popup.css"/>
+    
+    <!-- jQuery DataTables -->
+    
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+    <link rel="StyleSheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css"></link>
+    
+  </ui:define>
+  <ui:define name="content">
+    <div id="store-index"></div>
+    <div id="storeSidebar">
+      <div id="storeShoppingCart">
+        <div id="storeShoppingCartTitle">Shopping Cart</div>
+
+        <div id="storeShoppingCartButtons">
+          <a id="viewCartButton" href="${pageContext.request.contextPath}/store/viewcart.page">View</a>
+        </div>
+
+        <div class="storeShoppingCartContentsContainer">
+
+          <div class="storeShoppingCartItems">
+
+            <div class="storeShoppingCartItemContainer">
+              <div class="storeShoppingCartItemCount">1 x</div>
+              <div class="storeShoppingCartItemName">Quisque at nisl ac nisi dignissim grav...</div>
+              <div class="storeShoppingCartItemPrice">EUR 5.00</div>
+            </div>
+
+          </div>
+
+          <div class="storeShoppingCartSummaryContainer">
+            <div class="storeShoppingCartTotalTitleContainer">
+              <div class="storeShoppingCartTotalTitle">Total</div>
+            </div>
+            <div class="storeShoppingCartTotal">EUR 5.00</div>
           </div>
         </div>
+
       </div>
-      <div id="storeSidebar">
-        <ui:include src="/store/fragments/shoppingcart.xhtml" />
-        <ui:include src="/store/fragments/categories.xhtml" />
+
+      <div id="storeCategoriesContainer">
+        <div class="storeCategoriesTitle">Product Tags</div>
+
+        <div id="storeCategories">
+          <div class="storeCategory">
+            <div class="storeCategoryTitle">
+              <a href="javascript:void(null);" data-category-type="recent">Most recent</a>
+            </div>
+          </div>
+          
+          <!-- TODO: Only if user has them... -->
+          
+          <div class="storeCategory">
+            <div class="storeCategoryTitle">
+              <a href="javascript:void(null);" data-category-type="unpublished">Unpublished</a>
+            </div>
+          </div>
+          <ui:repeat var="tag" value="#{storeIndexViewBackingBean.storeTags}">
+            <div class="storeCategory">
+              <div class="storeCategoryTitle">
+                <a href="javascript:void(null);" data-category-type="tag" data-tag="#{tag.text}">#{tag.text}</a>
+              </div>
+            </div>
+          </ui:repeat>
+
+        </div>
       </div>
-    </ui:define>
+      
+      <div id="storeAdminPanel">
+        <a class="storeAdminCreateBookProduct" title="Create New Book Product"> </a>
+      </div>
+
+    </div>
+  </ui:define>
 
 </ui:composition>

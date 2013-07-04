@@ -32,10 +32,9 @@ public class StoreIndexViewBackingBean extends AbstractViewBackingBean {
 	
 	public List<StoreTagBean> getStoreTags() {
 		List<StoreTagBean> result = new ArrayList<>();
-		Locale locale = sessionController.getLocale();
 		
-		for (StoreTag storeTag : storeController.listStoreTags()) {
-			result.add(new StoreTagBean(storeTag.getId(), storeTag.getText().getValue(locale)));
+		for (StoreTag storeTag : storeController.listTags()) {
+			result.add(new StoreTagBean(storeTag.getId(), storeTag.getText()));
 		}
 		
 		return result;
@@ -49,7 +48,7 @@ public class StoreIndexViewBackingBean extends AbstractViewBackingBean {
 			List<StoreTagBean> tagBeans = new ArrayList<>();
 			List<StoreTag> tags = storeController.listProductTags(product);
 			for (StoreTag tag : tags) {
-				tagBeans.add(new StoreTagBean(tag.getId(), tag.getText().getValue(locale)));
+				tagBeans.add(new StoreTagBean(tag.getId(), tag.getText()));
 			}
 			
 			Boolean downloadable = false;

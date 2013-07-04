@@ -1,47 +1,74 @@
 <!DOCTYPE html>
-<html 
-  xmlns="http://www.w3.org/1999/xhtml" 
-  xmlns:c="http://java.sun.com/jsp/jstl/core"
-  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-  xmlns:h="http://java.sun.com/jsf/html" 
-  xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:ui="http://java.sun.com/jsf/facelets" >
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets">
 
-  <f:view locale="#{sessionController.locale}">
-    <ui:insert name="metadata"/>
-  
-    <h:head>
-      <title>
-        <ui:insert name="pageTitle"></ui:insert>
-      </title>
+<f:view locale="#{sessionController.locale}">
+  <ui:insert name="metadata" />
 
-      <ui:include src="/fragments/view_head_generic.xhtml" />
-      <ui:include src="/fragments/view_head_generic_scripts.xhtml" />
+  <h:head>
+    <title><ui:insert name="pageTitle"></ui:insert></title>
+    <script type="text/javascript">
+      var LOCALE = '#{request.locale.language}';
+      var CONTEXTPATH = '#{request.contextPath}';
+      var THEMEPATH = '#{request.contextPath}/themes/novus/';
+    </script>
+     
+    <!-- jQuery -->
 
-      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/default_dev/css/common.css"/>
-      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/default_dev/css/store.css"/>
-      
-    </h:head>
-    <h:body styleClass="siteBodyWrapper"> 
-      <div id="siteWrapper">
-        <div id="siteLayoutWrapper">
-          
-          <!-- Site's Menu bar -->
-          <ui:include src="/fragments/view_sitemenubar.xhtml" />
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.2.js"></script>
+     
+    <!-- jQuery UI -->
     
-          <!-- Site's Header -->
-          <div id="siteHeaderWrapper" class="authHeaderWrapper"></div>
-          
-          <!-- Site's Content -->
-          <div id="siteContentWrapper">
-            <ui:insert name="content"></ui:insert>
-            <div class="clearFloating"></div>
-          </div>
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.js"></script>
     
-          <!-- Site's Footer -->
-          <ui:include src="/fragments/view_sitefooter.xhtml" />
+    <!-- jQuery Validation   -->
+    
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"/>
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/additional-methods.min.js"/>
+    
+    <!-- jQuery REST -->
+    
+    <h:outputScript name="scripts/jquery.rest/jquery.rest.js"></h:outputScript>
+    
+    <!-- Async.js -->    
+    
+    <h:outputScript name="scripts/async/async.js"></h:outputScript>
+
+    <!-- DustJs -->
+    
+    <h:outputScript name="scripts/dustjs/dust-full-1.2.5.js"></h:outputScript>
+    <h:outputScript name="scripts/dustjs/dust-helpers.js"></h:outputScript>
+    <h:outputScript name="scripts/dustutils/dustutils.js"></h:outputScript>
+    
+    <!-- FnI API -->
+    
+    <h:outputScript name="scripts/fniapi/fniapi.js"></h:outputScript>
+
+    <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/common.css"/>
+    <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/store.css"/>
+    
+    <ui:insert name="head" />
+  </h:head>
+  <h:body styleClass="siteBodyWrapper">
+    <div id="siteWrapper">
+      <div id="siteLayoutWrapper">
+
+        <!-- Site's Menu bar -->
+        <ui:include src="/fragments/view_sitemenubar.xhtml" />
+
+        <!-- Site's Header -->
+        <div id="siteHeaderWrapper" class="authHeaderWrapper"></div>
+
+        <!-- Site's Content -->
+        <div id="siteContentWrapper">
+          <ui:insert name="content"></ui:insert>
+          <div class="clearFloating"></div>
         </div>
+
+        <!-- Site's Footer -->
+        <ui:include src="/fragments/view_sitefooter.xhtml" />
       </div>
-    </h:body>
-  </f:view>
+    </div>
+  </h:body>
+</f:view>
 </html>

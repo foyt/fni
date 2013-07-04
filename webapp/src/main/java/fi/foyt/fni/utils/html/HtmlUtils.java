@@ -5,8 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.transform.TransformerException;
 
@@ -17,9 +15,6 @@ import org.w3c.dom.DocumentType;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
-
-import de.spieleck.app.cngram.NGramProfiles;
-import de.spieleck.app.cngram.NGramProfiles.Ranker;
 
 public class HtmlUtils {
 
@@ -141,26 +136,6 @@ public class HtmlUtils {
 
     return output.toString();
   }
-
-  public static List<GuessedLanguage> getGuessedLanguages(String text, double threshold) throws IOException {
-    List<GuessedLanguage> guessedLanguages = new ArrayList<GuessedLanguage>();
-
-    Ranker ranker = getNGramRanker();
-    
-    ranker.account(text);
-    NGramProfiles.RankResult result = ranker.getRankResult();
-
-    for (int i = 0, l = result.getLength(); i < l; i++) {
-      double score = result.getScore(i);
-      if (score > threshold) {
-        guessedLanguages.add(new GuessedLanguage(result.getName(i), score));
-      } else {
-        break;
-      }
-    }
-
-    return guessedLanguages;
-  }
   
   public static boolean containsMicrosoftCruft(String data) {
     // TODO: Implement
@@ -187,15 +162,6 @@ public class HtmlUtils {
     htmlBuilder.append("</html>");
     
     return htmlBuilder.toString();
-  }
-  
-  private static synchronized Ranker getNGramRanker() throws IOException {
-  	if (nGramRanker == null) {
-      NGramProfiles nGramProfiles = new NGramProfiles();
-      nGramRanker = nGramProfiles.getRanker();
-  	}
-  	
-  	return nGramRanker;
   }
   
   private static void printDocumentType(PrintingContext printingContext, DocumentType documentType) throws IOException {
@@ -227,6 +193,4 @@ public class HtmlUtils {
     
     contentWriter.append('>');
   }
-  
-  private static Ranker nGramRanker = null;
 }

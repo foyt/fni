@@ -68,9 +68,10 @@ import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.compression.CompressionUtils;
 import fi.foyt.fni.utils.diff.DiffUtils;
-import fi.foyt.fni.utils.html.GuessedLanguage;
 import fi.foyt.fni.utils.html.HtmlUtils;
 import fi.foyt.fni.utils.itext.B64ImgReplacedElementFactory;
+import fi.foyt.fni.utils.language.GuessedLanguage;
+import fi.foyt.fni.utils.language.LanguageUtils;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @Path("/materials/documents")
@@ -162,7 +163,7 @@ public class MaterialsDocumentsRESTService extends RESTService {
 		if (language == null) {
 			List<GuessedLanguage> guessedLanguages;
       try {
-	      guessedLanguages = HtmlUtils.getGuessedLanguages(data, 0.2);
+	      guessedLanguages = LanguageUtils.getGuessedLanguages(data, 0.2);
   			if (guessedLanguages.size() > 0) {
   				String languageCode = guessedLanguages.get(0).getLanguageCode();
   				language = languageDAO.findByIso2(languageCode);
@@ -219,7 +220,7 @@ public class MaterialsDocumentsRESTService extends RESTService {
 		if (language == null) {
 			List<GuessedLanguage> guessedLanguages;
       try {
-	      guessedLanguages = HtmlUtils.getGuessedLanguages(data, 0.2);
+	      guessedLanguages = LanguageUtils.getGuessedLanguages(data, 0.2);
   			if (guessedLanguages.size() > 0) {
   				String languageCode = guessedLanguages.get(0).getLanguageCode();
   				language = languageDAO.findByIso2(languageCode);

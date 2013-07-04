@@ -31,10 +31,10 @@
         </div>
       </ui:fragment>
       
-      <div class="siteMenuBarWidget" id="siteMenuBarWidgetChat"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetChatLabel']}</a></div>
-      <div class="siteMenuBarWidget" id="siteMenuBarWidgetFriends"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetFriendsLabel']}</a></div>
+      <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetChat"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetChatLabel']}</a></div>
+      <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetFriends"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetFriendsLabel']}</a></div>
       <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetCalendar"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetCalendarLabel']}</a></div>
-    
+    <!-- 
       <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetMessagesContent">
   
         <div id="siteMenuBarWidgetMessagesFoldersContainer">
@@ -137,7 +137,7 @@
       
     
       <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetCalendarContent"></div>
-      
+      -->      
     </div>
     <div id="siteMenuBarThirdColumn">
       <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetSearch"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetSearchLabel']}</a></div>
@@ -150,10 +150,10 @@
         <a href="#{request.contextPath}/login/">#{locales['generic.header.menuBarWidgetLoginLabel']}</a>
       </h:panelGroup>
 
-      <h:panelGroup layout="block" class="siteMenuBarWidget" id="siteMenuBarWidgetLocale">
-        <a href="javascript:void(null);">#{fn:toUpperCase(sessionController.locale.language)}</a>
+      <h:panelGroup layout="block" class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetLocale">
+        <a href="javascript:void(null);">#{sessionController.locale.language}</a>
       </h:panelGroup>
-
+<!-- 
       <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetSearchContent">
         <span>#{locales['generic.header.menuBarWidgetSearchText']}</span>
         <div class="siteMenuBarWidgetSearchInputContainer">
@@ -194,7 +194,7 @@
           </li>
         </ul>
       </div>
-      
+ -->      
     </div>
   </div> 
 </ui:composition>  

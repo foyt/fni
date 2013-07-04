@@ -72,9 +72,10 @@ import fi.foyt.fni.persistence.model.materials.VectorImageRevision;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.fileupload.FileData;
-import fi.foyt.fni.utils.html.GuessedLanguage;
 import fi.foyt.fni.utils.html.HtmlUtils;
 import fi.foyt.fni.utils.images.ImageUtils;
+import fi.foyt.fni.utils.language.GuessedLanguage;
+import fi.foyt.fni.utils.language.LanguageUtils;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @RequestScoped
@@ -654,7 +655,7 @@ public class MaterialController {
 		List<GuessedLanguage> guessedLanguages;
 		Language language = null;
 		try {
-			guessedLanguages = HtmlUtils.getGuessedLanguages(data, 0.2);
+			guessedLanguages = LanguageUtils.getGuessedLanguages(data, 0.2);
 			if (guessedLanguages.size() > 0) {
 				String languageCode = guessedLanguages.get(0).getLanguageCode();
 				language = languageDAO.findByIso2(languageCode);

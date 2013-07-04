@@ -536,16 +536,20 @@
   opacity: 1;
 }
 
-.store-product-admin-actions-container .attach-book-file-action  {
+.store-product-admin-actions-container .product-attach-book-file-action  {
   background-image: url("../gfx/icons/32x32/actions/store-attach-book.png");
 }
 
-.store-product-admin-actions-container .add-images-action  {
+.store-product-admin-actions-container .product-add-images-action  {
   background-image: url("../gfx/icons/32x32/actions/store-add-images.png");
 }
 
-.store-product-admin-actions-container .edit-details {
+.store-product-admin-actions-container .product-edit-details {
   background-image: url("../gfx/icons/32x32/actions/store-edit-details.png");
+}
+
+.store-product-admin-actions-container .product-delete {
+  background-image: url("../gfx/icons/32x32/actions/store-delete-product.png");
 }
 
 /* Store dialogs */

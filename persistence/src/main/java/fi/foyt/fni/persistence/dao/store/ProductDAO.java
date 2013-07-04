@@ -12,6 +12,7 @@ import javax.persistence.criteria.Root;
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.store.Product;
+import fi.foyt.fni.persistence.model.store.ProductImage;
 import fi.foyt.fni.persistence.model.store.Product_;
 
 @RequestScoped
@@ -33,5 +34,11 @@ public class ProductDAO extends GenericDAO<Product> {
     
     return query.getResultList();
   }
+
+	public Product updateDefaultImage(Product product, ProductImage defaultImage) {
+		product.setDefaultImage(defaultImage);
+		getEntityManager().persist(product);
+		return product;
+	}
 	
 }

@@ -58,8 +58,9 @@ import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.compression.CompressionUtils;
 import fi.foyt.fni.utils.diff.DiffUtils;
 import fi.foyt.fni.utils.diff.PatchResult;
-import fi.foyt.fni.utils.html.GuessedLanguage;
 import fi.foyt.fni.utils.html.HtmlUtils;
+import fi.foyt.fni.utils.language.GuessedLanguage;
+import fi.foyt.fni.utils.language.LanguageUtils;
 
 @ApplicationScoped
 @Stateful
@@ -250,7 +251,7 @@ public class CKCConnectorImpl implements CKCConnector {
 
     if (language == null) {
       try {
-        List<GuessedLanguage> guessedLanguages = HtmlUtils.getGuessedLanguages(document.getContentPlain(), 0.2);
+        List<GuessedLanguage> guessedLanguages = LanguageUtils.getGuessedLanguages(document.getContentPlain(), 0.2);
         if (guessedLanguages.size() > 0) {
           language = languageDAO.findByIso2(guessedLanguages.get(0).getLanguageCode());
         }
@@ -447,7 +448,7 @@ public class CKCConnectorImpl implements CKCConnector {
 
     if (document.getLanguage() == null) {
       try {
-        List<GuessedLanguage> guessedLanguages = HtmlUtils.getGuessedLanguages(document.getContentPlain(), 0.2);
+        List<GuessedLanguage> guessedLanguages = LanguageUtils.getGuessedLanguages(document.getContentPlain(), 0.2);
         if (guessedLanguages.size() > 0) {
           Language language = languageDAO.findByIso2(guessedLanguages.get(0).getLanguageCode());
           if (language != null) {
