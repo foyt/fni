@@ -111,7 +111,17 @@
   	  <groupId>fi.foyt.fni</groupId>
   	  <artifactId>persistence</artifactId>
     </dependency>
-    
+
+    <dependency>
+      <groupId>fi.foyt.fni</groupId>
+      <artifactId>common</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>fi.foyt.fni</groupId>
+      <artifactId>rest</artifactId>
+    </dependency>
+
     <!-- Scribe -->
 
     <dependency>
@@ -153,15 +163,6 @@
     <dependency>
       <groupId>diff_match_patch</groupId>
       <artifactId>diff_match_patch</artifactId>
-      <type>jar</type>
-      <scope>compile</scope>
-    </dependency>
-
-    <!-- NGram -->
-
-    <dependency>
-      <groupId>de.spieleck.app.ngramj</groupId>
-      <artifactId>cngram</artifactId>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
@@ -215,14 +216,6 @@
       <id>ckc-plugin-googlecode</id>
       <name>CKC Maven Repository</name>
       <url>http://ckc-plugin.googlecode.com/svn/repository</url>
-    </repository>
-
-    <!-- CNGram -->
-    
-    <repository>
-      <id>ObjectWEB</id>
-      <name>ObjectWEB</name>
-      <url>http://maven.ow2.org/maven2/</url>
     </repository>
   </repositories>
 

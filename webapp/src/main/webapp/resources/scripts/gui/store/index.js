@@ -161,7 +161,7 @@
     /**
      * Product Admin Actions / Attach book file
      */
-    $(document).on('click', '.attach-book-file-action', function (e) {
+    $(document).on('click', '.product-attach-book-file-action', function (e) {
       
       var productId = $(this).data('product-id');
       var uploadUrl = getFnIApi().basePath + '/store/products/' + productId + '/files';
@@ -260,7 +260,7 @@
     /**
      * Product Admin Actions / Edit Product Details
      */
-    $(document).on('click', '.edit-details', function (e) {
+    $(document).on('click', '.product-edit-details', function (e) {
       var productId = $(this).data('product-id');
       api.batch({
         productDetails: api.store(false).products.details.read(productId),
@@ -340,6 +340,39 @@
               
               **/
             }
+          });
+        }
+      });
+    });
+    
+    /**
+     * Product Admin Actions / Delete Product
+     */
+    $(document).on('click', '.product-delete', function (event) {
+      var productId = $(this).data('product-id');
+      
+      renderDustTemplate('/store/dust/productdeletedialog.dust', {
+        title: "Tuotetitteli"
+      }, function(err, out) {
+        if (err) {
+          // Proper error handling
+          alert(err);
+        } else {
+          var buttons = new Object();
+          
+          buttons['Delete'] = function() {
+            $(this).dialog("close");
+          };
+
+          buttons['Cancel'] = function() {
+            $(this).dialog("close");
+          };
+          
+          var dialog = $(out).dialog({
+            modal: true,
+            width: 500,
+            maxHeight: 600,
+            buttons: buttons
           });
         }
       });

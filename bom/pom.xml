@@ -25,6 +25,8 @@
     <ckc-connector.version>0.0.4</ckc-connector.version>
     <google-api-services-drive.version>v2-rev77-1.15.0-rc</google-api-services-drive.version>
     <google-http-client-jackson.version>1.15.0-rc</google-http-client-jackson.version>
+    <resteasy-multipart-provider.version>2.3.2.Final</resteasy-multipart-provider.version>
+    <pdfbox.version>1.8.2</pdfbox.version>
   </properties>
 
   <dependencyManagement>
@@ -34,6 +36,12 @@
       <dependency>
         <groupId>fi.foyt.fni</groupId>
         <artifactId>persistence</artifactId>
+        <version>${fni.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>fi.foyt.fni</groupId>
+        <artifactId>common</artifactId>
         <version>${fni.version}</version>
       </dependency>
 
@@ -50,6 +58,14 @@
         <artifactId>jboss-javaee-6.0</artifactId>
         <version>${jboss-javaee-6.0.version}</version>
         <type>pom</type>
+      </dependency>
+      
+      <!-- RESTEasy -->
+
+      <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+        <artifactId>resteasy-multipart-provider</artifactId>
+        <version>${resteasy-multipart-provider.version}</version>
       </dependency>
 
       <!-- Xalan -->
@@ -79,7 +95,16 @@
         <artifactId>commons-compress</artifactId>
         <version>${commons-compress.version}</version>
       </dependency>
+ 
+      <!-- PDFBox -->
 
+      <dependency>
+        <groupId>org.apache.pdfbox</groupId>
+        <artifactId>pdfbox</artifactId>
+        <version>${pdfbox.version}</version>
+        <type>jar</type>
+      </dependency>
+      
       <!-- Hibenate -->
 
       <dependency>
