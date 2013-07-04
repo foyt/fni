@@ -1,8 +1,11 @@
 package fi.foyt.fni.persistence.model.common;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PersistenceException;
 import javax.persistence.Transient;
+
+import org.apache.commons.lang3.StringUtils;
 
 @Entity
 public class MultilingualString {
@@ -71,9 +76,26 @@ public class MultilingualString {
 				return string.getValue();
 		}
 		
+		if (StringUtils.isNotBlank(locale.getCountry())) {
+			String value = getValue(new Locale(locale.getLanguage()));
+			if (value != null)
+				return value;
+		}
+		
 		return getDefaultValue();
 	}
-	
+
+	@Transient
+	public Map<Locale, String> toMap() {
+		Map<Locale, String> result = new HashMap<>();
+		
+		for (LocalizedString string : getStrings()) {
+			result.put(string.getLocale(), string.getValue());
+		}		
+		
+		return Collections.unmodifiableMap(result);
+	}
+
 	@Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
