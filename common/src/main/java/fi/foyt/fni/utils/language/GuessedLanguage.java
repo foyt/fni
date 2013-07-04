@@ -1,4 +1,4 @@
-package fi.foyt.fni.utils.html;
+package fi.foyt.fni.utils.language;
 
 public class GuessedLanguage {
 
