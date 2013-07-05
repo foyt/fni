@@ -1,5 +1,6 @@
 package fi.foyt.fni.persistence.dao.store;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
@@ -14,6 +15,7 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.store.Product;
 import fi.foyt.fni.persistence.model.store.ProductImage;
 import fi.foyt.fni.persistence.model.store.Product_;
+import fi.foyt.fni.persistence.model.users.User;
 
 @RequestScoped
 @DAO
@@ -40,5 +42,28 @@ public class ProductDAO extends GenericDAO<Product> {
 		getEntityManager().persist(product);
 		return product;
 	}
+
+	public Product updatePrice(Product product, Double price) {
+		product.setPrice(price);
+		getEntityManager().persist(product);
+		return product;
+	}
+
+	public Product updatePublished(Product product, Boolean published) {
+		product.setPublished(published);
+		getEntityManager().persist(product);
+		return product;
+	}
+
+	public Product updateModified(Product product, Date modified) {
+		product.setModified(modified);
+		getEntityManager().persist(product);
+		return product;
+	}
 	
+	public Product updateModifier(Product product, User modifier) {
+		product.setModifier(modifier);
+		getEntityManager().persist(product);
+		return product;
+	}
 }
