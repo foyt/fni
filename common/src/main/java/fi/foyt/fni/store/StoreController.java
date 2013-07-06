@@ -25,6 +25,7 @@ import fi.foyt.fni.persistence.dao.store.ProductImageDAO;
 import fi.foyt.fni.persistence.dao.store.ProductTagDAO;
 import fi.foyt.fni.persistence.dao.store.StoreDetailDAO;
 import fi.foyt.fni.persistence.dao.store.StoreTagDAO;
+import fi.foyt.fni.persistence.model.common.LocalizedString;
 import fi.foyt.fni.persistence.model.common.MultilingualString;
 import fi.foyt.fni.persistence.model.store.BookProduct;
 import fi.foyt.fni.persistence.model.store.FileProduct;
@@ -91,7 +92,7 @@ public class StoreController {
 	@DAO
 	private ProductDetailDAO productDetailDAO;
 	
-	/* Tags */
+	/* Store Tags */
 
 	public StoreTag createTag(String text) {
 		return storeTagDAO.create(text);
@@ -108,8 +109,25 @@ public class StoreController {
 	public List<StoreTag> listTags() {
 		return storeTagDAO.listAll();
 	}
+
+	public List<StoreTag> listProductStoreTags(Product product) {
+		List<StoreTag> result = new ArrayList<StoreTag>();
+		
+		List<ProductTag> productTags = productTagDAO.listByProduct(product);
+		for (ProductTag productTag : productTags) {
+			result.add(productTag.getTag());
+		}
+		
+		return result;
+	}
 	
-	public List<StoreTag> listProductTags(Product product) {
+	/* Product Tags */
+
+	private List<ProductTag> listProductTagsByProduct(Product product) {
+		return productTagDAO.listByProduct(product);
+	}
+
+	public List<StoreTag> listStoreTagsByProduct(Product product) {
 		List<StoreTag> result = new ArrayList<>();
 		
 		List<ProductTag> productTags = productTagDAO.listByProduct(product);
@@ -118,6 +136,17 @@ public class StoreController {
 		}
 		
 		return result;
+	}
+
+	public void deleteProductTag(ProductTag productTag) {
+		StoreTag storeTag = productTag.getTag();
+		
+		productTagDAO.delete(productTag);
+		
+		Long productCount = productTagDAO.countProductsByTag(storeTag);
+		if (productCount == 0) {
+			storeTagDAO.delete(storeTag);
+		}
 	}
 	
 	/* Store Details */
@@ -144,7 +173,7 @@ public class StoreController {
 		return productDetailDAO.findByProductAndDetail(product, storeDetail);
 	}
 
-	public List<ProductDetail> listProductDetails(Product product) {
+	public List<ProductDetail> listProductDetailsByProduct(Product product) {
 		return productDetailDAO.listByProduct(product);
 	}
 
@@ -175,7 +204,7 @@ public class StoreController {
 	public Map<String, String> getProductDetailMap(Product product) {
 		Map<String, String> result = new HashMap<String, String>();
 		
-		List<ProductDetail> productDetails = listProductDetails(product);
+		List<ProductDetail> productDetails = listProductDetailsByProduct(product);
 		for (ProductDetail productDetail : productDetails) {
 			String name = productDetail.getDetail().getName();
 			String value = productDetail.getValue();
@@ -217,6 +246,33 @@ public class StoreController {
 		return productDAO.listAllOrderByCreated(0, RECENT_PRODUCT_COUNT);
 	}
 	
+	public Product updateProductDefaultImage(Product product, ProductImage productImage) {
+		return productDAO.updateDefaultImage(product, productImage);
+	}
+
+	public void deleteProduct(Product product) {
+		for (ProductImage productImage : listProductImageByProduct(product)) {
+			deleteProductImage(productImage);
+		}
+		
+		if (product instanceof FileProduct) {
+			FileProductFile file = ((FileProduct) product).getFile();
+			if (file != null) {
+			  deleteFileProductFile(file);
+			}
+		}
+		
+		for (ProductDetail productDetail : listProductDetailsByProduct(product)) {
+			deleteProductDetailValue(productDetail);
+		}
+		
+		for (ProductTag productTag : listProductTagsByProduct(product)) {
+			deleteProductTag(productTag);
+		}
+		
+		productDAO.delete(product);
+	}
+	
 	/* ProductImages */
 
 	public ProductImage createProductImage(Product product, byte[] content, String contentType, User creator) {
@@ -231,11 +287,11 @@ public class StoreController {
 	public List<ProductImage> listProductImageByProduct(Product product) {
 		return productImageDAO.listByProduct(product);
 	}
-	
-	public Product updateProductDefaultImage(Product product, ProductImage productImage) {
-		return productDAO.updateDefaultImage(product, productImage);
+
+	public void deleteProductImage(ProductImage productImage) {
+		productImageDAO.delete(productImage);
 	}
-	
+
 	/* BookProducts */
 
 	public BookProduct createBookProduct(User creator, Map<Locale, String> names, Map<Locale, String> descriptions, Boolean downloadable, Double price, ProductImage defaultImage, List<StoreTag> tags, Map<String, String> details) {
@@ -263,12 +319,93 @@ public class StoreController {
 		return bookProduct;
 	}
 	
-	/* FileProducts */
-
-	public FileProductFile createFileProductFile(byte[] content, String contentType) {
-		return fileProductFileDAO.create(content, contentType);
+	public BookProduct findBookProductById(Long id) {
+		return bookProductDAO.findById(id);
 	}
 	
+	public BookProduct updateBookProduct(fi.foyt.fni.persistence.model.store.BookProduct bookProduct, Double price, Map<Locale, String> names,
+			Map<Locale, String> descriptions, Map<String, String> details, List<String> tags, Boolean published, Boolean downloadable, User modifier) {
+		
+		for (Locale locale : names.keySet()) {
+			setMultiLingualString(bookProduct.getName(), locale, names.get(locale));
+		}
+		
+		for (Locale locale : descriptions.keySet()) {
+			setMultiLingualString(bookProduct.getDescription(), locale, names.get(locale));
+		}
+		
+		if (details == null) {
+			details = new HashMap<String, String>();
+		}
+		
+		Map<String, String> existingDetails = getProductDetailMap(bookProduct);
+		
+		for (String name : details.keySet()) {
+			String value = details.get(name);
+			existingDetails.remove(name);
+			setProductDetail(bookProduct, name, value);
+		}
+		
+		for (String name : existingDetails.keySet()) {
+			setProductDetail(bookProduct, name, null);
+		}
+		
+		List<StoreTag> addTags = new ArrayList<>();
+		
+		for (String tag : tags) {
+			StoreTag storeTag = findTagByText(tag);
+			if (storeTag == null) {
+				storeTag = createTag(tag);
+			}
+			
+		  addTags.add(storeTag);
+		}
+		
+		Map<Long, ProductTag> existingTagMap = new HashMap<Long, ProductTag>();
+		List<ProductTag> existingTags = listProductTagsByProduct(bookProduct);
+		for (ProductTag existingTag : existingTags) {
+			existingTagMap.put(existingTag.getTag().getId(), existingTag);
+		}
+		
+		for (int i = addTags.size() - 1; i >= 0; i--) {
+			StoreTag addTag = addTags.get(i);
+			
+			if (existingTagMap.containsKey(addTag.getId())) {
+				addTags.remove(i);
+			} 
+			
+			existingTagMap.remove(addTag.getId());
+		}
+		
+		for (ProductTag removeTag : existingTagMap.values()) {
+			deleteProductTag(removeTag);
+		}
+		
+		for (StoreTag storeTag : addTags) {
+			productTagDAO.create(storeTag, bookProduct);
+		}
+		
+		productDAO.updateModified(bookProduct, new Date());
+		productDAO.updateModifier(bookProduct, modifier);
+		productDAO.updatePrice(bookProduct, price);
+		productDAO.updatePublished(bookProduct, published);
+		bookProductDAO.updateDownloadable(bookProduct, downloadable);
+		
+		return bookProduct;
+	}
+
+	/* FileProducts */
+
+	private void setMultiLingualString(MultilingualString string, Locale locale, String value) {
+		LocalizedString localizedString = localizedStringDAO.findByMultilingualStringAndLocale(string, locale);
+		
+		if (localizedString == null) {
+			localizedStringDAO.create(string, locale, value);
+		} else {
+			localizedStringDAO.updateValue(localizedString, value);
+		}
+	}
+
 	public FileProduct findFileProductById(Long id) {
 		return fileProductDAO.findById(id);
 	}
@@ -276,6 +413,15 @@ public class StoreController {
 	public FileProduct updateFileProductFile(fi.foyt.fni.persistence.model.store.FileProduct fileProduct, FileProductFile file) {
 		return fileProductDAO.updateFile(fileProduct, file);
 	}
+	
+	/* FileProductFiles */
 
+	public FileProductFile createFileProductFile(byte[] content, String contentType) {
+		return fileProductFileDAO.create(content, contentType);
+	}
+	
+	public void deleteFileProductFile(FileProductFile fileProductFile) {
+		fileProductFileDAO.delete(fileProductFile);
+	}
 	
 }
