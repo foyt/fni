@@ -24,6 +24,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+
 import fi.foyt.fni.api.beans.CompactVectorImageBean;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
@@ -40,7 +41,6 @@ import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.utils.compression.CompressionUtils;
 import fi.foyt.fni.utils.diff.DiffUtils;
-import fi.foyt.fni.utils.html.HtmlUtils;
 import fi.foyt.fni.utils.language.GuessedLanguage;
 import fi.foyt.fni.utils.language.LanguageUtils;
 

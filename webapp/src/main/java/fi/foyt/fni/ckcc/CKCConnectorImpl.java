@@ -58,7 +58,6 @@ import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.compression.CompressionUtils;
 import fi.foyt.fni.utils.diff.DiffUtils;
 import fi.foyt.fni.utils.diff.PatchResult;
-import fi.foyt.fni.utils.html.HtmlUtils;
 import fi.foyt.fni.utils.language.GuessedLanguage;
 import fi.foyt.fni.utils.language.LanguageUtils;
 
