@@ -1,12 +1,13 @@
 package fi.foyt.fni.persistence.model.store;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
-import fi.foyt.fni.persistence.model.common.MultilingualString;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 public class StoreDetail {
@@ -15,11 +16,11 @@ public class StoreDetail {
     return id;
   }
   
-  public MultilingualString getName() {
+  public String getName() {
 		return name;
 	}
   
-  public void setName(MultilingualString name) {
+  public void setName(String name) {
 		this.name = name;
 	}
   
@@ -27,6 +28,8 @@ public class StoreDetail {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   
-  @OneToOne
-  private MultilingualString name;
+  @Column (nullable = false, unique = true)
+  @NotEmpty
+  @NotNull
+  private String name;
 }

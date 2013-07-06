@@ -12,12 +12,21 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.persistence.model.common.Country;
+import fi.foyt.fni.persistence.model.users.User;
 
 @Entity
 public class Address {
 
   public Long getId() {
     return id;
+  }
+
+  public User getUser() {
+    return user;
+  }
+  
+  public void setUser(User user) {
+    this.user = user;
   }
   
   public AddressType getAddressType() {
@@ -113,10 +122,13 @@ public class Address {
       return false;
     }    
   }
-  
+
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
+  
+  @ManyToOne 
+  private User user;
   
   @Column (nullable = false)
   @Enumerated
