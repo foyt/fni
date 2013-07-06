@@ -58,21 +58,21 @@
 
         <div id="store-categories">
           <div class="store-category">
-            <div class="storeCategoryTitle">
+            <div class="store-category-title">
               <a href="javascript:void(null);" data-category-type="recent">Most recent</a>
             </div>
           </div>
           
           <!-- TODO: Only if user has them... -->
           
-          <div class="storeCategory">
-            <div class="storeCategoryTitle">
+          <div class="store-category">
+            <div class="store-category-title">
               <a href="javascript:void(null);" data-category-type="unpublished">Unpublished</a>
             </div>
           </div>
-          <ui:repeat var="tag" value="#{storeIndexViewBackingBean.storeTags}">
-            <div class="storeCategory">
-              <div class="storeCategoryTitle">
+          <ui:repeat var="tag" value="#{storeBackingBean.tagsWithPublishedProducts}">
+            <div class="store-category">
+              <div class="store-category-title">
                 <a href="javascript:void(null);" data-category-type="tag" data-tag="#{tag.text}">#{tag.text}</a>
               </div>
             </div>

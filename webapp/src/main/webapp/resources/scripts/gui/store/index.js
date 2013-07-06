@@ -166,7 +166,7 @@
      * Category links
      */
     
-    $('#storeCategories .storeCategory a').click(function (e) {
+    $('#store-categories .store-category a').click(function (e) {
       loadProductList($(this).data('category-type'), $(this).data('tag'));
     });
     

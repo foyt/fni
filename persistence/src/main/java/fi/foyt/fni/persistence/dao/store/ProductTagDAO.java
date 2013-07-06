@@ -6,6 +6,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.DAO;
@@ -13,6 +14,7 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.store.Product;
 import fi.foyt.fni.persistence.model.store.ProductTag;
 import fi.foyt.fni.persistence.model.store.ProductTag_;
+import fi.foyt.fni.persistence.model.store.Product_;
 import fi.foyt.fni.persistence.model.store.StoreTag;
 
 @RequestScoped
@@ -67,5 +69,23 @@ public class ProductTagDAO extends GenericDAO<ProductTag> {
     );
     
     return entityManager.createQuery(criteria).getSingleResult();
+	}
+
+	public List<StoreTag> listStoreTagsByProductPublished(Boolean published) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<StoreTag> criteria = criteriaBuilder.createQuery(StoreTag.class);
+    Root<ProductTag> root = criteria.from(ProductTag.class);
+    Join<ProductTag, Product> join = root.join(ProductTag_.product);
+    criteria.select(root.get(ProductTag_.tag)).distinct(true);
+    
+    criteria.where(
+    		criteriaBuilder.and(
+    		  criteriaBuilder.equal(join.get(Product_.published), published)
+    		)
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
 	}
 }

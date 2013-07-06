@@ -1,6 +1,8 @@
 package fi.foyt.fni.store;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -110,6 +112,10 @@ public class StoreController {
 		return storeTagDAO.listAll();
 	}
 
+	public List<StoreTag> listStoreTagsWithPublishedProducts() {
+		return productTagDAO.listStoreTagsByProductPublished(Boolean.TRUE);
+	}
+	
 	public List<StoreTag> listProductStoreTags(Product product) {
 		List<StoreTag> result = new ArrayList<StoreTag>();
 		
@@ -424,4 +430,13 @@ public class StoreController {
 		fileProductFileDAO.delete(fileProductFile);
 	}
 	
+	/* Currency */
+	
+	public String formatCurrency(Locale locale, Double number) {
+		// TODO: Currency -> SystemSettings
+		Currency currency = Currency.getInstance("EUR");
+		NumberFormat format = NumberFormat.getCurrencyInstance(locale);
+		format.setCurrency(currency);
+		return format.format(number);
+	}
 }
