@@ -2,6 +2,9 @@ package fi.foyt.fni.rest.entities.store;
 
 public class StoreTag {
 
+	public StoreTag() {
+	}
+	
 	public StoreTag(Long id, String text) {
 		super();
 		this.id = id;

@@ -1,6 +1,9 @@
 package fi.foyt.fni.rest.entities.store;
 
 public class StoreDetail {
+	
+	public StoreDetail() {
+	}
 
 	public StoreDetail(Long id, String name) {
 		super();

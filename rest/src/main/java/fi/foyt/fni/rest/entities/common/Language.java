@@ -2,6 +2,9 @@ package fi.foyt.fni.rest.entities.common;
 
 public class Language {
 
+	public Language() {
+	}
+	
 	public Language(Long id, Boolean localized, String iSO2, String iSO3) {
 		super();
 		this.id = id;

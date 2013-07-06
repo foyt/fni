@@ -5,9 +5,11 @@ import java.util.Date;
 import fi.foyt.fni.rest.entities.users.User;
 
 public class ProductImage {
+	
+	public ProductImage() {
+	}
 
 	public ProductImage(Long id, Date modified, Date created, User creator, User modifier, String downloadUrl) {
-		super();
 		this.id = id;
 		this.modified = modified;
 		this.created = created;
