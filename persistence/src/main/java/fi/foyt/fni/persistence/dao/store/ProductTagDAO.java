@@ -54,4 +54,18 @@ public class ProductTagDAO extends GenericDAO<ProductTag> {
     
     return entityManager.createQuery(criteria).getResultList();
 	}
+
+	public Long countProductsByTag(StoreTag tag) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Long> criteria = criteriaBuilder.createQuery(Long.class);
+    Root<ProductTag> root = criteria.from(ProductTag.class);
+    criteria.select(criteriaBuilder.count(root.get(ProductTag_.product)));
+    criteria.where(
+    		criteriaBuilder.equal(root.get(ProductTag_.tag), tag)
+    );
+    
+    return entityManager.createQuery(criteria).getSingleResult();
+	}
 }
