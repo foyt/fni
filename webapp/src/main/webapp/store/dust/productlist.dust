@@ -1,0 +1,8 @@
+<div class="store-products">
+  <h3 class="store-products-title">{title}</h3>
+  <div class="store-products-contents">
+    {#products}
+      {>"/store/dust/product.dust"/}
+    {/products}
+  </div>
+</div>

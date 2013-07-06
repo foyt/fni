@@ -1,0 +1,12 @@
+<div title="Attach Book File" class="store-dialog attach-book-file-dialog">
+
+  <h3>Attach Book File</h3>
+
+  <div class="dialog-section">
+    <label>File</label>
+    <div>
+      <input id="fileupload" type="file" name="file" data-url="{url}" multiple>
+    </div>
+  </div>
+  
+</div>

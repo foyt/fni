@@ -20,49 +20,44 @@
     <h:outputScript name="scripts/jquery.magnific-popup/jquery.magnific-popup.min.js"/>
     <h:outputStylesheet name="scripts/jquery.magnific-popup/magnific-popup.css"/>
     
-    <!-- jQuery DataTables -->
-    
-    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
-    <link rel="StyleSheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css"></link>
-    
   </ui:define>
   <ui:define name="content">
     <div id="store-index"></div>
-    <div id="storeSidebar">
-      <div id="storeShoppingCart">
-        <div id="storeShoppingCartTitle">Shopping Cart</div>
+    <div id="store-sidebar">
+      <div id="store-mini-shopping-cart">
+        <div id="store-mini-shopping-cart-title">Shopping Cart</div>
 
-        <div id="storeShoppingCartButtons">
-          <a id="viewCartButton" href="${pageContext.request.contextPath}/store/viewcart.page">View</a>
+        <div id="store-mini-shopping-cart-buttons">
+          <h:link id="store-view-cart-button" value="View" outcome="/store/cart.jsf"/>
         </div>
 
-        <div class="storeShoppingCartContentsContainer">
+        <div class="store-mini-shopping-cart-contents">
 
-          <div class="storeShoppingCartItems">
+          <div class="store-mini-shopping-cart-items">
 
-            <div class="storeShoppingCartItemContainer">
-              <div class="storeShoppingCartItemCount">1 x</div>
-              <div class="storeShoppingCartItemName">Quisque at nisl ac nisi dignissim grav...</div>
-              <div class="storeShoppingCartItemPrice">EUR 5.00</div>
+            <div class="store-mini-shopping-cart-item">
+              <div class="store-mini-shopping-cart-item-count">1 x</div>
+              <div class="store-mini-shopping-cart-item-name">Quisque at nisl ac nisi dignissim grav...</div>
+              <div class="store-mini-shopping-cart-item-price">EUR 5.00</div>
             </div>
 
           </div>
 
-          <div class="storeShoppingCartSummaryContainer">
-            <div class="storeShoppingCartTotalTitleContainer">
-              <div class="storeShoppingCartTotalTitle">Total</div>
+          <div class="store-mini-shopping-cart-summary">
+            <div class="store-mini-shopping-cart-summary-total-title-container">
+              <div class="store-mini-shopping-cart-summary-total-title">Total</div>
             </div>
-            <div class="storeShoppingCartTotal">EUR 5.00</div>
+            <div class="store-mini-shopping-cart-summary-total">EUR 5.00</div>
           </div>
         </div>
 
       </div>
 
-      <div id="storeCategoriesContainer">
-        <div class="storeCategoriesTitle">Product Tags</div>
+      <div id="store-categories-container">
+        <div class="store-categories-title">Product Tags</div>
 
-        <div id="storeCategories">
-          <div class="storeCategory">
+        <div id="store-categories">
+          <div class="store-category">
             <div class="storeCategoryTitle">
               <a href="javascript:void(null);" data-category-type="recent">Most recent</a>
             </div>
@@ -86,8 +81,8 @@
         </div>
       </div>
       
-      <div id="storeAdminPanel">
-        <a class="storeAdminCreateBookProduct" title="Create New Book Product"> </a>
+      <div id="store-admin-panel">
+        <a class="store-admin-create-product" title="Create New Product"> </a>
       </div>
 
     </div>

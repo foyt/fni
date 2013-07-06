@@ -1,0 +1,106 @@
+<div title="Create new Product" class="store-dialog create-product-dialog">
+  <form>
+    <h3>Create new Product</h3>
+  
+    <div class="dialog-section">
+      <label>Type</label>
+      <div>
+        <select name="type">
+          <option value="BOOK">Book</option>
+          <option value="PREMIUM_ACCOUNT">Premium Account</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="dialog-section">
+      <label>Name</label>
+      <table>
+        <tr>
+          <th>Locale</th>
+          <th>Name</th>
+        </tr>
+        
+        {#localizedLanguages}
+          <tr>
+            <td>
+              {iso2}
+            </td>
+            <td>
+              <input required="required" name="name-{iso2}" type="text" class="max-width" value=""/>
+            </td>
+          </tr>
+        {/localizedLanguages}
+      </table>
+    </div>
+    
+    <div class="dialog-section">
+      <label>Description</label>
+      <table>
+        <tr>
+          <th>Locale</th>
+          <th>Description</th>
+        </tr>
+        
+        {#localizedLanguages}
+          <tr>
+            <td>
+              {iso2}
+            </td>
+            <td>
+              <input required="required" name="description-{iso2}" type="text" class="max-width" value=""/>
+            </td>
+          </tr>
+        {/localizedLanguages}
+      </table>
+    </div>
+    
+    <div class="dialog-section">
+      <label>Price</label>
+      <div>
+        <input type="number" name="price" class="max-width" />
+      </div> 
+    </div>
+    
+    <div class="dialog-section">
+      <label>Tags</label>
+      <div>
+        <select name="tag">
+          <optgroup label="Create New Tag">
+            <option value="new">New Tag</option>
+          </optgroup>
+          <optgroup label="Existing Tags">
+            {#tags}
+              <option value="{text}">{text}</option>
+            {/tags}
+          </optgroup>
+        </select>
+        <div class="new-tag-container">        
+          <label>New Tag</label> 
+          <div class="max-width">
+            <input type="text" value="" name="new-tag"/>
+            <a class="add-new-tag" href="javascript:void(null);">Add</a>
+          </div>
+        </div>
+      </div>
+      <div class="tags"></div>
+    </div>
+
+    <div data-type="BOOK">
+      <h4>Book Options</h4>
+      <div class="dialog-section">
+        <input type="checkbox" name="downloadable"/> <label>Downloadable</label>
+      </div>
+    </div>
+  
+    <div data-type="PREMIUM_ACCOUNT" style="display: none;">
+      <h4>Premium Account Options</h4>
+      <div class="dialog-section">
+        <label>Months</label>
+        <div>
+          <input required="required" type="number" name="months" class="max-width" />
+        </div>
+      </div>
+    </div>
+  
+ </form>
+</div>

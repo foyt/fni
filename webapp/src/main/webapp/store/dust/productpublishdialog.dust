@@ -1,0 +1,3 @@
+<div title="Are You Sure?" class="store-dialog product-publish-dialog">
+  <h3>Are you sure that you wish to publish {title}</h3>
+</div>
