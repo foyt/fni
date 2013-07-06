@@ -2,3 +2,5 @@
 /.settings
 /.classpath
 /.project
+/hbm2ddl.xml
+/sql.ddl
