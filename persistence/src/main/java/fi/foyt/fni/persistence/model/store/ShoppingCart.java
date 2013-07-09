@@ -28,6 +28,14 @@ public class ShoppingCart {
     this.customer = customer;
   }
   
+  public String getSessionId() {
+		return sessionId;
+	}
+  
+  public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+  
   public PaymentMethod getPaymentMethod() {
     return paymentMethod;
   }
@@ -52,13 +60,13 @@ public class ShoppingCart {
     this.modified = modified;
   }
   
-  public DeliveryMethod getCarrier() {
-    return carrier;
-  }
+  public DeliveryMethod getDeliveryMethod() {
+		return deliveryMethod;
+	}
   
-  public void setCarrier(DeliveryMethod carrier) {
-    this.carrier = carrier;
-  }
+  public void setDeliveryMethod(DeliveryMethod deliveryMethod) {
+		this.deliveryMethod = deliveryMethod;
+	}
   
   public Address getDeliveryAddress() {
     return deliveryAddress;
@@ -83,11 +91,13 @@ public class ShoppingCart {
   @ManyToOne 
   private User customer;
   
+  private String sessionId;
+  
   @ManyToOne 
   private PaymentMethod paymentMethod;
   
   @ManyToOne 
-  private DeliveryMethod carrier;
+  private DeliveryMethod deliveryMethod;
   
   @ManyToOne 
   private Address deliveryAddress;

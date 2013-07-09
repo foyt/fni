@@ -49,14 +49,6 @@ public class OrderItem {
     this.product = product;
   }
   
-  public String getReference() {
-    return reference;
-  }
-  
-  public void setReference(String reference) {
-    this.reference = reference;
-  }
-  
   public Double getUnitPrice() {
     return unitPrice;
   }
@@ -85,6 +77,4 @@ public class OrderItem {
   @NotNull
   @Column (nullable = false)
   private Integer count;
-  
-  private String reference;
 }

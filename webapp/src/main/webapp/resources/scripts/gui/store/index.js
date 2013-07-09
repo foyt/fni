@@ -178,6 +178,17 @@
       event.preventDefault();
       loadProductList('tag', $(this).data('tag'));
     });
+    
+    /**
+     * Product Admin Actions / Publish Product
+     */
+    $(document).on('click', '.store-product-add-to-cart-action', function (event) {
+      var productId = $(this).closest('.store-product').data('product-id');
+      var operatorForm = $('#shopping-cart-operator-container form');
+      var prefix = operatorForm.attr('name');
+      operatorForm.find('input[name="' + prefix + ':productId"]').val(productId);
+      operatorForm.find('input[type="submit"]').click();
+    });
 
     /**
      * Product Admin Actions / Publish Product
@@ -581,7 +592,7 @@
     /**
      * Admin / Create Product
      */
-    $('#storeAdminPanel>a').click(function (e) {
+    $('#store-admin-panel>a').click(function (e) {
       api.batch({
         localizedLanguages: api.system(false).languages.read({ localized : true }),
         tags: api.store(false).tags.read()

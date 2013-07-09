@@ -1,6 +1,5 @@
 package fi.foyt.fni.persistence.model.store;
 
-import java.util.Currency;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -47,14 +46,6 @@ public class Order {
   
   public void setOrderStatus(OrderStatus orderStatus) {
     this.orderStatus = orderStatus;
-  }
-  
-  public Currency getCurrency() {
-    return currency;
-  }
-  
-  public void setCurrency(Currency currency) {
-    this.currency = currency;
   }
   
   public Double getShippingCosts() {
@@ -135,9 +126,7 @@ public class Order {
   private OrderStatus orderStatus;
   
   @ManyToOne
-  private Address deliveryAddress;
-  
-  private Currency currency;  
+  private Address deliveryAddress; 
 
   private Double shippingCosts;
   

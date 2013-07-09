@@ -33,27 +33,10 @@
         }
 
         return this;
-        
-        /**
-        async.parallel(batchCallbacks, function(err, results) {
-          var resultObject = new Object();
-          $.each(results, function (index, result) {
-            $.each(result, function (key, value) {
-              resultObject[key] = value;
-            });
-          });
-          
-          var err = null;
-          callback(err, resultObject);
-        });
-        
-        **/
       }
     };
     
     async.parallel(batchCallbacks, $.proxy(function(err, results) {
-      console.log(["done", err, results]);
-      
       if (err) {
         if (this._errorCallback) {
           this._errorCallback(null, err, _err);
