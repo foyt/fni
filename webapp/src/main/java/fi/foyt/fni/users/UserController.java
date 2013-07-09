@@ -62,6 +62,10 @@ public class UserController {
     return user;
   }
 
+	public User findUserById(Long userId) {
+		return userDAO.findById(userId);
+	}
+
   public User findUserByEmail(String email) {
     UserEmail userEmail = userEmailDAO.findByEmail(email);
     if (userEmail != null)
