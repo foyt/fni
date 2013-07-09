@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -22,7 +23,15 @@ import fi.foyt.fni.persistence.model.users.UserToken;
 @Stateful
 public class SessionController {
   
-  @Inject
+	@Inject
+	@Login
+	private Event<UserSessionEvent> loginEvent;
+	
+	@Inject
+	@Logout
+	private Event<UserSessionEvent> logoutEvent;
+
+	@Inject
   @DAO
   private UserDAO userDAO;
 
@@ -53,10 +62,12 @@ public class SessionController {
   public Long getLoggedUserId() {
     return loggedUserId;
   }
-  
+	
   public void login(UserToken token) {
     this.loggedUserId = token.getUserIdentifier().getUser().getId();
     this.loggedUserTokenId = token.getId();
+    
+    loginEvent.fire(new UserSessionEvent(loggedUserId));
   }
 
   public UserToken getLoggedUserToken() {
@@ -76,9 +87,12 @@ public class SessionController {
       context.addCookie("accessToken", null, null, "/");
     }
 **/    
-    
+    Long userId = this.loggedUserId;
+  	
     this.loggedUserId = null;
     this.loggedUserTokenId = null;
+
+  	logoutEvent.fire(new UserSessionEvent(userId));
   }
 
   
