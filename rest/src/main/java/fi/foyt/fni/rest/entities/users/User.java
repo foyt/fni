@@ -4,6 +4,9 @@ import java.util.Date;
 
 public class User {
 
+	public User() {
+	}
+	
 	public User(Long id, String firstName, String lastName, String nickname, String role, Date registrationDate, String locale) {
 		super();
 		this.id = id;
