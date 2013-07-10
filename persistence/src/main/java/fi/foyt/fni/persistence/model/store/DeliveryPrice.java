@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class DeliveryPrice {
@@ -14,21 +15,21 @@ public class DeliveryPrice {
     return id;
   }
   
-  public Double getFromWeight() {
-    return fromWeight;
-  }
+  public Integer getFromWeight() {
+		return fromWeight;
+	}
   
-  public void setFromWeight(Double fromWeight) {
-    this.fromWeight = fromWeight;
-  }
+  public void setFromWeight(Integer fromWeight) {
+		this.fromWeight = fromWeight;
+	}
   
-  public Double getToWeight() {
-    return toWeight;
-  }
+  public Integer getToWeight() {
+		return toWeight;
+	}
   
-  public void setToWeight(Double toWeight) {
-    this.toWeight = toWeight;
-  }
+  public void setToWeight(Integer toWeight) {
+		this.toWeight = toWeight;
+	}
   
   public Double getPrice() {
     return price;
@@ -50,13 +51,18 @@ public class DeliveryPrice {
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
   
-  private Double fromWeight;
+  @NotNull
+  @Column (nullable = false)
+  private Integer fromWeight;
   
-  private Double toWeight;
+  @NotNull
+  @Column (nullable = false)
+  private Integer toWeight;
   
   @ManyToOne
   private DeliveryMethod deliveryMethod;
   
+  @NotNull
   @Column (nullable = false)
   private Double price;
 }
