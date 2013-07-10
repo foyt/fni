@@ -1,8 +1,6 @@
 package fi.foyt.fni.store;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +17,8 @@ import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.common.LocalizedStringDAO;
 import fi.foyt.fni.persistence.dao.common.MultilingualStringDAO;
 import fi.foyt.fni.persistence.dao.store.BookProductDAO;
+import fi.foyt.fni.persistence.dao.store.DeliveryMethodDAO;
+import fi.foyt.fni.persistence.dao.store.DeliveryPriceDAO;
 import fi.foyt.fni.persistence.dao.store.FileProductDAO;
 import fi.foyt.fni.persistence.dao.store.FileProductFileDAO;
 import fi.foyt.fni.persistence.dao.store.ProductDAO;
@@ -30,6 +30,8 @@ import fi.foyt.fni.persistence.dao.store.StoreTagDAO;
 import fi.foyt.fni.persistence.model.common.LocalizedString;
 import fi.foyt.fni.persistence.model.common.MultilingualString;
 import fi.foyt.fni.persistence.model.store.BookProduct;
+import fi.foyt.fni.persistence.model.store.DeliveryMethod;
+import fi.foyt.fni.persistence.model.store.DeliveryPrice;
 import fi.foyt.fni.persistence.model.store.FileProduct;
 import fi.foyt.fni.persistence.model.store.FileProductFile;
 import fi.foyt.fni.persistence.model.store.Product;
@@ -93,6 +95,14 @@ public class StoreController {
 	@Inject
 	@DAO
 	private ProductDetailDAO productDetailDAO;
+
+	@Inject
+	@DAO
+	private DeliveryMethodDAO deliveryMethodDAO;
+
+	@Inject
+	@DAO
+	private DeliveryPriceDAO deliveryPriceDAO;
 	
 	/* Store Tags */
 
@@ -430,13 +440,15 @@ public class StoreController {
 		fileProductFileDAO.delete(fileProductFile);
 	}
 	
-	/* Currency */
+	/* Delivery Methods */
 	
-	public String formatCurrency(Locale locale, Double number) {
-		// TODO: Currency -> SystemSettings
-		Currency currency = Currency.getInstance("EUR");
-		NumberFormat format = NumberFormat.getCurrencyInstance(locale);
-		format.setCurrency(currency);
-		return format.format(number);
+	public List<DeliveryMethod> listDeliveryMethods() {
+		return deliveryMethodDAO.listAll();
+	}
+	
+	/* Delivery Price */
+	
+	public DeliveryPrice findDeliveryPriceByDeliveryMethodAndWeight(DeliveryMethod deliveryMethod, Integer weight) {
+		return deliveryPriceDAO.findByDeliveryMethodAndWeight(deliveryMethod, weight);
 	}
 }
