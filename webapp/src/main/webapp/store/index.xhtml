@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/store.xhtml">
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/store.xhtml">
 
   <ui:define name="pageTitle">#{locales['store.index.pageTitle']}</ui:define>
   <ui:define name="head">
@@ -24,37 +28,48 @@
   <ui:define name="content">
     <div id="store-index"></div>
     <div id="store-sidebar">
-      <div id="store-mini-shopping-cart">
-        <div id="store-mini-shopping-cart-title">Shopping Cart</div>
+      <h:panelGroup layout="block" id="store-mini-shopping-cart">
+        <h3 class="store-mini-shopping-cart-title">Shopping Cart</h3>
 
         <div id="store-mini-shopping-cart-buttons">
           <h:link id="store-view-cart-button" value="View" outcome="/store/cart.jsf"/>
         </div>
 
-        <div class="store-mini-shopping-cart-contents">
-
+        <h:panelGroup layout="block" id="store-mini-shopping-cart-contents">
           <div class="store-mini-shopping-cart-items">
-
-            <div class="store-mini-shopping-cart-item">
-              <div class="store-mini-shopping-cart-item-count">1 x</div>
-              <div class="store-mini-shopping-cart-item-name">Quisque at nisl ac nisi dignissim grav...</div>
-              <div class="store-mini-shopping-cart-item-price">EUR 5.00</div>
-            </div>
-
+            <h:panelGroup layout="block" rendered="#{shoppingCartBackingBean.shoppingCartEmpty}">
+              You don't have any products in cart yet.
+            </h:panelGroup>
+          
+            <ui:repeat var="cartItem" value="#{shoppingCartBackingBean.shoppingCartItems}">   
+              <div class="store-mini-shopping-cart-item">
+                <div class="store-mini-shopping-cart-item-count">#{cartItem.count}</div>
+                <div class="store-mini-shopping-cart-item-name">#{cartItem.name}</div>
+                <div class="store-mini-shopping-cart-item-price">
+                  <h:outputText value="#{cartItem.price}" >
+                    <f:convertNumber currencyCode="EUR" type="currency" />
+                  </h:outputText>
+                </div>
+              </div>
+            </ui:repeat>
           </div>
 
           <div class="store-mini-shopping-cart-summary">
             <div class="store-mini-shopping-cart-summary-total-title-container">
               <div class="store-mini-shopping-cart-summary-total-title">Total</div>
             </div>
-            <div class="store-mini-shopping-cart-summary-total">EUR 5.00</div>
+            <div class="store-mini-shopping-cart-summary-total">
+              <h:outputText value="#{shoppingCartBackingBean.itemCosts}" >
+                <f:convertNumber currencyCode="EUR" type="currency" />
+              </h:outputText>
+            </div>
           </div>
-        </div>
-
-      </div>
-
+          
+        </h:panelGroup>
+      </h:panelGroup>
+  
       <div id="store-categories-container">
-        <div class="store-categories-title">Product Tags</div>
+        <h3 class="store-categories-title">Product Tags</h3>
 
         <div id="store-categories">
           <div class="store-category">
@@ -70,7 +85,7 @@
               <a href="javascript:void(null);" data-category-type="unpublished">Unpublished</a>
             </div>
           </div>
-          <ui:repeat var="tag" value="#{storeBackingBean.tagsWithPublishedProducts}">
+          <ui:repeat var="tag" value="#{categoryListBackingBean.tagsWithPublishedProducts}">
             <div class="store-category">
               <div class="store-category-title">
                 <a href="javascript:void(null);" data-category-type="tag" data-tag="#{tag.text}">#{tag.text}</a>
@@ -85,6 +100,14 @@
         <a class="store-admin-create-product" title="Create New Product"> </a>
       </div>
 
+      <div id="shopping-cart-operator-container" style="display: none">
+        <h:form>
+          <h:inputHidden value="#{productListViewBackingBean.productId}" id="productId"/>
+          <h:commandButton id="shopping-cart-add-product-button" action="#{productListViewBackingBean.addProductToCart}">
+            <f:ajax render=":store-mini-shopping-cart-contents" execute="@form"/>
+          </h:commandButton>
+        </h:form>
+      </div>
     </div>
   </ui:define>
 

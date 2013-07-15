@@ -61,6 +61,18 @@
     </div>
     
     <div class="dialog-section">
+      <label>Delivery</label>
+      <div>
+        {?product.requiresDelivery}
+          <input checked="checked" type="checkbox" id="requires-delivery" name="requires-delivery"/> 
+        {:else}
+          <input type="checkbox" id="requires-delivery" name="requires-delivery"/> 
+        {/product.requiresDelivery}
+        </div>
+      </div> 
+    </div>
+    
+    <div class="dialog-section">
       <label>Tags</label>
       <div>
         <select name="tag">

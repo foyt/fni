@@ -8,17 +8,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import fi.foyt.fni.persistence.model.store.StoreTag;
-import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.store.StoreController;
-import fi.foyt.fni.view.AbstractViewBackingBean;
 
+@Stateful
 @RequestScoped
 @Named
-@Stateful
-public class StoreBackingBean extends AbstractViewBackingBean {
-
-	@Inject
-	private SessionController sessionController;
+public class CategoryListBackingBean {
 	
 	@Inject
 	private StoreController storeController;
@@ -26,4 +21,5 @@ public class StoreBackingBean extends AbstractViewBackingBean {
 	public List<StoreTag> getTagsWithPublishedProducts() {
 		return storeController.listStoreTagsWithPublishedProducts();
 	}
+	
 }

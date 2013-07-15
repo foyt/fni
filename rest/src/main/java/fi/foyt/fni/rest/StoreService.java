@@ -98,7 +98,9 @@ public class StoreService {
 
 				return Response.ok().entity(toEntity(
 					storeController.createBookProduct(loggedUser, bookProduct.getNames(), bookProduct.getDescriptions(), 
-					  bookProduct.getDownloadable(), bookProduct.getPrice(), defaultImage, tags, bookProduct.getDetails())
+					  bookProduct.getRequiresDelivery(), bookProduct.getDownloadable(), 
+					  bookProduct.getPrice(), defaultImage, tags, bookProduct.getDetails()
+					)
 			  )).build();
 		} else {
 			// TODO: Localize exception 
@@ -173,13 +175,14 @@ public class StoreService {
   			BookProduct bookProductEntity = (BookProduct) product;
   			fi.foyt.fni.persistence.model.store.BookProduct bookProduct = storeController.findBookProductById(productId);
 
-  			storeController.updateBookProduct(bookProduct, 
+  			storeController.updateBookProduct(bookProduct,  
   	  			bookProductEntity.getPrice(),
   	  			bookProductEntity.getNames(),
   	  			bookProductEntity.getDescriptions(),
   	  			bookProductEntity.getDetails(),
   	  			bookProductEntity.getTags(),
-  	  			bookProductEntity.getPublished(),  					
+  	  			bookProductEntity.getPublished(), 
+  	  			bookProductEntity.getRequiresDelivery(),
   					bookProductEntity.getDownloadable(),
   					loggedUser
   			);
@@ -575,26 +578,26 @@ public class StoreService {
 		if (product == null) {
 			return null;
 		}
-
+		
 		List<String> tags = getProductTags(product);
 		Map<String, String> details = storeController.getProductDetailMap(product);
 
 		return new PremiumAccountProduct(product.getId(), product.getPublished(), "PREMIUM_ACCOUNT", product.getName().toMap(), product.getDescription().toMap(),
 				product.getPrice(), toEntity(product.getDefaultImage()), product.getModified(), product.getCreated(), toEntity(product.getCreator()),
-				toEntity(product.getModifier()), tags, details, product.getMonths());
+				toEntity(product.getModifier()), product.getRequiresDelivery(), tags, details, product.getMonths());
 	}
 
 	private BookProduct toEntity(fi.foyt.fni.persistence.model.store.BookProduct product) {
 		if (product == null) {
 			return null;
 		}
-
+		
 		List<String> tags = getProductTags(product);
 		Map<String, String> details = storeController.getProductDetailMap(product);
 
 		return new BookProduct(product.getId(), product.getPublished(), "BOOK", product.getName().toMap(), product.getDescription().toMap(), product.getPrice(),
 				toEntity(product.getDefaultImage()), product.getModified(), product.getCreated(), toEntity(product.getCreator()), toEntity(product.getModifier()),
-				tags, details, getBookFileDownloadUrl(product), product.getDownloadable());
+				product.getRequiresDelivery(), tags, details, getBookFileDownloadUrl(product), product.getDownloadable());
 	}
 
 	private List<String> getProductTags(fi.foyt.fni.persistence.model.store.Product product) {

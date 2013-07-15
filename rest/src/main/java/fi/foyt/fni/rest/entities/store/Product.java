@@ -27,7 +27,7 @@ public class Product {
 	}
 
 	public Product(Long id, Boolean published, String type, Map<Locale, String> names, Map<Locale, String> descriptions, Double price, ProductImage defaultImage,
-			Date modified, Date created, User creator, User modifier, List<String> tags, Map<String, String> details) {
+			Date modified, Date created, User creator, User modifier, Boolean requiresDelivery, List<String> tags, Map<String, String> details) {
 		super();
 		this.id = id;
 		this.published = published;
@@ -39,6 +39,7 @@ public class Product {
 		this.modified = modified;
 		this.created = created;
 		this.creator = creator;
+		this.requiresDelivery = requiresDelivery;
 		this.modifier = modifier;
 		this.tags = tags;
 		this.details = details;
@@ -127,6 +128,14 @@ public class Product {
 	public void setModifier(User modifier) {
 		this.modifier = modifier;
 	}
+	
+	public Boolean getRequiresDelivery() {
+		return requiresDelivery;
+	}
+	
+	public void setRequiresDelivery(Boolean requiresDelivery) {
+		this.requiresDelivery = requiresDelivery;
+	}
 
 	public List<String> getTags() {
 		return tags;
@@ -165,7 +174,9 @@ public class Product {
 	private User creator;
 
 	private User modifier;
-
+	
+	private Boolean requiresDelivery;
+	
 	private List<String> tags;
 
 	private Map<String, String> details;

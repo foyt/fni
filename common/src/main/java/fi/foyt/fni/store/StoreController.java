@@ -17,8 +17,6 @@ import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.common.LocalizedStringDAO;
 import fi.foyt.fni.persistence.dao.common.MultilingualStringDAO;
 import fi.foyt.fni.persistence.dao.store.BookProductDAO;
-import fi.foyt.fni.persistence.dao.store.DeliveryMethodDAO;
-import fi.foyt.fni.persistence.dao.store.DeliveryPriceDAO;
 import fi.foyt.fni.persistence.dao.store.FileProductDAO;
 import fi.foyt.fni.persistence.dao.store.FileProductFileDAO;
 import fi.foyt.fni.persistence.dao.store.ProductDAO;
@@ -30,8 +28,6 @@ import fi.foyt.fni.persistence.dao.store.StoreTagDAO;
 import fi.foyt.fni.persistence.model.common.LocalizedString;
 import fi.foyt.fni.persistence.model.common.MultilingualString;
 import fi.foyt.fni.persistence.model.store.BookProduct;
-import fi.foyt.fni.persistence.model.store.DeliveryMethod;
-import fi.foyt.fni.persistence.model.store.DeliveryPrice;
 import fi.foyt.fni.persistence.model.store.FileProduct;
 import fi.foyt.fni.persistence.model.store.FileProductFile;
 import fi.foyt.fni.persistence.model.store.Product;
@@ -95,14 +91,6 @@ public class StoreController {
 	@Inject
 	@DAO
 	private ProductDetailDAO productDetailDAO;
-
-	@Inject
-	@DAO
-	private DeliveryMethodDAO deliveryMethodDAO;
-
-	@Inject
-	@DAO
-	private DeliveryPriceDAO deliveryPriceDAO;
 	
 	/* Store Tags */
 
@@ -310,7 +298,7 @@ public class StoreController {
 
 	/* BookProducts */
 
-	public BookProduct createBookProduct(User creator, Map<Locale, String> names, Map<Locale, String> descriptions, Boolean downloadable, Double price, ProductImage defaultImage, List<StoreTag> tags, Map<String, String> details) {
+	public BookProduct createBookProduct(User creator, Map<Locale, String> names, Map<Locale, String> descriptions, Boolean requiresDelivery, Boolean downloadable, Double price, ProductImage defaultImage, List<StoreTag> tags, Map<String, String> details) {
 		MultilingualString name = multilingualStringDAO.create();
 		MultilingualString description = multilingualStringDAO.create();
 		
@@ -326,7 +314,7 @@ public class StoreController {
 		
 		Date now = new Date();
 		
-		BookProduct bookProduct = bookProductDAO.create(name, description, price, downloadable, defaultImage, now, creator, now, creator, Boolean.FALSE);
+		BookProduct bookProduct = bookProductDAO.create(name, description, price, downloadable, defaultImage, now, creator, now, creator, Boolean.FALSE, requiresDelivery);
 
 		for (StoreTag tag : tags) {
 			productTagDAO.create(tag, bookProduct);
@@ -340,7 +328,7 @@ public class StoreController {
 	}
 	
 	public BookProduct updateBookProduct(fi.foyt.fni.persistence.model.store.BookProduct bookProduct, Double price, Map<Locale, String> names,
-			Map<Locale, String> descriptions, Map<String, String> details, List<String> tags, Boolean published, Boolean downloadable, User modifier) {
+			Map<Locale, String> descriptions, Map<String, String> details, List<String> tags, Boolean published, Boolean requiresDelivery, Boolean downloadable, User modifier) {
 		
 		for (Locale locale : names.keySet()) {
 			setMultiLingualString(bookProduct.getName(), locale, names.get(locale));
@@ -405,6 +393,7 @@ public class StoreController {
 		productDAO.updateModifier(bookProduct, modifier);
 		productDAO.updatePrice(bookProduct, price);
 		productDAO.updatePublished(bookProduct, published);
+		productDAO.updateRequiresDelivery(bookProduct, requiresDelivery);
 		bookProductDAO.updateDownloadable(bookProduct, downloadable);
 		
 		return bookProduct;
@@ -438,17 +427,5 @@ public class StoreController {
 	
 	public void deleteFileProductFile(FileProductFile fileProductFile) {
 		fileProductFileDAO.delete(fileProductFile);
-	}
-	
-	/* Delivery Methods */
-	
-	public List<DeliveryMethod> listDeliveryMethods() {
-		return deliveryMethodDAO.listAll();
-	}
-	
-	/* Delivery Price */
-	
-	public DeliveryPrice findDeliveryPriceByDeliveryMethodAndWeight(DeliveryMethod deliveryMethod, Integer weight) {
-		return deliveryPriceDAO.findByDeliveryMethodAndWeight(deliveryMethod, weight);
 	}
 }

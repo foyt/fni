@@ -60,12 +60,12 @@ public class ShoppingCart {
     this.modified = modified;
   }
   
-  public DeliveryMethod getDeliveryMethod() {
-		return deliveryMethod;
+  public String getDeliveryMethodId() {
+		return deliveryMethodId;
 	}
   
-  public void setDeliveryMethod(DeliveryMethod deliveryMethod) {
-		this.deliveryMethod = deliveryMethod;
+  public void setDeliveryMethodId(String deliveryMethodId) {
+		this.deliveryMethodId = deliveryMethodId;
 	}
   
   public Address getDeliveryAddress() {
@@ -96,8 +96,7 @@ public class ShoppingCart {
   @ManyToOne 
   private PaymentMethod paymentMethod;
   
-  @ManyToOne 
-  private DeliveryMethod deliveryMethod;
+  private String deliveryMethodId;
   
   @ManyToOne 
   private Address deliveryAddress;

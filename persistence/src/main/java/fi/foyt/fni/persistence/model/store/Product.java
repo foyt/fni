@@ -98,6 +98,14 @@ public class Product {
     this.modifier = modifier;
   }
   
+  public Boolean getRequiresDelivery() {
+		return requiresDelivery;
+	}
+  
+  public void setRequiresDelivery(Boolean requiresDelivery) {
+		this.requiresDelivery = requiresDelivery;
+	}
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -134,4 +142,8 @@ public class Product {
 
   @ManyToOne
   private User modifier;
+  
+  @NotNull
+  @Column (nullable = false, columnDefinition = "BIT")
+  private Boolean requiresDelivery;
 }

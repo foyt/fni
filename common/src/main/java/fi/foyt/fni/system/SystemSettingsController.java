@@ -12,22 +12,30 @@ import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import fi.foyt.fni.persistence.dao.DAO;
+import fi.foyt.fni.persistence.dao.common.CountryDAO;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
 import fi.foyt.fni.persistence.dao.system.SystemSettingDAO;
+import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.system.SystemSetting;
 
 @RequestScoped
 @Stateful
 public class SystemSettingsController {
+	
+	private static final String DEFAULT_COUNTRY_CODE = "FI";
 
 	@Inject
 	@DAO
 	private SystemSettingDAO systemSettingDAO;
-	
+
 	@Inject
 	@DAO
 	private LanguageDAO languageDAO;
+
+	@Inject
+	@DAO
+	private CountryDAO countryDAO;
 
 	public String getSetting(String name) {
 		SystemSetting systemSetting = systemSettingDAO.findByName(name);
@@ -72,5 +80,21 @@ public class SystemSettingsController {
 	
 	public List<Language> listLocalizedLanguages() {
 		return languageDAO.listByLocalized(Boolean.TRUE);
+	}
+
+	public Country findCountryById(Long id) {
+		return countryDAO.findById(id);
+	}
+
+	public Country findCountryByCode(String code) {
+		return countryDAO.findByCode(code);
+	}
+
+	public Country getDefaultCountry() {
+		return findCountryByCode(DEFAULT_COUNTRY_CODE);
+	}
+	
+	public List<Country> listCountries() {
+		return countryDAO.listAll();
 	}
 }

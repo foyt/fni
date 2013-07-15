@@ -62,6 +62,13 @@
     </div>
     
     <div class="dialog-section">
+      <label>Delivery</label>
+      <div>
+        <input type="checkbox" id="requires-delivery" name="requires-delivery"/> <label for="requires-delivery">Requires Delivery</label>
+      </div> 
+    </div>
+    
+    <div class="dialog-section">
       <label>Tags</label>
       <div>
         <select name="tag">

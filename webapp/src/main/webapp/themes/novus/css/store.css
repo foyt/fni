@@ -1,6 +1,177 @@
 @CHARSET "UTF-8";
 
+/* Prototyping */
+
+.store-cart-items-inner-container {
+  margin-top: 8px;
+}
+
+.store-cart-item-actions input[type="submit"] {
+  border: 1px solid #eee;
+  font-size: 10px;
+  line-height: 12px;
+  vertical-align: top;
+  width: 18px;
+  margin-right: 2px;
+  cursor: pointer;
+} 
+
+.store-cart-item-actions {
+  width: 50px;
+}
+
+.store-cart-cell-header {
+}
+
+.store-cart-item-count {
+  width: 60px;
+  text-align: center;
+}
+
+.store-cart-item-name {
+  width: 750px;
+}
+
+.store-cart-item-price {
+  width: 120px;
+  text-align: left;
+}
+
+.store-cart-item-total-price {
+  width: 120px;
+  text-align: left;
+}
+
+#store-cart-items-container {
+  display: table;
+}
+
+.store-cart-item-container {
+  display: table-row;
+}
+
+.store-cart-cell, .store-cart-cell-header {
+  padding-left: 4px;
+  padding-right: 4px;
+  display: table-cell;
+}
+
+#store-cart h4 {
+  background: #fafafa;
+  color: #002;
+  margin-top: 8px;
+  font-size: 14px;
+  border-radius: 4px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 4px;
+} 
+
+#store-cart h5 {
+  font-style: italic;
+}
+
+#store-cart-summary-total-price {
+  font-weight: bold;
+}
+
+#store-cart-summary-total-price h5 {
+  font-weight: bold;
+}
+
+#store-cart-summary-items {
+  margin-top: 8px;
+}
+
+.store-cart-summary-item h5 {
+  display: inline-block;
+  width: 200px;
+}
+
+
+.store-cart-delivery-method-container {
+  padding: 8px;
+}
+
+.store-cart-delivery-method-info {
+  margin-left: 21px;
+  font-style: italic;
+}
+
+.store-cart-delivery-method-details {
+  margin-left: 23px;
+}
+
+.store-cart-delivery-method-details h5 {
+  display: inline-block;
+}
+
+.store-cart-delivery-method-price {
+  float: right;
+}
+
+.store-cart-delivery-method-price-note {
+  font-weight: bold;
+}
+
+.store-cart-delivery-method-price-note-text {
+  font-style: italic;
+}
+
+.store-cart-delivery-address-container {
+  margin-top: 8px;
+}
+
+.store-cart-delivery-address-new-address {
+  display: table;
+  margin-left: 18px;
+}
+
+.store-cart-delivery-address-field {
+  display: table-row; 
+}
+
+.store-cart-delivery-address-field-label, .store-cart-delivery-address-field-input {
+  display: table-cell;
+  padding: 1px;
+}
+
+.store-cart-delivery-address-field label {
+  width: 110px;
+  display: inline-block;
+  font-weight: bold;
+}
+
+.store-cart-delivery-address-field input[type="text"], .store-cart-delivery-address-field select {
+  width: 300px;
+  -webkit-box-sizing: border-box; 	
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;  
+}
+
+/* Prototyping */
+
 /* Layout */
+
+#store-index, #store-cart {
+  background: #fff;
+  margin-top: 20px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 8px;
+  min-height: 783px;
+}
+
+#store-index h3, #store-cart h3, #store-sidebar h3 {
+  background-color: #EEEEEE;
+  border-radius: 8px 8px 8px 8px;
+  color: #000000;
+  padding-bottom: 8px;
+  padding-left: 8px;
+  padding-top: 8px;
+  font-size: 14px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
 
 #store-index, #store-cart {
   background: #fff;
@@ -193,13 +364,7 @@
   margin-top: 8px;
 }
 
-#store-mini-shopping-cart-title {
-  border-radius: 8px;
-  background: #eee;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 8px;
-  color: #000;
+#store-sidebar h3.store-mini-shopping-cart-title {
   background-image: url("../gfx/icons/22x22/actions/store-cart.png");
   background-repeat: no-repeat;
   background-position: 8px center;
@@ -212,11 +377,12 @@
   top: 16px;
 }
 
-.store-mini-shopping-cart-contents {
+#store-mini-shopping-cart-contents {
   padding: 8px;
   background: #fafafa;
-  margin-top: 4px;
-  border-radius: 8px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  margin-top: 10px;
+border-radius: 8px;
 }
 
 .store-mini-shopping-cart-items {
@@ -230,6 +396,11 @@
 .store-mini-shopping-cart-item-count {
   display: inline-block;
   font-size: 12px;
+}
+
+.store-mini-shopping-cart-item-count:after {
+  content: 'x';
+  margin-left: 3px;
 }
 
 .store-mini-shopping-cart-item-name {
@@ -264,12 +435,7 @@
   margin-top: 8px;
 }
 
-.store-categories-title {
-  border-radius: 8px;
-  background: #eee;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  color: #000;
+#store-sidebar h3.store-categories-title {
   background-image: url("../gfx/icons/22x22/actions/store-categories.png");
   background-repeat: no-repeat;
   background-position: 8px center;
@@ -279,7 +445,8 @@
 #store-categories {
   border-radius: 8px;
   background: #fafafa;
-  margin-top: 4px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  margin-top: 10px;
   padding-top: 4px;
   padding-left: 8px;
   padding-bottom: 4px;

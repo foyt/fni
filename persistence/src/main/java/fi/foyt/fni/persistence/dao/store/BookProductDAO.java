@@ -15,7 +15,7 @@ import fi.foyt.fni.persistence.model.users.User;
 @DAO
 public class BookProductDAO extends GenericDAO<BookProduct> {
   
-	public BookProduct create(MultilingualString name, MultilingualString description, Double price, Boolean downloadable, ProductImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published) {
+	public BookProduct create(MultilingualString name, MultilingualString description, Double price, Boolean downloadable, ProductImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Boolean requiresDelivery) {
     
 		BookProduct bookProduct = new BookProduct();
     bookProduct.setCreated(created);
@@ -28,6 +28,7 @@ public class BookProductDAO extends GenericDAO<BookProduct> {
     bookProduct.setName(name);
     bookProduct.setPrice(price);
     bookProduct.setPublished(published);
+    bookProduct.setRequiresDelivery(requiresDelivery);
     
     getEntityManager().persist(bookProduct);
     

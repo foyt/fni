@@ -95,7 +95,7 @@
     {/downloadable}
     
     <div class="store-product-action-container">
-      <a href="javascript:void(null);">Add to Shopping Cart</a>
+      <a href="javascript:void(null);" class="store-product-add-to-cart-action">Add to Shopping Cart</a>
     </div>
   </div>  
   

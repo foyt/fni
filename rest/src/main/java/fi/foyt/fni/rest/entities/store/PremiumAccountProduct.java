@@ -13,8 +13,8 @@ public class PremiumAccountProduct extends Product {
 	}
 	
 	public PremiumAccountProduct(Long id, Boolean published, String type, Map<Locale, String> name, Map<Locale, String> descriptions, Double price,
-			ProductImage defaultImage, Date modified, Date created, User creator, User modifier, List<String> tags, Map<String, String> details, Integer months) {
-		super(id, published, type, name, descriptions, price, defaultImage, modified, created, creator, modifier, tags, details);
+			ProductImage defaultImage, Date modified, Date created, User creator, User modifier, Boolean requiresDelivery,  List<String> tags, Map<String, String> details, Integer months) {
+		super(id, published, type, name, descriptions, price, defaultImage, modified, created, creator, modifier, requiresDelivery, tags, details);
 		this.months = months;
 	}
 

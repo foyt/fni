@@ -11,7 +11,6 @@ import javax.persistence.criteria.Root;
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.store.Address;
-import fi.foyt.fni.persistence.model.store.DeliveryMethod;
 import fi.foyt.fni.persistence.model.store.PaymentMethod;
 import fi.foyt.fni.persistence.model.store.ShoppingCart;
 import fi.foyt.fni.persistence.model.store.ShoppingCart_;
@@ -21,9 +20,9 @@ import fi.foyt.fni.persistence.model.users.User;
 @DAO
 public class ShoppingCartDAO extends GenericDAO<ShoppingCart> {
   
-	public ShoppingCart create(User customer, String sessionId, DeliveryMethod deliveryMethod, PaymentMethod paymentMethod, Address deliveryAddress, Date created, Date modified) {
+	public ShoppingCart create(User customer, String sessionId, String deliveryMethodId, PaymentMethod paymentMethod, Address deliveryAddress, Date created, Date modified) {
 		ShoppingCart shoppingCart = new ShoppingCart();
-		shoppingCart.setDeliveryMethod(deliveryMethod);
+		shoppingCart.setDeliveryMethodId(deliveryMethodId);
 		shoppingCart.setCreated(created);
 		shoppingCart.setCustomer(customer);
 		shoppingCart.setSessionId(sessionId);

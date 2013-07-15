@@ -144,6 +144,17 @@
       
       return result;
     },
+    getCheckboxNumberList: function (form, name) {
+      var result = new Array();
+      
+      var inputElements = form.find('input[name="' + name + '"]'); 
+      $.each(inputElements, function (index, inputElement) {
+        if ($(inputElement).prop('checked'))
+          result.push(parseInt($(inputElement).val()));
+      });
+      
+      return result;
+    },
     getPostfixMap: function (form, prefix, postfixes) {
       var result = new Object();
       var _this = this;
@@ -347,7 +358,7 @@
               var languages = $.map(data.localizedLanguages, function(localizedLanguage) { 
                 return localizedLanguage["iso2"]; 
               });
-              
+
               var product = {
                 id: data.product.id,
                 type: type,
@@ -355,9 +366,10 @@
                 names: valueExtractor.getPostfixMap(form, 'name-', languages),
                 descriptions: valueExtractor.getPostfixMap(form, 'description-', languages),
                 tags: valueExtractor.getTextList(form, 'tags'),
-                published: false
+                published: false,
+                requiresDelivery: valueExtractor.getCheckboxValue(form, 'requires-delivery')
               };
-              
+
               switch (type) {
                 case 'BOOK':
                   product['downloadable'] = valueExtractor.getCheckboxValue(form, 'downloadable');
@@ -620,7 +632,8 @@
                 price: valueExtractor.getInputFloat(form, 'price'),
                 names: valueExtractor.getPostfixMap(form, 'name-', languages),
                 descriptions: valueExtractor.getPostfixMap(form, 'description-', languages),
-                tags: valueExtractor.getTextList(form, 'tags')
+                tags: valueExtractor.getTextList(form, 'tags'),
+                requiresDelivery: valueExtractor.getCheckboxValue(form, 'requires-delivery')
               };
               
               switch (type) {

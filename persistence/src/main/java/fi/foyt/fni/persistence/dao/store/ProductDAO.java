@@ -66,4 +66,10 @@ public class ProductDAO extends GenericDAO<Product> {
 		getEntityManager().persist(product);
 		return product;
 	}
+
+	public Product updateRequiresDelivery(Product product, Boolean requiresDelivery) {
+		product.setRequiresDelivery(requiresDelivery);
+		getEntityManager().persist(product);
+		return product;
+	}
 }

@@ -93,14 +93,6 @@ public class Address {
     this.postalCode = postalCode;
   }
   
-  public String getRegion() {
-    return region;
-  }
-  
-  public void setRegion(String region) {
-    this.region = region;
-  }
-  
   @Transient
   public boolean match(Object obj) {
     if (obj instanceof Address) {
@@ -116,7 +108,6 @@ public class Address {
         StringUtils.equals(getStreet2(), other.getStreet2()) && 
         StringUtils.equals(getPostalCode(), other.getPostalCode()) &&
         StringUtils.equals(getCity(), other.getCity()) &&
-        StringUtils.equals(getRegion(), other.getRegion()) &&
         countryId == otherCountryId;      
     } else {
       return false;
@@ -148,9 +139,6 @@ public class Address {
   
   @Column (nullable = false)
   private String city;
-  
-  @Column (nullable = false)
-  private String region;
   
   @ManyToOne 
   private Country country;

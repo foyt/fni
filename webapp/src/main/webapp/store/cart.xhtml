@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/store.xhtml">
+
+  <ui:define name="pageTitle">#{locales['store.cart.pageTitle']}</ui:define>
+  <ui:define name="head">
+  </ui:define>
+  <ui:define name="content">
+    <h:panelGroup layout="block" id="store-cart">
+      <h3 class="store-cart-title">
+        <span>Shopping Cart</span>
+        <h:link outcome="/store/index.jsf" value="Back to Store"/>
+      </h3>
+      <div class="store-cart-contents">
+        <h:form id="store-cart-form">
+          <h:panelGroup layout="block" id="store-cart-items-container"> 
+            <h4>Items</h4>
+            
+            <div class="store-cart-items-inner-container">
+             <!-- TODO: Cart empty message -->
+             
+             <div class="store-cart-item-header-container"> 
+               <div class="store-cart-cell-header store-cart-item-actions"></div>     
+               <div class="store-cart-cell-header store-cart-item-count">Count</div>  
+               <div class="store-cart-cell-header store-cart-item-name">Item</div>   
+               <div class="store-cart-cell-header store-cart-item-price">Unit Price</div>
+               <div class="store-cart-cell-header store-cart-item-total-price">Total Price</div> 
+             </div>
+             
+             <ui:repeat var="cartItem" value="#{shoppingCartBackingBean.shoppingCartItems}">  
+               <div class="store-cart-item-container">  
+                  <div class="store-cart-cell store-cart-item-actions">
+                    <h:commandButton action="#{shoppingCartBackingBean.incShoppingCartItemCount(cartItem.id)}" value="+">
+                      <f:ajax render=":store-cart" execute="@form"/>
+                    </h:commandButton>
+                    <h:commandButton action="#{shoppingCartBackingBean.decShoppingCartItemCount(cartItem.id)}" value="-">
+                      <f:ajax render=":store-cart" execute="@form"/>
+                    </h:commandButton>
+                  </div>
+                  <div class="store-cart-cell store-cart-item-count">#{cartItem.count}</div>
+                  <div class="store-cart-cell store-cart-item-name">#{cartItem.name}</div>  
+                  <div class="store-cart-cell store-cart-item-price">
+                    <h:outputText value="#{cartItem.price}" >
+                      <f:convertNumber currencyCode="EUR" type="currency" />
+                    </h:outputText>
+                  </div>
+                  <div class="store-cart-cell store-cart-item-total-price">
+                    <h:outputText value="#{cartItem.totalPrice}" >
+                      <f:convertNumber currencyCode="EUR" type="currency" />
+                    </h:outputText>
+                  </div> 
+                </div>
+              </ui:repeat>
+            </div>
+          </h:panelGroup>
+          
+          <!-- TODO: If items need delivering -->
+          
+          <div id="store-cart-delivery-container">
+            <h4>Shipping</h4>
+            
+            <ui:repeat var="deliveryMethod" value="#{shoppingCartBackingBean.deliveryMethods}">
+              <div class="store-cart-delivery-method-container">
+                <h:selectOneRadio value="#{shoppingCartBackingBean.deliveryMethodId}">
+                  <f:selectItem itemLabel="#{deliveryMethod.name}" itemValue="#{deliveryMethod.id}"/>
+                  <f:ajax render=":store-cart" />
+                </h:selectOneRadio>
+                
+                <div class="store-cart-delivery-method-price">
+                  <ui:fragment rendered="#{deliveryMethod.requiresAddress}">
+                    <span class="store-cart-delivery-method-price-note" title="Delivery country can affect shipping costs">*</span>
+                  </ui:fragment>
+                  <span>
+                    <h:outputText value="#{deliveryMethod.price}">
+                      <f:convertNumber currencyCode="EUR" type="currency" />
+                    </h:outputText>
+                  </span>
+                </div> 
+                  
+                <div class="store-cart-delivery-method-info">#{deliveryMethod.info}</div> 
+                <div class="store-cart-delivery-method-details">
+                  <ui:fragment rendered="#{deliveryMethod.requiresAddress}">
+                    <h:panelGroup layout="block">
+                      <div class="store-cart-delivery-address-container">
+                        <h:selectOneRadio styleClass="store-cart-delivery-address-radio" value="#{shoppingCartBackingBean.addressId}">
+                          <f:selectItems value="#{shoppingCartBackingBean.addressSelectItems}"/>
+                        </h:selectOneRadio>
+                        
+                        <div class="store-cart-delivery-address-new-container">
+                          <div class="store-cart-delivery-address-new-address">
+                            <div class="store-cart-delivery-address-field">
+                              <div class="store-cart-delivery-address-field-label">
+                                <h:outputLabel value="Name" />
+                              </div>
+                              <div class="store-cart-delivery-address-field-input">
+                                <h:inputText value="#{shoppingCartBackingBean.addressPersonName}" />
+                              </div>
+                            </div>
+                            
+                            <div class="store-cart-delivery-address-field">
+                              <div class="store-cart-delivery-address-field-label">
+                                <h:outputLabel value="Company" />
+                              </div>
+                              <div class="store-cart-delivery-address-field-input">
+                                <h:inputText value="#{shoppingCartBackingBean.addressCompanyName}" />
+                              </div>
+                            </div>
+                            
+                            <div class="store-cart-delivery-address-field">
+                              <div class="store-cart-delivery-address-field-label">
+                                <h:outputLabel value="Street 1" />
+                              </div>
+                              <div class="store-cart-delivery-address-field-input">
+                                <h:inputText value="#{shoppingCartBackingBean.addressStreet1}" />
+                              </div>
+                            </div>
+                            
+                            <div class="store-cart-delivery-address-field">
+                              <div class="store-cart-delivery-address-field-label">
+                                <h:outputLabel value="Street 2" />
+                              </div>
+                              <div class="store-cart-delivery-address-field-input">
+                                <h:inputText value="#{shoppingCartBackingBean.addressStreet2}" />
+                              </div>
+                            </div>
+                            
+                            <div class="store-cart-delivery-address-field">
+                              <div class="store-cart-delivery-address-field-label">
+                                <h:outputLabel value="Postal Code / Zip" />
+                              </div>
+                              <div class="store-cart-delivery-address-field-input">
+                                <h:inputText value="#{shoppingCartBackingBean.addressPostalCode}" />
+                              </div>
+                            </div>
+                            
+                            <div class="store-cart-delivery-address-field">
+                              <div class="store-cart-delivery-address-field-label">
+                                <h:outputLabel value="City" />
+                              </div>
+                              <div class="store-cart-delivery-address-field-input">
+                                <h:inputText value="#{shoppingCartBackingBean.addressCity}" />
+                              </div>
+                            </div>
+                            
+                            <div class="store-cart-delivery-address-field">
+                              <div class="store-cart-delivery-address-field-label">
+                                <h:outputLabel value="Country" />
+                              </div>
+                              <div class="store-cart-delivery-address-field-input">
+                                <h:selectOneMenu id="address-country-id" value="#{shoppingCartBackingBean.addressCountryId}">
+                                  <f:selectItems value="#{shoppingCartBackingBean.countrySelectItems}"/>
+                                  <f:ajax render=":store-cart"/>
+                                </h:selectOneMenu>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </h:panelGroup>
+                  </ui:fragment>
+                </div>
+                
+              </div>
+            </ui:repeat>
+            
+            <div class="store-cart-delivery-method-price-note-text">* Delivery country can affect shipping costs</div>
+          </div>          
+          
+          <div id="store-cart-summary-container">
+            <h4>Summary</h4>
+            <div id="store-cart-summary-items" class="store-cart-summary-item">
+              <h5>Items</h5>
+              <span>
+                <h:outputText value="#{shoppingCartBackingBean.itemCosts}" >
+                  <f:convertNumber currencyCode="EUR" type="currency" />
+                </h:outputText>
+              </span>
+            </div>
+            <div id="store-cart-summary-delivery" class="store-cart-summary-item">
+              <h5>Delivery</h5>
+              <span>
+                <h:outputText value="#{shoppingCartBackingBean.deliveryCosts}" >
+                  <f:convertNumber currencyCode="EUR" type="currency" />
+                </h:outputText>
+              </span>
+            </div>
+            <div id="store-cart-summary-tax" class="store-cart-summary-item">
+              <h5>Tax (VAT 23 %)</h5>
+              <span>
+                <h:outputText value="#{shoppingCartBackingBean.taxAmount}" >
+                  <f:convertNumber currencyCode="EUR" type="currency" />
+                </h:outputText>
+              </span>
+            </div>
+            <div id="store-cart-summary-total-price" class="store-cart-summary-item">
+              <h5>Total</h5>
+              <span>
+                <h:outputText value="#{shoppingCartBackingBean.netPrice}" >
+                  <f:convertNumber currencyCode="EUR" type="currency" />
+                </h:outputText>
+              </span>
+            </div>
+          </div>
+          
+          <h:commandButton value="Proceed to Checkout" action="#{shoppingCartBackingBean.proceedToCheckout}" />
+          
+        </h:form>
+      </div>  
+    </h:panelGroup>
+  </ui:define>
+
+</ui:composition>

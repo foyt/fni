@@ -8,7 +8,7 @@
   <h:head>
     <title><ui:insert name="pageTitle"></ui:insert></title>
     <script type="text/javascript">
-      var LOCALE = '#{request.locale.language}';
+      var LOCALE = '#{sessionController.locale.language}';
       var CONTEXTPATH = '#{request.contextPath}';
       var THEMEPATH = '#{request.contextPath}/themes/novus/';
     </script>
@@ -52,7 +52,6 @@
   <h:body styleClass="siteBodyWrapper">
     <div id="siteWrapper">
       <div id="siteLayoutWrapper">
-
         <!-- Site's Menu bar -->
         <ui:include src="/fragments/view_sitemenubar.xhtml" />
 
