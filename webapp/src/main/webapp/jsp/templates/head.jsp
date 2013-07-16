@@ -13,6 +13,7 @@
 </script>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0/prototype.js"></script>
+<script type="text/javascript" src="http://cdn.jsdelivr.net/ckeditor/3.6.3/ckeditor.js"></script>
 
 <c:set var="jsVaribleScript"/>
 <c:forEach var="jsVariable" items="${jsVariables}">
@@ -35,7 +36,6 @@
 <script src="${pageContext.request.contextPath}/resources/scripts/pfvlib/pfvlib.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/cookie/cookie.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/prototype-datepicker-widget/datepicker.js" type="text/javascript"></script>
-<script src="${pageContext.request.contextPath}/resources/scripts/ckeditor/ckeditor.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/gui/forge/ckconfig.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/fnievents/fnievents.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/fnilocale/fnilocale.js" type="text/javascript"></script>
