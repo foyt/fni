@@ -12,7 +12,7 @@
   var THEMEPATH = '${pageContext.request.contextPath}/themes/${theme}/';
 </script>
 
-<script src="${pageContext.request.contextPath}/resources/scripts/prototype/prototype.js" type="text/javascript"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/prototype/1.7.0/prototype.js"></script>
 
 <c:set var="jsVaribleScript"/>
 <c:forEach var="jsVariable" items="${jsVariables}">
