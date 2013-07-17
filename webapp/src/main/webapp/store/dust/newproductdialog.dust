@@ -14,44 +14,12 @@
     
     <div class="dialog-section">
       <label>Name</label>
-      <table>
-        <tr>
-          <th>Locale</th>
-          <th>Name</th>
-        </tr>
-        
-        {#localizedLanguages}
-          <tr>
-            <td>
-              {iso2}
-            </td>
-            <td>
-              <input required="required" name="name-{iso2}" type="text" class="max-width" value=""/>
-            </td>
-          </tr>
-        {/localizedLanguages}
-      </table>
+      <input required="required" name="name" type="text" class="max-width" value=""/>
     </div>
     
     <div class="dialog-section">
       <label>Description</label>
-      <table>
-        <tr>
-          <th>Locale</th>
-          <th>Description</th>
-        </tr>
-        
-        {#localizedLanguages}
-          <tr>
-            <td>
-              {iso2}
-            </td>
-            <td>
-              <input required="required" name="description-{iso2}" type="text" class="max-width" value=""/>
-            </td>
-          </tr>
-        {/localizedLanguages}
-      </table>
+      <textarea required="required" name="description" class="max-width"></textarea>
     </div>
     
     <div class="dialog-section">

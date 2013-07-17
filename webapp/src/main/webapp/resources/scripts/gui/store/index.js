@@ -49,7 +49,6 @@
     var api = getFnIApi();
     
     renderDustTemplate('/store/dust/productlist.dust', {
-      locale: LOCALE,
       title: title,
       baseUrl: api.basePath,
       products: data
@@ -363,8 +362,8 @@
                 id: data.product.id,
                 type: type,
                 price: valueExtractor.getInputFloat(form, 'price'),
-                names: valueExtractor.getPostfixMap(form, 'name-', languages),
-                descriptions: valueExtractor.getPostfixMap(form, 'description-', languages),
+                name: valueExtractor.getPostfixMap(form, 'name-', languages),
+                description: valueExtractor.getPostfixMap(form, 'description-', languages),
                 tags: valueExtractor.getTextList(form, 'tags'),
                 published: false,
                 requiresDelivery: valueExtractor.getCheckboxValue(form, 'requires-delivery')
@@ -606,7 +605,6 @@
      */
     $('#store-admin-panel>a').click(function (e) {
       api.batch({
-        localizedLanguages: api.system(false).languages.read({ localized : true }),
         tags: api.store(false).tags.read()
       })
       .done(function (data) {
@@ -618,10 +616,6 @@
             var buttons = {
             };
             
-            var languages = $.map(data.localizedLanguages, function(localizedLanguage) { 
-              return localizedLanguage["iso2"]; 
-            });
-            
             buttons['Create'] = function() {
               var form = $(this).find('form');
               
@@ -630,8 +624,8 @@
               var product = {
                 type: type,
                 price: valueExtractor.getInputFloat(form, 'price'),
-                names: valueExtractor.getPostfixMap(form, 'name-', languages),
-                descriptions: valueExtractor.getPostfixMap(form, 'description-', languages),
+                name: valueExtractor.getInputValue(form, 'name'),
+                description: $(form.find('textarea[name="description"]')).val(),
                 tags: valueExtractor.getTextList(form, 'tags'),
                 requiresDelivery: valueExtractor.getCheckboxValue(form, 'requires-delivery')
               };

@@ -105,11 +105,10 @@ public class ShoppingCartBackingBean implements Serializable {
 
 	public List<ShoppingCartItemBean> getShoppingCartItems() { 
 		List<ShoppingCartItemBean> result = new ArrayList<>();
-		Locale locale = sessionController.getLocale();
 		
 		List<ShoppingCartItem> items = shoppingCartController.getShoppingCartItems();
 		for (ShoppingCartItem item : items) {
-			result.add(new ShoppingCartItemBean(item.getId(), item.getProduct().getName().getValue(locale), item.getCount(), item.getProduct().getPrice()));
+			result.add(new ShoppingCartItemBean(item.getId(), item.getProduct().getName(), item.getCount(), item.getProduct().getPrice()));
 		}
 		
 		return result;

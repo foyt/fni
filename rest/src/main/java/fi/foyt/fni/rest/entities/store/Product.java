@@ -2,7 +2,6 @@ package fi.foyt.fni.rest.entities.store;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonSubTypes;
@@ -26,14 +25,14 @@ public class Product {
 	public Product() {
 	}
 
-	public Product(Long id, Boolean published, String type, Map<Locale, String> names, Map<Locale, String> descriptions, Double price, ProductImage defaultImage,
+	public Product(Long id, Boolean published, String type, String name, String description, Double price, ProductImage defaultImage,
 			Date modified, Date created, User creator, User modifier, Boolean requiresDelivery, List<String> tags, Map<String, String> details) {
 		super();
 		this.id = id;
 		this.published = published;
 		this.type = type;
-		this.names = names;
-		this.descriptions = descriptions;
+		this.name = name;
+		this.description = description;
 		this.price = price;
 		this.defaultImage = defaultImage;
 		this.modified = modified;
@@ -65,20 +64,20 @@ public class Product {
 		this.type = type;
 	}
 
-	public Map<Locale, String> getNames() {
-		return names;
+	public String getName() {
+		return name;
 	}
-
-	public void setNames(Map<Locale, String> names) {
-		this.names = names;
+	
+	public void setName(String name) {
+		this.name = name;
 	}
-
-	public Map<Locale, String> getDescriptions() {
-		return descriptions;
+	
+	public String getDescription() {
+		return description;
 	}
-
-	public void setDescriptions(Map<Locale, String> descriptions) {
-		this.descriptions = descriptions;
+	
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Double getPrice() {
@@ -159,9 +158,9 @@ public class Product {
 
 	private String type;
 
-	private Map<Locale, String> names;
+	private String name;
 
-	private Map<Locale, String> descriptions;
+	private String description;
 
 	private Double price;
 

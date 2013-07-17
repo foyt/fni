@@ -9,13 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import fi.foyt.fni.persistence.model.common.MultilingualString;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import fi.foyt.fni.persistence.model.users.User;
 
 @Entity
@@ -34,19 +35,19 @@ public class Product {
 		this.published = published;
 	}
 
-  public MultilingualString getName() {
+  public String getName() {
 		return name;
 	}
   
-  public void setName(MultilingualString name) {
+  public void setName(String name) {
 		this.name = name;
 	}
   
-  public MultilingualString getDescription() {
+  public String getDescription() {
 		return description;
 	}
   
-  public void setDescription(MultilingualString description) {
+  public void setDescription(String description) {
 		this.description = description;
 	}
   
@@ -114,11 +115,13 @@ public class Product {
   @Column (nullable = false, columnDefinition = "BIT")
   private Boolean published;
 
-  @OneToOne
-  private MultilingualString name;
+  @NotNull
+  @NotEmpty
+  @Column(nullable = false)
+  private String name;
   
-  @OneToOne
-  private MultilingualString description;
+  @Lob
+  private String description;
 
   @NotNull
   @Column(nullable = false)

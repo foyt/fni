@@ -5,7 +5,7 @@
 <div class="store-product" data-product-id="{id}">
 {/published}  
   <div class="store-product-info-container">    
-    <div class="store-product-name">{names[locale]}</div>
+    <div class="store-product-name">{name}</div>
     <div class="store-product-tag-container">
       {#tags}
         <div class="store-product-tag">
@@ -14,7 +14,7 @@
       {/tags}
     </div>
     
-    <div class="store-product-description">{descriptions[locale]}</div>
+    <div class="store-product-description">{description}</div>
     <div class="store-product-details">
       {@if cond="{price} > 0"}
         <div class="store-product-detail">Price: <span class="store-product-details-price">EUR {price}</span></div>

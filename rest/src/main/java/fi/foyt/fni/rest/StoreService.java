@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.ejb.Stateful;
@@ -97,7 +96,7 @@ public class StoreService {
 				ProductImage defaultImage = defaultImageId != null ? storeController.findProductImageById(defaultImageId) : null;
 
 				return Response.ok().entity(toEntity(
-					storeController.createBookProduct(loggedUser, bookProduct.getNames(), bookProduct.getDescriptions(), 
+					storeController.createBookProduct(loggedUser, bookProduct.getName(), bookProduct.getDescription(), 
 					  bookProduct.getRequiresDelivery(), bookProduct.getDownloadable(), 
 					  bookProduct.getPrice(), defaultImage, tags, bookProduct.getDetails()
 					)
@@ -177,8 +176,8 @@ public class StoreService {
 
   			storeController.updateBookProduct(bookProduct,  
   	  			bookProductEntity.getPrice(),
-  	  			bookProductEntity.getNames(),
-  	  			bookProductEntity.getDescriptions(),
+  	  			bookProductEntity.getName(),
+  	  			bookProductEntity.getDescription(),
   	  			bookProductEntity.getDetails(),
   	  			bookProductEntity.getTags(),
   	  			bookProductEntity.getPublished(), 
@@ -335,12 +334,10 @@ public class StoreService {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 
-		Locale locale = getRequestLocale(httpHeaders);
-
 		// TODO: Permissions
 
 		FileProductFile fileProductFile = fileProduct.getFile();
-		String productName = fileProduct.getName().getValue(locale);
+		String productName = fileProduct.getName();
 		String urlName = StringUtils.lowerCase(StringUtils.stripAccents(StringUtils.substring(StringUtils.normalizeSpace(productName), 0, 20).replaceAll(" ", "_")));
 		MediaType mediaType = MediaType.valueOf(fileProductFile.getContentType());
 
@@ -556,14 +553,6 @@ public class StoreService {
 				.append(product.getFile().getId()).toString();
 	}
 
-	private Locale getRequestLocale(HttpHeaders httpHeaders) {
-		Locale locale = httpHeaders.getLanguage();
-		if (locale == null) {
-			locale = systemSettingsController.getDefaultLocale();
-		}
-		return locale;
-	}
-	
 	private fi.foyt.fni.rest.entities.store.Product toEntity(fi.foyt.fni.persistence.model.store.Product product) {
 		if (product instanceof fi.foyt.fni.persistence.model.store.BookProduct) {
 			return toEntity((fi.foyt.fni.persistence.model.store.BookProduct) product);
@@ -582,7 +571,7 @@ public class StoreService {
 		List<String> tags = getProductTags(product);
 		Map<String, String> details = storeController.getProductDetailMap(product);
 
-		return new PremiumAccountProduct(product.getId(), product.getPublished(), "PREMIUM_ACCOUNT", product.getName().toMap(), product.getDescription().toMap(),
+		return new PremiumAccountProduct(product.getId(), product.getPublished(), "PREMIUM_ACCOUNT", product.getName(), product.getDescription(),
 				product.getPrice(), toEntity(product.getDefaultImage()), product.getModified(), product.getCreated(), toEntity(product.getCreator()),
 				toEntity(product.getModifier()), product.getRequiresDelivery(), tags, details, product.getMonths());
 	}
@@ -595,7 +584,7 @@ public class StoreService {
 		List<String> tags = getProductTags(product);
 		Map<String, String> details = storeController.getProductDetailMap(product);
 
-		return new BookProduct(product.getId(), product.getPublished(), "BOOK", product.getName().toMap(), product.getDescription().toMap(), product.getPrice(),
+		return new BookProduct(product.getId(), product.getPublished(), "BOOK", product.getName(), product.getDescription(), product.getPrice(),
 				toEntity(product.getDefaultImage()), product.getModified(), product.getCreated(), toEntity(product.getCreator()), toEntity(product.getModifier()),
 				product.getRequiresDelivery(), tags, details, getBookFileDownloadUrl(product), product.getDownloadable());
 	}

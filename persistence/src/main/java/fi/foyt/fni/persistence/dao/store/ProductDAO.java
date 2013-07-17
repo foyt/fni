@@ -37,6 +37,18 @@ public class ProductDAO extends GenericDAO<Product> {
     return query.getResultList();
   }
 
+	public Product updateName(Product product, String name) {
+		product.setName(name);
+		getEntityManager().persist(product);
+		return product;
+	}
+
+	public Product updateDescription(Product product, String description) {
+		product.setDescription(description);
+		getEntityManager().persist(product);
+		return product;
+	}
+
 	public Product updateDefaultImage(Product product, ProductImage defaultImage) {
 		product.setDefaultImage(defaultImage);
 		getEntityManager().persist(product);

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.ejb.Stateful;
@@ -25,8 +24,6 @@ import fi.foyt.fni.persistence.dao.store.ProductImageDAO;
 import fi.foyt.fni.persistence.dao.store.ProductTagDAO;
 import fi.foyt.fni.persistence.dao.store.StoreDetailDAO;
 import fi.foyt.fni.persistence.dao.store.StoreTagDAO;
-import fi.foyt.fni.persistence.model.common.LocalizedString;
-import fi.foyt.fni.persistence.model.common.MultilingualString;
 import fi.foyt.fni.persistence.model.store.BookProduct;
 import fi.foyt.fni.persistence.model.store.FileProduct;
 import fi.foyt.fni.persistence.model.store.FileProductFile;
@@ -298,19 +295,7 @@ public class StoreController {
 
 	/* BookProducts */
 
-	public BookProduct createBookProduct(User creator, Map<Locale, String> names, Map<Locale, String> descriptions, Boolean requiresDelivery, Boolean downloadable, Double price, ProductImage defaultImage, List<StoreTag> tags, Map<String, String> details) {
-		MultilingualString name = multilingualStringDAO.create();
-		MultilingualString description = multilingualStringDAO.create();
-		
-		for (Locale locale : names.keySet()) {
-			String value = names.get(locale);
-			localizedStringDAO.create(name, locale, value);
-		}
-		
-		for (Locale locale : descriptions.keySet()) {
-			String value = descriptions.get(locale);
-			localizedStringDAO.create(description, locale, value);
-		}
+	public BookProduct createBookProduct(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Double price, ProductImage defaultImage, List<StoreTag> tags, Map<String, String> details) {
 		
 		Date now = new Date();
 		
@@ -327,16 +312,11 @@ public class StoreController {
 		return bookProductDAO.findById(id);
 	}
 	
-	public BookProduct updateBookProduct(fi.foyt.fni.persistence.model.store.BookProduct bookProduct, Double price, Map<Locale, String> names,
-			Map<Locale, String> descriptions, Map<String, String> details, List<String> tags, Boolean published, Boolean requiresDelivery, Boolean downloadable, User modifier) {
-		
-		for (Locale locale : names.keySet()) {
-			setMultiLingualString(bookProduct.getName(), locale, names.get(locale));
-		}
-		
-		for (Locale locale : descriptions.keySet()) {
-			setMultiLingualString(bookProduct.getDescription(), locale, names.get(locale));
-		}
+	public BookProduct updateBookProduct(fi.foyt.fni.persistence.model.store.BookProduct bookProduct, Double price, String name,
+			String description, Map<String, String> details, List<String> tags, Boolean published, Boolean requiresDelivery, Boolean downloadable, User modifier) {
+
+		productDAO.updateName(bookProduct, name);
+		productDAO.updateDescription(bookProduct, description);
 		
 		if (details == null) {
 			details = new HashMap<String, String>();
@@ -344,14 +324,14 @@ public class StoreController {
 		
 		Map<String, String> existingDetails = getProductDetailMap(bookProduct);
 		
-		for (String name : details.keySet()) {
-			String value = details.get(name);
-			existingDetails.remove(name);
-			setProductDetail(bookProduct, name, value);
+		for (String detail : details.keySet()) {
+			String value = details.get(detail);
+			existingDetails.remove(detail);
+			setProductDetail(bookProduct, detail, value);
 		}
 		
-		for (String name : existingDetails.keySet()) {
-			setProductDetail(bookProduct, name, null);
+		for (String detail : existingDetails.keySet()) {
+			setProductDetail(bookProduct, detail, null);
 		}
 		
 		List<StoreTag> addTags = new ArrayList<>();
@@ -400,16 +380,6 @@ public class StoreController {
 	}
 
 	/* FileProducts */
-
-	private void setMultiLingualString(MultilingualString string, Locale locale, String value) {
-		LocalizedString localizedString = localizedStringDAO.findByMultilingualStringAndLocale(string, locale);
-		
-		if (localizedString == null) {
-			localizedStringDAO.create(string, locale, value);
-		} else {
-			localizedStringDAO.updateValue(localizedString, value);
-		}
-	}
 
 	public FileProduct findFileProductById(Long id) {
 		return fileProductDAO.findById(id);

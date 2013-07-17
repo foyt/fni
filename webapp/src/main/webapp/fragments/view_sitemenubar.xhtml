@@ -9,7 +9,9 @@
       <div class="siteMenuBarWidget" id="siteMenuBarWidgetIndex"><a href="#{request.contextPath}/">#{locales['generic.header.menuBarWidgetIndexLabel']}</a></div>
       <div class="siteMenuBarWidget" id="siteMenuBarWidgetForge"><a href="#{request.contextPath}/forge/">#{locales['generic.header.menuBarWidgetForgeLabel']}</a></div>
       <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetIllusion"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetIllusionLabel']}</a></div>
-      <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetStore"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetStoreLabel']}</a></div>
+      <div class="siteMenuBarWidget" id="siteMenuBarWidgetStore">
+        <h:link outcome="/store/index.jsf" value="#{locales['generic.header.menuBarWidgetStoreLabel']}"/>
+      </div>
       <div class="siteMenuBarWidget" id="siteMenuBarWidgetForum"><a href="#{request.contextPath}/forum/">#{locales['generic.header.menuBarWidgetForumLabel']}</a></div>
     </div>
     <div id="siteMenuBarSecondColumn">

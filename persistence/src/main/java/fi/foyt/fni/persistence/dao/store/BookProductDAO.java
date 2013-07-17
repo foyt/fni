@@ -6,7 +6,6 @@ import javax.enterprise.context.RequestScoped;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.common.MultilingualString;
 import fi.foyt.fni.persistence.model.store.BookProduct;
 import fi.foyt.fni.persistence.model.store.ProductImage;
 import fi.foyt.fni.persistence.model.users.User;
@@ -15,7 +14,7 @@ import fi.foyt.fni.persistence.model.users.User;
 @DAO
 public class BookProductDAO extends GenericDAO<BookProduct> {
   
-	public BookProduct create(MultilingualString name, MultilingualString description, Double price, Boolean downloadable, ProductImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Boolean requiresDelivery) {
+	public BookProduct create(String name, String description, Double price, Boolean downloadable, ProductImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Boolean requiresDelivery) {
     
 		BookProduct bookProduct = new BookProduct();
     bookProduct.setCreated(created);
