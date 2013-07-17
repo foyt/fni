@@ -13,8 +13,15 @@
       #{locales['auth.login.pageTitle']}
     </ui:define>
     
+    <ui:define name="head">
+
+      <!-- md5 -->
+
+      <script type="text/javascript" charset="utf8" src="http://cdn.jsdelivr.net/jshash/2.2/md5-min.js"></script>
+
+    </ui:define>
+    
     <ui:define name="content">
-      <h:outputScript name="scripts/jshash/md5-min.js" target="head"/>
       <h:outputScript name="scripts/gui/auth/index.js" target="head"/>
       <h:outputScript name="scripts/gui/auth/forgotpassworddialog.js" target="head"/>
       <h:outputScript name="scripts/gui/auth/resetpassworddialog.js" target="head"/>

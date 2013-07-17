@@ -9,10 +9,23 @@
       #{locales['root.editProfile.pageTitle']}
     </ui:define>
     
-    <ui:define name="content">
-      <h:outputScript name="scripts/jshash/md5-min.js" target="head"/>
-      <h:outputScript name="scripts/gui/common/imageselectdialog.js" target="head"/>
+    <ui:define name="head">
+      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/editprofile.css"/>
+
+      <!-- jQuery UI -->
+    
+      <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.js"></script>
+
+      <!-- md5 -->
+
+      <script type="text/javascript" charset="utf8" src="http://cdn.jsdelivr.net/jshash/2.2/md5-min.js"></script>
+
       <h:outputScript name="scripts/gui/editprofile.js" target="head"/>
+    </ui:define>   
+
+    <ui:define name="content">
+      <!-- 
+      <h:outputScript name="scripts/gui/common/imageselectdialog.js" target="head"/>
       <h:outputScript target="head">
         var viewController = new EditProfileViewController();
     
@@ -24,13 +37,12 @@
           viewController.destroy();
         });
       </h:outputScript>
-      
       <div id="editProfile">
         <h2>
           #{locales['root.editProfile.pageTitle']}
         </h2>
           
-        <div id="editProfileTabsContainer">
+        <div id="edit-profile-tabs">
           <ul class="editProfileTabLabelsContainer">
             <li><a href="#basic">#{locales['root.editProfile.basicTabLabel']}</a></li>
             <li><a href="#authSources">#{locales['root.editProfile.authSourcesTabLabel']}</a></li>
@@ -77,18 +89,12 @@
                   </ui:define>
                   
                   <ui:define name="buttons">
-                    
-                    <ui:include src="/fragments/form_submitfield.xhtml">
-                      <ui:param name="output" value="HTML"/>
-                      <ui:param name="id" value="basic-edit-profile-save" />
-                      <ui:param name="text" value="#{locales['root.editProfile.saveBasicLabel']}" />
-                      <ui:param name="classes" value="formvalid" />
-                    </ui:include> 
-
+                    <div class="formField formSubmitField">
+                      <input type="submit" id="editor-profile-basic-edit-profile-save" value="#{locales['root.editProfile.saveBasicLabel']}" class="formvalid"/>
+                    </div>
                   </ui:define>
                 </ui:decorate>
               
-                <!-- TODO: emails -->
               </div>
               
               <div class="editProfileImageColumn">
@@ -97,7 +103,7 @@
                     <img src="#{request.contextPath}/v1/users/SELF/profileImage/128x128" class="editProfileImage"/>
                   </div>
                 </div>
-                <a id="editProfileImageChangeLink" href="javascript:void(null)">#{locales['root.editProfile.changeProfileImageLink']}</a>
+                <a id="edit-profile-image-change-link" href="javascript:void(null)">#{locales['root.editProfile.changeProfileImageLink']}</a>
               </div>
             </div>
               
@@ -403,7 +409,8 @@
           </div>  
 
         </div> 
-      </div>
+      </div>      -->
+      
     </ui:define>
 
 </ui:composition>

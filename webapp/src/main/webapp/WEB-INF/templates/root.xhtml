@@ -15,12 +15,19 @@
         <ui:insert name="pageTitle"></ui:insert>
       </title>
 
-      <ui:include src="/fragments/view_head_generic.xhtml" />
-      <ui:include src="/fragments/view_head_generic_scripts.xhtml" />
+      <script type="text/javascript">
+        var LOCALE = '#{sessionController.locale.language}';
+        var CONTEXTPATH = '#{request.contextPath}';
+        var THEMEPATH = '#{request.contextPath}/themes/novus/';
+      </script>
+       
+      <!-- jQuery -->
+  
+      <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.2.js"></script>
 
-      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/default_dev/css/common.css"/>
-      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/default_dev/css/root.css"/>
-      
+      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/common.css"/>
+     
+      <ui:insert name="head" />
     </h:head>
     <h:body styleClass="siteBodyWrapper"> 
       <div id="siteWrapper">

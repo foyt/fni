@@ -5,37 +5,41 @@
     xmlns:h="http://java.sun.com/jsf/html"
     template="/WEB-INF/templates/root.xhtml">
     
+    <ui:define name="head">
+      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/index.css"/>
+    </ui:define>   
+    
     <ui:define name="pageTitle">
       #{locales['root.indexPage.pageTitle']}
     </ui:define>
     
     <ui:define name="siteHeader">
       <!-- Site's Header -->
-      <div id="siteHeaderWrapper" class="indexHeaderWrapper">
+      <div id="siteHeaderWrapper" class="index-header-wrapper">
         <ui:fragment rendered="#{!sessionController.loggedIn}">
-          <div id="indexHeaderLoginRegisterWrapper">
-            <div id="indexHeaderLogin"><span class="indexHeaderBigFont"><a href="#{request.contextPath}/login">#{locales['root.indexPage.headerLoginLink']}</a></span> #{locales['root.indexPage.headerLoginHint']}</div>
-            <div id="indexHeaderGuestLogin"><span class="indexHeaderBigFont"><a href="#{request.contextPath}/login?loginMethod=GUEST">#{locales['root.indexPage.headerGuestLoginLink']}</a></span> #{locales['root.indexPage.headerGuestLoginHint']}</div>
+          <div id="index-header-login-register-wrapper">
+            <div id="index-header-login"><span class="index-header-big-font"><a href="#{request.contextPath}/login">#{locales['root.indexPage.headerLoginLink']}</a></span> #{locales['root.indexPage.headerLoginHint']}</div>
+            <div id="index-header-guest-login"><span class="index-header-big-font"><a href="#{request.contextPath}/login?loginMethod=GUEST">#{locales['root.indexPage.headerGuestLoginLink']}</a></span> #{locales['root.indexPage.headerGuestLoginHint']}</div>
           </div>
         </ui:fragment>
         
         <ui:fragment rendered="#{sessionController.loggedIn}">
-          <div id="indexHeaderUserInfoWrapper">
+          <div id="index-header-user-info-wrapper">
             <ui:fragment rendered="#{sessionController.loggedUser.profileImage ne null}">
               <img src="#{request.contextPath}/v1/users/SELF/profileImage/48x48"/>
             </ui:fragment>
           
             <ui:fragment rendered="#{sessionController.loggedUser.profileImage eq null}">
-              <div class="indexHeaderNoProfileImage"></div>
+              <div class="index-header-no-profile-image"></div>
             </ui:fragment>
             
-            <div id="indexHeaderUserInfo">
+            <div id="index-header-user-info">
               <h:outputFormat value="#{locales['root.indexPage.headerLoggedInAs']}">
                 <f:param value="#{sessionController.loggedUser.fullName}"/>
               </h:outputFormat>
-              <span class="indexHeaderBigFont"><a id="indexHeaderLogoutLink" href="#{request.contextPath}/auth/logout.page">#{locales['root.indexPage.headerLogoutLink']}</a></span> 
+              <span class="index-header-big-font"><a id="index-header-logout-link" href="#{request.contextPath}/auth/logout.page">#{locales['root.indexPage.headerLogoutLink']}</a></span> 
               #{locales['root.indexPage.headerOr']}
-              <span class="indexHeaderBigFont">
+              <span class="index-header-big-font">
                 <h:link outcome="/editprofile.jsf" value="#{locales['root.indexPage.headerEditProfileLink']}"/>
               </span>
             </div>
@@ -46,44 +50,31 @@
     
     <ui:define name="content">
       <h:outputScript name="scripts/gui/index/index.js" target="head"/>
-      <h:outputScript target="head">
-        var viewController = new IndexViewController();
-      
-        Event.observe(document, "dom:loaded", function (event) {
-          viewController.setup();
-        });
-        
-        Event.observe(window, "beforeunload", function (event) {
-          viewController.destroy();
-        });
-      </h:outputScript>
-      
-      <div id="indexSidebarWrapper">
-        <div id="indexSidebarBackground"></div>
-        <div id="indexSidebarContent">
-          <div id="indexSideBarWidgetWhatIsWrapper">
-            <div id="indexSideBarWidgetWhatIsIcon" class="siderbarWidgetIconContainer"></div>
-            <div id="indexWhatIsContentWrapper" class="indexSiderbarWidgetContentContainer">
+      <div id="index-sidebar-wrapper">
+        <div id="index-sidebar-background"></div>
+        <div id="index-sidebar-content">
+          <div id="index-sidebar-widget-what-is-wrapper">
+            <div id="index-sidebar-widget-what-is-icon" class="index-sidebar-widget-icon-container"></div>
+            <div id="index-what-is-content-wrapper" class="index-sidebar-widget-content-container">
               <h1>#{locales['root.indexPage.whatIsForgeHeader']}</h1>
-              <div id="indexWhatIsContent" class="indexSiderbarWidgetContent">
+              <div id="index-sidebar-widget-what-is-content" class="index-sidebar-widget-content">
                 <b>#{locales['root.indexPage.whatIsForgeContentPrefix']}</b> #{locales['root.indexPage.whatIsForgeContent']}
               </div>
             </div>
           </div>
 
           <ui:fragment rendered="#{indexViewBackingBean.technicalAnnouncements.size() > 0}">
-            <div id="indexSideBarWidgetTechnicalAnnouncementsWrapper">
-              <div id="indexSideBarWidgetTechnicalAnnouncementsIcon" class="siderbarWidgetIconContainer"></div>
-              <div id="indexTechnicalAnnouncementsContentWrapper" class="indexSiderbarWidgetContentContainer">
+            <div id="index-sidebar-widget-technical-announcements-wrapper">
+              <div id="index-sidebar-widget-technical-announcements-icon" class="index-sidebar-widget-icon-container"></div>
+              <div id="index-sidebar-widget-technical-announcements-content-wrapper" class="index-sidebar-widget-content-container">
                 <h1>#{locales['root.indexPage.technicalAnnouncementsHeader']}</h1>
-                <div id="indexTechnicalAnnouncementsContent" class="indexSiderbarWidgetContent">
+                <div id="index-sidebar-widget-technical-announcements-content" class="index-sidebar-widget-content">
                   <ul> 
                     <ui:repeat var="article" value="#{indexViewBackingBean.technicalAnnouncements}">
                       <li>
-                        <input type="hidden" name="articleId" value="${article.id}"/>
-                        <a href="javascript:void(null);" class="articleLink">${article.material.title}</a>
+                        <a href="javascript:void(null);" class="index-sidebar-article-link" data-article-id="#{article.id}">#{article.material.title}</a>
                         <ui:fragment rendered="#{sessionController.loggedUserRole eq 'ADMINISTRATOR'}">
-                          <a href="javascript:void(null);" class="defaultArticleLink"></a>
+                          <a href="javascript:void(null);" class="index-sidebar-default-article-link" data-article-id="#{article.id}"></a>
                         </ui:fragment>
                       </li>
                     </ui:repeat>
@@ -95,11 +86,11 @@
           
           <ui:fragment rendered="false">
             <!-- TODO: Add publications -->
-            <div id="indexSideBarWidgetLastestPublicationsWrapper">
-              <div id="indexSideBarWidgetLastestPublicationsIcon" class="siderbarWidgetIconContainer"></div>
-              <div id="indexLastestPublicationsContentWrapper" class="indexSiderbarWidgetContentContainer">
+            <div id="index-sidebar-widget-lastest-publications-wrapper">
+              <div id="index-sidebar-widget-lastest-publications-icon" class="index-sidebar-widget-icon-container"></div>
+              <div id="index-sidebar-widget-lastest-publications-content-wrapper" class="index-sidebar-widget-content-container">
                 <h1>#{locales['root.indexPage.latestPublicationsHeader']}</h1>
-                <div id="indexLastestPublicationsContent" class="indexSiderbarWidgetContent">
+                <div id="index-sidebar-widget-lastest-publications-content" class="index-sidebar-widget-content">
                   <ul>
                   </ul>
                 </div>
@@ -108,18 +99,17 @@
           </ui:fragment>
           
           <ui:fragment rendered="#{indexViewBackingBean.articles.size() > 0}">
-            <div id="indexSideBarWidgetLastestArticlesWrapper">
-              <div id="indexSideBarWidgetLastestArticlesIcon" class="siderbarWidgetIconContainer"></div>
-              <div id="indexLastestArticlesContentWrapper" class="indexSiderbarWidgetContentContainer">
+            <div id="index-sidebar-widget-lastest-articles-wrapper">
+              <div id="index-sidebar-widget-latest-articles-icon" class="index-sidebar-widget-icon-container"></div>
+              <div id="index-sidebar-widget-latest-articles-content-wrapper" class="index-sidebar-widget-content-container">
                 <h1>#{locales['root.indexPage.latestArticlesHeader']}</h1>
-                <div id="indexLastestArticlesContent" class="indexSiderbarWidgetContent">
+                <div id="index-sidebar-widget-latest-articles-content" class="index-sidebar-widget-content">
                   <ul>
                     <ui:repeat var="article" value="#{indexViewBackingBean.articles}">
                       <li>
-                        <input type="hidden" name="articleId" value="${article.id}"/>
-                        <a href="javascript:void(null);" class="articleLink">${article.material.title}</a>
+                        <a href="javascript:void(null);" class="index-sidebar-article-link" data-article-id="#{article.id}">#{article.material.title}</a>
                         <ui:fragment rendered="#{sessionController.loggedUserRole eq 'ADMINISTRATOR'}">
-                          <a href="javascript:void(null);" class="defaultArticleLink"></a>
+                          <a href="javascript:void(null);" class="index-sidebar-default-article-link" data-article-id="#{article.id}"></a>
                         </ui:fragment>
                       </li>
                     </ui:repeat>
@@ -131,13 +121,13 @@
 
         </div>
       </div>
-      <div id="frontPageArticle">
-        <h1 class="frontPageArticleTitle">#{indexViewBackingBean.defaultArticleData.title}</h1>
-        <div class="frontPageArticleTopArrow"></div>
-        <div class="frontPageArticleContent">
+      <div id="index-front-page-article">
+        <h1 class="index-front-page-article-title">#{indexViewBackingBean.defaultArticleData.title}</h1>
+        <div class="index-front-page-article-top-arrow"></div>
+        <div class="index-front-page-article-content">
           <h:outputText value="#{indexViewBackingBean.defaultArticleData.content}" escape="false"/>
         </div>
-        <div class="frontPageArticleLoading" style="display:none"></div>
+        <div class="index-front-page-article-loading" style="display:none"></div>
       </div>
     </ui:define>
 
