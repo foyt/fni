@@ -13,8 +13,6 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.persistence.dao.DAO;
-import fi.foyt.fni.persistence.dao.common.LocalizedStringDAO;
-import fi.foyt.fni.persistence.dao.common.MultilingualStringDAO;
 import fi.foyt.fni.persistence.dao.store.BookProductDAO;
 import fi.foyt.fni.persistence.dao.store.FileProductDAO;
 import fi.foyt.fni.persistence.dao.store.FileProductFileDAO;
@@ -60,14 +58,6 @@ public class StoreController {
 	@Inject
 	@DAO
 	private ProductImageDAO productImageDAO;
-	
-	@Inject
-	@DAO
-	private MultilingualStringDAO multilingualStringDAO;
-	
-	@Inject
-	@DAO
-	private LocalizedStringDAO localizedStringDAO;
 	
 	@Inject
 	@DAO

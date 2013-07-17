@@ -16,7 +16,6 @@ import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.store.ShoppingCartItem;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
-import fi.foyt.fni.utils.common.MultilingualStringController;
 
 @Stateful
 @SessionScoped
@@ -38,9 +37,6 @@ public class ShoppingCartBackingBean implements Serializable {
 
 	@Inject
 	private SystemSettingsController systemSettingsController;
-	
-	@Inject
-	private MultilingualStringController multilingualStringController;
 	
 	@PostConstruct
 	public void init() {
