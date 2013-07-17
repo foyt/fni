@@ -2,11 +2,11 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" metadata-complete="false" version="3.0">
   <context-param>
     <param-name>javax.faces.PROJECT_STAGE</param-name>
-    <param-value>Development</param-value>
+    <param-value>Production</param-value><!-- Development -->
   </context-param>
   <context-param>
     <param-name>com.ocpsoft.pretty.DEVELOPMENT</param-name>
-    <param-value>true</param-value>
+    <param-value>false</param-value> <!-- true -->
   </context-param>
   <context-param>
     <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
