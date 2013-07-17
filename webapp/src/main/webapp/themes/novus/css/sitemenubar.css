@@ -42,6 +42,7 @@
 #siteMenuBar { /* Wraps the site's menubar */
   padding: 0 0 0 60px;
   height: 39px;
+  line-height: 1.7em;
 }
 
 #siteMenuBarFirstColumn { /* Menu Bar's 1st column */
