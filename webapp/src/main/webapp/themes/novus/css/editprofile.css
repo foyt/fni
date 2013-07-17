@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+#edit-profile {
+  background: #fff;
+  margin-top: 20px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 8px;
+  min-height: 783px;
+}
