@@ -14,7 +14,7 @@ public class BookProductDAO extends GenericDAO<BookProduct> {
   
 	private static final long serialVersionUID = 1L;
 
-	public BookProduct create(String name, String description, Double price, Boolean downloadable, ProductImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Boolean requiresDelivery, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages) {
+	public BookProduct create(String name, String description, Double price, Boolean downloadable, Boolean purchasable, ProductImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Boolean requiresDelivery, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages) {
     
 		BookProduct bookProduct = new BookProduct();
     bookProduct.setCreated(created);
@@ -28,6 +28,7 @@ public class BookProductDAO extends GenericDAO<BookProduct> {
     bookProduct.setPrice(price);
     bookProduct.setPublished(published);
     bookProduct.setRequiresDelivery(requiresDelivery);
+    bookProduct.setPurchasable(purchasable);
     bookProduct.setHeight(height);
     bookProduct.setWidth(width);
     bookProduct.setDepth(depth);
