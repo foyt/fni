@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.common.CountryDAO;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
 import fi.foyt.fni.persistence.dao.system.SystemSettingDAO;
@@ -26,15 +25,12 @@ public class SystemSettingsController {
 	private static final String DEFAULT_COUNTRY_CODE = "FI";
 
 	@Inject
-	@DAO
 	private SystemSettingDAO systemSettingDAO;
 
 	@Inject
-	@DAO
 	private LanguageDAO languageDAO;
 
 	@Inject
-	@DAO
 	private CountryDAO countryDAO;
 
 	public String getSetting(String name) {

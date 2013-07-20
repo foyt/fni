@@ -11,13 +11,13 @@ import javax.inject.Named;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.persistence.model.users.UserToken;
 
+// TODO: Remove Named and references
 @Named
 @SessionScoped
 @Stateful
@@ -32,11 +32,9 @@ public class SessionController {
 	private Event<UserSessionEvent> logoutEvent;
 
 	@Inject
-  @DAO
   private UserDAO userDAO;
 
   @Inject
-  @DAO
   private UserTokenDAO userTokenDAO;
   
   public boolean isLoggedIn() {
