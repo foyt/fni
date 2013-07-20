@@ -2,7 +2,6 @@ package fi.foyt.fni.persistence.dao.materials;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,9 +14,10 @@ import fi.foyt.fni.persistence.model.materials.ImageSize;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialThumbnail;
 
-@RequestScoped
 @DAO
 public class MaterialThumbnailDAO extends GenericDAO<MaterialThumbnail> {
+
+	private static final long serialVersionUID = 1L;
 
 	public MaterialThumbnail create(Material material, ImageSize size, byte[] content, String contentType) {
     EntityManager entityManager = getEntityManager();

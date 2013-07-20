@@ -1,6 +1,5 @@
 package fi.foyt.fni.persistence.dao.common;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -11,9 +10,10 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.common.Country_;
 
-@RequestScoped
 @DAO
 public class CountryDAO extends GenericDAO<Country> {
+
+	private static final long serialVersionUID = 1L;
 
 	public Country findByCode(String code) {
 		EntityManager entityManager = getEntityManager();

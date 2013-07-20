@@ -2,7 +2,6 @@ package fi.foyt.fni.persistence.dao.store;
 
 import java.util.Date;
 
-import javax.enterprise.context.RequestScoped;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
@@ -12,10 +11,11 @@ import fi.foyt.fni.persistence.model.store.OrderStatus;
 import fi.foyt.fni.persistence.model.store.PaymentMethod;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class OrderDAO extends GenericDAO<Order> {
   
+	private static final long serialVersionUID = 1L;
+
 	public Order create(User customer, OrderStatus orderStatus, PaymentMethod paymentMethod, Double shippingCosts, String notes, Address deliveryAddress, Date created, Date canceled, Date checkedOut, Date paid, Date delivered) {
 		Order order = new Order();
 		

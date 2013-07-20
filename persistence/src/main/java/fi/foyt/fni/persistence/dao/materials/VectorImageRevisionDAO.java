@@ -3,7 +3,6 @@ package fi.foyt.fni.persistence.dao.materials;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,9 +15,10 @@ import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.materials.VectorImageRevision;
 import fi.foyt.fni.persistence.model.materials.VectorImageRevision_;
 
-@RequestScoped
 @DAO
 public class VectorImageRevisionDAO extends GenericDAO<VectorImageRevision> {
+
+	private static final long serialVersionUID = 1L;
 
 	public VectorImageRevision create(VectorImage vectorImage, Long revision, Date created, Boolean compressed, Boolean completeRevision, byte[] data, String title, Language language) {
     EntityManager entityManager = getEntityManager();

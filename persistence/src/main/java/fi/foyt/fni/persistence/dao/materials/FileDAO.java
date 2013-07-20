@@ -2,7 +2,6 @@ package fi.foyt.fni.persistence.dao.materials;
 
 import java.util.Date;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 
 import fi.foyt.fni.persistence.dao.DAO;
@@ -13,9 +12,10 @@ import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.materials.File;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class FileDAO extends GenericDAO<File> {
+
+	private static final long serialVersionUID = 1L;
 
 	public File create(User creator, Date created, User modifier, Date modified, Language language, Folder parentFolder, String urlName, String title, byte[] data, String contentType, MaterialPublicity publicity) {
     EntityManager entityManager = getEntityManager();

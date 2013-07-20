@@ -3,7 +3,6 @@ package fi.foyt.fni.persistence.dao.maps;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,11 +15,12 @@ import fi.foyt.fni.persistence.model.maps.Map;
 import fi.foyt.fni.persistence.model.maps.Map_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class MapDAO extends GenericDAO<Map> {
   
-  public Map create(IllusionSession illusionSession, String name, User creator) {
+  private static final long serialVersionUID = 1L;
+
+	public Map create(IllusionSession illusionSession, String name, User creator) {
     Date now = new Date();
     return create(illusionSession, name, creator, now, creator, now);
   }

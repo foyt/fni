@@ -1,6 +1,5 @@
 package fi.foyt.fni.persistence.dao.common;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -11,9 +10,10 @@ import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.common.Tag;
 
-@RequestScoped
 @DAO
 public class TagDAO extends GenericDAO<Tag> {
+
+	private static final long serialVersionUID = 1L;
 
 	public Tag create(String text) {
     EntityManager entityManager = getEntityManager();

@@ -2,7 +2,6 @@ package fi.foyt.fni.persistence.dao.users;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -14,9 +13,10 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserEmail;
 
-@RequestScoped
 @DAO
 public class UserEmailDAO extends GenericDAO<UserEmail> {
+
+	private static final long serialVersionUID = 1L;
 
 	public UserEmail create(User user, String email, Boolean primary) {
     EntityManager entityManager = getEntityManager();

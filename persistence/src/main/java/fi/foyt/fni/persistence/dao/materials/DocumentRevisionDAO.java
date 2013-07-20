@@ -3,7 +3,6 @@ package fi.foyt.fni.persistence.dao.materials;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,9 +15,10 @@ import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision_;
 
-@RequestScoped
 @DAO
 public class DocumentRevisionDAO extends GenericDAO<DocumentRevision> {
+
+	private static final long serialVersionUID = 1L;
 
 	public DocumentRevision create(Document document, Long revision, Date created, Boolean compressed, Boolean completeRevision, byte[] data, String title, Language language) {
     EntityManager entityManager = getEntityManager();

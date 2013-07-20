@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -20,9 +19,10 @@ import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class ImageDAO extends GenericDAO<Image> {
+
+	private static final long serialVersionUID = 1L;
 
 	public Image create(User creator, Date created, User modifier, Date modified, Language language, Folder parentFolder, String urlName, String title, byte[] data, String contentType, MaterialPublicity publicity) {
     EntityManager entityManager = getEntityManager();

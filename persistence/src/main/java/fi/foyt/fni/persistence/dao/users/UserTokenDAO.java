@@ -3,7 +3,6 @@ package fi.foyt.fni.persistence.dao.users;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,9 +14,10 @@ import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.users.UserToken;
 
-@RequestScoped
 @DAO
 public class UserTokenDAO extends GenericDAO<UserToken> {
+
+	private static final long serialVersionUID = 1L;
 
 	public UserToken create(UserIdentifier userIdentifier, String token, String secret, Date expires, String grantedScopes) {
     EntityManager entityManager = getEntityManager();

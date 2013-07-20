@@ -3,7 +3,6 @@ package fi.foyt.fni.persistence.dao.materials;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -18,11 +17,12 @@ import fi.foyt.fni.persistence.model.materials.UbuntuOneFolder;
 import fi.foyt.fni.persistence.model.materials.UbuntuOneFolder_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class UbuntuOneFolderDAO extends GenericDAO<UbuntuOneFolder> {
 
-  public UbuntuOneFolder create(User creator, Language language, Folder parentFolder, String urlName, String title, MaterialPublicity publicity, String ubuntuOneKey,
+  private static final long serialVersionUID = 1L;
+
+	public UbuntuOneFolder create(User creator, Language language, Folder parentFolder, String urlName, String title, MaterialPublicity publicity, String ubuntuOneKey,
       Long generation, String contentPath) {
     EntityManager entityManager = getEntityManager();
 

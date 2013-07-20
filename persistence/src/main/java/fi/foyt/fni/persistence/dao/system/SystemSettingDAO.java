@@ -1,6 +1,5 @@
 package fi.foyt.fni.persistence.dao.system;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -11,10 +10,11 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.system.SystemSetting;
 import fi.foyt.fni.persistence.model.system.SystemSetting_;
 
-@RequestScoped
 @DAO
 public class SystemSettingDAO extends GenericDAO<SystemSetting> {
 	
+	private static final long serialVersionUID = 1L;
+
 	public SystemSetting create(String name, String value) {
     EntityManager entityManager = getEntityManager();
 

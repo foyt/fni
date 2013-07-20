@@ -3,7 +3,6 @@ package fi.foyt.fni.persistence.dao.messages;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,9 +14,10 @@ import fi.foyt.fni.persistence.model.messages.Message;
 import fi.foyt.fni.persistence.model.messages.Message_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class MessageDAO extends GenericDAO<Message> {
+
+	private static final long serialVersionUID = 1L;
 
 	public Message create(String threadId, User sender, String subject, String content, Date sent) {
 		Message message = new Message();

@@ -1,6 +1,5 @@
 package fi.foyt.fni.persistence.dao.users;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,9 +12,10 @@ import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserSetting;
 import fi.foyt.fni.persistence.model.users.UserSettingKey;
 
-@RequestScoped
 @DAO
 public class UserSettingDAO extends GenericDAO<UserSetting> {
+
+	private static final long serialVersionUID = 1L;
 
 	public UserSetting create(User user, UserSettingKey userSettingKey, String value) {
     EntityManager entityManager = getEntityManager();

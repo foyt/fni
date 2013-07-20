@@ -2,7 +2,6 @@ package fi.foyt.fni.persistence.dao.maps;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,9 +14,10 @@ import fi.foyt.fni.persistence.model.common.Tag;
 import fi.foyt.fni.persistence.model.maps.MapTile;
 import fi.foyt.fni.persistence.model.maps.MapTileTag;
 
-@RequestScoped
 @DAO
 public class MapTileTagDAO extends GenericDAO<MapTileTag> {
+
+	private static final long serialVersionUID = 1L;
 
 	public MapTileTag create(MapTile mapTile, Tag tag) {
     EntityManager entityManager = getEntityManager();

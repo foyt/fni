@@ -2,7 +2,6 @@ package fi.foyt.fni.persistence.dao.materials;
 
 import java.util.Date;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -17,9 +16,10 @@ import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.materials.VectorImage_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class VectorImageDAO extends GenericDAO<VectorImage> {
+
+	private static final long serialVersionUID = 1L;
 
 	public VectorImage create(User creator, Language language, Folder parentFolder,  String urlName, String title, String data, MaterialPublicity publicity) {
     EntityManager entityManager = getEntityManager();

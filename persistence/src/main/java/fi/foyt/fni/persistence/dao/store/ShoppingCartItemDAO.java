@@ -2,7 +2,6 @@ package fi.foyt.fni.persistence.dao.store;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,10 +14,11 @@ import fi.foyt.fni.persistence.model.store.ShoppingCart;
 import fi.foyt.fni.persistence.model.store.ShoppingCartItem;
 import fi.foyt.fni.persistence.model.store.ShoppingCartItem_;
 
-@RequestScoped
 @DAO
 public class ShoppingCartItemDAO extends GenericDAO<ShoppingCartItem> {
   
+	private static final long serialVersionUID = 1L;
+
 	public ShoppingCartItem create(ShoppingCart cart, Product product, Integer count) {
 		ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
 		shoppingCartItem.setCart(cart);

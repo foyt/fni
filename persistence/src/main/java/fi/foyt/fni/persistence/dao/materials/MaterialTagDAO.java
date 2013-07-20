@@ -2,7 +2,6 @@ package fi.foyt.fni.persistence.dao.materials;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,9 +14,10 @@ import fi.foyt.fni.persistence.model.common.Tag;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialTag;
 
-@RequestScoped
 @DAO
 public class MaterialTagDAO extends GenericDAO<MaterialTag> {
+
+	private static final long serialVersionUID = 1L;
 
 	public MaterialTag create(Material material, Tag tag) {
     EntityManager entityManager = getEntityManager();

@@ -1,6 +1,5 @@
 package fi.foyt.fni.persistence.dao.chat;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -12,9 +11,10 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class UserChatCredentialsDAO extends GenericDAO<UserChatCredentials> {
+
+	private static final long serialVersionUID = 1L;
 
 	public UserChatCredentials create(User user, String userJid, String password) {
     EntityManager entityManager = getEntityManager();

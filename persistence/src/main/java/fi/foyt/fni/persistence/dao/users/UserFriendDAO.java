@@ -3,7 +3,6 @@ package fi.foyt.fni.persistence.dao.users;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
@@ -23,9 +22,10 @@ import fi.foyt.fni.persistence.model.users.UserFriend;
 import fi.foyt.fni.persistence.model.users.UserFriend_;
 import fi.foyt.fni.persistence.model.users.User_;
 
-@RequestScoped
 @DAO
 public class UserFriendDAO extends GenericDAO<UserFriend> {
+
+	private static final long serialVersionUID = 1L;
 
 	public UserFriend create(User user, User friend, Boolean confirmed) {
     EntityManager entityManager = getEntityManager();

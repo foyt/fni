@@ -3,7 +3,6 @@ package fi.foyt.fni.persistence.dao.materials;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -17,9 +16,10 @@ import fi.foyt.fni.persistence.model.materials.Folder_;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class FolderDAO extends GenericDAO<Folder> {
+
+	private static final long serialVersionUID = 1L;
 
 	public Folder create(User creator, Date created, User modifier, Date modified, Language language, Folder parentFolder,  String urlName, String title, MaterialPublicity publicity) {
     EntityManager entityManager = getEntityManager();

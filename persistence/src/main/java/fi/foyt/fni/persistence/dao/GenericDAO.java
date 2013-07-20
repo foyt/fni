@@ -1,5 +1,6 @@
 package fi.foyt.fni.persistence.dao;
 
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
@@ -7,8 +8,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
-public class GenericDAO<T> {
+public class GenericDAO<T> implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	public GenericDAO() {
   }
 	

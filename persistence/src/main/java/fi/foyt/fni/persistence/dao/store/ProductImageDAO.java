@@ -3,7 +3,6 @@ package fi.foyt.fni.persistence.dao.store;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,10 +15,11 @@ import fi.foyt.fni.persistence.model.store.ProductImage;
 import fi.foyt.fni.persistence.model.store.ProductImage_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class ProductImageDAO extends GenericDAO<ProductImage> {
   
+	private static final long serialVersionUID = 1L;
+
 	public ProductImage create(Product product, byte[] content, String contentType, Date created, Date modified, User creator, User modifier) {
 		ProductImage productImage = new ProductImage();
 		productImage.setContent(content);

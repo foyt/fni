@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -17,9 +16,10 @@ import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.persistence.model.users.User_;
 
-@RequestScoped
 @DAO
 public class UserDAO extends GenericDAO<User> {
+
+	private static final long serialVersionUID = 1L;
 
 	public User create(String firstName, String lastName, String nickname, Locale locale, Date registrationDate, UserRole role) {
     EntityManager entityManager = getEntityManager();

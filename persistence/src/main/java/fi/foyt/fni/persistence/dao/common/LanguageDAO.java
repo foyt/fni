@@ -2,7 +2,6 @@ package fi.foyt.fni.persistence.dao.common;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,9 +12,10 @@ import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 
-@RequestScoped
 @DAO
 public class LanguageDAO extends GenericDAO<Language> {
+
+	private static final long serialVersionUID = 1L;
 
 	public Language create(String iso2, String iso3) {
     EntityManager entityManager = getEntityManager();

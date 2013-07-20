@@ -2,7 +2,6 @@ package fi.foyt.fni.persistence.dao.materials;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,9 +15,10 @@ import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class UserMaterialRoleDAO extends GenericDAO<UserMaterialRole> {
+
+	private static final long serialVersionUID = 1L;
 
 	public UserMaterialRole create(Material material, User user, MaterialRole role) {
     EntityManager entityManager = getEntityManager();

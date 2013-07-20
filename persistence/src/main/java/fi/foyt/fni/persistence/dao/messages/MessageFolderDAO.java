@@ -2,7 +2,6 @@ package fi.foyt.fni.persistence.dao.messages;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -14,9 +13,10 @@ import fi.foyt.fni.persistence.model.messages.MessageFolder;
 import fi.foyt.fni.persistence.model.messages.MessageFolder_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class MessageFolderDAO extends GenericDAO<MessageFolder> {
+
+	private static final long serialVersionUID = 1L;
 
 	public MessageFolder create(User owner, String name) {
 		MessageFolder messageFolder = new MessageFolder();

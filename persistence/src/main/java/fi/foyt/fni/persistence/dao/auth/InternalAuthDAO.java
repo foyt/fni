@@ -1,6 +1,5 @@
 package fi.foyt.fni.persistence.dao.auth;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -12,9 +11,10 @@ import fi.foyt.fni.persistence.model.auth.InternalAuth;
 import fi.foyt.fni.persistence.model.auth.InternalAuth_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class InternalAuthDAO extends GenericDAO<InternalAuth> {
+
+	private static final long serialVersionUID = 1L;
 
 	public InternalAuth create(User user, String password, Boolean verified) {
     EntityManager entityManager = getEntityManager();

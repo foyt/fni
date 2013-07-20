@@ -2,7 +2,6 @@ package fi.foyt.fni.persistence.dao.illusion;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,9 +15,10 @@ import fi.foyt.fni.persistence.model.illusion.IllusionSessionParticipantRole;
 import fi.foyt.fni.persistence.model.illusion.IllusionSessionParticipant_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class IllusionSessionParticipantDAO extends GenericDAO<IllusionSessionParticipant> {
+
+	private static final long serialVersionUID = 1L;
 
 	public IllusionSessionParticipant create(IllusionSession session, User participant, IllusionSessionParticipantRole role) {
     EntityManager entityManager = getEntityManager();

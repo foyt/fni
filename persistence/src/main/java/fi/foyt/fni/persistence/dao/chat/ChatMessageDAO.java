@@ -3,7 +3,6 @@ package fi.foyt.fni.persistence.dao.chat;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,11 +14,12 @@ import fi.foyt.fni.persistence.model.chat.ChatMessage;
 import fi.foyt.fni.persistence.model.chat.ChatMessage_;
 import fi.foyt.fni.persistence.model.chat.XmppUser;
 
-@RequestScoped
 @DAO
 public class ChatMessageDAO extends GenericDAO<ChatMessage> {
 	
-  public ChatMessage create(XmppUser from, XmppUser to, String body, String subject, Date sent, Boolean received) {
+  private static final long serialVersionUID = 1L;
+
+	public ChatMessage create(XmppUser from, XmppUser to, String body, String subject, Date sent, Boolean received) {
     ChatMessage chatMessage = new ChatMessage();
     
     chatMessage.setBody(body);

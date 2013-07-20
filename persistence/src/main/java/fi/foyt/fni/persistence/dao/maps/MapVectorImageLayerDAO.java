@@ -1,6 +1,5 @@
 package fi.foyt.fni.persistence.dao.maps;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 
 import fi.foyt.fni.persistence.dao.DAO;
@@ -9,10 +8,11 @@ import fi.foyt.fni.persistence.model.maps.Map;
 import fi.foyt.fni.persistence.model.maps.MapVectorImageLayer;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
 
-@RequestScoped
 @DAO
 public class MapVectorImageLayerDAO extends GenericDAO<MapVectorImageLayer> {
   
+	private static final long serialVersionUID = 1L;
+
 	public MapVectorImageLayer create(Map map, VectorImage vectorImage, String name) {
     EntityManager entityManager = getEntityManager();
 

@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
@@ -21,9 +20,10 @@ import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class DocumentDAO extends GenericDAO<Document> {
+
+	private static final long serialVersionUID = 1L;
 
 	public Document create(User creator, Language language, Folder parentFolder,  String urlName, String title, String data, MaterialPublicity publicity) {
     EntityManager entityManager = getEntityManager();

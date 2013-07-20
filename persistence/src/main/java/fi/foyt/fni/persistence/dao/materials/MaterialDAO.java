@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -24,9 +23,11 @@ import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class MaterialDAO extends GenericDAO<Material> {
+
+	private static final long serialVersionUID = 1L;
+
 
 	public Material findByParentFolderAndUrlName(Folder parentFolder, String urlName) {
     EntityManager entityManager = getEntityManager();

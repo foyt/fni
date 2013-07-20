@@ -3,7 +3,6 @@ package fi.foyt.fni.persistence.dao.materials;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -17,9 +16,10 @@ import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialView;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class MaterialViewDAO extends GenericDAO<MaterialView> {
+
+	private static final long serialVersionUID = 1L;
 
 	public MaterialView create(Material material, User user, Integer count, Date viewed) {
     EntityManager entityManager = getEntityManager();

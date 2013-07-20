@@ -2,7 +2,6 @@ package fi.foyt.fni.persistence.dao.store;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -17,10 +16,11 @@ import fi.foyt.fni.persistence.model.store.ProductTag_;
 import fi.foyt.fni.persistence.model.store.Product_;
 import fi.foyt.fni.persistence.model.store.StoreTag;
 
-@RequestScoped
 @DAO
 public class ProductTagDAO extends GenericDAO<ProductTag> {
   
+	private static final long serialVersionUID = 1L;
+
 	public ProductTag create(StoreTag tag, Product product) {
 		ProductTag productTag = new ProductTag();
 		productTag.setProduct(product);

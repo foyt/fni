@@ -1,6 +1,5 @@
 package fi.foyt.fni.persistence.dao.forum;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -11,9 +10,10 @@ import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.forum.ForumCategory;
 
-@RequestScoped
 @DAO
 public class ForumCategoryDAO extends GenericDAO<ForumCategory> {
+
+	private static final long serialVersionUID = 1L;
 
 	public ForumCategory create(String name) {
     EntityManager entityManager = getEntityManager();

@@ -2,7 +2,6 @@ package fi.foyt.fni.persistence.dao.users;
 
 import java.util.Date;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -14,9 +13,10 @@ import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.PasswordResetKey;
 import fi.foyt.fni.persistence.model.users.PasswordResetKey_;
 
-@RequestScoped
 @DAO
 public class PasswordResetKeyDAO extends GenericDAO<PasswordResetKey> {
+
+	private static final long serialVersionUID = 1L;
 
 	public PasswordResetKey create(User user, String value) {
     EntityManager entityManager = getEntityManager();
