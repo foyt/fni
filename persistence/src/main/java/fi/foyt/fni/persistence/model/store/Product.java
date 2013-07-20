@@ -107,6 +107,46 @@ public class Product {
 		this.requiresDelivery = requiresDelivery;
 	}
   
+  public Boolean getPurchasable() {
+		return purchasable;
+	}
+  
+  public void setPurchasable(Boolean purchasable) {
+		this.purchasable = purchasable;
+	}
+  
+  public Double getWeight() {
+		return weight;
+	}
+  
+  public void setWeight(Double weight) {
+		this.weight = weight;
+	}
+  
+  public Integer getWidth() {
+		return width;
+	}
+  
+  public void setWidth(Integer width) {
+		this.width = width;
+	}
+  
+  public Integer getHeight() {
+		return height;
+	}
+  
+  public void setHeight(Integer height) {
+		this.height = height;
+	}
+  
+  public Integer getDepth() {
+		return depth;
+	}
+  
+  public void setDepth(Integer depth) {
+		this.depth = depth;
+	}
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -149,4 +189,16 @@ public class Product {
   @NotNull
   @Column (nullable = false, columnDefinition = "BIT")
   private Boolean requiresDelivery;
+  
+  @NotNull
+  @Column (nullable = false, columnDefinition = "BIT")
+  private Boolean purchasable;
+  
+  private Double weight;
+  
+  private Integer width;
+  
+  private Integer height;
+  
+  private Integer depth;
 }
