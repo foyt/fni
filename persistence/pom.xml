@@ -12,11 +12,13 @@
   </parent>
 
   <dependencies>
-    <!-- CDI -->
-      
+    <!-- JBoss -->
+  
     <dependency>
-      <groupId>javax.enterprise</groupId>
-      <artifactId>cdi-api</artifactId>
+      <groupId>org.jboss.spec</groupId>
+      <artifactId>jboss-javaee-6.0</artifactId>
+      <type>pom</type>
+      <scope>provided</scope>
     </dependency>
   
     <!-- Hibernate -->
