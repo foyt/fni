@@ -3,7 +3,6 @@ package fi.foyt.fni.persistence.dao.store;
 import java.util.Date;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -17,17 +16,23 @@ import fi.foyt.fni.persistence.model.store.ProductImage;
 import fi.foyt.fni.persistence.model.store.Product_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@RequestScoped
 @DAO
 public class ProductDAO extends GenericDAO<Product> {
   
-	public List<Product> listAllOrderByCreated(int firstResult, int maxResults) {
+	private static final long serialVersionUID = 1L;
+
+	public List<Product> listByPublishedOrderByCreated(Boolean published, int firstResult, int maxResults) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Product> criteria = criteriaBuilder.createQuery(Product.class);
     Root<Product> root = criteria.from(Product.class);
     criteria.select(root);
+    criteria.where(
+  		criteriaBuilder.equal(root.get(Product_.published), published)
+    );
+    
+    
     criteria.orderBy(criteriaBuilder.desc(root.get(Product_.created)));
 
     TypedQuery<Product> query = entityManager.createQuery(criteria);
@@ -37,6 +42,20 @@ public class ProductDAO extends GenericDAO<Product> {
     return query.getResultList();
   }
 
+	public List<Product> listByPublished(Boolean published) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Product> criteria = criteriaBuilder.createQuery(Product.class);
+    Root<Product> root = criteria.from(Product.class);
+    criteria.select(root);
+    criteria.where(
+  		criteriaBuilder.equal(root.get(Product_.published), published)
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+	}
+	
 	public Product updateName(Product product, String name) {
 		product.setName(name);
 		getEntityManager().persist(product);
@@ -84,4 +103,35 @@ public class ProductDAO extends GenericDAO<Product> {
 		getEntityManager().persist(product);
 		return product;
 	}
+
+	public Product updateWidth(Product product, Integer width) {
+		product.setWidth(width);
+		getEntityManager().persist(product);
+    return product;
+	}
+
+	public Product updateHeight(Product product, Integer height) {
+		product.setHeight(height);
+		getEntityManager().persist(product);
+    return product;
+	}
+
+	public Product updateDepth(Product product, Integer depth) {
+		product.setDepth(depth);
+		getEntityManager().persist(product);
+    return product;
+	}
+
+	public Product updateWeight(Product product, Double weight) {
+		product.setWeight(weight);
+		getEntityManager().persist(product);
+    return product;
+	}
+
+	public Product updatePurchasable(Product product, Boolean purchasable) {
+		product.setPurchasable(purchasable);
+		getEntityManager().persist(product);
+    return product;
+	}
+
 }
