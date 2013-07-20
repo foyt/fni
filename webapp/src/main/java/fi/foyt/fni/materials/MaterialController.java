@@ -25,7 +25,6 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 
 import fi.foyt.fni.drive.DriveManager;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
 import fi.foyt.fni.persistence.dao.materials.BinaryDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
@@ -90,87 +89,66 @@ public class MaterialController {
 	private Logger logger;
 	
 	@Inject
-	@DAO
 	private LanguageDAO languageDAO;
 	
   @Inject
-  @DAO
   private MaterialDAO materialDAO;
 
   @Inject
-  @DAO
   private FolderDAO folderDAO;
   
   @Inject
-  @DAO
   private FileDAO fileDAO;
   
   @Inject
-  @DAO
   private PdfDAO pdfDAO;
   
   @Inject
-  @DAO
   private ImageDAO imageDAO;
   
   @Inject
-  @DAO
   private BinaryDAO binaryDAO;
   
   @Inject
-  @DAO
   private DropboxFileDAO dropboxFileDAO;
   
   @Inject
-  @DAO
   private UbuntuOneFileDAO ubuntuOneFileDAO;
 
   @Inject
-  @DAO
   private GoogleDocumentDAO googleDocumentDAO;
   
   @Inject
-  @DAO
   private PermaLinkDAO permaLinkDAO;
 
   @Inject
-  @DAO
   private StarredMaterialDAO starredMaterialDAO;
   
   @Inject
-  @DAO
   private MaterialViewDAO materialViewDAO;
   
   @Inject
-  @DAO
   private UserDAO userDAO;
   
   @Inject
-  @DAO
   private MaterialTagDAO materialTagDAO;
 
   @Inject
-  @DAO
   private UserMaterialRoleDAO userMaterialRoleDAO;
 
   @Inject
-  @DAO
   private MaterialThumbnailDAO materialThumbnailDAO;
 
   @Inject
-  @DAO
   private DocumentDAO documentDAO;
   
   @Inject
-  @DAO
   private DocumentRevisionDAO documentRevisionDAO;
 
   @Inject
-  @DAO
   private VectorImageDAO vectorImageDAO;
   
   @Inject
-  @DAO
   private VectorImageRevisionDAO vectorImageRevisionDAO;
   
   @Inject

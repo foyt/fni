@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import fi.foyt.fni.persistence.dao.forum.ForumDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumPostDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumTopicDAO;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
@@ -20,15 +19,12 @@ import fi.foyt.fni.persistence.model.users.User;
 public class ForumController {
 
 	@Inject
-	@DAO
 	private ForumDAO forumDAO;
 	
 	@Inject
-	@DAO
 	private ForumTopicDAO forumTopicDAO;
 
 	@Inject
-	@DAO
 	private ForumPostDAO forumPostDAO;
 	
 	// Forums

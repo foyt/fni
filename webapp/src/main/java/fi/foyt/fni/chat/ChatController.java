@@ -6,7 +6,6 @@ import java.security.GeneralSecurityException;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.chat.UserChatCredentialsDAO;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.users.User;
@@ -20,7 +19,6 @@ public class ChatController {
 	private SystemSettingsController systemSettingsController;
 	
 	@Inject
-	@DAO
 	private UserChatCredentialsDAO userChatCredentialsDAO;
 
 	public String getCredentialsUserJid(UserChatCredentials chatCredentials) throws GeneralSecurityException, IOException {

@@ -6,7 +6,6 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.UserMaterialRoleDAO;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
@@ -23,7 +22,6 @@ public class MaterialPermissionController {
 	private UserController userController;
 
 	@Inject
-	@DAO
 	private UserMaterialRoleDAO userMaterialRoleDAO;
 
 	public boolean isOwner(User user, Material material) {

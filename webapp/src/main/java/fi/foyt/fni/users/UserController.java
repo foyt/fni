@@ -8,7 +8,6 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.dao.users.UserEmailDAO;
@@ -30,31 +29,24 @@ import fi.foyt.fni.persistence.model.users.UserSettingKey;
 public class UserController {
 	
 	@Inject
-	@DAO
 	private UserDAO userDAO;
 
 	@Inject
-	@DAO
 	private UserEmailDAO userEmailDAO;
 	
 	@Inject
-	@DAO
 	private UserIdentifierDAO userIdentifierDAO;
 	
 	@Inject
-	@DAO
 	private UserTokenDAO userTokenDAO;
 	
 	@Inject
-	@DAO
 	private UserFriendDAO userFriendDAO; 
 	
 	@Inject
-	@DAO
 	private UserSettingDAO userSettingDAO;
 	
 	@Inject
-	@DAO
 	private UserSettingKeyDAO userSettingKeyDAO;
 	
   public User createUser(String firstName, String lastName, String nickname, Locale locale, Date registrationDate) {

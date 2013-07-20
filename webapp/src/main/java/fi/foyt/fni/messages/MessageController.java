@@ -14,7 +14,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.api.beans.CompactUserBean;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.messages.MessageDAO;
 import fi.foyt.fni.persistence.dao.messages.RecipientMessageDAO;
 import fi.foyt.fni.persistence.model.messages.Message;
@@ -31,11 +30,9 @@ public class MessageController {
   private SessionController sessionController;
 
 	@Inject
-	@DAO
 	private MessageDAO messageDAO;
 	
   @Inject
-  @DAO
   private RecipientMessageDAO recipientMessageDAO;
   
   public boolean getNewMessages() {

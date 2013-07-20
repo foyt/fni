@@ -7,7 +7,6 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.auth.InternalAuthDAO;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.users.PasswordResetKeyDAO;
@@ -25,23 +24,18 @@ import fi.foyt.fni.persistence.model.users.UserToken;
 public class AuthenticationController {
 	
 	@Inject
-	@DAO
 	private InternalAuthDAO internalAuthDAO;
 
 	@Inject
-	@DAO
 	private PasswordResetKeyDAO passwordResetKeyDAO;
 
 	@Inject
-	@DAO
 	private UserConfirmKeyDAO userConfirmKeyDAO;
 	
 	@Inject
-	@DAO
 	private UserIdentifierDAO userIdentifierDAO;
 	
 	@Inject
-	@DAO
 	private UserTokenDAO userTokenDAO;
 	
 	// InternalAuth

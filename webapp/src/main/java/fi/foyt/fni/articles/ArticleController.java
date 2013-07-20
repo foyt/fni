@@ -10,7 +10,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.PublishedArticleDAO;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Material;
@@ -28,7 +27,6 @@ public class ArticleController {
 	private SystemSettingsController systemSettingsController;
 
 	@Inject
-	@DAO
 	private PublishedArticleDAO publishedArticleDAO;
 	
 	public ArticleDataBean getArticleData(PublishedArticle article) throws UnsupportedEncodingException {
