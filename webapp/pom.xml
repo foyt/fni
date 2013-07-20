@@ -117,11 +117,6 @@
       <artifactId>common</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>fi.foyt.fni</groupId>
-      <artifactId>rest</artifactId>
-    </dependency>
-
     <!-- Scribe -->
 
     <dependency>

@@ -45,12 +45,6 @@
         <version>${fni.version}</version>
       </dependency>
 
-      <dependency>
-        <groupId>fi.foyt.fni</groupId>
-        <artifactId>rest</artifactId>
-        <version>${fni.version}</version>
-      </dependency>
-
       <!-- JBoss -->
 
       <dependency>
