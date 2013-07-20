@@ -19,7 +19,6 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.ImageDAO;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.users.User;
@@ -40,7 +39,6 @@ public class MaterialsImagesRESTService extends RESTService {
 	private MaterialPermissionController materialPermissionController;
 
 	@Inject
-	@DAO
 	private ImageDAO imageDAO;
 	
 	@GET

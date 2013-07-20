@@ -27,7 +27,6 @@ import fi.foyt.fni.api.beans.CompactFolderBean;
 import fi.foyt.fni.api.beans.CompactMaterialBean;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.FolderDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
 import fi.foyt.fni.persistence.model.materials.Folder;
@@ -50,11 +49,9 @@ public class MaterialsFoldersRESTService extends RESTService {
   private MaterialController materialController;
   
 	@Inject
-	@DAO
 	private FolderDAO folderDAO;
 
   @Inject
-  @DAO
   private MaterialDAO materialDAO;
   
 	/**

@@ -6,7 +6,6 @@ import javax.inject.Inject;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionSessionDAO;
 import fi.foyt.fni.persistence.dao.maps.MapDAO;
 import fi.foyt.fni.persistence.dao.maps.MapVectorImageLayerDAO;
@@ -19,19 +18,15 @@ import fi.foyt.fni.persistence.dao.materials.VectorImageDAO;
 public class MapRESTService extends RESTService {
   
 	@Inject
-	@DAO
 	private MapDAO mapDAO;
 
   @Inject
-  @DAO
   private VectorImageDAO vectorImageDAO;
 
   @Inject
-  @DAO
   private MapVectorImageLayerDAO mapVectorImageLayerDAO;
   
   @Inject
-  @DAO
 	private IllusionSessionDAO illusionSessionDAO;
 
 //	@PUT

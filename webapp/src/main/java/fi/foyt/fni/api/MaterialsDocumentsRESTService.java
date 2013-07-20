@@ -49,7 +49,6 @@ import fi.foyt.fni.api.beans.CompactDocumentBean;
 import fi.foyt.fni.api.beans.CompactPdfBean;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentRevisionDAO;
@@ -93,23 +92,18 @@ public class MaterialsDocumentsRESTService extends RESTService {
   private MaterialController materialController;
 	
 	@Inject
-	@DAO
 	private DocumentDAO documentDAO;
 	
 	@Inject
-	@DAO
 	private DocumentRevisionDAO documentRevisionDAO;
 	
 	@Inject
-	@DAO
 	private FolderDAO folderDAO;
 
 	@Inject
-	@DAO
 	private PdfDAO pdfDAO;
 	
 	@Inject
-	@DAO
 	private LanguageDAO languageDAO;
 
 	/**

@@ -34,7 +34,6 @@ import fi.foyt.fni.api.beans.CompactRecipientMessageBean;
 import fi.foyt.fni.api.events.PrivateMessageSentEvent;
 import fi.foyt.fni.messages.MessageController;
 import fi.foyt.fni.messages.MessageController.MessageBean;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.messages.MessageDAO;
 import fi.foyt.fni.persistence.dao.messages.MessageFolderDAO;
 import fi.foyt.fni.persistence.dao.messages.RecipientMessageDAO;
@@ -58,19 +57,15 @@ public class MessagesRESTService extends RESTService {
 	private Event<PrivateMessageSentEvent> privateMessageSentEvent;
 
 	@Inject
-	@DAO
 	private MessageDAO messageDAO;
 
 	@Inject
-	@DAO
 	private MessageFolderDAO messageFolderDAO;
 
 	@Inject
-	@DAO
 	private RecipientMessageDAO recipientMessageDAO;
 	
 	@Inject
-	@DAO
 	private UserDAO userDAO;
 	
 	@POST

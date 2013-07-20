@@ -18,7 +18,6 @@ import javax.ws.rs.core.Response.Status;
 
 import fi.foyt.fni.dropbox.DropboxManager;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.DropboxFileDAO;
 import fi.foyt.fni.persistence.model.materials.DropboxFile;
 import fi.foyt.fni.persistence.model.users.User;
@@ -37,7 +36,6 @@ public class MaterialsDropboxRESTService extends RESTService {
 	private MaterialPermissionController materialPermissionController;
 
   @Inject
-  @DAO
   private DropboxFileDAO dropboxFileDAO;
   
 	@Inject

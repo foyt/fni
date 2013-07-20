@@ -28,7 +28,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 import fi.foyt.fni.api.beans.CompactVectorImageBean;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
 import fi.foyt.fni.persistence.dao.materials.FolderDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageDAO;
@@ -60,19 +59,15 @@ public class VectorImagesRESTService extends RESTService {
 	private MaterialPermissionController materialPermissionController;
 
 	@Inject
-	@DAO
 	private FolderDAO folderDAO;
 	
 	@Inject
-	@DAO
 	private VectorImageDAO vectorImageDAO;
 	
 	@Inject
-	@DAO
 	private LanguageDAO languageDAO;
 	
 	@Inject
-	@DAO
 	private VectorImageRevisionDAO vectorImageRevisionDAO;
 
 	/**

@@ -15,7 +15,6 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionSessionDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionSessionParticipantDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionSession;
@@ -30,11 +29,9 @@ import fi.foyt.fni.persistence.model.users.UserRole;
 public class IllusionRESTService extends RESTService {
 
 	@Inject
-	@DAO
 	private IllusionSessionDAO illusionSessionDAO;
 
   @Inject
-  @DAO
   private IllusionSessionParticipantDAO illusionSessionParticipantDAO;
   
 	@PUT

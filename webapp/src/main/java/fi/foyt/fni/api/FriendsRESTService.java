@@ -36,7 +36,6 @@ import fi.foyt.fni.api.beans.CompleteCommonFriendBean;
 import fi.foyt.fni.api.events.FriendRemovedEvent;
 import fi.foyt.fni.api.events.FriendRequestConfirmedEvent;
 import fi.foyt.fni.api.events.FriendRequestEvent;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.users.FriendConfirmKeyDAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.dao.users.UserEmailDAO;
@@ -68,19 +67,15 @@ public class FriendsRESTService extends RESTService {
 	private Event<FriendRemovedEvent> friendRemoved;
 
 	@Inject
-	@DAO
 	private UserDAO userDAO;
 
 	@Inject
-	@DAO
 	private UserEmailDAO userEmailDAO;
 	
 	@Inject
-	@DAO
 	private UserFriendDAO userFriendDAO;
 	
 	@Inject
-	@DAO
 	private FriendConfirmKeyDAO friendConfirmKeyDAO;
 	
 	@PUT

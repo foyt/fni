@@ -14,7 +14,6 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.FileDAO;
 import fi.foyt.fni.persistence.model.materials.File;
 import fi.foyt.fni.persistence.model.users.User;
@@ -30,7 +29,6 @@ public class MaterialsFilesRESTService extends RESTService {
 	private MaterialPermissionController materialPermissionController;
 
 	@Inject
-	@DAO
 	private FileDAO fileDAO;
 	
 	/**

@@ -17,7 +17,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.PdfDAO;
 import fi.foyt.fni.persistence.model.materials.Pdf;
 import fi.foyt.fni.persistence.model.users.User;
@@ -33,7 +32,6 @@ public class MaterialsPdfsRESTService extends RESTService {
 	private MaterialPermissionController materialPermissionController;
 
 	@Inject
-	@DAO
 	private PdfDAO pdfDAO;
 	
 	/**

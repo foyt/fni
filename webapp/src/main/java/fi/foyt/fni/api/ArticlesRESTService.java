@@ -25,7 +25,6 @@ import fi.foyt.fni.api.beans.CompletePublishedArticleBean;
 import fi.foyt.fni.articles.ArticleDataBean;
 import fi.foyt.fni.articles.ArticleController;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
 import fi.foyt.fni.persistence.dao.materials.PublishedArticleDAO;
 import fi.foyt.fni.persistence.model.materials.Material;
@@ -47,11 +46,9 @@ public class ArticlesRESTService extends RESTService {
 	private ArticleController articleController;
 	 
 	@Inject
-	@DAO
   private MaterialDAO materialDAO;
 	
 	@Inject
-	@DAO
 	private PublishedArticleDAO publishedArticleDAO;
   
   /**

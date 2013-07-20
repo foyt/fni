@@ -67,7 +67,6 @@ import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.MaterialTypeComparator;
 import fi.foyt.fni.materials.TitleComparator;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.FileDAO;
 import fi.foyt.fni.persistence.dao.materials.FolderDAO;
@@ -133,47 +132,36 @@ public class MaterialsAllRESTService extends RESTService {
 	private FullTextEntityManager fullTextEntityManager;
 	
 	@Inject
-	@DAO
   private MaterialDAO materialDAO;
 
 	@Inject
-	@DAO
   private MaterialTagDAO materialTagDAO;
 	
 	@Inject
-	@DAO
   private UserDAO userDAO;
 	
 	@Inject
-	@DAO
   private UserMaterialRoleDAO userMaterialRoleDAO;
 
 	@Inject
-	@DAO
   private MaterialViewDAO materialViewDAO;
 
 	@Inject
-	@DAO
 	private FolderDAO folderDAO;
 	
 	@Inject
-	@DAO
 	private DocumentDAO documentDAO;
 	
 	@Inject
-	@DAO
 	private FileDAO fileDAO;
 	
 	@Inject
-	@DAO
 	private ImageDAO imageDAO;
 
 	@Inject
-	@DAO
 	private VectorImageDAO vectorImageDAO;
 	
 	@Inject
-	@DAO
 	private PdfDAO pdfDAO;
 	
 	

@@ -44,7 +44,6 @@ import org.hibernate.search.jpa.FullTextQuery;
 
 import fi.foyt.fni.api.beans.CompleteForumPostBean;
 import fi.foyt.fni.api.beans.CompleteForumTopicBean;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.forum.ForumDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumPostDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumTopicDAO;
@@ -69,15 +68,12 @@ public class ForumRESTService extends RESTService {
 	private Logger logger;
 	
 	@Inject
-	@DAO
 	private ForumDAO forumDAO;
 
 	@Inject
-	@DAO
 	private ForumPostDAO forumPostDAO;
 	
 	@Inject
-	@DAO
 	private ForumTopicDAO forumTopicDAO;
 
 	/**

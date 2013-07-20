@@ -40,7 +40,6 @@ import fi.foyt.fni.api.beans.CompactMaterialBean;
 import fi.foyt.fni.api.beans.CompactUserBean;
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.materials.MaterialController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.auth.InternalAuthDAO;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.materials.ImageDAO;
@@ -94,35 +93,27 @@ public class UsersRESTService extends RESTService {
 	private AuthenticationController authenticationController;
 	
 	@Inject
-	@DAO
 	private UserEmailDAO userEmailDAO;
 
 	@Inject
-	@DAO
 	private UserConfirmKeyDAO userConfirmKeyDAO;
 
 	@Inject
-	@DAO
 	private InternalAuthDAO internalAuthDAO;
 
 	@Inject
-	@DAO
 	private UserIdentifierDAO userIdentifierDAO;
 	
 	@Inject
-	@DAO
 	private UserDAO userDAO;
 	
 	@Inject
-	@DAO
 	private ImageDAO imageDAO;
 
 	@Inject
-	@DAO
 	private UserSettingKeyDAO userSettingKeyDAO;
 
 	@Inject
-	@DAO
 	private UserSettingDAO userSettingDAO;
 	
 	/**
