@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.auth.InternalAuthDAO;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.auth.InternalAuth;
@@ -20,7 +19,6 @@ public abstract class AbstractInternalAuthenticationStrategy extends Authenticat
 	private UserController userController;
 
 	@Inject
-	@DAO
 	private InternalAuthDAO internalAuthDAO;
 	
 	protected UserToken handleLogin(Locale locale, String username, String password) throws InvalidCredentialsException, UserNotConfirmedException, MultipleEmailAccountsException, EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException, InvalidCredentialsException, UserNotConfirmedException {

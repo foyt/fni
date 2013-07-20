@@ -21,7 +21,6 @@ import org.scribe.oauth.OAuthService;
 
 import fi.foyt.fni.auth.DropboxAuthenticationStrategy;
 import fi.foyt.fni.materials.MaterialController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.materials.DropboxFileDAO;
 import fi.foyt.fni.persistence.dao.materials.DropboxFolderDAO;
@@ -55,31 +54,24 @@ public class DropboxManager {
 	private SystemSettingsController systemSettingsController;
 
   @Inject
-  @DAO
   private UserTokenDAO userTokenDAO;
 
   @Inject
-  @DAO
   private UserIdentifierDAO userIdentifierDAO;
 
   @Inject
-  @DAO
   private DropboxFolderDAO dropboxFolderDAO;
 
   @Inject
-  @DAO
   private DropboxRootFolderDAO dropboxRootFolderDAO;
 
   @Inject
-  @DAO
   private DropboxFileDAO dropboxFileDAO;
 
   @Inject
-  @DAO
   private FolderDAO folderDAO;
 
   @Inject
-  @DAO
   private MaterialDAO materialDAO;
 
   @Inject

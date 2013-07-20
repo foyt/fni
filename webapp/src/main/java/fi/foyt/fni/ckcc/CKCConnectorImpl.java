@@ -32,7 +32,6 @@ import fi.foyt.ckc.UpdateResult;
 import fi.foyt.ckc.utils.CKCUtils;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
 import fi.foyt.fni.persistence.dao.common.TagDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
@@ -77,43 +76,33 @@ public class CKCConnectorImpl implements CKCConnector {
   private SessionController sessionController;
 
   @Inject
-  @DAO
   private DocumentDAO documentDAO;
 
   @Inject
-  @DAO
   private DocumentRevisionDAO documentRevisionDAO;
 
   @Inject
-  @DAO
   private LanguageDAO languageDAO;
 
   @Inject
-  @DAO
   private TagDAO tagDAO;
 
   @Inject
-  @DAO
   private MaterialTagDAO materialTagDAO;
 
   @Inject
-  @DAO
   private MaterialSettingDAO materialSettingDAO;
 
   @Inject
-  @DAO
   private MaterialSettingKeyDAO materialSettingKeyDAO;
 
   @Inject
-  @DAO
   private MaterialRevisionSettingDAO materialRevisionSettingDAO;
 
   @Inject
-  @DAO
   private MaterialRevisionTagDAO materialRevisionTagDAO;
 
   @Inject
-  @DAO
   private UserTokenDAO userTokenDAO;
 
   @Override

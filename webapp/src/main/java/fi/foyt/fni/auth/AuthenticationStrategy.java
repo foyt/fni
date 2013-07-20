@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.dao.users.UserEmailDAO;
@@ -37,19 +36,15 @@ public abstract class AuthenticationStrategy {
 	private SystemSettingsController systemSettingsController;
 
 	@Inject
-	@DAO
 	private UserIdentifierDAO userIdentifierDAO;
 	
 	@Inject
-	@DAO
 	private UserTokenDAO userTokenDAO;
 	
 	@Inject
-	@DAO
 	private UserEmailDAO userEmailDAO;
 	
 	@Inject
-	@DAO
 	private UserDAO userDAO;
 
 	/**

@@ -21,7 +21,6 @@ import org.scribe.oauth.OAuthService;
 
 import fi.foyt.fni.auth.UbuntuOneAuthenticationStrategy;
 import fi.foyt.fni.materials.MaterialController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.materials.FolderDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
@@ -51,27 +50,21 @@ public class UbuntuOneManager {
   private MaterialController materialController;
   
   @Inject
-  @DAO
   private UserTokenDAO userTokenDAO;
 
   @Inject
-  @DAO
   private UserIdentifierDAO userIdentifierDAO;
 
   @Inject
-  @DAO
   private FolderDAO folderDAO;
 
   @Inject
-  @DAO
   private MaterialDAO materialDAO;
 
   @Inject
-  @DAO
   private UbuntuOneFolderDAO ubuntuOneFolderDAO;
 
   @Inject
-  @DAO
   private UbuntuOneFileDAO ubuntuOneFileDAO;
   
   @Inject
