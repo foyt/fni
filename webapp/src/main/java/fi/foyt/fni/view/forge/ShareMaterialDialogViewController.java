@@ -7,7 +7,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
 import fi.foyt.fni.persistence.dao.materials.UserMaterialRoleDAO;
 import fi.foyt.fni.persistence.model.materials.Material;
@@ -28,11 +27,9 @@ public class ShareMaterialDialogViewController extends AbstractViewController {
 	private MaterialPermissionController materialPermissionController;
 
 	@Inject
-	@DAO
   private MaterialDAO materialDAO;
 
 	@Inject
-	@DAO
   private UserMaterialRoleDAO userMaterialRoleDAO;
 
   @Override

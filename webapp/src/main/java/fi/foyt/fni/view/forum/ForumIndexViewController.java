@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.forum.ForumCategoryDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumDAO;
 import fi.foyt.fni.persistence.model.forum.Forum;
@@ -27,11 +26,9 @@ public class ForumIndexViewController extends PageViewController {
   private SessionController sessionController;
   
 	@Inject
-	@DAO
 	private ForumCategoryDAO forumCategoryDAO;
 	
 	@Inject
-	@DAO
 	private ForumDAO forumDAO;
 
   @Override

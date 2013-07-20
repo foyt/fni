@@ -6,7 +6,6 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.dao.users.UserFriendDAO;
 import fi.foyt.fni.persistence.model.users.User;
@@ -20,11 +19,9 @@ public class UserProfileViewController extends PageViewController {
   private SessionController sessionController;
 
 	@Inject
-	@DAO
 	private UserFriendDAO userFriendDAO;
 
 	@Inject
-	@DAO
 	private UserDAO userDAO;
 	
 	@Override

@@ -10,7 +10,6 @@ import javax.inject.Inject;
 
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.TitleComparator;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.FolderDAO;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
@@ -33,7 +32,6 @@ public class MaterialListViewController extends AbstractViewController {
   private ForgeWorkspaceManager workspaceManager;
 
 	@Inject
-	@DAO
 	private FolderDAO folderDAO;
 	
   @Override

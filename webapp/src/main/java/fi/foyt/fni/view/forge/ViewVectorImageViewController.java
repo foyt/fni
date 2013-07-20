@@ -14,7 +14,6 @@ import org.scribe.model.Response;
 
 import fi.foyt.fni.dropbox.DropboxManager;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.DropboxFileDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
 import fi.foyt.fni.persistence.dao.materials.UbuntuOneFileDAO;
@@ -50,19 +49,15 @@ public class ViewVectorImageViewController extends AbstractViewController {
   private UbuntuOneManager ubuntuOneManager;
   
 	@Inject
-	@DAO
 	private MaterialDAO materialDAO;
 
   @Inject
-  @DAO
 	private VectorImageDAO vectorImageDAO;
 	
   @Inject
-  @DAO
   private UbuntuOneFileDAO ubuntuOneFileDAO;
   
   @Inject
-  @DAO
   private DropboxFileDAO dropboxFileDAO;
 
   @Override

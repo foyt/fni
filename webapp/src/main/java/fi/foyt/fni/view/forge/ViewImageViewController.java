@@ -6,7 +6,6 @@ import javax.inject.Inject;
 
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.ImageDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
 import fi.foyt.fni.persistence.model.materials.Material;
@@ -28,11 +27,9 @@ public class ViewImageViewController extends AbstractViewController {
 	private MaterialPermissionController materialPermissionController;
 
   @Inject
-  @DAO
   private MaterialDAO materialDAO;
 
   @Inject
-	@DAO
 	private ImageDAO imageDAO;
   
   @Override

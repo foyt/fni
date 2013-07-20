@@ -15,7 +15,6 @@ import fi.foyt.fni.auth.DropboxAuthenticationStrategy;
 import fi.foyt.fni.dropbox.DropboxManager;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.messages.MessageController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.materials.DropboxRootFolderDAO;
 import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
@@ -53,15 +52,12 @@ public class DropboxConnectViewController extends AbstractViewController {
   private MaterialController materialController;
   
   @Inject
-  @DAO
   private UserIdentifierDAO userIdentifierDAO;
   
   @Inject
-  @DAO
   private UserTokenDAO userTokenDAO;
   
   @Inject
-  @DAO
   private DropboxRootFolderDAO dropboxRootFolderDAO;
   
   @Inject

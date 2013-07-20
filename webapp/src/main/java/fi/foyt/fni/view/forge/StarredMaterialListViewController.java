@@ -8,7 +8,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import fi.foyt.fni.materials.MaterialController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.StarredMaterialDAO;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.users.User;
@@ -30,7 +29,6 @@ public class StarredMaterialListViewController extends AbstractViewController {
   private MaterialController materialController;
   
   @Inject
-  @DAO
 	private StarredMaterialDAO starredMaterialDAO;
 
   @Override

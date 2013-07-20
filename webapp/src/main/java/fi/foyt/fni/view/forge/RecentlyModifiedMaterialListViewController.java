@@ -8,7 +8,6 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
@@ -28,7 +27,6 @@ public class RecentlyModifiedMaterialListViewController extends AbstractViewCont
   private ForgeWorkspaceManager workspaceManager;
 
   @Inject
-	@DAO
   private MaterialDAO materialDAO;
 
   @Override

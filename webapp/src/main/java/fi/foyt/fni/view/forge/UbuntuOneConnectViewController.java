@@ -13,7 +13,6 @@ import org.scribe.model.Token;
 import fi.foyt.fni.auth.UbuntuOneAuthenticationStrategy;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.messages.MessageController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.materials.UbuntuOneRootFolderDAO;
 import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
@@ -49,15 +48,12 @@ public class UbuntuOneConnectViewController extends AbstractViewController {
   private MaterialController materialController;
   
   @Inject
-  @DAO
   private UserIdentifierDAO userIdentifierDAO;
   
   @Inject
-  @DAO
   private UserTokenDAO userTokenDAO;
   
   @Inject
-  @DAO
   private UbuntuOneRootFolderDAO ubuntuOneRootFolderDAO;
   
   @Inject

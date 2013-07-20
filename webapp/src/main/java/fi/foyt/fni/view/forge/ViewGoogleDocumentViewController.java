@@ -4,7 +4,6 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.GoogleDocumentDAO;
 import fi.foyt.fni.persistence.model.materials.GoogleDocument;
 import fi.foyt.fni.view.AbstractViewController;
@@ -15,7 +14,6 @@ import fi.foyt.fni.view.ViewControllerContext;
 public class ViewGoogleDocumentViewController extends AbstractViewController {
 
 	@Inject
-	@DAO
 	private GoogleDocumentDAO googleDocumentDAO;
 
   @Override

@@ -21,7 +21,6 @@ import fi.foyt.fni.materials.MaterialArchetype;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialTypeComparator;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.FolderDAO;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
@@ -52,7 +51,6 @@ public class CKEditorConnectorViewController extends AbstractViewController {
   private SessionController sessionController;
   
 	@Inject
-	@DAO
 	private FolderDAO folderDAO;
 	
 	@Override

@@ -5,7 +5,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.FolderDAO;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.users.User;
@@ -24,7 +23,6 @@ public class EditFolderDialogViewController extends AbstractViewController {
 	private MaterialPermissionController materialPermissionController;
 
 	@Inject
-	@DAO
 	private FolderDAO folderDAO;
 
 	@Override

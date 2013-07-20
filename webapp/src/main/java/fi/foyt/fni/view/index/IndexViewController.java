@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.articles.ArticleController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.PublishedArticleDAO;
 import fi.foyt.fni.persistence.model.materials.PublishedArticle;
 import fi.foyt.fni.persistence.model.materials.PublishedArticleType;
@@ -28,7 +27,6 @@ public class IndexViewController extends PageViewController {
 	private ArticleController articleController;
 
 	@Inject
-	@DAO
   private PublishedArticleDAO publishedArticleDAO;
 
   @Override

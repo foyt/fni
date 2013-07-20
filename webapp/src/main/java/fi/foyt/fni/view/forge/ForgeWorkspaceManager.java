@@ -17,7 +17,6 @@ import org.apache.commons.collections.ComparatorUtils;
 import fi.foyt.fni.materials.MaterialArchetype;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.DropboxRootFolderDAO;
 import fi.foyt.fni.persistence.dao.materials.PublishedArticleDAO;
 import fi.foyt.fni.persistence.dao.materials.UbuntuOneRootFolderDAO;
@@ -40,15 +39,12 @@ public class ForgeWorkspaceManager {
 	private MaterialPermissionController materialPermissionController;
 
   @Inject
-  @DAO
   private PublishedArticleDAO publishedArticleDAO;
   
   @Inject
-  @DAO
   private DropboxRootFolderDAO dropboxRootFolderDAO;
 
   @Inject
-  @DAO
   private UbuntuOneRootFolderDAO ubuntuOneRootFolderDAO;
   
   public WorkspaceMaterialBean createRootBean(Locale locale) {

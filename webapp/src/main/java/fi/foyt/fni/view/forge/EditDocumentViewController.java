@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentRevisionDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialSettingDAO;
@@ -39,23 +38,18 @@ public class EditDocumentViewController extends AbstractViewController {
 	private MaterialPermissionController materialPermissionController;
 
 	@Inject
-	@DAO
 	private DocumentDAO documentDAO;
 
 	@Inject
-	@DAO
 	private DocumentRevisionDAO documentRevisionDAO;
 
 	@Inject
-	@DAO
 	private MaterialTagDAO materialTagDAO;
 	
 	@Inject
-	@DAO
 	private MaterialSettingKeyDAO materialSettingKeyDAO;
 	
 	@Inject
-	@DAO
 	private MaterialSettingDAO materialSettingDAO;
 	
 	
