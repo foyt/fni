@@ -11,8 +11,8 @@ public class GenericNodePrinter implements NodePrinter {
   
   public void printNode(PrintingContext printingContext, Node node) throws IOException {
     Element element = (Element) node;
-    String tagName = element.getLocalName().toLowerCase().replaceAll("[ \t\r]*", "");
-    
+
+    String tagName = (node.getLocalName() == null ? node.getNodeName() : node.getLocalName()).toLowerCase().replaceAll("[ \t\r]*", "");    
     Writer writer = printingContext.getContentWriter();
     
     writer.append('<')

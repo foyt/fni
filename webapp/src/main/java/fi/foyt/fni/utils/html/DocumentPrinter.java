@@ -23,7 +23,7 @@ public class DocumentPrinter {
     if (node == null)
       return getDefaultNodePrinter();
 
-    String tagName = node.getLocalName().toLowerCase();
+    String tagName = (node.getLocalName() == null ? node.getNodeName() : node.getLocalName()).toLowerCase();
     List<String> classNames = null;
 
     if (node instanceof Element) {
