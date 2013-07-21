@@ -7,8 +7,6 @@
 <c:set var="shareLinkTooltip"><fmt:message key="forge.indexPage.materialsListShareTooltip"/></c:set>
 <c:set var="deleteLinkTooltip"><fmt:message key="forge.indexPage.materialsListDeleteTooltip"/></c:set>
 <c:set var="printToPdfLinkTooltip"><fmt:message key="forge.indexPage.materialsListPrintToPdfTooltip"/></c:set>
-<c:set var="publishLinkTooltip"><fmt:message key="forge.indexPage.materialsListPublishAsArticleTooltip"/></c:set>
-<c:set var="unpublishLinkTooltip"><fmt:message key="forge.indexPage.materialsListUnpublishAsArticleTooltip"/></c:set>
 
 <c:choose>
   <c:when test="${!empty(param.classes)}">
@@ -69,18 +67,6 @@
     </c:if>
     <c:if test="${material.shareable}">
       <a href="javascript:void(null)" class="forgeWorkspaceMaterialShareLink" title="${shareLinkTooltip}"></a>
-    </c:if>
-    <c:if test="${(loggedUser.role eq 'ADMINISTRATOR') and (material.type eq 'DOCUMENT')}">
-      <c:choose>
-        <c:when test="${material.articleId ne null}">
-          <a href="javascript:void(null)" class="forgeWorkspaceMaterialPublishLink" title="${publishLinkTooltip}" style="display: none"></a>
-          <a href="javascript:void(null)" class="forgeWorkspaceMaterialUnpublishLink" title="${unpublishLinkTooltip}"></a>
-        </c:when>
-        <c:otherwise>
-          <a href="javascript:void(null)" class="forgeWorkspaceMaterialPublishLink" title="${publishLinkTooltip}"></a>
-          <a href="javascript:void(null)" class="forgeWorkspaceMaterialUnpublishLink" title="${unpublishLinkTooltip}" style="display: none"></a>
-        </c:otherwise>
-      </c:choose>
     </c:if>
   </div>
 </li>

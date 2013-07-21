@@ -7,7 +7,6 @@
 <script src="${pageContext.request.contextPath}/resources/scripts/gui/forge/editfolderdialog.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/gui/forge/movetofolderdialog.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/gui/forge/selectfolderdialog.js" type="text/javascript"></script>
-<script src="${pageContext.request.contextPath}/resources/scripts/gui/forge/publisharticledialog.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/gui/forge/sharematerialdialog.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/gui/forge/workspacewindow.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/gui/forge/dockedworkspacewindow.js" type="text/javascript"></script>

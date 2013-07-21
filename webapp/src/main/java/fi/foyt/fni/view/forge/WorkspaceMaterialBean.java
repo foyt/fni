@@ -9,8 +9,7 @@ public class WorkspaceMaterialBean {
 
   public WorkspaceMaterialBean(Long id, Long parentId, String parentTitle, String title, MaterialType type, 
   		MaterialArchetype archetype, String mimeType, Date modified, Date created, String path, String editorName, 
-  		boolean starred, boolean editable, boolean movable, boolean deletable, boolean shareable, boolean printableAsPdf, 
-  		Long articleId) {
+  		boolean starred, boolean editable, boolean movable, boolean deletable, boolean shareable, boolean printableAsPdf) {
   	
     this.id = id;
     this.parentId = parentId;
@@ -27,7 +26,6 @@ public class WorkspaceMaterialBean {
     this.movable = movable;
     this.editable = editable;
     this.deletable = deletable;
-    this.articleId = articleId;
     this.shareable = shareable;
     this.printableAsPdf = printableAsPdf;
   }
@@ -120,10 +118,6 @@ public class WorkspaceMaterialBean {
     this.deletable = deletable;
   }
 
-  public void setArticleId(Long articleId) {
-    this.articleId = articleId;
-  }
-
   public boolean getStarred() {
     return starred;
   }
@@ -151,10 +145,6 @@ public class WorkspaceMaterialBean {
   public boolean getMovable() {
     return movable;
   }
-  
-  public Long getArticleId() {
-    return articleId;
-  }
 
   public String getPath() {
     return path;
@@ -181,6 +171,4 @@ public class WorkspaceMaterialBean {
   private boolean movable;
   private boolean shareable; 
   private boolean printableAsPdf;
-  private Long articleId;
-
 }

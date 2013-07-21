@@ -457,14 +457,6 @@
   background-image: url('../gfx/icons/16x16/actions/print-to-pdf.png');
 }
 
-.forgeWorkspaceMaterialPublishLink {
-  background-image: url('../gfx/icons/16x16/actions/article-publish.png');
-}
-
-.forgeWorkspaceMaterialUnpublishLink {
-  background-image: url('../gfx/icons/16x16/actions/article-unpublish.png');
-}
-
 .forgeWorkspaceMaterialShareLink {
   background-image: url('../gfx/icons/16x16/actions/material-share.png');
 }

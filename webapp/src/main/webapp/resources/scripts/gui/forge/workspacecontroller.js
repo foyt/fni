@@ -875,28 +875,6 @@ ForgeWorkspaceController = Class.create({
     listStates[0].showAll = true;
     this._loadMaterialLists(listStates);
   },
-  _onMaterialPublishLinkClick: function (event) {
-    var element = Event.element(event);
-    
-    var li = element.up('li');
-    var materialId = li.down('input[name="materialId"]').value;
-    var dialog = new PublishArticleDialogController({
-      materialId: materialId
-    });
-    dialog.open();
-  },
-  _onMaterialUnpublishLinkClick: function (event) {
-    var element = Event.element(event);
-    
-    var li = element.up('li');
-    var materialId = li.down('input[name="materialId"]').value;
-    var _this = this;
-    API.post(CONTEXTPATH + '/v1/articles/unpublish/' + materialId, {
-      onSuccess: function (jsonResponse) { 
-        _this.reloadMaterialLists();
-      }
-    });
-  },
   _onMaterialShareLinkClick: function (event) {
     var element = Event.element(event);
     

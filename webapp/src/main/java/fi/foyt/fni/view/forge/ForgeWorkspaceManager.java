@@ -18,14 +18,11 @@ import fi.foyt.fni.materials.MaterialArchetype;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.dao.materials.DropboxRootFolderDAO;
-import fi.foyt.fni.persistence.dao.materials.PublishedArticleDAO;
 import fi.foyt.fni.persistence.dao.materials.UbuntuOneRootFolderDAO;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
-import fi.foyt.fni.persistence.model.materials.PublishedArticle;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.view.Locales;
 
 @RequestScoped
@@ -38,9 +35,6 @@ public class ForgeWorkspaceManager {
   @Inject
 	private MaterialPermissionController materialPermissionController;
 
-  @Inject
-  private PublishedArticleDAO publishedArticleDAO;
-  
   @Inject
   private DropboxRootFolderDAO dropboxRootFolderDAO;
 
@@ -67,8 +61,7 @@ public class ForgeWorkspaceManager {
         false,
         false,
         false,
-        false,
-        null
+        false
     );
   }
   
@@ -99,15 +92,6 @@ public class ForgeWorkspaceManager {
       break;
       default:
       break;
-    }
-    
-    Long articleId = null;
-    
-    if ((loggedUser.getRole() == UserRole.ADMINISTRATOR) && (material.getType() == MaterialType.DOCUMENT)) {
-      PublishedArticle article = publishedArticleDAO.findByMaterial(material);
-      if (article != null) {
-        articleId = article.getId();
-      }
     }
     
     String title = material.getTitle();
@@ -142,8 +126,7 @@ public class ForgeWorkspaceManager {
         movable,
         deletable,
         shareable,
-        printableAsPdf,
-        articleId
+        printableAsPdf
     );
   }
 
