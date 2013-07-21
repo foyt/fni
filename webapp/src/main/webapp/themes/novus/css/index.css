@@ -1,5 +1,90 @@
 @charset "UTF-8";
 
+/* Blog Feed */
+
+#index-blog-feed {
+  background: #fff;
+  width: 705px;
+  min-height: 860px;
+  float: right;
+  padding-right: 15px;
+  padding-top: 25px;
+  position: relative;
+}
+
+#index-blog-feed .index-blog-feed-entry .index-blog-feed-entry-header {
+  margin-top:5px;
+}
+
+#index-blog-feed .index-blog-feed-entry h1 {
+  display: inline;
+}
+
+#index-blog-feed .index-blog-feed-entry h1 a {
+  text-decoration: none;
+  color: #000;
+}
+
+.index-blog-feed-entry-author:before {
+  content: '-';
+  margin-left: 5px;
+  margin-right: 7px;
+}
+
+.index-blog-feed-entry-author, .index-blog-feed-entry-published {
+  vertical-align: top;
+  display: inline-block;
+  margin-top: 10px;
+  color: #555;
+}
+
+.index-blog-feed-entry-published {
+  float: right;
+  margin-right: 5px;
+}
+
+#index-blog-feed .index-blog-feed-entry-summary-container {
+  background: url('../gfx/layout/content_flow_toparrow.gif') no-repeat;
+  padding-top: 10px;
+}
+
+#index-blog-feed .index-blog-feed-entry-summary {
+  background: #f7f7f7;
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+  max-height: 780px;
+  overflow: auto;
+  line-height: 1.7em;
+  font-family: 'PT Sans','Trebuchet MS',Arial;
+  color: #3B3B3B;
+  margin-bottom: 5px;
+  padding: 10px;
+}
+
+#index-blog-feed .index-blog-feed-entry .index-blog-feed-entry-tag {
+  background: #B6C9ED;
+  padding-left: 8px;
+  padding-right: 8px;
+  display: inline-block;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-right: 4px;
+}
+
+#index-blog-feed .index-blog-feed-entry .index-blog-feed-entry-tag:hover {
+  background: #BCCEFA;
+}
+
+#index-blog-feed .index-blog-feed-entry .index-blog-feed-entry-tag a {
+  text-decoration: none;
+  color: #fff;
+}
+
+#index-blog-feed .index-blog-feed-entry .index-blog-feed-entry-summary p {
+  margin-bottom: 20px;
+}
+
 #siteFooterBackground {
   left: 48px;
 }
@@ -47,56 +132,6 @@
   font-weight: 200;
   margin-bottom: 10px;
   margin-top: 0;
-}
-
-#index-front-page-article>h1{
-  padding-left:15px;
-}
-
-.index-front-page-article-top-arrow {
-  background: url('../gfx/layout/content_flow_toparrow.gif') no-repeat;
-  height: 10px;
-}
-
-.index-front-page-article-content {
-  background: #f7f7f7;
-  padding: 15px;
-  border-radius: 15px;
-  -moz-border-radius: 15px;
-  -webkit-border-radius: 15px;
-  max-height: 780px;
-  overflow: auto;
-  line-height: 1.7em;
-  font-family: 'PT Sans','Trebuchet MS',Arial;
-  color: #3B3B3B;
-}
-
-.index-front-page-article-content p {
-  margin-bottom: 20px;
-  margin-top: 0;
-}
-
-.index-front-page-article-loading {
-  background-position: center 90px;
-  background-repeat: no-repeat; 
-  background-image: url('../gfx/layout/loader-black-64x64.gif');
-  background-color: #fff;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  opacity: 0.75;
-}
-
-.index-sidebar-default-article-link {
-  background-image: url("../gfx/icons/16x16/actions/article-set-default.png");
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  background-repeat: no-repeat;
-  background-position: center;
-  float: right;
 }
 
 #siteHeaderWrapper.index-header-wrapper {

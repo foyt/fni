@@ -49,7 +49,6 @@
     </ui:define>
     
     <ui:define name="content">
-      <h:outputScript name="scripts/gui/index/index.js" target="head"/>
       <div id="index-sidebar-wrapper">
         <div id="index-sidebar-background"></div>
         <div id="index-sidebar-content">
@@ -61,74 +60,64 @@
                 <b>#{locales['root.indexPage.whatIsForgeContentPrefix']}</b> #{locales['root.indexPage.whatIsForgeContent']}
               </div>
             </div>
-          </div>
-
-          <ui:fragment rendered="#{indexViewBackingBean.technicalAnnouncements.size() > 0}">
-            <div id="index-sidebar-widget-technical-announcements-wrapper">
-              <div id="index-sidebar-widget-technical-announcements-icon" class="index-sidebar-widget-icon-container"></div>
-              <div id="index-sidebar-widget-technical-announcements-content-wrapper" class="index-sidebar-widget-content-container">
-                <h1>#{locales['root.indexPage.technicalAnnouncementsHeader']}</h1>
-                <div id="index-sidebar-widget-technical-announcements-content" class="index-sidebar-widget-content">
-                  <ul> 
-                    <ui:repeat var="article" value="#{indexViewBackingBean.technicalAnnouncements}">
-                      <li>
-                        <a href="javascript:void(null);" class="index-sidebar-article-link" data-article-id="#{article.id}">#{article.material.title}</a>
-                        <ui:fragment rendered="#{sessionController.loggedUserRole eq 'ADMINISTRATOR'}">
-                          <a href="javascript:void(null);" class="index-sidebar-default-article-link" data-article-id="#{article.id}"></a>
-                        </ui:fragment>
-                      </li>
-                    </ui:repeat>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </ui:fragment>
-          
-          <ui:fragment rendered="false">
-            <!-- TODO: Add publications -->
-            <div id="index-sidebar-widget-lastest-publications-wrapper">
-              <div id="index-sidebar-widget-lastest-publications-icon" class="index-sidebar-widget-icon-container"></div>
-              <div id="index-sidebar-widget-lastest-publications-content-wrapper" class="index-sidebar-widget-content-container">
-                <h1>#{locales['root.indexPage.latestPublicationsHeader']}</h1>
-                <div id="index-sidebar-widget-lastest-publications-content" class="index-sidebar-widget-content">
-                  <ul>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </ui:fragment>
-          
-          <ui:fragment rendered="#{indexViewBackingBean.articles.size() > 0}">
+            
             <div id="index-sidebar-widget-lastest-articles-wrapper">
               <div id="index-sidebar-widget-latest-articles-icon" class="index-sidebar-widget-icon-container"></div>
               <div id="index-sidebar-widget-latest-articles-content-wrapper" class="index-sidebar-widget-content-container">
                 <h1>#{locales['root.indexPage.latestArticlesHeader']}</h1>
                 <div id="index-sidebar-widget-latest-articles-content" class="index-sidebar-widget-content">
                   <ul>
-                    <ui:repeat var="article" value="#{indexViewBackingBean.articles}">
+                    <ui:repeat var="blogEntry" value="#{indexViewBackingBean.latestBlogEntries}">
                       <li>
-                        <a href="javascript:void(null);" class="index-sidebar-article-link" data-article-id="#{article.id}">#{article.material.title}</a>
-                        <ui:fragment rendered="#{sessionController.loggedUserRole eq 'ADMINISTRATOR'}">
-                          <a href="javascript:void(null);" class="index-sidebar-default-article-link" data-article-id="#{article.id}"></a>
-                        </ui:fragment>
+                        <h:outputLink value="#{blogEntry.link}">#{blogEntry.title}</h:outputLink>
                       </li>
                     </ui:repeat>
                   </ul>
                 </div>
               </div>
             </div>
-          </ui:fragment>
+          </div>
 
         </div>
       </div>
-      <div id="index-front-page-article">
-        <h1 class="index-front-page-article-title">#{indexViewBackingBean.defaultArticleData.title}</h1>
-        <div class="index-front-page-article-top-arrow"></div>
-        <div class="index-front-page-article-content">
-          <h:outputText value="#{indexViewBackingBean.defaultArticleData.content}" escape="false"/>
-        </div>
-        <div class="index-front-page-article-loading" style="display:none"></div>
+      
+      <div id="index-blog-feed">
+        <h:form>
+          <ui:repeat var="blogEntry" value="#{indexViewBackingBean.blogFeed}">
+            <div class="index-blog-feed-entry">
+              <div class="index-blog-feed-entry-header">
+                <h1>
+                  <h:outputLink value="#{blogEntry.link}">#{blogEntry.title}</h:outputLink>
+                </h1>
+                <span class="index-blog-feed-entry-author">#{blogEntry.authorName}</span>
+                <span class="index-blog-feed-entry-published">
+                  <h:outputText value="#{blogEntry.created}">
+                    <f:convertDateTime/> 
+                  </h:outputText>
+                </span>
+              </div>
+              
+              <div class="index-blog-feed-entry-summary-container">
+                <div class="index-blog-feed-entry-summary">
+                  <div class="index-blog-feed-entry-tags">
+                    <ui:repeat var="tag" value="#{indexViewBackingBean.getBlogEntryTags(blogEntry)}">
+                      <div class="index-blog-feed-entry-tag">
+                        <h:commandLink action="#{indexViewBackingBean.setBlogEntryFilterTag(tag.text)}" value="#{tag.text}" /> 
+                      </div>
+                    </ui:repeat>
+                  </div>
+                  <div class="index-blog-feed-entry-summary-text">
+                    <h:outputText value="#{blogEntry.summary}" escape="false"/>
+                  </div>
+                  <div class="index-blog-feed-entry-summary-more">
+                    <h:outputLink value="#{blogEntry.link}">More...</h:outputLink>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ui:repeat>
+        </h:form>
       </div>
+ 
     </ui:define>
-
 </ui:composition>
