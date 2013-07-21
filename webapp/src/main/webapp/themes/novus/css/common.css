@@ -1,9 +1,9 @@
 @CHARSET "UTF-8";
 
+@IMPORT url("http://yui.yahooapis.com/3.11.0/build/cssreset/cssreset-min.css");
 @IMPORT url("fonts.css");
 @IMPORT url("styles.css");
 @IMPORT url("layout.css");
 @IMPORT url("sitemenubar.css");
 @IMPORT url("dialogs.css");
-@IMPORT url("http://yui.yahooapis.com/3.11.0/build/cssreset/cssreset-min.css");
 @IMPORT url("http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css");
