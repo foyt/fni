@@ -1,716 +1,507 @@
 (function() {
+  'use strict';
   
   function showError(jqXHR, textStatus, errorThrown) {
+    // TODO: Better error handling
     alert(errorThrown);
   }
   
-  function reloadProductList() {
-    loadProductList($('#store-index').data('category-type'), $('#store-index').data('tag'));
-  }
-  
-  function loadProductList(categoryType, tag) {
-    var api = getFnIApi();
+  function openImageUploadDialog(productId) {
+    var url = CONTEXTPATH + '/store/productImages/';
+    var maxFileSize = 1000000;
+    var previewWidth = 64;
+    var previewHeight = 64;
     
-    $('#store-index').data('category-type', categoryType);
-    $('#store-index').data('tag', tag);
-
-    switch (categoryType) {
-      case 'recent':
-        api.store(false).products.read()
-          .done(function (data) {
-            renderProductList('Most Recent Products', data);
-          })
-          .error(function (jqXHR, textStatus, errorThrown) {
-            showError(jqXHR, textStatus, errorThrown);
-          });
-      break;
-      case 'unpublished':
-        api.store(false).products.read({published:false})
-          .done(function (data) {
-            renderProductList('Unpublished Products', data);
-          })
-          .error(function (jqXHR, textStatus, errorThrown) {
-            showError(jqXHR, textStatus, errorThrown);
-          });
-      break;
-      case 'tag':
-        api.store(false).products.read({tag:tag})
-          .done(function (data) {
-            renderProductList('Products tagged as \'' + tag + "'", data);
-          })
-          .error(function (jqXHR, textStatus, errorThrown) {
-            showError(jqXHR, textStatus, errorThrown);
-          });
-      break;
-    }
-  }
-  
-  function renderProductList(title, data) {
-    var api = getFnIApi();
-    
-    renderDustTemplate('/store/dust/productlist.dust', {
-      title: title,
-      baseUrl: api.basePath,
-      products: data
-    }, function(err, out) {
-      $('#store-index').html(out);
-      
-      /**
-       * Thumbnails
-       */
-      
-      var imageRequests = new Object();
-      $.each(data, function (index, product) {
-        if (product.defaultImage != null) {
-          imageRequests[product.id] = api.store(false).products.images.read(product.id);
-        }
-      });
-      
-      api.batch(imageRequests)
-        .done(function (data) {
-          $.each(data, function (productId, images) {
-            var galleryItems = new Array();
-  
-            $.each(images, function (index, image) {
-              var thumbnailUrl = api.basePath + image.downloadUrl + '?width=32&height=32';
-              var imageUrl = api.basePath + image.downloadUrl;
-              var thumbnailsContainer = $('.store-product[data-product-id="' + productId + '"] .store-product-thumbnails-container');
-              thumbnailsContainer.has('img').show();
-              
-              $('<div class="store-product-thumbnail-container"><a href="javascript:void(null)"><img src="{1}" data-url="{0}"/></a></div>'.replace("{0}", imageUrl).replace("{1}", thumbnailUrl))
-                .appendTo(thumbnailsContainer.find('.store-product-thumbnails-inner-container'));
-              
-              galleryItems.push({
-                src: imageUrl
-              });
-            });
-            
-            /**
-             * Image popup
-             */
-            
-            $('.store-product[data-product-id="' + productId + '"] .store-product-images-container a').magnificPopup({ 
-              type: 'image',
-              gallery: {
-                enabled: true
-              },
-              items: galleryItems
-            });
-          });
-        })
-        .error(function (jqXHR, textStatus, errorThrown) {
-          showError(jqXHR, textStatus, errorThrown);
+    $.ajax(CONTEXTPATH + '/store/dialogs/imageupload.jsf?productId=' + productId, {
+      async: false,
+      success : function(data, textStatus, jqXHR) {
+        var dialog = $(data).dialog({
+          modal: true,
+          width: 800,
+          maxHeight: 600,
+          buttons: [{
+            'class': 'cancel-button',
+            'text': 'Cancel',
+            'click': function(event) { 
+              $(this).dialog("close");
+            }
+          },{
+            'class': 'upload-button',
+            'text': 'Upload',
+            'disabled': "disabled",
+            'click': function(event) { 
+              var button = $(this).closest('.ui-dialog').find('.upload-button');
+              if (button.data('close') == true) {
+                $(this).dialog('close');
+              } else {
+                button.attr('disabled', 'disabled').addClass('ui-state-disabled');
+                button.find('span').text('Processing...');
+                
+                var data = button.data();
+                // TODO: always?
+                data.submit().always($.proxy(function () {
+                  var button = $(this).closest('.ui-dialog').find('.upload-button');
+                  button.removeAttr('disabled').removeClass('ui-state-disabled');
+                  button.find('span').text('Close');
+                  button.data('close', true);
+                }, this));
+              }
+            }
+          }]
         });
+        
+        $(dialog).data('title', $(dialog).dialog( "option", "title" ));
+
+        $(dialog).find('input[name="files"]').fileupload({
+          url: url,
+          dataType: 'json',
+          autoUpload: false,
+          acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+          maxFileSize: maxFileSize, 
+          disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+          previewMaxWidth: previewWidth,
+          previewMaxHeight: previewHeight,
+          previewCrop: true
+        }).on('fileuploadadd', function (e, data) {
+          $(dialog).closest('.ui-dialog').find('.upload-button')
+            .removeAttr('disabled')
+            .removeClass('ui-state-disabled')
+            .data(data);
+          
+          $.each(data.files, function (index, file) {
+            data.context = 
+              $('<div class="file-queue-item"/>')
+                .append($('<span class="file-queue-item-name"/>').html(file.name))
+                .appendTo($(dialog).find('.file-queue'));
+           });
+          
+          
+        }).on('fileuploadprocessalways', function (e, data) {
+          var index = data.index;
+          var file = data.files[index];
+          if (file.error) {
+            $(data.context).append(file.error);
+          } else {
+            if (file.preview) {
+              $(data.context).prepend(file.preview);
+            } else {
+              $(data.context).prepend($('<div class="file-queue-preview-failed"/>'));
+            }
+          }  
+        }).on('fileuploadprogressall', function (e, data) {
+          var progress = parseInt(data.loaded / data.total * 100, 10);
+          $(dialog).dialog( "option", "title", $(dialog).data('title') + ' ' + (progress + ' %'));
+        }).on('fileuploadfail', function (e, data) {
+          var error = "";
+          
+          $.each(data.result.files, function (index, file) {
+            if (error) {
+              error += '\n';
+            }
+            
+            error += file.error;
+          });
+          
+          showError(null, error, null);
+        });
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        showError(jqXHR, textStatus, errorThrown);
+      }
     });
-  }
+  };
+
+  /* Image popups */
   
-  var valueExtractor = {
-    getInputValue: function (form, name) {
-      var inputElement = form.find('input[name="' + name + '"]'); 
-      if (inputElement.length == 0) {
-        inputElement = form.find('select[name="' + name + '"]'); 
-      }
+  function initializeImagePopups() {
+    $('.store-product').each(function (productIndex, product) {
+      var galleryItems = new Array();
       
-      return inputElement.length == 0 ? null : $(inputElement).val();
-    },
-    getInputInt: function (form, name) {
-      var value = this.getInputValue(form, name);
-      if (value !== null) {
-        return parseInt(value);
-      }
-      
-      return null;
-    },
-    getInputFloat: function (form, name) {
-      var value = this.getInputValue(form, name);
-      if (value !== null) {
-        return parseFloat(value.replace(',', '.'));
-      }
-      
-      return null;
-    },
-    getCheckboxValue: function (form, name) {
-      var inputElement = form.find('input[name="' + name + '"]'); 
-      return inputElement.prop('checked');
-    },
-    getTextList: function (form, name) {
-      var result = new Array();
-      
-      var inputElements = form.find('input[name="' + name + '"]'); 
-      $.each(inputElements, function (index, inputElement) {
-        result.push($(inputElement).val());
+      $(product).find('.store-product-thumbnails-container img').each(function (thumbnailIndex, thumbnail) {
+        galleryItems.push({
+          src: $(thumbnail).data('url')
+        });
       });
       
-      return result;
-    },
-    getCheckboxNumberList: function (form, name) {
-      var result = new Array();
-      
-      var inputElements = form.find('input[name="' + name + '"]'); 
-      $.each(inputElements, function (index, inputElement) {
-        if ($(inputElement).prop('checked'))
-          result.push(parseInt($(inputElement).val()));
+      $('.store-product .store-product-images-container a').magnificPopup({ 
+        type: 'image',
+        gallery: {
+          enabled: true
+        },
+        items: galleryItems
       });
-      
-      return result;
-    },
-    getPostfixMap: function (form, prefix, postfixes) {
-      var result = new Object();
-      var _this = this;
-      $.each(postfixes, function (index, postfix) {
-        result[postfix] = _this.getInputValue(form, prefix + postfix);
-      });
-      return result;
+    });
+  };
+  
+  /* Jsf events */
+  
+  window.onJsfCategoryChange = function (event) {
+    if (event.status == 'success') {
+      initializeImagePopups(); 
     }
   };
   
-  $(document).ready(function(){
-    var api = getFnIApi();
-
-    /**
-     * Product list
-     */
-    loadProductList('recent', '');
- 
-    /**
-     * Category links
-     */
-    
-    $('#store-categories .store-category a').click(function (e) {
-      loadProductList($(this).data('category-type'), $(this).data('tag'));
-    });
-    
-    /**
-     * Product tags
-     */
-    
-    $(document).on('click', '.store-product-tag a', function (event) {
-      event.preventDefault();
-      loadProductList('tag', $(this).data('tag'));
-    });
-    
-    /**
-     * Product Admin Actions / Publish Product
-     */
-    $(document).on('click', '.store-product-add-to-cart-action', function (event) {
-      var productId = $(this).closest('.store-product').data('product-id');
-      var operatorForm = $('#shopping-cart-operator-container form');
-      var prefix = operatorForm.attr('name');
-      operatorForm.find('input[name="' + prefix + ':productId"]').val(productId);
-      operatorForm.find('input[type="submit"]').click();
-    });
-
-    /**
-     * Product Admin Actions / Publish Product
-     */
-    $(document).on('click', '.product-publish', function (event) {
-      var productId = $(this).data('product-id');
-
-      api.store(false).products.read(productId)
-        .done(function (product) {
-          renderDustTemplate('/store/dust/productpublishdialog.dust', {
-            title: product.names[LOCALE]
-          }, function(err, out) {
-            if (err) {
-              // Proper error handling
-              alert(err);
-            } else {
-              var buttons = new Object();
-              
-              buttons['Publish'] = function() {
-                product.published = true;
-                api.store(true).products.update(productId, product)
-                  .done($.proxy(function (data) {
-                    loadProductList('recent');
-                    $(this).dialog("close");
-                  }, this))
-                  .error(function (jqXHR, textStatus, errorThrown) {
-                    showError(jqXHR, textStatus, errorThrown);
-                  });
-              };
-    
-              buttons['Cancel'] = function() {
-                $(this).dialog("close");
-              };
-              
-              var dialog = $(out).dialog({
-                modal: true,
-                width: 500,
-                maxHeight: 600,
-                buttons: buttons
-              });
-            }
-          });
-        })
-        .error(function (jqXHR, textStatus, errorThrown) {
-          showError(jqXHR, textStatus, errorThrown);
-        });
-    });
-    
-    /**
-     * Product Admin Actions / Unpublish Product
-     */
-    $(document).on('click', '.product-unpublish', function (event) {
-      var productId = $(this).data('product-id');
-
-      api.store(false).products.read(productId)
-        .done(function (product) {
-          renderDustTemplate('/store/dust/productunpublishdialog.dust', {
-            title: product.names[LOCALE]
-          }, function(err, out) {
-            if (err) {
-              // Proper error handling
-              alert(err);
-            } else {
-              var buttons = new Object();
-              
-              buttons['Unpublish'] = function() {
-                product.published = false;
-                api.store(true).products.update(productId, product)
-                  .done($.proxy(function (data) {
-                    loadProductList('unpublished');
-                    $(this).dialog("close");
-                  }, this))
-                  .error(function (jqXHR, textStatus, errorThrown) {
-                    showError(jqXHR, textStatus, errorThrown);
-                  });
-              };
-    
-              buttons['Cancel'] = function() {
-                $(this).dialog("close");
-              };
-              
-              var dialog = $(out).dialog({
-                modal: true,
-                width: 500,
-                maxHeight: 600,
-                buttons: buttons
-              });
-            }
-          });
-        })
-        .error(function (jqXHR, textStatus, errorThrown) {
-          showError(jqXHR, textStatus, errorThrown);
-        });
-    });
-    
-    /**
-     * Product Admin Actions / Attach book file
-     */
-    $(document).on('click', '.product-attach-book-file-action', function (e) {
+  window.onJsfProductUpdate = function (event) {
+    if (event.status == 'success') {
+      var form = $(event.source).closest('form');
+      var file = form.find('input[name="file"]');
+      if (file.val()) {
+        var fileForm = $('#edit-product-file-form form');
+        file.appendTo(fileForm);
+        fileForm.submit();
+      }
       
-      var productId = $(this).data('product-id');
-      var uploadUrl = getFnIApi().basePath + '/store/products/' + productId + '/files';
+      // TODO: This should wait for upload response
       
-      renderDustTemplate('/store/dust/attachbookfiledialog.dust', {
-        url: uploadUrl
-      }, function(err2, out) {
-        if (err2) {
-          // Proper error handling
-          alert(err2);
-        } else {
-          var buttons = {
-          };
-          
-          buttons['Cancel'] = function() {
-            $(this).dialog("close");
-          };
-          
-          var dialog = $(out).dialog({
-            modal: true,
-            width: 500,
-            maxHeight: 600,
-            buttons: buttons
-          });
-        }
-      });
-    });
-    
-    /**
-     * Product Admin Actions / Edit Product
-     */
-    $(document).on('click', '.product-edit', function (event) {
-      var productId = $(this).data('product-id');
-      
-      api.batch({
-        localizedLanguages: api.system(false).languages.read({ localized : true }),
-        product: api.store(false).products.read(productId),
-        tags: api.store(false).tags.read()
-      })
-      .done(function (data) {
-        renderDustTemplate('/store/dust/editproductdialog.dust', {
-          locale: LOCALE,
-          localizedLanguages: data.localizedLanguages,
-          product: data.product,
-          tags: data.tags
-        }, function(err, out) {
-          if (err) {
-            // TODO: Proper error handling
-            alert(err);
-          } else {
-            var buttons = new Object();
-            
-            buttons['Save'] = function() {
-              var form = $(this).find('form');
-              
-              var type = data.product.type;
-              var languages = $.map(data.localizedLanguages, function(localizedLanguage) { 
-                return localizedLanguage["iso2"]; 
-              });
-
-              var product = {
-                id: data.product.id,
-                type: type,
-                price: valueExtractor.getInputFloat(form, 'price'),
-                name: valueExtractor.getPostfixMap(form, 'name-', languages),
-                description: valueExtractor.getPostfixMap(form, 'description-', languages),
-                tags: valueExtractor.getTextList(form, 'tags'),
-                published: false,
-                requiresDelivery: valueExtractor.getCheckboxValue(form, 'requires-delivery')
-              };
-
-              switch (type) {
-                case 'BOOK':
-                  product['downloadable'] = valueExtractor.getCheckboxValue(form, 'downloadable');
-                break;
-                case 'PREMIUM_ACCOUNT':
-                  product['months'] = valueExtractor.getInputInt(form, 'months');
-                break;
-              }
-              
-              api.store(true).products.update(data.product.id, product).done($.proxy(function () {
-                $(this).dialog("close");
-                reloadProductList();
-              }, this));
-            };
+      var dialog = $(document).data('open-dialog');
+      $(dialog).dialog('close');
+      $(document).data('open-dialog', null);
+    }
+  };
   
-            buttons['Cancel'] = function() {
-              $(this).dialog("close");
-            };
-            
-            var dialog = $(out).dialog({
-              modal: true,
-              width: 500,
-              maxHeight: 600,
-              buttons: buttons
-            });
-            
-            $(dialog).on("click", 'a.remove-tag', function (event) {
-              $(this).closest('.tag').remove();
-            });
-            
-            var createTagElement = function (tagsElement, inputText) {
-              var text = inputText.toLowerCase();
-              var existing = tagsElement.find('input[value="' + text + '"]');
-              if (existing.length == 0) {
-                $('<span class="tag"><span>{0}</span><input name="tags" type="hidden" value="{1}"/><a class="remove-tag" href="javascript:void(null);"></a></span>'.replace('{0}', text).replace('{1}', text))
-                  .appendTo(tagsElement);
-              }
-            };
-            
-            dialog.find('select[name="tag"]').change(function (event) {
-              var text = $(this).val();
-              if (text == 'new') {
-                $(this.form).find('.new-tag-container').show();
-              } else {
-                $(this.form).find('.new-tag-container').hide();
-                
-                var section = $(this).closest('.dialog-section');
+  window.onJsfProductCreate = function (event) {
+    if (event.status == 'success') {
+      var form = $(event.source).closest('form');
+      var file = form.find('input[name="file"]');
+      if (file.val()) {
+        var fileForm = $('#create-product-file-form form');
+        file.appendTo(fileForm);
+        fileForm.submit();
+      } 
+      
+      // TODO: This should wait for upload response
+      
+      var dialog = $(document).data('open-dialog');
+      $(dialog).dialog('close');
+      $(document).data('open-dialog', null);
+    }
+  };
+  
+  /* Jsf Actions */
+  
+  /**
+   * Execute product admin action
+   */
+  
+  function executeProductAdminAction(productId, command) {
+    var operatorForm = $('#product-admin-operator-container form');
+    var prefix = operatorForm.attr('name');
+    operatorForm.find('input[name="' + prefix + ':product-id"]').val(productId);
+    operatorForm.find('input[name="' + prefix + ':' + command + '"]').click();
+  }
 
-                if (text) {
-                  createTagElement(section.find('.tags'), text);
-                }
-              }
-            });
-            
-            dialog.find('a.add-new-tag').click(function (event) {
-              var section = $(this).closest('.dialog-section');
-              var tagInput = section.find('input[name="new-tag"]');
-              var text = tagInput.val();
-              if (text) {
-                createTagElement(section.find('.tags'), text);
-                tagInput.val('');
-              }
-            });
-          }
-        });
-      })
-      .error(function (jqXHR, textStatus, errorThrown) {
-        showError(jqXHR, textStatus, errorThrown);
-      });
-    });
+  /* Live Listeners */
+  
+  /**
+   * Product Admin Actions / Publish Product
+   */
+ 
+  $(document).on('click', '.product-publish', function (event) {
+    var productId = $(this).data('product-id');
+    var productName = $(this).data('product-name');
     
-    /**
-     * Product Admin Actions / Add product images
-     */
-    $(document).on('click', '.product-add-images-action', function (e) {
-      var productId = $(this).data('product-id');
-      var uploadUrl = getFnIApi().basePath + '/store/products/' + productId + '/images';
-
-      renderDustTemplate('/store/dust/addproductimagesdialog.dust', {
-        url: uploadUrl
-      }, function(err2, out) {
-        if (err2) {
-          // Proper error handling
-          alert(err2);
-        } else {
-          var buttons = {
-          };
-          
-          buttons['Close'] = function() {
-            $(this).dialog("close");
-          };
-          
-          var dialog = $(out).dialog({
-            modal: true,
-            width: 500,
-            maxHeight: 600,
-            buttons: buttons
-          });
-          
-          dialog.find('input[name="files"]').fileupload({
-            dataType: 'json',
-            progressall: function (e, data) {
-              var progress = parseInt(data.loaded / data.total * 100, 10);
-              dialog.find('#progress .bar').css(
-                'width',
-                progress + '%'
-              );
-              dialog.find('.progress .text').html(progress + ' %');
-            },
-            disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator && navigator.userAgent),
-            imageMaxWidth: 800,
-            imageMaxHeight: 800,
-            previewCrop: true,
-            done: function (e, data) {
-              $(dialog).dialog("close");
-              reloadProductList();
+    $.ajax(CONTEXTPATH + '/store/dialogs/productpublish.jsf?productId=' + productId + '&productName=' + productName, {
+      async: false,
+      success : function(data, textStatus, jqXHR) {
+        var dialog = $(data).dialog({
+          modal: true,
+          width: 400,
+          maxHeight: 600,
+          buttons: [{
+            'class': 'cancel-button',
+            'text': 'Cancel',
+            'click': function(event) { 
+              $(this).dialog("close");
             }
-          }); 
-        }
-      });
-    });
-    
-    /**
-     * Product Admin Actions / Edit Product Details
-     */
-    $(document).on('click', '.product-edit-details', function (e) {
-      var productId = $(this).data('product-id');
-      api.batch({
-        productDetails: api.store(false).products.details.read(productId),
-        storeDetails: api.store(false).details.read()
-      })
-      .done(function (data) {
-        renderDustTemplate('/store/dust/productdetailsdialog.dust', data, function(err2, out) {
-          if (err2) {
-            // Proper error handling
-            alert(err2);
-          } else {
-            var buttons = { };
-           
-            buttons['Save'] = function() {
-              var productDetails = new Object();
-              $.each(dialog.find('.edit-product-details-table').find('input'), function (index, input) {
-                productDetails[$(input).attr('name')] = $(input).val();
-              });
-              
-              api.store(true).products.details.update(productId, productDetails).done($.proxy(function (data) {
-                $(this).dialog("close");
-                reloadProductList();
-              }, this));
-            };
-            
-            buttons['Close'] = function() {
+          }, {
+            'class': 'publish-button',
+            'text': 'Publish',
+            'click': function(event) { 
+              executeProductAdminAction(productId, 'publish');
               $(this).dialog("close");
-            };
-            
-            var dialog = $(out).dialog({
-              modal: true,
-              width: 500,
-              maxHeight: 600,
-              buttons: buttons
-            });
-            
-            $.each(data.storeDetails, function (index, storeDetail) {
-              var name = storeDetail.name;
-              var value = data.productDetails[name]||'';
-              $('<tr><td>{0}</td><td><input name="{1}" type="text" value="{2}" class="max-width"/></td></tr>'.replace('{0}', name).replace('{1}', name).replace('{2}', value))
-                .appendTo(dialog.find('.edit-product-details-table'));
-            });
-          }
+            }
+          }]
         });
-      })
-      .error(function (jqXHR, textStatus, errorThrown) {
-        showError(jqXHR, textStatus, errorThrown);
-      });
-    });
-    
-    /**
-     * Product Admin Actions / Delete Product
-     */
-    $(document).on('click', '.product-delete', function (event) {
-      var productId = $(this).data('product-id');
-      var productTitle = $(this).closest('.store-product').find('.storeProductListProductName').html();
-      
-      renderDustTemplate('/store/dust/productdeletedialog.dust', {
-        title: productTitle
-      }, function(err, out) {
-        if (err) {
-          // Proper error handling
-          alert(err);
-        } else {
-          var buttons = new Object();
-          
-          buttons['Delete'] = function() {
-            api.store(false).products.destroy(productId)
-              .done($.proxy(function (data) {
-                reloadProductList();
-                $(this).dialog("close");
-              }, this))
-              .error(function (jqXHR, textStatus, errorThrown) {
-                showError(jqXHR, textStatus, errorThrown);
-              });
-          };
-
-          buttons['Cancel'] = function() {
-            $(this).dialog("close");
-          };
-          
-          var dialog = $(out).dialog({
-            modal: true,
-            width: 500,
-            maxHeight: 600,
-            buttons: buttons
-          });
-        }
-      });
-    });
-    
-    /**
-     * Thumbnail images
-     */
-    
-    $(document).on('mouseenter', '.store-product-thumbnails-container img', function (e) {
-      var product = $(this).closest('.store-product');
-      var productId = product.data('product-id');
-      var imageUrl = $(this).data('url');
-      var thumbnailUrl = imageUrl + '?width=128&height=128';
-      
-      $('.store-product[data-product-id="' + productId + '"] .store-product-image-container a').attr("href", imageUrl);
-      $('.store-product[data-product-id="' + productId + '"] .store-product-image-container img').attr("src", thumbnailUrl);
-    });
-    
-    /**
-     * Admin / Create Product
-     */
-    $('#store-admin-panel>a').click(function (e) {
-      api.batch({
-        tags: api.store(false).tags.read()
-      })
-      .done(function (data) {
-        renderDustTemplate('/store/dust/newproductdialog.dust', data, function(err2, out) {
-          if (err2) {
-            // Proper error handling
-            alert(err2);
-          } else {
-            var buttons = {
-            };
-            
-            buttons['Create'] = function() {
-              var form = $(this).find('form');
-              
-              var type = valueExtractor.getInputValue(form, 'type');
-              
-              var product = {
-                type: type,
-                price: valueExtractor.getInputFloat(form, 'price'),
-                name: valueExtractor.getInputValue(form, 'name'),
-                description: $(form.find('textarea[name="description"]')).val(),
-                tags: valueExtractor.getTextList(form, 'tags'),
-                requiresDelivery: valueExtractor.getCheckboxValue(form, 'requires-delivery')
-              };
-              
-              switch (type) {
-                case 'BOOK':
-                  product['downloadable'] = valueExtractor.getCheckboxValue(form, 'downloadable');
-                break;
-                case 'PREMIUM_ACCOUNT':
-                  product['months'] = valueExtractor.getInputInt(form, 'months');
-                break;
-              }
-              
-              api.store(true).products.create(product)
-                .done($.proxy(function (data) {
-                  $(this).dialog("close");
-                  loadProductList('unpublished');
-                }, this))
-                .error(function (jqXHR, textStatus, errorThrown) {
-                  showError(jqXHR, textStatus, errorThrown);
-                });
-            };
-            
-            buttons['Cancel'] = function() {
-              $(this).dialog("close");
-            };
-            
-            var dialog = $(out).dialog({
-              modal: true,
-              width: 500,
-              maxHeight: 600,
-              buttons: buttons
-            });
-            
-            dialog.find('select[name="type"]').change(function (event) {
-              $(this.form).find('div[data-type]').hide();
-              $(this.form).find('div[data-type="' + $(this).val() + '"]').show();
-            });
-            
-            $(dialog).on("click", 'a.remove-tag', function (event) {
-              $(this).closest('.tag').remove();
-            });
-            
-            var createTagElement = function (tagsElement, inputText) {
-              var text = inputText.toLowerCase();
-              var existing = tagsElement.find('input[value="' + text + '"]');
-              if (existing.length == 0) {
-                $('<span class="tag"><span>{0}</span><input name="tags" type="hidden" value="{1}"/><a class="remove-tag" href="javascript:void(null);"></a></span>'.replace('{0}', text).replace('{1}', text))
-                  .appendTo(tagsElement);
-              }
-            };
-
-            dialog.find('select[name="tag"]').change(function (event) {
-              var text = $(this).val();
-              if (text == 'new') {
-                $(this.form).find('.new-tag-container').show();
-              } else {
-                $(this.form).find('.new-tag-container').hide();
-                
-                var section = $(this).closest('.dialog-section');
-
-                if (text) {
-                  createTagElement(section.find('.tags'), text);
-                }
-              }
-            });
-            
-            dialog.find('a.add-new-tag').click(function (event) {
-              var section = $(this).closest('.dialog-section');
-              var tagInput = section.find('input[name="new-tag"]');
-              var text = tagInput.val();
-              if (text) {
-                createTagElement(section.find('.tags'), text);
-                tagInput.val('');
-              }
-            });
-            
-          }
-        });
-      })
-      .error(function (jqXHR, textStatus, errorThrown) {
-        showError(jqXHR, textStatus, errorThrown);
-      });
+      }
     });
   });
   
-}).call(this);
+  /**
+   * Product Admin Actions / Publish Product
+   */
+ 
+  $(document).on('click', '.product-unpublish', function (event) {
+    var productId = $(this).data('product-id');
+    var productName = $(this).data('product-name');
+    
+    $.ajax(CONTEXTPATH + '/store/dialogs/productunpublish.jsf?productId=' + productId + '&productName=' + productName, {
+      async: false,
+      success : function(data, textStatus, jqXHR) {
+        var dialog = $(data).dialog({
+          modal: true,
+          width: 400,
+          maxHeight: 600,
+          buttons: [{
+            'class': 'cancel-button',
+            'text': 'Cancel',
+            'click': function(event) { 
+              $(this).dialog("close");
+            }
+          }, {
+            'class': 'unpublish-button',
+            'text': 'Unpublish',
+            'click': function(event) { 
+              executeProductAdminAction(productId, 'unpublish');
+              $(this).dialog("close");
+            }
+          }]
+        });
+      }
+    });
+  });
+  
+  /**
+   * Product Admin Actions / Edit Product
+   */
+ 
+  $(document).on('click', '.product-edit', function (event) {
+    var productId = $(this).data('product-id');
+    
+    $.ajax(CONTEXTPATH + '/store/product/' + productId + '/dialog/edit', {
+      async: false,
+      success : function(data, textStatus, jqXHR) {
+        var dialog = $(data).dialog({
+          modal: true,
+          width: 800,
+          maxHeight: 600,
+          buttons: [{
+            'class': 'cancel-button',
+            'text': 'Cancel',
+            'click': function(event) { 
+              $(this).dialog("close");
+            }
+          }, {
+            'class': 'save-button',
+            'text': 'Save',
+            'click': function(event) {
+              var form = $(this).find('.store-edit-product-form');
+              var prefix = form.attr('name');
+              var submitButton = form.find('input[name="' + prefix + ':submit-button"]');
+              submitButton.click();
+              $(document).data('open-dialog', this);
+            }
+          }]
+        });
+        
+        var form = dialog.find('.store-edit-product-form');
+        var prefix = form.attr('name');
+        
+        var createTagElement = function (inputText) {
+          var text = $.trim(inputText.toLowerCase());
+          if (text) {
+            var tagsInputElement = dialog.find('input[name="' + prefix + ':tags' + '"]');
+            var tagsElement = dialog.find('.tags');
+            var existingTagsStr = tagsInputElement.val();
+            var existingTags = existingTagsStr ? existingTagsStr.split(';') : new Array(); 
+            if (existingTags.indexOf(text) == -1) {
+              $('<span class="tag" data-tag="{0}"><span>{1}</span><a class="remove-tag" href="javascript:void(null);"></a></span>'.replace('{0}', text).replace('{1}', text))
+                .appendTo(tagsElement);
+              existingTags.push(text);
+              tagsInputElement.val(existingTags.join(';'));
+            }
+          }
+        };
+        
+        var tagsInputElement = dialog.find('input[name="' + prefix + ':tags' + '"]');
+        var existingTagsStr = tagsInputElement.val();
+        var existingTags = existingTagsStr ? existingTagsStr.split(';') : new Array(); 
+        tagsInputElement.val('');
+        for (var i = 0, l = existingTags.length; i < l; i++) {
+          createTagElement(existingTags[i]);
+        }
 
+        dialog.find('a.add-new-tag').click(function (event) {
+          var section = $(this).closest('.dialog-section');
+          var tagInput = section.find('input[name="new-tag"]');
+          var text = tagInput.val();
+          if (text) {
+            createTagElement(text);
+            tagInput.val('');
+          }
+        });
+        
+        dialog.find('select[name="' + prefix + ':tag-select"]').change(function (event) {
+          var text = $(this).val();
+          if (text == 'new') {
+            $(this.form).find('.new-tag-container').show();
+          } else {
+            $(this.form).find('.new-tag-container').hide();
+            if (text) {
+              createTagElement(text);
+            }
+          }
+        });
+        
+        dialog.on('click', '.remove-tag', function () {
+          var tagContainer = $(this).parent();
+          var text = tagContainer.data('tag');
+          var tagsInputElement = dialog.find('input[name="' + prefix + ':tags' + '"]');
+          var existingTagsStr = tagsInputElement.val();
+          var existingTags = existingTagsStr ? existingTagsStr.split(';') : new Array(); 
+          var removeIndex = existingTags.indexOf(text);
+          if (removeIndex != -1) {
+            existingTags.splice(removeIndex, 1);
+            tagsInputElement.val(existingTags.join(';'));
+          }
+          tagContainer.remove();
+        });
+      }
+    });
+  });
+  
+  /**
+   * Product Admin Actions / Add Images
+   */
+  
+  $(document).on('click', '.product-add-images-action', function (e) {
+    openImageUploadDialog($(this).data('product-id'));
+  });
+  
+  /**
+   * Product Admin Actions / Delete Product
+   */
+ 
+  $(document).on('click', '.product-delete', function (event) {
+    var productId = $(this).data('product-id');
+    var productName = $(this).data('product-name');
+    
+    $.ajax(CONTEXTPATH + '/store/dialogs/productdelete.jsf?productId=' + productId + '&productName=' + productName, {
+      async: false,
+      success : function(data, textStatus, jqXHR) {
+        var dialog = $(data).dialog({
+          modal: true,
+          width: 400,
+          maxHeight: 600,
+          buttons: [{
+            'class': 'cancel-button',
+            'text': 'Cancel',
+            'click': function(event) { 
+              $(this).dialog("close");
+            }
+          }, {
+            'class': 'delete-button',
+            'text': 'Delete',
+            'click': function(event) { 
+              executeProductAdminAction(productId, 'delete');
+              $(this).dialog("close");
+            }
+          }]
+        });
+      }
+    });
+  });
+  
+  /**
+   * Store Admin Panel / Create Product
+   */
+ 
+  $(document).on('click', '#store-admin-panel .store-admin-create-product', function (event) {
+    $.ajax(CONTEXTPATH + '/store/product/dialog/create', {
+      async: false,
+      success : function(data, textStatus, jqXHR) {
+        var dialog = $(data).dialog({
+          modal: true,
+          width: 800,
+          maxHeight: 600,
+          buttons: [{
+            'class': 'cancel-button',
+            'text': 'Cancel',
+            'click': function(event) { 
+              $(this).dialog("close");
+            }
+          }, {
+            'class': 'create-button',
+            'text': 'Create',
+            'click': function(event) {
+              var form = $(this).find('.store-create-product-form');
+              var prefix = form.attr('name');
+              var submitButton = form.find('input[name="' + prefix + ':submit-button"]');
+              submitButton.click();
+              $(document).data('open-dialog', this);
+            }
+          }]
+        });
+        
+        var form = dialog.find('.store-create-product-form');
+        var prefix = form.attr('name');
+
+        var createTagElement = function (inputText) {
+          var text = $.trim(inputText.toLowerCase());
+          if (text) {
+            var tagsInputElement = dialog.find('input[name="' + prefix + ':tags' + '"]');
+            var tagsElement = dialog.find('.tags');
+            var existingTagsStr = tagsInputElement.val();
+            var existingTags = existingTagsStr ? existingTagsStr.split(';') : new Array(); 
+            if (existingTags.indexOf(text) == -1) {
+              $('<span class="tag" data-tag="{0}"><span>{1}</span><a class="remove-tag" href="javascript:void(null);"></a></span>'.replace('{0}', text).replace('{1}', text))
+                .appendTo(tagsElement);
+              existingTags.push(text);
+              tagsInputElement.val(existingTags.join(';'));
+            }
+          }
+        };
+        
+        dialog.find('a.add-new-tag').click(function (event) {
+          var section = $(this).closest('.dialog-section');
+          var tagInput = section.find('input[name="new-tag"]');
+          var text = tagInput.val();
+          if (text) {
+            createTagElement(text);
+            tagInput.val('');
+          }
+        });
+        
+        dialog.find('select[name="' + prefix + ':tag-select"]').change(function (event) {
+          var text = $(this).val();
+          if (text == 'new') {
+            $(this.form).find('.new-tag-container').show();
+          } else {
+            $(this.form).find('.new-tag-container').hide();
+            if (text) {
+              createTagElement(text);
+            }
+          }
+        });
+        
+        dialog.on('click', '.remove-tag', function () {
+          var tagContainer = $(this).parent();
+          var text = tagContainer.data('tag');
+          var tagsInputElement = dialog.find('input[name="' + prefix + ':tags' + '"]');
+          var existingTagsStr = tagsInputElement.val();
+          var existingTags = existingTagsStr ? existingTagsStr.split(';') : new Array(); 
+          var removeIndex = existingTags.indexOf(text);
+          if (removeIndex != -1) {
+            existingTags.splice(removeIndex, 1);
+            tagsInputElement.val(existingTags.join(';'));
+          }
+          tagContainer.remove();
+        });
+      }
+    });
+  });
+  
+  /**
+   * Product thumbnails / Mouse Enter
+   */
+  
+  $(document).on('mouseenter', '.store-product-thumbnails-container img', function (e) {
+    var product = $(this).closest('.store-product');
+    var productId = product.data('product-id');
+    var imageUrl = $(this).data('url');
+    var thumbnailUrl = imageUrl + '?width=128&height=128';
+   
+    $('.store-product[data-product-id="' + productId + '"] .store-product-image-container a').attr("href", imageUrl);
+    $('.store-product[data-product-id="' + productId + '"] .store-product-image-container img').attr("src", thumbnailUrl);
+  });
+  
+}).call(this);

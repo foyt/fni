@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html">
+<div title="Create Product" class="store-dialog store-create-product-dialog">  
+  
+  <h:form styleClass="store-create-product-form">
+    <div class="dialog-section">
+      <h:outputLabel value="Type" />
+      <div>
+        <h:selectOneMenu>
+          <f:selectItem itemLabel="BOOK"/>
+        </h:selectOneMenu>
+      </div>
+    </div>
+    
+    <div class="dialog-section">
+      <h:outputLabel value="Name" />
+      <div>
+        <h:inputText name="name" value="#{productCreateBackingBean.productName}" styleClass="max-width" required="required"/>
+      </div>
+    </div>
+    
+    <div class="dialog-section">
+      <h:outputLabel value="Description" />
+      <div>
+        <h:inputTextarea name="description" value="#{productCreateBackingBean.productDescription}" rows="5" styleClass="max-width" required="required"/>
+      </div>
+    </div>
+    
+    <div class="dialog-section">
+      <h:outputLabel value="Price (EUR)" />
+      <div>
+        <h:inputText name="price" type="number" value="#{productCreateBackingBean.productPrice}" styleClass="max-width" required="required"/>
+      </div>
+    </div>
+        
+    <div class="dialog-section">
+      <h:outputLabel value="Pdf File" />
+      <div>
+        <input type="file" name="file"/>
+      </div>
+    </div>
+    
+    <div class="dialog-section">
+      <h:outputLabel value="Tags" />
+      <div>
+        <h:selectOneMenu id="tag-select">
+          <f:selectItems value="#{productCreateBackingBean.tagSelectItems}" />
+        </h:selectOneMenu>
+        
+        <div class="new-tag-container">        
+          <label>New Tag</label> 
+          <div class="max-width">
+            <input type="text" value="" name="new-tag"/>
+            <a class="add-new-tag" href="javascript:void(null);">Add</a>
+          </div>
+        </div>
+        
+      </div>
+      <div class="tags">
+        <h:inputHidden id="tags" value="#{productCreateBackingBean.productTags}" />
+      </div>
+    </div>
+
+    <div class="dialog-section">
+      <h:outputLabel value="Settings" />
+      <div>
+        <h:selectBooleanCheckbox name="requires-delivery" value="#{productCreateBackingBean.productRequiresDelivery}"/>
+        <h:outputLabel value="Requires Delivery" />
+      </div>
+      <div>
+        <h:selectBooleanCheckbox name="purchasable" value="#{productCreateBackingBean.productPurchasable}"/>
+        <h:outputLabel value="Purchasable" />
+      </div>
+    </div>
+
+    <div class="dialog-section">
+      <h:outputLabel value="Details" />
+      <table class="details-table">
+        <tr>
+          <td><h:outputLabel value="Width" /></td><td><h:inputText name="width" value="#{productCreateBackingBean.productWidth}"/><span>mm</span></td>
+        </tr>
+        <tr>
+          <td><h:outputLabel value="Height" /></td><td><h:inputText name="height" value="#{productCreateBackingBean.productHeight}"/><span>mm</span></td>
+        </tr>
+        <tr>
+          <td><h:outputLabel value="Depth" /></td><td><h:inputText name="depth" value="#{productCreateBackingBean.productDepth}"/><span>mm</span></td>
+        </tr>
+        <tr>
+          <td><h:outputLabel value="Weight" /></td><td><h:inputText name="weight" value="#{productCreateBackingBean.productWeight}"/><span>g</span></td>
+        </tr>
+      </table>
+    </div>
+
+    <h4>Book Options</h4>
+    <div class="dialog-section">
+      <table class="book-options-table">
+        <tr>
+          <td>
+            <h:outputLabel value="Downloadable" />
+          </td>
+          <td>
+            <h:selectBooleanCheckbox name="downloadable" value="#{productCreateBackingBean.productDownloadable}"/>
+          </td>
+        </tr>
+        <tr>
+          <td><h:outputLabel value="Number Of Pages" /></td><td><h:inputText name="numberOfPages" value="#{productCreateBackingBean.bookNumberOfPages}"/></td>
+        </tr>
+        <tr>
+          <td><h:outputLabel value="Author" /></td><td><h:inputText name="author" value="#{productCreateBackingBean.bookAuthor}"/></td>
+        </tr>
+      </table>
+    </div>
+    
+    <h:commandButton id="submit-button" action="#{productCreateBackingBean.save}">
+      <f:ajax execute="@form" onevent="onJsfProductCreate" render=":create-product-file-form"/>
+    </h:commandButton>
+
+  </h:form>
+  
+  <h:panelGroup layout="block" id="create-product-file-form">
+    <iframe src="about:blank" width="0" height="0" name="_file_form_target_"></iframe>
+    <form method="post" enctype="multipart/form-data" action="#{request.contextPath}/store/productFiles/#{productCreateBackingBean.productId}" target="_file_form_target_"></form>
+  </h:panelGroup>
+</div>  
+</ui:composition>

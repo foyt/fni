@@ -39,13 +39,9 @@
 	  <view-id value="/forum/viewtopic.page" />
 	</url-mapping>
 	
-	<url-mapping id="store-index">
-	  <pattern value="/store/" />
-	  <view-id value="/store/index.jsf" />
-	</url-mapping>
 	<rewrite match="^/store$" substitute="/store/"/>
 	<rewrite match="^/store([\?\#])(.*)" substitute="/store/$1$2"/>
-	
+
 	<url-mapping id="auth-login">
 	  <pattern value="/login/" />
 	  <view-id value="/auth/login.jsf" />

@@ -140,11 +140,12 @@ public class ProductController {
 	}
 	/* BookProducts */
 
-	public BookProduct createBookProduct(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Double price, ProductImage defaultImage, Integer length, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, List<StoreTag> tags) {
+	public BookProduct createBookProduct(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, ProductImage defaultImage, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, List<StoreTag> tags) {
 		
 		Date now = new Date();
 		
-		BookProduct bookProduct = bookProductDAO.create(name, description, price, downloadable, defaultImage, now, creator, now, creator, Boolean.FALSE, requiresDelivery, length, width, depth, weight, author, numberOfPages);
+		BookProduct bookProduct = bookProductDAO.create(name, description, price, downloadable, purchasable, defaultImage, now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width
+				, depth, weight, author, numberOfPages);
 
 		for (StoreTag tag : tags) {
 			productTagDAO.create(tag, bookProduct);
@@ -158,7 +159,7 @@ public class ProductController {
 	}
 	
 	public BookProduct updateBookProduct(fi.foyt.fni.persistence.model.store.BookProduct bookProduct, Double price, String name,
-			String description, List<String> tags, Boolean published, Boolean requiresDelivery, Boolean downloadable, 
+			String description, List<StoreTag> tags, Boolean published, Boolean requiresDelivery, Boolean downloadable, 
 			Boolean purchasable, Double weight, Integer width, Integer height, Integer depth, Integer numberOfPages, String author, 
 			User modifier) {
 
@@ -172,16 +173,7 @@ public class ProductController {
 		bookProductDAO.updateNumberOfPages(bookProduct, numberOfPages);
 		bookProductDAO.updateAuthor(bookProduct, author);
 		
-		List<StoreTag> addTags = new ArrayList<>();
-		
-		for (String tag : tags) {
-			StoreTag storeTag = storeTagController.findTagByText(tag);
-			if (storeTag == null) {
-				storeTag = storeTagController.createTag(tag);
-			}
-			
-		  addTags.add(storeTag);
-		}
+		List<StoreTag> addTags = new ArrayList<>(tags);
 		
 		Map<Long, ProductTag> existingTagMap = new HashMap<Long, ProductTag>();
 		List<ProductTag> existingTags = storeTagController.listProductTags(bookProduct);

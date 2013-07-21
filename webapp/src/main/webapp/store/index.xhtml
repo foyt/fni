@@ -14,10 +14,11 @@
 
     <h:outputScript name="scripts/load-image/load-image.min.js"/>
     <h:outputScript name="scripts/canvas-to-blob/canvas-to-blob.min.js"/>
-    <h:outputScript name="scripts/jquery.fileupload/jquery.iframe-transport.js"></h:outputScript>
-    <h:outputScript name="scripts/jquery.fileupload/jquery.fileupload.js"></h:outputScript>
-    <h:outputScript name="scripts/jquery.fileupload/jquery.fileupload-process.js"></h:outputScript>
-    <h:outputScript name="scripts/jquery.fileupload/jquery.fileupload-image.js"></h:outputScript>
+    
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload-process.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload-image.js"></script>
     
     <!-- jQuery Magnific-Popup  -->
     
@@ -26,88 +27,191 @@
     
   </ui:define>
   <ui:define name="content">
-    <div id="store-index"></div>
-    <div id="store-sidebar">
-      <h:panelGroup layout="block" id="store-mini-shopping-cart">
-        <h3 class="store-mini-shopping-cart-title">Shopping Cart</h3>
+    <h:form>
+      <h:panelGroup layout="block" id="store-index" styleClass="store-index">
+        <div class="store-products">
+          <h3 class="store-products-title">#{productListViewBackingBean.category.name}</h3>
+          <div class="store-products-contents">
+            <ui:repeat var="product" value="#{productListViewBackingBean.products}">
+              <div data-product-id="#{product.id}" class="store-product">
+                <div class="store-product-info-container">
+                  <div class="store-product-name">#{product.name}</div>
+                  <div class="store-product-tags-container">
+                    <ui:repeat var="category" value="#{productListViewBackingBean.getProductCategories(product)}">
+                      <div class="store-product-tag">
+                        <h:commandLink value="#{category.name}" action="#{productListViewBackingBean.setCategory(category)}">
+                          <f:ajax execute="@form" render="@form" onevent="onJsfCategoryChange"/>
+                        </h:commandLink>
+                      </div>
+                    </ui:repeat>
+                  </div>
+                  
+                  <div class="store-product-description">#{product.description}</div>
+                  <div class="store-product-details">
+                    <div class="store-product-detail">
+                      <span>Price:</span>
+                      <span class="store-product-details-price">
+                        <h:outputText value="#{product.price}" >
+                          <f:convertNumber currencyCode="EUR" type="currency" />
+                        </h:outputText>
+                      </span>
+                    </div>
+                    <ui:fragment rendered="#{productListViewBackingBean.isBookProduct(product)}">
+                      <ui:fragment rendered="#{productListViewBackingBean.getBookProduct(product).numberOfPages > 0}">
+                        <div class="store-product-detail">
+                          <span>Number of Pages:</span> 
+                          <span>#{productListViewBackingBean.getBookProduct(product).numberOfPages}</span>
+                        </div>
+                      </ui:fragment>
+                    </ui:fragment >
+                    <ui:fragment rendered="#{productListViewBackingBean.isBookProduct(product)}">
+                      <ui:fragment rendered="#{!empty(productListViewBackingBean.getBookProduct(product).author)}">
+                        <span>Author:</span> 
+                        <span>#{productListViewBackingBean.getBookProduct(product).author}</span>
+                      </ui:fragment>
+                    </ui:fragment >
+                  </div>
+                  
+                  <ui:fragment rendered="#{product.published}">
+                    <!-- TODO: Admins and owners only -->
+                    <div class="store-product-admin-actions-container">
+                      <div class="store-product-admin-action-container">
+                        <a title="Unpublish Product" href="javascript:void(null);" data-product-id="#{product.id}" data-product-name="#{product.name}" class="product-unpublish"></a>
+                      </div>
+                    </div>
+                  </ui:fragment>
+                  
+                  <ui:fragment rendered="#{!product.published}">
+                    <div class="store-product-admin-actions-container">
+                      <div class="store-product-admin-action-container">
+                        <a class="product-publish" data-product-id="#{product.id}" data-product-name="#{product.name}" href="javascript:void(null);" title="Publish Product"></a>
+                      </div>
+                      <div class="store-product-admin-action-container">
+                        <a class="product-edit" data-product-id="#{product.id}" href="javascript:void(null);" title="Edit"></a>
+                      </div>
+                      <div class="store-product-admin-action-container">
+                        <a class="product-add-images-action" data-product-id="#{product.id}" href="javascript:void(null);" title="Add Images"></a>
+                      </div>
+                      <div class="store-product-admin-action-container">
+                        <a class="product-delete" data-product-id="#{product.id}" data-product-name="#{product.name}" href="javascript:void(null);" title="Delete Product"></a>
+                      </div>
+                    </div>
+                  </ui:fragment>
+                  
+                </div>
+                
+                <div class="store-product-images-container">
+                  <ui:fragment rendered="#{productListViewBackingBean.hasSeveralImages(product)}">
+                    <div class="store-product-thumbnails-container">
+                      <div class="store-product-thumbnails-inner-container">
+                        <ui:repeat value="#{productListViewBackingBean.getProductImages(product)}" var="productImage">
+                          <div class="store-product-thumbnail-container">
+                            <a href="javascript:void(null)">
+                              <img data-url="#{request.contextPath}/store/productImages/#{productImage.id}" src="#{request.contextPath}/store/productImages/#{productImage.id}?width=32&amp;height=32"/>
+                            </a>
+                          </div>
+                        </ui:repeat>
+                      </div>
+                    </div>
+                  </ui:fragment>
 
-        <div id="store-mini-shopping-cart-buttons">
-          <h:link id="store-view-cart-button" value="View" outcome="/store/cart.jsf"/>
+                  <ui:fragment rendered="#{productListViewBackingBean.hasImages(product)}">
+                    <div class="store-product-image-container">
+                      <div class="store-product-image-inner-container">
+                        <a href="#{request.contextPath}/store/productImages/#{productListViewBackingBean.getFirstImage(product).id}">
+                          <img src="#{request.contextPath}/store/productImages/#{productListViewBackingBean.getFirstImage(product).id}?width=128&amp;height=128"/>
+                        </a>
+                      </div>
+                    </div>
+                  </ui:fragment>
+                </div>
+                
+                <div class="store-product-actions-container">
+                  <div class="store-product-action-container">
+                    <a href="#{request.contextPath}/store/productFiles/#{product.id}">Download Free PDF</a>
+                  </div>
+                  <div class="store-product-action-container">
+                    <h:commandLink action="#{productListViewBackingBean.addProductToShoppingCart(product)}" value="Add to Shopping Cart" styleClass="store-product-add-to-cart-action">
+                      <f:ajax render="@form"/>
+                    </h:commandLink>
+                  </div>
+                </div>
+                <div class="clearFloating"></div>
+              </div>
+            </ui:repeat>
+          </div>
         </div>
-
-        <h:panelGroup layout="block" id="store-mini-shopping-cart-contents">
-          <div class="store-mini-shopping-cart-items">
-            <h:panelGroup layout="block" rendered="#{shoppingCartBackingBean.shoppingCartEmpty}">
-              You don't have any products in cart yet.
-            </h:panelGroup>
-          
-            <ui:repeat var="cartItem" value="#{shoppingCartBackingBean.shoppingCartItems}">   
-              <div class="store-mini-shopping-cart-item">
-                <div class="store-mini-shopping-cart-item-count">#{cartItem.count}</div>
-                <div class="store-mini-shopping-cart-item-name">#{cartItem.name}</div>
-                <div class="store-mini-shopping-cart-item-price">
-                  <h:outputText value="#{cartItem.price}" >
-                    <f:convertNumber currencyCode="EUR" type="currency" />
-                  </h:outputText>
+      </h:panelGroup>
+      
+      <div id="store-sidebar">
+        <h:panelGroup layout="block" id="store-mini-shopping-cart">
+          <h3 class="store-mini-shopping-cart-title">Shopping Cart</h3>
+  
+          <div id="store-mini-shopping-cart-buttons">
+            <h:link id="store-view-cart-button" value="View" outcome="/store/cart.jsf"/>
+          </div>
+  
+          <div id="store-mini-shopping-cart-contents">
+            <div class="store-mini-shopping-cart-items">
+              <h:panelGroup layout="block" rendered="#{shoppingCartBackingBean.shoppingCartEmpty}">
+                You don't have any products in cart yet.
+              </h:panelGroup>
+            
+              <ui:repeat var="cartItem" value="#{shoppingCartBackingBean.shoppingCartItems}">   
+                <div class="store-mini-shopping-cart-item">
+                  <div class="store-mini-shopping-cart-item-count">#{cartItem.count}</div>
+                  <div class="store-mini-shopping-cart-item-name">#{cartItem.name}</div>
+                  <div class="store-mini-shopping-cart-item-price">
+                    <h:outputText value="#{cartItem.price}" >
+                      <f:convertNumber currencyCode="EUR" type="currency" />
+                    </h:outputText>
+                  </div>
+                </div>
+              </ui:repeat>
+            </div>
+  
+            <div class="store-mini-shopping-cart-summary">
+              <div class="store-mini-shopping-cart-summary-total-title-container">
+                <div class="store-mini-shopping-cart-summary-total-title">Total</div>
+              </div>
+              <div class="store-mini-shopping-cart-summary-total">
+                <h:outputText value="#{shoppingCartBackingBean.itemCosts}" >
+                  <f:convertNumber currencyCode="EUR" type="currency" />
+                </h:outputText>
+              </div>
+            </div>
+            
+          </div>
+        </h:panelGroup>
+    
+        <div id="store-categories-container">
+          <h3 class="store-categories-title">Product Tags</h3>
+  
+          <div id="store-categories">
+            <ui:repeat var="category" value="#{productListViewBackingBean.categories}">
+              <div class="store-category">
+                <div class="store-category-title">
+                  <h:commandLink value="#{category.name}" action="#{productListViewBackingBean.setCategory(category)}">
+                    <f:ajax render="@form" onevent="onJsfCategoryChange"/>
+                  </h:commandLink>
                 </div>
               </div>
             </ui:repeat>
           </div>
-
-          <div class="store-mini-shopping-cart-summary">
-            <div class="store-mini-shopping-cart-summary-total-title-container">
-              <div class="store-mini-shopping-cart-summary-total-title">Total</div>
-            </div>
-            <div class="store-mini-shopping-cart-summary-total">
-              <h:outputText value="#{shoppingCartBackingBean.itemCosts}" >
-                <f:convertNumber currencyCode="EUR" type="currency" />
-              </h:outputText>
-            </div>
-          </div>
-          
-        </h:panelGroup>
-      </h:panelGroup>
-  
-      <div id="store-categories-container">
-        <h3 class="store-categories-title">Product Tags</h3>
-
-        <div id="store-categories">
-          <div class="store-category">
-            <div class="store-category-title">
-              <a href="javascript:void(null);" data-category-type="recent">Most recent</a>
-            </div>
-          </div>
-          
-          <!-- TODO: Only if user has them... -->
-          
-          <div class="store-category">
-            <div class="store-category-title">
-              <a href="javascript:void(null);" data-category-type="unpublished">Unpublished</a>
-            </div>
-          </div>
-          <ui:repeat var="tag" value="#{categoryListBackingBean.tagsWithPublishedProducts}">
-            <div class="store-category">
-              <div class="store-category-title">
-                <a href="javascript:void(null);" data-category-type="tag" data-tag="#{tag.text}">#{tag.text}</a>
-              </div>
-            </div>
-          </ui:repeat>
-
+        </div>
+        
+        <div id="store-admin-panel">
+          <a class="store-admin-create-product" title="Create New Product"> </a>
         </div>
       </div>
-      
-      <div id="store-admin-panel">
-        <a class="store-admin-create-product" title="Create New Product"> </a>
-      </div>
-
-      <div id="shopping-cart-operator-container" style="display: none">
-        <h:form>
-          <h:inputHidden value="#{productListViewBackingBean.productId}" id="productId"/>
-          <h:commandButton id="shopping-cart-add-product-button" action="#{productListViewBackingBean.addProductToCart}">
-            <f:ajax render=":store-mini-shopping-cart-contents" execute="@form"/>
-          </h:commandButton>
-        </h:form>
-      </div>
+    </h:form>
+    <div id="product-admin-operator-container" style="display: none">
+      <h:form>
+        <h:inputHidden value="#{productAdminBackingBean.productId}" id="product-id"/>
+        <h:commandButton action="#{productAdminBackingBean.publish}" id="publish"></h:commandButton>
+        <h:commandButton action="#{productAdminBackingBean.unpublish}" id="unpublish"></h:commandButton>
+        <h:commandButton action="#{productAdminBackingBean.delete}" id="delete"></h:commandButton>
+      </h:form>
     </div>
   </ui:define>
 

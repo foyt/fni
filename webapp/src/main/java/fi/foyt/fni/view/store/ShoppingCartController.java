@@ -10,7 +10,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.store.OrderDAO;
 import fi.foyt.fni.persistence.dao.store.OrderItemDAO;
 import fi.foyt.fni.persistence.dao.store.ShoppingCartDAO;
@@ -36,19 +35,15 @@ public class ShoppingCartController {
 	private UserController userController;
 
 	@Inject
-	@DAO
 	private ShoppingCartDAO shoppingCartDAO;
 
 	@Inject
-	@DAO
 	private ShoppingCartItemDAO shoppingCartItemDAO;
 	
 	@Inject
-	@DAO
 	private OrderDAO orderDAO;
 	
 	@Inject
-	@DAO
 	private OrderItemDAO orderItemDAO;
 	
 	public ShoppingCart getShoppingCart() {

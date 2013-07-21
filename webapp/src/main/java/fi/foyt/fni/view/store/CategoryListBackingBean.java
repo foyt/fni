@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import fi.foyt.fni.persistence.model.store.StoreTag;
-import fi.foyt.fni.store.StoreController;
 
 @Stateful
 @RequestScoped
@@ -16,10 +15,10 @@ import fi.foyt.fni.store.StoreController;
 public class CategoryListBackingBean {
 	
 	@Inject
-	private StoreController storeController;
+	private StoreTagController tagController;
 	
 	public List<StoreTag> getTagsWithPublishedProducts() {
-		return storeController.listStoreTagsWithPublishedProducts();
+		return tagController.listActiveStoreTags();
 	}
 	
 }
