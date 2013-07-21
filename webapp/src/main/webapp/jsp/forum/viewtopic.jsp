@@ -13,7 +13,7 @@
       </fmt:message>
     </title>
     <jsp:include page="templates/head.jsp"></jsp:include>
-    <script type="text/javascript" src="http://cdn.jsdelivr.net/ckeditor/3.6.3/ckeditor.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/ckeditor/4.1.2/ckeditor.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/scripts/gui/forum/ckconfig.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/scripts/gui/forum/viewtopic.js"></script>
     <script type="text/javascript">
