@@ -116,10 +116,11 @@
       </table>
     </div>
     
-    <h:commandButton id="submit-button" action="#{productEditBackingBean.save}">
-      <f:ajax execute="@form" onevent="onJsfProductUpdate"/>
-    </h:commandButton>
-
+    <div style="display: none">
+      <h:commandButton id="submit-button" action="#{productEditBackingBean.save}">
+        <f:ajax execute="@form" onevent="onJsfProductUpdate"/>
+      </h:commandButton>
+    </div>
   </h:form>
   
   <div id="edit-product-file-form" style="display: none">

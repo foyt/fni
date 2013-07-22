@@ -116,13 +116,14 @@
       </table>
     </div>
     
-    <h:commandButton id="submit-button" action="#{productCreateBackingBean.save}">
-      <f:ajax execute="@form" onevent="onJsfProductCreate" render=":create-product-file-form"/>
-    </h:commandButton>
-
+    <div style="display: none">
+      <h:commandButton id="submit-button" action="#{productCreateBackingBean.save}">
+        <f:ajax execute="@form" onevent="onJsfProductCreate" render=":create-product-file-form"/>
+      </h:commandButton>
+    </div>
   </h:form>
   
-  <h:panelGroup layout="block" id="create-product-file-form">
+  <h:panelGroup layout="block" id="create-product-file-form" style="display: none">
     <iframe src="about:blank" width="0" height="0" name="_file_form_target_"></iframe>
     <form method="post" enctype="multipart/form-data" action="#{request.contextPath}/store/productFiles/#{productCreateBackingBean.productId}" target="_file_form_target_"></form>
   </h:panelGroup>
