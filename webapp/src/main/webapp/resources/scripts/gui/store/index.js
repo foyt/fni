@@ -123,7 +123,19 @@
         });
       });
       
-      $('.store-product .store-product-images-container a').magnificPopup({ 
+      if (galleryItems.length == 0) {
+        // There is only one image and thus no thumbnails so we need to
+        // use the product image
+        
+        var url = $(product).find('.store-product-image-container img').data('url');
+        if (url) {
+          galleryItems.push({
+            src: url
+          });
+        }
+      }
+      
+      $(product).find('.store-product-images-container a').magnificPopup({ 
         type: 'image',
         gallery: {
           enabled: true
@@ -502,6 +514,10 @@
    
     $('.store-product[data-product-id="' + productId + '"] .store-product-image-container a').attr("href", imageUrl);
     $('.store-product[data-product-id="' + productId + '"] .store-product-image-container img').attr("src", thumbnailUrl);
+  });
+  
+  $(document).ready(function () {
+    initializeImagePopups();
   });
   
 }).call(this);
