@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/forum.xhtml">
+
+  <ui:define name="pageTitle">Forum</ui:define>
+  <ui:define name="head">
+  </ui:define>
+  <ui:define name="content">
+    <h:form>
+      <h:panelGroup layout="block" id="forum" styleClass="forum">
+        <h3>
+          <span class="forum-nav-item"><h:outputLink value="#{request.contextPath}/forum/">Forum</h:outputLink></span>
+          <span class="forum-nav-separator"/>
+          <span class="forum-nav-item">#{forumBackingBean.forum.name}</span>
+        </h3>
+       
+        <div class="forum-container">
+          <div class="forum-topics">
+            <ui:repeat var="topic" value="#{forumBackingBean.topics}">
+              <div class="forum-topic">
+                <div class="forum-topic-subject">
+                  <h:outputLink value="#{forumBackingBean.forum.urlName}/#{topic.urlName}">#{topic.subject}</h:outputLink>
+                  <div class="forum-topic-message-count-container">
+                    <span>Total Messages: </span>
+                    <span class="forum-topic-message-count">#{forumBackingBean.getTopicPostCount(topic)}</span>
+                  </div>
+                  <div class="forum-topic-last-message-container">
+                    <span class="">Last Message: </span>
+                    <span class="forum-topic-last-message">
+                      <h:outputText value="#{forumBackingBean.getLastMessageDate(topic)}">
+                        <f:convertDateTime/> 
+                      </h:outputText></span>
+                  </div>                
+                </div>
+                
+                <div class="forum-topic-author">
+                  <span>Started by #{topic.author.fullName}</span>
+                </div>
+                <div class="forum-topic-created">
+                  <span> at <h:outputText value="#{topic.created}">
+                    <f:convertDateTime/> 
+                  </h:outputText></span>
+                </div>
+              </div>
+            </ui:repeat>
+          </div>
+        </div>        
+      </h:panelGroup>
+    </h:form>    
+  </ui:define>
+
+</ui:composition>

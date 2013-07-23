@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/forum.xhtml">
+
+  <ui:define name="pageTitle">Forum</ui:define>
+  <ui:define name="head">
+  </ui:define>
+  <ui:define name="content">
+    <h:form>
+      <h:panelGroup layout="block" id="forum" styleClass="forum">
+        <h3>
+          <span class="forum-nav-item"><h:outputLink value="#{request.contextPath}/forum/">Forum</h:outputLink></span>
+          <span class="forum-nav-separator"/>
+          <span class="forum-nav-item"><h:outputLink value="#{request.contextPath}/forum/#{forumTopicBackingBean.forum.urlName}">#{forumTopicBackingBean.forum.name}</h:outputLink></span>
+          <span class="forum-nav-separator"/>
+          <span class="forum-nav-item">#{forumTopicBackingBean.topic.subject}</span>
+        </h3>
+        
+        <div class="forum-posts">
+          <ui:repeat var="post" value="#{forumTopicBackingBean.posts}">
+            <div class="forum-post">
+              <div class="forum-post-author">
+                <div class="forum-post-author-image-contener">
+                  <div class="forum-post-author-image-inner-container">
+                    <h:graphicImage value="/v1/users/#{post.author.id}/profileImage/128x128" />
+                  </div>  
+                </div>
+                <div class="forum-post-author-name">
+                  <h:outputLink value="#{request.contextPath}/users/#{post.author.id}">
+                    #{post.author.fullName}
+                  </h:outputLink>
+                </div>
+                <div class="forum-post-author-post-count">
+                  Posts: #{forumTopicBackingBean.getAuthorPostCount(post.author)}
+                </div>
+              </div>
+              <div class="forum-post-content">
+                <h:panelGroup layout="block" styleClass="forum-post-sent">
+                  Created: <h:outputText value="#{post.created}">
+                    <f:convertDateTime/> 
+                  </h:outputText>
+                </h:panelGroup>
+                
+                <h:panelGroup layout="block" styleClass="forum-post-modified" rendered="#{(post.modified ne null) and (post.modified != post.created)}">
+                  Modified: <h:outputText value="#{post.modified}">
+                    <f:convertDateTime/> 
+                  </h:outputText>
+                </h:panelGroup>
+                
+                <div class="forum-post-content-text">
+                  <h:outputText value="#{post.content}" escape="false"/>
+                </div>
+              </div>
+            </div>
+          </ui:repeat>
+        </div>
+        
+      </h:panelGroup>
+    </h:form>    
+  </ui:define>
+
+</ui:composition>
