@@ -67,6 +67,18 @@ public class ForumTopicDAO extends GenericDAO<ForumTopic> {
     return entityManager.createQuery(criteria).getResultList();
   }
 
+	public Long countByForum(Forum forum) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Long> criteria = criteriaBuilder.createQuery(Long.class);
+    Root<ForumTopic> root = criteria.from(ForumTopic.class);
+    criteria.select(criteriaBuilder.count(root));
+    criteria.where(criteriaBuilder.equal(root.get(ForumTopic_.forum), forum));
+
+    return entityManager.createQuery(criteria).getSingleResult();
+	}
+
   public ForumTopic updateViews(ForumTopic forumTopic, Long views) {
     EntityManager entityManager = getEntityManager();
 

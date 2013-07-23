@@ -7,13 +7,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.model.forum.ForumPost_;
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
+import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
+import fi.foyt.fni.persistence.model.forum.ForumTopic_;
 import fi.foyt.fni.persistence.model.users.User;
 
 @DAO
@@ -65,6 +68,27 @@ public class ForumPostDAO extends GenericDAO<ForumPost> {
     return query.getResultList();
   }
   
+  public List<ForumPost> listByForumSortByCreated(Forum forum, Integer firstResult, Integer maxResults) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<ForumPost> criteria = criteriaBuilder.createQuery(ForumPost.class);
+    Root<ForumPost> root = criteria.from(ForumPost.class);
+    Join<ForumPost, ForumTopic> topicJoin = root.join(ForumPost_.topic);
+    criteria.select(root);
+    criteria.orderBy(criteriaBuilder.desc(root.get(ForumPost_.created)));
+    criteria.where(
+  		criteriaBuilder.equal(topicJoin.join(ForumTopic_.forum), forum)
+    );
+    
+    TypedQuery<ForumPost> query = entityManager.createQuery(criteria);
+
+    query.setFirstResult(firstResult);
+    query.setMaxResults(maxResults);
+    
+    return query.getResultList();
+  }
+  
   public Long countByTopic(ForumTopic topic) {
     EntityManager entityManager = getEntityManager();
 
@@ -86,6 +110,21 @@ public class ForumPostDAO extends GenericDAO<ForumPost> {
     criteria.select(criteriaBuilder.count(root));
     criteria.where(criteriaBuilder.equal(root.get(ForumPost_.author), author));
 
+    return entityManager.createQuery(criteria).getSingleResult();
+  }
+  
+  public Long countByForum(Forum forum) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Long> criteria = criteriaBuilder.createQuery(Long.class);
+    Root<ForumPost> root = criteria.from(ForumPost.class);
+    Join<ForumPost, ForumTopic> topicJoin = root.join(ForumPost_.topic);
+    criteria.select(criteriaBuilder.count(root));
+    criteria.where(
+  		criteriaBuilder.equal(topicJoin.join(ForumTopic_.forum), forum)
+    );
+    
     return entityManager.createQuery(criteria).getSingleResult();
   }
 
