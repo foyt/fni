@@ -1,10 +1,13 @@
 package fi.foyt.fni.forum;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+
+import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.persistence.dao.forum.ForumCategoryDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumDAO;
@@ -15,6 +18,7 @@ import fi.foyt.fni.persistence.model.forum.ForumCategory;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @Dependent
 @Stateful
@@ -39,17 +43,26 @@ public class ForumController {
 	}
 	
 	// Forums
-
-	public List<Forum> listForumsByCategory(ForumCategory category) {
-		return forumDAO.listByCategory(category);
-	}
 	
+	public Forum findForumById(Long id) {
+		return forumDAO.findById(id);
+	}
+
 	public Forum findForumByUrlName(String urlName) {
 		return forumDAO.findByUrlName(urlName);
 	}
 	
-	// Topics
+	public List<Forum> listForumsByCategory(ForumCategory category) {
+		return forumDAO.listByCategory(category);
+	}
 	
+	// Topics
+
+	public ForumTopic createTopic(Forum forum, String subject, User author) {
+		Date now = new Date();
+		return forumTopicDAO.create(forum, author, now, now, createUrlName(forum, subject), subject, 0l);
+	}
+
 	public ForumTopic findForumTopicByForumAndUrlName(Forum forum, String urlName) {
 		return forumTopicDAO.findByForumAndUrlName(forum, urlName);
 	}
@@ -118,4 +131,27 @@ public class ForumController {
 		
 		return null;
 	}
+
+	private String createUrlName(Forum forum, String subject) {
+		int maxLength = 20;
+		int padding = 0;
+		do {
+			String urlName = RequestUtils.createUrlName(subject, maxLength);
+			if (padding > 0) {
+				urlName = urlName.concat(StringUtils.repeat('_', padding));
+			}
+			
+			ForumTopic topic = forumTopicDAO.findByForumAndUrlName(forum, urlName);
+			if (topic == null) {
+				return urlName;
+			}
+			
+			if (maxLength < subject.length()) {
+				maxLength++;
+			} else {
+				padding++;
+			}
+		} while (true);
+	}
+
 }
