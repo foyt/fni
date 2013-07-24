@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.users.User;
 
 @Entity
@@ -147,6 +148,14 @@ public class Product {
 		this.depth = depth;
 	}
   
+  public ForumTopic getForumTopic() {
+		return forumTopic;
+	}
+  
+  public void setForumTopic(ForumTopic forumTopic) {
+		this.forumTopic = forumTopic;
+	}
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -201,4 +210,7 @@ public class Product {
   private Integer height;
   
   private Integer depth;
+  
+  @ManyToOne
+  private ForumTopic forumTopic;
 }
