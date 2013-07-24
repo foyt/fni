@@ -65,12 +65,16 @@ public class RequestUtils {
     
     return uri;
   }
-  
-  public static String createUrlName(String text) {
-    String urlName = StringUtils.normalizeSpace((text.length() > 20 ? text.substring(0, 20) : text).toLowerCase());
+
+  public static String createUrlName(String text, int maxLength) {
+  	String urlName = StringUtils.normalizeSpace(text);
     if (StringUtils.isBlank(urlName))
       return null;
     
-    return StringUtils.stripAccents(urlName.replaceAll(" ", "_"));
+    return StringUtils.lowerCase(StringUtils.substring(StringUtils.stripAccents(urlName.replaceAll(" ", "_")).replaceAll("[^a-zA-Z0-9\\ -\\.\\_]", ""), 0, maxLength));
+  }
+  
+  public static String createUrlName(String text) {
+    return createUrlName(text, 20);
   }
 }
