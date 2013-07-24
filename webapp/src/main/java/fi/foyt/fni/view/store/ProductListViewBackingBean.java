@@ -13,6 +13,7 @@ import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
+import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.model.store.BookProduct;
 import fi.foyt.fni.persistence.model.store.Product;
 import fi.foyt.fni.persistence.model.store.ProductImage;
@@ -42,6 +43,9 @@ public class ProductListViewBackingBean {
 	@Inject
 	private ShoppingCartController shoppingCartController;
 
+	@Inject
+	private ForumController forumController;
+	
 	@PostConstruct
 	public void init() {
 		this.categories = new ArrayList<>();
@@ -111,7 +115,15 @@ public class ProductListViewBackingBean {
 	public void addProductToShoppingCart(Product product) {
 		shoppingCartController.addProduct(product);
 	}
-
+	
+	public Long getProductCommentCount(Product product) {
+		if (product.getForumTopic() != null) {
+			return forumController.countPostsByTopic(product.getForumTopic());
+		}
+		
+		return null;
+	}
+	
 	public List<CategoryBean> getCategories() {
 		return categories;
 	}

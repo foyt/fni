@@ -10,12 +10,15 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.dao.store.BookProductDAO;
 import fi.foyt.fni.persistence.dao.store.FileProductDAO;
 import fi.foyt.fni.persistence.dao.store.FileProductFileDAO;
 import fi.foyt.fni.persistence.dao.store.ProductDAO;
 import fi.foyt.fni.persistence.dao.store.ProductImageDAO;
 import fi.foyt.fni.persistence.dao.store.ProductTagDAO;
+import fi.foyt.fni.persistence.model.forum.Forum;
+import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.store.BookProduct;
 import fi.foyt.fni.persistence.model.store.FileProduct;
 import fi.foyt.fni.persistence.model.store.FileProductFile;
@@ -24,6 +27,7 @@ import fi.foyt.fni.persistence.model.store.ProductImage;
 import fi.foyt.fni.persistence.model.store.ProductTag;
 import fi.foyt.fni.persistence.model.store.StoreTag;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.system.SystemSettingsController;
 
 @Stateful
 @Dependent
@@ -50,6 +54,12 @@ public class ProductController {
 	@Inject
 	private FileProductFileDAO fileProductFileDAO;
 
+	@Inject
+	private ForumController forumController;
+
+	@Inject
+	private SystemSettingsController systemSettingsController;
+	
 	/* Products */
 
 	public Product findProductById(Long id) {
@@ -143,9 +153,12 @@ public class ProductController {
 	public BookProduct createBookProduct(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, ProductImage defaultImage, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, List<StoreTag> tags) {
 		
 		Date now = new Date();
-		
-		BookProduct bookProduct = bookProductDAO.create(name, description, price, downloadable, purchasable, defaultImage, now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width
-				, depth, weight, author, numberOfPages);
+		Long forumId = systemSettingsController.getStoreProductForumId();
+		Forum forum = forumController.findForumById(forumId);
+		ForumTopic forumTopic = forumController.createTopic(forum, name, creator);
+
+		BookProduct bookProduct = bookProductDAO.create(name, description, price, downloadable, purchasable, defaultImage, 
+				now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width, depth, weight, author, numberOfPages, forumTopic);
 
 		for (StoreTag tag : tags) {
 			productTagDAO.create(tag, bookProduct);

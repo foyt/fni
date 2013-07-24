@@ -404,6 +404,7 @@
 
 .store-product-description {
   margin-top: 4px;
+  min-height: 120px;
 }
 
 .store-product-tag {

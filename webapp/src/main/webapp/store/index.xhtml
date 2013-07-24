@@ -63,13 +63,17 @@
                           <span>#{productListViewBackingBean.getBookProduct(product).numberOfPages}</span>
                         </div>
                       </ui:fragment>
-                    </ui:fragment >
+                    </ui:fragment>
                     <ui:fragment rendered="#{productListViewBackingBean.isBookProduct(product)}">
                       <ui:fragment rendered="#{!empty(productListViewBackingBean.getBookProduct(product).author)}">
                         <span>Author:</span> 
                         <span>#{productListViewBackingBean.getBookProduct(product).author}</span>
                       </ui:fragment>
-                    </ui:fragment >
+                    </ui:fragment>
+                    
+                    <h:panelGroup layout="block" rendered="#{product.forumTopic ne null}" styleClass="store-product-comments">
+                      <h:outputLink value="#{request.contextPath}/forum/#{product.forumTopic.forum.urlName}/#{product.forumTopic.urlName}">Comments (#{productListViewBackingBean.getProductCommentCount(product)})</h:outputLink>
+                    </h:panelGroup>
                   </div>
                   
                   <ui:fragment rendered="#{product.published}">
@@ -136,6 +140,7 @@
                     </h:commandLink>
                   </div>
                 </div>
+                
                 <div class="clearFloating"></div>
               </div>
             </ui:repeat>
