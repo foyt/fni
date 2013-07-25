@@ -89,6 +89,11 @@ public class ForumController {
 	
 	// Posts
 
+	public ForumPost createForumPost(ForumTopic topic, User author, String content) {
+		Date now = new Date();
+		return forumPostDAO.create(topic, author, now, now, content, 0l);
+	}
+	
 	public ForumPost findLastTopicPost(ForumTopic forumTopic) {
 		ForumPost lastTopicPost = null;
     List<ForumPost> forumPosts = forumPostDAO.listByTopicSortByCreated(forumTopic, 0, 1);
