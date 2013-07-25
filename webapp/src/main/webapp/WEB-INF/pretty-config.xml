@@ -32,9 +32,4 @@
 	<rewrite match="^/login$" substitute="/login/"/>
 	<rewrite match="^/login([\?\#])(.*)" substitute="/login/$1$2"/>
 
-	<url-mapping id="user-profile">
-	  <pattern value="/users/#{userId}" />
-	  <view-id value="/userprofile.page" />
-	</url-mapping>	
-
 </pretty-config>
