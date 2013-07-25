@@ -1,9 +1,11 @@
 package fi.foyt.fni.view.forum;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -16,6 +18,7 @@ import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
 @Stateful
@@ -29,15 +32,18 @@ import fi.foyt.fni.persistence.model.users.User;
 	})
 public class ForumTopicBackingBean {
 	
+	@Inject
+	private ForumController forumController;
+
+	@Inject
+	private SessionController sessionController;
+	
 	@URLAction
 	public void load() {
 		forum = forumController.findForumByUrlName(getForumUrlName());
 		topic = forumController.findForumTopicByForumAndUrlName(forum, topicUrlName);
 		posts = forumController.listPostsByTopic(topic);
 	}
-	
-	@Inject
-	private ForumController forumController;
 	
 	public Forum getForum() {
 		return forum;
@@ -75,9 +81,37 @@ public class ForumTopicBackingBean {
 		return forumController.countPostsByAuthor(author);
 	}
 	
+	public boolean getAuthorHasImage(User author) {
+		return author.getProfileImage() != null;
+	}
+	
+	public String getReply() {
+		return reply;
+	}
+	
+	public void setReply(String reply) {
+		this.reply = reply;
+	}
+	
+	public void postReply() throws IOException {
+		User author = sessionController.getLoggedUser();
+		ForumPost post = forumController.createForumPost(getTopic(), author, getReply());
+
+		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+		  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+		  .append("/forum/")
+		  .append(forum.getUrlName())
+		  .append('/')
+		  .append(topic.getUrlName())
+		  .append("#p")
+		  .append(post.getId())
+		  .toString());
+	}
+	
 	private Forum forum;
 	private ForumTopic topic;
 	private String forumUrlName;
 	private String topicUrlName;
 	private List<ForumPost> posts;
+	private String reply;
 }

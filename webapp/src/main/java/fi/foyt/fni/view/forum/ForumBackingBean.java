@@ -1,5 +1,6 @@
 package fi.foyt.fni.view.forum;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -7,6 +8,7 @@ import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -18,6 +20,8 @@ import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
+import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
 @Stateful
@@ -33,6 +37,9 @@ public class ForumBackingBean {
 	
 	@Inject
 	private ForumController forumController;
+
+	@Inject
+	private SessionController sessionController;
 
 	@URLAction
 	public void load() {
@@ -76,6 +83,40 @@ public class ForumBackingBean {
 		return null;
 	}
 	
+	public String getNewTopicSubject() {
+		return newTopicSubject;
+	}
+	
+	public void setNewTopicSubject(String newTopicSubject) {
+		this.newTopicSubject = newTopicSubject;
+	}
+	
+	public String getNewTopicContents() {
+		return newTopicContents;
+	}
+	
+	public void setNewTopicContents(String newTopicContents) {
+		this.newTopicContents = newTopicContents;
+	}
+	
+	public void newTopic() throws IOException {
+		User author = sessionController.getLoggedUser();
+		ForumTopic topic = forumController.createTopic(getForum(), getNewTopicSubject(), author);
+		ForumPost post = forumController.createForumPost(topic, author, getNewTopicContents());
+		
+		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+		  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+		  .append("/forum/")
+		  .append(forum.getUrlName())
+		  .append('/')
+		  .append(topic.getUrlName())
+		  .append("#p")
+		  .append(post.getId())
+		  .toString());
+	}
+	
 	private Forum forum;
 	private String forumUrlName;
+	private String newTopicSubject;
+	private String newTopicContents;
 }

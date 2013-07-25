@@ -211,13 +211,13 @@
 }
 
 .index-header-no-profile-image {
-  width: 45px;
-  height: 45px;  
-  background: url(../gfx/icons/48x48/emblems/user-anonymous.png) left center no-repeat #8dace3;
+  width: 64px;
+  height: 64px;  
+  background: url(../gfx/icons/64x64/actions/user-anonymous.png) left top no-repeat #8dace3;
   display: inline-block;
-  margin-top: 10px;
-  margin-left: 10px;
   float: left;
+  margin-left: 2px;
+  border-radius: 5px;
 }
 
 /* 

@@ -8,6 +8,19 @@
 
   <ui:define name="pageTitle">Forum</ui:define>
   <ui:define name="head">
+    <!-- jQuery -->
+
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.2.js"></script>
+    
+    <!-- CKEditor -->
+    
+    <script type="text/javascript" charset="utf8" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/ckeditor.js"></script>
+    
+    <!-- View Scripts -->
+
+    <h:outputScript name="scripts/gui/forum/ckconfig.js"></h:outputScript>
+    <h:outputScript name="scripts/gui/forum/forum.js"></h:outputScript>
+    
   </ui:define>
   <ui:define name="content">
     <h:form>
@@ -17,7 +30,7 @@
           <span class="forum-nav-separator"/>
           <span class="forum-nav-item">#{forumBackingBean.forum.name}</span>
         </h3>
-       
+
         <div class="forum-container">
           <div class="forum-topics">
             <ui:repeat var="topic" value="#{forumBackingBean.topics}">
@@ -48,7 +61,30 @@
               </div>
             </ui:repeat>
           </div>
-        </div>        
+        </div>   
+        
+        <div class="forum-new-topic-container">
+          <div class="forum-new-topic-editor-container" style="display: none">
+            <div>
+              <h:outputLabel value="Subject" />
+            </div>
+            <div>
+              <h:inputText required="required" class="forum-new-topic-subject" value="#{forumBackingBean.newTopicSubject}" />
+            </div>
+            <div>
+              <h:outputLabel value="Contents" />
+            </div>
+            <div>
+              <h:inputTextarea class="forum-topic-contents-editor" value="#{forumBackingBean.newTopicContents}" />
+            </div>
+            <div>
+              <h:commandButton  class="forum-new-topic-button" value="New Topic" action="#{forumBackingBean.newTopic}" />
+            </div>
+          </div>
+          
+          <a href="javascript:void(null)" class="forum-new-topic-link">New Topic</a>
+        </div>       
+
       </h:panelGroup>
     </h:form>    
   </ui:define>

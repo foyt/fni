@@ -8,6 +8,18 @@
 
   <ui:define name="pageTitle">Forum</ui:define>
   <ui:define name="head">
+    <!-- jQuery -->
+
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.2.js"></script>
+    
+    <!-- CKEditor -->
+    
+    <script type="text/javascript" charset="utf8" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/ckeditor.js"></script>
+    
+    <!-- View Scripts -->
+
+    <h:outputScript name="scripts/gui/forum/ckconfig.js"></h:outputScript>
+    <h:outputScript name="scripts/gui/forum/topic.js"></h:outputScript>
   </ui:define>
   <ui:define name="content">
     <h:form>
@@ -23,10 +35,16 @@
         <div class="forum-posts">
           <ui:repeat var="post" value="#{forumTopicBackingBean.posts}">
             <div class="forum-post">
+              <a id="p#{post.id}"></a>              
               <div class="forum-post-author">
                 <div class="forum-post-author-image-contener">
                   <div class="forum-post-author-image-inner-container">
-                    <h:graphicImage value="/v1/users/#{post.author.id}/profileImage/128x128" />
+                    <ui:fragment rendered="#{forumTopicBackingBean.getAuthorHasImage(post.author)}">
+                      <h:graphicImage value="/v1/users/#{post.author.id}/profileImage/128x128" />
+                    </ui:fragment>
+                    <ui:fragment rendered="#{!forumTopicBackingBean.getAuthorHasImage(post.author)}">
+                      <div class="forum-post-author-noimage"/>
+                    </ui:fragment>
                   </div>  
                 </div>
                 <div class="forum-post-author-name">
@@ -57,6 +75,14 @@
               </div>
             </div>
           </ui:repeat>
+        </div>
+
+        <div class="forum-post-editor-container">
+          <h:inputTextarea value="#{forumTopicBackingBean.reply}" class="forum-post-editor"/>
+        </div>
+        
+        <div class="forum-post-send-container">
+          <h:commandButton value="Post Reply" action="#{forumTopicBackingBean.postReply}" />
         </div>
         
       </h:panelGroup>
