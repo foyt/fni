@@ -1,5 +1,6 @@
 package fi.foyt.fni.session;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 import javax.ejb.Stateful;
@@ -21,8 +22,10 @@ import fi.foyt.fni.persistence.model.users.UserToken;
 @Named
 @SessionScoped
 @Stateful
-public class SessionController {
+public class SessionController implements Serializable {
   
+	private static final long serialVersionUID = -441183766079031359L;
+
 	@Inject
 	@Login
 	private Event<UserSessionEvent> loginEvent;
