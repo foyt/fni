@@ -21,6 +21,7 @@ import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
@@ -99,6 +100,7 @@ public class ForumBackingBean {
 		this.newTopicContents = newTopicContents;
 	}
 	
+	@LoggedIn
 	public void newTopic() throws IOException {
 		User author = sessionController.getLoggedUser();
 		ForumTopic topic = forumController.createTopic(getForum(), getNewTopicSubject(), author);

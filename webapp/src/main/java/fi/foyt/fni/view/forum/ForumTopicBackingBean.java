@@ -18,6 +18,7 @@ import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
@@ -92,7 +93,8 @@ public class ForumTopicBackingBean {
 	public void setReply(String reply) {
 		this.reply = reply;
 	}
-	
+
+	@LoggedIn
 	public void postReply() throws IOException {
 		User author = sessionController.getLoggedUser();
 		ForumPost post = forumController.createForumPost(getTopic(), author, getReply());
