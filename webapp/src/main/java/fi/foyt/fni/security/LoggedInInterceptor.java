@@ -20,8 +20,7 @@ public class LoggedInInterceptor implements Serializable {
 
 	@AroundInvoke
 	public Object aroundInvoke(InvocationContext ic) throws Exception {
-		Long loggedUserId = sessionController.getLoggedUserId();
-		if (loggedUserId == null) {
+		if (!sessionController.isLoggedIn()) {
 			throw new UnauthorizedException();
 		} else {
 			return ic.proceed();
