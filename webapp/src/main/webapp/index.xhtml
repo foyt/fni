@@ -23,19 +23,19 @@
           </div>
         </ui:fragment>
         
-        <ui:fragment rendered="#{sessionController.loggedIn}">
+        <ui:fragment rendered="#{sessionBackingBean.loggedIn}">
           <div id="index-header-user-info-wrapper">
-            <ui:fragment rendered="#{sessionController.loggedUser.profileImage ne null}">
+            <ui:fragment rendered="#{sessionBackingBean.loggedUser.profileImage ne null}">
               <img src="#{request.contextPath}/v1/users/SELF/profileImage/48x48"/>
             </ui:fragment>
           
-            <ui:fragment rendered="#{sessionController.loggedUser.profileImage eq null}">
+            <ui:fragment rendered="#{sessionBackingBean.loggedUser.profileImage eq null}">
               <div class="index-header-no-profile-image"></div>
             </ui:fragment>
             
             <div id="index-header-user-info">
               <h:outputFormat value="#{locales['root.indexPage.headerLoggedInAs']}">
-                <f:param value="#{sessionController.loggedUser.fullName}"/>
+                <f:param value="#{sessionBackingBean.loggedUser.fullName}"/>
               </h:outputFormat>
               <span class="index-header-big-font"><a id="index-header-logout-link" href="#{request.contextPath}/auth/logout.page">#{locales['root.indexPage.headerLogoutLink']}</a></span> 
               #{locales['root.indexPage.headerOr']}

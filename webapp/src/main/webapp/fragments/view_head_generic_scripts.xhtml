@@ -91,14 +91,14 @@
   <h:outputScript>
     window.siteMenuBarController = new SiteMenuBarController();
     window.isLoggedIn = function () {
-      return #{sessionController.loggedIn};
+      return #{sessionBackingBean.loggedIn};
     }
     
     window.getLocale = function() {
       if (window._locale == undefined) {
         window._locale = new fni.locale.FNILocale();
-        window._locale.loadLocale("#{sessionController.locale}", "#{request.contextPath}/generic/javascriptlocales.json?locale=#{sessionController.locale}");
-        window._locale.setLocale("#{sessionController.locale}");
+        window._locale.loadLocale("#{sessionBackingBean.locale}", "#{request.contextPath}/generic/javascriptlocales.json?locale=#{sessionBackingBean.locale}");
+        window._locale.setLocale("#{sessionBackingBean.locale}");
       }
       
       return window._locale;

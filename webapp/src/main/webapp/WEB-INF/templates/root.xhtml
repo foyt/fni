@@ -7,7 +7,7 @@
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:ui="http://java.sun.com/jsf/facelets" >
 
-  <f:view locale="#{sessionController.locale}">
+  <f:view locale="#{sessionBackingBean.locale}">
     <ui:insert name="metadata"/>
   
     <h:head>
@@ -16,7 +16,7 @@
       </title>
 
       <script type="text/javascript">
-        var LOCALE = '#{sessionController.locale.language}';
+        var LOCALE = '#{sessionBackingBean.locale.language}';
         var CONTEXTPATH = '#{request.contextPath}';
         var THEMEPATH = '#{request.contextPath}/themes/novus/';
       </script>

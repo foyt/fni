@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
   xmlns:ui="http://java.sun.com/jsf/facelets">
 
-<f:view locale="#{sessionController.locale}">
+<f:view locale="#{sessionBackingBean.locale}">
   <ui:insert name="metadata" />
 
   <h:head>
     <title><ui:insert name="pageTitle"></ui:insert></title>
     <script type="text/javascript">
-      var LOCALE = '#{sessionController.locale.language}';
+      var LOCALE = '#{sessionBackingBean.locale.language}';
       var CONTEXTPATH = '#{request.contextPath}';
       var THEMEPATH = '#{request.contextPath}/themes/novus/';
     </script>

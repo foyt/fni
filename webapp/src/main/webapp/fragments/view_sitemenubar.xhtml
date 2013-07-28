@@ -144,7 +144,7 @@
     <div id="siteMenuBarThirdColumn">
       <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetSearch"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetSearchLabel']}</a></div>
 
-      <h:panelGroup layout="block" class="siteMenuBarWidget" id="siteMenuBarWidgetAccount"  rendered="#{sessionController.loggedIn}">
+      <h:panelGroup layout="block" class="siteMenuBarWidget" id="siteMenuBarWidgetAccount"  rendered="#{sessionBackingBean.loggedIn}">
         <a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetAccountLabel']}</a>
       </h:panelGroup>
       
@@ -153,7 +153,7 @@
       </h:panelGroup>
 
       <h:panelGroup layout="block" class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetLocale">
-        <a href="javascript:void(null);">#{sessionController.locale.language}</a>
+        <a href="javascript:void(null);">#{sessionBackingBean.locale.language}</a>
       </h:panelGroup>
 <!-- 
       <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetSearchContent">
@@ -171,7 +171,7 @@
         </div>
       </div>  
 
-      <h:panelGroup layout="block" class="siteMenuBarWidgetContent" id="siteMenuBarWidgetAccountContent" rendered="#{sessionController.loggedIn}">
+      <h:panelGroup layout="block" class="siteMenuBarWidgetContent" id="siteMenuBarWidgetAccountContent" rendered="#{sessionBackingBean.loggedIn}">
         <ul>
           <li>
             <h:link value="#{locales['generic.header.menuBarWidgetAccountEditProfile']}" outcome="/editprofile.jsf"/>
