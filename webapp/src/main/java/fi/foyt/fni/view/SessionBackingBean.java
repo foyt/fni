@@ -7,6 +7,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 
 @Named
@@ -19,6 +20,10 @@ public class SessionBackingBean {
 	
 	public boolean isLoggedIn() {
 		return sessionController.isLoggedIn();
+	}
+	
+	public User getLoggedUser() {
+		return sessionController.getLoggedUser();
 	}
 	
 	public Locale getLocale() {
