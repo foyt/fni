@@ -1,30 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://v2.forgeandillusion.net/</loc>
-    <lastmod>2012-01-01</lastmod>
+    <loc>http://www.forgeandillusion.net/</loc>
+    <lastmod>2013-01-01</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>http://v2.forgeandillusion.net/forge/</loc>
-    <lastmod>2012-01-01</lastmod>
-    <changefreq>monthly</changefreq>
-  </url>
-<!--   
-  <url>
-    <loc>http://v2.forgeandillusion.net/illusion/</loc>
-    <lastmod>2012-01-01</lastmod>
-    <changefreq>monthly</changefreq>
-  </url>
--->
-  <url>
-    <loc>http://v2.forgeandillusion.net/store/</loc>
-    <lastmod>2012-01-01</lastmod>
+    <loc>http://www.forgeandillusion.net/forge/</loc>
+    <lastmod>2013-01-01</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>http://v2.forgeandillusion.net/forum/</loc>
-    <lastmod>2012-01-01</lastmod>
+    <loc>http://www.forgeandillusion.net/store/</loc>
+    <lastmod>2013-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://www.forgeandillusion.net/forum/</loc>
+    <lastmod>2013-01-01</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 </urlset>
