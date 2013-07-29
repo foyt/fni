@@ -1,13 +1,32 @@
 package fi.foyt.fni.forum;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
+import org.apache.lucene.search.highlight.QueryScorer;
+import org.apache.lucene.search.highlight.SimpleFragmenter;
+import org.apache.lucene.util.Version;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.FullTextQuery;
 
 import fi.foyt.fni.persistence.dao.forum.ForumCategoryDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumDAO;
@@ -18,12 +37,24 @@ import fi.foyt.fni.persistence.model.forum.ForumCategory;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.security.Permission;
+import fi.foyt.fni.security.Secure;
+import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @Dependent
 @Stateful
-public class ForumController {
+public class ForumController implements Serializable {
 
+	private static final long serialVersionUID = -5991883993762343104L;
+
+	@Inject
+	private FullTextEntityManager fullTextEntityManager;
+	
+	@Inject
+	private Logger logger;
+	
 	@Inject
 	private ForumCategoryDAO forumCategoryDAO;
 
@@ -58,6 +89,8 @@ public class ForumController {
 	
 	// Topics
 
+	@LoggedIn
+	@Secure (permission = Permission.FORUM_TOPIC_CREATE)
 	public ForumTopic createTopic(Forum forum, String subject, User author) {
 		Date now = new Date();
 		return forumTopicDAO.create(forum, author, now, now, createUrlName(forum, subject), subject, 0l);
@@ -89,6 +122,8 @@ public class ForumController {
 	
 	// Posts
 
+	@LoggedIn
+	@Secure (permission = Permission.FORUM_POST_CREATE)
 	public ForumPost createForumPost(ForumTopic topic, User author, String content) {
 		Date now = new Date();
 		return forumPostDAO.create(topic, author, now, now, content, 0l);
@@ -117,6 +152,65 @@ public class ForumController {
 
 	public Long countPostsByForum(Forum forum) {
 		return forumPostDAO.countByForum(forum);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<SearchResult<ForumPost>> searchPosts(String text) {
+		String[] criterias = text.replace(",", " ").replaceAll("\\s+", " ").split(" ");
+		int maxFragments = 1;
+
+		List<SearchResult<ForumPost>> posts = new ArrayList<SearchResult<ForumPost>>();
+		
+		StringBuilder queryStringBuilder = new StringBuilder();
+		queryStringBuilder.append("+(");
+		for (int i = 0, l = criterias.length; i < l; i++) {
+			String criteria = QueryParser.escape(criterias[i]);
+			
+			queryStringBuilder.append("contentPlain:");
+			queryStringBuilder.append(criteria);
+			queryStringBuilder.append("* ");
+			
+			queryStringBuilder.append("topicSubject:");
+			queryStringBuilder.append(criteria);
+			queryStringBuilder.append("*");
+			
+			if (i < l - 1)
+			  queryStringBuilder.append(' ');
+		}
+		
+		queryStringBuilder.append(")");
+		
+		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+		QueryParser parser = new QueryParser(Version.LUCENE_35, "", analyzer);
+		try {
+			Query luceneQuery = parser.parse(queryStringBuilder.toString());
+	    FullTextQuery query = (FullTextQuery) fullTextEntityManager.createFullTextQuery(luceneQuery, ForumPost.class);
+  		Highlighter highlighter = new Highlighter(new QueryScorer(luceneQuery));
+  		highlighter.setTextFragmenter(new SimpleFragmenter());
+  		
+  		for (ForumPost forumPost : (List<ForumPost>) query.getResultList()) {
+  			String content = forumPost.getContentPlain();
+    		TokenStream tokenStream = analyzer.tokenStream( "contentPlain", new StringReader(content) );
+    		try {
+    			String matchText = highlighter.getBestFragments(tokenStream, content, maxFragments, "...");
+    			if (StringUtils.isBlank(matchText)) {
+    				matchText = StringUtils.abbreviate(forumPost.getContentPlain(), 100);
+    			}
+    			
+          ForumTopic topic = forumPost.getTopic();
+          String link = "/forum/" + topic.getFullPath() + "#p" + forumPost.getId(); 
+          posts.add(new SearchResult<ForumPost>(forumPost, forumPost.getTopic().getSubject(), link, matchText));
+        } catch (IOException e) {
+        	logger.log(Level.WARNING, "Lucene query analyzing failed", e);
+        } catch (InvalidTokenOffsetsException e) {
+        	logger.log(Level.WARNING, "Lucene query analyzing failed", e);
+        }
+  		}
+		} catch (ParseException e) {
+			logger.log(Level.SEVERE, "Lucene query parsing failed", e);
+    }
+		
+		return posts;
 	}
 
 	public ForumPost getLastPostByTopic(ForumTopic topic) {
