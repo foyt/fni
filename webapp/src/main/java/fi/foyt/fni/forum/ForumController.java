@@ -90,7 +90,7 @@ public class ForumController implements Serializable {
 	// Topics
 
 	@LoggedIn
-	@Secure (permission = Permission.FORUM_TOPIC_CREATE)
+	@Secure (Permission.FORUM_TOPIC_CREATE)
 	public ForumTopic createTopic(Forum forum, String subject, User author) {
 		Date now = new Date();
 		return forumTopicDAO.create(forum, author, now, now, createUrlName(forum, subject), subject, 0l);
@@ -123,7 +123,7 @@ public class ForumController implements Serializable {
 	// Posts
 
 	@LoggedIn
-	@Secure (permission = Permission.FORUM_POST_CREATE)
+	@Secure (Permission.FORUM_POST_CREATE)
 	public ForumPost createForumPost(ForumTopic topic, User author, String content) {
 		Date now = new Date();
 		return forumPostDAO.create(topic, author, now, now, content, 0l);

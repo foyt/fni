@@ -22,7 +22,7 @@ public class SecureInterceptor implements Serializable {
 	@AroundInvoke
 	public Object aroundInvoke(InvocationContext ic) throws Exception {
 		Secure secure = ic.getMethod().getAnnotation(Secure.class);
-		Permission permission = secure.permission();
+		Permission permission = secure.value();
 		if (sessionController.hasLoggedUserPermission(permission)) {
 			return ic.proceed();
 		} else {
