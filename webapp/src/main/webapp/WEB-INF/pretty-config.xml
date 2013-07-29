@@ -14,13 +14,6 @@
 	</url-mapping>
 	<rewrite match="^/forge$" substitute="/forge/"/>
 	<rewrite match="^/forge([\?\#])(.*)" substitute="/forge/$1$2"/>
-	
-	<url-mapping id="illusion-index">
-	  <pattern value="/illusion/" />
-	  <view-id value="/illusion/index.jsf" />
-	</url-mapping>
-	<rewrite match="^/illusion$" substitute="/illusion/"/>
-	<rewrite match="^/illusion([\?\#])(.*)" substitute="/illusion/$1$2"/>
 
 	<rewrite match="^/store$" substitute="/store/"/>
 	<rewrite match="^/store([\?\#])(.*)" substitute="/store/$1$2"/>
