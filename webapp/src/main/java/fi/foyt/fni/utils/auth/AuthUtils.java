@@ -4,8 +4,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
-import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.persistence.model.users.UserToken;
 
 public class AuthUtils {
@@ -17,22 +15,6 @@ public class AuthUtils {
   }
 	
 	private static final String REDIRECT_URL_SESSION_PARAMETER = "_REDIRECT_URL_";
-	
-	public boolean isAllowed(User user, UserRole requiredRole) {
-		if (user == null)
-			return false;
-		
-		if (requiredRole == UserRole.ADMINISTRATOR) {
-			return user.getRole() == UserRole.ADMINISTRATOR;
-		}
-		
-	  if (requiredRole == UserRole.USER) {
-	  	if ((user.getRole() == UserRole.ADMINISTRATOR) || (user.getRole() == UserRole.USER))
-	  		return true;
-	  }
-			
-	  return false;
-	}
 	
   public String[] getGrantedScopes(UserToken userToken) {
     String grantedScopes = userToken.getGrantedScopes();

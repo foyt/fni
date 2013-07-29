@@ -13,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
+import fi.foyt.fni.persistence.model.users.Permission;
+import fi.foyt.fni.persistence.model.users.Role;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.persistence.model.users.UserToken;
@@ -41,13 +43,46 @@ public class SessionController implements Serializable {
     return loggedUserId != null;
   }
   
-  public UserRole getLoggedUserRole() {
+  public Role[] getLoggedUserRoles() {
     User loggedUser = getLoggedUser();
     if (loggedUser != null) {
-    	return loggedUser.getRole();
+    	return convertUserRole(loggedUser.getRole());
     }
     
     return null;
+  }
+
+	public boolean hasLoggedUserPermission(Permission permission) {
+		Role[] roles = getLoggedUserRoles();
+		for (Role role : roles) {
+			Permission[] rolePermissions = role.getPermissions();
+			for (Permission rolePermission : rolePermissions) {
+				if (rolePermission.equals(permission)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+  
+  private Role[] convertUserRole(UserRole role) {
+  	switch (role) {
+  		case ADMINISTRATOR:
+  			return new Role[] {
+  				Role.FORUM_ADMIN	
+  			};
+  		case USER:
+  			return new Role[] {
+          Role.FORUM_USER
+        };
+  		case GUEST:
+  			return new Role[] {
+          Role.FORUM_GUEST
+        };
+  	}
+  	
+  	return null;
   }
   
   public User getLoggedUser() {
