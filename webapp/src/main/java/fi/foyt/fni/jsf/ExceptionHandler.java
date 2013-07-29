@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.ocpsoft.pretty.PrettyContext;
 
+import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.UnauthorizedException;
 
 public class ExceptionHandler extends ExceptionHandlerWrapper {
@@ -81,6 +82,15 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
   				} catch (IOException e) {
   					logger.log(Level.SEVERE, "Error occurred while redirecting to login page", e);
   				}
+  			} else if (exception instanceof ForbiddenException) {
+  			  // TODO: JSP -> JSF
+  				externalContext.setResponseStatus(HttpServletResponse.SC_NOT_FOUND);
+  				externalContext.setResponseContentType("text/html; charset=utf-8");
+					try {
+						externalContext.dispatch("/jsp/generic/error-403.jsp");
+					} catch (IOException e) {
+  					logger.log(Level.SEVERE, "Error occurred while redirecting to forbidden error page", e);
+					}
   			} else if (exception instanceof FileNotFoundException) {
   				// TODO: JSP -> JSF
   				externalContext.setResponseStatus(HttpServletResponse.SC_NOT_FOUND);
