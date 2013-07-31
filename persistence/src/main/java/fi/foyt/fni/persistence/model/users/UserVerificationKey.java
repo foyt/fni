@@ -13,7 +13,7 @@ import org.hibernate.annotations.Immutable;
 
 @Entity
 @Immutable
-public class UserConfirmKey {
+public class UserVerificationKey {
 
   public Long getId() {
     return id;
