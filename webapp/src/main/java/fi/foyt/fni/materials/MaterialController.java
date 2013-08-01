@@ -69,6 +69,7 @@ import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.materials.VectorImageRevision;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.fileupload.FileData;
 import fi.foyt.fni.utils.html.HtmlUtils;
@@ -456,6 +457,7 @@ public class MaterialController {
    * @param material material
    * @return material size in bytes
    */
+	@LoggedIn
   public long getUserMaterialsTotalSize(User user) {
     // Count of materials multiplied by default material size as a base value
     long materialTotalSize = materialDAO.countByCreator(user) * DEFAULT_MATERIAL_SIZE;
@@ -587,12 +589,16 @@ public class MaterialController {
 		return createImage(parentFolder, loggedUser, imageData.getData(), imageData.getContentType(), fileData.getFileName());
   }
 	
-	private Material createImage(Folder parentFolder, User loggedUser, byte[] data, String contentType, String title) {
+	public Image createImage(Folder parentFolder, User loggedUser, byte[] data, String contentType, String title) {
 		Date now = new Date();
 		String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
 		return imageDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, contentType, MaterialPublicity.PRIVATE);
   }
-	
+
+	public Image updateImageContent(Image image, String contentType, byte[] data, User modifier) {
+		return imageDAO.updateData(imageDAO.updateContentType(image, modifier, contentType), modifier, data);
+	}
+
 	private Material createVectorImage(Folder parentFolder, User loggedUser, String data, String title) {
 		String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
 	  return vectorImageDAO.create(loggedUser, null, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
