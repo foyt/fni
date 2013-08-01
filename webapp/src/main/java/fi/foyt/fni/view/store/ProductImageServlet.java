@@ -26,9 +26,10 @@ import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.images.ImageUtils;
+import fi.foyt.fni.view.AbstractFileServlet;
 
 @WebServlet(urlPatterns = "/store/productImages/*")
-public class ProductImageServlet extends AbstractStoreFileServlet {
+public class ProductImageServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = 8109481247044843102L;
 

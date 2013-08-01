@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.store;
+package fi.foyt.fni.view;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-public abstract class AbstractStoreFileServlet extends HttpServlet {
+public abstract class AbstractFileServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 2682138379342291553L;
 
