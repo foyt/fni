@@ -37,7 +37,7 @@
               <h:outputFormat value="#{locales['root.indexPage.headerLoggedInAs']}">
                 <f:param value="#{sessionBackingBean.loggedUser.fullName}"/>
               </h:outputFormat>
-              <span class="index-header-big-font"><a id="index-header-logout-link" href="#{request.contextPath}/auth/logout.page">#{locales['root.indexPage.headerLogoutLink']}</a></span> 
+              <span class="index-header-big-font"><a id="index-header-logout-link" href="#{request.contextPath}/logout">#{locales['root.indexPage.headerLogoutLink']}</a></span> 
               #{locales['root.indexPage.headerOr']}
               <span class="index-header-big-font">
                 <h:link outcome="/editprofile.jsf" value="#{locales['root.indexPage.headerEditProfileLink']}"/>
