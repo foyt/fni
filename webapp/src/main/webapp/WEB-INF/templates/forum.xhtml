@@ -19,6 +19,11 @@
     <ui:insert name="head" />
   </h:head>
   <h:body styleClass="siteBodyWrapper">
+    <div id="messages-container">
+      <ui:insert name="messages">
+        <h:messages globalOnly="false" errorClass="error" fatalClass="error" warnClass="warning" infoClass="info"/>
+      </ui:insert>
+    </div>
     <div id="siteWrapper">
       <div id="siteLayoutWrapper">
         <!-- Site's Menu bar -->
