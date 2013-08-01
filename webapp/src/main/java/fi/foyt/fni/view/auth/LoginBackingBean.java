@@ -21,6 +21,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.ocpsoft.pretty.faces.annotation.URLMapping;
+import com.ocpsoft.pretty.faces.annotation.URLMappings;
+
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.auth.AuthenticationStrategy;
 import fi.foyt.fni.auth.AuthenticationStrategyManager;
@@ -48,6 +51,13 @@ import fi.foyt.fni.utils.mail.MailUtils;
 @RequestScoped
 @Named
 @Stateful
+@URLMappings(mappings = {
+  @URLMapping(
+		id = "auth-login", 
+		pattern = "/login/", 
+		viewId = "/auth/login.jsf"
+  )
+})
 public class LoginBackingBean {
 
 	@Inject

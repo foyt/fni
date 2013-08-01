@@ -18,10 +18,6 @@
 	<rewrite match="^/store$" substitute="/store/"/>
 	<rewrite match="^/store([\?\#])(.*)" substitute="/store/$1$2"/>
 
-	<url-mapping id="auth-login">
-	  <pattern value="/login/" />
-	  <view-id value="/auth/login.jsf" />
-	</url-mapping>	
 	<rewrite match="^/login$" substitute="/login/"/>
 	<rewrite match="^/login([\?\#])(.*)" substitute="/login/$1$2"/>
 
