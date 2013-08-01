@@ -25,7 +25,7 @@
         <a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetAccountLabel']}</a>
       </h:panelGroup>
       
-      <h:panelGroup layout="block" class="site-menu-bar-widget" id="site-menu-bar-widget-login" rendered="#{!sessionController.loggedIn}">
+      <h:panelGroup layout="block" class="site-menu-bar-widget" id="site-menu-bar-widget-login" rendered="#{!sessionBackingBean.loggedIn}">
         <a href="#{request.contextPath}/login/">#{locales['generic.header.menuBarWidgetLoginLabel']}</a>
       </h:panelGroup>
 
@@ -57,12 +57,12 @@
           <ul>
             <li>
               <span>
-                <h:link value="#{locales['generic.header.menuBarWidgetAccountEditProfile']}" outcome="" />
+                <h:link value="#{locales['generic.header.menuBarWidgetAccountEditProfile']}" outcome="/editprofile" />
               </span>
             </li>
             <li>
               <span>
-                <h:outputLink value="#{request.contextPath}/logout">#{locales['generic.header.menuBarWidgetAccountLogout']}</h:outputLink>
+                <h:link value="#{locales['generic.header.menuBarWidgetAccountLogout']}" outcome="/auth/logout" />
               </span>
             </li>
           </ul>
