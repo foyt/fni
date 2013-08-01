@@ -14,18 +14,19 @@
       $.ajax(CONTEXTPATH + '/auth/dialogs/forgotpassword.jsf', {
         async: false,
         success : function(data, textStatus, jqXHR) {
-          var dialog = $(data).dialog({
+          var dialogElement = $(data);
+          var dialog = dialogElement.dialog({
             modal: true,
             width: 600,
             buttons: [{
               'class': 'cancel-button',
-              'text': 'Cancel',
+              'text': $(dialogElement).data('button-cancel'),
               'click': function(event) { 
                 $(this).dialog("close");
               }
             }, {
-              'class': 'publish-button',
-              'text': 'Reset Password',
+              'class': 'send-button',
+              'text': $(dialogElement).data('button-send'),
               'click': function(event) { 
                 var form = $('#forgot-password-form-container form');
                 var prefix = form.attr('name');
