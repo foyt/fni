@@ -10,13 +10,14 @@ import javax.inject.Inject;
 import fi.foyt.fni.persistence.dao.auth.InternalAuthDAO;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.users.PasswordResetKeyDAO;
-import fi.foyt.fni.persistence.dao.users.UserConfirmKeyDAO;
+import fi.foyt.fni.persistence.dao.users.UserVerificationKeyDAO;
 import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
+import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.auth.InternalAuth;
 import fi.foyt.fni.persistence.model.auth.UserIdentifier;
 import fi.foyt.fni.persistence.model.users.PasswordResetKey;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.persistence.model.users.UserConfirmKey;
+import fi.foyt.fni.persistence.model.users.UserVerificationKey;
 import fi.foyt.fni.persistence.model.users.UserToken;
 
 @RequestScoped
@@ -30,7 +31,7 @@ public class AuthenticationController {
 	private PasswordResetKeyDAO passwordResetKeyDAO;
 
 	@Inject
-	private UserConfirmKeyDAO userConfirmKeyDAO;
+	private UserVerificationKeyDAO userVerificationKeyDAO;
 	
 	@Inject
 	private UserIdentifierDAO userIdentifierDAO;
@@ -40,13 +41,18 @@ public class AuthenticationController {
 	
 	// InternalAuth
 	
+	public InternalAuth createInternalAuth(User user, String password) {
+		InternalAuth internalAuth = internalAuthDAO.create(user, password, Boolean.FALSE);
+	  return internalAuth;
+	}	
+	
 	public InternalAuth findInternalAuthByUser(User user) {
 		return internalAuthDAO.findByUser(user);
 	}
 
-	public void verifyInternalAuth(UserConfirmKey confirmKey, InternalAuth internalAuth) {
+	public void verifyInternalAuth(UserVerificationKey verificationKey, InternalAuth internalAuth) {
 		internalAuthDAO.updateVerified(internalAuth, Boolean.TRUE);
-		userConfirmKeyDAO.delete(confirmKey);
+		userVerificationKeyDAO.delete(verificationKey);
   }
 	
 	public void setUserPassword(User user, String encodedPassword) {
@@ -72,10 +78,15 @@ public class AuthenticationController {
 		passwordResetKeyDAO.delete(passwordResetKey);
 	}
 
-	// UserConfirmKey
+	// UserVerificationKey
 
-	public UserConfirmKey findConfirmKeyByKey(String key) {
-		return userConfirmKeyDAO.findByValue(key);
+	public UserVerificationKey createVerificationKey(User user, String email) {
+		userIdentifierDAO.create(user, AuthSource.INTERNAL, email, "INTERNAL-" + user.getId());	
+	  return userVerificationKeyDAO.create(user, UUID.randomUUID().toString());
+	}
+
+	public UserVerificationKey findVerificationKey(String key) {
+		return userVerificationKeyDAO.findByValue(key);
 	}
 
 	// UserIdentifier 
