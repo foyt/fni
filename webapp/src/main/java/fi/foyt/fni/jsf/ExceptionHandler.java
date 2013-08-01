@@ -111,6 +111,8 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
 					} catch (IOException e) {
   					logger.log(Level.SEVERE, "Error occurred while redirecting to internal error page", e);
 					}
+  				
+  				exception.printStackTrace();
   			}
 
   			facesContext.responseComplete();
