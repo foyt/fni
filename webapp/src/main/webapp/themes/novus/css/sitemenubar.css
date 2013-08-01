@@ -285,6 +285,45 @@
   display: block;
 }
 
+/* Account */
+
+#site-menu-bar-widget-account-content {
+  width: 250px;
+  min-height: 20px;
+  padding: 8px;
+  right: 15px;
+}
+
+#site-menu-bar-widget-account-content>span {
+  color: #000;
+  padding-left: 4px;
+  display: block;
+  padding-bottom: 4px;
+}
+
+#site-menu-bar-widget-account-content li {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding: 4px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#site-menu-bar-widget-account-content li a {
+  color: #4D6CA3;
+  text-decoration: none;
+  width: 100%;
+  display: block;
+}
+
+#site-menu-bar-widget-account-content li:hover {
+  background: #7197DC;
+}
+
+#site-menu-bar-widget-account-content li:hover a {
+  color: #fff;
+}
+
 /* Locale */
 
 #site-menu-bar-widget-locale-content {

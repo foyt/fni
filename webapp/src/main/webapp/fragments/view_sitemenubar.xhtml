@@ -33,7 +33,7 @@
         <a href="javascript:void(null);">#{sessionBackingBean.locale.language}</a>
       </h:panelGroup>
       
-      <div style="display: none" id="site-menu-bar-widget-locale-content" class="site-menu-bar-widget-content site-menu-bar-widget-content-active">
+      <div style="display: none" id="site-menu-bar-widget-locale-content" class="site-menu-bar-widget-content">
         <h:form>
           <span>#{locales['generic.header.menuBarWidgetLocaleSelectText']}</span>
           
@@ -51,6 +51,24 @@
           </ul>
         </h:form>
       </div>
+      
+      <div style="display: none" id="site-menu-bar-widget-account-content" class="site-menu-bar-widget-content">
+        <h:form>
+          <ul>
+            <li>
+              <span>
+                <h:link value="#{locales['generic.header.menuBarWidgetAccountEditProfile']}" outcome="" />
+              </span>
+            </li>
+            <li>
+              <span>
+                <h:outputLink value="#{request.contextPath}/logout">#{locales['generic.header.menuBarWidgetAccountLogout']}</h:outputLink>
+              </span>
+            </li>
+          </ul>
+        </h:form>
+      </div>
+      
     </div>
   </div> 
 </ui:composition>  

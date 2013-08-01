@@ -246,7 +246,7 @@
             <a href="${pageContext.request.contextPath}/editprofile.jsf"><fmt:message key="generic.header.menuBarWidgetAccountEditProfile"/></a>
           </li>
           <li>
-            <a href="${pageContext.request.contextPath}/auth/logout.page"><fmt:message key="generic.header.menuBarWidgetAccountLogout"/></a>
+            <a href="${pageContext.request.contextPath}/logout"><fmt:message key="generic.header.menuBarWidgetAccountLogout"/></a>
           </li>
         </ul>
       </div>
