@@ -21,13 +21,13 @@ public class PasswordResetKeyDAO extends GenericDAO<PasswordResetKey> {
 	public PasswordResetKey create(User user, String value) {
     EntityManager entityManager = getEntityManager();
 
-    PasswordResetKey userConfirmKey = new PasswordResetKey();
-    userConfirmKey.setValue(value);
-    userConfirmKey.setUser(user);
-    userConfirmKey.setCreated(new Date());
+    PasswordResetKey passwordResetKey = new PasswordResetKey();
+    passwordResetKey.setValue(value);
+    passwordResetKey.setUser(user);
+    passwordResetKey.setCreated(new Date());
     
-    entityManager.persist(userConfirmKey);
-    return userConfirmKey;
+    entityManager.persist(passwordResetKey);
+    return passwordResetKey;
   }
 
   public PasswordResetKey findByValue(String value) {
