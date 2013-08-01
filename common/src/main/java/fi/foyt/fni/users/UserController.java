@@ -17,12 +17,15 @@ import fi.foyt.fni.persistence.dao.users.UserSettingKeyDAO;
 import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.auth.UserIdentifier;
+import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserEmail;
 import fi.foyt.fni.persistence.model.users.UserFriend;
 import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.persistence.model.users.UserSetting;
 import fi.foyt.fni.persistence.model.users.UserSettingKey;
+import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.security.Secure;
 
 @RequestScoped
 @Stateful
@@ -79,6 +82,24 @@ public class UserController {
       return userIdentifier.getUser();
     return null;
   }
+  
+  @LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public User updateFirstName(User user, String firstName) {
+		return userDAO.updateFirstName(user, firstName);
+	}
+  
+  @LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public User updateLastName(User user, String lastName) {
+		return userDAO.updateLastName(user, lastName);
+	}
+  
+  @LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public User updateNickname(User user, String nickname) {
+		return userDAO.updateNickname(user, nickname);
+	}
   
   public UserFriend getUserFriendByUsers(User user1, User user2) {
     UserFriend userFriend = userFriendDAO.findByUserAndFriend(user1, user2);
