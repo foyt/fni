@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.EJBException;
 import javax.el.ELException;
+import javax.enterprise.inject.CreationException;
 import javax.faces.FacesException;
 import javax.faces.context.ExceptionHandlerWrapper;
 import javax.faces.context.ExternalContext;
@@ -47,9 +48,14 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
 		for (final Iterator<ExceptionQueuedEvent> queuedEventIterator = getUnhandledExceptionQueuedEvents().iterator(); queuedEventIterator.hasNext();) {
 			ExceptionQueuedEvent queuedEvent = queuedEventIterator.next();
 			ExceptionQueuedEventContext queuedEventContext = queuedEvent.getContext();
-			
+
 			Throwable exception = queuedEventContext.getException();
-			while ((exception instanceof FacesException || exception instanceof EJBException || exception instanceof ELException) && exception.getCause() != null) {
+			while ((exception instanceof FacesException || 
+							exception instanceof EJBException || 
+							exception instanceof ELException || 
+							exception instanceof CreationException || 
+							exception instanceof IllegalStateException) && 
+							exception.getCause() != null) {
 				exception = exception.getCause();
 			}
 			
