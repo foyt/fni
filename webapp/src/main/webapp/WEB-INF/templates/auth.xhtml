@@ -11,19 +11,32 @@
     <ui:insert name="metadata"/>
   
     <h:head>
-      <title>
-        <ui:insert name="pageTitle"></ui:insert>
-      </title>
+      <title><ui:insert name="pageTitle"></ui:insert></title>
+      <script type="text/javascript">
+        var LOCALE = '#{sessionBackingBean.locale.language}';
+        var CONTEXTPATH = '#{request.contextPath}';
+        var THEMEPATH = '#{request.contextPath}/themes/novus/';
+      </script>
+    
+      <!-- jQuery -->
+  
+      <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.2.js"></script>
 
-      <ui:include src="/fragments/view_head_generic.xhtml" />
-      <ui:include src="/fragments/view_head_generic_scripts.xhtml" />
+      <!-- jQuery UI -->
+    
+      <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.js"></script>
 
-      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/default_dev/css/common.css"/>
-      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/default_dev/css/auth.css"/>
+      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/common.css"/>
       
       <ui:insert name="head"/>
     </h:head>
     <h:body styleClass="siteBodyWrapper"> 
+      <div id="messages-container">
+        <ui:insert name="messages">
+          <h:messages globalOnly="false" errorClass="error" fatalClass="error" warnClass="warning" infoClass="info"/>
+        </ui:insert>
+      </div>
+      
       <div id="siteWrapper">
         <div id="siteLayoutWrapper">
           
