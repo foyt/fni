@@ -1,12 +1,19 @@
 package fi.foyt.fni.persistence.model.users;
 
 public enum Role {
+	
+	/* Guest */
+	
+	GUEST,
+	
+	/* User */
+	
+	USER (Permission.PROFILE_UPDATE),
 
 	/* Forum */
 	
 	FORUM_ADMIN (Permission.FORUM_TOPIC_CREATE, Permission.FORUM_POST_CREATE),
-	FORUM_USER (Permission.FORUM_TOPIC_CREATE, Permission.FORUM_POST_CREATE),
-	FORUM_GUEST ();
+	FORUM_USER (Permission.FORUM_TOPIC_CREATE, Permission.FORUM_POST_CREATE);
   
 	Role(Permission... permissions) {
     this.permissions = permissions;
