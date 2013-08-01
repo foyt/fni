@@ -3,200 +3,54 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html">  
+    
+  <h:outputScript name="/scripts/gui/menu.js" target="head"></h:outputScript>
 
-  <div id="siteMenuBar">
-    <div id="siteMenuBarFirstColumn">
-      <div class="siteMenuBarWidget" id="siteMenuBarWidgetIndex"><a href="#{request.contextPath}/">#{locales['generic.header.menuBarWidgetIndexLabel']}</a></div>
-      <div class="siteMenuBarWidget" id="siteMenuBarWidgetForge"><a href="#{request.contextPath}/forge/">#{locales['generic.header.menuBarWidgetForgeLabel']}</a></div>
-      <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetIllusion"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetIllusionLabel']}</a></div>
-      <div class="siteMenuBarWidget" id="siteMenuBarWidgetStore">
+  <div id="site-menu-bar">
+    <div id="site-menu-bar-first-column">
+      <div class="site-menu-bar-widget" id="site-menu-bar-widget-index"><a href="#{request.contextPath}/">#{locales['generic.header.menuBarWidgetIndexLabel']}</a></div>
+      <div class="site-menu-bar-widget" id="site-menu-bar-widget-forge"><a href="#{request.contextPath}/forge/">#{locales['generic.header.menuBarWidgetForgeLabel']}</a></div>
+      <div class="site-menu-bar-widget site-menu-bar-widget-disabled" id="site-menu-bar-widget-illusion"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetIllusionLabel']}</a></div>
+      <div class="site-menu-bar-widget" id="site-menu-bar-widget-store">
         <h:link outcome="/store/index.jsf" value="#{locales['generic.header.menuBarWidgetStoreLabel']}"/>
       </div>
-      <div class="siteMenuBarWidget" id="siteMenuBarWidgetForum"><a href="#{request.contextPath}/forum/">#{locales['generic.header.menuBarWidgetForumLabel']}</a></div>
+      <div class="site-menu-bar-widget" id="site-menu-bar-widget-forum"><a href="#{request.contextPath}/forum/">#{locales['generic.header.menuBarWidgetForumLabel']}</a></div>
     </div>
-    <div id="siteMenuBarSecondColumn">
-      <ui:fragment rendered="#{(sessionController.loggedIn) and (sessionController.loggedUserRole ne 'GUEST')}">
-        <div class="siteMenuBarWidget" id="siteMenuBarWidgetMessages">
-          <a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetMessagesLabel']}</a>
-          <ui:fragment rendered="#{messageController.newMessages}">
-            <div class="siteMenuBarWidgetNotification">#{messageController.newMessageCount}</div>
-          </ui:fragment>
-        </div>
-      </ui:fragment>
-    
-      <ui:fragment rendered="#{!((sessionController.loggedIn) and (sessionController.loggedUserRole ne 'GUEST'))}">
-        <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetMessages">
-          <a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetMessagesLabel']}</a>
-          <ui:fragment rendered="#{messageController.newMessages}">
-            <div class="siteMenuBarWidgetNotification">#{messageController.newMessageCount}</div>
-          </ui:fragment>
-        </div>
-      </ui:fragment>
-      
-      <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetChat"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetChatLabel']}</a></div>
-      <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetFriends"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetFriendsLabel']}</a></div>
-      <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetCalendar"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetCalendarLabel']}</a></div>
-    <!-- 
-      <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetMessagesContent">
-  
-        <div id="siteMenuBarWidgetMessagesFoldersContainer">
-          <div id="siteMenuBarWidgetMessagesButtonsContainer">
-            <input type="submit" id="siteMenuBarWidgetMessagesComposeButton" value="#{locales['generic.header.menuBarWidgetMessagesComposeMessageLabel']}"/>
-          </div>
-        
-          <div id="siteMenuBarWidgetMessagesSpecialFoldersContainer">
-            <div class="siteMenuBarWidgetMessagesFolder siteMenuBarWidgetMessagesSelectedFolder" id="siteMenuBarWidgetMessagesInboxFolder">
-              <input type="hidden" name="folderId" value="INBOX"/>
-              <div class="siteMenuBarWidgetMessagesFolderIcon"></div>
-              <div class="siteMenuBarWidgetMessagesFolderName">#{locales['generic.header.menuBarWidgetMessagesInboxFolder']}</div>
-              <div class="siteMenuBarWidgetMessagesFolderUnread">#{messageController.newMessageCount}</div>
-            </div>
-            
-            <div class="siteMenuBarWidgetMessagesFolder" id="siteMenuBarWidgetMessagesStarredFolder">
-              <input type="hidden" name="folderId" value="STARRED"/>
-              <div class="siteMenuBarWidgetMessagesFolderIcon"></div>
-              <div class="siteMenuBarWidgetMessagesFolderName">#{locales['generic.header.menuBarWidgetMessagesStarredFolder']}</div>
-            </div>
-            
-            <div class="siteMenuBarWidgetMessagesFolder" id="siteMenuBarWidgetMessagesOutboxFolder">
-              <input type="hidden" name="folderId" value="OUTBOX"/>
-              <div class="siteMenuBarWidgetMessagesFolderIcon"></div>
-              <div class="siteMenuBarWidgetMessagesFolderName">#{locales['generic.header.menuBarWidgetMessagesSentFolder']}</div>
-            </div>
-            
-            <div class="siteMenuBarWidgetMessagesFolder" id="siteMenuBarWidgetMessagesTrashFolder">
-              <input type="hidden" name="folderId" value="TRASH"/>
-              <div class="siteMenuBarWidgetMessagesFolderIcon"></div>
-              <div class="siteMenuBarWidgetMessagesFolderName">#{locales['generic.header.menuBarWidgetMessagesTrashFolder']}</div>
-            </div>
-          </div>
-  
-          <div id="siteMenuBarWidgetMessagesCustomFoldersContainer"></div>
-        </div>
-        
-        <div id="siteMenuBarWidgetMessagesWorkareaContainer">
-        </div>
-     
-      </div>
-    
-      <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetChatContent">
-        <div id="siteMenuBarWidgetChatTabsContainer">
-          <div class="siteMenuBarWidgetChatInstructions">
-            <div class="siteMenuBarWidgetChatWelcomeTitle">
-              #{locales['generic.header.menuBarWidgetChatWelcomeTitle']}
-            </div>
-            <div class="siteMenuBarWidgetChatWelcomeText">
-              #{locales['generic.header.menuBarWidgetChatWelcomeText']}
-            </div>
-          </div>
-          <ul>
-          </ul>
-        </div>
-        
-        <div id="siteMenuBarWidgetChatOnlineFriendsContainer">
-          <div class="siteMenuBarWidgetChatNoFriendsOnline">
-            #{locales['generic.header.menuBarWidgetChatNoFriendsOnline']}
-          </div>
-        </div>
-      </div>
-      
-  
-      <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetFriendsContent">
-        <div class="siteMenuBarWidgetFriendsTabsContainer">
-          <ul> 
-            <li><a href="#sitemenubarfriendswidget-suggest">#{locales['generic.header.menuBarWidgetFriendsSuggestTabLabel']}</a></li>
-            <li><a href="#sitemenubarfriendswidget-add">#{locales['generic.header.menuBarWidgetFriendsAddTabLabel']}</a></li>
-            <li><a href="#sitemenubarfriendswidget-list">#{locales['generic.header.menuBarWidgetFriendsListTabLabel']}</a></li>
-          </ul>
-          
-          <div id="sitemenubarfriendswidget-suggest">
-            <div class="sitemenubarfriendswidgetSuggestContent">
-            
-            </div>
-            <a class="sitemenubarfriendswidgetSuggestMore" href="javascript:void(null);">
-              #{locales['generic.header.menuBarWidgetFriendsSuggestMore']}
-            </a>
-          </div>
-          <div id="sitemenubarfriendswidget-add">
-            <div class="siteMenuBarFriendsWidgetInviteFriendsProvider" id="siteMenuBarFriendsWidgetInviteFriendsProviderEmail">
-              <div class="siteMenuBarFriendsWidgetInviteFriendsProviderInfo">
-                <div class="siteMenuBarFriendsWidgetInviteFriendsProviderImage"></div>
-                <div class="siteMenuBarFriendsWidgetInviteFriendsProviderText">#{locales['generic.header.menuBarWidgetFriendsAddByEmail']}</div>
-              </div>
-              <div class="siteMenuBarFriendsWidgetInviteFriendsProviderOptions" style="display: none">
-                 <form onsubmit="return false;">
-                   #{locales['generic.header.menuBarWidgetFriendsAddByEmailAddress']}
-                   <input type="text" name="emailAddress" class="required email"/>
-                   <input type="submit" name="addByEmail" class="formvalid" value="#{locales['generic.header.menuBarWidgetFriendsAddByEmailProceed']}"/>
-                 </form>
-              </div>
-            </div>
-          </div>
-          <div id="sitemenubarfriendswidget-list">
-          </div>
-        </div>
-      </div>
-      
-    
-      <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetCalendarContent"></div>
-      -->      
+    <div id="site-menu-bar-second-column">
     </div>
-    <div id="siteMenuBarThirdColumn">
-      <div class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetSearch"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetSearchLabel']}</a></div>
+    <div id="site-menu-bar-third-column">
+      <div class="site-menu-bar-widget site-menu-bar-widget-disabled" id="site-menu-bar-widget-search"><a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetSearchLabel']}</a></div>
 
-      <h:panelGroup layout="block" class="siteMenuBarWidget" id="siteMenuBarWidgetAccount"  rendered="#{sessionBackingBean.loggedIn}">
+      <h:panelGroup layout="block" class="site-menu-bar-widget" id="site-menu-bar-widget-account"  rendered="#{sessionBackingBean.loggedIn}">
         <a href="javascript:void(null);">#{locales['generic.header.menuBarWidgetAccountLabel']}</a>
       </h:panelGroup>
       
-      <h:panelGroup layout="block" class="siteMenuBarWidget" id="siteMenuBarWidgetLogin" rendered="#{!sessionController.loggedIn}">
+      <h:panelGroup layout="block" class="site-menu-bar-widget" id="site-menu-bar-widget-login" rendered="#{!sessionController.loggedIn}">
         <a href="#{request.contextPath}/login/">#{locales['generic.header.menuBarWidgetLoginLabel']}</a>
       </h:panelGroup>
 
-      <h:panelGroup layout="block" class="siteMenuBarWidget siteMenuBarWidgetDisabled" id="siteMenuBarWidgetLocale">
+      <h:panelGroup layout="block" class="site-menu-bar-widget" id="site-menu-bar-widget-locale">
         <a href="javascript:void(null);">#{sessionBackingBean.locale.language}</a>
       </h:panelGroup>
-<!-- 
-      <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetSearchContent">
-        <span>#{locales['generic.header.menuBarWidgetSearchText']}</span>
-        <div class="siteMenuBarWidgetSearchInputContainer">
-          <input class="siteMenuBarWidgetSearchInput" type="text" name="searchText" value="consect"/>
-        </div>
-        <span>#{locales['generic.header.menuBarWidgetResultsTitle']}</span>
-        <div id="siteMenuBarWidgetSearchResultsContainer">
-          <ul>
-            <li><a href="javascript:void(null);" class="siteMenuBarWidgetSearchResultTitle">Lorem ipsum</a>Lorem ipsum <span class="match">consec</span>tetur dolor sit amet, <span class="match">consec</span>tetur adipiscing e...</li>
-            <li><a href="javascript:void(null);" class="siteMenuBarWidgetSearchResultTitle">Lorem ipsum</a>Lorem ipsum <span class="match">consec</span>tetur dolor sit amet, <span class="match">consec</span>tetur adipiscing e...</li>
-            <li><a href="javascript:void(null);" class="siteMenuBarWidgetSearchResultTitle">Lorem ipsum</a>Lorem ipsum <span class="match">consec</span>tetur dolor sit amet, <span class="match">consec</span>tetur adipiscing e...</li>
-          </ul>
-        </div>
-      </div>  
-
-      <h:panelGroup layout="block" class="siteMenuBarWidgetContent" id="siteMenuBarWidgetAccountContent" rendered="#{sessionBackingBean.loggedIn}">
-        <ul>
-          <li>
-            <h:link value="#{locales['generic.header.menuBarWidgetAccountEditProfile']}" outcome="/editprofile.jsf"/>
-          </li>
-          <li>
-            <a href="#{request.contextPath}/auth/logout.page">#{locales['generic.header.menuBarWidgetAccountLogout']}</a>
-          </li>
-        </ul>
-      </h:panelGroup> 
       
-      <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetLocaleContent">
-        <span>#{locales['generic.header.menuBarWidgetLocaleSelectText']}</span>
-        
-        <ul>
-          <li>
-            <span>#{locales['generic.header.menuBarWidgetLocaleFinnish']}</span>
-            <input type="hidden" name="locale" value="fi_FI"/>
-          </li>
-          <li>
-            <span>#{locales['generic.header.menuBarWidgetLocaleEnglish']}</span>
-            <input type="hidden" name="locale" value="en_US"/>
-          </li>
-        </ul>
+      <div style="display: none" id="site-menu-bar-widget-locale-content" class="site-menu-bar-widget-content site-menu-bar-widget-content-active">
+        <h:form>
+          <span>#{locales['generic.header.menuBarWidgetLocaleSelectText']}</span>
+          
+          <ul>
+            <li>
+              <span>
+                <h:commandLink value="#{locales['generic.header.menuBarWidgetLocaleFinnish']}" action="#{sessionBackingBean.changeLanguage('fi')}" />
+              </span>
+            </li>
+            <li>
+              <span>
+                <h:commandLink value="#{locales['generic.header.menuBarWidgetLocaleEnglish']}" action="#{sessionBackingBean.changeLanguage('en')}" />
+              </span>
+            </li>
+          </ul>
+        </h:form>
       </div>
- -->      
     </div>
   </div> 
 </ui:composition>  

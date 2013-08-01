@@ -1,11 +1,10 @@
 @CHARSET "UTF-8";
 
-
 /* 
  *  GUI Specific Rules : MenuBar
  *
  */
-.siteMenuBarWidgetContent {
+.site-menu-bar-widget-content {
   position: absolute;
   top: 38px;
   background-color: #fff;
@@ -17,11 +16,11 @@
   border: 1px solid #eee;
 }
 
-.siteMenuBarWidgetContentActive {
+.site-menu-bar-widget-content-active {
   display: block;
 }
 
-.siteMenuBarWidgetNotification {
+.site-menu-bar-widget-notification {
   position: absolute;
   top: 4px;
   left: 4px;
@@ -39,59 +38,55 @@
   vertical-align: top;
 }
 
-#siteMenuBar { /* Wraps the site's menubar */
+#site-menu-bar { /* Wraps the site's menubar */
   padding: 0 0 0 60px;
   height: 39px;
   line-height: 1.7em;
 }
 
-#siteMenuBarFirstColumn { /* Menu Bar's 1st column */
+#site-menu-bar-first-column { /* Menu Bar's 1st column */
   float: left;
 }
 
-.siteMenuBarWidget {
+.site-menu-bar-widget {
   background-repeat: no-repeat;
   background-color: #fff;
   position: relative;
 }
 
-#siteMenuBarFirstColumn .siteMenuBarWidget {
+#site-menu-bar-first-column .site-menu-bar-widget {
   background-position: 8px 9px;
 }
 
-#siteMenuBarFirstColumn>div.siteMenuBarWidgetDisabled>a {
+#site-menu-bar-first-column>div.site-menu-bar-widget-disabled>a {
   color: #555;	
 }
 
-#siteMenuBarFirstColumn #siteMenuBarWidgetIndex {
+#site-menu-bar-first-column #site-menu-bar-widget-index {
   background-image: url('../gfx/icons/22x22/places/index.png');
 }
 
-#siteMenuBarFirstColumn #siteMenuBarWidgetForge {
+#site-menu-bar-first-column #site-menu-bar-widget-forge {
   background-image: url('../gfx/icons/22x22/places/forge.png');
 }
 
-#siteMenuBarFirstColumn #siteMenuBarWidgetIllusion {
+#site-menu-bar-first-column #site-menu-bar-widget-illusion {
   background-image: url('../gfx/icons/22x22/places/illusion.png');
 }
 
-#siteMenuBarFirstColumn #siteMenuBarWidgetIllusion.siteMenuBarWidgetDisabled {
+#site-menu-bar-first-column #site-menu-bar-widget-illusion.site-menu-bar-widget-disabled {
   background-image: url('../gfx/icons/22x22/places/illusion_gray.jpg');
 }
 
-#siteMenuBarFirstColumn #siteMenuBarWidgetStore {
+#site-menu-bar-first-column #site-menu-bar-widget-store {
   background-image: url('../gfx/icons/22x22/places/store.png');
 }
 
-#siteMenuBarFirstColumn #siteMenuBarWidgetStore.siteMenuBarWidgetDisabled {
-  background-image: url('../gfx/icons/22x22/places/store_gray.jpg');
-}
-
-#siteMenuBarFirstColumn #siteMenuBarWidgetForum {
+#site-menu-bar-first-column #site-menu-bar-widget-forum {
   background-image: url('../gfx/icons/22x22/places/forum.png');
 }
 
-#siteMenuBarFirstColumn>div>a {
+#site-menu-bar-first-column>div>a {
   font-family: 'Yanone Kaffeesatz', 'Trebuchet MS', Arial;
   text-decoration: none;
   color: #5076bc;
@@ -99,11 +94,11 @@
   font-weight: 200;
 }
 
-#siteMenuBarFirstColumn>div>a:hover {
+#site-menu-bar-first-column>div>a:hover {
   color: #000;
 }
 
-#siteMenuBarFirstColumn div.siteMenuBarWidget { /* Generic rules for the 1st column's Menu Bar Widgets */
+#site-menu-bar-first-column div.site-menu-bar-widget { /* Generic rules for the 1st column's Menu Bar Widgets */
   padding: 7px 15px 7px 40px;
   margin: 0 4px 0 4px;
   border-bottom-right-radius: 5px;
@@ -115,49 +110,17 @@
   float: left;
 }
 
-#siteMenuBarSecondColumn { /* Menu Bar's 2nd column */
+#site-menu-bar-second-column { /* Menu Bar's 2nd column */
   float: left;
   margin-left: 20px;
 }
 
-#siteMenuBarSecondColumn div.siteMenuBarWidgetLoading {
+#site-menu-bar-second-column div.site-menu-bar-widget-loading {
   background-position: 4px center !important; 
   background-image: url('../gfx/layout/loader-orange-16x16.png') !important;
 }
 
-#siteMenuBarSecondColumn #siteMenuBarWidgetMessages {
-  background-image: url('../gfx/icons/custom/messages_menubarwidget.jpg');
-}
-
-#siteMenuBarSecondColumn #siteMenuBarWidgetMessages.siteMenuBarWidgetDisabled {
-  background-image: url('../gfx/icons/custom/messages_gray_menubarwidget.jpg');
-}
-
-#siteMenuBarSecondColumn #siteMenuBarWidgetChat {
-  background-image: url('../gfx/icons/custom/chat_menubarwidget.jpg');
-}
-
-#siteMenuBarSecondColumn #siteMenuBarWidgetChat.siteMenuBarWidgetDisabled {
-  background-image: url('../gfx/icons/custom/chat_gray_menubarwidget.jpg');
-}
-
-#siteMenuBarSecondColumn #siteMenuBarWidgetFriends {
-  background-image: url('../gfx/icons/custom/friends_menubarwidget.jpg');
-}
-
-#siteMenuBarSecondColumn #siteMenuBarWidgetFriends.siteMenuBarWidgetDisabled {
-  background-image: url('../gfx/icons/custom/friends_gray_menubarwidget.jpg');
-}
-
-#siteMenuBarSecondColumn #siteMenuBarWidgetCalendar {
-  background-image: url('../gfx/icons/custom/calendar_menubarwidget.jpg');
-}
-
-#siteMenuBarSecondColumn #siteMenuBarWidgetCalendar.siteMenuBarWidgetDisabled {
-  background-image: url('../gfx/icons/custom/calendar_gray_menubarwidget.jpg');
-}
-
-#siteMenuBarSecondColumn>div>a {
+#site-menu-bar-second-column>div>a {
   font-family: 'Yanone Kaffeesatz', 'Trebuchet MS', Arial;
   text-decoration: none;
   color: #dc6626;
@@ -165,15 +128,15 @@
   font-weight: 200;
 }
 
-#siteMenuBarSecondColumn>div.siteMenuBarWidgetDisabled>a {
+#site-menu-bar-second-column>div.site-menu-bar-widget-disabled>a {
   color: #555;	
 }
 
-#siteMenuBarSecondColumn>div>a:hover {
+#site-menu-bar-second-column>div>a:hover {
   color: #000;
 }
 
-#siteMenuBarSecondColumn div.siteMenuBarWidget { /* Generic rules for the 2nd column's Menu bar */
+#site-menu-bar-second-column div.site-menu-bar-widget { /* Generic rules for the 2nd column's Menu bar */
   background-color: #fff;
   background-position: 0px 9px;
   background-repeat: no-repeat;
@@ -188,7 +151,7 @@
   float: left;
 }
 
-#siteMenuBarSecondColumn div.siteMenuBarWidget.siteMenuBarWidgetActive {
+#site-menu-bar-second-column div.site-menu-bar-widget.site-menu-bar-widget-active {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   height: 31px;
@@ -196,599 +159,36 @@
   z-index: 1000;
 }
 
-/* Chat */
-
-#siteMenuBarWidgetChatContent {
-  width: 600px;
-  height: 402px;
-}
-
-#siteMenuBarWidgetChatTabsContainer {
-  border: 1px solid #ccc;
-  margin: 2px;
-  position: absolute;
-  right: 204px;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  border-radius: 5px;
-}
-
-#siteMenuBarWidgetChatTabsContainer.ui-tabs .ui-tabs-panel {
-  border: 0px;
-}
-
-#siteMenuBarWidgetChatTabsContainer.ui-tabs .ui-tabs-nav {
-  padding-top: 2px;
-  padding-bottom: 2px;
-  padding-left: 0px;
-  padding-right: 0px;
-  background: #fff;
-  border: 0px;
-  width: 100%;
-}
-
-.siteMenuBarWidgetChatTabStatus {
-  display: inline-block;
-  font-size: 12px;
-  line-height: 12px;
-  vertical-align: top;
-  padding-right: 5px;
-  padding-left: 5px;
-  padding-top: 3px;
-  padding-bottom: 2px;
-  color: #fff;
-  border-radius: 6px;
-  font-family: courier;
-  margin-top: -2px;
-  margin-left: 4px;
-  min-width: 7px;
-  height: 12px;
-  margin-left: 1px;
-  margin-bottom: 3px;
-  margin-top: 3px;
-  margin-right: 3px;
-}
-
-.siteMenuBarWidgetChatTabStatusMessages {
-  background:#00d;
-}
-
-.siteMenuBarWidgetChatTabStatusNewCount {
-  
-}
-
-.ui-state-hover .siteMenuBarWidgetChatTabStatus {
-  background-color: #ccc;
-  cursor: pointer;
-  background-image: url('../gfx/icons/custom/close-tab.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  border: 1px solid #000;
-  margin-left: 0px;
-  margin-bottom: 2px;
-  margin-top: 2px;
-  margin-right: 2px;
-}
-
-.siteMenuBarWidgetChatTabStatusOnline {
-  background-image: url('../gfx/icons/16x16/actions/chat-status-online.png');
-  background-repeat: no-repeat;
-  background-position: left bottom;
-}
-
-.siteMenuBarWidgetChatTabStatusOffline {
-  background-image: url('../gfx/icons/16x16/actions/chat-status-offline.png');
-  background-repeat: no-repeat;
-  background-position: left bottom;
-}
-
-.siteMenuBarWidgetChatTabStatusAway {
-  background-image: url('../gfx/icons/16x16/actions/chat-status-away.png');
-  background-repeat: no-repeat;
-  background-position: left bottom;
-}
-
-.siteMenuBarWidgetChatTabStatusBusy {
-  background-image: url('../gfx/icons/16x16/actions/chat-status-busy.png');
-  background-repeat: no-repeat;
-  background-position: left bottom;
-}
-
-.siteMenuBarWidgetChatTabStatusUnreadMessages {
-  background-color: #00d;
-  background-image: none;
-}
-
-.ui-state-hover .siteMenuBarWidgetChatTabStatus:hover {
-  background-color: #ddd;
-}
-
-.ui-state-hover .siteMenuBarWidgetChatTabStatus .siteMenuBarWidgetChatTabStatusNewCount {
-  display: none;
-}
-
-#siteMenuBarWidgetChatOnlineFriendsContainer {
-  border: 1px solid #ccc;
-  width: 200px;
-  margin: 2px;
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  bottom: 0px;
-  overflow-y: scroll;
-  border-radius: 5px;
-}
-
-.siteMenuBarWidgetChatNoFriendsOnline {
-  font-style: italic;
-  text-align: center;
-  margin-top: 12px;
-}
-
-
-.siteMenuBarWidgetChatOnlineFriendContainer {
-  padding: 4px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.siteMenuBarWidgetChatOnlineFriendContainer:hover {
-  color: #fff;
-  background: #7197DC;
-}
-
-.siteMenuBarWidgetChatOnlineFriendStatus {
-  height: 16px;
-  width: 16px;
-  display: inline-block;
-  background-repeat: no-repeat;
-  vertical-align: middle;
-}
-
-.siteMenuBarWidgetChatOnlineFriendStatusOnline {
-	background-image: url('../gfx/icons/16x16/actions/chat-status-online.png');
-}
-
-.siteMenuBarWidgetChatOnlineFriendStatusAway {
-  background-image: url('../gfx/icons/16x16/actions/chat-status-away.png');
-}
-
-.siteMenuBarWidgetChatOnlineFriendStatusBusy {
-  background-image: url('../gfx/icons/16x16/actions/chat-status-busy.png');
-}
-
-.siteMenuBarWidgetChatOnlineFriendImage>img {
-  vertical-align: middle;
-}
-
-.siteMenuBarWidgetChatOnlineFriendName {
-  height: 20px;
-  font-weight: bold;
-  display: inline-block; 
-  margin-left: 4px;
-}
-
-#siteMenuBarWidgetChatTabsContainer.ui-tabs .ui-tabs-panel {
-  padding: 0px;
-  margin: 0px;
-}
-
-.siteMenuBarWidgetChatMessagesContainer {
-  height: 280px;
-  overflow-y: scroll;
-}
-
-.siteMenuBarWidgetChatInstructions {
-	padding: 8px;
-}
-
-.siteMenuBarWidgetChatWelcomeTitle {
-  font-weight: bold;
-  margin: 2px;
-}
-
-.siteMenuBarWidgetChatWelcomeText {
-  margin-left: 2px;
-  margin-right: 2px;
-  margin-top: 6px;
-}
-
-.siteMenuBarWidgetChatMessage {
-  padding: 4px;
-  position: relative;
-  min-height: 42px;  
-  background: #fafaf5;
-  border-radius: 3px;
-  margin-right: 2px; 
-  padding-right: 40px;
-  border: 1px solid #ddd;
-  margin-bottom: 4px;
-}
-
-.siteMenuBarWidgetChatSentMessage {
-  background: #f3f3f0;
-}
-
-.siteMenuBarWidgetChatMessageContent {
- word-wrap: break-word;	
-}
-
-.siteMenuBarWidgetChatMessageSenderImage {
-  margin-top: 6px;
-  position: absolute;
-  right: 4px;
-}
-
-.siteMenuBarWidgetChatMessageDate {
-  display: inline;
-  font-style: italic;
-  vertical-align: top;
-}
-
-.siteMenuBarWidgetChatMessageDate:after {
-  content: ' - ';
-}
-
-.siteMenuBarWidgetChatMessageTime {
-  display: inline;
-  font-style: italic;
-  vertical-align: top;
-}
-
-.siteMenuBarWidgetChatMessageSenderName {
-  display: inline;
-  font-weight: bold;
-  vertical-align: top;
-  margin-left: 4px;
-}
-
-.siteMenuBarWidgetChatStatus {
-  padding: 4px;
-  font-style: italic;
-  color: #000;
-}
-
-.siteMenuBarWidgetChatStatusDate {
-  display: inline;
-}
-
-.siteMenuBarWidgetChatStatusDate:after {
-  content: ' - ';
-}
-
-.siteMenuBarWidgetChatStatusTime {
-  display: inline;
-}
-
-.siteMenuBarWidgetChatStatusText {
-  display: inline;
-  margin-left: 4px;
-}
-
-.siteMenuBarWidgetChatStatusOnline {
-  color: #0a0;
-}
-
-.siteMenuBarWidgetChatStatusAway {
-  color: #aa0;
-}
-
-.siteMenuBarWidgetChatStatusOffline {
-  color: #666;
-}
-
-.siteMenuBarWidgetChatEditorContainer {
-  height: 82px;
-}
-
-.siteMenuBarWidgetChatEditor:focus {
-	border: 1px solid #5076BC;
-}
-
-.siteMenuBarWidgetChatEditor {
-  width: 299px;
-  height: 71px;
-  margin-top: 3px;
-  margin-left: 1px;
-  margin-bottom: 3px;
-  float: left;
-  padding: 2px;
-  resize:none;
-}
-
-.siteMenuBarWidgetChatSendButton {
-  float: left;
-  display: block;
-  width: 77px;
-  height: 77px; 
-  margin-top: 3px;
-  margin-left: 2px;
-  margin-bottom: 3px;
-}
-
-/* Friends */
-
-#siteMenuBarWidgetFriendsContent {
-  width: 600px;
-  height: 430px;
-  padding: 4px;
-  border-radius: 4px;
-}
-
-#siteMenuBarWidgetFriendsContent .ui-tabs-panel {
-  height: 384px;
-  padding: 4px;
-}
-
-#sitemenubarfriendswidget-list {
-  overflow: auto;
-}
-
-.sitemenubarfriendswidgetSuggestMore {
-  position: absolute;
-  left:12px;
-  bottom: 12px;
-}
-
-.siteMenuBarFriendsWidgetFriendContainer {
-  border-radius: 5px;
-  padding: 4px;
-  position: relative;
-  cursor: default;
-}
-
-.siteMenuBarFriendsWidgetFriendContainer:hover {
-  background: #fafafa;
-}
-
-.siteMenuBarFriendsWidgetFriendImageContainer {
-  display: table;
-  width: 64px;
-  height: 64px;
-  border: 1px solid #eee;
-  padding: 8px;
-}
-
-.siteMenuBarFriendsWidgetFriendImageInnerContainer {
-  width: 64px;
-  height: 64px;
-  vertical-align: middle;
-  text-align: center;  
-  display: table-cell;
-}
-
-.siteMenuBarFriendsWidgetFriendImageInnerContainer img {
-  vertical-align: top;  
-}
-
-.siteMenuBarFriendsWidgetFriendImageNone {
-  width: 64px;
-  height: 64px;  
-  background-image: url("../gfx/icons/64x64/actions/profile-anonymous.png");
-}
-
-.siteMenuBarFriendsWidgetFriendName {
-  font-size: 14px;
-  left: 100px;
-  position: absolute;
-  top: 0px;
-}
-
-.siteMenuBarFriendsWidgetFriendMutualFriends {
-  left: 100px;
-  position: absolute;
-  top: 24px;
-  color: #666;
-}
-
-.siteMenuBarFriendsWidgetRemoveFriendLink {
-  left: 100px;
-  position: absolute;
-  top: 20px;
-}
-
-.siteMenuBarFriendsWidgetFriendAddLink {
-  left: 100px;
-  position: absolute;
-  top: 42px;
-}
-
-#sitemenubarfriendswidget-add {
-  overflow: auto;
-  overflow-y: scroll;
-}
-
-.siteMenuBarFriendsWidgetInviteFriendsProviderInfo {
-  cursor: pointer;
-  border-radius: 5px;
-  padding: 8px;
-}
-
-.siteMenuBarFriendsWidgetInviteFriendsProviderInfo:hover {
-  background: #fafafa;
-}
-
-.siteMenuBarFriendsWidgetInviteFriendsProviderNoStoreText {
-  font-style: italic;
-  color: #666;
-}
-
-.siteMenuBarFriendsWidgetInviteFriendsProviderImage {
-  width: 32px;
-  height: 32px;
-  background-repeat: no-repeat;
-  background-position: center; 
-  display: inline-block;
-  vertical-align: top;
-}
-
-.siteMenuBarFriendsWidgetInviteFriendsProviderText {
-  font-style: italic;
-  display: inline-block;
-  vertical-align: top;
-  margin-left: 6px;
-}
-
-.siteMenuBarFriendsWidgetInviteFriendsProviderOptions {
-  padding-left: 8px;
-}
-
-.siteMenuBarFriendsWidgetInviteFriendsProviderOptions input[type="text"] {
-  margin-bottom: 8px;
-}
-
-#siteMenuBarFriendsWidgetInviteFriendsProviderGoogle .siteMenuBarFriendsWidgetInviteFriendsProviderImage {
-  background-image: url("../gfx/icons/32x32/actions/contacts-import-google.png");
-}
-
-#siteMenuBarFriendsWidgetInviteFriendsProviderYahoo .siteMenuBarFriendsWidgetInviteFriendsProviderImage {
-  background-image: url("../gfx/icons/32x32/actions/contacts-import-yahoo.png");
-}
-
-#siteMenuBarFriendsWidgetInviteFriendsProviderEmail .siteMenuBarFriendsWidgetInviteFriendsProviderImage {
-  background-image: url("../gfx/icons/32x32/actions/contacts-import-mail.png");
-}
-
-#siteMenuBarFriendsWidgetInviteFriendsProviderFacebook .siteMenuBarFriendsWidgetInviteFriendsProviderImage {
-  background-image: url("../gfx/icons/32x32/actions/contacts-import-facebook.png");
-}
-
-/* Calendar */
-
-#siteMenuBarWidgetCalendarContent {
-  background-color: #fff;
-  height: 250px;
-  width: 240px;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker {
-  border: 0px;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker tfoot {
-  display: none;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker thead th {
-  font-weight: bold;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker thead th:nth-child(2) {
-  text-align: center;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker td {
-  width: 33px;
-  height: 27px;
-  background: #fafafa;
-  color: #000;
-  border-radius: 3px;
-  border: 0px;
-  cursor: pointer;
-  text-align: center;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker td.nclick_outbound {
-  background: #fafafa;
-  color: #999;
-  cursor: default;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker td:hover {
-  background: #4D6CA3;
-  color: #fff;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker td.wday {
-  font-weight: bold;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker td.wday:hover {
-  background: #fafafa;
-  color: #000;
-  cursor: default;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker td.nclick_outbound:hover {
-  background: #fafafa;
-  color: #999;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker td.siteMenuBarWidgetCalendarCellPrivateEvents {
-  background-color: #4DA36C;
-  color: #fff;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker td.siteMenuBarWidgetCalendarCellPrivateEvents:hover {
-  background-color: #1D733C;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker td.siteMenuBarWidgetCalendarCellPublicEvents {
-  background-color: #d0bf62;
-  color: #fff;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker td.siteMenuBarWidgetCalendarCellPublicEvents:hover {
-  background-color: #b08f32;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker td.siteMenuBarWidgetCalendarCellPublicEvents.siteMenuBarWidgetCalendarCellPrivateEvents {
-  background-color: #00bf62;
-  background-image: -moz-linear-gradient(#4DA36C 0%, #d0bf62 100%);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#d0bf62), to(#d0bf62) );
-  -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4DA36C, endColorstr=#d0bf62 );
-  color: #fff;
-}
-
-#siteMenuBarWidgetCalendarContent .datepicker td.siteMenuBarWidgetCalendarCellPublicEvents.siteMenuBarWidgetCalendarCellPrivateEvents:hover {
-  background-color: #008f32;
-  background-image: -moz-linear-gradient(#1D733C 0%, #b08f32 100%);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#1D733C), to(#b08f32) );
-  -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#1D733C, endColorstr=#b08f32 );
-}
-
-#siteMenuBarWidgetCalendarContent  div.datepicker table {
-  width: 232px;
-  margin: 5px;
-  border-collapse: separate;
-  border-spacing: 3px;
-}
-
-#siteMenuBarWidgetCalendarContent div.datepicker table thead tr th {
-  background: none;
-}
-
-#siteMenuBarThirdColumn { /* Menu Bar's 3rd column */
+#site-menu-bar-third-column { /* Menu Bar's 3rd column */
   float: right;
   margin-right: 15px;
 }
 
-#siteMenuBarThirdColumn>div.siteMenuBarWidgetDisabled>a {
+#site-menu-bar-third-column>div.site-menu-bar-widget-disabled>a {
   color: #555;	
 }
 
-#siteMenuBarThirdColumn #siteMenuBarWidgetSearch {
+#site-menu-bar-third-column #site-menu-bar-widget-search {
   background-image: url('../gfx/icons/custom/search_menubarwidget.jpg');
 }
-#siteMenuBarThirdColumn #siteMenuBarWidgetSearch.siteMenuBarWidgetDisabled {
+#site-menu-bar-third-column #site-menu-bar-widget-search.site-menu-bar-widget-disabled {
   background-image: url('../gfx/icons/custom/search_gray_menubarwidget.jpg');
 }
 
-#siteMenuBarThirdColumn #siteMenuBarWidgetLogin {
+#site-menu-bar-third-column #site-menu-bar-widget-login {
   background-image: url('../gfx/icons/custom/login_menubarwidget.png');
   background-position: 8px center;
 }
 
-#siteMenuBarThirdColumn #siteMenuBarWidgetAccount {
+#site-menu-bar-third-column #site-menu-bar-widget-account {
   background-image: url('../gfx/icons/custom/account_menubarwidget.jpg');
 }
 
-#siteMenuBarThirdColumn #siteMenuBarWidgetHelp.siteMenuBarWidgetDisabled {
+#site-menu-bar-third-column #site-menu-bar-widget-help.site-menu-bar-widget-disabled {
   background-image: url('../gfx/icons/custom/help_gray_menubarwidget.jpg');
 }
 
-#siteMenuBarThirdColumn>div>a {
+#site-menu-bar-third-column>div>a {
   font-family: 'Yanone Kaffeesatz', 'Trebuchet MS', Arial;
   text-decoration: none;
   color: #5076bc;
@@ -796,11 +196,11 @@
   font-weight: 200;
 }
 
-#siteMenuBarThirdColumn>div>a:hover {
+#site-menu-bar-third-column>div>a:hover {
   color: #000;
 }
 
-#siteMenuBarThirdColumn div.siteMenuBarWidget { /* Generic rules for 3rd column's Menu Bar Widgets */
+#site-menu-bar-third-column div.site-menu-bar-widget { /* Generic rules for 3rd column's Menu Bar Widgets */
   background-color: #fff;
   background-position: 0px 9px;
   background-repeat: no-repeat;
@@ -818,7 +218,7 @@
   float: left;
 }
 
-#siteMenuBarThirdColumn div.siteMenuBarWidget.siteMenuBarWidgetActive {
+#site-menu-bar-third-column div.site-menu-bar-widget.site-menu-bar-widget-active {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   height: 31px;
@@ -826,7 +226,7 @@
   z-index: 1000;
 }
 
-#siteMenuBarThirdColumn div#siteMenuBarWidgetLocale { /* Overriding locale link's padding */
+#site-menu-bar-third-column div#site-menu-bar-widget-locale { /* Overriding locale link's padding */
   padding-left: 15px;
   padding-top: 4px;
   padding-right: 15px;
@@ -834,47 +234,15 @@
   text-transform: uppercase;
 }
 
-/* Search */
-
-#siteMenuBarWidgetSearchContent {
-  width: 310px;
-  padding: 8px;
-}
-
-#siteMenuBarWidgetSearchResultsContainer .match {
-  font-weight: bold;
-}
-
-.siteMenuBarWidgetSearchResultTitle {
-  display: block;
-  color: #5076BC;
-  text-decoration: none;
-}
-
-.siteMenuBarWidgetSearchInput {
-  width: 304px;
-}
-
-#siteMenuBarWidgetSearchResultsContainer li {
-  margin-bottom: 4px;
-  padding: 4px;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-#siteMenuBarWidgetSearchResultsContainer li:hover {
-  background: #f0f0f0;
-}
-
 /* Account */
 
-#siteMenuBarWidgetAccountContent {
+#site-menu-bar-widget-account-content {
   min-height: 20px;
   padding: 8px;
   width: 250px;
 }
 
-#siteMenuBarWidgetAccountContent li>a {
+#site-menu-bar-widget-account-content li>a {
   color: #000;
   padding-left: 4px;
   padding-bottom: 4px;
@@ -883,22 +251,16 @@
   border-radius: 3px;
   cursor: pointer;
   display: block;
-}
-
-#siteMenuBarWidgetAccountContent li>a {
   color: #4D6CA3;
   text-decoration: none;
 }
 
-#siteMenuBarWidgetAccountContent li>a:hover {
+#site-menu-bar-widget-account-content li>a:hover {
   background: #7197DC;
-}
-
-#siteMenuBarWidgetAccountContent li>a:hover {
   color: #fff;
 }
 
-#siteMenuBarWidgetAccountContent li>b {
+#site-menu-bar-widget-account-content li>b {
   color: #4D6CA3; 
   padding-left: 4px;
   padding-bottom: 4px;
@@ -909,45 +271,55 @@
   display: block;
 }
 
-#siteMenuBarWidgetAccountContent li>b:after {
+#site-menu-bar-widget-account-content li>b:after {
   content: '▶';
   float: right;
 }
 
-#siteMenuBarWidgetAccountContent li>ul>li {
+#site-menu-bar-widget-account-content li>ul>li {
   display: none;
   padding-left: 8px;
 } 
 
-#siteMenuBarWidgetAccountContent li:hover>ul>li {
+#site-menu-bar-widget-account-content li:hover>ul>li {
   display: block;
 }
 
 /* Locale */
 
-#siteMenuBarWidgetLocaleContent {
+#site-menu-bar-widget-locale-content {
   width: 250px;
   min-height: 20px;
   padding: 8px;
+  right: 15px;
 }
 
-#siteMenuBarWidgetLocaleContent>span {
+#site-menu-bar-widget-locale-content>span {
   color: #000;
   padding-left: 4px;
   display: block;
   padding-bottom: 4px;
 }
 
-#siteMenuBarWidgetLocaleContent li {
+#site-menu-bar-widget-locale-content li {
   padding-top: 4px;
   padding-bottom: 4px;
-  color: #4D6CA3;
   padding: 4px;
   border-radius: 3px;
   cursor: pointer;
 }
 
-#siteMenuBarWidgetLocaleContent li:hover {
-  color: #fff;
+#site-menu-bar-widget-locale-content li a {
+  color: #4D6CA3;
+  text-decoration: none;
+  width: 100%;
+  display: block;
+}
+
+#site-menu-bar-widget-locale-content li:hover {
   background: #7197DC;
+}
+
+#site-menu-bar-widget-locale-content li:hover a {
+  color: #fff;
 }
