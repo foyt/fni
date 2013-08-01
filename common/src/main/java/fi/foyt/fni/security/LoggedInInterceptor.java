@@ -12,9 +12,9 @@ import fi.foyt.fni.session.SessionController;
 @LoggedIn
 @Interceptor
 public class LoggedInInterceptor implements Serializable {
-	
+
 	private static final long serialVersionUID = -4809267710739056756L;
-	
+
 	@Inject
 	private SessionController sessionController;
 
