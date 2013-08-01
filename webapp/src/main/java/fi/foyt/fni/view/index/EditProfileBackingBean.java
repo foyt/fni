@@ -27,9 +27,9 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Named
 @URLMappings(mappings = {
   @URLMapping(
-		id = "edit-profile", 
+		id = "users-edit-profile", 
 		pattern = "/editprofile", 
-		viewId = "/editprofile.jsf"
+		viewId = "/users/editprofile.jsf"
   )
 })
 public class EditProfileBackingBean {
@@ -89,7 +89,7 @@ public class EditProfileBackingBean {
 		userController.updateLastName(sessionController.getLoggedUser(), getBasicLastName());
 		userController.updateNickname(sessionController.getLoggedUser(), getBasicNickname());
 		
-		FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("root.editProfile.basicSaved"));
+		FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.basicSaved"));
 	}
 
 	public String getQuotaUsage() {

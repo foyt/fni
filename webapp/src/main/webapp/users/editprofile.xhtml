@@ -6,7 +6,7 @@
     template="/WEB-INF/templates/root.xhtml">
     
   <ui:define name="pageTitle">
-    #{locales['root.editProfile.pageTitle']}
+    #{locales['users.editProfile.pageTitle']}
   </ui:define>
   
   <ui:define name="head">
@@ -26,53 +26,53 @@
   <ui:define name="content">
     <div id="edit-profile">
       <h2>
-        #{locales['root.editProfile.pageTitle']}
+        #{locales['users.editProfile.pageTitle']}
       </h2>
         
       <div id="edit-profile-tabs">
         <ul class="edit-profile-tab-labels">
-          <li><a href="#basic">#{locales['root.editProfile.basicTabLabel']}</a></li>
-          <li><a href="#quota">#{locales['root.editProfile.quotaTabLabel']}</a></li>
-          <li style="display: none"><a href="#auth-sources">#{locales['root.editProfile.authSourcesTabLabel']}</a></li>
-          <li style="display: none"><a href="#notifications">#{locales['root.editProfile.notificationsTabLabel']}</a></li>
-          <li style="display: none"><a href="#chat">#{locales['root.editProfile.chatTabLabel']}</a></li>
+          <li><a href="#basic">#{locales['users.editProfile.basicTabLabel']}</a></li>
+          <li><a href="#quota">#{locales['users.editProfile.quotaTabLabel']}</a></li>
+          <li style="display: none"><a href="#auth-sources">#{locales['users.editProfile.authSourcesTabLabel']}</a></li>
+          <li style="display: none"><a href="#notifications">#{locales['users.editProfile.notificationsTabLabel']}</a></li>
+          <li style="display: none"><a href="#chat">#{locales['users.editProfile.chatTabLabel']}</a></li>
         </ul>
         
         <div id="basic">
-          <h3>#{locales['root.editProfile.basicTitle']}</h3>
+          <h3>#{locales['users.editProfile.basicTitle']}</h3>
           <h:form>
             <div class="edit-profile-basic-profile-image-container">
              <h:graphicImage value="/users/profileImages/#{sessionBackingBean.loggedUser.id}?width=128&amp;height=128" />
-             <button>#{locales['root.editProfile.basicChangeProfileImage']}</button>
+             <button>#{locales['users.editProfile.basicChangeProfileImage']}</button>
             </div>
             <div>
-              <h:outputLabel value="#{locales['root.editProfile.basicFirstNameTitle']}"/>
+              <h:outputLabel value="#{locales['users.editProfile.basicFirstNameTitle']}"/>
               <h:inputText value="#{editProfileBackingBean.basicFirstName}" />
             </div>
             <div>
-              <h:outputLabel value="#{locales['root.editProfile.basicLastNameTitle']}"/>
+              <h:outputLabel value="#{locales['users.editProfile.basicLastNameTitle']}"/>
               <h:inputText value="#{editProfileBackingBean.basicLastName}" />
             </div>
             <div>
-              <h:outputLabel value="#{locales['root.editProfile.basicNicknameTitle']}"/>
+              <h:outputLabel value="#{locales['users.editProfile.basicNicknameTitle']}"/>
               <h:inputText value="#{editProfileBackingBean.basicNickname}" />
             </div>
             <div>
-              <h:commandButton action="#{editProfileBackingBean.basicSave}" value="#{locales['root.editProfile.basicSave']}" />
+              <h:commandButton action="#{editProfileBackingBean.basicSave}" value="#{locales['users.editProfile.basicSave']}" />
             </div>
           </h:form>
         </div> 
 
         <div id="quota">
-          <h3>#{locales['root.editProfile.quotaTitle']}</h3>
+          <h3>#{locales['users.editProfile.quotaTitle']}</h3>
           <div>
-            <h:outputFormat rendered="#{editProfileBackingBean.quotaExceeded}" value="#{locales['root.editProfile.quotaUsage']}" styleClass="edit-profile-quota">
+            <h:outputFormat rendered="#{editProfileBackingBean.quotaExceeded}" value="#{locales['users.editProfile.quotaUsage']}" styleClass="edit-profile-quota">
               <f:param value="#{editProfileBackingBean.quotaUsage}" />         
               <f:param value="#{editProfileBackingBean.quotaReserved}" />            
               <f:param value="#{editProfileBackingBean.quotaPercent}" />         
             </h:outputFormat>
             
-            <h:outputFormat rendered="#{!editProfileBackingBean.quotaExceeded}" value="#{locales['root.editProfile.quotaUsage']}" styleClass="edit-profile-quota edit-profile-quota-exceeded">
+            <h:outputFormat rendered="#{!editProfileBackingBean.quotaExceeded}" value="#{locales['users.editProfile.quotaUsage']}" styleClass="edit-profile-quota edit-profile-quota-exceeded">
               <f:param value="#{editProfileBackingBean.quotaUsage}" />         
               <f:param value="#{editProfileBackingBean.quotaReserved}" />            
               <f:param value="#{editProfileBackingBean.quotaPercent}" />         
