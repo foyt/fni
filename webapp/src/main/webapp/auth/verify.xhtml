@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="/WEB-INF/templates/auth.xhtml">
+ 
+    <ui:define name="pageTitle">
+      #{locales['auth.verification.pageTitle']}
+    </ui:define>
+    
+    <ui:define name="head">
+      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/login.css"/>
+    </ui:define>
+    
+    <ui:define name="content">
+      <div class="registration-verification-container">
+        <div>#{locales['auth.verification.message']}</div>
+      </div>
+    </ui:define>
+
+</ui:composition>
