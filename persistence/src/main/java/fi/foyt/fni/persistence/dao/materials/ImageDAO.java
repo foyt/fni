@@ -1,21 +1,19 @@
 package fi.foyt.fni.persistence.dao.materials;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import fi.foyt.fni.persistence.model.materials.Image_;
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Image;
+import fi.foyt.fni.persistence.model.materials.Image_;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.users.User;
 
@@ -74,15 +72,10 @@ public class ImageDAO extends GenericDAO<Image> {
     return image;
   }
 
-  public Image updateData(Image image, User modifier, String data) {
+  public Image updateData(Image image, User modifier, byte[] data) {
     EntityManager entityManager = getEntityManager();
 
-    try {
-      image.setData(data.getBytes("UTF-8"));
-    } catch (UnsupportedEncodingException e) {
-      throw new PersistenceException(e);
-    }
-
+    image.setData(data);
     image.setModified(new Date());
     image.setModifier(modifier);
 
@@ -90,15 +83,15 @@ public class ImageDAO extends GenericDAO<Image> {
     return image;
   }
 
-  public Image updateContentType(Image document, User modifier, String contentType) {
+  public Image updateContentType(Image image, User modifier, String contentType) {
     EntityManager entityManager = getEntityManager();
 
-    document.setContentType(contentType);
-    document.setModified(new Date());
-    document.setModifier(modifier);
+    image.setContentType(contentType);
+    image.setModified(new Date());
+    image.setModifier(modifier);
     
-    document = entityManager.merge(document);
-    return document;
+    image = entityManager.merge(image);
+    return image;
   }
 
 }
