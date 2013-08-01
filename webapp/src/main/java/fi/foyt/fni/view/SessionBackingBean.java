@@ -7,6 +7,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang.LocaleUtils;
+
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 
@@ -28,6 +30,10 @@ public class SessionBackingBean {
 	
 	public Locale getLocale() {
 		return sessionController.getLocale();
+	}
+	
+	public void changeLanguage(String language) {
+		sessionController.setLocale(LocaleUtils.toLocale(language));
 	}
 	
 }
