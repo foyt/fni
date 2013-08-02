@@ -6,6 +6,8 @@
     template="/WEB-INF/templates/root.xhtml">
     
     <ui:define name="head">
+      <!-- View specific -->
+    
       <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/index.css"/>
     </ui:define>   
     
@@ -15,7 +17,7 @@
     
     <ui:define name="siteHeader">
       <!-- Site's Header -->
-      <div id="siteHeaderWrapper" class="index-header-wrapper">
+      <div class="index-header-wrapper">
         <ui:fragment rendered="#{!sessionController.loggedIn}">
           <div id="index-header-login-register-wrapper">
             <div id="index-header-login"><span class="index-header-big-font"><a href="#{request.contextPath}/login">#{locales['root.indexPage.headerLoginLink']}</a></span> #{locales['root.indexPage.headerLoginHint']}</div>

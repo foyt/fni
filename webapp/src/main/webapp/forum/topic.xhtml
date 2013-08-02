@@ -8,18 +8,15 @@
 
   <ui:define name="pageTitle">Forum</ui:define>
   <ui:define name="head">
-    <!-- jQuery -->
-
-    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.2.js"></script>
-    
     <!-- CKEditor -->
     
     <script type="text/javascript" charset="utf8" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/ckeditor.js"></script>
     
-    <!-- View Scripts -->
+    <!-- View Specific -->
 
     <h:outputScript name="scripts/gui/forum/ckconfig.js"></h:outputScript>
     <h:outputScript name="scripts/gui/forum/topic.js"></h:outputScript>
+    <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/forum.css"/>
   </ui:define>
   <ui:define name="content">
     <h:form>

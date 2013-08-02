@@ -1,47 +1,7 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  template="/WEB-INF/templates/view.xhtml">
 
-<f:view locale="#{sessionBackingBean.locale}">
-  <ui:insert name="metadata" />
-
-  <h:head>
-    <title><ui:insert name="pageTitle"></ui:insert></title>
-    <script type="text/javascript">
-      var LOCALE = '#{sessionBackingBean.locale.language}';
-      var CONTEXTPATH = '#{request.contextPath}';
-      var THEMEPATH = '#{request.contextPath}/themes/novus/';
-    </script>
-    
-    <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/common.css"/>
-    <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/forum.css"/>
-    
-    <ui:insert name="head" />
-  </h:head>
-  <h:body styleClass="siteBodyWrapper">
-    <div id="messages-container">
-      <ui:insert name="messages">
-        <h:messages globalOnly="false" errorClass="error" fatalClass="error" warnClass="warning" infoClass="info"/>
-      </ui:insert>
-    </div>
-    <div id="siteWrapper">
-      <div id="siteLayoutWrapper">
-        <!-- Site's Menu bar -->
-        <ui:include src="/fragments/view_sitemenubar.xhtml" />
-
-        <!-- Site's Header -->
-        <div id="siteHeaderWrapper" class="authHeaderWrapper"></div>
-
-        <!-- Site's Content -->
-        <div id="siteContentWrapper">
-          <ui:insert name="content"></ui:insert>
-          <div class="clearFloating"></div>
-        </div>
-
-        <!-- Site's Footer -->
-        <ui:include src="/fragments/view_sitefooter.xhtml" />
-      </div>
-    </div>
-  </h:body>
-</f:view>
-</html>
+</ui:composition>

@@ -134,7 +134,7 @@
   margin-top: 0;
 }
 
-#siteHeaderWrapper.index-header-wrapper {
+.index-header-wrapper {
   background: url('../gfx/layout/header_background.png') no-repeat;
   width: 1130px;
   height: 253px;

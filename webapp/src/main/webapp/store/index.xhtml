@@ -8,7 +8,9 @@
 
   <ui:define name="pageTitle">#{locales['store.index.pageTitle']}</ui:define>
   <ui:define name="head">
-    <h:outputScript name="scripts/gui/store/index.js"></h:outputScript>
+    <!-- jQuery UI -->
+  
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.js"></script>
     
     <!-- jQuery File Upload -->
 
@@ -24,6 +26,11 @@
     
     <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.magnific-popup/0.8.9/jquery.magnific-popup.min.js"></script>
     <h:outputStylesheet name="scripts/jquery.magnific-popup/magnific-popup.css"/>
+
+    <!-- View specific -->
+    
+    <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/store.css"/>
+    <h:outputScript name="scripts/gui/store/index.js"></h:outputScript>
     
   </ui:define>
   <ui:define name="content">
