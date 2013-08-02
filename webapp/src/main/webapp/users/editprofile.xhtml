@@ -16,11 +16,21 @@
   
     <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.js"></script>
 
+    <!-- jQuery File Upload -->
+
+    <h:outputScript name="scripts/load-image/load-image.min.js"/>
+    <h:outputScript name="scripts/canvas-to-blob/canvas-to-blob.min.js"/>
+    
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload-process.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload-image.js"></script>
+    
     <!-- md5 -->
 
     <script type="text/javascript" charset="utf8" src="http://cdn.jsdelivr.net/jshash/2.2/md5-min.js"></script>
 
-    <h:outputScript name="scripts/gui/editprofile.js" target="head"/>
+    <h:outputScript name="scripts/gui/users/editprofile.js" target="head"/>
   </ui:define>   
 
   <ui:define name="content">
@@ -33,9 +43,6 @@
         <ul class="edit-profile-tab-labels">
           <li><a href="#basic">#{locales['users.editProfile.basicTabLabel']}</a></li>
           <li><a href="#quota">#{locales['users.editProfile.quotaTabLabel']}</a></li>
-          <li style="display: none"><a href="#auth-sources">#{locales['users.editProfile.authSourcesTabLabel']}</a></li>
-          <li style="display: none"><a href="#notifications">#{locales['users.editProfile.notificationsTabLabel']}</a></li>
-          <li style="display: none"><a href="#chat">#{locales['users.editProfile.chatTabLabel']}</a></li>
         </ul>
         
         <div id="basic">
@@ -43,7 +50,7 @@
           <h:form>
             <div class="edit-profile-basic-profile-image-container">
              <h:graphicImage value="/users/profileImages/#{sessionBackingBean.loggedUser.id}?width=128&amp;height=128" />
-             <button>#{locales['users.editProfile.basicChangeProfileImage']}</button>
+             <button id="edit-profile-basic-profile-image-change">#{locales['users.editProfile.basicChangeProfileImage']}</button>
             </div>
             <div>
               <h:outputLabel value="#{locales['users.editProfile.basicFirstNameTitle']}"/>
@@ -79,19 +86,6 @@
             </h:outputFormat>
           </div>
         </div>
-
-
-        <div id="auth-sources">
-        
-        </div>  
-        
-        <div id="notifications">
-        
-        </div>
-
-        <div id="chat">
-          
-        </div>  
 
       </div> 
     </div>  

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html">
+<div title="Update Profile Image">  
+  
+  <div>
+    <iframe style="display: none" src="about:blank" width="0" height="0" name="_file_form_target_"></iframe>
+    <form method="post" enctype="multipart/form-data" action="#{request.contextPath}/users/profileImages/#{sessionBackingBean.loggedUser.id}" target="_file_form_target_">
+      <label>Profile Image</label>
+      <input type="file" name="file"/>
+    </form>
+  </div>
+  
+</div>  
+</ui:composition>
