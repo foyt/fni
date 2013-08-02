@@ -243,7 +243,7 @@
       <div class="siteMenuBarWidgetContent" id="siteMenuBarWidgetAccountContent">
         <ul>
           <li>
-            <a href="${pageContext.request.contextPath}/editprofile.jsf"><fmt:message key="generic.header.menuBarWidgetAccountEditProfile"/></a>
+            <a href="${pageContext.request.contextPath}/editprofile"><fmt:message key="generic.header.menuBarWidgetAccountEditProfile"/></a>
           </li>
           <li>
             <a href="${pageContext.request.contextPath}/logout"><fmt:message key="generic.header.menuBarWidgetAccountLogout"/></a>
