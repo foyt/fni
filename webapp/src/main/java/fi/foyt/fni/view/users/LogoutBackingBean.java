@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.auth;
+package fi.foyt.fni.view.users;
 
 import java.io.IOException;
 
@@ -20,9 +20,9 @@ import fi.foyt.fni.session.SessionController;
 @Stateful
 @URLMappings(mappings = {
   @URLMapping(
-		id = "auth-logout", 
+		id = "users-logout", 
 		pattern = "/logout", 
-		viewId = "/auth/logout.jsf"
+		viewId = "/users/logout.jsf"
   )
 })
 public class LogoutBackingBean {

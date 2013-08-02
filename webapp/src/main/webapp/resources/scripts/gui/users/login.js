@@ -11,7 +11,7 @@
     });
     
     $('#forgot-password-link').click(function (event) {
-      $.ajax(CONTEXTPATH + '/auth/dialogs/forgotpassword.jsf', {
+      $.ajax(CONTEXTPATH + '/users/dialogs/forgotpassword.jsf', {
         async: false,
         success : function(data, textStatus, jqXHR) {
           var dialogElement = $(data);

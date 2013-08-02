@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.auth;
+package fi.foyt.fni.view.users;
 
 import java.io.IOException;
 
@@ -22,9 +22,9 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Stateful
 @URLMappings(mappings = {
   @URLMapping(
-		id = "internal-auth-password-reset", 
-		pattern = "/auth/resetpassword/#{passwordResetBackingBean.key}", 
-		viewId = "/auth/resetpassword.jsf"
+		id = "users-password-reset", 
+		pattern = "/users/resetpassword/#{passwordResetBackingBean.key}", 
+		viewId = "/users/resetpassword.jsf"
   )
 })
 public class PasswordResetBackingBean {
@@ -58,7 +58,7 @@ public class PasswordResetBackingBean {
 	
 	public void changePassword() throws IOException {
 		if (!getPassword1().equals(getPassword2())) {
-			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("auth.resetPassword.passwordsDontMatch"));
+			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.resetPassword.passwordsDontMatch"));
 		} else {
   		PasswordResetKey passwordResetKey = authenticationController.findPasswordResetKey(getKey());
   		if (passwordResetKey != null) {
@@ -70,7 +70,7 @@ public class PasswordResetBackingBean {
       	  .append("/")
       	  .toString());  
   		} else {
-  			FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("auth.resetPassword.invalidPasswordResetKey"));
+  			FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("users.resetPassword.invalidPasswordResetKey"));
   		}
 		}
 	}

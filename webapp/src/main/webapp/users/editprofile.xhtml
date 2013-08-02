@@ -10,12 +10,6 @@
   </ui:define>
   
   <ui:define name="head">
-    <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/editprofile.css"/>
-    
-    <!-- jQuery -->
-
-    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.2.js"></script>
-
     <!-- jQuery UI -->
   
     <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.js"></script>
@@ -24,7 +18,10 @@
 
     <script type="text/javascript" charset="utf8" src="http://cdn.jsdelivr.net/jshash/2.2/md5-min.js"></script>
 
+    <!-- View Specific -->
+
     <h:outputScript name="scripts/gui/users/editprofile.js" target="head"/>
+    <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/editprofile.css"/>
   </ui:define>   
 
   <ui:define name="content">

@@ -3,19 +3,22 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html"
-    template="/WEB-INF/templates/auth.xhtml">
+    template="/WEB-INF/templates/users.xhtml">
  
     <ui:define name="pageTitle">
-      #{locales['auth.verification.pageTitle']}
+      #{locales['users.verification.pageTitle']}
     </ui:define>
     
     <ui:define name="head">
+    
+      <!-- View Specific -->
+    
       <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/login.css"/>
     </ui:define>
     
     <ui:define name="content">
       <div class="registration-verification-container">
-        <div>#{locales['auth.verification.message']}</div>
+        <div>#{locales['users.verification.message']}</div>
       </div>
     </ui:define>
 

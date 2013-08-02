@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.auth;
+package fi.foyt.fni.view.users;
 
 import java.io.IOException;
 import java.util.Date;
@@ -53,9 +53,9 @@ import fi.foyt.fni.utils.mail.MailUtils;
 @Stateful
 @URLMappings(mappings = {
   @URLMapping(
-		id = "auth-login", 
+		id = "users-login", 
 		pattern = "/login/", 
-		viewId = "/auth/login.jsf"
+		viewId = "/users/login.jsf"
   )
 })
 public class LoginBackingBean {
@@ -137,23 +137,23 @@ public class LoginBackingBean {
 							externalContext.redirect(redirectUrl);
 						}
 					} else {
-						FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("auth.login.invalidCredentials"));
+						FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.invalidCredentials"));
 					}
 				}
 
 			} catch (UserNotConfirmedException e) {
-				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("auth.login.userNotConfirmed"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.userNotConfirmed"));
 			} catch (MultipleEmailAccountsException e) {
-				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("auth.login.userConflictMultipleEmailAccounts"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.userConflictMultipleEmailAccounts"));
 			} catch (EmailDoesNotMatchLoggedUserException e) {
-				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("auth.login.userConflictEmailDoesNotMatchLoggedUser"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.userConflictEmailDoesNotMatchLoggedUser"));
 			} catch (IdentityBelongsToAnotherUserException e) {
-				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("auth.login.userConflictIdentityBelongsToAnotherUser"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.userConflictIdentityBelongsToAnotherUser"));
 			} catch (ExternalLoginFailedException e) {
 				logger.log(Level.SEVERE, "Login with external authentication source failed", e);
-				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("auth.login.externalLoginFailed"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.externalLoginFailed"));
 			} catch (InvalidCredentialsException e) {
-				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("auth.login.invalidCredentials"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.invalidCredentials"));
 			} catch (IOException e) {
 				logger.log(Level.SEVERE, "Login redirect failed because of malformed url", e);
 				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("generic.configurationError"));
@@ -207,14 +207,14 @@ public class LoginBackingBean {
 		boolean valid = true;
 
 		if (!getRegisterPassword1().equals(getRegisterPassword2())) {
-			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("auth.login.registrationPasswordsDontMatch"));
+			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.registrationPasswordsDontMatch"));
 			valid = false;
 		}
 
 		if (valid) {
 			User existingUser = userController.findUserByEmail(getRegisterEmail());
 			if (existingUser != null) {
-				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("auth.login.registrationUserWithSpecifiedEmailAlreadyExists"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.registrationUserWithSpecifiedEmailAlreadyExists"));
 			} else {
 				Locale locale = sessionController.getLocale();
 				User user = userController.createUser(getRegisterFirstName(), getRegisterLastName(), null, locale, new Date());
@@ -225,18 +225,18 @@ public class LoginBackingBean {
 				ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 				String verifyUrl = new StringBuilder().append(externalContext.getRequestScheme()).append("://").append(externalContext.getRequestServerName())
 						.append(":").append(externalContext.getRequestServerPort()).append(externalContext.getRequestContextPath())
-						.append("/auth/verify/" + verificationKey.getValue()).toString();
+						.append("/users/verify/" + verificationKey.getValue()).toString();
 
-				String mailTitle = FacesUtils.getLocalizedValue("auth.login.verificationEmailTitle");
-				String mailContent = FacesUtils.getLocalizedValue("auth.login.verificationEmailContent", verifyUrl);
+				String mailTitle = FacesUtils.getLocalizedValue("users.login.verificationEmailTitle");
+				String mailContent = FacesUtils.getLocalizedValue("users.login.verificationEmailContent", verifyUrl);
 
 				try {
 					String fromName = systemSettingsController.getSetting("system.mailer.name");
 					String fromMail = systemSettingsController.getSetting("system.mailer.mail");
 					MailUtils.sendMail(fromMail, fromName, getForgotPasswordEmail(), user.getFullName(), mailTitle, mailContent, "text/plain");
-					FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("auth.login.verificationEmailSent"));
+					FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.login.verificationEmailSent"));
 				} catch (MessagingException e) {
-					FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("auth.login.registrationCouldNotSendEmail"));
+					FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.registrationCouldNotSendEmail"));
 				}
 
 			}
@@ -253,7 +253,7 @@ public class LoginBackingBean {
 
 	public void sendResetMail() {
 		if (StringUtils.isBlank(getForgotPasswordEmail())) {
-			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("auth.login.forgotPasswordEmailRequired"));
+			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.forgotPasswordEmailRequired"));
 		} else {
 			User user = userController.findUserByEmail(getForgotPasswordEmail());
 			if (user != null) {
@@ -262,22 +262,22 @@ public class LoginBackingBean {
 				ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 				String verifyUrl = new StringBuilder().append(externalContext.getRequestScheme()).append("://").append(externalContext.getRequestServerName())
 						.append(":").append(externalContext.getRequestServerPort()).append(externalContext.getRequestContextPath())
-						.append("/auth/resetpassword/" + resetKey.getValue()).toString();
+						.append("/users/resetpassword/" + resetKey.getValue()).toString();
 
-				String mailTitle = FacesUtils.getLocalizedValue("auth.login.resetPasswordEmailTitle");
-				String mailContent = FacesUtils.getLocalizedValue("auth.login.resetPasswordEmailContent", verifyUrl);
+				String mailTitle = FacesUtils.getLocalizedValue("users.login.resetPasswordEmailTitle");
+				String mailContent = FacesUtils.getLocalizedValue("users.login.resetPasswordEmailContent", verifyUrl);
 
 				try {
 					String fromName = systemSettingsController.getSetting("system.mailer.name");
 					String fromMail = systemSettingsController.getSetting("system.mailer.mail");
 					MailUtils.sendMail(fromMail, fromName, getForgotPasswordEmail(), user.getFullName(), mailTitle, mailContent, "text/html");
-					FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("auth.login.resetPasswordEmailSent", getForgotPasswordEmail()));
+					FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.login.resetPasswordEmailSent", getForgotPasswordEmail()));
 				} catch (MessagingException e) {
-					FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("auth.login.registrationCouldNotSendEmail"));
+					FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.registrationCouldNotSendEmail"));
 				}
 
 			} else {
-				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("auth.login.forgotPasswordNoUserFound"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.forgotPasswordNoUserFound"));
 			}
 		}
 	}
@@ -292,7 +292,7 @@ public class LoginBackingBean {
 				if (authenticationStrategy instanceof OAuthAuthenticationStrategy) {
 					OAuthAuthenticationStrategy oAuthStrategy = (OAuthAuthenticationStrategy) authenticationStrategy;
 					if (!authenticationStrategy.getSupportLogin() && !sessionController.isLoggedIn()) {
-						FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("auth.login.authenticationStrategyDoesNotSupportLogginIn"));
+						FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("users.login.authenticationStrategyDoesNotSupportLogginIn"));
 					} else {
 						// If return=1 we are returning from external authentication source
 						if ("1".equals(externalContext.getRequestParameterMap().get("return"))) {
@@ -310,7 +310,7 @@ public class LoginBackingBean {
 								
 								externalContext.redirect(redirectUrl);
 							} else {
-								FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("auth.login.externalLoginFailed"));
+								FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.externalLoginFailed"));
 							}
 						} else {
 							String[] extraScopes = parameters.get("extraScopes");
@@ -320,23 +320,23 @@ public class LoginBackingBean {
 					}
 				}
 			} catch (MultipleEmailAccountsException e) {
-				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("auth.login.userConflictMultipleEmailAccounts"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.userConflictMultipleEmailAccounts"));
 			} catch (EmailDoesNotMatchLoggedUserException e) {
-				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("auth.login.userConflictEmailDoesNotMatchLoggedUser"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.userConflictEmailDoesNotMatchLoggedUser"));
 			} catch (IdentityBelongsToAnotherUserException e) {
-				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("auth.login.userConflictIdentityBelongsToAnotherUser"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.userConflictIdentityBelongsToAnotherUser"));
 			} catch (ConfigurationErrorException e) {
 				logger.log(Level.SEVERE, "Login failed because of configuration error", e);
 				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("generic.configurationError"));
 			} catch (ExternalLoginFailedException e) {
 				logger.log(Level.SEVERE, "Login with external authentication source failed", e);
-				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("auth.login.externalLoginFailed"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.externalLoginFailed"));
 			} catch (IOException e) {
 				logger.log(Level.SEVERE, "Login redirect failed because of malformed url", e);
 				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("generic.configurationError"));
 			}
 		} else {
-			FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("auth.login.invalidAuthenticationStrategy"));
+			FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.invalidAuthenticationStrategy"));
 		}
 	}
 

@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.auth;
+package fi.foyt.fni.view.users;
 
 import java.io.IOException;
 
@@ -24,9 +24,9 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Stateful
 @URLMappings(mappings = {
   @URLMapping(
-		id = "internal-auth-verification", 
-		pattern = "/auth/verify/#{verifyBackingBean.key}", 
-		viewId = "/auth/verify.jsf"
+		id = "users-verification", 
+		pattern = "/users/verify/#{verifyBackingBean.key}", 
+		viewId = "/users/verify.jsf"
   )
 })
 public class VerifyBackingBean {
@@ -38,7 +38,7 @@ public class VerifyBackingBean {
 	public void load() throws IOException {
 		UserVerificationKey verificationKey = authenticationController.findVerificationKey(getKey());
 		if (verificationKey == null) {
-			FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("auth.verification.invalidVerificationKey"));
+			FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("users.verification.invalidVerificationKey"));
 		} else {
 			InternalAuth internalAuth = authenticationController.findInternalAuthByUser(verificationKey.getUser());
 			if (internalAuth != null) {
@@ -49,7 +49,7 @@ public class VerifyBackingBean {
       	  .append("/")
       	  .toString());   
 			} else {
-				FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("auth.verification.internalAuthNotFound"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("users.verification.internalAuthNotFound"));
 			}
 		}
 	}
