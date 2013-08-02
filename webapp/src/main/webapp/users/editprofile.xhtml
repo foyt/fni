@@ -3,7 +3,7 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html"
-    template="/WEB-INF/templates/root.xhtml">
+    template="/WEB-INF/templates/users.xhtml">
     
   <ui:define name="pageTitle">
     #{locales['users.editProfile.pageTitle']}
@@ -11,21 +11,15 @@
   
   <ui:define name="head">
     <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/editprofile.css"/>
+    
+    <!-- jQuery -->
+
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.2.js"></script>
 
     <!-- jQuery UI -->
   
     <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.js"></script>
 
-    <!-- jQuery File Upload -->
-
-    <h:outputScript name="scripts/load-image/load-image.min.js"/>
-    <h:outputScript name="scripts/canvas-to-blob/canvas-to-blob.min.js"/>
-    
-    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.iframe-transport.js"></script>
-    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload.js"></script>
-    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload-process.js"></script>
-    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload-image.js"></script>
-    
     <!-- md5 -->
 
     <script type="text/javascript" charset="utf8" src="http://cdn.jsdelivr.net/jshash/2.2/md5-min.js"></script>
