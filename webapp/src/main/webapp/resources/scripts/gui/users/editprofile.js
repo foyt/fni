@@ -46,6 +46,11 @@
       event.preventDefault();
       openProfileImageUploadDialog();
     });
+    
+    CKEDITOR.replaceClass = 'basic-about-editor';
+    CKEDITOR.replaceAll( function( textarea, config ) {
+      config.toolbar = 'About';
+    });
   });
   
 }).call(this);

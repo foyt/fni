@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.index;
+package fi.foyt.fni.view.users;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -53,6 +53,7 @@ public class EditProfileBackingBean {
 		basicFirstName = loggedUser.getFirstName();
 		basicLastName = loggedUser.getLastName();
 		basicNickname = loggedUser.getNickname();
+		basicAbout = loggedUser.getAbout();
 		
 		quotaUsed = materialController.getUserMaterialsTotalSize(loggedUser);
 		quotaReserved = materialController.getUserQuota();
@@ -82,12 +83,21 @@ public class EditProfileBackingBean {
 		this.basicNickname = basicNickname;
 	}
 	
+	public String getBasicAbout() {
+		return basicAbout;
+	}
+	
+	public void setBasicAbout(String basicAbout) {
+		this.basicAbout = basicAbout;
+	}
+	
 	@LoggedIn
 	@Secure (Permission.PROFILE_UPDATE)
 	public void basicSave() {
 		userController.updateFirstName(sessionController.getLoggedUser(), getBasicFirstName());
 		userController.updateLastName(sessionController.getLoggedUser(), getBasicLastName());
 		userController.updateNickname(sessionController.getLoggedUser(), getBasicNickname());
+		userController.updateAbout(sessionController.getLoggedUser(), getBasicAbout());
 		
 		FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.basicSaved"));
 	}
@@ -118,6 +128,7 @@ public class EditProfileBackingBean {
 	private String basicFirstName;
 	private String basicLastName;
 	private String basicNickname;
+	private String basicAbout;
 	private long quotaUsed;
-	private long quotaReserved;
+	private long quotaReserved;	
 }

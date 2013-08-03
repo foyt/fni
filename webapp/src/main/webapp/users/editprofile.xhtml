@@ -18,8 +18,13 @@
 
     <script type="text/javascript" charset="utf8" src="http://cdn.jsdelivr.net/jshash/2.2/md5-min.js"></script>
 
+    <!-- CKEditor -->
+    
+    <script type="text/javascript" charset="utf8" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/ckeditor.js"></script>
+    
     <!-- View Specific -->
 
+    <h:outputScript name="scripts/gui/users/ckconfig.js" target="head"/>
     <h:outputScript name="scripts/gui/users/editprofile.js" target="head"/>
     <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/editprofile.css"/>
   </ui:define>   
@@ -54,6 +59,10 @@
             <div>
               <h:outputLabel value="#{locales['users.editProfile.basicNicknameTitle']}"/>
               <h:inputText value="#{editProfileBackingBean.basicNickname}" />
+            </div>
+            <div>
+              <h:outputLabel value="#{locales['users.editProfile.basicAbout']}"/>
+              <h:inputTextarea class="basic-about-editor" value="#{editProfileBackingBean.basicAbout}" />
             </div>
             <div>
               <h:commandButton action="#{editProfileBackingBean.basicSave}" value="#{locales['users.editProfile.basicSave']}" />
