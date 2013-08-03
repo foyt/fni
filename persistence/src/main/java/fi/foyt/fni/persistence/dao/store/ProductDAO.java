@@ -55,6 +55,23 @@ public class ProductDAO extends GenericDAO<Product> {
     
     return entityManager.createQuery(criteria).getResultList();
 	}
+
+	public List<Product> listByCreatorAndPublished(User creator, Boolean published) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Product> criteria = criteriaBuilder.createQuery(Product.class);
+    Root<Product> root = criteria.from(Product.class);
+    criteria.select(root);
+    criteria.where(
+  		criteriaBuilder.and(
+  		  criteriaBuilder.equal(root.get(Product_.creator), creator),
+  			criteriaBuilder.equal(root.get(Product_.published), published)
+  		)
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+	}
 	
 	public Product updateName(Product product, String name) {
 		product.setName(name);
