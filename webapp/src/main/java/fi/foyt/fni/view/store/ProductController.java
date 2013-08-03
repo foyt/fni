@@ -91,6 +91,10 @@ public class ProductController {
 	public List<Product> listUnpublishedProducts() {
 		return productDAO.listByPublished(Boolean.FALSE);
 	}
+	
+	public List<Product> listPublishedProductsByCreator(User creator) {
+		return productDAO.listByCreatorAndPublished(creator, Boolean.TRUE);
+	}
 
 	public Product updatedModified(Product product, User modifier, Date modified) {
 		productDAO.updateModified(product, modified);
