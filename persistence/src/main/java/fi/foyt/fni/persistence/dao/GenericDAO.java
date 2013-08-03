@@ -72,6 +72,11 @@ public class GenericDAO<T> implements Serializable {
   protected EntityManager getEntityManager() {
   	return entityManager;
   }
+  
+  protected T persist(T entity) {
+  	getEntityManager().persist(entity);
+  	return entity;
+  }
 
   @javax.persistence.PersistenceContext
   private EntityManager entityManager;
