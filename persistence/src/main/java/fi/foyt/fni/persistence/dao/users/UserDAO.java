@@ -132,4 +132,9 @@ public class UserDAO extends GenericDAO<User> {
     return user;
   }
 
+	public User updateAbout(User user, String about) {
+		user.setAbout(about);
+		return persist(user);
+	}
+
 }

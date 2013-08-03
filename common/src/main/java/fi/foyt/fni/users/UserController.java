@@ -100,6 +100,12 @@ public class UserController {
 	public User updateNickname(User user, String nickname) {
 		return userDAO.updateNickname(user, nickname);
 	}
+
+  @LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public User updateAbout(User user, String about) {
+  	return userDAO.updateAbout(user, about);
+	}
   
   public UserFriend getUserFriendByUsers(User user1, User user2) {
     UserFriend userFriend = userFriendDAO.findByUserAndFriend(user1, user2);

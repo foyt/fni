@@ -10,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -105,6 +106,14 @@ public class User {
     this.profileImage = profileImage;
   }
   
+  public String getAbout() {
+		return about;
+	}
+  
+  public void setAbout(String about) {
+		this.about = about;
+	}
+  
   @Transient
   @Field
   public String getFullName() {
@@ -132,6 +141,9 @@ public class User {
   private String lastName;  
   
   private String nickname;  
+  
+  @Lob
+  private String about;
   
   @Column (nullable=false)
   @Enumerated (EnumType.STRING)
