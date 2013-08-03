@@ -104,12 +104,25 @@ public class ForumController implements Serializable {
 		return findForumTopicByForumAndUrlName(findForumByUrlName(forumUrlName), topicUrlName);
 	}
 
+	public ForumTopic findMostActiveTopicByAuthor(User author) {
+		List<ForumTopic> forums = forumTopicDAO.listAllSortByAuthorMessageCount(author, 0, 1);
+		if (forums.size() == 1) {
+			return forums.get(0);
+		}
+		
+		return null;
+	}
+	
 	public List<ForumTopic> listTopicsByForum(Forum forum) {
 		return forumTopicDAO.listByForum(forum);
 	}	
 
 	public Long countPostsByTopic(ForumTopic topic) {
 		return forumPostDAO.countByTopic(topic);
+	}
+
+	public Long countPostsByTopicAndAuthor(ForumTopic topic, User author) {
+		return forumPostDAO.countByTopicAndAuthor(topic, author);
 	}
 
 	public Long countTopicsByForum(Forum forum) {
@@ -140,6 +153,15 @@ public class ForumController implements Serializable {
 	
 	public List<ForumPost> listPostsByTopic(ForumTopic topic) {
 		return forumPostDAO.listByTopic(topic);
+	}
+
+	public ForumPost findLastPostByAuthor(User author) {
+		List<ForumPost> posts = forumPostDAO.listByAuthorSortByCreated(author, 0, 1);
+		if (posts.size() == 1) {
+			return posts.get(0);
+		}
+		
+		return null;
 	}
 
 	public Long countPostsByAuthor(User author) {

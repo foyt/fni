@@ -88,6 +88,26 @@ public class ForumPostDAO extends GenericDAO<ForumPost> {
     
     return query.getResultList();
   }
+
+	public List<ForumPost> listByAuthorSortByCreated(User author, int firstResult, int maxResults) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<ForumPost> criteria = criteriaBuilder.createQuery(ForumPost.class);
+    Root<ForumPost> root = criteria.from(ForumPost.class);
+    criteria.select(root);
+    criteria.orderBy(criteriaBuilder.desc(root.get(ForumPost_.created)));
+    criteria.where(
+  		criteriaBuilder.equal(root.get(ForumPost_.author), author)
+    );
+    
+    TypedQuery<ForumPost> query = entityManager.createQuery(criteria);
+
+    query.setFirstResult(firstResult);
+    query.setMaxResults(maxResults);
+    
+    return query.getResultList();
+	}
   
   public Long countByTopic(ForumTopic topic) {
     EntityManager entityManager = getEntityManager();
@@ -112,6 +132,23 @@ public class ForumPostDAO extends GenericDAO<ForumPost> {
 
     return entityManager.createQuery(criteria).getSingleResult();
   }
+
+	public Long countByTopicAndAuthor(ForumTopic topic, User author) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Long> criteria = criteriaBuilder.createQuery(Long.class);
+    Root<ForumPost> root = criteria.from(ForumPost.class);
+    criteria.select(criteriaBuilder.count(root));
+    criteria.where(
+  		criteriaBuilder.and(
+    		criteriaBuilder.equal(root.get(ForumPost_.author), author),
+    		criteriaBuilder.equal(root.get(ForumPost_.topic), topic)
+    	)
+    );
+
+    return entityManager.createQuery(criteria).getSingleResult();
+	}
   
   public Long countByForum(Forum forum) {
     EntityManager entityManager = getEntityManager();

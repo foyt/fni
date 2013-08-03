@@ -4,15 +4,18 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import fi.foyt.fni.persistence.model.forum.ForumTopic_;
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.forum.Forum;
+import fi.foyt.fni.persistence.model.forum.ForumPost;
+import fi.foyt.fni.persistence.model.forum.ForumPost_;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
+import fi.foyt.fni.persistence.model.forum.ForumTopic_;
 import fi.foyt.fni.persistence.model.users.User;
 
 @DAO
@@ -88,5 +91,31 @@ public class ForumTopicDAO extends GenericDAO<ForumTopic> {
     
     return forumTopic;
   }
+
+	public List<ForumTopic> listAllSortByAuthorMessageCount(User author, int firstResult, int maxResults) {
+		EntityManager entityManager = getEntityManager();
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    
+    CriteriaQuery<ForumTopic> criteria = criteriaBuilder.createQuery(ForumTopic.class);
+    Root<ForumPost> root = criteria.from(ForumPost.class);
+    root.join(ForumPost_.topic);
+    criteria.select(root.get(ForumPost_.topic));
+    criteria.where(
+    	criteriaBuilder.equal(root.get(ForumPost_.author), author)
+    );
+    criteria.groupBy(root.get(ForumPost_.topic));
+    criteria.orderBy(
+      criteriaBuilder.desc(
+    	  criteriaBuilder.count(root.get(ForumPost_.id))		
+      )
+    );
+
+    TypedQuery<ForumTopic> query = entityManager.createQuery(criteria);
+
+    query.setFirstResult(firstResult);
+    query.setMaxResults(maxResults);
+    
+    return query.getResultList();
+	}
 
 }
