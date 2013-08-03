@@ -21,6 +21,20 @@ public class ProductDAO extends GenericDAO<Product> {
   
 	private static final long serialVersionUID = 1L;
 
+	public Product findByUrlName(String urlName) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Product> criteria = criteriaBuilder.createQuery(Product.class);
+    Root<Product> root = criteria.from(Product.class);
+    criteria.select(root);
+    criteria.where(
+  		criteriaBuilder.equal(root.get(Product_.urlName), urlName)
+    );
+    
+    return getSingleResult(entityManager.createQuery(criteria));
+	}
+
 	public List<Product> listByPublishedOrderByCreated(Boolean published, int firstResult, int maxResults) {
     EntityManager entityManager = getEntityManager();
 

@@ -47,6 +47,14 @@ public class Product {
 		this.name = name;
 	}
   
+  public String getUrlName() {
+		return urlName;
+	}
+  
+  public void setUrlName(String urlName) {
+		this.urlName = urlName;
+	}
+  
   public String getDescription() {
 		return description;
 	}
@@ -181,6 +189,11 @@ public class Product {
   @NotEmpty
   @Column(nullable = false)
   private String name;
+  
+  @NotNull
+  @NotEmpty
+  @Column(nullable = false)
+  private String urlName;
   
   @Lob
   private String description;
