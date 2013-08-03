@@ -13,8 +13,11 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
@@ -155,6 +158,16 @@ public class Product {
   public void setForumTopic(ForumTopic forumTopic) {
 		this.forumTopic = forumTopic;
 	}
+  
+  @Transient
+  public String getDescriptionPlain() {
+    return StringEscapeUtils.unescapeHtml4(getDescription().replaceAll("\\<.*?>",""));
+  }
+  
+  @Transient
+  public String getDescriptionPlainAbbr() {
+  	return StringUtils.abbreviate(getDescriptionPlain(), 255);
+  }
   
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
