@@ -114,10 +114,10 @@
   /* Image popups */
   
   function initializeImagePopups() {
-    $('.store-product').each(function (productIndex, product) {
+    $('.gamelibrary-product').each(function (productIndex, product) {
       var galleryItems = new Array();
       
-      $(product).find('.store-product-thumbnails-container img').each(function (thumbnailIndex, thumbnail) {
+      $(product).find('.gamelibrary-product-thumbnails-container img').each(function (thumbnailIndex, thumbnail) {
         galleryItems.push({
           src: $(thumbnail).data('url')
         });
@@ -127,7 +127,7 @@
         // There is only one image and thus no thumbnails so we need to
         // use the product image
         
-        var url = $(product).find('.store-product-image-container img').data('url');
+        var url = $(product).find('.gamelibrary-product-image-container img').data('url');
         if (url) {
           galleryItems.push({
             src: url
@@ -135,7 +135,7 @@
         }
       }
       
-      $(product).find('.store-product-images-container a').magnificPopup({ 
+      $(product).find('.gamelibrary-product-images-container a').magnificPopup({ 
         type: 'image',
         gallery: {
           enabled: true
@@ -296,7 +296,7 @@
             'class': 'save-button',
             'text': 'Save',
             'click': function(event) {
-              var form = $(this).find('.store-edit-product-form');
+              var form = $(this).find('.gamelibrary-edit-product-form');
               var prefix = form.attr('name');
               var submitButton = form.find('input[name="' + prefix + ':submit-button"]');
               submitButton.click();
@@ -305,7 +305,7 @@
           }]
         });
         
-        var form = dialog.find('.store-edit-product-form');
+        var form = dialog.find('.gamelibrary-edit-product-form');
         var prefix = form.attr('name');
         
         var createTagElement = function (inputText) {
@@ -417,7 +417,7 @@
    * Store Admin Panel / Create Product
    */
  
-  $(document).on('click', '#store-admin-panel .store-admin-create-product', function (event) {
+  $(document).on('click', '#gamelibrary-admin-panel .gamelibrary-admin-create-product', function (event) {
     $.ajax(CONTEXTPATH + '/gamelibrary/publications/dialog/create', {
       async: false,
       success : function(data, textStatus, jqXHR) {
@@ -435,7 +435,7 @@
             'class': 'create-button',
             'text': 'Create',
             'click': function(event) {
-              var form = $(this).find('.store-create-product-form');
+              var form = $(this).find('.gamelibrary-create-product-form');
               var prefix = form.attr('name');
               var submitButton = form.find('input[name="' + prefix + ':submit-button"]');
               submitButton.click();
@@ -444,7 +444,7 @@
           }]
         });
         
-        var form = dialog.find('.store-create-product-form');
+        var form = dialog.find('.gamelibrary-create-product-form');
         var prefix = form.attr('name');
 
         var createTagElement = function (inputText) {
@@ -506,14 +506,14 @@
    * Product thumbnails / Mouse Enter
    */
   
-  $(document).on('mouseenter', '.store-product-thumbnails-container img', function (e) {
-    var product = $(this).closest('.store-product');
+  $(document).on('mouseenter', '.gamelibrary-product-thumbnails-container img', function (e) {
+    var product = $(this).closest('.gamelibrary-product');
     var productId = product.data('product-id');
     var imageUrl = $(this).data('url');
     var thumbnailUrl = imageUrl + '?width=128&height=128';
    
-    $('.store-product[data-product-id="' + productId + '"] .store-product-image-container a').attr("href", imageUrl);
-    $('.store-product[data-product-id="' + productId + '"] .store-product-image-container img').attr("src", thumbnailUrl);
+    $('.gamelibrary-product[data-product-id="' + productId + '"] .gamelibrary-product-image-container a').attr("href", imageUrl);
+    $('.gamelibrary-product[data-product-id="' + productId + '"] .gamelibrary-product-image-container img').attr("src", thumbnailUrl);
   });
   
   $(document).ready(function () {

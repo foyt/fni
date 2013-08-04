@@ -71,11 +71,11 @@
 
 /* Edit Product */
 
-.store-dialog .details-table td label {
+.gamelibrary-dialog .details-table td label {
   padding-right: 8px;
 }
 
-.store-dialog .details-table td input {
+.gamelibrary-dialog .details-table td input {
   width: 64px;
   margin-right: 8px;
 }
@@ -90,11 +90,11 @@
 
 /* Cart Prototyping */
 
-.store-cart-items-inner-container {
+.gamelibrary-cart-items-inner-container {
   margin-top: 8px;
 }
 
-.store-cart-item-actions input[type="submit"] {
+.gamelibrary-cart-item-actions input[type="submit"] {
   border: 1px solid #eee;
   font-size: 10px;
   line-height: 12px;
@@ -104,47 +104,47 @@
   cursor: pointer;
 } 
 
-.store-cart-item-actions {
+.gamelibrary-cart-item-actions {
   width: 50px;
 }
 
-.store-cart-cell-header {
+.gamelibrary-cart-cell-header {
 }
 
-.store-cart-item-count {
+.gamelibrary-cart-item-count {
   width: 60px;
   text-align: center;
 }
 
-.store-cart-item-name {
+.gamelibrary-cart-item-name {
   width: 750px;
 }
 
-.store-cart-item-price {
+.gamelibrary-cart-item-price {
   width: 120px;
   text-align: left;
 }
 
-.store-cart-item-total-price {
+.gamelibrary-cart-item-total-price {
   width: 120px;
   text-align: left;
 }
 
-#store-cart-items-container {
+#gamelibrary-cart-items-container {
   display: table;
 }
 
-.store-cart-item-container {
+.gamelibrary-cart-item-container {
   display: table-row;
 }
 
-.store-cart-cell, .store-cart-cell-header {
+.gamelibrary-cart-cell, .gamelibrary-cart-cell-header {
   padding-left: 4px;
   padding-right: 4px;
   display: table-cell;
 }
 
-#store-cart h4 {
+#gamelibrary-cart h4 {
   background: #fafafa;
   color: #002;
   margin-top: 8px;
@@ -155,82 +155,82 @@
   padding-left: 4px;
 } 
 
-#store-cart h5 {
+#gamelibrary-cart h5 {
   font-style: italic;
 }
 
-#store-cart-summary-total-price {
+#gamelibrary-cart-summary-total-price {
   font-weight: bold;
 }
 
-#store-cart-summary-total-price h5 {
+#gamelibrary-cart-summary-total-price h5 {
   font-weight: bold;
 }
 
-#store-cart-summary-items {
+#gamelibrary-cart-summary-items {
   margin-top: 8px;
 }
 
-.store-cart-summary-item h5 {
+.gamelibrary-cart-summary-item h5 {
   display: inline-block;
   width: 200px;
 }
 
 
-.store-cart-delivery-method-container {
+.gamelibrary-cart-delivery-method-container {
   padding: 8px;
 }
 
-.store-cart-delivery-method-info {
+.gamelibrary-cart-delivery-method-info {
   margin-left: 21px;
   font-style: italic;
 }
 
-.store-cart-delivery-method-details {
+.gamelibrary-cart-delivery-method-details {
   margin-left: 23px;
 }
 
-.store-cart-delivery-method-details h5 {
+.gamelibrary-cart-delivery-method-details h5 {
   display: inline-block;
 }
 
-.store-cart-delivery-method-price {
+.gamelibrary-cart-delivery-method-price {
   float: right;
 }
 
-.store-cart-delivery-method-price-note {
+.gamelibrary-cart-delivery-method-price-note {
   font-weight: bold;
 }
 
-.store-cart-delivery-method-price-note-text {
+.gamelibrary-cart-delivery-method-price-note-text {
   font-style: italic;
 }
 
-.store-cart-delivery-address-container {
+.gamelibrary-cart-delivery-address-container {
   margin-top: 8px;
 }
 
-.store-cart-delivery-address-new-address {
+.gamelibrary-cart-delivery-address-new-address {
   display: table;
   margin-left: 18px;
 }
 
-.store-cart-delivery-address-field {
+.gamelibrary-cart-delivery-address-field {
   display: table-row; 
 }
 
-.store-cart-delivery-address-field-label, .store-cart-delivery-address-field-input {
+.gamelibrary-cart-delivery-address-field-label, .gamelibrary-cart-delivery-address-field-input {
   display: table-cell;
   padding: 1px;
 }
 
-.store-cart-delivery-address-field label {
+.gamelibrary-cart-delivery-address-field label {
   width: 110px;
   display: inline-block;
   font-weight: bold;
 }
 
-.store-cart-delivery-address-field input[type="text"], .store-cart-delivery-address-field select {
+.gamelibrary-cart-delivery-address-field input[type="text"], .gamelibrary-cart-delivery-address-field select {
   width: 300px;
   -webkit-box-sizing: border-box; 	
   -moz-box-sizing: border-box;
@@ -241,7 +241,7 @@
 
 /* Layout */
 
-.store-index, #store-cart {
+.gamelibrary-index, #gamelibrary-cart {
   background: #fff;
   margin-top: 20px;
   border-top-left-radius: 5px;
@@ -250,7 +250,7 @@
   min-height: 783px;
 }
 
-.store-index h3, #store-cart h3, #store-sidebar h3 {
+.gamelibrary-index h3, #gamelibrary-cart h3, #gamelibrary-sidebar h3 {
   background-color: #EEEEEE;
   border-radius: 8px 8px 8px 8px;
   color: #000000;
@@ -261,7 +261,7 @@
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
 }
 
-.store-index, #store-cart {
+.gamelibrary-index, #gamelibrary-cart {
   background: #fff;
   margin-top: 20px;
   border-top-left-radius: 5px;
@@ -270,7 +270,7 @@
   min-height: 783px;
 }
 
-.store-index h3, #store-cart h3 {
+.gamelibrary-index h3, #gamelibrary-cart h3 {
   background: #EEEEEE;
   border-radius: 8px 8px 8px 8px;
   color: #000000;
@@ -282,12 +282,12 @@
 
 /* Shopping Cart */
 
-#store-cart h3.store-cart-title {
-  background: url("../gfx/icons/22x22/actions/store-cart.png") no-repeat scroll 8px center #EEEEEE;
+#gamelibrary-cart h3.gamelibrary-cart-title {
+  background: url("../gfx/icons/22x22/actions/gamelibrary-cart.png") no-repeat scroll 8px center #EEEEEE;
   padding-left: 36px;
 }
 
-#store-cart h3.store-cart-title a {
+#gamelibrary-cart h3.gamelibrary-cart-title a {
   float: right;
   margin-right: 12px;
   text-decoration: none;
@@ -295,31 +295,31 @@
   font-weight: bold;
 }
 
-#store-cart h3.store-cart-title a:after {
+#gamelibrary-cart h3.gamelibrary-cart-title a:after {
   content: ' >'; 
 }
 
 /* Index */
 
-.store-products {
+.gamelibrary-products {
   max-width: 802px;
 }
 
-.store-nav-separator {
+.gamelibrary-nav-separator {
   margin-left: 4px;
   margin-right: 4px;
 }
 
-.store-nav-separator:after {
+.gamelibrary-nav-separator:after {
   content: '>';
 }
 
-#store-index h3.store-products-title {
-  background: url("../gfx/icons/22x22/actions/store-recent-products.png") no-repeat scroll 8px center #EEEEEE;
+#gamelibrary-index h3.gamelibrary-products-title {
+  background: url("../gfx/icons/22x22/actions/gamelibrary-recent-publications.png") no-repeat scroll 8px center #EEEEEE;
   padding-left: 36px;
 }
 
-.store-product {
+.gamelibrary-product {
   padding: 8px;
   background: #fafafa;
   border-radius: 10px;
@@ -329,54 +329,54 @@
   box-shadow: 0px 0px 4px rgba(0,0,0,0.3);
 }
 
-.store-product-unpublished {
+.gamelibrary-product-unpublished {
   box-shadow: 0px 0px 4px rgba(255,0,0,0.5);
 }
 
-.store-product:hover {
+.gamelibrary-product:hover {
   box-shadow: 0px 0px 4px rgba(0,0,0,0.75);
 }
 
-.store-product-unpublished:hover {
+.gamelibrary-product-unpublished:hover {
   box-shadow: 0px 0px 4px rgba(255,0,0,0.75);
 }
 
-.store-product-info-container {
+.gamelibrary-product-info-container {
   width: 650px;
   float: left;
   min-height: 210px;
 }
 
-.store-product-images-container {
+.gamelibrary-product-images-container {
   float: right;
   margin-left: 4px;
 }
 
 
-.store-product-images-container a:focus {
+.gamelibrary-product-images-container a:focus {
   outline: 0px;
 }
 
-.store-product-image-container {
+.gamelibrary-product-image-container {
   height: 128px;
   width: 128px; 
 }
 
-.store-product-image-container img {
+.gamelibrary-product-image-container img {
   border-radius: 4px;
   box-shadow: 0px 0px 6px #aaa;
 }
 
-.store-product-image-inner-container {
+.gamelibrary-product-image-inner-container {
   text-align: center;
 }
 
-.store-product-thumbnails-container {
+.gamelibrary-product-thumbnails-container {
   width: 128px;
   height: 40px;
 }
 
-.store-product-thumbnails-inner-container {
+.gamelibrary-product-thumbnails-inner-container {
   right: 2px;
   position: absolute;
   height: 32px;
@@ -385,43 +385,43 @@
   padding-left: 4px;
 }
 
-.store-product-thumbnail-container {
+.gamelibrary-product-thumbnail-container {
   display: table-cell;
   height: 32px; 
   vertical-align: middle;
   width: 32px;
 }
 
-.store-product-thumbnails-container img {
+.gamelibrary-product-thumbnails-container img {
   border-radius: 4px;
   box-shadow: 0px 0px 6px #aaa;
   display: block;
   margin-right: 6px;
 }
 
-.store-product-noimage {
+.gamelibrary-product-noimage {
   width: 128px;
   height: 128px;
   display: inline-block;
-  background-image: url("../gfx/icons/128x128/actions/store-noimage.png");
+  background-image: url("../gfx/icons/128x128/actions/gamelibrary-noimage.png");
 }
 
-.store-product-name {
+.gamelibrary-product-name {
   font-size: 16px; 
   margin-bottom: 4px;
 }
 
-.store-product-name a {
+.gamelibrary-product-name a {
   color: #000;
   text-decoration: none;
 }
 
-.store-product-description {
+.gamelibrary-product-description {
   margin-top: 4px;
   min-height: 120px;
 }
 
-.store-product-tag {
+.gamelibrary-product-tag {
   background: #B6C9ED;
   padding-left: 8px;
   padding-right: 8px;
@@ -431,42 +431,42 @@
   margin-right: 4px;
 }
 
-.store-product-tag:hover {
+.gamelibrary-product-tag:hover {
   background: #BCCEFA;
 }
 
-.store-product-tag a {
+.gamelibrary-product-tag a {
   text-decoration: none;
   color: #fff;
 }
 
-.store-product-actions-container {
+.gamelibrary-product-actions-container {
   bottom: 8px;
   right: 8px;
   position: absolute;
   vertical-align: bottom;  
 }
 
-.store-product-action-container {
+.gamelibrary-product-action-container {
   text-align: right;
 }
 
-.store-product-details {
+.gamelibrary-product-details {
   margin-top: 8px;
 }
 
-.store-product-details-price,
-.store-product-details-price-free {
+.gamelibrary-product-details-price,
+.gamelibrary-product-details-price-free {
   font-weight: bold;
 }
 
-.store-product-details-price-free {
+.gamelibrary-product-details-price-free {
   color: green;
 }
 
 /* Sidebar */
 
-#store-sidebar {
+#gamelibrary-sidebar {
   position: absolute;
   right: 4px;
   top: 0px;
@@ -474,32 +474,32 @@
 
 /* Shopping cart */
 /**
-#store-mini-shopping-cart {
+#gamelibrary-mini-shopping-cart {
   width: 300px;
   margin-top: 8px;
   margin-right: 2px;
 }
 **/
 
-#store-sidebar {
+#gamelibrary-sidebar {
   margin-top: 8px;
   margin-right: 2px;
 }
 
-#store-sidebar h3.store-mini-shopping-cart-title {
-  background-image: url("../gfx/icons/22x22/actions/store-cart.png");
+#gamelibrary-sidebar h3.gamelibrary-mini-shopping-cart-title {
+  background-image: url("../gfx/icons/22x22/actions/gamelibrary-cart.png");
   background-repeat: no-repeat;
   background-position: 8px center;
   padding-left: 36px;
 }
 
-#store-mini-shopping-cart-buttons {
+#gamelibrary-mini-shopping-cart-buttons {
   position: absolute;
   margin-top: -26px;
   right: 10px;
 }
 
-#store-mini-shopping-cart-contents {
+#gamelibrary-mini-shopping-cart-contents {
   padding: 8px;
   background: #fafafa;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
@@ -507,64 +507,64 @@
   border-radius: 8px;
 }
 
-.store-mini-shopping-cart-items {
+.gamelibrary-mini-shopping-cart-items {
   padding-bottom: 8px;
 }
 
-.store-mini-shopping-cart-item {
+.gamelibrary-mini-shopping-cart-item {
   
 }
 
-.store-mini-shopping-cart-item-count {
+.gamelibrary-mini-shopping-cart-item-count {
   display: inline-block;
   font-size: 12px;
 }
 
-.store-mini-shopping-cart-item-count:after {
+.gamelibrary-mini-shopping-cart-item-count:after {
   content: 'x';
   margin-left: 3px;
 }
 
-.store-mini-shopping-cart-item-name {
+.gamelibrary-mini-shopping-cart-item-name {
   display: inline-block;
   font-size: 12px;
 }
 
-.store-mini-shopping-cart-item-price {
+.gamelibrary-mini-shopping-cart-item-price {
   display: inline-block;
   float: right;
   font-size: 12px;
 }
 
-.store-mini-shopping-cart-summary {
+.gamelibrary-mini-shopping-cart-summary {
   border-top: 1px solid #000;
   padding-top: 8px;
 }
 
-.store-mini-shopping-cart-summary-total-title-container {
+.gamelibrary-mini-shopping-cart-summary-total-title-container {
   display: inline-block;
 }
 
-.store-mini-shopping-cart-summary-total {
+.gamelibrary-mini-shopping-cart-summary-total {
   display: inline-block;
   float: right;
 }
 
 /* Categories */
 
-#store-categories-container {
+#gamelibrary-categories-container {
   width: 300px;
   margin-top: 8px;
 }
 
-#store-sidebar h3.store-categories-title {
-  background-image: url("../gfx/icons/22x22/actions/store-categories.png");
+#gamelibrary-sidebar h3.gamelibrary-categories-title {
+  background-image: url("../gfx/icons/22x22/actions/gamelibrary-categories.png");
   background-repeat: no-repeat;
   background-position: 8px center;
   padding-left: 36px;
 }
 
-#store-categories {
+#gamelibrary-categories {
   border-radius: 8px;
   background: #fafafa;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
@@ -576,18 +576,18 @@
 
 /* Admin */
 
-#store-admin-panel {
+#gamelibrary-admin-panel {
   position: fixed;
   top: 10px;
   right: 10px;
   opacity: 0.01; 
 }
 
-#store-admin-panel:hover {
+#gamelibrary-admin-panel:hover {
   opacity: 1;
 }
 
-#store-admin-panel a {
+#gamelibrary-admin-panel a {
   width: 40px;
   height: 40px; 
   background: #fff;
@@ -598,13 +598,13 @@
   background-repeat: no-repeat;
 }
 
-#store-admin-panel a.store-admin-create-product {
-  background-image: url("../gfx/icons/32x32/actions/store-create-product.png");
+#gamelibrary-admin-panel a.gamelibrary-admin-create-product {
+  background-image: url("../gfx/icons/32x32/actions/gamelibrary-create-publication.png");
 }
 
 /* Admin Actions */
 
-.store-product .store-product-admin-actions-container  {
+.gamelibrary-product .gamelibrary-product-admin-actions-container  {
   position: absolute;
   left: 4px;
   top: -12px;
@@ -614,11 +614,11 @@
   border-radius: 4px;
 }
 
-.store-product:hover .store-product-admin-actions-container  {
+.gamelibrary-product:hover .gamelibrary-product-admin-actions-container  {
   display: block;
 }
 
-.store-product-admin-actions-container .store-product-admin-action-container a {
+.gamelibrary-product-admin-actions-container .gamelibrary-product-admin-action-container a {
   float: right;
   display: block;
   width: 32px;
@@ -628,7 +628,7 @@
   background-position: center; 
 }
 
-.store-product-admin-action-container {
+.gamelibrary-product-admin-action-container {
   display: inline-block;
   box-shadow: 0px 0px 4px #000;
   margin: 4px;
@@ -637,42 +637,42 @@
   opacity: 0.75;
 }
 
-.store-product-admin-action-container:hover {
+.gamelibrary-product-admin-action-container:hover {
   box-shadow: 0px 0px 5px #000;
   opacity: 1;
 }
 
-.store-product-admin-actions-container .product-edit {
-  background-image: url("../gfx/icons/32x32/actions/store-edit-product.png");
+.gamelibrary-product-admin-actions-container .product-edit {
+  background-image: url("../gfx/icons/32x32/actions/gamelibrary-edit-publication.png");
 }
 
-.store-product-admin-actions-container .product-attach-book-file-action  {
-  background-image: url("../gfx/icons/32x32/actions/store-attach-book.png");
+.gamelibrary-product-admin-actions-container .product-attach-book-file-action  {
+  background-image: url("../gfx/icons/32x32/actions/gamelibrary-attach-book.png");
 }
 
-.store-product-admin-actions-container .product-add-images-action  {
-  background-image: url("../gfx/icons/32x32/actions/store-add-images.png");
+.gamelibrary-product-admin-actions-container .product-add-images-action  {
+  background-image: url("../gfx/icons/32x32/actions/gamelibrary-add-images.png");
 }
 
-.store-product-admin-actions-container .product-edit-details {
-  background-image: url("../gfx/icons/32x32/actions/store-edit-details.png");
+.gamelibrary-product-admin-actions-container .product-edit-details {
+  background-image: url("../gfx/icons/32x32/actions/gamelibrary-edit-details.png");
 }
 
-.store-product-admin-actions-container .product-delete {
-  background-image: url("../gfx/icons/32x32/actions/store-delete-product.png");
+.gamelibrary-product-admin-actions-container .product-delete {
+  background-image: url("../gfx/icons/32x32/actions/gamelibrary-delete-publication.png");
 }
 
-.store-product-admin-actions-container .product-publish {
-  background-image: url("../gfx/icons/32x32/actions/store-publish-product.png");
+.gamelibrary-product-admin-actions-container .product-publish {
+  background-image: url("../gfx/icons/32x32/actions/gamelibrary-publish-publication.png");
 }
 
-.store-product-admin-actions-container .product-unpublish {
-  background-image: url("../gfx/icons/32x32/actions/store-unpublish-product.png");
+.gamelibrary-product-admin-actions-container .product-unpublish {
+  background-image: url("../gfx/icons/32x32/actions/gamelibrary-unpublish-publication.png");
 }
 
 /* Store dialogs */
 
-.store-dialog .dialog-section .max-width {
+.gamelibrary-dialog .dialog-section .max-width {
   width: 100%;
   -webkit-box-sizing: border-box; 	
   -moz-box-sizing: border-box;
@@ -685,30 +685,30 @@
 
 /* Create / edit product */
 
-.store-create-product-dialog div[data-type], .store-edit-product-dialog div[data-type] {
+.gamelibrary-create-product-dialog div[data-type], .gamelibrary-edit-product-dialog div[data-type] {
   margin-top: 8px;
 }
 
-.store-create-product-dialog div[data-type]>h4, .store-edit-product-dialog div[data-type]>h4 {
+.gamelibrary-create-product-dialog div[data-type]>h4, .gamelibrary-edit-product-dialog div[data-type]>h4 {
   margin-bottom: 8px;
 }
 
-.store-create-product-dialog table, .store-edit-product-dialog table {
+.gamelibrary-create-product-dialog table, .gamelibrary-edit-product-dialog table {
   width: 100%;
   -webkit-box-sizing: border-box; 	
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
-.store-create-product-dialog input[name="new-tag"], .store-edit-product-dialog input[name="new-tag"]  {
+.gamelibrary-create-product-dialog input[name="new-tag"], .gamelibrary-edit-product-dialog input[name="new-tag"]  {
   width: 395px;
 }
 
-.store-create-product-dialog .add-new-tag, .store-edit-product-dialog .add-new-tag {
+.gamelibrary-create-product-dialog .add-new-tag, .gamelibrary-edit-product-dialog .add-new-tag {
   margin-left: 8px;
 }
 
-.store-create-product-dialog .tags .tag, .store-edit-product-dialog .tags .tag {
+.gamelibrary-create-product-dialog .tags .tag, .gamelibrary-edit-product-dialog .tags .tag {
   display: inline-block;
   padding: 4px;
   font-size: 12px;
@@ -719,11 +719,11 @@
   margin-top: 8px;
 }
 
-.store-create-product-dialog .tags .tag:last-child, .store-edit-product-dialog .tags .tag:last-child {
+.gamelibrary-create-product-dialog .tags .tag:last-child, .gamelibrary-edit-product-dialog .tags .tag:last-child {
   margin-right: 0px;
 }
 
-.store-create-product-dialog .tags .tag .remove-tag:after, .store-edit-product-dialog .tags .tag .remove-tag:after {
+.gamelibrary-create-product-dialog .tags .tag .remove-tag:after, .gamelibrary-edit-product-dialog .tags .tag .remove-tag:after {
   content: 'X';
   color: #eee;
   font-family: courier;

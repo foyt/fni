@@ -38,25 +38,25 @@
   
     <ui:insert name="products" />
       
-    <div id="store-sidebar">
-      <h:panelGroup layout="block" id="store-mini-shopping-cart">
-        <h3 class="store-mini-shopping-cart-title">#{locales['gamelibrary.publications.shoppingCart']}</h3>
+    <div id="gamelibrary-sidebar">
+      <h:panelGroup layout="block" id="gamelibrary-mini-shopping-cart">
+        <h3 class="gamelibrary-mini-shopping-cart-title">#{locales['gamelibrary.publications.shoppingCart']}</h3>
 
-        <div id="store-mini-shopping-cart-buttons">
-          <h:outputLink id="store-view-cart-button" value="#{request.contextPath}/gamelibrary/cart/">#{locales['gamelibrary.publications.shoppingCartView']}</h:outputLink>
+        <div id="gamelibrary-mini-shopping-cart-buttons">
+          <h:outputLink id="gamelibrary-view-cart-button" value="#{request.contextPath}/gamelibrary/cart/">#{locales['gamelibrary.publications.shoppingCartView']}</h:outputLink>
         </div>
 
-        <div id="store-mini-shopping-cart-contents">
-          <div class="store-mini-shopping-cart-items">
+        <div id="gamelibrary-mini-shopping-cart-contents">
+          <div class="gamelibrary-mini-shopping-cart-items">
             <h:panelGroup layout="block" rendered="#{shoppingCartBackingBean.shoppingCartEmpty}">
               #{locales['gamelibrary.publications.shoppingCartEmpty']}
             </h:panelGroup>
           
             <ui:repeat var="cartItem" value="#{shoppingCartBackingBean.shoppingCartItems}">   
-              <div class="store-mini-shopping-cart-item">
-                <div class="store-mini-shopping-cart-item-count">#{cartItem.count}</div>
-                <div class="store-mini-shopping-cart-item-name">#{cartItem.name}</div>
-                <div class="store-mini-shopping-cart-item-price">
+              <div class="gamelibrary-mini-shopping-cart-item">
+                <div class="gamelibrary-mini-shopping-cart-item-count">#{cartItem.count}</div>
+                <div class="gamelibrary-mini-shopping-cart-item-name">#{cartItem.name}</div>
+                <div class="gamelibrary-mini-shopping-cart-item-price">
                   <h:outputText value="#{cartItem.price}" >
                     <f:convertNumber currencyCode="EUR" type="currency" />
                   </h:outputText>
@@ -65,11 +65,11 @@
             </ui:repeat>
           </div>
 
-          <div class="store-mini-shopping-cart-summary">
-            <div class="store-mini-shopping-cart-summary-total-title-container">
-              <div class="store-mini-shopping-cart-summary-total-title">#{locales['gamelibrary.publications.shoppingCartTotal']}</div>
+          <div class="gamelibrary-mini-shopping-cart-summary">
+            <div class="gamelibrary-mini-shopping-cart-summary-total-title-container">
+              <div class="gamelibrary-mini-shopping-cart-summary-total-title">#{locales['gamelibrary.publications.shoppingCartTotal']}</div>
             </div>
-            <div class="store-mini-shopping-cart-summary-total">
+            <div class="gamelibrary-mini-shopping-cart-summary-total">
               <h:outputText value="#{shoppingCartBackingBean.itemCosts}" >
                 <f:convertNumber currencyCode="EUR" type="currency" />
               </h:outputText>
@@ -79,18 +79,18 @@
         </div>
       </h:panelGroup>
   
-      <div id="store-categories-container">
-        <h3 class="store-categories-title">#{locales['gamelibrary.publications.categories']}</h3>
+      <div id="gamelibrary-categories-container">
+        <h3 class="gamelibrary-categories-title">#{locales['gamelibrary.publications.categories']}</h3>
 
-        <div id="store-categories">
-          <div class="store-category">
-            <div class="store-category-title">
+        <div id="gamelibrary-categories">
+          <div class="gamelibrary-category">
+            <div class="gamelibrary-category-title">
               <h:outputLink value="#{request.contextPath}/gamelibrary/">#{locales['gamelibrary.publications.mostRecent']}</h:outputLink>
             </div>
           </div>
           <ui:repeat var="tag" value="#{productCategoriesBackingBean.tags}">
-            <div class="store-category">
-              <div class="store-category-title">
+            <div class="gamelibrary-category">
+              <div class="gamelibrary-category-title">
                 <h:outputLink value="#{request.contextPath}/gamelibrary/tags/#{tag.text}">#{tag.text}</h:outputLink>
               </div>
             </div>
@@ -101,8 +101,8 @@
   
     <!-- TODO: Store Admins only -->
           
-    <div id="store-admin-panel">
-      <a class="store-admin-create-product" title="Create New Product"> </a>
+    <div id="gamelibrary-admin-panel">
+      <a class="gamelibrary-admin-create-product" title="Create New Product"> </a>
     </div>
     
     <div id="product-admin-operator-container" style="display: none">

@@ -8,40 +8,40 @@
 
   <ui:define name="products">
     <h:form>
-      <h:panelGroup layout="block" id="store-index" styleClass="store-index">
-        <div class="store-products">
-          <h3 class="store-products-title">
-            <span class="store-nav-item">
+      <h:panelGroup layout="block" id="gamelibrary-index" styleClass="gamelibrary-index">
+        <div class="gamelibrary-products">
+          <h3 class="gamelibrary-products-title">
+            <span class="gamelibrary-nav-item">
               <h:outputLink value="#{request.contextPath}/gamelibrary/">
                 #{locales['gamelibrary.index.navIndex']} 
               </h:outputLink>
             </span>
-            <span class="store-nav-separator"/>
-            <span class="store-nav-item">
+            <span class="gamelibrary-nav-separator"/>
+            <span class="gamelibrary-nav-item">
               #{locales['gamelibrary.index.navMostRecent']} 
             </span>
           </h3>
           
-          <div class="store-products">
+          <div class="gamelibrary-products">
             <ui:repeat var="product" value="#{productMostRecentListBackingBean.products}">
-              <div data-product-id="#{product.id}" class="store-product">
-                <div class="store-product-info-container">
-                  <div class="store-product-name">
+              <div data-product-id="#{product.id}" class="gamelibrary-product">
+                <div class="gamelibrary-product-info-container">
+                  <div class="gamelibrary-product-name">
                     <h:outputLink value="#{request.contextPath}/gamelibrary/#{product.urlName}">#{product.name}</h:outputLink>
                   </div>
-                  <div class="store-product-tags-container">
+                  <div class="gamelibrary-product-tags-container">
                     <ui:repeat var="tag" value="#{productMostRecentListBackingBean.getTags(product)}">
-                      <div class="store-product-tag">
+                      <div class="gamelibrary-product-tag">
                         <h:outputLink value="#{request.contextPath}/gamelibrary/tags/#{tag.text}">#{tag.text}</h:outputLink>
                       </div>
                     </ui:repeat>
                   </div>
                   
-                  <div class="store-product-description">#{product.description}</div>
-                  <div class="store-product-details">
-                    <div class="store-product-detail">
+                  <div class="gamelibrary-product-description">#{product.description}</div>
+                  <div class="gamelibrary-product-details">
+                    <div class="gamelibrary-product-detail">
                       <span>#{locales['gamelibrary.index.publicationDetailsPrice']}</span>
-                      <span class="store-product-details-price">
+                      <span class="gamelibrary-product-details-price">
                         <h:outputText value="#{product.price}" >
                           <f:convertNumber currencyCode="EUR" type="currency" />
                         </h:outputText>
@@ -49,7 +49,7 @@
                     </div>
                     <ui:fragment rendered="#{productMostRecentListBackingBean.getBookProduct(product) ne null}">
                       <ui:fragment rendered="#{productMostRecentListBackingBean.getBookProduct(product).numberOfPages > 0}">
-                        <div class="store-product-detail">
+                        <div class="gamelibrary-product-detail">
                           <span>#{locales['gamelibrary.index.publicationDetailsNumberOfPages']}</span> 
                           <span>#{productMostRecentListBackingBean.getBookProduct(product).numberOfPages}</span>
                         </div>
@@ -61,7 +61,7 @@
                       </ui:fragment>
                     </ui:fragment>
                     
-                    <h:panelGroup layout="block" rendered="#{product.forumTopic ne null}" styleClass="store-product-comments">
+                    <h:panelGroup layout="block" rendered="#{product.forumTopic ne null}" styleClass="gamelibrary-product-comments">
                       <h:outputLink value="#{request.contextPath}/forum/#{product.forumTopic.forum.urlName}/#{product.forumTopic.urlName}">
                         <h:outputFormat value="#{locales['gamelibrary.index.publicationComments']}">
                           <f:param value="#{productMostRecentListBackingBean.getProductCommentCount(product)}"/>
@@ -72,25 +72,25 @@
                   
                   <ui:fragment rendered="#{product.published}">
                     <!-- TODO: Admins and owners only -->
-                    <div class="store-product-admin-actions-container">
-                      <div class="store-product-admin-action-container">
+                    <div class="gamelibrary-product-admin-actions-container">
+                      <div class="gamelibrary-product-admin-action-container">
                         <a title="Unpublish Product" href="javascript:void(null);" data-product-id="#{product.id}" data-product-name="#{product.name}" class="product-unpublish"></a>
                       </div>
                     </div>
                   </ui:fragment>
                   
                   <ui:fragment rendered="#{!product.published}">
-                    <div class="store-product-admin-actions-container">
-                      <div class="store-product-admin-action-container">
+                    <div class="gamelibrary-product-admin-actions-container">
+                      <div class="gamelibrary-product-admin-action-container">
                         <a class="product-publish" data-product-id="#{product.id}" data-product-name="#{product.name}" href="javascript:void(null);" title="Publish Product"></a>
                       </div>
-                      <div class="store-product-admin-action-container">
+                      <div class="gamelibrary-product-admin-action-container">
                         <a class="product-edit" data-product-id="#{product.id}" href="javascript:void(null);" title="Edit"></a>
                       </div>
-                      <div class="store-product-admin-action-container">
+                      <div class="gamelibrary-product-admin-action-container">
                         <a class="product-add-images-action" data-product-id="#{product.id}" href="javascript:void(null);" title="Add Images"></a>
                       </div>
-                      <div class="store-product-admin-action-container">
+                      <div class="gamelibrary-product-admin-action-container">
                         <a class="product-delete" data-product-id="#{product.id}" data-product-name="#{product.name}" href="javascript:void(null);" title="Delete Product"></a>
                       </div>
                     </div>
@@ -98,12 +98,12 @@
                   
                 </div>
                 
-                <div class="store-product-images-container">
+                <div class="gamelibrary-product-images-container">
                   <ui:fragment rendered="#{productMostRecentListBackingBean.hasSeveralImages(product)}">
-                    <div class="store-product-thumbnails-container">
-                      <div class="store-product-thumbnails-inner-container">
+                    <div class="gamelibrary-product-thumbnails-container">
+                      <div class="gamelibrary-product-thumbnails-inner-container">
                         <ui:repeat value="#{productMostRecentListBackingBean.getProductImages(product)}" var="productImage">
-                          <div class="store-product-thumbnail-container">
+                          <div class="gamelibrary-product-thumbnail-container">
                             <a href="javascript:void(null)">
                               <img data-url="#{request.contextPath}/gamelibrary/publicationImages/#{productImage.id}" src="#{request.contextPath}/gamelibrary/publicationImages/#{productImage.id}?width=32&amp;height=32"/>
                             </a>
@@ -114,8 +114,8 @@
                   </ui:fragment>
   
                   <ui:fragment rendered="#{productMostRecentListBackingBean.hasImages(product)}">
-                    <div class="store-product-image-container">
-                      <div class="store-product-image-inner-container">
+                    <div class="gamelibrary-product-image-container">
+                      <div class="gamelibrary-product-image-inner-container">
                         <a href="#{request.contextPath}/gamelibrary/publicationImages/#{productMostRecentListBackingBean.getFirstImage(product).id}">
                           <img data-url="#{request.contextPath}/gamelibrary/publicationImages/#{productMostRecentListBackingBean.getFirstImage(product).id}" src="#{request.contextPath}/gamelibrary/publicationImages/#{productMostRecentListBackingBean.getFirstImage(product).id}?width=128&amp;height=128"/>
                         </a>
@@ -124,12 +124,12 @@
                   </ui:fragment>
                 </div>
                 
-                <div class="store-product-actions-container">
-                  <div class="store-product-action-container">
+                <div class="gamelibrary-product-actions-container">
+                  <div class="gamelibrary-product-action-container">
                     <a href="#{request.contextPath}/gamelibrary/publicationFiles/#{product.id}">#{locales['gamelibrary.index.publicationDownloadFreePdf']}</a>
                   </div>
-                  <div class="store-product-action-container">
-                    <h:commandLink action="#{productMostRecentListBackingBean.addProductToShoppingCart(product)}" value="#{locales['gamelibrary.index.publicationAddToShoppingCart']}" styleClass="store-product-add-to-cart-action">
+                  <div class="gamelibrary-product-action-container">
+                    <h:commandLink action="#{productMostRecentListBackingBean.addProductToShoppingCart(product)}" value="#{locales['gamelibrary.index.publicationAddToShoppingCart']}" styleClass="gamelibrary-product-add-to-cart-action">
                     </h:commandLink>
                   </div>
                 </div>
