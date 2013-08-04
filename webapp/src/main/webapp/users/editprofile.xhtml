@@ -38,6 +38,7 @@
       <div id="edit-profile-tabs">
         <ul class="edit-profile-tab-labels">
           <li><a href="#basic">#{locales['users.editProfile.basicTabLabel']}</a></li>
+          <li><a href="#contact-info">#{locales['users.editProfile.contactInfoTabLabel']}</a></li>
           <li><a href="#quota">#{locales['users.editProfile.quotaTabLabel']}</a></li>
         </ul>
         
@@ -66,6 +67,39 @@
             </div>
             <div>
               <h:commandButton action="#{editProfileBackingBean.basicSave}" value="#{locales['users.editProfile.basicSave']}" />
+            </div>
+          </h:form>
+        </div> 
+        
+        <div id="contact-info">
+          <h3>#{locales['users.editProfile.contactInfoTitle']}</h3>
+          <h:form>
+            <div>
+              <h:outputLabel value="#{locales['users.editProfile.contactInfoFieldHomePage']}"/>
+              <h:inputText value="#{editProfileBackingBean.contactInfoFieldHomePage}" />
+            </div>
+            <div>
+              <h:outputLabel value="#{locales['users.editProfile.contactInfoFieldBlog']}"/>
+              <h:inputText value="#{editProfileBackingBean.contactInfoFieldBlog}" />
+            </div>
+            <div>
+              <h:outputLabel value="#{locales['users.editProfile.contactInfoFieldFacebook']}"/>
+              <h:inputText value="#{editProfileBackingBean.contactInfoFieldFacebook}" />
+            </div>
+            <div>
+              <h:outputLabel value="#{locales['users.editProfile.contactInfoFieldTwitter']}"/>
+              <h:inputText value="#{editProfileBackingBean.contactInfoFieldTwitter}" />
+            </div>
+            <div>
+              <h:outputLabel value="#{locales['users.editProfile.contactInfoFieldLinkedIn']}"/>
+              <h:inputText value="#{editProfileBackingBean.contactInfoFieldLinkedIn}" />
+            </div>
+            <div>
+              <h:outputLabel value="#{locales['users.editProfile.contactInfoFieldGooglePlus']}"/>
+              <h:inputText value="#{editProfileBackingBean.contactInfoFieldGooglePlus}" />
+            </div>
+            <div>
+              <h:commandButton action="#{editProfileBackingBean.contactInfoSave}" value="#{locales['users.editProfile.contactInfoSave']}" />
             </div>
           </h:form>
         </div> 

@@ -15,6 +15,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.users.UserContactFieldType;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.UnauthorizedException;
@@ -54,6 +55,13 @@ public class EditProfileBackingBean {
 		basicLastName = loggedUser.getLastName();
 		basicNickname = loggedUser.getNickname();
 		basicAbout = loggedUser.getAbout();
+
+		contactInfoFieldHomePage = userController.getContactInfoFieldValue(loggedUser, UserContactFieldType.HOME_PAGE);
+		contactInfoFieldBlog = userController.getContactInfoFieldValue(loggedUser, UserContactFieldType.BLOG);
+		contactInfoFieldFacebook = userController.getContactInfoFieldValue(loggedUser, UserContactFieldType.FACEBOOK);
+		contactInfoFieldTwitter = userController.getContactInfoFieldValue(loggedUser, UserContactFieldType.TWITTER);
+		contactInfoFieldLinkedIn = userController.getContactInfoFieldValue(loggedUser, UserContactFieldType.LINKEDIN);
+		contactInfoFieldGooglePlus = userController.getContactInfoFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS);
 		
 		quotaUsed = materialController.getUserMaterialsTotalSize(loggedUser);
 		quotaReserved = materialController.getUserQuota();
@@ -101,7 +109,70 @@ public class EditProfileBackingBean {
 		
 		FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.basicSaved"));
 	}
+	
+	public String getContactInfoFieldHomePage() {
+		return contactInfoFieldHomePage;
+	}
+	
+	public void setContactInfoFieldHomePage(String contactInfoFieldHomePage) {
+		this.contactInfoFieldHomePage = contactInfoFieldHomePage;
+	}
+	
+	public String getContactInfoFieldBlog() {
+		return contactInfoFieldBlog;
+	}
+	
+	public void setContactInfoFieldBlog(String contactInfoFieldBlog) {
+		this.contactInfoFieldBlog = contactInfoFieldBlog;
+	}
+	
+	public String getContactInfoFieldFacebook() {
+		return contactInfoFieldFacebook;
+	}
 
+	public void setContactInfoFieldFacebook(String contactInfoFieldFacebook) {
+		this.contactInfoFieldFacebook = contactInfoFieldFacebook;
+	}
+
+	public String getContactInfoFieldTwitter() {
+		return contactInfoFieldTwitter;
+	}
+
+	public void setContactInfoFieldTwitter(String contactInfoFieldTwitter) {
+		this.contactInfoFieldTwitter = contactInfoFieldTwitter;
+	}
+
+	public String getContactInfoFieldLinkedIn() {
+		return contactInfoFieldLinkedIn;
+	}
+
+	public void setContactInfoFieldLinkedIn(String contactInfoFieldLinkedIn) {
+		this.contactInfoFieldLinkedIn = contactInfoFieldLinkedIn;
+	}
+
+	public String getContactInfoFieldGooglePlus() {
+		return contactInfoFieldGooglePlus;
+	}
+
+	public void setContactInfoFieldGooglePlus(String contactInfoFieldGooglePlus) {
+		this.contactInfoFieldGooglePlus = contactInfoFieldGooglePlus;
+	}
+
+	@LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public void contactInfoSave() {
+		User loggedUser = sessionController.getLoggedUser();
+		
+		userController.setContactInfoFieldValue(loggedUser, UserContactFieldType.HOME_PAGE, getContactInfoFieldHomePage());
+		userController.setContactInfoFieldValue(loggedUser, UserContactFieldType.BLOG, getContactInfoFieldBlog());
+		userController.setContactInfoFieldValue(loggedUser, UserContactFieldType.FACEBOOK, getContactInfoFieldFacebook());
+		userController.setContactInfoFieldValue(loggedUser, UserContactFieldType.TWITTER, getContactInfoFieldTwitter());
+		userController.setContactInfoFieldValue(loggedUser, UserContactFieldType.LINKEDIN, getContactInfoFieldLinkedIn());
+		userController.setContactInfoFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS, getContactInfoFieldGooglePlus());
+
+		FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.contactInfoSaved"));
+	}
+	
 	public String getQuotaUsage() {
 		return FileUtils.byteCountToDisplaySize(quotaUsed);
 	}
@@ -129,6 +200,12 @@ public class EditProfileBackingBean {
 	private String basicLastName;
 	private String basicNickname;
 	private String basicAbout;
+	private String contactInfoFieldHomePage;
+	private String contactInfoFieldBlog;
+	private String contactInfoFieldFacebook;
+	private String contactInfoFieldTwitter;
+	private String contactInfoFieldLinkedIn;
+	private String contactInfoFieldGooglePlus;
 	private long quotaUsed;
 	private long quotaReserved;	
 }
