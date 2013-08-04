@@ -11,7 +11,11 @@
       <h:panelGroup layout="block" id="store-index" styleClass="store-index">
         <div class="store-products">
           <h3 class="store-products-title">
-            <span class="store-nav-item"><h:outputLink value="#{request.contextPath}/gamelibrary/">Store</h:outputLink></span>
+            <span class="store-nav-item">
+              <h:outputLink value="#{request.contextPath}/gamelibrary/">
+                #{locales['gamelibrary.tagList.navIndex']} 
+              </h:outputLink>
+            </span>
             <span class="store-nav-separator"/>
             <span class="store-nav-item">#{productTagListBackingBean.tag}</span>
           </h3>
@@ -34,29 +38,34 @@
                   <div class="store-product-description">#{product.description}</div>
                   <div class="store-product-details">
                     <div class="store-product-detail">
-                      <span>Price:</span>
+                      <span>#{locales['gamelibrary.tagList.publicationDetailsPrice']}</span>
                       <span class="store-product-details-price">
                         <h:outputText value="#{product.price}" >
                           <f:convertNumber currencyCode="EUR" type="currency" />
                         </h:outputText>
                       </span>
                     </div>
+                    
                     <ui:fragment rendered="#{productTagListBackingBean.getBookProduct(product) ne null}">
                       <ui:fragment rendered="#{productTagListBackingBean.getBookProduct(product).numberOfPages > 0}">
                         <div class="store-product-detail">
-                          <span>Number of Pages:</span> 
+                          <span>#{locales['gamelibrary.tagList.publicationDetailsNumberOfPages']}</span> 
                           <span>#{productTagListBackingBean.getBookProduct(product).numberOfPages}</span>
                         </div>
                       </ui:fragment>
 
                       <ui:fragment rendered="#{!empty(productTagListBackingBean.getBookProduct(product).author)}">
-                        <span>Author:</span> 
+                        <span>#{locales['gamelibrary.tagList.publicationDetailsAuthor']}</span> 
                         <span>#{productTagListBackingBean.getBookProduct(product).author}</span>
                       </ui:fragment>
                     </ui:fragment>
                     
                     <h:panelGroup layout="block" rendered="#{product.forumTopic ne null}" styleClass="store-product-comments">
-                      <h:outputLink value="#{request.contextPath}/forum/#{product.forumTopic.forum.urlName}/#{product.forumTopic.urlName}">Comments (#{productTagListBackingBean.getProductCommentCount(product)})</h:outputLink>
+                      <h:outputLink value="#{request.contextPath}/forum/#{product.forumTopic.forum.urlName}/#{product.forumTopic.urlName}">
+                        <h:outputFormat value="#{locales['gamelibrary.tagList.publicationComments']}">
+                          <f:param value="#{productTagListBackingBean.getProductCommentCount(product)}"/>
+                        </h:outputFormat>                    
+                      </h:outputLink>
                     </h:panelGroup>
                   </div>
                   
@@ -116,10 +125,10 @@
                 
                 <div class="store-product-actions-container">
                   <div class="store-product-action-container">
-                    <a href="#{request.contextPath}/gamelibrary/publicationFiles/#{product.id}">Download Free PDF</a>
+                    <a href="#{request.contextPath}/gamelibrary/publicationFiles/#{product.id}">#{locales['gamelibrary.tagList.publicationDownloadFreePdf']}</a>
                   </div>
                   <div class="store-product-action-container">
-                    <h:commandLink action="#{productTagListBackingBean.addProductToShoppingCart(product)}" value="Add to Shopping Cart" styleClass="store-product-add-to-cart-action">
+                    <h:commandLink action="#{productTagListBackingBean.addProductToShoppingCart(product)}" value="#{locales['gamelibrary.tagList.publicationAddToShoppingCart']}" styleClass="store-product-add-to-cart-action">
                     </h:commandLink>
                   </div>
                 </div>

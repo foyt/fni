@@ -40,16 +40,16 @@
       
     <div id="store-sidebar">
       <h:panelGroup layout="block" id="store-mini-shopping-cart">
-        <h3 class="store-mini-shopping-cart-title">Shopping Cart</h3>
+        <h3 class="store-mini-shopping-cart-title">#{locales['gamelibrary.publications.shoppingCart']}</h3>
 
         <div id="store-mini-shopping-cart-buttons">
-          <h:outputLink id="store-view-cart-button" value="#{request.contextPath}/gamelibrary/cart/">View</h:outputLink>
+          <h:outputLink id="store-view-cart-button" value="#{request.contextPath}/gamelibrary/cart/">#{locales['gamelibrary.publications.shoppingCartView']}</h:outputLink>
         </div>
 
         <div id="store-mini-shopping-cart-contents">
           <div class="store-mini-shopping-cart-items">
             <h:panelGroup layout="block" rendered="#{shoppingCartBackingBean.shoppingCartEmpty}">
-              You don't have any products in cart yet.
+              #{locales['gamelibrary.publications.shoppingCartEmpty']}
             </h:panelGroup>
           
             <ui:repeat var="cartItem" value="#{shoppingCartBackingBean.shoppingCartItems}">   
@@ -67,7 +67,7 @@
 
           <div class="store-mini-shopping-cart-summary">
             <div class="store-mini-shopping-cart-summary-total-title-container">
-              <div class="store-mini-shopping-cart-summary-total-title">Total</div>
+              <div class="store-mini-shopping-cart-summary-total-title">#{locales['gamelibrary.publications.shoppingCartTotal']}</div>
             </div>
             <div class="store-mini-shopping-cart-summary-total">
               <h:outputText value="#{shoppingCartBackingBean.itemCosts}" >
@@ -80,12 +80,12 @@
       </h:panelGroup>
   
       <div id="store-categories-container">
-        <h3 class="store-categories-title">Product Tags</h3>
+        <h3 class="store-categories-title">#{locales['gamelibrary.publications.categories']}</h3>
 
         <div id="store-categories">
           <div class="store-category">
             <div class="store-category-title">
-              <h:outputLink value="#{request.contextPath}/gamelibrary/">Most Recent</h:outputLink>
+              <h:outputLink value="#{request.contextPath}/gamelibrary/">#{locales['gamelibrary.publications.mostRecent']}</h:outputLink>
             </div>
           </div>
           <ui:repeat var="tag" value="#{productCategoriesBackingBean.tags}">
