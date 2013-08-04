@@ -5,6 +5,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import fi.foyt.fni.gamelibrary.ProductController;
+
 @Stateful
 @RequestScoped
 @Named

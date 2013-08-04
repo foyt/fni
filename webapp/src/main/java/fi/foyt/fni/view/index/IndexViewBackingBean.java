@@ -11,12 +11,12 @@ import javax.inject.Named;
 
 import fi.foyt.fni.blog.BlogController;
 import fi.foyt.fni.forum.ForumController;
+import fi.foyt.fni.gamelibrary.ProductController;
 import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.Product;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.view.store.ProductController;
 
 @RequestScoped
 @Named

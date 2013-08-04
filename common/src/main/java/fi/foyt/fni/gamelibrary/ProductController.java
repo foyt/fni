@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.store;
+package fi.foyt.fni.gamelibrary;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +31,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.servlet.RequestUtils;
+import fi.foyt.fni.gamelibrary.StoreTagController;
 
 @Stateful
 @Dependent

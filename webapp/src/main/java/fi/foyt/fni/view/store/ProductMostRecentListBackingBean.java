@@ -10,6 +10,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.forum.ForumController;
+import fi.foyt.fni.gamelibrary.ProductController;
 
 @SessionScoped
 @Named
