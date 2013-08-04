@@ -12,7 +12,7 @@
     </ui:define>   
     
     <ui:define name="pageTitle">
-      #{locales['root.indexPage.pageTitle']}
+      #{locales['index.pageTitle']}
     </ui:define>
     
     <ui:define name="siteHeader">
@@ -20,8 +20,8 @@
       <div class="index-header-wrapper">
         <ui:fragment rendered="#{!sessionController.loggedIn}">
           <div id="index-header-login-register-wrapper">
-            <div id="index-header-login"><span class="index-header-big-font"><a href="#{request.contextPath}/login">#{locales['root.indexPage.headerLoginLink']}</a></span> #{locales['root.indexPage.headerLoginHint']}</div>
-            <div id="index-header-guest-login"><span class="index-header-big-font"><a href="#{request.contextPath}/login?loginMethod=GUEST">#{locales['root.indexPage.headerGuestLoginLink']}</a></span> #{locales['root.indexPage.headerGuestLoginHint']}</div>
+            <div id="index-header-login"><span class="index-header-big-font"><a href="#{request.contextPath}/login">#{locales['index.headerLoginLink']}</a></span> #{locales['index.headerLoginHint']}</div>
+            <div id="index-header-guest-login"><span class="index-header-big-font"><a href="#{request.contextPath}/login?loginMethod=GUEST">#{locales['index.headerGuestLoginLink']}</a></span> #{locales['index.headerGuestLoginHint']}</div>
           </div>
         </ui:fragment>
         
@@ -36,15 +36,15 @@
             </ui:fragment>
             
             <div id="index-header-user-info">
-              <h:outputFormat value="#{locales['root.indexPage.headerLoggedInAs']}">
+              <h:outputFormat value="#{locales['index.headerLoggedInAs']}">
                 <f:param value="#{sessionBackingBean.loggedUser.fullName}"/>
               </h:outputFormat>
               <span class="index-header-big-font">
-                <h:link id="index-header-logout-link" outcome="/users/logout" value="#{locales['root.indexPage.headerLogoutLink']}"/>
+                <h:link id="index-header-logout-link" outcome="/users/logout" value="#{locales['index.headerLogoutLink']}"/>
               </span> 
-              <span>#{locales['root.indexPage.headerOr']}</span>
+              <span>#{locales['index.headerOr']}</span>
               <span class="index-header-big-font">
-                <h:link outcome="/users/editprofile" value="#{locales['root.indexPage.headerEditProfileLink']}"/>
+                <h:link outcome="/users/editprofile" value="#{locales['index.headerEditProfileLink']}"/>
               </span>
             </div>
           </div>
@@ -59,16 +59,32 @@
           <div id="index-sidebar-widget-what-is-wrapper">
             <div id="index-sidebar-widget-what-is-icon" class="index-sidebar-widget-icon-container"></div>
             <div id="index-what-is-content-wrapper" class="index-sidebar-widget-content-container">
-              <h1>#{locales['root.indexPage.whatIsForgeHeader']}</h1>
+              <h1>#{locales['index.whatIsForgeHeader']}</h1>
               <div id="index-sidebar-widget-what-is-content" class="index-sidebar-widget-content">
-                <b>#{locales['root.indexPage.whatIsForgeContentPrefix']}</b> #{locales['root.indexPage.whatIsForgeContent']}
+                <b>#{locales['index.whatIsForgeContentPrefix']}</b> #{locales['index.whatIsForgeContent']}
               </div>
-            </div>
+            </div> 
             
-            <div id="index-sidebar-widget-lastest-articles-wrapper">
+            <div id="index-sidebar-widget-latest-game-library-publications-wrapper">
+              <div id="index-sidebar-widget-latest-game-library-publications-icon" class="index-sidebar-widget-icon-container"></div>
+              <div id="index-sidebar-widget-latest-game-library-publications-content-wrapper" class="index-sidebar-widget-content-container">
+                <h1>#{locales['index.latestGameLibraryPublicationsHeader']}</h1>
+                <div id="index-sidebar-widget-latest-game-library-publications-content" class="index-sidebar-widget-content">
+                  <ul>
+                    <ui:repeat var="publication" value="#{indexViewBackingBean.latestGameLibraryPublications}">
+                      <li>
+                        <h:outputLink value="#{request.contextPath}/store/#{publication.urlName}">#{publication.name}</h:outputLink>
+                      </li>
+                    </ui:repeat>
+                  </ul>
+                </div>
+              </div>
+            </div>        
+            
+            <div id="index-sidebar-widget-latest-articles-wrapper">
               <div id="index-sidebar-widget-latest-articles-icon" class="index-sidebar-widget-icon-container"></div>
               <div id="index-sidebar-widget-latest-articles-content-wrapper" class="index-sidebar-widget-content-container">
-                <h1>#{locales['root.indexPage.latestArticlesHeader']}</h1>
+                <h1>#{locales['index.latestArticlesHeader']}</h1>
                 <div id="index-sidebar-widget-latest-articles-content" class="index-sidebar-widget-content">
                   <ul>
                     <ui:repeat var="blogEntry" value="#{indexViewBackingBean.latestBlogEntries}">
@@ -80,6 +96,22 @@
                 </div>
               </div>
             </div>
+            
+            <div id="index-sidebar-widget-latest-forum-topics-wrapper">
+              <div id="index-sidebar-widget-latest-forum-topics-icon" class="index-sidebar-widget-icon-container"></div>
+              <div id="index-sidebar-widget-latest-forum-topics-content-wrapper" class="index-sidebar-widget-content-container">
+                <h1>#{locales['index.latestForumTopicsHeader']}</h1>
+                <div id="index-sidebar-widget-latest-forum-topics-content" class="index-sidebar-widget-content">
+                  <ul>
+                    <ui:repeat var="topic" value="#{indexViewBackingBean.latestForumTopics}">
+                      <li>
+                        <h:outputLink value="#{request.contextPath}/forum/#{topic.fullPath}">#{topic.subject}</h:outputLink>
+                      </li>
+                    </ui:repeat>
+                  </ul>
+                </div>
+              </div>
+            </div>  
           </div>
 
         </div>
@@ -106,7 +138,7 @@
                   <div class="index-blog-feed-entry-tags">
                     <ui:repeat var="tag" value="#{indexViewBackingBean.getBlogEntryTags(blogEntry)}">
                       <div class="index-blog-feed-entry-tag">
-                        <h:commandLink action="#{indexViewBackingBean.setBlogEntryFilterTag(tag.text)}" value="#{tag.text}" /> 
+                        <a href="#">#{tag.text}</a>
                       </div>
                     </ui:repeat>
                   </div>

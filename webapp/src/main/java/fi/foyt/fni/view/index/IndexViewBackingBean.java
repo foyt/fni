@@ -3,22 +3,31 @@ package fi.foyt.fni.view.index;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import fi.foyt.fni.blog.BlogController;
+import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
+import fi.foyt.fni.persistence.model.forum.ForumTopic;
+import fi.foyt.fni.persistence.model.store.Product;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.view.store.ProductController;
 
 @RequestScoped
 @Named
 @Stateful
 public class IndexViewBackingBean {
-
-	private static final int MAX_LATEST_ENTRIES = 10;
+	
+	private static final int MAX_GAME_LIBRARY_PUBLICATIONS = 5;
+	
+	private static final int MAX_LATEST_ENTRIES = 5;
+	
+	private static final int MAX_FORUM_TOPICS = 5;
 	
 	private static final int DEFAULT_FEED_ENTRIES = 3;
 	
@@ -30,6 +39,18 @@ public class IndexViewBackingBean {
 
 	@Inject
 	private BlogController blogController;
+
+	@Inject
+	private ProductController productController;
+
+	@Inject
+	private ForumController forumController;
+	
+	@PostConstruct
+	public void init() {
+		latestGameLibraryPublications = productController.listRecentProducts(MAX_GAME_LIBRARY_PUBLICATIONS);
+		latestForumTopics = forumController.listLatestForumTopics(MAX_FORUM_TOPICS);
+	}
 	
 	public List<BlogEntry> getLatestBlogEntries() {
 		return blogController.listBlogEntries(MAX_LATEST_ENTRIES);
@@ -43,13 +64,14 @@ public class IndexViewBackingBean {
 		return blogController.listBlogEntryTags(entry);
 	}
 	
-	public void setBlogEntryFilterTag(String blogEntryFilterTag) {
-		this.blogEntryFilterTag = blogEntryFilterTag;
+	public List<Product> getLatestGameLibraryPublications() {
+		return latestGameLibraryPublications;
 	}
 	
-	public String getBlogEntryFilterTag() {
-		return blogEntryFilterTag;
+	public List<ForumTopic> getLatestForumTopics() {
+		return latestForumTopics;
 	}
 	
-	private String blogEntryFilterTag;
+	private List<Product> latestGameLibraryPublications;
+	private List<ForumTopic> latestForumTopics;
 }

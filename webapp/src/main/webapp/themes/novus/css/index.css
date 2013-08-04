@@ -273,21 +273,21 @@
   margin-left: 15px;
 }
 
-#index-sidebar-widget-technical-announcements-wrapper {
+#index-sidebar-widget-latest-forum-topics-wrapper {
   min-height: 100px;
   margin-bottom: 10px;
 }
 
-#index-sidebar-widget-technical-announcements-icon {
+#index-sidebar-widget-latest-forum-topics-icon {
   background: url('../gfx/icons/custom/latest_technical_announcements.png') #fff no-repeat;
 }
 
-#index-sidebar-widget-technical-announcements-content-wrapper {
+#index-sidebar-widget-latest-forum-topics-content-wrapper {
   position: relative;
   z-index: 2;
 }
 
-#index-sidebar-widget-technical-announcements-content {
+#index-sidebar-widget-latest-forum-topics-content {
   background: #f1f2f0;
   color: #fff;
   border-radius: 10px;
@@ -298,14 +298,14 @@
   margin-left: 15px;
 }
 
-#index-sidebar-widget-technical-announcements-content ul {
+#index-sidebar-widget-latest-forum-topics-content ul {
   padding: 0;
   margin: 0 0 0 20px;
   list-style-type: none;
   list-style-image: url('../gfx/icons/custom/list_arrow_orange.gif');
 }
 
-#index-sidebar-widget-technical-announcements-content ul li a {
+#index-sidebar-widget-latest-forum-topics-content ul li a {
   font-family: 'Trebuchet MS', Arial;
   font-size: 12px;
   text-decoration: none;
@@ -313,26 +313,26 @@
   padding: 0px 4px 0px 2px;
 }
 
-#index-sidebar-widget-technical-announcements-content ul li a:hover {
+#index-sidebar-widget-latest-forum-topics-content ul li a:hover {
   color: #b28202;
 }
 
-#index-sidebar-widget-lastest-publications-wrapper {
+#index-sidebar-widget-latest-publications-wrapper {
   min-height: 100px;
   margin-bottom: 10px;
 }
 
-#index-sidebar-widget-lastest-publications-icon {
+#index-sidebar-widget-latest-game-library-publications-icon {
   background: url('../gfx/icons/custom/latest_publications.png') #fff
     no-repeat;
 }
 
-#index-sidebar-widget-lastest-publications-content-wrapper {
+#index-sidebar-widget-latest-game-library-publications-content-wrapper {
   position: relative;
   z-index: 2;
 }
 
-#index-sidebar-widget-lastest-publications-content {
+#index-sidebar-widget-latest-game-library-publications-content {
   background: #b6c9ed;
   color: #fff;
   border-radius: 10px;
@@ -343,14 +343,14 @@
   margin-left: 15px;
 }
 
-#index-sidebar-widget-lastest-publications-content ul {
+#index-sidebar-widget-latest-game-library-publications-content ul {
   padding: 0;
   margin: 0 0 0 20px;
   list-style-type: none;
   list-style-image: url('../gfx/icons/custom/list_arrow_green.gif');
 }
 
-#index-sidebar-widget-lastest-publications-content ul li a {
+#index-sidebar-widget-latest-game-library-publications-content ul li a {
   font-family: 'Trebuchet MS', Arial;
   font-size: 12px;
   text-decoration: none;
@@ -358,11 +358,11 @@
   padding: 0px 4px 0px 2px;
 }
 
-#index-sidebar-widget-lastest-publications-content ul li a:hover {
+#index-sidebar-widget-latest-game-library-publications-content ul li a:hover {
   color: #fff;
 }
 
-#index-sidebar-widget-lastest-articles-wrapper {
+#index-sidebar-widget-latest-articles-wrapper {
   min-height: 100px;
   margin-bottom: 10px;
 }
