@@ -29,7 +29,7 @@ import fi.foyt.fni.session.SessionController;
   @URLMapping(
   		id = "store-product-dialog-edit", 
   		pattern = "/gamelibrary/publications/#{productEditBackingBean.productId}/dialog/edit", 
-  		viewId = "/store/dialogs/editproduct.jsf"
+  		viewId = "/gamelibrary/dialogs/editproduct.jsf"
   )
 })
 public class ProductEditBackingBean extends AbstractProductEditBackingBean {

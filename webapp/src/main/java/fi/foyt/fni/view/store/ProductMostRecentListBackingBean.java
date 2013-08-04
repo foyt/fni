@@ -18,7 +18,7 @@ import fi.foyt.fni.forum.ForumController;
   @URLMapping(
 		id = "store-product-most-recent", 
 		pattern = "/gamelibrary/", 
-		viewId = "/store/index.jsf"
+		viewId = "/gamelibrary/index.jsf"
   )
 })
 public class ProductMostRecentListBackingBean extends AbstractProductListBackingBean {

@@ -12,7 +12,7 @@
     var previewWidth = 64;
     var previewHeight = 64;
     
-    $.ajax(CONTEXTPATH + '/store/dialogs/imageupload.jsf?productId=' + productId, {
+    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/imageupload.jsf?productId=' + productId, {
       async: false,
       success : function(data, textStatus, jqXHR) {
         var dialog = $(data).dialog({
@@ -212,7 +212,7 @@
     var productId = $(this).data('product-id');
     var productName = $(this).data('product-name');
     
-    $.ajax(CONTEXTPATH + '/store/dialogs/productpublish.jsf?productId=' + productId + '&productName=' + productName, {
+    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/productpublish.jsf?productId=' + productId + '&productName=' + productName, {
       async: false,
       success : function(data, textStatus, jqXHR) {
         var dialog = $(data).dialog({
@@ -246,7 +246,7 @@
     var productId = $(this).data('product-id');
     var productName = $(this).data('product-name');
     
-    $.ajax(CONTEXTPATH + '/store/dialogs/productunpublish.jsf?productId=' + productId + '&productName=' + productName, {
+    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/productunpublish.jsf?productId=' + productId + '&productName=' + productName, {
       async: false,
       success : function(data, textStatus, jqXHR) {
         var dialog = $(data).dialog({
@@ -387,7 +387,7 @@
     var productId = $(this).data('product-id');
     var productName = $(this).data('product-name');
     
-    $.ajax(CONTEXTPATH + '/store/dialogs/productdelete.jsf?productId=' + productId + '&productName=' + productName, {
+    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/productdelete.jsf?productId=' + productId + '&productName=' + productName, {
       async: false,
       success : function(data, textStatus, jqXHR) {
         var dialog = $(data).dialog({

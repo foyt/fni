@@ -21,7 +21,7 @@ import fi.foyt.fni.persistence.model.store.StoreTag;
   @URLMapping(
 		id = "store-product-tag-list", 
 		pattern = "/gamelibrary/tags/#{productTagListBackingBean.tag}", 
-		viewId = "/store/producttaglist.jsf"
+		viewId = "/gamelibrary/producttaglist.jsf"
   )
 })
 public class ProductTagListBackingBean extends AbstractProductListBackingBean {

@@ -26,7 +26,7 @@ import fi.foyt.fni.session.SessionController;
   @URLMapping(
   		id = "store-product-dialog-create", 
   		pattern = "/gamelibrary/publications/dialog/create", 
-  		viewId = "/store/dialogs/createproduct.jsf"
+  		viewId = "/gamelibrary/dialogs/createproduct.jsf"
   )
 })
 public class ProductCreateBackingBean extends AbstractProductEditBackingBean {

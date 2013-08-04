@@ -27,7 +27,7 @@ import fi.foyt.fni.system.SystemSettingsController;
   @URLMapping(
 		id = "store-cart", 
 		pattern = "/gamelibrary/cart/", 
-		viewId = "/store/cart.jsf"
+		viewId = "/gamelibrary/cart.jsf"
   )
 })
 public class ShoppingCartBackingBean implements Serializable {
