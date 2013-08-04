@@ -28,6 +28,23 @@ public class UserContactFieldDAO extends GenericDAO<UserContactField> {
     return persist(userContactField);
   }
 
+	public UserContactField findByUserAndType(User user, UserContactFieldType type) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<UserContactField> criteria = criteriaBuilder.createQuery(UserContactField.class);
+    Root<UserContactField> root = criteria.from(UserContactField.class);
+    criteria.select(root);
+    criteria.where(
+    	criteriaBuilder.and(
+    		criteriaBuilder.equal(root.get(UserContactField_.user), user),
+    		criteriaBuilder.equal(root.get(UserContactField_.type), type)
+    	)
+    );
+
+    return getSingleResult(entityManager.createQuery(criteria));
+	}
+
   public List<UserContactField> listByUser(User user) {
     EntityManager entityManager = getEntityManager();
 
@@ -39,5 +56,10 @@ public class UserContactFieldDAO extends GenericDAO<UserContactField> {
 
     return entityManager.createQuery(criteria).getResultList();
   }
+
+	public UserContactField updateValue(UserContactField contactField, String value) {
+		contactField.setValue(value);
+		return persist(contactField);
+	}
 
 }

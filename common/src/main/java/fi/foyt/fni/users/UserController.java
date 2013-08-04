@@ -8,7 +8,10 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
+
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
+import fi.foyt.fni.persistence.dao.users.UserContactFieldDAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.dao.users.UserEmailDAO;
 import fi.foyt.fni.persistence.dao.users.UserFriendDAO;
@@ -19,6 +22,8 @@ import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.auth.UserIdentifier;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.users.UserContactField;
+import fi.foyt.fni.persistence.model.users.UserContactFieldType;
 import fi.foyt.fni.persistence.model.users.UserEmail;
 import fi.foyt.fni.persistence.model.users.UserFriend;
 import fi.foyt.fni.persistence.model.users.UserRole;
@@ -51,6 +56,9 @@ public class UserController {
 	
 	@Inject
 	private UserSettingKeyDAO userSettingKeyDAO;
+
+	@Inject
+	private UserContactFieldDAO userContactFieldDAO;
 	
   public User createUser(String firstName, String lastName, String nickname, Locale locale, Date registrationDate) {
     User user = userDAO.create(firstName, lastName, nickname, locale, registrationDate, UserRole.USER);
@@ -180,6 +188,47 @@ public class UserController {
 			UserSettingKey userSettingKey = userSettingKeyDAO.findByKey(setting);
 			if (userSettingKey != null) {
 			  userSettingDAO.create(user, userSettingKey, value);
+			}
+		}
+	}
+	
+	/* Contact Info */
+
+	public UserContactField createContactInfoField(User user, UserContactFieldType type, String value) {
+		return userContactFieldDAO.create(user, type, value);
+	}
+
+	public UserContactField findContactInfoFieldByType(User user, UserContactFieldType type) {
+		return userContactFieldDAO.findByUserAndType(user, type);
+	}
+	
+	public UserContactField updateContactInfoField(UserContactField contactInfoField, String value) {
+		return userContactFieldDAO.updateValue(contactInfoField, value);
+	}
+
+	public void deleteContactInfoField(UserContactField contactInfoField) {
+		userContactFieldDAO.delete(contactInfoField);
+	}
+	
+	public String getContactInfoFieldValue(User user, UserContactFieldType type) {
+		UserContactField contectInfoField = findContactInfoFieldByType(user, type);
+		return contectInfoField != null ? contectInfoField.getValue() : null;
+	}
+
+	public UserContactField setContactInfoFieldValue(User user, UserContactFieldType type, String value) {
+		UserContactField contactField = findContactInfoFieldByType(user, type);
+		if (contactField == null) {
+			if (StringUtils.isBlank(value)) {
+				return null;
+			} else {
+			  return createContactInfoField(user, type, value);
+			}
+		} else {
+			if (StringUtils.isBlank(value)) {
+			  deleteContactInfoField(contactField);
+			  return null;
+			} else {			
+		  	return updateContactInfoField(contactField, value);
 			}
 		}
 	}
