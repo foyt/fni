@@ -15,7 +15,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 @Stateful
 @Dependent
-public class StoreTagController {
+public class GameLibraryTagController {
 
 	@Inject
 	private GameLibraryTagDAO gameLibraryTagDAO;

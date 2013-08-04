@@ -15,7 +15,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.gamelibrary.ProductController;
-import fi.foyt.fni.gamelibrary.StoreTagController;
+import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.users.User;
@@ -37,7 +37,7 @@ public class ProductCreateBackingBean extends AbstractProductEditBackingBean {
 	private ProductController productController;
 
 	@Inject
-	private StoreTagController storeTagController;
+	private GameLibraryTagController gameLibraryTagController;
 	
 	@Inject
 	private SessionController sessionController;
@@ -45,7 +45,7 @@ public class ProductCreateBackingBean extends AbstractProductEditBackingBean {
 	@PostConstruct
 	public void init() {
 		setTagSelectItems(
-			  createTagSelectItems(storeTagController.listGameLibraryTags())		
+			  createTagSelectItems(gameLibraryTagController.listGameLibraryTags())		
 			);
 	}
 
@@ -56,9 +56,9 @@ public class ProductCreateBackingBean extends AbstractProductEditBackingBean {
 		
 		if (StringUtils.isNotBlank(tagsString)) {
   		for (String tag : tagsString.split(";")) {
-  			GameLibraryTag gameLibraryTag = storeTagController.findTagByText(tag);
+  			GameLibraryTag gameLibraryTag = gameLibraryTagController.findTagByText(tag);
   			if (gameLibraryTag == null) {
-  				gameLibraryTag = storeTagController.createTag(tag);
+  				gameLibraryTag = gameLibraryTagController.createTag(tag);
   			}
   			tags.add(gameLibraryTag);
   		}

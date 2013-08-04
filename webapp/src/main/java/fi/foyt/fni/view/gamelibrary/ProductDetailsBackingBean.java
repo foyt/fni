@@ -15,7 +15,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.ProductController;
 import fi.foyt.fni.gamelibrary.ShoppingCartController;
-import fi.foyt.fni.gamelibrary.StoreTagController;
+import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
 import fi.foyt.fni.persistence.model.gamelibrary.Product;
 import fi.foyt.fni.persistence.model.gamelibrary.ProductImage;
@@ -37,7 +37,7 @@ public class ProductDetailsBackingBean {
 	private ProductController productController;
 	
 	@Inject
-	private StoreTagController storeTagController;
+	private GameLibraryTagController gameLibraryTagController;
 
 	@Inject
 	private ForumController forumController;
@@ -52,7 +52,7 @@ public class ProductDetailsBackingBean {
 			throw new FileNotFoundException();
 		}
 		
-		tags = storeTagController.listProductGameLibraryTags(product);
+		tags = gameLibraryTagController.listProductGameLibraryTags(product);
 	}
 	
 	public String getUrlName() {

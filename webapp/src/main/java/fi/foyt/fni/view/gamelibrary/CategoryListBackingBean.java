@@ -7,7 +7,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import fi.foyt.fni.gamelibrary.StoreTagController;
+import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 @Stateful
@@ -16,10 +16,10 @@ import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 public class CategoryListBackingBean {
 	
 	@Inject
-	private StoreTagController tagController;
+	private GameLibraryTagController gameLibraryTagController;
 	
 	public List<GameLibraryTag> getTagsWithPublishedProducts() {
-		return tagController.listActiveGameLibraryTags();
+		return gameLibraryTagController.listActiveGameLibraryTags();
 	}
 	
 }

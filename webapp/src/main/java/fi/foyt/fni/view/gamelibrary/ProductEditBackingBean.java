@@ -16,7 +16,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.gamelibrary.ProductController;
-import fi.foyt.fni.gamelibrary.StoreTagController;
+import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
 import fi.foyt.fni.persistence.model.gamelibrary.Product;
 import fi.foyt.fni.persistence.model.gamelibrary.ProductTag;
@@ -40,7 +40,7 @@ public class ProductEditBackingBean extends AbstractProductEditBackingBean {
 	private ProductController productController;
 
 	@Inject
-	private StoreTagController storeTagController;
+	private GameLibraryTagController gameLibraryTagController;
 	
 	@Inject
 	private SessionController sessionController;
@@ -48,7 +48,7 @@ public class ProductEditBackingBean extends AbstractProductEditBackingBean {
 	@PostConstruct
 	public void init() {
 		setTagSelectItems(
-  	  createTagSelectItems(storeTagController.listGameLibraryTags())		
+  	  createTagSelectItems(gameLibraryTagController.listGameLibraryTags())		
 		);
 	}
 	
@@ -73,7 +73,7 @@ public class ProductEditBackingBean extends AbstractProductEditBackingBean {
 		}
 		
 		List<String> tagList = new ArrayList<>();
-		List<ProductTag> productTags = storeTagController.listProductTags(product);
+		List<ProductTag> productTags = gameLibraryTagController.listProductTags(product);
 		for (ProductTag productTag : productTags) {
 			tagList.add(productTag.getTag().getText());
 		}
@@ -92,9 +92,9 @@ public class ProductEditBackingBean extends AbstractProductEditBackingBean {
 			
 			if (StringUtils.isNotBlank(tagsString)) {
 	  		for (String tag : tagsString.split(";")) {
-	  			GameLibraryTag gameLibraryTag = storeTagController.findTagByText(tag);
+	  			GameLibraryTag gameLibraryTag = gameLibraryTagController.findTagByText(tag);
 	  			if (gameLibraryTag == null) {
-	  				gameLibraryTag = storeTagController.createTag(tag);
+	  				gameLibraryTag = gameLibraryTagController.createTag(tag);
 	  			}
 	  			tags.add(gameLibraryTag);
 	  		}

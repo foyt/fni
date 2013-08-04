@@ -13,7 +13,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.gamelibrary.ProductController;
-import fi.foyt.fni.gamelibrary.StoreTagController;
+import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 @SessionScoped
@@ -32,11 +32,11 @@ public class ProductTagListBackingBean extends AbstractProductListBackingBean {
 	private ProductController productController;
 	
 	@Inject
-	private StoreTagController storeTagController;
+	private GameLibraryTagController gameLibraryTagController;
 
 	@URLAction
 	public void init() throws FileNotFoundException {
-		gameLibraryTag = storeTagController.findTagByText(tag);
+		gameLibraryTag = gameLibraryTagController.findTagByText(tag);
 		if (gameLibraryTag == null) {
 			throw new FileNotFoundException();
 		}

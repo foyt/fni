@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.ProductController;
 import fi.foyt.fni.gamelibrary.ShoppingCartController;
-import fi.foyt.fni.gamelibrary.StoreTagController;
+import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
 import fi.foyt.fni.persistence.model.gamelibrary.Product;
 import fi.foyt.fni.persistence.model.gamelibrary.ProductImage;
@@ -21,7 +21,7 @@ public class AbstractProductListBackingBean {
 	private ProductController productController;
 	
 	@Inject
-	private StoreTagController storeTagController;
+	private GameLibraryTagController gameLibraryTagController;
 	
 	@Inject
 	private ForumController forumController;
@@ -56,7 +56,7 @@ public class AbstractProductListBackingBean {
 	public List<GameLibraryTag> getTags(Product product) {
 		List<GameLibraryTag> result = new ArrayList<>();
 
-		List<ProductTag> productTags = storeTagController.listProductTags(product);
+		List<ProductTag> productTags = gameLibraryTagController.listProductTags(product);
 		for (ProductTag productTag : productTags) {
 			result.add(productTag.getTag());
 		}

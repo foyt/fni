@@ -8,7 +8,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import fi.foyt.fni.gamelibrary.StoreTagController;
+import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 @RequestScoped
@@ -17,11 +17,11 @@ import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 public class ProductCategoriesBackingBean {
 	
 	@Inject
-	private StoreTagController storeTagController;
+	private GameLibraryTagController gameLibraryTagController;
 
 	@PostConstruct
 	public void init() {
-		tags = storeTagController.listGameLibraryTags();
+		tags = gameLibraryTagController.listGameLibraryTags();
 	}
 	
 	public List<GameLibraryTag> getTags() {

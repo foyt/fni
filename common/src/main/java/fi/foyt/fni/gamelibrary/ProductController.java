@@ -31,14 +31,14 @@ import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.servlet.RequestUtils;
-import fi.foyt.fni.gamelibrary.StoreTagController;
+import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 
 @Stateful
 @Dependent
 public class ProductController {
 	
 	@Inject
-	private StoreTagController storeTagController;
+	private GameLibraryTagController gameLibraryTagController;
 
 	@Inject
 	private ProductDAO productDAO;
@@ -82,7 +82,7 @@ public class ProductController {
 		List<GameLibraryTag> gameLibraryTags = new ArrayList<>();
 
 		for (String tag : tags) {
-			gameLibraryTags.add(storeTagController.findTagByText(tag));
+			gameLibraryTags.add(gameLibraryTagController.findTagByText(tag));
 		}
 
 		return listProductsByTags(gameLibraryTags);
@@ -135,8 +135,8 @@ public class ProductController {
 			}
 		}
 		
-		for (ProductTag productTag : storeTagController.listProductTags(product)) {
-			storeTagController.deleteProductTag(productTag);
+		for (ProductTag productTag : gameLibraryTagController.listProductTags(product)) {
+			gameLibraryTagController.deleteProductTag(productTag);
 		}
 		
 		productDAO.delete(product);
@@ -202,7 +202,7 @@ public class ProductController {
 		List<GameLibraryTag> addTags = new ArrayList<>(tags);
 		
 		Map<Long, ProductTag> existingTagMap = new HashMap<Long, ProductTag>();
-		List<ProductTag> existingTags = storeTagController.listProductTags(bookProduct);
+		List<ProductTag> existingTags = gameLibraryTagController.listProductTags(bookProduct);
 		for (ProductTag existingTag : existingTags) {
 			existingTagMap.put(existingTag.getTag().getId(), existingTag);
 		}
@@ -218,7 +218,7 @@ public class ProductController {
 		}
 		
 		for (ProductTag removeTag : existingTagMap.values()) {
-			storeTagController.deleteProductTag(removeTag);
+			gameLibraryTagController.deleteProductTag(removeTag);
 		}
 		
 		for (GameLibraryTag gameLibraryTag : addTags) {
