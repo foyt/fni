@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.store;
+package fi.foyt.fni.view.gamelibrary;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,6 +15,9 @@ import javax.inject.Named;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
+import fi.foyt.fni.delivery.DeliveryMehtodsController;
+import fi.foyt.fni.delivery.DeliveryMethod;
+import fi.foyt.fni.gamelibrary.ShoppingCartController;
 import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCartItem;
 import fi.foyt.fni.session.SessionController;

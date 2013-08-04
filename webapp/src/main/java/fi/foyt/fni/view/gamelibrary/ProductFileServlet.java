@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.store;
+package fi.foyt.fni.view.gamelibrary;
 
 import java.io.IOException;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.store;
+package fi.foyt.fni.view.gamelibrary;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -14,6 +14,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.ProductController;
+import fi.foyt.fni.gamelibrary.ShoppingCartController;
 import fi.foyt.fni.gamelibrary.StoreTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
 import fi.foyt.fni.persistence.model.gamelibrary.Product;

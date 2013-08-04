@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.store;
+package fi.foyt.fni.view.gamelibrary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import javax.inject.Inject;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.ProductController;
+import fi.foyt.fni.gamelibrary.ShoppingCartController;
 import fi.foyt.fni.gamelibrary.StoreTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
 import fi.foyt.fni.persistence.model.gamelibrary.Product;

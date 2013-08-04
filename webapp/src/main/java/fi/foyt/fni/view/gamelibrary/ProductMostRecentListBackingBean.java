@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.store;
+package fi.foyt.fni.view.gamelibrary;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
@@ -11,6 +11,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.ProductController;
+import fi.foyt.fni.gamelibrary.ShoppingCartController;
 
 @SessionScoped
 @Named
