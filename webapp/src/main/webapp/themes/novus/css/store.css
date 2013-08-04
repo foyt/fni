@@ -305,6 +305,15 @@
   max-width: 802px;
 }
 
+.store-nav-separator {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.store-nav-separator:after {
+  content: '>';
+}
+
 #store-index h3.store-products-title {
   background: url("../gfx/icons/22x22/actions/store-recent-products.png") no-repeat scroll 8px center #EEEEEE;
   padding-left: 36px;
@@ -400,6 +409,11 @@
 .store-product-name {
   font-size: 16px; 
   margin-bottom: 4px;
+}
+
+.store-product-name a {
+  color: #000;
+  text-decoration: none;
 }
 
 .store-product-description {

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/store.xhtml">
+
+
+  <ui:define name="pageTitle">#{locales['store.index.pageTitle']}</ui:define>
+  <ui:define name="head">
+    <!-- jQuery UI -->
+  
+    <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.js"></script>
+    
+    <!-- jQuery File Upload -->
+
+    <h:outputScript name="scripts/load-image/load-image.min.js"/>
+    <h:outputScript name="scripts/canvas-to-blob/canvas-to-blob.min.js"/>
+    
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload-process.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload-image.js"></script>
+    
+    <!-- jQuery Magnific-Popup  -->
+    
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.magnific-popup/0.8.9/jquery.magnific-popup.min.js"></script>
+    <h:outputStylesheet name="scripts/jquery.magnific-popup/magnific-popup.css"/>
+
+    <!-- View specific -->
+    
+    <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/store.css"/>
+    <h:outputScript name="scripts/gui/store/index.js"></h:outputScript>
+    
+  </ui:define>
+  <ui:define name="content">
+  
+    <ui:insert name="products" />
+      
+    <div id="store-sidebar">
+      <h:panelGroup layout="block" id="store-mini-shopping-cart">
+        <h3 class="store-mini-shopping-cart-title">Shopping Cart</h3>
+
+        <div id="store-mini-shopping-cart-buttons">
+          <h:link id="store-view-cart-button" value="View" outcome="/store/cart"/>
+        </div>
+
+        <div id="store-mini-shopping-cart-contents">
+          <div class="store-mini-shopping-cart-items">
+            <h:panelGroup layout="block" rendered="#{shoppingCartBackingBean.shoppingCartEmpty}">
+              You don't have any products in cart yet.
+            </h:panelGroup>
+          
+            <ui:repeat var="cartItem" value="#{shoppingCartBackingBean.shoppingCartItems}">   
+              <div class="store-mini-shopping-cart-item">
+                <div class="store-mini-shopping-cart-item-count">#{cartItem.count}</div>
+                <div class="store-mini-shopping-cart-item-name">#{cartItem.name}</div>
+                <div class="store-mini-shopping-cart-item-price">
+                  <h:outputText value="#{cartItem.price}" >
+                    <f:convertNumber currencyCode="EUR" type="currency" />
+                  </h:outputText>
+                </div>
+              </div>
+            </ui:repeat>
+          </div>
+
+          <div class="store-mini-shopping-cart-summary">
+            <div class="store-mini-shopping-cart-summary-total-title-container">
+              <div class="store-mini-shopping-cart-summary-total-title">Total</div>
+            </div>
+            <div class="store-mini-shopping-cart-summary-total">
+              <h:outputText value="#{shoppingCartBackingBean.itemCosts}" >
+                <f:convertNumber currencyCode="EUR" type="currency" />
+              </h:outputText>
+            </div>
+          </div>
+          
+        </div>
+      </h:panelGroup>
+  
+      <div id="store-categories-container">
+        <h3 class="store-categories-title">Product Tags</h3>
+
+        <div id="store-categories">
+          <div class="store-category">
+            <div class="store-category-title">
+              <h:outputLink value="#{request.contextPath}/store/">Most Recent</h:outputLink>
+            </div>
+          </div>
+          <ui:repeat var="tag" value="#{productCategoriesBackingBean.tags}">
+            <div class="store-category">
+              <div class="store-category-title">
+                <h:outputLink value="#{request.contextPath}/store/tags/#{tag.text}">#{tag.text}</h:outputLink>
+              </div>
+            </div>
+          </ui:repeat>
+        </div>
+      </div>
+    </div>
+  
+    <!-- TODO: Store Admins only -->
+          
+    <div id="store-admin-panel">
+      <a class="store-admin-create-product" title="Create New Product"> </a>
+    </div>
+    
+    <div id="product-admin-operator-container" style="display: none">
+      <h:form>
+        <h:inputHidden value="#{productAdminBackingBean.productId}" id="product-id"/>
+        <h:commandButton action="#{productAdminBackingBean.publish}" id="publish"></h:commandButton>
+        <h:commandButton action="#{productAdminBackingBean.unpublish}" id="unpublish"></h:commandButton>
+        <h:commandButton action="#{productAdminBackingBean.delete}" id="delete"></h:commandButton>
+      </h:form>
+    </div>
+  </ui:define>
+
+</ui:composition>
+  

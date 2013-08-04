@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/store_products.xhtml">
+
+  <ui:define name="products">
+    <h:form>
+      <h:panelGroup layout="block" id="store-index" styleClass="store-index">
+        <div class="store-products">
+          <h3 class="store-products-title">
+            <span class="store-nav-item"><h:outputLink value="#{request.contextPath}/store/">Store</h:outputLink></span>
+            <span class="store-nav-separator"/>
+            <span class="store-nav-item">#{productDetailsBackingBean.product.name}</span>
+          </h3>
+          
+          <div>
+            <div data-product-id="#{productDetailsBackingBean.product.id}" class="store-product">
+              <div class="store-product-info-container">
+                <div class="store-product-name">#{productDetailsBackingBean.product.name}</div>
+                <div class="store-product-tags-container">
+                  <ui:repeat var="tag" value="#{productDetailsBackingBean.tags}">
+                    <div class="store-product-tag">
+                      <h:outputLink value="#{request.contextPath}/store/tags/#{tag.text}">#{tag.text}</h:outputLink>
+                    </div>
+                  </ui:repeat>
+                </div>
+                
+                <div class="store-product-description">#{productDetailsBackingBean.product.description}</div>
+                <div class="store-product-details">
+                  <div class="store-product-detail">
+                    <span>Price:</span>
+                    <span class="store-product-details-price">
+                      <h:outputText value="#{productDetailsBackingBean.product.price}" >
+                        <f:convertNumber currencyCode="EUR" type="currency" />
+                      </h:outputText>
+                    </span>
+                  </div>
+                  <ui:fragment rendered="#{productDetailsBackingBean.bookProduct ne null}">
+                    <ui:fragment rendered="#{productDetailsBackingBean.bookProduct.numberOfPages > 0}">
+                      <div class="store-product-detail">
+                        <span>Number of Pages:</span> 
+                        <span>#{productDetailsBackingBean.bookProduct.numberOfPages}</span>
+                      </div>
+                    </ui:fragment>
+                  </ui:fragment>
+                  <ui:fragment rendered="#{productDetailsBackingBean.bookProduct ne null}">
+                    <ui:fragment rendered="#{!empty(productDetailsBackingBean.bookProduct.author)}">
+                      <span>Author:</span> 
+                      <span>#{productDetailsBackingBean.bookProduct.author}</span>
+                    </ui:fragment>
+                  </ui:fragment>
+                  
+                  <h:panelGroup layout="block" rendered="#{productDetailsBackingBean.product.forumTopic ne null}" styleClass="store-product-comments">
+                    <h:outputLink value="#{request.contextPath}/forum/#{productDetailsBackingBean.product.forumTopic.forum.urlName}/#{productDetailsBackingBean.product.forumTopic.urlName}">Comments (#{productDetailsBackingBean.productCommentCount})</h:outputLink>
+                  </h:panelGroup>
+                </div>
+                
+                <ui:fragment rendered="#{productDetailsBackingBean.product.published}">
+                  <!-- TODO: Admins and owners only -->
+                  <div class="store-product-admin-actions-container">
+                    <div class="store-product-admin-action-container">
+                      <a title="Unpublish Product" href="javascript:void(null);" data-product-id="#{productDetailsBackingBean.product.id}" data-product-name="#{productDetailsBackingBean.product.name}" class="product-unpublish"></a>
+                    </div>
+                  </div>
+                </ui:fragment>
+                
+                <ui:fragment rendered="#{!product.published}">
+                  <div class="store-product-admin-actions-container">
+                    <div class="store-product-admin-action-container">
+                      <a class="product-publish" data-product-id="#{productDetailsBackingBean.product.id}" data-product-name="#{productDetailsBackingBean.product.name}" href="javascript:void(null);" title="Publish Product"></a>
+                    </div>
+                    <div class="store-product-admin-action-container">
+                      <a class="product-edit" data-product-id="#{productDetailsBackingBean.product.id}" href="javascript:void(null);" title="Edit"></a>
+                    </div>
+                    <div class="store-product-admin-action-container">
+                      <a class="product-add-images-action" data-product-id="#{productDetailsBackingBean.product.id}" href="javascript:void(null);" title="Add Images"></a>
+                    </div>
+                    <div class="store-product-admin-action-container">
+                      <a class="product-delete" data-product-id="#{productDetailsBackingBean.product.id}" data-product-name="#{productDetailsBackingBean.product.name}" href="javascript:void(null);" title="Delete Product"></a>
+                    </div>
+                  </div>
+                </ui:fragment>
+                
+              </div>
+              
+              <div class="store-product-images-container">
+                <ui:fragment rendered="#{productDetailsBackingBean.hasSeveralImages}">
+                  <div class="store-product-thumbnails-container">
+                    <div class="store-product-thumbnails-inner-container">
+                      <ui:repeat value="#{productDetailsBackingBean.productImages}" var="productImage">
+                        <div class="store-product-thumbnail-container">
+                          <a href="javascript:void(null)">
+                            <img data-url="#{request.contextPath}/store/productImages/#{productImage.id}" src="#{request.contextPath}/store/productImages/#{productImage.id}?width=32&amp;height=32"/>
+                          </a>
+                        </div>
+                      </ui:repeat>
+                    </div>
+                  </div>
+                </ui:fragment>
+
+                <ui:fragment rendered="#{productDetailsBackingBean.hasImages}">
+                  <div class="store-product-image-container">
+                    <div class="store-product-image-inner-container">
+                      <a href="#{request.contextPath}/store/productImages/#{productDetailsBackingBean.firstImage.id}">
+                        <img data-url="#{request.contextPath}/store/productImages/#{productDetailsBackingBean.firstImage.id}" src="#{request.contextPath}/store/productImages/#{productDetailsBackingBean.firstImage.id}?width=128&amp;height=128"/>
+                      </a>
+                    </div>
+                  </div>
+                </ui:fragment>
+              </div>
+              
+              <div class="store-product-actions-container">
+                <div class="store-product-action-container">
+                  <a href="#{request.contextPath}/store/productFiles/#{productDetailsBackingBean.product.id}">Download Free PDF</a>
+                </div>
+                <div class="store-product-action-container">
+                  <h:commandLink action="#{productDetailsBackingBean.addProductToShoppingCart}" value="Add to Shopping Cart" styleClass="store-product-add-to-cart-action">
+                  </h:commandLink>
+                </div>
+              </div>
+              
+              <div class="clearFloating"></div>
+            </div>
+          </div>
+        </div>
+      </h:panelGroup>
+    </h:form>
+  </ui:define>  
+</ui:composition>
+    
+    

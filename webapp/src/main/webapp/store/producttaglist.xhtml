@@ -13,18 +13,18 @@
           <h3 class="store-products-title">
             <span class="store-nav-item"><h:outputLink value="#{request.contextPath}/store/">Store</h:outputLink></span>
             <span class="store-nav-separator"/>
-            <span class="store-nav-item">Most Recent Publications</span>
+            <span class="store-nav-item">#{productTagListBackingBean.tag}</span>
           </h3>
           
           <div class="store-products">
-            <ui:repeat var="product" value="#{productMostRecentListBackingBean.products}">
+            <ui:repeat var="product" value="#{productTagListBackingBean.products}">
               <div data-product-id="#{product.id}" class="store-product">
                 <div class="store-product-info-container">
                   <div class="store-product-name">
                     <h:outputLink value="#{request.contextPath}/store/#{product.urlName}">#{product.name}</h:outputLink>
                   </div>
                   <div class="store-product-tags-container">
-                    <ui:repeat var="tag" value="#{productMostRecentListBackingBean.getTags(product)}">
+                    <ui:repeat var="tag" value="#{productTagListBackingBean.getTags(product)}">
                       <div class="store-product-tag">
                         <h:outputLink value="#{request.contextPath}/store/tags/#{tag.text}">#{tag.text}</h:outputLink>
                       </div>
@@ -41,22 +41,22 @@
                         </h:outputText>
                       </span>
                     </div>
-                    <ui:fragment rendered="#{productMostRecentListBackingBean.getBookProduct(product) ne null}">
-                      <ui:fragment rendered="#{productMostRecentListBackingBean.getBookProduct(product).numberOfPages > 0}">
+                    <ui:fragment rendered="#{productTagListBackingBean.getBookProduct(product) ne null}">
+                      <ui:fragment rendered="#{productTagListBackingBean.getBookProduct(product).numberOfPages > 0}">
                         <div class="store-product-detail">
                           <span>Number of Pages:</span> 
-                          <span>#{productMostRecentListBackingBean.getBookProduct(product).numberOfPages}</span>
+                          <span>#{productTagListBackingBean.getBookProduct(product).numberOfPages}</span>
                         </div>
                       </ui:fragment>
 
-                      <ui:fragment rendered="#{!empty(productMostRecentListBackingBean.getBookProduct(product).author)}">
+                      <ui:fragment rendered="#{!empty(productTagListBackingBean.getBookProduct(product).author)}">
                         <span>Author:</span> 
-                        <span>#{productMostRecentListBackingBean.getBookProduct(product).author}</span>
+                        <span>#{productTagListBackingBean.getBookProduct(product).author}</span>
                       </ui:fragment>
                     </ui:fragment>
                     
                     <h:panelGroup layout="block" rendered="#{product.forumTopic ne null}" styleClass="store-product-comments">
-                      <h:outputLink value="#{request.contextPath}/forum/#{product.forumTopic.forum.urlName}/#{product.forumTopic.urlName}">Comments (#{productMostRecentListBackingBean.getProductCommentCount(product)})</h:outputLink>
+                      <h:outputLink value="#{request.contextPath}/forum/#{product.forumTopic.forum.urlName}/#{product.forumTopic.urlName}">Comments (#{productTagListBackingBean.getProductCommentCount(product)})</h:outputLink>
                     </h:panelGroup>
                   </div>
                   
@@ -89,10 +89,10 @@
                 </div>
                 
                 <div class="store-product-images-container">
-                  <ui:fragment rendered="#{productMostRecentListBackingBean.hasSeveralImages(product)}">
+                  <ui:fragment rendered="#{productTagListBackingBean.hasSeveralImages(product)}">
                     <div class="store-product-thumbnails-container">
                       <div class="store-product-thumbnails-inner-container">
-                        <ui:repeat value="#{productMostRecentListBackingBean.getProductImages(product)}" var="productImage">
+                        <ui:repeat value="#{productTagListBackingBean.getProductImages(product)}" var="productImage">
                           <div class="store-product-thumbnail-container">
                             <a href="javascript:void(null)">
                               <img data-url="#{request.contextPath}/store/productImages/#{productImage.id}" src="#{request.contextPath}/store/productImages/#{productImage.id}?width=32&amp;height=32"/>
@@ -103,11 +103,11 @@
                     </div>
                   </ui:fragment>
   
-                  <ui:fragment rendered="#{productMostRecentListBackingBean.hasImages(product)}">
+                  <ui:fragment rendered="#{productTagListBackingBean.hasImages(product)}">
                     <div class="store-product-image-container">
                       <div class="store-product-image-inner-container">
-                        <a href="#{request.contextPath}/store/productImages/#{productMostRecentListBackingBean.getFirstImage(product).id}">
-                          <img data-url="#{request.contextPath}/store/productImages/#{productMostRecentListBackingBean.getFirstImage(product).id}" src="#{request.contextPath}/store/productImages/#{productMostRecentListBackingBean.getFirstImage(product).id}?width=128&amp;height=128"/>
+                        <a href="#{request.contextPath}/store/productImages/#{productTagListBackingBean.getFirstImage(product).id}">
+                          <img data-url="#{request.contextPath}/store/productImages/#{productTagListBackingBean.getFirstImage(product).id}" src="#{request.contextPath}/store/productImages/#{productTagListBackingBean.getFirstImage(product).id}?width=128&amp;height=128"/>
                         </a>
                       </div>
                     </div>
@@ -119,7 +119,7 @@
                     <a href="#{request.contextPath}/store/productFiles/#{product.id}">Download Free PDF</a>
                   </div>
                   <div class="store-product-action-container">
-                    <h:commandLink action="#{productMostRecentListBackingBean.addProductToShoppingCart(product)}" value="Add to Shopping Cart" styleClass="store-product-add-to-cart-action">
+                    <h:commandLink action="#{productTagListBackingBean.addProductToShoppingCart(product)}" value="Add to Shopping Cart" styleClass="store-product-add-to-cart-action">
                     </h:commandLink>
                   </div>
                 </div>
