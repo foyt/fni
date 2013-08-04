@@ -17,7 +17,7 @@ import javax.persistence.TemporalType;
 
 import fi.foyt.fni.persistence.model.users.User;
 
-@Entity (name = "StoreOrder")
+@Entity (name = "Order_")
 public class Order {
   
   public Long getId() {
