@@ -17,7 +17,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
-import fi.foyt.fni.persistence.model.store.Product;
+import fi.foyt.fni.persistence.model.gamelibrary.Product;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserContactFieldType;
 import fi.foyt.fni.users.UserController;

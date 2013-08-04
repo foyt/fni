@@ -1,10 +1,10 @@
-package fi.foyt.fni.persistence.dao.store;
+package fi.foyt.fni.persistence.dao.gamelibrary;
 
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.store.FileProduct;
-import fi.foyt.fni.persistence.model.store.FileProductFile;
+import fi.foyt.fni.persistence.model.gamelibrary.FileProduct;
+import fi.foyt.fni.persistence.model.gamelibrary.FileProductFile;
 
 @DAO
 public class FileProductDAO extends GenericDAO<FileProduct> {

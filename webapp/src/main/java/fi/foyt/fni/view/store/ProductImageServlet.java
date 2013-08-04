@@ -20,8 +20,8 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import fi.foyt.fni.persistence.model.store.Product;
-import fi.foyt.fni.persistence.model.store.ProductImage;
+import fi.foyt.fni.persistence.model.gamelibrary.Product;
+import fi.foyt.fni.persistence.model.gamelibrary.ProductImage;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.TypedData;

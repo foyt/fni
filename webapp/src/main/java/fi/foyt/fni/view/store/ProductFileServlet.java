@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 
-import fi.foyt.fni.persistence.model.store.FileProduct;
-import fi.foyt.fni.persistence.model.store.FileProductFile;
+import fi.foyt.fni.persistence.model.gamelibrary.FileProduct;
+import fi.foyt.fni.persistence.model.gamelibrary.FileProductFile;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.TypedData;

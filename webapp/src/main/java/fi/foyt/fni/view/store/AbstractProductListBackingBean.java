@@ -6,11 +6,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import fi.foyt.fni.forum.ForumController;
-import fi.foyt.fni.persistence.model.store.BookProduct;
-import fi.foyt.fni.persistence.model.store.Product;
-import fi.foyt.fni.persistence.model.store.ProductImage;
-import fi.foyt.fni.persistence.model.store.ProductTag;
-import fi.foyt.fni.persistence.model.store.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
+import fi.foyt.fni.persistence.model.gamelibrary.Product;
+import fi.foyt.fni.persistence.model.gamelibrary.ProductImage;
+import fi.foyt.fni.persistence.model.gamelibrary.ProductTag;
+import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
 
 public class AbstractProductListBackingBean {
 	

@@ -13,21 +13,21 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.forum.ForumController;
-import fi.foyt.fni.persistence.dao.store.BookProductDAO;
-import fi.foyt.fni.persistence.dao.store.FileProductDAO;
-import fi.foyt.fni.persistence.dao.store.FileProductFileDAO;
-import fi.foyt.fni.persistence.dao.store.ProductDAO;
-import fi.foyt.fni.persistence.dao.store.ProductImageDAO;
-import fi.foyt.fni.persistence.dao.store.ProductTagDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.BookProductDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.FileProductDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.FileProductFileDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.ProductDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.ProductImageDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.ProductTagDAO;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
-import fi.foyt.fni.persistence.model.store.BookProduct;
-import fi.foyt.fni.persistence.model.store.FileProduct;
-import fi.foyt.fni.persistence.model.store.FileProductFile;
-import fi.foyt.fni.persistence.model.store.Product;
-import fi.foyt.fni.persistence.model.store.ProductImage;
-import fi.foyt.fni.persistence.model.store.ProductTag;
-import fi.foyt.fni.persistence.model.store.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
+import fi.foyt.fni.persistence.model.gamelibrary.FileProduct;
+import fi.foyt.fni.persistence.model.gamelibrary.FileProductFile;
+import fi.foyt.fni.persistence.model.gamelibrary.Product;
+import fi.foyt.fni.persistence.model.gamelibrary.ProductImage;
+import fi.foyt.fni.persistence.model.gamelibrary.ProductTag;
+import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.servlet.RequestUtils;
@@ -183,7 +183,7 @@ public class ProductController {
 		return bookProductDAO.findById(id);
 	}
 	
-	public BookProduct updateBookProduct(fi.foyt.fni.persistence.model.store.BookProduct bookProduct, Double price, String name,
+	public BookProduct updateBookProduct(fi.foyt.fni.persistence.model.gamelibrary.BookProduct bookProduct, Double price, String name,
 			String description, List<StoreTag> tags, Boolean published, Boolean requiresDelivery, Boolean downloadable, 
 			Boolean purchasable, Double weight, Integer width, Integer height, Integer depth, Integer numberOfPages, String author, 
 			User modifier) {

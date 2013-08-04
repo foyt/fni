@@ -1,4 +1,4 @@
-package fi.foyt.fni.persistence.dao.store;
+package fi.foyt.fni.persistence.dao.gamelibrary;
 
 import java.util.List;
 
@@ -9,10 +9,10 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.store.Product;
-import fi.foyt.fni.persistence.model.store.ShoppingCart;
-import fi.foyt.fni.persistence.model.store.ShoppingCartItem;
-import fi.foyt.fni.persistence.model.store.ShoppingCartItem_;
+import fi.foyt.fni.persistence.model.gamelibrary.Product;
+import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCart;
+import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCartItem;
+import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCartItem_;
 
 @DAO
 public class ShoppingCartItemDAO extends GenericDAO<ShoppingCartItem> {

@@ -16,7 +16,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.persistence.model.common.Country;
-import fi.foyt.fni.persistence.model.store.ShoppingCartItem;
+import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCartItem;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 

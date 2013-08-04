@@ -1,4 +1,4 @@
-package fi.foyt.fni.persistence.model.store;
+package fi.foyt.fni.persistence.model.gamelibrary;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

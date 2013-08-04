@@ -1,4 +1,4 @@
-package fi.foyt.fni.persistence.dao.store;
+package fi.foyt.fni.persistence.dao.gamelibrary;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -7,8 +7,8 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.store.StoreTag;
-import fi.foyt.fni.persistence.model.store.StoreTag_;
+import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.StoreTag_;
 
 @DAO
 public class StoreTagDAO extends GenericDAO<StoreTag> {

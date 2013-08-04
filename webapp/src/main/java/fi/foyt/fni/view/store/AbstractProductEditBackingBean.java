@@ -9,7 +9,7 @@ import javax.servlet.http.Part;
 
 import org.apache.commons.lang3.StringUtils;
 
-import fi.foyt.fni.persistence.model.store.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
 
 public class AbstractProductEditBackingBean {
 	

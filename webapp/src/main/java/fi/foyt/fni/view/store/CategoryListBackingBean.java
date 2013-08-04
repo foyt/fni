@@ -7,7 +7,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import fi.foyt.fni.persistence.model.store.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
 
 @Stateful
 @RequestScoped

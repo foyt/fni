@@ -7,11 +7,11 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import fi.foyt.fni.persistence.dao.store.ProductTagDAO;
-import fi.foyt.fni.persistence.dao.store.StoreTagDAO;
-import fi.foyt.fni.persistence.model.store.Product;
-import fi.foyt.fni.persistence.model.store.ProductTag;
-import fi.foyt.fni.persistence.model.store.StoreTag;
+import fi.foyt.fni.persistence.dao.gamelibrary.ProductTagDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.StoreTagDAO;
+import fi.foyt.fni.persistence.model.gamelibrary.Product;
+import fi.foyt.fni.persistence.model.gamelibrary.ProductTag;
+import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
 
 @Stateful
 @Dependent

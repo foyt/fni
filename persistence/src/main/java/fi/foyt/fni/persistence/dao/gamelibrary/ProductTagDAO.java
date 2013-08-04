@@ -1,4 +1,4 @@
-package fi.foyt.fni.persistence.dao.store;
+package fi.foyt.fni.persistence.dao.gamelibrary;
 
 import java.util.List;
 
@@ -10,11 +10,11 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.store.Product;
-import fi.foyt.fni.persistence.model.store.ProductTag;
-import fi.foyt.fni.persistence.model.store.ProductTag_;
-import fi.foyt.fni.persistence.model.store.Product_;
-import fi.foyt.fni.persistence.model.store.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.Product;
+import fi.foyt.fni.persistence.model.gamelibrary.ProductTag;
+import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.ProductTag_;
+import fi.foyt.fni.persistence.model.gamelibrary.Product_;
 
 @DAO
 public class ProductTagDAO extends GenericDAO<ProductTag> {

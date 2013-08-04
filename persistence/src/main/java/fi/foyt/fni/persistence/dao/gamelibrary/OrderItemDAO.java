@@ -1,11 +1,11 @@
-package fi.foyt.fni.persistence.dao.store;
+package fi.foyt.fni.persistence.dao.gamelibrary;
 
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.store.Order;
-import fi.foyt.fni.persistence.model.store.OrderItem;
-import fi.foyt.fni.persistence.model.store.Product;
+import fi.foyt.fni.persistence.model.gamelibrary.Order;
+import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
+import fi.foyt.fni.persistence.model.gamelibrary.Product;
 
 @DAO
 public class OrderItemDAO extends GenericDAO<OrderItem> {
