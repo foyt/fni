@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import fi.foyt.fni.gamelibrary.StoreTagController;
-import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 @Stateful
 @RequestScoped
@@ -18,8 +18,8 @@ public class CategoryListBackingBean {
 	@Inject
 	private StoreTagController tagController;
 	
-	public List<StoreTag> getTagsWithPublishedProducts() {
-		return tagController.listActiveStoreTags();
+	public List<GameLibraryTag> getTagsWithPublishedProducts() {
+		return tagController.listActiveGameLibraryTags();
 	}
 	
 }

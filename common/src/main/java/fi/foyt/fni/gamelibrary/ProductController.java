@@ -27,7 +27,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.FileProductFile;
 import fi.foyt.fni.persistence.model.gamelibrary.Product;
 import fi.foyt.fni.persistence.model.gamelibrary.ProductImage;
 import fi.foyt.fni.persistence.model.gamelibrary.ProductTag;
-import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.servlet.RequestUtils;
@@ -79,17 +79,17 @@ public class ProductController {
 	}
 
 	public List<Product> listProductsByTags(String... tags) {
-		List<StoreTag> storeTags = new ArrayList<>();
+		List<GameLibraryTag> gameLibraryTags = new ArrayList<>();
 
 		for (String tag : tags) {
-			storeTags.add(storeTagController.findTagByText(tag));
+			gameLibraryTags.add(storeTagController.findTagByText(tag));
 		}
 
-		return listProductsByTags(storeTags);
+		return listProductsByTags(gameLibraryTags);
 	}
 
-	public List<Product> listProductsByTags(List<StoreTag> storeTags) {
-		return productTagDAO.listProductsByStoreTags(storeTags);
+	public List<Product> listProductsByTags(List<GameLibraryTag> gameLibraryTags) {
+		return productTagDAO.listProductsByGameLibraryTags(gameLibraryTags);
 	}
 
 	public List<Product> listRecentProducts(int maxRecentProduct) {
@@ -162,7 +162,7 @@ public class ProductController {
 	}
 	/* BookProducts */
 
-	public BookProduct createBookProduct(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, ProductImage defaultImage, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, List<StoreTag> tags) {
+	public BookProduct createBookProduct(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, ProductImage defaultImage, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, List<GameLibraryTag> tags) {
 		
 		Date now = new Date();
 		Long forumId = systemSettingsController.getStoreProductForumId();
@@ -173,7 +173,7 @@ public class ProductController {
 		BookProduct bookProduct = bookProductDAO.create(name, urlName, description, price, downloadable, purchasable, defaultImage, 
 				now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width, depth, weight, author, numberOfPages, forumTopic);
 
-		for (StoreTag tag : tags) {
+		for (GameLibraryTag tag : tags) {
 			productTagDAO.create(tag, bookProduct);
 		}
 		
@@ -185,7 +185,7 @@ public class ProductController {
 	}
 	
 	public BookProduct updateBookProduct(fi.foyt.fni.persistence.model.gamelibrary.BookProduct bookProduct, Double price, String name,
-			String description, List<StoreTag> tags, Boolean published, Boolean requiresDelivery, Boolean downloadable, 
+			String description, List<GameLibraryTag> tags, Boolean published, Boolean requiresDelivery, Boolean downloadable, 
 			Boolean purchasable, Double weight, Integer width, Integer height, Integer depth, Integer numberOfPages, String author, 
 			User modifier) {
 
@@ -199,7 +199,7 @@ public class ProductController {
 		bookProductDAO.updateNumberOfPages(bookProduct, numberOfPages);
 		bookProductDAO.updateAuthor(bookProduct, author);
 		
-		List<StoreTag> addTags = new ArrayList<>(tags);
+		List<GameLibraryTag> addTags = new ArrayList<>(tags);
 		
 		Map<Long, ProductTag> existingTagMap = new HashMap<Long, ProductTag>();
 		List<ProductTag> existingTags = storeTagController.listProductTags(bookProduct);
@@ -208,7 +208,7 @@ public class ProductController {
 		}
 		
 		for (int i = addTags.size() - 1; i >= 0; i--) {
-			StoreTag addTag = addTags.get(i);
+			GameLibraryTag addTag = addTags.get(i);
 			
 			if (existingTagMap.containsKey(addTag.getId())) {
 				addTags.remove(i);
@@ -221,8 +221,8 @@ public class ProductController {
 			storeTagController.deleteProductTag(removeTag);
 		}
 		
-		for (StoreTag storeTag : addTags) {
-			productTagDAO.create(storeTag, bookProduct);
+		for (GameLibraryTag gameLibraryTag : addTags) {
+			productTagDAO.create(gameLibraryTag, bookProduct);
 		}
 		
 		productDAO.updatePrice(bookProduct, price);

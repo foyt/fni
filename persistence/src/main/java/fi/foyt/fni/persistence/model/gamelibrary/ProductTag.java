@@ -21,11 +21,11 @@ public class ProductTag {
 		this.product = product;
 	}
   
-  public StoreTag getTag() {
+  public GameLibraryTag getTag() {
 		return tag;
 	}
   
-  public void setTag(StoreTag tag) {
+  public void setTag(GameLibraryTag tag) {
 		this.tag = tag;
 	}
 
@@ -37,5 +37,5 @@ public class ProductTag {
   private Product product;
   
   @ManyToOne
-  private StoreTag tag;
+  private GameLibraryTag tag;
 }

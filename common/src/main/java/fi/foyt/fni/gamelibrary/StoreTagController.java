@@ -7,46 +7,46 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import fi.foyt.fni.persistence.dao.gamelibrary.GameLibraryTagDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.ProductTagDAO;
-import fi.foyt.fni.persistence.dao.gamelibrary.StoreTagDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.Product;
 import fi.foyt.fni.persistence.model.gamelibrary.ProductTag;
-import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 @Stateful
 @Dependent
 public class StoreTagController {
 
 	@Inject
-	private StoreTagDAO storeTagDAO;
+	private GameLibraryTagDAO gameLibraryTagDAO;
 	
 	@Inject
 	private ProductTagDAO productTagDAO;
 	
 	/* Store Tags */
 
-	public StoreTag createTag(String text) {
-		return storeTagDAO.create(text);
+	public GameLibraryTag createTag(String text) {
+		return gameLibraryTagDAO.create(text);
 	}
 
-	public StoreTag findTagById(Long id) {
-		return storeTagDAO.findById(id);
+	public GameLibraryTag findTagById(Long id) {
+		return gameLibraryTagDAO.findById(id);
 	}
 	
-	public StoreTag findTagByText(String text) {
-		return storeTagDAO.findByText(text);
+	public GameLibraryTag findTagByText(String text) {
+		return gameLibraryTagDAO.findByText(text);
 	}
 	
-	public List<StoreTag> listStoreTags() {
-		return storeTagDAO.listAll();
+	public List<GameLibraryTag> listGameLibraryTags() {
+		return gameLibraryTagDAO.listAll();
 	}
 	
-	public List<StoreTag> listActiveStoreTags() {
-		return productTagDAO.listStoreTagsByProductPublished(Boolean.TRUE);
+	public List<GameLibraryTag> listActiveGameLibraryTags() {
+		return productTagDAO.listGameLibraryTagsByProductPublished(Boolean.TRUE);
 	}
 	
-	public List<StoreTag> listProductStoreTags(Product product) {
-		List<StoreTag> result = new ArrayList<StoreTag>();
+	public List<GameLibraryTag> listProductGameLibraryTags(Product product) {
+		List<GameLibraryTag> result = new ArrayList<GameLibraryTag>();
 		
 		List<ProductTag> productTags = productTagDAO.listByProduct(product);
 		for (ProductTag productTag : productTags) {
@@ -63,13 +63,13 @@ public class StoreTagController {
 	}
 
 	public void deleteProductTag(ProductTag productTag) {
-		StoreTag storeTag = productTag.getTag();
+		GameLibraryTag gameLibraryTag = productTag.getTag();
 		
 		productTagDAO.delete(productTag);
 		
-		Long productCount = productTagDAO.countProductsByTag(storeTag);
+		Long productCount = productTagDAO.countProductsByTag(gameLibraryTag);
 		if (productCount == 0) {
-			storeTagDAO.delete(storeTag);
+			gameLibraryTagDAO.delete(gameLibraryTag);
 		}
 	}
 }

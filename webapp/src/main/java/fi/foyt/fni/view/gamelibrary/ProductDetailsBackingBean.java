@@ -19,7 +19,7 @@ import fi.foyt.fni.gamelibrary.StoreTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
 import fi.foyt.fni.persistence.model.gamelibrary.Product;
 import fi.foyt.fni.persistence.model.gamelibrary.ProductImage;
-import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 @SessionScoped
 @Named
@@ -52,7 +52,7 @@ public class ProductDetailsBackingBean {
 			throw new FileNotFoundException();
 		}
 		
-		tags = storeTagController.listProductStoreTags(product);
+		tags = storeTagController.listProductGameLibraryTags(product);
 	}
 	
 	public String getUrlName() {
@@ -71,7 +71,7 @@ public class ProductDetailsBackingBean {
 		return bookProduct;
 	}
 	
-	public List<StoreTag> getTags() {
+	public List<GameLibraryTag> getTags() {
 		return tags;
 	}
 
@@ -106,5 +106,5 @@ public class ProductDetailsBackingBean {
 	private String urlName;
 	private Product product;
 	private BookProduct bookProduct;
-	private List<StoreTag> tags;
+	private List<GameLibraryTag> tags;
 }

@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import fi.foyt.fni.gamelibrary.StoreTagController;
-import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 @RequestScoped
 @Named
@@ -21,17 +21,17 @@ public class ProductCategoriesBackingBean {
 
 	@PostConstruct
 	public void init() {
-		tags = storeTagController.listActiveStoreTags();
+		tags = storeTagController.listGameLibraryTags();
 	}
 	
-	public List<StoreTag> getTags() {
+	public List<GameLibraryTag> getTags() {
 		return tags;
 	}
 	
-	public void setTags(List<StoreTag> tags) {
+	public void setTags(List<GameLibraryTag> tags) {
 		this.tags = tags;
 	}
 	
-	private List<StoreTag> tags;
+	private List<GameLibraryTag> tags;
 	
 }

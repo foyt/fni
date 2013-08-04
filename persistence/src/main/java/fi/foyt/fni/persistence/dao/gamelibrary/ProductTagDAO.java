@@ -12,7 +12,7 @@ import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.Product;
 import fi.foyt.fni.persistence.model.gamelibrary.ProductTag;
-import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.ProductTag_;
 import fi.foyt.fni.persistence.model.gamelibrary.Product_;
 
@@ -21,7 +21,7 @@ public class ProductTagDAO extends GenericDAO<ProductTag> {
   
 	private static final long serialVersionUID = 1L;
 
-	public ProductTag create(StoreTag tag, Product product) {
+	public ProductTag create(GameLibraryTag tag, Product product) {
 		ProductTag productTag = new ProductTag();
 		productTag.setProduct(product);
 		productTag.setTag(tag);
@@ -43,7 +43,7 @@ public class ProductTagDAO extends GenericDAO<ProductTag> {
     return entityManager.createQuery(criteria).getResultList();
   }
 
-	public List<Product> listProductsByStoreTags(List<StoreTag> storeTags) {
+	public List<Product> listProductsByGameLibraryTags(List<GameLibraryTag> gameLibaryTags) {
 		EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -51,13 +51,13 @@ public class ProductTagDAO extends GenericDAO<ProductTag> {
     Root<ProductTag> root = criteria.from(ProductTag.class);
     criteria.select(root.get(ProductTag_.product));
     criteria.where(
-    	root.get(ProductTag_.tag).in(storeTags)
+    	root.get(ProductTag_.tag).in(gameLibaryTags)
     );
     
     return entityManager.createQuery(criteria).getResultList();
 	}
 
-	public Long countProductsByTag(StoreTag tag) {
+	public Long countProductsByTag(GameLibraryTag tag) {
 		EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -71,11 +71,11 @@ public class ProductTagDAO extends GenericDAO<ProductTag> {
     return entityManager.createQuery(criteria).getSingleResult();
 	}
 
-	public List<StoreTag> listStoreTagsByProductPublished(Boolean published) {
+	public List<GameLibraryTag> listGameLibraryTagsByProductPublished(Boolean published) {
 		EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<StoreTag> criteria = criteriaBuilder.createQuery(StoreTag.class);
+    CriteriaQuery<GameLibraryTag> criteria = criteriaBuilder.createQuery(GameLibraryTag.class);
     Root<ProductTag> root = criteria.from(ProductTag.class);
     Join<ProductTag, Product> join = root.join(ProductTag_.product);
     criteria.select(root.get(ProductTag_.tag)).distinct(true);

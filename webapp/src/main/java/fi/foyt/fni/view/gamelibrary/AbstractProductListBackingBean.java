@@ -13,7 +13,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
 import fi.foyt.fni.persistence.model.gamelibrary.Product;
 import fi.foyt.fni.persistence.model.gamelibrary.ProductImage;
 import fi.foyt.fni.persistence.model.gamelibrary.ProductTag;
-import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 public class AbstractProductListBackingBean {
 	
@@ -53,8 +53,8 @@ public class AbstractProductListBackingBean {
 		return null;
 	}
 	
-	public List<StoreTag> getTags(Product product) {
-		List<StoreTag> result = new ArrayList<>();
+	public List<GameLibraryTag> getTags(Product product) {
+		List<GameLibraryTag> result = new ArrayList<>();
 
 		List<ProductTag> productTags = storeTagController.listProductTags(product);
 		for (ProductTag productTag : productTags) {

@@ -9,15 +9,15 @@ import javax.servlet.http.Part;
 
 import org.apache.commons.lang3.StringUtils;
 
-import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 public class AbstractProductEditBackingBean {
 	
-	protected List<SelectItemGroup> createTagSelectItems(List<StoreTag> tags) {
+	protected List<SelectItemGroup> createTagSelectItems(List<GameLibraryTag> tags) {
 		 ArrayList<SelectItemGroup> result = new ArrayList<>();
 
 		List<SelectItem> tagItems = new ArrayList<>();
-		for (StoreTag tag : tags) {
+		for (GameLibraryTag tag : tags) {
 			tagItems.add(new SelectItem(tag.getText(), StringUtils.capitalize(tag.getText())));
 		}
 

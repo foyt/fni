@@ -14,7 +14,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.gamelibrary.ProductController;
 import fi.foyt.fni.gamelibrary.StoreTagController;
-import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 @SessionScoped
 @Named
@@ -36,12 +36,12 @@ public class ProductTagListBackingBean extends AbstractProductListBackingBean {
 
 	@URLAction
 	public void init() throws FileNotFoundException {
-		storeTag = storeTagController.findTagByText(tag);
-		if (storeTag == null) {
+		gameLibraryTag = storeTagController.findTagByText(tag);
+		if (gameLibraryTag == null) {
 			throw new FileNotFoundException();
 		}
 		
-		setProducts(productController.listProductsByTags(Arrays.asList(storeTag)));
+		setProducts(productController.listProductsByTags(Arrays.asList(gameLibraryTag)));
 	}
 	
 	public String getTag() {
@@ -52,10 +52,10 @@ public class ProductTagListBackingBean extends AbstractProductListBackingBean {
 		this.tag = tag;
 	}
 	
-	public StoreTag getStoreTag() {
-		return storeTag;
+	public GameLibraryTag getGameLibraryTag() {
+		return gameLibraryTag;
 	}
 
 	private String tag;
-	private StoreTag storeTag;
+	private GameLibraryTag gameLibraryTag;
 }

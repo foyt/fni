@@ -17,7 +17,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import fi.foyt.fni.gamelibrary.ProductController;
 import fi.foyt.fni.gamelibrary.StoreTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
-import fi.foyt.fni.persistence.model.gamelibrary.StoreTag;
+import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 
@@ -45,22 +45,22 @@ public class ProductCreateBackingBean extends AbstractProductEditBackingBean {
 	@PostConstruct
 	public void init() {
 		setTagSelectItems(
-			  createTagSelectItems(storeTagController.listStoreTags())		
+			  createTagSelectItems(storeTagController.listGameLibraryTags())		
 			);
 	}
 
 	public void save() {
 		User loggedUser = sessionController.getLoggedUser();
-		List<StoreTag> tags = new ArrayList<>();
+		List<GameLibraryTag> tags = new ArrayList<>();
 		String tagsString = getProductTags();
 		
 		if (StringUtils.isNotBlank(tagsString)) {
   		for (String tag : tagsString.split(";")) {
-  			StoreTag storeTag = storeTagController.findTagByText(tag);
-  			if (storeTag == null) {
-  				storeTag = storeTagController.createTag(tag);
+  			GameLibraryTag gameLibraryTag = storeTagController.findTagByText(tag);
+  			if (gameLibraryTag == null) {
+  				gameLibraryTag = storeTagController.createTag(tag);
   			}
-  			tags.add(storeTag);
+  			tags.add(gameLibraryTag);
   		}
 		}
 		
