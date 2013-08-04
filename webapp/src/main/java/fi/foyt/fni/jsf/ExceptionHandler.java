@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ocpsoft.pretty.PrettyContext;
+import com.ocpsoft.pretty.PrettyException;
 
 import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.UnauthorizedException;
@@ -52,7 +53,8 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
 			Throwable exception = queuedEventContext.getException();
 			while ((exception instanceof FacesException || 
 							exception instanceof EJBException || 
-							exception instanceof ELException || 
+							exception instanceof ELException ||  
+							exception instanceof PrettyException || 
 							exception instanceof CreationException || 
 							exception instanceof IllegalStateException) && 
 							exception.getCause() != null) {
