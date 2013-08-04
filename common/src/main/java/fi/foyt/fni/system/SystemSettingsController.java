@@ -23,7 +23,7 @@ import fi.foyt.fni.persistence.model.system.SystemSetting;
 public class SystemSettingsController {
 	
 	private static final String DEFAULT_COUNTRY_CODE = "FI";
-	private static final String STORE_PRODUCT_FORUM_ID = "store.product.forum";
+	private static final String GAMELIBRARY_PUBLICATION_FORUM_ID = "gamelibrary.publication.forum";
 
 	@Inject
 	private SystemSettingDAO systemSettingDAO;
@@ -95,7 +95,7 @@ public class SystemSettingsController {
 		return countryDAO.listAll();
 	}
 
-	public Long getStoreProductForumId() {
-		return NumberUtils.createLong(getSetting(STORE_PRODUCT_FORUM_ID));
+	public Long getGameLibraryPublicationForumId() {
+		return NumberUtils.createLong(getSetting(GAMELIBRARY_PUBLICATION_FORUM_ID));
 	}
 }

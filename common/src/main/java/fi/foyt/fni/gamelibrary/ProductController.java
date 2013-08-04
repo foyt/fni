@@ -165,7 +165,7 @@ public class ProductController {
 	public BookProduct createBookProduct(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, ProductImage defaultImage, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, List<GameLibraryTag> tags) {
 		
 		Date now = new Date();
-		Long forumId = systemSettingsController.getStoreProductForumId();
+		Long forumId = systemSettingsController.getGameLibraryPublicationForumId();
 		Forum forum = forumController.findForumById(forumId);
 		ForumTopic forumTopic = forumController.createTopic(forum, name, creator);
 		String urlName = createUrlName(name);
