@@ -18,7 +18,7 @@ import fi.foyt.fni.gamelibrary.ShoppingCartController;
 @Stateful
 @URLMappings(mappings = {
   @URLMapping(
-		id = "store-product-most-recent", 
+		id = "gamelibrary-product-most-recent", 
 		pattern = "/gamelibrary/", 
 		viewId = "/gamelibrary/index.jsf"
   )

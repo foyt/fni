@@ -21,7 +21,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 @Stateful
 @URLMappings(mappings = {
   @URLMapping(
-		id = "store-product-tag-list", 
+		id = "gamelibrary-product-tag-list", 
 		pattern = "/gamelibrary/tags/#{productTagListBackingBean.tag}", 
 		viewId = "/gamelibrary/producttaglist.jsf"
   )

@@ -23,7 +23,7 @@ public class GameLibraryTagController {
 	@Inject
 	private ProductTagDAO productTagDAO;
 	
-	/* Store Tags */
+	/* Game Library Tags */
 
 	public GameLibraryTag createTag(String text) {
 		return gameLibraryTagDAO.create(text);

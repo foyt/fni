@@ -28,7 +28,7 @@ import fi.foyt.fni.system.SystemSettingsController;
 @Named
 @URLMappings(mappings = {
   @URLMapping(
-		id = "store-cart", 
+		id = "gamelibrary-cart", 
 		pattern = "/gamelibrary/cart/", 
 		viewId = "/gamelibrary/cart.jsf"
   )
