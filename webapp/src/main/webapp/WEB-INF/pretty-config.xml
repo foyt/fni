@@ -15,8 +15,8 @@
 	<rewrite match="^/forge$" substitute="/forge/"/>
 	<rewrite match="^/forge([\?\#])(.*)" substitute="/forge/$1$2"/>
 
-	<rewrite match="^/store$" substitute="/store/"/>
-	<rewrite match="^/store([\?\#])(.*)" substitute="/store/$1$2"/>
+	<rewrite match="^/gamelibrary$" substitute="/gamelibrary/"/>
+	<rewrite match="^/gamelibrary([\?\#])(.*)" substitute="/gamelibrary/$1$2"/>
 
 	<rewrite match="^/login$" substitute="/login/"/>
 	<rewrite match="^/login([\?\#])(.*)" substitute="/login/$1$2"/>

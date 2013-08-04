@@ -43,7 +43,7 @@
         <h3 class="store-mini-shopping-cart-title">Shopping Cart</h3>
 
         <div id="store-mini-shopping-cart-buttons">
-          <h:link id="store-view-cart-button" value="View" outcome="/store/cart"/>
+          <h:outputLink id="store-view-cart-button" value="#{request.contextPath}/gamelibrary/cart/">View</h:outputLink>
         </div>
 
         <div id="store-mini-shopping-cart-contents">
@@ -85,13 +85,13 @@
         <div id="store-categories">
           <div class="store-category">
             <div class="store-category-title">
-              <h:outputLink value="#{request.contextPath}/store/">Most Recent</h:outputLink>
+              <h:outputLink value="#{request.contextPath}/gamelibrary/">Most Recent</h:outputLink>
             </div>
           </div>
           <ui:repeat var="tag" value="#{productCategoriesBackingBean.tags}">
             <div class="store-category">
               <div class="store-category-title">
-                <h:outputLink value="#{request.contextPath}/store/tags/#{tag.text}">#{tag.text}</h:outputLink>
+                <h:outputLink value="#{request.contextPath}/gamelibrary/tags/#{tag.text}">#{tag.text}</h:outputLink>
               </div>
             </div>
           </ui:repeat>

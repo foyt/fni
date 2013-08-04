@@ -73,7 +73,7 @@
                   <ul>
                     <ui:repeat var="publication" value="#{indexViewBackingBean.latestGameLibraryPublications}">
                       <li>
-                        <h:outputLink value="#{request.contextPath}/store/#{publication.urlName}">#{publication.name}</h:outputLink>
+                        <h:outputLink value="#{request.contextPath}/gamelibrary/#{publication.urlName}">#{publication.name}</h:outputLink>
                       </li>
                     </ui:repeat>
                   </ul>

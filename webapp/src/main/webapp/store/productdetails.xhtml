@@ -11,7 +11,7 @@
       <h:panelGroup layout="block" id="store-index" styleClass="store-index">
         <div class="store-products">
           <h3 class="store-products-title">
-            <span class="store-nav-item"><h:outputLink value="#{request.contextPath}/store/">Store</h:outputLink></span>
+            <span class="store-nav-item"><h:outputLink value="#{request.contextPath}/gamelibrary/">Store</h:outputLink></span>
             <span class="store-nav-separator"/>
             <span class="store-nav-item">#{productDetailsBackingBean.product.name}</span>
           </h3>
@@ -23,7 +23,7 @@
                 <div class="store-product-tags-container">
                   <ui:repeat var="tag" value="#{productDetailsBackingBean.tags}">
                     <div class="store-product-tag">
-                      <h:outputLink value="#{request.contextPath}/store/tags/#{tag.text}">#{tag.text}</h:outputLink>
+                      <h:outputLink value="#{request.contextPath}/gamelibrary/tags/#{tag.text}">#{tag.text}</h:outputLink>
                     </div>
                   </ui:repeat>
                 </div>
@@ -93,7 +93,7 @@
                       <ui:repeat value="#{productDetailsBackingBean.productImages}" var="productImage">
                         <div class="store-product-thumbnail-container">
                           <a href="javascript:void(null)">
-                            <img data-url="#{request.contextPath}/store/productImages/#{productImage.id}" src="#{request.contextPath}/store/productImages/#{productImage.id}?width=32&amp;height=32"/>
+                            <img data-url="#{request.contextPath}/gamelibrary/publicationImages/#{productImage.id}" src="#{request.contextPath}/gamelibrary/publicationImages/#{productImage.id}?width=32&amp;height=32"/>
                           </a>
                         </div>
                       </ui:repeat>
@@ -104,8 +104,8 @@
                 <ui:fragment rendered="#{productDetailsBackingBean.hasImages}">
                   <div class="store-product-image-container">
                     <div class="store-product-image-inner-container">
-                      <a href="#{request.contextPath}/store/productImages/#{productDetailsBackingBean.firstImage.id}">
-                        <img data-url="#{request.contextPath}/store/productImages/#{productDetailsBackingBean.firstImage.id}" src="#{request.contextPath}/store/productImages/#{productDetailsBackingBean.firstImage.id}?width=128&amp;height=128"/>
+                      <a href="#{request.contextPath}/gamelibrary/publicationImages/#{productDetailsBackingBean.firstImage.id}">
+                        <img data-url="#{request.contextPath}/gamelibrary/publicationImages/#{productDetailsBackingBean.firstImage.id}" src="#{request.contextPath}/gamelibrary/publicationImages/#{productDetailsBackingBean.firstImage.id}?width=128&amp;height=128"/>
                       </a>
                     </div>
                   </div>
@@ -114,7 +114,7 @@
               
               <div class="store-product-actions-container">
                 <div class="store-product-action-container">
-                  <a href="#{request.contextPath}/store/productFiles/#{productDetailsBackingBean.product.id}">Download Free PDF</a>
+                  <a href="#{request.contextPath}/gamelibrary/publicationFiles/#{productDetailsBackingBean.product.id}">Download Free PDF</a>
                 </div>
                 <div class="store-product-action-container">
                   <h:commandLink action="#{productDetailsBackingBean.addProductToShoppingCart}" value="Add to Shopping Cart" styleClass="store-product-add-to-cart-action">

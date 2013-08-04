@@ -28,7 +28,7 @@ import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.images.ImageUtils;
 import fi.foyt.fni.view.AbstractFileServlet;
 
-@WebServlet(urlPatterns = "/store/productImages/*")
+@WebServlet(urlPatterns = "/gamelibrary/publicationImages/*")
 public class ProductImageServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = 8109481247044843102L;
@@ -119,7 +119,7 @@ public class ProductImageServlet extends AbstractFileServlet {
 				if (product != null) {
 					for (TypedData image : images) {
 						ProductImage productImage = productController.createProductImage(product, image.getData(), image.getContentType(), loggedUser);
-						String url = request.getContextPath() + "/fni/store/productImages/" + productImage.getId();
+						String url = request.getContextPath() + "/gamelibrary/publicationImages/" + productImage.getId();
 						String thumbnailUrl = url + "?width=128&height=128";
 						resultItems.add(new UploadResultItem(productImage.getId().toString(), image.getData().length, url, thumbnailUrl, "N/A", "DELETE"));
 					}

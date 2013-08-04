@@ -25,7 +25,7 @@ import fi.foyt.fni.session.SessionController;
 @URLMappings(mappings = {
   @URLMapping(
   		id = "store-product-dialog-create", 
-  		pattern = "/store/product/dialog/create", 
+  		pattern = "/gamelibrary/publications/dialog/create", 
   		viewId = "/store/dialogs/createproduct.jsf"
   )
 })

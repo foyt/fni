@@ -12,6 +12,9 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.ocpsoft.pretty.faces.annotation.URLMapping;
+import com.ocpsoft.pretty.faces.annotation.URLMappings;
+
 import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.store.ShoppingCartItem;
 import fi.foyt.fni.session.SessionController;
@@ -20,6 +23,13 @@ import fi.foyt.fni.system.SystemSettingsController;
 @Stateful
 @SessionScoped
 @Named
+@URLMappings(mappings = {
+  @URLMapping(
+		id = "store-cart", 
+		pattern = "/gamelibrary/cart/", 
+		viewId = "/store/cart.jsf"
+  )
+})
 public class ShoppingCartBackingBean implements Serializable {
 
 	private static final long serialVersionUID = 8752219019720302773L;

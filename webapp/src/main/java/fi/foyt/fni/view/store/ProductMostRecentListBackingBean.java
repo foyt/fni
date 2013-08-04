@@ -17,7 +17,7 @@ import fi.foyt.fni.forum.ForumController;
 @URLMappings(mappings = {
   @URLMapping(
 		id = "store-product-most-recent", 
-		pattern = "/store/", 
+		pattern = "/gamelibrary/", 
 		viewId = "/store/index.jsf"
   )
 })

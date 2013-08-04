@@ -20,7 +20,7 @@ import fi.foyt.fni.persistence.model.store.StoreTag;
 @URLMappings(mappings = {
   @URLMapping(
 		id = "store-product-tag-list", 
-		pattern = "/store/tags/#{productTagListBackingBean.tag}", 
+		pattern = "/gamelibrary/tags/#{productTagListBackingBean.tag}", 
 		viewId = "/store/producttaglist.jsf"
   )
 })

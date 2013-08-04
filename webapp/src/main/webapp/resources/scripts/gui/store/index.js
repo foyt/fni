@@ -7,7 +7,7 @@
   }
   
   function openImageUploadDialog(productId) {
-    var url = CONTEXTPATH + '/store/productImages/';
+    var url = CONTEXTPATH + '/gamelibrary/publicationImages/';
     var maxFileSize = 1000000;
     var previewWidth = 64;
     var previewHeight = 64;
@@ -279,7 +279,7 @@
   $(document).on('click', '.product-edit', function (event) {
     var productId = $(this).data('product-id');
     
-    $.ajax(CONTEXTPATH + '/store/product/' + productId + '/dialog/edit', {
+    $.ajax(CONTEXTPATH + '/gamelibrary/publications/' + productId + '/dialog/edit', {
       async: false,
       success : function(data, textStatus, jqXHR) {
         var dialog = $(data).dialog({
@@ -418,7 +418,7 @@
    */
  
   $(document).on('click', '#store-admin-panel .store-admin-create-product', function (event) {
-    $.ajax(CONTEXTPATH + '/store/product/dialog/create', {
+    $.ajax(CONTEXTPATH + '/gamelibrary/publications/dialog/create', {
       async: false,
       success : function(data, textStatus, jqXHR) {
         var dialog = $(data).dialog({
