@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    template="/WEB-INF/templates/root.xhtml">
+    
+    <ui:define name="pageTitle">
+      #{profileBackingBean.fullName}
+    </ui:define>
+
+    <ui:define name="head">
+      <!-- View Specific -->
+  
+      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/profile.css"/>
+    </ui:define>
+    
+    <ui:define name="content">
+      <div id="profile">
+        <h2>#{profileBackingBean.fullName}</h2>
+        
+        <div class="profile-column-left">
+          <div class="profile-about">
+            <h3>#{locales['users.profile.aboutMe']}</h3>
+            <div>
+              <div class="profile-image-container">
+                <h:graphicImage value="/users/profileImages/#{profileBackingBean.userId}?width=128&amp;height=128" rendered="#{profileBackingBean.user.profileImage ne null}"/>
+              </div>
+              <div class="profile-about-container">
+                <h:outputText value="#{profileBackingBean.user.about}" escape="false"/>
+              </div>
+            </div>
+          </div>
+          
+          <div class="profile-contact">
+            <h3>#{locales['users.profile.contactInfo']}</h3>
+
+            <h:panelGroup layout="block" rendered="#{!empty(profileBackingBean.contactFieldHomePage)}" styleClass="profile-contact-info">
+              <h:outputLabel value="#{locales['users.profile.contactInfoFieldHomePage']}" />
+              <span><a href="#{profileBackingBean.contactFieldHomePage}">#{profileBackingBean.contactFieldHomePage}</a></span>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" rendered="#{!empty(profileBackingBean.contactFieldBlog)}" styleClass="profile-contact-info">
+              <h:outputLabel value="#{locales['users.profile.contactInfoFieldBlog']}" />
+              <span><a href="#{profileBackingBean.contactFieldBlog}">#{profileBackingBean.contactFieldBlog}</a></span>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" rendered="#{!empty(profileBackingBean.contactFieldFacebook)}" styleClass="profile-contact-info">
+              <h:outputLabel value="#{locales['users.profile.contactInfoFieldFacebook']}" />
+              <span><a href="#{profileBackingBean.contactFieldFacebook}">#{profileBackingBean.contactFieldFacebook}</a></span>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" rendered="#{!empty(profileBackingBean.contactFieldTwitter)}" styleClass="profile-contact-info">
+              <h:outputLabel value="#{locales['users.profile.contactInfoFieldTwitter']}" />
+              <span><a href="#{profileBackingBean.contactFieldTwitter}">#{profileBackingBean.contactFieldTwitter}</a></span>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" rendered="#{!empty(profileBackingBean.contactFieldLinkedIn)}" styleClass="profile-contact-info">
+              <h:outputLabel value="#{locales['users.profile.contactInfoFieldLinkedIn']}" />
+              <span><a href="#{profileBackingBean.contactFieldTwitter}">#{profileBackingBean.contactFieldLinkedIn}</a></span>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" rendered="#{!empty(profileBackingBean.contactFieldGooglePlus)}" styleClass="profile-contact-info">
+              <h:outputLabel value="#{locales['users.profile.contactInfoFieldGooglePlus']}" />
+              <span><a href="#{profileBackingBean.contactFieldGooglePlus}">#{profileBackingBean.contactFieldGooglePlus}</a></span>
+            </h:panelGroup>
+          </div>
+          
+          <div class="profile-forum-activity">
+            <h3>#{locales['users.profile.forumActivity']}</h3>
+            
+            <div class="profile-forum-activity-info">
+              <h:outputLabel value="#{locales['users.profile.forumTotalPosts']}" />
+              <span>#{profileBackingBean.forumPosts}</span>
+            </div> 
+            <h:panelGroup layout="block" styleClass="profile-forum-activity-info" rendered="#{profileBackingBean.latestPost ne null}">
+              <h:outputLabel value="#{locales['users.profile.forumLatestTopic']}" />
+              <span>
+                <a href="#{request.contextPath}/forum/#{profileBackingBean.latestPost.topic.fullPath}#p#{profileBackingBean.latestPost.id}">
+                  #{profileBackingBean.latestPost.topic.forum.name} &gt; #{profileBackingBean.latestPost.topic.subject}
+                </a>
+              </span>
+            </h:panelGroup>
+            <div class="profile-forum-activity-info">
+              <h:outputLabel value="#{locales['users.profile.forumMostActiveTopic']}" />
+              <span>
+                <a href="#{request.contextPath}/forum/#{profileBackingBean.mostActiveTopic.fullPath}">
+                  #{profileBackingBean.mostActiveTopic.forum.name} &gt; #{profileBackingBean.mostActiveTopic.subject} (#{profileBackingBean.mostActiveTopicPosts})
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="profile-column-right">
+          <div class="profile-gamelibrary-publications">
+            <h3>#{locales['users.profile.gameLibraryPublications']}</h3>
+            <ui:repeat var="publishedProduct" value="#{profileBackingBean.publishedProducts}">
+              <div class="profile-gamelibrary-publication">
+                <h:panelGroup rendered="#{publishedProduct.defaultImage ne null}" styleClass="profile-gamelibrary-publication-image"> 
+                  <h:graphicImage value="/store/productImages/#{publishedProduct.defaultImage.id}?width=64&amp;height=64" />
+                </h:panelGroup>
+                <div class="profile-gamelibrary-publication-name">
+                  <h:outputLink value="#{request.contextPath}/store/#{publishedProduct.urlName}">#{publishedProduct.name}</h:outputLink>
+                </div>
+                <div class="profile-gamelibrary-publication-description">#{publishedProduct.descriptionPlainAbbr}</div>
+              </div>            
+            </ui:repeat>
+          </div>
+        
+          <div class="profile-friends">
+            <h3>#{locales['users.profile.friends']}</h3>
+            
+            <ui:repeat var="friend" value="#{profileBackingBean.friends}">
+              <div class="profile-friend" title="#{friend.fullName}">
+                <div class="profile-friend-image-container">
+                  <div class="profile-friend-image-inner-container">
+                    <h:outputLink value="#{request.contextPath}/users/#{friend.id}">
+                      <h:graphicImage value="/users/profileImages/#{friend.id}?width=64&amp;height=64" rendered="#{friend.profileImage ne null}"/>
+                      <h:panelGroup styleClass="profile-friend-image-noimage" rendered="#{friend.profileImage eq null}"/>
+                    </h:outputLink>
+                  </div>
+                </div>
+              </div>
+            </ui:repeat>
+            
+          </div>
+        </div>
+        
+      </div>
+    </ui:define>
+
+</ui:composition>

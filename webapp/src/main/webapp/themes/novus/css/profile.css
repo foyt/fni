@@ -1,0 +1,138 @@
+@charset "UTF-8";
+
+#profile {
+  background: #fff;
+  margin-top: 20px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 8px;
+  min-height: 783px;
+}
+
+
+.profile-column-left,
+.profile-column-right {
+  width: 552px;
+}
+
+.profile-column-left {
+  float: left;
+}
+
+.profile-column-right {
+  float: right;
+}
+
+.profile-image-container {
+  float: left;
+  margin-right: 10px;
+  line-height: 0px;
+}
+
+.profile-contact-info, .profile-forum-activity-info {
+  overflow: hidden; 
+  width: 538px; 
+  white-space:nowrap;
+}
+
+#profile .profile-contact-info label, #profile .profile-forum-activity-info label {
+  width: 180px;
+  display: inline-block;
+  font-weight: bold;
+}
+
+#profile .profile-friend {
+  display: inline-block;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+#profile .profile-friend-image-container {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 0px;
+}
+
+#profile .profile-friend-image-inner-container {
+  display: inline-block;
+  line-height: 0px;
+}
+
+.profile-image-container img {
+  border-radius: 4px;
+  line-height: 0px;
+}
+
+.profile-friend-image-inner-container img {
+  border-radius: 4px;
+  line-height: 0px;
+}
+
+.profile-friend-image-noimage {
+  width: 64px;
+  height: 64px;
+  display: inline-block;
+  background-image: url(../gfx/icons/64x64/actions/user-anonymous.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.profile-friend-image-container {
+  width: 64px;
+  box-shadow: 0 0 4px rgba(128, 128, 128, 0.1);
+  background: rgba(240, 240, 240, 0.5);
+  text-align: center;
+  border-radius: 4px;
+  opacity: 0.95;
+}
+
+.profile-friend-image-container:hover {
+  opacity: 1;
+}
+
+.profile-about,
+.profile-contact,
+.profile-forum-activity,
+.profile-gamelibrary-publications,
+.profile-friends {
+  box-shadow: 0px 0px 4px rgba(0,0,0,0.3);
+  padding: 8px;
+  border-radius: 10px;
+  margin-top: 8px;
+}
+
+.profile-about-container {
+  min-height: 128px;
+}
+
+.profile-about-container p {
+  margin-top: 13px;
+  margin-bottom: 13px;
+  line-height: 1.4em;
+}
+
+.profile-about-container p:last-child {
+  margin-bottom: 0px;
+}
+
+.profile-gamelibrary-publication-name {
+  font-size: 18px;
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+
+.profile-gamelibrary-publication-name a {
+  color: #000;
+  text-decoration: none;
+}
+
+.profile-gamelibrary-publication-image {
+  float: right;
+  margin-left: 8px;
+  border-radius: 4px;
+}
+
+.profile-gamelibrary-publication-image img {
+  border-radius: 4px;
+}
+
