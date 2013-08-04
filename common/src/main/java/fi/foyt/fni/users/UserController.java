@@ -194,41 +194,45 @@ public class UserController {
 	
 	/* Contact Info */
 
-	public UserContactField createContactInfoField(User user, UserContactFieldType type, String value) {
+	public UserContactField createContactField(User user, UserContactFieldType type, String value) {
 		return userContactFieldDAO.create(user, type, value);
 	}
 
-	public UserContactField findContactInfoFieldByType(User user, UserContactFieldType type) {
+	public UserContactField findContactFieldByType(User user, UserContactFieldType type) {
 		return userContactFieldDAO.findByUserAndType(user, type);
 	}
+
+	public List<UserContactField> listContactFields(User user) {
+		return userContactFieldDAO.listByUser(user);
+	}
 	
-	public UserContactField updateContactInfoField(UserContactField contactInfoField, String value) {
-		return userContactFieldDAO.updateValue(contactInfoField, value);
+	public UserContactField updateContactField(UserContactField contactField, String value) {
+		return userContactFieldDAO.updateValue(contactField, value);
 	}
 
-	public void deleteContactInfoField(UserContactField contactInfoField) {
-		userContactFieldDAO.delete(contactInfoField);
+	public void deleteContactField(UserContactField contactField) {
+		userContactFieldDAO.delete(contactField);
 	}
 	
-	public String getContactInfoFieldValue(User user, UserContactFieldType type) {
-		UserContactField contectInfoField = findContactInfoFieldByType(user, type);
+	public String getContactFieldValue(User user, UserContactFieldType type) {
+		UserContactField contectInfoField = findContactFieldByType(user, type);
 		return contectInfoField != null ? contectInfoField.getValue() : null;
 	}
 
-	public UserContactField setContactInfoFieldValue(User user, UserContactFieldType type, String value) {
-		UserContactField contactField = findContactInfoFieldByType(user, type);
+	public UserContactField setContactFieldValue(User user, UserContactFieldType type, String value) {
+		UserContactField contactField = findContactFieldByType(user, type);
 		if (contactField == null) {
 			if (StringUtils.isBlank(value)) {
 				return null;
 			} else {
-			  return createContactInfoField(user, type, value);
+			  return createContactField(user, type, value);
 			}
 		} else {
 			if (StringUtils.isBlank(value)) {
-			  deleteContactInfoField(contactField);
+			  deleteContactField(contactField);
 			  return null;
 			} else {			
-		  	return updateContactInfoField(contactField, value);
+		  	return updateContactField(contactField, value);
 			}
 		}
 	}

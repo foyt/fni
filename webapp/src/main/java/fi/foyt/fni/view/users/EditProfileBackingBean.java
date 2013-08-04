@@ -56,12 +56,12 @@ public class EditProfileBackingBean {
 		basicNickname = loggedUser.getNickname();
 		basicAbout = loggedUser.getAbout();
 
-		contactInfoFieldHomePage = userController.getContactInfoFieldValue(loggedUser, UserContactFieldType.HOME_PAGE);
-		contactInfoFieldBlog = userController.getContactInfoFieldValue(loggedUser, UserContactFieldType.BLOG);
-		contactInfoFieldFacebook = userController.getContactInfoFieldValue(loggedUser, UserContactFieldType.FACEBOOK);
-		contactInfoFieldTwitter = userController.getContactInfoFieldValue(loggedUser, UserContactFieldType.TWITTER);
-		contactInfoFieldLinkedIn = userController.getContactInfoFieldValue(loggedUser, UserContactFieldType.LINKEDIN);
-		contactInfoFieldGooglePlus = userController.getContactInfoFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS);
+		contactInfoFieldHomePage = userController.getContactFieldValue(loggedUser, UserContactFieldType.HOME_PAGE);
+		contactInfoFieldBlog = userController.getContactFieldValue(loggedUser, UserContactFieldType.BLOG);
+		contactInfoFieldFacebook = userController.getContactFieldValue(loggedUser, UserContactFieldType.FACEBOOK);
+		contactInfoFieldTwitter = userController.getContactFieldValue(loggedUser, UserContactFieldType.TWITTER);
+		contactInfoFieldLinkedIn = userController.getContactFieldValue(loggedUser, UserContactFieldType.LINKEDIN);
+		contactInfoFieldGooglePlus = userController.getContactFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS);
 		
 		quotaUsed = materialController.getUserMaterialsTotalSize(loggedUser);
 		quotaReserved = materialController.getUserQuota();
@@ -163,12 +163,12 @@ public class EditProfileBackingBean {
 	public void contactInfoSave() {
 		User loggedUser = sessionController.getLoggedUser();
 		
-		userController.setContactInfoFieldValue(loggedUser, UserContactFieldType.HOME_PAGE, getContactInfoFieldHomePage());
-		userController.setContactInfoFieldValue(loggedUser, UserContactFieldType.BLOG, getContactInfoFieldBlog());
-		userController.setContactInfoFieldValue(loggedUser, UserContactFieldType.FACEBOOK, getContactInfoFieldFacebook());
-		userController.setContactInfoFieldValue(loggedUser, UserContactFieldType.TWITTER, getContactInfoFieldTwitter());
-		userController.setContactInfoFieldValue(loggedUser, UserContactFieldType.LINKEDIN, getContactInfoFieldLinkedIn());
-		userController.setContactInfoFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS, getContactInfoFieldGooglePlus());
+		userController.setContactFieldValue(loggedUser, UserContactFieldType.HOME_PAGE, getContactInfoFieldHomePage());
+		userController.setContactFieldValue(loggedUser, UserContactFieldType.BLOG, getContactInfoFieldBlog());
+		userController.setContactFieldValue(loggedUser, UserContactFieldType.FACEBOOK, getContactInfoFieldFacebook());
+		userController.setContactFieldValue(loggedUser, UserContactFieldType.TWITTER, getContactInfoFieldTwitter());
+		userController.setContactFieldValue(loggedUser, UserContactFieldType.LINKEDIN, getContactInfoFieldLinkedIn());
+		userController.setContactFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS, getContactInfoFieldGooglePlus());
 
 		FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.contactInfoSaved"));
 	}
