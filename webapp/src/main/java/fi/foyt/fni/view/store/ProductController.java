@@ -10,6 +10,8 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
+
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.dao.store.BookProductDAO;
 import fi.foyt.fni.persistence.dao.store.FileProductDAO;
@@ -28,6 +30,7 @@ import fi.foyt.fni.persistence.model.store.ProductTag;
 import fi.foyt.fni.persistence.model.store.StoreTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @Stateful
 @Dependent
@@ -64,6 +67,10 @@ public class ProductController {
 
 	public Product findProductById(Long id) {
 		return productDAO.findById(id);
+	}
+
+	public Product findProductByUrlName(String urlName) {
+		return productDAO.findByUrlName(urlName);
 	}
 
 	public List<Product> listAllProducts() {
@@ -160,8 +167,9 @@ public class ProductController {
 		Long forumId = systemSettingsController.getStoreProductForumId();
 		Forum forum = forumController.findForumById(forumId);
 		ForumTopic forumTopic = forumController.createTopic(forum, name, creator);
+		String urlName = createUrlName(name);
 
-		BookProduct bookProduct = bookProductDAO.create(name, description, price, downloadable, purchasable, defaultImage, 
+		BookProduct bookProduct = bookProductDAO.create(name, urlName, description, price, downloadable, purchasable, defaultImage, 
 				now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width, depth, weight, author, numberOfPages, forumTopic);
 
 		for (StoreTag tag : tags) {
@@ -258,5 +266,27 @@ public class ProductController {
 	
 	public void deleteFileProductFile(FileProductFile fileProductFile) {
 		fileProductFileDAO.delete(fileProductFile);
+	}
+	
+	private String createUrlName(String name) {
+		int maxLength = 20;
+		int padding = 0;
+		do {
+			String urlName = RequestUtils.createUrlName(name, maxLength);
+			if (padding > 0) {
+				urlName = urlName.concat(StringUtils.repeat('_', padding));
+			}
+			
+			Product product = productDAO.findByUrlName(urlName);
+			if (product == null) {
+				return urlName;
+			}
+			
+			if (maxLength < name.length()) {
+				maxLength++;
+			} else {
+				padding++;
+			}
+		} while (true);
 	}
 }
