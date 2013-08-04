@@ -196,7 +196,7 @@ public class ShoppingCartBackingBean implements Serializable {
 	}
 	
 	public String proceedToCheckout() {
-		return "/store/checkout.jsf";
+		return null;
 	}
 	
 	public String getDeliveryMethodId() {
