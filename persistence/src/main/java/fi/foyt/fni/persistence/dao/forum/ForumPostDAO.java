@@ -108,6 +108,24 @@ public class ForumPostDAO extends GenericDAO<ForumPost> {
     
     return query.getResultList();
 	}
+	
+	public List<ForumTopic> listTopicsSortByCreated(int firstResult, int maxResults) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<ForumTopic> criteria = criteriaBuilder.createQuery(ForumTopic.class);
+    Root<ForumPost> root = criteria.from(ForumPost.class);
+    criteria.select(root.get(ForumPost_.topic));
+    criteria.orderBy(criteriaBuilder.desc(criteriaBuilder.greatest(root.get(ForumPost_.created))));
+    criteria.groupBy(root.get(ForumPost_.topic));
+    
+    TypedQuery<ForumTopic> query = entityManager.createQuery(criteria);
+
+    query.setFirstResult(firstResult);
+    query.setMaxResults(maxResults);
+    
+    return query.getResultList();
+	}
   
   public Long countByTopic(ForumTopic topic) {
     EntityManager entityManager = getEntityManager();
@@ -174,4 +192,5 @@ public class ForumPostDAO extends GenericDAO<ForumPost> {
     
     return forumPost;
   }
+
 }
