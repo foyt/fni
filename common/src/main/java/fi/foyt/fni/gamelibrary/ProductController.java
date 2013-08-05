@@ -16,7 +16,7 @@ import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.dao.gamelibrary.BookProductDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.FileProductFileDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.ProductDAO;
-import fi.foyt.fni.persistence.dao.gamelibrary.ProductImageDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.PublicationImageDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationTagDAO;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
@@ -44,7 +44,7 @@ public class ProductController {
 	private PublicationTagDAO publicationTagDAO;
 
 	@Inject
-	private ProductImageDAO productImageDAO;
+	private PublicationImageDAO publicationImageDAO;
 
 	@Inject
 	private BookProductDAO bookProductDAO;
@@ -140,19 +140,19 @@ public class ProductController {
 
 	public PublicationImage createProductImage(Publication publication, byte[] content, String contentType, User creator) {
 		Date now = new Date();
-		return productImageDAO.create(publication, content, contentType, now, now, creator, creator);
+		return publicationImageDAO.create(publication, content, contentType, now, now, creator, creator);
 	}
 	
 	public PublicationImage findProductImageById(Long productImageId) {
-		return productImageDAO.findById(productImageId);
+		return publicationImageDAO.findById(productImageId);
 	}
 
 	public List<PublicationImage> listProductImageByProduct(Publication publication) {
-		return productImageDAO.listByProduct(publication);
+		return publicationImageDAO.listByProduct(publication);
 	}
 
 	public void deleteProductImage(PublicationImage publicationImage) {
-		productImageDAO.delete(publicationImage);
+		publicationImageDAO.delete(publicationImage);
 	}
 	/* BookProducts */
 

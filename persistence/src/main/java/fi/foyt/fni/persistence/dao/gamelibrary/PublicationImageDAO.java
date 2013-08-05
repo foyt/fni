@@ -16,7 +16,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage_;
 import fi.foyt.fni.persistence.model.users.User;
 
 @DAO
-public class ProductImageDAO extends GenericDAO<PublicationImage> {
+public class PublicationImageDAO extends GenericDAO<PublicationImage> {
   
 	private static final long serialVersionUID = 1L;
 
