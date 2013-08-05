@@ -9,7 +9,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
+import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
+import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
 @Named
@@ -19,9 +21,19 @@ public class PublicationCategoriesBackingBean {
 	@Inject
 	private GameLibraryTagController gameLibraryTagController;
 
+	@Inject
+	private SessionController sessionController;
+	
+	@Inject
+	private PublicationController publicationController;
+	
 	@PostConstruct
 	public void init() {
 		tags = gameLibraryTagController.listGameLibraryTags();
+		hasUnpublished = false;
+		if (sessionController.isLoggedIn()) {
+			hasUnpublished = publicationController.countUnpublishedPublicationsByCreator(sessionController.getLoggedUser()) > 0;
+		}
 	}
 	
 	public List<GameLibraryTag> getTags() {
@@ -32,6 +44,10 @@ public class PublicationCategoriesBackingBean {
 		this.tags = tags;
 	}
 	
-	private List<GameLibraryTag> tags;
+	public boolean getHasUnpublished() {
+		return hasUnpublished;
+	}
 	
+	private List<GameLibraryTag> tags;
+	private boolean hasUnpublished;
 }

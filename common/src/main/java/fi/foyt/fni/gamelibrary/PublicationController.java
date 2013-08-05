@@ -32,7 +32,7 @@ import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @Stateful
 @Dependent
-public class ProductController {
+public class PublicationController {
 	
 	@Inject
 	private GameLibraryTagController gameLibraryTagController;
@@ -58,7 +58,7 @@ public class ProductController {
 	@Inject
 	private SystemSettingsController systemSettingsController;
 	
-	/* Products */
+	/* Publications */
 
 	public Publication findProductById(Long id) {
 		return publicationDAO.findById(id);
@@ -90,12 +90,16 @@ public class ProductController {
 		return publicationDAO.listByPublishedOrderByCreated(Boolean.TRUE, 0, maxRecentProduct);
 	}
 
-	public List<Publication> listUnpublishedProducts() {
-		return publicationDAO.listByPublished(Boolean.FALSE);
+	public List<Publication> listUnpublishedProducts(User creator) {
+		return publicationDAO.listByCreatorAndPublished(creator, Boolean.FALSE);
 	}
 	
 	public List<Publication> listPublishedProductsByCreator(User creator) {
 		return publicationDAO.listByCreatorAndPublished(creator, Boolean.TRUE);
+	}
+	
+	public Long countUnpublishedPublicationsByCreator(User user) {
+		return publicationDAO.countByCreatorAndPublished(user, Boolean.FALSE);
 	}
 
 	public Publication updatedModified(Publication publication, User modifier, Date modified) {

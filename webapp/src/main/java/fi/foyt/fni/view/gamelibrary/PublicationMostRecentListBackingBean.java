@@ -1,7 +1,7 @@
 package fi.foyt.fni.view.gamelibrary;
 
 import javax.ejb.Stateful;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -10,10 +10,10 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.forum.ForumController;
-import fi.foyt.fni.gamelibrary.ProductController;
+import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.ShoppingCartController;
 
-@SessionScoped
+@RequestScoped
 @Named
 @Stateful
 @URLMappings(mappings = {
@@ -28,7 +28,7 @@ public class PublicationMostRecentListBackingBean extends AbstractPublicationLis
 	private static final int MAX_RECENT_PRODUCTS = 10;
 
 	@Inject
-	private ProductController productController;
+	private PublicationController publicationController;
 
 	@Inject
 	private ShoppingCartController shoppingCartController;
@@ -38,7 +38,7 @@ public class PublicationMostRecentListBackingBean extends AbstractPublicationLis
 	
 	@URLAction
 	public void init() {
-		setProducts(productController.listRecentProducts(MAX_RECENT_PRODUCTS));
+		setPublications(publicationController.listRecentProducts(MAX_RECENT_PRODUCTS));
 	}
 	
 }

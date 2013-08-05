@@ -15,7 +15,7 @@ import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
-import fi.foyt.fni.gamelibrary.ProductController;
+import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
@@ -37,7 +37,7 @@ import fi.foyt.fni.session.SessionController;
 public class PublicationEditBackingBean extends AbstractPublicationEditBackingBean {
 	
 	@Inject
-	private ProductController productController;
+	private PublicationController publicationController;
 
 	@Inject
 	private GameLibraryTagController gameLibraryTagController;
@@ -54,7 +54,7 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 	
 	@URLAction (onPostback = false)
 	public void load() {
-		Publication publication = productController.findProductById(getPublicationId());
+		Publication publication = publicationController.findProductById(getPublicationId());
 		setPublicationName(publication.getName());
 		setPublicationDescription(publication.getDescription());
 		setPublicationPrice(publication.getPrice());
@@ -82,7 +82,7 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 	}
 	
 	public void save() {
-		Publication publication = productController.findProductById(getPublicationId());
+		Publication publication = publicationController.findProductById(getPublicationId());
 		if (publication instanceof BookPublication) {
 			BookPublication bookPublication = (BookPublication) publication;
 			User loggedUser = sessionController.getLoggedUser();
@@ -100,7 +100,7 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 	  		}
 			}
 			
-			productController.updateBookProduct(bookPublication, 
+			publicationController.updateBookProduct(bookPublication, 
 				getPublicationPrice(), 
 				getPublicationName(), 
 				getPublicationDescription(), 

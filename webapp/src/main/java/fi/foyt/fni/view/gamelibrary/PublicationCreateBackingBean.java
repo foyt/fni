@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
-import fi.foyt.fni.gamelibrary.ProductController;
+import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
@@ -34,7 +34,7 @@ import fi.foyt.fni.session.SessionController;
 public class PublicationCreateBackingBean extends AbstractPublicationEditBackingBean {
 	
 	@Inject
-	private ProductController productController;
+	private PublicationController publicationController;
 
 	@Inject
 	private GameLibraryTagController gameLibraryTagController;
@@ -64,7 +64,7 @@ public class PublicationCreateBackingBean extends AbstractPublicationEditBacking
   		}
 		}
 		
-		BookPublication bookPublication = productController.createBookProduct(loggedUser, 
+		BookPublication bookPublication = publicationController.createBookProduct(loggedUser, 
 			getPublicationName(), 
 			getPublicationDescription(), 
 			getPublicationRequiresDelivery(), 

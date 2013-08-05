@@ -86,7 +86,24 @@ public class PublicationDAO extends GenericDAO<Publication> {
     
     return entityManager.createQuery(criteria).getResultList();
 	}
-	
+
+	public Long countByCreatorAndPublished(User creator, Boolean published) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Long> criteria = criteriaBuilder.createQuery(Long.class);
+    Root<Publication> root = criteria.from(Publication.class);
+    criteria.select(criteriaBuilder.count(root));
+    criteria.where(
+  		criteriaBuilder.and(
+  		  criteriaBuilder.equal(root.get(Publication_.creator), creator),
+  			criteriaBuilder.equal(root.get(Publication_.published), published)
+  		)
+    );
+    
+    return entityManager.createQuery(criteria).getSingleResult();
+	}
+
 	public Publication updateName(Publication publication, String name) {
 		publication.setName(name);
 		getEntityManager().persist(publication);

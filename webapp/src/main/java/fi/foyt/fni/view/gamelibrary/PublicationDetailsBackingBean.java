@@ -13,7 +13,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.forum.ForumController;
-import fi.foyt.fni.gamelibrary.ProductController;
+import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.ShoppingCartController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
@@ -34,7 +34,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 public class PublicationDetailsBackingBean {
 	
 	@Inject
-	private ProductController productController;
+	private PublicationController publicationController;
 	
 	@Inject
 	private GameLibraryTagController gameLibraryTagController;
@@ -47,7 +47,7 @@ public class PublicationDetailsBackingBean {
 	
 	@URLAction
 	public void init() throws FileNotFoundException {
-		this.publication = productController.findProductByUrlName(getUrlName());
+		this.publication = publicationController.findProductByUrlName(getUrlName());
 		if (this.publication == null) {
 			throw new FileNotFoundException();
 		}
@@ -63,11 +63,11 @@ public class PublicationDetailsBackingBean {
 		this.urlName = urlName;
 	}
 	
-	public Publication getProduct() {
+	public Publication getPublication() {
 		return publication;
 	}
 	
-	public BookPublication getBookProduct() {
+	public BookPublication getBookPublication() {
 		return bookPublication;
 	}
 	
@@ -76,22 +76,22 @@ public class PublicationDetailsBackingBean {
 	}
 
 	public boolean getHasSeveralImages() {
-		return productController.listPublicationImagesByPublication(publication).size() > 1;
+		return publicationController.listPublicationImagesByPublication(publication).size() > 1;
 	}
 
 	public boolean getHasImages() {
-		return productController.listPublicationImagesByPublication(publication).size() > 0;
+		return publicationController.listPublicationImagesByPublication(publication).size() > 0;
 	}
 
 	public PublicationImage getFirstImage() {
-		return productController.listPublicationImagesByPublication(publication).get(0);
+		return publicationController.listPublicationImagesByPublication(publication).get(0);
 	}
 	
-	public List<PublicationImage> getProductImages() {
-		return productController.listPublicationImagesByPublication(publication);
+	public List<PublicationImage> getPublicationImages() {
+		return publicationController.listPublicationImagesByPublication(publication);
 	}
 
-	public Long getProductCommentCount() {
+	public Long getPublicationCommentCount() {
 		if (publication.getForumTopic() != null) {
 			return forumController.countPostsByTopic(publication.getForumTopic());
 		}
@@ -99,7 +99,7 @@ public class PublicationDetailsBackingBean {
 		return null;
 	}
 	
-	public void addProductToShoppingCart() {
+	public void addPublicationToShoppingCart() {
 		shoppingCartController.addProduct(publication);
 	}
 	

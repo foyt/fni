@@ -36,7 +36,7 @@
   </ui:define>
   <ui:define name="content">
   
-    <ui:insert name="products" />
+    <ui:insert name="publications" />
       
     <div id="gamelibrary-sidebar">
       <h:panelGroup layout="block" id="gamelibrary-mini-shopping-cart">
@@ -88,7 +88,12 @@
               <h:outputLink value="#{request.contextPath}/gamelibrary/">#{locales['gamelibrary.publications.mostRecent']}</h:outputLink>
             </div>
           </div>
-          <ui:repeat var="tag" value="#{productCategoriesBackingBean.tags}">
+          <h:panelGroup styleClass="gamelibrary-category" layout="block" rendered="#{publicationCategoriesBackingBean.hasUnpublished}">
+            <div class="gamelibrary-category-title">
+              <h:outputLink value="#{request.contextPath}/gamelibrary/unpublished/">#{locales['gamelibrary.publications.unpublished']}</h:outputLink>
+            </div>
+          </h:panelGroup>
+          <ui:repeat var="tag" value="#{publicationCategoriesBackingBean.tags}">
             <div class="gamelibrary-category">
               <div class="gamelibrary-category-title">
                 <h:outputLink value="#{request.contextPath}/gamelibrary/tags/#{tag.text}">#{tag.text}</h:outputLink>
@@ -102,15 +107,15 @@
     <!-- TODO: Game Library Admins only -->
           
     <div id="gamelibrary-admin-panel">
-      <a class="gamelibrary-admin-create-publication" title="Create New Product"> </a>
+      <a class="gamelibrary-admin-create-publication" title="Create New Publication"> </a>
     </div>
     
-    <div id="product-admin-operator-container" style="display: none">
+    <div id="publication-admin-operator-container" style="display: none">
       <h:form>
-        <h:inputHidden value="#{productAdminBackingBean.productId}" id="product-id"/>
-        <h:commandButton action="#{productAdminBackingBean.publish}" id="publish"></h:commandButton>
-        <h:commandButton action="#{productAdminBackingBean.unpublish}" id="unpublish"></h:commandButton>
-        <h:commandButton action="#{productAdminBackingBean.delete}" id="delete"></h:commandButton>
+        <h:inputHidden value="#{publicationAdminBackingBean.publicationId}" id="publication-id"/>
+        <h:commandButton action="#{publicationAdminBackingBean.publish}" id="publish"></h:commandButton>
+        <h:commandButton action="#{publicationAdminBackingBean.unpublish}" id="unpublish"></h:commandButton>
+        <h:commandButton action="#{publicationAdminBackingBean.delete}" id="delete"></h:commandButton>
       </h:form>
     </div>
   </ui:define>

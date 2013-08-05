@@ -6,105 +6,87 @@
   xmlns:h="http://java.sun.com/jsf/html" 
   template="/WEB-INF/templates/gamelibrary_publications.xhtml">
 
-  <ui:define name="products">
+  <ui:define name="publications">
     <h:form>
       <h:panelGroup layout="block" id="gamelibrary-index" styleClass="gamelibrary-index">
-        <div class="gamelibrary-products">
-          <h3 class="gamelibrary-products-title">
+        <div class="gamelibrary-publications">
+          <h3 class="gamelibrary-publications-title">
             <span class="gamelibrary-nav-item">
               <h:outputLink value="#{request.contextPath}/gamelibrary/">
                 #{locales['gamelibrary.tagList.navIndex']} 
               </h:outputLink>
             </span>
             <span class="gamelibrary-nav-separator"/>
-            <span class="gamelibrary-nav-item">#{productTagListBackingBean.tag}</span>
+            <span class="gamelibrary-nav-item">#{publicationTagListBackingBean.tag}</span>
           </h3>
           
-          <div class="gamelibrary-products">
-            <ui:repeat var="product" value="#{productTagListBackingBean.products}">
-              <div data-product-id="#{product.id}" class="gamelibrary-product">
-                <div class="gamelibrary-product-info-container">
-                  <div class="gamelibrary-product-name">
-                    <h:outputLink value="#{request.contextPath}/gamelibrary/#{product.urlName}">#{product.name}</h:outputLink>
+          <div class="gamelibrary-publications">
+            <ui:repeat var="publication" value="#{publicationTagListBackingBean.publications}">
+              <div data-publication-id="#{publication.id}" class="gamelibrary-publication">
+                <div class="gamelibrary-publication-info-container">
+                  <div class="gamelibrary-publication-name">
+                    <h:outputLink value="#{request.contextPath}/gamelibrary/#{publication.urlName}">#{publication.name}</h:outputLink>
                   </div>
-                  <div class="gamelibrary-product-tags-container">
-                    <ui:repeat var="tag" value="#{productTagListBackingBean.getTags(product)}">
-                      <div class="gamelibrary-product-tag">
+                  <div class="gamelibrary-publication-tags-container">
+                    <ui:repeat var="tag" value="#{publicationTagListBackingBean.getTags(publication)}">
+                      <div class="gamelibrary-publication-tag">
                         <h:outputLink value="#{request.contextPath}/gamelibrary/tags/#{tag.text}">#{tag.text}</h:outputLink>
                       </div>
                     </ui:repeat>
                   </div>
                   
-                  <div class="gamelibrary-product-description">#{product.description}</div>
-                  <div class="gamelibrary-product-details">
-                    <div class="gamelibrary-product-detail">
+                  <div class="gamelibrary-publication-description">#{publication.description}</div>
+                  <div class="gamelibrary-publication-details">
+                    <div class="gamelibrary-publication-detail">
                       <span>#{locales['gamelibrary.tagList.publicationDetailsPrice']}</span>
-                      <span class="gamelibrary-product-details-price">
-                        <h:outputText value="#{product.price}" >
+                      <span class="gamelibrary-publication-details-price">
+                        <h:outputText value="#{publication.price}" >
                           <f:convertNumber currencyCode="EUR" type="currency" />
                         </h:outputText>
                       </span>
                     </div>
                     
-                    <ui:fragment rendered="#{productTagListBackingBean.getBookProduct(product) ne null}">
-                      <ui:fragment rendered="#{productTagListBackingBean.getBookProduct(product).numberOfPages > 0}">
-                        <div class="gamelibrary-product-detail">
+                    <ui:fragment rendered="#{publicationTagListBackingBean.getBookPublication(publication) ne null}">
+                      <ui:fragment rendered="#{publicationTagListBackingBean.getBookPublication(publication).numberOfPages > 0}">
+                        <div class="gamelibrary-publication-detail">
                           <span>#{locales['gamelibrary.tagList.publicationDetailsNumberOfPages']}</span> 
-                          <span>#{productTagListBackingBean.getBookProduct(product).numberOfPages}</span>
+                          <span>#{publicationTagListBackingBean.getBookPublication(publication).numberOfPages}</span>
                         </div>
                       </ui:fragment>
 
-                      <ui:fragment rendered="#{!empty(productTagListBackingBean.getBookProduct(product).author)}">
+                      <ui:fragment rendered="#{!empty(publicationTagListBackingBean.getBookPublication(publication).author)}">
                         <span>#{locales['gamelibrary.tagList.publicationDetailsAuthor']}</span> 
-                        <span>#{productTagListBackingBean.getBookProduct(product).author}</span>
+                        <span>#{publicationTagListBackingBean.getBookPublication(publication).author}</span>
                       </ui:fragment>
                     </ui:fragment>
                     
-                    <h:panelGroup layout="block" rendered="#{product.forumTopic ne null}" styleClass="gamelibrary-product-comments">
-                      <h:outputLink value="#{request.contextPath}/forum/#{product.forumTopic.forum.urlName}/#{product.forumTopic.urlName}">
+                    <h:panelGroup layout="block" rendered="#{publication.forumTopic ne null}" styleClass="gamelibrary-publication-comments">
+                      <h:outputLink value="#{request.contextPath}/forum/#{publication.forumTopic.forum.urlName}/#{publication.forumTopic.urlName}">
                         <h:outputFormat value="#{locales['gamelibrary.tagList.publicationComments']}">
-                          <f:param value="#{productTagListBackingBean.getProductCommentCount(product)}"/>
+                          <f:param value="#{publicationTagListBackingBean.getPublicationCommentCount(publication)}"/>
                         </h:outputFormat>                    
                       </h:outputLink>
                     </h:panelGroup>
                   </div>
                   
-                  <ui:fragment rendered="#{product.published}">
+                  <ui:fragment rendered="#{publication.published}">
                     <!-- TODO: Admins and owners only -->
-                    <div class="gamelibrary-product-admin-actions-container">
-                      <div class="gamelibrary-product-admin-action-container">
-                        <a title="Unpublish Product" href="javascript:void(null);" data-product-id="#{product.id}" data-product-name="#{product.name}" class="product-unpublish"></a>
+                    <div class="gamelibrary-publication-admin-actions-container">
+                      <div class="gamelibrary-publication-admin-action-container">
+                        <a title="Unpublish Publication" href="javascript:void(null);" data-publication-id="#{publication.id}" data-publication-name="#{publication.name}" class="publication-unpublish"></a>
                       </div>
                     </div>
                   </ui:fragment>
-                  
-                  <ui:fragment rendered="#{!product.published}">
-                    <div class="gamelibrary-product-admin-actions-container">
-                      <div class="gamelibrary-product-admin-action-container">
-                        <a class="product-publish" data-product-id="#{product.id}" data-product-name="#{product.name}" href="javascript:void(null);" title="Publish Product"></a>
-                      </div>
-                      <div class="gamelibrary-product-admin-action-container">
-                        <a class="product-edit" data-product-id="#{product.id}" href="javascript:void(null);" title="Edit"></a>
-                      </div>
-                      <div class="gamelibrary-product-admin-action-container">
-                        <a class="product-add-images-action" data-product-id="#{product.id}" href="javascript:void(null);" title="Add Images"></a>
-                      </div>
-                      <div class="gamelibrary-product-admin-action-container">
-                        <a class="product-delete" data-product-id="#{product.id}" data-product-name="#{product.name}" href="javascript:void(null);" title="Delete Product"></a>
-                      </div>
-                    </div>
-                  </ui:fragment>
-                  
                 </div>
                 
-                <div class="gamelibrary-product-images-container">
-                  <ui:fragment rendered="#{productTagListBackingBean.hasSeveralImages(product)}">
-                    <div class="gamelibrary-product-thumbnails-container">
-                      <div class="gamelibrary-product-thumbnails-inner-container">
-                        <ui:repeat value="#{productTagListBackingBean.getProductImages(product)}" var="productImage">
-                          <div class="gamelibrary-product-thumbnail-container">
+                <div class="gamelibrary-publication-images-container">
+                  <ui:fragment rendered="#{publicationTagListBackingBean.hasSeveralImages(publication)}">
+                    <div class="gamelibrary-publication-thumbnails-container">
+                      <div class="gamelibrary-publication-thumbnails-inner-container">
+                        <ui:repeat value="#{publicationTagListBackingBean.getPublicationImages(publication)}" var="publicationImage">
+                          <div class="gamelibrary-publication-thumbnail-container">
                             <a href="javascript:void(null)">
-                              <img data-url="#{request.contextPath}/gamelibrary/publicationImages/#{productImage.id}" src="#{request.contextPath}/gamelibrary/publicationImages/#{productImage.id}?width=32&amp;height=32"/>
+                              <img data-url="#{request.contextPath}/gamelibrary/publicationImages/#{publicationImage.id}" src="#{request.contextPath}/gamelibrary/publicationImages/#{publicationImage.id}?width=32&amp;height=32"/>
                             </a>
                           </div>
                         </ui:repeat>
@@ -112,23 +94,23 @@
                     </div>
                   </ui:fragment>
   
-                  <ui:fragment rendered="#{productTagListBackingBean.hasImages(product)}">
-                    <div class="gamelibrary-product-image-container">
-                      <div class="gamelibrary-product-image-inner-container">
-                        <a href="#{request.contextPath}/gamelibrary/publicationImages/#{productTagListBackingBean.getFirstImage(product).id}">
-                          <img data-url="#{request.contextPath}/gamelibrary/publicationImages/#{productTagListBackingBean.getFirstImage(product).id}" src="#{request.contextPath}/gamelibrary/publicationImages/#{productTagListBackingBean.getFirstImage(product).id}?width=128&amp;height=128"/>
+                  <ui:fragment rendered="#{publicationTagListBackingBean.hasImages(publication)}">
+                    <div class="gamelibrary-publication-image-container">
+                      <div class="gamelibrary-publication-image-inner-container">
+                        <a href="#{request.contextPath}/gamelibrary/publicationImages/#{publicationTagListBackingBean.getFirstImage(publication).id}">
+                          <img data-url="#{request.contextPath}/gamelibrary/publicationImages/#{publicationTagListBackingBean.getFirstImage(publication).id}" src="#{request.contextPath}/gamelibrary/publicationImages/#{publicationTagListBackingBean.getFirstImage(publication).id}?width=128&amp;height=128"/>
                         </a>
                       </div>
                     </div>
                   </ui:fragment>
                 </div>
                 
-                <div class="gamelibrary-product-actions-container">
-                  <div class="gamelibrary-product-action-container">
-                    <a href="#{request.contextPath}/gamelibrary/publicationFiles/#{product.id}">#{locales['gamelibrary.tagList.publicationDownloadFreePdf']}</a>
+                <div class="gamelibrary-publication-actions-container">
+                  <div class="gamelibrary-publication-action-container">
+                    <a href="#{request.contextPath}/gamelibrary/publicationFiles/#{publication.id}">#{locales['gamelibrary.tagList.publicationDownloadFreePdf']}</a>
                   </div>
-                  <div class="gamelibrary-product-action-container">
-                    <h:commandLink action="#{productTagListBackingBean.addProductToShoppingCart(product)}" value="#{locales['gamelibrary.tagList.publicationAddToShoppingCart']}" styleClass="gamelibrary-product-add-to-cart-action">
+                  <div class="gamelibrary-publication-action-container">
+                    <h:commandLink action="#{publicationTagListBackingBean.addPublicationToShoppingCart(publication)}" value="#{locales['gamelibrary.tagList.publicationAddToShoppingCart']}" styleClass="gamelibrary-publication-add-to-cart-action">
                     </h:commandLink>
                   </div>
                 </div>

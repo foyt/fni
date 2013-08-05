@@ -69,7 +69,7 @@
   margin-top: -36px;
 }
 
-/* Edit Product */
+/* Edit Publication */
 
 .gamelibrary-dialog .details-table td label {
   padding-right: 8px;
@@ -301,7 +301,7 @@
 
 /* Index */
 
-.gamelibrary-products {
+.gamelibrary-publications {
   max-width: 802px;
 }
 
@@ -314,12 +314,12 @@
   content: '>';
 }
 
-#gamelibrary-index h3.gamelibrary-products-title {
+#gamelibrary-index h3.gamelibrary-publications-title {
   background: url("../gfx/icons/22x22/actions/gamelibrary-recent-publications.png") no-repeat scroll 8px center #EEEEEE;
   padding-left: 36px;
 }
 
-.gamelibrary-product {
+.gamelibrary-publication {
   padding: 8px;
   background: #fafafa;
   border-radius: 10px;
@@ -329,54 +329,54 @@
   box-shadow: 0px 0px 4px rgba(0,0,0,0.3);
 }
 
-.gamelibrary-product-unpublished {
+.gamelibrary-publication-unpublished {
   box-shadow: 0px 0px 4px rgba(255,0,0,0.5);
 }
 
-.gamelibrary-product:hover {
+.gamelibrary-publication:hover {
   box-shadow: 0px 0px 4px rgba(0,0,0,0.75);
 }
 
-.gamelibrary-product-unpublished:hover {
+.gamelibrary-publication-unpublished:hover {
   box-shadow: 0px 0px 4px rgba(255,0,0,0.75);
 }
 
-.gamelibrary-product-info-container {
+.gamelibrary-publication-info-container {
   width: 650px;
   float: left;
   min-height: 210px;
 }
 
-.gamelibrary-product-images-container {
+.gamelibrary-publication-images-container {
   float: right;
   margin-left: 4px;
 }
 
 
-.gamelibrary-product-images-container a:focus {
+.gamelibrary-publication-images-container a:focus {
   outline: 0px;
 }
 
-.gamelibrary-product-image-container {
+.gamelibrary-publication-image-container {
   height: 128px;
   width: 128px; 
 }
 
-.gamelibrary-product-image-container img {
+.gamelibrary-publication-image-container img {
   border-radius: 4px;
   box-shadow: 0px 0px 6px #aaa;
 }
 
-.gamelibrary-product-image-inner-container {
+.gamelibrary-publication-image-inner-container {
   text-align: center;
 }
 
-.gamelibrary-product-thumbnails-container {
+.gamelibrary-publication-thumbnails-container {
   width: 128px;
   height: 40px;
 }
 
-.gamelibrary-product-thumbnails-inner-container {
+.gamelibrary-publication-thumbnails-inner-container {
   right: 2px;
   position: absolute;
   height: 32px;
@@ -385,43 +385,43 @@
   padding-left: 4px;
 }
 
-.gamelibrary-product-thumbnail-container {
+.gamelibrary-publication-thumbnail-container {
   display: table-cell;
   height: 32px; 
   vertical-align: middle;
   width: 32px;
 }
 
-.gamelibrary-product-thumbnails-container img {
+.gamelibrary-publication-thumbnails-container img {
   border-radius: 4px;
   box-shadow: 0px 0px 6px #aaa;
   display: block;
   margin-right: 6px;
 }
 
-.gamelibrary-product-noimage {
+.gamelibrary-publication-noimage {
   width: 128px;
   height: 128px;
   display: inline-block;
   background-image: url("../gfx/icons/128x128/actions/gamelibrary-noimage.png");
 }
 
-.gamelibrary-product-name {
+.gamelibrary-publication-name {
   font-size: 16px; 
   margin-bottom: 4px;
 }
 
-.gamelibrary-product-name a {
+.gamelibrary-publication-name a {
   color: #000;
   text-decoration: none;
 }
 
-.gamelibrary-product-description {
+.gamelibrary-publication-description {
   margin-top: 4px;
   min-height: 120px;
 }
 
-.gamelibrary-product-tag {
+.gamelibrary-publication-tag {
   background: #B6C9ED;
   padding-left: 8px;
   padding-right: 8px;
@@ -431,36 +431,36 @@
   margin-right: 4px;
 }
 
-.gamelibrary-product-tag:hover {
+.gamelibrary-publication-tag:hover {
   background: #BCCEFA;
 }
 
-.gamelibrary-product-tag a {
+.gamelibrary-publication-tag a {
   text-decoration: none;
   color: #fff;
 }
 
-.gamelibrary-product-actions-container {
+.gamelibrary-publication-actions-container {
   bottom: 8px;
   right: 8px;
   position: absolute;
   vertical-align: bottom;  
 }
 
-.gamelibrary-product-action-container {
+.gamelibrary-publication-action-container {
   text-align: right;
 }
 
-.gamelibrary-product-details {
+.gamelibrary-publication-details {
   margin-top: 8px;
 }
 
-.gamelibrary-product-details-price,
-.gamelibrary-product-details-price-free {
+.gamelibrary-publication-details-price,
+.gamelibrary-publication-details-price-free {
   font-weight: bold;
 }
 
-.gamelibrary-product-details-price-free {
+.gamelibrary-publication-details-price-free {
   color: green;
 }
 
@@ -604,7 +604,7 @@
 
 /* Admin Actions */
 
-.gamelibrary-product .gamelibrary-product-admin-actions-container  {
+.gamelibrary-publication .gamelibrary-publication-admin-actions-container  {
   position: absolute;
   left: 4px;
   top: -12px;
@@ -614,11 +614,11 @@
   border-radius: 4px;
 }
 
-.gamelibrary-product:hover .gamelibrary-product-admin-actions-container  {
+.gamelibrary-publication:hover .gamelibrary-publication-admin-actions-container  {
   display: block;
 }
 
-.gamelibrary-product-admin-actions-container .gamelibrary-product-admin-action-container a {
+.gamelibrary-publication-admin-actions-container .gamelibrary-publication-admin-action-container a {
   float: right;
   display: block;
   width: 32px;
@@ -628,7 +628,7 @@
   background-position: center; 
 }
 
-.gamelibrary-product-admin-action-container {
+.gamelibrary-publication-admin-action-container {
   display: inline-block;
   box-shadow: 0px 0px 4px #000;
   margin: 4px;
@@ -637,36 +637,36 @@
   opacity: 0.75;
 }
 
-.gamelibrary-product-admin-action-container:hover {
+.gamelibrary-publication-admin-action-container:hover {
   box-shadow: 0px 0px 5px #000;
   opacity: 1;
 }
 
-.gamelibrary-product-admin-actions-container .product-edit {
+.gamelibrary-publication-admin-actions-container .publication-edit {
   background-image: url("../gfx/icons/32x32/actions/gamelibrary-edit-publication.png");
 }
 
-.gamelibrary-product-admin-actions-container .product-attach-book-file-action  {
+.gamelibrary-publication-admin-actions-container .publication-attach-book-file-action  {
   background-image: url("../gfx/icons/32x32/actions/gamelibrary-attach-book.png");
 }
 
-.gamelibrary-product-admin-actions-container .product-add-images-action  {
+.gamelibrary-publication-admin-actions-container .publication-add-images-action  {
   background-image: url("../gfx/icons/32x32/actions/gamelibrary-add-images.png");
 }
 
-.gamelibrary-product-admin-actions-container .product-edit-details {
+.gamelibrary-publication-admin-actions-container .publication-edit-details {
   background-image: url("../gfx/icons/32x32/actions/gamelibrary-edit-details.png");
 }
 
-.gamelibrary-product-admin-actions-container .product-delete {
+.gamelibrary-publication-admin-actions-container .publication-delete {
   background-image: url("../gfx/icons/32x32/actions/gamelibrary-delete-publication.png");
 }
 
-.gamelibrary-product-admin-actions-container .product-publish {
+.gamelibrary-publication-admin-actions-container .publication-publish {
   background-image: url("../gfx/icons/32x32/actions/gamelibrary-publish-publication.png");
 }
 
-.gamelibrary-product-admin-actions-container .product-unpublish {
+.gamelibrary-publication-admin-actions-container .publication-unpublish {
   background-image: url("../gfx/icons/32x32/actions/gamelibrary-unpublish-publication.png");
 }
 
@@ -683,32 +683,32 @@
   margin-right: 4px;
 }
 
-/* Create / edit product */
+/* Create / edit publication */
 
-.gamelibrary-create-product-dialog div[data-type], .gamelibrary-edit-product-dialog div[data-type] {
+.gamelibrary-create-publication-dialog div[data-type], .gamelibrary-edit-publication-dialog div[data-type] {
   margin-top: 8px;
 }
 
-.gamelibrary-create-product-dialog div[data-type]>h4, .gamelibrary-edit-product-dialog div[data-type]>h4 {
+.gamelibrary-create-publication-dialog div[data-type]>h4, .gamelibrary-edit-publication-dialog div[data-type]>h4 {
   margin-bottom: 8px;
 }
 
-.gamelibrary-create-product-dialog table, .gamelibrary-edit-product-dialog table {
+.gamelibrary-create-publication-dialog table, .gamelibrary-edit-publication-dialog table {
   width: 100%;
   -webkit-box-sizing: border-box; 	
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
-.gamelibrary-create-product-dialog input[name="new-tag"], .gamelibrary-edit-product-dialog input[name="new-tag"]  {
+.gamelibrary-create-publication-dialog input[name="new-tag"], .gamelibrary-edit-publication-dialog input[name="new-tag"]  {
   width: 395px;
 }
 
-.gamelibrary-create-product-dialog .add-new-tag, .gamelibrary-edit-product-dialog .add-new-tag {
+.gamelibrary-create-publication-dialog .add-new-tag, .gamelibrary-edit-publication-dialog .add-new-tag {
   margin-left: 8px;
 }
 
-.gamelibrary-create-product-dialog .tags .tag, .gamelibrary-edit-product-dialog .tags .tag {
+.gamelibrary-create-publication-dialog .tags .tag, .gamelibrary-edit-publication-dialog .tags .tag {
   display: inline-block;
   padding: 4px;
   font-size: 12px;
@@ -719,11 +719,11 @@
   margin-top: 8px;
 }
 
-.gamelibrary-create-product-dialog .tags .tag:last-child, .gamelibrary-edit-product-dialog .tags .tag:last-child {
+.gamelibrary-create-publication-dialog .tags .tag:last-child, .gamelibrary-edit-publication-dialog .tags .tag:last-child {
   margin-right: 0px;
 }
 
-.gamelibrary-create-product-dialog .tags .tag .remove-tag:after, .gamelibrary-edit-product-dialog .tags .tag .remove-tag:after {
+.gamelibrary-create-publication-dialog .tags .tag .remove-tag:after, .gamelibrary-edit-publication-dialog .tags .tag .remove-tag:after {
   content: 'X';
   color: #eee;
   font-family: courier;

@@ -6,7 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import fi.foyt.fni.forum.ForumController;
-import fi.foyt.fni.gamelibrary.ProductController;
+import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.ShoppingCartController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
@@ -18,7 +18,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 public class AbstractPublicationListBackingBean {
 	
 	@Inject
-	private ProductController productController;
+	private PublicationController publicationController;
 	
 	@Inject
 	private GameLibraryTagController gameLibraryTagController;
@@ -29,15 +29,15 @@ public class AbstractPublicationListBackingBean {
 	@Inject
 	private ShoppingCartController shoppingCartController;
 
-	protected void setProducts(List<Publication> publications) {
+	protected void setPublications(List<Publication> publications) {
 		this.publications = publications;
 	}
 	
-	public List<Publication> getProducts() {
+	public List<Publication> getPublications() {
 		return publications;
 	}
 	
-	public BookPublication getBookProduct(Publication publication) {
+	public BookPublication getBookPublication(Publication publication) {
 		if (publication instanceof BookPublication) {
 			return (BookPublication) publication;
 		}
@@ -45,7 +45,7 @@ public class AbstractPublicationListBackingBean {
 		return null;
 	}
 	
-	public Long getProductCommentCount(Publication publication) {
+	public Long getPublicationCommentCount(Publication publication) {
 		if (publication.getForumTopic() != null) {
 			return forumController.countPostsByTopic(publication.getForumTopic());
 		}
@@ -64,23 +64,23 @@ public class AbstractPublicationListBackingBean {
 		return result;
 	}
 	
-	public List<PublicationImage> getProductImages(Publication publication) {
-		return productController.listPublicationImagesByPublication(publication);
+	public List<PublicationImage> getPublicationImages(Publication publication) {
+		return publicationController.listPublicationImagesByPublication(publication);
 	}
 	
 	public PublicationImage getFirstImage(Publication publication) {
-		return productController.listPublicationImagesByPublication(publication).get(0);
+		return publicationController.listPublicationImagesByPublication(publication).get(0);
 	}
 
 	public boolean hasImages(Publication publication) {
-		return productController.listPublicationImagesByPublication(publication).size() > 0;
+		return publicationController.listPublicationImagesByPublication(publication).size() > 0;
 	}
 
 	public boolean hasSeveralImages(Publication publication) {
-		return productController.listPublicationImagesByPublication(publication).size() > 1;
+		return publicationController.listPublicationImagesByPublication(publication).size() > 1;
 	}
 	
-	public void addProductToShoppingCart(Publication publication) {
+	public void addPublicationToShoppingCart(Publication publication) {
 		shoppingCartController.addProduct(publication);
 	}
 	

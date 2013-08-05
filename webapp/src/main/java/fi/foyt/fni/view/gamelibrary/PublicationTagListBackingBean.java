@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 
 import javax.ejb.Stateful;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -12,11 +12,11 @@ import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
-import fi.foyt.fni.gamelibrary.ProductController;
+import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
-@SessionScoped
+@RequestScoped
 @Named
 @Stateful
 @URLMappings(mappings = {
@@ -29,7 +29,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 public class PublicationTagListBackingBean extends AbstractPublicationListBackingBean {
 	
 	@Inject
-	private ProductController productController;
+	private PublicationController publicationController;
 	
 	@Inject
 	private GameLibraryTagController gameLibraryTagController;
@@ -41,7 +41,7 @@ public class PublicationTagListBackingBean extends AbstractPublicationListBackin
 			throw new FileNotFoundException();
 		}
 		
-		setProducts(productController.listProductsByTags(Arrays.asList(gameLibraryTag)));
+		setPublications(publicationController.listProductsByTags(Arrays.asList(gameLibraryTag)));
 	}
 	
 	public String getTag() {
