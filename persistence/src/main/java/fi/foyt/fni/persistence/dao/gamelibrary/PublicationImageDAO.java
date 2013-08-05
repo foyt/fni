@@ -28,7 +28,7 @@ public class PublicationImageDAO extends GenericDAO<PublicationImage> {
 		publicationImage.setCreator(creator);
 		publicationImage.setModified(modified);
 		publicationImage.setModifier(modifier);
-		publicationImage.setProduct(publication);
+		publicationImage.setPublication(publication);
 		
 		getEntityManager().persist(publicationImage);
 		
