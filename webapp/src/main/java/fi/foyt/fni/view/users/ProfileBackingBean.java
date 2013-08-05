@@ -15,7 +15,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.forum.ForumController;
-import fi.foyt.fni.gamelibrary.ProductController;
+import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
@@ -42,7 +42,7 @@ public class ProfileBackingBean {
 	private ForumController forumController;
 	
 	@Inject
-	private ProductController productController;
+	private PublicationController publicationController;
 
 	@URLAction
 	public void init() throws FileNotFoundException {
@@ -55,7 +55,7 @@ public class ProfileBackingBean {
 		mostActiveTopic = forumController.findMostActiveTopicByAuthor(user);
 		mostActiveTopicPosts = mostActiveTopic != null ? forumController.countPostsByTopicAndAuthor(mostActiveTopic, user) : null;
 		friends = userController.listUserFriends(user);
-		publishedProducts = productController.listPublishedProductsByCreator(user);
+		publishedProducts = publicationController.listPublishedProductsByCreator(user);
 		
 		contactFieldHomePage = userController.getContactFieldValue(user, UserContactFieldType.HOME_PAGE);
 		contactFieldBlog = userController.getContactFieldValue(user, UserContactFieldType.BLOG);
