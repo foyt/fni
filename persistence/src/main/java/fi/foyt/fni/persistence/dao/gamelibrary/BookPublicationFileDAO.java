@@ -6,7 +6,7 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationFile;
 
 @DAO
-public class FileProductFileDAO extends GenericDAO<PublicationFile> {
+public class BookPublicationFileDAO extends GenericDAO<PublicationFile> {
   
 	private static final long serialVersionUID = 1L;
 

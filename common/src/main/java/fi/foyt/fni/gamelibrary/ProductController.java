@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.dao.gamelibrary.BookPublicationDAO;
-import fi.foyt.fni.persistence.dao.gamelibrary.FileProductFileDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.BookPublicationFileDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationImageDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationTagDAO;
@@ -50,7 +50,7 @@ public class ProductController {
 	private BookPublicationDAO bookPublicationDAO;
 
 	@Inject
-	private FileProductFileDAO fileProductFileDAO;
+	private BookPublicationFileDAO bookPublicationFileDAO;
 
 	@Inject
 	private ForumController forumController;
@@ -238,7 +238,7 @@ public class ProductController {
 	public PublicationFile createBookPublicationFile(BookPublication bookPublication, String contentType, byte[] content, User creator) {
 	  // TODO: Should not be needed but ProductFileServlet crashes without this...
 		bookPublication = bookPublicationDAO.findById(bookPublication.getId());
-		PublicationFile file = fileProductFileDAO.create(content, contentType);
+		PublicationFile file = bookPublicationFileDAO.create(content, contentType);
 		updatedModified(bookPublication, creator, new Date());
 		bookPublicationDAO.updateFile(bookPublication, file);
 		return file;
@@ -247,14 +247,14 @@ public class ProductController {
 	public PublicationFile updateBookPublicationFile(BookPublication bookPublication, String contentType, byte[] content, User modifier) {
 	  // TODO: Should not be needed but ProductFileServlet crashes without this...
 		bookPublication = bookPublicationDAO.findById(bookPublication.getId());
-		PublicationFile file = fileProductFileDAO.updateContent(fileProductFileDAO.updateContentType(bookPublication.getFile(), contentType), content);
+		PublicationFile file = bookPublicationFileDAO.updateContent(bookPublicationFileDAO.updateContentType(bookPublication.getFile(), contentType), content);
 		updatedModified(bookPublication, modifier, new Date());
 		bookPublicationDAO.updateFile(bookPublication, file);
 		return file;
 	}
 	
 	public void deleteFileProductFile(PublicationFile publicationFile) {
-		fileProductFileDAO.delete(publicationFile);
+		bookPublicationFileDAO.delete(publicationFile);
 	}
 	
 	private String createUrlName(String name) {
