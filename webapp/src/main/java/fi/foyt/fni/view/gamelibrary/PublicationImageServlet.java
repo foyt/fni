@@ -20,7 +20,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import fi.foyt.fni.gamelibrary.ProductController;
+import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.users.User;
@@ -35,7 +35,7 @@ public class PublicationImageServlet extends AbstractFileServlet {
 	private static final long serialVersionUID = 8109481247044843102L;
 
 	@Inject
-	private ProductController productController;
+	private PublicationController publicationController;
 
 	@Inject
 	private SessionController sessionController;
@@ -50,7 +50,7 @@ public class PublicationImageServlet extends AbstractFileServlet {
 		}
 
 		// ProductImage was not found, send 404
-		PublicationImage publicationImage = productController.findPublicationImageById(productImageId);
+		PublicationImage publicationImage = publicationController.findPublicationImageById(productImageId);
 		if (publicationImage == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
@@ -99,37 +99,35 @@ public class PublicationImageServlet extends AbstractFileServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO: Security
 
+		Long publicationId = getPathId(request);
+		if (publicationId == null) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		
 		List<UploadResultItem> resultItems = new ArrayList<>();
 		User loggedUser = sessionController.getLoggedUser();
 
 		try {
-			Long productId = null;
 			List<TypedData> images = new ArrayList<>();
 			List<FileItem> items = getFileItems(request);
 			
 			for (FileItem item : items) {
-				if ("productId".equals(item.getFieldName())) {
-					productId = NumberUtils.createLong(item.getString());
-				} else {
+				if (!item.isFormField()) {
 					images.add(new TypedData(item.get(), item.getContentType()));
 				}
 			}
 
-			if (productId != null) {
-				Publication publication = productController.findProductById(productId);
-				if (publication != null) {
-					for (TypedData image : images) {
-						PublicationImage publicationImage = productController.createPublicationImage(publication, image.getData(), image.getContentType(), loggedUser);
-						String url = request.getContextPath() + "/gamelibrary/publicationImages/" + publicationImage.getId();
-						String thumbnailUrl = url + "?width=128&height=128";
-						resultItems.add(new UploadResultItem(publicationImage.getId().toString(), image.getData().length, url, thumbnailUrl, "N/A", "DELETE"));
-					}
-				} else {
-					response.sendError(HttpServletResponse.SC_BAD_REQUEST, "productId parameter is invalid");
-					return;
+			Publication publication = publicationController.findProductById(publicationId);
+			if (publication != null) {
+				for (TypedData image : images) {
+					PublicationImage publicationImage = publicationController.createPublicationImage(publication, image.getData(), image.getContentType(), loggedUser);
+					String url = request.getContextPath() + "/gamelibrary/publicationImages/" + publicationImage.getId();
+					String thumbnailUrl = url + "?width=128&height=128";
+					resultItems.add(new UploadResultItem(publicationImage.getId().toString(), image.getData().length, url, thumbnailUrl, "N/A", "DELETE"));
 				}
 			} else {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "productId parameter is required");
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "productId parameter is invalid");
 				return;
 			}
 

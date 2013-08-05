@@ -7,12 +7,12 @@
   }
   
   function openImageUploadDialog(publicationId) {
-    var url = CONTEXTPATH + '/gamelibrary/publicationImages/';
+    var url = CONTEXTPATH + '/gamelibrary/publicationImages/' + publicationId;
     var maxFileSize = 1000000;
     var previewWidth = 64;
     var previewHeight = 64;
     
-    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/imageupload.jsf?publicationId=' + publicationId, {
+    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/imageupload.jsf', {
       async: false,
       success : function(data, textStatus, jqXHR) {
         var dialog = $(data).dialog({
@@ -212,7 +212,7 @@
     var publicationId = $(this).data('publication-id');
     var publicationName = $(this).data('publication-name');
     
-    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/publicationPublish.jsf?publicationId=' + publicationId + '&publicationName=' + publicationName, {
+    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/publicationpublish.jsf?publicationId=' + publicationId + '&publicationName=' + publicationName, {
       async: false,
       success : function(data, textStatus, jqXHR) {
         var dialog = $(data).dialog({
@@ -230,7 +230,6 @@
             'text': 'Publish',
             'click': function(event) { 
               executePublicationAdminAction(publicationId, 'publish');
-              $(this).dialog("close");
             }
           }]
         });
@@ -264,7 +263,6 @@
             'text': 'Unpublish',
             'click': function(event) { 
               executePublicationAdminAction(publicationId, 'unpublish');
-              $(this).dialog("close");
             }
           }]
         });
