@@ -13,7 +13,7 @@ import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
-import fi.foyt.fni.persistence.model.gamelibrary.Product_;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication_;
 import fi.foyt.fni.persistence.model.users.User;
 
 @DAO
@@ -29,7 +29,7 @@ public class ProductDAO extends GenericDAO<Publication> {
     Root<Publication> root = criteria.from(Publication.class);
     criteria.select(root);
     criteria.where(
-  		criteriaBuilder.equal(root.get(Product_.urlName), urlName)
+  		criteriaBuilder.equal(root.get(Publication_.urlName), urlName)
     );
     
     return getSingleResult(entityManager.createQuery(criteria));
@@ -43,11 +43,11 @@ public class ProductDAO extends GenericDAO<Publication> {
     Root<Publication> root = criteria.from(Publication.class);
     criteria.select(root);
     criteria.where(
-  		criteriaBuilder.equal(root.get(Product_.published), published)
+  		criteriaBuilder.equal(root.get(Publication_.published), published)
     );
     
     
-    criteria.orderBy(criteriaBuilder.desc(root.get(Product_.created)));
+    criteria.orderBy(criteriaBuilder.desc(root.get(Publication_.created)));
 
     TypedQuery<Publication> query = entityManager.createQuery(criteria);
     query.setFirstResult(firstResult);
@@ -64,7 +64,7 @@ public class ProductDAO extends GenericDAO<Publication> {
     Root<Publication> root = criteria.from(Publication.class);
     criteria.select(root);
     criteria.where(
-  		criteriaBuilder.equal(root.get(Product_.published), published)
+  		criteriaBuilder.equal(root.get(Publication_.published), published)
     );
     
     return entityManager.createQuery(criteria).getResultList();
@@ -79,8 +79,8 @@ public class ProductDAO extends GenericDAO<Publication> {
     criteria.select(root);
     criteria.where(
   		criteriaBuilder.and(
-  		  criteriaBuilder.equal(root.get(Product_.creator), creator),
-  			criteriaBuilder.equal(root.get(Product_.published), published)
+  		  criteriaBuilder.equal(root.get(Publication_.creator), creator),
+  			criteriaBuilder.equal(root.get(Publication_.published), published)
   		)
     );
     

@@ -13,8 +13,8 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
-import fi.foyt.fni.persistence.model.gamelibrary.ProductTag_;
-import fi.foyt.fni.persistence.model.gamelibrary.Product_;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag_;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication_;
 
 @DAO
 public class ProductTagDAO extends GenericDAO<PublicationTag> {
@@ -37,7 +37,7 @@ public class ProductTagDAO extends GenericDAO<PublicationTag> {
     Root<PublicationTag> root = criteria.from(PublicationTag.class);
     criteria.select(root);
     criteria.where(
-    		criteriaBuilder.equal(root.get(ProductTag_.publication), publication)
+    		criteriaBuilder.equal(root.get(PublicationTag_.publication), publication)
     );
     
     return entityManager.createQuery(criteria).getResultList();
@@ -49,9 +49,9 @@ public class ProductTagDAO extends GenericDAO<PublicationTag> {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Publication> criteria = criteriaBuilder.createQuery(Publication.class);
     Root<PublicationTag> root = criteria.from(PublicationTag.class);
-    criteria.select(root.get(ProductTag_.publication));
+    criteria.select(root.get(PublicationTag_.publication));
     criteria.where(
-    	root.get(ProductTag_.tag).in(gameLibaryTags)
+    	root.get(PublicationTag_.tag).in(gameLibaryTags)
     );
     
     return entityManager.createQuery(criteria).getResultList();
@@ -63,9 +63,9 @@ public class ProductTagDAO extends GenericDAO<PublicationTag> {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Long> criteria = criteriaBuilder.createQuery(Long.class);
     Root<PublicationTag> root = criteria.from(PublicationTag.class);
-    criteria.select(criteriaBuilder.count(root.get(ProductTag_.publication)));
+    criteria.select(criteriaBuilder.count(root.get(PublicationTag_.publication)));
     criteria.where(
-    		criteriaBuilder.equal(root.get(ProductTag_.tag), tag)
+    		criteriaBuilder.equal(root.get(PublicationTag_.tag), tag)
     );
     
     return entityManager.createQuery(criteria).getSingleResult();
@@ -77,12 +77,12 @@ public class ProductTagDAO extends GenericDAO<PublicationTag> {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<GameLibraryTag> criteria = criteriaBuilder.createQuery(GameLibraryTag.class);
     Root<PublicationTag> root = criteria.from(PublicationTag.class);
-    Join<PublicationTag, Publication> join = root.join(ProductTag_.publication);
-    criteria.select(root.get(ProductTag_.tag)).distinct(true);
+    Join<PublicationTag, Publication> join = root.join(PublicationTag_.publication);
+    criteria.select(root.get(PublicationTag_.tag)).distinct(true);
     
     criteria.where(
     		criteriaBuilder.and(
-    		  criteriaBuilder.equal(join.get(Product_.published), published)
+    		  criteriaBuilder.equal(join.get(Publication_.published), published)
     		)
     );
     

@@ -12,7 +12,7 @@ import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
-import fi.foyt.fni.persistence.model.gamelibrary.ProductImage_;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage_;
 import fi.foyt.fni.persistence.model.users.User;
 
 @DAO
@@ -43,7 +43,7 @@ public class ProductImageDAO extends GenericDAO<PublicationImage> {
     Root<PublicationImage> root = criteria.from(PublicationImage.class);
     criteria.select(root);
     criteria.where(
-    		criteriaBuilder.equal(root.get(ProductImage_.publication), publication)
+    		criteriaBuilder.equal(root.get(PublicationImage_.publication), publication)
     );
     
     return entityManager.createQuery(criteria).getResultList();
