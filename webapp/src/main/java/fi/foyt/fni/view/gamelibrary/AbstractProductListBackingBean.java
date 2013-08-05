@@ -65,19 +65,19 @@ public class AbstractProductListBackingBean {
 	}
 	
 	public List<PublicationImage> getProductImages(Publication publication) {
-		return productController.listProductImageByProduct(publication);
+		return productController.listPublicationImagesByPublication(publication);
 	}
 	
 	public PublicationImage getFirstImage(Publication publication) {
-		return productController.listProductImageByProduct(publication).get(0);
+		return productController.listPublicationImagesByPublication(publication).get(0);
 	}
 
 	public boolean hasImages(Publication publication) {
-		return productController.listProductImageByProduct(publication).size() > 0;
+		return productController.listPublicationImagesByPublication(publication).size() > 0;
 	}
 
 	public boolean hasSeveralImages(Publication publication) {
-		return productController.listProductImageByProduct(publication).size() > 1;
+		return productController.listPublicationImagesByPublication(publication).size() > 1;
 	}
 	
 	public void addProductToShoppingCart(Publication publication) {

@@ -50,7 +50,7 @@ public class ProductImageServlet extends AbstractFileServlet {
 		}
 
 		// ProductImage was not found, send 404
-		PublicationImage publicationImage = productController.findProductImageById(productImageId);
+		PublicationImage publicationImage = productController.findPublicationImageById(productImageId);
 		if (publicationImage == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
@@ -119,7 +119,7 @@ public class ProductImageServlet extends AbstractFileServlet {
 				Publication publication = productController.findProductById(productId);
 				if (publication != null) {
 					for (TypedData image : images) {
-						PublicationImage publicationImage = productController.createProductImage(publication, image.getData(), image.getContentType(), loggedUser);
+						PublicationImage publicationImage = productController.createPublicationImage(publication, image.getData(), image.getContentType(), loggedUser);
 						String url = request.getContextPath() + "/gamelibrary/publicationImages/" + publicationImage.getId();
 						String thumbnailUrl = url + "?width=128&height=128";
 						resultItems.add(new UploadResultItem(publicationImage.getId().toString(), image.getData().length, url, thumbnailUrl, "N/A", "DELETE"));

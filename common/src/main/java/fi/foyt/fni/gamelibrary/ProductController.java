@@ -118,8 +118,8 @@ public class ProductController {
 	}
 	
 	public void deleteProduct(Publication publication) {
-		for (PublicationImage publicationImage : listProductImageByProduct(publication)) {
-			deleteProductImage(publicationImage);
+		for (PublicationImage publicationImage : listPublicationImagesByPublication(publication)) {
+			deletePublicationImage(publicationImage);
 		}
 		
 		if (publication instanceof BookPublication) {
@@ -136,22 +136,22 @@ public class ProductController {
 		publicationDAO.delete(publication);
 	}
 
-	/* ProductImages */
+	/* PublicationImages */
 
-	public PublicationImage createProductImage(Publication publication, byte[] content, String contentType, User creator) {
+	public PublicationImage createPublicationImage(Publication publication, byte[] content, String contentType, User creator) {
 		Date now = new Date();
 		return publicationImageDAO.create(publication, content, contentType, now, now, creator, creator);
 	}
 	
-	public PublicationImage findProductImageById(Long productImageId) {
-		return publicationImageDAO.findById(productImageId);
+	public PublicationImage findPublicationImageById(Long publicationImageId) {
+		return publicationImageDAO.findById(publicationImageId);
 	}
 
-	public List<PublicationImage> listProductImageByProduct(Publication publication) {
-		return publicationImageDAO.listByProduct(publication);
+	public List<PublicationImage> listPublicationImagesByPublication(Publication publication) {
+		return publicationImageDAO.listByPublication(publication);
 	}
 
-	public void deleteProductImage(PublicationImage publicationImage) {
+	public void deletePublicationImage(PublicationImage publicationImage) {
 		publicationImageDAO.delete(publicationImage);
 	}
 	/* BookProducts */

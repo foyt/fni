@@ -35,7 +35,7 @@ public class PublicationImageDAO extends GenericDAO<PublicationImage> {
 		return publicationImage;
 	}
 
-	public List<PublicationImage> listByProduct(Publication publication) {
+	public List<PublicationImage> listByPublication(Publication publication) {
 		EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

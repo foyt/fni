@@ -76,19 +76,19 @@ public class ProductDetailsBackingBean {
 	}
 
 	public boolean getHasSeveralImages() {
-		return productController.listProductImageByProduct(publication).size() > 1;
+		return productController.listPublicationImagesByPublication(publication).size() > 1;
 	}
 
 	public boolean getHasImages() {
-		return productController.listProductImageByProduct(publication).size() > 0;
+		return productController.listPublicationImagesByPublication(publication).size() > 0;
 	}
 
 	public PublicationImage getFirstImage() {
-		return productController.listProductImageByProduct(publication).get(0);
+		return productController.listPublicationImagesByPublication(publication).get(0);
 	}
 	
 	public List<PublicationImage> getProductImages() {
-		return productController.listProductImageByProduct(publication);
+		return productController.listPublicationImagesByPublication(publication);
 	}
 
 	public Long getProductCommentCount() {
