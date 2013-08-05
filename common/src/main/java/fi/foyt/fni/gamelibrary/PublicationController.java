@@ -129,6 +129,7 @@ public class PublicationController {
 		if (publication instanceof BookPublication) {
 			PublicationFile file = ((BookPublication) publication).getFile();
 			if (file != null) {
+				updateBookPublicationFile((BookPublication) publication, null);
 			  deleteFilePublicationFile(file);
 			}
 		}
