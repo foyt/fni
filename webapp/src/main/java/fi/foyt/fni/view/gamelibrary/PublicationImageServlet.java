@@ -118,7 +118,7 @@ public class PublicationImageServlet extends AbstractFileServlet {
 				}
 			}
 
-			Publication publication = publicationController.findProductById(publicationId);
+			Publication publication = publicationController.findPublicationById(publicationId);
 			if (publication != null) {
 				for (TypedData image : images) {
 					PublicationImage publicationImage = publicationController.createPublicationImage(publication, image.getData(), image.getContentType(), loggedUser);
@@ -127,7 +127,7 @@ public class PublicationImageServlet extends AbstractFileServlet {
 					resultItems.add(new UploadResultItem(publicationImage.getId().toString(), image.getData().length, url, thumbnailUrl, "N/A", "DELETE"));
 				}
 			} else {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "productId parameter is invalid");
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "publicationId parameter is invalid");
 				return;
 			}
 

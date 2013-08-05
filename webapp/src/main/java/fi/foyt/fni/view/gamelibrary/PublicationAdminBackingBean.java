@@ -19,7 +19,7 @@ public class PublicationAdminBackingBean {
 	private PublicationController publicationController;
 
 	public void publish() throws IOException {
-		publicationController.publishProduct(publicationController.findProductById(publicationId));
+		publicationController.publishPublication(publicationController.findPublicationById(publicationId));
 		
 		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
   	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
@@ -28,7 +28,7 @@ public class PublicationAdminBackingBean {
 	}
 
 	public void unpublish() throws IOException {
-		publicationController.unpublishProduct(publicationController.findProductById(publicationId));
+		publicationController.unpublishPublication(publicationController.findPublicationById(publicationId));
 
 		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
   	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
@@ -37,7 +37,7 @@ public class PublicationAdminBackingBean {
 	}
 
 	public void delete() throws IOException {
-		publicationController.deleteProduct(publicationController.findProductById(publicationId));
+		publicationController.deletePublication(publicationController.findPublicationById(publicationId));
 
 		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
   	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())

@@ -64,7 +64,7 @@ public class PublicationCreateBackingBean extends AbstractPublicationEditBacking
   		}
 		}
 		
-		BookPublication bookPublication = publicationController.createBookProduct(loggedUser, 
+		BookPublication bookPublication = publicationController.createBookPublication(loggedUser, 
 			getPublicationName(), 
 			getPublicationDescription(), 
 			getPublicationRequiresDelivery(), 

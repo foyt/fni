@@ -80,7 +80,7 @@ public class ShoppingCartController {
 		return shoppingCartItemDAO.listByCart(getShoppingCart());
 	}
 
-	public void addProduct(Publication publication) {
+	public void addPublication(Publication publication) {
 		List<ShoppingCartItem> items = getShoppingCartItems();
 		for (ShoppingCartItem item : items) {
 			if (item.getPublication().getId().equals(publication.getId())) {
@@ -92,7 +92,7 @@ public class ShoppingCartController {
 		shoppingCartItemDAO.create(getShoppingCart(), publication, 1);
 	}
 	
-	public void setProductCount(Publication publication, Integer count) {
+	public void setPublicationCount(Publication publication, Integer count) {
 		List<ShoppingCartItem> items = getShoppingCartItems();
 		for (ShoppingCartItem item : items) {
 			if (item.getPublication().getId().equals(publication.getId())) {
@@ -112,8 +112,8 @@ public class ShoppingCartController {
 		}
 	}
 	
-	public void removeProduct(Publication publication) {
-		setProductCount(publication, 0);
+	public void removePublication(Publication publication) {
+		setPublicationCount(publication, 0);
 	}
 	
 	public boolean isShoppingCartEmpty() {

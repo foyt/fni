@@ -25,7 +25,7 @@ import fi.foyt.fni.gamelibrary.ShoppingCartController;
 })
 public class PublicationMostRecentListBackingBean extends AbstractPublicationListBackingBean {
 
-	private static final int MAX_RECENT_PRODUCTS = 10;
+	private static final int MAX_RECENT_PUBLICATIONS = 10;
 
 	@Inject
 	private PublicationController publicationController;
@@ -38,7 +38,7 @@ public class PublicationMostRecentListBackingBean extends AbstractPublicationLis
 	
 	@URLAction
 	public void init() {
-		setPublications(publicationController.listRecentProducts(MAX_RECENT_PRODUCTS));
+		setPublications(publicationController.listRecentPublications(MAX_RECENT_PUBLICATIONS));
 	}
 	
 }

@@ -55,7 +55,7 @@ public class ProfileBackingBean {
 		mostActiveTopic = forumController.findMostActiveTopicByAuthor(user);
 		mostActiveTopicPosts = mostActiveTopic != null ? forumController.countPostsByTopicAndAuthor(mostActiveTopic, user) : null;
 		friends = userController.listUserFriends(user);
-		publishedProducts = publicationController.listPublishedProductsByCreator(user);
+		publishedProducts = publicationController.listPublishedPublicationsByCreator(user);
 		
 		contactFieldHomePage = userController.getContactFieldValue(user, UserContactFieldType.HOME_PAGE);
 		contactFieldBlog = userController.getContactFieldValue(user, UserContactFieldType.BLOG);

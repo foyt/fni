@@ -43,7 +43,7 @@ public class PublicationFileServlet extends AbstractFileServlet {
 		}
 
 		// BookPublication was not found, send 404
-		BookPublication bookPublication = publicationController.findBookProductById(publicationId);
+		BookPublication bookPublication = publicationController.findBookPublicationById(publicationId);
 		if (bookPublication == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
@@ -94,8 +94,8 @@ public class PublicationFileServlet extends AbstractFileServlet {
 			return;
 		}
 
-		// FileProduct was not found, send 404
-		BookPublication bookPublication = publicationController.findBookProductById(publicationId);
+		// BookPublication was not found, send 404
+		BookPublication bookPublication = publicationController.findBookPublicationById(publicationId);
 		if (bookPublication == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;

@@ -5,9 +5,9 @@
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html">
-<div title="Edit Product #{param.productName}" class="gamelibrary-dialog gamelibrary-edit-product-dialog">  
+<div title="Edit Publication #{param.publicationName}" class="gamelibrary-dialog gamelibrary-edit-publication-dialog">  
   
-  <h:form styleClass="gamelibrary-edit-product-form">
+  <h:form styleClass="gamelibrary-edit-publication-form">
     <div class="dialog-section">
       <h:outputLabel value="Type" />
       <div>
@@ -20,21 +20,21 @@
     <div class="dialog-section">
       <h:outputLabel value="Name" />
       <div>
-        <h:inputText name="name" value="#{productEditBackingBean.productName}" styleClass="max-width" required="required"/>
+        <h:inputText name="name" value="#{publicationEditBackingBean.publicationName}" styleClass="max-width" required="required"/>
       </div>
     </div>
     
     <div class="dialog-section">
       <h:outputLabel value="Description" />
       <div>
-        <h:inputTextarea name="description" value="#{productEditBackingBean.productDescription}" rows="5" styleClass="max-width" required="required"/>
+        <h:inputTextarea name="description" value="#{publicationEditBackingBean.publicationDescription}" rows="5" styleClass="max-width" required="required"/>
       </div>
     </div>
     
     <div class="dialog-section">
       <h:outputLabel value="Price (EUR)" />
       <div>
-        <h:inputText name="price" type="number" value="#{productEditBackingBean.productPrice}" styleClass="max-width" required="required"/>
+        <h:inputText name="price" type="number" value="#{publicationEditBackingBean.publicationPrice}" styleClass="max-width" required="required"/>
       </div>
     </div>
         
@@ -49,7 +49,7 @@
       <h:outputLabel value="Tags" />
       <div>
         <h:selectOneMenu id="tag-select">
-          <f:selectItems value="#{productEditBackingBean.tagSelectItems}" />
+          <f:selectItems value="#{publicationEditBackingBean.tagSelectItems}" />
         </h:selectOneMenu>
         
         <div class="new-tag-container">        
@@ -62,18 +62,18 @@
         
       </div>
       <div class="tags">
-        <h:inputHidden id="tags" value="#{productEditBackingBean.productTags}" />
+        <h:inputHidden id="tags" value="#{publicationEditBackingBean.publicationTags}" />
       </div>
     </div>
 
     <div class="dialog-section">
       <h:outputLabel value="Settings" />
       <div>
-        <h:selectBooleanCheckbox name="requires-delivery" value="#{productEditBackingBean.productRequiresDelivery}"/>
+        <h:selectBooleanCheckbox name="requires-delivery" value="#{publicationEditBackingBean.publicationRequiresDelivery}"/>
         <h:outputLabel value="Requires Delivery" />
       </div>
       <div>
-        <h:selectBooleanCheckbox name="purchasable" value="#{productEditBackingBean.productPurchasable}"/>
+        <h:selectBooleanCheckbox name="purchasable" value="#{publicationEditBackingBean.publicationPurchasable}"/>
         <h:outputLabel value="Purchasable" />
       </div>
     </div>
@@ -82,16 +82,16 @@
       <h:outputLabel value="Details" />
       <table class="details-table">
         <tr>
-          <td><h:outputLabel value="Width" /></td><td><h:inputText name="width" value="#{productEditBackingBean.productWidth}"/><span>mm</span></td>
+          <td><h:outputLabel value="Width" /></td><td><h:inputText name="width" value="#{publicationEditBackingBean.publicationWidth}"/><span>mm</span></td>
         </tr>
         <tr>
-          <td><h:outputLabel value="Height" /></td><td><h:inputText name="height" value="#{productEditBackingBean.productHeight}"/><span>mm</span></td>
+          <td><h:outputLabel value="Height" /></td><td><h:inputText name="height" value="#{publicationEditBackingBean.publicationHeight}"/><span>mm</span></td>
         </tr>
         <tr>
-          <td><h:outputLabel value="Depth" /></td><td><h:inputText name="depth" value="#{productEditBackingBean.productDepth}"/><span>mm</span></td>
+          <td><h:outputLabel value="Depth" /></td><td><h:inputText name="depth" value="#{publicationEditBackingBean.publicationDepth}"/><span>mm</span></td>
         </tr>
         <tr>
-          <td><h:outputLabel value="Weight" /></td><td><h:inputText name="weight" value="#{productEditBackingBean.productWeight}"/><span>g</span></td>
+          <td><h:outputLabel value="Weight" /></td><td><h:inputText name="weight" value="#{publicationEditBackingBean.publicationWeight}"/><span>g</span></td>
         </tr>
       </table>
     </div>
@@ -104,28 +104,28 @@
             <h:outputLabel value="Downloadable" />
           </td>
           <td>
-            <h:selectBooleanCheckbox name="downloadable" value="#{productEditBackingBean.productDownloadable}"/>
+            <h:selectBooleanCheckbox name="downloadable" value="#{publicationEditBackingBean.publicationDownloadable}"/>
           </td>
         </tr>
         <tr>
-          <td><h:outputLabel value="Number Of Pages" /></td><td><h:inputText name="numberOfPages" value="#{productEditBackingBean.bookNumberOfPages}"/></td>
+          <td><h:outputLabel value="Number Of Pages" /></td><td><h:inputText name="numberOfPages" value="#{publicationEditBackingBean.bookNumberOfPages}"/></td>
         </tr>
         <tr>
-          <td><h:outputLabel value="Author" /></td><td><h:inputText name="author" value="#{productEditBackingBean.bookAuthor}"/></td>
+          <td><h:outputLabel value="Author" /></td><td><h:inputText name="author" value="#{publicationEditBackingBean.bookAuthor}"/></td>
         </tr>
       </table>
     </div>
     
     <div style="display: none">
-      <h:commandButton id="submit-button" action="#{productEditBackingBean.save}">
-        <f:ajax execute="@form" onevent="onJsfProductUpdate"/>
+      <h:commandButton id="submit-button" action="#{publicationEditBackingBean.save}">
+        <f:ajax execute="@form" onevent="onJsfPublicationUpdate"/>
       </h:commandButton>
     </div>
   </h:form>
   
-  <div id="edit-product-file-form" style="display: none">
+  <div id="edit-publication-file-form" style="display: none">
     <iframe src="about:blank" width="0" height="0" name="_file_form_target_"></iframe>
-    <form method="post" enctype="multipart/form-data" action="#{request.contextPath}/gamelibrary/publicationFiles/#{productEditBackingBean.productId}" target="_file_form_target_"></form>
+    <form method="post" enctype="multipart/form-data" action="#{request.contextPath}/gamelibrary/publicationFiles/#{publicationEditBackingBean.publicationId}" target="_file_form_target_"></form>
   </div>
 </div>  
 </ui:composition>

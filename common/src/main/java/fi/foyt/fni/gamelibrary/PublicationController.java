@@ -60,41 +60,41 @@ public class PublicationController {
 	
 	/* Publications */
 
-	public Publication findProductById(Long id) {
+	public Publication findPublicationById(Long id) {
 		return publicationDAO.findById(id);
 	}
 
-	public Publication findProductByUrlName(String urlName) {
+	public Publication findPublicationByUrlName(String urlName) {
 		return publicationDAO.findByUrlName(urlName);
 	}
 
-	public List<Publication> listAllProducts() {
+	public List<Publication> listAllPublications() {
 		return publicationDAO.listAll();
 	}
 
-	public List<Publication> listProductsByTags(String... tags) {
+	public List<Publication> listPublicationsByTags(String... tags) {
 		List<GameLibraryTag> gameLibraryTags = new ArrayList<>();
 
 		for (String tag : tags) {
 			gameLibraryTags.add(gameLibraryTagController.findTagByText(tag));
 		}
 
-		return listProductsByTags(gameLibraryTags);
+		return listPublicationsByTags(gameLibraryTags);
 	}
 
-	public List<Publication> listProductsByTags(List<GameLibraryTag> gameLibraryTags) {
+	public List<Publication> listPublicationsByTags(List<GameLibraryTag> gameLibraryTags) {
 		return publicationTagDAO.listPublicationsByGameLibraryTags(gameLibraryTags);
 	}
 
-	public List<Publication> listRecentProducts(int maxRecentProduct) {
-		return publicationDAO.listByPublishedOrderByCreated(Boolean.TRUE, 0, maxRecentProduct);
+	public List<Publication> listRecentPublications(int maxRecentPublication) {
+		return publicationDAO.listByPublishedOrderByCreated(Boolean.TRUE, 0, maxRecentPublication);
 	}
 
-	public List<Publication> listUnpublishedProducts(User creator) {
+	public List<Publication> listUnpublishedPublications(User creator) {
 		return publicationDAO.listByCreatorAndPublished(creator, Boolean.FALSE);
 	}
 	
-	public List<Publication> listPublishedProductsByCreator(User creator) {
+	public List<Publication> listPublishedPublicationsByCreator(User creator) {
 		return publicationDAO.listByCreatorAndPublished(creator, Boolean.TRUE);
 	}
 	
@@ -109,19 +109,19 @@ public class PublicationController {
 		return publication;
 	}
 	
-	public Publication publishProduct(Publication publication) {
+	public Publication publishPublication(Publication publication) {
 		return publicationDAO.updatePublished(publication, Boolean.TRUE);
 	}
 
-	public Publication unpublishProduct(Publication publication) {
+	public Publication unpublishPublication(Publication publication) {
 		return publicationDAO.updatePublished(publication, Boolean.FALSE);
 	}
 	
-	public Publication updateProductDefaultImage(Publication publication, PublicationImage publicationImage) {
+	public Publication updatePublicationDefaultImage(Publication publication, PublicationImage publicationImage) {
 		return publicationDAO.updateDefaultImage(publication, publicationImage);
 	}
 	
-	public void deleteProduct(Publication publication) {
+	public void deletePublication(Publication publication) {
 		for (PublicationImage publicationImage : listPublicationImagesByPublication(publication)) {
 			deletePublicationImage(publicationImage);
 		}
@@ -129,12 +129,12 @@ public class PublicationController {
 		if (publication instanceof BookPublication) {
 			PublicationFile file = ((BookPublication) publication).getFile();
 			if (file != null) {
-			  deleteFileProductFile(file);
+			  deleteFilePublicationFile(file);
 			}
 		}
 		
 		for (PublicationTag publicationTag : gameLibraryTagController.listPublicationTags(publication)) {
-			gameLibraryTagController.deleteProductTag(publicationTag);
+			gameLibraryTagController.deletePublicationTag(publicationTag);
 		}
 		
 		publicationDAO.delete(publication);
@@ -158,9 +158,9 @@ public class PublicationController {
 	public void deletePublicationImage(PublicationImage publicationImage) {
 		publicationImageDAO.delete(publicationImage);
 	}
-	/* BookProducts */
+	/* BookPublications */
 
-	public BookPublication createBookProduct(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, List<GameLibraryTag> tags) {
+	public BookPublication createBookPublication(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, List<GameLibraryTag> tags) {
 		
 		Date now = new Date();
 		Long forumId = systemSettingsController.getGameLibraryPublicationForumId();
@@ -178,11 +178,11 @@ public class PublicationController {
 		return bookPublication;
 	}
 	
-	public BookPublication findBookProductById(Long id) {
+	public BookPublication findBookPublicationById(Long id) {
 		return bookPublicationDAO.findById(id);
 	}
 	
-	public BookPublication updateBookProduct(fi.foyt.fni.persistence.model.gamelibrary.BookPublication bookPublication, Double price, String name,
+	public BookPublication updateBookPublication(fi.foyt.fni.persistence.model.gamelibrary.BookPublication bookPublication, Double price, String name,
 			String description, List<GameLibraryTag> tags, Boolean published, Boolean requiresDelivery, Boolean downloadable, 
 			Boolean purchasable, Double weight, Integer width, Integer height, Integer depth, Integer numberOfPages, String author, 
 			User modifier) {
@@ -216,7 +216,7 @@ public class PublicationController {
 		}
 		
 		for (PublicationTag removeTag : existingTagMap.values()) {
-			gameLibraryTagController.deleteProductTag(removeTag);
+			gameLibraryTagController.deletePublicationTag(removeTag);
 		}
 		
 		for (GameLibraryTag gameLibraryTag : addTags) {
@@ -240,7 +240,7 @@ public class PublicationController {
 	/* PublicationFile */
 
 	public PublicationFile createBookPublicationFile(BookPublication bookPublication, String contentType, byte[] content, User creator) {
-	  // TODO: Should not be needed but ProductFileServlet crashes without this...
+	  // TODO: Should not be needed but PublicationFileServlet crashes without this...
 		bookPublication = bookPublicationDAO.findById(bookPublication.getId());
 		PublicationFile file = bookPublicationFileDAO.create(content, contentType);
 		updatedModified(bookPublication, creator, new Date());
@@ -249,7 +249,7 @@ public class PublicationController {
 	}
 	
 	public PublicationFile updateBookPublicationFile(BookPublication bookPublication, String contentType, byte[] content, User modifier) {
-	  // TODO: Should not be needed but ProductFileServlet crashes without this...
+	  // TODO: Should not be needed but PublicationFileServlet crashes without this...
 		bookPublication = bookPublicationDAO.findById(bookPublication.getId());
 		PublicationFile file = bookPublicationFileDAO.updateContent(bookPublicationFileDAO.updateContentType(bookPublication.getFile(), contentType), content);
 		updatedModified(bookPublication, modifier, new Date());
@@ -257,7 +257,7 @@ public class PublicationController {
 		return file;
 	}
 	
-	public void deleteFileProductFile(PublicationFile publicationFile) {
+	public void deleteFilePublicationFile(PublicationFile publicationFile) {
 		bookPublicationFileDAO.delete(publicationFile);
 	}
 	

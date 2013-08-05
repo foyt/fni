@@ -1,11 +1,13 @@
 package fi.foyt.fni.view.gamelibrary;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -54,7 +56,7 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 	
 	@URLAction (onPostback = false)
 	public void load() {
-		Publication publication = publicationController.findProductById(getPublicationId());
+		Publication publication = publicationController.findPublicationById(getPublicationId());
 		setPublicationName(publication.getName());
 		setPublicationDescription(publication.getDescription());
 		setPublicationPrice(publication.getPrice());
@@ -81,8 +83,8 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 		setPublicationTags(StringUtils.join(tagList, ';'));
 	}
 	
-	public void save() {
-		Publication publication = publicationController.findProductById(getPublicationId());
+	public void save() throws IOException {
+		Publication publication = publicationController.findPublicationById(getPublicationId());
 		if (publication instanceof BookPublication) {
 			BookPublication bookPublication = (BookPublication) publication;
 			User loggedUser = sessionController.getLoggedUser();
@@ -100,7 +102,7 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 	  		}
 			}
 			
-			publicationController.updateBookProduct(bookPublication, 
+			publicationController.updateBookPublication(bookPublication, 
 				getPublicationPrice(), 
 				getPublicationName(), 
 				getPublicationDescription(), 
@@ -116,6 +118,11 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 				getBookNumberOfPages(),
 				getBookAuthor(),
 				loggedUser);
+			
+			FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+	  	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+	  	  .append("/gamelibrary/unpublished/")
+	  	  .toString());
 		} else {
 			// TODO: Proper error handling
 			throw new RuntimeException("Could not persist unknown product");

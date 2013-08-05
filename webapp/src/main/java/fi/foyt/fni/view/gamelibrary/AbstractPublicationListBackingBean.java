@@ -81,7 +81,7 @@ public class AbstractPublicationListBackingBean {
 	}
 	
 	public void addPublicationToShoppingCart(Publication publication) {
-		shoppingCartController.addProduct(publication);
+		shoppingCartController.addPublication(publication);
 	}
 	
 	private List<Publication> publications;

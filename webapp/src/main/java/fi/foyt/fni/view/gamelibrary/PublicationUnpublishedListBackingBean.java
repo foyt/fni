@@ -36,7 +36,7 @@ public class PublicationUnpublishedListBackingBean extends AbstractPublicationLi
 	@LoggedIn
 	public void init() {
 		User loggedUser = sessionController.getLoggedUser();
-		setPublications(publicationController.listUnpublishedProducts(loggedUser));
+		setPublications(publicationController.listUnpublishedPublications(loggedUser));
 	}
 	
 }

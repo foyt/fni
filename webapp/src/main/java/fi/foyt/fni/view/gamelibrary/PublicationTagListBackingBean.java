@@ -41,7 +41,7 @@ public class PublicationTagListBackingBean extends AbstractPublicationListBackin
 			throw new FileNotFoundException();
 		}
 		
-		setPublications(publicationController.listProductsByTags(Arrays.asList(gameLibraryTag)));
+		setPublications(publicationController.listPublicationsByTags(Arrays.asList(gameLibraryTag)));
 	}
 	
 	public String getTag() {

@@ -45,7 +45,7 @@ public class GameLibraryTagController {
 		return publicationTagDAO.listGameLibraryTagsByPublicationPublished(Boolean.TRUE);
 	}
 	
-	public List<GameLibraryTag> listProductGameLibraryTags(Publication publication) {
+	public List<GameLibraryTag> listPublicationGameLibraryTags(Publication publication) {
 		List<GameLibraryTag> result = new ArrayList<GameLibraryTag>();
 		
 		List<PublicationTag> publicationTags = publicationTagDAO.listByPublication(publication);
@@ -56,19 +56,19 @@ public class GameLibraryTagController {
 		return result;
 	}
 	
-	/* Product Tags */
+	/* Publication Tags */
 	
 	public List<PublicationTag> listPublicationTags(Publication publication) {
 		return publicationTagDAO.listByPublication(publication);
 	}
 
-	public void deleteProductTag(PublicationTag publicationTag) {
+	public void deletePublicationTag(PublicationTag publicationTag) {
 		GameLibraryTag gameLibraryTag = publicationTag.getTag();
 		
 		publicationTagDAO.delete(publicationTag);
 		
-		Long productCount = publicationTagDAO.countPublicationsByTag(gameLibraryTag);
-		if (productCount == 0) {
+		Long publicationCount = publicationTagDAO.countPublicationsByTag(gameLibraryTag);
+		if (publicationCount == 0) {
 			gameLibraryTagDAO.delete(gameLibraryTag);
 		}
 	}

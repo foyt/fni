@@ -48,7 +48,7 @@ public class IndexViewBackingBean {
 	
 	@PostConstruct
 	public void init() {
-		latestGameLibraryPublications = publicationController.listRecentProducts(MAX_GAME_LIBRARY_PUBLICATIONS);
+		latestGameLibraryPublications = publicationController.listRecentPublications(MAX_GAME_LIBRARY_PUBLICATIONS);
 		latestForumTopics = forumController.listLatestForumTopics(MAX_FORUM_TOPICS);
 	}
 	

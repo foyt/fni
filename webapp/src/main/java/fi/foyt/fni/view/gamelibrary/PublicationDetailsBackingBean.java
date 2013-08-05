@@ -47,12 +47,12 @@ public class PublicationDetailsBackingBean {
 	
 	@URLAction
 	public void init() throws FileNotFoundException {
-		this.publication = publicationController.findProductByUrlName(getUrlName());
+		this.publication = publicationController.findPublicationByUrlName(getUrlName());
 		if (this.publication == null) {
 			throw new FileNotFoundException();
 		}
 		
-		tags = gameLibraryTagController.listProductGameLibraryTags(publication);
+		tags = gameLibraryTagController.listPublicationGameLibraryTags(publication);
 	}
 	
 	public String getUrlName() {
@@ -100,7 +100,7 @@ public class PublicationDetailsBackingBean {
 	}
 	
 	public void addPublicationToShoppingCart() {
-		shoppingCartController.addProduct(publication);
+		shoppingCartController.addPublication(publication);
 	}
 	
 	private String urlName;
