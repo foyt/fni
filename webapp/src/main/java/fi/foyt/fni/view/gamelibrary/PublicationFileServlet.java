@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 
-import fi.foyt.fni.gamelibrary.ProductController;
+import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationFile;
 import fi.foyt.fni.persistence.model.users.User;
@@ -28,35 +28,35 @@ public class PublicationFileServlet extends AbstractFileServlet {
 	private static final long serialVersionUID = -5117742561225873455L;
 
 	@Inject
-	private ProductController productController;
+	private PublicationController publicationController;
 
 	@Inject
 	private SessionController sessionController;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// ProductId could not be resolved, send 404
-		Long productId = getPathId(request);
-		if (productId == null) {
+		// PublicationId could not be resolved, send 404
+		Long publicationId = getPathId(request);
+		if (publicationId == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
-		// FileProduct was not found, send 404
-		BookPublication bookPublication = productController.findBookProductById(productId);
+		// BookPublication was not found, send 404
+		BookPublication bookPublication = publicationController.findBookProductById(publicationId);
 		if (bookPublication == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 		
-		// FileProduct does not have a file, send 404
+		// BookPublication does not have a file, send 404
 		PublicationFile file = bookPublication.getFile();
 		if (file == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
-		// TODO: If product is unpublished, only managers may view it
+		// TODO: If publication is unpublished, only managers may view it
 
 		String eTag = createETag(bookPublication.getModified());
 		long lastModified = bookPublication.getModified().getTime();
@@ -87,15 +87,15 @@ public class PublicationFileServlet extends AbstractFileServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO: Security
 		
-		// ProductId could not be resolved, send 404
-		Long productId = getPathId(request);
-		if (productId == null) {
+		// PublicationId could not be resolved, send 404
+		Long publicationId = getPathId(request);
+		if (publicationId == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
 		// FileProduct was not found, send 404
-		BookPublication bookPublication = productController.findBookProductById(productId);
+		BookPublication bookPublication = publicationController.findBookProductById(publicationId);
 		if (bookPublication == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
@@ -118,9 +118,9 @@ public class PublicationFileServlet extends AbstractFileServlet {
 			}
 			
 			if (bookPublication.getFile() != null) {
-				productController.updateBookPublicationFile(bookPublication, file.getContentType(), file.getData(), loggedUser);
+				publicationController.updateBookPublicationFile(bookPublication, file.getContentType(), file.getData(), loggedUser);
 			} else {
-				productController.createBookPublicationFile(bookPublication, file.getContentType(), file.getData(), loggedUser);
+				publicationController.createBookPublicationFile(bookPublication, file.getContentType(), file.getData(), loggedUser);
 			}
 			
 		} catch (FileUploadException e) {
