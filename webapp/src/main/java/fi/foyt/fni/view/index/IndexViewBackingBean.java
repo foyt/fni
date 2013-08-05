@@ -11,7 +11,7 @@ import javax.inject.Named;
 
 import fi.foyt.fni.blog.BlogController;
 import fi.foyt.fni.forum.ForumController;
-import fi.foyt.fni.gamelibrary.ProductController;
+import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
@@ -41,14 +41,14 @@ public class IndexViewBackingBean {
 	private BlogController blogController;
 
 	@Inject
-	private ProductController productController;
+	private PublicationController publicationController;
 
 	@Inject
 	private ForumController forumController;
 	
 	@PostConstruct
 	public void init() {
-		latestGameLibraryPublications = productController.listRecentProducts(MAX_GAME_LIBRARY_PUBLICATIONS);
+		latestGameLibraryPublications = publicationController.listRecentProducts(MAX_GAME_LIBRARY_PUBLICATIONS);
 		latestForumTopics = forumController.listLatestForumTopics(MAX_FORUM_TOPICS);
 	}
 	
