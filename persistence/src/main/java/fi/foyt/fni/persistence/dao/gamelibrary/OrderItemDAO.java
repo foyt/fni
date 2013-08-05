@@ -18,7 +18,7 @@ public class OrderItemDAO extends GenericDAO<OrderItem> {
 		orderItem.setCount(count);
 		orderItem.setName(name);
 		orderItem.setOrder(order);
-		orderItem.setProduct(publication);
+		orderItem.setPublication(publication);
 		orderItem.setUnitPrice(unitPrice);
 		
 		getEntityManager().persist(orderItem);

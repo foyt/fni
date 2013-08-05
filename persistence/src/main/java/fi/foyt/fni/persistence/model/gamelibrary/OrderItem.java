@@ -41,13 +41,13 @@ public class OrderItem {
     this.name = name;
   }
   
-  public Publication getProduct() {
-    return publication;
-  }
+  public Publication getPublication() {
+		return publication;
+	}
   
-  public void setProduct(Publication publication) {
-    this.publication = publication;
-  }
+  public void setPublication(Publication publication) {
+		this.publication = publication;
+	}
   
   public Double getUnitPrice() {
     return unitPrice;
