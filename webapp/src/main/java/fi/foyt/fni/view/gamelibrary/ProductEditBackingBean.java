@@ -18,8 +18,8 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import fi.foyt.fni.gamelibrary.ProductController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
-import fi.foyt.fni.persistence.model.gamelibrary.Product;
-import fi.foyt.fni.persistence.model.gamelibrary.ProductTag;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
@@ -54,37 +54,37 @@ public class ProductEditBackingBean extends AbstractProductEditBackingBean {
 	
 	@URLAction (onPostback = false)
 	public void load() {
-		Product product = productController.findProductById(getProductId());
-		setProductName(product.getName());
-		setProductDescription(product.getDescription());
-		setProductPrice(product.getPrice());
-		setProductRequiresDelivery(product.getRequiresDelivery());
-		setProductPurchasable(product.getPurchasable());
+		Publication publication = productController.findProductById(getProductId());
+		setProductName(publication.getName());
+		setProductDescription(publication.getDescription());
+		setProductPrice(publication.getPrice());
+		setProductRequiresDelivery(publication.getRequiresDelivery());
+		setProductPurchasable(publication.getPurchasable());
 		setProductDownloadable(false);
-		setProductWeight(product.getWeight());
-		setProductWidth(product.getWidth());
-		setProductHeight(product.getHeight());
-		setProductDepth(product.getDepth());
+		setProductWeight(publication.getWeight());
+		setProductWidth(publication.getWidth());
+		setProductHeight(publication.getHeight());
+		setProductDepth(publication.getDepth());
 		
-		if (product instanceof BookProduct) {
-			setProductDownloadable(((BookProduct) product).getDownloadable());
-			setBookAuthor(((BookProduct) product).getAuthor());
-			setBookNumberOfPages(((BookProduct) product).getNumberOfPages());
+		if (publication instanceof BookProduct) {
+			setProductDownloadable(((BookProduct) publication).getDownloadable());
+			setBookAuthor(((BookProduct) publication).getAuthor());
+			setBookNumberOfPages(((BookProduct) publication).getNumberOfPages());
 		}
 		
 		List<String> tagList = new ArrayList<>();
-		List<ProductTag> productTags = gameLibraryTagController.listProductTags(product);
-		for (ProductTag productTag : productTags) {
-			tagList.add(productTag.getTag().getText());
+		List<PublicationTag> publicationTags = gameLibraryTagController.listProductTags(publication);
+		for (PublicationTag publicationTag : publicationTags) {
+			tagList.add(publicationTag.getTag().getText());
 		}
 		
 		setProductTags(StringUtils.join(tagList, ';'));
 	}
 	
 	public void save() {
-		Product product = productController.findProductById(getProductId());
-		if (product instanceof BookProduct) {
-			BookProduct bookProduct = (BookProduct) product;
+		Publication publication = productController.findProductById(getProductId());
+		if (publication instanceof BookProduct) {
+			BookProduct bookProduct = (BookProduct) publication;
 			User loggedUser = sessionController.getLoggedUser();
 			
 			List<GameLibraryTag> tags = new ArrayList<>();
@@ -105,7 +105,7 @@ public class ProductEditBackingBean extends AbstractProductEditBackingBean {
 				getProductName(), 
 				getProductDescription(), 
 				tags, 
-				product.getPublished(), 
+				publication.getPublished(), 
 				getProductRequiresDelivery(), 
 				getProductDownloadable(), 
 				getProductPurchasable(),

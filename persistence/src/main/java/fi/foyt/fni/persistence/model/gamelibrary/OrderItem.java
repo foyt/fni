@@ -41,12 +41,12 @@ public class OrderItem {
     this.name = name;
   }
   
-  public Product getProduct() {
-    return product;
+  public Publication getProduct() {
+    return publication;
   }
   
-  public void setProduct(Product product) {
-    this.product = product;
+  public void setProduct(Publication publication) {
+    this.publication = publication;
   }
   
   public Double getUnitPrice() {
@@ -70,7 +70,7 @@ public class OrderItem {
   private String name;
   
   @ManyToOne 
-  private Product product;
+  private Publication publication;
     
   private Double unitPrice;
   

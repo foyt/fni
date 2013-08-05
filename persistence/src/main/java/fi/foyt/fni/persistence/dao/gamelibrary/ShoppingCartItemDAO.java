@@ -9,7 +9,7 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.gamelibrary.Product;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCart;
 import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCartItem;
 import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCartItem_;
@@ -19,11 +19,11 @@ public class ShoppingCartItemDAO extends GenericDAO<ShoppingCartItem> {
   
 	private static final long serialVersionUID = 1L;
 
-	public ShoppingCartItem create(ShoppingCart cart, Product product, Integer count) {
+	public ShoppingCartItem create(ShoppingCart cart, Publication publication, Integer count) {
 		ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
 		shoppingCartItem.setCart(cart);
 		shoppingCartItem.setCount(count);
-		shoppingCartItem.setProduct(product);
+		shoppingCartItem.setProduct(publication);
 		getEntityManager().persist(shoppingCartItem);
 		
 		return shoppingCartItem;
@@ -43,7 +43,7 @@ public class ShoppingCartItemDAO extends GenericDAO<ShoppingCartItem> {
     return entityManager.createQuery(criteria).getResultList();
 	}
 
-	public List<ShoppingCartItem> listByCartAndProduct(ShoppingCart cart, Product product) {
+	public List<ShoppingCartItem> listByCartAndProduct(ShoppingCart cart, Publication publication) {
 		EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

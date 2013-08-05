@@ -25,7 +25,7 @@ import fi.foyt.fni.persistence.model.users.User;
 
 @Entity
 @Inheritance (strategy=InheritanceType.JOINED)
-public class Product {
+public class Publication {
 
   public Long getId() {
     return id;
@@ -71,11 +71,11 @@ public class Product {
 		this.price = price;
 	}
   
-  public ProductImage getDefaultImage() {
+  public PublicationImage getDefaultImage() {
 		return defaultImage;
 	}
   
-  public void setDefaultImage(ProductImage defaultImage) {
+  public void setDefaultImage(PublicationImage defaultImage) {
 		this.defaultImage = defaultImage;
 	}
 
@@ -203,7 +203,7 @@ public class Product {
   private Double price;
   
   @ManyToOne
-  private ProductImage defaultImage;
+  private PublicationImage defaultImage;
   
   @NotNull
   @Column(nullable = false)

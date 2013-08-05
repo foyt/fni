@@ -10,40 +10,40 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.gamelibrary.Product;
-import fi.foyt.fni.persistence.model.gamelibrary.ProductImage;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.ProductImage_;
 import fi.foyt.fni.persistence.model.users.User;
 
 @DAO
-public class ProductImageDAO extends GenericDAO<ProductImage> {
+public class ProductImageDAO extends GenericDAO<PublicationImage> {
   
 	private static final long serialVersionUID = 1L;
 
-	public ProductImage create(Product product, byte[] content, String contentType, Date created, Date modified, User creator, User modifier) {
-		ProductImage productImage = new ProductImage();
-		productImage.setContent(content);
-		productImage.setContentType(contentType);
-		productImage.setCreated(created);
-		productImage.setCreator(creator);
-		productImage.setModified(modified);
-		productImage.setModifier(modifier);
-		productImage.setProduct(product);
+	public PublicationImage create(Publication publication, byte[] content, String contentType, Date created, Date modified, User creator, User modifier) {
+		PublicationImage publicationImage = new PublicationImage();
+		publicationImage.setContent(content);
+		publicationImage.setContentType(contentType);
+		publicationImage.setCreated(created);
+		publicationImage.setCreator(creator);
+		publicationImage.setModified(modified);
+		publicationImage.setModifier(modifier);
+		publicationImage.setProduct(publication);
 		
-		getEntityManager().persist(productImage);
+		getEntityManager().persist(publicationImage);
 		
-		return productImage;
+		return publicationImage;
 	}
 
-	public List<ProductImage> listByProduct(Product product) {
+	public List<PublicationImage> listByProduct(Publication publication) {
 		EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<ProductImage> criteria = criteriaBuilder.createQuery(ProductImage.class);
-    Root<ProductImage> root = criteria.from(ProductImage.class);
+    CriteriaQuery<PublicationImage> criteria = criteriaBuilder.createQuery(PublicationImage.class);
+    Root<PublicationImage> root = criteria.from(PublicationImage.class);
     criteria.select(root);
     criteria.where(
-    		criteriaBuilder.equal(root.get(ProductImage_.product), product)
+    		criteriaBuilder.equal(root.get(ProductImage_.publication), publication)
     );
     
     return entityManager.createQuery(criteria).getResultList();

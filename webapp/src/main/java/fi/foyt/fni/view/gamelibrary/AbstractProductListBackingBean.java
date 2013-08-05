@@ -10,9 +10,9 @@ import fi.foyt.fni.gamelibrary.ProductController;
 import fi.foyt.fni.gamelibrary.ShoppingCartController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
-import fi.foyt.fni.persistence.model.gamelibrary.Product;
-import fi.foyt.fni.persistence.model.gamelibrary.ProductImage;
-import fi.foyt.fni.persistence.model.gamelibrary.ProductTag;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 public class AbstractProductListBackingBean {
@@ -29,60 +29,60 @@ public class AbstractProductListBackingBean {
 	@Inject
 	private ShoppingCartController shoppingCartController;
 
-	protected void setProducts(List<Product> products) {
-		this.products = products;
+	protected void setProducts(List<Publication> publications) {
+		this.publications = publications;
 	}
 	
-	public List<Product> getProducts() {
-		return products;
+	public List<Publication> getProducts() {
+		return publications;
 	}
 	
-	public BookProduct getBookProduct(Product product) {
-		if (product instanceof BookProduct) {
-			return (BookProduct) product;
+	public BookProduct getBookProduct(Publication publication) {
+		if (publication instanceof BookProduct) {
+			return (BookProduct) publication;
 		}
 		
 		return null;
 	}
 	
-	public Long getProductCommentCount(Product product) {
-		if (product.getForumTopic() != null) {
-			return forumController.countPostsByTopic(product.getForumTopic());
+	public Long getProductCommentCount(Publication publication) {
+		if (publication.getForumTopic() != null) {
+			return forumController.countPostsByTopic(publication.getForumTopic());
 		}
 		
 		return null;
 	}
 	
-	public List<GameLibraryTag> getTags(Product product) {
+	public List<GameLibraryTag> getTags(Publication publication) {
 		List<GameLibraryTag> result = new ArrayList<>();
 
-		List<ProductTag> productTags = gameLibraryTagController.listProductTags(product);
-		for (ProductTag productTag : productTags) {
-			result.add(productTag.getTag());
+		List<PublicationTag> publicationTags = gameLibraryTagController.listProductTags(publication);
+		for (PublicationTag publicationTag : publicationTags) {
+			result.add(publicationTag.getTag());
 		}
 
 		return result;
 	}
 	
-	public List<ProductImage> getProductImages(Product product) {
-		return productController.listProductImageByProduct(product);
+	public List<PublicationImage> getProductImages(Publication publication) {
+		return productController.listProductImageByProduct(publication);
 	}
 	
-	public ProductImage getFirstImage(Product product) {
-		return productController.listProductImageByProduct(product).get(0);
+	public PublicationImage getFirstImage(Publication publication) {
+		return productController.listProductImageByProduct(publication).get(0);
 	}
 
-	public boolean hasImages(Product product) {
-		return productController.listProductImageByProduct(product).size() > 0;
+	public boolean hasImages(Publication publication) {
+		return productController.listProductImageByProduct(publication).size() > 0;
 	}
 
-	public boolean hasSeveralImages(Product product) {
-		return productController.listProductImageByProduct(product).size() > 1;
+	public boolean hasSeveralImages(Publication publication) {
+		return productController.listProductImageByProduct(publication).size() > 1;
 	}
 	
-	public void addProductToShoppingCart(Product product) {
-		shoppingCartController.addProduct(product);
+	public void addProductToShoppingCart(Publication publication) {
+		shoppingCartController.addProduct(publication);
 	}
 	
-	private List<Product> products;
+	private List<Publication> publications;
 }

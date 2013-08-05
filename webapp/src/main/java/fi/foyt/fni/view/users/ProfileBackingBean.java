@@ -18,7 +18,7 @@ import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.ProductController;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
-import fi.foyt.fni.persistence.model.gamelibrary.Product;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserContactFieldType;
 import fi.foyt.fni.users.UserController;
@@ -118,7 +118,7 @@ public class ProfileBackingBean {
 		return friends;
 	}
 	
-	public List<Product> getPublishedProducts() {
+	public List<Publication> getPublishedProducts() {
 		return publishedProducts;
 	}
 	
@@ -151,7 +151,7 @@ public class ProfileBackingBean {
 	private ForumTopic mostActiveTopic;
 	private Long mostActiveTopicPosts;	
 	private List<User> friends;
-	private List<Product> publishedProducts;
+	private List<Publication> publishedProducts;
 	private String contactFieldHomePage;
 	private String contactFieldBlog;
 	private String contactFieldFacebook;

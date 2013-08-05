@@ -24,9 +24,9 @@ import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
 import fi.foyt.fni.persistence.model.gamelibrary.FileProduct;
 import fi.foyt.fni.persistence.model.gamelibrary.FileProductFile;
-import fi.foyt.fni.persistence.model.gamelibrary.Product;
-import fi.foyt.fni.persistence.model.gamelibrary.ProductImage;
-import fi.foyt.fni.persistence.model.gamelibrary.ProductTag;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
@@ -66,19 +66,19 @@ public class ProductController {
 	
 	/* Products */
 
-	public Product findProductById(Long id) {
+	public Publication findProductById(Long id) {
 		return productDAO.findById(id);
 	}
 
-	public Product findProductByUrlName(String urlName) {
+	public Publication findProductByUrlName(String urlName) {
 		return productDAO.findByUrlName(urlName);
 	}
 
-	public List<Product> listAllProducts() {
+	public List<Publication> listAllProducts() {
 		return productDAO.listAll();
 	}
 
-	public List<Product> listProductsByTags(String... tags) {
+	public List<Publication> listProductsByTags(String... tags) {
 		List<GameLibraryTag> gameLibraryTags = new ArrayList<>();
 
 		for (String tag : tags) {
@@ -88,81 +88,81 @@ public class ProductController {
 		return listProductsByTags(gameLibraryTags);
 	}
 
-	public List<Product> listProductsByTags(List<GameLibraryTag> gameLibraryTags) {
+	public List<Publication> listProductsByTags(List<GameLibraryTag> gameLibraryTags) {
 		return productTagDAO.listProductsByGameLibraryTags(gameLibraryTags);
 	}
 
-	public List<Product> listRecentProducts(int maxRecentProduct) {
+	public List<Publication> listRecentProducts(int maxRecentProduct) {
 		return productDAO.listByPublishedOrderByCreated(Boolean.TRUE, 0, maxRecentProduct);
 	}
 
-	public List<Product> listUnpublishedProducts() {
+	public List<Publication> listUnpublishedProducts() {
 		return productDAO.listByPublished(Boolean.FALSE);
 	}
 	
-	public List<Product> listPublishedProductsByCreator(User creator) {
+	public List<Publication> listPublishedProductsByCreator(User creator) {
 		return productDAO.listByCreatorAndPublished(creator, Boolean.TRUE);
 	}
 
-	public Product updatedModified(Product product, User modifier, Date modified) {
-		productDAO.updateModified(product, modified);
-		productDAO.updateModifier(product, modifier);
+	public Publication updatedModified(Publication publication, User modifier, Date modified) {
+		productDAO.updateModified(publication, modified);
+		productDAO.updateModifier(publication, modifier);
 		
-		return product;
+		return publication;
 	}
 	
-	public Product publishProduct(Product product) {
-		return productDAO.updatePublished(product, Boolean.TRUE);
+	public Publication publishProduct(Publication publication) {
+		return productDAO.updatePublished(publication, Boolean.TRUE);
 	}
 
-	public Product unpublishProduct(Product product) {
-		return productDAO.updatePublished(product, Boolean.FALSE);
+	public Publication unpublishProduct(Publication publication) {
+		return productDAO.updatePublished(publication, Boolean.FALSE);
 	}
 	
-	public Product updateProductDefaultImage(Product product, ProductImage productImage) {
-		return productDAO.updateDefaultImage(product, productImage);
+	public Publication updateProductDefaultImage(Publication publication, PublicationImage publicationImage) {
+		return productDAO.updateDefaultImage(publication, publicationImage);
 	}
 	
-	public void deleteProduct(Product product) {
-		for (ProductImage productImage : listProductImageByProduct(product)) {
-			deleteProductImage(productImage);
+	public void deleteProduct(Publication publication) {
+		for (PublicationImage publicationImage : listProductImageByProduct(publication)) {
+			deleteProductImage(publicationImage);
 		}
 		
-		if (product instanceof FileProduct) {
-			FileProductFile file = ((FileProduct) product).getFile();
+		if (publication instanceof FileProduct) {
+			FileProductFile file = ((FileProduct) publication).getFile();
 			if (file != null) {
 			  deleteFileProductFile(file);
 			}
 		}
 		
-		for (ProductTag productTag : gameLibraryTagController.listProductTags(product)) {
-			gameLibraryTagController.deleteProductTag(productTag);
+		for (PublicationTag publicationTag : gameLibraryTagController.listProductTags(publication)) {
+			gameLibraryTagController.deleteProductTag(publicationTag);
 		}
 		
-		productDAO.delete(product);
+		productDAO.delete(publication);
 	}
 
 	/* ProductImages */
 
-	public ProductImage createProductImage(Product product, byte[] content, String contentType, User creator) {
+	public PublicationImage createProductImage(Publication publication, byte[] content, String contentType, User creator) {
 		Date now = new Date();
-		return productImageDAO.create(product, content, contentType, now, now, creator, creator);
+		return productImageDAO.create(publication, content, contentType, now, now, creator, creator);
 	}
 	
-	public ProductImage findProductImageById(Long productImageId) {
+	public PublicationImage findProductImageById(Long productImageId) {
 		return productImageDAO.findById(productImageId);
 	}
 
-	public List<ProductImage> listProductImageByProduct(Product product) {
-		return productImageDAO.listByProduct(product);
+	public List<PublicationImage> listProductImageByProduct(Publication publication) {
+		return productImageDAO.listByProduct(publication);
 	}
 
-	public void deleteProductImage(ProductImage productImage) {
-		productImageDAO.delete(productImage);
+	public void deleteProductImage(PublicationImage publicationImage) {
+		productImageDAO.delete(publicationImage);
 	}
 	/* BookProducts */
 
-	public BookProduct createBookProduct(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, ProductImage defaultImage, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, List<GameLibraryTag> tags) {
+	public BookProduct createBookProduct(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, List<GameLibraryTag> tags) {
 		
 		Date now = new Date();
 		Long forumId = systemSettingsController.getGameLibraryPublicationForumId();
@@ -201,9 +201,9 @@ public class ProductController {
 		
 		List<GameLibraryTag> addTags = new ArrayList<>(tags);
 		
-		Map<Long, ProductTag> existingTagMap = new HashMap<Long, ProductTag>();
-		List<ProductTag> existingTags = gameLibraryTagController.listProductTags(bookProduct);
-		for (ProductTag existingTag : existingTags) {
+		Map<Long, PublicationTag> existingTagMap = new HashMap<Long, PublicationTag>();
+		List<PublicationTag> existingTags = gameLibraryTagController.listProductTags(bookProduct);
+		for (PublicationTag existingTag : existingTags) {
 			existingTagMap.put(existingTag.getTag().getId(), existingTag);
 		}
 		
@@ -217,7 +217,7 @@ public class ProductController {
 			existingTagMap.remove(addTag.getId());
 		}
 		
-		for (ProductTag removeTag : existingTagMap.values()) {
+		for (PublicationTag removeTag : existingTagMap.values()) {
 			gameLibraryTagController.deleteProductTag(removeTag);
 		}
 		
@@ -278,8 +278,8 @@ public class ProductController {
 				urlName = urlName.concat(StringUtils.repeat('_', padding));
 			}
 			
-			Product product = productDAO.findByUrlName(urlName);
-			if (product == null) {
+			Publication publication = productDAO.findByUrlName(urlName);
+			if (publication == null) {
 				return urlName;
 			}
 			

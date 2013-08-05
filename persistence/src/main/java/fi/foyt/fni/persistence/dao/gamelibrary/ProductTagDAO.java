@@ -10,46 +10,46 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.gamelibrary.Product;
-import fi.foyt.fni.persistence.model.gamelibrary.ProductTag;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.ProductTag_;
 import fi.foyt.fni.persistence.model.gamelibrary.Product_;
 
 @DAO
-public class ProductTagDAO extends GenericDAO<ProductTag> {
+public class ProductTagDAO extends GenericDAO<PublicationTag> {
   
 	private static final long serialVersionUID = 1L;
 
-	public ProductTag create(GameLibraryTag tag, Product product) {
-		ProductTag productTag = new ProductTag();
-		productTag.setProduct(product);
-		productTag.setTag(tag);
-		getEntityManager().persist(productTag);
-		return productTag;
+	public PublicationTag create(GameLibraryTag tag, Publication publication) {
+		PublicationTag publicationTag = new PublicationTag();
+		publicationTag.setProduct(publication);
+		publicationTag.setTag(tag);
+		getEntityManager().persist(publicationTag);
+		return publicationTag;
 	}
 
-	public List<ProductTag> listByProduct(Product product) {
+	public List<PublicationTag> listByProduct(Publication publication) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<ProductTag> criteria = criteriaBuilder.createQuery(ProductTag.class);
-    Root<ProductTag> root = criteria.from(ProductTag.class);
+    CriteriaQuery<PublicationTag> criteria = criteriaBuilder.createQuery(PublicationTag.class);
+    Root<PublicationTag> root = criteria.from(PublicationTag.class);
     criteria.select(root);
     criteria.where(
-    		criteriaBuilder.equal(root.get(ProductTag_.product), product)
+    		criteriaBuilder.equal(root.get(ProductTag_.publication), publication)
     );
     
     return entityManager.createQuery(criteria).getResultList();
   }
 
-	public List<Product> listProductsByGameLibraryTags(List<GameLibraryTag> gameLibaryTags) {
+	public List<Publication> listProductsByGameLibraryTags(List<GameLibraryTag> gameLibaryTags) {
 		EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<Product> criteria = criteriaBuilder.createQuery(Product.class);
-    Root<ProductTag> root = criteria.from(ProductTag.class);
-    criteria.select(root.get(ProductTag_.product));
+    CriteriaQuery<Publication> criteria = criteriaBuilder.createQuery(Publication.class);
+    Root<PublicationTag> root = criteria.from(PublicationTag.class);
+    criteria.select(root.get(ProductTag_.publication));
     criteria.where(
     	root.get(ProductTag_.tag).in(gameLibaryTags)
     );
@@ -62,8 +62,8 @@ public class ProductTagDAO extends GenericDAO<ProductTag> {
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Long> criteria = criteriaBuilder.createQuery(Long.class);
-    Root<ProductTag> root = criteria.from(ProductTag.class);
-    criteria.select(criteriaBuilder.count(root.get(ProductTag_.product)));
+    Root<PublicationTag> root = criteria.from(PublicationTag.class);
+    criteria.select(criteriaBuilder.count(root.get(ProductTag_.publication)));
     criteria.where(
     		criteriaBuilder.equal(root.get(ProductTag_.tag), tag)
     );
@@ -76,8 +76,8 @@ public class ProductTagDAO extends GenericDAO<ProductTag> {
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<GameLibraryTag> criteria = criteriaBuilder.createQuery(GameLibraryTag.class);
-    Root<ProductTag> root = criteria.from(ProductTag.class);
-    Join<ProductTag, Product> join = root.join(ProductTag_.product);
+    Root<PublicationTag> root = criteria.from(PublicationTag.class);
+    Join<PublicationTag, Publication> join = root.join(ProductTag_.publication);
     criteria.select(root.get(ProductTag_.tag)).distinct(true);
     
     criteria.where(

@@ -17,8 +17,8 @@ import fi.foyt.fni.gamelibrary.ProductController;
 import fi.foyt.fni.gamelibrary.ShoppingCartController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
-import fi.foyt.fni.persistence.model.gamelibrary.Product;
-import fi.foyt.fni.persistence.model.gamelibrary.ProductImage;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 @SessionScoped
@@ -47,12 +47,12 @@ public class ProductDetailsBackingBean {
 	
 	@URLAction
 	public void init() throws FileNotFoundException {
-		this.product = productController.findProductByUrlName(getUrlName());
-		if (this.product == null) {
+		this.publication = productController.findProductByUrlName(getUrlName());
+		if (this.publication == null) {
 			throw new FileNotFoundException();
 		}
 		
-		tags = gameLibraryTagController.listProductGameLibraryTags(product);
+		tags = gameLibraryTagController.listProductGameLibraryTags(publication);
 	}
 	
 	public String getUrlName() {
@@ -63,8 +63,8 @@ public class ProductDetailsBackingBean {
 		this.urlName = urlName;
 	}
 	
-	public Product getProduct() {
-		return product;
+	public Publication getProduct() {
+		return publication;
 	}
 	
 	public BookProduct getBookProduct() {
@@ -76,35 +76,35 @@ public class ProductDetailsBackingBean {
 	}
 
 	public boolean getHasSeveralImages() {
-		return productController.listProductImageByProduct(product).size() > 1;
+		return productController.listProductImageByProduct(publication).size() > 1;
 	}
 
 	public boolean getHasImages() {
-		return productController.listProductImageByProduct(product).size() > 0;
+		return productController.listProductImageByProduct(publication).size() > 0;
 	}
 
-	public ProductImage getFirstImage() {
-		return productController.listProductImageByProduct(product).get(0);
+	public PublicationImage getFirstImage() {
+		return productController.listProductImageByProduct(publication).get(0);
 	}
 	
-	public List<ProductImage> getProductImages() {
-		return productController.listProductImageByProduct(product);
+	public List<PublicationImage> getProductImages() {
+		return productController.listProductImageByProduct(publication);
 	}
 
 	public Long getProductCommentCount() {
-		if (product.getForumTopic() != null) {
-			return forumController.countPostsByTopic(product.getForumTopic());
+		if (publication.getForumTopic() != null) {
+			return forumController.countPostsByTopic(publication.getForumTopic());
 		}
 		
 		return null;
 	}
 	
 	public void addProductToShoppingCart() {
-		shoppingCartController.addProduct(product);
+		shoppingCartController.addProduct(publication);
 	}
 	
 	private String urlName;
-	private Product product;
+	private Publication publication;
 	private BookProduct bookProduct;
 	private List<GameLibraryTag> tags;
 }

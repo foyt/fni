@@ -6,7 +6,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @PrimaryKeyJoinColumn (name="id")
-public class FileProduct extends Product {
+public class FileProduct extends Publication {
 
 	public FileProductFile getFile() {
 		return file;

@@ -21,8 +21,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import fi.foyt.fni.gamelibrary.ProductController;
-import fi.foyt.fni.persistence.model.gamelibrary.Product;
-import fi.foyt.fni.persistence.model.gamelibrary.ProductImage;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.TypedData;
@@ -50,8 +50,8 @@ public class ProductImageServlet extends AbstractFileServlet {
 		}
 
 		// ProductImage was not found, send 404
-		ProductImage productImage = productController.findProductImageById(productImageId);
-		if (productImage == null) {
+		PublicationImage publicationImage = productController.findProductImageById(productImageId);
+		if (publicationImage == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
@@ -61,8 +61,8 @@ public class ProductImageServlet extends AbstractFileServlet {
 
 		Integer width = NumberUtils.createInteger(request.getParameter("width"));
 		Integer height = NumberUtils.createInteger(request.getParameter("height"));
-		String eTag = createETag(productImage.getModified(), width, height);
-		long lastModified = productImage.getModified().getTime();
+		String eTag = createETag(publicationImage.getModified(), width, height);
+		long lastModified = publicationImage.getModified().getTime();
 
 		if (!isModifiedSince(request, lastModified, eTag)) {
 			response.setHeader("ETag", eTag); // Required in 304.
@@ -70,7 +70,7 @@ public class ProductImageServlet extends AbstractFileServlet {
 			return;
 		}
 
-		TypedData data = new TypedData(productImage.getContent(), productImage.getContentType());
+		TypedData data = new TypedData(publicationImage.getContent(), publicationImage.getContentType());
 
 		if ((width != null) && (height != null)) {
 			try {
@@ -116,13 +116,13 @@ public class ProductImageServlet extends AbstractFileServlet {
 			}
 
 			if (productId != null) {
-				Product product = productController.findProductById(productId);
-				if (product != null) {
+				Publication publication = productController.findProductById(productId);
+				if (publication != null) {
 					for (TypedData image : images) {
-						ProductImage productImage = productController.createProductImage(product, image.getData(), image.getContentType(), loggedUser);
-						String url = request.getContextPath() + "/gamelibrary/publicationImages/" + productImage.getId();
+						PublicationImage publicationImage = productController.createProductImage(publication, image.getData(), image.getContentType(), loggedUser);
+						String url = request.getContextPath() + "/gamelibrary/publicationImages/" + publicationImage.getId();
 						String thumbnailUrl = url + "?width=128&height=128";
-						resultItems.add(new UploadResultItem(productImage.getId().toString(), image.getData().length, url, thumbnailUrl, "N/A", "DELETE"));
+						resultItems.add(new UploadResultItem(publicationImage.getId().toString(), image.getData().length, url, thumbnailUrl, "N/A", "DELETE"));
 					}
 				} else {
 					response.sendError(HttpServletResponse.SC_BAD_REQUEST, "productId parameter is invalid");

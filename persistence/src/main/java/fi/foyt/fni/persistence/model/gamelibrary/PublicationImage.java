@@ -19,18 +19,18 @@ import org.hibernate.validator.constraints.NotEmpty;
 import fi.foyt.fni.persistence.model.users.User;
 
 @Entity
-public class ProductImage {
+public class PublicationImage {
 
   public Long getId() {
     return id;
   }
   
-  public Product getProduct() {
-		return product;
+  public Publication getProduct() {
+		return publication;
 	}
   
-  public void setProduct(Product product) {
-		this.product = product;
+  public void setProduct(Publication publication) {
+		this.publication = publication;
 	}
   
   public String getContentType() {
@@ -86,7 +86,7 @@ public class ProductImage {
   private Long id;
 
   @OneToOne
-  private Product product;
+  private Publication publication;
   
   @Column(nullable = false)
   @NotNull

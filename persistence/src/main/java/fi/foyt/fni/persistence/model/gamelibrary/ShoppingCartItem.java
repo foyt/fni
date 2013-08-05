@@ -30,12 +30,12 @@ public class ShoppingCartItem {
     this.count = count;
   }
   
-  public Product getProduct() {
-		return product;
+  public Publication getProduct() {
+		return publication;
 	}
   
-  public void setProduct(Product product) {
-		this.product = product;
+  public void setProduct(Publication publication) {
+		this.publication = publication;
 	}
   
   @Id
@@ -49,5 +49,5 @@ public class ShoppingCartItem {
   private Integer count;
   
   @ManyToOne 
-  private Product product;
+  private Publication publication;
 }

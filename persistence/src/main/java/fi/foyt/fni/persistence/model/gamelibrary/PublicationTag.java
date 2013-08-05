@@ -7,18 +7,18 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class ProductTag {
+public class PublicationTag {
 
   public Long getId() {
     return id;
   }
   
-  public Product getProduct() {
-		return product;
+  public Publication getProduct() {
+		return publication;
 	}
   
-  public void setProduct(Product product) {
-		this.product = product;
+  public void setProduct(Publication publication) {
+		this.publication = publication;
 	}
   
   public GameLibraryTag getTag() {
@@ -34,7 +34,7 @@ public class ProductTag {
   private Long id;
 
   @ManyToOne
-  private Product product;
+  private Publication publication;
   
   @ManyToOne
   private GameLibraryTag tag;

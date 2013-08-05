@@ -15,7 +15,7 @@ import fi.foyt.fni.persistence.dao.gamelibrary.OrderItemDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.ShoppingCartDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.ShoppingCartItemDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
-import fi.foyt.fni.persistence.model.gamelibrary.Product;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCart;
 import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCartItem;
 import fi.foyt.fni.persistence.model.users.User;
@@ -80,28 +80,28 @@ public class ShoppingCartController {
 		return shoppingCartItemDAO.listByCart(getShoppingCart());
 	}
 
-	public void addProduct(Product product) {
+	public void addProduct(Publication publication) {
 		List<ShoppingCartItem> items = getShoppingCartItems();
 		for (ShoppingCartItem item : items) {
-			if (item.getProduct().getId().equals(product.getId())) {
+			if (item.getProduct().getId().equals(publication.getId())) {
 				shoppingCartItemDAO.updateCount(item, item.getCount() + 1);
 				return;
 			} 
 		}
 		
-		shoppingCartItemDAO.create(getShoppingCart(), product, 1);
+		shoppingCartItemDAO.create(getShoppingCart(), publication, 1);
 	}
 	
-	public void setProductCount(Product product, Integer count) {
+	public void setProductCount(Publication publication, Integer count) {
 		List<ShoppingCartItem> items = getShoppingCartItems();
 		for (ShoppingCartItem item : items) {
-			if (item.getProduct().getId().equals(product.getId())) {
+			if (item.getProduct().getId().equals(publication.getId())) {
 				setItemCount(item, count);
 				return;
 			}
 		}
 		
-		shoppingCartItemDAO.create(getShoppingCart(), product, count);
+		shoppingCartItemDAO.create(getShoppingCart(), publication, count);
 	}
 
 	public void setItemCount(ShoppingCartItem item, Integer count) {
@@ -112,8 +112,8 @@ public class ShoppingCartController {
 		}
 	}
 	
-	public void removeProduct(Product product) {
-		setProductCount(product, 0);
+	public void removeProduct(Publication publication) {
+		setProductCount(publication, 0);
 	}
 	
 	public boolean isShoppingCartEmpty() {

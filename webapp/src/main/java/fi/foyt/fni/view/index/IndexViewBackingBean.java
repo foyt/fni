@@ -15,7 +15,7 @@ import fi.foyt.fni.gamelibrary.ProductController;
 import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
-import fi.foyt.fni.persistence.model.gamelibrary.Product;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
@@ -64,7 +64,7 @@ public class IndexViewBackingBean {
 		return blogController.listBlogEntryTags(entry);
 	}
 	
-	public List<Product> getLatestGameLibraryPublications() {
+	public List<Publication> getLatestGameLibraryPublications() {
 		return latestGameLibraryPublications;
 	}
 	
@@ -72,6 +72,6 @@ public class IndexViewBackingBean {
 		return latestForumTopics;
 	}
 	
-	private List<Product> latestGameLibraryPublications;
+	private List<Publication> latestGameLibraryPublications;
 	private List<ForumTopic> latestForumTopics;
 }

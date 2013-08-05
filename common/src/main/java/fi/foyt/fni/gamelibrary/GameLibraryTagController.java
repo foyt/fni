@@ -9,8 +9,8 @@ import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.dao.gamelibrary.GameLibraryTagDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.ProductTagDAO;
-import fi.foyt.fni.persistence.model.gamelibrary.Product;
-import fi.foyt.fni.persistence.model.gamelibrary.ProductTag;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 @Stateful
@@ -45,12 +45,12 @@ public class GameLibraryTagController {
 		return productTagDAO.listGameLibraryTagsByProductPublished(Boolean.TRUE);
 	}
 	
-	public List<GameLibraryTag> listProductGameLibraryTags(Product product) {
+	public List<GameLibraryTag> listProductGameLibraryTags(Publication publication) {
 		List<GameLibraryTag> result = new ArrayList<GameLibraryTag>();
 		
-		List<ProductTag> productTags = productTagDAO.listByProduct(product);
-		for (ProductTag productTag : productTags) {
-			result.add(productTag.getTag());
+		List<PublicationTag> publicationTags = productTagDAO.listByProduct(publication);
+		for (PublicationTag publicationTag : publicationTags) {
+			result.add(publicationTag.getTag());
 		}
 		
 		return result;
@@ -58,14 +58,14 @@ public class GameLibraryTagController {
 	
 	/* Product Tags */
 	
-	public List<ProductTag> listProductTags(Product product) {
-		return productTagDAO.listByProduct(product);
+	public List<PublicationTag> listProductTags(Publication publication) {
+		return productTagDAO.listByProduct(publication);
 	}
 
-	public void deleteProductTag(ProductTag productTag) {
-		GameLibraryTag gameLibraryTag = productTag.getTag();
+	public void deleteProductTag(PublicationTag publicationTag) {
+		GameLibraryTag gameLibraryTag = publicationTag.getTag();
 		
-		productTagDAO.delete(productTag);
+		productTagDAO.delete(publicationTag);
 		
 		Long productCount = productTagDAO.countProductsByTag(gameLibraryTag);
 		if (productCount == 0) {
