@@ -125,7 +125,7 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 	  	  .toString());
 		} else {
 			// TODO: Proper error handling
-			throw new RuntimeException("Could not persist unknown product");
+			throw new RuntimeException("Could not persist unknown publication");
 		}
 	}
 	

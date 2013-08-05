@@ -42,22 +42,22 @@ public class PublicationImageServlet extends AbstractFileServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// ProductImageId could not be resolved, send 404
-		Long productImageId = getPathId(request);
-		if (productImageId == null) {
+		// PublicationImageId could not be resolved, send 404
+		Long publicationImageId = getPathId(request);
+		if (publicationImageId == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
-		// ProductImage was not found, send 404
-		PublicationImage publicationImage = publicationController.findPublicationImageById(productImageId);
+		// PublicationImage was not found, send 404
+		PublicationImage publicationImage = publicationController.findPublicationImageById(publicationImageId);
 		if (publicationImage == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
-		// TODO: If product is unpublished, only managers may view it
-		// (productImage.getProduct().getPublished() != true)
+		// TODO: If publication is unpublished, only managers may view it
+		// (publicationImage.getPublication().getPublished() != true)
 
 		Integer width = NumberUtils.createInteger(request.getParameter("width"));
 		Integer height = NumberUtils.createInteger(request.getParameter("height"));

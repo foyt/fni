@@ -95,15 +95,15 @@
         <div class="profile-column-right">
           <div class="profile-gamelibrary-publications">
             <h3>#{locales['users.profile.gameLibraryPublications']}</h3>
-            <ui:repeat var="publishedProduct" value="#{profileBackingBean.publishedProducts}">
+            <ui:repeat var="publishedPublication" value="#{profileBackingBean.publishedPublications}">
               <div class="profile-gamelibrary-publication">
-                <h:panelGroup rendered="#{publishedProduct.defaultImage ne null}" styleClass="profile-gamelibrary-publication-image"> 
-                  <h:graphicImage value="/gamelibrary/publicationImages/#{publishedProduct.defaultImage.id}?width=64&amp;height=64" />
+                <h:panelGroup rendered="#{publishedPublication.defaultImage ne null}" styleClass="profile-gamelibrary-publication-image"> 
+                  <h:graphicImage value="/gamelibrary/publicationImages/#{publishedPublication.defaultImage.id}?width=64&amp;height=64" />
                 </h:panelGroup>
                 <div class="profile-gamelibrary-publication-name">
-                  <h:outputLink value="#{request.contextPath}/gamelibrary/#{publishedProduct.urlName}">#{publishedProduct.name}</h:outputLink>
+                  <h:outputLink value="#{request.contextPath}/gamelibrary/#{publishedPublication.urlName}">#{publishedPublication.name}</h:outputLink>
                 </div>
-                <div class="profile-gamelibrary-publication-description">#{publishedProduct.descriptionPlainAbbr}</div>
+                <div class="profile-gamelibrary-publication-description">#{publishedPublication.descriptionPlainAbbr}</div>
               </div>            
             </ui:repeat>
           </div>

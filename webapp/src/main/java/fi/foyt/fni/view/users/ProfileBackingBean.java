@@ -55,7 +55,7 @@ public class ProfileBackingBean {
 		mostActiveTopic = forumController.findMostActiveTopicByAuthor(user);
 		mostActiveTopicPosts = mostActiveTopic != null ? forumController.countPostsByTopicAndAuthor(mostActiveTopic, user) : null;
 		friends = userController.listUserFriends(user);
-		publishedProducts = publicationController.listPublishedPublicationsByCreator(user);
+		publishedPublications = publicationController.listPublishedPublicationsByCreator(user);
 		
 		contactFieldHomePage = userController.getContactFieldValue(user, UserContactFieldType.HOME_PAGE);
 		contactFieldBlog = userController.getContactFieldValue(user, UserContactFieldType.BLOG);
@@ -118,8 +118,8 @@ public class ProfileBackingBean {
 		return friends;
 	}
 	
-	public List<Publication> getPublishedProducts() {
-		return publishedProducts;
+	public List<Publication> getPublishedPublications() {
+		return publishedPublications;
 	}
 	
 	public String getContactFieldHomePage() {
@@ -151,7 +151,7 @@ public class ProfileBackingBean {
 	private ForumTopic mostActiveTopic;
 	private Long mostActiveTopicPosts;	
 	private List<User> friends;
-	private List<Publication> publishedProducts;
+	private List<Publication> publishedPublications;
 	private String contactFieldHomePage;
 	private String contactFieldBlog;
 	private String contactFieldFacebook;

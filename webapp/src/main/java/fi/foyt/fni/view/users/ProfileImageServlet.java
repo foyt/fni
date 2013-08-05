@@ -43,7 +43,7 @@ public class ProfileImageServlet extends AbstractFileServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// ProductImageId could not be resolved, send 404
+		// PublicationImageId could not be resolved, send 404
 		Long userId = getPathId(request);
 		if (userId == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
