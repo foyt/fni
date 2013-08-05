@@ -6,13 +6,13 @@
     alert(errorThrown);
   }
   
-  function openImageUploadDialog(productId) {
+  function openImageUploadDialog(publicationId) {
     var url = CONTEXTPATH + '/gamelibrary/publicationImages/';
     var maxFileSize = 1000000;
     var previewWidth = 64;
     var previewHeight = 64;
     
-    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/imageupload.jsf?productId=' + productId, {
+    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/imageupload.jsf?publicationId=' + publicationId, {
       async: false,
       success : function(data, textStatus, jqXHR) {
         var dialog = $(data).dialog({
@@ -114,10 +114,10 @@
   /* Image popups */
   
   function initializeImagePopups() {
-    $('.gamelibrary-product').each(function (productIndex, product) {
+    $('.gamelibrary-publication').each(function (publicationIndex, publication) {
       var galleryItems = new Array();
       
-      $(product).find('.gamelibrary-product-thumbnails-container img').each(function (thumbnailIndex, thumbnail) {
+      $(publication).find('.gamelibrary-publication-thumbnails-container img').each(function (thumbnailIndex, thumbnail) {
         galleryItems.push({
           src: $(thumbnail).data('url')
         });
@@ -125,9 +125,9 @@
       
       if (galleryItems.length == 0) {
         // There is only one image and thus no thumbnails so we need to
-        // use the product image
+        // use the publication image
         
-        var url = $(product).find('.gamelibrary-product-image-container img').data('url');
+        var url = $(publication).find('.gamelibrary-publication-image-container img').data('url');
         if (url) {
           galleryItems.push({
             src: url
@@ -135,7 +135,7 @@
         }
       }
       
-      $(product).find('.gamelibrary-product-images-container a').magnificPopup({ 
+      $(publication).find('.gamelibrary-publication-images-container a').magnificPopup({ 
         type: 'image',
         gallery: {
           enabled: true
@@ -153,12 +153,12 @@
     }
   };
   
-  window.onJsfProductUpdate = function (event) {
+  window.onJsfPublicationUpdate = function (event) {
     if (event.status == 'success') {
       var form = $(event.source).closest('form');
       var file = form.find('input[name="file"]');
       if (file.val()) {
-        var fileForm = $('#edit-product-file-form form');
+        var fileForm = $('#edit-publication-file-form form');
         file.appendTo(fileForm);
         fileForm.submit();
       }
@@ -171,12 +171,12 @@
     }
   };
   
-  window.onJsfProductCreate = function (event) {
+  window.onJsfPublicationCreate = function (event) {
     if (event.status == 'success') {
       var form = $(event.source).closest('form');
       var file = form.find('input[name="file"]');
       if (file.val()) {
-        var fileForm = $('#create-product-file-form form');
+        var fileForm = $('#create-publication-file-form form');
         file.appendTo(fileForm);
         fileForm.submit();
       } 
@@ -192,27 +192,27 @@
   /* Jsf Actions */
   
   /**
-   * Execute product admin action
+   * Execute publication admin action
    */
   
-  function executeProductAdminAction(productId, command) {
-    var operatorForm = $('#product-admin-operator-container form');
+  function executePublicationAdminAction(publicationId, command) {
+    var operatorForm = $('#publication-admin-operator-container form');
     var prefix = operatorForm.attr('name');
-    operatorForm.find('input[name="' + prefix + ':product-id"]').val(productId);
+    operatorForm.find('input[name="' + prefix + ':publication-id"]').val(publicationId);
     operatorForm.find('input[name="' + prefix + ':' + command + '"]').click();
   }
 
   /* Live Listeners */
   
   /**
-   * Product Admin Actions / Publish Product
+   * Publication Admin Actions / Publish Publication
    */
  
-  $(document).on('click', '.product-publish', function (event) {
-    var productId = $(this).data('product-id');
-    var productName = $(this).data('product-name');
+  $(document).on('click', '.publication-publish', function (event) {
+    var publicationId = $(this).data('publication-id');
+    var publicationName = $(this).data('publication-name');
     
-    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/productpublish.jsf?productId=' + productId + '&productName=' + productName, {
+    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/publicationPublish.jsf?publicationId=' + publicationId + '&publicationName=' + publicationName, {
       async: false,
       success : function(data, textStatus, jqXHR) {
         var dialog = $(data).dialog({
@@ -229,7 +229,7 @@
             'class': 'publish-button',
             'text': 'Publish',
             'click': function(event) { 
-              executeProductAdminAction(productId, 'publish');
+              executePublicationAdminAction(publicationId, 'publish');
               $(this).dialog("close");
             }
           }]
@@ -239,14 +239,14 @@
   });
   
   /**
-   * Product Admin Actions / Publish Product
+   * Publication Admin Actions / Publish Publication
    */
  
-  $(document).on('click', '.product-unpublish', function (event) {
-    var productId = $(this).data('product-id');
-    var productName = $(this).data('product-name');
+  $(document).on('click', '.publication-unpublish', function (event) {
+    var publicationId = $(this).data('publication-id');
+    var publicationName = $(this).data('publication-name');
     
-    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/productunpublish.jsf?productId=' + productId + '&productName=' + productName, {
+    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/publicationunpublish.jsf?publicationId=' + publicationId + '&publicationName=' + publicationName, {
       async: false,
       success : function(data, textStatus, jqXHR) {
         var dialog = $(data).dialog({
@@ -263,7 +263,7 @@
             'class': 'unpublish-button',
             'text': 'Unpublish',
             'click': function(event) { 
-              executeProductAdminAction(productId, 'unpublish');
+              executePublicationAdminAction(publicationId, 'unpublish');
               $(this).dialog("close");
             }
           }]
@@ -273,13 +273,13 @@
   });
   
   /**
-   * Product Admin Actions / Edit Product
+   * Publication Admin Actions / Edit Publication
    */
  
-  $(document).on('click', '.product-edit', function (event) {
-    var productId = $(this).data('product-id');
+  $(document).on('click', '.publication-edit', function (event) {
+    var publicationId = $(this).data('publication-id');
     
-    $.ajax(CONTEXTPATH + '/gamelibrary/publications/' + productId + '/dialog/edit', {
+    $.ajax(CONTEXTPATH + '/gamelibrary/publications/' + publicationId + '/dialog/edit', {
       async: false,
       success : function(data, textStatus, jqXHR) {
         var dialog = $(data).dialog({
@@ -296,7 +296,7 @@
             'class': 'save-button',
             'text': 'Save',
             'click': function(event) {
-              var form = $(this).find('.gamelibrary-edit-product-form');
+              var form = $(this).find('.gamelibrary-edit-publication-form');
               var prefix = form.attr('name');
               var submitButton = form.find('input[name="' + prefix + ':submit-button"]');
               submitButton.click();
@@ -305,7 +305,7 @@
           }]
         });
         
-        var form = dialog.find('.gamelibrary-edit-product-form');
+        var form = dialog.find('.gamelibrary-edit-publication-form');
         var prefix = form.attr('name');
         
         var createTagElement = function (inputText) {
@@ -372,22 +372,22 @@
   });
   
   /**
-   * Product Admin Actions / Add Images
+   * Publication Admin Actions / Add Images
    */
   
-  $(document).on('click', '.product-add-images-action', function (e) {
-    openImageUploadDialog($(this).data('product-id'));
+  $(document).on('click', '.publication-add-images-action', function (e) {
+    openImageUploadDialog($(this).data('publication-id'));
   });
   
   /**
-   * Product Admin Actions / Delete Product
+   * Publication Admin Actions / Delete Publication
    */
  
-  $(document).on('click', '.product-delete', function (event) {
-    var productId = $(this).data('product-id');
-    var productName = $(this).data('product-name');
+  $(document).on('click', '.publication-delete', function (event) {
+    var publicationId = $(this).data('publication-id');
+    var publicationName = $(this).data('publication-name');
     
-    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/productdelete.jsf?productId=' + productId + '&productName=' + productName, {
+    $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/publicationdelete.jsf?publicationId=' + publicationId + '&publicationName=' + publicationName, {
       async: false,
       success : function(data, textStatus, jqXHR) {
         var dialog = $(data).dialog({
@@ -404,7 +404,7 @@
             'class': 'delete-button',
             'text': 'Delete',
             'click': function(event) { 
-              executeProductAdminAction(productId, 'delete');
+              executePublicationAdminAction(publicationId, 'delete');
               $(this).dialog("close");
             }
           }]
@@ -414,10 +414,10 @@
   });
   
   /**
-   * Store Admin Panel / Create Product
+   * Store Admin Panel / Create Publication
    */
  
-  $(document).on('click', '#gamelibrary-admin-panel .gamelibrary-admin-create-product', function (event) {
+  $(document).on('click', '#gamelibrary-admin-panel .gamelibrary-admin-create-publication', function (event) {
     $.ajax(CONTEXTPATH + '/gamelibrary/publications/dialog/create', {
       async: false,
       success : function(data, textStatus, jqXHR) {
@@ -435,7 +435,7 @@
             'class': 'create-button',
             'text': 'Create',
             'click': function(event) {
-              var form = $(this).find('.gamelibrary-create-product-form');
+              var form = $(this).find('.gamelibrary-create-publication-form');
               var prefix = form.attr('name');
               var submitButton = form.find('input[name="' + prefix + ':submit-button"]');
               submitButton.click();
@@ -444,7 +444,7 @@
           }]
         });
         
-        var form = dialog.find('.gamelibrary-create-product-form');
+        var form = dialog.find('.gamelibrary-create-publication-form');
         var prefix = form.attr('name');
 
         var createTagElement = function (inputText) {
@@ -503,17 +503,17 @@
   });
   
   /**
-   * Product thumbnails / Mouse Enter
+   * Publication thumbnails / Mouse Enter
    */
   
-  $(document).on('mouseenter', '.gamelibrary-product-thumbnails-container img', function (e) {
-    var product = $(this).closest('.gamelibrary-product');
-    var productId = product.data('product-id');
+  $(document).on('mouseenter', '.gamelibrary-publication-thumbnails-container img', function (e) {
+    var publication = $(this).closest('.gamelibrary-publication');
+    var publicationId = publication.data('publication-id');
     var imageUrl = $(this).data('url');
     var thumbnailUrl = imageUrl + '?width=128&height=128';
    
-    $('.gamelibrary-product[data-product-id="' + productId + '"] .gamelibrary-product-image-container a').attr("href", imageUrl);
-    $('.gamelibrary-product[data-product-id="' + productId + '"] .gamelibrary-product-image-container img').attr("src", thumbnailUrl);
+    $('.gamelibrary-publication[data-publication-id="' + publicationId + '"] .gamelibrary-publication-image-container a').attr("href", imageUrl);
+    $('.gamelibrary-publication[data-publication-id="' + publicationId + '"] .gamelibrary-publication-image-container img').attr("src", thumbnailUrl);
   });
   
   $(document).ready(function () {
