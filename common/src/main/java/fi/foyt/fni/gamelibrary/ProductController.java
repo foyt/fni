@@ -14,24 +14,21 @@ import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.dao.gamelibrary.BookProductDAO;
-import fi.foyt.fni.persistence.dao.gamelibrary.FileProductDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.FileProductFileDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.ProductDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.ProductImageDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.ProductTagDAO;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
-import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
-import fi.foyt.fni.persistence.model.gamelibrary.FileProduct;
-import fi.foyt.fni.persistence.model.gamelibrary.FileProductFile;
+import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
+import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationFile;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
-import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.servlet.RequestUtils;
-import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 
 @Stateful
 @Dependent
@@ -51,9 +48,6 @@ public class ProductController {
 
 	@Inject
 	private BookProductDAO bookProductDAO;
-
-	@Inject
-	private FileProductDAO fileProductDAO;
 
 	@Inject
 	private FileProductFileDAO fileProductFileDAO;
@@ -128,8 +122,8 @@ public class ProductController {
 			deleteProductImage(publicationImage);
 		}
 		
-		if (publication instanceof FileProduct) {
-			FileProductFile file = ((FileProduct) publication).getFile();
+		if (publication instanceof BookPublication) {
+			PublicationFile file = ((BookPublication) publication).getFile();
 			if (file != null) {
 			  deleteFileProductFile(file);
 			}
@@ -162,7 +156,7 @@ public class ProductController {
 	}
 	/* BookProducts */
 
-	public BookProduct createBookProduct(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, List<GameLibraryTag> tags) {
+	public BookPublication createBookProduct(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, List<GameLibraryTag> tags) {
 		
 		Date now = new Date();
 		Long forumId = systemSettingsController.getGameLibraryPublicationForumId();
@@ -170,39 +164,39 @@ public class ProductController {
 		ForumTopic forumTopic = forumController.createTopic(forum, name, creator);
 		String urlName = createUrlName(name);
 
-		BookProduct bookProduct = bookProductDAO.create(name, urlName, description, price, downloadable, purchasable, defaultImage, 
+		BookPublication bookPublication = bookProductDAO.create(name, urlName, description, price, downloadable, purchasable, defaultImage, 
 				now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width, depth, weight, author, numberOfPages, forumTopic);
 
 		for (GameLibraryTag tag : tags) {
-			productTagDAO.create(tag, bookProduct);
+			productTagDAO.create(tag, bookPublication);
 		}
 		
-		return bookProduct;
+		return bookPublication;
 	}
 	
-	public BookProduct findBookProductById(Long id) {
+	public BookPublication findBookProductById(Long id) {
 		return bookProductDAO.findById(id);
 	}
 	
-	public BookProduct updateBookProduct(fi.foyt.fni.persistence.model.gamelibrary.BookProduct bookProduct, Double price, String name,
+	public BookPublication updateBookProduct(fi.foyt.fni.persistence.model.gamelibrary.BookPublication bookPublication, Double price, String name,
 			String description, List<GameLibraryTag> tags, Boolean published, Boolean requiresDelivery, Boolean downloadable, 
 			Boolean purchasable, Double weight, Integer width, Integer height, Integer depth, Integer numberOfPages, String author, 
 			User modifier) {
 
-		productDAO.updateName(bookProduct, name);
-		productDAO.updateDescription(bookProduct, description);
-		productDAO.updatePurchasable(bookProduct, purchasable);
-		productDAO.updateWeight(bookProduct, weight);
-		productDAO.updateWidth(bookProduct, width);
-		productDAO.updateHeight(bookProduct, height);
-		productDAO.updateDepth(bookProduct, depth);
-		bookProductDAO.updateNumberOfPages(bookProduct, numberOfPages);
-		bookProductDAO.updateAuthor(bookProduct, author);
+		productDAO.updateName(bookPublication, name);
+		productDAO.updateDescription(bookPublication, description);
+		productDAO.updatePurchasable(bookPublication, purchasable);
+		productDAO.updateWeight(bookPublication, weight);
+		productDAO.updateWidth(bookPublication, width);
+		productDAO.updateHeight(bookPublication, height);
+		productDAO.updateDepth(bookPublication, depth);
+		bookProductDAO.updateNumberOfPages(bookPublication, numberOfPages);
+		bookProductDAO.updateAuthor(bookPublication, author);
 		
 		List<GameLibraryTag> addTags = new ArrayList<>(tags);
 		
 		Map<Long, PublicationTag> existingTagMap = new HashMap<Long, PublicationTag>();
-		List<PublicationTag> existingTags = gameLibraryTagController.listProductTags(bookProduct);
+		List<PublicationTag> existingTags = gameLibraryTagController.listProductTags(bookPublication);
 		for (PublicationTag existingTag : existingTags) {
 			existingTagMap.put(existingTag.getTag().getId(), existingTag);
 		}
@@ -222,51 +216,45 @@ public class ProductController {
 		}
 		
 		for (GameLibraryTag gameLibraryTag : addTags) {
-			productTagDAO.create(gameLibraryTag, bookProduct);
+			productTagDAO.create(gameLibraryTag, bookPublication);
 		}
 		
-		productDAO.updatePrice(bookProduct, price);
-		productDAO.updatePublished(bookProduct, published);
-		productDAO.updateRequiresDelivery(bookProduct, requiresDelivery);
-		bookProductDAO.updateDownloadable(bookProduct, downloadable);
+		productDAO.updatePrice(bookPublication, price);
+		productDAO.updatePublished(bookPublication, published);
+		productDAO.updateRequiresDelivery(bookPublication, requiresDelivery);
+		bookProductDAO.updateDownloadable(bookPublication, downloadable);
 		
-		updatedModified(bookProduct, modifier, new Date());
+		updatedModified(bookPublication, modifier, new Date());
 		
-		return bookProduct;
+		return bookPublication;
 	}
 
-	/* FileProducts */
-
-	public FileProduct findFileProductById(Long id) {
-		return fileProductDAO.findById(id);
-	}
-	
-	public FileProduct updateFileProductFile(FileProduct fileProduct, FileProductFile file) {
-		return fileProductDAO.updateFile(fileProduct, file);
+	public BookPublication updateBookPublicationFile(BookPublication bookPublication, PublicationFile file) {
+		return bookProductDAO.updateFile(bookPublication, file);
 	}
 
-	/* FileProductFiles */
+	/* PublicationFile */
 
-	public FileProductFile createFileProductFile(FileProduct fileProduct, String contentType, byte[] content, User creator) {
+	public PublicationFile createBookPublicationFile(BookPublication bookPublication, String contentType, byte[] content, User creator) {
 	  // TODO: Should not be needed but ProductFileServlet crashes without this...
-		fileProduct = fileProductDAO.findById(fileProduct.getId());
-		FileProductFile file = fileProductFileDAO.create(content, contentType);
-		updatedModified(fileProduct, creator, new Date());
-		fileProductDAO.updateFile(fileProduct, file);
+		bookPublication = bookProductDAO.findById(bookPublication.getId());
+		PublicationFile file = fileProductFileDAO.create(content, contentType);
+		updatedModified(bookPublication, creator, new Date());
+		bookProductDAO.updateFile(bookPublication, file);
 		return file;
 	}
 	
-	public FileProductFile updateFileProductFile(FileProduct fileProduct, String contentType, byte[] content, User modifier) {
+	public PublicationFile updateBookPublicationFile(BookPublication bookPublication, String contentType, byte[] content, User modifier) {
 	  // TODO: Should not be needed but ProductFileServlet crashes without this...
-		fileProduct = fileProductDAO.findById(fileProduct.getId());
-		FileProductFile file = fileProductFileDAO.updateContent(fileProductFileDAO.updateContentType(fileProduct.getFile(), contentType), content);
-		updatedModified(fileProduct, modifier, new Date());
-		fileProductDAO.updateFile(fileProduct, file);
+		bookPublication = bookProductDAO.findById(bookPublication.getId());
+		PublicationFile file = fileProductFileDAO.updateContent(fileProductFileDAO.updateContentType(bookPublication.getFile(), contentType), content);
+		updatedModified(bookPublication, modifier, new Date());
+		bookProductDAO.updateFile(bookPublication, file);
 		return file;
 	}
 	
-	public void deleteFileProductFile(FileProductFile fileProductFile) {
-		fileProductFileDAO.delete(fileProductFile);
+	public void deleteFileProductFile(PublicationFile publicationFile) {
+		fileProductFileDAO.delete(publicationFile);
 	}
 	
 	private String createUrlName(String name) {

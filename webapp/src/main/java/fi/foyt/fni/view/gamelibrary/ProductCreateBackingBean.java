@@ -16,7 +16,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.gamelibrary.ProductController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
-import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
+import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
@@ -64,7 +64,7 @@ public class ProductCreateBackingBean extends AbstractProductEditBackingBean {
   		}
 		}
 		
-		BookProduct bookProduct = productController.createBookProduct(loggedUser, 
+		BookPublication bookPublication = productController.createBookProduct(loggedUser, 
 			getProductName(), 
 			getProductDescription(), 
 			getProductRequiresDelivery(), 
@@ -81,7 +81,7 @@ public class ProductCreateBackingBean extends AbstractProductEditBackingBean {
 			tags
 		);
 		
-		setProductId(bookProduct.getId());
+		setProductId(bookPublication.getId());
 	}
 	
 }

@@ -6,60 +6,67 @@ import java.util.Date;
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
-import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
+import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationFile;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.users.User;
 
 @DAO
-public class BookProductDAO extends GenericDAO<BookProduct> {
+public class BookProductDAO extends GenericDAO<BookPublication> {
   
 	private static final long serialVersionUID = 1L;
 
-	public BookProduct create(String name, String urlName, String description, Double price, Boolean downloadable, Boolean purchasable, PublicationImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Boolean requiresDelivery, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, ForumTopic forumTopic) {
+	public BookPublication create(String name, String urlName, String description, Double price, Boolean downloadable, Boolean purchasable, PublicationImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Boolean requiresDelivery, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, ForumTopic forumTopic) {
     
-		BookProduct bookProduct = new BookProduct();
-    bookProduct.setCreated(created);
-    bookProduct.setCreator(creator);
-    bookProduct.setDefaultImage(defaultImage);
-    bookProduct.setDescription(description);
-    bookProduct.setDownloadable(downloadable);
-    bookProduct.setModified(modified);
-    bookProduct.setModifier(modifier);
-    bookProduct.setName(name);
-    bookProduct.setUrlName(urlName);
-    bookProduct.setPrice(price);
-    bookProduct.setPublished(published);
-    bookProduct.setRequiresDelivery(requiresDelivery);
-    bookProduct.setPurchasable(purchasable);
-    bookProduct.setHeight(height);
-    bookProduct.setWidth(width);
-    bookProduct.setDepth(depth);
-    bookProduct.setWeight(weight);
-    bookProduct.setAuthor(author);
-    bookProduct.setNumberOfPages(numberOfPages);
-    bookProduct.setForumTopic(forumTopic);
+		BookPublication bookPublication = new BookPublication();
+    bookPublication.setCreated(created);
+    bookPublication.setCreator(creator);
+    bookPublication.setDefaultImage(defaultImage);
+    bookPublication.setDescription(description);
+    bookPublication.setDownloadable(downloadable);
+    bookPublication.setModified(modified);
+    bookPublication.setModifier(modifier);
+    bookPublication.setName(name);
+    bookPublication.setUrlName(urlName);
+    bookPublication.setPrice(price);
+    bookPublication.setPublished(published);
+    bookPublication.setRequiresDelivery(requiresDelivery);
+    bookPublication.setPurchasable(purchasable);
+    bookPublication.setHeight(height);
+    bookPublication.setWidth(width);
+    bookPublication.setDepth(depth);
+    bookPublication.setWeight(weight);
+    bookPublication.setAuthor(author);
+    bookPublication.setNumberOfPages(numberOfPages);
+    bookPublication.setForumTopic(forumTopic);
     
-    getEntityManager().persist(bookProduct);
+    getEntityManager().persist(bookPublication);
     
-    return bookProduct;
+    return bookPublication;
 	}
 
-	public BookProduct updateDownloadable(BookProduct bookProduct, Boolean downloadable) {
-		bookProduct.setDownloadable(downloadable);
-		getEntityManager().persist(bookProduct);
-    return bookProduct;
+	public BookPublication updateDownloadable(BookPublication bookPublication, Boolean downloadable) {
+		bookPublication.setDownloadable(downloadable);
+		getEntityManager().persist(bookPublication);
+    return bookPublication;
 	}
 
-	public BookProduct updateAuthor(BookProduct bookProduct, String author) {
-		bookProduct.setAuthor(author);
-		getEntityManager().persist(bookProduct);
-    return bookProduct;
+	public BookPublication updateAuthor(BookPublication bookPublication, String author) {
+		bookPublication.setAuthor(author);
+		getEntityManager().persist(bookPublication);
+    return bookPublication;
 	}
 
-	public BookProduct updateNumberOfPages(BookProduct bookProduct, Integer numberOfPages) {
-		bookProduct.setNumberOfPages(numberOfPages);
-		getEntityManager().persist(bookProduct);
-    return bookProduct;
+	public BookPublication updateNumberOfPages(BookPublication bookPublication, Integer numberOfPages) {
+		bookPublication.setNumberOfPages(numberOfPages);
+		getEntityManager().persist(bookPublication);
+    return bookPublication;
 	}
-	
+
+	public BookPublication updateFile(BookPublication bookPublication, PublicationFile file) {
+		bookPublication.setFile(file);
+		getEntityManager().persist(bookPublication);
+		return bookPublication;
+	}
+  
 }

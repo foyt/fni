@@ -16,7 +16,7 @@ import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.ProductController;
 import fi.foyt.fni.gamelibrary.ShoppingCartController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
-import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
+import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
@@ -67,8 +67,8 @@ public class ProductDetailsBackingBean {
 		return publication;
 	}
 	
-	public BookProduct getBookProduct() {
-		return bookProduct;
+	public BookPublication getBookProduct() {
+		return bookPublication;
 	}
 	
 	public List<GameLibraryTag> getTags() {
@@ -105,6 +105,6 @@ public class ProductDetailsBackingBean {
 	
 	private String urlName;
 	private Publication publication;
-	private BookProduct bookProduct;
+	private BookPublication bookPublication;
 	private List<GameLibraryTag> tags;
 }

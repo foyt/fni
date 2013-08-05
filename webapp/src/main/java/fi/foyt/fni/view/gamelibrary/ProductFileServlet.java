@@ -15,8 +15,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 
 import fi.foyt.fni.gamelibrary.ProductController;
-import fi.foyt.fni.persistence.model.gamelibrary.FileProduct;
-import fi.foyt.fni.persistence.model.gamelibrary.FileProductFile;
+import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationFile;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.TypedData;
@@ -43,14 +43,14 @@ public class ProductFileServlet extends AbstractFileServlet {
 		}
 
 		// FileProduct was not found, send 404
-		FileProduct fileProduct = productController.findFileProductById(productId);
-		if (fileProduct == null) {
+		BookPublication bookPublication = productController.findBookProductById(productId);
+		if (bookPublication == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 		
 		// FileProduct does not have a file, send 404
-		FileProductFile file = fileProduct.getFile();
+		PublicationFile file = bookPublication.getFile();
 		if (file == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
@@ -58,8 +58,8 @@ public class ProductFileServlet extends AbstractFileServlet {
 
 		// TODO: If product is unpublished, only managers may view it
 
-		String eTag = createETag(fileProduct.getModified());
-		long lastModified = fileProduct.getModified().getTime();
+		String eTag = createETag(bookPublication.getModified());
+		long lastModified = bookPublication.getModified().getTime();
 
 		if (!isModifiedSince(request, lastModified, eTag)) {
 			response.setHeader("ETag", eTag); // Required in 304.
@@ -95,8 +95,8 @@ public class ProductFileServlet extends AbstractFileServlet {
 		}
 
 		// FileProduct was not found, send 404
-		FileProduct fileProduct = productController.findFileProductById(productId);
-		if (fileProduct == null) {
+		BookPublication bookPublication = productController.findBookProductById(productId);
+		if (bookPublication == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
@@ -117,10 +117,10 @@ public class ProductFileServlet extends AbstractFileServlet {
 				} 
 			}
 			
-			if (fileProduct.getFile() != null) {
-				productController.updateFileProductFile(fileProduct, file.getContentType(), file.getData(), loggedUser);
+			if (bookPublication.getFile() != null) {
+				productController.updateBookPublicationFile(bookPublication, file.getContentType(), file.getData(), loggedUser);
 			} else {
-				productController.createFileProductFile(fileProduct, file.getContentType(), file.getData(), loggedUser);
+				productController.createBookPublicationFile(bookPublication, file.getContentType(), file.getData(), loggedUser);
 			}
 			
 		} catch (FileUploadException e) {

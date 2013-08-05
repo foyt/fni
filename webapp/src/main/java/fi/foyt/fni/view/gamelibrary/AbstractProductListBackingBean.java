@@ -9,7 +9,7 @@ import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.ProductController;
 import fi.foyt.fni.gamelibrary.ShoppingCartController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
-import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
+import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
@@ -37,9 +37,9 @@ public class AbstractProductListBackingBean {
 		return publications;
 	}
 	
-	public BookProduct getBookProduct(Publication publication) {
-		if (publication instanceof BookProduct) {
-			return (BookProduct) publication;
+	public BookPublication getBookProduct(Publication publication) {
+		if (publication instanceof BookPublication) {
+			return (BookPublication) publication;
 		}
 		
 		return null;

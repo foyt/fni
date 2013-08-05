@@ -17,7 +17,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.gamelibrary.ProductController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
-import fi.foyt.fni.persistence.model.gamelibrary.BookProduct;
+import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
@@ -66,10 +66,10 @@ public class ProductEditBackingBean extends AbstractProductEditBackingBean {
 		setProductHeight(publication.getHeight());
 		setProductDepth(publication.getDepth());
 		
-		if (publication instanceof BookProduct) {
-			setProductDownloadable(((BookProduct) publication).getDownloadable());
-			setBookAuthor(((BookProduct) publication).getAuthor());
-			setBookNumberOfPages(((BookProduct) publication).getNumberOfPages());
+		if (publication instanceof BookPublication) {
+			setProductDownloadable(((BookPublication) publication).getDownloadable());
+			setBookAuthor(((BookPublication) publication).getAuthor());
+			setBookNumberOfPages(((BookPublication) publication).getNumberOfPages());
 		}
 		
 		List<String> tagList = new ArrayList<>();
@@ -83,8 +83,8 @@ public class ProductEditBackingBean extends AbstractProductEditBackingBean {
 	
 	public void save() {
 		Publication publication = productController.findProductById(getProductId());
-		if (publication instanceof BookProduct) {
-			BookProduct bookProduct = (BookProduct) publication;
+		if (publication instanceof BookPublication) {
+			BookPublication bookPublication = (BookPublication) publication;
 			User loggedUser = sessionController.getLoggedUser();
 			
 			List<GameLibraryTag> tags = new ArrayList<>();
@@ -100,7 +100,7 @@ public class ProductEditBackingBean extends AbstractProductEditBackingBean {
 	  		}
 			}
 			
-			productController.updateBookProduct(bookProduct, 
+			productController.updateBookProduct(bookPublication, 
 				getProductPrice(), 
 				getProductName(), 
 				getProductDescription(), 

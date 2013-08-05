@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 
 @Entity
-public class FileProductFile {
+public class PublicationFile {
 
 	public Long getId() {
 		return id;
