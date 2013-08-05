@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.forum.ForumController;
-import fi.foyt.fni.persistence.dao.gamelibrary.BookProductDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.BookPublicationDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.FileProductFileDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationImageDAO;
@@ -47,7 +47,7 @@ public class ProductController {
 	private PublicationImageDAO publicationImageDAO;
 
 	@Inject
-	private BookProductDAO bookProductDAO;
+	private BookPublicationDAO bookPublicationDAO;
 
 	@Inject
 	private FileProductFileDAO fileProductFileDAO;
@@ -164,7 +164,7 @@ public class ProductController {
 		ForumTopic forumTopic = forumController.createTopic(forum, name, creator);
 		String urlName = createUrlName(name);
 
-		BookPublication bookPublication = bookProductDAO.create(name, urlName, description, price, downloadable, purchasable, defaultImage, 
+		BookPublication bookPublication = bookPublicationDAO.create(name, urlName, description, price, downloadable, purchasable, defaultImage, 
 				now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width, depth, weight, author, numberOfPages, forumTopic);
 
 		for (GameLibraryTag tag : tags) {
@@ -175,7 +175,7 @@ public class ProductController {
 	}
 	
 	public BookPublication findBookProductById(Long id) {
-		return bookProductDAO.findById(id);
+		return bookPublicationDAO.findById(id);
 	}
 	
 	public BookPublication updateBookProduct(fi.foyt.fni.persistence.model.gamelibrary.BookPublication bookPublication, Double price, String name,
@@ -190,8 +190,8 @@ public class ProductController {
 		publicationDAO.updateWidth(bookPublication, width);
 		publicationDAO.updateHeight(bookPublication, height);
 		publicationDAO.updateDepth(bookPublication, depth);
-		bookProductDAO.updateNumberOfPages(bookPublication, numberOfPages);
-		bookProductDAO.updateAuthor(bookPublication, author);
+		bookPublicationDAO.updateNumberOfPages(bookPublication, numberOfPages);
+		bookPublicationDAO.updateAuthor(bookPublication, author);
 		
 		List<GameLibraryTag> addTags = new ArrayList<>(tags);
 		
@@ -222,7 +222,7 @@ public class ProductController {
 		publicationDAO.updatePrice(bookPublication, price);
 		publicationDAO.updatePublished(bookPublication, published);
 		publicationDAO.updateRequiresDelivery(bookPublication, requiresDelivery);
-		bookProductDAO.updateDownloadable(bookPublication, downloadable);
+		bookPublicationDAO.updateDownloadable(bookPublication, downloadable);
 		
 		updatedModified(bookPublication, modifier, new Date());
 		
@@ -230,26 +230,26 @@ public class ProductController {
 	}
 
 	public BookPublication updateBookPublicationFile(BookPublication bookPublication, PublicationFile file) {
-		return bookProductDAO.updateFile(bookPublication, file);
+		return bookPublicationDAO.updateFile(bookPublication, file);
 	}
 
 	/* PublicationFile */
 
 	public PublicationFile createBookPublicationFile(BookPublication bookPublication, String contentType, byte[] content, User creator) {
 	  // TODO: Should not be needed but ProductFileServlet crashes without this...
-		bookPublication = bookProductDAO.findById(bookPublication.getId());
+		bookPublication = bookPublicationDAO.findById(bookPublication.getId());
 		PublicationFile file = fileProductFileDAO.create(content, contentType);
 		updatedModified(bookPublication, creator, new Date());
-		bookProductDAO.updateFile(bookPublication, file);
+		bookPublicationDAO.updateFile(bookPublication, file);
 		return file;
 	}
 	
 	public PublicationFile updateBookPublicationFile(BookPublication bookPublication, String contentType, byte[] content, User modifier) {
 	  // TODO: Should not be needed but ProductFileServlet crashes without this...
-		bookPublication = bookProductDAO.findById(bookPublication.getId());
+		bookPublication = bookPublicationDAO.findById(bookPublication.getId());
 		PublicationFile file = fileProductFileDAO.updateContent(fileProductFileDAO.updateContentType(bookPublication.getFile(), contentType), content);
 		updatedModified(bookPublication, modifier, new Date());
-		bookProductDAO.updateFile(bookPublication, file);
+		bookPublicationDAO.updateFile(bookPublication, file);
 		return file;
 	}
 	
