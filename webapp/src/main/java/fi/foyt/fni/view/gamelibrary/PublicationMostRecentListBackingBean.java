@@ -18,12 +18,12 @@ import fi.foyt.fni.gamelibrary.ShoppingCartController;
 @Stateful
 @URLMappings(mappings = {
   @URLMapping(
-		id = "gamelibrary-product-most-recent", 
+		id = "gamelibrary-publication-most-recent", 
 		pattern = "/gamelibrary/", 
 		viewId = "/gamelibrary/index.jsf"
   )
 })
-public class ProductMostRecentListBackingBean extends AbstractProductListBackingBean {
+public class PublicationMostRecentListBackingBean extends AbstractPublicationListBackingBean {
 
 	private static final int MAX_RECENT_PRODUCTS = 10;
 

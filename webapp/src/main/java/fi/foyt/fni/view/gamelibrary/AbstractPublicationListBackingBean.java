@@ -15,7 +15,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
-public class AbstractProductListBackingBean {
+public class AbstractPublicationListBackingBean {
 	
 	@Inject
 	private ProductController productController;

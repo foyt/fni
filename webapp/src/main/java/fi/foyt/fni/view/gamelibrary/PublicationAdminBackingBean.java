@@ -10,7 +10,7 @@ import fi.foyt.fni.gamelibrary.ProductController;
 @Stateful
 @RequestScoped
 @Named
-public class ProductAdminBackingBean {
+public class PublicationAdminBackingBean {
 	
 	@Inject
 	private ProductController productController;

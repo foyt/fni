@@ -21,12 +21,12 @@ import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 @Stateful
 @URLMappings(mappings = {
   @URLMapping(
-		id = "gamelibrary-product-tag-list", 
-		pattern = "/gamelibrary/tags/#{productTagListBackingBean.tag}", 
-		viewId = "/gamelibrary/producttaglist.jsf"
+		id = "gamelibrary-publication-tag-list", 
+		pattern = "/gamelibrary/tags/#{publicationTagListBackingBean.tag}", 
+		viewId = "/gamelibrary/publicationtaglist.jsf"
   )
 })
-public class ProductTagListBackingBean extends AbstractProductListBackingBean {
+public class PublicationTagListBackingBean extends AbstractPublicationListBackingBean {
 	
 	@Inject
 	private ProductController productController;

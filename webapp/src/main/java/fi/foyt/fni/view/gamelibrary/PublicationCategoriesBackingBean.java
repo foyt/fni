@@ -14,7 +14,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 @RequestScoped
 @Named
 @Stateful
-public class ProductCategoriesBackingBean {
+public class PublicationCategoriesBackingBean {
 	
 	@Inject
 	private GameLibraryTagController gameLibraryTagController;

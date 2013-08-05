@@ -18,7 +18,7 @@ public class CategoryListBackingBean {
 	@Inject
 	private GameLibraryTagController gameLibraryTagController;
 	
-	public List<GameLibraryTag> getTagsWithPublishedProducts() {
+	public List<GameLibraryTag> getTagsWithPublishedPublications() {
 		return gameLibraryTagController.listActiveGameLibraryTags();
 	}
 	

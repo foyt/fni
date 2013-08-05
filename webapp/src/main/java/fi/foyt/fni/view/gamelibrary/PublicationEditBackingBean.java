@@ -29,12 +29,12 @@ import fi.foyt.fni.session.SessionController;
 @Named
 @URLMappings(mappings = {
   @URLMapping(
-  		id = "gamelibrary-product-dialog-edit", 
-  		pattern = "/gamelibrary/publications/#{productEditBackingBean.productId}/dialog/edit", 
-  		viewId = "/gamelibrary/dialogs/editproduct.jsf"
+  		id = "gamelibrary-publication-dialog-edit", 
+  		pattern = "/gamelibrary/publications/#{publicationEditBackingBean.publicationId}/dialog/edit", 
+  		viewId = "/gamelibrary/dialogs/editpublication.jsf"
   )
 })
-public class ProductEditBackingBean extends AbstractProductEditBackingBean {
+public class PublicationEditBackingBean extends AbstractPublicationEditBackingBean {
 	
 	@Inject
 	private ProductController productController;
@@ -54,20 +54,20 @@ public class ProductEditBackingBean extends AbstractProductEditBackingBean {
 	
 	@URLAction (onPostback = false)
 	public void load() {
-		Publication publication = productController.findProductById(getProductId());
-		setProductName(publication.getName());
-		setProductDescription(publication.getDescription());
-		setProductPrice(publication.getPrice());
-		setProductRequiresDelivery(publication.getRequiresDelivery());
-		setProductPurchasable(publication.getPurchasable());
-		setProductDownloadable(false);
-		setProductWeight(publication.getWeight());
-		setProductWidth(publication.getWidth());
-		setProductHeight(publication.getHeight());
-		setProductDepth(publication.getDepth());
+		Publication publication = productController.findProductById(getPublicationId());
+		setPublicationName(publication.getName());
+		setPublicationDescription(publication.getDescription());
+		setPublicationPrice(publication.getPrice());
+		setPublicationRequiresDelivery(publication.getRequiresDelivery());
+		setPublicationPurchasable(publication.getPurchasable());
+		setPublicationDownloadable(false);
+		setPublicationWeight(publication.getWeight());
+		setPublicationWidth(publication.getWidth());
+		setPublicationHeight(publication.getHeight());
+		setPublicationDepth(publication.getDepth());
 		
 		if (publication instanceof BookPublication) {
-			setProductDownloadable(((BookPublication) publication).getDownloadable());
+			setPublicationDownloadable(((BookPublication) publication).getDownloadable());
 			setBookAuthor(((BookPublication) publication).getAuthor());
 			setBookNumberOfPages(((BookPublication) publication).getNumberOfPages());
 		}
@@ -78,17 +78,17 @@ public class ProductEditBackingBean extends AbstractProductEditBackingBean {
 			tagList.add(publicationTag.getTag().getText());
 		}
 		
-		setProductTags(StringUtils.join(tagList, ';'));
+		setPublicationTags(StringUtils.join(tagList, ';'));
 	}
 	
 	public void save() {
-		Publication publication = productController.findProductById(getProductId());
+		Publication publication = productController.findProductById(getPublicationId());
 		if (publication instanceof BookPublication) {
 			BookPublication bookPublication = (BookPublication) publication;
 			User loggedUser = sessionController.getLoggedUser();
 			
 			List<GameLibraryTag> tags = new ArrayList<>();
-			String tagsString = getProductTags();
+			String tagsString = getPublicationTags();
 			
 			if (StringUtils.isNotBlank(tagsString)) {
 	  		for (String tag : tagsString.split(";")) {
@@ -101,18 +101,18 @@ public class ProductEditBackingBean extends AbstractProductEditBackingBean {
 			}
 			
 			productController.updateBookProduct(bookPublication, 
-				getProductPrice(), 
-				getProductName(), 
-				getProductDescription(), 
+				getPublicationPrice(), 
+				getPublicationName(), 
+				getPublicationDescription(), 
 				tags, 
 				publication.getPublished(), 
-				getProductRequiresDelivery(), 
-				getProductDownloadable(), 
-				getProductPurchasable(),
-				getProductWeight(),
-				getProductWidth(),
-				getProductHeight(),
-				getProductDepth(),
+				getPublicationRequiresDelivery(), 
+				getPublicationDownloadable(), 
+				getPublicationPurchasable(),
+				getPublicationWeight(),
+				getPublicationWidth(),
+				getPublicationHeight(),
+				getPublicationDepth(),
 				getBookNumberOfPages(),
 				getBookAuthor(),
 				loggedUser);

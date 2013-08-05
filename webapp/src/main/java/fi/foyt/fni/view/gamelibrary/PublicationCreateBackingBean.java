@@ -26,12 +26,12 @@ import fi.foyt.fni.session.SessionController;
 @Named
 @URLMappings(mappings = {
   @URLMapping(
-  		id = "gamelibrary-product-dialog-create", 
+  		id = "gamelibrary-publication-dialog-create", 
   		pattern = "/gamelibrary/publications/dialog/create", 
-  		viewId = "/gamelibrary/dialogs/createproduct.jsf"
+  		viewId = "/gamelibrary/dialogs/createpublication.jsf"
   )
 })
-public class ProductCreateBackingBean extends AbstractProductEditBackingBean {
+public class PublicationCreateBackingBean extends AbstractPublicationEditBackingBean {
 	
 	@Inject
 	private ProductController productController;
@@ -52,7 +52,7 @@ public class ProductCreateBackingBean extends AbstractProductEditBackingBean {
 	public void save() {
 		User loggedUser = sessionController.getLoggedUser();
 		List<GameLibraryTag> tags = new ArrayList<>();
-		String tagsString = getProductTags();
+		String tagsString = getPublicationTags();
 		
 		if (StringUtils.isNotBlank(tagsString)) {
   		for (String tag : tagsString.split(";")) {
@@ -65,23 +65,23 @@ public class ProductCreateBackingBean extends AbstractProductEditBackingBean {
 		}
 		
 		BookPublication bookPublication = productController.createBookProduct(loggedUser, 
-			getProductName(), 
-			getProductDescription(), 
-			getProductRequiresDelivery(), 
-			getProductDownloadable(), 
-			getProductPurchasable(),
-			getProductPrice(),
+			getPublicationName(), 
+			getPublicationDescription(), 
+			getPublicationRequiresDelivery(), 
+			getPublicationDownloadable(), 
+			getPublicationPurchasable(),
+			getPublicationPrice(),
 			null,
-			getProductHeight(), 
-			getProductWidth(),
-			getProductDepth(),
-			getProductWeight(),
+			getPublicationHeight(), 
+			getPublicationWidth(),
+			getPublicationDepth(),
+			getPublicationWeight(),
 			getBookAuthor(),
 			getBookNumberOfPages(),
 			tags
 		);
 		
-		setProductId(bookPublication.getId());
+		setPublicationId(bookPublication.getId());
 	}
 	
 }
