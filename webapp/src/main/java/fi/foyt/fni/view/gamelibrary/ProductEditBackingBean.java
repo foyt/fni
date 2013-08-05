@@ -73,7 +73,7 @@ public class ProductEditBackingBean extends AbstractProductEditBackingBean {
 		}
 		
 		List<String> tagList = new ArrayList<>();
-		List<PublicationTag> publicationTags = gameLibraryTagController.listProductTags(publication);
+		List<PublicationTag> publicationTags = gameLibraryTagController.listPublicationTags(publication);
 		for (PublicationTag publicationTag : publicationTags) {
 			tagList.add(publicationTag.getTag().getText());
 		}

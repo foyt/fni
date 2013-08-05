@@ -23,13 +23,13 @@ public class PublicationTagDAO extends GenericDAO<PublicationTag> {
 
 	public PublicationTag create(GameLibraryTag tag, Publication publication) {
 		PublicationTag publicationTag = new PublicationTag();
-		publicationTag.setProduct(publication);
+		publicationTag.setPublication(publication);
 		publicationTag.setTag(tag);
 		getEntityManager().persist(publicationTag);
 		return publicationTag;
 	}
 
-	public List<PublicationTag> listByProduct(Publication publication) {
+	public List<PublicationTag> listByPublication(Publication publication) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -43,7 +43,7 @@ public class PublicationTagDAO extends GenericDAO<PublicationTag> {
     return entityManager.createQuery(criteria).getResultList();
   }
 
-	public List<Publication> listProductsByGameLibraryTags(List<GameLibraryTag> gameLibaryTags) {
+	public List<Publication> listPublicationsByGameLibraryTags(List<GameLibraryTag> gameLibaryTags) {
 		EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -57,7 +57,7 @@ public class PublicationTagDAO extends GenericDAO<PublicationTag> {
     return entityManager.createQuery(criteria).getResultList();
 	}
 
-	public Long countProductsByTag(GameLibraryTag tag) {
+	public Long countPublicationsByTag(GameLibraryTag tag) {
 		EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -71,7 +71,7 @@ public class PublicationTagDAO extends GenericDAO<PublicationTag> {
     return entityManager.createQuery(criteria).getSingleResult();
 	}
 
-	public List<GameLibraryTag> listGameLibraryTagsByProductPublished(Boolean published) {
+	public List<GameLibraryTag> listGameLibraryTagsByPublicationPublished(Boolean published) {
 		EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

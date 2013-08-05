@@ -43,7 +43,7 @@ public class ShoppingCartItemDAO extends GenericDAO<ShoppingCartItem> {
     return entityManager.createQuery(criteria).getResultList();
 	}
 
-	public List<ShoppingCartItem> listByCartAndProduct(ShoppingCart cart, Publication publication) {
+	public List<ShoppingCartItem> listByCartAndPublication(ShoppingCart cart, Publication publication) {
 		EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

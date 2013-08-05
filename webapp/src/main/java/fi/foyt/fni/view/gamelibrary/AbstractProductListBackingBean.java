@@ -56,7 +56,7 @@ public class AbstractProductListBackingBean {
 	public List<GameLibraryTag> getTags(Publication publication) {
 		List<GameLibraryTag> result = new ArrayList<>();
 
-		List<PublicationTag> publicationTags = gameLibraryTagController.listProductTags(publication);
+		List<PublicationTag> publicationTags = gameLibraryTagController.listPublicationTags(publication);
 		for (PublicationTag publicationTag : publicationTags) {
 			result.add(publicationTag.getTag());
 		}

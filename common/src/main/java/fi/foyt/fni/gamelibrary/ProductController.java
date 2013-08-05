@@ -83,7 +83,7 @@ public class ProductController {
 	}
 
 	public List<Publication> listProductsByTags(List<GameLibraryTag> gameLibraryTags) {
-		return publicationTagDAO.listProductsByGameLibraryTags(gameLibraryTags);
+		return publicationTagDAO.listPublicationsByGameLibraryTags(gameLibraryTags);
 	}
 
 	public List<Publication> listRecentProducts(int maxRecentProduct) {
@@ -129,7 +129,7 @@ public class ProductController {
 			}
 		}
 		
-		for (PublicationTag publicationTag : gameLibraryTagController.listProductTags(publication)) {
+		for (PublicationTag publicationTag : gameLibraryTagController.listPublicationTags(publication)) {
 			gameLibraryTagController.deleteProductTag(publicationTag);
 		}
 		
@@ -196,7 +196,7 @@ public class ProductController {
 		List<GameLibraryTag> addTags = new ArrayList<>(tags);
 		
 		Map<Long, PublicationTag> existingTagMap = new HashMap<Long, PublicationTag>();
-		List<PublicationTag> existingTags = gameLibraryTagController.listProductTags(bookPublication);
+		List<PublicationTag> existingTags = gameLibraryTagController.listPublicationTags(bookPublication);
 		for (PublicationTag existingTag : existingTags) {
 			existingTagMap.put(existingTag.getTag().getId(), existingTag);
 		}
