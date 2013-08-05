@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.dao.gamelibrary.BookProductDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.FileProductFileDAO;
-import fi.foyt.fni.persistence.dao.gamelibrary.ProductDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.PublicationDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationImageDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationTagDAO;
 import fi.foyt.fni.persistence.model.forum.Forum;
@@ -38,7 +38,7 @@ public class ProductController {
 	private GameLibraryTagController gameLibraryTagController;
 
 	@Inject
-	private ProductDAO productDAO;
+	private PublicationDAO publicationDAO;
 
 	@Inject
 	private PublicationTagDAO publicationTagDAO;
@@ -61,15 +61,15 @@ public class ProductController {
 	/* Products */
 
 	public Publication findProductById(Long id) {
-		return productDAO.findById(id);
+		return publicationDAO.findById(id);
 	}
 
 	public Publication findProductByUrlName(String urlName) {
-		return productDAO.findByUrlName(urlName);
+		return publicationDAO.findByUrlName(urlName);
 	}
 
 	public List<Publication> listAllProducts() {
-		return productDAO.listAll();
+		return publicationDAO.listAll();
 	}
 
 	public List<Publication> listProductsByTags(String... tags) {
@@ -87,34 +87,34 @@ public class ProductController {
 	}
 
 	public List<Publication> listRecentProducts(int maxRecentProduct) {
-		return productDAO.listByPublishedOrderByCreated(Boolean.TRUE, 0, maxRecentProduct);
+		return publicationDAO.listByPublishedOrderByCreated(Boolean.TRUE, 0, maxRecentProduct);
 	}
 
 	public List<Publication> listUnpublishedProducts() {
-		return productDAO.listByPublished(Boolean.FALSE);
+		return publicationDAO.listByPublished(Boolean.FALSE);
 	}
 	
 	public List<Publication> listPublishedProductsByCreator(User creator) {
-		return productDAO.listByCreatorAndPublished(creator, Boolean.TRUE);
+		return publicationDAO.listByCreatorAndPublished(creator, Boolean.TRUE);
 	}
 
 	public Publication updatedModified(Publication publication, User modifier, Date modified) {
-		productDAO.updateModified(publication, modified);
-		productDAO.updateModifier(publication, modifier);
+		publicationDAO.updateModified(publication, modified);
+		publicationDAO.updateModifier(publication, modifier);
 		
 		return publication;
 	}
 	
 	public Publication publishProduct(Publication publication) {
-		return productDAO.updatePublished(publication, Boolean.TRUE);
+		return publicationDAO.updatePublished(publication, Boolean.TRUE);
 	}
 
 	public Publication unpublishProduct(Publication publication) {
-		return productDAO.updatePublished(publication, Boolean.FALSE);
+		return publicationDAO.updatePublished(publication, Boolean.FALSE);
 	}
 	
 	public Publication updateProductDefaultImage(Publication publication, PublicationImage publicationImage) {
-		return productDAO.updateDefaultImage(publication, publicationImage);
+		return publicationDAO.updateDefaultImage(publication, publicationImage);
 	}
 	
 	public void deleteProduct(Publication publication) {
@@ -133,7 +133,7 @@ public class ProductController {
 			gameLibraryTagController.deleteProductTag(publicationTag);
 		}
 		
-		productDAO.delete(publication);
+		publicationDAO.delete(publication);
 	}
 
 	/* ProductImages */
@@ -183,13 +183,13 @@ public class ProductController {
 			Boolean purchasable, Double weight, Integer width, Integer height, Integer depth, Integer numberOfPages, String author, 
 			User modifier) {
 
-		productDAO.updateName(bookPublication, name);
-		productDAO.updateDescription(bookPublication, description);
-		productDAO.updatePurchasable(bookPublication, purchasable);
-		productDAO.updateWeight(bookPublication, weight);
-		productDAO.updateWidth(bookPublication, width);
-		productDAO.updateHeight(bookPublication, height);
-		productDAO.updateDepth(bookPublication, depth);
+		publicationDAO.updateName(bookPublication, name);
+		publicationDAO.updateDescription(bookPublication, description);
+		publicationDAO.updatePurchasable(bookPublication, purchasable);
+		publicationDAO.updateWeight(bookPublication, weight);
+		publicationDAO.updateWidth(bookPublication, width);
+		publicationDAO.updateHeight(bookPublication, height);
+		publicationDAO.updateDepth(bookPublication, depth);
 		bookProductDAO.updateNumberOfPages(bookPublication, numberOfPages);
 		bookProductDAO.updateAuthor(bookPublication, author);
 		
@@ -219,9 +219,9 @@ public class ProductController {
 			publicationTagDAO.create(gameLibraryTag, bookPublication);
 		}
 		
-		productDAO.updatePrice(bookPublication, price);
-		productDAO.updatePublished(bookPublication, published);
-		productDAO.updateRequiresDelivery(bookPublication, requiresDelivery);
+		publicationDAO.updatePrice(bookPublication, price);
+		publicationDAO.updatePublished(bookPublication, published);
+		publicationDAO.updateRequiresDelivery(bookPublication, requiresDelivery);
 		bookProductDAO.updateDownloadable(bookPublication, downloadable);
 		
 		updatedModified(bookPublication, modifier, new Date());
@@ -266,7 +266,7 @@ public class ProductController {
 				urlName = urlName.concat(StringUtils.repeat('_', padding));
 			}
 			
-			Publication publication = productDAO.findByUrlName(urlName);
+			Publication publication = publicationDAO.findByUrlName(urlName);
 			if (publication == null) {
 				return urlName;
 			}
