@@ -30,11 +30,11 @@ public class ShoppingCartItem {
     this.count = count;
   }
   
-  public Publication getProduct() {
+  public Publication getPublication() {
 		return publication;
 	}
   
-  public void setProduct(Publication publication) {
+  public void setPublication(Publication publication) {
 		this.publication = publication;
 	}
   

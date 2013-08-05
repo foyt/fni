@@ -117,7 +117,7 @@ public class ShoppingCartBackingBean implements Serializable {
 		
 		List<ShoppingCartItem> items = shoppingCartController.getShoppingCartItems();
 		for (ShoppingCartItem item : items) {
-			result.add(new ShoppingCartItemBean(item.getId(), item.getProduct().getName(), item.getCount(), item.getProduct().getPrice()));
+			result.add(new ShoppingCartItemBean(item.getId(), item.getPublication().getName(), item.getCount(), item.getPublication().getPrice()));
 		}
 		
 		return result;
@@ -148,7 +148,7 @@ public class ShoppingCartBackingBean implements Serializable {
 	public Double getItemCosts() {
 		Double result = 0d;
 		for (ShoppingCartItem item : shoppingCartController.getShoppingCartItems()) {
-			result += item.getCount() * item.getProduct().getPrice();
+			result += item.getCount() * item.getPublication().getPrice();
 		}
 
 		return result;

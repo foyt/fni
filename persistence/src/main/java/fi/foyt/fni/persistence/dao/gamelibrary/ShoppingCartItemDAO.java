@@ -23,7 +23,7 @@ public class ShoppingCartItemDAO extends GenericDAO<ShoppingCartItem> {
 		ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
 		shoppingCartItem.setCart(cart);
 		shoppingCartItem.setCount(count);
-		shoppingCartItem.setProduct(publication);
+		shoppingCartItem.setPublication(publication);
 		getEntityManager().persist(shoppingCartItem);
 		
 		return shoppingCartItem;

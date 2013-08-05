@@ -83,7 +83,7 @@ public class ShoppingCartController {
 	public void addProduct(Publication publication) {
 		List<ShoppingCartItem> items = getShoppingCartItems();
 		for (ShoppingCartItem item : items) {
-			if (item.getProduct().getId().equals(publication.getId())) {
+			if (item.getPublication().getId().equals(publication.getId())) {
 				shoppingCartItemDAO.updateCount(item, item.getCount() + 1);
 				return;
 			} 
@@ -95,7 +95,7 @@ public class ShoppingCartController {
 	public void setProductCount(Publication publication, Integer count) {
 		List<ShoppingCartItem> items = getShoppingCartItems();
 		for (ShoppingCartItem item : items) {
-			if (item.getProduct().getId().equals(publication.getId())) {
+			if (item.getPublication().getId().equals(publication.getId())) {
 				setItemCount(item, count);
 				return;
 			}
