@@ -17,7 +17,7 @@ import fi.foyt.fni.persistence.dao.gamelibrary.BookProductDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.FileProductFileDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.ProductDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.ProductImageDAO;
-import fi.foyt.fni.persistence.dao.gamelibrary.ProductTagDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.PublicationTagDAO;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
@@ -41,7 +41,7 @@ public class ProductController {
 	private ProductDAO productDAO;
 
 	@Inject
-	private ProductTagDAO productTagDAO;
+	private PublicationTagDAO publicationTagDAO;
 
 	@Inject
 	private ProductImageDAO productImageDAO;
@@ -83,7 +83,7 @@ public class ProductController {
 	}
 
 	public List<Publication> listProductsByTags(List<GameLibraryTag> gameLibraryTags) {
-		return productTagDAO.listProductsByGameLibraryTags(gameLibraryTags);
+		return publicationTagDAO.listProductsByGameLibraryTags(gameLibraryTags);
 	}
 
 	public List<Publication> listRecentProducts(int maxRecentProduct) {
@@ -168,7 +168,7 @@ public class ProductController {
 				now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width, depth, weight, author, numberOfPages, forumTopic);
 
 		for (GameLibraryTag tag : tags) {
-			productTagDAO.create(tag, bookPublication);
+			publicationTagDAO.create(tag, bookPublication);
 		}
 		
 		return bookPublication;
@@ -216,7 +216,7 @@ public class ProductController {
 		}
 		
 		for (GameLibraryTag gameLibraryTag : addTags) {
-			productTagDAO.create(gameLibraryTag, bookPublication);
+			publicationTagDAO.create(gameLibraryTag, bookPublication);
 		}
 		
 		productDAO.updatePrice(bookPublication, price);

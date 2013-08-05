@@ -17,7 +17,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag_;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication_;
 
 @DAO
-public class ProductTagDAO extends GenericDAO<PublicationTag> {
+public class PublicationTagDAO extends GenericDAO<PublicationTag> {
   
 	private static final long serialVersionUID = 1L;
 

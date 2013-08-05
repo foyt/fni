@@ -8,7 +8,7 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.dao.gamelibrary.GameLibraryTagDAO;
-import fi.foyt.fni.persistence.dao.gamelibrary.ProductTagDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.PublicationTagDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
@@ -21,7 +21,7 @@ public class GameLibraryTagController {
 	private GameLibraryTagDAO gameLibraryTagDAO;
 	
 	@Inject
-	private ProductTagDAO productTagDAO;
+	private PublicationTagDAO publicationTagDAO;
 	
 	/* Game Library Tags */
 
@@ -42,13 +42,13 @@ public class GameLibraryTagController {
 	}
 	
 	public List<GameLibraryTag> listActiveGameLibraryTags() {
-		return productTagDAO.listGameLibraryTagsByProductPublished(Boolean.TRUE);
+		return publicationTagDAO.listGameLibraryTagsByProductPublished(Boolean.TRUE);
 	}
 	
 	public List<GameLibraryTag> listProductGameLibraryTags(Publication publication) {
 		List<GameLibraryTag> result = new ArrayList<GameLibraryTag>();
 		
-		List<PublicationTag> publicationTags = productTagDAO.listByProduct(publication);
+		List<PublicationTag> publicationTags = publicationTagDAO.listByProduct(publication);
 		for (PublicationTag publicationTag : publicationTags) {
 			result.add(publicationTag.getTag());
 		}
@@ -59,15 +59,15 @@ public class GameLibraryTagController {
 	/* Product Tags */
 	
 	public List<PublicationTag> listProductTags(Publication publication) {
-		return productTagDAO.listByProduct(publication);
+		return publicationTagDAO.listByProduct(publication);
 	}
 
 	public void deleteProductTag(PublicationTag publicationTag) {
 		GameLibraryTag gameLibraryTag = publicationTag.getTag();
 		
-		productTagDAO.delete(publicationTag);
+		publicationTagDAO.delete(publicationTag);
 		
-		Long productCount = productTagDAO.countProductsByTag(gameLibraryTag);
+		Long productCount = publicationTagDAO.countProductsByTag(gameLibraryTag);
 		if (productCount == 0) {
 			gameLibraryTagDAO.delete(gameLibraryTag);
 		}
