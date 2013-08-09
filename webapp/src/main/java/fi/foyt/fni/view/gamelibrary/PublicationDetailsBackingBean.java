@@ -85,10 +85,6 @@ public class PublicationDetailsBackingBean {
 	public boolean getHasImages() {
 		return publicationController.listPublicationImagesByPublication(publication).size() > 0;
 	}
-
-	public PublicationImage getFirstImage() {
-		return publicationController.listPublicationImagesByPublication(publication).get(0);
-	}
 	
 	public List<PublicationImage> getPublicationImages() {
 		return publicationController.listPublicationImagesByPublication(publication);

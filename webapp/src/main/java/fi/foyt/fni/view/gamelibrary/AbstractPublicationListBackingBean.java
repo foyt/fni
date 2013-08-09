@@ -69,10 +69,6 @@ public class AbstractPublicationListBackingBean {
 	public List<PublicationImage> getPublicationImages(Publication publication) {
 		return publicationController.listPublicationImagesByPublication(publication);
 	}
-	
-	public PublicationImage getFirstImage(Publication publication) {
-		return publicationController.listPublicationImagesByPublication(publication).get(0);
-	}
 
 	public boolean hasImages(Publication publication) {
 		return publicationController.listPublicationImagesByPublication(publication).size() > 0;
