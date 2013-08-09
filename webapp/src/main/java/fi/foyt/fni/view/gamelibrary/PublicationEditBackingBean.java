@@ -19,6 +19,8 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
+import fi.foyt.fni.licences.CreativeCommonsLicense;
+import fi.foyt.fni.licences.CreativeCommonsUtils;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
@@ -49,9 +51,8 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 	
 	@PostConstruct
 	public void init() {
-		setTagSelectItems(
-  	  createTagSelectItems(gameLibraryTagController.listGameLibraryTags())		
-		);
+		setTagSelectItems(createTagSelectItems(gameLibraryTagController.listGameLibraryTags()));
+		setLicenseSelectItems(createLicenseSelectItems());
 	}
 	
 	@URLAction (onPostback = false)
@@ -81,6 +82,33 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 		}
 		
 		setPublicationTags(StringUtils.join(tagList, ';'));
+		CreativeCommonsLicense creativeCommonsLicense = CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
+		
+		if (creativeCommonsLicense != null) {
+			setLicenseType("CC");	
+			
+			if (creativeCommonsLicense.getDerivatives()) {
+				if (creativeCommonsLicense.getShareAlike()) {
+				  setCreativeCommonsDerivatives("SHARE_ALIKE");
+				} else {
+				  setCreativeCommonsDerivatives("YES");
+				}
+			} else {
+			  setCreativeCommonsDerivatives("NO");
+			}
+			
+			if (creativeCommonsLicense.getCommercial()) {
+				setCreativeCommonsCommercial("YES");
+			} else {
+				setCreativeCommonsCommercial("NO");
+			}
+			
+		} else {
+			setLicenseType("OTHER");	
+			setCreativeCommonsDerivatives("YES");
+			setCreativeCommonsCommercial("YES");
+			setLicenseOther(publication.getLicense());
+		}
 	}
 	
 	public void save() throws IOException {
@@ -118,6 +146,8 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 				getBookNumberOfPages(),
 				getBookAuthor(),
 				loggedUser);
+			
+			publicationController.updateLicense(publication, getLicenseUrl());
 			
 			FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
 	  	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())

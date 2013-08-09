@@ -9,6 +9,7 @@ import javax.servlet.http.Part;
 
 import org.apache.commons.lang3.StringUtils;
 
+import fi.foyt.fni.licences.CreativeCommonsUtils;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 public class AbstractPublicationEditBackingBean {
@@ -29,6 +30,13 @@ public class AbstractPublicationEditBackingBean {
 
 		return result;
 	}
+	
+	protected List<SelectItem> createLicenseSelectItems() {
+		List<SelectItem> result = new ArrayList<>(); 
+		result.add(new SelectItem("CC", "Creative Commons 3.0"));
+		result.add(new SelectItem("OTHER", "Other"));
+		return result;
+	}
 
 	public List<SelectItemGroup> getTagSelectItems() {
 		return tagSelectItems;
@@ -36,6 +44,14 @@ public class AbstractPublicationEditBackingBean {
 
 	public void setTagSelectItems(List<SelectItemGroup> tagSelectItems) {
 		this.tagSelectItems = tagSelectItems;
+	}
+	
+	public List<SelectItem> getLicenseSelectItems() {
+		return licenseSelectItems;
+	}
+	
+	public void setLicenseSelectItems(List<SelectItem> licenseSelectItems) {
+		this.licenseSelectItems = licenseSelectItems;
 	}
 
 	public Integer getBookNumberOfPages() {
@@ -157,6 +173,62 @@ public class AbstractPublicationEditBackingBean {
 	public void setPublicationDepth(Integer publicationDepth) {
 		this.publicationDepth = publicationDepth;
 	}
+	
+	public String getLicenseType() {
+		return licenseType;
+	}
+	
+	public void setLicenseType(String licenseType) {
+		this.licenseType = licenseType;
+	}
+	
+	public String getCreativeCommonsCommercial() {
+		return creativeCommonsCommercial;
+	}
+	
+	public void setCreativeCommonsCommercial(String creativeCommonsCommercial) {
+		this.creativeCommonsCommercial = creativeCommonsCommercial;
+	}
+	
+	public String getCreativeCommonsDerivatives() {
+		return creativeCommonsDerivatives;
+	}
+	
+	public void setCreativeCommonsDerivatives(String creativeCommonsDerivatives) {
+		this.creativeCommonsDerivatives = creativeCommonsDerivatives;
+	}
+	
+	public String getLicenseOther() {
+		return licenseOther;
+	}
+	
+	public void setLicenseOther(String licenseOther) {
+		this.licenseOther = licenseOther;
+	}
+	
+	protected String getLicenseUrl() {
+		if ("CC".equals(getLicenseType())) {
+			boolean attribution = true;
+			boolean shareAlike = false;
+			boolean derivatives = false;
+			boolean commercial = true;
+			
+			if ("YES".equals(getCreativeCommonsDerivatives())) {
+				derivatives = true;
+			} else if ("SHARE_ALIKE".equals(getCreativeCommonsDerivatives())) {
+				derivatives = true;
+				shareAlike = true;
+			}
+			
+			if ("NO".equals(getCreativeCommonsCommercial())) {
+				commercial = false;
+			}
+
+			return CreativeCommonsUtils.createLicenseUrl(attribution, derivatives, shareAlike, commercial);
+		} else {
+			return getLicenseOther();
+		}
+	}
 
 	private Long publicationId;
 	private String publicationName;
@@ -173,5 +245,10 @@ public class AbstractPublicationEditBackingBean {
 	private Integer publicationDepth;
 	private Integer bookNumberOfPages;
 	private String bookAuthor;
+	private String licenseType;
+	private String creativeCommonsDerivatives;
+	private String creativeCommonsCommercial;
+	private String licenseOther;
 	private List<SelectItemGroup> tagSelectItems;
+	private List<SelectItem> licenseSelectItems;
 }

@@ -65,6 +65,34 @@
         <h:inputHidden id="tags" value="#{publicationEditBackingBean.publicationTags}" />
       </div>
     </div>
+    
+    <div class="dialog-section">
+      <h:outputLabel value="License" />
+      <div>
+        <h:selectOneMenu value="#{publicationEditBackingBean.licenseType}" id="license-select">
+          <f:selectItems value="#{publicationEditBackingBean.licenseSelectItems}"></f:selectItems>
+        </h:selectOneMenu>
+        <div class="license-cc-container">
+          <h:outputLabel value="Allow modifications of your work?" />
+          <h:selectOneRadio value="#{publicationEditBackingBean.creativeCommonsDerivatives}">
+            <f:selectItem itemLabel="Yes" itemValue="YES"/>
+            <f:selectItem itemLabel="No" itemValue="NO"/>
+            <f:selectItem itemLabel="Yes, as long as others share alike " itemValue="SHARE_ALIKE"/>
+          </h:selectOneRadio>
+          
+          <h:outputLabel value="Allow commercial uses of your work?" />
+          <h:selectOneRadio value="#{publicationEditBackingBean.creativeCommonsCommercial}">
+            <f:selectItem itemLabel="Yes" itemValue="YES"/>
+            <f:selectItem itemLabel="No" itemValue="NO"/>
+          </h:selectOneRadio>
+        </div>
+
+        <div class="license-other" >
+          <h:outputLabel value="Link to license" />
+          <h:inputText value="#{publicationEditBackingBean.licenseOther}" styleClass="max-width"/>
+        </div>
+      </div>
+    </div>
 
     <div class="dialog-section">
       <h:outputLabel value="Settings" />

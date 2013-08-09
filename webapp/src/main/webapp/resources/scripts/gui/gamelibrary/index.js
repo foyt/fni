@@ -365,6 +365,27 @@
           }
           tagContainer.remove();
         });
+        
+        dialog.find('select[name="' + prefix + ':license-select"]').change(function (event) {
+          var value = $(this).val();
+          var section = $(this).closest('.dialog-section');
+
+          if (value == 'CC') {
+            $(section).find('.license-cc-container').show();
+            $(section).find('.license-other').hide();
+          } else {
+            $(section).find('.license-cc-container').hide();
+            $(section).find('.license-other').show();
+          }
+        });
+        
+        if (dialog.find('select[name="' + prefix + ':license-select"]').val() == 'CC') {
+          dialog.find('.license-cc-container').show();
+          dialog.find('.license-other').hide();
+        } else {
+          dialog.find('.license-cc-container').hide();
+          dialog.find('.license-other').show();
+        }
       }
     });
   });
@@ -480,6 +501,19 @@
             if (text) {
               createTagElement(text);
             }
+          }
+        });
+        
+        dialog.find('select[name="' + prefix + ':license-select"]').change(function (event) {
+          var value = $(this).val();
+          var section = $(this).closest('.dialog-section');
+
+          if (value == 'CC') {
+            $(section).find('.license-cc-container').show();
+            $(section).find('.license-other').hide();
+          } else {
+            $(section).find('.license-cc-container').hide();
+            $(section).find('.license-other').show();
           }
         });
         

@@ -451,6 +451,10 @@
   text-align: right;
 }
 
+.gamelibrary-publication-license-container {
+  margin-top: 8px;
+}
+
 .gamelibrary-publication-details {
   margin-top: 8px;
 }
@@ -693,11 +697,13 @@
   margin-bottom: 8px;
 }
 
-.gamelibrary-create-publication-dialog table, .gamelibrary-edit-publication-dialog table {
-  width: 100%;
-  -webkit-box-sizing: border-box; 	
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+.gamelibrary-create-publication-dialog input[type="radio"], .gamelibrary-edit-publication-dialog input[type="radio"] {
+  margin-left: 16px;
+  margin-right: 8px;
+}
+
+.gamelibrary-create-publication-dialog td:first-child input[type="radio"], .gamelibrary-edit-publication-dialog td:first-child input[type="radio"] {
+  margin-left: 0px;
 }
 
 .gamelibrary-create-publication-dialog input[name="new-tag"], .gamelibrary-edit-publication-dialog input[name="new-tag"]  {

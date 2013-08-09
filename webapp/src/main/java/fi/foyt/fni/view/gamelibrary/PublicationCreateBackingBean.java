@@ -44,9 +44,11 @@ public class PublicationCreateBackingBean extends AbstractPublicationEditBacking
 	
 	@PostConstruct
 	public void init() {
-		setTagSelectItems(
-			  createTagSelectItems(gameLibraryTagController.listGameLibraryTags())		
-			);
+		setTagSelectItems(createTagSelectItems(gameLibraryTagController.listGameLibraryTags()));
+		setLicenseSelectItems(createLicenseSelectItems());
+		setLicenseType("CC");	
+	  setCreativeCommonsDerivatives("SHARE_ALIKE");
+		setCreativeCommonsCommercial("YES");
 	}
 
 	public void save() {
@@ -78,6 +80,7 @@ public class PublicationCreateBackingBean extends AbstractPublicationEditBacking
 			getPublicationWeight(),
 			getBookAuthor(),
 			getBookNumberOfPages(),
+			getLicenseUrl(),
 			tags
 		);
 		
