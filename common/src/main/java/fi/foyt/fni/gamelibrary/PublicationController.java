@@ -161,7 +161,7 @@ public class PublicationController {
 	}
 	/* BookPublications */
 
-	public BookPublication createBookPublication(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, List<GameLibraryTag> tags) {
+	public BookPublication createBookPublication(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, String license, List<GameLibraryTag> tags) {
 		
 		Date now = new Date();
 		Long forumId = systemSettingsController.getGameLibraryPublicationForumId();
@@ -170,7 +170,7 @@ public class PublicationController {
 		String urlName = createUrlName(name);
 
 		BookPublication bookPublication = bookPublicationDAO.create(name, urlName, description, price, downloadable, purchasable, defaultImage, 
-				now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width, depth, weight, author, numberOfPages, forumTopic);
+				now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width, depth, weight, author, numberOfPages, license, forumTopic);
 
 		for (GameLibraryTag tag : tags) {
 			publicationTagDAO.create(tag, bookPublication);
