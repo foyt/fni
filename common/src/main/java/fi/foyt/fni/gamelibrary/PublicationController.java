@@ -283,4 +283,8 @@ public class PublicationController {
 			}
 		} while (true);
 	}
+
+	public Publication updateLicense(Publication publication, String licenseUrl) {
+		return publicationDAO.updateLicense(publication, licenseUrl);
+	}
 }

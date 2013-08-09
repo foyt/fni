@@ -182,4 +182,9 @@ public class PublicationDAO extends GenericDAO<Publication> {
     return publication;
 	}
 
+	public Publication updateLicense(Publication publication, String license) {
+		publication.setLicense(license);
+		return persist(publication);
+	}
+
 }
