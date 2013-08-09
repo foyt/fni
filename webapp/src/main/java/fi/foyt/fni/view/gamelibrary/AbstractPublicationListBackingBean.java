@@ -9,6 +9,8 @@ import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.ShoppingCartController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
+import fi.foyt.fni.licences.CreativeCommonsLicense;
+import fi.foyt.fni.licences.CreativeCommonsUtils;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
@@ -82,6 +84,10 @@ public class AbstractPublicationListBackingBean {
 	
 	public void addPublicationToShoppingCart(Publication publication) {
 		shoppingCartController.addPublication(publication);
+	}
+	
+	public CreativeCommonsLicense getCreativeCommonsLicense(Publication publication) {
+		return CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
 	}
 	
 	private List<Publication> publications;

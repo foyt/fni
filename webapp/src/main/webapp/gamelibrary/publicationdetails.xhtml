@@ -33,6 +33,18 @@
                 </div>
                 
                 <div class="gamelibrary-publication-description">#{publicationDetailsBackingBean.publication.description}</div>
+                <h:panelGroup layout="block" styleClass="gamelibrary-publication-license-container">
+                  <ui:fragment rendered="#{publicationDetailsBackingBean.creativeCommonsLicense ne null}">
+                    <h:outputLink value="#{publicationDetailsBackingBean.creativeCommonsLicense.url}">
+                      <h:graphicImage value="#{publicationDetailsBackingBean.creativeCommonsLicense.iconUrl}" />
+                    </h:outputLink>
+                  </ui:fragment>
+                  
+                  <ui:fragment rendered="#{publicationDetailsBackingBean.creativeCommonsLicense eq null}">
+                    <label>#{locales['gamelibrary.publicationDetails.publicationLicenseOther']}</label>
+                    <div>#{publicationDetailsBackingBean.publication.license}</div>
+                  </ui:fragment>
+                </h:panelGroup>
                 <div class="gamelibrary-publication-details">
                   <div class="gamelibrary-publication-detail">
                     <span>#{locales['gamelibrary.publicationDetails.publicationDetailsPrice']}</span>

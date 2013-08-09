@@ -13,13 +13,15 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.forum.ForumController;
+import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.ShoppingCartController;
-import fi.foyt.fni.gamelibrary.GameLibraryTagController;
+import fi.foyt.fni.licences.CreativeCommonsLicense;
+import fi.foyt.fni.licences.CreativeCommonsUtils;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
+import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
-import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 @SessionScoped
 @Named
@@ -53,6 +55,7 @@ public class PublicationDetailsBackingBean {
 		}
 		
 		tags = gameLibraryTagController.listPublicationGameLibraryTags(publication);
+		creativeCommonsLicense = CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
 	}
 	
 	public String getUrlName() {
@@ -103,8 +106,13 @@ public class PublicationDetailsBackingBean {
 		shoppingCartController.addPublication(publication);
 	}
 	
+	public CreativeCommonsLicense getCreativeCommonsLicense() {
+		return creativeCommonsLicense;
+	}
+	
 	private String urlName;
 	private Publication publication;
 	private BookPublication bookPublication;
 	private List<GameLibraryTag> tags;
+	private CreativeCommonsLicense creativeCommonsLicense;
 }

@@ -38,6 +38,20 @@
                   </div>
                   
                   <div class="gamelibrary-publication-description">#{publication.description}</div>
+                  
+                  <h:panelGroup layout="block" styleClass="gamelibrary-publication-license-container">
+                    <ui:fragment rendered="#{publicationUnpublishedListBackingBean.getCreativeCommonsLicense(publication) ne null}">
+                      <h:outputLink value="#{publicationUnpublishedListBackingBean.getCreativeCommonsLicense(publication).url}">
+                        <h:graphicImage value="#{publicationUnpublishedListBackingBean.getCreativeCommonsLicense(publication).iconUrl}" />
+                      </h:outputLink>
+                    </ui:fragment>
+                    
+                    <ui:fragment rendered="#{publicationUnpublishedListBackingBean.getCreativeCommonsLicense(publication) eq null}">
+                      <label>#{locales['gamelibrary.unpublishedList.publicationLicenseOther']}</label>
+                      <div>#{publication.license}</div>
+                    </ui:fragment>
+                  </h:panelGroup>
+                                  
                   <div class="gamelibrary-publication-details">
                     <div class="gamelibrary-publication-detail">
                       <span>#{locales['gamelibrary.unpublishedList.publicationDetailsPrice']}</span>
