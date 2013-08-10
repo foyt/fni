@@ -7,7 +7,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -148,11 +147,6 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 				loggedUser);
 			
 			publicationController.updateLicense(publication, getLicenseUrl());
-			
-			FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
-	  	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
-	  	  .append("/gamelibrary/unpublished/")
-	  	  .toString());
 		} else {
 			// TODO: Proper error handling
 			throw new RuntimeException("Could not persist unknown publication");

@@ -160,7 +160,13 @@
       if (file.val()) {
         var fileForm = $('#edit-publication-file-form form');
         file.appendTo(fileForm);
+        $('#edit-publication-file-form iframe').load(function (event) {
+          window.location.href = CONTEXTPATH + '/gamelibrary/unpublished/';
+        });
+        
         fileForm.submit();
+      } else {
+        window.location.href = CONTEXTPATH + '/gamelibrary/unpublished/';
       }
       
       // TODO: This should wait for upload response
