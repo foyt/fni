@@ -241,8 +241,6 @@ public class PublicationController {
 	/* PublicationFile */
 
 	public PublicationFile createBookPublicationFile(BookPublication bookPublication, String contentType, byte[] content, User creator) {
-	  // TODO: Should not be needed but PublicationFileServlet crashes without this...
-		bookPublication = bookPublicationDAO.findById(bookPublication.getId());
 		PublicationFile file = bookPublicationFileDAO.create(content, contentType);
 		updatedModified(bookPublication, creator, new Date());
 		bookPublicationDAO.updateFile(bookPublication, file);
@@ -250,8 +248,6 @@ public class PublicationController {
 	}
 	
 	public PublicationFile updateBookPublicationFile(BookPublication bookPublication, String contentType, byte[] content, User modifier) {
-	  // TODO: Should not be needed but PublicationFileServlet crashes without this...
-		bookPublication = bookPublicationDAO.findById(bookPublication.getId());
 		PublicationFile file = bookPublicationFileDAO.updateContent(bookPublicationFileDAO.updateContentType(bookPublication.getFile(), contentType), content);
 		updatedModified(bookPublication, modifier, new Date());
 		bookPublicationDAO.updateFile(bookPublication, file);
