@@ -203,7 +203,6 @@ public class PostiDeliveryMethod implements DeliveryMethod {
 
 	@Override
 	public String getName(Locale locale) {
-		// TODO Auto-generated method stub
 		return "Posti";
 	}
 
