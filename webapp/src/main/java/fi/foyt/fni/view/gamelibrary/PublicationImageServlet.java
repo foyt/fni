@@ -104,14 +104,14 @@ public class PublicationImageServlet extends AbstractFileServlet {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
-		
+
 		List<UploadResultItem> resultItems = new ArrayList<>();
 		User loggedUser = sessionController.getLoggedUser();
 
 		try {
 			List<TypedData> images = new ArrayList<>();
 			List<FileItem> items = getFileItems(request);
-			
+
 			for (FileItem item : items) {
 				if (!item.isFormField()) {
 					images.add(new TypedData(item.get(), item.getContentType()));
@@ -122,6 +122,11 @@ public class PublicationImageServlet extends AbstractFileServlet {
 			if (publication != null) {
 				for (TypedData image : images) {
 					PublicationImage publicationImage = publicationController.createPublicationImage(publication, image.getData(), image.getContentType(), loggedUser);
+					if (publication.getDefaultImage() == null) {
+						// If publication does not yet have a default image we update it to uploaded image
+						publicationController.updatePublicationDefaultImage(publication, publicationImage);
+					}
+
 					String url = request.getContextPath() + "/gamelibrary/publicationImages/" + publicationImage.getId();
 					String thumbnailUrl = url + "?width=128&height=128";
 					resultItems.add(new UploadResultItem(publicationImage.getId().toString(), image.getData().length, url, thumbnailUrl, "N/A", "DELETE"));
@@ -137,10 +142,10 @@ public class PublicationImageServlet extends AbstractFileServlet {
 		}
 
 		response.setContentType("application/json");
-		
+
 		PrintWriter writer = response.getWriter();
 		try {
-			ObjectMapper mapper = new ObjectMapper(); 
+			ObjectMapper mapper = new ObjectMapper();
 			Map<String, List<UploadResultItem>> result = new HashMap<>();
 			result.put("files", resultItems);
 			mapper.writeValue(writer, result);
@@ -149,7 +154,7 @@ public class PublicationImageServlet extends AbstractFileServlet {
 			writer.close();
 		}
 	}
-	
+
 	private String createETag(Date modified, Integer width, Integer height) {
 		StringBuilder eTagBuilder = new StringBuilder();
 
