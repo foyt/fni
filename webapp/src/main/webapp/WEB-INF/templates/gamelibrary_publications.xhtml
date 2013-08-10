@@ -13,16 +13,6 @@
   
     <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.js"></script>
     
-    <!-- jQuery File Upload -->
-
-    <h:outputScript name="scripts/load-image/load-image.min.js"/>
-    <h:outputScript name="scripts/canvas-to-blob/canvas-to-blob.min.js"/>
-    
-    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.iframe-transport.js"></script>
-    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload.js"></script>
-    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload-process.js"></script>
-    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload-image.js"></script>
-    
     <!-- jQuery Magnific-Popup  -->
     
     <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.magnific-popup/0.8.9/jquery.magnific-popup.min.js"></script>
@@ -31,8 +21,9 @@
     <!-- View specific -->
     
     <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/gamelibrary.css"/>
-    <h:outputScript name="scripts/gui/gamelibrary/index.js"></h:outputScript>
+    <h:outputScript name="scripts/gui/gamelibrary/publications.js"></h:outputScript>
     
+    <ui:insert name="headExtra"/>
   </ui:define>
   <ui:define name="content">
   

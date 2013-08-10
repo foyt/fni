@@ -5,6 +5,20 @@
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" 
   template="/WEB-INF/templates/gamelibrary_publications.xhtml">
+  
+  <ui:define name="headExtra">
+    <!-- jQuery File Upload -->
+
+    <h:outputScript name="scripts/load-image/load-image.min.js"/>
+    <h:outputScript name="scripts/canvas-to-blob/canvas-to-blob.min.js"/>
+    
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload-process.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload-image.js"></script>
+    
+    <h:outputScript name="scripts/gui/gamelibrary/unpublishedlist.js"></h:outputScript>
+  </ui:define>
 
   <ui:define name="publications">
     <h:form>

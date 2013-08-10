@@ -6,6 +6,10 @@
   xmlns:h="http://java.sun.com/jsf/html" 
   template="/WEB-INF/templates/gamelibrary_publications.xhtml">
 
+  <ui:define name="headExtra">
+    <h:outputScript name="scripts/gui/gamelibrary/publishedlist.js"></h:outputScript>
+  </ui:define>
+
   <ui:define name="publications">
     <h:form>
       <h:panelGroup layout="block" id="gamelibrary-index" styleClass="gamelibrary-index">
