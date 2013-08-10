@@ -4,9 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.transaction.NotSupportedException;
+import javax.transaction.Status;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -21,6 +28,42 @@ public abstract class AbstractFileServlet extends HttpServlet {
 	private static final long serialVersionUID = 2682138379342291553L;
 
   protected static final long DEFAULT_EXPIRE_TIME = 1000 * 60 * 60;
+
+	@Resource
+	private UserTransaction userTransaction;
+
+  @Override
+  protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+  	try {
+    	// If transaction is not already active, we start it
+   		boolean transactionActive = userTransaction.getStatus() == Status.STATUS_ACTIVE;
+   		if (!transactionActive) {
+   			userTransaction.begin();
+   		}
+  
+  		try {
+     		// Proceed with the request
+
+  			super.service(req, resp);
+    
+    		// If transaction was started here, we commit the transaction
+    		if (!transactionActive) {
+    			userTransaction.commit();
+    		} 
+    		
+    	} catch (Throwable t) {
+    		// If exception was thrown and the transaction was started here, we rollback the transaction
+    		if (!transactionActive) {
+    			userTransaction.rollback();
+    		}
+    
+    		// ... and throw an IOException
+    		throw new IOException(t);
+    	}  	
+  	} catch (SystemException | NotSupportedException e) {
+  		throw new ServletException(e);
+		}
+  }
 
 	protected Long getPathId(HttpServletRequest req) {
 		String pathInfo = req.getPathInfo();
