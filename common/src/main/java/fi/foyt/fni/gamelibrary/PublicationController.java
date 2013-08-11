@@ -106,6 +106,18 @@ public class PublicationController {
 	public List<Publication> listPublicationsByAuthor(User author) {
 		return publicationAuthorDAO.listPublicationsByAuthor(author);
 	}
+
+	public List<Publication> listPublishedPublicationsByAuthor(User author) {
+		List<Publication> result = new ArrayList<>();
+		List<Publication> publications = listPublicationsByAuthor(author);
+		for (Publication publication : publications) {
+			if (publication.getPublished()) {
+				result.add(publication);
+			}
+		}
+		
+		return result;
+	}
 	
 	public Long countUnpublishedPublicationsByCreator(User user) {
 		return publicationDAO.countByCreatorAndPublished(user, Boolean.FALSE);
