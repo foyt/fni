@@ -714,6 +714,7 @@
   margin-left: 8px;
 }
 
+.gamelibrary-create-publication-dialog .authors-container .author, .gamelibrary-edit-publication-dialog .authors-container .author,
 .gamelibrary-create-publication-dialog .tags .tag, .gamelibrary-edit-publication-dialog .tags .tag {
   display: inline-block;
   padding: 4px;
@@ -725,15 +726,22 @@
   margin-top: 8px;
 }
 
+.gamelibrary-create-publication-dialog .authors-container .author:last-child, .gamelibrary-edit-publication-dialog .authors-container .author:last-child,
 .gamelibrary-create-publication-dialog .tags .tag:last-child, .gamelibrary-edit-publication-dialog .tags .tag:last-child {
   margin-right: 0px;
 }
 
+.gamelibrary-create-publication-dialog .authors-container .author .remove-author:after, .gamelibrary-edit-publication-dialog .authors-container .author .remove-author:after,
 .gamelibrary-create-publication-dialog .tags .tag .remove-tag:after, .gamelibrary-edit-publication-dialog .tags .tag .remove-tag:after {
   content: 'X';
   color: #eee;
   font-family: courier;
   padding-left: 4px;
+}
+
+.gamelibrary-create-publication-dialog .authors-container .author .remove-author, .gamelibrary-edit-publication-dialog .authors-container .author .remove-author,
+.gamelibrary-create-publication-dialog .tags .tag .remove-tag, .gamelibrary-edit-publication-dialog .tags .tag .remove-tag {
+  text-decoration: none;
 }
 
 /* Attach Book File Dialog */

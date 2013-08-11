@@ -95,6 +95,15 @@
     </div>
 
     <div class="dialog-section">
+      <h:outputLabel value="Author(s)" />
+      <h:selectOneMenu id="author-select" styleClass="max-width">
+        <f:selectItems value="#{publicationCreateBackingBean.authorSelectItems}"/>
+      </h:selectOneMenu>
+      <h:inputHidden id="author-ids" value="#{publicationCreateBackingBean.authorIds}" />
+      <div class="authors-container"></div>
+    </div>
+
+    <div class="dialog-section">
       <h:outputLabel value="Settings" />
       <div>
         <h:selectBooleanCheckbox name="requires-delivery" value="#{publicationCreateBackingBean.publicationRequiresDelivery}"/>
@@ -137,9 +146,6 @@
         </tr>
         <tr>
           <td><h:outputLabel value="Number Of Pages" /></td><td><h:inputText name="numberOfPages" value="#{publicationCreateBackingBean.bookNumberOfPages}"/></td>
-        </tr>
-        <tr>
-          <td><h:outputLabel value="Author" /></td><td><h:inputText name="author" value="#{publicationCreateBackingBean.bookAuthor}"/></td>
         </tr>
       </table>
     </div>

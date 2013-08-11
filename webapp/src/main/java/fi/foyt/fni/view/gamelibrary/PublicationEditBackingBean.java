@@ -10,6 +10,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ocpsoft.pretty.faces.annotation.URLAction;
@@ -22,10 +23,12 @@ import fi.foyt.fni.licences.CreativeCommonsLicense;
 import fi.foyt.fni.licences.CreativeCommonsUtils;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationAuthor;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.users.UserController;
 
 @Stateful
 @RequestScoped
@@ -44,6 +47,9 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 
 	@Inject
 	private GameLibraryTagController gameLibraryTagController;
+
+	@Inject
+	private UserController userController;
 	
 	@Inject
 	private SessionController sessionController;
@@ -52,6 +58,7 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 	public void init() {
 		setTagSelectItems(createTagSelectItems(gameLibraryTagController.listGameLibraryTags()));
 		setLicenseSelectItems(createLicenseSelectItems());
+		setAuthorSelectItems(createAuthorSelectItems());
 	}
 	
 	@URLAction (onPostback = false)
@@ -70,7 +77,6 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 		
 		if (publication instanceof BookPublication) {
 			setPublicationDownloadable(((BookPublication) publication).getDownloadable());
-			setBookAuthor(((BookPublication) publication).getAuthor());
 			setBookNumberOfPages(((BookPublication) publication).getNumberOfPages());
 		}
 		
@@ -108,6 +114,18 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 			setCreativeCommonsCommercial("YES");
 			setLicenseOther(publication.getLicense());
 		}
+		
+		List<User> authors = new ArrayList<User>();
+		List<Long> authorIds = new ArrayList<Long>();
+		
+		List<PublicationAuthor> publicationAuthors = publicationController.listPublicationAuthors(publication);
+		for (PublicationAuthor publicationAuthor : publicationAuthors) {
+			authors.add(publicationAuthor.getAuthor());
+			authorIds.add(publicationAuthor.getAuthor().getId());
+		}
+		
+		setAuthors(authors);
+		setAuthorIds(StringUtils.join(authorIds, ','));
 	}
 	
 	public void save() throws IOException {
@@ -143,8 +161,45 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 				getPublicationHeight(),
 				getPublicationDepth(),
 				getBookNumberOfPages(),
-				getBookAuthor(),
 				loggedUser);
+			
+			List<PublicationAuthor> publicationAuthors = publicationController.listPublicationAuthors(bookPublication);
+			List<Long> oldAuthorIds = new ArrayList<Long>();
+			for (PublicationAuthor publicationAuthor : publicationAuthors) {
+				oldAuthorIds.add(publicationAuthor.getAuthor().getId());
+			}
+			
+			String[] authorIdsStr = StringUtils.split(getAuthorIds(), ",");
+			
+			for (String authorIdStr : authorIdsStr) {
+				Long authorId = NumberUtils.createLong(authorIdStr);
+				if (authorId == null) {
+					// TODO: Proper error handling
+					throw new RuntimeException("Invalid author id");
+				} else {
+  				if (!oldAuthorIds.contains(authorId)) {
+  					User author = userController.findUserById(authorId);
+  					if (author == null) {
+  						// TODO: Proper error handling
+  						throw new RuntimeException("Invalid author id");
+  					} else {
+  					  publicationController.createPublicationAuthor(bookPublication, author);
+  					}
+  				}
+				}
+				
+				oldAuthorIds.remove(authorId);
+			}
+			
+			for (Long removeAuthorId : oldAuthorIds) {
+				User author = userController.findUserById(removeAuthorId);
+				if (author != null) {
+					PublicationAuthor publicationAuthor = publicationController.findPublicationAuthorByPublicationAndAuthor(bookPublication, author);
+					if (publicationAuthor != null) {
+						publicationController.deletePublicationAuthor(publicationAuthor);
+					}
+				}
+			}
 			
 			publicationController.updateLicense(publication, getLicenseUrl());
 		} else {

@@ -154,6 +154,42 @@
           }
           tagContainer.remove();
         });
+        
+        dialog.find('select[name="' + prefix + ':author-select"]').change(function (event) {
+          var authorId = $(this).val();
+          if (authorId) {
+            var authorName = $(this).find("option:selected").text();
+            var authorsInputElement = dialog.find('input[name="' + prefix + ':author-ids' + '"]');
+            var authorsContainer = dialog.find('.authors-container');
+            var authorsStr = $(authorsInputElement).val();
+            var authors = authorsStr ? authorsStr.split(',') : new Array();
+            
+            if (authors.indexOf(authorId) == -1) {
+              $('<span data-author-id="{0}" class="author"><span>{1}</span><a href="javascript:void(null);" class="remove-author"></a></span>'.replace('{0}', authorId).replace('{1}', authorName))
+                .appendTo(authorsContainer);
+              authors.push(authorId);
+              authorsInputElement.val(authors.join(','));
+            }
+            
+            $(this).val('');
+          }
+        });
+        
+        dialog.on('click', '.remove-author', function () {
+          var author = $(this).closest('.author');
+          var authorId = $(author).attr('data-author-id');
+          if (authorId) {
+            var authorsInputElement = dialog.find('input[name="' + prefix + ':author-ids' + '"]');
+            var authorsStr = $(authorsInputElement).val();
+            var authors = authorsStr ? authorsStr.split(',') : new Array();
+            var authorIndex = authors.indexOf(authorId);
+            if (authorIndex > -1) {
+              authors.splice(authorIndex, 1);
+              authorsInputElement.val(authors.join(','));
+              author.remove();
+            }
+          }
+        });
       }
     });
   });

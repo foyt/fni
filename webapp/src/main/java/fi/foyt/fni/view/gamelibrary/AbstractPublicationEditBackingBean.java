@@ -5,14 +5,24 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
+import javax.inject.Inject;
 import javax.servlet.http.Part;
 
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.licences.CreativeCommonsUtils;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
+import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.users.UserController;
 
 public class AbstractPublicationEditBackingBean {
+	
+	@Inject
+	private SessionController sessionController;
+	
+	@Inject
+	private UserController userController;
 
 	protected List<SelectItemGroup> createTagSelectItems(List<GameLibraryTag> tags) {
 		ArrayList<SelectItemGroup> result = new ArrayList<>();
@@ -37,6 +47,20 @@ public class AbstractPublicationEditBackingBean {
 		result.add(new SelectItem("OTHER", "Other"));
 		return result;
 	}
+	
+	protected List<SelectItem> createAuthorSelectItems() {
+		List<SelectItem> result = new ArrayList<>(); 
+		User loggedUser = sessionController.getLoggedUser();
+
+		result.add(new SelectItem(null, "-- Select --"));
+		result.add(new SelectItem(loggedUser.getId(), loggedUser.getFullName()));
+		List<User> users = userController.listUserFriends(loggedUser);
+		for (User user : users) {
+			result.add(new SelectItem(user.getId(), user.getFullName()));
+		}
+		
+		return result;
+	}
 
 	public List<SelectItemGroup> getTagSelectItems() {
 		return tagSelectItems;
@@ -53,6 +77,14 @@ public class AbstractPublicationEditBackingBean {
 	public void setLicenseSelectItems(List<SelectItem> licenseSelectItems) {
 		this.licenseSelectItems = licenseSelectItems;
 	}
+	
+	public List<SelectItem> getAuthorSelectItems() {
+		return authorSelectItems;
+	}
+	
+	public void setAuthorSelectItems(List<SelectItem> authorSelectItems) {
+		this.authorSelectItems = authorSelectItems;
+	}
 
 	public Integer getBookNumberOfPages() {
 		return bookNumberOfPages;
@@ -61,15 +93,7 @@ public class AbstractPublicationEditBackingBean {
 	public void setBookNumberOfPages(Integer bookNumberOfPages) {
 		this.bookNumberOfPages = bookNumberOfPages;
 	}
-
-	public String getBookAuthor() {
-		return bookAuthor;
-	}
-
-	public void setBookAuthor(String bookAuthor) {
-		this.bookAuthor = bookAuthor;
-	}
-
+	
 	public Long getPublicationId() {
 		return publicationId;
 	}
@@ -206,6 +230,22 @@ public class AbstractPublicationEditBackingBean {
 		this.licenseOther = licenseOther;
 	}
 	
+	public String getAuthorIds() {
+		return authorIds;
+	}
+	
+	public void setAuthorIds(String authorIds) {
+		this.authorIds = authorIds;
+	}
+	
+	public List<User> getAuthors() {
+		return authors;
+	}
+	
+	public void setAuthors(List<User> authors) {
+		this.authors = authors;
+	}
+	
 	protected String getLicenseUrl() {
 		if ("CC".equals(getLicenseType())) {
 			boolean attribution = true;
@@ -244,11 +284,13 @@ public class AbstractPublicationEditBackingBean {
 	private Integer publicationHeight;
 	private Integer publicationDepth;
 	private Integer bookNumberOfPages;
-	private String bookAuthor;
 	private String licenseType;
 	private String creativeCommonsDerivatives;
 	private String creativeCommonsCommercial;
 	private String licenseOther;
+	private String authorIds;
+	private List<User> authors;
 	private List<SelectItemGroup> tagSelectItems;
 	private List<SelectItem> licenseSelectItems;
+	private List<SelectItem> authorSelectItems;
 }
