@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.dao.gamelibrary.BookPublicationDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.BookPublicationFileDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.PublicationAuthorDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationImageDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationTagDAO;
@@ -23,6 +24,7 @@ import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationAuthor;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationFile;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
@@ -51,6 +53,9 @@ public class PublicationController {
 
 	@Inject
 	private BookPublicationFileDAO bookPublicationFileDAO;
+
+	@Inject
+	private PublicationAuthorDAO publicationAuthorDAO;
 
 	@Inject
 	private ForumController forumController;
@@ -98,6 +103,10 @@ public class PublicationController {
 		return publicationDAO.listByCreatorAndPublished(creator, Boolean.TRUE);
 	}
 	
+	public List<Publication> listPublicationsByAuthor(User author) {
+		return publicationAuthorDAO.listPublicationsByAuthor(author);
+	}
+	
 	public Long countUnpublishedPublicationsByCreator(User user) {
 		return publicationDAO.countByCreatorAndPublished(user, Boolean.FALSE);
 	}
@@ -107,6 +116,10 @@ public class PublicationController {
 		publicationDAO.updateModifier(publication, modifier);
 		
 		return publication;
+	}
+
+	public Publication updateLicense(Publication publication, String licenseUrl) {
+		return publicationDAO.updateLicense(publication, licenseUrl);
 	}
 	
 	public Publication publishPublication(Publication publication) {
@@ -159,9 +172,10 @@ public class PublicationController {
 	public void deletePublicationImage(PublicationImage publicationImage) {
 		publicationImageDAO.delete(publicationImage);
 	}
+	
 	/* BookPublications */
 
-	public BookPublication createBookPublication(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, String author, Integer numberOfPages, String license, List<GameLibraryTag> tags) {
+	public BookPublication createBookPublication(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, List<GameLibraryTag> tags) {
 		
 		Date now = new Date();
 		Long forumId = systemSettingsController.getGameLibraryPublicationForumId();
@@ -170,7 +184,7 @@ public class PublicationController {
 		String urlName = createUrlName(name);
 
 		BookPublication bookPublication = bookPublicationDAO.create(name, urlName, description, price, downloadable, purchasable, defaultImage, 
-				now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width, depth, weight, author, numberOfPages, license, forumTopic);
+				now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width, depth, weight, numberOfPages, license, forumTopic);
 
 		for (GameLibraryTag tag : tags) {
 			publicationTagDAO.create(tag, bookPublication);
@@ -185,8 +199,7 @@ public class PublicationController {
 	
 	public BookPublication updateBookPublication(fi.foyt.fni.persistence.model.gamelibrary.BookPublication bookPublication, Double price, String name,
 			String description, List<GameLibraryTag> tags, Boolean published, Boolean requiresDelivery, Boolean downloadable, 
-			Boolean purchasable, Double weight, Integer width, Integer height, Integer depth, Integer numberOfPages, String author, 
-			User modifier) {
+			Boolean purchasable, Double weight, Integer width, Integer height, Integer depth, Integer numberOfPages, User modifier) {
 
 		publicationDAO.updateName(bookPublication, name);
 		publicationDAO.updateDescription(bookPublication, description);
@@ -196,7 +209,6 @@ public class PublicationController {
 		publicationDAO.updateHeight(bookPublication, height);
 		publicationDAO.updateDepth(bookPublication, depth);
 		bookPublicationDAO.updateNumberOfPages(bookPublication, numberOfPages);
-		bookPublicationDAO.updateAuthor(bookPublication, author);
 		
 		List<GameLibraryTag> addTags = new ArrayList<>(tags);
 		
@@ -258,6 +270,24 @@ public class PublicationController {
 		bookPublicationFileDAO.delete(publicationFile);
 	}
 	
+	/* PublicationAuthor */
+	
+	public PublicationAuthor createPublicationAuthor(Publication publication, User author) {
+		return publicationAuthorDAO.create(publication, author);
+	}
+	
+	public PublicationAuthor findPublicationAuthorByPublicationAndAuthor(Publication publication, User author) {
+		return publicationAuthorDAO.findByPublicationAndAuthor(publication, author);
+	}
+	
+	public List<PublicationAuthor> listPublicationAuthors(Publication publication) {
+		return publicationAuthorDAO.listByPublication(publication);
+	}
+	
+	public void deletePublicationAuthor(PublicationAuthor publicationAuthor) {
+		publicationAuthorDAO.delete(publicationAuthor);
+	}
+	
 	private String createUrlName(String name) {
 		int maxLength = 20;
 		int padding = 0;
@@ -278,9 +308,5 @@ public class PublicationController {
 				padding++;
 			}
 		} while (true);
-	}
-
-	public Publication updateLicense(Publication publication, String licenseUrl) {
-		return publicationDAO.updateLicense(publication, licenseUrl);
 	}
 }
