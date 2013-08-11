@@ -41,12 +41,12 @@ public class CreativeCommonsUtils {
 			properties.add("by");
 		}
 		
-		if (!derivatives) {
-			properties.add("nd");
-		}
-		
 		if (!commercial) {
 			properties.add("nc");
+		}
+		
+		if (!derivatives) {
+			properties.add("nd");
 		}
 		
 		if (shareAlike) {
