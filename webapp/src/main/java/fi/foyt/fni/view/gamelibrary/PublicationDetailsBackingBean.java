@@ -1,6 +1,7 @@
 package fi.foyt.fni.view.gamelibrary;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateful;
@@ -21,7 +22,9 @@ import fi.foyt.fni.licences.CreativeCommonsUtils;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationAuthor;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
+import fi.foyt.fni.persistence.model.users.User;
 
 @SessionScoped
 @Named
@@ -88,6 +91,17 @@ public class PublicationDetailsBackingBean {
 	
 	public List<PublicationImage> getPublicationImages() {
 		return publicationController.listPublicationImagesByPublication(publication);
+	}
+	
+	public List<User> getAuthors() {
+		List<User> result = new ArrayList<>(); 
+
+		List<PublicationAuthor> publicationAuthors = publicationController.listPublicationAuthors(publication);
+		for (PublicationAuthor publicationAuthor : publicationAuthors) {
+			result.add(publicationAuthor.getAuthor());
+		}
+		
+		return result;
 	}
 
 	public Long getPublicationCommentCount() {

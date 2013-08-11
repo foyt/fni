@@ -58,9 +58,17 @@
                         </div>
                       </ui:fragment>
 
-                      <ui:fragment rendered="#{!empty(publicationTagListBackingBean.getBookPublication(publication).author)}">
-                        <span>#{locales['gamelibrary.tagList.publicationDetailsAuthor']}</span> 
-                        <span>#{publicationTagListBackingBean.getBookPublication(publication).author}</span>
+                      <ui:fragment rendered="#{publicationTagListBackingBean.getAuthors(publication).size() > 0}">
+                        <div class="gamelibrary-publication-detail">
+                        <span>#{locales['gamelibrary.tagList.publicationDetailsAuthors']}</span> 
+                        <span>
+                          <ui:repeat var="author" value="#{publicationTagListBackingBean.getAuthors(publication)}">
+                            <h:outputLink value="#{request.contextPath}/users/#{author.id}">
+                              #{author.fullName}
+                            </h:outputLink>
+                          </ui:repeat>
+                        </span>
+                        </div>
                       </ui:fragment>
                     </ui:fragment>
                     

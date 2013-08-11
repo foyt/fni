@@ -83,10 +83,18 @@
                           <span>#{publicationUnpublishedListBackingBean.getBookPublication(publication).numberOfPages}</span>
                         </div>
                       </ui:fragment>
-
-                      <ui:fragment rendered="#{!empty(publicationTagListBackingBean.getBookPublication(publication).author)}">
-                        <span>#{locales['gamelibrary.unpublishedList.publicationDetailsAuthor']}</span> 
-                        <span>#{publicationUnpublishedListBackingBean.getBookPublication(publication).author}</span>
+                      
+                      <ui:fragment rendered="#{publicationUnpublishedListBackingBean.getAuthors(publication).size() > 0}">
+                        <div class="gamelibrary-publication-detail">
+                        <span>#{locales['gamelibrary.unpublishedList.publicationDetailsAuthors']}</span> 
+                        <span>
+                          <ui:repeat var="author" value="#{publicationUnpublishedListBackingBean.getAuthors(publication)}">
+                            <h:outputLink value="#{request.contextPath}/users/#{author.id}">
+                              #{author.fullName}
+                            </h:outputLink>
+                          </ui:repeat>
+                        </span>
+                        </div>
                       </ui:fragment>
                     </ui:fragment>
                     

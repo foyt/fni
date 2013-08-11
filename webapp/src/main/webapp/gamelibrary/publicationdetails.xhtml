@@ -66,13 +66,20 @@
                       </div>
                     </ui:fragment>
                   </ui:fragment>
-                  <ui:fragment rendered="#{publicationDetailsBackingBean.bookPublication ne null}">
-                    <ui:fragment rendered="#{!empty(publicationDetailsBackingBean.bookPublication.author)}">
-                      <span>#{locales['gamelibrary.publicationDetails.publicationDetailsPrice']}</span> 
-                      <span>#{publicationDetailsBackingBean.bookPublication.author}</span>
-                    </ui:fragment>
+
+                  <ui:fragment rendered="#{publicationDetailsBackingBean.authors.size() > 0}">
+                    <div class="gamelibrary-publication-detail">
+                    <span>#{locales['gamelibrary.publicationDetails.publicationDetailsAuthors']}</span> 
+                    <span>
+                      <ui:repeat var="author" value="#{publicationDetailsBackingBean.authors}">
+                        <h:outputLink value="#{request.contextPath}/users/#{author.id}">
+                          #{author.fullName}
+                        </h:outputLink>
+                      </ui:repeat>
+                    </span>
+                    </div>
                   </ui:fragment>
-                  
+
                   <h:panelGroup layout="block" rendered="#{publicationDetailsBackingBean.publication.forumTopic ne null}" styleClass="gamelibrary-publication-comments">
                     <h:outputLink value="#{request.contextPath}/forum/#{publicationDetailsBackingBean.publication.forumTopic.forum.urlName}/#{publicationDetailsBackingBean.publication.forumTopic.urlName}">
                       <h:outputFormat value="#{locales['gamelibrary.tagList.publicationComments']}">

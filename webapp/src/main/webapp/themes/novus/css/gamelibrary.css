@@ -459,6 +459,16 @@
   margin-top: 8px;
 }
 
+.gamelibrary-publication-detail span:first-child {
+  min-width: 120px;
+  display: inline-block;
+}
+
+.gamelibrary-publication-detail span a {
+  margin-right: 4px;
+  color: #000;
+}
+
 .gamelibrary-publication-details-price,
 .gamelibrary-publication-details-price-free {
   font-weight: bold;

@@ -13,9 +13,11 @@ import fi.foyt.fni.licences.CreativeCommonsLicense;
 import fi.foyt.fni.licences.CreativeCommonsUtils;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationAuthor;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
+import fi.foyt.fni.persistence.model.users.User;
 
 public class AbstractPublicationListBackingBean {
 	
@@ -45,6 +47,17 @@ public class AbstractPublicationListBackingBean {
 		}
 		
 		return null;
+	}
+	
+	public List<User> getAuthors(Publication publication) {
+		List<User> result = new ArrayList<>(); 
+
+		List<PublicationAuthor> publicationAuthors = publicationController.listPublicationAuthors(publication);
+		for (PublicationAuthor publicationAuthor : publicationAuthors) {
+			result.add(publicationAuthor.getAuthor());
+		}
+		
+		return result;
 	}
 	
 	public Long getPublicationCommentCount(Publication publication) {
