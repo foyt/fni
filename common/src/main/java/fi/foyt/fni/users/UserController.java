@@ -90,6 +90,10 @@ public class UserController {
       return userIdentifier.getUser();
     return null;
   }
+
+	public List<User> listUsers() {
+		return userDAO.listByArchived(Boolean.FALSE);
+	}
   
   @LoggedIn
 	@Secure (Permission.PROFILE_UPDATE)
