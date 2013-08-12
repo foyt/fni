@@ -20,6 +20,7 @@ import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.users.UserController;
 
 @RequestScoped
 @Stateful
@@ -32,6 +33,9 @@ import fi.foyt.fni.session.SessionController;
 	  )
 	})
 public class ForumTopicBackingBean {
+	
+	@Inject
+	private UserController userController;
 	
 	@Inject
 	private ForumController forumController;
@@ -83,7 +87,7 @@ public class ForumTopicBackingBean {
 	}
 	
 	public boolean getAuthorHasImage(User author) {
-		return author.getProfileImage() != null;
+		return userController.hasProfileImage(author);
 	}
 	
 	public String getReply() {

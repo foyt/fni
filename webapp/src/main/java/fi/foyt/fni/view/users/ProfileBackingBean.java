@@ -137,12 +137,21 @@ public class ProfileBackingBean {
 	public String getContactFieldTwitter() {
 		return contactFieldTwitter;
 	}
+	
 	public String getContactFieldLinkedIn() {
 		return contactFieldLinkedIn;
 	}
 
 	public String getContactFieldGooglePlus() {
 		return contactFieldGooglePlus;
+	}
+	
+	public boolean getUserHasProfileImage() {
+		return userController.hasProfileImage(getUser());
+	}
+	
+	public boolean getFriendHasProfileImage(User friend) {
+		return userController.hasProfileImage(friend);
 	}
 	
 	private Long userId;
