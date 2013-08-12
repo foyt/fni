@@ -388,13 +388,6 @@ public class MaterialController {
          */ 
         recursiveDelete(folderDAO.findById(material.getId()), deletingUser);
       break;
-      case IMAGE:
-        Image image = (Image) material;
-        List<User> users = userDAO.listByProfileImage(image);
-        for (User user : users) {
-          userDAO.updateProfileImage(user, null);
-        }
-      break;
       case DOCUMENT:
         Document document = (Document) material;
         List<DocumentRevision> documentRevisions = documentRevisionDAO.listByDocument(document);
