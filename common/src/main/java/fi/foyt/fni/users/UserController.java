@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +15,7 @@ import fi.foyt.fni.persistence.dao.users.UserContactFieldDAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.dao.users.UserEmailDAO;
 import fi.foyt.fni.persistence.dao.users.UserFriendDAO;
+import fi.foyt.fni.persistence.dao.users.UserImageDAO;
 import fi.foyt.fni.persistence.dao.users.UserSettingDAO;
 import fi.foyt.fni.persistence.dao.users.UserSettingKeyDAO;
 import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
@@ -26,13 +27,15 @@ import fi.foyt.fni.persistence.model.users.UserContactField;
 import fi.foyt.fni.persistence.model.users.UserContactFieldType;
 import fi.foyt.fni.persistence.model.users.UserEmail;
 import fi.foyt.fni.persistence.model.users.UserFriend;
+import fi.foyt.fni.persistence.model.users.UserImage;
 import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.persistence.model.users.UserSetting;
 import fi.foyt.fni.persistence.model.users.UserSettingKey;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
+import fi.foyt.fni.utils.data.TypedData;
 
-@RequestScoped
+@Dependent
 @Stateful
 public class UserController {
 	
@@ -59,6 +62,9 @@ public class UserController {
 
 	@Inject
 	private UserContactFieldDAO userContactFieldDAO;
+
+	@Inject
+	private UserImageDAO userImageDAO;
 	
   public User createUser(String firstName, String lastName, String nickname, Locale locale, Date registrationDate) {
     User user = userDAO.create(firstName, lastName, nickname, locale, registrationDate, UserRole.USER);
@@ -238,6 +244,35 @@ public class UserController {
 			} else {			
 		  	return updateContactField(contactField, value);
 			}
+		}
+	}
+
+	/* Profile Image */
+	
+	public TypedData getProfileImage(User user) {
+		UserImage userImage = userImageDAO.findByUser(user);
+		if (userImage != null) {
+			return new TypedData(userImage.getData(), userImage.getContentType(), userImage.getModified());
+		}
+
+		// TODO Gravatar
+		
+		return null;
+	}
+	
+	public boolean hasProfileImage(User user) {
+		// TODO Gravatar
+		return userImageDAO.findByUser(user) != null;
+	}
+	
+	public void updateProfileImage(User user, String contentType, byte[] data) {
+		UserImage userImage = userImageDAO.findByUser(user);
+		Date now = new Date();
+		if (userImage != null) {
+			userImageDAO.updateData(userImage, data, now);
+			userImageDAO.updateContentType(userImage, contentType, now);
+		} else {
+			userImageDAO.create(user, contentType, data, now);
 		}
 	}
 }
