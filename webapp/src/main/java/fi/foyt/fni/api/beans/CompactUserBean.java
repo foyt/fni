@@ -9,7 +9,7 @@ import fi.foyt.fni.persistence.model.users.UserRole;
 
 public class CompactUserBean {
 	
-	public CompactUserBean(Long id, String firstName, String lastName, String nickname, UserRole role, Date registrationDate, String locale, Long profileImageId) {
+	public CompactUserBean(Long id, String firstName, String lastName, String nickname, UserRole role, Date registrationDate, String locale) {
 	  super();
 	  this.id = id;
 	  this.firstName = firstName;
@@ -18,7 +18,6 @@ public class CompactUserBean {
 	  this.role = role;
 	  this.registrationDate = registrationDate;
 	  this.locale = locale;
-	  this.profileImageId = profileImageId;
   }
 
 	public Long getId() {
@@ -85,19 +84,11 @@ public class CompactUserBean {
 		this.locale = locale;
 	}
 	
-	public Long getProfileImageId() {
-	  return profileImageId;
-  }
-	
-	public void setProfileImageId(Long profileImageId) {
-	  this.profileImageId = profileImageId;
-  }
-	
 	public static CompactUserBean fromEntity(User entity) {
 		if (entity == null)
 			return null;
 		
-		return new CompactUserBean(entity.getId(), entity.getFirstName(), entity.getLastName(), entity.getNickname(), entity.getRole(), entity.getRegistrationDate(), entity.getLocale(), entity.getProfileImage() != null ? entity.getProfileImage().getId() : null);
+		return new CompactUserBean(entity.getId(), entity.getFirstName(), entity.getLastName(), entity.getNickname(), entity.getRole(), entity.getRegistrationDate(), entity.getLocale());
 	}
 	
 	public static List<CompactUserBean> fromEntities(List<User> users) {
@@ -123,6 +114,4 @@ public class CompactUserBean {
 	private Date registrationDate;
 
 	private String locale;
-	
-	private Long profileImageId;
 }
