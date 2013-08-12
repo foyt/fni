@@ -1,11 +1,16 @@
 package fi.foyt.fni.persistence.model.users;
 
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 public class UserImage {
@@ -37,6 +42,14 @@ public class UserImage {
   public void setContentType(String contentType) {
     this.contentType = contentType;
   } 
+
+  public Date getModified() {
+		return modified;
+	}
+  
+  public void setModified(Date modified) {
+		this.modified = modified;
+	}
  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
@@ -49,4 +62,8 @@ public class UserImage {
   private byte[] data;
   
   private String contentType; 
+  
+  @Column (nullable=false)
+  @Temporal (TemporalType.TIMESTAMP)
+  private Date modified;
 }
