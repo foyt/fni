@@ -11,7 +11,6 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.persistence.model.users.User_;
@@ -37,18 +36,6 @@ public class UserDAO extends GenericDAO<User> {
     entityManager.persist(user);
 
     return user;
-  }
-  
-  public List <User> listByProfileImage(Image image) {
-  	EntityManager entityManager = getEntityManager();
-
-    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<User> criteria = criteriaBuilder.createQuery(User.class);
-    Root<User> root = criteria.from(User.class);
-    criteria.select(root);
-    criteria.where(criteriaBuilder.equal(root.get(User_.profileImage), image));
-
-    return entityManager.createQuery(criteria).getResultList();
   }
   
 	public List<User> listByArchived(Boolean archived) {
@@ -128,16 +115,6 @@ public class UserDAO extends GenericDAO<User> {
     EntityManager entityManager = getEntityManager();
 
     user.setRole(role);
-
-    entityManager.persist(user);
-    
-    return user;
-  }
-
-	public User updateProfileImage(User user, Image profileImage) {
-		EntityManager entityManager = getEntityManager();
-
-    user.setProfileImage(profileImage);
 
     entityManager.persist(user);
     

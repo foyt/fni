@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -21,8 +20,6 @@ import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import fi.foyt.fni.persistence.model.materials.Image;
 
 @Entity
 @Cacheable (true)
@@ -97,14 +94,6 @@ public class User {
   public void setArchived(Boolean archived) {
     this.archived = archived;
   }
-
-  public Image getProfileImage() {
-    return profileImage;
-  }
-  
-  public void setProfileImage(Image profileImage) {
-    this.profileImage = profileImage;
-  }
   
   public String getAbout() {
 		return about;
@@ -159,9 +148,6 @@ public class User {
   
   @Column (nullable=false, columnDefinition = "BIT")
   private Boolean archived;
-  
-  @ManyToOne
-  private Image profileImage;
     
   // TODO: License
 }
