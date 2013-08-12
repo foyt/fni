@@ -15,8 +15,6 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import fi.foyt.fni.materials.MaterialController;
-import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
@@ -38,9 +36,6 @@ public class ProfileImageServlet extends AbstractFileServlet {
 	@Inject
 	private SessionController sessionController;
 
-	@Inject
-	private MaterialController materialController;
-
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// PublicationImageId could not be resolved, send 404
@@ -55,8 +50,8 @@ public class ProfileImageServlet extends AbstractFileServlet {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
-
-		Image profileImage = user.getProfileImage();
+		
+		TypedData profileImage = userController.getProfileImage(user);
 		if (profileImage == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
@@ -73,25 +68,23 @@ public class ProfileImageServlet extends AbstractFileServlet {
 			return;
 		}
 
-		TypedData data = new TypedData(profileImage.getData(), profileImage.getContentType());
-
 		if ((width != null) && (height != null)) {
 			try {
-				data = ImageUtils.resizeImage(data, width, height, null);
+				profileImage = ImageUtils.resizeImage(profileImage, width, height, null);
 			} catch (IOException e) {
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to resize image");
 				return;
 			}
 		}
 
-		response.setContentType(data.getContentType());
+		response.setContentType(profileImage.getContentType());
 		response.setHeader("ETag", eTag);
 		response.setDateHeader("Last-Modified", lastModified);
 		response.setDateHeader("Expires", System.currentTimeMillis() + DEFAULT_EXPIRE_TIME);
 
 		ServletOutputStream outputStream = response.getOutputStream();
 		try {
-			outputStream.write(data.getData());
+			outputStream.write(profileImage.getData());
 		} finally {
 			outputStream.flush();
 			outputStream.close();
@@ -119,7 +112,6 @@ public class ProfileImageServlet extends AbstractFileServlet {
 		User loggedUser = sessionController.getLoggedUser();
 
 		try {
-			String title = null;
 			TypedData file = null;
 			List<FileItem> items = getFileItems(request);
 
@@ -129,17 +121,11 @@ public class ProfileImageServlet extends AbstractFileServlet {
 						throw new ServletException("Multiple files found from request");
 					} else {
 						file = new TypedData(item.get(), item.getContentType());
-						title = item.getName();
 					}
 				}
 			}
 
-			if (user.getProfileImage() != null) {
-				materialController.updateImageContent(user.getProfileImage(), file.getContentType(), file.getData(), loggedUser);
-			} else {
-				materialController.createImage(null, loggedUser, file.getData(), file.getContentType(), title);
-			}
-
+			userController.updateProfileImage(loggedUser, file.getContentType(), file.getData());
 		} catch (FileUploadException e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return;
