@@ -11,6 +11,7 @@ import org.apache.commons.lang.LocaleUtils;
 
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.users.UserController;
 
 @Named
 @RequestScoped
@@ -19,6 +20,9 @@ public class SessionBackingBean {
 
 	@Inject
 	private SessionController sessionController;
+
+	@Inject
+	private UserController userController;
 	
 	public boolean isLoggedIn() {
 		return sessionController.isLoggedIn();
@@ -26,6 +30,10 @@ public class SessionBackingBean {
 	
 	public User getLoggedUser() {
 		return sessionController.getLoggedUser();
+	}
+	
+	public boolean getLoggedHasProfileImage() {
+		return userController.hasProfileImage(getLoggedUser());
 	}
 	
 	public Locale getLocale() {
