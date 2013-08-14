@@ -32,10 +32,6 @@ public class SessionBackingBean {
 		return sessionController.getLoggedUser();
 	}
 	
-	public boolean getLoggedHasProfileImage() {
-		return userController.hasProfileImage(getLoggedUser());
-	}
-	
 	public Locale getLocale() {
 		return sessionController.getLocale();
 	}

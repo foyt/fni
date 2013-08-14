@@ -27,13 +27,7 @@
         
         <ui:fragment rendered="#{sessionBackingBean.loggedIn}">
           <div id="index-header-user-info-wrapper">
-            <ui:fragment rendered="#{sessionBackingBean.loggedHasProfileImage}">
-              <h:graphicImage value="/users/profileImages/#{sessionBackingBean.loggedUser.id}?width=48&amp;height=48" />
-            </ui:fragment>
-          
-            <ui:fragment rendered="#{!sessionBackingBean.loggedHasProfileImage}">
-              <div class="index-header-no-profile-image"></div>
-            </ui:fragment>
+            <h:graphicImage value="/users/profileImages/#{sessionBackingBean.loggedUser.id}?width=48&amp;height=48" />
             
             <div id="index-header-user-info">
               <h:outputFormat value="#{locales['index.headerLoggedInAs']}">

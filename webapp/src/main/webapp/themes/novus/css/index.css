@@ -210,16 +210,6 @@
   margin-left: 10px;
 }
 
-.index-header-no-profile-image {
-  width: 64px;
-  height: 64px;  
-  background: url(../gfx/icons/64x64/actions/user-anonymous.png) left top no-repeat #8dace3;
-  display: inline-block;
-  float: left;
-  margin-left: 2px;
-  border-radius: 5px;
-}
-
 /* 
  *  GUI Specific Rules : SIDEBAR WIDGETS
  *
