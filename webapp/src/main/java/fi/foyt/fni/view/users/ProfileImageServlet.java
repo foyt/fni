@@ -11,8 +11,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import fi.foyt.fni.persistence.model.users.Permission;
@@ -29,6 +31,8 @@ import fi.foyt.fni.view.AbstractFileServlet;
 public class ProfileImageServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = 8109481247044843102L;
+	
+  private final static String GRAVATAR_URL = "http://www.gravatar.com/avatar/";
 
 	@Inject
 	private UserController userController;
@@ -51,14 +55,21 @@ public class ProfileImageServlet extends AbstractFileServlet {
 			return;
 		}
 		
-		TypedData profileImage = userController.getProfileImage(user);
-		if (profileImage == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+		Integer width = NumberUtils.createInteger(request.getParameter("width"));
+		Integer height = NumberUtils.createInteger(request.getParameter("height"));
+		
+		if ((width == null)||(height == null)) {
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Width and height parameters are mandatory");
 			return;
 		}
 
-		Integer width = NumberUtils.createInteger(request.getParameter("width"));
-		Integer height = NumberUtils.createInteger(request.getParameter("height"));
+		TypedData profileImage = userController.getProfileImage(user);
+		if (profileImage == null) {
+			String gravatarUrl = getGravatar(user, Math.max(width, height));
+		  response.sendRedirect(gravatarUrl);
+		  return;
+		}
+		
 		String eTag = createETag(profileImage.getModified(), width, height);
 		long lastModified = profileImage.getModified().getTime();
 
@@ -89,6 +100,19 @@ public class ProfileImageServlet extends AbstractFileServlet {
 			outputStream.flush();
 			outputStream.close();
 		}
+	}
+
+	private String getGravatar(User user, int size) {
+		String email = StringUtils.lowerCase(StringUtils.trim(userController.getUserPrimaryEmail(user)));
+		String emailHash = DigestUtils.md5Hex(email);
+		
+		return new StringBuilder(GRAVATAR_URL)
+		  .append(emailHash)
+		  .append(".png")
+		  .append("?s=")
+		  .append(size)
+		  .append("&d=monsterid")
+		  .toString();
 	}
 
 	@Override
