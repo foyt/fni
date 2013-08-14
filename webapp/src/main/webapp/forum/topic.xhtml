@@ -36,12 +36,7 @@
               <div class="forum-post-author">
                 <div class="forum-post-author-image-contener">
                   <div class="forum-post-author-image-inner-container">
-                    <ui:fragment rendered="#{forumTopicBackingBean.getAuthorHasImage(post.author)}">
-                      <h:graphicImage value="/users/profileImages/#{post.author.id}?width=128&amp;height=128" />
-                    </ui:fragment>
-                    <ui:fragment rendered="#{!forumTopicBackingBean.getAuthorHasImage(post.author)}">
-                      <div class="forum-post-author-noimage"/>
-                    </ui:fragment>
+                    <h:graphicImage value="/users/profileImages/#{post.author.id}?width=128&amp;height=128" />
                   </div>  
                 </div>
                 <div class="forum-post-author-name">

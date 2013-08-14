@@ -176,12 +176,6 @@
   border-radius: 5px;
 }
 
-.forum-post-author-noimage {
-  width: 128px;
-  height: 128px;
-  background-image: url("../gfx/icons/128x128/actions/user-anonymous.png");
-}
-
 .forum-post-content {
   display: table-cell;
   vertical-align: top;

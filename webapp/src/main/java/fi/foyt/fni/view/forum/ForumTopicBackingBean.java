@@ -86,10 +86,6 @@ public class ForumTopicBackingBean {
 		return forumController.countPostsByAuthor(author);
 	}
 	
-	public boolean getAuthorHasImage(User author) {
-		return userController.hasProfileImage(author);
-	}
-	
 	public String getReply() {
 		return reply;
 	}
