@@ -146,14 +146,6 @@ public class ProfileBackingBean {
 		return contactFieldGooglePlus;
 	}
 	
-	public boolean getUserHasProfileImage() {
-		return userController.hasProfileImage(getUser());
-	}
-	
-	public boolean getFriendHasProfileImage(User friend) {
-		return userController.hasProfileImage(friend);
-	}
-	
 	private Long userId;
 	private User user;
 	private ForumPost latestPost;

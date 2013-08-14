@@ -24,7 +24,7 @@
             <h3>#{locales['users.profile.aboutMe']}</h3>
             <div>
               <div class="profile-image-container">
-                <h:graphicImage value="/users/profileImages/#{profileBackingBean.userId}?width=128&amp;height=128" rendered="#{profileBackingBean.userHasProfileImage}"/>
+                <h:graphicImage value="/users/profileImages/#{profileBackingBean.userId}?width=128&amp;height=128"/>
               </div>
               <div class="profile-about-container">
                 <h:outputText value="#{profileBackingBean.user.about}" escape="false"/>
@@ -116,8 +116,7 @@
                 <div class="profile-friend-image-container">
                   <div class="profile-friend-image-inner-container">
                     <h:outputLink value="#{request.contextPath}/users/#{friend.id}">
-                      <h:graphicImage value="/users/profileImages/#{friend.id}?width=64&amp;height=64" rendered="#{profileBackingBean.getFriendHasProfileImage(friend)}"/>
-                      <h:panelGroup styleClass="profile-friend-image-noimage" rendered="#{!profileBackingBean.getFriendHasProfileImage(friend)}"/>
+                      <h:graphicImage value="/users/profileImages/#{friend.id}?width=64&amp;height=64"/>
                     </h:outputLink>
                   </div>
                 </div>

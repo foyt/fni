@@ -68,15 +68,6 @@
   line-height: 0px;
 }
 
-.profile-friend-image-noimage {
-  width: 64px;
-  height: 64px;
-  display: inline-block;
-  background-image: url(../gfx/icons/64x64/actions/user-anonymous.png);
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
 .profile-friend-image-container {
   width: 64px;
   box-shadow: 0 0 4px rgba(128, 128, 128, 0.1);
