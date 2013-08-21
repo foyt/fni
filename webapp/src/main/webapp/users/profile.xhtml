@@ -37,32 +37,44 @@
 
             <h:panelGroup layout="block" rendered="#{!empty(profileBackingBean.contactFieldHomePage)}" styleClass="profile-contact-info">
               <h:outputLabel value="#{locales['users.profile.contactInfoFieldHomePage']}" />
-              <span><a href="#{profileBackingBean.contactFieldHomePage}">#{profileBackingBean.contactFieldHomePage}</a></span>
+              <span>
+                <h:outputLink value="#{profileBackingBean.contactFieldHomePage}" target="_blank">#{profileBackingBean.contactFieldHomePage}</h:outputLink>
+              </span>
             </h:panelGroup>
 
             <h:panelGroup layout="block" rendered="#{!empty(profileBackingBean.contactFieldBlog)}" styleClass="profile-contact-info">
               <h:outputLabel value="#{locales['users.profile.contactInfoFieldBlog']}" />
-              <span><a href="#{profileBackingBean.contactFieldBlog}">#{profileBackingBean.contactFieldBlog}</a></span>
+              <span>
+                <h:outputLink value="#{profileBackingBean.contactFieldBlog}" target="_blank">#{profileBackingBean.contactFieldBlog}</h:outputLink>
+              </span>
             </h:panelGroup>
             
             <h:panelGroup layout="block" rendered="#{!empty(profileBackingBean.contactFieldFacebook)}" styleClass="profile-contact-info">
               <h:outputLabel value="#{locales['users.profile.contactInfoFieldFacebook']}" />
-              <span><a href="#{profileBackingBean.contactFieldFacebook}">#{profileBackingBean.contactFieldFacebook}</a></span>
+              <span>
+                <h:outputLink value="#{profileBackingBean.contactFieldFacebook}" target="_blank">#{profileBackingBean.contactFieldFacebook}</h:outputLink>
+              </span>
             </h:panelGroup>
 
             <h:panelGroup layout="block" rendered="#{!empty(profileBackingBean.contactFieldTwitter)}" styleClass="profile-contact-info">
               <h:outputLabel value="#{locales['users.profile.contactInfoFieldTwitter']}" />
-              <span><a href="#{profileBackingBean.contactFieldTwitter}">#{profileBackingBean.contactFieldTwitter}</a></span>
+              <span>
+                <h:outputLink value="#{profileBackingBean.contactFieldTwitter}" target="_blank">#{profileBackingBean.contactFieldTwitter}</h:outputLink>
+              </span>
             </h:panelGroup>
 
             <h:panelGroup layout="block" rendered="#{!empty(profileBackingBean.contactFieldLinkedIn)}" styleClass="profile-contact-info">
               <h:outputLabel value="#{locales['users.profile.contactInfoFieldLinkedIn']}" />
-              <span><a href="#{profileBackingBean.contactFieldTwitter}">#{profileBackingBean.contactFieldLinkedIn}</a></span>
+              <span>
+                <h:outputLink value="#{profileBackingBean.contactFieldLinkedIn}" target="_blank">#{profileBackingBean.contactFieldLinkedIn}</h:outputLink>
+              </span>
             </h:panelGroup>
 
             <h:panelGroup layout="block" rendered="#{!empty(profileBackingBean.contactFieldGooglePlus)}" styleClass="profile-contact-info">
               <h:outputLabel value="#{locales['users.profile.contactInfoFieldGooglePlus']}" />
-              <span><a href="#{profileBackingBean.contactFieldGooglePlus}">#{profileBackingBean.contactFieldGooglePlus}</a></span>
+              <span>
+                <h:outputLink value="#{profileBackingBean.contactFieldGooglePlus}" target="_blank">#{profileBackingBean.contactFieldGooglePlus}</h:outputLink>
+              </span>
             </h:panelGroup>
           </div>
           
