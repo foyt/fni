@@ -19,6 +19,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
@@ -62,12 +63,21 @@ public class ProfileImageServlet extends AbstractFileServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Width and height parameters are mandatory");
 			return;
 		}
-
-		TypedData profileImage = userController.getProfileImage(user);
-		if (profileImage == null) {
-			String gravatarUrl = getGravatar(user, Math.max(width, height));
-		  response.sendRedirect(gravatarUrl);
-		  return;
+		
+		TypedData profileImage = null;
+		UserProfileImageSource profileImageSource = user.getProfileImageSource();
+		switch (profileImageSource) {
+			case FNI:
+				profileImage = userController.getProfileImage(user);
+				if (profileImage == null) {
+					response.sendError(HttpServletResponse.SC_NOT_FOUND);
+					return;
+				}
+			break;
+			case GRAVATAR:
+				String gravatarUrl = getGravatar(user, Math.max(width, height));
+			  response.sendRedirect(gravatarUrl);
+			  return;
 		}
 		
 		String eTag = createETag(profileImage.getModified(), width, height);
@@ -150,6 +160,7 @@ public class ProfileImageServlet extends AbstractFileServlet {
 			}
 
 			userController.updateProfileImage(loggedUser, file.getContentType(), file.getData());
+			userController.updateProfileImageSource(loggedUser, UserProfileImageSource.FNI);
 		} catch (FileUploadException e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return;
