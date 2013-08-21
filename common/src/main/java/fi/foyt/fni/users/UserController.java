@@ -28,6 +28,7 @@ import fi.foyt.fni.persistence.model.users.UserContactFieldType;
 import fi.foyt.fni.persistence.model.users.UserEmail;
 import fi.foyt.fni.persistence.model.users.UserFriend;
 import fi.foyt.fni.persistence.model.users.UserImage;
+import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
 import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.persistence.model.users.UserSetting;
 import fi.foyt.fni.persistence.model.users.UserSettingKey;
@@ -254,17 +255,16 @@ public class UserController {
 		if (userImage != null) {
 			return new TypedData(userImage.getData(), userImage.getContentType(), userImage.getModified());
 		}
-
-		// TODO Gravatar
 		
 		return null;
 	}
 	
 	public boolean hasProfileImage(User user) {
-		// TODO Gravatar
 		return userImageDAO.findByUser(user) != null;
 	}
 	
+  @LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
 	public void updateProfileImage(User user, String contentType, byte[] data) {
 		UserImage userImage = userImageDAO.findByUser(user);
 		Date now = new Date();
@@ -275,4 +275,11 @@ public class UserController {
 			userImageDAO.create(user, contentType, data, now);
 		}
 	}
+
+  @LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public void updateProfileImageSource(User user, UserProfileImageSource profileImageSource) {
+		userDAO.updateProfileImageSource(user, profileImageSource);
+	}
+
 }
