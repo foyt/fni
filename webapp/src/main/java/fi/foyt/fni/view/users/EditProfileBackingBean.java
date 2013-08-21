@@ -16,6 +16,7 @@ import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserContactFieldType;
+import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.UnauthorizedException;
@@ -55,6 +56,8 @@ public class EditProfileBackingBean {
 		basicLastName = loggedUser.getLastName();
 		basicNickname = loggedUser.getNickname();
 		basicAbout = loggedUser.getAbout();
+		basicProfileImageSource = loggedUser.getProfileImageSource();
+		basicEmail = userController.getUserPrimaryEmail(loggedUser);
 
 		contactInfoFieldHomePage = userController.getContactFieldValue(loggedUser, UserContactFieldType.HOME_PAGE);
 		contactInfoFieldBlog = userController.getContactFieldValue(loggedUser, UserContactFieldType.BLOG);
@@ -91,12 +94,32 @@ public class EditProfileBackingBean {
 		this.basicNickname = basicNickname;
 	}
 	
+	public String getBasicEmail() {
+		return basicEmail;
+	}
+	
+	public void setBasicEmail(String basicEmail) {
+		this.basicEmail = basicEmail;
+	}
+	
 	public String getBasicAbout() {
 		return basicAbout;
 	}
 	
 	public void setBasicAbout(String basicAbout) {
 		this.basicAbout = basicAbout;
+	}
+	
+	public UserProfileImageSource getBasicProfileImageSource() {
+		return basicProfileImageSource;
+	}
+	
+	public void setBasicProfileImageSource(UserProfileImageSource basicProfileImageSource) {
+		this.basicProfileImageSource = basicProfileImageSource;
+	}
+	
+	public boolean getBasicHasFniProfileImage() {
+		return userController.hasProfileImage(sessionController.getLoggedUser());
 	}
 	
 	@LoggedIn
@@ -106,7 +129,8 @@ public class EditProfileBackingBean {
 		userController.updateLastName(sessionController.getLoggedUser(), getBasicLastName());
 		userController.updateNickname(sessionController.getLoggedUser(), getBasicNickname());
 		userController.updateAbout(sessionController.getLoggedUser(), getBasicAbout());
-		
+		userController.updateProfileImageSource(sessionController.getLoggedUser(), getBasicProfileImageSource());
+
 		FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.basicSaved"));
 	}
 	
@@ -200,6 +224,8 @@ public class EditProfileBackingBean {
 	private String basicLastName;
 	private String basicNickname;
 	private String basicAbout;
+	private String basicEmail;
+	private UserProfileImageSource basicProfileImageSource;
 	private String contactInfoFieldHomePage;
 	private String contactInfoFieldBlog;
 	private String contactInfoFieldFacebook;

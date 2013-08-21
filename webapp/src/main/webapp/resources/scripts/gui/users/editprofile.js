@@ -20,13 +20,9 @@
             'click': function(event) { 
               var form = $(this).find('form');
               var frame = $(this).find('iframe[name="' + form.attr('target') + '"]');
-              var _this = this;
               
               $(frame).one('load', function () {
-                var img = $('.edit-profile-basic-profile-image-container img');
-                img.attr("src", CONTEXTPATH + "/users/profileImages/1?width=128&height=128&t=" + new Date().getTime());
-                $(_this).dialog("close");
-                $(_this).remove();
+                window.location.reload();
               });
               
               form.submit();

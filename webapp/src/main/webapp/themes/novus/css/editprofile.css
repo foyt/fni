@@ -15,6 +15,13 @@
   padding-top: 4px;
 }
 
+#edit-profile form table label {
+  display: inline-block;
+  vertical-align: top;
+  padding-top: 1px;
+  margin-left: 4px;
+}
+
 #edit-profile form input[type="text"] {
   width: 100%;
   -webkit-box-sizing: border-box; 	
@@ -54,5 +61,6 @@
   color: #555555;
   padding: 0.4em 1em;
   border-radius: 4px;
-  cursor: pointer;
+  cursor: pointer; 
+  font-size: 12px;
 }

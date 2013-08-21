@@ -46,8 +46,8 @@
           <h3>#{locales['users.editProfile.basicTitle']}</h3>
           <h:form>
             <div class="edit-profile-basic-profile-image-container">
-             <h:graphicImage value="/users/profileImages/#{sessionBackingBean.loggedUser.id}?width=128&amp;height=128" />
-             <button id="edit-profile-basic-profile-image-change">#{locales['users.editProfile.basicChangeProfileImage']}</button>
+             <h:graphicImage value="/users/profileImages/#{sessionBackingBean.loggedUser.id}?width=128&amp;height=128&amp;s=#{sessionBackingBean.loggedUser.profileImageSource}" />
+             <button id="edit-profile-basic-profile-image-change">#{locales['users.editProfile.basicUploadProfileImage']}</button>
             </div>
             <div>
               <h:outputLabel value="#{locales['users.editProfile.basicFirstNameTitle']}"/>
@@ -60,6 +60,17 @@
             <div>
               <h:outputLabel value="#{locales['users.editProfile.basicNicknameTitle']}"/>
               <h:inputText value="#{editProfileBackingBean.basicNickname}" />
+            </div>
+            <div>
+              <h:outputLabel value="#{locales['users.editProfile.basicEmailTitle']}"/>
+              <h:inputText value="#{editProfileBackingBean.basicEmail}" disabled="true"/>
+            </div>
+            <div>
+              <h:outputLabel value="#{locales['users.editProfile.basicProfileImageSource']}"/>
+              <h:selectOneRadio layout="pageDirection" styleClass="basic-profile-image-source" value="#{editProfileBackingBean.basicProfileImageSource}">
+                <f:selectItem itemLabel="#{locales['users.editProfile.basicProfileImageSourceGravatar']}" itemValue="GRAVATAR"/>
+                <f:selectItem itemLabel="#{locales['users.editProfile.basicProfileImageSourceFni']}" itemValue="FNI" itemDisabled="#{!editProfileBackingBean.basicHasFniProfileImage}"/>
+              </h:selectOneRadio>
             </div>
             <div>
               <h:outputLabel value="#{locales['users.editProfile.basicAbout']}"/>
