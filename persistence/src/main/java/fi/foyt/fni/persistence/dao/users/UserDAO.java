@@ -12,6 +12,7 @@ import javax.persistence.criteria.Root;
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
 import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.persistence.model.users.User_;
 
@@ -123,6 +124,11 @@ public class UserDAO extends GenericDAO<User> {
 
 	public User updateAbout(User user, String about) {
 		user.setAbout(about);
+		return persist(user);
+	}
+
+	public User updateProfileImageSource(User user, UserProfileImageSource profileImageSource) {
+		user.setProfileImageSource(profileImageSource);
 		return persist(user);
 	}
 

@@ -55,6 +55,14 @@ public class User {
     this.nickname = nickname;
   }
   
+  public UserProfileImageSource getProfileImageSource() {
+		return profileImageSource;
+	}
+  
+  public void setProfileImageSource(UserProfileImageSource profileImageSource) {
+		this.profileImageSource = profileImageSource;
+	}
+  
   public UserRole getRole() {
 	  return role;
   }
@@ -130,6 +138,10 @@ public class User {
   private String lastName;  
   
   private String nickname;  
+  
+  @Column (nullable=false)
+  @Enumerated (EnumType.STRING)
+  private UserProfileImageSource profileImageSource;
   
   @Lob
   private String about;
