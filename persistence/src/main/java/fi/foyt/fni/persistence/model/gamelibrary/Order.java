@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import fi.foyt.fni.persistence.model.users.Address;
 import fi.foyt.fni.persistence.model.users.User;
 
 @Entity (name = "Order_")
@@ -62,14 +63,6 @@ public class Order {
   
   public void setCreated(Date created) {
     this.created = created;
-  }
-  
-  public Date getCheckedOut() {
-    return checkedOut;
-  }
-  
-  public void setCheckedOut(Date checkedOut) {
-    this.checkedOut = checkedOut;
   }
   
   public Date getPaid() {
@@ -132,9 +125,6 @@ public class Order {
   
   @Temporal (TemporalType.TIMESTAMP)
   private Date created;
-  
-  @Temporal (TemporalType.TIMESTAMP)
-  private Date checkedOut;
   
   @Temporal (TemporalType.TIMESTAMP)
   private Date paid;
