@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
+import fi.foyt.fni.persistence.dao.users.AddressDAO;
 import fi.foyt.fni.persistence.dao.users.UserContactFieldDAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.dao.users.UserEmailDAO;
@@ -21,6 +22,9 @@ import fi.foyt.fni.persistence.dao.users.UserSettingKeyDAO;
 import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.auth.UserIdentifier;
+import fi.foyt.fni.persistence.model.common.Country;
+import fi.foyt.fni.persistence.model.users.Address;
+import fi.foyt.fni.persistence.model.users.AddressType;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserContactField;
@@ -66,6 +70,9 @@ public class UserController {
 
 	@Inject
 	private UserImageDAO userImageDAO;
+
+	@Inject
+	private AddressDAO addressDAO;
 	
   public User createUser(String firstName, String lastName, String nickname, Locale locale, Date registrationDate) {
     User user = userDAO.create(firstName, lastName, nickname, locale, registrationDate, UserRole.USER);
@@ -280,6 +287,16 @@ public class UserController {
 	@Secure (Permission.PROFILE_UPDATE)
 	public void updateProfileImageSource(User user, UserProfileImageSource profileImageSource) {
 		userDAO.updateProfileImageSource(user, profileImageSource);
+	}
+
+  /* Address */
+  
+  public Address createAddress(User user, AddressType addressType, String companyName, String street1, String street2, String postalCode, String city, Country country) {
+  	return addressDAO.create(user, addressType, companyName, street1, street2, postalCode, city, country);
+  }
+  
+	public Address findAddressByUserAndType(User user, AddressType addressType) {
+		return addressDAO.findByUserAndAddressType(user, addressType);
 	}
 
 }
