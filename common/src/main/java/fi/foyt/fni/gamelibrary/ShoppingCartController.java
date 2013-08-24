@@ -126,7 +126,7 @@ public class ShoppingCartController {
 	
 	private void cancelOrder(ShoppingCart shoppingCart) {
 		Date now = new Date();
-		orderDAO.create(shoppingCart.getCustomer(), OrderStatus.CANCELED, shoppingCart.getPaymentMethod(), null, null, shoppingCart.getDeliveryAddress(), now, now, null, null, null);
+		orderDAO.create(shoppingCart.getCustomer(), OrderStatus.CANCELED, shoppingCart.getPaymentMethod(), null, null, shoppingCart.getDeliveryAddress(), now, now, null, null);
 		shoppingCartDAO.delete(shoppingCart);
 	}
 	
