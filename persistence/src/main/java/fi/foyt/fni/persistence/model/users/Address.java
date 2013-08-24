@@ -1,4 +1,4 @@
-package fi.foyt.fni.persistence.model.gamelibrary;
+package fi.foyt.fni.persistence.model.users;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +12,6 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.persistence.model.common.Country;
-import fi.foyt.fni.persistence.model.users.User;
 
 @Entity
 public class Address {
@@ -35,14 +34,6 @@ public class Address {
   
   public void setAddressType(AddressType addressType) {
     this.addressType = addressType;
-  }
-  
-  public String getPersonName() {
-    return personName;
-  }
-  
-  public void setPersonName(String personName) {
-    this.personName = personName;
   }
   
   public String getStreet1() {
@@ -102,7 +93,6 @@ public class Address {
       Long otherCountryId = other.getCountry() != null ? other.getCountry().getId() : null;
       
       return getAddressType().equals(other.getAddressType()) &&
-        StringUtils.equals(getPersonName(), other.getPersonName()) && 
         StringUtils.equals(getCompanyName(), other.getCompanyName()) &&
         StringUtils.equals(getStreet1(), other.getStreet1()) &&
         StringUtils.equals(getStreet2(), other.getStreet2()) && 
@@ -126,8 +116,6 @@ public class Address {
   private AddressType addressType;
   
   private String companyName;
-  
-  private String personName;
   
   @Column (nullable = false)
   private String street1;
