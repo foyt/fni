@@ -9,10 +9,10 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.gamelibrary.Address;
 import fi.foyt.fni.persistence.model.gamelibrary.PaymentMethod;
 import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCart;
 import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCart_;
+import fi.foyt.fni.persistence.model.users.Address;
 import fi.foyt.fni.persistence.model.users.User;
 
 @DAO
