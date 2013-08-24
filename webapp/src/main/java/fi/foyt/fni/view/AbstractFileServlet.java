@@ -4,16 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.transaction.NotSupportedException;
-import javax.transaction.Status;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -23,47 +15,11 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-public abstract class AbstractFileServlet extends HttpServlet {
+public abstract class AbstractFileServlet extends AbstractTransactionedServlet {
 
 	private static final long serialVersionUID = 2682138379342291553L;
 
-  protected static final long DEFAULT_EXPIRE_TIME = 1000 * 60 * 60;
-
-	@Resource
-	private UserTransaction userTransaction;
-
-  @Override
-  protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-  	try {
-    	// If transaction is not already active, we start it
-   		boolean transactionActive = userTransaction.getStatus() == Status.STATUS_ACTIVE;
-   		if (!transactionActive) {
-   			userTransaction.begin();
-   		}
-  
-  		try {
-     		// Proceed with the request
-
-  			super.service(req, resp);
-    
-    		// If transaction was started here, we commit the transaction
-    		if (!transactionActive) {
-    			userTransaction.commit();
-    		} 
-    		
-    	} catch (Throwable t) {
-    		// If exception was thrown and the transaction was started here, we rollback the transaction
-    		if (!transactionActive) {
-    			userTransaction.rollback();
-    		}
-    
-    		// ... and throw an IOException
-    		throw new IOException(t);
-    	}  	
-  	} catch (SystemException | NotSupportedException e) {
-  		throw new ServletException(e);
-		}
-  }
+	protected static final long DEFAULT_EXPIRE_TIME = 1000 * 60 * 60;
 
 	protected Long getPathId(HttpServletRequest req) {
 		String pathInfo = req.getPathInfo();
@@ -88,10 +44,10 @@ public abstract class AbstractFileServlet extends HttpServlet {
 		if ((ifNoneMatch == null) && (ifModifiedSince != -1) && ((ifModifiedSince + 1000) > lastModified)) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	protected List<FileItem> getFileItems(HttpServletRequest request) throws FileUploadException {
 		FileItemFactory factory = new DiskFileItemFactory();
 		ServletContext servletContext = this.getServletConfig().getServletContext();
