@@ -317,4 +317,8 @@ public class UserController {
 		return addressDAO.findByUserAndAddressType(user, addressType);
 	}
 
+	public Address updateAddress(Address address, String street1, String street2, String postalCode, String city, Country country) {
+		return addressDAO.updateStreet1(addressDAO.updateStreet2(addressDAO.updatePostalCode(addressDAO.updateCity(addressDAO.updateCountry(address, country), city), postalCode), street2), street1);
+	}
+
 }
