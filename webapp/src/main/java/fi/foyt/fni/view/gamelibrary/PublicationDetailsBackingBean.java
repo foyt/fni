@@ -16,7 +16,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
-import fi.foyt.fni.gamelibrary.ShoppingCartController;
+import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
 import fi.foyt.fni.licences.CreativeCommonsLicense;
 import fi.foyt.fni.licences.CreativeCommonsUtils;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
@@ -48,7 +48,7 @@ public class PublicationDetailsBackingBean {
 	private ForumController forumController;
 
 	@Inject
-	private ShoppingCartController shoppingCartController;
+	private SessionShoppingCartController sessionShoppingCartController;
 	
 	@URLAction
 	public void init() throws FileNotFoundException {
@@ -113,7 +113,7 @@ public class PublicationDetailsBackingBean {
 	}
 	
 	public void addPublicationToShoppingCart() {
-		shoppingCartController.addPublication(publication);
+		sessionShoppingCartController.addPublication(publication);
 	}
 	
 	public CreativeCommonsLicense getCreativeCommonsLicense() {

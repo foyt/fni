@@ -7,7 +7,7 @@ import javax.inject.Inject;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.PublicationController;
-import fi.foyt.fni.gamelibrary.ShoppingCartController;
+import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.licences.CreativeCommonsLicense;
 import fi.foyt.fni.licences.CreativeCommonsUtils;
@@ -31,7 +31,7 @@ public class AbstractPublicationListBackingBean {
 	private ForumController forumController;
 
 	@Inject
-	private ShoppingCartController shoppingCartController;
+	private SessionShoppingCartController sessionShoppingCartController;
 
 	protected void setPublications(List<Publication> publications) {
 		this.publications = publications;
@@ -92,7 +92,7 @@ public class AbstractPublicationListBackingBean {
 	}
 	
 	public void addPublicationToShoppingCart(Publication publication) {
-		shoppingCartController.addPublication(publication);
+		sessionShoppingCartController.addPublication(publication);
 	}
 	
 	public CreativeCommonsLicense getCreativeCommonsLicense(Publication publication) {

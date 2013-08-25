@@ -22,7 +22,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import fi.foyt.fni.delivery.DeliveryMehtodsController;
 import fi.foyt.fni.delivery.DeliveryMethod;
 import fi.foyt.fni.gamelibrary.OrderController;
-import fi.foyt.fni.gamelibrary.ShoppingCartController;
+import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
 import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
@@ -69,7 +69,7 @@ public class ShoppingCartBackingBean implements Serializable {
 	private UserController userController;
 
 	@Inject
-	private ShoppingCartController shoppingCartController;
+	private SessionShoppingCartController sessionShoppingCartController;
 
 	@Inject
 	private DeliveryMehtodsController deliveryMehtodsController;
@@ -161,7 +161,7 @@ public class ShoppingCartBackingBean implements Serializable {
 	public List<ShoppingCartItemBean> getShoppingCartItems() { 
 		List<ShoppingCartItemBean> result = new ArrayList<>();
 		
-		List<ShoppingCartItem> items = shoppingCartController.getShoppingCartItems();
+		List<ShoppingCartItem> items = sessionShoppingCartController.getShoppingCartItems();
 		for (ShoppingCartItem item : items) {
 			result.add(new ShoppingCartItemBean(item.getId(), item.getPublication().getName(), item.getCount(), item.getPublication().getPrice()));
 		}
@@ -170,22 +170,22 @@ public class ShoppingCartBackingBean implements Serializable {
 	}
 	
 	public boolean isShoppingCartEmpty() {
-		return shoppingCartController.isShoppingCartEmpty();
+		return sessionShoppingCartController.isShoppingCartEmpty();
 	}
 	
 	public void incShoppingCartItemCount(Long itemId) {
-		for (ShoppingCartItem item : shoppingCartController.getShoppingCartItems()) {
+		for (ShoppingCartItem item : sessionShoppingCartController.getShoppingCartItems()) {
 			if (item.getId().equals(itemId)) {
-				shoppingCartController.setItemCount(item, item.getCount() + 1);
+				sessionShoppingCartController.setItemCount(item, item.getCount() + 1);
 				break;
 			}
 		}
 	}
 
 	public void decShoppingCartItemCount(Long itemId) {
-		for (ShoppingCartItem item : shoppingCartController.getShoppingCartItems()) {
+		for (ShoppingCartItem item : sessionShoppingCartController.getShoppingCartItems()) {
 			if (item.getId().equals(itemId)) {
-				shoppingCartController.setItemCount(item, item.getCount() - 1);
+				sessionShoppingCartController.setItemCount(item, item.getCount() - 1);
 				break;
 			}
 		}
@@ -193,7 +193,7 @@ public class ShoppingCartBackingBean implements Serializable {
 
 	public Double getItemCosts() {
 		Double result = 0d;
-		for (ShoppingCartItem item : shoppingCartController.getShoppingCartItems()) {
+		for (ShoppingCartItem item : sessionShoppingCartController.getShoppingCartItems()) {
 			result += item.getCount() * item.getPublication().getPrice();
 		}
 
@@ -319,7 +319,7 @@ public class ShoppingCartBackingBean implements Serializable {
 		payment.setDescription(notes);
 		
 		try {
-			List<ShoppingCartItem> shoppingCartItems = shoppingCartController.getShoppingCartItems();
+			List<ShoppingCartItem> shoppingCartItems = sessionShoppingCartController.getShoppingCartItems();
 			for (ShoppingCartItem shoppingCartItem : shoppingCartItems) {
 				Publication publication = shoppingCartItem.getPublication();
 				OrderItem orderItem = orderController.createOrderItem(order, publication, publication.getName(), publication.getPrice(), shoppingCartItem.getCount());
@@ -345,7 +345,7 @@ public class ShoppingCartBackingBean implements Serializable {
   					Product.TYPE_POSTAL);
 			}
 			
-			shoppingCartController.deleteShoppingCart();
+			sessionShoppingCartController.deleteShoppingCart();
 			
 			Result result = paytrailService.processPayment(payment);
 			if (result != null) {

@@ -27,7 +27,7 @@ import fi.foyt.fni.users.UserController;
 
 @Stateful
 @SessionScoped
-public class ShoppingCartController {
+public class SessionShoppingCartController {
 
 	@Inject
 	private SessionController sessionController;

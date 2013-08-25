@@ -11,7 +11,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.PublicationController;
-import fi.foyt.fni.gamelibrary.ShoppingCartController;
+import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
 
 @RequestScoped
 @Named
@@ -31,7 +31,7 @@ public class PublicationMostRecentListBackingBean extends AbstractPublicationLis
 	private PublicationController publicationController;
 
 	@Inject
-	private ShoppingCartController shoppingCartController;
+	private SessionShoppingCartController sessionShoppingCartController;
 
 	@Inject
 	private ForumController forumController;
