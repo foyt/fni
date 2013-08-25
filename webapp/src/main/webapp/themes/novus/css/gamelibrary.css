@@ -88,160 +88,9 @@
   vertical-align: top;
 }
 
-/* Cart Prototyping */
-
-.gamelibrary-cart-items-inner-container {
-  margin-top: 8px;
-}
-
-.gamelibrary-cart-item-actions input[type="submit"] {
-  border: 1px solid #eee;
-  font-size: 10px;
-  line-height: 12px;
-  vertical-align: top;
-  width: 18px;
-  margin-right: 2px;
-  cursor: pointer;
-} 
-
-.gamelibrary-cart-item-actions {
-  width: 50px;
-}
-
-.gamelibrary-cart-cell-header {
-}
-
-.gamelibrary-cart-item-count {
-  width: 60px;
-  text-align: center;
-}
-
-.gamelibrary-cart-item-name {
-  width: 750px;
-}
-
-.gamelibrary-cart-item-price {
-  width: 120px;
-  text-align: left;
-}
-
-.gamelibrary-cart-item-total-price {
-  width: 120px;
-  text-align: left;
-}
-
-#gamelibrary-cart-items-container {
-  display: table;
-}
-
-.gamelibrary-cart-item-container {
-  display: table-row;
-}
-
-.gamelibrary-cart-cell, .gamelibrary-cart-cell-header {
-  padding-left: 4px;
-  padding-right: 4px;
-  display: table-cell;
-}
-
-#gamelibrary-cart h4 {
-  background: #fafafa;
-  color: #002;
-  margin-top: 8px;
-  font-size: 14px;
-  border-radius: 4px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 4px;
-} 
-
-#gamelibrary-cart h5 {
-  font-style: italic;
-}
-
-#gamelibrary-cart-summary-total-price {
-  font-weight: bold;
-}
-
-#gamelibrary-cart-summary-total-price h5 {
-  font-weight: bold;
-}
-
-#gamelibrary-cart-summary-items {
-  margin-top: 8px;
-}
-
-.gamelibrary-cart-summary-item h5 {
-  display: inline-block;
-  width: 200px;
-}
-
-
-.gamelibrary-cart-delivery-method-container {
-  padding: 8px;
-}
-
-.gamelibrary-cart-delivery-method-info {
-  margin-left: 21px;
-  font-style: italic;
-}
-
-.gamelibrary-cart-delivery-method-details {
-  margin-left: 23px;
-}
-
-.gamelibrary-cart-delivery-method-details h5 {
-  display: inline-block;
-}
-
-.gamelibrary-cart-delivery-method-price {
-  float: right;
-}
-
-.gamelibrary-cart-delivery-method-price-note {
-  font-weight: bold;
-}
-
-.gamelibrary-cart-delivery-method-price-note-text {
-  font-style: italic;
-}
-
-.gamelibrary-cart-delivery-address-container {
-  margin-top: 8px;
-}
-
-.gamelibrary-cart-delivery-address-new-address {
-  display: table;
-  margin-left: 18px;
-}
-
-.gamelibrary-cart-delivery-address-field {
-  display: table-row; 
-}
-
-.gamelibrary-cart-delivery-address-field-label, .gamelibrary-cart-delivery-address-field-input {
-  display: table-cell;
-  padding: 1px;
-}
-
-.gamelibrary-cart-delivery-address-field label {
-  width: 110px;
-  display: inline-block;
-  font-weight: bold;
-}
-
-.gamelibrary-cart-delivery-address-field input[type="text"], .gamelibrary-cart-delivery-address-field select {
-  width: 300px;
-  -webkit-box-sizing: border-box; 	
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;  
-}
-
-/* Prototyping */
-
 /* Layout */
 
-.gamelibrary-index, #gamelibrary-cart {
+.gamelibrary-index {
   background: #fff;
   margin-top: 20px;
   border-top-left-radius: 5px;
@@ -250,7 +99,7 @@
   min-height: 783px;
 }
 
-.gamelibrary-index h3, #gamelibrary-cart h3, #gamelibrary-sidebar h3 {
+.gamelibrary-index h3, #gamelibrary-sidebar h3 {
   background-color: #EEEEEE;
   border-radius: 8px 8px 8px 8px;
   color: #000000;
@@ -259,44 +108,6 @@
   padding-top: 8px;
   font-size: 14px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
-}
-
-.gamelibrary-index, #gamelibrary-cart {
-  background: #fff;
-  margin-top: 20px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  padding: 8px;
-  min-height: 783px;
-}
-
-.gamelibrary-index h3, #gamelibrary-cart h3 {
-  background: #EEEEEE;
-  border-radius: 8px 8px 8px 8px;
-  color: #000000;
-  padding-bottom: 8px;
-  padding-left: 8px;
-  padding-top: 8px;
-  font-size: 14px;
-}
-
-/* Shopping Cart */
-
-#gamelibrary-cart h3.gamelibrary-cart-title {
-  background: url("../gfx/icons/22x22/actions/gamelibrary-cart.png") no-repeat scroll 8px center #EEEEEE;
-  padding-left: 36px;
-}
-
-#gamelibrary-cart h3.gamelibrary-cart-title a {
-  float: right;
-  margin-right: 12px;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-#gamelibrary-cart h3.gamelibrary-cart-title a:after {
-  content: ' >'; 
 }
 
 /* Index */

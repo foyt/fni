@@ -1,5 +1,6 @@
 package fi.foyt.fni.view.gamelibrary;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,24 +8,46 @@ import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.delivery.DeliveryMehtodsController;
 import fi.foyt.fni.delivery.DeliveryMethod;
+import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.gamelibrary.ShoppingCartController;
 import fi.foyt.fni.persistence.model.common.Country;
+import fi.foyt.fni.persistence.model.gamelibrary.Order;
+import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
+import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
+import fi.foyt.fni.persistence.model.gamelibrary.PaymentMethod;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCartItem;
+import fi.foyt.fni.persistence.model.users.Address;
+import fi.foyt.fni.persistence.model.users.AddressType;
+import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.users.UserController;
+import fi.foyt.fni.utils.faces.FacesUtils;
+import fi.foyt.paytrail.PaytrailException;
+import fi.foyt.paytrail.PaytrailService;
+import fi.foyt.paytrail.rest.Contact;
+import fi.foyt.paytrail.rest.OrderDetails;
+import fi.foyt.paytrail.rest.Payment;
+import fi.foyt.paytrail.rest.Product;
+import fi.foyt.paytrail.rest.Result;
+import fi.foyt.paytrail.rest.UrlSet;
 
 @Stateful
-@SessionScoped
+@RequestScoped
 @Named
 @URLMappings(mappings = {
   @URLMapping(
@@ -43,6 +66,9 @@ public class ShoppingCartBackingBean implements Serializable {
 	private SessionController sessionController;
 
 	@Inject
+	private UserController userController;
+
+	@Inject
 	private ShoppingCartController shoppingCartController;
 
 	@Inject
@@ -50,17 +76,45 @@ public class ShoppingCartBackingBean implements Serializable {
 
 	@Inject
 	private SystemSettingsController systemSettingsController;
+
+	@Inject
+	private OrderController orderController;
+	
+	@Inject
+	private PaytrailService paytrailService;
 	
 	@PostConstruct
 	public void init() {
-		this.addressId = -1l;
-		this.addressPersonName = "";
-		this.addressCompanyName = "";
-		this.addressStreet1 = "";
-		this.addressStreet2 = "";
-		this.addressPostalCode = "";
-		this.addressCity = "";
-		this.addressCountryId = systemSettingsController.getDefaultCountry().getId();
+		deliveryContactFirstName = "";
+		deliveryContactLastName = "";
+		deliveryContactEmail = "";
+		deliveryAddressStreet1 = "";
+		deliveryAddressStreet2 = "";
+		deliveryAddressPostalCode = "";
+		deliveryAddressCity = "";
+		deliveryAddressCountryId = systemSettingsController.getDefaultCountry().getId();
+		deliveryContactMobile = "";
+		deliveryContactTelephone = "";
+		deliveryContactCompanyName = "";
+		
+		User loggedUser = sessionController.getLoggedUser();
+		if (loggedUser != null) {
+			deliveryContactFirstName = loggedUser.getFirstName();
+			deliveryContactLastName = loggedUser.getLastName();
+			deliveryContactEmail = userController.getUserPrimaryEmail(loggedUser);
+			deliveryContactCompanyName = loggedUser.getCompany();
+			deliveryContactMobile = loggedUser.getMobile();
+			deliveryContactTelephone = loggedUser.getPhone();
+
+			Address address = userController.findAddressByUserAndType(loggedUser, AddressType.DELIVERY);
+			if (address != null) {
+				deliveryAddressStreet1 = address.getStreet1();
+				deliveryAddressStreet2 = address.getStreet2();
+				deliveryAddressPostalCode = address.getPostalCode();
+				deliveryAddressCity = address.getCity();
+				deliveryAddressCountryId = address.getCountry().getId();
+			}
+		}
 		
 		countrySelectItems = new ArrayList<>();
 
@@ -68,10 +122,6 @@ public class ShoppingCartBackingBean implements Serializable {
 		for (Country country : countries) {
 			countrySelectItems.add(new SelectItem(country.getId(), country.getName()));
 		}
-		
-		addressSelectItems = new ArrayList<>();
-		// TODO: Add existing addresses
-		addressSelectItems.add(new SelectItem(-1l, "New Address"));
 
 		deliveryMethodId = deliveryMehtodsController.getDefaultDeliveryMethod().getId();
 	}
@@ -83,7 +133,7 @@ public class ShoppingCartBackingBean implements Serializable {
 		List<DeliveryMethod> shoppingCartDeliveryMethods = deliveryMehtodsController.getDeliveryMethods();
 		if (shoppingCartDeliveryMethods != null) {
 			for (DeliveryMethod deliveryMethod : shoppingCartDeliveryMethods) {
-				Country country = (this.addressCountryId != null) ? systemSettingsController.findCountryById(this.addressCountryId) : null;
+				Country country = (this.deliveryAddressCountryId != null) ? systemSettingsController.findCountryById(this.deliveryAddressCountryId) : null;
 				String countryCode = country != null ? country.getCode() : systemSettingsController.getDefaultCountry().getCode();
 				int weight = getItemsWeight();
 				int width = getItemsWidth();
@@ -106,10 +156,6 @@ public class ShoppingCartBackingBean implements Serializable {
 
 	public List<SelectItem> getCountrySelectItems() {
 		return countrySelectItems;
-	}
-
-	public List<SelectItem> getAddressSelectItems() {
-		return addressSelectItems;
 	}
 
 	public List<ShoppingCartItemBean> getShoppingCartItems() { 
@@ -192,11 +238,129 @@ public class ShoppingCartBackingBean implements Serializable {
 	}
 	
 	public String getCountryCode() {
-		return systemSettingsController.findCountryById(getAddressCountryId()).getCode();
+		return systemSettingsController.findCountryById(getDeliveryAddressCountryId()).getCode();
 	}
 	
-	public String proceedToCheckout() {
-		return null;
+	public void proceedToCheckout() {
+		// TODO: validate
+		// TODO: What to do with payment method?
+		// TODO: Notes?
+		
+		User loggedUser = sessionController.getLoggedUser();
+		String localAddress = FacesUtils.getLocalAddress(true);
+		
+		UrlSet urlSet = new UrlSet(
+			localAddress + "/gamelibrary/paytrail/success",	
+			localAddress + "/gamelibrary/paytrail/failure",	
+			localAddress + "/gamelibrary/paytrail/notify",
+			localAddress + "/gamelibrary/paytrail/pending"
+		);
+		
+		Country deliveryAddressCountry = systemSettingsController.findCountryById(getDeliveryAddressCountryId());
+		
+		Address address = null;
+		
+		if (loggedUser != null) {
+		  address = userController.findAddressByUserAndType(loggedUser, AddressType.DELIVERY);
+		}
+
+	  if (address == null) {
+	  	address = userController.createAddress(loggedUser, AddressType.DELIVERY, getDeliveryAddressStreet1(), 
+	  			getDeliveryAddressStreet2(), getDeliveryAddressPostalCode(), getDeliveryAddressCity(), deliveryAddressCountry);
+	  } else {
+	  	userController.updateAddress(address, getDeliveryAddressStreet1(),  getDeliveryAddressStreet2(), 
+	  			getDeliveryAddressPostalCode(), getDeliveryAddressCity(), deliveryAddressCountry);
+	  }
+		
+		String streetAddess = address.getStreet1();
+		if (StringUtils.isNotEmpty(address.getStreet2())) {
+			streetAddess += '\n' + address.getStreet2();
+		}
+		
+		String customerCompany = getDeliveryContactCompanyName();
+		String customerEmail = getDeliveryContactEmail();
+		String customerFirstName = getDeliveryContactFirstName();
+		String customerLastName = getDeliveryContactLastName();
+		String customerMobile = getDeliveryContactMobile();
+		String customerPhone = getDeliveryContactTelephone();
+
+		userController.updateUserCompany(loggedUser, customerCompany);
+		userController.updateUserMobile(loggedUser, customerMobile);
+		userController.updateUserPhone(loggedUser, customerPhone);
+
+		Contact contact = new Contact(
+		  customerFirstName,
+			customerLastName,
+			customerEmail,
+			 new fi.foyt.paytrail.rest.Address(
+				 streetAddess,
+				 address.getPostalCode(),
+				 address.getCity(),
+				 address.getCountry().getCode()
+			 ),
+			 customerPhone,
+			 customerMobile,
+			 customerCompany
+		);
+		
+		String notes = null;
+		
+		Address orderAddress = userController.createAddress(address.getUser(), AddressType.DELIVERY_ARCHIVED, 
+				address.getStreet1(), address.getStreet2(), address.getPostalCode(), address.getCity(), address.getCountry());
+		PaymentMethod paymentMethod = null;
+		
+		Order order = orderController.createOrder(loggedUser, 
+		  customerCompany, customerEmail, customerFirstName, customerLastName, customerMobile, customerPhone,
+			OrderStatus.NEW, paymentMethod, getDeliveryCosts(), notes, orderAddress);
+
+		OrderDetails orderDetails = new OrderDetails(1, contact);
+		String orderNumber = order.getId().toString();
+		Payment payment = new Payment(orderNumber, orderDetails, urlSet);
+		payment.setDescription(notes);
+		
+		try {
+			List<ShoppingCartItem> shoppingCartItems = shoppingCartController.getShoppingCartItems();
+			for (ShoppingCartItem shoppingCartItem : shoppingCartItems) {
+				Publication publication = shoppingCartItem.getPublication();
+				OrderItem orderItem = orderController.createOrderItem(order, publication, publication.getName(), publication.getPrice(), shoppingCartItem.getCount());
+				
+				paytrailService.addProduct(payment, 
+						orderItem.getName(), 
+						"#" + orderItem.getId().toString(), 
+						orderItem.getCount().doubleValue(),
+						orderItem.getUnitPrice(),
+						VAT_PERCENT,
+						0d,
+						Product.TYPE_NORMAL);
+			}
+			
+			if (order.getShippingCosts() != null) {
+  			paytrailService.addProduct(payment, 
+  					"Delivery",
+  					"",
+  					1d,
+  					order.getShippingCosts(),
+  					VAT_PERCENT,
+  					0d, 
+  					Product.TYPE_POSTAL);
+			}
+			
+			shoppingCartController.deleteShoppingCart();
+			
+			Result result = paytrailService.processPayment(payment);
+			if (result != null) {
+				try {
+					FacesContext.getCurrentInstance().getExternalContext().redirect(result.getUrl());
+				} catch (IOException e) {
+					// TODO: Handle error
+				}
+			} else {
+				// TODO: Handle error
+			}
+		} catch (PaytrailException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public String getDeliveryMethodId() {
@@ -207,81 +371,107 @@ public class ShoppingCartBackingBean implements Serializable {
 		this.deliveryMethodId = deliveryMethodId;
 	}
 
-	public Long getAddressId() {
-		return addressId;
+	public String getDeliveryContactFirstName() {
+		return deliveryContactFirstName;
 	}
 
-	public void setAddressId(Long addressId) {
-		this.addressId = addressId;
+	public void setDeliveryContactFirstName(String deliveryContactFirstName) {
+		this.deliveryContactFirstName = deliveryContactFirstName;
 	}
 
-	public String getAddressPersonName() {
-		return addressPersonName;
+	public String getDeliveryContactLastName() {
+		return deliveryContactLastName;
 	}
 
-	public void setAddressPersonName(String addressPersonName) {
-		this.addressPersonName = addressPersonName;
+	public void setDeliveryContactLastName(String deliveryContactLastName) {
+		this.deliveryContactLastName = deliveryContactLastName;
 	}
 
-	public String getAddressCompanyName() {
-		return addressCompanyName;
+	public String getDeliveryContactEmail() {
+		return deliveryContactEmail;
 	}
 
-	public void setAddressCompanyName(String addressCompanyName) {
-		this.addressCompanyName = addressCompanyName;
+	public void setDeliveryContactEmail(String deliveryContactEmail) {
+		this.deliveryContactEmail = deliveryContactEmail;
 	}
 
-	public String getAddressStreet1() {
-		return addressStreet1;
+	public String getDeliveryContactMobile() {
+		return deliveryContactMobile;
 	}
 
-	public void setAddressStreet1(String addressStreet1) {
-		this.addressStreet1 = addressStreet1;
+	public void setDeliveryContactMobile(String deliveryContactMobile) {
+		this.deliveryContactMobile = deliveryContactMobile;
 	}
 
-	public String getAddressStreet2() {
-		return addressStreet2;
+	public String getDeliveryContactTelephone() {
+		return deliveryContactTelephone;
 	}
 
-	public void setAddressStreet2(String addressStreet2) {
-		this.addressStreet2 = addressStreet2;
+	public void setDeliveryContactTelephone(String deliveryContactTelephone) {
+		this.deliveryContactTelephone = deliveryContactTelephone;
 	}
 
-	public String getAddressPostalCode() {
-		return addressPostalCode;
+	public String getDeliveryContactCompanyName() {
+		return deliveryContactCompanyName;
 	}
 
-	public void setAddressPostalCode(String addressPostalCode) {
-		this.addressPostalCode = addressPostalCode;
+	public void setDeliveryContactCompanyName(String deliveryContactCompanyName) {
+		this.deliveryContactCompanyName = deliveryContactCompanyName;
 	}
 
-	public String getAddressCity() {
-		return addressCity;
+	public String getDeliveryAddressStreet1() {
+		return deliveryAddressStreet1;
 	}
 
-	public void setAddressCity(String addressCity) {
-		this.addressCity = addressCity;
+	public void setDeliveryAddressStreet1(String deliveryAddressStreet1) {
+		this.deliveryAddressStreet1 = deliveryAddressStreet1;
 	}
 
-	public Long getAddressCountryId() {
-		return addressCountryId;
+	public String getDeliveryAddressStreet2() {
+		return deliveryAddressStreet2;
 	}
 
-	public void setAddressCountryId(Long addressCountryId) {
-		this.addressCountryId = addressCountryId;
+	public void setDeliveryAddressStreet2(String deliveryAddressStreet2) {
+		this.deliveryAddressStreet2 = deliveryAddressStreet2;
+	}
+
+	public String getDeliveryAddressPostalCode() {
+		return deliveryAddressPostalCode;
+	}
+
+	public void setDeliveryAddressPostalCode(String deliveryAddressPostalCode) {
+		this.deliveryAddressPostalCode = deliveryAddressPostalCode;
+	}
+
+	public String getDeliveryAddressCity() {
+		return deliveryAddressCity;
+	}
+
+	public void setDeliveryAddressCity(String deliveryAddressCity) {
+		this.deliveryAddressCity = deliveryAddressCity;
+	}
+
+	public Long getDeliveryAddressCountryId() {
+		return deliveryAddressCountryId;
+	}
+
+	public void setDeliveryAddressCountryId(Long deliveryAddressCountryId) {
+		this.deliveryAddressCountryId = deliveryAddressCountryId;
 	}
 
 	private List<SelectItem> countrySelectItems;
-	private List<SelectItem> addressSelectItems;
 	private String deliveryMethodId;
-	private Long addressId;
-	private String addressPersonName;
-	private String addressCompanyName;
-	private String addressStreet1;
-	private String addressStreet2;
-	private String addressPostalCode;
-	private String addressCity;
-	private Long addressCountryId;
+	private String deliveryContactFirstName;
+	private String deliveryContactLastName;
+	private String deliveryContactEmail;
+	private String deliveryContactMobile;
+	private String deliveryContactTelephone;
+	private String deliveryContactCompanyName;
+	private String deliveryAddressStreet1;
+	private String deliveryAddressStreet2;
+	private String deliveryAddressPostalCode;
+	private String deliveryAddressCity;
+	private Long deliveryAddressCountryId;
 	
 	public class ShoppingCartItemBean implements Serializable {
 		

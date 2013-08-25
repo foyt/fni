@@ -7,7 +7,7 @@
   
     <!-- View specific -->
     
-    <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/gamelibrary.css"/>
+    <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/cart.css"/>
   
   </ui:define>
   <ui:define name="content">
@@ -87,80 +87,107 @@
                   <ui:fragment rendered="#{deliveryMethod.requiresAddress}">
                     <h:panelGroup layout="block">
                       <div class="gamelibrary-cart-delivery-address-container">
-                        <h:selectOneRadio styleClass="gamelibrary-cart-delivery-address-radio" value="#{shoppingCartBackingBean.addressId}">
-                          <f:selectItems value="#{shoppingCartBackingBean.addressSelectItems}"/>
-                        </h:selectOneRadio>
-                        
-                        <div class="gamelibrary-cart-delivery-address-new-container">
-                          <div class="gamelibrary-cart-delivery-address-new-address">
-                            <div class="gamelibrary-cart-delivery-address-field">
-                              <div class="gamelibrary-cart-delivery-address-field-label">
-                                <h:outputLabel value="Name" />
-                              </div>
-                              <div class="gamelibrary-cart-delivery-address-field-input">
-                                <h:inputText value="#{shoppingCartBackingBean.addressPersonName}" />
-                              </div>
-                            </div>
-                            
-                            <div class="gamelibrary-cart-delivery-address-field">
-                              <div class="gamelibrary-cart-delivery-address-field-label">
-                                <h:outputLabel value="Company" />
-                              </div>
-                              <div class="gamelibrary-cart-delivery-address-field-input">
-                                <h:inputText value="#{shoppingCartBackingBean.addressCompanyName}" />
-                              </div>
-                            </div>
-                            
-                            <div class="gamelibrary-cart-delivery-address-field">
-                              <div class="gamelibrary-cart-delivery-address-field-label">
-                                <h:outputLabel value="Street 1" />
-                              </div>
-                              <div class="gamelibrary-cart-delivery-address-field-input">
-                                <h:inputText value="#{shoppingCartBackingBean.addressStreet1}" />
-                              </div>
-                            </div>
-                            
-                            <div class="gamelibrary-cart-delivery-address-field">
-                              <div class="gamelibrary-cart-delivery-address-field-label">
-                                <h:outputLabel value="Street 2" />
-                              </div>
-                              <div class="gamelibrary-cart-delivery-address-field-input">
-                                <h:inputText value="#{shoppingCartBackingBean.addressStreet2}" />
-                              </div>
-                            </div>
-                            
-                            <div class="gamelibrary-cart-delivery-address-field">
-                              <div class="gamelibrary-cart-delivery-address-field-label">
-                                <h:outputLabel value="Postal Code / Zip" />
-                              </div>
-                              <div class="gamelibrary-cart-delivery-address-field-input">
-                                <h:inputText value="#{shoppingCartBackingBean.addressPostalCode}" />
-                              </div>
-                            </div>
-                            
-                            <div class="gamelibrary-cart-delivery-address-field">
-                              <div class="gamelibrary-cart-delivery-address-field-label">
-                                <h:outputLabel value="City" />
-                              </div>
-                              <div class="gamelibrary-cart-delivery-address-field-input">
-                                <h:inputText value="#{shoppingCartBackingBean.addressCity}" />
-                              </div>
-                            </div>
-                            
-                            <div class="gamelibrary-cart-delivery-address-field">
-                              <div class="gamelibrary-cart-delivery-address-field-label">
-                                <h:outputLabel value="Country" />
-                              </div>
-                              <div class="gamelibrary-cart-delivery-address-field-input">
-                                <h:selectOneMenu id="address-country-id" value="#{shoppingCartBackingBean.addressCountryId}">
-                                  <f:selectItems value="#{shoppingCartBackingBean.countrySelectItems}"/>
-                                  <f:ajax render=":gamelibrary-cart"/>
-                                </h:selectOneMenu>
-                              </div>
-                            </div>
+                        <div class="gamelibrary-cart-delivery-address-field">
+                          <div class="gamelibrary-cart-delivery-address-field-label">
+                            <h:outputLabel value="First Name" />
+                          </div>
+                          <div class="gamelibrary-cart-delivery-address-field-input">
+                            <h:inputText value="#{shoppingCartBackingBean.deliveryContactFirstName}" />
                           </div>
                         </div>
-
+                        
+                        <div class="gamelibrary-cart-delivery-address-field">
+                          <div class="gamelibrary-cart-delivery-address-field-label">
+                            <h:outputLabel value="Last Name" />
+                          </div>
+                          <div class="gamelibrary-cart-delivery-address-field-input">
+                            <h:inputText value="#{shoppingCartBackingBean.deliveryContactLastName}" />
+                          </div>
+                        </div>
+                        
+                        <div class="gamelibrary-cart-delivery-address-field">
+                          <div class="gamelibrary-cart-delivery-address-field-label">
+                            <h:outputLabel value="Email" />
+                          </div>
+                          <div class="gamelibrary-cart-delivery-address-field-input">
+                            <h:inputText value="#{shoppingCartBackingBean.deliveryContactEmail}" />
+                          </div>
+                        </div>
+                        
+                        <div class="gamelibrary-cart-delivery-address-field">
+                          <div class="gamelibrary-cart-delivery-address-field-label">
+                            <h:outputLabel value="Mobile Number" />
+                          </div>
+                          <div class="gamelibrary-cart-delivery-address-field-input">
+                            <h:inputText value="#{shoppingCartBackingBean.deliveryContactMobile}" />
+                          </div>
+                        </div>
+                        
+                        <div class="gamelibrary-cart-delivery-address-field">
+                          <div class="gamelibrary-cart-delivery-address-field-label">
+                            <h:outputLabel value="Telephone Number" />
+                          </div>
+                          <div class="gamelibrary-cart-delivery-address-field-input">
+                            <h:inputText value="#{shoppingCartBackingBean.deliveryContactTelephone}" />
+                          </div>
+                        </div>
+                        
+                        <div class="gamelibrary-cart-delivery-address-field">
+                          <div class="gamelibrary-cart-delivery-address-field-label">
+                            <h:outputLabel value="Company" />
+                          </div>
+                          <div class="gamelibrary-cart-delivery-address-field-input">
+                            <h:inputText value="#{shoppingCartBackingBean.deliveryContactCompanyName}" />
+                          </div>
+                        </div>
+                        
+                        <div class="gamelibrary-cart-delivery-address-field">
+                          <div class="gamelibrary-cart-delivery-address-field-label">
+                            <h:outputLabel value="Street 1" />
+                          </div>
+                          <div class="gamelibrary-cart-delivery-address-field-input">
+                            <h:inputText value="#{shoppingCartBackingBean.deliveryAddressStreet1}" />
+                          </div>
+                        </div>
+                        
+                        <div class="gamelibrary-cart-delivery-address-field">
+                          <div class="gamelibrary-cart-delivery-address-field-label">
+                            <h:outputLabel value="Street 2" />
+                          </div>
+                          <div class="gamelibrary-cart-delivery-address-field-input">
+                            <h:inputText value="#{shoppingCartBackingBean.deliveryAddressStreet2}" />
+                          </div>
+                        </div>
+                        
+                        <div class="gamelibrary-cart-delivery-address-field">
+                          <div class="gamelibrary-cart-delivery-address-field-label">
+                            <h:outputLabel value="Postal Code / Zip" />
+                          </div>
+                          <div class="gamelibrary-cart-delivery-address-field-input">
+                            <h:inputText value="#{shoppingCartBackingBean.deliveryAddressPostalCode}" />
+                          </div>
+                        </div>
+                        
+                        <div class="gamelibrary-cart-delivery-address-field">
+                          <div class="gamelibrary-cart-delivery-address-field-label">
+                            <h:outputLabel value="City" />
+                          </div>
+                          <div class="gamelibrary-cart-delivery-address-field-input">
+                            <h:inputText value="#{shoppingCartBackingBean.deliveryAddressCity}" />
+                          </div>
+                        </div>
+                        
+                        <div class="gamelibrary-cart-delivery-address-field">
+                          <div class="gamelibrary-cart-delivery-address-field-label">
+                            <h:outputLabel value="Country" />
+                          </div>
+                          <div class="gamelibrary-cart-delivery-address-field-input">
+                            <h:selectOneMenu id="address-country-id" value="#{shoppingCartBackingBean.deliveryAddressCountryId}">
+                              <f:selectItems value="#{shoppingCartBackingBean.countrySelectItems}"/>
+                              <f:ajax render=":gamelibrary-cart"/>
+                            </h:selectOneMenu>
+                          </div>
+                        </div>
                       </div>
                     </h:panelGroup>
                   </ui:fragment>
@@ -208,7 +235,7 @@
             </div>
           </div>
           
-          <h:commandButton value="Proceed to Checkout" action="#{shoppingCartBackingBean.proceedToCheckout}" />
+          <h:commandButton value="Proceed to Checkout" action="#{shoppingCartBackingBean.proceedToCheckout}" styleClass="gamelibrary-cart-submit"/>
           
         </h:form>
       </div>  
