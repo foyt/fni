@@ -14,6 +14,7 @@ import fi.foyt.fni.persistence.dao.gamelibrary.OrderDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.OrderItemDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.ShoppingCartDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.ShoppingCartItemDAO;
+import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCart;
@@ -126,7 +127,34 @@ public class ShoppingCartController {
 	
 	private void cancelOrder(ShoppingCart shoppingCart) {
 		Date now = new Date();
-		orderDAO.create(shoppingCart.getCustomer(), OrderStatus.CANCELED, shoppingCart.getPaymentMethod(), null, null, shoppingCart.getDeliveryAddress(), now, now, null, null);
+
+		String customerCompany = null;
+		String customerEmail = null;
+		String customerFirstName = null;
+		String customerLastName = null;
+		String customerMobile = null;
+		String customerPhone = null;
+		
+		if (sessionController.isLoggedIn()) {
+			User loggedUser = sessionController.getLoggedUser();
+			customerCompany = loggedUser.getCompany();
+			customerEmail = userController.getUserPrimaryEmail(loggedUser);
+			customerFirstName = loggedUser.getFirstName();
+			customerLastName = loggedUser.getLastName();
+			customerMobile = loggedUser.getMobile();
+			customerPhone = loggedUser.getPhone();
+		}
+		
+		Order order = orderDAO.create(shoppingCart.getCustomer(), customerCompany, customerEmail, customerFirstName, customerLastName, customerMobile, customerPhone, 
+				OrderStatus.CANCELED, shoppingCart.getPaymentMethod(), null, null, shoppingCart.getDeliveryAddress(), now, now, null, null, null);
+		
+		List<ShoppingCartItem> shoppingCartItems = shoppingCartItemDAO.listByCart(shoppingCart);
+		
+		for (ShoppingCartItem shoppingCartItem : shoppingCartItems) {
+			orderItemDAO.create(order, shoppingCartItem.getPublication(), shoppingCartItem.getPublication().getName(), shoppingCartItem.getPublication().getPrice(), shoppingCartItem.getCount());
+			shoppingCartItemDAO.delete(shoppingCartItem);
+		}
+		
 		shoppingCartDAO.delete(shoppingCart);
 	}
 	
