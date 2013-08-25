@@ -18,11 +18,10 @@ public class AddressDAO extends GenericDAO<Address> {
 
 	private static final long serialVersionUID = 1L;
 
-	public Address create(User user, AddressType addressType, String companyName, String street1, String street2, String postalCode, String city, Country country) {
+	public Address create(User user, AddressType addressType, String street1, String street2, String postalCode, String city, Country country) {
     Address address = new Address();
     address.setAddressType(addressType);
     address.setCity(city);
-    address.setCompanyName(companyName);
     address.setCountry(country);
     address.setPostalCode(postalCode);
     address.setStreet1(street1);
@@ -51,11 +50,6 @@ public class AddressDAO extends GenericDAO<Address> {
 
 	public Address updateCity(Address address, String city) {
 		address.setCity(city);
-		return persist(address);
-	}
-
-	public Address updateCompanyName(Address address, String companyName) {
-		address.setCompanyName(companyName);
 		return persist(address);
 	}
 

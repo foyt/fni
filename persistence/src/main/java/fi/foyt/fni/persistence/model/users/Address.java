@@ -59,14 +59,6 @@ public class Address {
   public void setCity(String city) {
     this.city = city;
   }
-  
-  public String getCompanyName() {
-    return companyName;
-  }
-  
-  public void setCompanyName(String companyName) {
-    this.companyName = companyName;
-  }
 
   public Country getCountry() {
     return country;
@@ -93,7 +85,6 @@ public class Address {
       Long otherCountryId = other.getCountry() != null ? other.getCountry().getId() : null;
       
       return getAddressType().equals(other.getAddressType()) &&
-        StringUtils.equals(getCompanyName(), other.getCompanyName()) &&
         StringUtils.equals(getStreet1(), other.getStreet1()) &&
         StringUtils.equals(getStreet2(), other.getStreet2()) && 
         StringUtils.equals(getPostalCode(), other.getPostalCode()) &&
@@ -114,8 +105,6 @@ public class Address {
   @Column (nullable = false)
   @Enumerated
   private AddressType addressType;
-  
-  private String companyName;
   
   @Column (nullable = false)
   private String street1;
