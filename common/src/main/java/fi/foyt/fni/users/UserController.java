@@ -132,6 +132,24 @@ public class UserController {
 	public User updateAbout(User user, String about) {
   	return userDAO.updateAbout(user, about);
 	}
+
+  @LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public User updateUserCompany(User user, String company) {
+  	return userDAO.updateCompany(user, company);
+	}
+
+  @LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public User updateUserMobile(User user, String mobile) {
+  	return userDAO.updateMobile(user, mobile);
+	}
+
+  @LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public User updateUserPhone(User user, String phone) {
+  	return userDAO.updatePhone(user, phone);
+	}
   
   public UserFriend getUserFriendByUsers(User user1, User user2) {
     UserFriend userFriend = userFriendDAO.findByUserAndFriend(user1, user2);
@@ -291,8 +309,8 @@ public class UserController {
 
   /* Address */
   
-  public Address createAddress(User user, AddressType addressType, String companyName, String street1, String street2, String postalCode, String city, Country country) {
-  	return addressDAO.create(user, addressType, companyName, street1, street2, postalCode, city, country);
+  public Address createAddress(User user, AddressType addressType, String street1, String street2, String postalCode, String city, Country country) {
+  	return addressDAO.create(user, addressType, street1, street2, postalCode, city, country);
   }
   
 	public Address findAddressByUserAndType(User user, AddressType addressType) {
