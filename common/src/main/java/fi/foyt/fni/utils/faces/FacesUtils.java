@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 public class FacesUtils {
@@ -21,5 +22,31 @@ public class FacesUtils {
 	
 	public static void addMessage(Severity severity, String message) {
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity, message, null));
+	}
+
+	public static String getLocalAddress(boolean includeContextPath) {
+		 ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		 
+		 int port = externalContext.getRequestServerPort();
+		 String serverName = externalContext.getRequestServerName();
+		 String scheme = externalContext.getRequestScheme();
+		 boolean dropPort = ((port == 80) && "http".equals(scheme)) || ((port == 443) && "https".equals(scheme));
+		
+		 StringBuilder resultBuilder = new StringBuilder();
+		 
+		 resultBuilder.append(scheme);
+		 resultBuilder.append("://");
+		 resultBuilder.append(serverName);
+		 
+		 if (!dropPort) {
+			 resultBuilder.append(':');
+			 resultBuilder.append(port);
+		 }
+		 
+		 if (includeContextPath) {
+			 resultBuilder.append(externalContext.getRequestContextPath());
+		 }
+		 
+		 return resultBuilder.toString();
 	}
 }
