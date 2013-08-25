@@ -117,7 +117,14 @@
       <groupId>fi.foyt.fni</groupId>
       <artifactId>common</artifactId>
     </dependency>
-
+    
+    <!-- Paytrail -->
+      
+    <dependency>
+      <groupId>fi.foyt.paytrail</groupId>
+      <artifactId>sdk</artifactId>
+    </dependency>
+      
     <!-- Scribe -->
 
     <dependency>

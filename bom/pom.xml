@@ -24,6 +24,10 @@
     <google-http-client-jackson.version>1.15.0-rc</google-http-client-jackson.version>
     <resteasy-multipart-provider.version>2.3.2.Final</resteasy-multipart-provider.version>
     
+    <!-- Paytrail -->
+    
+    <paytrail-sdk.version>1.0.0-SNAPSHOT</paytrail-sdk.version>
+    
     <!-- Rome -->
 
     <rome.version>1.0.0</rome.version>
@@ -50,7 +54,15 @@
         <artifactId>common</artifactId>
         <version>${fni.version}</version>
       </dependency>
-
+      
+      <!-- Paytrail -->
+      
+      <dependency>
+        <groupId>fi.foyt.paytrail</groupId>
+        <artifactId>sdk</artifactId>
+        <version>${paytrail-sdk.version}</version>
+      </dependency>
+      
       <!-- JBoss -->
 
       <dependency>
