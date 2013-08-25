@@ -125,6 +125,23 @@ public class ShoppingCartController {
 		return getShoppingCartItems().size() == 0;
 	}
 	
+	public void deleteShoppingCart() {
+		ShoppingCart shoppingCart = getShoppingCart();
+		if (shoppingCart != null) {
+  		deleteShoppingCart(shoppingCart);
+		}
+	}
+	
+	private void deleteShoppingCart(ShoppingCart shoppingCart) {
+		List<ShoppingCartItem> shoppingCartItems = shoppingCartItemDAO.listByCart(shoppingCart);
+		
+		for (ShoppingCartItem shoppingCartItem : shoppingCartItems) {
+			shoppingCartItemDAO.delete(shoppingCartItem);
+		}
+		
+		shoppingCartDAO.delete(shoppingCart);
+	}
+	
 	private void cancelOrder(ShoppingCart shoppingCart) {
 		Date now = new Date();
 
@@ -152,10 +169,9 @@ public class ShoppingCartController {
 		
 		for (ShoppingCartItem shoppingCartItem : shoppingCartItems) {
 			orderItemDAO.create(order, shoppingCartItem.getPublication(), shoppingCartItem.getPublication().getName(), shoppingCartItem.getPublication().getPrice(), shoppingCartItem.getCount());
-			shoppingCartItemDAO.delete(shoppingCartItem);
 		}
 		
-		shoppingCartDAO.delete(shoppingCart);
+		deleteShoppingCart(shoppingCart);
 	}
 	
 	public void loginObserver(@Observes @Login UserSessionEvent event) {
