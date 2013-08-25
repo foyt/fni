@@ -39,16 +39,16 @@
 
         <div id="gamelibrary-mini-shopping-cart-contents">
           <div class="gamelibrary-mini-shopping-cart-items">
-            <h:panelGroup layout="block" rendered="#{shoppingCartBackingBean.shoppingCartEmpty}">
+            <h:panelGroup layout="block" rendered="#{miniShoppingCartBackingBean.shoppingCartEmpty}">
               #{locales['gamelibrary.publications.shoppingCartEmpty']}
             </h:panelGroup>
           
-            <ui:repeat var="cartItem" value="#{shoppingCartBackingBean.shoppingCartItems}">   
+            <ui:repeat var="cartItem" value="#{miniShoppingCartBackingBean.shoppingCartItems}">   
               <div class="gamelibrary-mini-shopping-cart-item">
                 <div class="gamelibrary-mini-shopping-cart-item-count">#{cartItem.count}</div>
-                <div class="gamelibrary-mini-shopping-cart-item-name">#{cartItem.name}</div>
+                <div class="gamelibrary-mini-shopping-cart-item-name">#{cartItem.publication.name}</div>
                 <div class="gamelibrary-mini-shopping-cart-item-price">
-                  <h:outputText value="#{cartItem.price}" >
+                  <h:outputText value="#{cartItem.publication.price}" >
                     <f:convertNumber currencyCode="EUR" type="currency" />
                   </h:outputText>
                 </div>
@@ -61,7 +61,7 @@
               <div class="gamelibrary-mini-shopping-cart-summary-total-title">#{locales['gamelibrary.publications.shoppingCartTotal']}</div>
             </div>
             <div class="gamelibrary-mini-shopping-cart-summary-total">
-              <h:outputText value="#{shoppingCartBackingBean.itemCosts}" >
+              <h:outputText value="#{miniShoppingCartBackingBean.itemCosts}" >
                 <f:convertNumber currencyCode="EUR" type="currency" />
               </h:outputText>
             </div>
