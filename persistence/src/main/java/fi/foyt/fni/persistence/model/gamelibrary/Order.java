@@ -3,6 +3,7 @@ package fi.foyt.fni.persistence.model.gamelibrary;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -14,6 +15,9 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 import fi.foyt.fni.persistence.model.users.Address;
 import fi.foyt.fni.persistence.model.users.User;
@@ -33,7 +37,55 @@ public class Order {
     this.customer = customer;
   }
   
-  public PaymentMethod getPaymentMethod() {
+  public String getCustomerCompany() {
+		return customerCompany;
+	}
+
+	public void setCustomerCompany(String customerCompany) {
+		this.customerCompany = customerCompany;
+	}
+
+	public String getCustomerFirstName() {
+		return customerFirstName;
+	}
+
+	public void setCustomerFirstName(String customerFirstName) {
+		this.customerFirstName = customerFirstName;
+	}
+
+	public String getCustomerLastName() {
+		return customerLastName;
+	}
+
+	public void setCustomerLastName(String customerLastName) {
+		this.customerLastName = customerLastName;
+	}
+
+	public String getCustomerEmail() {
+		return customerEmail;
+	}
+
+	public void setCustomerEmail(String customerEmail) {
+		this.customerEmail = customerEmail;
+	}
+
+	public String getCustomerPhone() {
+		return customerPhone;
+	}
+
+	public void setCustomerPhone(String customerPhone) {
+		this.customerPhone = customerPhone;
+	}
+
+	public String getCustomerMobile() {
+		return customerMobile;
+	}
+
+	public void setCustomerMobile(String customerMobile) {
+		this.customerMobile = customerMobile;
+	}
+
+	public PaymentMethod getPaymentMethod() {
     return paymentMethod;
   }
   
@@ -72,6 +124,14 @@ public class Order {
   public void setPaid(Date paid) {
     this.paid = paid;
   }
+  
+  public Date getShipped() {
+		return shipped;
+	}
+  
+  public void setShipped(Date shipped) {
+		this.shipped = shipped;
+	}
   
   public Date getDelivered() {
     return delivered;
@@ -112,6 +172,27 @@ public class Order {
   @ManyToOne 
   private User customer;
   
+  private String customerCompany;
+  
+  @Column (nullable = false)
+  @NotNull
+  @NotEmpty
+  private String customerFirstName;
+  
+  @Column (nullable = false)
+  @NotNull
+  @NotEmpty
+  private String customerLastName;
+  
+  @Column (nullable = false)
+  @NotNull
+  @NotEmpty
+  private String customerEmail;
+  
+  private String customerPhone;
+  
+  private String customerMobile;
+  
   @ManyToOne 
   private PaymentMethod paymentMethod;
   
@@ -128,6 +209,9 @@ public class Order {
   
   @Temporal (TemporalType.TIMESTAMP)
   private Date paid;
+  
+  @Temporal (TemporalType.TIMESTAMP)
+  private Date shipped;
   
   @Temporal (TemporalType.TIMESTAMP)
   private Date delivered;

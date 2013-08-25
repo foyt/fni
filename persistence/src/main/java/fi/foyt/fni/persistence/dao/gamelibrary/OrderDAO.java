@@ -16,12 +16,19 @@ public class OrderDAO extends GenericDAO<Order> {
   
 	private static final long serialVersionUID = 1L;
 
-	public Order create(User customer, OrderStatus orderStatus, PaymentMethod paymentMethod, Double shippingCosts, String notes, Address deliveryAddress, Date created, Date canceled, Date paid, Date delivered) {
+	public Order create(User customer, String customerCompany, String customerEmail, String customerFirstName, String customerLastName, String customerMobile, String customerPhone, OrderStatus orderStatus, PaymentMethod paymentMethod, Double shippingCosts, String notes, Address deliveryAddress, Date created, Date canceled, Date paid, Date shipped, Date delivered) {
 		Order order = new Order();
 		
 		order.setCanceled(canceled);
 		order.setCreated(created);
 		order.setCustomer(customer);
+		order.setCustomerCompany(customerCompany);
+		order.setCustomerEmail(customerEmail);
+		order.setCustomerFirstName(customerFirstName);
+		order.setCustomerLastName(customerLastName);
+		order.setCustomerMobile(customerMobile);
+		order.setCustomerPhone(customerPhone);
+		order.setShipped(shipped);
 		order.setDelivered(delivered);
 		order.setDeliveryAddress(deliveryAddress);
 		order.setNotes(notes);
@@ -35,6 +42,11 @@ public class OrderDAO extends GenericDAO<Order> {
 	
 	public Order updateOrderStatus(Order order, OrderStatus orderStatus) {
 		order.setOrderStatus(orderStatus);
+		return persist(order);
+	}
+
+	public Order updateShipped(Order order, Date shipped) {
+		order.setShipped(shipped);
 		return persist(order);
 	}
 
