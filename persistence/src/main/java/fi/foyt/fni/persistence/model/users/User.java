@@ -111,6 +111,30 @@ public class User {
 		this.about = about;
 	}
   
+  public String getCompany() {
+		return company;
+	}
+  
+  public void setCompany(String company) {
+		this.company = company;
+	}
+  
+  public String getMobile() {
+		return mobile;
+	}
+  
+  public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+  
+  public String getPhone() {
+		return phone;
+	}
+  
+  public void setPhone(String phone) {
+		this.phone = phone;
+	}
+  
   @Transient
   @Field
   public String getFullName() {
@@ -160,6 +184,12 @@ public class User {
   
   @Column (nullable=false, columnDefinition = "BIT")
   private Boolean archived;
+  
+  private String company;
+  
+  private String mobile;
+  
+  private String phone;
     
   // TODO: License
 }

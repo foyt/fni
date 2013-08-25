@@ -127,6 +127,21 @@ public class UserDAO extends GenericDAO<User> {
 		return persist(user);
 	}
 
+	public User updateCompany(User user, String company) {
+		user.setCompany(company);
+		return persist(user);
+	}
+
+	public User updateMobile(User user, String mobile) {
+		user.setMobile(mobile);
+		return persist(user);
+	}
+
+	public User updatePhone(User user, String phone) {
+		user.setPhone(phone);
+		return persist(user);
+	}
+
 	public User updateProfileImageSource(User user, UserProfileImageSource profileImageSource) {
 		user.setProfileImageSource(profileImageSource);
 		return persist(user);
