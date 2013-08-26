@@ -118,7 +118,8 @@ public class SessionShoppingCartController {
 	}
 	
 	public boolean isShoppingCartEmpty() {
-		if (shoppingCartId == null) {
+		ShoppingCart shoppingCart = getShoppingCart();
+		if (shoppingCart == null) {
 			return true;
 		}
 		
