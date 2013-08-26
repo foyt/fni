@@ -96,10 +96,14 @@ public class PostiDeliveryMethod implements DeliveryMethod {
 	}
 
 	@Override
-	public Double getPrice(int weight, int width, int height, int depth, String countryCode) {
+	public Double getPrice(Double weight, int width, int height, int depth, String countryCode) {
+		if ((width == 0) && (height == 0) && (depth == 0) && (weight == 0d)) {
+			return 0d;
+		}
+		
 		int[] widthHeightDepth = new int[] { width, height, depth };
 		Arrays.sort(widthHeightDepth);
-		
+
 		for (DeliveryMethod deliveryMethod : DELIVERY_METHODS) {
 			if (deliveryMethod.canDeliver(widthHeightDepth, weight, countryCode)) {
 				return deliveryMethod.getPrice(weight);
@@ -120,7 +124,7 @@ public class PostiDeliveryMethod implements DeliveryMethod {
 		  this.pricingModel = pricingModel;
 		}
 		
-		public boolean canDeliver(int[] dimensions, int weight, String countryCode) {
+		public boolean canDeliver(int[] dimensions, Double weight, String countryCode) {
 			if ((deliveryCountries != null) && (!ArrayUtils.contains(deliveryCountries, countryCode))) {
 				return false;
 			}
@@ -142,7 +146,7 @@ public class PostiDeliveryMethod implements DeliveryMethod {
 			return packType;
 		}
 		
-		public Double getPrice(int weight) {
+		public Double getPrice(Double weight) {
 			return pricingModel.getItemByWeight(weight).getPrice();
 		}
 
@@ -165,7 +169,7 @@ public class PostiDeliveryMethod implements DeliveryMethod {
 			this.items = items;
 		}
 		
-		public PricingModelItem getItemByWeight(int weight) {
+		public PricingModelItem getItemByWeight(Double weight) {
 			for (PricingModelItem item : getItems()) {
 				if (weight <= item.getMaxWeight()) {
 					return item;

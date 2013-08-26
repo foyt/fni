@@ -24,6 +24,7 @@ import fi.foyt.fni.delivery.DeliveryMethod;
 import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
 import fi.foyt.fni.persistence.model.common.Country;
+import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
@@ -136,19 +137,20 @@ public class ShoppingCartBackingBean implements Serializable {
 			for (DeliveryMethod deliveryMethod : shoppingCartDeliveryMethods) {
 				Country country = (this.deliveryAddressCountryId != null) ? systemSettingsController.findCountryById(this.deliveryAddressCountryId) : null;
 				String countryCode = country != null ? country.getCode() : systemSettingsController.getDefaultCountry().getCode();
-				int weight = getItemsWeight();
+				Double weight = getItemsWeight();
 				int width = getItemsWidth();
 				int height = getItemsHeight();
 				int depth = getItemsDepth();
 				Double price = deliveryMethod.getPrice(weight, width, height, depth, countryCode);
-
-				deliveryMethods.add(new DeliveryMethodBean(
-					deliveryMethod.getId(), 
-					deliveryMethod.getName(locale), 
-					deliveryMethod.getInfo(locale), 
-					deliveryMethod.getRequiresAddress(), 
-					price
-				));
+				if (price != null) {
+  				deliveryMethods.add(new DeliveryMethodBean(
+  					deliveryMethod.getId(), 
+  					deliveryMethod.getName(locale), 
+  					deliveryMethod.getInfo(locale), 
+  					deliveryMethod.getRequiresAddress(), 
+  					price
+  				));
+				}
 			}
 		}
 		
@@ -204,7 +206,7 @@ public class ShoppingCartBackingBean implements Serializable {
 	public Double getDeliveryCosts(String deliveryMethodId) {
 		DeliveryMethod deliveryMethod = deliveryMehtodsController.findDeliveryMethod(deliveryMethodId);
 		if (deliveryMethod != null) {
-			return deliveryMethod.getPrice(getItemsWeight(), getItemsWeight(), getItemsHeight(), getItemsDepth(), getCountryCode());
+			return deliveryMethod.getPrice(getItemsWeight(), getItemsWidth(), getItemsHeight(), getItemsDepth(), getCountryCode());
 		}
 
 		return 0d;
@@ -215,27 +217,88 @@ public class ShoppingCartBackingBean implements Serializable {
 	}
 
 	public Double getNetPrice() {
-		return getDeliveryCosts() + getItemCosts();
+		Double deliveryCosts = getDeliveryCosts();
+		return (deliveryCosts != null ? deliveryCosts : 0d) + getItemCosts();
 	}
 
 	public Double getTaxAmount() {
 		return getItemCosts() * (VAT_PERCENT / 100);
 	}
 
-	public int getItemsWeight() {
-		return 225; // a5 / 100 pages
+	/**
+	 * Returns total weight of items in grams
+	 * 
+	 * @return total weight of items in grams
+	 */
+	public Double getItemsWeight() {
+		Double result = 0d;
+		for (ShoppingCartItem item : sessionShoppingCartController.getShoppingCartItems()) {
+			Publication publication = item.getPublication();
+			if (publication instanceof BookPublication) {
+				BookPublication bookPublication = (BookPublication) publication;
+				result += bookPublication.getWeight() * item.getCount();
+			}
+		}
+
+		return result;
 	}
 	
+	/**
+	 * Returns maximum width of items in millimeters
+	 * 
+	 * @return maximum width of items in millimeters
+	 */
 	public int getItemsWidth() {
-		return 148; // a5;
+		int result = 0;
+		for (ShoppingCartItem item : sessionShoppingCartController.getShoppingCartItems()) {
+			Publication publication = item.getPublication();
+			if (publication instanceof BookPublication) {
+				BookPublication bookPublication = (BookPublication) publication;
+				if (bookPublication.getWidth() > result) {
+					result = bookPublication.getWidth();
+				}
+			}
+		}
+
+		return result;
 	}
 	
+	/**
+	 * Returns maximum height of items in millimeters 
+	 * 
+	 * @return maximum height of items in millimeters
+	 */
 	public int getItemsHeight() {
-		return 210; // a5;
+		int result = 0;
+		for (ShoppingCartItem item : sessionShoppingCartController.getShoppingCartItems()) {
+			Publication publication = item.getPublication();
+			if (publication instanceof BookPublication) {
+				BookPublication bookPublication = (BookPublication) publication;
+				if (bookPublication.getWidth() > result) {
+					result = bookPublication.getWidth();
+				}
+			}
+		}
+
+		return result;
 	}
 	
+	/**
+	 * Returns total depth of items in millimeters 
+	 * 
+	 * @return total depth of items in millimeters 
+	 */
 	public int getItemsDepth() {
-		return 100; // 1mm paper * 100
+		int result = 0;
+		for (ShoppingCartItem item : sessionShoppingCartController.getShoppingCartItems()) {
+			Publication publication = item.getPublication();
+			if (publication instanceof BookPublication) {
+				BookPublication bookPublication = (BookPublication) publication;
+  			result += bookPublication.getWidth() * item.getCount();
+			}
+		}
+
+		return result;
 	}
 	
 	public String getCountryCode() {

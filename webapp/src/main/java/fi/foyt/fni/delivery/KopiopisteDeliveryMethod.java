@@ -6,7 +6,7 @@ import java.util.Locale;
 public class KopiopisteDeliveryMethod implements DeliveryMethod {
 
 	@Override
-	public Double getPrice(int weight, int width, int height, int depth, String countryCode) {
+	public Double getPrice(Double weight, int width, int height, int depth, String countryCode) {
 		return 0d;
 	}
 

@@ -22,7 +22,7 @@ public interface DeliveryMethod {
 	 * @param countryCode Country code in ISO 3166-1 alpha-2 format.
 	 * @return price in currency returned by getCurrency method
 	 */
-	public Double getPrice(int weight, int width, int height, int depth, String countryCode);
+	public Double getPrice(Double weight, int width, int height, int depth, String countryCode);
 	
 	/**
 	 * Returns currency DeliveryMethod uses
