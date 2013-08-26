@@ -58,8 +58,14 @@ public class PublicationFileServlet extends AbstractFileServlet {
 
 		// TODO: If publication is unpublished, only managers may view it
 
+		String fileName = bookPublication.getUrlName();
+		if ("application/pdf".equals(file.getContentType())) {
+			fileName += ".pdf";
+		}
+		
 		String eTag = createETag(bookPublication.getModified());
 		long lastModified = bookPublication.getModified().getTime();
+		response.setHeader("content-disposition", "attachment; filename=" + fileName);
 
 		if (!isModifiedSince(request, lastModified, eTag)) {
 			response.setHeader("ETag", eTag); // Required in 304.
