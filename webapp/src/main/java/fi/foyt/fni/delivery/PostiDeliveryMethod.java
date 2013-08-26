@@ -1,8 +1,11 @@
 package fi.foyt.fni.delivery;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Currency;
-import java.util.Locale;
+import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -101,16 +104,49 @@ public class PostiDeliveryMethod implements DeliveryMethod {
 			return 0d;
 		}
 		
-		int[] widthHeightDepth = new int[] { width, height, depth };
-		Arrays.sort(widthHeightDepth);
-
-		for (DeliveryMethod deliveryMethod : DELIVERY_METHODS) {
-			if (deliveryMethod.canDeliver(widthHeightDepth, weight, countryCode)) {
-				return deliveryMethod.getPrice(weight);
-			}
+		DeliveryMethod deliveryMethod = getDeliveryMethod(weight, width, height, depth, countryCode);
+		if (deliveryMethod != null) {
+			return deliveryMethod.getPrice(weight);
 		}
 		
 		return null;
+	}
+	
+	private DeliveryMethod getDeliveryMethod(final Double weight, int width, int height, int depth, String countryCode) {
+		int[] widthHeightDepth = new int[] { width, height, depth };
+		Arrays.sort(widthHeightDepth);
+		
+		List<DeliveryMethod> deliveryMethods = new ArrayList<>();
+
+		for (DeliveryMethod deliveryMethod : DELIVERY_METHODS) {
+			if (deliveryMethod.canDeliver(widthHeightDepth, weight, countryCode)) {
+				deliveryMethods.add(deliveryMethod);
+			}
+		}
+		
+		if (deliveryMethods.isEmpty()) {
+			return null;
+		}
+		
+		Collections.sort(deliveryMethods, new Comparator<DeliveryMethod>() {
+			@Override
+			public int compare(DeliveryMethod o1, DeliveryMethod o2) {
+				Double price1 = o1.getPrice(weight);
+				Double price2 = o2.getPrice(weight);
+				
+				if (price1.equals(price2)) {
+					return 0;
+				}
+				
+				if (price1 > price2) {
+					return 1;
+				}
+				
+				return -1;
+			}
+		});
+		
+		return deliveryMethods.get(0);
 	}
 	
 	private static class DeliveryMethod {
@@ -141,7 +177,6 @@ public class PostiDeliveryMethod implements DeliveryMethod {
 			return true;
 		}
 		
-		@SuppressWarnings("unused")
 		public PackType getPackType() {
 			return packType;
 		}
@@ -206,13 +241,39 @@ public class PostiDeliveryMethod implements DeliveryMethod {
 	}
 
 	@Override
-	public String getName(Locale locale) {
-		return "Posti";
+	public String getNameLocaleKey(Double weight, int width, int height, int depth, String countryCode) {
+		DeliveryMethod deliveryMethod = getDeliveryMethod(weight, width, height, depth, countryCode);
+		
+		if (deliveryMethod != null) {
+		  switch (deliveryMethod.getPackType()) {
+		  	case LETTER:
+		  		return "deliveryMethodPostiLetterName";
+		  	case MAXI_LETTER:
+		  		return "deliveryMethodPostiMaxiLetterName";
+		  	case PARCEL:
+		  	  return "deliveryMethodPostiParcelName";
+		  }
+		}
+		
+		return null;
 	}
-
+	
 	@Override
-	public String getId() {
-		return "posti";
+	public String getInfoLocaleKey(Double weight, int width, int height, int depth, String countryCode) {
+		DeliveryMethod deliveryMethod = getDeliveryMethod(weight, width, height, depth, countryCode);
+		
+		if (deliveryMethod != null) {
+		  switch (deliveryMethod.getPackType()) {
+		  	case LETTER:
+		  		return "deliveryMethodPostiLetterInfo";
+		  	case MAXI_LETTER:
+		  		return "deliveryMethodPostiMaxiLetterInfo";
+		  	case PARCEL:
+		  	  return "deliveryMethodPostiParcelInfo";
+		  }
+		}
+		
+		return null;
 	}
 
 	@Override
@@ -221,8 +282,8 @@ public class PostiDeliveryMethod implements DeliveryMethod {
 	}
 
 	@Override
-	public String getInfo(Locale locale) {
-		return "Tuotteet toimitetaan postitse";
+	public String getId() {
+		return "posti";
 	}
-	
+
 }

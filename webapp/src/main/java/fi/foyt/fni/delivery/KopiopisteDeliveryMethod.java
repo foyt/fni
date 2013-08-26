@@ -1,7 +1,6 @@
 package fi.foyt.fni.delivery;
 
 import java.util.Currency;
-import java.util.Locale;
 
 public class KopiopisteDeliveryMethod implements DeliveryMethod {
 
@@ -14,10 +13,15 @@ public class KopiopisteDeliveryMethod implements DeliveryMethod {
 	public Currency getCurrency() {
 		return Currency.getInstance("EUR");
 	}
-
+	
 	@Override
-	public String getName(Locale locale) {
-		return "Nouto Kopiopisteestä";
+	public String getNameLocaleKey(Double weight, int width, int height, int depth, String countryCode) {
+		return "deliveryMethodKopiopisteName";
+	}
+	
+	@Override
+	public String getInfoLocaleKey(Double weight, int width, int height, int depth, String countryCode) {
+		return "deliveryMethodKopiopisteInfo";
 	}
 
 	@Override
@@ -28,11 +32,6 @@ public class KopiopisteDeliveryMethod implements DeliveryMethod {
 	@Override
 	public boolean getRequiresAddress() {
 		return false;
-	}
-
-	@Override
-	public String getInfo(Locale locale) {
-		return "Tulostettavat tuotteet noudetaan suoraan Mikkelin Kopiopiste Ky:n tiloista osoitteesta: Maaherrankatu 30 50100 Mikkeli";
 	}
 
 }

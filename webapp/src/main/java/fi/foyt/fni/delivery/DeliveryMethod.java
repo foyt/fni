@@ -1,7 +1,6 @@
 package fi.foyt.fni.delivery;
 
 import java.util.Currency;
-import java.util.Locale;
 
 public interface DeliveryMethod {
 	
@@ -39,18 +38,26 @@ public interface DeliveryMethod {
 	public boolean getRequiresAddress();
 	
 	/**
-	 * Returns localized name of the delivery method
+	 * Returns locale key for delivery method name
 	 * 
-	 * @param locale locale in which name is returned 
-	 * @return localized name of the delivery method
+	 * @param weight package weight 
+	 * @param width package width
+	 * @param height package height
+	 * @param depth package depth
+	 * @param countryCode target country code
+	 * @return locale key
 	 */
-	public String getName(Locale locale);
+	public String getNameLocaleKey(Double weight, int width, int height, int depth, String countryCode);
 	
 	/**
-	 * Returns localized info of the delivery method
+	 * Returns locale key for delivery method info
 	 * 
-	 * @param locale locale in which name is returned 
-	 * @return localized info of the delivery method
+	 * @param weight package weight 
+	 * @param width package width
+	 * @param height package height
+	 * @param depth package depth
+	 * @param countryCode target country code
+	 * @return locale key
 	 */
-	public String getInfo(Locale locale);
+	public String getInfoLocaleKey(Double weight, int width, int height, int depth, String countryCode);
 }

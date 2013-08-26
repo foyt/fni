@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -130,7 +129,6 @@ public class ShoppingCartBackingBean implements Serializable {
 	
 	public List<DeliveryMethodBean> getDeliveryMethods() {
 		ArrayList<DeliveryMethodBean> deliveryMethods = new ArrayList<>();
-		Locale locale = sessionController.getLocale();
 
 		List<DeliveryMethod> shoppingCartDeliveryMethods = deliveryMehtodsController.getDeliveryMethods();
 		if (shoppingCartDeliveryMethods != null) {
@@ -143,10 +141,13 @@ public class ShoppingCartBackingBean implements Serializable {
 				int depth = getItemsDepth();
 				Double price = deliveryMethod.getPrice(weight, width, height, depth, countryCode);
 				if (price != null) {
+					String name = FacesUtils.getLocalizedValue("gamelibrary.cart." + deliveryMethod.getNameLocaleKey(weight, width, height, depth, countryCode));
+					String info = FacesUtils.getLocalizedValue("gamelibrary.cart." + deliveryMethod.getInfoLocaleKey(weight, width, height, depth, countryCode));
+					
   				deliveryMethods.add(new DeliveryMethodBean(
   					deliveryMethod.getId(), 
-  					deliveryMethod.getName(locale), 
-  					deliveryMethod.getInfo(locale), 
+  					name, 
+  					info, 
   					deliveryMethod.getRequiresAddress(), 
   					price
   				));
@@ -274,8 +275,8 @@ public class ShoppingCartBackingBean implements Serializable {
 			Publication publication = item.getPublication();
 			if (publication instanceof BookPublication) {
 				BookPublication bookPublication = (BookPublication) publication;
-				if (bookPublication.getWidth() > result) {
-					result = bookPublication.getWidth();
+				if (bookPublication.getHeight() > result) {
+					result = bookPublication.getHeight();
 				}
 			}
 		}
@@ -294,7 +295,7 @@ public class ShoppingCartBackingBean implements Serializable {
 			Publication publication = item.getPublication();
 			if (publication instanceof BookPublication) {
 				BookPublication bookPublication = (BookPublication) publication;
-  			result += bookPublication.getWidth() * item.getCount();
+  			result += bookPublication.getDepth() * item.getCount();
 			}
 		}
 
