@@ -17,6 +17,10 @@
         <h:link outcome="/gamelibrary/index.jsf" value="Back to Store"/>
       </h3>
       <div class="gamelibrary-cart-contents">
+        <div class="gamelibrary-cart-order-information">
+          #{locales['gamelibrary.cart.orderInformation']}
+        </div>
+      
         <h:form id="gamelibrary-cart-form">
           <h:panelGroup layout="block" id="gamelibrary-cart-items-container"> 
             <h4>Items</h4>

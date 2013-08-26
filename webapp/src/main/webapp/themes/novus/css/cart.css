@@ -7,6 +7,12 @@
   min-height: 783px;
 }
 
+.gamelibrary-cart-order-information {
+  margin-top: 12px;
+  font-style: italic;
+  text-align: center;
+}
+
 .gamelibrary-cart-notes textarea {
   margin-left: 2px;
   margin-right: 2px;
