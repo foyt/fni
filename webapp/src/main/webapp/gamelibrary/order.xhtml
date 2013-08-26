@@ -91,7 +91,14 @@
               </h:outputText>
             </h:column>
           </h:dataTable>
-        </h:panelGroup>   
+        </h:panelGroup> 
+        
+        <h:panelGroup layout="block" styleClass="order-notes" rendered="#{orderBackingBean.notes ne null}">
+          <h4>#{locales['gamelibrary.order.notesTitle']}</h4>
+          <h:panelGroup layout="block" styleClass="order-notes-text">
+            #{orderBackingBean.notes}
+          </h:panelGroup>
+        </h:panelGroup>  
         
         <h:panelGroup layout="block" styleClass="order-history">
           <h4>#{locales['gamelibrary.order.historyTitle']}</h4>

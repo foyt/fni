@@ -7,6 +7,17 @@
   min-height: 783px;
 }
 
+.gamelibrary-cart-notes textarea {
+  margin-left: 2px;
+  margin-right: 2px;
+  width: 100%;
+  -webkit-box-sizing: border-box; 	
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-top: 8px;
+  height: 100px;
+}
+
 #gamelibrary-cart h3 {
   background-color: #EEEEEE;
   border-radius: 8px 8px 8px 8px;

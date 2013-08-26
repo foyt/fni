@@ -96,6 +96,7 @@ public class ShoppingCartBackingBean implements Serializable {
 		deliveryContactMobile = "";
 		deliveryContactTelephone = "";
 		deliveryContactCompanyName = "";
+		notes = "";
 		
 		User loggedUser = sessionController.getLoggedUser();
 		if (loggedUser != null) {
@@ -303,7 +304,7 @@ public class ShoppingCartBackingBean implements Serializable {
 			 customerCompany
 		);
 		
-		String notes = null;
+		String notes = getNotes();
 		
 		Address orderAddress = userController.createAddress(address.getUser(), AddressType.DELIVERY_ARCHIVED, 
 				address.getStreet1(), address.getStreet2(), address.getPostalCode(), address.getCity(), address.getCountry());
@@ -459,6 +460,14 @@ public class ShoppingCartBackingBean implements Serializable {
 		this.deliveryAddressCountryId = deliveryAddressCountryId;
 	}
 
+	public String getNotes() {
+		return notes;
+	}
+	
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+	
 	private List<SelectItem> countrySelectItems;
 	private String deliveryMethodId;
 	private String deliveryContactFirstName;
@@ -472,6 +481,7 @@ public class ShoppingCartBackingBean implements Serializable {
 	private String deliveryAddressPostalCode;
 	private String deliveryAddressCity;
 	private Long deliveryAddressCountryId;
+	private String notes;
 	
 	public class ShoppingCartItemBean implements Serializable {
 		

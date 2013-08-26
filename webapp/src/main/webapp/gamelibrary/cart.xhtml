@@ -197,7 +197,12 @@
             </ui:repeat>
             
             <div class="gamelibrary-cart-delivery-method-price-note-text">* Delivery country can affect shipping costs</div>
-          </div>          
+          </div>       
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-cart-notes">
+            <h4>Notes</h4>
+            <h:inputTextarea value="#{shoppingCartBackingBean.notes}" />
+          </h:panelGroup>   
           
           <div id="gamelibrary-cart-summary-container">
             <h4>Summary</h4>

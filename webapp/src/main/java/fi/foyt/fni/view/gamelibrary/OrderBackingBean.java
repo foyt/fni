@@ -45,6 +45,7 @@ public class OrderBackingBean {
 		customerEmail = order.getCustomerEmail();
 		customerPhone = order.getCustomerPhone();
 		customerMobile = order.getCustomerMobile();
+		notes = order.getNotes();
 		created = order.getCreated();
 	  paid = order.getPaid();
 	  shipped = order.getShipped();
@@ -118,7 +119,15 @@ public class OrderBackingBean {
 	public String getCustomerMobile() {
 		return customerMobile;
 	}
-
+	
+	public String getNotes() {
+		return notes;
+	}
+	
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+	
 	public Date getCreated() {
 		return created;
 	}
@@ -153,6 +162,7 @@ public class OrderBackingBean {
 	private String customerPhone;
 	private String customerMobile;
 	private Long orderId;
+	private String notes;
   private Date created;
   private Date paid;
   private Date shipped;
