@@ -6,7 +6,7 @@
   xmlns:h="http://java.sun.com/jsf/html" 
   template="/WEB-INF/templates/forum.xhtml">
 
-  <ui:define name="pageTitle">Forum</ui:define>
+  <ui:define name="pageTitle">#{locales['forum.forum.pageTitle']}</ui:define>
   <ui:define name="head">
     <!-- CKEditor -->
     
@@ -23,7 +23,7 @@
     <h:form>
       <h:panelGroup layout="block" id="forum" styleClass="forum">
         <h3>
-          <span class="forum-nav-item"><h:outputLink value="#{request.contextPath}/forum/">Forum</h:outputLink></span>
+          <span class="forum-nav-item"><h:outputLink value="#{request.contextPath}/forum/">#{locales['forum.forum.navItemForum']}</h:outputLink></span>
           <span class="forum-nav-separator"/>
           <span class="forum-nav-item">#{forumBackingBean.forum.name}</span>
         </h3>
@@ -35,25 +35,34 @@
                 <div class="forum-topic-subject">
                   <h:outputLink value="#{forumBackingBean.forum.urlName}/#{topic.urlName}">#{topic.subject}</h:outputLink>
                   <div class="forum-topic-message-count-container">
-                    <span>Total Messages: </span>
-                    <span class="forum-topic-message-count">#{forumBackingBean.getTopicPostCount(topic)}</span>
+                    <span class="forum-topic-message-count">
+                      <h:outputFormat value="#{locales['forum.forum.totalPosts']}">
+                        <f:param value="#{forumBackingBean.getTopicPostCount(topic)}"/>
+                      </h:outputFormat>
+                    </span>
                   </div>
                   <div class="forum-topic-last-message-container">
-                    <span class="">Last Message: </span>
-                    <span class="forum-topic-last-message">
-                      <h:outputText value="#{forumBackingBean.getLastMessageDate(topic)}">
-                        <f:convertDateTime/> 
-                      </h:outputText></span>
+                    <h:panelGroup styleClass="forum-topic-last-message">
+                      <h:outputFormat value="#{locales['forum.forum.lastPost']}">
+                        <f:param value="#{forumBackingBean.getLastMessageDate(topic)}"/>
+                      </h:outputFormat>
+                    </h:panelGroup>
                   </div>                
                 </div>
                 
                 <div class="forum-topic-author">
-                  <span>Started by #{topic.author.fullName}</span>
+                  <span>
+                    <h:outputFormat value="#{locales['forum.forum.topicStartedBy']}">
+                      <f:param value="#{topic.author.fullName}"/>
+                    </h:outputFormat>
+                  </span>
                 </div>
                 <div class="forum-topic-created">
-                  <span> at <h:outputText value="#{topic.created}">
-                    <f:convertDateTime/> 
-                  </h:outputText></span>
+                  <span>
+                    <h:outputFormat value="#{locales['forum.forum.topicCreatedAt']}">
+                      <f:param value="#{topic.created}"/>
+                    </h:outputFormat>
+                  </span>
                 </div>
               </div>
             </ui:repeat>
@@ -63,23 +72,23 @@
         <div class="forum-new-topic-container">
           <div class="forum-new-topic-editor-container" style="display: none">
             <div>
-              <h:outputLabel value="Subject" />
+              <h:outputLabel value="#{locales['forum.forum.newTopicSubjectLabel']}" />
             </div>
             <div>
               <h:inputText required="required" class="forum-new-topic-subject" value="#{forumBackingBean.newTopicSubject}" />
             </div>
             <div>
-              <h:outputLabel value="Contents" />
+              <h:outputLabel value="#{locales['forum.forum.newTopicContentLabel']}" />
             </div>
             <div>
               <h:inputTextarea class="forum-topic-contents-editor" value="#{forumBackingBean.newTopicContents}" />
             </div>
             <div>
-              <h:commandButton  class="forum-new-topic-button" value="New Topic" action="#{forumBackingBean.newTopic}" />
+              <h:commandButton  class="forum-new-topic-button" value="#{locales['forum.forum.newTopicButton']}" action="#{forumBackingBean.newTopic}" />
             </div>
           </div>
           
-          <a href="javascript:void(null)" class="forum-new-topic-link">New Topic</a>
+          <a href="javascript:void(null)" class="forum-new-topic-link">#{locales['forum.forum.newTopicLink']}</a>
         </div>       
 
       </h:panelGroup>
