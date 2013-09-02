@@ -69,7 +69,7 @@
           </div>
         </div>   
         
-        <div class="forum-new-topic-container">
+        <h:panelGroup layout="block" styleClass="forum-new-topic-container" rendered="#{sessionBackingBean.loggedIn}">
           <div class="forum-new-topic-editor-container" style="display: none">
             <div>
               <h:outputLabel value="#{locales['forum.forum.newTopicSubjectLabel']}" />
@@ -89,7 +89,11 @@
           </div>
           
           <a href="javascript:void(null)" class="forum-new-topic-link">#{locales['forum.forum.newTopicLink']}</a>
-        </div>       
+        </h:panelGroup>
+        
+        <h:panelGroup layout="block" styleClass="forum-new-topic-login-container" rendered="#{!sessionBackingBean.loggedIn}">
+          <h:outputLink styleClass="forum-new-topic-login-link" value="#{request.contextPath}/login?redirectUrl=#{request.contextPath}/forum/#{forumBackingBean.forum.urlName}">#{locales['forum.forum.newTopicLoginRequired']}</h:outputLink>
+        </h:panelGroup>
 
       </h:panelGroup>
     </h:form>    

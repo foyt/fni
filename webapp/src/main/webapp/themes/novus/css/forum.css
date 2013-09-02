@@ -111,6 +111,11 @@
   box-sizing: border-box; 
 }
 
+.forum-new-topic-login-container {
+  margin-top: 8px;
+}
+
+.forum-new-topic-login-link, 
 .forum-new-topic-link {
   background: #E6E6E6;
   border: 1px solid #D3D3D3;
