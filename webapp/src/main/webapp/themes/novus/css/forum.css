@@ -203,10 +203,11 @@
   margin-top: 20px;
 }
 
-.forum-post-send-container, .forum-new-topic-container {
+.forum-post-send-container, .forum-new-topic-container, .forum-post-reply-login-container {
   margin-top: 8px;
 }
 
+.forum-post-reply-login-link,
 .forum-new-topic-container input[type="submit"],
 .forum-post-send-container input[type="submit"] {
   background: #E6E6E6;

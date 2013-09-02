@@ -71,13 +71,19 @@
           </ui:repeat>
         </div>
 
-        <div class="forum-post-editor-container">
-          <h:inputTextarea value="#{forumTopicBackingBean.reply}" class="forum-post-editor"/>
-        </div>
+        <h:panelGroup rendered="#{sessionBackingBean.loggedIn}">
+          <div class="forum-post-editor-container">
+            <h:inputTextarea value="#{forumTopicBackingBean.reply}" class="forum-post-editor"/>
+          </div>
+          
+          <div class="forum-post-send-container">
+            <h:commandButton value="#{locales['forum.topic.replyButton']}" action="#{forumTopicBackingBean.postReply}" />
+          </div>
+        </h:panelGroup>
         
-        <div class="forum-post-send-container">
-          <h:commandButton value="#{locales['forum.topic.replyButton']}" action="#{forumTopicBackingBean.postReply}" />
-        </div>
+        <h:panelGroup layout="block" styleClass="forum-post-reply-login-container" rendered="#{!sessionBackingBean.loggedIn}">
+          <h:outputLink styleClass="forum-post-reply-login-link" value="#{request.contextPath}/login?redirectUrl=#{request.contextPath}/forum/#{forumTopicBackingBean.forumUrlName}/#{forumTopicBackingBean.topicUrlName}">#{locales['forum.topic.replyLoginRequired']}</h:outputLink>
+        </h:panelGroup>
         
       </h:panelGroup>
     </h:form>    
