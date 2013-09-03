@@ -103,6 +103,10 @@ public class ForumBackingBean {
 		this.newTopicContents = newTopicContents;
 	}
 	
+	public boolean getAllowTopicCreation() {
+		return forum.getAllowTopicCreation();
+	}
+	
 	@LoggedIn
 	@Secure (Permission.FORUM_TOPIC_CREATE)
 	@SecurityContext (context = "#{forumBackingBean.forum}")

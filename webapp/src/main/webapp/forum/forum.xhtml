@@ -69,30 +69,32 @@
           </div>
         </div>   
         
-        <h:panelGroup layout="block" styleClass="forum-new-topic-container" rendered="#{sessionBackingBean.loggedIn}">
-          <div class="forum-new-topic-editor-container" style="display: none">
-            <div>
-              <h:outputLabel value="#{locales['forum.forum.newTopicSubjectLabel']}" />
+        <h:panelGroup rendered="#{forumBackingBean.allowTopicCreation}">
+          <h:panelGroup layout="block" styleClass="forum-new-topic-container" rendered="#{sessionBackingBean.loggedIn}">
+            <div class="forum-new-topic-editor-container" style="display: none">
+              <div>
+                <h:outputLabel value="#{locales['forum.forum.newTopicSubjectLabel']}" />
+              </div>
+              <div>
+                <h:inputText required="required" class="forum-new-topic-subject" value="#{forumBackingBean.newTopicSubject}" />
+              </div>
+              <div>
+                <h:outputLabel value="#{locales['forum.forum.newTopicContentLabel']}" />
+              </div>
+              <div>
+                <h:inputTextarea class="forum-topic-contents-editor" value="#{forumBackingBean.newTopicContents}" />
+              </div>
+              <div>
+                <h:commandButton  class="forum-new-topic-button" value="#{locales['forum.forum.newTopicButton']}" action="#{forumBackingBean.newTopic}" />
+              </div>
             </div>
-            <div>
-              <h:inputText required="required" class="forum-new-topic-subject" value="#{forumBackingBean.newTopicSubject}" />
-            </div>
-            <div>
-              <h:outputLabel value="#{locales['forum.forum.newTopicContentLabel']}" />
-            </div>
-            <div>
-              <h:inputTextarea class="forum-topic-contents-editor" value="#{forumBackingBean.newTopicContents}" />
-            </div>
-            <div>
-              <h:commandButton  class="forum-new-topic-button" value="#{locales['forum.forum.newTopicButton']}" action="#{forumBackingBean.newTopic}" />
-            </div>
-          </div>
+            
+            <a href="javascript:void(null)" class="forum-new-topic-link">#{locales['forum.forum.newTopicLink']}</a>
+          </h:panelGroup>
           
-          <a href="javascript:void(null)" class="forum-new-topic-link">#{locales['forum.forum.newTopicLink']}</a>
-        </h:panelGroup>
-        
-        <h:panelGroup layout="block" styleClass="forum-new-topic-login-container" rendered="#{!sessionBackingBean.loggedIn}">
-          <h:outputLink styleClass="forum-new-topic-login-link" value="#{request.contextPath}/login?redirectUrl=#{request.contextPath}/forum/#{forumBackingBean.forum.urlName}">#{locales['forum.forum.newTopicLoginRequired']}</h:outputLink>
+          <h:panelGroup layout="block" styleClass="forum-new-topic-login-container" rendered="#{!sessionBackingBean.loggedIn}">
+            <h:outputLink styleClass="forum-new-topic-login-link" value="#{request.contextPath}/login?redirectUrl=#{request.contextPath}/forum/#{forumBackingBean.forum.urlName}">#{locales['forum.forum.newTopicLoginRequired']}</h:outputLink>
+          </h:panelGroup>
         </h:panelGroup>
 
       </h:panelGroup>
