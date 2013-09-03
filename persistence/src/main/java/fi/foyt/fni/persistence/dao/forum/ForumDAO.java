@@ -18,7 +18,7 @@ public class ForumDAO extends GenericDAO<Forum> {
 
 	private static final long serialVersionUID = 1L;
 
-	public Forum create(String name, String urlName, String description, ForumCategory forumCategory) {
+	public Forum create(String name, String urlName, String description, ForumCategory forumCategory, Boolean allowTopicCreation) {
     EntityManager entityManager = getEntityManager();
 
     Forum forum = new Forum();
@@ -26,6 +26,7 @@ public class ForumDAO extends GenericDAO<Forum> {
     forum.setUrlName(urlName);
     forum.setCategory(forumCategory);
     forum.setDescription(description);
+    forum.setAllowTopicCreation(allowTopicCreation);
 
     entityManager.persist(forum);
 
