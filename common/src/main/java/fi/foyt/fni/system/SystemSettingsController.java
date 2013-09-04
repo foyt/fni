@@ -17,6 +17,8 @@ import fi.foyt.fni.persistence.dao.system.SystemSettingDAO;
 import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.system.SystemSetting;
+import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.users.UserController;
 
 @RequestScoped
 @Stateful
@@ -24,6 +26,7 @@ public class SystemSettingsController {
 	
 	private static final String DEFAULT_COUNTRY_CODE = "FI";
 	private static final String GAMELIBRARY_PUBLICATION_FORUM_ID = "gamelibrary.publication.forum";
+	private static final String SYSTEM_USER_EMAIL = "system.user.email";
 
 	@Inject
 	private SystemSettingDAO systemSettingDAO;
@@ -34,6 +37,9 @@ public class SystemSettingsController {
 	@Inject
 	private CountryDAO countryDAO;
 
+	@Inject
+	private UserController userController;
+	
 	public String getSetting(String name) {
 		SystemSetting systemSetting = systemSettingDAO.findByName(name);
 		if (systemSetting != null)
@@ -97,5 +103,9 @@ public class SystemSettingsController {
 
 	public Long getGameLibraryPublicationForumId() {
 		return NumberUtils.createLong(getSetting(GAMELIBRARY_PUBLICATION_FORUM_ID));
+	}
+
+	public User getSystemUser() {
+		return userController.findUserByEmail(getSetting(SYSTEM_USER_EMAIL));
 	}
 }
