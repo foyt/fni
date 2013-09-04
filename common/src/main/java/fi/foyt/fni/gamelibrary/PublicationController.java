@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +31,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.utils.faces.FacesUtils;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @Stateful
@@ -190,9 +192,11 @@ public class PublicationController {
 	public BookPublication createBookPublication(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, List<GameLibraryTag> tags) {
 		
 		Date now = new Date();
+		User systemUser = systemSettingsController.getSystemUser();
+		
 		Long forumId = systemSettingsController.getGameLibraryPublicationForumId();
 		Forum forum = forumController.findForumById(forumId);
-		ForumTopic forumTopic = forumController.createTopic(forum, name, creator);
+		ForumTopic forumTopic = forumController.createTopic(forum, name, systemUser);
 		String urlName = createUrlName(name);
 
 		BookPublication bookPublication = bookPublicationDAO.create(name, urlName, description, price, downloadable, purchasable, defaultImage, 
@@ -202,6 +206,15 @@ public class PublicationController {
 			publicationTagDAO.create(tag, bookPublication);
 		}
 		
+		String publicationUrl = new StringBuilder()
+  	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+  	  .append("/gamelibrary/")
+  	  .append(bookPublication.getUrlName())
+  	  .toString();
+		
+		String initialForumPostContent = FacesUtils.getLocalizedValue("gamelibrary.bookPublication.initialForumMessage", publicationUrl, bookPublication.getName());
+		forumController.createForumPost(forumTopic, systemUser, initialForumPostContent);
+
 		return bookPublication;
 	}
 	
