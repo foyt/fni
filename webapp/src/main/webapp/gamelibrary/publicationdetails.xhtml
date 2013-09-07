@@ -21,13 +21,13 @@
               </h:outputLink>
             </span>            
             <span class="gamelibrary-nav-separator"/>
-            <span class="gamelibrary-nav-item">#{publicationDetailsBackingBean.publication.name}</span>
+            <span class="gamelibrary-nav-item">#{publicationDetailsBackingBean.name}</span>
           </h3>
           
           <div>
-            <div data-publication-id="#{publicationDetailsBackingBean.publication.id}" class="gamelibrary-publication">
+            <div data-publication-id="#{publicationDetailsBackingBean.id}" class="gamelibrary-publication">
               <div class="gamelibrary-publication-info-container">
-                <div class="gamelibrary-publication-name">#{publicationDetailsBackingBean.publication.name}</div>
+                <div class="gamelibrary-publication-name">#{publicationDetailsBackingBean.name}</div>
                 <div class="gamelibrary-publication-tags-container">
                   <ui:repeat var="tag" value="#{publicationDetailsBackingBean.tags}">
                     <div class="gamelibrary-publication-tag">
@@ -36,7 +36,7 @@
                   </ui:repeat>
                 </div>
                 
-                <div class="gamelibrary-publication-description">#{publicationDetailsBackingBean.publication.description}</div>
+                <div class="gamelibrary-publication-description">#{publicationDetailsBackingBean.description}</div>
                 <h:panelGroup layout="block" styleClass="gamelibrary-publication-license-container">
                   <ui:fragment rendered="#{publicationDetailsBackingBean.creativeCommonsLicense ne null}">
                     <h:outputLink value="#{publicationDetailsBackingBean.creativeCommonsLicense.url}">
@@ -46,25 +46,24 @@
                   
                   <ui:fragment rendered="#{publicationDetailsBackingBean.creativeCommonsLicense eq null}">
                     <label>#{locales['gamelibrary.publicationDetails.publicationLicenseOther']}</label>
-                    <div>#{publicationDetailsBackingBean.publication.license}</div>
+                    <div>#{publicationDetailsBackingBean.license}</div>
                   </ui:fragment>
                 </h:panelGroup>
                 <div class="gamelibrary-publication-details">
                   <div class="gamelibrary-publication-detail">
                     <span>#{locales['gamelibrary.publicationDetails.publicationDetailsPrice']}</span>
                     <span class="gamelibrary-publication-details-price">
-                      <h:outputText value="#{publicationDetailsBackingBean.publication.price}" >
+                      <h:outputText value="#{publicationDetailsBackingBean.price}" >
                         <f:convertNumber currencyCode="EUR" type="currency" />
                       </h:outputText>
                     </span>
                   </div>
-                  <ui:fragment rendered="#{publicationDetailsBackingBean.bookPublication ne null}">
-                    <ui:fragment rendered="#{publicationDetailsBackingBean.bookPublication.numberOfPages > 0}">
-                      <div class="gamelibrary-publication-detail">
-                        <span>#{locales['gamelibrary.publicationDetails.publicationDetailsNumberOfPages']}</span> 
-                        <span>#{publicationDetailsBackingBean.bookPublication.numberOfPages}</span>
-                      </div>
-                    </ui:fragment>
+
+                  <ui:fragment rendered="#{(publicationDetailsBackingBean.numberOfPages ne null) and (publicationDetailsBackingBean.numberOfPages > 0)}">
+                    <div class="gamelibrary-publication-detail">
+                      <span>#{locales['gamelibrary.publicationDetails.publicationDetailsNumberOfPages']}</span> 
+                      <span>#{publicationDetailsBackingBean.numberOfPages}</span>
+                    </div>
                   </ui:fragment>
 
                   <ui:fragment rendered="#{publicationDetailsBackingBean.authors.size() > 0}">
@@ -80,23 +79,22 @@
                     </div>
                   </ui:fragment>
 
-                  <h:panelGroup layout="block" rendered="#{publicationDetailsBackingBean.publication.forumTopic ne null}" styleClass="gamelibrary-publication-comments">
-                    <h:outputLink value="#{request.contextPath}/forum/#{publicationDetailsBackingBean.publication.forumTopic.forum.urlName}/#{publicationDetailsBackingBean.publication.forumTopic.urlName}">
+                  <h:panelGroup layout="block" rendered="#{publicationDetailsBackingBean.forumTopicPath ne null}" styleClass="gamelibrary-publication-comments">
+                    <h:outputLink value="#{request.contextPath}/forum/#{publicationDetailsBackingBean.forumTopicPath}">
                       <h:outputFormat value="#{locales['gamelibrary.tagList.publicationComments']}">
-                        <f:param value="#{publicationDetailsBackingBean.publicationCommentCount}"/>
+                        <f:param value="#{publicationDetailsBackingBean.commentCount}"/>
                       </h:outputFormat>                          
                     </h:outputLink>
                   </h:panelGroup>
                 </div>
                 
-                <ui:fragment rendered="#{(publicationDetailsBackingBean.mayManagePublications) and (publicationDetailsBackingBean.publication.published)}">
+                <ui:fragment rendered="#{(publicationDetailsBackingBean.mayManagePublications)}">
                   <div class="gamelibrary-publication-admin-actions-container">
                     <div class="gamelibrary-publication-admin-action-container">
-                      <a title="#{locales['gamelibrary.publicationDetails.unpublishButtonTitle']}" href="javascript:void(null);" data-publication-id="#{publicationDetailsBackingBean.publication.id}" data-publication-name="#{publicationDetailsBackingBean.publication.name}" class="publication-unpublish"></a>
+                      <a title="#{locales['gamelibrary.publicationDetails.unpublishButtonTitle']}" href="javascript:void(null);" data-publication-id="#{publicationDetailsBackingBean.id}" data-publication-name="#{publicationDetailsBackingBean.name}" class="publication-unpublish"></a>
                     </div>
                   </div>
                 </ui:fragment>
-                
               </div>
               
               <div class="gamelibrary-publication-images-container">
@@ -117,8 +115,8 @@
                 <ui:fragment rendered="#{publicationDetailsBackingBean.hasImages}">
                   <div class="gamelibrary-publication-image-container">
                     <div class="gamelibrary-publication-image-inner-container">
-                      <a href="#{request.contextPath}/gamelibrary/publicationImages/#{publicationDetailsBackingBean.publication.defaultImage.id}">
-                        <img data-url="#{request.contextPath}/gamelibrary/publicationImages/#{publicationDetailsBackingBean.publication.defaultImage.id}" src="#{request.contextPath}/gamelibrary/publicationImages/#{publicationDetailsBackingBean.publication.defaultImage.id}?width=128&amp;height=128"/>
+                      <a href="#{request.contextPath}/gamelibrary/publicationImages/#{publicationDetailsBackingBean.defaultImage.id}">
+                        <img data-url="#{request.contextPath}/gamelibrary/publicationImages/#{publicationDetailsBackingBean.defaultImage.id}" src="#{request.contextPath}/gamelibrary/publicationImages/#{publicationDetailsBackingBean.defaultImage.id}?width=128&amp;height=128"/>
                       </a>
                     </div>
                   </div>
@@ -126,9 +124,9 @@
               </div>
               
               <div class="gamelibrary-publication-actions-container">
-                <div class="gamelibrary-publication-action-container">
-                  <a href="#{request.contextPath}/gamelibrary/publicationFiles/#{publicationDetailsBackingBean.publication.id}">#{locales['gamelibrary.publicationDetails.publicationDownloadFreePdf']}</a>
-                </div>
+                <h:panelGroup layout="block" styleClass="gamelibrary-publication-action-container" rendered="#{publicationDetailsBackingBean.downloadable}">
+                  <a href="#{request.contextPath}/gamelibrary/publicationFiles/#{publicationDetailsBackingBean.id}">#{locales['gamelibrary.publicationDetails.publicationDownloadFreePdf']}</a>
+                </h:panelGroup>
                 <div class="gamelibrary-publication-action-container">
                   <h:commandLink action="#{publicationDetailsBackingBean.addPublicationToShoppingCart}" value="#{locales['gamelibrary.publicationDetails.publicationAddToShoppingCart']}" styleClass="gamelibrary-publication-add-to-cart-action">
                   </h:commandLink>
@@ -140,8 +138,14 @@
           </div>
         </div>
       </h:panelGroup>
+      
+      <h:panelGroup style="display: none">
+        <h:commandButton action="#{publicationDetailsBackingBean.unpublish}" styleClass="publication-unpublish-command-button"></h:commandButton>
+      </h:panelGroup>
+      
     </h:form>
   </ui:define>  
+  
 </ui:composition>
     
     

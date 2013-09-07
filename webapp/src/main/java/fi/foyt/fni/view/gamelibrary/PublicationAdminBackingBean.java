@@ -27,15 +27,6 @@ public class PublicationAdminBackingBean {
   	  .toString());
 	}
 
-	public void unpublish() throws IOException {
-		publicationController.unpublishPublication(publicationController.findPublicationById(publicationId));
-
-		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
-  	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
-  	  .append("/gamelibrary/unpublished/")
-  	  .toString());
-	}
-
 	public void delete() throws IOException {
 		publicationController.deletePublication(publicationController.findPublicationById(publicationId));
 

@@ -1,12 +1,10 @@
 (function() {
   'use strict';
 
-  /* Live Listeners */
-
   /**
    * Publication Admin Actions / unpublish Publication
    */
- 
+  
   $(document).on('click', '.publication-unpublish', function (event) {
     var publicationId = $(this).data('publication-id');
     var publicationName = $(this).data('publication-name');
@@ -28,7 +26,7 @@
             'class': 'unpublish-button',
             'text': 'Unpublish',
             'click': function(event) { 
-              executePublicationAdminAction(publicationId, 'unpublish');
+              $('.publication-unpublish-command-button').click();
             }
           }]
         });
