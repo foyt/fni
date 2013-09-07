@@ -166,7 +166,26 @@
         </div>
       </h:panelGroup>
     </h:form>
-  </ui:define>  
+  </ui:define>
+  
+  <ui:define name="adminPanel">
+  
+    <!-- TODO: Game Library Admins only -->
+          
+    <div id="gamelibrary-admin-panel">
+      <a class="gamelibrary-admin-create-publication" title="Create New Publication"> </a>
+    </div>
+    
+    <div id="publication-admin-operator-container" style="display: none">
+      <h:form>
+        <h:inputHidden value="#{publicationAdminBackingBean.publicationId}" id="publication-id"/>
+        <h:commandButton action="#{publicationAdminBackingBean.publish}" id="publish"></h:commandButton>
+        <h:commandButton action="#{publicationAdminBackingBean.unpublish}" id="unpublish"></h:commandButton>
+        <h:commandButton action="#{publicationAdminBackingBean.delete}" id="delete"></h:commandButton>
+      </h:form>
+    </div>
+  </ui:define>
+    
 </ui:composition>
     
     

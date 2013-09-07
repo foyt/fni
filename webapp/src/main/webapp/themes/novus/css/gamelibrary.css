@@ -405,7 +405,7 @@
   position: fixed;
   top: 10px;
   right: 10px;
-  opacity: 0.01; 
+  opacity: 0.9; 
 }
 
 #gamelibrary-admin-panel:hover {
