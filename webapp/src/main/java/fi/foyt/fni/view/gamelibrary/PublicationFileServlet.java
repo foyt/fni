@@ -51,7 +51,12 @@ public class PublicationFileServlet extends AbstractFileServlet {
 		}
 		
 		if (!bookPublication.getPublished()) {
-			if ((!sessionController.isLoggedIn())||(!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS))) {
+			if (!sessionController.isLoggedIn()) {
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+				return;
+			}
+			
+			if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
 				response.sendError(HttpServletResponse.SC_FORBIDDEN);
 				return;
 			}
@@ -97,8 +102,17 @@ public class PublicationFileServlet extends AbstractFileServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO: Security
+		User loggedUser = sessionController.getLoggedUser();
+		if (loggedUser == null) {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+			return;
+		}
 		
+		if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN);
+			return;
+		}
+
 		// PublicationId could not be resolved, send 404
 		Long publicationId = getPathId(request);
 		if (publicationId == null) {
@@ -113,8 +127,6 @@ public class PublicationFileServlet extends AbstractFileServlet {
 			return;
 		}
 		
-		User loggedUser = sessionController.getLoggedUser();
-
 		try {
 			TypedData file = null;
 			List<FileItem> items = getFileItems(request);
