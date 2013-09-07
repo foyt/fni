@@ -92,7 +92,7 @@
                 <ui:fragment rendered="#{(publicationDetailsBackingBean.mayManagePublications) and (publicationDetailsBackingBean.publication.published)}">
                   <div class="gamelibrary-publication-admin-actions-container">
                     <div class="gamelibrary-publication-admin-action-container">
-                      <a title="Unpublish Publication" href="javascript:void(null);" data-publication-id="#{publicationDetailsBackingBean.publication.id}" data-publication-name="#{publicationDetailsBackingBean.publication.name}" class="publication-unpublish"></a>
+                      <a title="#{locales['gamelibrary.publicationDetails.unpublishButtonTitle']}" href="javascript:void(null);" data-publication-id="#{publicationDetailsBackingBean.publication.id}" data-publication-name="#{publicationDetailsBackingBean.publication.name}" class="publication-unpublish"></a>
                     </div>
                   </div>
                 </ui:fragment>
