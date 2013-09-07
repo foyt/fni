@@ -10,8 +10,10 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.gamelibrary.PublicationController;
+import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
@@ -34,6 +36,7 @@ public class PublicationUnpublishedListBackingBean extends AbstractPublicationLi
 	
 	@URLAction
 	@LoggedIn
+	@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
 	public void init() {
 		User loggedUser = sessionController.getLoggedUser();
 		setPublications(publicationController.listUnpublishedPublications(loggedUser));
