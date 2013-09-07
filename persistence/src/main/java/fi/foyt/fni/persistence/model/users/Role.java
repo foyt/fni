@@ -17,7 +17,8 @@ public enum Role {
 	
 	/* Game Library */
 	
-	GAME_LIBRARY_MANAGER (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS);
+	GAME_LIBRARY_USER (Permission.GAMELIBRARY_VIEW_ORDER),
+	GAME_LIBRARY_MANAGER (Permission.GAMELIBRARY_VIEW_ORDER, Permission.GAMELIBRARY_MANAGE_PUBLICATIONS);
   
 	Role(Permission... permissions) {
     this.permissions = permissions;

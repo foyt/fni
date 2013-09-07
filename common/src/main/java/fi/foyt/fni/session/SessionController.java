@@ -77,7 +77,8 @@ public class SessionController implements Serializable {
   		case USER:
   			return new Role[] {
           Role.USER,
-          Role.FORUM_USER
+          Role.FORUM_USER,
+          Role.GAME_LIBRARY_USER
         };
   		case GUEST:
   			return new Role[] {
