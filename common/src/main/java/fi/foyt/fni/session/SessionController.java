@@ -51,6 +51,17 @@ public class SessionController implements Serializable {
     
     return null;
   }
+  
+  public boolean hasLoggedUserRole(Role role) {
+  	Role[] roles = getLoggedUserRoles();
+  	for (Role loggedUserRole : roles) {
+  		if (loggedUserRole == role) {
+  			return true;
+  		}
+  	}
+  	
+  	return false;
+  }
 
 	public boolean hasLoggedUserPermission(Permission permission) {
 		Role[] roles = getLoggedUserRoles();
