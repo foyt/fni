@@ -24,7 +24,9 @@ import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationAuthor;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
+import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.session.SessionController;
 
 @SessionScoped
 @Named
@@ -49,6 +51,9 @@ public class PublicationDetailsBackingBean {
 
 	@Inject
 	private SessionShoppingCartController sessionShoppingCartController;
+
+	@Inject
+	private SessionController sessionController;
 	
 	@URLAction
 	public void init() throws FileNotFoundException {
@@ -118,6 +123,14 @@ public class PublicationDetailsBackingBean {
 	
 	public CreativeCommonsLicense getCreativeCommonsLicense() {
 		return creativeCommonsLicense;
+	}
+	
+	public boolean getMayManagePublications() {
+		if (sessionController.isLoggedIn()) {
+			return sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS);
+		} 
+
+		return false;
 	}
 	
 	private String urlName;

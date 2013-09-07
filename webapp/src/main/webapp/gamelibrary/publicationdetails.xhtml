@@ -7,7 +7,7 @@
   template="/WEB-INF/templates/gamelibrary_publications.xhtml">
 
  <ui:define name="headExtra">
-    <h:outputScript name="scripts/gui/gamelibrary/publishedlist.js"></h:outputScript>
+    <h:outputScript name="scripts/gui/gamelibrary/publicationdetails.js"></h:outputScript>
   </ui:define>
 
   <ui:define name="publications">
@@ -89,8 +89,7 @@
                   </h:panelGroup>
                 </div>
                 
-                <ui:fragment rendered="#{publicationDetailsBackingBean.publication.published}">
-                  <!-- TODO: Admins and owners only -->
+                <ui:fragment rendered="#{(publicationDetailsBackingBean.mayManagePublications) and (publicationDetailsBackingBean.publication.published)}">
                   <div class="gamelibrary-publication-admin-actions-container">
                     <div class="gamelibrary-publication-admin-action-container">
                       <a title="Unpublish Publication" href="javascript:void(null);" data-publication-id="#{publicationDetailsBackingBean.publication.id}" data-publication-name="#{publicationDetailsBackingBean.publication.name}" class="publication-unpublish"></a>
