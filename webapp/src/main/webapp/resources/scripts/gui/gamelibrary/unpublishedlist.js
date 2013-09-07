@@ -302,6 +302,7 @@
   $(document).on('click', '.publication-publish', function (event) {
     var publicationId = $(this).data('publication-id');
     var publicationName = $(this).data('publication-name');
+    var publishButton = $(this).parent().find('input[type="submit"]');
     
     $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/publicationpublish.jsf?publicationId=' + publicationId + '&publicationName=' + publicationName, {
       async: false,
@@ -320,7 +321,7 @@
             'class': 'publish-button',
             'text': 'Publish',
             'click': function(event) { 
-              executePublicationAdminAction(publicationId, 'publish');
+              publishButton.click();
             }
           }]
         });
@@ -499,6 +500,7 @@
   $(document).on('click', '.publication-delete', function (event) {
     var publicationId = $(this).data('publication-id');
     var publicationName = $(this).data('publication-name');
+    var deleteButton = $(this).parent().find('input[type="submit"]');
     
     $.ajax(CONTEXTPATH + '/gamelibrary/dialogs/publicationdelete.jsf?publicationId=' + publicationId + '&publicationName=' + publicationName, {
       async: false,
@@ -517,8 +519,7 @@
             'class': 'delete-button',
             'text': 'Delete',
             'click': function(event) { 
-              executePublicationAdminAction(publicationId, 'delete');
-              $(this).dialog("close");
+              deleteButton.click();
             }
           }]
         });

@@ -46,17 +46,6 @@
   /* Jsf Actions */
   
   /**
-   * Execute publication admin action
-   */
-  
-  window.executePublicationAdminAction = function (publicationId, command) {
-    var operatorForm = $('#publication-admin-operator-container form');
-    var prefix = operatorForm.attr('name');
-    operatorForm.find('input[name="' + prefix + ':publication-id"]').val(publicationId);
-    operatorForm.find('input[name="' + prefix + ':' + command + '"]').click();
-  };
-  
-  /**
    * Publication thumbnails / Mouse Enter
    */
   

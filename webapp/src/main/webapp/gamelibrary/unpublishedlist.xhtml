@@ -110,6 +110,7 @@
                   <div class="gamelibrary-publication-admin-actions-container">
                     <div class="gamelibrary-publication-admin-action-container">
                       <a class="publication-publish" data-publication-id="#{publication.id}" data-publication-name="#{publication.name}" href="javascript:void(null);" title="#{locales['gamelibrary.unpublishedList.actionsPublish']}"></a>
+                      <h:commandButton action="#{publicationUnpublishedListBackingBean.publish(publication.id)}" style="display:none"/>
                     </div>
                     <div class="gamelibrary-publication-admin-action-container">
                       <a class="publication-edit" data-publication-id="#{publication.id}" href="javascript:void(null);" title="#{locales['gamelibrary.unpublishedList.actionsEdit']}"></a>
@@ -119,6 +120,7 @@
                     </div>
                     <div class="gamelibrary-publication-admin-action-container">
                       <a class="publication-delete" data-publication-id="#{publication.id}" data-publication-name="#{publication.name}" href="javascript:void(null);" title="#{locales['gamelibrary.unpublishedList.actionsDelete']}"></a>
+                      <h:commandButton action="#{publicationUnpublishedListBackingBean.delete(publication.id)}" style="display:none"/>
                     </div>
                   </div>
                 </div>
@@ -154,8 +156,7 @@
                     <a href="#{request.contextPath}/gamelibrary/publicationFiles/#{publication.id}">#{locales['gamelibrary.unpublishedList.publicationDownloadFreePdf']}</a>
                   </div>
                   <div class="gamelibrary-publication-action-container">
-                    <h:commandLink action="#{publicationUnpublishedListBackingBean.addPublicationToShoppingCart(publication)}" value="#{locales['gamelibrary.unpublishedList.publicationAddToShoppingCart']}" styleClass="gamelibrary-publication-add-to-cart-action">
-                    </h:commandLink>
+                    <h:commandLink action="#{publicationUnpublishedListBackingBean.addPublicationToShoppingCart(publication)}" value="#{locales['gamelibrary.unpublishedList.publicationAddToShoppingCart']}" styleClass="gamelibrary-publication-add-to-cart-action"/>
                   </div>
                 </div>
                 
@@ -174,15 +175,6 @@
           
     <div id="gamelibrary-admin-panel">
       <a class="gamelibrary-admin-create-publication" title="Create New Publication"> </a>
-    </div>
-    
-    <div id="publication-admin-operator-container" style="display: none">
-      <h:form>
-        <h:inputHidden value="#{publicationAdminBackingBean.publicationId}" id="publication-id"/>
-        <h:commandButton action="#{publicationAdminBackingBean.publish}" id="publish"></h:commandButton>
-        <h:commandButton action="#{publicationAdminBackingBean.unpublish}" id="unpublish"></h:commandButton>
-        <h:commandButton action="#{publicationAdminBackingBean.delete}" id="delete"></h:commandButton>
-      </h:form>
     </div>
   </ui:define>
     

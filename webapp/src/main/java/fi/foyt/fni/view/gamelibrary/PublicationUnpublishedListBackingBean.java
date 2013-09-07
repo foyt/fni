@@ -1,7 +1,10 @@
 package fi.foyt.fni.view.gamelibrary;
 
+import java.io.IOException;
+
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -40,6 +43,28 @@ public class PublicationUnpublishedListBackingBean extends AbstractPublicationLi
 	public void init() {
 		User loggedUser = sessionController.getLoggedUser();
 		setPublications(publicationController.listUnpublishedPublications(loggedUser));
+	}
+
+	@LoggedIn
+	@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
+	public void publish(Long publicationId) throws IOException {
+		publicationController.publishPublication(publicationController.findPublicationById(publicationId));
+		
+		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+  	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+  	  .append("/gamelibrary/")
+  	  .toString());
+	}
+
+	@LoggedIn
+	@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
+	public void delete(Long publicationId) throws IOException {
+		publicationController.deletePublication(publicationController.findPublicationById(publicationId));
+
+		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+  	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+  	  .append("/gamelibrary/unpublished/")
+  	  .toString());
 	}
 	
 }
