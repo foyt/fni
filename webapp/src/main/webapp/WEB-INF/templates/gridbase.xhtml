@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:ui="http://java.sun.com/jsf/facelets" lang="#{sessionBackingBean.locale.language}">
+  <f:view locale="#{sessionBackingBean.locale}">
+    <ui:insert name="metadata"/>
+    <h:head>
+      <title><ui:insert name="pageTitle"></ui:insert></title>
+      <h:outputStylesheet library="novus" name="grid.css"/>
+      <ui:insert name="head-content"/>
+    </h:head>      
+    <h:body>
+      <ui:insert name="body-content">
+        <h:panelGroup layout="block" styleClass="container_16">
+          <ui:insert name="grid-content"/>
+        </h:panelGroup> 
+      </ui:insert>
+    </h:body>
+  </f:view>
+</html>
