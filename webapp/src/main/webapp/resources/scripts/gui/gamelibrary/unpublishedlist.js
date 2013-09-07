@@ -161,7 +161,7 @@
    * Store Admin Panel / Create Publication
    */
  
-  $(document).on('click', '#gamelibrary-admin-panel .gamelibrary-admin-create-publication', function (event) {
+  $(document).on('click', '.gamelibrary-admin-panel .gamelibrary-admin-create-publication', function (event) {
     $.ajax(CONTEXTPATH + '/gamelibrary/publications/dialog/create', {
       async: false,
       success : function(data, textStatus, jqXHR) {
