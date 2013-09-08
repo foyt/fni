@@ -6,8 +6,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.search.annotations.Indexed;
+
 @Entity
 @PrimaryKeyJoinColumn (name="id")
+@Indexed
 public class BookPublication extends Publication {
 	
 	public PublicationFile getFile() {
