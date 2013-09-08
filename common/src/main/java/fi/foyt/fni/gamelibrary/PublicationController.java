@@ -165,6 +165,11 @@ public class PublicationController {
 			gameLibraryTagController.deletePublicationTag(publicationTag);
 		}
 		
+		List<PublicationAuthor> authors = publicationAuthorDAO.listByPublication(publication);
+		for (PublicationAuthor author : authors) {
+			publicationAuthorDAO.delete(author);
+		}
+		
 		publicationDAO.delete(publication);
 	}
 
