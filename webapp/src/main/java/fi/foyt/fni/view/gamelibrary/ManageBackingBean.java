@@ -24,12 +24,12 @@ import fi.foyt.fni.session.SessionController;
 @Stateful
 @URLMappings(mappings = {
   @URLMapping(
-		id = "gamelibrary-publication-unpublished", 
-		pattern = "/gamelibrary/unpublished/", 
-		viewId = "/gamelibrary/unpublishedlist.jsf"
+		id = "gamelibrary-manage", 
+		pattern = "/gamelibrary/manage/", 
+		viewId = "/gamelibrary/manage.jsf"
   )
 })
-public class PublicationUnpublishedListBackingBean extends AbstractPublicationListBackingBean {
+public class ManageBackingBean extends AbstractPublicationListBackingBean {
 
 	@Inject
 	private PublicationController publicationController;
@@ -63,7 +63,7 @@ public class PublicationUnpublishedListBackingBean extends AbstractPublicationLi
 
 		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
   	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
-  	  .append("/gamelibrary/unpublished/")
+  	  .append("/gamelibrary/manage/")
   	  .toString());
 	}
 	

@@ -193,7 +193,7 @@ public class PublicationDetailsBackingBean {
 
 		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
   	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
-  	  .append("/gamelibrary/unpublished/")
+  	  .append("/gamelibrary/manage/")
   	  .toString());
 	}
 

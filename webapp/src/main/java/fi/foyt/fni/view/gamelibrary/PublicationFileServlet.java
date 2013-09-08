@@ -149,7 +149,7 @@ public class PublicationFileServlet extends AbstractFileServlet {
 
 			response.sendRedirect(new StringBuilder()
   		  .append(request.getContextPath())
-  		  .append("/gamelibrary/unpublished/")
+  		  .append("/gamelibrary/manage/")
   		  .toString()
 			);
 			

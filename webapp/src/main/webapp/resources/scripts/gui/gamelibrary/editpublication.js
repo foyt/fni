@@ -124,7 +124,7 @@
         file.appendTo(fileForm);
         fileForm.submit();
       } else {
-        window.location = CONTEXTPATH + '/gamelibrary/unpublished/';
+        window.location = CONTEXTPATH + '/gamelibrary/manage/';
       }
     }
   };

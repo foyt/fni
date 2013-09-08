@@ -140,7 +140,7 @@
   box-shadow: 0px 0px 4px rgba(0,0,0,0.3);
 }
 
-.gamelibrary-publication-unpublished {
+.gamelibrary-publication-manage {
   box-shadow: 0px 0px 4px rgba(255,0,0,0.5);
 }
 
@@ -148,7 +148,7 @@
   box-shadow: 0px 0px 4px rgba(0,0,0,0.75);
 }
 
-.gamelibrary-publication-unpublished:hover {
+.gamelibrary-publication-manage:hover {
   box-shadow: 0px 0px 4px rgba(255,0,0,0.75);
 }
 

@@ -79,11 +79,6 @@
               <h:outputLink value="#{request.contextPath}/gamelibrary/">#{locales['gamelibrary.publications.mostRecent']}</h:outputLink>
             </div>
           </div>
-          <h:panelGroup styleClass="gamelibrary-category" layout="block" rendered="#{publicationCategoriesBackingBean.hasUnpublished}">
-            <div class="gamelibrary-category-title">
-              <h:outputLink value="#{request.contextPath}/gamelibrary/unpublished/">#{locales['gamelibrary.publications.unpublished']}</h:outputLink>
-            </div>
-          </h:panelGroup>
           <ui:repeat var="tag" value="#{publicationCategoriesBackingBean.tags}">
             <div class="gamelibrary-category">
               <div class="gamelibrary-category-title">
