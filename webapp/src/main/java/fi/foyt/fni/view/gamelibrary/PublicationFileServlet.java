@@ -146,6 +146,12 @@ public class PublicationFileServlet extends AbstractFileServlet {
 			} else {
 				publicationController.createBookPublicationFile(bookPublication, file.getContentType(), file.getData(), loggedUser);
 			}
+
+			response.sendRedirect(new StringBuilder()
+  		  .append(request.getContextPath())
+  		  .append("/gamelibrary/unpublished/")
+  		  .toString()
+			);
 			
 		} catch (FileUploadException e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());

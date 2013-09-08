@@ -1,0 +1,83 @@
+@CHARSET "UTF-8";
+
+#gamelibrary-create-publication {
+  background: #fff;
+  margin-top: 20px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 8px;
+  min-height: 783px;
+}
+
+.section {
+  padding: 8px;
+  margin-bottom: 4px; 
+  background-color: rgba(220, 220, 220, 0.1);
+  border-radius: 4px;
+  font-family: 'Trebuchet MS', Arial;
+  border: 1px solid rgba(200, 200, 200, 0.1);
+}
+
+.section label {
+  display: inline-block;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.max-width {
+  width: 100%;
+  -webkit-box-sizing: border-box; 	
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+div[data-type] {
+  margin-top: 8px;
+}
+
+div[data-type]>h4 {
+  margin-bottom: 8px;
+}
+
+input[type="radio"] {
+  margin-left: 16px;
+  margin-right: 8px;
+}
+
+td:first-child input[type="radio"] {
+  margin-left: 0px;
+}
+
+input[name="new-tag"] {
+  width: 395px;
+}
+
+.add-new-tag {
+  margin-left: 8px;
+}
+
+.authors-container .author, .tags .tag {
+  display: inline-block;
+  padding: 4px;
+  font-size: 12px;
+  background: rgb(0, 128, 192);
+  color: #fff;
+  border-radius: 4px;
+  margin-right: 4px;
+  margin-top: 8px;
+}
+
+.authors-container .author:last-child, .tags .tag:last-child {
+  margin-right: 0px;
+}
+
+.authors-container .author .remove-author:after, .tags .tag .remove-tag:after {
+  content: 'X';
+  color: #eee;
+  font-family: courier;
+  padding-left: 4px;
+}
+
+.authors-container .author .remove-author, .tags .tag .remove-tag {
+  text-decoration: none;
+}
