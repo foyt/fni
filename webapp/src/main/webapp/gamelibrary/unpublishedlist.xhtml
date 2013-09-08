@@ -171,7 +171,7 @@
   
   <ui:define name="adminPanel">
     <h:panelGroup layout="block" styleClass="gamelibrary-admin-panel">
-      <h:outputLink styleClass="gamelibrary-admin-create-publication" title="#{locales['gamelibrary.unpublishedList.createNewPublicationLink']}" value="javascript:void(null)"></h:outputLink>      
+      <h:outputLink styleClass="gamelibrary-admin-create-publication" title="#{locales['gamelibrary.unpublishedList.createNewPublicationLink']}" value="#{request.contextPath}/gamelibrary/manage/createpublication"></h:outputLink>      
     </h:panelGroup>
   </ui:define>
     
