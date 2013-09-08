@@ -37,9 +37,9 @@ import fi.foyt.fni.users.UserController;
 @Named
 @URLMappings(mappings = {
   @URLMapping(
-  		id = "gamelibrary-publication-dialog-edit", 
-  		pattern = "/gamelibrary/publications/#{publicationEditBackingBean.publicationId}/dialog/edit", 
-  		viewId = "/gamelibrary/dialogs/editpublication.jsf"
+  		id = "gamelibrary-publication-edit", 
+  		pattern = "/gamelibrary/manage/editpublication/#{publicationEditBackingBean.publicationId}", 
+  		viewId = "/gamelibrary/editpublication.jsf"
   )
 })
 public class PublicationEditBackingBean extends AbstractPublicationEditBackingBean {
@@ -56,7 +56,7 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 	@Inject
 	private SessionController sessionController;
 	
-	@URLAction (onPostback = false)
+	@URLAction
 	@LoggedIn
 	@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
 	public void load() {

@@ -1,6 +1,6 @@
 @CHARSET "UTF-8";
 
-#gamelibrary-create-publication {
+#gamelibrary-create-publication, #gamelibrary-edit-publication {
   background: #fff;
   margin-top: 20px;
   border-top-left-radius: 5px;

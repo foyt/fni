@@ -113,7 +113,7 @@
                       <h:commandButton action="#{publicationUnpublishedListBackingBean.publish(publication.id)}" style="display:none"/>
                     </div>
                     <div class="gamelibrary-publication-admin-action-container">
-                      <a class="publication-edit" data-publication-id="#{publication.id}" href="javascript:void(null);" title="#{locales['gamelibrary.unpublishedList.actionsEdit']}"></a>
+                      <h:outputLink styleClass="publication-edit" value="#{request.contextPath}/gamelibrary/manage/editpublication/#{publication.id}" title="#{locales['gamelibrary.unpublishedList.actionsEdit']}"/>
                     </div>
                     <div class="gamelibrary-publication-admin-action-container">
                       <a class="publication-add-images-action" data-publication-id="#{publication.id}" href="javascript:void(null);" title="#{locales['gamelibrary.unpublishedList.actionsAddImages']}"></a>
