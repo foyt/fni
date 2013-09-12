@@ -12,6 +12,14 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.util.Version;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.FullTextQuery;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.dao.gamelibrary.BookPublicationDAO;
@@ -32,6 +40,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.faces.FacesUtils;
+import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @Stateful
@@ -64,6 +73,9 @@ public class PublicationController {
 
 	@Inject
 	private SystemSettingsController systemSettingsController;
+	
+	@Inject
+	private FullTextEntityManager fullTextEntityManager;
 	
 	/* Publications */
 
@@ -120,11 +132,48 @@ public class PublicationController {
 		
 		return result;
 	}
-	
+
 	public Long countUnpublishedPublicationsByCreator(User user) {
 		return publicationDAO.countByCreatorAndPublished(user, Boolean.FALSE);
 	}
 
+	public List<SearchResult<Publication>> searchPublications(String text) throws ParseException {
+		if (StringUtils.isBlank(text)) {
+			return null;
+		}
+		
+		List<SearchResult<Publication>> result = new ArrayList<>();
+		
+		String[] criterias = text.replace(",", " ").replaceAll("\\s+", " ").split(" ");
+
+		StringBuilder queryStringBuilder = new StringBuilder();
+		queryStringBuilder.append("+(");
+		for (int i = 0, l = criterias.length; i < l; i++) {
+			String criteria = QueryParser.escape(criterias[i]);
+			queryStringBuilder.append(criteria);
+			queryStringBuilder.append("*");
+			if (i < l - 1)
+			  queryStringBuilder.append(' ');
+		}
+		queryStringBuilder.append(")");
+		
+		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+		QueryParser parser = new QueryParser(Version.LUCENE_35, "descriptionPlain", analyzer);
+		Query luceneQuery = parser.parse(queryStringBuilder.toString());
+    FullTextQuery query = (FullTextQuery) fullTextEntityManager.createFullTextQuery(luceneQuery, BookPublication.class);
+		@SuppressWarnings("unchecked")
+		List<Publication> searchResults = query.getResultList();
+    for (Publication searchResult : searchResults) {
+    	String link = new StringBuilder()
+    	  .append("gamelibrary/")
+    	  .append(searchResult.getUrlName())
+    	  .toString();
+    	result.add(new SearchResult<Publication>(searchResult, searchResult.getName(), link, null, null));
+    }
+		
+		return result;
+	}
+	
 	public Publication updatedModified(Publication publication, User modifier, Date modified) {
 		publicationDAO.updateModified(publication, modified);
 		publicationDAO.updateModifier(publication, modifier);
@@ -339,4 +388,5 @@ public class PublicationController {
 			}
 		} while (true);
 	}
+
 }
