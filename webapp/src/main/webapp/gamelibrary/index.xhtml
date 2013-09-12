@@ -25,6 +25,10 @@
             </span>
           </h3>
           
+          <h:panelGroup layout="block">
+            <input type="text" id="gamelibrary-search"/>
+          </h:panelGroup>          
+
           <div class="gamelibrary-publications">
             <ui:repeat var="publication" value="#{publicationMostRecentListBackingBean.publications}">
               <div data-publication-id="#{publication.id}" class="gamelibrary-publication">

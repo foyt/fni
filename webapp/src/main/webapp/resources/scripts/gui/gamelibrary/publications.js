@@ -35,6 +35,44 @@
     });
   };
   
+  /* Search */
+  
+  function initializeSearch() {
+    $("#gamelibrary-search").autocomplete({
+      source : function(request, response) {
+        $.ajax({
+          url : CONTEXTPATH + "/gamelibrary/publicationSearch/",
+          data : {
+            q: request.term
+          },
+          success : function(data) {
+            response($.map(data, function(item) {
+              console.log(item);
+              
+              return {
+                label : item.name,
+                value : item.link
+              };
+            }));
+          }
+        });
+      },
+      minLength : 1,
+      select : function(event, ui) {
+        if (ui.item) {
+          event.preventDefault();
+          window.location.href = CONTEXTPATH + '/' + ui.item.value;
+        }
+      },
+      open : function() {
+        $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+      },
+      close : function() {
+        $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+      }
+    });
+  }
+  
   /* Jsf events */
   
   window.onJsfCategoryChange = function (event) {
@@ -61,6 +99,7 @@
   
   $(document).ready(function () {
     initializeImagePopups();
+    initializeSearch();
   });
   
 }).call(this);
