@@ -178,6 +178,7 @@ public class Publication {
 	}
   
   @Transient
+  @Field
   public String getDescriptionPlain() {
     return StringEscapeUtils.unescapeHtml4(getDescription().replaceAll("\\<.*?>",""));
   }
@@ -208,7 +209,6 @@ public class Publication {
   private String urlName;
   
   @Lob
-  @Field
   private String description;
 
   @NotNull
