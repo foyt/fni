@@ -349,10 +349,12 @@ public class ShoppingCartBackingBean implements Serializable {
 		String customerMobile = getDeliveryContactMobile();
 		String customerPhone = getDeliveryContactTelephone();
 
-		userController.updateUserCompany(loggedUser, customerCompany);
-		userController.updateUserMobile(loggedUser, customerMobile);
-		userController.updateUserPhone(loggedUser, customerPhone);
-
+		if (loggedUser != null) {
+		  userController.updateUserCompany(loggedUser, customerCompany);
+		  userController.updateUserMobile(loggedUser, customerMobile);
+		  userController.updateUserPhone(loggedUser, customerPhone);
+		}
+		
 		Contact contact = new Contact(
 		  customerFirstName,
 			customerLastName,
