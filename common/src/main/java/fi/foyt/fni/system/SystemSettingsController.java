@@ -26,6 +26,8 @@ public class SystemSettingsController {
 	
 	private static final String DEFAULT_COUNTRY_CODE = "FI";
 	private static final String GAMELIBRARY_PUBLICATION_FORUM_ID = "gamelibrary.publication.forum";
+	private static final String GAMELIBRARY_ORDERMAILER_MAIL = "gamelibrary.orderMailer.mail";
+	private static final String GAMELIBRARY_ORDERMAILER_NAME = "gamelibrary.orderMailer.name";
 	private static final String SYSTEM_USER_EMAIL = "system.user.email";
 
 	@Inject
@@ -105,7 +107,23 @@ public class SystemSettingsController {
 		return NumberUtils.createLong(getSetting(GAMELIBRARY_PUBLICATION_FORUM_ID));
 	}
 
+	public String getGameLibraryOrderMailerName() {
+		return getSetting(GAMELIBRARY_ORDERMAILER_NAME);
+	}
+
+	public String getGameLibraryOrderMailerMail() {
+		return getSetting(GAMELIBRARY_ORDERMAILER_MAIL);
+	}
+
 	public User getSystemUser() {
-		return userController.findUserByEmail(getSetting(SYSTEM_USER_EMAIL));
+		return userController.findUserByEmail(getSystemUserEmail());
+	}
+	
+	public String getSystemUserEmail() {
+		return getSetting(SYSTEM_USER_EMAIL);
+	}
+	
+	public String getSystemUserName() {
+		return getSystemUser().getFullName();
 	}
 }
