@@ -76,7 +76,7 @@ public class SessionShoppingCartController {
 			return shoppingCart;
 		}
 	}
-
+	
 	public List<ShoppingCartItem> getShoppingCartItems() {
 		return shoppingCartItemDAO.listByCart(getShoppingCart());
 	}
@@ -130,6 +130,7 @@ public class SessionShoppingCartController {
 		ShoppingCart shoppingCart = getShoppingCart();
 		if (shoppingCart != null) {
   		deleteShoppingCart(shoppingCart);
+  		shoppingCartId = null;
 		}
 	}
 	
