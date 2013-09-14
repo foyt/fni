@@ -8,7 +8,6 @@ import java.util.Map;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +27,6 @@ import fi.foyt.fni.persistence.dao.gamelibrary.PublicationAuthorDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationImageDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationTagDAO;
-import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
@@ -39,7 +37,6 @@ import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
-import fi.foyt.fni.utils.faces.FacesUtils;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
@@ -196,6 +193,10 @@ public class PublicationController {
 	public Publication updatePublicationDefaultImage(Publication publication, PublicationImage publicationImage) {
 		return publicationDAO.updateDefaultImage(publication, publicationImage);
 	}
+
+	public Publication updatePublicationForumTopic(Publication publication, ForumTopic forumTopic) {
+		return publicationDAO.updateForumTopic(publication, forumTopic);
+	}
 	
 	public void deletePublication(Publication publication) {
 		for (PublicationImage publicationImage : listPublicationImagesByPublication(publication)) {
@@ -246,29 +247,15 @@ public class PublicationController {
 	public BookPublication createBookPublication(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, List<GameLibraryTag> tags) {
 		
 		Date now = new Date();
-		User systemUser = systemSettingsController.getSystemUser();
-		
-		Long forumId = systemSettingsController.getGameLibraryPublicationForumId();
-		Forum forum = forumController.findForumById(forumId);
-		ForumTopic forumTopic = forumController.createTopic(forum, name, systemUser);
 		String urlName = createUrlName(name);
 
 		BookPublication bookPublication = bookPublicationDAO.create(name, urlName, description, price, downloadable, purchasable, defaultImage, 
-				now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width, depth, weight, numberOfPages, license, forumTopic);
+				now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width, depth, weight, numberOfPages, license, null);
 
 		for (GameLibraryTag tag : tags) {
 			publicationTagDAO.create(tag, bookPublication);
 		}
 		
-		String publicationUrl = new StringBuilder()
-  	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
-  	  .append("/gamelibrary/")
-  	  .append(bookPublication.getUrlName())
-  	  .toString();
-		
-		String initialForumPostContent = FacesUtils.getLocalizedValue("gamelibrary.bookPublication.initialForumMessage", publicationUrl, bookPublication.getName());
-		forumController.createForumPost(forumTopic, systemUser, initialForumPostContent);
-
 		return bookPublication;
 	}
 	
