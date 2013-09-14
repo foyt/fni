@@ -11,6 +11,7 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
+import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication_;
@@ -184,6 +185,11 @@ public class PublicationDAO extends GenericDAO<Publication> {
 
 	public Publication updateLicense(Publication publication, String license) {
 		publication.setLicense(license);
+		return persist(publication);
+	}
+
+	public Publication updateForumTopic(Publication publication, ForumTopic forumTopic) {
+		publication.setForumTopic(forumTopic);
 		return persist(publication);
 	}
 
