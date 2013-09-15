@@ -63,6 +63,10 @@ public class OrderController implements Serializable {
 	public Order findOrderById(Long orderId) {
 		return orderDAO.findById(orderId);
 	}
+	
+	public List<Order> listOrdersByPublication(Publication publication) {
+		return orderItemDAO.listOrdersByPublication(publication);
+	}
 
 	public Order updateOrderAsPaid(Order order) {
 		Date now = new Date();
