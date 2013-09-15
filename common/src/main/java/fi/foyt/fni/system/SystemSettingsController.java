@@ -17,7 +17,7 @@ import fi.foyt.fni.persistence.dao.system.SystemSettingDAO;
 import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.system.SystemSetting;
-import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.users.UserController;
 
 @RequestScoped
@@ -25,10 +25,6 @@ import fi.foyt.fni.users.UserController;
 public class SystemSettingsController {
 	
 	private static final String DEFAULT_COUNTRY_CODE = "FI";
-	private static final String GAMELIBRARY_PUBLICATION_FORUM_ID = "gamelibrary.publication.forum";
-	private static final String GAMELIBRARY_ORDERMAILER_MAIL = "gamelibrary.orderMailer.mail";
-	private static final String GAMELIBRARY_ORDERMAILER_NAME = "gamelibrary.orderMailer.name";
-	private static final String SYSTEM_USER_EMAIL = "system.user.email";
 
 	@Inject
 	private SystemSettingDAO systemSettingDAO;
@@ -42,31 +38,35 @@ public class SystemSettingsController {
 	@Inject
 	private UserController userController;
 	
-	public String getSetting(String name) {
-		SystemSetting systemSetting = systemSettingDAO.findByName(name);
+	public String getSetting(SystemSettingKey key) {
+		SystemSetting systemSetting = systemSettingDAO.findByKey(key);
 		if (systemSetting != null)
 			return systemSetting.getValue();
 
 		return null;
 	}
 
-	public Integer getIntegerSetting(String name) {
-		return NumberUtils.createInteger(getSetting(name));
+	public Integer getIntegerSetting(SystemSettingKey key) {
+		return NumberUtils.createInteger(getSetting(key));
 	}
 
-	public Locale getLocaleSetting(String name) {
-		String setting = getSetting(name);
+	public Long getLongSetting(SystemSettingKey key) {
+		return NumberUtils.createLong(getSetting(key));
+	}
+
+	public Locale getLocaleSetting(SystemSettingKey key) {
+		String setting = getSetting(key);
 		return LocaleUtils.toLocale(setting);
 	}
 
 	public Locale getDefaultLocale() {
-		return getLocaleSetting("system.defaultLocale");
+		return getLocaleSetting(SystemSettingKey.DEFAULT_LOCALE);
 	}
 
-	public void updateSetting(String name, String value) {
-		SystemSetting systemSetting = systemSettingDAO.findByName(name);
+	public void updateSetting(SystemSettingKey key, String value) {
+		SystemSetting systemSetting = systemSettingDAO.findByKey(key);
 		if (systemSetting == null)
-			systemSetting = systemSettingDAO.create(name, value);
+			systemSetting = systemSettingDAO.create(key, value);
 		else
 			systemSetting = systemSettingDAO.updateValue(systemSetting, value);
 	}
@@ -101,29 +101,5 @@ public class SystemSettingsController {
 	
 	public List<Country> listCountries() {
 		return countryDAO.listAll();
-	}
-
-	public Long getGameLibraryPublicationForumId() {
-		return NumberUtils.createLong(getSetting(GAMELIBRARY_PUBLICATION_FORUM_ID));
-	}
-
-	public String getGameLibraryOrderMailerName() {
-		return getSetting(GAMELIBRARY_ORDERMAILER_NAME);
-	}
-
-	public String getGameLibraryOrderMailerMail() {
-		return getSetting(GAMELIBRARY_ORDERMAILER_MAIL);
-	}
-
-	public User getSystemUser() {
-		return userController.findUserByEmail(getSystemUserEmail());
-	}
-	
-	public String getSystemUserEmail() {
-		return getSetting(SYSTEM_USER_EMAIL);
-	}
-	
-	public String getSystemUserName() {
-		return getSystemUser().getFullName();
 	}
 }
