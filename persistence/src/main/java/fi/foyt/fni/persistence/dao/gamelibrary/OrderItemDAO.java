@@ -45,4 +45,16 @@ public class OrderItemDAO extends GenericDAO<OrderItem> {
 		return entityManager.createQuery(criteria).getResultList();
 	}
 
+	public List<Order> listOrdersByPublication(Publication publication) {
+		EntityManager entityManager = getEntityManager();
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Order> criteria = criteriaBuilder.createQuery(Order.class);
+		Root<OrderItem> root = criteria.from(OrderItem.class);
+		criteria.select(root.get(OrderItem_.order)).distinct(true);
+		criteria.where(criteriaBuilder.equal(root.get(OrderItem_.publication), publication));
+
+		return entityManager.createQuery(criteria).getResultList();
+	}
+
 }
