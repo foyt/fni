@@ -8,6 +8,7 @@ import javax.persistence.criteria.Root;
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.system.SystemSetting;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.system.SystemSetting_;
 
 @DAO
@@ -15,11 +16,11 @@ public class SystemSettingDAO extends GenericDAO<SystemSetting> {
 	
 	private static final long serialVersionUID = 1L;
 
-	public SystemSetting create(String name, String value) {
+	public SystemSetting create(SystemSettingKey key, String value) {
     EntityManager entityManager = getEntityManager();
 
     SystemSetting systemSetting = new SystemSetting();
-    systemSetting.setName(name);
+    systemSetting.setKey(key);
     systemSetting.setValue(value);
     
     entityManager.persist(systemSetting);
@@ -27,7 +28,7 @@ public class SystemSettingDAO extends GenericDAO<SystemSetting> {
     return systemSetting;
   }
 
-  public SystemSetting findByName(String name) {
+  public SystemSetting findByKey(SystemSettingKey key) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -35,7 +36,7 @@ public class SystemSettingDAO extends GenericDAO<SystemSetting> {
     Root<SystemSetting> root = criteria.from(SystemSetting.class);
     criteria.select(root);
     criteria.where(
-      criteriaBuilder.equal(root.get(SystemSetting_.name), name)
+      criteriaBuilder.equal(root.get(SystemSetting_.key), key)
     );
     
     return getSingleResult(entityManager.createQuery(criteria));
