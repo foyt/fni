@@ -17,12 +17,14 @@ import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
 @RequestScoped
@@ -49,6 +51,9 @@ public class ManageBackingBean extends AbstractPublicationListBackingBean {
 	@Inject
 	private ForumController forumController;
 	
+	@Inject
+	private UserController userController;
+	
 	@URLAction
 	@LoggedIn
 	@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
@@ -62,8 +67,9 @@ public class ManageBackingBean extends AbstractPublicationListBackingBean {
 	public void publish(Long publicationId) throws IOException {
 		Publication publication = publicationController.findPublicationById(publicationId);
 		if (publication.getForumTopic() == null) {
-			User systemUser = systemSettingsController.getSystemUser();
-			Long forumId = systemSettingsController.getGameLibraryPublicationForumId();
+			String systemUserEmail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_USER_EMAIL);
+			User systemUser = userController.findUserByEmail(systemUserEmail);
+			Long forumId = systemSettingsController.getLongSetting(SystemSettingKey.GAMELIBRARY_PUBLICATION_FORUM_ID);
 			Forum forum = forumController.findForumById(forumId);
 			ForumTopic forumTopic = forumController.createTopic(forum, publication.getName(), systemUser);
 

@@ -21,6 +21,7 @@ import org.scribe.model.Token;
 import org.scribe.oauth.OAuthService;
 
 import fi.foyt.fni.persistence.model.auth.AuthSource;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.auth.OAuthUtils;
@@ -33,17 +34,17 @@ public class FacebookAuthenticationStrategy extends OAuthAuthenticationStrategy 
 
 	@Override
 	protected String getApiKey() {
-		return systemSettingsController.getSetting("auth.facebook.apiKey");
+		return systemSettingsController.getSetting(SystemSettingKey.FACEBOOK_APIKEY);
 	}
 
 	@Override
 	protected String getApiSecret() {
-		return systemSettingsController.getSetting("auth.facebook.apiSecret");
+		return systemSettingsController.getSetting(SystemSettingKey.FACEBOOK_APISECRET);
 	}
 
 	@Override
 	protected String getCallbackUrl() {
-		return systemSettingsController.getSetting("auth.facebook.callbackUrl");
+		return systemSettingsController.getSetting(SystemSettingKey.FACEBOOK_CALLBACKURL);
 	}
 
 	@Override

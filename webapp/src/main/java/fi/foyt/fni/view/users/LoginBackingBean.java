@@ -37,6 +37,7 @@ import fi.foyt.fni.auth.MultipleEmailAccountsException;
 import fi.foyt.fni.auth.OAuthAuthenticationStrategy;
 import fi.foyt.fni.auth.UserNotConfirmedException;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.PasswordResetKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserToken;
@@ -231,8 +232,8 @@ public class LoginBackingBean {
 				String mailContent = FacesUtils.getLocalizedValue("users.login.verificationEmailContent", verifyUrl);
 
 				try {
-					String fromName = systemSettingsController.getSetting("system.mailer.name");
-					String fromMail = systemSettingsController.getSetting("system.mailer.mail");
+					String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
+					String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
 					MailUtils.sendMail(fromMail, fromName, getForgotPasswordEmail(), user.getFullName(), mailTitle, mailContent, "text/plain");
 					FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.login.verificationEmailSent"));
 				} catch (MessagingException e) {
@@ -268,8 +269,8 @@ public class LoginBackingBean {
 				String mailContent = FacesUtils.getLocalizedValue("users.login.resetPasswordEmailContent", verifyUrl);
 
 				try {
-					String fromName = systemSettingsController.getSetting("system.mailer.name");
-					String fromMail = systemSettingsController.getSetting("system.mailer.mail");
+					String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
+					String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
 					MailUtils.sendMail(fromMail, fromName, getForgotPasswordEmail(), user.getFullName(), mailTitle, mailContent, "text/html");
 					FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.login.resetPasswordEmailSent", getForgotPasswordEmail()));
 				} catch (MessagingException e) {

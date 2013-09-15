@@ -20,6 +20,7 @@ import fi.foyt.fni.persistence.dao.materials.DropboxRootFolderDAO;
 import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
 import fi.foyt.fni.persistence.model.materials.DropboxRootFolder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
@@ -102,7 +103,7 @@ public class DropboxConnectViewController extends AbstractViewController {
   }
   
   private void sendMessage(User recipient, String subject, String content) {
-    String systemMail = systemSettingsController.getSetting("system.mailer.mail");
+    String systemMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_USER_EMAIL);
     User systemUser = userController.findUserByEmail(systemMail);
     messageController.sendMessage(systemUser, recipient, subject, content);
   }

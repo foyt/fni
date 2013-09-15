@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.mail.MailUtils;
 
@@ -37,8 +38,8 @@ public class OrderMailer {
   			Locale locale = event.getLocale();
   			String customerName = order.getCustomerFirstName() + ' ' + order.getCustomerLastName();
   			String customerEmail = order.getCustomerEmail();
-  			String fromName = systemSettingsController.getGameLibraryOrderMailerName();
-  			String fromMail = systemSettingsController.getGameLibraryOrderMailerMail();
+  			String fromName = systemSettingsController.getSetting(SystemSettingKey.GAMELIBRARY_ORDERMAILER_NAME);
+  			String fromMail = systemSettingsController.getSetting(SystemSettingKey.GAMELIBRARY_ORDERMAILER_MAIL);
   			
   			List<OrderItem> items = orderController.listOrderItems(order);
   			

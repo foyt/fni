@@ -29,6 +29,7 @@ import org.scribe.oauth.OAuth20ServiceImpl;
 import org.scribe.oauth.OAuthService;
 
 import fi.foyt.fni.persistence.model.auth.AuthSource;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.auth.OAuthUtils;
@@ -41,17 +42,17 @@ public class GoogleAuthenticationStrategy extends OAuthAuthenticationStrategy {
 	
   @Override
   protected String getApiKey() {
-  	return systemSettingsController.getSetting("auth.google.apiKey");
+  	return systemSettingsController.getSetting(SystemSettingKey.GOOGLE_APIKEY);
   }
   
   @Override
   protected String getApiSecret() {
-  	return systemSettingsController.getSetting("auth.google.apiSecret");
+  	return systemSettingsController.getSetting(SystemSettingKey.GOOGLE_APISECRET);
   }
   
   @Override
   protected String getCallbackUrl() {
-  	return systemSettingsController.getSetting("auth.google.callbackUrl");
+  	return systemSettingsController.getSetting(SystemSettingKey.GOOGLE_CALLBACKURL);
   }
   
   @Override

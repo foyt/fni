@@ -36,6 +36,7 @@ import fi.foyt.fni.persistence.model.materials.DropboxRootFolder;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.system.SystemSettingsController;
@@ -206,7 +207,7 @@ public class DropboxManager {
     Token dropboxToken = getDropboxToken(user);
     OAuthService service = dropboxAuthenticationStrategy.getOAuthService();
 
-    String root = systemSettingsController.getSetting("auth.dropbox.root");
+    String root = systemSettingsController.getSetting(SystemSettingKey.DROPBOX_ROOT);
     String url = "https://api-content.dropbox.com/1/files/" + root + dropboxFile.getDropboxPath();
 
     return OAuthUtils.doGetRequest(service, dropboxToken, url);
