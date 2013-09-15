@@ -35,7 +35,7 @@ public class SystemSetting {
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false)
+  @Column(nullable = false, name = "settingKey")
   @Enumerated (EnumType.STRING)
   private SystemSettingKey key;
 
