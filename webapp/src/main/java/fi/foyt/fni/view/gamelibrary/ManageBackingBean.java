@@ -13,7 +13,9 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.forum.ForumController;
+import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.gamelibrary.PublicationController;
+import fi.foyt.fni.gamelibrary.ShoppingCartController;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
@@ -41,6 +43,12 @@ public class ManageBackingBean extends AbstractPublicationListBackingBean {
 
 	@Inject
 	private PublicationController publicationController;
+
+	@Inject
+	private ShoppingCartController shoppingCartController;
+
+	@Inject
+	private OrderController orderController;
 
 	@Inject
 	private SystemSettingsController systemSettingsController;
@@ -91,6 +99,20 @@ public class ManageBackingBean extends AbstractPublicationListBackingBean {
   	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
   	  .append("/gamelibrary/")
   	  .toString());
+	}
+	
+	public boolean getDeletable(Long publicationId) {
+		Publication publication = publicationController.findPublicationById(publicationId);
+
+		if (orderController.listOrdersByPublication(publication).size() > 0) {
+			return false;
+		}
+		
+		if (shoppingCartController.listShoppingCartsByPublication(publication).size() > 0) {
+			return false;
+		}
+		
+		return true;
 	}
 
 	@LoggedIn

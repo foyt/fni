@@ -118,10 +118,10 @@
                     <div class="gamelibrary-publication-admin-action-container">
                       <a class="publication-add-images-action" data-publication-id="#{publication.id}" href="javascript:void(null);" title="#{locales['gamelibrary.manageIndex.actionsAddImages']}"></a>
                     </div>
-                    <div class="gamelibrary-publication-admin-action-container">
+                    <h:panelGroup layout="block" styleClass="gamelibrary-publication-admin-action-container" rendered="#{manageBackingBean.getDeletable(publication.id)}">
                       <a class="publication-delete" data-publication-id="#{publication.id}" data-publication-name="#{publication.name}" href="javascript:void(null);" title="#{locales['gamelibrary.manageIndex.actionsDelete']}"></a>
                       <h:commandButton action="#{manageBackingBean.delete(publication.id)}" style="display:none"/>
-                    </div>
+                    </h:panelGroup>
                   </div>
                 </div>
                 
