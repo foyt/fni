@@ -1,9 +1,9 @@
 package fi.foyt.fni.view.gamelibrary;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -12,14 +12,18 @@ import javax.inject.Named;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
-import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
+import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
+import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
 
@@ -28,9 +32,9 @@ import fi.foyt.fni.users.UserController;
 @Named
 @URLMappings(mappings = {
   @URLMapping(
-  		id = "gamelibrary-publication-dialog-create", 
-  		pattern = "/gamelibrary/publications/dialog/create", 
-  		viewId = "/gamelibrary/dialogs/createpublication.jsf"
+  		id = "gamelibrary-publication-create", 
+  		pattern = "/gamelibrary/manage/createpublication", 
+  		viewId = "/gamelibrary/createpublication.jsf"
   )
 })
 public class PublicationCreateBackingBean extends AbstractPublicationEditBackingBean {
@@ -47,7 +51,9 @@ public class PublicationCreateBackingBean extends AbstractPublicationEditBacking
 	@Inject
 	private SessionController sessionController;
 	
-	@PostConstruct
+	@URLAction
+	@LoggedIn
+	@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
 	public void init() {
 		setTagSelectItems(createTagSelectItems(gameLibraryTagController.listGameLibraryTags()));
 		setLicenseSelectItems(createLicenseSelectItems());
@@ -57,7 +63,9 @@ public class PublicationCreateBackingBean extends AbstractPublicationEditBacking
 		setCreativeCommonsCommercial("YES");
 	}
 
-	public void save() {
+	@LoggedIn
+	@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
+	public void save() throws IOException {
 		User loggedUser = sessionController.getLoggedUser();
 		List<GameLibraryTag> tags = new ArrayList<>();
 		String tagsString = getPublicationTags();
@@ -71,7 +79,7 @@ public class PublicationCreateBackingBean extends AbstractPublicationEditBacking
   			tags.add(gameLibraryTag);
   		}
 		}
-		
+
 		BookPublication bookPublication = publicationController.createBookPublication(loggedUser, 
 			getPublicationName(), 
 			getPublicationDescription(), 
@@ -106,7 +114,7 @@ public class PublicationCreateBackingBean extends AbstractPublicationEditBacking
 				}
 			}
 		}
-		
+
 		setPublicationId(bookPublication.getId());
 	}
 	

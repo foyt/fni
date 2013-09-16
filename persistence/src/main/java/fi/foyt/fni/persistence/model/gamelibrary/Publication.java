@@ -18,6 +18,8 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.hibernate.search.annotations.DocumentId;
+import org.hibernate.search.annotations.Field;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
@@ -176,6 +178,7 @@ public class Publication {
 	}
   
   @Transient
+  @Field
   public String getDescriptionPlain() {
     return StringEscapeUtils.unescapeHtml4(getDescription().replaceAll("\\<.*?>",""));
   }
@@ -187,6 +190,7 @@ public class Publication {
   
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @DocumentId
   private Long id;
   
   @NotNull
@@ -196,6 +200,7 @@ public class Publication {
   @NotNull
   @NotEmpty
   @Column(nullable = false)
+  @Field
   private String name;
   
   @NotNull

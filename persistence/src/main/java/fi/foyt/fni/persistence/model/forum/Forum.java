@@ -56,6 +56,14 @@ public class Forum {
     this.category = category;
   }
   
+  public Boolean getAllowTopicCreation() {
+		return allowTopicCreation;
+	}
+  
+  public void setAllowTopicCreation(Boolean allowTopicCreation) {
+		this.allowTopicCreation = allowTopicCreation;
+	}
+  
   @Id
   @DocumentId
   @GeneratedValue (strategy=GenerationType.IDENTITY)
@@ -73,4 +81,7 @@ public class Forum {
   
   @ManyToOne
   private ForumCategory category;
+  
+  @Column (nullable=false, columnDefinition = "BIT")
+  private Boolean allowTopicCreation;
 }

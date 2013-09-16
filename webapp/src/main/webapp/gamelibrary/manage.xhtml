@@ -17,7 +17,7 @@
     <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload-process.js"></script>
     <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.fileupload/8.5.0/js/jquery.fileupload-image.js"></script>
     
-    <h:outputScript name="scripts/gui/gamelibrary/unpublishedlist.js"></h:outputScript>
+    <h:outputScript name="scripts/gui/gamelibrary/manage.js"></h:outputScript>
   </ui:define>
 
   <ui:define name="publications">
@@ -27,24 +27,24 @@
           <h3 class="gamelibrary-publications-title">
             <span class="gamelibrary-nav-item">
               <h:outputLink value="#{request.contextPath}/gamelibrary/">
-                #{locales['gamelibrary.unpublishedList.navIndex']} 
+                #{locales['gamelibrary.manageIndex.navIndex']} 
               </h:outputLink>
             </span>
             <span class="gamelibrary-nav-separator"/>
             <span class="gamelibrary-nav-item">
-              #{locales['gamelibrary.unpublishedList.navUnpublished']} 
+              #{locales['gamelibrary.manageIndex.navManage']} 
             </span>
           </h3>
           
           <div class="gamelibrary-publications">
-            <ui:repeat var="publication" value="#{publicationUnpublishedListBackingBean.publications}">
+            <ui:repeat var="publication" value="#{manageBackingBean.publications}">
               <div data-publication-id="#{publication.id}" class="gamelibrary-publication">
                 <div class="gamelibrary-publication-info-container">
                   <div class="gamelibrary-publication-name">
                     <h:outputLink value="#{request.contextPath}/gamelibrary/#{publication.urlName}">#{publication.name}</h:outputLink>
                   </div>
                   <div class="gamelibrary-publication-tags-container">
-                    <ui:repeat var="tag" value="#{publicationUnpublishedListBackingBean.getTags(publication)}">
+                    <ui:repeat var="tag" value="#{manageBackingBean.getTags(publication)}">
                       <div class="gamelibrary-publication-tag">
                         <h:outputLink value="#{request.contextPath}/gamelibrary/tags/#{tag.text}">#{tag.text}</h:outputLink>
                       </div>
@@ -54,21 +54,21 @@
                   <div class="gamelibrary-publication-description">#{publication.description}</div>
                   
                   <h:panelGroup layout="block" styleClass="gamelibrary-publication-license-container">
-                    <ui:fragment rendered="#{publicationUnpublishedListBackingBean.getCreativeCommonsLicense(publication) ne null}">
-                      <h:outputLink value="#{publicationUnpublishedListBackingBean.getCreativeCommonsLicense(publication).url}">
-                        <h:graphicImage value="#{publicationUnpublishedListBackingBean.getCreativeCommonsLicense(publication).iconUrl}" />
+                    <ui:fragment rendered="#{manageBackingBean.getCreativeCommonsLicense(publication) ne null}">
+                      <h:outputLink value="#{manageBackingBean.getCreativeCommonsLicense(publication).url}">
+                        <h:graphicImage value="#{manageBackingBean.getCreativeCommonsLicense(publication).iconUrl}" />
                       </h:outputLink>
                     </ui:fragment>
                     
-                    <ui:fragment rendered="#{publicationUnpublishedListBackingBean.getCreativeCommonsLicense(publication) eq null}">
-                      <label>#{locales['gamelibrary.unpublishedList.publicationLicenseOther']}</label>
+                    <ui:fragment rendered="#{manageBackingBean.getCreativeCommonsLicense(publication) eq null}">
+                      <label>#{locales['gamelibrary.manageIndex.publicationLicenseOther']}</label>
                       <div>#{publication.license}</div>
                     </ui:fragment>
                   </h:panelGroup>
                                   
                   <div class="gamelibrary-publication-details">
                     <div class="gamelibrary-publication-detail">
-                      <span>#{locales['gamelibrary.unpublishedList.publicationDetailsPrice']}</span>
+                      <span>#{locales['gamelibrary.manageIndex.publicationDetailsPrice']}</span>
                       <span class="gamelibrary-publication-details-price">
                         <h:outputText value="#{publication.price}" >
                           <f:convertNumber currencyCode="EUR" type="currency" />
@@ -76,19 +76,19 @@
                       </span>
                     </div>
                     
-                    <ui:fragment rendered="#{publicationUnpublishedListBackingBean.getBookPublication(publication) ne null}">
-                      <ui:fragment rendered="#{publicationUnpublishedListBackingBean.getBookPublication(publication).numberOfPages > 0}">
+                    <ui:fragment rendered="#{manageBackingBean.getBookPublication(publication) ne null}">
+                      <ui:fragment rendered="#{manageBackingBean.getBookPublication(publication).numberOfPages > 0}">
                         <div class="gamelibrary-publication-detail">
-                          <span>#{locales['gamelibrary.unpublishedList.publicationDetailsNumberOfPages']}</span> 
-                          <span>#{publicationUnpublishedListBackingBean.getBookPublication(publication).numberOfPages}</span>
+                          <span>#{locales['gamelibrary.manageIndex.publicationDetailsNumberOfPages']}</span> 
+                          <span>#{manageBackingBean.getBookPublication(publication).numberOfPages}</span>
                         </div>
                       </ui:fragment>
                       
-                      <ui:fragment rendered="#{publicationUnpublishedListBackingBean.getAuthors(publication).size() > 0}">
+                      <ui:fragment rendered="#{manageBackingBean.getAuthors(publication).size() > 0}">
                         <div class="gamelibrary-publication-detail">
-                        <span>#{locales['gamelibrary.unpublishedList.publicationDetailsAuthors']}</span> 
+                        <span>#{locales['gamelibrary.manageIndex.publicationDetailsAuthors']}</span> 
                         <span>
-                          <ui:repeat var="author" value="#{publicationUnpublishedListBackingBean.getAuthors(publication)}">
+                          <ui:repeat var="author" value="#{manageBackingBean.getAuthors(publication)}">
                             <h:outputLink value="#{request.contextPath}/users/#{author.id}">
                               #{author.fullName}
                             </h:outputLink>
@@ -100,8 +100,8 @@
                     
                     <h:panelGroup layout="block" rendered="#{publication.forumTopic ne null}" styleClass="gamelibrary-publication-comments">
                       <h:outputLink value="#{request.contextPath}/forum/#{publication.forumTopic.forum.urlName}/#{publication.forumTopic.urlName}">
-                        <h:outputFormat value="#{locales['gamelibrary.unpublishedList.publicationComments']}">
-                          <f:param value="#{publicationUnpublishedListBackingBean.getPublicationCommentCount(publication)}"/>
+                        <h:outputFormat value="#{locales['gamelibrary.manageIndex.publicationComments']}">
+                          <f:param value="#{manageBackingBean.getPublicationCommentCount(publication)}"/>
                         </h:outputFormat>                    
                       </h:outputLink>
                     </h:panelGroup>
@@ -109,25 +109,27 @@
                   
                   <div class="gamelibrary-publication-admin-actions-container">
                     <div class="gamelibrary-publication-admin-action-container">
-                      <a class="publication-publish" data-publication-id="#{publication.id}" data-publication-name="#{publication.name}" href="javascript:void(null);" title="#{locales['gamelibrary.unpublishedList.actionsPublish']}"></a>
+                      <a class="publication-publish" data-publication-id="#{publication.id}" data-publication-name="#{publication.name}" href="javascript:void(null);" title="#{locales['gamelibrary.manageIndex.actionsPublish']}"></a>
+                      <h:commandButton action="#{manageBackingBean.publish(publication.id)}" style="display:none"/>
                     </div>
                     <div class="gamelibrary-publication-admin-action-container">
-                      <a class="publication-edit" data-publication-id="#{publication.id}" href="javascript:void(null);" title="#{locales['gamelibrary.unpublishedList.actionsEdit']}"></a>
+                      <h:outputLink styleClass="publication-edit" value="#{request.contextPath}/gamelibrary/manage/editpublication/#{publication.id}" title="#{locales['gamelibrary.manageIndex.actionsEdit']}"/>
                     </div>
                     <div class="gamelibrary-publication-admin-action-container">
-                      <a class="publication-add-images-action" data-publication-id="#{publication.id}" href="javascript:void(null);" title="#{locales['gamelibrary.unpublishedList.actionsAddImages']}"></a>
+                      <a class="publication-add-images-action" data-publication-id="#{publication.id}" href="javascript:void(null);" title="#{locales['gamelibrary.manageIndex.actionsAddImages']}"></a>
                     </div>
-                    <div class="gamelibrary-publication-admin-action-container">
-                      <a class="publication-delete" data-publication-id="#{publication.id}" data-publication-name="#{publication.name}" href="javascript:void(null);" title="#{locales['gamelibrary.unpublishedList.actionsDelete']}"></a>
-                    </div>
+                    <h:panelGroup layout="block" styleClass="gamelibrary-publication-admin-action-container" rendered="#{manageBackingBean.getDeletable(publication.id)}">
+                      <a class="publication-delete" data-publication-id="#{publication.id}" data-publication-name="#{publication.name}" href="javascript:void(null);" title="#{locales['gamelibrary.manageIndex.actionsDelete']}"></a>
+                      <h:commandButton action="#{manageBackingBean.delete(publication.id)}" style="display:none"/>
+                    </h:panelGroup>
                   </div>
                 </div>
                 
                 <div class="gamelibrary-publication-images-container">
-                  <ui:fragment rendered="#{publicationUnpublishedListBackingBean.hasSeveralImages(publication)}">
+                  <ui:fragment rendered="#{manageBackingBean.hasSeveralImages(publication)}">
                     <div class="gamelibrary-publication-thumbnails-container">
                       <div class="gamelibrary-publication-thumbnails-inner-container">
-                        <ui:repeat value="#{publicationUnpublishedListBackingBean.getPublicationImages(publication)}" var="publicationImage">
+                        <ui:repeat value="#{manageBackingBean.getPublicationImages(publication)}" var="publicationImage">
                           <div class="gamelibrary-publication-thumbnail-container">
                             <a href="javascript:void(null)">
                               <img data-url="#{request.contextPath}/gamelibrary/publicationImages/#{publicationImage.id}" src="#{request.contextPath}/gamelibrary/publicationImages/#{publicationImage.id}?width=32&amp;height=32"/>
@@ -138,7 +140,7 @@
                     </div>
                   </ui:fragment>
   
-                  <ui:fragment rendered="#{publicationUnpublishedListBackingBean.hasImages(publication)}">
+                  <ui:fragment rendered="#{manageBackingBean.hasImages(publication)}">
                     <div class="gamelibrary-publication-image-container">
                       <div class="gamelibrary-publication-image-inner-container">
                         <a href="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
@@ -151,11 +153,10 @@
                 
                 <div class="gamelibrary-publication-actions-container">
                   <div class="gamelibrary-publication-action-container">
-                    <a href="#{request.contextPath}/gamelibrary/publicationFiles/#{publication.id}">#{locales['gamelibrary.unpublishedList.publicationDownloadFreePdf']}</a>
+                    <a href="#{request.contextPath}/gamelibrary/publicationFiles/#{publication.id}">#{locales['gamelibrary.manageIndex.publicationDownloadFreePdf']}</a>
                   </div>
                   <div class="gamelibrary-publication-action-container">
-                    <h:commandLink action="#{publicationUnpublishedListBackingBean.addPublicationToShoppingCart(publication)}" value="#{locales['gamelibrary.unpublishedList.publicationAddToShoppingCart']}" styleClass="gamelibrary-publication-add-to-cart-action">
-                    </h:commandLink>
+                    <h:commandLink action="#{manageBackingBean.addPublicationToShoppingCart(publication)}" value="#{locales['gamelibrary.manageIndex.publicationAddToShoppingCart']}" styleClass="gamelibrary-publication-add-to-cart-action"/>
                   </div>
                 </div>
                 
@@ -166,7 +167,14 @@
         </div>
       </h:panelGroup>
     </h:form>
-  </ui:define>  
+  </ui:define>
+  
+  <ui:define name="adminPanel">
+    <h:panelGroup layout="block" styleClass="gamelibrary-admin-panel">
+      <h:outputLink styleClass="gamelibrary-admin-create-publication" title="#{locales['gamelibrary.manageIndex.createNewPublicationLink']}" value="#{request.contextPath}/gamelibrary/manage/createpublication"></h:outputLink>      
+    </h:panelGroup>
+  </ui:define>
+    
 </ui:composition>
     
     

@@ -25,7 +25,6 @@ import fi.foyt.fni.persistence.model.auth.UserIdentifier;
 import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.users.Address;
 import fi.foyt.fni.persistence.model.users.AddressType;
-import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserContactField;
 import fi.foyt.fni.persistence.model.users.UserContactFieldType;
@@ -36,8 +35,6 @@ import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
 import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.persistence.model.users.UserSetting;
 import fi.foyt.fni.persistence.model.users.UserSettingKey;
-import fi.foyt.fni.security.LoggedIn;
-import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.utils.data.TypedData;
 
 @Dependent
@@ -109,44 +106,30 @@ public class UserController {
 		return userDAO.listByArchived(Boolean.FALSE);
 	}
   
-  @LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public User updateFirstName(User user, String firstName) {
 		return userDAO.updateFirstName(user, firstName);
 	}
   
-  @LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public User updateLastName(User user, String lastName) {
 		return userDAO.updateLastName(user, lastName);
 	}
   
-  @LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public User updateNickname(User user, String nickname) {
 		return userDAO.updateNickname(user, nickname);
 	}
 
-  @LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public User updateAbout(User user, String about) {
   	return userDAO.updateAbout(user, about);
 	}
 
-  @LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public User updateUserCompany(User user, String company) {
   	return userDAO.updateCompany(user, company);
 	}
 
-  @LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public User updateUserMobile(User user, String mobile) {
   	return userDAO.updateMobile(user, mobile);
 	}
 
-  @LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public User updateUserPhone(User user, String phone) {
   	return userDAO.updatePhone(user, phone);
 	}
@@ -288,8 +271,6 @@ public class UserController {
 		return userImageDAO.findByUser(user) != null;
 	}
 	
-  @LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public void updateProfileImage(User user, String contentType, byte[] data) {
 		UserImage userImage = userImageDAO.findByUser(user);
 		Date now = new Date();
@@ -301,9 +282,7 @@ public class UserController {
 		}
 	}
 
-  @LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
-	public void updateProfileImageSource(User user, UserProfileImageSource profileImageSource) {
+  public void updateProfileImageSource(User user, UserProfileImageSource profileImageSource) {
 		userDAO.updateProfileImageSource(user, profileImageSource);
 	}
 

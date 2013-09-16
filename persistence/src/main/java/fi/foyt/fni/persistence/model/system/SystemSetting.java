@@ -2,6 +2,8 @@ package fi.foyt.fni.persistence.model.system;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,13 +15,13 @@ public class SystemSetting {
     return id;
   }
   
-  public String getName() {
-    return name;
-  }
+  public SystemSettingKey getKey() {
+		return key;
+	}
   
-  public void setName(String name) {
-    this.name = name;
-  }
+  public void setKey(SystemSettingKey key) {
+		this.key = key;
+	}
 
   public String getValue() {
     return value;
@@ -33,8 +35,9 @@ public class SystemSetting {
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false)
-  private String name;
+  @Column(nullable = false, name = "settingKey")
+  @Enumerated (EnumType.STRING)
+  private SystemSettingKey key;
 
   @Column(nullable = false)
   private String value;

@@ -23,6 +23,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
+import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.TypedData;
@@ -55,9 +56,18 @@ public class PublicationImageServlet extends AbstractFileServlet {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
-
-		// TODO: If publication is unpublished, only managers may view it
-		// (publicationImage.getPublication().getPublished() != true)
+		
+		if (!publicationImage.getPublication().getPublished()) {
+			if (!sessionController.isLoggedIn()) {
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+				return;
+			}
+			
+			if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
+				response.sendError(HttpServletResponse.SC_FORBIDDEN);
+				return;
+			}
+		}
 
 		Integer width = NumberUtils.createInteger(request.getParameter("width"));
 		Integer height = NumberUtils.createInteger(request.getParameter("height"));
@@ -97,16 +107,32 @@ public class PublicationImageServlet extends AbstractFileServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO: Security
-
+		User loggedUser = sessionController.getLoggedUser();
 		Long publicationId = getPathId(request);
 		if (publicationId == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
+		Publication publication = publicationController.findPublicationById(publicationId);
+		if (publication == null) {
+			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		
+		if (!publication.getPublished()) {
+			if (!sessionController.isLoggedIn()) {
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+				return;
+			}
+			
+			if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
+				response.sendError(HttpServletResponse.SC_FORBIDDEN);
+				return;
+			}
+		}
+		
 		List<UploadResultItem> resultItems = new ArrayList<>();
-		User loggedUser = sessionController.getLoggedUser();
 
 		try {
 			List<TypedData> images = new ArrayList<>();
@@ -118,22 +144,16 @@ public class PublicationImageServlet extends AbstractFileServlet {
 				}
 			}
 
-			Publication publication = publicationController.findPublicationById(publicationId);
-			if (publication != null) {
-				for (TypedData image : images) {
-					PublicationImage publicationImage = publicationController.createPublicationImage(publication, image.getData(), image.getContentType(), loggedUser);
-					if (publication.getDefaultImage() == null) {
-						// If publication does not yet have a default image we update it to uploaded image
-						publicationController.updatePublicationDefaultImage(publication, publicationImage);
-					}
-
-					String url = request.getContextPath() + "/gamelibrary/publicationImages/" + publicationImage.getId();
-					String thumbnailUrl = url + "?width=128&height=128";
-					resultItems.add(new UploadResultItem(publicationImage.getId().toString(), image.getData().length, url, thumbnailUrl, "N/A", "DELETE"));
+			for (TypedData image : images) {
+				PublicationImage publicationImage = publicationController.createPublicationImage(publication, image.getData(), image.getContentType(), loggedUser);
+				if (publication.getDefaultImage() == null) {
+					// If publication does not yet have a default image we update it to uploaded image
+					publicationController.updatePublicationDefaultImage(publication, publicationImage);
 				}
-			} else {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "publicationId parameter is invalid");
-				return;
+
+				String url = request.getContextPath() + "/gamelibrary/publicationImages/" + publicationImage.getId();
+				String thumbnailUrl = url + "?width=128&height=128";
+				resultItems.add(new UploadResultItem(publicationImage.getId().toString(), image.getData().length, url, thumbnailUrl, "N/A", "DELETE"));
 			}
 
 		} catch (FileUploadException e) {

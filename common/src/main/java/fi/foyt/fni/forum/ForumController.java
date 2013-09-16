@@ -36,10 +36,7 @@ import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumCategory;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
-import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.security.LoggedIn;
-import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
@@ -89,8 +86,6 @@ public class ForumController implements Serializable {
 	
 	// Topics
 
-	@LoggedIn
-	@Secure (Permission.FORUM_TOPIC_CREATE)
 	public ForumTopic createTopic(Forum forum, String subject, User author) {
 		Date now = new Date();
 		return forumTopicDAO.create(forum, author, now, now, createUrlName(forum, subject), subject, 0l);
@@ -139,8 +134,6 @@ public class ForumController implements Serializable {
 	
 	// Posts
 
-	@LoggedIn
-	@Secure (Permission.FORUM_POST_CREATE)
 	public ForumPost createForumPost(ForumTopic topic, User author, String content) {
 		Date now = new Date();
 		return forumPostDAO.create(topic, author, now, now, content, 0l);

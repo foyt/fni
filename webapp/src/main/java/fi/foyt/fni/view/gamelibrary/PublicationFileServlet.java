@@ -17,6 +17,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationFile;
+import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.TypedData;
@@ -49,14 +50,24 @@ public class PublicationFileServlet extends AbstractFileServlet {
 			return;
 		}
 		
+		if (!bookPublication.getPublished()) {
+			if (!sessionController.isLoggedIn()) {
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+				return;
+			}
+			
+			if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
+				response.sendError(HttpServletResponse.SC_FORBIDDEN);
+				return;
+			}
+		}
+		
 		// BookPublication does not have a file, send 404
 		PublicationFile file = bookPublication.getFile();
 		if (file == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
-
-		// TODO: If publication is unpublished, only managers may view it
 
 		String fileName = bookPublication.getUrlName();
 		if ("application/pdf".equals(file.getContentType())) {
@@ -91,8 +102,17 @@ public class PublicationFileServlet extends AbstractFileServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO: Security
+		User loggedUser = sessionController.getLoggedUser();
+		if (loggedUser == null) {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+			return;
+		}
 		
+		if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN);
+			return;
+		}
+
 		// PublicationId could not be resolved, send 404
 		Long publicationId = getPathId(request);
 		if (publicationId == null) {
@@ -107,8 +127,6 @@ public class PublicationFileServlet extends AbstractFileServlet {
 			return;
 		}
 		
-		User loggedUser = sessionController.getLoggedUser();
-
 		try {
 			TypedData file = null;
 			List<FileItem> items = getFileItems(request);
@@ -128,6 +146,12 @@ public class PublicationFileServlet extends AbstractFileServlet {
 			} else {
 				publicationController.createBookPublicationFile(bookPublication, file.getContentType(), file.getData(), loggedUser);
 			}
+
+			response.sendRedirect(new StringBuilder()
+  		  .append(request.getContextPath())
+  		  .append("/gamelibrary/manage/")
+  		  .toString()
+			);
 			
 		} catch (FileUploadException e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());

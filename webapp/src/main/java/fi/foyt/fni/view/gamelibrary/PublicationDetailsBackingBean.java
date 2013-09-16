@@ -1,11 +1,13 @@
 package fi.foyt.fni.view.gamelibrary;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateful;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -19,14 +21,19 @@ import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
 import fi.foyt.fni.licences.CreativeCommonsLicense;
 import fi.foyt.fni.licences.CreativeCommonsUtils;
+import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationAuthor;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
+import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.security.Secure;
+import fi.foyt.fni.session.SessionController;
 
-@SessionScoped
+@RequestScoped
 @Named
 @Stateful
 @URLMappings(mappings = {
@@ -49,16 +56,48 @@ public class PublicationDetailsBackingBean {
 
 	@Inject
 	private SessionShoppingCartController sessionShoppingCartController;
-	
-	@URLAction
+
+	@Inject
+	private SessionController sessionController;
+
+	@URLAction (onPostback = true)
 	public void init() throws FileNotFoundException {
-		this.publication = publicationController.findPublicationByUrlName(getUrlName());
-		if (this.publication == null) {
+		Publication publication = publicationController.findPublicationByUrlName(getUrlName());
+		if (publication == null) {
 			throw new FileNotFoundException();
 		}
 		
+		id = publication.getId();
+		name = publication.getName();
+		description = publication.getDescription();
+		license = publication.getLicense();
+		price = publication.getPrice();
 		tags = gameLibraryTagController.listPublicationGameLibraryTags(publication);
 		creativeCommonsLicense = CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
+		hasSeveralImages = publicationController.listPublicationImagesByPublication(publication).size() > 1;
+		hasImages = publicationController.listPublicationImagesByPublication(publication).size() > 0;
+		defaultImage = publication.getDefaultImage();
+		
+		if (publication instanceof BookPublication) {
+			BookPublication bookPublication = ((BookPublication) publication);
+			numberOfPages = bookPublication.getNumberOfPages();
+			downloadable = bookPublication.getDownloadable() && bookPublication.getFile() != null;
+		}
+		
+		ForumTopic forumTopic = publication.getForumTopic();
+		if (forumTopic != null) {
+			forumTopicPath = forumTopic.getFullPath();
+			commentCount = forumController.countPostsByTopic(forumTopic);
+		}
+		
+		authors = new ArrayList<>(); 
+
+		List<PublicationAuthor> publicationAuthors = publicationController.listPublicationAuthors(publication);
+		for (PublicationAuthor publicationAuthor : publicationAuthors) {
+			authors.add(publicationAuthor.getAuthor());
+		}
+		
+		publicationImages = publicationController.listPublicationImagesByPublication(publication);
 	}
 	
 	public String getUrlName() {
@@ -69,50 +108,68 @@ public class PublicationDetailsBackingBean {
 		this.urlName = urlName;
 	}
 	
-	public Publication getPublication() {
-		return publication;
+	public Long getId() {
+		return id;
 	}
 	
-	public BookPublication getBookPublication() {
-		return bookPublication;
+	public String getName() {
+		return name;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public String getLicense() {
+		return license;
+	}
+	
+	public Double getPrice() {
+		return price;
 	}
 	
 	public List<GameLibraryTag> getTags() {
 		return tags;
 	}
+	
+	public Integer getNumberOfPages() {
+		return numberOfPages;
+	}
+	
+	public Boolean getDownloadable() {
+		return downloadable;
+	}
+	
+	public String getForumTopicPath() {
+		return forumTopicPath;
+	}
+	
+	public Long getCommentCount() {
+		return commentCount;
+	}
 
 	public boolean getHasSeveralImages() {
-		return publicationController.listPublicationImagesByPublication(publication).size() > 1;
+		return hasSeveralImages;
 	}
 
 	public boolean getHasImages() {
-		return publicationController.listPublicationImagesByPublication(publication).size() > 0;
+		return hasImages;
 	}
 	
 	public List<PublicationImage> getPublicationImages() {
-		return publicationController.listPublicationImagesByPublication(publication);
+		return publicationImages;
 	}
 	
 	public List<User> getAuthors() {
-		List<User> result = new ArrayList<>(); 
-
-		List<PublicationAuthor> publicationAuthors = publicationController.listPublicationAuthors(publication);
-		for (PublicationAuthor publicationAuthor : publicationAuthors) {
-			result.add(publicationAuthor.getAuthor());
-		}
-		
-		return result;
-	}
-
-	public Long getPublicationCommentCount() {
-		if (publication.getForumTopic() != null) {
-			return forumController.countPostsByTopic(publication.getForumTopic());
-		}
-		
-		return null;
+		return authors;
 	}
 	
+	public PublicationImage getDefaultImage() {
+		return defaultImage;
+	}
+
 	public void addPublicationToShoppingCart() {
+		Publication publication = publicationController.findPublicationById(getId());
 		sessionShoppingCartController.addPublication(publication);
 	}
 	
@@ -120,9 +177,41 @@ public class PublicationDetailsBackingBean {
 		return creativeCommonsLicense;
 	}
 	
+	public boolean getMayManagePublications() {
+		if (sessionController.isLoggedIn()) {
+			return sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS);
+		} 
+
+		return false;
+	}
+
+	@LoggedIn
+	@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
+	public void unpublish() throws IOException {
+		Publication publication = publicationController.findPublicationById(getId());
+		publicationController.unpublishPublication(publication);
+
+		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+  	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+  	  .append("/gamelibrary/manage/")
+  	  .toString());
+	}
+
+	private Long id;
+	private String name;
+	private String description;
+	private String license;
+	private Double price;
+	private Integer numberOfPages;
+	private Boolean downloadable;
+	private String forumTopicPath;
+	private Long commentCount;
 	private String urlName;
-	private Publication publication;
-	private BookPublication bookPublication;
 	private List<GameLibraryTag> tags;
+	private List<User> authors;
+	private Boolean hasSeveralImages;
+	private Boolean hasImages;
+	private PublicationImage defaultImage;
 	private CreativeCommonsLicense creativeCommonsLicense;
+	private List<PublicationImage> publicationImages;
 }

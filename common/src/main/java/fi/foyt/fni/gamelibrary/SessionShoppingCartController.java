@@ -76,7 +76,7 @@ public class SessionShoppingCartController {
 			return shoppingCart;
 		}
 	}
-
+	
 	public List<ShoppingCartItem> getShoppingCartItems() {
 		return shoppingCartItemDAO.listByCart(getShoppingCart());
 	}
@@ -106,11 +106,7 @@ public class SessionShoppingCartController {
 	}
 
 	public void setItemCount(ShoppingCartItem item, Integer count) {
-		if (count == 0) {
-			shoppingCartItemDAO.delete(item);
-		} else {
-			shoppingCartItemDAO.updateCount(item, count);
-		}
+		shoppingCartItemDAO.updateCount(item, count);
 	}
 	
 	public void removePublication(Publication publication) {
@@ -130,6 +126,7 @@ public class SessionShoppingCartController {
 		ShoppingCart shoppingCart = getShoppingCart();
 		if (shoppingCart != null) {
   		deleteShoppingCart(shoppingCart);
+  		shoppingCartId = null;
 		}
 	}
 	

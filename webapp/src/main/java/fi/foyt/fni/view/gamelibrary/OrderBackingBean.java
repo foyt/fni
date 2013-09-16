@@ -17,6 +17,9 @@ import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
 import fi.foyt.fni.persistence.model.users.Address;
+import fi.foyt.fni.persistence.model.users.Permission;
+import fi.foyt.fni.security.Secure;
+import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
 @Stateful
@@ -34,6 +37,8 @@ public class OrderBackingBean {
 	private OrderController orderController;
 
 	@URLAction
+	@Secure (Permission.GAMELIBRARY_VIEW_ORDER)
+	@SecurityContext (context = "#{orderBackingBean.orderId}")
 	public void init() {
 		Order order = orderController.findOrderById(getOrderId());
 		orderStatus = order.getOrderStatus();

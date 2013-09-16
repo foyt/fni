@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -26,7 +25,10 @@ import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationAuthor;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
+import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
 
@@ -35,9 +37,9 @@ import fi.foyt.fni.users.UserController;
 @Named
 @URLMappings(mappings = {
   @URLMapping(
-  		id = "gamelibrary-publication-dialog-edit", 
-  		pattern = "/gamelibrary/publications/#{publicationEditBackingBean.publicationId}/dialog/edit", 
-  		viewId = "/gamelibrary/dialogs/editpublication.jsf"
+  		id = "gamelibrary-publication-edit", 
+  		pattern = "/gamelibrary/manage/editpublication/#{publicationEditBackingBean.publicationId}", 
+  		viewId = "/gamelibrary/editpublication.jsf"
   )
 })
 public class PublicationEditBackingBean extends AbstractPublicationEditBackingBean {
@@ -54,15 +56,14 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 	@Inject
 	private SessionController sessionController;
 	
-	@PostConstruct
-	public void init() {
+	@URLAction
+	@LoggedIn
+	@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
+	public void load() {
 		setTagSelectItems(createTagSelectItems(gameLibraryTagController.listGameLibraryTags()));
 		setLicenseSelectItems(createLicenseSelectItems());
 		setAuthorSelectItems(createAuthorSelectItems());
-	}
-	
-	@URLAction (onPostback = false)
-	public void load() {
+
 		Publication publication = publicationController.findPublicationById(getPublicationId());
 		setPublicationName(publication.getName());
 		setPublicationDescription(publication.getDescription());
@@ -128,6 +129,8 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 		setAuthorIds(StringUtils.join(authorIds, ','));
 	}
 	
+	@LoggedIn
+	@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
 	public void save() throws IOException {
 		Publication publication = publicationController.findPublicationById(getPublicationId());
 		if (publication instanceof BookPublication) {

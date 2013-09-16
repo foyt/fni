@@ -30,10 +30,6 @@ public class PublicationCategoriesBackingBean {
 	@PostConstruct
 	public void init() {
 		tags = gameLibraryTagController.listGameLibraryTags();
-		hasUnpublished = false;
-		if (sessionController.isLoggedIn()) {
-			hasUnpublished = publicationController.countUnpublishedPublicationsByCreator(sessionController.getLoggedUser()) > 0;
-		}
 	}
 	
 	public List<GameLibraryTag> getTags() {
@@ -44,10 +40,5 @@ public class PublicationCategoriesBackingBean {
 		this.tags = tags;
 	}
 	
-	public boolean getHasUnpublished() {
-		return hasUnpublished;
-	}
-	
 	private List<GameLibraryTag> tags;
-	private boolean hasUnpublished;
 }

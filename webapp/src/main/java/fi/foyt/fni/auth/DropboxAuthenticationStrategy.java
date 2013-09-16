@@ -14,6 +14,7 @@ import org.scribe.model.Token;
 import org.scribe.oauth.OAuthService;
 
 import fi.foyt.fni.persistence.model.auth.AuthSource;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.auth.OAuthUtils;
@@ -26,17 +27,17 @@ public class DropboxAuthenticationStrategy extends OAuthAuthenticationStrategy {
 
 	@Override
 	protected String getApiKey() {
-		return systemSettingsController.getSetting("auth.dropbox.apiKey");
+		return systemSettingsController.getSetting(SystemSettingKey.DROPBOX_APIKEY);
 	}
 
 	@Override
 	protected String getApiSecret() {
-		return systemSettingsController.getSetting("auth.dropbox.apiSecret");
+		return systemSettingsController.getSetting(SystemSettingKey.DROPBOX_APISECRET);
 	}
 
 	@Override
 	protected String getCallbackUrl() {
-		return systemSettingsController.getSetting("auth.dropbox.callbackUrl");
+		return systemSettingsController.getSetting(SystemSettingKey.DROPBOX_CALLBACKURL);
 	}
 
 	@Override

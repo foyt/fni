@@ -6,7 +6,7 @@
   xmlns:h="http://java.sun.com/jsf/html" 
   template="/WEB-INF/templates/forum.xhtml">
 
-  <ui:define name="pageTitle">Forum</ui:define>
+  <ui:define name="pageTitle">#{locales['forum.index.pageTitle']}</ui:define>
   <ui:define name="head">
     <!-- View Specific -->
 
@@ -16,7 +16,7 @@
     <h:form>
       <h:panelGroup layout="block" id="forum-index" styleClass="forum-index">
           <h3>
-            <span class="forum-nav-item">Forum</span>
+            <span class="forum-nav-item">#{locales['forum.index.navItemForum']}</span>
           </h3>
           <div class="forum-index-forums">
           <ui:repeat var="category" value="#{forumIndexBackingBean.categories}">
@@ -25,19 +25,25 @@
                 <div class="forum-index-forum-name">
                   <h:outputLink value="#{forum.urlName}">#{forum.name}</h:outputLink>
                   <div class="forum-message-count-container">
-                    <span>Total Posts: </span>
-                    <span class="forum-message-count">#{forumIndexBackingBean.getForumPostCount(forum)}</span>
+                    <span class="forum-message-count">
+                      <h:outputFormat value="#{locales['forum.index.totalPosts']}">
+                        <f:param value="#{forumIndexBackingBean.getForumPostCount(forum)}"/>
+                      </h:outputFormat>
+                    </span>
                   </div>
                   <div class="forum-topic-count-container">
-                    <span>Total Topics: </span>
-                    <span class="forum-topic-count">#{forumIndexBackingBean.getForumTopicCount(forum)}</span>
+                    <span class="forum-topic-count">
+                      <h:outputFormat value="#{locales['forum.index.totalTopics']}">
+                        <f:param value="#{forumIndexBackingBean.getForumTopicCount(forum)}"/>
+                      </h:outputFormat>
+                    </span>
                   </div>                  
                   <div class="forum-last-message-container">
-                    <span>Last Message: </span>
                     <span class="forum-last-message">
-                      <h:outputText value="#{forumIndexBackingBean.getLastMessageDate(forum)}">
-                        <f:convertDateTime/>
-                      </h:outputText></span>
+                      <h:outputFormat value="#{locales['forum.index.lastMessage']}">
+                        <f:param value="#{forumIndexBackingBean.getLastMessageDate(forum)}"/>
+                      </h:outputFormat>
+                    </span>
                   </div>                  
                 </div>
                 <div class="forum-index-forum-description">#{forum.description}</div>

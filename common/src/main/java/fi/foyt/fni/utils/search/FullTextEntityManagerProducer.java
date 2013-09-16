@@ -1,5 +1,6 @@
 package fi.foyt.fni.utils.search;
 
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,6 +14,7 @@ public class FullTextEntityManagerProducer {
 	private EntityManager entityManager;
 	
 	@Produces
+	@RequestScoped
 	public FullTextEntityManager produceFullTextEntityManager() {
 		return Search.getFullTextEntityManager(entityManager);
 	}

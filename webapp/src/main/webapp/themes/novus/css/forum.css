@@ -111,6 +111,11 @@
   box-sizing: border-box; 
 }
 
+.forum-new-topic-login-container {
+  margin-top: 8px;
+}
+
+.forum-new-topic-login-link, 
 .forum-new-topic-link {
   background: #E6E6E6;
   border: 1px solid #D3D3D3;
@@ -198,10 +203,11 @@
   margin-top: 20px;
 }
 
-.forum-post-send-container, .forum-new-topic-container {
+.forum-post-send-container, .forum-new-topic-container, .forum-post-reply-login-container {
   margin-top: 8px;
 }
 
+.forum-post-reply-login-link,
 .forum-new-topic-container input[type="submit"],
 .forum-post-send-container input[type="submit"] {
   background: #E6E6E6;

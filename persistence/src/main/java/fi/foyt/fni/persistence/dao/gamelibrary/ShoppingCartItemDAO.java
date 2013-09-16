@@ -57,6 +57,18 @@ public class ShoppingCartItemDAO extends GenericDAO<ShoppingCartItem> {
     return entityManager.createQuery(criteria).getResultList();
 	}
 
+	public List<ShoppingCart> listShoppingCartsByPublication(Publication publication) {
+		EntityManager entityManager = getEntityManager();
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<ShoppingCart> criteria = criteriaBuilder.createQuery(ShoppingCart.class);
+		Root<ShoppingCartItem> root = criteria.from(ShoppingCartItem.class);
+		criteria.select(root.get(ShoppingCartItem_.cart)).distinct(true);
+		criteria.where(criteriaBuilder.equal(root.get(ShoppingCartItem_.publication), publication));
+
+		return entityManager.createQuery(criteria).getResultList();
+	}
+	
 	public ShoppingCartItem updateCount(ShoppingCartItem shoppingCartItem, Integer count) {
 		shoppingCartItem.setCount(count);
 		getEntityManager().persist(shoppingCartItem);

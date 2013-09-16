@@ -24,6 +24,7 @@ import fi.foyt.fni.messages.MessageController;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialRole;
 import fi.foyt.fni.persistence.model.messages.RecipientMessage;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
@@ -208,15 +209,15 @@ public class NotifyListener {
 		String recipientEmail = userController.getUserPrimaryEmail(recipient);
 
 		if (StringUtils.isNotBlank(recipientEmail)) {
-			String systemMail = systemSettingsController.getSetting("system.mailer.mail");
-			String systemName = systemSettingsController.getSetting("system.mailer.name");
+			String systemName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
+			String systemMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
 			String recipientName = recipient.getFullName();
 			MailUtils.sendMail(systemMail, systemName, recipientEmail, recipientName, subject, content, "text/html");
 		}
 	}
 
 	private void sendMessage(User recipient, String subject, String content) {
-		String systemMail = systemSettingsController.getSetting("system.mailer.mail");
+		String systemMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_USER_EMAIL);
 		User systemUser = userController.findUserByEmail(systemMail);
 		messageController.sendMessage(systemUser, recipient, subject, content);
 	}

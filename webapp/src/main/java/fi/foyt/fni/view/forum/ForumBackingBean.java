@@ -20,8 +20,11 @@ import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
+import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.security.SecurityContext;
+import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
@@ -100,7 +103,13 @@ public class ForumBackingBean {
 		this.newTopicContents = newTopicContents;
 	}
 	
+	public boolean getAllowTopicCreation() {
+		return forum.getAllowTopicCreation();
+	}
+	
 	@LoggedIn
+	@Secure (Permission.FORUM_TOPIC_CREATE)
+	@SecurityContext (context = "#{forumBackingBean.forum}")
 	public void newTopic() throws IOException {
 		User author = sessionController.getLoggedUser();
 		ForumTopic topic = forumController.createTopic(getForum(), getNewTopicSubject(), author);

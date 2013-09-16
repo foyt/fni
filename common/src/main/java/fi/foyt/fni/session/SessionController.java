@@ -51,6 +51,17 @@ public class SessionController implements Serializable {
     
     return null;
   }
+  
+  public boolean hasLoggedUserRole(Role role) {
+  	Role[] roles = getLoggedUserRoles();
+  	for (Role loggedUserRole : roles) {
+  		if (loggedUserRole == role) {
+  			return true;
+  		}
+  	}
+  	
+  	return false;
+  }
 
 	public boolean hasLoggedUserPermission(Permission permission) {
 		Role[] roles = getLoggedUserRoles();
@@ -71,12 +82,14 @@ public class SessionController implements Serializable {
   		case ADMINISTRATOR:
   			return new Role[] {
   				Role.USER,
-  				Role.FORUM_ADMIN	
+  				Role.FORUM_ADMIN,
+  				Role.GAME_LIBRARY_MANAGER
   			};
   		case USER:
   			return new Role[] {
           Role.USER,
-          Role.FORUM_USER
+          Role.FORUM_USER,
+          Role.GAME_LIBRARY_USER
         };
   		case GUEST:
   			return new Role[] {
