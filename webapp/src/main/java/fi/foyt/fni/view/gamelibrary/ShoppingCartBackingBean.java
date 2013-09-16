@@ -3,7 +3,11 @@ package fi.foyt.fni.view.gamelibrary;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -15,6 +19,8 @@ import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.ocpsoft.pretty.faces.annotation.URLAction;
+import com.ocpsoft.pretty.faces.annotation.URLAction.PhaseId;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
@@ -49,18 +55,17 @@ import fi.foyt.paytrail.rest.UrlSet;
 @Stateful
 @RequestScoped
 @Named
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "gamelibrary-cart", 
-		pattern = "/gamelibrary/cart/", 
-		viewId = "/gamelibrary/cart.jsf"
-  )
-})
+@URLMappings(mappings = { @URLMapping(id = "gamelibrary-cart", pattern = "/gamelibrary/cart/", viewId = "/gamelibrary/cart.jsf") })
 public class ShoppingCartBackingBean implements Serializable {
 
-	private static final long serialVersionUID = 8752219019720302773L;
-
 	private final static double VAT_PERCENT = 23;
+	private static final long serialVersionUID = -5130175554468783304L;
+	
+	@Inject
+	private Logger logger;
+
+	@Inject
+	private SystemSettingsController systemSettingsController;
 
 	@Inject
 	private SessionController sessionController;
@@ -69,54 +74,19 @@ public class ShoppingCartBackingBean implements Serializable {
 	private UserController userController;
 
 	@Inject
+	private OrderController orderController;
+
+	@Inject
 	private SessionShoppingCartController sessionShoppingCartController;
 
 	@Inject
 	private DeliveryMehtodsController deliveryMehtodsController;
 
 	@Inject
-	private SystemSettingsController systemSettingsController;
-
-	@Inject
-	private OrderController orderController;
-	
-	@Inject
 	private PaytrailService paytrailService;
-	
+
 	@PostConstruct
 	public void init() {
-		deliveryContactFirstName = "";
-		deliveryContactLastName = "";
-		deliveryContactEmail = "";
-		deliveryAddressStreet1 = "";
-		deliveryAddressStreet2 = "";
-		deliveryAddressPostalCode = "";
-		deliveryAddressCity = "";
-		deliveryAddressCountryId = systemSettingsController.getDefaultCountry().getId();
-		deliveryContactMobile = "";
-		deliveryContactTelephone = "";
-		deliveryContactCompanyName = "";
-		notes = "";
-		
-		User loggedUser = sessionController.getLoggedUser();
-		if (loggedUser != null) {
-			deliveryContactFirstName = loggedUser.getFirstName();
-			deliveryContactLastName = loggedUser.getLastName();
-			deliveryContactEmail = userController.getUserPrimaryEmail(loggedUser);
-			deliveryContactCompanyName = loggedUser.getCompany();
-			deliveryContactMobile = loggedUser.getMobile();
-			deliveryContactTelephone = loggedUser.getPhone();
-
-			Address address = userController.findAddressByUserAndType(loggedUser, AddressType.DELIVERY);
-			if (address != null) {
-				deliveryAddressStreet1 = address.getStreet1();
-				deliveryAddressStreet2 = address.getStreet2();
-				deliveryAddressPostalCode = address.getPostalCode();
-				deliveryAddressCity = address.getCity();
-				deliveryAddressCountryId = address.getCountry().getId();
-			}
-		}
-		
 		countrySelectItems = new ArrayList<>();
 
 		List<Country> countries = systemSettingsController.listCountries();
@@ -124,16 +94,66 @@ public class ShoppingCartBackingBean implements Serializable {
 			countrySelectItems.add(new SelectItem(country.getId(), country.getName()));
 		}
 
+		payerCountryId = systemSettingsController.getDefaultCountry().getId();
 		deliveryMethodId = deliveryMehtodsController.getDefaultDeliveryMethod().getId();
+		shoppingCartItems = new ArrayList<>();
+
+		List<ShoppingCartItem> items = sessionShoppingCartController.getShoppingCartItems();
+		for (ShoppingCartItem item : items) {
+			shoppingCartItems.add(new ShoppingCartItemBean(item.getId(), item.getPublication().getName(), item.getCount(), item.getPublication().getPrice()));
+		}
+		
+		if (sessionController.isLoggedIn()) {
+			User loggedUser = sessionController.getLoggedUser();
+
+			payerCompany = loggedUser.getCompany();
+			payerFirstName = loggedUser.getFirstName();
+			payerLastName = loggedUser.getLastName();
+			payerEmail = userController.getUserPrimaryEmail(loggedUser);
+			payerMobile = loggedUser.getMobile();
+			payerTelephone = loggedUser.getPhone();
+
+			Address address = userController.findAddressByUserAndType(loggedUser, AddressType.DELIVERY);
+			if (address != null) {
+				payerStreetAddress = address.getStreet1();
+				payerPostalCode = address.getPostalCode();
+				payerPostalOffice = address.getCity();
+				payerCountryId = address.getCountry().getId();
+			}
+		}
 	}
 	
+	@URLAction (phaseId = PhaseId.INVOKE_APPLICATION)
+	public void applyValues() {
+		List<ShoppingCartItem> cartItems = sessionShoppingCartController.getShoppingCartItems();
+		Map<Long, ShoppingCartItem> itemMap = new HashMap<>();
+		for (ShoppingCartItem cartItem : cartItems) {
+			itemMap.put(cartItem.getId(), cartItem);
+		}
+
+		for (ShoppingCartItemBean itemBean : getShoppingCartItems()) {
+			ShoppingCartItem shoppingCartItem = itemMap.get(itemBean.getId());
+			if (!shoppingCartItem.getCount().equals(itemBean.getCount())) {
+				sessionShoppingCartController.setItemCount(shoppingCartItem, itemBean.getCount());
+			}
+		}
+	}
+
+	public List<SelectItem> getCountrySelectItems() {
+		return countrySelectItems;
+	}
+
+	public List<ShoppingCartItemBean> getShoppingCartItems() {
+		return shoppingCartItems;
+	}
+
 	public List<DeliveryMethodBean> getDeliveryMethods() {
 		ArrayList<DeliveryMethodBean> deliveryMethods = new ArrayList<>();
 
 		List<DeliveryMethod> shoppingCartDeliveryMethods = deliveryMehtodsController.getDeliveryMethods();
 		if (shoppingCartDeliveryMethods != null) {
 			for (DeliveryMethod deliveryMethod : shoppingCartDeliveryMethods) {
-				Country country = (this.deliveryAddressCountryId != null) ? systemSettingsController.findCountryById(this.deliveryAddressCountryId) : null;
+				Country country = (this.payerCountryId != null) ? systemSettingsController.findCountryById(this.payerCountryId) : null;
 				String countryCode = country != null ? country.getCode() : systemSettingsController.getDefaultCountry().getCode();
 				Double weight = getItemsWeight();
 				int width = getItemsWidth();
@@ -143,56 +163,113 @@ public class ShoppingCartBackingBean implements Serializable {
 				if (price != null) {
 					String name = FacesUtils.getLocalizedValue("gamelibrary.cart." + deliveryMethod.getNameLocaleKey(weight, width, height, depth, countryCode));
 					String info = FacesUtils.getLocalizedValue("gamelibrary.cart." + deliveryMethod.getInfoLocaleKey(weight, width, height, depth, countryCode));
-					
-  				deliveryMethods.add(new DeliveryMethodBean(
-  					deliveryMethod.getId(), 
-  					name, 
-  					info, 
-  					deliveryMethod.getRequiresAddress(), 
-  					price
-  				));
+
+					deliveryMethods.add(new DeliveryMethodBean(deliveryMethod.getId(), name, info, deliveryMethod.getRequiresAddress(), price));
 				}
 			}
 		}
-		
+
 		return deliveryMethods;
 	}
 
-	public List<SelectItem> getCountrySelectItems() {
-		return countrySelectItems;
+	public String getPayerFirstName() {
+		return payerFirstName;
 	}
 
-	public List<ShoppingCartItemBean> getShoppingCartItems() { 
-		List<ShoppingCartItemBean> result = new ArrayList<>();
-		
-		List<ShoppingCartItem> items = sessionShoppingCartController.getShoppingCartItems();
-		for (ShoppingCartItem item : items) {
-			result.add(new ShoppingCartItemBean(item.getId(), item.getPublication().getName(), item.getCount(), item.getPublication().getPrice()));
-		}
-		
-		return result;
-	}
-	
-	public boolean isShoppingCartEmpty() {
-		return sessionShoppingCartController.isShoppingCartEmpty();
-	}
-	
-	public void incShoppingCartItemCount(Long itemId) {
-		for (ShoppingCartItem item : sessionShoppingCartController.getShoppingCartItems()) {
-			if (item.getId().equals(itemId)) {
-				sessionShoppingCartController.setItemCount(item, item.getCount() + 1);
-				break;
-			}
-		}
+	public void setPayerFirstName(String payerFirstName) {
+		this.payerFirstName = payerFirstName;
 	}
 
-	public void decShoppingCartItemCount(Long itemId) {
-		for (ShoppingCartItem item : sessionShoppingCartController.getShoppingCartItems()) {
-			if (item.getId().equals(itemId)) {
-				sessionShoppingCartController.setItemCount(item, item.getCount() - 1);
-				break;
-			}
-		}
+	public String getPayerLastName() {
+		return payerLastName;
+	}
+
+	public void setPayerLastName(String payerLastName) {
+		this.payerLastName = payerLastName;
+	}
+
+	public String getPayerCompany() {
+		return payerCompany;
+	}
+
+	public void setPayerCompany(String payerCompany) {
+		this.payerCompany = payerCompany;
+	}
+
+	public String getPayerEmail() {
+		return payerEmail;
+	}
+
+	public void setPayerEmail(String payerEmail) {
+		this.payerEmail = payerEmail;
+	}
+
+	public String getPayerMobile() {
+		return payerMobile;
+	}
+
+	public void setPayerMobile(String payerMobile) {
+		this.payerMobile = payerMobile;
+	}
+
+	public String getPayerTelephone() {
+		return payerTelephone;
+	}
+
+	public void setPayerTelephone(String payerTelephone) {
+		this.payerTelephone = payerTelephone;
+	}
+
+	public String getPayerStreetAddress() {
+		return payerStreetAddress;
+	}
+
+	public void setPayerStreetAddress(String payerStreetAddress) {
+		this.payerStreetAddress = payerStreetAddress;
+	}
+
+	public String getPayerPostalCode() {
+		return payerPostalCode;
+	}
+
+	public void setPayerPostalCode(String payerPostalCode) {
+		this.payerPostalCode = payerPostalCode;
+	}
+
+	public String getPayerPostalOffice() {
+		return payerPostalOffice;
+	}
+
+	public void setPayerPostalOffice(String payerPostalOffice) {
+		this.payerPostalOffice = payerPostalOffice;
+	}
+
+	public Long getPayerCountryId() {
+		return payerCountryId;
+	}
+
+	public void setPayerCountryId(Long payerCountryId) {
+		this.payerCountryId = payerCountryId;
+	}
+
+	public String getPayerCountryCode() {
+		return systemSettingsController.findCountryById(getPayerCountryId()).getCode();
+	}
+
+	public String getDeliveryMethodId() {
+		return deliveryMethodId;
+	}
+
+	public void setDeliveryMethodId(String deliveryMethodId) {
+		this.deliveryMethodId = deliveryMethodId;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 
 	public Double getItemCosts() {
@@ -203,16 +280,16 @@ public class ShoppingCartBackingBean implements Serializable {
 
 		return result;
 	}
-	
+
 	public Double getDeliveryCosts(String deliveryMethodId) {
 		DeliveryMethod deliveryMethod = deliveryMehtodsController.findDeliveryMethod(deliveryMethodId);
 		if (deliveryMethod != null) {
-			return deliveryMethod.getPrice(getItemsWeight(), getItemsWidth(), getItemsHeight(), getItemsDepth(), getCountryCode());
+			return deliveryMethod.getPrice(getItemsWeight(), getItemsWidth(), getItemsHeight(), getItemsDepth(), getPayerCountryCode());
 		}
 
 		return 0d;
 	}
-	
+
 	public Double getDeliveryCosts() {
 		return getDeliveryCosts(getDeliveryMethodId());
 	}
@@ -243,7 +320,7 @@ public class ShoppingCartBackingBean implements Serializable {
 
 		return result;
 	}
-	
+
 	/**
 	 * Returns maximum width of items in millimeters
 	 * 
@@ -263,9 +340,9 @@ public class ShoppingCartBackingBean implements Serializable {
 
 		return result;
 	}
-	
+
 	/**
-	 * Returns maximum height of items in millimeters 
+	 * Returns maximum height of items in millimeters
 	 * 
 	 * @return maximum height of items in millimeters
 	 */
@@ -283,11 +360,11 @@ public class ShoppingCartBackingBean implements Serializable {
 
 		return result;
 	}
-	
+
 	/**
-	 * Returns total depth of items in millimeters 
+	 * Returns total depth of items in millimeters
 	 * 
-	 * @return total depth of items in millimeters 
+	 * @return total depth of items in millimeters
 	 */
 	public int getItemsDepth() {
 		int result = 0;
@@ -295,291 +372,161 @@ public class ShoppingCartBackingBean implements Serializable {
 			Publication publication = item.getPublication();
 			if (publication instanceof BookPublication) {
 				BookPublication bookPublication = (BookPublication) publication;
-  			result += bookPublication.getDepth() * item.getCount();
+				result += bookPublication.getDepth() * item.getCount();
 			}
 		}
 
 		return result;
 	}
-	
-	public String getCountryCode() {
-		return systemSettingsController.findCountryById(getDeliveryAddressCountryId()).getCode();
-	}
-	
+
 	public void proceedToCheckout() {
-		// TODO: validate
-		// TODO: What to do with payment method?
-		// TODO: Notes?
-		
+		// TODO: Delivery method
 		User loggedUser = sessionController.getLoggedUser();
 		String localAddress = FacesUtils.getLocalAddress(true);
-		
+
 		UrlSet urlSet = new UrlSet(
-			localAddress + "/gamelibrary/paytrail/success",	
-			localAddress + "/gamelibrary/paytrail/failure",	
-			localAddress + "/gamelibrary/paytrail/notify",
+			localAddress + "/gamelibrary/paytrail/success", 
+			localAddress + "/gamelibrary/paytrail/failure", 
+			localAddress + "/gamelibrary/paytrail/notify", 
 			localAddress + "/gamelibrary/paytrail/pending"
 		);
-		
-		Country deliveryAddressCountry = systemSettingsController.findCountryById(getDeliveryAddressCountryId());
-		
+
+		Country deliveryAddressCountry = systemSettingsController.findCountryById(getPayerCountryId());
+
 		Address address = null;
-		
+
 		if (loggedUser != null) {
-		  address = userController.findAddressByUserAndType(loggedUser, AddressType.DELIVERY);
+			address = userController.findAddressByUserAndType(loggedUser, AddressType.DELIVERY);
 		}
 
-	  if (address == null) {
-	  	address = userController.createAddress(loggedUser, AddressType.DELIVERY, getDeliveryAddressStreet1(), 
-	  			getDeliveryAddressStreet2(), getDeliveryAddressPostalCode(), getDeliveryAddressCity(), deliveryAddressCountry);
-	  } else {
-	  	userController.updateAddress(address, getDeliveryAddressStreet1(),  getDeliveryAddressStreet2(), 
-	  			getDeliveryAddressPostalCode(), getDeliveryAddressCity(), deliveryAddressCountry);
-	  }
-		
+		if (address == null) {
+			address = userController.createAddress(loggedUser, AddressType.DELIVERY, getPayerStreetAddress(), null, 
+			  getPayerPostalCode(), getPayerPostalOffice(), deliveryAddressCountry);
+		} else {
+			userController.updateAddress(address, getPayerStreetAddress(), null, getPayerPostalCode(), getPayerPostalOffice(), deliveryAddressCountry);
+		}
+
 		String streetAddess = address.getStreet1();
 		if (StringUtils.isNotEmpty(address.getStreet2())) {
 			streetAddess += '\n' + address.getStreet2();
 		}
-		
-		String customerCompany = getDeliveryContactCompanyName();
-		String customerEmail = getDeliveryContactEmail();
-		String customerFirstName = getDeliveryContactFirstName();
-		String customerLastName = getDeliveryContactLastName();
-		String customerMobile = getDeliveryContactMobile();
-		String customerPhone = getDeliveryContactTelephone();
+
+		String company = getPayerCompany();
+		String mobile = getPayerMobile();
+		String phone = getPayerTelephone();
+		String firstName = getPayerFirstName();
+		String lastName = getPayerLastName();
+		String email = getPayerEmail();
 
 		if (loggedUser != null) {
-		  userController.updateUserCompany(loggedUser, customerCompany);
-		  userController.updateUserMobile(loggedUser, customerMobile);
-		  userController.updateUserPhone(loggedUser, customerPhone);
+			userController.updateUserCompany(loggedUser, company);
+			userController.updateUserMobile(loggedUser, mobile);
+			userController.updateUserPhone(loggedUser, phone);
 		}
-		
-		Contact contact = new Contact(
-		  customerFirstName,
-			customerLastName,
-			customerEmail,
-			 new fi.foyt.paytrail.rest.Address(
-				 streetAddess,
-				 address.getPostalCode(),
-				 address.getCity(),
-				 address.getCountry().getCode()
-			 ),
-			 customerPhone,
-			 customerMobile,
-			 customerCompany
-		);
-		
+
+		Contact contact = new Contact(firstName, lastName, email, new fi.foyt.paytrail.rest.Address(streetAddess, address.getPostalCode(), address.getCity(),
+				address.getCountry().getCode()), phone, mobile, company);
+
 		String notes = getNotes();
-		
-		Address orderAddress = userController.createAddress(address.getUser(), AddressType.DELIVERY_ARCHIVED, 
-				address.getStreet1(), address.getStreet2(), address.getPostalCode(), address.getCity(), address.getCountry());
+
+		Address orderAddress = userController.createAddress(address.getUser(), AddressType.DELIVERY_ARCHIVED, address.getStreet1(), address.getStreet2(),
+				address.getPostalCode(), address.getCity(), address.getCountry());
 		PaymentMethod paymentMethod = null;
-		
-		Order order = orderController.createOrder(loggedUser, 
-		  customerCompany, customerEmail, customerFirstName, customerLastName, customerMobile, customerPhone,
-			OrderStatus.NEW, paymentMethod, getDeliveryCosts(), notes, orderAddress);
+
+		Order order = orderController.createOrder(loggedUser, company, email, firstName, lastName, mobile, phone, OrderStatus.NEW, paymentMethod,
+				getDeliveryCosts(), notes, orderAddress);
 
 		OrderDetails orderDetails = new OrderDetails(1, contact);
 		String orderNumber = order.getId().toString();
 		Payment payment = new Payment(orderNumber, orderDetails, urlSet);
 		payment.setDescription(notes);
-		
+
 		try {
 			List<ShoppingCartItem> shoppingCartItems = sessionShoppingCartController.getShoppingCartItems();
 			for (ShoppingCartItem shoppingCartItem : shoppingCartItems) {
-				Publication publication = shoppingCartItem.getPublication();
-				OrderItem orderItem = orderController.createOrderItem(order, publication, publication.getName(), publication.getPrice(), shoppingCartItem.getCount());
-				
-				paytrailService.addProduct(payment, 
-						orderItem.getName(), 
-						"#" + orderItem.getId().toString(), 
-						orderItem.getCount().doubleValue(),
-						orderItem.getUnitPrice(),
-						VAT_PERCENT,
-						0d,
-						Product.TYPE_NORMAL);
+				if (shoppingCartItem.getCount() > 0) {
+  				Publication publication = shoppingCartItem.getPublication();
+  				OrderItem orderItem = orderController.createOrderItem(order, publication, publication.getName(), publication.getPrice(), shoppingCartItem.getCount());
+  
+  				paytrailService.addProduct(payment, orderItem.getName(), "#" + orderItem.getId().toString(), 
+  						orderItem.getCount().doubleValue(), orderItem.getUnitPrice(), VAT_PERCENT, 0d, Product.TYPE_NORMAL);
+				}
 			}
-			
+
 			if (order.getShippingCosts() != null) {
-  			paytrailService.addProduct(payment, 
-  					"Delivery",
-  					"",
-  					1d,
-  					order.getShippingCosts(),
-  					VAT_PERCENT,
-  					0d, 
-  					Product.TYPE_POSTAL);
+				paytrailService.addProduct(payment, "Delivery", "", 1d, order.getShippingCosts(), VAT_PERCENT, 0d, Product.TYPE_POSTAL);
 			}
-			
+
 			sessionShoppingCartController.deleteShoppingCart();
-			
+
 			Result result = paytrailService.processPayment(payment);
 			if (result != null) {
 				try {
 					FacesContext.getCurrentInstance().getExternalContext().redirect(result.getUrl());
 				} catch (IOException e) {
-					// TODO: Handle error
+					logger.log(Level.SEVERE, "Could not redirect to Paytrail", e);
+					FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_FATAL, e.getMessage());
 				}
 			} else {
-				// TODO: Handle error
+				FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_FATAL, "Unknown error occurred while communicating with Paytrail");
 			}
 		} catch (PaytrailException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, "Error occurred while communicating with Paytrail", e);
+			FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_FATAL, e.getMessage());
 		}
 	}
-	
-	public String getDeliveryMethodId() {
-		return deliveryMethodId;
-	}
-	
-	public void setDeliveryMethodId(String deliveryMethodId) {
-		this.deliveryMethodId = deliveryMethodId;
-	}
 
-	public String getDeliveryContactFirstName() {
-		return deliveryContactFirstName;
-	}
-
-	public void setDeliveryContactFirstName(String deliveryContactFirstName) {
-		this.deliveryContactFirstName = deliveryContactFirstName;
-	}
-
-	public String getDeliveryContactLastName() {
-		return deliveryContactLastName;
-	}
-
-	public void setDeliveryContactLastName(String deliveryContactLastName) {
-		this.deliveryContactLastName = deliveryContactLastName;
-	}
-
-	public String getDeliveryContactEmail() {
-		return deliveryContactEmail;
-	}
-
-	public void setDeliveryContactEmail(String deliveryContactEmail) {
-		this.deliveryContactEmail = deliveryContactEmail;
-	}
-
-	public String getDeliveryContactMobile() {
-		return deliveryContactMobile;
-	}
-
-	public void setDeliveryContactMobile(String deliveryContactMobile) {
-		this.deliveryContactMobile = deliveryContactMobile;
-	}
-
-	public String getDeliveryContactTelephone() {
-		return deliveryContactTelephone;
-	}
-
-	public void setDeliveryContactTelephone(String deliveryContactTelephone) {
-		this.deliveryContactTelephone = deliveryContactTelephone;
-	}
-
-	public String getDeliveryContactCompanyName() {
-		return deliveryContactCompanyName;
-	}
-
-	public void setDeliveryContactCompanyName(String deliveryContactCompanyName) {
-		this.deliveryContactCompanyName = deliveryContactCompanyName;
-	}
-
-	public String getDeliveryAddressStreet1() {
-		return deliveryAddressStreet1;
-	}
-
-	public void setDeliveryAddressStreet1(String deliveryAddressStreet1) {
-		this.deliveryAddressStreet1 = deliveryAddressStreet1;
-	}
-
-	public String getDeliveryAddressStreet2() {
-		return deliveryAddressStreet2;
-	}
-
-	public void setDeliveryAddressStreet2(String deliveryAddressStreet2) {
-		this.deliveryAddressStreet2 = deliveryAddressStreet2;
-	}
-
-	public String getDeliveryAddressPostalCode() {
-		return deliveryAddressPostalCode;
-	}
-
-	public void setDeliveryAddressPostalCode(String deliveryAddressPostalCode) {
-		this.deliveryAddressPostalCode = deliveryAddressPostalCode;
-	}
-
-	public String getDeliveryAddressCity() {
-		return deliveryAddressCity;
-	}
-
-	public void setDeliveryAddressCity(String deliveryAddressCity) {
-		this.deliveryAddressCity = deliveryAddressCity;
-	}
-
-	public Long getDeliveryAddressCountryId() {
-		return deliveryAddressCountryId;
-	}
-
-	public void setDeliveryAddressCountryId(Long deliveryAddressCountryId) {
-		this.deliveryAddressCountryId = deliveryAddressCountryId;
-	}
-
-	public String getNotes() {
-		return notes;
-	}
-	
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
-	
 	private List<SelectItem> countrySelectItems;
+	private List<ShoppingCartItemBean> shoppingCartItems;
+
+	private String payerFirstName;
+	private String payerLastName;
+	private String payerCompany;
+	private String payerEmail;
+	private String payerMobile;
+	private String payerTelephone;
+	private String payerStreetAddress;
+	private String payerPostalCode;
+	private String payerPostalOffice;
+	private Long payerCountryId;
 	private String deliveryMethodId;
-	private String deliveryContactFirstName;
-	private String deliveryContactLastName;
-	private String deliveryContactEmail;
-	private String deliveryContactMobile;
-	private String deliveryContactTelephone;
-	private String deliveryContactCompanyName;
-	private String deliveryAddressStreet1;
-	private String deliveryAddressStreet2;
-	private String deliveryAddressPostalCode;
-	private String deliveryAddressCity;
-	private Long deliveryAddressCountryId;
 	private String notes;
-	
+
 	public class ShoppingCartItemBean implements Serializable {
-		
+
 		private static final long serialVersionUID = -8677229900263196359L;
-		
+
 		public ShoppingCartItemBean(Long id, String name, Integer count, Double price) {
 			this.id = id;
 			this.name = name;
 			this.count = count;
 			this.price = price;
 		}
-		
+
 		public Long getId() {
 			return id;
 		}
-		
+
 		public String getName() {
 			return name;
 		}
-		
+
 		public Double getPrice() {
 			return price;
 		}
-		
+
 		public Integer getCount() {
 			return count;
 		}
-		
+
+		public void setCount(Integer count) {
+			this.count = count;
+		}
+
 		public Double getTotalPrice() {
 			return getCount() * getPrice();
 		}
-		
+
 		private Long id;
 		private String name;
 		private Double price;
