@@ -15,7 +15,7 @@ public class DeliveryMehtodsController {
 	public void init() {
 		deliveryMethods = new ArrayList<>();
 		deliveryMethods.add(new PostiDeliveryMethod());
-		deliveryMethods.add(new KopiopisteDeliveryMethod());
+//		deliveryMethods.add(new KopiopisteDeliveryMethod());
 	}
 	
 	public List<DeliveryMethod> getDeliveryMethods() {
