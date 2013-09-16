@@ -72,6 +72,12 @@
   content: ' >'; 
 }
 
+.gamelibrary-cart-empty-message {
+  text-align: center;
+  font-style: italic;
+  margin-top: 8px;
+}
+
 .gamelibrary-cart-items-inner-container {
   margin-top: 8px;
 }

@@ -378,6 +378,10 @@ public class ShoppingCartBackingBean implements Serializable {
 
 		return result;
 	}
+	
+	public boolean getHasItems() {
+		return getShoppingCartItems().size() > 0;
+	}
 
 	public void proceedToCheckout() {
 		// TODO: Delivery method
