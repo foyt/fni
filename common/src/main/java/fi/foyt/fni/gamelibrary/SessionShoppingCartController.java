@@ -106,11 +106,7 @@ public class SessionShoppingCartController {
 	}
 
 	public void setItemCount(ShoppingCartItem item, Integer count) {
-		if (count == 0) {
-			shoppingCartItemDAO.delete(item);
-		} else {
-			shoppingCartItemDAO.updateCount(item, count);
-		}
+		shoppingCartItemDAO.updateCount(item, count);
 	}
 	
 	public void removePublication(Publication publication) {
