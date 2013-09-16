@@ -58,7 +58,7 @@ import fi.foyt.paytrail.rest.UrlSet;
 @URLMappings(mappings = { @URLMapping(id = "gamelibrary-cart", pattern = "/gamelibrary/cart/", viewId = "/gamelibrary/cart.jsf") })
 public class ShoppingCartBackingBean implements Serializable {
 
-	private final static double VAT_PERCENT = 23;
+	private final static double VAT_PERCENT = 24;
 	private static final long serialVersionUID = -5130175554468783304L;
 	
 	@Inject
