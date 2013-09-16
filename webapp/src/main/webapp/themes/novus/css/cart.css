@@ -140,3 +140,8 @@
   margin-top: 8px;
   padding: 0.4em 1em;
 }
+
+.gamelibrary-cart-submit:disabled {
+  cursor: default; 
+  color: #aaa;
+}

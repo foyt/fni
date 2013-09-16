@@ -158,7 +158,7 @@
             </div>
           </div>
           
-          <h:commandButton value="#{locales['gamelibrary.cart.proceedToCheckout']}" action="#{shoppingCartBackingBean.proceedToCheckout}" styleClass="gamelibrary-cart-submit"/>
+          <h:commandButton value="#{locales['gamelibrary.cart.proceedToCheckout']}" action="#{shoppingCartBackingBean.proceedToCheckout}" styleClass="gamelibrary-cart-submit" disabled="#{!shoppingCartBackingBean.canProceedToCheckout}"/>
           
         </h:form>
       </div>  

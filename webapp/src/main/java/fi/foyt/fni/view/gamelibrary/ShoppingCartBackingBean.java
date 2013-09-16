@@ -383,6 +383,16 @@ public class ShoppingCartBackingBean implements Serializable {
 		return getShoppingCartItems().size() > 0;
 	}
 
+	public boolean getCanProceedToCheckout() {
+		for (ShoppingCartItemBean shoppingCartItem : getShoppingCartItems()) {
+			if (shoppingCartItem.getCount() > 0) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	public void proceedToCheckout() {
 		// TODO: Delivery method
 		User loggedUser = sessionController.getLoggedUser();
