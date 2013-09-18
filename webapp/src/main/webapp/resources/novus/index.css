@@ -1,0 +1,119 @@
+@CHARSET "utf-8";
+@IMPORT url("http://yui.yahooapis.com/3.11.0/build/cssreset/cssreset-min.css");
+
+body {
+  background-image: url(#{resource['novus:gfx/layout/background.png']});
+}
+
+/* Menu */
+
+.index-menu-container {
+  position: relative;
+  height: 30px;
+  background: #000;
+}
+
+.index-menu-logo-text,
+.index-menu-logo-shadow {
+  font-size: 16px;
+  padding-top: 7px;
+  padding-left: 10px;  
+}
+
+.index-menu-logo-text {
+  color: rgba(255,255,255,1);
+}
+
+.index-menu-logo-shadow {
+  color: transparent;
+  position: absolute;
+  top: 0px;  
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.7);
+}
+
+.index-menu-navigation-container a, .index-menu-navigation-container span, .index-menu-tools-container a {
+  color: rgba(255,255,255,1);
+  white-space: nowrap;
+  font-size: 13px;
+  font-family: 'PT Sans';
+  text-decoration: none;
+}
+
+.index-menu-navigation-container {
+  display: inline-table;
+}
+
+.index-menu-navigation-container a, .index-menu-navigation-container span {
+  display: table-cell;  
+  text-align: center;
+  padding-top: 6px;
+  width: 92px;
+}
+
+.index-menu-tools-container a {
+  margin-top: 7px;
+  vertical-align: top;
+  display: inline-block;
+}
+
+.index-menu-tools-container input[type="text"] {
+  margin-top: 6px;
+  vertical-align: top;
+  display: inline-block;
+  height: 11px;
+}
+
+.index-menu-tools-locale {
+  margin-right: 20px;
+  float: right;
+}
+
+.index-menu-tools-login {
+  margin-right: 25px;
+  float: right;
+}
+
+.index-menu-tools-search-text {
+  margin-right: 5px;
+  float: right;
+}
+
+.index-menu-tools-search {
+  margin-right: 5px;
+  float: right;
+}
+
+.index-menu-tools-container input[type="text"] {
+  width: 100px;
+}
+
+.index-menu-tools-locale, .index-menu-tools-login, .index-menu-tools-search {
+  text-transform: uppercase;
+}
+  
+/* Banner */
+
+.index-banner {
+  height: 480px;
+  background: url(#{resource['novus:gfx/layout/banner.jpg']});
+}
+
+/* Description */
+
+.index-description {
+  background: #000;
+  color: rgb(95, 174, 225);
+  font-family: 'Bebas Neue';
+  padding-left: 36px;
+  padding-top: 18px;
+}
+
+.index-description-title {
+  font-size: 27px;
+  margin-bottom: 15px;
+}
+
+.index-description-text {
+  font-size: 18.5px;
+  padding-bottom: 15px;
+}

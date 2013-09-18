@@ -1,153 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    template="/WEB-INF/templates/root.xhtml">
-    
-    <ui:define name="head">
-      <!-- View specific -->
-    
-      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/index.css"/>
-    </ui:define>   
-    
-    <ui:define name="pageTitle">
-      #{locales['index.pageTitle']}
-    </ui:define>
-    
-    <ui:define name="siteHeader">
-      <!-- Site's Header -->
-      <div class="index-header-wrapper">
-        <ui:fragment rendered="#{!sessionController.loggedIn}">
-          <div id="index-header-login-register-wrapper">
-            <div id="index-header-login"><span class="index-header-big-font"><a href="#{request.contextPath}/login">#{locales['index.headerLoginLink']}</a></span> #{locales['index.headerLoginHint']}</div>
-            <div id="index-header-guest-login"><span class="index-header-big-font"><a href="#{request.contextPath}/login?loginMethod=GUEST">#{locales['index.headerGuestLoginLink']}</a></span> #{locales['index.headerGuestLoginHint']}</div>
-          </div>
-        </ui:fragment>
-        
-        <ui:fragment rendered="#{sessionBackingBean.loggedIn}">
-          <div id="index-header-user-info-wrapper">
-            <h:graphicImage value="/users/profileImages/#{sessionBackingBean.loggedUser.id}?width=48&amp;height=48" />
-            
-            <div id="index-header-user-info">
-              <h:outputFormat value="#{locales['index.headerLoggedInAs']}">
-                <f:param value="#{sessionBackingBean.loggedUser.fullName}"/>
-              </h:outputFormat>
-              <span class="index-header-big-font">
-                <h:link id="index-header-logout-link" outcome="/users/logout" value="#{locales['index.headerLogoutLink']}"/>
-              </span> 
-              <span>#{locales['index.headerOr']}</span>
-              <span class="index-header-big-font">
-                <h:link outcome="/users/editprofile" value="#{locales['index.headerEditProfileLink']}"/>
-              </span>
-            </div>
-          </div>
-        </ui:fragment>
-      </div>
-    </ui:define>
-    
-    <ui:define name="content">
-      <div id="index-sidebar-wrapper">
-        <div id="index-sidebar-background"></div>
-        <div id="index-sidebar-content">
-          <div id="index-sidebar-widget-what-is-wrapper">
-            <div id="index-sidebar-widget-what-is-icon" class="index-sidebar-widget-icon-container"></div>
-            <div id="index-what-is-content-wrapper" class="index-sidebar-widget-content-container">
-              <h1>#{locales['index.whatIsForgeHeader']}</h1>
-              <div id="index-sidebar-widget-what-is-content" class="index-sidebar-widget-content">
-                <b>#{locales['index.whatIsForgeContentPrefix']}</b> #{locales['index.whatIsForgeContent']}
-              </div>
-            </div> 
-            
-            <div id="index-sidebar-widget-latest-game-library-publications-wrapper">
-              <div id="index-sidebar-widget-latest-game-library-publications-icon" class="index-sidebar-widget-icon-container"></div>
-              <div id="index-sidebar-widget-latest-game-library-publications-content-wrapper" class="index-sidebar-widget-content-container">
-                <h1>#{locales['index.latestGameLibraryPublicationsHeader']}</h1>
-                <div id="index-sidebar-widget-latest-game-library-publications-content" class="index-sidebar-widget-content">
-                  <ul>
-                    <ui:repeat var="publication" value="#{indexViewBackingBean.latestGameLibraryPublications}">
-                      <li>
-                        <h:outputLink value="#{request.contextPath}/gamelibrary/#{publication.urlName}">#{publication.name}</h:outputLink>
-                      </li>
-                    </ui:repeat>
-                  </ul>
-                </div>
-              </div>
-            </div>        
-            
-            <div id="index-sidebar-widget-latest-articles-wrapper">
-              <div id="index-sidebar-widget-latest-articles-icon" class="index-sidebar-widget-icon-container"></div>
-              <div id="index-sidebar-widget-latest-articles-content-wrapper" class="index-sidebar-widget-content-container">
-                <h1>#{locales['index.latestArticlesHeader']}</h1>
-                <div id="index-sidebar-widget-latest-articles-content" class="index-sidebar-widget-content">
-                  <ul>
-                    <ui:repeat var="blogEntry" value="#{indexViewBackingBean.latestBlogEntries}">
-                      <li>
-                        <h:outputLink value="#{blogEntry.link}">#{blogEntry.title}</h:outputLink>
-                      </li>
-                    </ui:repeat>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            
-            <div id="index-sidebar-widget-latest-forum-topics-wrapper">
-              <div id="index-sidebar-widget-latest-forum-topics-icon" class="index-sidebar-widget-icon-container"></div>
-              <div id="index-sidebar-widget-latest-forum-topics-content-wrapper" class="index-sidebar-widget-content-container">
-                <h1>#{locales['index.latestForumTopicsHeader']}</h1>
-                <div id="index-sidebar-widget-latest-forum-topics-content" class="index-sidebar-widget-content">
-                  <ul>
-                    <ui:repeat var="topic" value="#{indexViewBackingBean.latestForumTopics}">
-                      <li>
-                        <h:outputLink value="#{request.contextPath}/forum/#{topic.fullPath}">#{topic.subject}</h:outputLink>
-                      </li>
-                    </ui:repeat>
-                  </ul>
-                </div>
-              </div>
-            </div>  
-          </div>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
 
-        </div>
-      </div>
+  <ui:define name="page-title">#{locales['index.title']}</ui:define>
+  <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="fonts.css"/>
+    <h:outputStylesheet library="novus" name="index.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <h:panelGroup layout="block" styleClass="index-menu-container"> 
+      <h:panelGroup layout="block" styleClass="grid_3 index-menu-logo">
+        <h:panelGroup layout="block" styleClass="index-menu-logo-shadow">#{locales['index.logoText']}</h:panelGroup>
+        <h:panelGroup layout="block" styleClass="index-menu-logo-shadow">#{locales['index.logoText']}</h:panelGroup>
+        <h:panelGroup layout="block" styleClass="index-menu-logo-shadow">#{locales['index.logoText']}</h:panelGroup>
+        <h:panelGroup layout="block" styleClass="index-menu-logo-text">#{locales['index.logoText']}</h:panelGroup>
+      </h:panelGroup>
       
-      <div id="index-blog-feed">
-        <h:form>
-          <ui:repeat var="blogEntry" value="#{indexViewBackingBean.blogFeed}">
-            <div class="index-blog-feed-entry">
-              <div class="index-blog-feed-entry-header">
-                <h1>
-                  <h:outputLink value="#{blogEntry.link}">#{blogEntry.title}</h:outputLink>
-                </h1>
-                <span class="index-blog-feed-entry-author">#{blogEntry.authorName}</span>
-                <span class="index-blog-feed-entry-published">
-                  <h:outputText value="#{blogEntry.created}">
-                    <f:convertDateTime/> 
-                  </h:outputText>
-                </span>
-              </div>
-              
-              <div class="index-blog-feed-entry-summary-container">
-                <div class="index-blog-feed-entry-summary">
-                  <div class="index-blog-feed-entry-tags">
-                    <ui:repeat var="tag" value="#{indexViewBackingBean.getBlogEntryTags(blogEntry)}">
-                      <div class="index-blog-feed-entry-tag">
-                        <a href="#">#{tag.text}</a>
-                      </div>
-                    </ui:repeat>
-                  </div>
-                  <div class="index-blog-feed-entry-summary-text">
-                    <h:outputText value="#{blogEntry.summary}" escape="false"/>
-                  </div>
-                  <div class="index-blog-feed-entry-summary-more">
-                    <h:outputLink value="#{blogEntry.link}">More...</h:outputLink>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ui:repeat>
-        </h:form>
-      </div>
- 
-    </ui:define>
+      <h:panelGroup layout="block" styleClass="grid_8 index-menu-navigation-container">
+        <h:link outcome="/index.jsf">#{locales['index.menuFrontPage']}</h:link>
+        <h:link outcome="/forge/">#{locales['index.menuForge']}</h:link>
+        <h:link outcome="/illusion/">#{locales['index.menuIllusion']}</h:link>
+        <h:link outcome="/gamelibrary/index.jsf">#{locales['index.menuGameLibrary']}</h:link>
+        <h:link outcome="/forum/index.jsf">#{locales['index.menuForum']}</h:link>
+      </h:panelGroup>
+      
+      <h:panelGroup layout="block" styleClass="grid_5 index-menu-tools-container">
+        <h:outputLink value="javascript:null(void)" styleClass="index-menu-tools-search">#{locales['index.toolSearch']}</h:outputLink>
+        <h:inputText value="" styleClass="index-menu-tools-search-text"/>
+        <h:link outcome="/users/login.jsf" styleClass="index-menu-tools-login">#{locales['index.toolLogin']}</h:link>
+        <h:outputLink value="javascript:null(void)" styleClass="index-menu-tools-locale">
+          <h:outputFormat value="#{locales['index.toolLocale']}">
+            <f:param value="#{sessionBackingBean.locale.language}"/>
+          </h:outputFormat>
+        </h:outputLink>
+      </h:panelGroup>
+      
+    </h:panelGroup>
+        
+    <h:panelGroup layout="block" styleClass="clear">&#160;</h:panelGroup>    
+    
+    <!-- Banner -->
+    
+    <h:panelGroup layout="block" styleClass="index-banner"></h:panelGroup>
+    
+    <!-- Description -->
+    
+    <h:panelGroup layout="block" styleClass="index-description">
+      <h:panelGroup layout="block" styleClass="index-description-title">#{locales['index.descriptionTitle']}</h:panelGroup>
+      <h:panelGroup layout="block" styleClass="index-description-text">#{locales['index.descriptionText']}</h:panelGroup>
+    </h:panelGroup>
+    
+    <h:panelGroup layout="block" styleClass="clear">&#160;</h:panelGroup>    
+    
+    <!-- Publications and Forum -->
+    
+    <h:panelGroup layout="block" styleClass="grid_12">
+      <p>700px Publications</p>
+    </h:panelGroup>
+    
+    <h:panelGroup layout="block" styleClass="grid_4">
+      <p>220px Forum</p>
+    </h:panelGroup>
+    
+    <h:panelGroup layout="block" styleClass="clear">&#160;</h:panelGroup>   
+    
+    <!-- Blog -->
+    
+    <h:panelGroup layout="block" styleClass="grid_12">
+      <p>700px Blog</p>
+    </h:panelGroup>
+    
+    <h:panelGroup layout="block" styleClass="clear">&#160;</h:panelGroup>   
+    
+  </ui:define>
+
 </ui:composition>
