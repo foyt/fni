@@ -75,7 +75,9 @@
           <h:panelGroup layout="block" styleClass="index-forum-topics">
             <ui:repeat var="forumTopic" value="#{indexViewBackingBean.latestForumTopics}">
               <h:panelGroup layout="block" styleClass="index-forum-topic">
-                <h:panelGroup layout="block" styleClass="index-forum-topic-subject">#{forumTopic.subject}</h:panelGroup>
+                <h:panelGroup layout="block" styleClass="index-forum-topic-subject">
+                  <h:outputLink value="#{request.contextPath}/forum/#{forumTopic.forum.urlName}/#{forumTopic.urlName}">#{forumTopic.subject}</h:outputLink>
+                </h:panelGroup>
                 <h:panelGroup layout="block" styleClass="index-forum-topic-author">
                   <h:panelGroup styleClass="index-forum-topic-author-prefix">#{locales['index.forumAuthor']}</h:panelGroup>
                   <h:outputLink styleClass="index-forum-topic-author-link" value="#{request.contextPath}/users/#{forumTopic.author.id}">#{forumTopic.author.fullName}</h:outputLink>

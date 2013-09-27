@@ -93,6 +93,12 @@ h3 {
     @include box-sizing(border-box);
     height: 100%;
   }  
+  
+  .index-forum-more-container {
+    bottom: 10px;
+    position: absolute;
+    right: 0;
+  }
 }
 
 .index-publications-forum h4 {
@@ -129,6 +135,19 @@ h3 {
 .index-gamelibrary-more-container, .index-forum-more-container {
   margin-right: 25px;
   float: right;
+}
+
+@media screen and (max-width: $grid-width-desktop) {
+  
+  .index-publications-panel {
+    position: relative;
+  }
+  
+  .index-gamelibrary-more-container {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+  }
 }
 
 .index-gamelibrary-more, .index-forum-more {
