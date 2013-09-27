@@ -13,6 +13,7 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -89,7 +90,7 @@ public class BlogController {
 				String authorName = syndEntry.getAuthor();
 				List<String> categories = new ArrayList<>();
 				for (SyndCategory category : (List<SyndCategory>) syndEntry.getCategories()) {
-					categories.add(category.getName());
+					categories.add(StringEscapeUtils.unescapeXml(category.getName()));
 				};
 				
   			synchronizeEntry(blogCategory, title, summary, modified, created, link, guid, authorName, categories);
@@ -116,8 +117,8 @@ public class BlogController {
 		
 		if (StringUtils.endsWith(summary, "[...]")) {
 			summary = summary.substring(0, summary.length() - 5);
-		} else if (StringUtils.endsWith(summary, "[…]")) {
-			summary = summary.substring(0, summary.length() - 3);
+		} else if (StringUtils.endsWith(summary, "[&#8230;]")) {
+			summary = summary.substring(0, summary.length() - 9);
 		}
 		
 		summary = StringUtils.strip(summary);
