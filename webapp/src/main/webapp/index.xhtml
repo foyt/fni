@@ -42,11 +42,15 @@
                   <h:graphicImage value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?width=200&amp;height=200"/>
                 </h:panelGroup>     
                 
-                <h4>#{publication.name}</h4>
+                <h4>
+                  <h:outputLink value="#{request.contextPath}/gamelibrary/#{publication.urlName}">#{publication.name}</h:outputLink>
+                </h4>
                 
                 <h:panelGroup layout="block" styleClass="index-publication-tags">
                   <ui:repeat var="tag" value="#{indexViewBackingBean.getPublicationTags(publication)}">
-                    <h:panelGroup styleClass="index-publication-tag">#{tag}</h:panelGroup>
+                    <h:panelGroup styleClass="index-publication-tag">
+                      <h:outputLink value="#{request.contextPath}/gamelibrary/tags/#{tag.text}">#{tag.text}</h:outputLink>
+                    </h:panelGroup>
                   </ui:repeat>
                 </h:panelGroup>
                 

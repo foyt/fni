@@ -17,6 +17,7 @@ import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
+import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.session.SessionController;
@@ -74,12 +75,12 @@ public class IndexViewBackingBean {
 		return latestGameLibraryPublications;
 	}
 	
-	public List<String> getPublicationTags(Publication publication) {
-		List<String> result = new ArrayList<>();
+	public List<GameLibraryTag> getPublicationTags(Publication publication) {
+		List<GameLibraryTag> result = new ArrayList<>();
 		
 		List<PublicationTag> publicationTags = gameLibraryTagController.listPublicationTags(publication);
 		for (PublicationTag publicationTag : publicationTags) {
-			result.add(publicationTag.getTag().getText());
+			result.add(publicationTag.getTag());
 		}
 		
 		return result;

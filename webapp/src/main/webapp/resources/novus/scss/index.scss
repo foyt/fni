@@ -101,13 +101,22 @@ h3 {
   padding-bottom: 13px;
 }
 
+.index-publications-forum h4 a {
+  text-decoration: none;
+  color: $default-color;
+}
+
 .index-publication-tag {
   font-family: $default-font;
-  color: $default-color;
   font-size: 10px;
   font-weight: bold;
   text-transform: uppercase;
   padding-right: 13px;
+}
+
+.index-publication-tag a {
+  color: $default-color;
+  text-decoration: none;
 }
 
 .index-publication-description {
