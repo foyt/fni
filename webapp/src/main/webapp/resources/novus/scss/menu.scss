@@ -1,0 +1,89 @@
+@import "styles";
+
+/* Logo */
+
+$search-box-width: 71px;
+$search-box-width-focus: 175px; 
+
+.index-menu {
+  background: #000;
+}
+
+.index-menu-logo {
+  position: relative;
+}
+
+.index-menu-logo-text,
+.index-menu-logo-shadow {
+  font-size: 16px;
+  white-space: nowrap;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.index-menu-logo-text { 
+  color: rgba(255,255,255,1);
+}
+
+.index-menu-logo-shadow {
+  color: transparent;
+  position: absolute;
+  top: 0px;  
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.7);
+}
+
+/* Navigation */
+
+.index-menu-navigation-container a, .index-menu-navigation-container span {
+  color: rgba(255,255,255,1);
+  white-space: nowrap;
+  font-size: 13px;
+  font-family: $default-font;
+  text-decoration: none;
+  width: 104px;
+  text-align: center;
+  display: inline-block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+/* Tools */
+
+.index-menu-tools-container a {
+  color: rgba(255,255,255,1);
+  white-space: nowrap;
+  font-size: 13px;
+  font-family: $default-font;
+  text-decoration: none;
+  display: inline-block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.index-menu-tools-container input[type="text"]{
+  width: $search-box-width;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 7px;
+  font-size: 11px;
+  vertical-align: top;
+}
+
+.index-menu-tools-container input[type="text"]:focus {
+  position: relative;
+  width: $search-box-width-focus;
+  margin-left: $search-box-width - $search-box-width-focus;
+  display: inline-block;
+}
+
+.index-menu-tools-locale, .index-menu-tools-login, .index-menu-tools-search {
+  text-transform: uppercase;
+}
+
+.index-menu-tools-login {
+  margin-right: 20px;
+}
+
+.index-menu-tools-locale {
+  margin-right: 20px;
+}

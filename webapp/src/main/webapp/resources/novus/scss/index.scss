@@ -1,0 +1,257 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+$description-color: #ADD6F0;
+
+/* Body */
+
+body {
+  background: url('#' + '{resource["novus:gfx/layout/background.jpg"]}') repeat-y top left;
+  background-size: 100% auto;
+}
+
+/* General */
+
+h3 {
+  @extend .header-2;
+  color: $title-color;
+}
+
+/* Banner */
+
+.index-banner img {
+  vertical-align: top;
+  width: 100%;
+}
+
+/* Description */
+
+.index-description {
+  background: #000;
+}
+
+.index-description-title {
+  margin-left: 39px;
+  margin-top: 26px;
+  font-size: 26px;
+  text-transform: uppercase;
+  font-family: $title-font;
+  color: $description-color;
+}
+
+.index-description-text {
+  margin-left: 39px;
+  margin-top: 12px;
+  margin-bottom: 26px;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: $default-font;
+  color: $description-color;
+}
+
+/* Publications and forum posts row */
+
+.index-publications-panel, 
+.index-forum-panel,
+.index-blog-panel {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding-top: 10px;
+  padding-left:26px;
+}
+
+.index-publications-panel {
+  display: table;
+  padding-bottom: 10px;
+}
+
+.index-publications-forum h3 {
+  margin-top: 23px;
+  margin-bottom: 39px;
+}
+
+.index-publications-forum {
+  margin-top: 10px;  
+}
+
+.index-publication {
+  max-width: 347px;
+}
+
+@media screen and (min-width: $grid-width-desktop) {
+  .index-publications-forum {
+    position: relative;
+  }
+  
+  .index-forum {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+  }
+  
+  .index-forum-panel {
+    @include box-sizing(border-box);
+    height: 100%;
+  }  
+}
+
+.index-publications-forum h4 {
+  @extend .header-1;
+  padding-top: 43px;
+  padding-bottom: 13px;
+}
+
+.index-publication-tag {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding-right: 13px;
+}
+
+.index-publication-description {
+  font-family: $default-font;
+  color: $default-color;
+  margin-top: 22px;
+  font-weight: bold;
+}
+
+.index-gamelibrary-more-container, .index-forum-more-container {
+  margin-right: 25px;
+  float: right;
+}
+
+.index-gamelibrary-more, .index-forum-more {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.index-forum-topic {
+  margin-bottom: 25px;
+}
+
+.index-forum-topic:last-child {
+  margin-bottom: 0px;
+}
+
+.index-forum-topic-subject {
+  font-family: $default-font;
+  color: $default-color;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.index-forum-topic-author {
+  font-family: $default-font;
+  color: $default-color;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.index-forum-topic-author-link {
+  font-family: $default-font;
+  color: $default-color;
+  padding-left: 4px;
+  text-decoration: none;  
+}
+
+/* Blog */
+
+.index-blog {
+  margin-top: 10px;
+}
+
+.index-blog h3 {
+  margin-top: 23px;
+  margin-bottom: 39px;
+}
+
+.index-blog-panel {
+  padding-bottom: 25px;
+  padding-right: 25px;
+}
+
+.index-blog-entry {
+  margin-bottom: 45px;
+}
+
+.index-blog-entry:last-child {
+  margin-bottom: 0px;
+}
+
+.index-blog-entry-date {
+  @extend .header-5;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.index-blog-entry-title {
+  @extend .header-1;
+}
+
+.index-blog-entry-author:before {
+  content: '-';
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.index-blog-entry-author {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.index-blog-entry-tags {
+  margin-top: 21px;
+}
+
+.index-blog-entry-tag {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 10px;
+  text-transform: uppercase;
+  padding-right: 13px;
+  text-decoration: none;
+}
+
+.index-blog-entry-content {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 16px;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.index-blog-entry-more-container {
+  margin-top: 16px;
+}
+
+.index-blog-entry-more {
+  font-family: $default-font;
+  color: $default-color;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.index-blog-more-container {
+  float: right;
+}
+
+.index-blog-more {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: bold;
+  font-style: italic;
+}

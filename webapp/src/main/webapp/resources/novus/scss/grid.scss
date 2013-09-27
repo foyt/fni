@@ -1,0 +1,9 @@
+@import "vars";
+
+@media screen and (max-width: $grid-width-desktop) {
+  @import "grid/grid-mobile"
+}
+
+@media screen and (min-width: $grid-width-desktop) {
+  @import "grid/grid-desktop"
+}

@@ -1,0 +1,53 @@
+// Colors
+
+$default-color: #1A1818;
+$title-color: #47B0B0;
+
+// Fonts
+
+$default-font: 'PT Sans', sans-serif;
+$title-font: "Bebas Neue",sans-serif;
+
+.header {
+  text-decoration: none;
+  font-family: $title-font;
+  font-style: normal;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+.header-1 {
+  @extend .header;
+  color: $default-color;
+  font-size: 26px;
+}
+
+.header-2 {
+  @extend .header;
+  color: $default-color;
+  font-size: 21px;
+}
+
+.header-3 {
+  @extend .header;
+  color: $default-color;
+  font-size: 18px;
+}
+
+.header-4 {
+  @extend .header;
+  color: $default-color;
+  font-size: 16px;
+}
+
+.header-5 {
+  @extend .header;
+  color: $default-color;
+  font-size: 12px;
+}
+
+.header-6 {
+  @extend .header;
+  color: $default-color;
+  font-size: 12px;
+}

@@ -4,15 +4,16 @@
 
   <ui:define name="page-title">#{locales['index.title']}</ui:define>
   <ui:define name="view-stylesheets">
-    <h:outputStylesheet library="novus" name="fonts.css"/>
-    <h:outputStylesheet library="novus" name="index.css"/>
+    <h:outputStylesheet library="novus" name="css/fonts.css"/>
+    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/index.css"/>
   </ui:define>
 
   <ui:define name="grid-content">
 
     <!-- Menu -->
 
-    <h:panelGroup layout="block" styleClass="index-menu-container"> 
+    <h:panelGroup layout="block" styleClass="grid_16 tight index-menu"> 
       <h:panelGroup layout="block" styleClass="grid_3 index-menu-logo">
         <h:panelGroup layout="block" styleClass="index-menu-logo-shadow">#{locales['index.logoText']}</h:panelGroup>
         <h:panelGroup layout="block" styleClass="index-menu-logo-shadow">#{locales['index.logoText']}</h:panelGroup>
@@ -20,7 +21,7 @@
         <h:panelGroup layout="block" styleClass="index-menu-logo-text">#{locales['index.logoText']}</h:panelGroup>
       </h:panelGroup>
       
-      <h:panelGroup layout="block" styleClass="grid_8 index-menu-navigation-container">
+      <h:panelGroup layout="block" styleClass="grid_9 index-menu-navigation-container">
         <h:link outcome="/index.jsf">#{locales['index.menuFrontPage']}</h:link>
         <h:link outcome="/forge/">#{locales['index.menuForge']}</h:link>
         <h:link outcome="/illusion/">#{locales['index.menuIllusion']}</h:link>
@@ -28,53 +29,134 @@
         <h:link outcome="/forum/index.jsf">#{locales['index.menuForum']}</h:link>
       </h:panelGroup>
       
-      <h:panelGroup layout="block" styleClass="grid_5 index-menu-tools-container">
-        <h:outputLink value="javascript:null(void)" styleClass="index-menu-tools-search">#{locales['index.toolSearch']}</h:outputLink>
-        <h:inputText value="" styleClass="index-menu-tools-search-text"/>
-        <h:link outcome="/users/login.jsf" styleClass="index-menu-tools-login">#{locales['index.toolLogin']}</h:link>
+      <h:panelGroup layout="block" styleClass="grid_4 index-menu-tools-container">
         <h:outputLink value="javascript:null(void)" styleClass="index-menu-tools-locale">
           <h:outputFormat value="#{locales['index.toolLocale']}">
             <f:param value="#{sessionBackingBean.locale.language}"/>
           </h:outputFormat>
         </h:outputLink>
+        <h:link outcome="/users/login.jsf" styleClass="index-menu-tools-login">#{locales['index.toolLogin']}</h:link>
+        <h:inputText value="" styleClass="index-menu-tools-search-text"/>
+        <h:outputLink value="javascript:null(void)" styleClass="index-menu-tools-search">#{locales['index.toolSearch']}</h:outputLink>
       </h:panelGroup>
-      
-    </h:panelGroup>
-        
-    <h:panelGroup layout="block" styleClass="clear">&#160;</h:panelGroup>    
+    </h:panelGroup>  
     
     <!-- Banner -->
     
-    <h:panelGroup layout="block" styleClass="index-banner"></h:panelGroup>
+    <h:panelGroup layout="block" styleClass="grid_16 tight index-banner">
+      <h:graphicImage library="novus" name="gfx/layout/banner.jpg" />
+    </h:panelGroup>
     
     <!-- Description -->
     
-    <h:panelGroup layout="block" styleClass="index-description">
-      <h:panelGroup layout="block" styleClass="index-description-title">#{locales['index.descriptionTitle']}</h:panelGroup>
-      <h:panelGroup layout="block" styleClass="index-description-text">#{locales['index.descriptionText']}</h:panelGroup>
+    <h:panelGroup layout="block" styleClass="grid_16 tight index-description">
+      <p class="index-description-title">#{locales['index.descriptionTitle']}</p>
+      <p class="index-description-text">#{locales['index.descriptionText']}</p>
     </h:panelGroup>
-    
-    <h:panelGroup layout="block" styleClass="clear">&#160;</h:panelGroup>    
-    
+
     <!-- Publications and Forum -->
-    
-    <h:panelGroup layout="block" styleClass="grid_12">
-      <p>700px Publications</p>
+   
+    <h:panelGroup layout="block" styleClass="grid_16 tight index-publications-forum">
+      <h:panelGroup layout="block" styleClass="grid_12 tight index-publications">
+        <h:panelGroup layout="block" styleClass="index-publications-panel">
+          <h3>#{locales['index.gameLibaryPublications']}</h3>
+        
+          <h:panelGroup layout="block" styleClass="index-publications">
+            <ui:repeat var="publication" value="#{indexViewBackingBean.latestGameLibraryPublications}">
+              <h:panelGroup layout="block" styleClass="grid_6 tight index-publication">
+                <h:panelGroup layout="block" styleClass="index-publication-image" rendered="#{publication.defaultImage ne null}">
+                  <h:graphicImage value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?width=200&amp;height=200"/>
+                </h:panelGroup>     
+                
+                <h4>#{publication.name}</h4>
+                
+                <h:panelGroup layout="block" styleClass="index-publication-tags">
+                  <ui:repeat var="tag" value="#{indexViewBackingBean.getPublicationTags(publication)}">
+                    <h:panelGroup styleClass="index-publication-tag">#{tag}</h:panelGroup>
+                  </ui:repeat>
+                </h:panelGroup>
+                
+                <h:panelGroup layout="block" styleClass="index-publication-description">
+                  #{publication.descriptionPlainAbbr}
+                </h:panelGroup>
+                
+              </h:panelGroup>
+            </ui:repeat>
+          </h:panelGroup> 
+          
+          <h:panelGroup layout="block" styleClass="index-gamelibrary-more-container">
+            <h:link value="#{locales['index.gameLibraryMoreLink']}" outcome="/gamelibrary/index.jsf"  styleClass="index-gamelibrary-more"/>
+          </h:panelGroup>
+        </h:panelGroup>
+      </h:panelGroup>
+          
+      <h:panelGroup layout="block" styleClass="grid_4 omega index-forum">
+        <h:panelGroup layout="block" styleClass="index-forum-panel">
+          <h3>#{locales['index.forumTopics']}</h3>
+          
+          <h:panelGroup layout="block" styleClass="index-forum-topics">
+            <ui:repeat var="forumTopic" value="#{indexViewBackingBean.latestForumTopics}">
+              <h:panelGroup layout="block" styleClass="index-forum-topic">
+                <h:panelGroup layout="block" styleClass="index-forum-topic-subject">#{forumTopic.subject}</h:panelGroup>
+                <h:panelGroup layout="block" styleClass="index-forum-topic-author">
+                  <h:panelGroup styleClass="index-forum-topic-author-prefix">#{locales['index.forumAuthor']}</h:panelGroup>
+                  <h:outputLink styleClass="index-forum-topic-author-link" value="#{request.contextPath}/users/#{forumTopic.author.id}">#{forumTopic.author.fullName}</h:outputLink>
+                </h:panelGroup>
+              </h:panelGroup>
+            </ui:repeat>
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="index-forum-more-container">
+            <h:link value="#{locales['index.forumMoreLink']}" outcome="/forum/index.jsf"  styleClass="index-forum-more"/>
+          </h:panelGroup>          
+        </h:panelGroup>
+      </h:panelGroup>
     </h:panelGroup>
-    
-    <h:panelGroup layout="block" styleClass="grid_4">
-      <p>220px Forum</p>
-    </h:panelGroup>
-    
-    <h:panelGroup layout="block" styleClass="clear">&#160;</h:panelGroup>   
     
     <!-- Blog -->
     
-    <h:panelGroup layout="block" styleClass="grid_12">
-      <p>700px Blog</p>
+    <h:panelGroup layout="block" styleClass="grid_12 tight index-blog">
+      <h:panelGroup layout="block" styleClass="index-blog-panel">
+        <h3>#{locales['index.blog']}</h3>
+        
+        <h:panelGroup layout="block" styleClass="index-blog-entries">
+          <ui:repeat var="blogEntry" value="#{indexViewBackingBean.latestBlogEntries}">
+            <h:panelGroup layout="block" styleClass="index-blog-entry">
+              <h:panelGroup layout="block" styleClass="index-blog-entry-date">
+                <h:outputFormat value="#{blogEntry.created}">
+                  <f:convertDateTime type="date"/>
+                </h:outputFormat>
+              </h:panelGroup>
+              
+              <h:panelGroup layout="block" styleClass="index-blog-entry-title-container">
+                <h:outputLink styleClass="index-blog-entry-title" value="#{blogEntry.link}">#{blogEntry.title}</h:outputLink>
+                <h:panelGroup styleClass="index-blog-entry-author">#{blogEntry.authorName}</h:panelGroup>
+              </h:panelGroup>
+
+              <h:outputLink layout="block" styleClass="index-blog-entry-tags">
+                <ui:repeat var="blogEntryTag" value="#{indexViewBackingBean.getBlogEntryTags(blogEntry)}">
+                  <h:outputLink value="javascript:void(null)" styleClass="index-blog-entry-tag">#{blogEntryTag.text}</h:outputLink> 
+                </ui:repeat>
+              </h:outputLink>
+              
+              <h:panelGroup layout="block" styleClass="index-blog-entry-content">
+                <h:outputText value="#{blogEntry.summary}" escape="false"/>
+              </h:panelGroup>
+              
+              <h:panelGroup layout="block" styleClass="index-blog-entry-more-container">
+                <h:outputLink styleClass="index-blog-entry-more" value="#{blogEntry.link}">#{locales['index.blogMore']}</h:outputLink>
+              </h:panelGroup>
+            </h:panelGroup>
+          </ui:repeat>         
+        </h:panelGroup>
+        
+        <h:panelGroup layout="block" styleClass="index-blog-more-container">
+          <h:link value="#{locales['index.blogMoreLink']}" outcome="/blog/index.jsf"  styleClass="index-blog-more"/>
+        </h:panelGroup>     
+        
+                
+      </h:panelGroup>
     </h:panelGroup>
-    
-    <h:panelGroup layout="block" styleClass="clear">&#160;</h:panelGroup>   
     
   </ui:define>
 
