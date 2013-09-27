@@ -1,1 +1,14 @@
+@import "compass";
 @import "../vars";
+
+.hide_on_mobile {
+  display: none !important;
+}
+
+@for $i from 1 through $grid-columns {
+  .grid_#{$i} { 
+    display: inline;
+    float: left;
+    width: 100%;
+  }
+}
