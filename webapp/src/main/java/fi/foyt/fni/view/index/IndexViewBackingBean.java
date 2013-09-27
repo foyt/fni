@@ -1,5 +1,6 @@
 package fi.foyt.fni.view.index;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -11,11 +12,13 @@ import javax.inject.Named;
 
 import fi.foyt.fni.blog.BlogController;
 import fi.foyt.fni.forum.ForumController;
+import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
@@ -23,7 +26,7 @@ import fi.foyt.fni.session.SessionController;
 @Stateful
 public class IndexViewBackingBean {
 	
-	private static final int MAX_GAME_LIBRARY_PUBLICATIONS = 5;
+	private static final int MAX_GAME_LIBRARY_PUBLICATIONS = 2;
 	
 	private static final int MAX_LATEST_ENTRIES = 5;
 	
@@ -43,6 +46,9 @@ public class IndexViewBackingBean {
 	@Inject
 	private PublicationController publicationController;
 
+	@Inject
+	private GameLibraryTagController gameLibraryTagController;
+	
 	@Inject
 	private ForumController forumController;
 	
@@ -66,6 +72,17 @@ public class IndexViewBackingBean {
 	
 	public List<Publication> getLatestGameLibraryPublications() {
 		return latestGameLibraryPublications;
+	}
+	
+	public List<String> getPublicationTags(Publication publication) {
+		List<String> result = new ArrayList<>();
+		
+		List<PublicationTag> publicationTags = gameLibraryTagController.listPublicationTags(publication);
+		for (PublicationTag publicationTag : publicationTags) {
+			result.add(publicationTag.getTag().getText());
+		}
+		
+		return result;
 	}
 	
 	public List<ForumTopic> getLatestForumTopics() {
