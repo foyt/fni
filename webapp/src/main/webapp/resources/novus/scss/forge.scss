@@ -1,0 +1,10 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+/* Body */
+
+body {
+  background: url('#' + '{resource["novus:gfx/layout/background.jpg"]}') repeat-y top left;
+  background-size: 100% auto;
+}
