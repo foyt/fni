@@ -116,7 +116,10 @@ public class BlogController {
 		
 		if (StringUtils.endsWith(summary, "[...]")) {
 			summary = summary.substring(0, summary.length() - 5);
+		} else if (StringUtils.endsWith(summary, "[…]")) {
+			summary = summary.substring(0, summary.length() - 3);
 		}
+		
 		summary = StringUtils.strip(summary);
 
 		if (StringUtils.isNotBlank(guid)) {
