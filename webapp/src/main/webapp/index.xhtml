@@ -13,33 +13,7 @@
 
     <!-- Menu -->
 
-    <h:panelGroup layout="block" styleClass="grid_16 tight index-menu"> 
-      <h:panelGroup layout="block" styleClass="grid_3 hide_on_mobile index-menu-logo">
-        <h:panelGroup layout="block" styleClass="index-menu-logo-shadow">#{locales['index.logoText']}</h:panelGroup>
-        <h:panelGroup layout="block" styleClass="index-menu-logo-shadow">#{locales['index.logoText']}</h:panelGroup>
-        <h:panelGroup layout="block" styleClass="index-menu-logo-shadow">#{locales['index.logoText']}</h:panelGroup>
-        <h:panelGroup layout="block" styleClass="index-menu-logo-text">#{locales['index.logoText']}</h:panelGroup>
-      </h:panelGroup>
-      
-      <h:panelGroup layout="block" styleClass="grid_9 index-menu-navigation-container">
-        <h:link outcome="/index.jsf">#{locales['index.menuFrontPage']}</h:link>
-        <h:link outcome="/forge/">#{locales['index.menuForge']}</h:link>
-        <h:link outcome="/illusion/">#{locales['index.menuIllusion']}</h:link>
-        <h:link outcome="/gamelibrary/index.jsf">#{locales['index.menuGameLibrary']}</h:link>
-        <h:link outcome="/forum/index.jsf">#{locales['index.menuForum']}</h:link>
-      </h:panelGroup>
-      
-      <h:panelGroup layout="block" styleClass="grid_4 index-menu-tools-container">
-        <h:outputLink value="javascript:null(void)" styleClass="index-menu-tools-locale">
-          <h:outputFormat value="#{locales['index.toolLocale']}">
-            <f:param value="#{sessionBackingBean.locale.language}"/>
-          </h:outputFormat>
-        </h:outputLink>
-        <h:link outcome="/users/login.jsf" styleClass="index-menu-tools-login">#{locales['index.toolLogin']}</h:link>
-        <h:inputText value="" styleClass="index-menu-tools-search-text"/>
-        <h:outputLink value="javascript:null(void)" styleClass="index-menu-tools-search">#{locales['index.toolSearch']}</h:outputLink>
-      </h:panelGroup>
-    </h:panelGroup>  
+    <ui:include src="/facelets/menu.xhtml" />
     
     <!-- Banner -->
     
