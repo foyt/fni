@@ -1,3 +1,5 @@
+@import "compass";
+@import "vars";
 @import "styles";
 
 /* Logo */
@@ -45,6 +47,20 @@ $search-box-width-focus: 175px;
   display: inline-block;
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+@media screen and (max-width: $grid-width-desktop) {
+  .index-menu-navigation-container a, .index-menu-navigation-container span {
+    width: 20%;
+  }
+  
+  .index-menu-tools-container {
+    text-align: right;
+  }
+  
+  .index-menu-tools-search {
+    margin-right: 8px;
+  }
 }
 
 /* Tools */
