@@ -3,11 +3,16 @@
 
 /* Logo */
 
+$menu-background-color: #000;
+$menu-text-color: #fff;
+$menu-background-color-hover: #000;
+$menu-text-color-hover: #fff;
+$menu-logo-shadow-color: rgba(255, 255, 255, 0.7);
 $search-box-width: 71px;
 $search-box-width-focus: 175px; 
 
 .index-menu {
-  background: #000;
+  background: $menu-background-color;
 }
 
 .menu-logo {
@@ -23,20 +28,20 @@ $search-box-width-focus: 175px;
 }
 
 .menu-logo-text { 
-  color: rgba(255,255,255,1);
+  color: $menu-text-color;
 }
 
 .menu-logo-shadow {
   color: transparent;
   position: absolute;
   top: 0px;  
-  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.7);
+  text-shadow: 0px 0px 10px $menu-logo-shadow-color;
 }
 
 /* Navigation */
 
 .menu-navigation-container a, .menu-navigation-container span {
-  color: rgba(255,255,255,1);
+  color: $menu-text-color;
   white-space: nowrap;
   font-size: 13px;
   font-family: $default-font;
@@ -65,7 +70,7 @@ $search-box-width-focus: 175px;
 /* Tools */
 
 .menu-tools-container a {
-  color: rgba(255,255,255,1);
+  color: $menu-text-color;
   white-space: nowrap;
   font-size: 13px;
   font-family: $default-font;
@@ -101,16 +106,23 @@ $search-box-width-focus: 175px;
 
 .menu-tools-locale-list {
   position: absolute;
-  background: #000;
+  background: $menu-background-color;
   font-family: $default-font;
   margin-left: -8px;
   list-style: none;
 }
 
-.menu-tools-locale-list ul {
-  color: #fff;
+.menu-tools-locale-list ul a {
+  color: $menu-text-color;
   padding: 8px;
   font-size: 13px;
+  width: 100%;
+  @include box-sizing(border-box);
+}
+
+.menu-tools-locale-list ul a:hover {
+  color:$menu-text-color-hover;
+  background: $menu-background-color-hover;
 }
 
 .menu-tools-login {
