@@ -30,14 +30,12 @@
           </h:outputFormat>
         </h:outputLink>
         
-        <li class="menu-tools-locale-list" style="display: none">
-          <ui:repeat var="localizedLanguage" value="#{menuBackingBean.localizedLanguages}">
-            <ul>
-              <h:outputText value="#{locales['menu.toolLocaleFinnish']}" rendered="#{localizedLanguage.ISO2 eq 'fi'}"/>
-              <h:outputText value="#{locales['menu.toolLocaleEnglish']}" rendered="#{localizedLanguage.ISO2 eq 'en'}"/>
-            </ul>
-          </ui:repeat>
-        </li>
+        <h:form>
+          <li class="menu-tools-locale-list" style="display: none">
+            <ul><h:commandLink value="#{locales['menu.toolLocaleFinnish']}" action="#{sessionBackingBean.changeLanguage('fi')}" /></ul>
+            <ul><h:commandLink value="#{locales['menu.toolLocaleEnglish']}" action="#{sessionBackingBean.changeLanguage('en')}" /></ul>
+          </li>
+        </h:form>
       </h:panelGroup>
       
       <h:link outcome="/users/login.jsf" styleClass="menu-tools-login">#{locales['menu.toolLogin']}</h:link>
