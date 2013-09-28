@@ -3,6 +3,8 @@
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html">
+  
+  <h:outputScript name="scripts/gui/menu.js" target="head"/>
 
   <h:panelGroup layout="block" styleClass="grid_16 tight index-menu"> 
     <h:panelGroup layout="block" styleClass="grid_3 hide_on_mobile menu-logo">
@@ -21,11 +23,23 @@
     </h:panelGroup>
     
     <h:panelGroup layout="block" styleClass="grid_4 menu-tools-container">
-      <h:outputLink value="javascript:null(void)" styleClass="menu-tools-locale">
-        <h:outputFormat value="#{locales['menu.toolLocale']}">
-          <f:param value="#{sessionBackingBean.locale.language}"/>
-        </h:outputFormat>
-      </h:outputLink>
+      <h:panelGroup layout="block" styleClass="menu-tools-locale-container">
+        <h:outputLink value="javascript:void(null)" styleClass="menu-tools-locale">
+          <h:outputFormat value="#{locales['menu.toolLocale']}">
+            <f:param value="#{sessionBackingBean.locale.language}"/>
+          </h:outputFormat>
+        </h:outputLink>
+        
+        <li class="menu-tools-locale-list" style="display: none">
+          <ui:repeat var="localizedLanguage" value="#{menuBackingBean.localizedLanguages}">
+            <ul>
+              <h:outputText value="#{locales['menu.toolLocaleFinnish']}" rendered="#{localizedLanguage.ISO2 eq 'fi'}"/>
+              <h:outputText value="#{locales['menu.toolLocaleEnglish']}" rendered="#{localizedLanguage.ISO2 eq 'en'}"/>
+            </ul>
+          </ui:repeat>
+        </li>
+      </h:panelGroup>
+      
       <h:link outcome="/users/login.jsf" styleClass="menu-tools-login">#{locales['menu.toolLogin']}</h:link>
       <h:inputText value="" styleClass="menu-tools-search-text"/>
       <h:outputLink value="javascript:null(void)" styleClass="menu-tools-search">#{locales['menu.toolSearch']}</h:outputLink>

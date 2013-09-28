@@ -1,6 +1,5 @@
 @import "compass";
 @import "vars";
-@import "styles";
 
 /* Logo */
 
@@ -92,8 +91,26 @@ $search-box-width-focus: 175px;
   display: inline-block;
 }
 
+.menu-tools-locale-container {
+  display: inline-block;
+}
+
 .menu-tools-locale, .menu-tools-login, .menu-tools-search {
   text-transform: uppercase;
+}
+
+.menu-tools-locale-list {
+  position: absolute;
+  background: #000;
+  font-family: $default-font;
+  margin-left: -8px;
+  list-style: none;
+}
+
+.menu-tools-locale-list ul {
+  color: #fff;
+  padding: 8px;
+  font-size: 13px;
 }
 
 .menu-tools-login {

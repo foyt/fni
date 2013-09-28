@@ -6,9 +6,19 @@
   <f:view locale="#{sessionBackingBean.locale}">
     <ui:insert name="metadata"/>
     <h:head>
+      <!-- Title -->
+    
       <title><ui:insert name="page-title"></ui:insert></title>
+      
+      <!-- Generic Styles -->
+      
       <h:outputStylesheet library="novus" name="css/common.css"/>
       <h:outputStylesheet library="novus" name="css/grid.css"/>
+      
+      <!-- jQuery -->
+ 
+      <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.2.js"></script>
+      
       <ui:insert name="view-stylesheets"/>
       <ui:insert name="view-scripts"/>
       <ui:insert name="view-custom-head"/>
