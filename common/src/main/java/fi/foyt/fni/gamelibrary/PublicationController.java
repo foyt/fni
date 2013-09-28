@@ -152,7 +152,7 @@ public class PublicationController {
 			if (i < l - 1)
 			  queryStringBuilder.append(' ');
 		}
-		queryStringBuilder.append(")");
+		queryStringBuilder.append(") AND +(published:true)");
 		
 		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
 		QueryParser parser = new QueryParser(Version.LUCENE_35, "descriptionPlain", analyzer);

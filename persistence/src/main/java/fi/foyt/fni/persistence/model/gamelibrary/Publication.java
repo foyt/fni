@@ -195,6 +195,7 @@ public class Publication {
   
   @NotNull
   @Column (nullable = false, columnDefinition = "BIT")
+  @Field
   private Boolean published;
 
   @NotNull
