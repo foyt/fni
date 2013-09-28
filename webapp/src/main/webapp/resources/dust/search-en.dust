@@ -1,0 +1,12 @@
+<h4>Game Library Publications</h4>
+{?publications}
+  {#publications}
+    <div>
+      <h5>
+        <a href="{link}">{name}</a>
+      </h5>
+    </div>
+  {/publications} 
+{:else}
+  <div class="menu-tools-search-no-result">No publications found</div>
+{/publications}

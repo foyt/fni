@@ -14,7 +14,7 @@ body {
 /* General */
 
 h3 {
-  @extend .header-2;
+  @include header-2;
   color: $title-color;
 }
 
@@ -102,7 +102,7 @@ h3 {
 }
 
 .index-publications-forum h4 {
-  @extend .header-1;
+  @include header-1;
   padding-top: 43px;
   padding-bottom: 13px;
 }
@@ -216,13 +216,13 @@ h3 {
 }
 
 .index-blog-entry-date {
-  @extend .header-5;
+  @include header-5;
   font-weight: bold;
   margin-bottom: 12px;
 }
 
 .index-blog-entry-title {
-  @extend .header-1;
+  @include header-1;
 }
 
 .index-blog-entry-author:before {

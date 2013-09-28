@@ -39,7 +39,11 @@
       </h:panelGroup>
       
       <h:link outcome="/users/login.jsf" styleClass="menu-tools-login">#{locales['menu.toolLogin']}</h:link>
-      <h:inputText value="" styleClass="menu-tools-search-text"/>
+      <h:panelGroup layout="block" styleClass="menu-tools-search-container">
+        <input class="menu-tools-search-text" type="text"></input>
+        <h:panelGroup layout="block" styleClass="menu-tools-search-loading" style="display: none"/>
+        <h:panelGroup layout="block" styleClass="menu-tools-search-result" style="display: none"/>
+      </h:panelGroup>
       <h:outputLink value="javascript:null(void)" styleClass="menu-tools-search">#{locales['menu.toolSearch']}</h:outputLink>
     </h:panelGroup>
   </h:panelGroup> 

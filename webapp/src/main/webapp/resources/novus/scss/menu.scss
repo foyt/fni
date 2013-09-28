@@ -1,14 +1,15 @@
 @import "compass";
 @import "vars";
+@import "styles";
 
 /* Logo */
 
 $menu-background-color: #000;
 $menu-text-color: #fff;
-$menu-background-color-hover: #000;
-$menu-text-color-hover: #fff;
+$menu-background-color-hover: #fff;
+$menu-text-color-hover: #000;
 $menu-logo-shadow-color: rgba(255, 255, 255, 0.7);
-$search-box-width: 71px;
+$search-box-width: 67px;
 $search-box-width-focus: 175px; 
 
 .index-menu {
@@ -80,11 +81,15 @@ $search-box-width-focus: 175px;
   padding-bottom: 5px;
 }
 
-.menu-tools-container input[type="text"]{
-  width: $search-box-width;
+.menu-tools-search-container {
+  display: inline-block;
   margin-top: 5px;
   margin-bottom: 5px;
   margin-right: 7px;
+}
+
+.menu-tools-container input[type="text"]{
+  width: $search-box-width;
   font-size: 11px;
   vertical-align: top;
 }
@@ -94,6 +99,55 @@ $search-box-width-focus: 175px;
   width: $search-box-width-focus;
   margin-left: $search-box-width - $search-box-width-focus;
   display: inline-block;
+}
+
+.menu-tools-search-loading {
+  background: url('#' + '{resource["novus:gfx/layout/loader-bw.gif"]}') no-repeat center center;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 1px;  
+  right: 1px;
+}
+
+.menu-tools-search-container {
+  display: inline-block;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 7px;
+  position: relative;
+}
+
+.menu-tools-search-result {
+  position: absolute;
+  background: #000;
+  color: #fff;
+  width: 300px;
+  right: 0px;
+  margin-right: -8px;
+}
+
+.menu-tools-search-result h4 {
+  @include header-4;
+  color: $menu-text-color;
+  padding: 8px;
+}
+
+.menu-tools-search-result a {
+  width: 100%;
+  @include box-sizing(border-box);
+  padding: 8px;
+}
+
+.menu-tools-search-result a:hover {
+  color:$menu-text-color-hover;
+  background: $menu-background-color-hover;
+}
+
+.menu-tools-search-no-result {
+  font-family: $default-font;
+  padding: 8px;
+  font-size: 13px;
 }
 
 .menu-tools-locale-container {

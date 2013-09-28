@@ -1,4 +1,4 @@
-.header {
+@mixin header {
   text-decoration: none;
   font-family: $title-font;
   font-style: normal;
@@ -6,38 +6,38 @@
   text-transform: uppercase;
 }
 
-.header-1 {
-  @extend .header;
+@mixin header-1 {
+  @include header;
   color: $default-color;
   font-size: 26px;
 }
 
-.header-2 {
-  @extend .header;
+@mixin header-2 {
+  @include header;
   color: $default-color;
   font-size: 21px;
 }
 
-.header-3 {
-  @extend .header;
+@mixin header-3 {
+  @include header;
   color: $default-color;
   font-size: 18px;
 }
 
-.header-4 {
-  @extend .header;
+@mixin header-4 {
+  @include header;
   color: $default-color;
   font-size: 16px;
 }
 
-.header-5 {
-  @extend .header;
+@mixin header-5 {
+  @include header;
   color: $default-color;
   font-size: 12px;
 }
 
-.header-6 {
-  @extend .header;
+@mixin header-6 {
+  @include header;
   color: $default-color;
   font-size: 12px;
 }
