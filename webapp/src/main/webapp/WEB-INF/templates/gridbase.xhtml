@@ -15,10 +15,22 @@
       <h:outputStylesheet library="novus" name="css/common.css"/>
       <h:outputStylesheet library="novus" name="css/grid.css"/>
       
+      <!-- Global Variables -->
+      
+      <script type="text/javascript">
+        var LOCALE = '#{sessionBackingBean.locale.language}';
+        var CONTEXTPATH = '#{request.contextPath}';
+      </script>
+      
       <!-- jQuery -->
  
-      <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.2.js"></script>
+      <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
       
+      <!-- Dust -->
+      
+      <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/dustjs-linkedin/2.0.0/dust-full.min.js"></script>
+      <h:outputScript name="/scripts/gui/dust.js"></h:outputScript>
+
       <ui:insert name="view-stylesheets"/>
       <ui:insert name="view-scripts"/>
       <ui:insert name="view-custom-head"/>
