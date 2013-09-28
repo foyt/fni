@@ -168,10 +168,14 @@ h3 {
 
 .index-forum-topic-subject {
   font-family: $default-font;
-  color: $default-color;
   font-weight: bold;
   font-size: 16px;
   margin-bottom: 10px;
+}
+
+.index-forum-topic-subject a {
+  color: $default-color;
+  text-decoration: none;
 }
 
 .index-forum-topic-author {
