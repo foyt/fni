@@ -113,11 +113,11 @@
                 <h:panelGroup styleClass="index-blog-entry-author">#{blogEntry.authorName}</h:panelGroup>
               </h:panelGroup>
 
-              <h:outputLink layout="block" styleClass="index-blog-entry-tags">
+              <h:panelGroup layout="block" styleClass="index-blog-entry-tags">
                 <ui:repeat var="blogEntryTag" value="#{indexViewBackingBean.getBlogEntryTags(blogEntry)}">
-                  <h:outputLink value="javascript:void(null)" styleClass="index-blog-entry-tag">#{blogEntryTag.text}</h:outputLink> 
+                  <h:outputText value="#{blogEntryTag.text}" styleClass="index-blog-entry-tag"/>
                 </ui:repeat>
-              </h:outputLink>
+              </h:panelGroup>
               
               <h:panelGroup layout="block" styleClass="index-blog-entry-content">
                 <h:outputText value="#{blogEntry.summary}" escape="false"/>
@@ -131,7 +131,7 @@
         </h:panelGroup>
         
         <h:panelGroup layout="block" styleClass="index-blog-more-container">
-          <h:link value="#{locales['index.blogMoreLink']}" outcome="/blog/index.jsf"  styleClass="index-blog-more"/>
+          <h:outputLink value="http://loki.pelilauta.fi/wordpress/" styleClass="index-blog-more">#{locales['index.blogMoreLink']}</h:outputLink>
         </h:panelGroup>     
         
                 
