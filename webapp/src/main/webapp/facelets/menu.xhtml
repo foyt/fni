@@ -5,14 +5,14 @@
   xmlns:h="http://java.sun.com/jsf/html">
 
   <h:panelGroup layout="block" styleClass="grid_16 tight index-menu"> 
-    <h:panelGroup layout="block" styleClass="grid_3 hide_on_mobile index-menu-logo">
-      <h:panelGroup layout="block" styleClass="index-menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
-      <h:panelGroup layout="block" styleClass="index-menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
-      <h:panelGroup layout="block" styleClass="index-menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
-      <h:panelGroup layout="block" styleClass="index-menu-logo-text">#{locales['menu.logoText']}</h:panelGroup>
+    <h:panelGroup layout="block" styleClass="grid_3 hide_on_mobile menu-logo">
+      <h:panelGroup layout="block" styleClass="menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
+      <h:panelGroup layout="block" styleClass="menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
+      <h:panelGroup layout="block" styleClass="menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
+      <h:panelGroup layout="block" styleClass="menu-logo-text">#{locales['menu.logoText']}</h:panelGroup>
     </h:panelGroup>
     
-    <h:panelGroup layout="block" styleClass="grid_9 index-menu-navigation-container">
+    <h:panelGroup layout="block" styleClass="grid_9 menu-navigation-container">
       <h:link outcome="/index.jsf">#{locales['menu.menuFrontPage']}</h:link>
       <h:link outcome="/forge/index.jsf">#{locales['menu.menuForge']}</h:link>
       <h:link outcome="/illusion/index.jsf">#{locales['menu.menuIllusion']}</h:link>
@@ -20,15 +20,15 @@
       <h:link outcome="/forum/index.jsf">#{locales['menu.menuForum']}</h:link>
     </h:panelGroup>
     
-    <h:panelGroup layout="block" styleClass="grid_4 index-menu-tools-container">
-      <h:outputLink value="javascript:null(void)" styleClass="index-menu-tools-locale">
+    <h:panelGroup layout="block" styleClass="grid_4 menu-tools-container">
+      <h:outputLink value="javascript:null(void)" styleClass="menu-tools-locale">
         <h:outputFormat value="#{locales['menu.toolLocale']}">
           <f:param value="#{sessionBackingBean.locale.language}"/>
         </h:outputFormat>
       </h:outputLink>
-      <h:link outcome="/users/login.jsf" styleClass="index-menu-tools-login">#{locales['menu.toolLogin']}</h:link>
-      <h:inputText value="" styleClass="index-menu-tools-search-text"/>
-      <h:outputLink value="javascript:null(void)" styleClass="index-menu-tools-search">#{locales['menu.toolSearch']}</h:outputLink>
+      <h:link outcome="/users/login.jsf" styleClass="menu-tools-login">#{locales['menu.toolLogin']}</h:link>
+      <h:inputText value="" styleClass="menu-tools-search-text"/>
+      <h:outputLink value="javascript:null(void)" styleClass="menu-tools-search">#{locales['menu.toolSearch']}</h:outputLink>
     </h:panelGroup>
   </h:panelGroup> 
     

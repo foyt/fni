@@ -11,23 +11,23 @@ $search-box-width-focus: 175px;
   background: #000;
 }
 
-.index-menu-logo {
+.menu-logo {
   position: relative;
 }
 
-.index-menu-logo-text,
-.index-menu-logo-shadow {
+.menu-logo-text,
+.menu-logo-shadow {
   font-size: 16px;
   white-space: nowrap;
   padding-top: 5px;
   padding-bottom: 5px;
 }
 
-.index-menu-logo-text { 
+.menu-logo-text { 
   color: rgba(255,255,255,1);
 }
 
-.index-menu-logo-shadow {
+.menu-logo-shadow {
   color: transparent;
   position: absolute;
   top: 0px;  
@@ -36,7 +36,7 @@ $search-box-width-focus: 175px;
 
 /* Navigation */
 
-.index-menu-navigation-container a, .index-menu-navigation-container span {
+.menu-navigation-container a, .menu-navigation-container span {
   color: rgba(255,255,255,1);
   white-space: nowrap;
   font-size: 13px;
@@ -50,22 +50,22 @@ $search-box-width-focus: 175px;
 }
 
 @media screen and (max-width: $grid-width-desktop) {
-  .index-menu-navigation-container a, .index-menu-navigation-container span {
+  .menu-navigation-container a, .menu-navigation-container span {
     width: 20%;
   }
   
-  .index-menu-tools-container {
+  .menu-tools-container {
     text-align: right;
   }
   
-  .index-menu-tools-search {
+  .menu-tools-search {
     margin-right: 8px;
   }
 }
 
 /* Tools */
 
-.index-menu-tools-container a {
+.menu-tools-container a {
   color: rgba(255,255,255,1);
   white-space: nowrap;
   font-size: 13px;
@@ -76,7 +76,7 @@ $search-box-width-focus: 175px;
   padding-bottom: 5px;
 }
 
-.index-menu-tools-container input[type="text"]{
+.menu-tools-container input[type="text"]{
   width: $search-box-width;
   margin-top: 5px;
   margin-bottom: 5px;
@@ -85,21 +85,21 @@ $search-box-width-focus: 175px;
   vertical-align: top;
 }
 
-.index-menu-tools-container input[type="text"]:focus {
+.menu-tools-container input[type="text"]:focus {
   position: relative;
   width: $search-box-width-focus;
   margin-left: $search-box-width - $search-box-width-focus;
   display: inline-block;
 }
 
-.index-menu-tools-locale, .index-menu-tools-login, .index-menu-tools-search {
+.menu-tools-locale, .menu-tools-login, .menu-tools-search {
   text-transform: uppercase;
 }
 
-.index-menu-tools-login {
+.menu-tools-login {
   margin-right: 20px;
 }
 
-.index-menu-tools-locale {
+.menu-tools-locale {
   margin-right: 20px;
 }
