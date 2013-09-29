@@ -13,7 +13,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCartItem;
 @Stateful
 @RequestScoped
 @Named
-public class MiniShoppingCartBackingBean {
+public class GameLibraryMiniShoppingCartBackingBean {
 	
 	@Inject
 	private SessionShoppingCartController sessionShoppingCartController;

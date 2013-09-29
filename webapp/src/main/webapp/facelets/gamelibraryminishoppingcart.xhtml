@@ -11,11 +11,11 @@
     
     <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-contents">
       <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-items">
-        <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-empty" rendered="#{miniShoppingCartBackingBean.shoppingCartEmpty}">
+        <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-empty" rendered="#{gameLibraryMiniShoppingCartBackingBean.shoppingCartEmpty}">
           #{locales['gamelibrary.miniShoppingCart.empty']}
         </h:panelGroup>
         
-        <ui:repeat var="cartItem" value="#{miniShoppingCartBackingBean.shoppingCartItems}">   
+        <ui:repeat var="cartItem" value="#{gameLibraryMiniShoppingCartBackingBean.shoppingCartItems}">   
           <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-item">
             <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-item-count">#{cartItem.count}</h:panelGroup>
             <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-item-name">
@@ -35,7 +35,7 @@
       <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-summary">
         <h:outputLabel value="#{locales['gamelibrary.miniShoppingCart.total']}" />
         <h:panelGroup styleClass="gamelibrary-mini-shopping-cart-summary-total">
-          <h:outputText value="#{miniShoppingCartBackingBean.itemCosts}" >
+          <h:outputText value="#{gameLibraryMiniShoppingCartBackingBean.itemCosts}" >
             <f:convertNumber currencyCode="EUR" type="currency" />
           </h:outputText>
         </h:panelGroup>
