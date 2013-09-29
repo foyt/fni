@@ -56,7 +56,7 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 	@Inject
 	private SessionController sessionController;
 	
-	@URLAction
+//	@URLAction
 	@LoggedIn
 	@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
 	public void load() {

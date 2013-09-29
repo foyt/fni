@@ -34,7 +34,7 @@ public class PublicationTagListBackingBean extends AbstractPublicationListBackin
 	@Inject
 	private GameLibraryTagController gameLibraryTagController;
 
-	@URLAction
+//	@URLAction
 	public void init() throws FileNotFoundException {
 		gameLibraryTag = gameLibraryTagController.findTagByText(tag);
 		if (gameLibraryTag == null) {

@@ -85,7 +85,7 @@ public class ShoppingCartBackingBean implements Serializable {
 	@Inject
 	private PaytrailService paytrailService;
 
-	@PostConstruct
+//	@PostConstruct
 	public void init() {
 		countrySelectItems = new ArrayList<>();
 
@@ -123,7 +123,7 @@ public class ShoppingCartBackingBean implements Serializable {
 		}
 	}
 	
-	@URLAction (phaseId = PhaseId.INVOKE_APPLICATION)
+//	@URLAction (phaseId = PhaseId.INVOKE_APPLICATION)
 	public void applyValues() {
 		List<ShoppingCartItem> cartItems = sessionShoppingCartController.getShoppingCartItems();
 		Map<Long, ShoppingCartItem> itemMap = new HashMap<>();

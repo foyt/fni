@@ -36,7 +36,7 @@ public class OrderBackingBean {
 	@Inject
 	private OrderController orderController;
 
-	@URLAction
+//	@URLAction
 	@Secure (Permission.GAMELIBRARY_VIEW_ORDER)
 	@SecurityContext (context = "#{orderBackingBean.orderId}")
 	public void init() {

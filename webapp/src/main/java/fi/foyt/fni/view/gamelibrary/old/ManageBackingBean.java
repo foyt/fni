@@ -62,7 +62,7 @@ public class ManageBackingBean extends AbstractPublicationListBackingBean {
 	@Inject
 	private UserController userController;
 	
-	@URLAction
+//	@URLAction
 	@LoggedIn
 	@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
 	public void init() {

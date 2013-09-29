@@ -51,7 +51,7 @@ public class PublicationCreateBackingBean extends AbstractPublicationEditBacking
 	@Inject
 	private SessionController sessionController;
 	
-	@URLAction
+//	@URLAction
 	@LoggedIn
 	@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
 	public void init() {

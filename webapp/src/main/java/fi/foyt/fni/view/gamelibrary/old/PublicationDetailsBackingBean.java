@@ -60,7 +60,7 @@ public class PublicationDetailsBackingBean {
 	@Inject
 	private SessionController sessionController;
 
-	@URLAction (onPostback = true)
+//	@URLAction (onPostback = true)
 	public void init() throws FileNotFoundException {
 		Publication publication = publicationController.findPublicationByUrlName(getUrlName());
 		if (publication == null) {

@@ -27,7 +27,7 @@ public class PublicationCategoriesBackingBean {
 	@Inject
 	private PublicationController publicationController;
 	
-	@PostConstruct
+//	@PostConstruct
 	public void init() {
 		tags = gameLibraryTagController.listGameLibraryTags();
 	}
