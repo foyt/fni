@@ -47,10 +47,24 @@
                 <h:outputLabel value="#{locales['gamelibrary.publications.detailsAuthors']}" rendered="#{gameLibraryPublicationsBackingBean.getAuthors(publication).size() gt 1}"/>
               
                 <ui:repeat var="author" value="#{gameLibraryPublicationsBackingBean.getAuthors(publication)}">
-                  <h:outputText value="#{author.fullName}" styleClass="gamelibrary-publication-author"/>
+                  <h:outputLink value="#{request.contextPath}/users/#{author.id}" styleClass="gamelibrary-publication-author">#{author.fullName}</h:outputLink>
                 </ui:repeat>
               
               </h:panelGroup>
+              
+              <h:panelGroup layout="block" styleClass="gamelibrary-publication-creative-commans-license-container" rendered="#{gameLibraryPublicationsBackingBean.getCreativeCommonsLicense(publication) ne null}">
+                <h:outputLink value="#{gameLibraryPublicationsBackingBean.getCreativeCommonsLicense(publication).url}">
+                  <h:graphicImage value="#{gameLibraryPublicationsBackingBean.getCreativeCommonsLicense(publication).iconUrl}" />
+                </h:outputLink>
+              </h:panelGroup>
+              
+              <ui:fragment rendered="#{(gameLibraryPublicationsBackingBean.getCreativeCommonsLicense(publication) eq null)and(!empty(publication.license))}">
+                <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail">
+                  <h:outputLabel value="#{locales['gamelibrary.publications.licenseOther']}"/>
+                  <h:outputText value="#{publication.license}"/>
+                </h:panelGroup>
+              </ui:fragment>
+
             </h:panelGroup>
           </h:panelGroup>
           

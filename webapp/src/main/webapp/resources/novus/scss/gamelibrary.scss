@@ -124,8 +124,15 @@ body {
   margin-right: 8px;
 }
 
+.gamelibrary-publication-creative-commans-license-container {
+  margin-top: 8px;
+  display: inline-block;
+}
+
 .gamelibrary-publication-author {
   margin-right: 6px;
+  color: $default-color;
+  text-decoration: none;
 }
 
 .gamelibrary-publication-footer-row {
