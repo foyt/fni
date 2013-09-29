@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -171,6 +173,62 @@ public class ForumController implements Serializable {
 
 	public Long countPostsByForum(Forum forum) {
 		return forumPostDAO.countByForum(forum);
+	}
+
+	public List<SearchResult<ForumTopic>> searchTopics(String text) {
+		return searchTopics(text, null);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<SearchResult<ForumTopic>> searchTopics(String text, Integer maxHits) {
+		String[] criterias = text.replace(",", " ").replaceAll("\\s+", " ").split(" ");
+
+		List<SearchResult<ForumTopic>> topics = new ArrayList<>();
+		
+		StringBuilder queryStringBuilder = new StringBuilder();
+		queryStringBuilder.append("+(");
+		for (int i = 0, l = criterias.length; i < l; i++) {
+			String criteria = QueryParser.escape(criterias[i]);
+			
+			queryStringBuilder.append("contentPlain:");
+			queryStringBuilder.append(criteria);
+			queryStringBuilder.append("* ");
+			
+			queryStringBuilder.append("topicSubject:");
+			queryStringBuilder.append(criteria);
+			queryStringBuilder.append("*");
+			
+			if (i < l - 1)
+			  queryStringBuilder.append(' ');
+		}
+		
+		queryStringBuilder.append(")");
+		
+		Set<Long> topicIds = new HashSet<>();
+		
+		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+		QueryParser parser = new QueryParser(Version.LUCENE_35, "", analyzer);
+		try {
+			Query luceneQuery = parser.parse(queryStringBuilder.toString());
+	    FullTextQuery query = (FullTextQuery) fullTextEntityManager.createFullTextQuery(luceneQuery, ForumPost.class);
+  		
+  		for (ForumPost forumPost : (List<ForumPost>) query.getResultList()) {
+  			ForumTopic topic = forumPost.getTopic();
+  			if (!topicIds.contains(topic.getId())) {
+          String link = "/forum/" + topic.getFullPath(); 
+          topics.add(new SearchResult<ForumTopic>(topic, topic.getSubject(), link, null));
+          topicIds.add(topic.getId());
+          
+          if (maxHits != null && topics.size() >= maxHits) {
+          	return topics;
+          }
+  			}
+  		}
+		} catch (ParseException e) {
+			logger.log(Level.SEVERE, "Lucene query parsing failed", e);
+    }
+		
+		return topics;
 	}
 	
 	@SuppressWarnings("unchecked")
