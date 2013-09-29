@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.gamelibrary.old;
+package fi.foyt.fni.view.gamelibrary;
 
 import java.util.List;
 
@@ -10,10 +10,10 @@ import javax.inject.Named;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
-//@Stateful
-//@RequestScoped
-//@Named
-public class CategoryListBackingBean {
+@Stateful
+@RequestScoped
+@Named
+public class GameLibraryCategoryListBackingBean {
 	
 	@Inject
 	private GameLibraryTagController gameLibraryTagController;
