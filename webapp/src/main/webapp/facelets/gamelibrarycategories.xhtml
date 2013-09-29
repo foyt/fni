@@ -7,6 +7,10 @@
     <h3 class="gamelibrary-categories-title">#{locales['gamelibrary.categories.title']}</h3>
 
     <h:panelGroup layout="block" styleClass="gamelibrary-categories">
+      <h:panelGroup layout="block" styleClass="gamelibrary-category">
+        <h:outputLink value="#{request.contextPath}/gamelibrary/" styleClass="gamelibrary-category-name">#{locales['gamelibrary.categories.mostRecent']}</h:outputLink>
+      </h:panelGroup>
+
       <ui:repeat var="tag" value="#{publicationCategoriesBackingBean.tags}">
         <h:panelGroup layout="block" styleClass="gamelibrary-category">
           <h:outputLink value="#{request.contextPath}/gamelibrary/tags/#{tag.text}" styleClass="gamelibrary-category-name">#{tag.text}</h:outputLink>
