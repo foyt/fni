@@ -10,3 +10,16 @@
 {:else}
   <div class="menu-tools-search-no-result">Ei löydettyjä julkaisuja</div>
 {/GAMELIBRARY}
+
+<h4>Keskustelu</h4>
+{?FORUM}
+  {#FORUM}
+    <div>
+      <h5>
+        <a href="{link}">{name}</a>
+      </h5>
+    </div>
+  {/FORUM} 
+{:else}
+  <div class="menu-tools-search-no-result">Ei löydettyjä keskusteluja</div>
+{/FORUM}

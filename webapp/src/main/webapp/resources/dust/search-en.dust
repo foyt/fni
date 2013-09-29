@@ -10,3 +10,16 @@
 {:else}
   <div class="menu-tools-search-no-result">No publications found</div>
 {/GAMELIBRARY}
+
+<h4>Forum</h4>
+{?FORUM}
+  {#FORUM}
+    <div>
+      <h5>
+        <a href="{link}">{name}</a>
+      </h5>
+    </div>
+  {/FORUM} 
+{:else}
+  <div class="menu-tools-search-no-result">No forum posts found</div>
+{/FORUM}

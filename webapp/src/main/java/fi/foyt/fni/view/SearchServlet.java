@@ -18,7 +18,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryParser.ParseException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.PublicationController;
+import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
@@ -30,6 +32,9 @@ public class SearchServlet extends AbstractTransactionedServlet {
 
 	@Inject
 	private PublicationController publicationController;
+
+	@Inject
+	private ForumController forumController;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -60,7 +65,7 @@ public class SearchServlet extends AbstractTransactionedServlet {
 		
 		try {
 			for (Source source : sources) {
-				results.put(source.toString(), executeSearch(source, queryText));
+				results.put(source.toString(), executeSearch(source, request.getContextPath(), queryText));
 			}
 
 			response.setContentType("application/json");
@@ -81,16 +86,16 @@ public class SearchServlet extends AbstractTransactionedServlet {
 		}
 	}
 	
-	private List<Map<String, Object>> executeSearch(Source source, String queryText) throws ParseException {
+	private List<Map<String, Object>> executeSearch(Source source, String contextPath, String queryText) throws ParseException {
 		switch (source) {
 			case GAMELIBRARY:
-			  return searchGameLibrary(queryText);
+			  return searchGameLibrary(contextPath, queryText);
 			case BLOG:
 				return searchBlog(queryText);
 			case FORGE:
 				return searchForge(queryText);
 			case FORUM:
-				return searchForum(queryText);
+				return searchForum(contextPath, queryText);
 			case USERS:
 				return searchUsers(queryText);
 		}
@@ -98,15 +103,15 @@ public class SearchServlet extends AbstractTransactionedServlet {
 		return null;
 	}
 	
-	private List<Map<String, Object>> searchGameLibrary(String queryText) throws ParseException {
+	private List<Map<String, Object>> searchGameLibrary(String contextPath, String queryText) throws ParseException {
 		List<Map<String, Object>> result = new ArrayList<>();
 
-		List<SearchResult<Publication>> searchResults = publicationController.searchPublications(queryText);
+		List<SearchResult<Publication>> searchResults = publicationController.searchPublications(queryText, 3);
 		
 		for (SearchResult<Publication> searchResult : searchResults) {
 			Map<String, Object> jsonItem = new HashMap<>();
 			jsonItem.put("name", searchResult.getTitle());
-			jsonItem.put("link", searchResult.getLink());
+			jsonItem.put("link", contextPath + searchResult.getLink());
 			result.add(jsonItem);
 		}
 		
@@ -123,8 +128,17 @@ public class SearchServlet extends AbstractTransactionedServlet {
 		return result;
 	}
 	
-	private List<Map<String, Object>> searchForum(String queryText) throws ParseException {
+	private List<Map<String, Object>> searchForum(String contextPath, String queryText) throws ParseException {
 		List<Map<String, Object>> result = new ArrayList<>();
+		
+		List<SearchResult<ForumTopic>> searchResults = forumController.searchTopics(queryText, 3);
+		for (SearchResult<ForumTopic> searchResult : searchResults) {
+			Map<String, Object> jsonItem = new HashMap<>();
+			jsonItem.put("name", searchResult.getTitle());
+			jsonItem.put("link", contextPath + searchResult.getLink());
+			result.add(jsonItem);
+		}
+		
 		return result;
 	}
 	
