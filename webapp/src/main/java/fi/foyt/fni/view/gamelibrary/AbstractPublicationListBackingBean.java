@@ -3,7 +3,10 @@ package fi.foyt.fni.view.gamelibrary;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.Stateful;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.PublicationController;
@@ -19,6 +22,9 @@ import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.users.User;
 
+@RequestScoped
+@Named
+@Stateful
 public class AbstractPublicationListBackingBean {
 	
 	@Inject

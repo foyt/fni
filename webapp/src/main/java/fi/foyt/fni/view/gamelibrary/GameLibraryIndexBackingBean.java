@@ -17,12 +17,12 @@ import fi.foyt.fni.gamelibrary.PublicationController;
 @Stateful
 @URLMappings(mappings = {
   @URLMapping(
-		id = "gamelibrary-publication-most-recent", 
+		id = "gamelibrary-index", 
 		pattern = "/gamelibrary/", 
 		viewId = "/gamelibrary/index.jsf"
   )
 })
-public class PublicationMostRecentListBackingBean extends AbstractPublicationListBackingBean {
+public class GameLibraryIndexBackingBean extends AbstractPublicationListBackingBean {
 
 	private static final int MAX_RECENT_PUBLICATIONS = 10;
 

@@ -3,6 +3,7 @@
 @import "styles";
 
 $description-color: #ADD6F0;
+$panel-background-color: rgba(255, 255, 255, 0.9);
 
 /* Body */
 
@@ -14,7 +15,7 @@ body {
 /* General */
 
 h3 {
-  @include header-2;
+  @include header-3;
   color: $title-color;
 }
 
@@ -54,7 +55,7 @@ h3 {
 .index-publications-panel, 
 .index-forum-panel,
 .index-blog-panel {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: $panel-background-color;
   padding-top: 10px;
   padding-left:26px;
 }
@@ -102,7 +103,7 @@ h3 {
 }
 
 .index-publications-forum h4 {
-  @include header-1;
+  @include header-2;
   padding-top: 43px;
   padding-bottom: 13px;
 }
@@ -216,13 +217,13 @@ h3 {
 }
 
 .index-blog-entry-date {
-  @include header-5;
+  @include header-6;
   font-weight: bold;
   margin-bottom: 12px;
 }
 
 .index-blog-entry-title {
-  @include header-1;
+  @include header-2;
 }
 
 .index-blog-entry-author:before {

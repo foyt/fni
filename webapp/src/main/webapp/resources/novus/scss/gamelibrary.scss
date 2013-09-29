@@ -1,0 +1,218 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+$panel-background-color: rgba(255, 255, 255, 0.9);
+$cart-panel-background-color: #47B0B0;
+$header-background-color: #000;
+$header-text-color: #fff;
+
+/* Body */
+
+body {
+  background: url('#' + '{resource["novus:gfx/layout/background.jpg"]}') repeat-y top left;
+  background-size: 100% auto;
+}
+
+/* Panels */
+
+.gamelibrary-publication-panel,
+.gamelibrary-cart-panel,
+.gamelibrary-categories-panel {
+  background-color: $panel-background-color;
+  margin-top: 10px;
+  padding-top: 31px;
+  padding-left: 27px;
+  padding-right: 27px;
+  padding-bottom: 31px;
+}
+
+.gamelibrary-cart-panel {
+  background-color: $cart-panel-background-color;
+  padding-right: 0px;
+}
+
+.gamelibrary-header {
+  background-color:  $header-background-color;
+  padding-bottom: 27px;
+  padding-top: 18px;
+  padding-left: 24px;
+  padding-right: 120px;
+  @include box-sizing(border-box); 
+}
+
+.gamelibrary-navigation-item,
+.gamelibrary-navigation-separator {
+  color: $title-color;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-family: $default-font;
+  margin-right: 8px;
+}
+
+.gamelibrary-navigation-separator:after {
+  content: '>>';
+}
+
+.gamelibrary-description-title {
+  @include header-1;
+  color: $header-text-color;
+}
+
+.gamelibrary-description-text {
+  font-size: 16px;
+  font-family: $default-font;
+  color: $header-text-color;
+}
+
+.gamelibrary-search {
+  margin-right: 120px;
+  margin-top: 30px;
+  font-size: 16px;
+  padding-top:5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  @include border-radius(12px);
+  @include box-sizing(border-box); 
+  width: 100%;
+}
+
+/* Publications */
+
+.gamelibrary-publication h3 {
+  @include header-2;
+}
+
+.gamelibrary-publication h3 a {
+  color: $default-color;
+  text-decoration: none;
+}
+
+.gamelibrary-publication-image {
+  float: right;
+}
+
+.gamelibrary-publication-tags {
+  margin-top: 18px;
+  margin-bottom: 14px;
+}
+
+.gamelibrary-publication-tag {
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase;
+  margin-right: 10px;
+}
+
+.gamelibrary-publication-info {
+  min-height: 192px;
+}
+
+.gamelibrary-publication-description {
+  font-family: $default-font;
+  font-size: 13px;
+  margin-bottom: 10px;
+  margin-right: 180px;
+}
+
+.gamelibrary-publication-detail {
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase; 
+}
+
+.gamelibrary-publication-detail label {
+  margin-right: 8px;
+}
+
+.gamelibrary-publication-author {
+  margin-right: 6px;
+}
+
+.gamelibrary-publication-footer-row {
+  height: 14px;  
+}
+
+.gamelibrary-publication-comments {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase; 
+  text-decoration: none;
+  float: left;
+}
+
+.gamelibrary-publication-action {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase; 
+  text-decoration: none;
+  float: right;
+}
+
+/* Shopping Cart */
+
+.gamelibrary-mini-shopping-cart-title {
+  @include header-2;
+}
+
+.gamelibrary-mini-shopping-cart-view {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 16px;
+  text-decoration: none;
+  padding-left: 16px;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.gamelibrary-mini-shopping-cart-empty {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 13px;
+}
+
+.gamelibrary-mini-shopping-cart-items:after {
+  content: '------------------------------';
+}
+
+.gamelibrary-mini-shopping-cart-summary {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 13px;
+  display: block;
+}
+
+.gamelibrary-mini-shopping-cart-summary label {
+  font-weight: bold;
+}
+
+.gamelibrary-mini-shopping-cart-summary span { 
+  float: right;
+  margin-right: 27px;
+}
+
+/* Categories */
+
+.gamelibrary-categories-title {
+  @include header-2;
+  margin-bottom: 12px;
+}
+
+.gamelibrary-category {
+  display: block;
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 13px;
+}
+
+.gamelibrary-category:before {
+  content: '»';
+}
+
+.gamelibrary-category-name {
+  color: $default-color;
+  text-decoration: none;
+  margin-left: 7px;
+}

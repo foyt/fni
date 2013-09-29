@@ -1,0 +1,19 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:panelGroup layout="block" styleClass="gamelibrary-categories-container">
+    <h3 class="gamelibrary-categories-title">#{locales['gamelibrary.categories.title']}</h3>
+
+    <h:panelGroup layout="block" styleClass="gamelibrary-categories">
+      <ui:repeat var="tag" value="#{publicationCategoriesBackingBean.tags}">
+        <h:panelGroup layout="block" styleClass="gamelibrary-category">
+          <h:outputLink value="#{request.contextPath}/gamelibrary/tags/#{tag.text}" styleClass="gamelibrary-category-name">#{tag.text}</h:outputLink>
+        </h:panelGroup>
+      </ui:repeat>
+    </h:panelGroup>
+
+  </h:panelGroup>
+
+ </ui:composition>

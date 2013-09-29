@@ -9,31 +9,31 @@
 @mixin header-1 {
   @include header;
   color: $default-color;
-  font-size: 26px;
+  font-size: 50px;
 }
 
 @mixin header-2 {
   @include header;
   color: $default-color;
-  font-size: 21px;
+  font-size: 26px;
 }
 
 @mixin header-3 {
   @include header;
   color: $default-color;
-  font-size: 18px;
+  font-size: 21px;
 }
 
 @mixin header-4 {
   @include header;
   color: $default-color;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 @mixin header-5 {
   @include header;
   color: $default-color;
-  font-size: 12px;
+  font-size: 16px;
 }
 
 @mixin header-6 {
