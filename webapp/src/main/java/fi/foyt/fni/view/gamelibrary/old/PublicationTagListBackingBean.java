@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.gamelibrary;
+package fi.foyt.fni.view.gamelibrary.old;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -41,7 +41,7 @@ public class PublicationTagListBackingBean extends AbstractPublicationListBackin
 			throw new FileNotFoundException();
 		}
 		
-		setPublications(publicationController.listPublicationsByTags(Arrays.asList(gameLibraryTag)));
+//		setPublications(publicationController.listPublicationsByTags(Arrays.asList(gameLibraryTag)));
 	}
 	
 	public String getTag() {

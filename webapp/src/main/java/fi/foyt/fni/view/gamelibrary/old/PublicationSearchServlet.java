@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.gamelibrary;
+package fi.foyt.fni.view.gamelibrary.old;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 
-@WebServlet(urlPatterns = "/gamelibrary/publicationSearch/")
+//@WebServlet(urlPatterns = "/gamelibrary/publicationSearch/")
 public class PublicationSearchServlet extends AbstractTransactionedServlet {
 
 	private static final long serialVersionUID = 5027578435195813091L;

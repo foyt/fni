@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.gamelibrary;
+package fi.foyt.fni.view.gamelibrary.old;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,16 +32,16 @@ import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
 
-@Stateful
-@RequestScoped
-@Named
-@URLMappings(mappings = {
-  @URLMapping(
-  		id = "gamelibrary-publication-edit", 
-  		pattern = "/gamelibrary/manage/editpublication/#{publicationEditBackingBean.publicationId}", 
-  		viewId = "/gamelibrary/editpublication.jsf"
-  )
-})
+//@Stateful
+//@RequestScoped
+//@Named
+//@URLMappings(mappings = {
+//  @URLMapping(
+//  		id = "gamelibrary-publication-edit", 
+//  		pattern = "/gamelibrary/manage/editpublication/#{publicationEditBackingBean.publicationId}", 
+//  		viewId = "/gamelibrary/editpublication.jsf"
+//  )
+//})
 public class PublicationEditBackingBean extends AbstractPublicationEditBackingBean {
 	
 	@Inject

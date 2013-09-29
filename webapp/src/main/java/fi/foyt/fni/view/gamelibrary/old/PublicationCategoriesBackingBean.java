@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.gamelibrary;
+package fi.foyt.fni.view.gamelibrary.old;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.session.SessionController;
 
-@RequestScoped
-@Named
-@Stateful
+//@RequestScoped
+//@Named
+//@Stateful
 public class PublicationCategoriesBackingBean {
 	
 	@Inject

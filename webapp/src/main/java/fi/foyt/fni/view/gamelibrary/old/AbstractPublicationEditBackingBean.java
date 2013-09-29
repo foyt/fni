@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.gamelibrary;
+package fi.foyt.fni.view.gamelibrary.old;
 
 import java.util.ArrayList;
 import java.util.List;

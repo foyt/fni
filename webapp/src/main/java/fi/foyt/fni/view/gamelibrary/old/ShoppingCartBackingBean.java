@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.gamelibrary;
+package fi.foyt.fni.view.gamelibrary.old;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -52,10 +52,10 @@ import fi.foyt.paytrail.rest.Product;
 import fi.foyt.paytrail.rest.Result;
 import fi.foyt.paytrail.rest.UrlSet;
 
-@Stateful
-@RequestScoped
-@Named
-@URLMappings(mappings = { @URLMapping(id = "gamelibrary-cart", pattern = "/gamelibrary/cart/", viewId = "/gamelibrary/cart.jsf") })
+//@Stateful
+//@RequestScoped
+//@Named
+//@URLMappings(mappings = { @URLMapping(id = "gamelibrary-cart", pattern = "/gamelibrary/cart/", viewId = "/gamelibrary/cart.jsf") })
 public class ShoppingCartBackingBean implements Serializable {
 
 	private final static double VAT_PERCENT = 24;

@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.gamelibrary;
+package fi.foyt.fni.view.gamelibrary.old;
 
 import java.io.IOException;
 
@@ -29,16 +29,16 @@ import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
-@RequestScoped
-@Named
-@Stateful
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "gamelibrary-manage", 
-		pattern = "/gamelibrary/manage/", 
-		viewId = "/gamelibrary/manage.jsf"
-  )
-})
+//@RequestScoped
+//@Named
+//@Stateful
+//@URLMappings(mappings = {
+//  @URLMapping(
+//		id = "gamelibrary-manage", 
+//		pattern = "/gamelibrary/manage/", 
+//		viewId = "/gamelibrary/manage.jsf"
+//  )
+//})
 public class ManageBackingBean extends AbstractPublicationListBackingBean {
 
 	@Inject
@@ -67,7 +67,7 @@ public class ManageBackingBean extends AbstractPublicationListBackingBean {
 	@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
 	public void init() {
 		User loggedUser = sessionController.getLoggedUser();
-		setPublications(publicationController.listUnpublishedPublications(loggedUser));
+//		setPublications(publicationController.listUnpublishedPublications(loggedUser));
 	}
 
 	@LoggedIn

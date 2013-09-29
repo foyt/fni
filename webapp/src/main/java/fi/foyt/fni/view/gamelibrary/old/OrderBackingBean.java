@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.gamelibrary;
+package fi.foyt.fni.view.gamelibrary.old;
 
 import java.util.Date;
 import java.util.List;
@@ -22,15 +22,15 @@ import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
-@Stateful
-@RequestScoped
-@Named
-@URLMappings(mappings = { 
-		@URLMapping(id = "gamelibrary-order", 
-				pattern = "/gamelibrary/orders/#{orderBackingBean.orderId}", 
-				viewId = "/gamelibrary/order.jsf"
-		) 
-})
+//@Stateful
+//@RequestScoped
+//@Named
+//@URLMappings(mappings = { 
+//		@URLMapping(id = "gamelibrary-order", 
+//				pattern = "/gamelibrary/orders/#{orderBackingBean.orderId}", 
+//				viewId = "/gamelibrary/order.jsf"
+//		) 
+//})
 public class OrderBackingBean {
 
 	@Inject

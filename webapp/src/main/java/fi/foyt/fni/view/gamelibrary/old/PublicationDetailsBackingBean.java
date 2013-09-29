@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.gamelibrary;
+package fi.foyt.fni.view.gamelibrary.old;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -33,16 +33,16 @@ import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
 
-@RequestScoped
-@Named
-@Stateful
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "gamelibrary-publication", 
-		pattern = "/gamelibrary/#{publicationDetailsBackingBean.urlName}", 
-		viewId = "/gamelibrary/publicationdetails.jsf"
-  )
-})
+//@RequestScoped
+//@Named
+//@Stateful
+//@URLMappings(mappings = {
+//  @URLMapping(
+//		id = "gamelibrary-publication", 
+//		pattern = "/gamelibrary/#{publicationDetailsBackingBean.urlName}", 
+//		viewId = "/gamelibrary/publicationdetails.jsf"
+//  )
+//})
 public class PublicationDetailsBackingBean {
 	
 	@Inject
