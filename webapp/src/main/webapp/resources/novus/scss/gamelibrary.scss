@@ -6,6 +6,8 @@ $panel-background-color: rgba(255, 255, 255, 0.9);
 $cart-panel-background-color: #47B0B0;
 $header-background-color: #000;
 $header-text-color: #fff;
+$header-background-color-hover: #fff;
+$header-text-color-hover: #000;
 
 /* Body */
 
@@ -53,6 +55,10 @@ body {
   content: '>>';
 }
 
+.gamelibrary-description {
+  margin-bottom: 30px;
+}
+
 .gamelibrary-description-title {
   @include header-1;
   color: $header-text-color;
@@ -64,9 +70,22 @@ body {
   color: $header-text-color;
 }
 
+.gamelibrary-search-container {
+  position: relative;  
+  
+}
+
+.gamelibrary-search-loading {
+  background: url('#' + '{resource["novus:gfx/layout/loader-bw.gif"]}') no-repeat center center;
+  width: 16px;
+  position: absolute;
+  top: 1px;
+  bottom: 0px;  
+  right: 5px;
+}
+
 .gamelibrary-search {
   margin-right: 120px;
-  margin-top: 30px;
   font-size: 16px;
   padding-top:5px;
   padding-bottom: 5px;
@@ -74,6 +93,40 @@ body {
   @include border-radius(12px);
   @include box-sizing(border-box); 
   width: 100%;
+  border: none;
+}
+
+.gamelibrary-search-result {
+  position: absolute;
+  width: 100%;
+  background: #000;
+  padding: 8px;
+  margin-top: 8px;
+  @include box-sizing(border-box); 
+  width: 100%;
+}
+
+.gamelibrary-search-result a {
+  padding: 8px;  
+  text-decoration: none;
+  font-family: $default-font;
+  color: $header-text-color;
+  @include box-sizing(border-box); 
+  width: 100%;
+  display: block;
+  font-size: 14px;
+}
+
+.gamelibrary-search-result a:hover {
+  background: $header-background-color-hover;
+  color: $header-text-color-hover;
+}
+
+.gamelibrary-search-no-result {
+  font-family: $default-font;
+  color: $header-text-color;
+  padding: 8px;
+  font-size: 14px;
 }
 
 /* Publications */

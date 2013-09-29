@@ -1,0 +1,7 @@
+{?publications}
+  {#publications}
+    <a href="{link}">{name}</a>
+  {/publications} 
+{:else}
+  <div class="gamelibrary-search-no-result">No publications found</div>
+{/publications}
