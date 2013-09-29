@@ -133,8 +133,12 @@ public class PublicationController {
 	public Long countUnpublishedPublicationsByCreator(User user) {
 		return publicationDAO.countByCreatorAndPublished(user, Boolean.FALSE);
 	}
-
+	
 	public List<SearchResult<Publication>> searchPublications(String text) throws ParseException {
+	  return searchPublications(text, null);
+	}
+	
+	public List<SearchResult<Publication>> searchPublications(String text, Integer maxHits) throws ParseException {
 		if (StringUtils.isBlank(text)) {
 			return null;
 		}
@@ -162,10 +166,14 @@ public class PublicationController {
 		List<Publication> searchResults = query.getResultList();
     for (Publication searchResult : searchResults) {
     	String link = new StringBuilder()
-    	  .append("gamelibrary/")
+    	  .append("/gamelibrary/")
     	  .append(searchResult.getUrlName())
     	  .toString();
     	result.add(new SearchResult<Publication>(searchResult, searchResult.getName(), link, null, null));
+    	
+    	if (maxHits != null && result.size() >= maxHits) {
+    		return result;
+    	}
     }
 		
 		return result;
