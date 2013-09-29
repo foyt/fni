@@ -1,16 +1,17 @@
 package fi.foyt.fni.view.gamelibrary;
 
+import java.util.List;
+
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
-import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.PublicationController;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 
 @RequestScoped
 @Named
@@ -22,19 +23,15 @@ import fi.foyt.fni.gamelibrary.PublicationController;
 		viewId = "/gamelibrary/index.jsf"
   )
 })
-public class GameLibraryIndexBackingBean extends AbstractPublicationListBackingBean {
-
-	private static final int MAX_RECENT_PUBLICATIONS = 10;
+public class GameLibraryIndexBackingBean {
+  
+	private static final int MAX_RECENT_PUBLICATIONS = 5;
 
 	@Inject
 	private PublicationController publicationController;
-
-	@Inject
-	private ForumController forumController;
 	
-	@URLAction
-	public void init() {
-		setPublications(publicationController.listRecentPublications(MAX_RECENT_PUBLICATIONS));
+	public List<Publication> getPublications() {
+		return publicationController.listRecentPublications(MAX_RECENT_PUBLICATIONS);
 	}
 	
 }
