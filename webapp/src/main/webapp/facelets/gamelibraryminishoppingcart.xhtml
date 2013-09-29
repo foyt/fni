@@ -16,15 +16,17 @@
         </h:panelGroup>
         
         <ui:repeat var="cartItem" value="#{miniShoppingCartBackingBean.shoppingCartItems}">   
-          <div class="gamelibrary-mini-shopping-cart-item">
-            <div class="gamelibrary-mini-shopping-cart-item-count">#{cartItem.count}</div>
-            <div class="gamelibrary-mini-shopping-cart-item-name">#{cartItem.publication.name}</div>
-            <div class="gamelibrary-mini-shopping-cart-item-price">
+          <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-item">
+            <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-item-count">#{cartItem.count}</h:panelGroup>
+            <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-item-name">
+              #{cartItem.publication.name.length() gt 15 ? cartItem.publication.name.substring(0, 12).concat('...') : cartItem.publication.name}
+            </h:panelGroup>
+            <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-item-price">
               <h:outputText value="#{cartItem.publication.price}" >
                 <f:convertNumber currencyCode="EUR" type="currency" />
               </h:outputText>
-            </div>
-          </div>
+            </h:panelGroup>
+          </h:panelGroup>
         </ui:repeat>
       </h:panelGroup>    
     </h:panelGroup>

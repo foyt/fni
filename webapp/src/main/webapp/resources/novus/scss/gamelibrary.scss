@@ -29,7 +29,6 @@ body {
 
 .gamelibrary-cart-panel {
   background-color: $cart-panel-background-color;
-  padding-right: 0px;
 }
 
 .gamelibrary-header {
@@ -173,6 +172,31 @@ body {
   font-size: 13px;
 }
 
+.gamelibrary-mini-shopping-cart-item {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 13px;
+}
+
+.gamelibrary-mini-shopping-cart-item-count {
+  display: inline-block;
+}
+
+.gamelibrary-mini-shopping-cart-item-count:after {
+  content: 'x';
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.gamelibrary-mini-shopping-cart-item-name {
+  display: inline-block;
+}
+
+.gamelibrary-mini-shopping-cart-item-price {
+  display: inline-block;
+  float: right;
+}
+
 .gamelibrary-mini-shopping-cart-items:after {
   content: '------------------------------';
 }
@@ -190,7 +214,6 @@ body {
 
 .gamelibrary-mini-shopping-cart-summary span { 
   float: right;
-  margin-right: 27px;
 }
 
 /* Categories */
