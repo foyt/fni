@@ -1,12 +1,12 @@
 <h4>Pelikirjastojulkaisut</h4>
-{?publications}
-  {#publications}
+{?GAMELIBRARY}
+  {#GAMELIBRARY}
     <div>
       <h5>
         <a href="{link}">{name}</a>
       </h5>
     </div>
-  {/publications} 
+  {/GAMELIBRARY} 
 {:else}
   <div class="menu-tools-search-no-result">Ei löydettyjä julkaisuja</div>
-{/publications}
+{/GAMELIBRARY}

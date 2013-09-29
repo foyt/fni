@@ -2,6 +2,7 @@ package fi.foyt.fni.view;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,20 +39,29 @@ public class SearchServlet extends AbstractTransactionedServlet {
 			return;
 		}
 		
+		List<Source> sources = null;
+		String[] sourceParameters = request.getParameterValues("source");
+		if ((sourceParameters == null)||(sourceParameters.length == 0)) {
+			sources = Arrays.asList(Source.values());
+		} else {
+			sources = new ArrayList<>();
+			for (String sourceParameter : sourceParameters) {
+				Source source = Source.valueOf(sourceParameter);
+				if (source != null) {
+				  sources.add(source);
+				} else {
+					response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+					return;
+				}
+			}
+		}
+		
 		Map<String, List<Map<String, Object>>> results = new HashMap<>();
 		
-		List<Map<String, Object>> publicationResult = new ArrayList<>();
 		try {
-			List<SearchResult<Publication>> searchResults = publicationController.searchPublications(queryText);
-			
-			for (SearchResult<Publication> searchResult : searchResults) {
-				Map<String, Object> jsonItem = new HashMap<>();
-				jsonItem.put("name", searchResult.getTitle());
-				jsonItem.put("link", searchResult.getLink());
-				publicationResult.add(jsonItem);
+			for (Source source : sources) {
+				results.put(source.toString(), executeSearch(source, queryText));
 			}
-			
-			results.put("publications", publicationResult);
 
 			response.setContentType("application/json");
 			
@@ -69,6 +79,66 @@ public class SearchServlet extends AbstractTransactionedServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
+	}
+	
+	private List<Map<String, Object>> executeSearch(Source source, String queryText) throws ParseException {
+		switch (source) {
+			case GAMELIBRARY:
+			  return searchGameLibrary(queryText);
+			case BLOG:
+				return searchBlog(queryText);
+			case FORGE:
+				return searchForge(queryText);
+			case FORUM:
+				return searchForum(queryText);
+			case USERS:
+				return searchUsers(queryText);
+		}
+		
+		return null;
+	}
+	
+	private List<Map<String, Object>> searchGameLibrary(String queryText) throws ParseException {
+		List<Map<String, Object>> result = new ArrayList<>();
+
+		List<SearchResult<Publication>> searchResults = publicationController.searchPublications(queryText);
+		
+		for (SearchResult<Publication> searchResult : searchResults) {
+			Map<String, Object> jsonItem = new HashMap<>();
+			jsonItem.put("name", searchResult.getTitle());
+			jsonItem.put("link", searchResult.getLink());
+			result.add(jsonItem);
+		}
+		
+		return result;
+	}
+	
+	private List<Map<String, Object>> searchBlog(String queryText) throws ParseException {
+		List<Map<String, Object>> result = new ArrayList<>();
+		return result;
+	}
+	
+	private List<Map<String, Object>> searchForge(String queryText) throws ParseException {
+		List<Map<String, Object>> result = new ArrayList<>();
+		return result;
+	}
+	
+	private List<Map<String, Object>> searchForum(String queryText) throws ParseException {
+		List<Map<String, Object>> result = new ArrayList<>();
+		return result;
+	}
+	
+	private List<Map<String, Object>> searchUsers(String queryText) throws ParseException {
+		List<Map<String, Object>> result = new ArrayList<>();
+		return result;
+	}
+	
+	private enum Source {
+		GAMELIBRARY,
+		USERS,
+		FORGE,
+		FORUM,
+		BLOG
 	}
 	
 }

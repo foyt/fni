@@ -1,7 +1,7 @@
-{?publications}
-  {#publications}
+{?GAMELIBRARY}
+  {#GAMELIBRARY}
     <a href="{link}">{name}</a>
-  {/publications} 
+  {/GAMELIBRARY} 
 {:else}
   <div class="gamelibrary-search-no-result">No publications found</div>
-{/publications}
+{/GAMELIBRARY}

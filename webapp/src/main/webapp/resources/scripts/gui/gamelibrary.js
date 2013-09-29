@@ -13,7 +13,7 @@
           url : CONTEXTPATH + "/search/",
           data : {
             q: query,
-            search: 'gamelibrarypublications'
+            source: 'GAMELIBRARY'
           },
           success : function(data) {
             input.data('searching', false);
