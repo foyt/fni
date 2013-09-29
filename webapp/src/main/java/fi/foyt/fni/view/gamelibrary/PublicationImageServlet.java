@@ -82,9 +82,9 @@ public class PublicationImageServlet extends AbstractFileServlet {
 
 		TypedData data = new TypedData(publicationImage.getContent(), publicationImage.getContentType());
 
-		if ((width != null) && (height != null)) {
+		if ((width != null) || (height != null)) {
 			try {
-				data = ImageUtils.resizeImage(data, width, height, null);
+				data = ImageUtils.resizeImage(data, width != null ? width : -1, height != null ? height : -1, null);
 			} catch (IOException e) {
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to resize image");
 				return;
