@@ -114,6 +114,10 @@ public class ForumController implements Serializable {
 		return forumTopicDAO.listByForum(forum);
 	}	
 	
+	public List<ForumTopic> listLatestForumTopicsByForum(Forum forum, int maxForumTopics) {
+		return forumPostDAO.listTopicsByForumSortByCreated(forum, 0, maxForumTopics);
+	}
+	
 	public List<ForumTopic> listLatestForumTopics(int maxForumTopics) {
 		return forumPostDAO.listTopicsSortByCreated(0, maxForumTopics);
 	}
