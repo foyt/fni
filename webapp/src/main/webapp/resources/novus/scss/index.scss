@@ -5,13 +5,6 @@
 $description-color: #ADD6F0;
 $panel-background-color: rgba(255, 255, 255, 0.9);
 
-/* Body */
-
-body {
-  background: url('#' + '{resource["novus:gfx/layout/background.jpg"]}') repeat-y top left;
-  background-size: 100% auto;
-}
-
 /* General */
 
 h3 {

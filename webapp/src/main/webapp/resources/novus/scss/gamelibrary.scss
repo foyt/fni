@@ -9,13 +9,6 @@ $header-text-color: #fff;
 $header-background-color-hover: #fff;
 $header-text-color-hover: #000;
 
-/* Body */
-
-body {
-  background: url('#' + '{resource["novus:gfx/layout/background.jpg"]}') repeat-y top left;
-  background-size: 100% auto;
-}
-
 /* Panels */
 
 .gamelibrary-publication-panel,
