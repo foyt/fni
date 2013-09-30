@@ -1,5 +1,6 @@
 package fi.foyt.fni.view.forum;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,25 +30,40 @@ import fi.foyt.fni.persistence.model.forum.ForumTopic;
 })
 public class ForumIndexBackingBean {
 	
+	private final static int MAX_TOPICS = 3;
+	
 	@Inject
 	private ForumController forumController;
 	
-	/* ForumCategories */
-
-	public List<ForumCategory> getCategories() {
-		return forumController.listForumCategories();
-	}
-
 	/* ForumTopic */
 	
 	public List<ForumTopic> getTopics(Forum forum) {
-		return forumController.listTopicsByForum(forum);
+		return forumController.listLatestForumTopicsByForum(forum, MAX_TOPICS);
+	}
+	
+	public Long getTopicPostCount(ForumTopic topic) {
+		return forumController.countPostsByTopic(topic);
+	}
+	
+	public Date getTopicLastMessageDate(ForumTopic topic) {
+		ForumPost post = forumController.getLastPostByTopic(topic);
+		if (post != null) {
+			return post.getCreated();
+		}
+		
+		return null;
 	}
 	
 	/* Forum */
 	
-	public List<Forum> getForums(ForumCategory category) {
-		return forumController.listForumsByCategory(category);
+	public List<Forum> getForums() {
+		List<Forum> result = new ArrayList<>();
+		
+		for (ForumCategory forumCategory : forumController.listForumCategories()) {
+			result.addAll(forumController.listForumsByCategory(forumCategory));
+		}
+		
+		return result;
 	}
 	
 	public Long getForumPostCount(Forum forum) {
@@ -58,7 +74,7 @@ public class ForumIndexBackingBean {
 		return forumController.countTopicsByForum(forum);
 	}
 	
-	public Date getLastMessageDate(Forum forum) {
+	public Date getForumLastMessageDate(Forum forum) {
 		ForumPost post = forumController.getLastPostByForum(forum);
 		if (post != null) {
 			return post.getCreated();
