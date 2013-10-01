@@ -1,10 +1,12 @@
+@import "vars";
 @import "compass";
 @IMPORT url("http://yui.yahooapis.com/3.11.0/build/cssreset/cssreset-min.css");
 
 /* Body */
-
-body {
-  background-position: repeat-y top left;
-  @include background-image(url('#' + '{resource["novus:gfx/layout/background.jpg"]}'), linear-gradient(left,  rgba(215,64,64,1) 0%,rgba(128,255,250,1) 50%,rgba(215,64,64,1) 100%));
-  background-size: 100% auto;
+@media screen and (min-width: $grid-width-desktop) {
+  body {
+    background-position: repeat-y top left;
+    @include background-image(url('#' + '{resource["novus:gfx/layout/background.jpg"]}'), linear-gradient(left,  rgba(215,64,64,1) 0%,rgba(128,255,250,1) 50%,rgba(215,64,64,1) 100%));
+    background-size: 100% auto;
+  }
 }
