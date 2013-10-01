@@ -5,7 +5,7 @@
 $panel-background-color: rgba(255, 255, 255, 0.9);
 $header-background-color: #000;
 $header-text-color: #fff;
-$table-border-color: #fff;
+$table-border-color: rgba(255, 255, 255, 0);
 
 /* Body */
 
@@ -85,23 +85,20 @@ body {
   margin-top: 10px;
   margin-bottom: 24px;
   margin-left: 16px;
+  margin-right: 250px;
 }
 
 .forum-index-forum-activity-container {
   float: right;
-  margin-top: -21px;
+  text-align: right;
+  margin-top: -58px;
 }
 
 .forum-index-forum-topic-count, .forum-index-forum-last-message-date {
   font-size: 13px;
   font-family: $default-font;
   color: $default-color;
-  display: inline-block;
   font-weight: bold;
-}
-
-.forum-index-forum-topic-count {
-  padding-right: 36px;
 }
 
 .forum-index-forum-topic {
@@ -115,9 +112,13 @@ body {
 .forum-index-forum-topic-name {
   font-size: 16px;
   font-family: $default-font;
-  color: $default-color;
   margin-bottom: 10px;
   font-weight: bold;
+}
+
+.forum-index-forum-topic-name a {
+  text-decoration: none;
+  color: $default-color;
 }
 
 .forum-index-forum-topic-name-container, .forum-index-forum-topic-activity-container {
@@ -161,4 +162,14 @@ body {
   font-family: $default-font;
   color: $default-color;
   font-weight: bold;
-} 
+}
+
+.forum-index-more-topics {
+  font-size: 16px;
+  font-family: $default-font;
+  color: $default-color;
+  font-style: italic;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 16px;
+}

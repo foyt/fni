@@ -34,10 +34,12 @@
       <h:panelGroup layout="block" styleClass="forum-panel">
         <ui:repeat var="forum" value="#{forumIndexBackingBean.forums}">
           <h:panelGroup layout="block" styleClass="forum-index-forum">
+            
             <h:panelGroup layout="block" styleClass="forum-index-forum-name">
               <h:outputLink value="#{request.contextPath}/forum/#{forum.urlName}">#{forum.name}</h:outputLink>
-            </h:panelGroup>
-            <h:panelGroup layout="block" styleClass="forum-index-forum-description">#{forum.description}</h:panelGroup>
+            </h:panelGroup> 
+            
+            <h:panelGroup layout="block" styleClass="forum-index-forum-description">#{forum.description}</h:panelGroup>   
 
             <h:panelGroup layout="block" styleClass="forum-index-forum-activity-container">
               <h:panelGroup layout="block" styleClass="forum-index-forum-topic-count">
@@ -50,13 +52,15 @@
                   <f:param value="#{forumIndexBackingBean.getForumLastMessageDate(forum) }"/>
                 </h:outputFormat>
               </h:panelGroup>
-            </h:panelGroup>      
-             
+            </h:panelGroup>  
+            
             <h:panelGroup layout="block" styleClass="forum-index-forum-topics">
               <ui:repeat var="topic" value="#{forumIndexBackingBean.getTopics(forum)}">
                 <h:panelGroup layout="block" styleClass="forum-index-forum-topic">
                   <h:panelGroup layout="block" styleClass="forum-index-forum-topic-name-container">
-                    <h:panelGroup layout="block" styleClass="forum-index-forum-topic-name">#{topic.subject}</h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="forum-index-forum-topic-name">
+                      <h:outputLink value="#{request.contextPath}/forum/#{topic.fullPath}">#{topic.subject}</h:outputLink>
+                    </h:panelGroup>
                     <h:panelGroup layout="block" styleClass="forum-index-forum-topic-info">
                       <h:panelGroup styleClass="forum-index-forum-topic-label">#{locales['forum.index.topicStartedBy']}</h:panelGroup>
                       <h:outputLink styleClass="forum-index-forum-topic-author" value="#{request.contextPath}/users/#{topic.author.id}">#{topic.author.fullName}</h:outputLink>
@@ -86,6 +90,9 @@
             </h:panelGroup>
   
           </h:panelGroup>
+
+          <h:outputLink styleClass="forum-index-more-topics" value="#{request.contextPath}/forum/#{forum.urlName}">#{locales['forum.index.moreTopics']}</h:outputLink>
+
         </ui:repeat>
       </h:panelGroup>
     </h:panelGroup>
