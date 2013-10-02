@@ -1,0 +1,236 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+$panel-background-color: rgb(209, 235, 235);
+$information-text-color: rgb(255, 255, 255);
+$information-background-color: rgb(71, 176, 176);
+$header-background-color: #000;
+$header-text-color: #fff;
+
+/* Generic */
+
+.gamelibrary-cart-panel h3 {
+  @include header-3;
+  color: $title-color;
+}
+
+/* Panels */
+
+.gamelibrary-cart-panel {
+  background-color: $panel-background-color;
+  margin-top: 10px;
+  padding-top: 31px;
+  padding-left: 27px;
+  padding-right: 27px;
+  padding-bottom: 31px;
+}
+
+/* Header */
+
+.gamelibrary-cart-header {
+  background-color:  $header-background-color;
+  padding-bottom: 27px;
+  padding-top: 18px;
+  padding-left: 24px;
+  padding-right: 120px;
+  @include box-sizing(border-box); 
+}
+
+.gamelibrary-cart-navigation-item,
+.gamelibrary-cart-navigation-separator {
+  color: $title-color;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-family: $default-font;
+  margin-right: 8px;
+}
+
+.gamelibrary-cart-navigation-separator:after {
+  content: '>>';
+}
+
+.gamelibrary-cart-description {
+  margin-bottom: 30px;
+}
+
+.gamelibrary-cart-description-title {
+  @include header-1;
+  color: $header-text-color;
+  display: inline-block;
+}
+
+.gamelibrary-cart-description-text {
+  font-size: 16px;
+  font-family: $default-font;
+  color: $header-text-color;
+}
+
+.gamelibrary-cart-back-link {
+  font-size: 16px;
+  font-family: $default-font;
+  color: $header-text-color;
+  padding-left: 20px;
+  font-style: italic;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.gamelibrary-cart-back-link:after {
+  content: '>>';
+  padding-left: 8px;
+}
+
+/* Info */
+
+.gamelibrary-cart-information {
+  color: $information-text-color;
+  background-color: $information-background-color;
+  text-align: center;
+  font-size: 12px;
+  font-family: $default-font;
+  font-weight: bold;
+  font-style: italic;
+  padding: 5px;
+  margin-bottom: 40px;
+}
+
+/* Items */
+
+.gamelibrary-cart-items {
+  margin-bottom: 46px;
+}
+
+.gamelibrary-cart-empty-message {
+  font-family: $default-font;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.gamelibrary-cart-items-inner-container th, .gamelibrary-cart-items-inner-container td {
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.gamelibrary-cart-item-count {
+  width: 157px;
+}
+
+.gamelibrary-cart-items-inner-container td input {
+  width: 40px;
+}
+
+.gamelibrary-cart-item-name {
+  width: 120px;
+}
+
+.gamelibrary-cart-item-price {
+  width: 123px;
+}
+
+/* Payer */
+
+.gamelibrary-cart-payer-fields {
+  margin-top: 20px;
+}
+
+.gamelibrary-cart-payer-field {
+  margin-bottom: 9px;
+}
+
+.gamelibrary-cart-payer-field label {
+  width: 120px;
+  display: inline-block;
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+}
+
+.gamelibrary-cart-payer-field input, .gamelibrary-cart-payer-field select {
+  width: 260px;
+  font-size: 14px;
+  font-family: $default-font;
+  @include box-sizing(border-box);
+}
+
+.gamelibrary-cart-delivery h4 {
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+}
+
+.gamelibrary-cart-delivery-method {
+  margin-top: 20px; 
+}
+
+.gamelibrary-cart-delivery-method label {
+  margin-left: 8px; 
+  font-size: 13px;
+  font-family: $default-font;
+  font-style: italic;
+}
+
+.gamelibrary-cart-notes {
+  margin-top: 13px;
+}
+
+.gamelibrary-cart-notes h4 {
+  width: 120px;
+  display: inline-block;
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold; 
+  vertical-align: top;
+  margin-top: 8px;
+}
+
+.gamelibrary-cart-notes textarea {
+  width: 260px;
+  height: 96px;
+  font-size: 14px;
+  @include box-sizing(border-box);
+}
+
+/* Summary */
+
+.gamelibrary-cart-summary-field label {
+  width: 154px;
+  display: inline-block;
+}
+
+.gamelibrary-cart-summary-field label, .gamelibrary-cart-summary-value {
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.gamelibrary-cart-summary-total-field {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  margin-top: 10px;
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+
+/* Submit */
+
+.gamelibrary-cart-submit {
+  @include header-3;
+  padding-left: 23px;
+  padding-right: 23px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 15px;
+  margin-top: 35px;
+  cursor: pointer;
+}
+
+.gamelibrary-cart-submit:disabled {
+  color: #eee;
+  background: #aaa;
+  cursor: default;
+}

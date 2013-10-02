@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['gamelibrary.cart.pageTitle']}</ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/gamelibrary-cart.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <!-- Header -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight gamelibrary-cart-header">
+
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="gamelibrary-cart-navigation">
+        <h:panelGroup styleClass="gamelibrary-cart-navigation-item">#{locales['gamelibrary.index.navigationIndex']}</h:panelGroup>
+        <h:panelGroup styleClass="gamelibrary-cart-navigation-separator"/>
+        <h:panelGroup styleClass="gamelibrary-cart-navigation-item">#{locales['gamelibrary.index.navigationMostRecent']}</h:panelGroup>
+      </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="gamelibrary-cart-description">
+        <p class="gamelibrary-cart-description-title">#{locales['gamelibrary.cart.descriptionTitle']}</p>
+        <h:link styleClass="gamelibrary-cart-back-link" outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.cart.backToGameLibrary']}</h:link>
+        <p class="gamelibrary-cart-description-text">#{locales['gamelibrary.cart.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <!-- Content -->
+
+    <h:form>
+      <h:panelGroup layout="block" styleClass="grid_16 tight">
+        
+        <h:panelGroup layout="block" styleClass="gamelibrary-cart-panel">
+          
+          <!-- Information -->
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-cart-information">
+            #{locales['gamelibrary.cart.orderInformation']}
+          </h:panelGroup>
+          
+          <!-- Items -->
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-cart-items">
+            <h3>#{locales['gamelibrary.cart.itemsTitle']}</h3>
+            
+            <h:panelGroup layout="block" styleClass="gamelibrary-cart-empty-message" rendered="#{!shoppingCartBackingBean.hasItems}">
+              #{locales['gamelibrary.cart.cartEmpty']}
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="gamelibrary-cart-items-inner-container" rendered="#{shoppingCartBackingBean.hasItems}"> 
+              <h:dataTable var="cartItem" value="#{shoppingCartBackingBean.shoppingCartItems}">
+                <h:column headerClass="gamelibrary-cart-item-count">
+                  <f:facet name="header">#{locales['gamelibrary.cart.itemsCountLabel']}</f:facet>
+                  <h:inputText value="#{cartItem.count}">
+                    <f:ajax execute="@form" render="@form"/>
+                  </h:inputText>
+                </h:column>
+                <h:column headerClass="gamelibrary-cart-item-name">
+                  <f:facet name="header">#{locales['gamelibrary.cart.itemsNameLabel']}</f:facet>
+                  <h:outputText value="#{cartItem.name}"/>
+                </h:column>
+                <h:column headerClass="gamelibrary-cart-item-price">
+                  <f:facet name="header">#{locales['gamelibrary.cart.itemsUnitPriceLabel']}</f:facet>
+                  <h:outputText value="#{cartItem.price}"/>
+                </h:column>
+                <h:column headerClass="gamelibrary-cart-item-total-price">
+                  <f:facet name="header">#{locales['gamelibrary.cart.itemsTotalPriceLabel']}</f:facet>
+                  <h:outputText value="#{cartItem.totalPrice}"/>
+                </h:column>
+              </h:dataTable>
+            </h:panelGroup>
+          </h:panelGroup>
+          
+          <!-- Payer -->
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer">
+  
+            <h3>#{locales['gamelibrary.cart.payerContactInformationTitle']}</h3>
+            
+            <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-fields">
+              <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
+                <h:outputLabel value="#{locales['gamelibrary.cart.payerFirstName']}" />
+                <h:inputText value="#{shoppingCartBackingBean.payerFirstName}" required="true" requiredMessage="#{locales['gamelibrary.cart.payerFirstNameRequired']}"/>
+              </h:panelGroup>
+              
+              <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
+                <h:outputLabel value="#{locales['gamelibrary.cart.payerLastName']}" />
+                <h:inputText value="#{shoppingCartBackingBean.payerLastName}" required="true" requiredMessage="#{locales['gamelibrary.cart.payerLastNameRequired']}"/>
+              </h:panelGroup>
+  
+              <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
+                <h:outputLabel value="#{locales['gamelibrary.cart.payerEmail']}" />
+                <h:inputText value="#{shoppingCartBackingBean.payerEmail}" required="true" requiredMessage="#{locales['gamelibrary.cart.payerEmailRequired']}"/>
+              </h:panelGroup>
+  
+              <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
+                <h:outputLabel value="#{locales['gamelibrary.cart.payerMobile']}" />
+                <h:inputText value="#{shoppingCartBackingBean.payerMobile}" />
+              </h:panelGroup>
+              
+              <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
+                <h:outputLabel value="#{locales['gamelibrary.cart.payerTelephone']}" />
+                <h:inputText value="#{shoppingCartBackingBean.payerTelephone}"/>
+              </h:panelGroup>
+              
+              <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
+                <h:outputLabel value="#{locales['gamelibrary.cart.payerStreetAddress']}" />
+                <h:inputText value="#{shoppingCartBackingBean.payerStreetAddress}" required="true" requiredMessage="#{locales['gamelibrary.cart.payerStreetAddressRequired']}"/>
+              </h:panelGroup>
+              
+              <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
+                <h:outputLabel value="#{locales['gamelibrary.cart.payerPostalCode']}" />
+                <h:inputText value="#{shoppingCartBackingBean.payerPostalCode}" required="true" requiredMessage="#{locales['gamelibrary.cart.payerPostalCodeRequired']}"/>
+              </h:panelGroup>
+              
+              <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
+                <h:outputLabel value="#{locales['gamelibrary.cart.payerPostalOffice']}" />
+                <h:inputText value="#{shoppingCartBackingBean.payerPostalOffice}" required="true" requiredMessage="#{locales['gamelibrary.cart.payerPostalOfficeRequired']}"/>
+              </h:panelGroup>
+              
+              <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
+                <h:outputLabel value="#{locales['gamelibrary.cart.payerCountry']}" />
+                <h:selectOneMenu value="#{shoppingCartBackingBean.payerCountryId}">
+                  <f:selectItems value="#{shoppingCartBackingBean.countrySelectItems}"/>
+                    <f:ajax execute="@form" render="@form"/>
+                  </h:selectOneMenu>
+              </h:panelGroup>
+            </h:panelGroup>
+            
+            <!-- Delivery -->
+            
+            <h:panelGroup layout="block" styleClass="gamelibrary-cart-delivery">
+              <h4>#{locales['gamelibrary.cart.deliveryTitle']}</h4>
+            
+              <h:selectOneRadio  styleClass="gamelibrary-cart-delivery-method" value="#{shoppingCartBackingBean.deliveryMethodId}">
+                <f:selectItems value="#{shoppingCartBackingBean.deliveryMethods}" var="deliveryMethod" itemLabel="#{deliveryMethod.name} (#{deliveryMethod.info})" itemValue="#{deliveryMethod.id}"/>
+                <f:ajax execute="@form" render="@form"/>
+              </h:selectOneRadio>  
+            
+            </h:panelGroup>
+            
+            <!-- Notes -->
+            
+            <h:panelGroup layout="block" styleClass="gamelibrary-cart-notes">
+              <h4>#{locales['gamelibrary.cart.notesTitle']}</h4>
+              <h:inputTextarea value="#{shoppingCartBackingBean.notes}" />
+            </h:panelGroup>   
+            
+          </h:panelGroup>
+          
+          <h:panelGroup class="gamelibrary-cart-summary-container">
+            <h3>#{locales['gamelibrary.cart.summaryTitle']}</h3>
+            
+            <h:panelGroup layout="block" class="gamelibrary-cart-summary-field">
+              <h:outputLabel value="#{locales['gamelibrary.cart.summaryItemsLabel']}" />
+              <h:panelGroup class="gamelibrary-cart-summary-value">
+                <h:outputText value="#{shoppingCartBackingBean.itemCosts}" >
+                  <f:convertNumber currencyCode="EUR" type="currency" />
+                </h:outputText>
+              </h:panelGroup>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" class="gamelibrary-cart-summary-field">
+              <h:outputLabel value="#{locales['gamelibrary.cart.summaryDeliveryLabel']}" />
+              <h:panelGroup class="gamelibrary-cart-summary-value">
+                <h:outputText value="#{shoppingCartBackingBean.deliveryCosts}" >
+                  <f:convertNumber currencyCode="EUR" type="currency" />
+                </h:outputText>
+              </h:panelGroup>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" class="gamelibrary-cart-summary-field">
+              <h:outputLabel value="#{locales['gamelibrary.cart.summaryTaxLabel']}" />
+              <h:panelGroup class="gamelibrary-cart-summary-value">
+                <h:outputText value="#{shoppingCartBackingBean.taxAmount}" >
+                  <f:convertNumber currencyCode="EUR" type="currency" />
+                </h:outputText>
+              </h:panelGroup>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" class="gamelibrary-cart-summary-field gamelibrary-cart-summary-total-field">
+              <h:outputLabel value="#{locales['gamelibrary.cart.summaryTotalLabel']}" />
+              <h:panelGroup class="gamelibrary-cart-summary-value">
+                <h:outputText value="#{shoppingCartBackingBean.netPrice}" >
+                  <f:convertNumber currencyCode="EUR" type="currency" />
+                </h:outputText>
+              </h:panelGroup>
+            </h:panelGroup>
+
+            <h:commandButton value="#{locales['gamelibrary.cart.proceedToCheckoutLabel']}" action="#{shoppingCartBackingBean.proceedToCheckout}" styleClass="gamelibrary-cart-submit" disabled="#{!shoppingCartBackingBean.canProceedToCheckout}"/>
+          </h:panelGroup>       
+        </h:panelGroup>
+      </h:panelGroup>
+    </h:form>
+    
+  </ui:define>
+
+</ui:composition>
