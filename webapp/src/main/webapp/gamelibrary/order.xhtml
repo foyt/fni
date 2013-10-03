@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['gamelibrary.order.pageTitle']}</ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/gamelibrary-order.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <!-- Header -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight gamelibrary-order-header">
+
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="gamelibrary-order-navigation">
+        <h:panelGroup styleClass="gamelibrary-order-navigation-item">#{locales['gamelibrary.index.navigationIndex']}</h:panelGroup>
+        <h:panelGroup styleClass="gamelibrary-order-navigation-separator"/>
+        <h:panelGroup styleClass="gamelibrary-order-navigation-item">#{locales['gamelibrary.index.navigationMostRecent']}</h:panelGroup>
+      </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="gamelibrary-order-description">
+        <p class="gamelibrary-order-description-title">#{locales['gamelibrary.order.descriptionTitle']}</p>
+        <p class="gamelibrary-order-description-text">#{locales['gamelibrary.order.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="gamelibrary-order-panel">
+      
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-id">
+          <h:outputFormat value="#{locales['gamelibrary.order.orderIdLabel']}">
+            <f:param value="#{orderBackingBean.orderId}"/>
+          </h:outputFormat>
+        </h:panelGroup>
+ 
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-status gamelibrary-order-status-#{orderBackingBean.orderStatus}">
+          <h:outputFormat value="#{locales['gamelibrary.order.statusLabel']}">
+            <f:param value="#{orderBackingBean.orderStatusText}"/>
+          </h:outputFormat>
+        </h:panelGroup>
+ 
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-customer">
+          <h3>#{locales['gamelibrary.order.customerTitle']}</h3>
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field" rendered="#{!empty(orderBackingBean.customerCompany)}">
+            #{orderBackingBean.customerCompany}
+          </h:panelGroup>  
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field">
+            #{orderBackingBean.customerFirstName} #{orderBackingBean.customerLastName}
+          </h:panelGroup>  
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field">
+            #{orderBackingBean.customerEmail}
+          </h:panelGroup>  
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field" rendered="#{!empty(orderBackingBean.customerMobile)}">
+            #{orderBackingBean.customerMobile}
+          </h:panelGroup> 
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field" rendered="#{!empty(orderBackingBean.customerPhone)}">
+            #{orderBackingBean.customerPhone}
+          </h:panelGroup> 
+        </h:panelGroup>
+       
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address">
+          <h3>#{locales['gamelibrary.order.deliveryAddressTitle']}</h3>
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field">
+            #{orderBackingBean.deliveryAddress.street1} #{orderBackingBean.deliveryAddress.street2}
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field">
+            #{orderBackingBean.deliveryAddress.postalCode} #{orderBackingBean.deliveryAddress.city}
+          </h:panelGroup> 
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field">
+            #{orderBackingBean.deliveryAddress.country.name}
+          </h:panelGroup>       
+        </h:panelGroup>
+               
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-items">
+          <h3>#{locales['gamelibrary.order.itemsTitle']}</h3>
+          
+          <h:dataTable value="#{orderBackingBean.orderItems}" var="orderItem">
+            <h:column>
+              <f:facet name="header">#{locales['gamelibrary.order.itemNameLabel']}</f:facet>
+              #{orderItem.count} x #{orderItem.name}
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">#{locales['gamelibrary.order.itemUnitPriceLabel']}</f:facet>
+              <h:outputText value="#{orderItem.unitPrice}" >
+                <f:convertNumber currencyCode="EUR" type="currency" />
+              </h:outputText>
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">#{locales['gamelibrary.order.itemTotalPriceLabel']}</f:facet>
+              <h:outputText value="#{orderItem.unitPrice * orderItem.count}">
+                <f:convertNumber currencyCode="EUR" type="currency" />
+              </h:outputText>
+            </h:column>
+          </h:dataTable>
+          
+        </h:panelGroup>
+       
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-notes" rendered="#{!empty(orderBackingBean.notes)}">
+          <h3>#{locales['gamelibrary.order.notesTitle']}</h3>
+          <p>#{orderBackingBean.notes}</p>
+        </h:panelGroup>
+       
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-history">
+          <h3>#{locales['gamelibrary.order.historyTitle']}</h3>
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-history-events">
+            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event">
+              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
+                <h:outputText value="#{orderBackingBean.created}">
+                  <f:convertDateTime type="both"/>
+                </h:outputText>
+              </h:panelGroup>          
+              
+              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-name">
+                #{locales['gamelibrary.order.historyEventLabelCreated']}
+              </h:panelGroup>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{orderBackingBean.canceled ne null}">
+              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
+                <h:outputText value="#{orderBackingBean.canceled}">
+                  <f:convertDateTime type="both"/>
+                </h:outputText>
+              </h:panelGroup>          
+              
+              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-name">
+                #{locales['gamelibrary.order.historyEventLabelCanceled']}
+              </h:panelGroup>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{orderBackingBean.paid ne null}">
+              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
+                <h:outputText value="#{orderBackingBean.paid}">
+                  <f:convertDateTime type="both"/>
+                </h:outputText>
+              </h:panelGroup>          
+              
+              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-name">
+                #{locales['gamelibrary.order.historyEventLabelPaid']}
+              </h:panelGroup>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{orderBackingBean.shipped ne null}">
+              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
+                <h:outputText value="#{orderBackingBean.shipped}">
+                  <f:convertDateTime type="both"/>
+                </h:outputText>
+              </h:panelGroup>          
+              
+              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-name">
+                #{locales['gamelibrary.order.historyEventLabelShipped']}
+              </h:panelGroup>
+            </h:panelGroup>       
+            
+            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{orderBackingBean.delivered ne null}">
+              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
+                <h:outputText value="#{orderBackingBean.delivered}">
+                  <f:convertDateTime type="both"/>
+                </h:outputText>
+              </h:panelGroup>          
+              
+              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-name">
+                #{locales['gamelibrary.order.historyEventLabelDelivered']}
+              </h:panelGroup>
+            </h:panelGroup>
+          </h:panelGroup>
+        </h:panelGroup>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+  </ui:define>
+
+</ui:composition>

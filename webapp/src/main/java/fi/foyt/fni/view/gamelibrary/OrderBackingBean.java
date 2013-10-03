@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.gamelibrary.old;
+package fi.foyt.fni.view.gamelibrary;
 
 import java.util.Date;
 import java.util.List;
@@ -17,40 +17,37 @@ import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
 import fi.foyt.fni.persistence.model.users.Address;
-import fi.foyt.fni.persistence.model.users.Permission;
-import fi.foyt.fni.security.Secure;
-import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
-//@Stateful
-//@RequestScoped
-//@Named
-//@URLMappings(mappings = { 
-//		@URLMapping(id = "gamelibrary-order", 
-//				pattern = "/gamelibrary/orders/#{orderBackingBean.orderId}", 
-//				viewId = "/gamelibrary/order.jsf"
-//		) 
-//})
+@Stateful
+@RequestScoped
+@Named
+@URLMappings(mappings = { 
+		@URLMapping(id = "gamelibrary-order", 
+				pattern = "/gamelibrary/orders/#{orderBackingBean.orderId}", 
+				viewId = "/gamelibrary/order.jsf"
+		) 
+})
 public class OrderBackingBean {
 
 	@Inject
 	private OrderController orderController;
 
-//	@URLAction
-	@Secure (Permission.GAMELIBRARY_VIEW_ORDER)
-	@SecurityContext (context = "#{orderBackingBean.orderId}")
+	@URLAction
+//	@Secure (Permission.GAMELIBRARY_VIEW_ORDER)
+//	@SecurityContext (context = "#{orderBackingBean.orderId}")
 	public void init() {
 		Order order = orderController.findOrderById(getOrderId());
 		orderStatus = order.getOrderStatus();
-		orderItems = orderController.listOrderItems(order);
-		deliveryAddress = order.getDeliveryAddress();
 		customerCompany = order.getCustomerCompany();
 		customerFirstName = order.getCustomerFirstName();
 		customerLastName = order.getCustomerLastName();
 		customerEmail = order.getCustomerEmail();
 		customerPhone = order.getCustomerPhone();
 		customerMobile = order.getCustomerMobile();
-		notes = order.getNotes();
+  	deliveryAddress = order.getDeliveryAddress();
+  	orderItems = orderController.listOrderItems(order);
+  	notes = order.getNotes();
 		created = order.getCreated();
 	  paid = order.getPaid();
 	  shipped = order.getShipped();
@@ -93,14 +90,6 @@ public class OrderBackingBean {
 		return deliveryAddress;
 	}
 
-	public List<OrderItem> getOrderItems() {
-		return orderItems;
-	}
-
-	public void setOrderItems(List<OrderItem> orderItems) {
-		this.orderItems = orderItems;
-	}
-
 	public String getCustomerCompany() {
 		return customerCompany;
 	}
@@ -124,15 +113,15 @@ public class OrderBackingBean {
 	public String getCustomerMobile() {
 		return customerMobile;
 	}
-	
-	public String getNotes() {
+
+	public List<OrderItem> getOrderItems() {
+		return orderItems;
+	}
+
+  public String getNotes() {
 		return notes;
 	}
-	
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
-	
+
 	public Date getCreated() {
 		return created;
 	}
@@ -156,9 +145,8 @@ public class OrderBackingBean {
 	public Date getCanceled() {
 		return canceled;
 	}
-	
-	private Address deliveryAddress;
-	private List<OrderItem> orderItems;
+
+  private Long orderId;
 	private OrderStatus orderStatus;
 	private String customerCompany;
 	private String customerFirstName;
@@ -166,7 +154,8 @@ public class OrderBackingBean {
 	private String customerEmail;
 	private String customerPhone;
 	private String customerMobile;
-	private Long orderId;
+	private Address deliveryAddress;
+  private List<OrderItem> orderItems;
 	private String notes;
   private Date created;
   private Date paid;

@@ -1,0 +1,154 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+$panel-background-color: rgb(209, 235, 235);
+$information-text-color: rgb(255, 255, 255);
+$information-background-color: rgb(71, 176, 176);
+$header-background-color: #000;
+$header-text-color: #fff;
+$entry-color: #313133;
+
+/* Generic */
+
+.gamelibrary-order-panel h3 {
+  @include header-3;
+  color: $title-color;
+  margin-bottom: 18px;
+}
+
+/* Panels */
+
+.gamelibrary-order-panel {
+  background-color: $panel-background-color;
+  margin-top: 10px;
+  padding-top: 31px;
+  padding-left: 27px;
+  padding-right: 27px;
+  padding-bottom: 31px;
+}
+
+/* Header */
+
+.gamelibrary-order-header {
+  background-color:  $header-background-color;
+  padding-bottom: 27px;
+  padding-top: 18px;
+  padding-left: 24px;
+  padding-right: 120px;
+  @include box-sizing(border-box); 
+}
+
+.gamelibrary-order-navigation-item,
+.gamelibrary-order-navigation-separator {
+  color: $title-color;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-family: $default-font;
+  margin-right: 8px;
+}
+
+.gamelibrary-order-navigation-separator:after {
+  content: '>>';
+}
+
+.gamelibrary-order-description {
+  margin-bottom: 30px;
+}
+
+.gamelibrary-order-description-title {
+  @include header-1;
+  color: $header-text-color;
+  display: inline-block;
+}
+
+.gamelibrary-order-description-text {
+  font-size: 16px;
+  font-family: $default-font;
+  color: $header-text-color;
+}
+
+/* Status */
+
+.gamelibrary-order-id, .gamelibrary-order-status {
+  font-family: $default-font;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: bold;  
+  display: inline-block;
+  margin-bottom: 63px;
+}
+
+/* Order Id */
+
+.gamelibrary-order-id {
+  width: 156px;
+}
+
+/* Customer / Delivery Fields */
+
+.gamelibrary-order-customer-field, .gamelibrary-order-delivery-address-field {
+  font-family: $default-font;
+  color: $entry-color;
+  font-size: 13px;
+}
+
+/* Sections */
+
+.gamelibrary-order-customer, .gamelibrary-order-delivery-address , .gamelibrary-order-notes {
+  margin-bottom: 30px;
+}
+
+/* Items */
+
+.gamelibrary-order-items td, .gamelibrary-order-items th {
+  font-family: $default-font;
+  color: $entry-color;
+  font-size: 13px;
+  border-bottom: 1px solid #000;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.gamelibrary-order-items td:first-child {
+  width: 200px;
+}
+
+.gamelibrary-order-items table {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+/* History */
+
+.gamelibrary-order-history-events {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.gamelibrary-order-history-event {
+  font-family: $default-font;
+  color: $entry-color;
+  font-size: 13px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  display: table-row;
+}
+
+.gamelibrary-order-history-event-date, .gamelibrary-order-history-event-name {
+  display: table-cell;
+  border-bottom: 1px solid #000;
+  border-top: 1px solid #000;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-family: $default-font;
+  color: $entry-color;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.gamelibrary-order-history-event-date {
+  width: 200px;
+}
