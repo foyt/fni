@@ -143,6 +143,12 @@
       <name>ObjectWEB</name>
       <url>http://maven.ow2.org/maven2/</url>
     </repository>
+    
+    <repository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
   </repositories>
   
 </project>
