@@ -120,6 +120,14 @@ $entry-color: #313133;
   margin-bottom: 30px;
 }
 
+/* Notes */
+
+.gamelibrary-order-notes {
+  font-family: $default-font;
+  color: $entry-color;
+  font-size: 13px;
+}
+
 /* History */
 
 .gamelibrary-order-history-events {
