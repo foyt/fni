@@ -33,7 +33,6 @@ import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
-import fi.foyt.fni.persistence.model.gamelibrary.PaymentMethod;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCartItem;
 import fi.foyt.fni.persistence.model.users.Address;
@@ -445,9 +444,8 @@ public class ShoppingCartBackingBean implements Serializable {
 
 		Address orderAddress = userController.createAddress(address.getUser(), AddressType.DELIVERY_ARCHIVED, address.getStreet1(), address.getStreet2(),
 				address.getPostalCode(), address.getCity(), address.getCountry());
-		PaymentMethod paymentMethod = null;
 
-		Order order = orderController.createOrder(loggedUser, company, email, firstName, lastName, mobile, phone, OrderStatus.NEW, paymentMethod,
+		Order order = orderController.createOrder(loggedUser, company, email, firstName, lastName, mobile, phone, OrderStatus.NEW, 
 				getDeliveryCosts(), notes, orderAddress);
 
 		OrderDetails orderDetails = new OrderDetails(1, contact);

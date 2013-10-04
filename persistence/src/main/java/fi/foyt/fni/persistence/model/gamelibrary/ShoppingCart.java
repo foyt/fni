@@ -37,14 +37,6 @@ public class ShoppingCart {
 		this.sessionId = sessionId;
 	}
   
-  public PaymentMethod getPaymentMethod() {
-    return paymentMethod;
-  }
-  
-  public void setPaymentMethod(PaymentMethod paymentMethod) {
-    this.paymentMethod = paymentMethod;
-  }
-  
   public Date getCreated() {
     return created;
   }
@@ -93,9 +85,6 @@ public class ShoppingCart {
   private User customer;
   
   private String sessionId;
-  
-  @ManyToOne 
-  private PaymentMethod paymentMethod;
   
   private String deliveryMethodId;
   

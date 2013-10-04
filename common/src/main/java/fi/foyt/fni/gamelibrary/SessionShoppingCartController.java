@@ -64,12 +64,12 @@ public class SessionShoppingCartController {
 				if (shoppingCart == null) {
 					// If one does not exist, we need to create it
 					Date now = new Date();
-					shoppingCart = shoppingCartDAO.create(loggedUser, null, null, null, null, now, now);
+					shoppingCart = shoppingCartDAO.create(loggedUser, null, null, null, now, now);
 				}
 			} else {
 				// If user is not yet logged in we have no option but to create new cart
 				Date now = new Date();
-				shoppingCart = shoppingCartDAO.create(null, sessionId, null, null, null, now, now);
+				shoppingCart = shoppingCartDAO.create(null, sessionId, null, null, now, now);
 			}
 			
 			shoppingCartId = shoppingCart.getId();
@@ -161,7 +161,7 @@ public class SessionShoppingCartController {
 		}
 		
 		Order order = orderDAO.create(shoppingCart.getCustomer(), customerCompany, customerEmail, customerFirstName, customerLastName, customerMobile, customerPhone, 
-				OrderStatus.CANCELED, shoppingCart.getPaymentMethod(), null, null, shoppingCart.getDeliveryAddress(), now, now, null, null, null);
+				OrderStatus.CANCELED, null, null, shoppingCart.getDeliveryAddress(), now, now, null, null, null);
 		
 		List<ShoppingCartItem> shoppingCartItems = shoppingCartItemDAO.listByCart(shoppingCart);
 		

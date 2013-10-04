@@ -2,23 +2,23 @@ package fi.foyt.fni.persistence.dao.gamelibrary;
 
 import java.util.Date;
 
-
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
-import fi.foyt.fni.persistence.model.gamelibrary.PaymentMethod;
 import fi.foyt.fni.persistence.model.users.Address;
 import fi.foyt.fni.persistence.model.users.User;
 
 @DAO
 public class OrderDAO extends GenericDAO<Order> {
-  
+
 	private static final long serialVersionUID = 1L;
 
-	public Order create(User customer, String customerCompany, String customerEmail, String customerFirstName, String customerLastName, String customerMobile, String customerPhone, OrderStatus orderStatus, PaymentMethod paymentMethod, Double shippingCosts, String notes, Address deliveryAddress, Date created, Date canceled, Date paid, Date shipped, Date delivered) {
+	public Order create(User customer, String customerCompany, String customerEmail, String customerFirstName, String customerLastName, String customerMobile,
+			String customerPhone, OrderStatus orderStatus, Double shippingCosts, String notes, Address deliveryAddress, Date created, Date canceled, Date paid,
+			Date shipped, Date delivered) {
 		Order order = new Order();
-		
+
 		order.setCanceled(canceled);
 		order.setCreated(created);
 		order.setCustomer(customer);
@@ -34,12 +34,11 @@ public class OrderDAO extends GenericDAO<Order> {
 		order.setNotes(notes);
 		order.setOrderStatus(orderStatus);
 		order.setPaid(paid);
-		order.setPaymentMethod(paymentMethod);
 		order.setShippingCosts(shippingCosts);
-		
+
 		return persist(order);
 	}
-	
+
 	public Order updateOrderStatus(Order order, OrderStatus orderStatus) {
 		order.setOrderStatus(orderStatus);
 		return persist(order);

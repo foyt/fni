@@ -84,14 +84,6 @@ public class Order {
 	public void setCustomerMobile(String customerMobile) {
 		this.customerMobile = customerMobile;
 	}
-
-	public PaymentMethod getPaymentMethod() {
-    return paymentMethod;
-  }
-  
-  public void setPaymentMethod(PaymentMethod paymentMethod) {
-    this.paymentMethod = paymentMethod;
-  }
   
   public OrderStatus getOrderStatus() {
     return orderStatus;
@@ -192,9 +184,6 @@ public class Order {
   private String customerPhone;
   
   private String customerMobile;
-  
-  @ManyToOne 
-  private PaymentMethod paymentMethod;
   
   @Enumerated (EnumType.STRING)
   private OrderStatus orderStatus;

@@ -14,7 +14,6 @@ import fi.foyt.fni.persistence.dao.gamelibrary.OrderItemDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
-import fi.foyt.fni.persistence.model.gamelibrary.PaymentMethod;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.users.Address;
 import fi.foyt.fni.persistence.model.users.User;
@@ -53,9 +52,9 @@ public class OrderController implements Serializable {
 
 	/* Order */
 	
-	public Order createOrder(User customer, String customerCompany, String customerEmail, String customerFirstName, String customerLastName, String customerMobile, String customerPhone, OrderStatus orderStatus, PaymentMethod paymentMethod, Double shippingCosts, String notes, Address deliveryAddress) {
+	public Order createOrder(User customer, String customerCompany, String customerEmail, String customerFirstName, String customerLastName, String customerMobile, String customerPhone, OrderStatus orderStatus, Double shippingCosts, String notes, Address deliveryAddress) {
 		Date now = new Date();
-		Order order = orderDAO.create(customer, customerCompany, customerEmail, customerFirstName, customerLastName, customerMobile, customerPhone, orderStatus, paymentMethod, shippingCosts, notes, deliveryAddress, now, null, null, null, null);
+		Order order = orderDAO.create(customer, customerCompany, customerEmail, customerFirstName, customerLastName, customerMobile, customerPhone, orderStatus, shippingCosts, notes, deliveryAddress, now, null, null, null, null);
 		orderCreatedEvent.fire(new OrderEvent(sessionController.getLocale(), order.getId()));
 		return order;
 	}
