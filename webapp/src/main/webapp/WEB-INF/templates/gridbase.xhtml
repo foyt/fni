@@ -37,6 +37,14 @@
       
       <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/dustjs-linkedin/2.0.0/dust-full.min.js"></script>
       <h:outputScript name="/scripts/gui/dust.js"></h:outputScript>
+      
+      <!-- Piwik -->
+      <ui:fragment rendered="#{piwikBackingBean.hasPiwikUrl}">
+        <script type="text/javascript" charset="utf8" src="//#{piwikBackingBean.piwikUrl}/piwik.js"></script>
+        <script type="text/javascript" charset="utf8">
+          var PIWIK_BASEURL = "//#{piwikBackingBean.piwikUrl}/";
+        </script>
+      </ui:fragment>
 
       <ui:insert name="view-stylesheets"/>
       <ui:insert name="view-scripts"/>
@@ -48,6 +56,14 @@
           <ui:insert name="grid-content"/>
         </h:panelGroup> 
       </ui:insert>
+      
+      <h:outputScript name="/scripts/gui/piwik.js?piwikUrl=#{piwikBackingBean.piwikUrl}" rendered="#{piwikBackingBean.hasPiwikUrl}"></h:outputScript>
+      
+      <!-- Piwik -->
+      <h:outputScript name="/scripts/gui/piwik.js" rendered="#{piwikBackingBean.hasPiwikUrl}"></h:outputScript>
+      <ui:fragment rendered="#{piwikBackingBean.hasPiwikUrl}">
+        <noscript><p><img src="//#{piwikBackingBean.piwikUrl}/piwik.php?idsite=1" style="border:0" alt="" /></p></noscript>
+      </ui:fragment>
     </h:body>
   </f:view>
 </html>
