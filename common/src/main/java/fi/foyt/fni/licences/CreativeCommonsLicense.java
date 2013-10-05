@@ -47,6 +47,10 @@ public class CreativeCommonsLicense {
 		return getIconUrl(false);
 	}
 	
+	public String getCompactIconUrl() {
+		return getIconUrl(true);
+	}
+	
 	/**
 	 * Returns whether 
 	 * 
