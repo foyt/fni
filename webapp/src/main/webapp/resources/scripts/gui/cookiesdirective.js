@@ -4,7 +4,8 @@
   $(document).ready(function() {
     $.cookiesDirective({
       duration: 30,
-      privacyPolicyUri: CONTEXTPATH + '/about.jsf#about',
+      position: 'bottom',
+      privacyPolicyUri: CONTEXTPATH + '/about.jsf#cookies',
       cookieScripts: 'Piwik',
       scriptWrapper: function() {
         if (PIWIK_BASEURL) {
