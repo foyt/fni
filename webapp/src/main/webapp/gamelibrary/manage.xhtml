@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['gamelibrary.manage.pageTitle']}</ui:define>
+  
+  <ui:define name="view-scripts">
+  </ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/gamelibrary-manage.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <!-- Header -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight gamelibrary-manage-header">
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="gamelibrary-manage-navigation">
+        <h:panelGroup styleClass="gamelibrary-manage-navigation-item">#{locales['gamelibrary.index.navigationIndex']}</h:panelGroup>
+        <h:panelGroup styleClass="gamelibrary-manage-navigation-separator"/>
+        <h:panelGroup styleClass="gamelibrary-manage-navigation-item">#{locales['gamelibrary.index.navigationMostRecent']}</h:panelGroup>
+      </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="gamelibrary-manage-description">
+        <p class="gamelibrary-manage-description-title">#{locales['gamelibrary.manage.descriptionTitle']}</p>
+        <p class="gamelibrary-manage-description-text">#{locales['gamelibrary.manage.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <!-- View Content -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="gamelibrary-manage-panel">
+        
+        <!-- Actions -->
+        
+        <!-- Unpublished publications list -->
+        
+        <h:panelGroup layout="block" styleClass="gamelibrary-manage-unpublished">
+          <h3>#{locales['gamelibrary.manage.unpublishedTitle']}</h3>
+          
+          <ui:include src="/facelets/gamelibrarymanagepublicationlist.xhtml">
+            <ui:param name="publications" value="#{gameLibraryManageBackingBean.unpublishedPublications}"/>
+          </ui:include>
+        </h:panelGroup>
+        
+        <!-- Published publications list -->
+        
+        <h:panelGroup layout="block" styleClass="gamelibrary-manage-published">
+          <h3>#{locales['gamelibrary.manage.publishedTitle']}</h3>
+          
+          <ui:include src="/facelets/gamelibrarymanagepublicationlist.xhtml">
+            <ui:param name="publications" value="#{gameLibraryManageBackingBean.publishedPublications}"/>
+          </ui:include>
+        </h:panelGroup>
+      </h:panelGroup>
+    </h:panelGroup>   
+  </ui:define>
+
+</ui:composition>

@@ -1,0 +1,141 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+$panel-background-color: rgba(255, 255, 255, 0.9);
+$header-background-color: #000;
+$header-text-color: #fff;
+
+/* Generic */
+
+.gamelibrary-manage-panel h3 {
+  @include header-3;
+  color: $title-color;
+  margin-bottom: 18px;
+}
+
+/* Panels */
+
+.gamelibrary-manage-panel {
+  background-color: $panel-background-color;
+  margin-top: 10px;
+  padding-top: 31px;
+  padding-left: 27px;
+  padding-right: 27px;
+  padding-bottom: 31px;
+}
+
+.gamelibrary-manage-header {
+  background-color:  $header-background-color;
+  padding-bottom: 27px;
+  padding-top: 18px;
+  padding-left: 24px;
+  padding-right: 120px;
+  @include box-sizing(border-box); 
+}
+
+.gamelibrary-manage-navigation-item,
+.gamelibrary-manage-navigation-separator {
+  color: $title-color;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-family: $default-font;
+  margin-right: 8px;
+}
+
+.gamelibrary-manage-navigation-separator:after {
+  content: '>>';
+}
+
+.gamelibrary-manage-description {
+  margin-bottom: 30px;
+}
+
+.gamelibrary-manage-description-title {
+  @include header-1;
+  color: $header-text-color;
+}
+
+.gamelibrary-manage-description-text {
+  font-size: 16px;
+  font-family: $default-font;
+  color: $header-text-color;
+}
+
+.gamelibrary-manage-published {
+  margin-top: 36px;
+}
+
+.gamelibrary-manage-publicationlist {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 12px;
+  width: 100%;
+  border-spacing: 1px;
+  border-collapse: separate;
+}
+
+.gamelibrary-manage-publicationlist th {
+  font-weight: bold;
+  padding: 4px;
+}
+
+.gamelibrary-manage-publicationlist td {
+  padding: {
+    top: 4px;
+    bottom: 4px;
+    left: 8px;
+  }
+  background: rgba(200, 200, 200, 0.3);
+}
+
+td.gamelibrary-manage-publicationlist-image {
+  width: 56px;
+  text-align: center;
+  padding-left: 0px;
+}
+
+.gamelibrary-manage-publicationlist-image img {
+  vertical-align: middle;
+}
+
+.gamelibrary-manage-publicationlist-name-actions {
+  width: 350px;
+}
+
+.gamelibrary-manage-publicationlist-name {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.gamelibrary-manage-publicationlist-actions a {
+  color: $default-color;
+  text-transform: uppercase; 
+  text-decoration: none;
+  margin-right: 8px;
+}
+
+.gamelibrary-manage-publicationlist-price, .gamelibrary-manage-publicationlist-dimensions {
+  width: 100px;
+}
+
+.gamelibrary-manage-publicationlist-license {
+  width: 90px;
+}
+
+.gamelibrary-manage-publicationlist-license img {
+  vertical-align: top;
+}
+
+.gamelibrary-manage-publicationlist-flags {
+  width: 80px;
+}
+
+.gamelibrary-manage-publicationlist-flags img {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.gamelibrary-manage-publicationlist-flags img:last-child {
+  margin-right: 0px;
+}

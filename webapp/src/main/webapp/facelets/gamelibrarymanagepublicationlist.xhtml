@@ -1,0 +1,79 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html">          
+          
+          <h:dataTable styleClass="gamelibrary-manage-publicationlist" columnClasses="gamelibrary-manage-publicationlist-image,gamelibrary-manage-publicationlist-name-actions,gamelibrary-manage-publicationlist-price,gamelibrary-manage-publicationlist-dimensions,gamelibrary-manage-publicationlist-license,gamelibrary-manage-publicationlist-flags" var="publication" value="#{publications}">
+            
+            
+            <h:column>
+              <f:facet name="header"></f:facet>
+              <h:outputLink styleClass="gamelibrary-manage-publication-image-link" value="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
+                <h:graphicImage styleClass="gamelibrary-manage-publication-image" value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=32"/>
+              </h:outputLink>
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">#{locales['gamelibrary.manage.publicationNameLabel']}</f:facet>
+              <h:panelGroup layout="block" styleClass="gamelibrary-manage-publicationlist-name">
+                #{publication.name}
+              </h:panelGroup>
+              
+              <h:panelGroup layout="block" styleClass="gamelibrary-manage-publicationlist-actions">
+                <h:link rendered="#{!publication.published}">
+                  #{locales['gamelibrary.manage.publicationEditLink']}
+                </h:link>    
+    
+                <h:link rendered="#{!publication.published}">
+                  #{locales['gamelibrary.manage.publicationPublishLink']}
+                </h:link>      
+    
+                <h:link rendered="#{publication.published}">
+                  #{locales['gamelibrary.manage.publicationUnpublishLink']}
+                </h:link>  
+    
+                <h:link rendered="#{!publication.published}">
+                  #{locales['gamelibrary.manage.publicationDeleteLink']}
+                </h:link>  
+              </h:panelGroup>
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">#{locales['gamelibrary.manage.publicationPriceLabel']}</f:facet>
+              <h:outputText value="#{publication.price}" >
+                <f:convertNumber currencyCode="EUR" type="currency" />
+              </h:outputText>
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header">#{locales['gamelibrary.manage.publicationDimensionsLabel']}</f:facet>
+              <h:outputText value="#{publication.width} x #{publication.height} x #{publication.depth}" />
+            </h:column>
+
+            <h:column>
+              <f:facet name="header">#{locales['gamelibrary.manage.publicationLicenseLabel']}</f:facet>
+              <ui:fragment rendered="#{gameLibraryManageBackingBean.getCreativeCommonsLicense(publication) ne null}">
+                <h:outputLink value="#{gameLibraryManageBackingBean.getCreativeCommonsLicense(publication).url}">
+                  <img src="#{gameLibraryManageBackingBean.getCreativeCommonsLicense(publication).iconUrl}"/>
+                </h:outputLink>
+              </ui:fragment>
+              
+              <ui:fragment rendered="#{gameLibraryManageBackingBean.getCreativeCommonsLicense(publication) eq null}">
+                <h:outputLink value="#{publication.license}" title="#{publication.license}">
+                  #{publication.license.length() gt 16 ? publication.license.substring(0, 13).concat('...') : publication.license}
+                </h:outputLink>
+              </ui:fragment>
+            </h:column>
+            
+            <h:column>
+              <f:facet name="header"></f:facet>
+              <ui:fragment rendered="#{gameLibraryManageBackingBean.getBookPublication(publication) ne null}">
+                <h:graphicImage title="#{locales['gamelibrary.manage.publicationImageDownloadableTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-downloadable.png" rendered="#{gameLibraryManageBackingBean.getBookPublication(publication).downloadable}"/>
+              </ui:fragment>
+              <h:graphicImage title="#{locales['gamelibrary.manage.publicationImagePurchasableTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-purchasable.png" rendered="#{publication.purchasable}"/>
+              <h:graphicImage title="#{locales['gamelibrary.manage.publicationImageRequiresDeliveryTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-requires-delivery.png" rendered="#{publication.requiresDelivery}"/>
+            </h:column>
+
+          </h:dataTable>
+
+</ui:composition>
