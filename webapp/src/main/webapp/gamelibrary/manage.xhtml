@@ -8,9 +8,17 @@
   <ui:define name="page-title">#{locales['gamelibrary.manage.pageTitle']}</ui:define>
   
   <ui:define name="view-scripts">
+    <!-- jQuery Magnific-Popup  -->
+  
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.magnific-popup/0.8.9/jquery.magnific-popup.min.js"></script>
+    
+    <!-- View scripts -->
+    
+    <h:outputScript name="scripts/gui/gamelibrary-manage.js"/>
   </ui:define>
   
   <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/magnific-popup.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary-manage.css"/>
   </ui:define>
 
