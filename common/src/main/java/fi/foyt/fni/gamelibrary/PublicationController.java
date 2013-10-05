@@ -106,8 +106,12 @@ public class PublicationController {
 		return publicationDAO.listByPublishedOrderByCreated(Boolean.TRUE, 0, maxRecentPublication);
 	}
 
-	public List<Publication> listUnpublishedPublications(User creator) {
-		return publicationDAO.listByCreatorAndPublished(creator, Boolean.FALSE);
+	public List<Publication> listUnpublishedPublications() {
+		return publicationDAO.listByPublished(Boolean.FALSE);
+	}
+	
+	public List<Publication> listPublishedPublications() {
+		return publicationDAO.listByPublished(Boolean.TRUE);
 	}
 	
 	public List<Publication> listPublishedPublicationsByCreator(User creator) {
