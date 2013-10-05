@@ -18,6 +18,7 @@
       <!-- Generic Styles -->
       
       <h:outputStylesheet library="novus" name="css/common.css"/>
+      <h:outputStylesheet library="novus" name="css/messages.css"/>
       <h:outputStylesheet library="novus" name="css/menu.css"/>
       <h:outputStylesheet library="novus" name="css/fonts.css"/>
       <h:outputStylesheet library="novus" name="css/grid.css"/>
@@ -55,6 +56,12 @@
       <ui:insert name="view-custom-head"/>
     </h:head>      
     <h:body>
+      <h:panelGroup layout="block" styleClass="jsf-messages-container">
+        <ui:insert name="messages">
+          <h:messages globalOnly="false" errorClass="error" fatalClass="error" warnClass="warning" infoClass="info"/>
+        </ui:insert>
+      </h:panelGroup>
+      
       <ui:insert name="body-content">
         <h:panelGroup layout="block" styleClass="container_16">
           <ui:insert name="grid-content"/>
