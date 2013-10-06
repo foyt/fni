@@ -29,6 +29,21 @@ public class PublicationTagDAO extends GenericDAO<PublicationTag> {
 		return publicationTag;
 	}
 
+	public PublicationTag findByPublicationAndTag(Publication publication, GameLibraryTag tag) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<PublicationTag> criteria = criteriaBuilder.createQuery(PublicationTag.class);
+    Root<PublicationTag> root = criteria.from(PublicationTag.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(PublicationTag_.publication), publication),
+      criteriaBuilder.equal(root.get(PublicationTag_.tag), tag)
+    );
+    
+    return getSingleResult(entityManager.createQuery(criteria));
+	}
+	
 	public List<PublicationTag> listByPublication(Publication publication) {
     EntityManager entityManager = getEntityManager();
 
@@ -88,4 +103,5 @@ public class PublicationTagDAO extends GenericDAO<PublicationTag> {
     
     return entityManager.createQuery(criteria).getResultList();
 	}
+
 }
