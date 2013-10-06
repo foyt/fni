@@ -18,9 +18,9 @@
       </h:panelGroup>
       
       <h:panelGroup layout="block" styleClass="gamelibrary-manage-publicationlist-actions">
-        <h:link rendered="#{!publication.published}">
+        <h:outputLink value="#{request.contextPath}/gamelibrary/manage/#{publication.id}/edit" rendered="#{!publication.published}">
           #{locales['gamelibrary.manage.publicationEditLink']}
-        </h:link>    
+        </h:outputLink>
   
         <h:link rendered="#{!publication.published}">
           #{locales['gamelibrary.manage.publicationPublishLink']}
