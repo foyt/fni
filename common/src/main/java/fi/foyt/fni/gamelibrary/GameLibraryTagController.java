@@ -9,9 +9,9 @@ import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.dao.gamelibrary.GameLibraryTagDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationTagDAO;
+import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
-import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 
 @Stateful
 @Dependent
@@ -57,11 +57,20 @@ public class GameLibraryTagController {
 	}
 	
 	/* Publication Tags */
-	
+
+	public PublicationTag addPublicationTag(Publication publication, GameLibraryTag tag) {
+		PublicationTag publicationTag = publicationTagDAO.findByPublicationAndTag(publication, tag);
+		if (publicationTag == null) {
+			publicationTag = publicationTagDAO.create(tag, publication);
+		}
+		
+		return publicationTag;
+	}
+
 	public List<PublicationTag> listPublicationTags(Publication publication) {
 		return publicationTagDAO.listByPublication(publication);
 	}
-
+	
 	public void deletePublicationTag(PublicationTag publicationTag) {
 		GameLibraryTag gameLibraryTag = publicationTag.getTag();
 		
