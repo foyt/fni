@@ -100,22 +100,19 @@
                 <f:ajax execute="@form" render="@form"/>
               </h:selectOneMenu>
               
-              <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-license-cc-container" rendered="#{gameLibraryEditPublicationBackingBean.licenseType eq 'CREATIVE_COMMONS'}">
+              <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-license-cc-container" style="#{gameLibraryEditPublicationBackingBean.licenseType eq 'CREATIVE_COMMONS' ? '' : 'display: none'}"> 
                 <h:outputLabel value="#{locales['gamelibrary.editPublication.licenseCreativeCommonsAllowModifications']}" />
                 <h:selectOneRadio value="#{gameLibraryEditPublicationBackingBean.creativeCommonsDerivatives}">
-                  <f:selectItem itemLabel="#{locales['gamelibrary.editPublication.licenseCreativeCommonsAllowModificationsYes']}" itemValue="YES"/>
-                  <f:selectItem itemLabel="#{locales['gamelibrary.editPublication.licenseCreativeCommonsAllowModificationsNo']}" itemValue="NO"/>
-                  <f:selectItem itemLabel="#{locales['gamelibrary.editPublication.licenseCreativeCommonsAllowModificationsShare']}" itemValue="SHARE_ALIKE"/>
+                  <f:selectItems value="#{gameLibraryEditPublicationBackingBean.creativeCommonsDerivativesSelectItems}"/>
                 </h:selectOneRadio>
                 
                 <h:outputLabel value="#{locales['gamelibrary.editPublication.licenseCreativeCommonsAllowCommercial']}" />
                 <h:selectOneRadio value="#{gameLibraryEditPublicationBackingBean.creativeCommonsCommercial}">
-                  <f:selectItem itemLabel="#{locales['gamelibrary.editPublication.licenseCreativeCommonsAllowCommercialYes']}" itemValue="YES"/>
-                  <f:selectItem itemLabel="#{locales['gamelibrary.editPublication.licenseCreativeCommonsAllowCommercialNo']}" itemValue="NO"/>
+                  <f:selectItems value="#{gameLibraryEditPublicationBackingBean.creativeCommonsCommercialSelectItems}"/>
                 </h:selectOneRadio>
               </h:panelGroup>
-      
-              <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-license-other" rendered="#{gameLibraryEditPublicationBackingBean.licenseType eq 'OTHER'}">
+   
+              <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-license-other" style="#{gameLibraryEditPublicationBackingBean.licenseType eq 'OTHER' ? '' : 'display: none'}">   
                 <h:outputLabel value="#{locales['gamelibrary.editPublication.linkToLicense']}" />
                 <div>
                   <h:inputText value="#{gameLibraryEditPublicationBackingBean.licenseOther}"/>
@@ -160,7 +157,7 @@
               <h:outputLabel value="#{locales['gamelibrary.editPublication.purchasableLabel']}" />
             </div>
             <div>
-              <h:selectBooleanCheckbox name="purchasable" value="#{gameLibraryEditPublicationBackingBean.downloadable}" rendered="true"/>
+              <h:selectBooleanCheckbox name="purchasable" value="#{gameLibraryEditPublicationBackingBean.downloadable}"/>
               <h:outputLabel value="#{locales['gamelibrary.editPublication.downloadableLabel']}" />
             </div>
           </h:panelGroup>
