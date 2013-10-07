@@ -23,6 +23,22 @@ $panel-background-color: rgba(255, 255, 255, 0.9);
   padding-bottom: 31px;
 }
 
+.gamelibrary-edit-publication-back-link {
+  color: $title-color;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-family: $default-font;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  text-decoration: none;
+  display: block;
+}
+
+.gamelibrary-edit-publication-back-link:before {
+  content: '<<';
+  margin-right: 4px;
+}
+
 /* Form */
 
 .gamelibrary-edit-publication-form-section {

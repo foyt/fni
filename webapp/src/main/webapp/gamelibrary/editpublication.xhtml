@@ -32,6 +32,8 @@
     <h:panelGroup layout="block" styleClass="grid_16 tight">
       <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-panel">
       
+        <h:link styleClass="gamelibrary-edit-publication-back-link" value="#{locales['gamelibrary.editPublication.backLink']}" outcome="/gamelibrary/manage.jsf"/>
+      
         <h3>
           <h:outputFormat value="#{locales['gamelibrary.editPublication.publicationTitle']}">
             <f:param value="#{gameLibraryEditPublicationBackingBean.name}"/>
