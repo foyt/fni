@@ -180,11 +180,19 @@ public class Publication {
   @Transient
   @Field
   public String getDescriptionPlain() {
+  	if (getDescription() == null) {
+  		return null;
+  	}
+  	
     return StringEscapeUtils.unescapeHtml4(getDescription().replaceAll("\\<.*?>",""));
   }
   
   @Transient
   public String getDescriptionPlainAbbr() {
+  	if (getDescription() == null) {
+  		return null;
+  	}
+
   	return StringUtils.abbreviate(getDescriptionPlain(), 255);
   }
   
