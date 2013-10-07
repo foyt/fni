@@ -84,5 +84,20 @@ public class PublicationAuthorDAO extends GenericDAO<PublicationAuthor> {
     
     return entityManager.createQuery(criteria).getResultList();
 	}
+
+	public List<PublicationAuthor> listByPublicationAndAuthorNotIn(Publication publication, List<User> authors) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<PublicationAuthor> criteria = criteriaBuilder.createQuery(PublicationAuthor.class);
+    Root<PublicationAuthor> root = criteria.from(PublicationAuthor.class);
+    criteria.select(root);
+    criteria.where(
+    		criteriaBuilder.equal(root.get(PublicationAuthor_.publication), publication),
+    		criteriaBuilder.not(root.get(PublicationAuthor_.author).in(authors))
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+	}
 	
 }

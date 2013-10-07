@@ -150,21 +150,21 @@ public class PublicationEditBackingBean extends AbstractPublicationEditBackingBe
 	  		}
 			}
 			
-			publicationController.updateBookPublication(bookPublication, 
-				getPublicationPrice(), 
-				getPublicationName(), 
-				getPublicationDescription(), 
-				tags, 
-				publication.getPublished(), 
-				getPublicationRequiresDelivery(), 
-				getPublicationDownloadable(), 
-				getPublicationPurchasable(),
-				getPublicationWeight(),
-				getPublicationWidth(),
-				getPublicationHeight(),
-				getPublicationDepth(),
-				getBookNumberOfPages(),
-				loggedUser);
+//			publicationController.updateBookPublication(bookPublication, 
+//				getPublicationPrice(), 
+//				getPublicationName(), 
+//				getPublicationDescription(), 
+//				tags, 
+//				publication.getPublished(), 
+//				getPublicationRequiresDelivery(), 
+//				getPublicationDownloadable(), 
+//				getPublicationPurchasable(),
+//				getPublicationWeight(),
+//				getPublicationWidth(),
+//				getPublicationHeight(),
+//				getPublicationDepth(),
+//				getBookNumberOfPages(),
+//				loggedUser);
 			
 			List<PublicationAuthor> publicationAuthors = publicationController.listPublicationAuthors(bookPublication);
 			List<Long> oldAuthorIds = new ArrayList<Long>();

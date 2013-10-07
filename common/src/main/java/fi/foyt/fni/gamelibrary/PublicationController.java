@@ -194,6 +194,87 @@ public class PublicationController {
 		return publicationDAO.updateLicense(publication, licenseUrl);
 	}
 	
+	public Publication updateDimensions(Publication publication, Integer width, Integer height, Integer depth) {
+		publicationDAO.updateWidth(publication, width);
+		publicationDAO.updateHeight(publication, height);
+		publicationDAO.updateDepth(publication, depth);
+		
+		return publication;
+	}
+	
+	public Publication updateWeight(Publication publication, Double weight) {
+		return publicationDAO.updateWeight(publication, weight);
+	}
+
+	public Publication updateRequiresDelivery(Publication publication, Boolean requiresDelivery) {
+		return publicationDAO.updateRequiresDelivery(publication, requiresDelivery);
+	}
+
+	public Publication updatePublished(Publication publication, Boolean published) {
+		return publicationDAO.updatePublished(publication, published);
+	}
+
+	public Publication updatePrice(Publication publication, Double price) {
+		return publicationDAO.updatePrice(publication, price);
+	}
+
+	public Publication updatePurchasable(Publication publication, Boolean purchasable) {
+		return publicationDAO.updatePurchasable(publication, purchasable);
+	}
+
+	public Publication updateDescription(Publication publication, String description) {
+		return publicationDAO.updateDescription(publication, description);
+	}
+
+	public Publication updateName(Publication publication, String name) {
+		return publicationDAO.updateName(publication, name);
+	}
+
+	public Publication updatePublicationAuthors(Publication publication, List<User> authors) {
+		for (User author : authors) {
+			if (publicationAuthorDAO.findByPublicationAndAuthor(publication, author) == null) {
+				publicationAuthorDAO.create(publication, author);
+			}
+		}
+		
+		List<PublicationAuthor> removeAuthors = publicationAuthorDAO.listByPublicationAndAuthorNotIn(publication, authors);
+		for (PublicationAuthor removeAuthor : removeAuthors) {
+			publicationAuthorDAO.delete(removeAuthor);
+		}
+		
+		return publication;
+	}
+
+	public Publication updateTags(Publication publication, List<GameLibraryTag> tags) {
+		List<GameLibraryTag> addTags = new ArrayList<>(tags);
+		
+		Map<Long, PublicationTag> existingTagMap = new HashMap<Long, PublicationTag>();
+		List<PublicationTag> existingTags = gameLibraryTagController.listPublicationTags(publication);
+		for (PublicationTag existingTag : existingTags) {
+			existingTagMap.put(existingTag.getTag().getId(), existingTag);
+		}
+		
+		for (int i = addTags.size() - 1; i >= 0; i--) {
+			GameLibraryTag addTag = addTags.get(i);
+			
+			if (existingTagMap.containsKey(addTag.getId())) {
+				addTags.remove(i);
+			} 
+			
+			existingTagMap.remove(addTag.getId());
+		}
+		
+		for (PublicationTag removeTag : existingTagMap.values()) {
+			gameLibraryTagController.deletePublicationTag(removeTag);
+		}
+		
+		for (GameLibraryTag gameLibraryTag : addTags) {
+			publicationTagDAO.create(gameLibraryTag, publication);
+		}
+		
+		return publication;
+	}
+	
 	public Publication publishPublication(Publication publication) {
 		return publicationDAO.updatePublished(publication, Boolean.TRUE);
 	}
@@ -275,53 +356,12 @@ public class PublicationController {
 		return bookPublicationDAO.findById(id);
 	}
 	
-	public BookPublication updateBookPublication(fi.foyt.fni.persistence.model.gamelibrary.BookPublication bookPublication, Double price, String name,
-			String description, List<GameLibraryTag> tags, Boolean published, Boolean requiresDelivery, Boolean downloadable, 
-			Boolean purchasable, Double weight, Integer width, Integer height, Integer depth, Integer numberOfPages, User modifier) {
+	public BookPublication updateNumberOfPages(BookPublication bookPublication, Integer numberOfPages) {
+		return bookPublicationDAO.updateNumberOfPages(bookPublication, numberOfPages);
+	}
 
-		publicationDAO.updateName(bookPublication, name);
-		publicationDAO.updateDescription(bookPublication, description);
-		publicationDAO.updatePurchasable(bookPublication, purchasable);
-		publicationDAO.updateWeight(bookPublication, weight);
-		publicationDAO.updateWidth(bookPublication, width);
-		publicationDAO.updateHeight(bookPublication, height);
-		publicationDAO.updateDepth(bookPublication, depth);
-		bookPublicationDAO.updateNumberOfPages(bookPublication, numberOfPages);
-		
-		List<GameLibraryTag> addTags = new ArrayList<>(tags);
-		
-		Map<Long, PublicationTag> existingTagMap = new HashMap<Long, PublicationTag>();
-		List<PublicationTag> existingTags = gameLibraryTagController.listPublicationTags(bookPublication);
-		for (PublicationTag existingTag : existingTags) {
-			existingTagMap.put(existingTag.getTag().getId(), existingTag);
-		}
-		
-		for (int i = addTags.size() - 1; i >= 0; i--) {
-			GameLibraryTag addTag = addTags.get(i);
-			
-			if (existingTagMap.containsKey(addTag.getId())) {
-				addTags.remove(i);
-			} 
-			
-			existingTagMap.remove(addTag.getId());
-		}
-		
-		for (PublicationTag removeTag : existingTagMap.values()) {
-			gameLibraryTagController.deletePublicationTag(removeTag);
-		}
-		
-		for (GameLibraryTag gameLibraryTag : addTags) {
-			publicationTagDAO.create(gameLibraryTag, bookPublication);
-		}
-		
-		publicationDAO.updatePrice(bookPublication, price);
-		publicationDAO.updatePublished(bookPublication, published);
-		publicationDAO.updateRequiresDelivery(bookPublication, requiresDelivery);
-		bookPublicationDAO.updateDownloadable(bookPublication, downloadable);
-		
-		updatedModified(bookPublication, modifier, new Date());
-		
-		return bookPublication;
+	public BookPublication updateDownloadable(BookPublication bookPublication, Boolean downloadable) {
+		return bookPublicationDAO.updateDownloadable(bookPublication, downloadable);
 	}
 
 	public BookPublication updateBookPublicationFile(BookPublication bookPublication, PublicationFile file) {
