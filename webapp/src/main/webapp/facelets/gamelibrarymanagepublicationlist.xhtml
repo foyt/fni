@@ -22,6 +22,14 @@
           #{locales['gamelibrary.manage.publicationEditLink']}
         </h:outputLink>
   
+        <h:outputLink value="javascript:void(null)" rendered="#{!publication.published}">
+          #{locales['gamelibrary.manage.publicationUploadImage']}
+        </h:outputLink>
+        
+        <h:outputLink value="javascript:void(null)" rendered="#{!publication.published}">
+          #{locales['gamelibrary.manage.publicationUploadPDF']}
+        </h:outputLink>
+
         <h:link rendered="#{!publication.published}">
           #{locales['gamelibrary.manage.publicationPublishLink']}
         </h:link>      
