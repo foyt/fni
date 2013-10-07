@@ -54,6 +54,12 @@
         
         <!-- Actions -->
         
+        <h:panelGroup layout="block" styleClass="gamelibrary-manage-actions">
+          <h:form>
+            <h:commandButton value="#{locales['gamelibrary.manage.createBookPublicationAction']}" action="#{gameLibraryManageBackingBean.createBookPublication}" />
+          </h:form>
+        </h:panelGroup>
+                
         <!-- Unpublished publications list -->
         
         <h:panelGroup layout="block" styleClass="gamelibrary-manage-unpublished">

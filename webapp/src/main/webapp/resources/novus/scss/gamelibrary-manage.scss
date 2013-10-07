@@ -25,6 +25,8 @@ $header-text-color: #fff;
   padding-bottom: 31px;
 }
 
+/* Header */
+
 .gamelibrary-manage-header {
   background-color:  $header-background-color;
   padding-bottom: 27px;
@@ -61,6 +63,27 @@ $header-text-color: #fff;
   font-family: $default-font;
   color: $header-text-color;
 }
+
+/* Actions */
+
+.gamelibrary-manage-actions {
+  margin-bottom: 18px;
+}
+
+.gamelibrary-manage-actions input[type="submit"] {
+  color: $default-color;
+  font-family: $title-font;
+  font-size: 14px;
+  text-transform: uppercase;
+  padding: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Lists */
 
 .gamelibrary-manage-published {
   margin-top: 36px;

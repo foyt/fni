@@ -1,9 +1,11 @@
 package fi.foyt.fni.view.gamelibrary;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -19,6 +21,8 @@ import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
+import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.utils.faces.FacesUtils;
 
 @RequestScoped
 @Named
@@ -31,6 +35,11 @@ import fi.foyt.fni.security.Secure;
   )
 })
 public class GameLibraryManageBackingBean {
+	
+	private static final String DEFAULT_LICENSE = "http://creativecommons.org/licenses/by-sa/3.0/";
+	
+	@Inject
+	private SessionController sessionController;
 	
 	@Inject
 	private PublicationController publicationController;
@@ -68,5 +77,18 @@ public class GameLibraryManageBackingBean {
   public CreativeCommonsLicense getCreativeCommonsLicense(Publication publication) {
 		return CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
 	}
+  
+  @LoggedIn
+  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
+  public void createBookPublication() throws IOException {
+  	BookPublication bookPublication = publicationController.createBookPublication(sessionController.getLoggedUser(), FacesUtils.getLocalizedValue("gamelibrary.manage.untitledBookName"), DEFAULT_LICENSE);
+  	
+  	FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+  	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+  	  .append("/gamelibrary/manage/")
+  	  .append(bookPublication.getId())
+  	  .append("/edit")
+  	  .toString());
+  }
 
 }
