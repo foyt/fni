@@ -351,11 +351,17 @@ public class PublicationController {
 		BookPublication bookPublication = bookPublicationDAO.create(name, urlName, description, price, downloadable, purchasable, defaultImage, 
 				now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width, depth, weight, numberOfPages, license, null);
 
-		for (GameLibraryTag tag : tags) {
-			publicationTagDAO.create(tag, bookPublication);
+		if (tags != null) {
+		  for (GameLibraryTag tag : tags) {
+			  publicationTagDAO.create(tag, bookPublication);
+		  }
 		}
 		
 		return bookPublication;
+	}
+
+	public BookPublication createBookPublication(User creator, String name, String license) {
+		return createBookPublication(creator, name, null, false, false, false, 0d, null, 0, 0, 0, 0d, 0, license, null);
 	}
 	
 	public BookPublication findBookPublicationById(Long id) {
