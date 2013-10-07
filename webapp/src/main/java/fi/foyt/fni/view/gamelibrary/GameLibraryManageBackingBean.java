@@ -63,7 +63,9 @@ public class GameLibraryManageBackingBean {
   	return null;
   }
   
-	public CreativeCommonsLicense getCreativeCommonsLicense(Publication publication) {
+  @LoggedIn
+  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
+  public CreativeCommonsLicense getCreativeCommonsLicense(Publication publication) {
 		return CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
 	}
 
