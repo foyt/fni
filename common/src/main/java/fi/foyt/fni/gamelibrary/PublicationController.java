@@ -237,7 +237,13 @@ public class PublicationController {
 			}
 		}
 		
-		List<PublicationAuthor> removeAuthors = publicationAuthorDAO.listByPublicationAndAuthorNotIn(publication, authors);
+		List<PublicationAuthor> removeAuthors = null;
+		if (authors.size() > 0) {
+			removeAuthors = publicationAuthorDAO.listByPublicationAndAuthorNotIn(publication, authors);
+		} else {
+			removeAuthors = publicationAuthorDAO.listByPublication(publication);
+		}
+		
 		for (PublicationAuthor removeAuthor : removeAuthors) {
 			publicationAuthorDAO.delete(removeAuthor);
 		}
