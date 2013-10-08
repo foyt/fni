@@ -131,6 +131,10 @@ td.gamelibrary-manage-publicationlist-image {
   font-weight: bold;
 }
 
+.gamelibrary-manage-publicationlist-actions form {
+  display: inline-block;
+}
+
 .gamelibrary-manage-publicationlist-actions a {
   color: $default-color;
   text-transform: uppercase; 
@@ -174,6 +178,12 @@ td.gamelibrary-manage-publicationlist-image {
   font-style: italic;
   font-size: 14px;
   margin-top: 8px;
+}
+
+.gamelibrary-publish-dialog p, .gamelibrary-unpublish-dialog p {
+  font-style: italic;
+  font-size: 14px;
+  margin-top: 16px;
 }
 
 .gamelibrary-manage-image-upload-dialog input[type="file"], .gamelibrary-manage-file-upload-dialog input[type="file"] {

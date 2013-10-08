@@ -1,0 +1,7 @@
+<div title="Unpublish '{publicationName}'?" data-unpublish-button="Unpublish" data-cancel-button="Cancel">
+  <div class="gamelibrary-unpublish-dialog">
+    <p>
+      Do you really wish to unpublish '{publicationName}'
+    </p>
+  </div>
+</div>

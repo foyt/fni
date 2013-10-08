@@ -33,14 +33,24 @@
             #{locales['gamelibrary.manage.publicationUploadPDF']}
           </a>
         </h:panelGroup>
+        
+        <h:panelGroup rendered="#{!publication.published}">
+          <h:form>
+            <a class="gamelibrary-manage-publish-link" href="javascript:void(null)">
+              #{locales['gamelibrary.manage.publicationPublishLink']}
+            </a>
+            <h:commandButton  style="display: none" action="#{gameLibraryManageBackingBean.publish(publication.id)}"/>
+          </h:form>
+        </h:panelGroup>
 
-        <h:link rendered="#{!publication.published}">
-          #{locales['gamelibrary.manage.publicationPublishLink']}
-        </h:link>      
-  
-        <h:link rendered="#{publication.published}">
-          #{locales['gamelibrary.manage.publicationUnpublishLink']}
-        </h:link>  
+        <h:panelGroup rendered="#{publication.published}">
+          <h:form>
+            <a class="gamelibrary-manage-unpublish-link" href="javascript:void(null)">
+              #{locales['gamelibrary.manage.publicationUnpublishLink']}
+            </a>
+            <h:commandButton  style="display: none" action="#{gameLibraryManageBackingBean.unpublish(publication.id)}"/>
+          </h:form>
+        </h:panelGroup>
   
         <h:link rendered="#{!publication.published}">
           #{locales['gamelibrary.manage.publicationDeleteLink']}

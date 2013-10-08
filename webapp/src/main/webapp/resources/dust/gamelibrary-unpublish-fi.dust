@@ -1,0 +1,7 @@
+<div title="Muuta '{publicationName}' yksityiseksi?" data-unpublish-button="Muuta" data-cancel-button="Peruuta">
+  <div class="gamelibrary-unpublish-dialog">
+    <p>
+      Haluatko todella muuttaa teoksen '{publicationName}' yksityiseksi?
+    </p>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+<div title="Publish '{publicationName}'?" data-publish-button="Publish" data-cancel-button="Cancel">
+  <div class="gamelibrary-publish-dialog">
+    <p>
+      Do you really wish to publish '{publicationName}'
+    </p>
+  </div>
+</div>

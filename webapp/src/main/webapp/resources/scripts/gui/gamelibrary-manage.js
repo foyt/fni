@@ -70,5 +70,65 @@
       }
     }); 
   });
+  
+  $(document).on('click', '.gamelibrary-manage-publish-link', function (event) {
+    var form = $(this).closest('form');
+    
+    dust.render("gamelibrary-publish", {
+      publicationName: $.trim($(this).closest('.gamelibrary-manage-publicationlist-name-actions').find('.gamelibrary-manage-publicationlist-name').html())
+    }, function(err, html) {
+      if (!err) {
+        var dialog = $(html);
+        dialog.dialog({
+          modal: true,
+          width: 400,
+          buttons: [{
+            'text': dialog.data('publish-button'),
+            'click': function(event) { 
+              form.find('input[type="submit"]').click();
+            }
+          }, {
+            'text': dialog.data('cancel-button'),
+            'click': function(event) { 
+              $(this).dialog("close");
+            }
+          }]
+        });
+      } else {
+       // TODO: Proper error handling...
+        alert(err);
+      }
+    });
+  });
 
+  $(document).on('click', '.gamelibrary-manage-unpublish-link', function (event) {
+    var form = $(this).closest('form');
+    
+    dust.render("gamelibrary-unpublish", {
+      publicationName: $.trim($(this).closest('.gamelibrary-manage-publicationlist-name-actions').find('.gamelibrary-manage-publicationlist-name').html())
+    }, function(err, html) {
+      if (!err) {
+        var dialog = $(html);
+        dialog.dialog({
+          modal: true,
+          width: 400,
+          buttons: [{
+            'text': dialog.data('unpublish-button'),
+            'click': function(event) { 
+              form.find('input[type="submit"]').click();
+            }
+          }, {
+            'text': dialog.data('cancel-button'),
+            'click': function(event) { 
+              $(this).dialog("close");
+            }
+          }]
+        });
+      } else {
+       // TODO: Proper error handling...
+        alert(err);
+      }
+    });
+  });
+  
 }).call(this);

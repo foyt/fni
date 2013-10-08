@@ -24,6 +24,7 @@ import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
+
 @RequestScoped
 @Named
 @Stateful
@@ -90,5 +91,15 @@ public class GameLibraryManageBackingBean {
   	  .append("/edit")
   	  .toString());
   }
+  
+  public void publish(Long publicationId) {
+  	Publication publication = publicationController.findPublicationById(publicationId);
+  	publicationController.publishPublication(publication);
+	}
+  
+  public void unpublish(Long publicationId) {
+  	Publication publication = publicationController.findPublicationById(publicationId);
+  	publicationController.unpublishPublication(publication);
+	}
 
 }

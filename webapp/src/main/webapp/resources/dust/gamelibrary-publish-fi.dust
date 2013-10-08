@@ -1,0 +1,7 @@
+<div title="Julkaise '{publicationName}'?" data-publish-button="Julkaise" data-cancel-button="Peruuta">
+  <div class="gamelibrary-publish-dialog">
+    <p>
+      Halutko varmasti julkaista teoksen '{publicationName}'
+    </p>
+  </div>
+</div>
