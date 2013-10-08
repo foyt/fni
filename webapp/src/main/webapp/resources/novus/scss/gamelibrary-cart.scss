@@ -37,19 +37,6 @@ $header-text-color: #fff;
   @include box-sizing(border-box); 
 }
 
-.gamelibrary-cart-navigation-item,
-.gamelibrary-cart-navigation-separator {
-  color: $title-color;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-family: $default-font;
-  margin-right: 8px;
-}
-
-.gamelibrary-cart-navigation-separator:after {
-  content: '>>';
-}
-
 .gamelibrary-cart-description {
   margin-bottom: 30px;
 }

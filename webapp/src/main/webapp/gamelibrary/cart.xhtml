@@ -8,6 +8,7 @@
   <ui:define name="page-title">#{locales['gamelibrary.cart.pageTitle']}</ui:define>
   
   <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/gamelibrary-common.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary-cart.css"/>
   </ui:define>
 
@@ -23,10 +24,10 @@
 
       <!-- Navigation -->
       
-      <h:panelGroup layout="block" styleClass="gamelibrary-cart-navigation">
-        <h:panelGroup styleClass="gamelibrary-cart-navigation-item">#{locales['gamelibrary.index.navigationIndex']}</h:panelGroup>
-        <h:panelGroup styleClass="gamelibrary-cart-navigation-separator"/>
-        <h:panelGroup styleClass="gamelibrary-cart-navigation-item">#{locales['gamelibrary.index.navigationMostRecent']}</h:panelGroup>
+      <h:panelGroup layout="block" styleClass="gamelibrary-navigation">
+        <h:panelGroup styleClass="gamelibrary-navigation-item">#{locales['gamelibrary.index.navigationIndex']}</h:panelGroup>
+        <h:panelGroup styleClass="gamelibrary-navigation-separator"/>
+        <h:panelGroup styleClass="gamelibrary-navigation-item">#{locales['gamelibrary.index.navigationMostRecent']}</h:panelGroup>
       </h:panelGroup>
   
       <!-- Description -->

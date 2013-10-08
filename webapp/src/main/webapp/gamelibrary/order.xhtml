@@ -8,6 +8,7 @@
   <ui:define name="page-title">#{locales['gamelibrary.order.pageTitle']}</ui:define>
   
   <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/gamelibrary-common.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary-order.css"/>
   </ui:define>
 
@@ -23,10 +24,10 @@
 
       <!-- Navigation -->
       
-      <h:panelGroup layout="block" styleClass="gamelibrary-order-navigation">
-        <h:panelGroup styleClass="gamelibrary-order-navigation-item">#{locales['gamelibrary.index.navigationIndex']}</h:panelGroup>
-        <h:panelGroup styleClass="gamelibrary-order-navigation-separator"/>
-        <h:panelGroup styleClass="gamelibrary-order-navigation-item">#{locales['gamelibrary.index.navigationMostRecent']}</h:panelGroup>
+      <h:panelGroup layout="block" styleClass="gamelibrary-navigation">
+        <h:panelGroup styleClass="gamelibrary-navigation-item">#{locales['gamelibrary.index.navigationIndex']}</h:panelGroup>
+        <h:panelGroup styleClass="gamelibrary-navigation-separator"/>
+        <h:panelGroup styleClass="gamelibrary-navigation-item">#{locales['gamelibrary.index.navigationMostRecent']}</h:panelGroup>
       </h:panelGroup>
   
       <!-- Description -->

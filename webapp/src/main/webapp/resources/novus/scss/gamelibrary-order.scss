@@ -39,19 +39,6 @@ $entry-color: #313133;
   @include box-sizing(border-box); 
 }
 
-.gamelibrary-order-navigation-item,
-.gamelibrary-order-navigation-separator {
-  color: $title-color;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-family: $default-font;
-  margin-right: 8px;
-}
-
-.gamelibrary-order-navigation-separator:after {
-  content: '>>';
-}
-
 .gamelibrary-order-description {
   margin-bottom: 30px;
 }

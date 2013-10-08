@@ -20,6 +20,7 @@
   
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <h:outputStylesheet library="novus" name="css/gamelibrary-common.css"/>
     <h:outputStylesheet library="novus" name="css/magnific-popup.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary-manage.css"/>
   </ui:define>
@@ -35,10 +36,10 @@
     <h:panelGroup layout="block" styleClass="grid_16 tight gamelibrary-manage-header">
       <!-- Navigation -->
       
-      <h:panelGroup layout="block" styleClass="gamelibrary-manage-navigation">
-        <h:panelGroup styleClass="gamelibrary-manage-navigation-item">#{locales['gamelibrary.index.navigationIndex']}</h:panelGroup>
-        <h:panelGroup styleClass="gamelibrary-manage-navigation-separator"/>
-        <h:panelGroup styleClass="gamelibrary-manage-navigation-item">#{locales['gamelibrary.index.navigationMostRecent']}</h:panelGroup>
+      <h:panelGroup layout="block" styleClass="gamelibrary-navigation">
+        <h:panelGroup styleClass="gamelibrary-navigation-item">#{locales['gamelibrary.index.navigationIndex']}</h:panelGroup>
+        <h:panelGroup styleClass="gamelibrary-navigation-separator"/>
+        <h:panelGroup styleClass="gamelibrary-navigation-item">#{locales['gamelibrary.index.navigationMostRecent']}</h:panelGroup>
       </h:panelGroup>
   
       <!-- Description -->
