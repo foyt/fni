@@ -1,0 +1,89 @@
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html">
+  
+  <h:form>
+    <h:panelGroup layout="block" styleClass="gamelibrary-publication">
+      <h:panelGroup layout="block" styleClass="gamelibrary-publication-panel">
+        <h:panelGroup layout="block" styleClass="gamelibrary-publication-image" rendered="#{gameLibraryPublicationsBackingBean.hasImages(publication)}">
+          <h:outputLink styleClass="gamelibrary-publication-image-link" value="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
+            <h:graphicImage value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=260"/>
+          </h:outputLink>
+        </h:panelGroup>
+       
+        <h3>
+          <h:outputLink value="#{request.contextPath}/gamelibrary/#{publication.urlName}">#{publication.name}</h:outputLink>
+        </h3>
+        
+        <h:panelGroup layout="block" styleClass="gamelibrary-publication-tags">
+          <ui:repeat var="tag" value="#{gameLibraryPublicationsBackingBean.getTags(publication)}">
+            <h:outputLink value="#{request.contextPath}/gamelibrary/tags/#{tag.text}" styleClass="gamelibrary-publication-tag">#{tag.text}</h:outputLink>
+          </ui:repeat>
+        </h:panelGroup>
+  
+        <h:panelGroup layout="block" styleClass="gamelibrary-publication-info">
+          <h:panelGroup layout="block" styleClass="gamelibrary-publication-description">
+            #{publication.description}
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-publication-details">
+            <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail">
+              <h:outputLabel value="#{locales['gamelibrary.publications.detailsPrice']}" />
+              <h:outputFormat value="#{publication.price}">
+                <f:convertNumber currencyCode="EUR" type="currency" />
+              </h:outputFormat>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail">
+              <h:outputLabel value="#{locales['gamelibrary.publications.detailsNumberOfPages']}" />
+              <h:outputText value="#{publication.numberOfPages}" />
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail" rendered="#{gameLibraryPublicationsBackingBean.getAuthors(publication).size() > 0}">
+              <h:outputLabel value="#{locales['gamelibrary.publications.detailsAuthor']}" rendered="#{gameLibraryPublicationsBackingBean.getAuthors(publication).size() eq 1}"/>
+              <h:outputLabel value="#{locales['gamelibrary.publications.detailsAuthors']}" rendered="#{gameLibraryPublicationsBackingBean.getAuthors(publication).size() gt 1}"/>
+            
+              <ui:repeat var="author" value="#{gameLibraryPublicationsBackingBean.getAuthors(publication)}">
+                <h:outputLink value="#{request.contextPath}/users/#{author.id}" styleClass="gamelibrary-publication-author">#{author.fullName}</h:outputLink>
+              </ui:repeat>
+            
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="gamelibrary-publication-creative-commans-license-container" rendered="#{gameLibraryPublicationsBackingBean.getCreativeCommonsLicense(publication) ne null}">
+              <h:outputLink value="#{gameLibraryPublicationsBackingBean.getCreativeCommonsLicense(publication).url}">
+                <h:graphicImage value="#{gameLibraryPublicationsBackingBean.getCreativeCommonsLicense(publication).iconUrl}" />
+              </h:outputLink>
+            </h:panelGroup>
+            
+            <ui:fragment rendered="#{(gameLibraryPublicationsBackingBean.getCreativeCommonsLicense(publication) eq null)and(!empty(publication.license))}">
+              <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail">
+                <h:outputLabel value="#{locales['gamelibrary.publications.licenseOther']}"/>
+                <h:outputText value="#{publication.license}"/>
+              </h:panelGroup>
+            </ui:fragment>
+
+          </h:panelGroup>
+        </h:panelGroup>
+        
+        <h:panelGroup layout="block" styleClass="gamelibrary-publication-footer">
+          <h:panelGroup layout="block" styleClass="gamelibrary-publication-footer-row">
+            <h:outputLink styleClass="gamelibrary-publication-action" value="#{request.contextPath}/gamelibrary/publicationFiles/#{publication.id}">#{locales['gamelibrary.publications.downloadFreePdf']}</h:outputLink>
+          </h:panelGroup>
+
+          <h:panelGroup layout="block" styleClass="gamelibrary-publication-footer-row">
+            <h:outputLink value="#{request.contextPath}/forum/#{publication.forumTopic.forum.urlName}/#{publication.forumTopic.urlName}" styleClass="gamelibrary-publication-comments" rendered="#{publication.forumTopic ne null}" >
+              <h:outputFormat value="#{locales['gamelibrary.publications.comments']}">
+                <f:param value="#{gameLibraryPublicationsBackingBean.getPublicationCommentCount(publication)}"/>
+              </h:outputFormat>
+            </h:outputLink>
+            <h:commandLink styleClass="gamelibrary-publication-action" value="#{locales['gamelibrary.publications.addToShoppingCart']}" action="#{gameLibraryPublicationsBackingBean.addPublicationToShoppingCart(publication)}" />
+          </h:panelGroup>
+        </h:panelGroup>
+        
+      </h:panelGroup>
+    </h:panelGroup>
+  </h:form>
+    
+</ui:composition>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['gamelibrary.index.pageTitle']}</ui:define>
+  
+  <ui:define name="view-scripts">
+    <!-- jQuery Magnific-Popup  -->
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/0.8.9/jquery.magnific-popup.min.js"></script>
+    
+    <!-- View scripts -->
+    
+    <h:outputScript name="scripts/gui/gamelibrary.js"/>
+  </ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/magnific-popup.css"/>
+    <h:outputStylesheet library="novus" name="css/gamelibrary.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight gamelibrary-header">
+      <!-- Breadcrumb -->
+      
+      <h:panelGroup layout="block" styleClass="gamelibrary-navigation">
+        <h:panelGroup styleClass="gamelibrary-navigation-item">#{locales['gamelibrary.index.navigationIndex']}</h:panelGroup>
+        <h:panelGroup styleClass="gamelibrary-navigation-separator"/>
+        <h:panelGroup styleClass="gamelibrary-navigation-item">#{locales['gamelibrary.index.navigationMostRecent']}</h:panelGroup>
+      </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="gamelibrary-description">
+        <p class="gamelibrary-description-title">#{locales['gamelibrary.index.descriptionTitle']}</p>
+        <p class="gamelibrary-description-text">#{locales['gamelibrary.index.descriptionText']}</p>
+      </h:panelGroup>
+      
+      <!-- Search -->
+      
+      <h:panelGroup layout="block" styleClass="gamelibrary-search-container">
+        <input type="text" class="gamelibrary-search"/>
+        <h:panelGroup layout="block" styleClass="gamelibrary-search-loading" style="display: none"/>
+        <h:panelGroup layout="block" styleClass="gamelibrary-search-result" style="display: none"/>
+      </h:panelGroup>
+    </h:panelGroup>
+
+    <!-- Content -->
+
+    <h:panelGroup layout="block" styleClass="grid_16 tight gamelibrary-publications">
+    
+      <!-- Products -->
+
+      <h:panelGroup layout="block" styleClass="grid_12 tight">
+        <ui:include src="/facelets/gamelibrarypublication.xhtml">
+          <ui:param name="publication" value="#{gameLibraryPublicationBackingBean.publication}"/>
+        </ui:include> 
+      </h:panelGroup>
+      
+      <!-- Shopping cart -->
+
+      <h:panelGroup layout="block" styleClass="grid_4 omega">
+        <h:panelGroup layout="block" styleClass="gamelibrary-cart-panel">
+          <ui:include src="/facelets/gamelibraryminishoppingcart.xhtml" />
+        </h:panelGroup>
+      </h:panelGroup>
+      
+      <!-- Categories -->
+
+      <h:panelGroup layout="block" styleClass="grid_4 omega">
+        <h:panelGroup layout="block" styleClass="gamelibrary-categories-panel">
+          <ui:include src="/facelets/gamelibrarycategories.xhtml" />
+        </h:panelGroup>
+      </h:panelGroup>
+      
+    </h:panelGroup>
+
+  </ui:define>
+
+</ui:composition>
