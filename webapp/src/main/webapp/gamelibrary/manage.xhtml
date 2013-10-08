@@ -10,14 +10,16 @@
   <ui:define name="view-scripts">
     <!-- jQuery Magnific-Popup  -->
   
-    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.magnific-popup/0.8.9/jquery.magnific-popup.min.js"></script>
-    
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/0.8.9/jquery.magnific-popup.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
     <!-- View scripts -->
     
     <h:outputScript name="scripts/gui/gamelibrary-manage.js"/>
   </ui:define>
   
   <ui:define name="view-stylesheets">
+    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
     <h:outputStylesheet library="novus" name="css/magnific-popup.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary-manage.css"/>
   </ui:define>

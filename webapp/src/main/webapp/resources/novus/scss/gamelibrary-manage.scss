@@ -162,3 +162,20 @@ td.gamelibrary-manage-publicationlist-image {
 .gamelibrary-manage-publicationlist-flags img:last-child {
   margin-right: 0px;
 }
+
+/* jQuery ui */
+
+.ui-widget {
+  font-family: $default-font;
+  font-size: 12px;
+}
+
+.gamelibrary-manage-image-upload-dialog p {
+  font-style: italic;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.gamelibrary-manage-image-upload-dialog input[type="file"] {
+  margin-top: 16px;
+}

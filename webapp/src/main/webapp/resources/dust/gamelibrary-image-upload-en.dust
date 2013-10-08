@@ -1,0 +1,15 @@
+<div title="Upload Image" data-upload-button="Upload" data-cancel-button="Cancel">
+  <div class="gamelibrary-manage-image-upload-dialog">
+    <form target="_upload_image_" method="post" enctype="multipart/form-data" action="{@contextPath/}/gamelibrary/publicationImages/{publicationId}?mode=REPLACE"> 
+      <p>
+        Choose a Image file for Publication
+      </p>
+    
+      <div>
+        <input type="file" name="file"/>
+      </div>
+    </form>  
+  
+    <iframe name="_upload_image_" style="border: 0px; visibility:hidden; opacity: 0; height: 0px; width: 0px" width="0" height="0"></iframe>
+  </div>
+</div>
