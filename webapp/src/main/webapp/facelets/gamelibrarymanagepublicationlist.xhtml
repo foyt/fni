@@ -28,9 +28,11 @@
           </a>
         </h:panelGroup>
         
-        <h:outputLink value="javascript:void(null)" rendered="#{!publication.published}">
-          #{locales['gamelibrary.manage.publicationUploadPDF']}
-        </h:outputLink>
+        <h:panelGroup rendered="#{!publication.published}">
+          <a class="gamelibrary-manage-upload-file-link" href="javascript:void(null)" data-publication-id="#{publication.id}">
+            #{locales['gamelibrary.manage.publicationUploadPDF']}
+          </a>
+        </h:panelGroup>
 
         <h:link rendered="#{!publication.published}">
           #{locales['gamelibrary.manage.publicationPublishLink']}

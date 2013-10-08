@@ -1,0 +1,15 @@
+<div title="Lataa PDF -tiedosto" data-upload-button="Lataa" data-cancel-button="Peruuta">
+  <div class="gamelibrary-manage-file-upload-dialog">
+    <form target="_upload_file_" method="post" enctype="multipart/form-data" action="{@contextPath/}/gamelibrary/publicationFiles/{publicationId}"> 
+      <p>
+        Valitse ladattava PDF -tiedosto.
+      </p>
+    
+      <div>
+        <input type="file" name="file"/>
+      </div>
+    </form>  
+  
+    <iframe name="_upload_file_" style="border: 0px; visibility:hidden; opacity: 0; height: 0px; width: 0px" width="0" height="0"></iframe>
+  </div>
+</div>
