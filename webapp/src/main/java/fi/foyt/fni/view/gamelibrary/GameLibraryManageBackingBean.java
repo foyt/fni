@@ -100,16 +100,22 @@ public class GameLibraryManageBackingBean {
   	  .toString());
   }
   
+  @LoggedIn
+  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public void publish(Long publicationId) {
   	Publication publication = publicationController.findPublicationById(publicationId);
   	publicationController.publishPublication(publication);
 	}
   
+  @LoggedIn
+  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public void unpublish(Long publicationId) {
   	Publication publication = publicationController.findPublicationById(publicationId);
   	publicationController.unpublishPublication(publication);
 	}
 	
+  @LoggedIn
+  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
 	public boolean isRemovable(Long publicationId) {
 		Publication publication = publicationController.findPublicationById(publicationId);
 
@@ -124,6 +130,8 @@ public class GameLibraryManageBackingBean {
 		return true;
 	}
   
+  @LoggedIn
+  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public void remove(Long publicationId) {
   	Publication publication = publicationController.findPublicationById(publicationId);
   	publicationController.deletePublication(publication);
