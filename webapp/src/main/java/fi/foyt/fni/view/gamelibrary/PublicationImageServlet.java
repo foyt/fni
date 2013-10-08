@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -132,6 +133,12 @@ public class PublicationImageServlet extends AbstractFileServlet {
 			}
 		}
 		
+		Mode mode = Mode.APPEND;
+		String modeParameter = request.getParameter("mode");
+		if (StringUtils.isNotBlank(modeParameter)) {
+			mode = Mode.valueOf(modeParameter);
+		}
+		
 		List<UploadResultItem> resultItems = new ArrayList<>();
 
 		try {
@@ -141,6 +148,14 @@ public class PublicationImageServlet extends AbstractFileServlet {
 			for (FileItem item : items) {
 				if (!item.isFormField()) {
 					images.add(new TypedData(item.get(), item.getContentType()));
+				}
+			}
+			
+			if (mode == Mode.REPLACE) {
+				publicationController.updatePublicationDefaultImage(publication, null);
+				List<PublicationImage> oldImages = publicationController.listPublicationImagesByPublication(publication);
+				for (PublicationImage oldImage : oldImages) {
+					publicationController.deletePublicationImage(oldImage);
 				}
 			}
 
@@ -232,5 +247,10 @@ public class PublicationImageServlet extends AbstractFileServlet {
 		private String thumbnailUrl;
 		private String deleteUrl;
 		private String deleteType;
+	}
+	
+	private enum Mode {
+		APPEND,
+		REPLACE
 	}
 }
