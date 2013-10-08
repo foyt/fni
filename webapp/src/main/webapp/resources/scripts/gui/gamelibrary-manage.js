@@ -130,5 +130,35 @@
       }
     });
   });
+
+  $(document).on('click', '.gamelibrary-manage-remove-link', function (event) {
+    var form = $(this).closest('form');
+    
+    dust.render("gamelibrary-remove", {
+      publicationName: $.trim($(this).closest('.gamelibrary-manage-publicationlist-name-actions').find('.gamelibrary-manage-publicationlist-name').html())
+    }, function(err, html) {
+      if (!err) {
+        var dialog = $(html);
+        dialog.dialog({
+          modal: true,
+          width: 400,
+          buttons: [{
+            'text': dialog.data('remove-button'),
+            'click': function(event) { 
+              form.find('input[type="submit"]').click();
+            }
+          }, {
+            'text': dialog.data('cancel-button'),
+            'click': function(event) { 
+              $(this).dialog("close");
+            }
+          }]
+        });
+      } else {
+       // TODO: Proper error handling...
+        alert(err);
+      }
+    });
+  });
   
 }).call(this);

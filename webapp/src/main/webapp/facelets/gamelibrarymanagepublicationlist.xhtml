@@ -51,10 +51,16 @@
             <h:commandButton  style="display: none" action="#{gameLibraryManageBackingBean.unpublish(publication.id)}"/>
           </h:form>
         </h:panelGroup>
+        
+        <h:panelGroup rendered="#{!publication.published and gameLibraryManageBackingBean.isRemovable(publication.id)}">
+          <h:form>
+            <a class="gamelibrary-manage-remove-link" href="javascript:void(null)">
+              #{locales['gamelibrary.manage.publicationDeleteLink']}
+            </a>
+            <h:commandButton style="display: none" action="#{gameLibraryManageBackingBean.remove(publication.id)}"/>
+          </h:form>
+        </h:panelGroup>
   
-        <h:link rendered="#{!publication.published}">
-          #{locales['gamelibrary.manage.publicationDeleteLink']}
-        </h:link>  
       </h:panelGroup>
     </h:column>
     

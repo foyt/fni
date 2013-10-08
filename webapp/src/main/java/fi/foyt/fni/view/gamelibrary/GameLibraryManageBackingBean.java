@@ -13,7 +13,9 @@ import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
+import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.gamelibrary.PublicationController;
+import fi.foyt.fni.gamelibrary.ShoppingCartController;
 import fi.foyt.fni.licences.CreativeCommonsLicense;
 import fi.foyt.fni.licences.CreativeCommonsUtils;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
@@ -38,6 +40,12 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 public class GameLibraryManageBackingBean {
 	
 	private static final String DEFAULT_LICENSE = "http://creativecommons.org/licenses/by-sa/3.0/";
+	
+	@Inject
+	private OrderController orderController;
+
+	@Inject
+	private ShoppingCartController shoppingCartController; 
 	
 	@Inject
 	private SessionController sessionController;
@@ -100,6 +108,25 @@ public class GameLibraryManageBackingBean {
   public void unpublish(Long publicationId) {
   	Publication publication = publicationController.findPublicationById(publicationId);
   	publicationController.unpublishPublication(publication);
+	}
+	
+	public boolean isRemovable(Long publicationId) {
+		Publication publication = publicationController.findPublicationById(publicationId);
+
+		if (orderController.listOrdersByPublication(publication).size() > 0) {
+			return false;
+		}
+		
+		if (shoppingCartController.listShoppingCartsByPublication(publication).size() > 0) {
+			return false;
+		}
+		
+		return true;
+	}
+  
+  public void remove(Long publicationId) {
+  	Publication publication = publicationController.findPublicationById(publicationId);
+  	publicationController.deletePublication(publication);
 	}
 
 }

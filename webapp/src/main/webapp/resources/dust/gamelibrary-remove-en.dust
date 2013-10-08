@@ -1,0 +1,7 @@
+<div title="Remove '{publicationName}'?" data-remove-button="Remove" data-cancel-button="Cancel">
+  <div class="gamelibrary-remove-dialog">
+    <p>
+      Do you really wish to remove '{publicationName}'
+    </p>
+  </div>
+</div>

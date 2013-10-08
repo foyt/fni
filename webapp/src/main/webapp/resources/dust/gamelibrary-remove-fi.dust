@@ -1,0 +1,7 @@
+<div title="Poista '{publicationName}'?" data-remove-button="Poista" data-cancel-button="Peruuta">
+  <div class="gamelibrary-remove-dialog">
+    <p>
+      Halutko varmasti poistaa teoksen '{publicationName}'
+    </p>
+  </div>
+</div>
