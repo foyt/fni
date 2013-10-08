@@ -26,6 +26,8 @@ $header-text-color-hover: #000;
   background-color: $cart-panel-background-color;
 }
 
+/* Header */
+
 .gamelibrary-header {
   background-color:  $header-background-color;
   padding-bottom: 27px;
@@ -65,7 +67,6 @@ $header-text-color-hover: #000;
 
 .gamelibrary-search-container {
   position: relative;  
-  
 }
 
 .gamelibrary-search-loading {
@@ -123,6 +124,10 @@ $header-text-color-hover: #000;
 }
 
 /* Publications */
+
+.gamelibrary-publications {
+  margin-bottom: 40px;
+}
 
 .gamelibrary-publication h3 {
   @include header-2;
