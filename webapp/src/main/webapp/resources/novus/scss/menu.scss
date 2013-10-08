@@ -9,6 +9,7 @@ $menu-text-color: #fff;
 $menu-background-color-hover: #fff;
 $menu-text-color-hover: #000;
 $menu-logo-shadow-color: rgba(255, 255, 255, 0.7);
+$menu-logo-font: "Bebas Neue",sans-serif;
 $search-box-width: 67px;
 $search-box-width-focus: 175px; 
 
@@ -22,10 +23,13 @@ $search-box-width-focus: 175px;
 
 .menu-logo-text,
 .menu-logo-shadow {
-  font-size: 16px;
+  font-size: 15px;
   white-space: nowrap;
   padding-top: 5px;
   padding-bottom: 5px;
+  font-family: $menu-logo-font;
+  letter-spacing: 1.7px;
+  font-weight: bold;
 }
 
 .menu-logo-text { 
