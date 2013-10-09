@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['forum.forum.pageTitle']}</ui:define>
+  <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/forum.css" />
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight forum-header">
+      <!-- Breadcrumb -->
+      
+      <h:panelGroup layout="block" styleClass="forum-navigation">
+        <h:link styleClass="forum-navigation-item" outcome="/forum/index.jsf">
+          #{locales['forum.forum.navItemForum']}
+        </h:link>
+        <h:panelGroup styleClass="forum-navigation-separator"/>
+        <h:panelGroup styleClass="forum-navigation-item">#{forumBackingBean.forum.name}</h:panelGroup>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <!-- Forums -->
+
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="forum-panel">
+        <h:panelGroup layout="block" styleClass="forum-view-forum">
+          
+          <h:panelGroup layout="block" styleClass="forum-view-forum-name">
+            <h:outputLink value="#{request.contextPath}/forum/#{forumBackingBean.forumUrlName}">#{forumBackingBean.forum.name}</h:outputLink>
+          </h:panelGroup> 
+          
+          <h:panelGroup layout="block" styleClass="forum-view-forum-description">#{forum.description}</h:panelGroup>   
+
+          <h:panelGroup layout="block" styleClass="forum-view-forum-activity-container">
+            <h:panelGroup layout="block" styleClass="forum-view-forum-topic-count">
+              <h:outputFormat value="#{locales['forum.forum.forumTotalTopics']}">
+                <f:param value="#{forumBackingBean.topicCount}"/>
+              </h:outputFormat>
+            </h:panelGroup>
+            <h:panelGroup layout="block" styleClass="forum-view-forum-last-message-date">
+              <h:outputFormat value="#{locales['forum.forum.forumLastMessage']}">
+                <f:param value="#{forumBackingBean.lastMessageDate}"/>
+              </h:outputFormat>
+            </h:panelGroup>
+          </h:panelGroup>  
+          
+          <h:panelGroup layout="block" styleClass="forum-view-forum-topics">
+            <ui:repeat var="topic" value="#{forumBackingBean.topics}">
+              <h:panelGroup layout="block" styleClass="forum-view-forum-topic">
+                <h:panelGroup layout="block" styleClass="forum-view-forum-topic-name-container">
+                  <h:panelGroup layout="block" styleClass="forum-view-forum-topic-name">
+                    <h:outputLink value="#{request.contextPath}/forum/#{topic.fullPath}">#{topic.subject}</h:outputLink>
+                  </h:panelGroup>
+                  <h:panelGroup layout="block" styleClass="forum-view-forum-topic-info">
+                    <h:panelGroup styleClass="forum-view-forum-topic-label">#{locales['forum.forum.topicStartedBy']}</h:panelGroup>
+                    <h:outputLink styleClass="forum-view-forum-topic-author" value="#{request.contextPath}/users/#{topic.author.id}">#{topic.author.fullName}</h:outputLink>
+                    <h:panelGroup styleClass="forum-view-forum-topic-created">
+                      <h:outputText value="#{topic.created}">
+                        <f:convertDateTime type="date"/>
+                      </h:outputText>
+                    </h:panelGroup>
+                  </h:panelGroup>
+                </h:panelGroup>
+                
+                <h:panelGroup layout="block" styleClass="forum-view-forum-topic-activity-container">
+                  <h:panelGroup layout="block" styleClass="forum-view-forum-topic-post-count">
+                    <h:outputFormat value="#{locales['forum.forum.topicTotalPosts']}">
+                      <f:param value="#{forumBackingBean.getTopicPostCount(topic)}"/>
+                    </h:outputFormat>
+                  </h:panelGroup>
+                  <h:panelGroup layout="block" styleClass="forum-view-forum-topic-last-message-date">
+                    <h:outputFormat value="#{locales['forum.forum.topicLastMessage']}">
+                      <f:param value="#{forumBackingBean.getTopicLastMessageDate(topic)}"/>
+                    </h:outputFormat>
+                  </h:panelGroup>
+                </h:panelGroup>                  
+                
+              </h:panelGroup>
+            </ui:repeat>
+          </h:panelGroup>
+
+        </h:panelGroup>
+
+      </h:panelGroup>
+    </h:panelGroup>
+
+  </ui:define>
+
+</ui:composition>

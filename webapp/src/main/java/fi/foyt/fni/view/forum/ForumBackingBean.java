@@ -48,18 +48,31 @@ public class ForumBackingBean {
 	@URLAction
 	public void load() {
 		forum = forumController.findForumByUrlName(getForumUrlName());
-	}
-	
-	public List<ForumTopic> getTopics() {
-		List<ForumTopic> topics = forumController.listTopicsByForum(getForum());
+		
+		topics = forumController.listTopicsByForum(forum);
 		Collections.sort(topics, new Comparator<ForumTopic>() {
 			@Override
 			public int compare(ForumTopic o1, ForumTopic o2) {
 				return o2.getCreated().compareTo(o1.getCreated());
 			}
 		});
-		
+	}
+	
+	public List<ForumTopic> getTopics() {
 		return topics;
+	}
+	
+	public int getTopicCount() {
+		return getTopics().size();
+	}
+	
+	public Date getLastMessageDate() {
+		ForumPost post = forumController.getLastPostByForum(forum);
+		if (post != null) {
+			return post.getCreated();
+		}
+		
+		return null;
 	}
 	
 	public Forum getForum() {
@@ -78,7 +91,7 @@ public class ForumBackingBean {
 		return forumController.countPostsByTopic(topic);
 	}
 	
-	public Date getLastMessageDate(ForumTopic topic) {
+	public Date getTopicLastMessageDate(ForumTopic topic) {
 		ForumPost post = forumController.getLastPostByTopic(topic);
 		if (post != null) {
 			return post.getCreated();
@@ -130,4 +143,5 @@ public class ForumBackingBean {
 	private String forumUrlName;
 	private String newTopicSubject;
 	private String newTopicContents;
+	private List<ForumTopic> topics;
 }

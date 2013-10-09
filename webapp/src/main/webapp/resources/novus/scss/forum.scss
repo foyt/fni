@@ -43,6 +43,7 @@ body {
   font-family: $default-font;
   font-weight: bold;
   margin-right: 8px;
+  text-decoration: none;
 }
 
 .forum-navigation-separator:after {
@@ -66,18 +67,18 @@ body {
 
 /* Forums */
 
-.forum-index-forum-name {
+.forum-view-forum-name {
   @include header-2;
   margin-top: 26px;
   margin-left: 16px;
 }
 
-.forum-index-forum-name a {
+.forum-view-forum-name a {
   text-decoration: none;
   color: $default-color;
 }
 
-.forum-index-forum-description {
+.forum-view-forum-description {
   font-size: 16px;
   font-family: $default-font;
   color: $default-color;
@@ -88,59 +89,59 @@ body {
   margin-right: 250px;
 }
 
-.forum-index-forum-activity-container {
+.forum-view-forum-activity-container {
   float: right;
   text-align: right;
   margin-top: -58px;
 }
 
-.forum-index-forum-topic-count, .forum-index-forum-last-message-date {
+.forum-view-forum-topic-count, .forum-view-forum-last-message-date {
   font-size: 13px;
   font-family: $default-font;
   color: $default-color;
   font-weight: bold;
 }
 
-.forum-index-forum-topic {
+.forum-view-forum-topic {
   display: table;
 }
 
-.forum-index-forum-topic:last-child {
+.forum-view-forum-topic:last-child {
   border-bottom: 1px solid $table-border-color;
 }
 
-.forum-index-forum-topic-name {
+.forum-view-forum-topic-name {
   font-size: 16px;
   font-family: $default-font;
   margin-bottom: 10px;
   font-weight: bold;
 }
 
-.forum-index-forum-topic-name a {
+.forum-view-forum-topic-name a {
   text-decoration: none;
   color: $default-color;
 }
 
-.forum-index-forum-topic-name-container, .forum-index-forum-topic-activity-container {
+.forum-view-forum-topic-name-container, .forum-view-forum-topic-activity-container {
   padding: 15px;
   border-top: 1px solid $table-border-color;
   border-left: 1px solid $table-border-color;
   display: table-cell;
 }
 
-.forum-index-forum-topic-activity-container {
+.forum-view-forum-topic-activity-container {
   border-right: 1px solid $table-border-color;
 }
 
-.forum-index-forum-topic-name-container {
+.forum-view-forum-topic-name-container {
   width: 672px;
 }
 
-.forum-index-forum-topic-activity-container {
+.forum-view-forum-topic-activity-container {
   width: 248px;
 }
 
-.forum-index-forum-topic-label, .forum-index-forum-topic-created {
+.forum-view-forum-topic-label, .forum-view-forum-topic-created {
   font-size: 12px;
   font-family: $default-font;
   color: $default-color;
@@ -148,7 +149,7 @@ body {
   padding-right: 4px;
 }
 
-.forum-index-forum-topic-author {
+.forum-view-forum-topic-author {
   text-decoration: none;
   font-size: 12px;
   font-family: $default-font;
@@ -157,7 +158,7 @@ body {
   padding-right: 4px;
 }
 
-.forum-index-forum-topic-post-count, .forum-index-forum-topic-last-message-date {
+.forum-view-forum-topic-post-count, .forum-view-forum-topic-last-message-date {
   font-size: 13px;
   font-family: $default-font;
   color: $default-color;
