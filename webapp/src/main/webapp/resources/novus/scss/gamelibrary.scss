@@ -12,16 +12,7 @@ $header-text-color-hover: #000;
 .gamelibrary-publication-panel,
 .gamelibrary-cart-panel,
 .gamelibrary-categories-panel {
-  background-color: $panel-background-color;
-  margin-top: 10px;
-  padding-top: 31px;
-  padding-left: 27px;
-  padding-right: 27px;
-  padding-bottom: 31px;
-}
-
-.gamelibrary-cart-panel {
-  background-color: $panel-background-color;
+  @include generic-panel;
 }
 
 /* Header */

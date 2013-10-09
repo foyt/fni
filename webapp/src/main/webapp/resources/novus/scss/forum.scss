@@ -14,12 +14,7 @@ body {
 /* Panels*/
 
 .forum-panel {
-  background-color: $panel-background-color;
-  padding-top: 19px;
-  padding-bottom: 45px;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-top: 10px;
+  @include generic-panel;
 }
 
 /* Forums */

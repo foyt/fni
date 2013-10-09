@@ -13,12 +13,7 @@
 /* Panels */
 
 .gamelibrary-edit-publication-panel {
-  background-color: $panel-background-color;
-  margin-top: 10px;
-  padding-top: 31px;
-  padding-left: 27px;
-  padding-right: 27px;
-  padding-bottom: 31px;
+  @include generic-panel;
 }
 
 .gamelibrary-edit-publication-back-link {
