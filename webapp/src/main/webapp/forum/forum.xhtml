@@ -13,15 +13,15 @@
 
     <ui:include src="/facelets/menu.xhtml" />
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight forum-header">
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
       <!-- Breadcrumb -->
       
-      <h:panelGroup layout="block" styleClass="forum-navigation">
-        <h:link styleClass="forum-navigation-item" outcome="/forum/index.jsf">
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:link styleClass="view-header-navigation-item" outcome="/forum/index.jsf">
           #{locales['forum.forum.navItemForum']}
         </h:link>
-        <h:panelGroup styleClass="forum-navigation-separator"/>
-        <h:panelGroup styleClass="forum-navigation-item">#{forumBackingBean.forum.name}</h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">#{forumBackingBean.forum.name}</h:panelGroup>
       </h:panelGroup>
     </h:panelGroup>
     

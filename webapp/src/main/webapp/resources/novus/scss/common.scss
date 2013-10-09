@@ -1,5 +1,7 @@
 @import "vars";
 @import "compass";
+@import "styles";
+
 @IMPORT url("http://yui.yahooapis.com/3.11.0/build/cssreset/cssreset-min.css");
 
 /* Body */
@@ -14,4 +16,45 @@
     background-size: 100% auto;
     background-attachment:fixed;
   }
+}
+
+/* Header */
+
+.view-header {
+  background-color: $header-background-color;
+  padding-bottom: 27px;
+  padding-top: 18px;
+  padding-left: 24px;
+  padding-right: 120px;
+  @include box-sizing(border-box);   
+}
+
+.view-header-navigation-item,
+.view-header-navigation-separator {
+  color: $title-color;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-family: $default-font;
+  font-weight: bold;
+  margin-right: 8px;
+  text-decoration: none;
+}
+
+.view-header-navigation-separator:after {
+  content: '>>';
+}
+
+.view-header-description {
+  margin-bottom: 30px;
+}
+
+.view-header-description-title {
+  @include header-1;
+  color: $header-text-color;
+}
+
+.view-header-description-text {
+  font-size: 16px;
+  font-family: $default-font;
+  color: $header-text-color;
 }

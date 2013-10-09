@@ -25,33 +25,6 @@ $entry-color: #313133;
   padding-bottom: 31px;
 }
 
-/* Header */
-
-.gamelibrary-order-header {
-  background-color:  $header-background-color;
-  padding-bottom: 27px;
-  padding-top: 18px;
-  padding-left: 24px;
-  padding-right: 120px;
-  @include box-sizing(border-box); 
-}
-
-.gamelibrary-order-description {
-  margin-bottom: 30px;
-}
-
-.gamelibrary-order-description-title {
-  @include header-1;
-  color: $header-text-color;
-  display: inline-block;
-}
-
-.gamelibrary-order-description-text {
-  font-size: 16px;
-  font-family: $default-font;
-  color: $header-text-color;
-}
-
 /* Status */
 
 .gamelibrary-order-id, .gamelibrary-order-status {

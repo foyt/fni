@@ -27,31 +27,6 @@ $header-text-color: #fff;
 
 /* Header */
 
-.gamelibrary-cart-header {
-  background-color:  $header-background-color;
-  padding-bottom: 27px;
-  padding-top: 18px;
-  padding-left: 24px;
-  padding-right: 120px;
-  @include box-sizing(border-box); 
-}
-
-.gamelibrary-cart-description {
-  margin-bottom: 30px;
-}
-
-.gamelibrary-cart-description-title {
-  @include header-1;
-  color: $header-text-color;
-  display: inline-block;
-}
-
-.gamelibrary-cart-description-text {
-  font-size: 16px;
-  font-family: $default-font;
-  color: $header-text-color;
-}
-
 .gamelibrary-cart-back-link {
   font-size: 16px;
   font-family: $default-font;

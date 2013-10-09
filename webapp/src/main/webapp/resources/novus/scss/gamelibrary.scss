@@ -26,30 +26,6 @@ $header-text-color-hover: #000;
 
 /* Header */
 
-.gamelibrary-header {
-  background-color:  $header-background-color;
-  padding-bottom: 27px;
-  padding-top: 18px;
-  padding-left: 24px;
-  padding-right: 120px;
-  @include box-sizing(border-box); 
-}
-
-.gamelibrary-description {
-  margin-bottom: 30px;
-}
-
-.gamelibrary-description-title {
-  @include header-1;
-  color: $header-text-color;
-}
-
-.gamelibrary-description-text {
-  font-size: 16px;
-  font-family: $default-font;
-  color: $header-text-color;
-}
-
 .gamelibrary-search-container {
   position: relative;  
 }
