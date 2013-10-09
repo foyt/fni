@@ -2,8 +2,6 @@
 @import "compass";
 @import "styles";
 
-$panel-background-color: rgba(255, 255, 255, 0.9);
-$cart-panel-background-color: #47B0B0;
 $header-background-color: #000;
 $header-text-color: #fff;
 $header-background-color-hover: #fff;
@@ -23,7 +21,7 @@ $header-text-color-hover: #000;
 }
 
 .gamelibrary-cart-panel {
-  background-color: $cart-panel-background-color;
+  background-color: $panel-background-color;
 }
 
 /* Header */

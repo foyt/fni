@@ -2,9 +2,8 @@
 @import "compass";
 @import "styles";
 
-$panel-background-color: rgb(209, 235, 235);
 $information-text-color: rgb(255, 255, 255);
-$information-background-color: rgb(71, 176, 176);
+$information-background-color: darken($panel-background-color, 80%);
 $header-background-color: #000;
 $header-text-color: #fff;
 
