@@ -12,5 +12,6 @@
     background-position: repeat-y top left;
     @include background-image(url('#' + '{resource["novus:gfx/layout/background.jpg"]}'), linear-gradient(left,  rgba(215,64,64,1) 0%,rgba(128,255,250,1) 50%,rgba(215,64,64,1) 100%));
     background-size: 100% auto;
+    background-attachment:fixed;
   }
 }
