@@ -58,3 +58,10 @@
   font-family: $default-font;
   color: $header-text-color;
 }
+
+/* jQuery ui */
+
+.ui-widget {
+  font-family: $default-font;
+  font-size: 12px;
+}
