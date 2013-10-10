@@ -1,0 +1,108 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+/* Panel */ 
+
+.user-login-login-panel, .user-login-register-panel {
+  @include generic-panel;
+  height: 377px;
+}
+
+/* Generic */
+
+h3 {
+  @include header-2;
+  margin-bottom: 10px;
+}
+
+/* Forms */
+
+.user-login-field label {
+  display: block;
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.user-login-field input[type="text"], .user-login-field input[type="password"] {
+  width: 300px;
+  font-size: 14px;
+  font-family: $default-font;
+  @include box-sizing(border-box);
+  margin-bottom: 8px;
+}
+
+/* Login */
+
+.user-login-external a {
+  text-decoration: none;
+  @include header-3;
+  display: block;
+}
+
+.user-login-external { 
+  margin-top: 8px;
+}
+
+.user-login-external-label {
+  vertical-align: top;
+  display: inline-block;
+  margin-top: 13px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.users-login-forgot-password-link {
+  font-family: $default-font;
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-right: 10px;
+  margin-top: 16px;
+  color: $default-color;
+  text-decoration: none;
+  display: block;
+}
+
+/* Register */
+
+.user-login-register-panel h3 {
+  @include header-3;
+}
+
+input[type="submit"] {
+  @include header-4;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+/* Reset dialog */
+
+.users-forgot-password-dialog p {
+  font-style: italic;
+  font-size: 13px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.users-forgot-password-dialog label {
+  display: block;
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.users-forgot-password-dialog input[type="email"] {
+  width: 100%;
+  @include box-sizing(border-box); 
+}

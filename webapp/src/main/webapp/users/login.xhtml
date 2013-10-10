@@ -1,137 +1,154 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    template="/WEB-INF/templates/users.xhtml">
-    
-    <ui:define name="metadata">
-      <f:event type="preRenderView" listener="#{loginBackingBean.preRenderViewListener}"/>
-    </ui:define>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['users.login.pageTitle']}</ui:define>
  
-    <ui:define name="pageTitle">
-      #{locales['users.login.pageTitle']}
-    </ui:define>
+  <ui:define name="metadata">
+    <f:event type="preRenderView" listener="#{loginBackingBean.preRenderViewListener}"/>
+  </ui:define>
+ 
+  <ui:define name="view-scripts">
+    <!-- md5 -->
     
-    <ui:define name="head">
-      <!-- jQuery UI -->
+    <script type="text/javascript" charset="utf8" src="http://cdn.jsdelivr.net/jshash/2.2/md5-min.js"></script>
     
-      <script type="text/javascript" charset="utf8" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.js"></script>
+    <!-- JQuery UI -->
     
-      <!-- md5 -->
-
-      <script type="text/javascript" charset="utf8" src="http://cdn.jsdelivr.net/jshash/2.2/md5-min.js"></script>
-
-      <!-- View specific -->
-
-      <h:outputScript name="scripts/gui/users/login.js" target="head"/>
-      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/login.css"/>
-
-    </ui:define>
+    <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     
-    <ui:define name="content">
-      <div class="login-container">
-        <div class="internal-login-container">
-          <h2>
-            #{locales['users.login.forgeAndIllusionLoginTitle']}
-          </h2>
-          <div class="internal-login-form-container">
-            <h:form>
-              <div>
-                <h:outputLabel value="#{locales['users.login.emailTitle']}" />
+    <!-- View scripts -->
+    
+    <h:outputScript name="scripts/gui/users-login.js"></h:outputScript>
+  </ui:define>
+  
+  <ui:define name="view-stylesheets">
+    
+    <!-- JQuery UI -->
+    
+    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    
+    <!-- View styles -->
+    
+    <h:outputStylesheet library="novus" name="css/users-login.css"/>
+    
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <!-- Header -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['users.login.navigationIndex']}</h:link>
+      </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{locales['users.login.descriptionTitle']}</p>
+        <p class="view-header-description-text">#{locales['users.login.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="grid_8 alpha slim-right">
+        <h:panelGroup layout="block" styleClass="user-login-login-panel">
+          <h3>#{locales['users.login.loginTitle']}</h3>
+        
+          <h:form>
+            <h:panelGroup layout="block">
+              <h:panelGroup layout="block" styleClass="user-login-field">
+                <h:outputLabel value="#{locales['users.login.loginEmailTitle']}" />
                 <h:inputText value="#{loginBackingBean.loginEmail}" id="email" required="true" requiredMessage="#{locales['users.login.loginEmailRequired']}"/>
-              </div>
-
-              <div>
-                <h:outputLabel value="#{locales['users.login.passwordTitle']}" />
+              </h:panelGroup>  
+              
+              <h:panelGroup layout="block" styleClass="user-login-field">
+                <h:outputLabel value="#{locales['users.login.loginPasswordTitle']}" />
                 <h:inputSecret id="password"/>
                 <h:inputHidden value="#{loginBackingBean.loginPassword}" id="password-encoded"/>
-              </div>
-              
-              <div>
+              </h:panelGroup>
+        
+              <h:panelGroup layout="block" styleClass="user-login-field">
                 <h:commandButton action="#{loginBackingBean.login}" value="#{locales['users.login.loginButton']}" />
-              </div>
-            </h:form>
-          </div>
-
-          <a href="javascript:void(null);" id="forgot-password-link">#{locales['users.login.forgotPassword']}</a>
-        </div>
-        
-        <div class="register-container">
-          <h2>
-            #{locales['users.login.createAccountTitle']}
-          </h2>
-          <div class="register-form-container">
+              </h:panelGroup>
+            </h:panelGroup>
+          </h:form>
+          
+          <h:panelGroup styleClass="users-login-forgot">
             <h:form>
-              <div>
-                <h:outputLabel value="#{locales['users.login.firstNameTitle']}"/>
-                <h:inputText value="#{loginBackingBean.registerFirstName}"/>
-              </div>
-              
-              <div>
-                <h:outputLabel value="#{locales['users.login.lastNameTitle']}"/>
-                <h:inputText value="#{loginBackingBean.registerLastName}" required="true" requiredMessage="#{locales['users.login.registrationFirstNameRequired']}"/>
-              </div>
-              
-              <div>
-                <h:outputLabel value="#{locales['users.login.emailTitle']}"/>
-                <h:inputText value="#{loginBackingBean.registerEmail}" required="true" requiredMessage="#{locales['users.login.registrationEmailRequired']}"/>
-              </div>
-              
-              <div>
-                <h:outputLabel value="#{locales['users.login.passwordTitle']}"/>
-                <h:inputSecret value="#{loginBackingBean.registerPassword1}" required="true" requiredMessage="#{locales['users.login.registrationPasswordRequired']}"/>
-              </div>
-              
-              <div>
-                <h:outputLabel value="#{locales['users.login.retypePasswordTitle']}"/>
-                <h:inputSecret value="#{loginBackingBean.registerPassword2}"/>
-              </div>
-              
-              <div>
-                <h:commandButton action="#{loginBackingBean.register}" value="#{locales['users.login.registerButton']}" />
-              </div>
-            </h:form>          
-          </div>
-        </div>
-        
-        <div class="external-login-container">
-          <h2>
-            #{locales['users.login.externalLoginTitle']}
-          </h2>
+              <h:outputLink styleClass="users-login-forgot-password-link" value="javascript:void(null);">#{locales['users.login.forgotPasswordLink']}</h:outputLink>
+              <h:inputHidden id="users-login-forgot-password-email" value="#{loginBackingBean.forgotPasswordEmail}" />     
+              <h:commandLink styleClass="users-login-forgot-password-send" action="#{loginBackingBean.forgotPassword}" style="display:none"/>
+            </h:form>
+          </h:panelGroup>
 
-          <div class="external-login-form-container">
-            <div class="login-link-container login-google-container">
-              <a class="login-link login-google-icon" href="?loginMethod=GOOGLE"> 
-                <span class="login-icon login-google-icon">&#160;</span> 
-                <span class="login-text login-google-text">#{locales['users.login.loginWithGoogle']}</span>
-              </a>
-            </div>
-      
-            <div class="login-link-container login-yahooo-container">
-              <a class="login-link login-yahoo-icon" href="?loginMethod=YAHOO"> 
-                <span class="login-icon login-yahoo-icon">&#160;</span> 
-                <span class="login-text login-yahoo-text">#{locales['users.login.loginWithYahoo']}</span>
-              </a>
-            </div>
-      
-            <div class="login-link-container login-facebook-container">
-              <a class="login-link login-facebook-icon" href="?loginMethod=FACEBOOK"> 
-                <span class="login-icon login-facebook-icon">&#160;</span> 
-                <span class="login-text login-facebook-text">#{locales['users.login.loginWithFacebook']}</span>
-              </a>
-            </div>
-          </div>
+          <h:panelGroup layout="block" styleClass="user-login-external">
+            <h:outputLink value="?loginMethod=FACEBOOK">
+              <h:graphicImage library="novus" name="/gfx/icons/48x48/users/login-facebook.png"/>
+              <h:panelGroup styleClass="user-login-external-label">#{locales['users.login.loginWithFacebook']}</h:panelGroup>
+            </h:outputLink>
+            
+            <h:outputLink value="?loginMethod=GOOGLE">
+              <h:graphicImage library="novus" name="/gfx/icons/48x48/users/login-google.png"/>
+              <h:panelGroup styleClass="user-login-external-label">#{locales['users.login.loginWithGoogle']}</h:panelGroup>
+            </h:outputLink>
+            
+            <h:outputLink value="?loginMethod=YAHOO">
+              <h:graphicImage library="novus" name="/gfx/icons/48x48/users/login-yahoo.png"/>
+              <h:panelGroup styleClass="user-login-external-label">#{locales['users.login.loginWithYahoo']}</h:panelGroup>
+            </h:outputLink>
+          </h:panelGroup>
+          
+        </h:panelGroup>
+      </h:panelGroup>
+      <h:panelGroup layout="block" styleClass="grid_8 omega slim-left">
+        <h:panelGroup layout="block" styleClass="user-login-register-panel">
+          <h3>#{locales['users.login.registerTitle']}</h3>
+          
+          <h:form>
+            <h:panelGroup layout="block" styleClass="user-login-field">
+              <h:outputLabel value="#{locales['users.login.registerFirstNameTitle']}"/>
+              <h:inputText value="#{loginBackingBean.registerFirstName}" required="true" requiredMessage="#{locales['users.login.registerFirstNameRequired']}"/>
+            </h:panelGroup>
+          
+            <h:panelGroup layout="block" styleClass="user-login-field">
+              <h:outputLabel value="#{locales['users.login.registerLastNameTitle']}"/>
+              <h:inputText value="#{loginBackingBean.registerLastName}" required="true" requiredMessage="#{locales['users.login.registerLastNameRequired']}"/>
+            </h:panelGroup>
 
-        </div>
-      </div>
-      
-      <div id="forgot-password-form-container" style="display: none" >
-        <h:form>
-          <h:inputHidden id="email" value="#{loginBackingBean.forgotPasswordEmail}" />
-          <h:commandButton id="send-button" action="#{loginBackingBean.sendResetMail}"></h:commandButton>
-        </h:form>
-      </div>
-    </ui:define>
+            <h:panelGroup layout="block" styleClass="user-login-field">
+              <h:outputLabel value="#{locales['users.login.registerEmailTitle']}"/>
+              <h:inputText value="#{loginBackingBean.registerEmail}" required="true" requiredMessage="#{locales['users.login.registerEmailRequired']}"/>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" styleClass="user-login-field">
+              <h:outputLabel value="#{locales['users.login.registerPasswordTitle']}"/>
+              <h:inputSecret value="#{loginBackingBean.registerPassword1}" required="true" requiredMessage="#{locales['users.login.registerPasswordRequired']}"/>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" styleClass="user-login-field">
+              <h:outputLabel value="#{locales['users.login.registerPassword2Title']}"/>
+              <h:inputSecret value="#{loginBackingBean.registerPassword2}"/>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" styleClass="user-login-field">
+              <h:commandButton action="#{loginBackingBean.register}" value="#{locales['users.login.registerButton']}" />
+            </h:panelGroup>
+            </h:form>  
+        </h:panelGroup>
+      </h:panelGroup>
+    </h:panelGroup>
+  </ui:define>
 
 </ui:composition>

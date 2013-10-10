@@ -40,6 +40,7 @@ import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.PasswordResetKey;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
 import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.persistence.model.users.UserVerificationKey;
 import fi.foyt.fni.session.SessionController;
@@ -143,7 +144,7 @@ public class LoginBackingBean {
 				}
 
 			} catch (UserNotConfirmedException e) {
-				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.userNotConfirmed"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.userNotVerified"));
 			} catch (MultipleEmailAccountsException e) {
 				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.userConflictMultipleEmailAccounts"));
 			} catch (EmailDoesNotMatchLoggedUserException e) {
@@ -157,7 +158,7 @@ public class LoginBackingBean {
 				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.invalidCredentials"));
 			} catch (IOException e) {
 				logger.log(Level.SEVERE, "Login redirect failed because of malformed url", e);
-				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("generic.configurationError"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, "Internal Error");
 			}
 		} else {
 			logger.severe("Could not find internal authentication strategy");
@@ -218,7 +219,7 @@ public class LoginBackingBean {
 				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.registrationUserWithSpecifiedEmailAlreadyExists"));
 			} else {
 				Locale locale = sessionController.getLocale();
-				User user = userController.createUser(getRegisterFirstName(), getRegisterLastName(), null, locale, new Date());
+				User user = userController.createUser(getRegisterFirstName(), getRegisterLastName(), null, locale, new Date(), UserProfileImageSource.GRAVATAR);
 
 				UserVerificationKey verificationKey = authenticationController.createVerificationKey(user, getRegisterEmail());
 				authenticationController.createInternalAuth(user, getRegisterPassword1());
@@ -234,10 +235,10 @@ public class LoginBackingBean {
 				try {
 					String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
 					String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
-					MailUtils.sendMail(fromMail, fromName, getForgotPasswordEmail(), user.getFullName(), mailTitle, mailContent, "text/plain");
+					MailUtils.sendMail(fromMail, fromName, getRegisterEmail(), user.getFullName(), mailTitle, mailContent, "text/plain");
 					FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.login.verificationEmailSent"));
 				} catch (MessagingException e) {
-					FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.registrationCouldNotSendEmail"));
+					FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.verificationSendingFailed"));
 				}
 
 			}
@@ -252,9 +253,9 @@ public class LoginBackingBean {
 		this.forgotPasswordEmail = forgotPasswordEmail;
 	}
 
-	public void sendResetMail() {
+	public void forgotPassword() {
 		if (StringUtils.isBlank(getForgotPasswordEmail())) {
-			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.forgotPasswordEmailRequired"));
+			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.resetPasswordEmail"));
 		} else {
 			User user = userController.findUserByEmail(getForgotPasswordEmail());
 			if (user != null) {
@@ -274,11 +275,11 @@ public class LoginBackingBean {
 					MailUtils.sendMail(fromMail, fromName, getForgotPasswordEmail(), user.getFullName(), mailTitle, mailContent, "text/html");
 					FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.login.resetPasswordEmailSent", getForgotPasswordEmail()));
 				} catch (MessagingException e) {
-					FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.registrationCouldNotSendEmail"));
+					FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.resetPasswordSendingFailed"));
 				}
 
 			} else {
-				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.forgotPasswordNoUserFound"));
+				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.resetPasswordUserNotFound"));
 			}
 		}
 	}
@@ -349,4 +350,5 @@ public class LoginBackingBean {
 	private String registerPassword1;
 	private String registerPassword2;
 	private String forgotPasswordEmail;
+
 }
