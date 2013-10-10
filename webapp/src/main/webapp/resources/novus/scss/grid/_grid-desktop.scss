@@ -49,6 +49,14 @@ body {
   margin-right: 0;
 }
 
+.slim-left {
+  margin-left: $grid-margin / 2;
+}
+
+.slim-right {
+  margin-right: $grid-margin / 2;
+}
+
 /* Grid >> 16 Columns
 ----------------------------------------------------------------------------------------------------*/
 
@@ -63,6 +71,14 @@ body {
   
   .container_#{$grid-columns} .grid_#{$i}.alpha, .container_#{$grid-columns} .grid_#{$i}.omega {
     width: ($grid-cell-width * $i) - $grid-margin;
+  }
+  
+  .container_#{$grid-columns} .grid_#{$i}.slim-left, .container_#{$grid-columns} .grid_#{$i}.slim-right {
+    width: ($grid-cell-width * $i) - ($grid-margin / 2);
+  }
+  
+  .container_#{$grid-columns} .grid_#{$i}.alpha.slim-left, .container_#{$grid-columns} .grid_#{$i}.alpha.slim-right {
+    width: ($grid-cell-width * $i) - ($grid-margin / 1.5);
   }
 }
 
