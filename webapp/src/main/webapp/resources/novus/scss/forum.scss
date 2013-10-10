@@ -4,13 +4,6 @@
 
 $table-border-color: rgba(255, 255, 255, 0);
 
-/* Body */
-
-body {
-  background: url('#' + '{resource["novus:gfx/layout/background.jpg"]}') repeat-y top left;
-  background-size: 100% auto;
-}
-
 /* Panels*/
 
 .forum-panel {
