@@ -78,7 +78,7 @@
                 </h:panelGroup>
                 <h:panelGroup layout="block" styleClass="index-forum-topic-author">
                   <h:panelGroup styleClass="index-forum-topic-author-prefix">#{locales['index.forumAuthor']}</h:panelGroup>
-                  <h:outputLink styleClass="index-forum-topic-author-link" value="#{request.contextPath}/users/#{forumTopic.author.id}">#{forumTopic.author.fullName}</h:outputLink>
+                  <h:outputLink styleClass="index-forum-topic-author-link" value="#{request.contextPath}/profile/#{forumTopic.author.id}">#{forumTopic.author.fullName}</h:outputLink>
                 </h:panelGroup>
               </h:panelGroup>
             </ui:repeat>

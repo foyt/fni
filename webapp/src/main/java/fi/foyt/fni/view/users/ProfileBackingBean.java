@@ -29,7 +29,7 @@ import fi.foyt.fni.users.UserController;
 @URLMappings(mappings = {
   @URLMapping(
 		id = "users-profile", 
-		pattern = "/users/#{profileBackingBean.userId}", 
+		pattern = "/profile/#{profileBackingBean.userId}", 
 		viewId = "/users/profile.jsf"
   )
 })

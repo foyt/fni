@@ -46,7 +46,7 @@
               <h:outputLabel value="#{locales['gamelibrary.publications.detailsAuthors']}" rendered="#{gameLibraryPublicationsBackingBean.getAuthors(publication).size() gt 1}"/>
             
               <ui:repeat var="author" value="#{gameLibraryPublicationsBackingBean.getAuthors(publication)}">
-                <h:outputLink value="#{request.contextPath}/users/#{author.id}" styleClass="gamelibrary-publication-author">#{author.fullName}</h:outputLink>
+                <h:outputLink value="#{request.contextPath}/profile/#{author.id}" styleClass="gamelibrary-publication-author">#{author.fullName}</h:outputLink>
               </ui:repeat>
             
             </h:panelGroup>

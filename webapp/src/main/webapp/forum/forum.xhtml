@@ -59,7 +59,7 @@
                   </h:panelGroup>
                   <h:panelGroup layout="block" styleClass="forum-view-forum-topic-info">
                     <h:panelGroup styleClass="forum-view-forum-topic-label">#{locales['forum.forum.topicStartedBy']}</h:panelGroup>
-                    <h:outputLink styleClass="forum-view-forum-topic-author" value="#{request.contextPath}/users/#{topic.author.id}">#{topic.author.fullName}</h:outputLink>
+                    <h:outputLink styleClass="forum-view-forum-topic-author" value="#{request.contextPath}/profile/#{topic.author.id}">#{topic.author.fullName}</h:outputLink>
                     <h:panelGroup styleClass="forum-view-forum-topic-created">
                       <h:outputText value="#{topic.created}">
                         <f:convertDateTime type="date"/>
