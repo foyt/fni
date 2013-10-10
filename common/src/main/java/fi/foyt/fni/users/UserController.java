@@ -71,8 +71,8 @@ public class UserController {
 	@Inject
 	private AddressDAO addressDAO;
 	
-  public User createUser(String firstName, String lastName, String nickname, Locale locale, Date registrationDate) {
-    User user = userDAO.create(firstName, lastName, nickname, locale, registrationDate, UserRole.USER);
+  public User createUser(String firstName, String lastName, String nickname, Locale locale, Date registrationDate, UserProfileImageSource profileImageSource) {
+    User user = userDAO.create(firstName, lastName, nickname, locale, registrationDate, UserRole.USER, profileImageSource);
     return user;
   }
 

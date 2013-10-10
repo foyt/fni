@@ -21,7 +21,7 @@ public class UserDAO extends GenericDAO<User> {
 
 	private static final long serialVersionUID = 1L;
 
-	public User create(String firstName, String lastName, String nickname, Locale locale, Date registrationDate, UserRole role) {
+	public User create(String firstName, String lastName, String nickname, Locale locale, Date registrationDate, UserRole role, UserProfileImageSource profileImageSource) {
     EntityManager entityManager = getEntityManager();
 
     User user = new User();
@@ -33,6 +33,7 @@ public class UserDAO extends GenericDAO<User> {
     user.setPremiumExpires(null);
     user.setRole(role);
     user.setRegistrationDate(registrationDate);
+    user.setProfileImageSource(profileImageSource);
 
     entityManager.persist(user);
 
