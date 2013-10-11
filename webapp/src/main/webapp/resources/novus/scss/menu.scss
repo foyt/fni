@@ -63,16 +63,20 @@ $search-box-width-focus: 175px;
     width: 20%;
   }
   
-  .menu-tools-container {
-    text-align: right;
-  }
-  
   .menu-tools-search {
     margin-right: 8px;
   }
 }
 
 /* Tools */
+
+.menu-tools-container {
+  text-align: right;
+}
+
+.menu-tools-container * {
+  text-align: left;
+}
 
 .menu-tools-container a {
   color: $menu-text-color;
@@ -154,15 +158,15 @@ $search-box-width-focus: 175px;
   font-size: 13px;
 }
 
-.menu-tools-locale-container {
+.menu-tools-locale-container, .menu-tools-account-container {
   display: inline-block;
 }
 
-.menu-tools-locale, .menu-tools-login, .menu-tools-search {
+.menu-tools-locale, .menu-tools-login, .menu-tools-logout, .menu-tools-search, .menu-tools-account {
   text-transform: uppercase;
 }
 
-.menu-tools-locale-list {
+.menu-tools-locale-list, .menu-tools-account-list {
   position: absolute;
   background: $menu-background-color;
   font-family: $default-font;
@@ -170,7 +174,7 @@ $search-box-width-focus: 175px;
   list-style: none;
 }
 
-.menu-tools-locale-list ul a {
+.menu-tools-locale-list ul a, .menu-tools-account-list ul a {
   color: $menu-text-color;
   padding: 8px;
   font-size: 13px;
@@ -178,15 +182,11 @@ $search-box-width-focus: 175px;
   @include box-sizing(border-box);
 }
 
-.menu-tools-locale-list ul a:hover {
+.menu-tools-locale-list ul a:hover, .menu-tools-account-list ul a:hover {
   color:$menu-text-color-hover;
   background: $menu-background-color-hover;
 }
 
-.menu-tools-login {
-  margin-right: 20px;
-}
-
-.menu-tools-locale {
+.menu-tools-locale, .menu-tools-account, .menu-tools-login {
   margin-right: 20px;
 }

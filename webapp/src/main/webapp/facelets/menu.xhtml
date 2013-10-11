@@ -17,7 +17,10 @@
     <h:panelGroup layout="block" styleClass="grid_9 menu-navigation-container">
       <h:link outcome="/index.jsf">#{locales['menu.menuFrontPage']}</h:link>
       <h:link outcome="/forge/index.jsf">#{locales['menu.menuForge']}</h:link>
+      <!-- 
+      Hidden because Illusion will not be ready for a while
       <h:link outcome="/illusion/index.jsf">#{locales['menu.menuIllusion']}</h:link>
+      -->
       <h:link outcome="/gamelibrary/index.jsf">#{locales['menu.menuGameLibrary']}</h:link>
       <h:link outcome="/forum/index.jsf">#{locales['menu.menuForum']}</h:link>
     </h:panelGroup>
@@ -38,7 +41,19 @@
         </h:form>
       </h:panelGroup>
       
-      <h:link outcome="/users/login.jsf" styleClass="menu-tools-login">#{locales['menu.toolLogin']}</h:link>
+      <h:link outcome="/users/login.jsf" styleClass="menu-tools-login" rendered="#{!sessionBackingBean.loggedIn}">#{locales['menu.toolLogin']}</h:link>
+      
+      <h:panelGroup layout="block" styleClass="menu-tools-account-container" rendered="#{sessionBackingBean.loggedIn}">
+        <h:outputLink value="javascript:void(null)" styleClass="menu-tools-account">
+          <h:outputFormat value="#{locales['menu.toolAccount']}"/>
+        </h:outputLink>
+        
+        <li class="menu-tools-account-list" style="display: none">
+          <ul><h:link value="#{locales['menu.toolAccountEditProfile']}" outcome="/users/editprofile.jsf" /></ul>
+          <ul><h:link value="#{locales['menu.toolAccountLogout']}" outcome="/users/logout.jsf" /></ul>
+        </li>
+      </h:panelGroup>
+      
       <h:panelGroup layout="block" styleClass="menu-tools-search-container">
         <input class="menu-tools-search-text" type="text"></input>
         <h:panelGroup layout="block" styleClass="menu-tools-search-loading" style="display: none"/>

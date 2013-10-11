@@ -45,6 +45,14 @@
       $('.menu-tools-locale-list').hide();
     });
   });
+  
+  $(document).on('click', '.menu-tools-account', function (e) {
+    $(this).closest('.menu-tools-account-container').find('.menu-tools-account-list').show();
+    
+    $(document).one('click', function (e) {
+      $('.menu-tools-account-list').hide();
+    });
+  });
 
   $(document).on('keyup', '.menu-tools-search-text', function (event) {
     search();
