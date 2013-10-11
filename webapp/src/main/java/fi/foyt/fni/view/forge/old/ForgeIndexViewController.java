@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.forge;
+package fi.foyt.fni.view.forge.old;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -28,8 +28,8 @@ import fi.foyt.fni.view.PageViewController;
 import fi.foyt.fni.view.ViewControllerContext;
 import fi.foyt.fni.view.ViewControllerException;
 
-@RequestScoped
-@Stateful
+//@RequestScoped
+//@Stateful
 public class ForgeIndexViewController extends PageViewController {
 
   @Inject

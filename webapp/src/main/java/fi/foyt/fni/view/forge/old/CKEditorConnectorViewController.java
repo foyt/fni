@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.forge;
+package fi.foyt.fni.view.forge.old;
 
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
@@ -34,8 +34,8 @@ import fi.foyt.fni.view.AbstractViewController;
 import fi.foyt.fni.view.ViewControllerContext;
 import fi.foyt.fni.view.ViewControllerException;
 
-@RequestScoped
-@Stateful
+//@RequestScoped
+//@Stateful
 public class CKEditorConnectorViewController extends AbstractViewController {
 
 	@Inject

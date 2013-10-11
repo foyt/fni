@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.forge;
+package fi.foyt.fni.view.forge.old;
 
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
@@ -25,8 +25,8 @@ import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.view.Locales;
 
-@RequestScoped
-@Stateful
+//@RequestScoped
+//@Stateful
 public class ForgeWorkspaceManager {
   
   @Inject

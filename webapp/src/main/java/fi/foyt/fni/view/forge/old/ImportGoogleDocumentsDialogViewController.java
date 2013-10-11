@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.forge;
+package fi.foyt.fni.view.forge.old;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -34,8 +34,8 @@ import fi.foyt.fni.view.Locales;
 import fi.foyt.fni.view.ViewControllerContext;
 import fi.foyt.fni.view.ViewControllerException;
 
-@RequestScoped
-@Stateful
+//@RequestScoped
+//@Stateful
 public class ImportGoogleDocumentsDialogViewController extends AbstractViewController {
 	
 	private final static String REQUIRED_SCOPE = "https://www.googleapis.com/auth/drive";

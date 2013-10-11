@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.forge;
+package fi.foyt.fni.view.forge.old;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,8 +18,8 @@ import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.view.AbstractViewController;
 import fi.foyt.fni.view.ViewControllerContext;
 
-@RequestScoped
-@Stateful
+//@RequestScoped
+//@Stateful
 public class MaterialListViewController extends AbstractViewController {
 
   @Inject

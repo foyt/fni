@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.forge;
+package fi.foyt.fni.view.forge.old;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -14,8 +14,8 @@ import fi.foyt.fni.view.AbstractViewController;
 import fi.foyt.fni.view.ViewControllerContext;
 import fi.foyt.fni.view.ViewControllerException;
 
-@RequestScoped
-@Stateful
+//@RequestScoped
+//@Stateful
 public class EditVectorImageViewController extends AbstractViewController {
 
   @Inject

@@ -1,4 +1,4 @@
-package fi.foyt.fni.view.forge;
+package fi.foyt.fni.view.forge.old;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -6,8 +6,8 @@ import javax.enterprise.context.RequestScoped;
 import fi.foyt.fni.view.AbstractViewController;
 import fi.foyt.fni.view.ViewControllerContext;
 
-@RequestScoped
-@Stateful
+//@RequestScoped
+//@Stateful
 public class UploadMaterialsDialogViewController extends AbstractViewController {
 
   @Override
