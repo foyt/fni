@@ -18,6 +18,7 @@ import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.auth.UserIdentifier;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
 import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
@@ -85,7 +86,7 @@ public abstract class AuthenticationStrategy {
         } else {
         	// If user is not logged in and no existing users by email were found 
         	// we need to create new user
-          user = userController.createUser(firstName, lastName, null, locale, new Date());
+          user = userController.createUser(firstName, lastName, null, locale, new Date(), UserProfileImageSource.GRAVATAR);
           newlyCreated = true;
         }
       } else {
