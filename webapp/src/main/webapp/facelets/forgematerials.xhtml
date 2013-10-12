@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html">
+  
+  <h:panelGroup layout="block" styleClass="grid_#{size} tight"> 
+    <h:panelGroup layout="block" styleClass="forge-materials"> 
+      <h2>#{title}</h2>
+      <h:panelGroup layout="block" styleClass="forge-materials-container"> 
+        <ui:repeat var="material" value="#{materials}">
+          <ui:include src="/facelets/forgematerial.xhtml">
+            <ui:param name="material" value="#{material}" />
+          </ui:include>
+        </ui:repeat>
+      </h:panelGroup>
+    </h:panelGroup>
+  </h:panelGroup>
+</ui:composition>

@@ -2,7 +2,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
 
-  <ui:define name="page-title">...</ui:define>
+  <ui:define name="page-title">#{locales['forge.index.pageTitle']}</ui:define>
   <ui:define name="view-stylesheets">
     <h:outputStylesheet library="novus" name="css/fonts.css"/>
     <h:outputStylesheet library="novus" name="css/menu.css"/>
@@ -14,13 +14,83 @@
     <!-- Menu -->
 
     <ui:include src="/facelets/menu.xhtml" />
-
-    <!-- Coming soon -->
     
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      <!-- Breadcrumb -->
+      
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:panelGroup styleClass="view-header-navigation-item">#{locales['forge.index.navigationIndex']}</h:panelGroup>
+      </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{locales['forge.index.descriptionTitle']}</p>
+        <p class="view-header-description-text">#{locales['forge.index.descriptionText']}</p>
+      </h:panelGroup>
+      
+      <!-- Search -->
+      
+      <h:panelGroup layout="block" styleClass="forge-search-container">
+        <input type="text" class="forge-search"/>
+        <h:panelGroup layout="block" styleClass="forge-search-loading" style="display: none"/>
+        <h:panelGroup layout="block" styleClass="forge-search-result" style="display: none"/>
+      </h:panelGroup>
+    </h:panelGroup>
+
+    <!-- Content -->
+
     <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <p>Coming soon</p>
+    
+      <!-- Buttons -->
+ 
+      <h:panelGroup layout="block" styleClass="grid_8 alpha slim-right">
+        <h:panelGroup layout="block" styleClass="forge-button-panel">
+          NEW
+        </h:panelGroup>
+      </h:panelGroup>
+ 
+      <h:panelGroup layout="block" styleClass="grid_8 omega slim-left">
+        <h:panelGroup layout="block" styleClass="forge-button-panel">
+         IMPORT
+        </h:panelGroup>
+      </h:panelGroup>
+      
     </h:panelGroup>
     
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="forge-material-panel">
+        
+        <h:panelGroup layout="block" styleClass="forge-material-set">
+          <ui:include src="/facelets/forgematerials.xhtml">
+            <ui:param name="size" value="16"/>
+            <ui:param name="title" value="Materials"/>
+            <ui:param name="materials" value="#{forgeIndexBackingBean.materials}" />
+          </ui:include>
+        </h:panelGroup>
+        
+        <h:panelGroup layout="block" styleClass="forge-material-set">
+          <ui:include src="/facelets/forgematerials.xhtml">
+            <ui:param name="size" value="5"/>
+            <ui:param name="title" value="Last Viewed"/>
+            <ui:param name="materials" value="#{forgeIndexBackingBean.lastViewedMaterials}" />
+          </ui:include>
+          
+          <ui:include src="/facelets/forgematerials.xhtml">
+            <ui:param name="size" value="5"/>
+            <ui:param name="title" value="Last Edited"/>
+            <ui:param name="materials" value="#{forgeIndexBackingBean.lastEditedMaterials}" />
+          </ui:include>
+          
+          <ui:include src="/facelets/forgematerials.xhtml">
+            <ui:param name="size" value="6"/>
+            <ui:param name="title" value="Starred"/>
+            <ui:param name="materials" value="#{forgeIndexBackingBean.starredMaterials}" />
+          </ui:include>
+        </h:panelGroup>
+        
+      </h:panelGroup>
+    </h:panelGroup>
   </ui:define>
 
 </ui:composition>

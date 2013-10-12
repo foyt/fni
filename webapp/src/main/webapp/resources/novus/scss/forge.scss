@@ -1,3 +1,160 @@
 @import "vars";
 @import "compass";
 @import "styles";
+
+$header-background-color: #000;
+$header-text-color: #fff;
+$header-background-color-hover: #fff;
+$header-text-color-hover: #000;
+
+/* Generic */
+
+.forge-material-panel h2 {
+  @include header-2;
+  color: $title-color;
+  
+  margin-top: 40px;
+  margin-bottom: 40px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+/* Panels */
+
+.forge-button-panel {
+  @include generic-panel;
+}
+
+.forge-material-panel {
+  display: table;
+  background-color: $panel-background-color;
+  margin-top: 10px;
+}
+
+.forge-material-panel h2 {
+  margin-bottom: 16px;  
+  border-bottom: 5px solid $title-color;
+}
+
+/* Header */
+
+.forge-search-container {
+  position: relative;  
+}
+
+.forge-search-loading {
+  background: url('#' + '{resource["novus:gfx/layout/loader-bw.gif"]}') no-repeat center center;
+  width: 16px;
+  position: absolute;
+  top: 1px;
+  bottom: 0px;  
+  right: 5px;
+}
+
+.forge-search {
+  margin-right: 120px;
+  font-size: 16px;
+  padding-top:5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  @include border-radius(12px);
+  @include box-sizing(border-box); 
+  width: 100%;
+  border: none;
+}
+
+.forge-search-result {
+  position: absolute;
+  width: 100%;
+  background: #000;
+  padding: 8px;
+  margin-top: 8px;
+  @include box-sizing(border-box); 
+  width: 100%;
+}
+
+.forge-search-result a {
+  padding: 8px;  
+  text-decoration: none;
+  font-family: $default-font;
+  color: $header-text-color;
+  @include box-sizing(border-box); 
+  width: 100%;
+  display: block;
+  font-size: 14px;
+}
+
+.forge-search-result a:hover {
+  background: $header-background-color-hover;
+  color: $header-text-color-hover;
+}
+
+.forge-search-no-result {
+  font-family: $default-font;
+  color: $header-text-color;
+  padding: 8px;
+  font-size: 14px;
+}
+
+/* Materials */
+
+.forge-material {
+  margin-bottom: 8px;
+  display: inline-table;
+  width: 300px;
+}
+
+.forge-materials-container {
+  margin-left: 40px;
+}
+
+.forge-material-icon {
+  display: table-cell;
+  vertical-align: top;
+  width: 48px;
+}
+
+.forge-material-info {
+  display: table-cell;
+  vertical-align: top;
+  padding-left: 8px;
+}
+
+.forge-material-title, .forge-material-date, .forge-material-creator {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-family: $default-font;
+  text-decoration: none;
+}
+
+.forge-material-title-container, .forge-material-creator-container, .forge-material-date-container {
+  display: block;
+}
+
+.forge-material-title, .forge-material-date {
+  color: $default-color;
+}
+
+.forge-material-star {
+  text-decoration: none;
+  font-family: courier;
+  font-size: 32px;
+  text-shadow: 0 0 1px #000000;
+  position: absolute;
+  margin-top: -16px;
+  margin-left: 8px;
+  outline: none;
+}
+
+.forge-material-star:after {
+  content: '☆';
+  color: black;
+}
+
+.forge-material-starred:after {
+  content: '★';
+  color: orange;
+}
+
+
+
