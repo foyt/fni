@@ -71,6 +71,8 @@ public class UserController {
 	@Inject
 	private AddressDAO addressDAO;
 	
+	/* User */
+	
   public User createUser(String firstName, String lastName, String nickname, Locale locale, Date registrationDate, UserProfileImageSource profileImageSource) {
     User user = userDAO.create(firstName, lastName, nickname, locale, registrationDate, UserRole.USER, profileImageSource);
     return user;
@@ -133,6 +135,22 @@ public class UserController {
 	public User updateUserPhone(User user, String phone) {
   	return userDAO.updatePhone(user, phone);
 	}
+	
+	/* Email */
+	
+	public UserEmail createUserEmail(User user, String email, Boolean primary) {
+		return userEmailDAO.create(user, email, primary);
+	}
+	
+	public UserEmail findUserEmailById(Long id) {
+		return userEmailDAO.findById(id);
+	}
+	
+	public UserEmail findByEmail(String email) {
+		return userEmailDAO.findByEmail(email);
+	}
+	
+	/* Friends */
   
   public UserFriend getUserFriendByUsers(User user1, User user2) {
     UserFriend userFriend = userFriendDAO.findByUserAndFriend(user1, user2);
