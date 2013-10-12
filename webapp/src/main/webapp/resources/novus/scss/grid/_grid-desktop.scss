@@ -74,11 +74,12 @@ body {
   }
   
   .container_#{$grid-columns} .grid_#{$i}.slim-left, .container_#{$grid-columns} .grid_#{$i}.slim-right {
-    width: ($grid-cell-width * $i) - ($grid-margin / 2);
+    width: ($grid-cell-width * $i) - ($grid-margin) + ($grid-margin / 2);
   }
   
-  .container_#{$grid-columns} .grid_#{$i}.alpha.slim-left, .container_#{$grid-columns} .grid_#{$i}.alpha.slim-right {
-    width: ($grid-cell-width * $i) - ($grid-margin / 1.5);
+  .container_#{$grid-columns} .grid_#{$i}.alpha.slim-left, .container_#{$grid-columns} .grid_#{$i}.alpha.slim-right,
+  .container_#{$grid-columns} .grid_#{$i}.omega.slim-left, .container_#{$grid-columns} .grid_#{$i}.omega.slim-right {
+    width: ($grid-cell-width * $i) - ($grid-margin) + ($grid-margin / 2);
   }
 }
 
