@@ -7,11 +7,7 @@
 	  <pattern value="/" />
       <view-id value="/index.jsf" />
 	</url-mapping>
-	
-	<url-mapping id="forge-index">
-	  <pattern value="/forge/" />
-	  <view-id value="/forge/index.page" />
-	</url-mapping>
+
 	<rewrite match="^/forge$" substitute="/forge/"/>
 	<rewrite match="^/forge([\?\#])(.*)" substitute="/forge/$1$2"/>
 
