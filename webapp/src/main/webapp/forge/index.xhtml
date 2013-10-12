@@ -70,7 +70,7 @@
                   <h:commandLink action="#{forgeIndexBackingBean.closeMaterialsList}" value="#{locales['forge.index.materialListClose']}" style="#{forgeIndexBackingBean.materialsOpen ? '' : 'display: none'}"/>
                   <h:commandLink action="#{forgeIndexBackingBean.openMaterialsList}" value="#{locales['forge.index.materialListOpen']}" style="#{!forgeIndexBackingBean.materialsOpen ? '' : 'display: none'}"/>
                 </h:panelGroup>
-                <h:panelGroup layout="block" styleClass="forge-materials-container" rendered="#{forgeIndexBackingBean.materialsOpen}"> 
+                <h:panelGroup layout="block" styleClass="forge-materials-container" style="#{forgeIndexBackingBean.materialsOpen ? '' : 'display: none'}"> 
                   <ui:repeat var="material" value="#{forgeIndexBackingBean.materials}">
                     <ui:include src="/facelets/forgematerial.xhtml">
                       <ui:param name="material" value="#{material}" />
@@ -80,7 +80,7 @@
               </h:panelGroup>
             </h:panelGroup>
           </h:panelGroup>
-          
+           
           <h:panelGroup layout="block" styleClass="forge-material-list-set">
             <h:panelGroup layout="block" styleClass="grid_5 tight"> 
               <h:panelGroup layout="block" styleClass="forge-material-list"> 

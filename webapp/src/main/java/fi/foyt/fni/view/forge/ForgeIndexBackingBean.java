@@ -46,8 +46,8 @@ public class ForgeIndexBackingBean {
 		folderId = null;
 		materialsOpen = false;
 		lastViewedOpen = true;
-		lastEditedOpen = true;
 		starredOpen = true;
+		lastEditedOpen = true;
 	}
 
 	public List<Material> getMaterials() {

@@ -754,4 +754,9 @@ public class MaterialController {
 	public GoogleDocument findGoogleDocumentById(Long id) {
 		return googleDocumentDAO.findById(id);
 	}
+
+	public Folder findFolderById(Long folderId) {
+		return folderDAO.findById(folderId);
+	}
+
 }

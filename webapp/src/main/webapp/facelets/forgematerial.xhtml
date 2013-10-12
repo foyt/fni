@@ -26,8 +26,8 @@
         <h:outputLink styleClass="forge-material-title" value="javascript:void(null)" title="#{material.title}">
           #{material.title.length() gt 30 ? material.title.substring(0, 27).concat('...') : material.title}
         </h:outputLink>
-        <h:commandLink action="#{forgeIndexBackingBean.starMaterial(material.id)}" styleClass="forge-material-star" rendered="#{!forgeIndexBackingBean.isStarred(material.id)}"/>
-        <h:commandLink action="#{forgeIndexBackingBean.unstarMaterial(material.id)}" styleClass="forge-material-star forge-material-starred" rendered="#{forgeIndexBackingBean.isStarred(material.id)}"/>
+        <h:commandLink action="#{forgeIndexBackingBean.starMaterial(material.id)}" styleClass="forge-material-star" style="#{!forgeIndexBackingBean.isStarred(material.id) ? '' : 'display: none'}"/>
+        <h:commandLink action="#{forgeIndexBackingBean.unstarMaterial(material.id)}" styleClass="forge-material-star forge-material-starred" rendered="#{forgeIndexBackingBean.isStarred(material.id)}" style="#{forgeIndexBackingBean.isStarred(material.id) ? '' : 'display: none'}"/>
       </h:panelGroup>
       
       <h:panelGroup layout="block" styleClass="forge-material-date-container">
