@@ -6,6 +6,7 @@ $header-background-color: #000;
 $header-text-color: #fff;
 $header-background-color-hover: #fff;
 $header-text-color-hover: #000;
+$selected-background-color: lighten(rgba(71, 176, 176, 0.75), 30%);
 
 /* Generic */
 
@@ -110,7 +111,8 @@ $header-text-color-hover: #000;
 .forge-material {
   margin-bottom: 8px;
   display: inline-table;
-  width: 300px;
+  width: 290px;
+  padding: 8px;
 }
 
 .forge-materials-container {
@@ -121,6 +123,8 @@ $header-text-color-hover: #000;
   display: table-cell;
   vertical-align: top;
   width: 48px;
+  line-height: 0px;
+  padding-left: 8px;
 }
 
 .forge-material-info {
@@ -130,18 +134,26 @@ $header-text-color-hover: #000;
 }
 
 .forge-material-title, .forge-material-date, .forge-material-creator {
-  text-transform: uppercase;
   font-size: 12px;
   font-family: $default-font;
   text-decoration: none;
 }
 
 .forge-material-title-container, .forge-material-creator-container, .forge-material-date-container {
-  display: block;
+  line-height: 12px;
+  padding-top: 3px;
+}
+
+.forge-material-title {
+  font-weight: bold;
 }
 
 .forge-material-title, .forge-material-date {
   color: $default-color;
+}
+
+.forge-material-date {
+  font-size: 10px;
 }
 
 .forge-material-star {
@@ -150,7 +162,7 @@ $header-text-color-hover: #000;
   font-size: 32px;
   text-shadow: 0 0 1px #000000;
   position: absolute;
-  margin-top: -16px;
+  margin-top: -1px;
   margin-left: 8px;
   outline: none;
 }
@@ -165,5 +177,9 @@ $header-text-color-hover: #000;
   color: orange;
 }
 
-
-
+.forge-material-selected {
+  display: block;  
+  width: 880px;
+  @include box-sizing(border-box); 
+  background: $selected-background-color;
+}

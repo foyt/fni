@@ -8,6 +8,10 @@
     <h:outputStylesheet library="novus" name="css/menu.css"/>
     <h:outputStylesheet library="novus" name="css/forge.css"/>
   </ui:define>
+  
+  <ui:define name="view-scripts">
+    <h:outputScript name="scripts/gui/forge-index.js"/>
+  </ui:define>
 
   <ui:define name="grid-content">
 
@@ -64,7 +68,7 @@
           
           <h:panelGroup layout="block" styleClass="forge-material-list-set">
             <h:panelGroup layout="block" styleClass="grid_16 tight"> 
-              <h:panelGroup layout="block" styleClass="forge-material-list"> 
+              <h:panelGroup layout="block" styleClass="forge-material-list forge-materials-list"> 
                 <h:panelGroup layout="block" styleClass="forge-material-list-title"> 
                   <h2>#{locales['forge.index.materialListTitle']}</h2>
                   <h:commandLink action="#{forgeIndexBackingBean.closeMaterialsList}" value="#{locales['forge.index.materialListClose']}" style="#{forgeIndexBackingBean.materialsOpen ? '' : 'display: none'}"/>
@@ -83,7 +87,7 @@
            
           <h:panelGroup layout="block" styleClass="forge-material-list-set">
             <h:panelGroup layout="block" styleClass="grid_5 tight"> 
-              <h:panelGroup layout="block" styleClass="forge-material-list"> 
+              <h:panelGroup layout="block" styleClass="forge-material-list forge-last-viewed-list"> 
                 <h:panelGroup layout="block" styleClass="forge-material-list-title"> 
                   <h2>#{locales['forge.index.lastViewedListTitle']}</h2>
                   <h:commandLink action="#{forgeIndexBackingBean.closeLastViewedList}" value="#{locales['forge.index.lastViewedClose']}" style="#{forgeIndexBackingBean.lastViewedOpen ? '' : 'display: none'}"/>
@@ -100,7 +104,7 @@
             </h:panelGroup>
             
             <h:panelGroup layout="block" styleClass="grid_5 tight"> 
-              <h:panelGroup layout="block" styleClass="forge-material-list"> 
+              <h:panelGroup layout="block" styleClass="forge-material-list forge-last-edited-list"> 
                 <h:panelGroup layout="block" styleClass="forge-material-list-title"> 
                   <h2>#{locales['forge.index.lastEditedListTitle']}</h2>
                   <h:commandLink action="#{forgeIndexBackingBean.closeLastEditedList}" value="#{locales['forge.index.lastEditedClose']}" style="#{forgeIndexBackingBean.lastEditedOpen ? '' : 'display: none'}"/>
@@ -117,7 +121,7 @@
             </h:panelGroup>
             
             <h:panelGroup layout="block" styleClass="grid_5 tight"> 
-              <h:panelGroup layout="block" styleClass="forge-material-list"> 
+              <h:panelGroup layout="block" styleClass="forge-material-list forge-starred-list"> 
                 <h:panelGroup layout="block" styleClass="forge-material-list-title"> 
                   <h2>#{locales['forge.index.starredListTitle']}</h2>
                   <h:commandLink action="#{forgeIndexBackingBean.closeStarredList}" value="#{locales['forge.index.starredClose']}" style="#{forgeIndexBackingBean.starredOpen ? '' : 'display: none'}"/>
