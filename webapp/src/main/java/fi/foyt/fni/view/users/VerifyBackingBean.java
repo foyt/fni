@@ -46,7 +46,7 @@ public class VerifyBackingBean {
     		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
     		externalContext.redirect(new StringBuilder()
       	  .append(externalContext.getRequestContextPath())
-      	  .append("/")
+      	  .append("/login/")
       	  .toString());   
 			} else {
 				FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("users.verification.internalAuthNotFound"));
