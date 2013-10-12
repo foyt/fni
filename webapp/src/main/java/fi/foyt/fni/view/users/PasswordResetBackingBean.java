@@ -10,6 +10,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
@@ -60,18 +62,22 @@ public class PasswordResetBackingBean {
 		if (!getPassword1().equals(getPassword2())) {
 			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.resetPassword.passwordsDontMatch"));
 		} else {
-  		PasswordResetKey passwordResetKey = authenticationController.findPasswordResetKey(getKey());
-  		if (passwordResetKey != null) {
-    		authenticationController.setUserPassword(passwordResetKey.getUser(), getPassword1());
-    		authenticationController.deletePasswordResetKey(passwordResetKey);
-    		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-    		externalContext.redirect(new StringBuilder()
-      	  .append(externalContext.getRequestContextPath())
-      	  .append("/")
-      	  .toString());  
-  		} else {
-  			FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("users.resetPassword.invalidPasswordResetKey"));
-  		}
+			if (DigestUtils.md5Hex("").equals(getPassword1())) {
+				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.resetPassword.passwordRequired"));
+			} else {
+    		PasswordResetKey passwordResetKey = authenticationController.findPasswordResetKey(getKey());
+    		if (passwordResetKey != null) {
+      		authenticationController.setUserPassword(passwordResetKey.getUser(), getPassword1());
+      		authenticationController.deletePasswordResetKey(passwordResetKey);
+      		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+      		externalContext.redirect(new StringBuilder()
+        	  .append(externalContext.getRequestContextPath())
+        	  .append("/login/")
+        	  .toString());  
+    		} else {
+    			FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("users.resetPassword.invalidPasswordResetKey"));
+    		}
+			}
 		}
 	}
 	
