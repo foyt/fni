@@ -134,12 +134,14 @@
 
             <h:panelGroup layout="block" styleClass="user-login-field">
               <h:outputLabel value="#{locales['users.login.registerPasswordTitle']}"/>
-              <h:inputSecret value="#{loginBackingBean.registerPassword1}" required="true" requiredMessage="#{locales['users.login.registerPasswordRequired']}"/>
+              <h:inputSecret id="password1"/>
+              <h:inputHidden value="#{loginBackingBean.registerPassword1}" id="password1-encoded"/>
             </h:panelGroup>
 
             <h:panelGroup layout="block" styleClass="user-login-field">
               <h:outputLabel value="#{locales['users.login.registerPassword2Title']}"/>
-              <h:inputSecret value="#{loginBackingBean.registerPassword2}"/>
+              <h:inputSecret id="password2"/>
+              <h:inputHidden value="#{loginBackingBean.registerPassword2}" id="password2-encoded"/>
             </h:panelGroup>
 
             <h:panelGroup layout="block" styleClass="user-login-field">

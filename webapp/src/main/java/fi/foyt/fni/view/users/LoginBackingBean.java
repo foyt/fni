@@ -19,6 +19,7 @@ import javax.inject.Named;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
@@ -207,10 +208,22 @@ public class LoginBackingBean {
 
 	public void register() {
 		boolean valid = true;
-
-		if (!getRegisterPassword1().equals(getRegisterPassword2())) {
+		
+		if (StringUtils.isBlank(getRegisterPassword1())) {
+			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.registerPasswordRequired"));
+			valid = false;
+		}
+		
+		if (valid && !getRegisterPassword1().equals(getRegisterPassword2())) {
 			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.registrationPasswordsDontMatch"));
 			valid = false;
+		}
+
+		if (valid) {
+		  if (DigestUtils.md5Hex("").equals(getRegisterPassword1())) {
+			  FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.registerPasswordRequired"));
+			  valid = false;
+	  	}
 		}
 
 		if (valid) {
@@ -220,7 +233,8 @@ public class LoginBackingBean {
 			} else {
 				Locale locale = sessionController.getLocale();
 				User user = userController.createUser(getRegisterFirstName(), getRegisterLastName(), null, locale, new Date(), UserProfileImageSource.GRAVATAR);
-
+				userController.createUserEmail(user, getRegisterEmail(), Boolean.TRUE);
+				
 				UserVerificationKey verificationKey = authenticationController.createVerificationKey(user, getRegisterEmail());
 				authenticationController.createInternalAuth(user, getRegisterPassword1());
 
