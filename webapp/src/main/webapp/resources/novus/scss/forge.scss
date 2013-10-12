@@ -12,11 +12,6 @@ $header-text-color-hover: #000;
 .forge-material-panel h2 {
   @include header-2;
   color: $title-color;
-  
-  margin-top: 40px;
-  margin-bottom: 40px;
-  margin-left: 40px;
-  margin-right: 40px;
 }
 
 /* Panels */
@@ -29,11 +24,6 @@ $header-text-color-hover: #000;
   display: table;
   background-color: $panel-background-color;
   margin-top: 10px;
-}
-
-.forge-material-panel h2 {
-  margin-bottom: 16px;  
-  border-bottom: 5px solid $title-color;
 }
 
 /* Header */
@@ -98,6 +88,25 @@ $header-text-color-hover: #000;
 
 /* Materials */
 
+.forge-material-list-title {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-bottom: 16px;  
+  border-bottom: 5px solid $title-color;
+}
+.forge-material-list-title h2 {
+  display: inline;
+}
+
+.forge-material-list-title a {
+  font-size: 16px;
+  color: $title-color;
+  font-family: $default-font;
+  float: right;
+}
+  
 .forge-material {
   margin-bottom: 8px;
   display: inline-table;

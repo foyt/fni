@@ -4,48 +4,46 @@
   xmlns:h="http://java.sun.com/jsf/html">
   
   <h:panelGroup layout="block" styleClass="forge-material"> 
-    <h:form>
-      <h:panelGroup layout="block" styleClass="forge-material-icon"> 
-        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-folder.png" rendered="#{material.type eq 'FOLDER'}"/> 
-        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-ubuntuone.png" rendered="#{material.type eq 'UBUNTU_ONE_ROOT_FOLDER'}"/> 
-        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-dropbox.png" rendered="#{material.type eq 'DROPBOX_ROOT_FOLDER'}"/> 
-        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-image.png" rendered="#{material.type eq 'IMAGE'}"/> 
-        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-document.png" rendered="#{material.type eq 'DOCUMENT'}"/> 
-        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-pdf.png" rendered="#{material.type eq 'PDF'}"/> 
-        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-vectorimage.png" rendered="#{material.type eq 'VECTOR_IMAGE'}"/> 
-        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'FILE'}"/> 
-        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'BINARY'}"/> 
-        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'GOOGLE_DOCUMENT'}"/> 
-        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'DROPBOX_FOLDER'}"/> 
-        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'DROPBOX_FILE'}"/> 
-        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'UBUNTU_ONE_FOLDER'}"/> 
-        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'UBUNTU_ONE_FILE'}"/> 
+    <h:panelGroup layout="block" styleClass="forge-material-icon"> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-folder.png" rendered="#{material.type eq 'FOLDER'}"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-ubuntuone.png" rendered="#{material.type eq 'UBUNTU_ONE_ROOT_FOLDER'}"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-dropbox.png" rendered="#{material.type eq 'DROPBOX_ROOT_FOLDER'}"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-image.png" rendered="#{material.type eq 'IMAGE'}"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-document.png" rendered="#{material.type eq 'DOCUMENT'}"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-pdf.png" rendered="#{material.type eq 'PDF'}"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-vectorimage.png" rendered="#{material.type eq 'VECTOR_IMAGE'}"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'FILE'}"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'BINARY'}"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'GOOGLE_DOCUMENT'}"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'DROPBOX_FOLDER'}"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'DROPBOX_FILE'}"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'UBUNTU_ONE_FOLDER'}"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'UBUNTU_ONE_FILE'}"/> 
+    </h:panelGroup>
+
+    <h:panelGroup layout="block" styleClass="forge-material-info">
+      <h:panelGroup layout="block" styleClass="forge-material-title-container">
+        <h:outputLink styleClass="forge-material-title" value="javascript:void(null)" title="#{material.title}">
+          #{material.title.length() gt 30 ? material.title.substring(0, 27).concat('...') : material.title}
+        </h:outputLink>
+        <h:commandLink action="#{forgeIndexBackingBean.starMaterial(material.id)}" styleClass="forge-material-star" rendered="#{!forgeIndexBackingBean.isStarred(material.id)}"/>
+        <h:commandLink action="#{forgeIndexBackingBean.unstarMaterial(material.id)}" styleClass="forge-material-star forge-material-starred" rendered="#{forgeIndexBackingBean.isStarred(material.id)}"/>
       </h:panelGroup>
-  
-      <h:panelGroup layout="block" styleClass="forge-material-info">
-        <h:panelGroup layout="block" styleClass="forge-material-title-container">
-          <h:outputLink styleClass="forge-material-title" value="javascript:void(null)" title="#{material.title}">
-            #{material.title.length() gt 30 ? material.title.substring(0, 27).concat('...') : material.title}
-          </h:outputLink>
-          <h:commandLink action="#{forgeIndexBackingBean.starMaterial(material.id)}" styleClass="forge-material-star" rendered="#{!forgeIndexBackingBean.isStarred(material.id)}"/>
-          <h:commandLink action="#{forgeIndexBackingBean.unstarMaterial(material.id)}" styleClass="forge-material-star forge-material-starred" rendered="#{forgeIndexBackingBean.isStarred(material.id)}"/>
-        </h:panelGroup>
-        
-        <h:panelGroup layout="block" styleClass="forge-material-date-container">
-          <h:panelGroup styleClass="forge-material-date">
-            <h:outputFormat value="#{material.modified}">
-              <f:convertDateTime type="date"/>
-            </h:outputFormat>
-          </h:panelGroup>
-        </h:panelGroup>
-        
-        <h:panelGroup layout="block" styleClass="forge-material-creator-container">
-          <h:outputLink styleClass="forge-material-creator" value="#{request.contextPath}/profile/#{material.creator.id}">
-            #{material.creator.fullName}
-          </h:outputLink>
+      
+      <h:panelGroup layout="block" styleClass="forge-material-date-container">
+        <h:panelGroup styleClass="forge-material-date">
+          <h:outputFormat value="#{material.modified}">
+            <f:convertDateTime type="date"/>
+          </h:outputFormat>
         </h:panelGroup>
       </h:panelGroup>
-    </h:form>      
+      
+      <h:panelGroup layout="block" styleClass="forge-material-creator-container">
+        <h:outputLink styleClass="forge-material-creator" value="#{request.contextPath}/profile/#{material.creator.id}">
+          #{material.creator.fullName}
+        </h:outputLink>
+      </h:panelGroup>
+    </h:panelGroup>
   </h:panelGroup>
   
 </ui:composition>
