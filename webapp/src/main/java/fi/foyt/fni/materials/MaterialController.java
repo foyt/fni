@@ -324,6 +324,10 @@ public class MaterialController {
     return materials;
   }
   
+  public List<Material> listModifiedMaterialsByUser(User user, Integer firstResult, Integer maxResults) {
+  	return materialDAO.listByModifierExcludingTypesSortByModified(user, Arrays.asList(new MaterialType[] {MaterialType.FOLDER}), firstResult, maxResults);
+  }
+  
   @SuppressWarnings("unchecked")
   public List<Material> listMaterialsByFolder(User user, Folder folder) {
     List<MaterialRole> roles = Arrays.asList(MaterialRole.MAY_EDIT, MaterialRole.MAY_VIEW);
