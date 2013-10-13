@@ -8,8 +8,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.ComparatorUtils;

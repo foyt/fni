@@ -7,8 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;

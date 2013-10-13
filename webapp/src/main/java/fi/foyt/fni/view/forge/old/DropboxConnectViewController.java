@@ -5,8 +5,6 @@ import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.scribe.model.Token;

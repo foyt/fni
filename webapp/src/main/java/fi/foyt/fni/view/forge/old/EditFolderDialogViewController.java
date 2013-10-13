@@ -1,7 +1,5 @@
 package fi.foyt.fni.view.forge.old;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import fi.foyt.fni.materials.MaterialPermissionController;

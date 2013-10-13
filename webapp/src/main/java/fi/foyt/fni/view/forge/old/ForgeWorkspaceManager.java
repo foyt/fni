@@ -8,8 +8,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.ComparatorUtils;
