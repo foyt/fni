@@ -19,6 +19,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.google.api.services.drive.Drive;
@@ -526,6 +527,29 @@ public class MaterialController {
     
     return null;
 	}
+	
+	public Material findByOwnerAndPath(User owner, String path) {
+		if (StringUtils.isBlank(path) || (owner == null)) {
+			return null;
+		}
+		
+		String[] pathElements = path.split("/");
+		Folder parentFolder = null;
+		
+		for (int i = 0, l = pathElements.length - 1; i < l; i++) {
+      String pathElement = pathElements[i];
+      if (parentFolder != null)
+        parentFolder = (Folder) materialDAO.findByParentFolderAndUrlName(parentFolder, pathElement);
+      else
+        parentFolder = (Folder) materialDAO.findByRootFolderAndUrlName(owner, pathElement);
+    }
+		
+		if (parentFolder != null)
+      return materialDAO.findByParentFolderAndUrlName(parentFolder, pathElements[pathElements.length - 1]);
+    else
+    	return materialDAO.findByRootFolderAndUrlName(owner, pathElements[pathElements.length - 1]);
+	}
+
 	
 	public Material createMaterial(Folder parentFolder, User user, FileData fileData) throws MimeTypeParseException, IOException, GeneralSecurityException {
 		MimeType mimeType = parseMimeType(fileData.getContentType());
