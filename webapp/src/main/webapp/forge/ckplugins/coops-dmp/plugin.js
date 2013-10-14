@@ -78,11 +78,7 @@
           
           _applyChanges: function (text, newText) {
             // TODO: cross-browser support for document creation
-            
-            if (window.console) {
-              console.log("Applying changes");
-            }
-            
+
             if (!text) {
               // We do not have old content so we can just directly set new content as editor data
               this.getEditor().setData(newText);
@@ -118,11 +114,6 @@
               } 
               
               var appliedChecksum = this._createChecksum(this.getEditor().getData());
-  
-              if (window.console) {
-                console.log("appliedChecksum: " + appliedChecksum);
-              }
-              
               if (newTextChecksum != appliedChecksum) {
                 if (window.console) {
                   console.log("appliedChecksum does not match newTextChecksum " + appliedChecksum + " != " + newTextChecksum);
@@ -167,10 +158,6 @@
           },
           
           _applyPatch: function (patch, patchChecksum, revisionNumber, callback) {
-            if (window.console) {
-              console.log("Incoming patch, checksum: " + patchChecksum + ", revision: " + revisionNumber);
-            }
-
             this.getEditor().document.$.normalize();
             var currentContent = this.getEditor().getData();
             var patchBaseContent = this.getEditor().getCoOps().getSavedContent();

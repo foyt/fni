@@ -36,11 +36,7 @@
             if (!event.data.isConnected()) {
               var joinData = event.data.joinData;
               this._revisionNumber = joinData.revisionNumber;
-              
-              if (window.console) {
-                console.log("REST Session started, revisionNumber: " + this._revisionNumber);
-              }
-              
+
               this.getEditor().on("CoOPS:ContentPatch", this._onContentPatch, this);
               this.getEditor().on("CoOPS:ContentRevert", this._onContentRevert, this);
     
@@ -60,10 +56,7 @@
                 case 200:
                   // Our patch was accepted, yay!
                   this._revisionNumber = responseJson.revisionNumber;
-                  if (window.console) {
-                    console.log("Patch accepted, new revisionNumber: " + this._revisionNumber);
-                  } 
-                  
+
                   this.getEditor().getChangeObserver().reset();
                   this.getEditor().getChangeObserver().resume();
                   
@@ -91,10 +84,7 @@
               switch (status) {
                 case 200:
                   // Content reverted
-                  if (window.console) {
-                    console.log("Content reverted, new revisionNumber: " + this._revisionNumber);
-                  }
-                  
+
                   this.getEditor().getChangeObserver().reset();
                   this.getEditor().getChangeObserver().resume();
                   
@@ -162,8 +152,6 @@
           },
           
           _applyPatches: function (patches) {
-            console.log(["applying patches", patches]);
-            
             var patch = patches.splice(0, 1)[0];
             this._applyPatch(patch, CKEDITOR.tools.bind(function () {
               if (patches.length > 0) {
@@ -173,8 +161,6 @@
           },
           
           _applyPatch: function (patch, callback) {
-            console.log(["applying patch", patch]);
-            
             if (this._editor.fire("CoOPS:PatchReceived", {
               patch : patch.patch,
               checksum: patch.checksum,

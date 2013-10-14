@@ -108,34 +108,18 @@
       });
     
       editor.on('CoOPS:SessionStart', function(event) {
-        if (window.console) {
-          console.log("SessionStart: updated saved content");
-        }
-        
         this._coOps.setSavedContent(this.getData());
       });
     
       editor.on('CoOPS:PatchAccepted', function(event) {
-        if (window.console) {
-          console.log("PatchAccepted: updated saved content");
-        }
-
         this._coOps.setSavedContent(this.getData());
       });
     
       editor.on('CoOPS:ContentReverted', function(event) {
-        if (window.console) {
-          console.log("ContentReverted: updated saved content");
-        }
-
         this._coOps.setSavedContent(event.data.content);
       });
     
       editor.on('CoOPS:PatchApplied', function(event) {
-        if (window.console) {
-          console.log("PatchApplied: updated saved content");
-        }
-
         this._coOps.setSavedContent(event.data.content);
       });
       

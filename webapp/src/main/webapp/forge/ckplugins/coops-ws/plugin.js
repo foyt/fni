@@ -39,9 +39,6 @@ CKEDITOR.plugins.add('coops-ws', {
           } else {
             // Our patch was accepted, yay!
             this._revisionNumber = message.revisionNumber;
-            if (window.console) {
-              console.log("Patch accepted, new revisionNumber: " + this._revisionNumber);
-            } 
 
             this.getEditor().getChangeObserver().resume();
             this.getEditor().fire("CoOPS:PatchAccepted", {
@@ -55,10 +52,7 @@ CKEDITOR.plugins.add('coops-ws', {
           var content = message.content;
           
           this._revisionNumber = revisionNumber;
-          if (window.console) {
-            console.log("Content reverted, new revisionNumber: " + this._revisionNumber);
-          }
-          
+
           this.getEditor().fire("CoOPS:RevertedContentReceived", {
             content: content
           });
@@ -278,11 +272,6 @@ CKEDITOR.plugins.add('coops-ws', {
               }
               
               this._revisionNumber = joinData.revisionNumber;
-              
-              if (window.console) {
-                console.log("Session started, revisionNumber: " + this._revisionNumber);
-              }
-              
               this._sessionId = joinData.sessionId;
               
               var webSocketUrl = null;
