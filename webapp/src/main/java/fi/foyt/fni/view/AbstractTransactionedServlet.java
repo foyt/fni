@@ -31,7 +31,12 @@ public class AbstractTransactionedServlet extends HttpServlet {
   		try {
      		// Proceed with the request
 
-  			super.service(req, resp);
+  			String method = req.getMethod();
+				if ("patch".equalsIgnoreCase(method)) {
+					doPatch(req, resp);
+				} else {
+		  		super.service(req, resp);
+				}
     
     		// If transaction was started here, we commit the transaction
     		if (!transactionActive) {
@@ -51,5 +56,9 @@ public class AbstractTransactionedServlet extends HttpServlet {
   		throw new ServletException(e);
 		}
   }
+
+	protected void doPatch(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Not implemented");
+	}
 
 }
