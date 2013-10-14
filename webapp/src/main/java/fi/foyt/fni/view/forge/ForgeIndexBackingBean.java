@@ -1,5 +1,6 @@
 package fi.foyt.fni.view.forge;
 
+import java.io.FileNotFoundException;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,10 +10,13 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
+import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.TitleComparator;
 import fi.foyt.fni.persistence.model.materials.Folder;
@@ -20,11 +24,24 @@ import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.users.UserController;
 
+@SuppressWarnings("el-syntax")
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { @URLMapping(id = "forge-index", pattern = "/forge/", viewId = "/forge/index.jsf") })
+@URLMappings(mappings = { 
+  @URLMapping(
+	  id = "forge-index", 
+		pattern = "/forge/", 
+		viewId = "/forge/index.jsf"
+  ),
+	@URLMapping(
+	  id = "forge-folder", 
+  	pattern = "/forge/folder/#{forgeIndexBackingBean.ownerId}/#{ /[a-z0-9_\\/]*/ forgeIndexBackingBean.urlName }", 
+		viewId = "/forge/index.jsf"
+  )
+})
 public class ForgeIndexBackingBean {
 
 	private static final int MAX_LAST_VIEWED_MATERIALS = 5;
@@ -34,6 +51,12 @@ public class ForgeIndexBackingBean {
 	private MaterialController materialController;
 
 	@Inject
+	private FolderController folderController;
+	
+	@Inject
+	private UserController userController;
+	
+	@Inject
 	private SessionController sessionController;
 
 	@PostConstruct
@@ -42,17 +65,39 @@ public class ForgeIndexBackingBean {
 
 	@URLAction
 	@LoggedIn
-	public void load() {
-		folderId = null;
+	public void load() throws FileNotFoundException {
 		materialsOpen = true;
 		lastViewedOpen = true;
 		starredOpen = true;
 		lastEditedOpen = true;
+		
+		if (ownerId != null && StringUtils.isNotBlank(urlName)) {
+			User owner = userController.findUserById(getOwnerId());
+			if (owner == null) {
+				throw new FileNotFoundException();
+			}
+			
+			Material material = materialController.findByOwnerAndPath(owner, getUrlName());
+			if (material == null) {
+				throw new FileNotFoundException();
+			}
+			
+			if (!(material instanceof Folder)) {
+				throw new FileNotFoundException();
+			}
+			
+			folderId = material.getId();
+		} else {
+			folderId = null;
+		}
 	}
 
 	public List<Material> getMaterials() {
 		Folder folder = null;
-
+		if (getFolderId() != null) {
+			folder = folderController.findFolderById(getFolderId());
+		}
+		
 		List<Material> materials = materialController.listMaterialsByFolder(sessionController.getLoggedUser(), folder);
 		Collections.sort(materials, new TitleComparator());
 
@@ -94,14 +139,6 @@ public class ForgeIndexBackingBean {
 			User loggedUser = sessionController.getLoggedUser();
 			materialController.unstarMaterial(material, loggedUser);
 		}
-	}
-
-	public Long getFolderId() {
-		return folderId;
-	}
-
-	public void setFolderId(Long folderId) {
-		this.folderId = folderId;
 	}
 
 	public boolean isMaterialsOpen() {
@@ -168,9 +205,35 @@ public class ForgeIndexBackingBean {
 		setStarredOpen(true);
 	}
 
-	private Long folderId;
+	public Long getFolderId() {
+		return folderId;
+	}
+
+	public void setFolderId(Long folderId) {
+		this.folderId = folderId;
+	}
+	
+	public Long getOwnerId() {
+		return ownerId;
+	}
+	
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
+	}
+	
+	public String getUrlName() {
+		return urlName;
+	}
+	
+	public void setUrlName(String urlName) {
+		this.urlName = urlName;
+	}
+	
 	private boolean materialsOpen;
 	private boolean lastViewedOpen;
 	private boolean starredOpen;
 	private boolean lastEditedOpen;
+	private Long folderId;
+	private Long ownerId;
+	private String urlName;
 }
