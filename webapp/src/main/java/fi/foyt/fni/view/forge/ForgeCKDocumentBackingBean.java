@@ -12,6 +12,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.materials.MaterialController;
+import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.users.UserController;
@@ -50,6 +51,10 @@ public class ForgeCKDocumentBackingBean {
 		
 		Material material = materialController.findByOwnerAndPath(owner, getUrlName());
 		if (material == null) {
+			throw new FileNotFoundException();
+		}
+		
+		if (!(material instanceof Document)) {
 			throw new FileNotFoundException();
 		}
 		
