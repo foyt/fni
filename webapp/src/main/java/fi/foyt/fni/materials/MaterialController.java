@@ -779,8 +779,4 @@ public class MaterialController {
 		return googleDocumentDAO.findById(id);
 	}
 
-	public Folder findFolderById(Long folderId) {
-		return folderDAO.findById(folderId);
-	}
-
 }
