@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -71,6 +72,14 @@ public class MaterialRevision {
     this.completeRevision = completeRevision;
   }
   
+  public String getChecksum() {
+		return checksum;
+	}
+  
+  public void setChecksum(String checksum) {
+		this.checksum = checksum;
+	}
+  
   public Long getRevision() {
     return revision;
   }
@@ -83,7 +92,8 @@ public class MaterialRevision {
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
   
-  @Column (length=1073741824)
+  @Column
+  @Lob
   private byte[] data;
   
   private String title;
@@ -100,6 +110,8 @@ public class MaterialRevision {
   
   @Column (nullable = false, columnDefinition = "BIT")
   private Boolean completeRevision = Boolean.FALSE;
+  
+  private String checksum;
   
   @Column (nullable = false, updatable = false)
   private Long revision;

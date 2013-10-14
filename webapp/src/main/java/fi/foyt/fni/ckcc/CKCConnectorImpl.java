@@ -359,7 +359,7 @@ public class CKCConnectorImpl implements CKCConnector {
       }
     }
 
-    DocumentRevision documentRevision = documentRevisionDAO.create(document, revisionNumber, new Date(), compressed, false, revisionBytes, null, null);
+    DocumentRevision documentRevision = documentRevisionDAO.create(document, revisionNumber, new Date(), compressed, false, revisionBytes, null, null, null);
 
     if (StringUtils.isNotBlank(properties)) {
       Map<String, String> changedProperties = CKCUtils.parseProperties(properties);

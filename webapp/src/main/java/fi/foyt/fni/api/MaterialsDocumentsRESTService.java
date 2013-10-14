@@ -258,7 +258,7 @@ public class MaterialsDocumentsRESTService extends RESTService {
       	logger.log(Level.WARNING, "revision compression failed", e);
       }
 
-      documentRevisionDAO.create(document, lastRevision + 1, new Date(), compressed, false, patchBytes, null, null);
+      documentRevisionDAO.create(document, lastRevision + 1, new Date(), compressed, false, patchBytes, null, null, null);
 		}
 
 		documentDAO.updateTitle(document, loggedUser, title);

@@ -177,7 +177,7 @@ public class VectorImagesRESTService extends RESTService {
       	logger.log(Level.SEVERE, "revision compression failed", e);
       }
 
-      vectorImageRevisionDAO.create(vectorImage, lastRevision + 1, new Date(), compressed, false, patchBytes, null, null);
+      vectorImageRevisionDAO.create(vectorImage, lastRevision + 1, new Date(), compressed, false, patchBytes, null, null, null);
 		}
 
 		vectorImageDAO.updateTitle(vectorImage, loggedUser, title);
