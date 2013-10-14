@@ -23,9 +23,18 @@
 
     <h:panelGroup layout="block" styleClass="forge-material-info">
       <h:panelGroup layout="block" styleClass="forge-material-title-container">
-        <h:outputLink styleClass="forge-material-title" value="javascript:void(null)" title="#{material.title}">
+        <h:outputLink styleClass="forge-material-title" value="#{request.contextPath}/forge/folder/#{material.creator.id}/#{material.path}" title="#{material.title}" rendered="#{material.type eq 'FOLDER'}">
           #{material.title.length() gt 30 ? material.title.substring(0, 27).concat('...') : material.title}
         </h:outputLink>
+        
+        <h:outputLink styleClass="forge-material-title" value="#{request.contextPath}/forge/ckdocument/#{material.creator.id}/#{material.path}" title="#{material.title}" rendered="#{material.type eq 'DOCUMENT'}">
+          #{material.title.length() gt 30 ? material.title.substring(0, 27).concat('...') : material.title}
+        </h:outputLink>
+        
+        <h:outputLink styleClass="forge-material-title" value="javascript:void(null)" title="#{material.title}" rendered="#{(material.type ne 'FOLDER') and (material.type ne 'DOCUMENT')}">
+          #{material.title.length() gt 30 ? material.title.substring(0, 27).concat('...') : material.title}
+        </h:outputLink>
+        
         <h:commandLink action="#{forgeIndexBackingBean.starMaterial(material.id)}" styleClass="forge-material-star" style="#{!forgeIndexBackingBean.isStarred(material.id) ? '' : 'display: none'}"/>
         <h:commandLink action="#{forgeIndexBackingBean.unstarMaterial(material.id)}" styleClass="forge-material-star forge-material-starred" rendered="#{forgeIndexBackingBean.isStarred(material.id)}" style="#{forgeIndexBackingBean.isStarred(material.id) ? '' : 'display: none'}"/>
       </h:panelGroup>
@@ -44,6 +53,44 @@
         </h:outputLink>
       </h:panelGroup>
     </h:panelGroup>
+    
+    <h:panelGroup layout="block" styleClass="forge-material-actions">
+      <h:panelGroup layout="block" styleClass="forge-material-action-edit">
+        <h:outputLink value="javascript:void(null)">
+          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-edit.png"/> 
+          <h:outputLabel value="#{locales['forge.index.materialEditLink']}" />
+        </h:outputLink>
+      </h:panelGroup>
+
+      <h:panelGroup layout="block" styleClass="forge-material-action-delete">
+        <h:outputLink value="javascript:void(null)">
+          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-delete.png"/>
+          <h:outputLabel value="#{locales['forge.index.materialDeleteLink']}" />
+        </h:outputLink>
+      </h:panelGroup>
+
+      <h:panelGroup layout="block" styleClass="forge-material-action-print-pdf">
+        <h:outputLink value="javascript:void(null)">
+          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-print-pdf.png"/>
+          <h:outputLabel value="#{locales['forge.index.materialPrintPdfLink']}" />
+        </h:outputLink>
+      </h:panelGroup>
+
+      <h:panelGroup layout="block" styleClass="forge-material-action-move">
+        <h:outputLink value="javascript:void(null)">
+          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-move.png"/>
+          <h:outputLabel value="#{locales['forge.index.materialMoveLink']}" />
+        </h:outputLink>
+      </h:panelGroup>
+
+      <h:panelGroup layout="block" styleClass="forge-material-action-share">
+        <h:outputLink value="javascript:void(null)">
+          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-share.png"/>
+          <h:outputLabel value="#{locales['forge.index.materialShareLink']}" />
+        </h:outputLink>
+      </h:panelGroup>
+    </h:panelGroup>
+    
   </h:panelGroup>
   
 </ui:composition>

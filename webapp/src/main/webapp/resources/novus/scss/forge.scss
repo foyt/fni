@@ -6,7 +6,7 @@ $header-background-color: #000;
 $header-text-color: #fff;
 $header-background-color-hover: #fff;
 $header-text-color-hover: #000;
-$selected-background-color: lighten(rgba(71, 176, 176, 0.75), 30%);
+$selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 
 /* Generic */
 
@@ -113,6 +113,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.75), 30%);
   display: inline-table;
   width: 290px;
   padding: 8px;
+  position: relative;
 }
 
 .forge-materials-container {
@@ -152,19 +153,23 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.75), 30%);
   color: $default-color;
 }
 
+.forge-material-creator {
+  color: blue;
+}
+
 .forge-material-date {
   font-size: 10px;
 }
 
 .forge-material-star {
   text-decoration: none;
-  font-family: courier;
-  font-size: 32px;
+  font-family: "PT Sans", sans-serif;
   text-shadow: 0 0 1px #000000;
   position: absolute;
-  margin-top: -1px;
+  margin-top: -2px;
   margin-left: 8px;
   outline: none;
+  text-transform: uppercase;
 }
 
 .forge-material-star:after {
@@ -177,9 +182,53 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.75), 30%);
   color: orange;
 }
 
-.forge-material-selected {
-  display: block;  
-  width: 880px;
-  @include box-sizing(border-box); 
+.forge-material:hover {
   background: $selected-background-color;
+}
+
+.forge-material-actions {
+  height: 0px;
+  position: absolute;
+  z-index: 9999;
+  background: $selected-background-color;
+  left: 0px;
+  margin-top: 56px;
+  width: 306px;
+  overflow: hidden;
+  @include transition-property(height);
+  @include transition-duration(0s);
+  @include transition-delay(0s);
+  @include box-sizing(border-box); 
+}
+
+.forge-material-actions > div {
+  margin-left: 47px;
+}
+
+.forge-material-actions img {
+  vertical-align: top;
+}
+
+.forge-material-actions label {
+  font-family: "PT Sans", sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-left: 10px;
+  cursor: pointer; 
+  vertical-align: top;
+  padding-top: 3px;
+  display: inline-block;
+}
+
+.forge-material-actions a {
+  text-decoration: none;
+  color: $default-color;
+}
+  
+.forge-material:hover .forge-material-actions {
+  height: 100px;
+  @include transition-property(height);
+  @include transition-duration(1s);
+  @include transition-delay(0.25s);
 }
