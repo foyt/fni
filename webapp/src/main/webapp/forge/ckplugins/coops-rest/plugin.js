@@ -35,6 +35,8 @@
           _onBeforeSessionStart : function(event) {
             if (!event.data.isConnected()) {
               var joinData = event.data.joinData;
+              
+              this._useMethodOverride = joinData.extensions.indexOf('x-http-method-override') > -1;
               this._revisionNumber = joinData.revisionNumber;
 
               this.getEditor().on("CoOPS:ContentPatch", this._onContentPatch, this);
@@ -187,24 +189,24 @@
           },
           
           _doPost: function (url, object, callback) {
-            this._doJsonPostRequest("post", url, object, callback);
+            this._doJsonPostRequest("POST", url, object, callback);
           },
           
           _doPut: function (url, object, callback) {
-            this._doJsonPostRequest("put", url, object, callback);
+            this._doJsonPostRequest("PUT", url, object, callback);
           },
           
           _doPatch: function (url, object, callback) {
-            this._doJsonPostRequest("patch", url, object, callback);
+            this._doJsonPostRequest("PATCH", url, object, callback);
           },
           
           _doDelete: function (url, object, callback) {
-            this._doJsonPostRequest("delete", url, object, callback);
+            this._doJsonPostRequest("DELETE", url, object, callback);
           },
           
           _doJsonPostRequest: function (method, url, object, callback) {
             var data = JSON.stringify(object);
-      
+            
             this._doPostRequest(method, url, data, 'application/json', function (status, responseText) {
               if ((status == 200) && (!responseText)) {
                 // Request was probably aborted...
@@ -247,7 +249,13 @@
               
           _doPostRequest: function (method, url, data, contentType, callback) {
             var xhr = this._createXMLHttpRequest();
-            xhr.open(method, url, false);
+            if (this._useMethodOverride && (method != 'POST')) {
+              xhr.open("POST", url, false);
+              xhr.setRequestHeader("x-http-method-override", method);
+            } else {
+              xhr.open(method, url, false);
+            }
+            
             xhr.setRequestHeader("Content-type", contentType);
             
             if (!CKEDITOR.env.webkit) {
