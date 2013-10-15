@@ -12,8 +12,12 @@ import javax.transaction.Status;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
-public class AbstractTransactionedServlet extends HttpServlet {
+import org.apache.commons.lang3.StringUtils;
 
+public class AbstractTransactionedServlet extends HttpServlet {
+	
+	private static final String METHOD_PATCH = "PATCH";
+	
 	private static final long serialVersionUID = -1673932340848238141L;
 
 	@Resource
@@ -32,7 +36,12 @@ public class AbstractTransactionedServlet extends HttpServlet {
      		// Proceed with the request
 
   			String method = req.getMethod();
-				if ("patch".equalsIgnoreCase(method)) {
+  			String methodOverride = req.getHeader("x-http-method-override");
+  			if (StringUtils.isNotBlank(methodOverride)) {
+  				method = methodOverride;
+  			}
+  			
+				if (METHOD_PATCH.equalsIgnoreCase(method)) {
 					doPatch(req, resp);
 				} else {
 		  		super.service(req, resp);
