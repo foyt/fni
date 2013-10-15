@@ -6,7 +6,7 @@
   <ui:define name="view-stylesheets">
     <h:outputStylesheet library="novus" name="css/fonts.css"/>
     <h:outputStylesheet library="novus" name="css/menu.css"/>
-    <h:outputStylesheet library="novus" name="css/forge.css"/>
+    <h:outputStylesheet library="novus" name="css/forge-index.css"/>
   </ui:define>
   
   <ui:define name="view-scripts">
@@ -20,7 +20,7 @@
     <ui:include src="/facelets/menu.xhtml" />
     
     <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Breadcrumb -->
+      <!-- Navigation -->
       
       <h:panelGroup layout="block" styleClass="view-header-navigation">
         <h:panelGroup styleClass="view-header-navigation-item">#{locales['forge.index.navigationIndex']}</h:panelGroup>
