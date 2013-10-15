@@ -1,0 +1,24 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+h2 {
+  @include header-2;
+  color: $title-color;
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.forge-image-panel {
+  background-color: $panel-background-color;
+}
+
+.forge-image-container {
+  text-align: center;
+}
+
+.forge-image-container img {
+  vertical-align: top;
+  margin: 20px;
+  border: 3px solid #000;
+}
