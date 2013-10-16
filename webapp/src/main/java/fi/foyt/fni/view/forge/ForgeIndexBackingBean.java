@@ -21,6 +21,7 @@ import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.TitleComparator;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
@@ -38,7 +39,7 @@ import fi.foyt.fni.users.UserController;
   ),
 	@URLMapping(
 	  id = "forge-folder", 
-  	pattern = "/forge/folder/#{forgeIndexBackingBean.ownerId}/#{ /[a-z0-9_\\/]*/ forgeIndexBackingBean.urlName }", 
+  	pattern = "/forge/folders/#{forgeIndexBackingBean.ownerId}/#{ /[a-z0-9_\\/]*/ forgeIndexBackingBean.urlName }", 
 		viewId = "/forge/index.jsf"
   )
 })
@@ -227,6 +228,33 @@ public class ForgeIndexBackingBean {
 	
 	public void setUrlName(String urlName) {
 		this.urlName = urlName;
+	}
+	
+	public String getMaterialViewer(MaterialType type) {
+		switch (type) {
+			case DROPBOX_FILE:
+			case DROPBOX_FOLDER:
+			case DROPBOX_ROOT_FOLDER:
+			case UBUNTU_ONE_FILE:
+			case UBUNTU_ONE_FOLDER:
+			case UBUNTU_ONE_ROOT_FOLDER:
+			case GOOGLE_DOCUMENT:
+				break;
+			case DOCUMENT:
+				return "documents";
+			case BINARY:
+			case FILE:
+			case PDF:
+				return "binary";
+			case FOLDER:
+				return "folders";
+			case IMAGE:
+				return "images";
+			case VECTOR_IMAGE:
+				break;
+		}
+
+		return "todo";
 	}
 	
 	private boolean materialsOpen;

@@ -15,6 +15,7 @@ import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.users.UserController;
 
 @SuppressWarnings("el-syntax")
@@ -23,12 +24,12 @@ import fi.foyt.fni.users.UserController;
 @Stateful
 @URLMappings(mappings = { 
 	@URLMapping(
-	  id = "forge-ckdocument", 
-		pattern = "/forge/ckdocument/#{forgeCKDocumentBackingBean.ownerId}/#{ /[a-z0-9_\\/]*/ forgeCKDocumentBackingBean.urlName }", 
-		viewId = "/forge/ckdocument.jsf"
+	  id = "forge-documents", 
+		pattern = "/forge/documents/#{forgeDocumentsBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\-]*/ forgeDocumentsBackingBean.urlPath }", 
+		viewId = "/forge/documents.jsf"
   ) 
 })
-public class ForgeCKDocumentBackingBean {
+public class ForgeDocumentsBackingBean {
 	
 	@Inject
 	private UserController userController;
@@ -37,10 +38,11 @@ public class ForgeCKDocumentBackingBean {
 	private MaterialController materialController;
 	
 	@URLAction
+	@LoggedIn
 	public void load() throws FileNotFoundException {
 		// TODO: Security
 		
-		if ((getOwnerId() == null)||(getUrlName() == null)) {
+		if ((getOwnerId() == null)||(getUrlPath() == null)) {
 			throw new FileNotFoundException();
 		}
 		
@@ -49,7 +51,7 @@ public class ForgeCKDocumentBackingBean {
 			throw new FileNotFoundException();
 		}
 		
-		Material material = materialController.findByOwnerAndPath(owner, getUrlName());
+		Material material = materialController.findByOwnerAndPath(owner, getUrlPath());
 		if (material == null) {
 			throw new FileNotFoundException();
 		}
@@ -69,12 +71,12 @@ public class ForgeCKDocumentBackingBean {
 		this.ownerId = ownerId;
 	}
 
-	public String getUrlName() {
-		return urlName;
+	public String getUrlPath() {
+		return urlPath;
 	}
 	
-	public void setUrlName(String urlName) {
-		this.urlName = urlName;
+	public void setUrlPath(String urlPath) {
+		this.urlPath = urlPath;
 	}
 	
 	public Long getMaterialId() {
@@ -82,6 +84,6 @@ public class ForgeCKDocumentBackingBean {
 	}
 	
 	private Long ownerId;
-	private String urlName;
+	private String urlPath;
 	private Long materialId;
 }

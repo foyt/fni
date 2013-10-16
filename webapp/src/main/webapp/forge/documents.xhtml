@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['forge.index.pageTitle']}</ui:define>
+  <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/fonts.css"/>
+    <h:outputStylesheet library="novus" name="css/menu.css"/>
+  </ui:define>
+  
+  <ui:define name="view-scripts">
+    <!-- CKEditor -->
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/ckeditor.js"/>
+    
+    <!-- JSON Polyfill -->
+    
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/json3/3.2.5/json3.min.js"/>
+  
+    <!-- View scripts -->
+    
+    <script type="text/javascript">
+      var COOPS_SERVER_URL = CONTEXTPATH + '/forge/coops/#{forgeDocumentsBackingBean.materialId}';
+    </script>
+    <h:outputScript name="scripts/gui/forge-ckdocument.js"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <!-- Header -->
+    
+    <ui:include src="/facelets/forgeheadersmall.xhtml" />
+
+    <!-- Editor -->
+    
+    <h:panelGroup styleClass="forge-ckdocument-editor-status">
+      <h:panelGroup styleClass="forge-ckdocument-editor-status-loading">
+        #{locales['forge.documents.statusLoading']}
+      </h:panelGroup>
+      <h:panelGroup styleClass="forge-ckdocument-editor-status-loaded" style="display: none">
+        #{locales['forge.documents.statusLoaded']}
+      </h:panelGroup>
+      <h:panelGroup styleClass="forge-ckdocument-editor-status-unsaved" style="display: none">
+        #{locales['forge.documents.statusUnsaved']}
+      </h:panelGroup>
+      <h:panelGroup styleClass="forge-ckdocument-editor-status-saving" style="display: none">
+        #{locales['forge.documents.statusSaving']}
+      </h:panelGroup>
+      <h:panelGroup styleClass="forge-ckdocument-editor-status-saved" style="display: none">
+        #{locales['forge.documents.statusSaved']}
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <h:panelGroup styleClass="forge-ckdocument-editor-container">
+      <textarea class="forge-ckdocument-editor" name="cke">#{locales['forge.documents.contentLoading']}</textarea>
+    </h:panelGroup>
+  </ui:define>
+
+</ui:composition>

@@ -25,19 +25,28 @@
           cursorBlinkInterval: 1.2
         }
       }
-    }, 'Content loading...');
+    });
+
+    editor.on("CoOPS:SessionStart", function (event) {
+      $('.forge-ckdocument-editor-status>span').css('display', 'none');
+      $('.forge-ckdocument-editor-status-loaded').css('display', 'block');
+    });
     
     editor.on("CoOPS:ContentDirty", function (event) {
-      $('.forge-ckdocument-editor-status').html('Unsaved');
+      $('.forge-ckdocument-editor-status>span').css('display', 'none');
+      $('.forge-ckdocument-editor-status-unsaved').css('display', 'block');
     });
     
     editor.on("CoOPS:ContentPatch", function (event) {
-      $('.forge-ckdocument-editor-status').html('Saving...');
+      $('.forge-ckdocument-editor-status>span').css('display', 'none');
+      $('.forge-ckdocument-editor-status-saving').css('display', 'block');
     });
     
     editor.on("CoOPS:PatchAccepted", function (event) {
-      $('.forge-ckdocument-editor-status').html('Saved');
+      $('.forge-ckdocument-editor-status>span').css('display', 'none');
+      $('.forge-ckdocument-editor-status-saved').css('display', 'block');
     });
+    
   });
   
 }).call(this);
