@@ -120,7 +120,7 @@ public class Material {
     if (getParentFolder() != null)
       return getParentFolder().getPath() + '/' + getUrlName();
     else {
-      return getUrlName();
+      return getCreator().getId().toString() + '/' + getUrlName();
     }
   }
   

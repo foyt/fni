@@ -23,7 +23,7 @@
 
     <h:panelGroup layout="block" styleClass="forge-material-info">
       <h:panelGroup layout="block" styleClass="forge-material-title-container">
-        <h:outputLink styleClass="forge-material-title" value="#{request.contextPath}/forge/#{forgeIndexBackingBean.getMaterialViewer(material.type)}/#{material.creator.id}/#{material.path}" title="#{material.title}">
+        <h:outputLink styleClass="forge-material-title" value="#{request.contextPath}/forge/#{forgeIndexBackingBean.getMaterialViewer(material.type)}/#{material.path}" title="#{material.title}">
           #{material.title.length() gt 30 ? material.title.substring(0, 27).concat('...') : material.title}
         </h:outputLink>
         
