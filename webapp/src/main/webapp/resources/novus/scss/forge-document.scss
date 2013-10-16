@@ -1,0 +1,27 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+/* Generic */
+
+ h2 {
+  @include header-2;
+  color: $title-color;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.forge-document-panel {
+  background-color: $panel-background-color;
+  padding: 20px;
+  position: relative;
+}
+
+.forge-ckdocument-editor-status {
+  @include header-5;
+  color: $title-color;
+  position: absolute;
+  margin-top: -42px;
+  position: absolute;
+  right: 20px;
+}

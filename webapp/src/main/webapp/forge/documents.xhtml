@@ -6,6 +6,7 @@
   <ui:define name="view-stylesheets">
     <h:outputStylesheet library="novus" name="css/fonts.css"/>
     <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/forge-document.css"/>
   </ui:define>
   
   <ui:define name="view-scripts">
@@ -37,27 +38,35 @@
 
     <!-- Editor -->
     
-    <h:panelGroup styleClass="forge-ckdocument-editor-status">
-      <h:panelGroup styleClass="forge-ckdocument-editor-status-loading">
-        #{locales['forge.documents.statusLoading']}
-      </h:panelGroup>
-      <h:panelGroup styleClass="forge-ckdocument-editor-status-loaded" style="display: none">
-        #{locales['forge.documents.statusLoaded']}
-      </h:panelGroup>
-      <h:panelGroup styleClass="forge-ckdocument-editor-status-unsaved" style="display: none">
-        #{locales['forge.documents.statusUnsaved']}
-      </h:panelGroup>
-      <h:panelGroup styleClass="forge-ckdocument-editor-status-saving" style="display: none">
-        #{locales['forge.documents.statusSaving']}
-      </h:panelGroup>
-      <h:panelGroup styleClass="forge-ckdocument-editor-status-saved" style="display: none">
-        #{locales['forge.documents.statusSaved']}
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="forge-document-panel">
+        <h2>#{forgeDocumentsBackingBean.documentTitle}</h2>
+    
+        <h:panelGroup styleClass="forge-ckdocument-editor-status">
+          <h:panelGroup styleClass="forge-ckdocument-editor-status-loading">
+            #{locales['forge.documents.statusLoading']}
+          </h:panelGroup>
+          <h:panelGroup styleClass="forge-ckdocument-editor-status-loaded" style="display: none">
+            #{locales['forge.documents.statusLoaded']}
+          </h:panelGroup>
+          <h:panelGroup styleClass="forge-ckdocument-editor-status-unsaved" style="display: none">
+            #{locales['forge.documents.statusUnsaved']}
+          </h:panelGroup>
+          <h:panelGroup styleClass="forge-ckdocument-editor-status-saving" style="display: none">
+            #{locales['forge.documents.statusSaving']}
+          </h:panelGroup>
+          <h:panelGroup styleClass="forge-ckdocument-editor-status-saved" style="display: none">
+            #{locales['forge.documents.statusSaved']}
+          </h:panelGroup>
+        </h:panelGroup>
+        
+        <h:panelGroup layout="block" styleClass="forge-ckdocument-editor-container">
+          <textarea class="forge-ckdocument-editor" name="cke">#{locales['forge.documents.contentLoading']}</textarea>
+        </h:panelGroup>
+        
       </h:panelGroup>
     </h:panelGroup>
     
-    <h:panelGroup styleClass="forge-ckdocument-editor-container">
-      <textarea class="forge-ckdocument-editor" name="cke">#{locales['forge.documents.contentLoading']}</textarea>
-    </h:panelGroup>
   </ui:define>
 
 </ui:composition>

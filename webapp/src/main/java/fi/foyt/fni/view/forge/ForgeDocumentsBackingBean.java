@@ -61,6 +61,7 @@ public class ForgeDocumentsBackingBean {
 		}
 		
 		materialId = material.getId();
+		documentTitle = material.getTitle();
 	}
 	
 	public Long getOwnerId() {
@@ -83,7 +84,12 @@ public class ForgeDocumentsBackingBean {
 		return materialId;
 	}
 	
+	public String getDocumentTitle() {
+		return documentTitle;
+	}
+	
 	private Long ownerId;
 	private String urlPath;
 	private Long materialId;
+	private String documentTitle;
 }
