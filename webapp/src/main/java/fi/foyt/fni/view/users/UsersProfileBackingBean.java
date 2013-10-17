@@ -85,6 +85,7 @@ public class UsersProfileBackingBean {
 		this.fullName = fullNameBuilder.toString();
 		this.about = user.getAbout();
 		this.publishedPublications = publicationController.listPublishedPublicationsByAuthor(user);
+		this.hasGameLibraryPublications = publishedPublications.size() > 0;
 		
 		forumTotalPosts = forumController.countPostsByAuthor(user);
 		if (forumTotalPosts > 0) {
@@ -108,6 +109,12 @@ public class UsersProfileBackingBean {
 		contactFieldTwitter = userController.getContactFieldValue(user, UserContactFieldType.TWITTER);
 		contactFieldLinkedIn = userController.getContactFieldValue(user, UserContactFieldType.LINKEDIN);
 		contactFieldGooglePlus = userController.getContactFieldValue(user, UserContactFieldType.GOOGLE_PLUS);
+		hasContactInformation = StringUtils.isNotBlank(contactFieldHomePage)||
+				StringUtils.isNotBlank(contactFieldBlog)||
+				StringUtils.isNotBlank(contactFieldFacebook)||
+				StringUtils.isNotBlank(contactFieldTwitter)||
+				StringUtils.isNotBlank(contactFieldLinkedIn)||
+				StringUtils.isNotBlank(contactFieldGooglePlus);
 	}
 	
 	public Long getUserId() {
@@ -174,6 +181,14 @@ public class UsersProfileBackingBean {
 		return publishedPublications;
 	}
 	
+	public Boolean getHasGameLibraryPublications() {
+		return hasGameLibraryPublications;
+	}
+	
+	public Boolean getHasContactInformation() {
+		return hasContactInformation;
+	}
+	
 	public String getContactFieldHomePage() {
 		return contactFieldHomePage;
 	}
@@ -226,7 +241,9 @@ public class UsersProfileBackingBean {
 	private String forumLastMessageTopicUrl;
 	private String forumMostActiveInTopic;
 	private String forumMostActiveInTopicUrl;
+	private Boolean hasGameLibraryPublications;
 	private List<Publication> publishedPublications;
+	private Boolean hasContactInformation;
 	private String contactFieldHomePage;
 	private String contactFieldBlog;
 	private String contactFieldFacebook;

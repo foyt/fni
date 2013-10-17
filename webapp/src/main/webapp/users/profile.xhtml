@@ -69,7 +69,7 @@
         
         <!-- Game Library -->
       
-        <h:panelGroup layout="block" styleClass="users-profile-publications-panel">
+        <h:panelGroup layout="block" styleClass="users-profile-publications-panel" rendered="#{usersProfileBackingBean.hasGameLibraryPublications}">
           <h3>#{locales['users.profile.gameLibraryPublications']}</h3>
 
           <ui:repeat var="publication" value="#{usersProfileBackingBean.publishedPublications}">
@@ -116,7 +116,7 @@
         
         <!-- Contact Info -->
         
-        <h:panelGroup layout="block" styleClass="users-profile-contact-info-panel">
+        <h:panelGroup layout="block" styleClass="users-profile-contact-info-panel" rendered="#{usersProfileBackingBean.hasContactInformation}">
           <h3>#{locales['users.profile.contactInfo']}</h3>
           
           <h:panelGroup layout="block" rendered="#{!empty(usersProfileBackingBean.contactFieldHomePage)}" styleClass="users-profile-contact-info">
