@@ -33,7 +33,7 @@ public class ProfileImageServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = 8109481247044843102L;
 	
-  private final static String GRAVATAR_URL = "http://www.gravatar.com/avatar/";
+  private final static String GRAVATAR_URL = "://www.gravatar.com/avatar/";
 
 	@Inject
 	private UserController userController;
@@ -75,7 +75,12 @@ public class ProfileImageServlet extends AbstractFileServlet {
 				}
 			break;
 			case GRAVATAR:
-				String gravatarUrl = getGravatar(user, Math.max(width, height));
+				String protocol = "http";
+				if (request.isSecure()) {
+					protocol = "https";
+				}
+				
+				String gravatarUrl = getGravatar(protocol, user, Math.max(width, height));
 			  response.sendRedirect(gravatarUrl);
 			  return;
 		}
@@ -112,11 +117,13 @@ public class ProfileImageServlet extends AbstractFileServlet {
 		}
 	}
 
-	private String getGravatar(User user, int size) {
+	private String getGravatar(String protocol, User user, int size) {
 		String email = StringUtils.lowerCase(StringUtils.trim(userController.getUserPrimaryEmail(user)));
 		String emailHash = DigestUtils.md5Hex(email);
 		
-		return new StringBuilder(GRAVATAR_URL)
+		return new StringBuilder()
+		  .append(protocol)
+		  .append(GRAVATAR_URL)
 		  .append(emailHash)
 		  .append(".png")
 		  .append("?s=")
