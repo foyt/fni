@@ -12,9 +12,9 @@
         </h:outputLink>
       </h:panelGroup>
      
-      <h3>
+      <h2>
         <h:outputLink value="#{request.contextPath}/gamelibrary/#{publication.urlName}">#{publication.name}</h:outputLink>
-      </h3>
+      </h2>
       
       <h:panelGroup layout="block" styleClass="users-profile-gamelibrary-publication-tags">
         <ui:repeat var="tag" value="#{usersProfileBackingBean.getPublicationTags(publication)}">
@@ -30,7 +30,7 @@
         <h:panelGroup layout="block" styleClass="users-profile-gamelibrary-publication-details">
           <h:panelGroup layout="block" styleClass="users-profile-gamelibrary-publication-detail">
             <h:outputLabel>
-              <h:outputText value="#{locales['users.profile.gameLibraryPublicationPrice']}" />
+              <h:outputLabel value="#{locales['users.profile.gameLibraryPublicationPrice']}" />
               <h:outputText value="#{publication.price}">
                 <f:convertNumber currencyCode="EUR" type="currency" />
               </h:outputText>
@@ -78,7 +78,7 @@
               <f:param value="#{usersProfileBackingBean.getPublicationCommentCount(publication)}"/>
             </h:outputFormat>
           </h:outputLink>
-          <h:commandLink styleClass="gamelibrary-publication-action" value="#{locales['users.profile.gameLibraryPublicationAddToShoppingCart']}" action="#{usersProfileBackingBean.addPublicationToShoppingCart(publication)}" />
+          <h:commandLink styleClass="users-profile-gamelibrary-publication-action" value="#{locales['users.profile.gameLibraryPublicationAddToShoppingCart']}" action="#{usersProfileBackingBean.addPublicationToShoppingCart(publication)}" />
         </h:panelGroup>
       </h:panelGroup>
       
