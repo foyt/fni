@@ -1,0 +1,38 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+/* General */
+
+h2 {
+  @include header-2;
+  margin-bottom: 30px;
+}
+
+h3 {
+  @include header-3;
+  color: $title-color;
+}
+
+/* Panels */
+
+.users-profile-about-panel,
+.users-profile-publications-panel,
+.users-profile-forum-panel,
+.users-profile-contact-info-panel {
+  @include generic-panel;
+  padding: 25px;
+}
+
+.users-profile-about img {
+  float: left;
+  margin-right: 40px;
+  margin-bottom: 40px;
+}
+
+.users-profile-about p {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 13px;
+  font-weight: bold; 
+}
