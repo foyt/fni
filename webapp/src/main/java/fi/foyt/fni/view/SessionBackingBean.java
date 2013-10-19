@@ -32,6 +32,15 @@ public class SessionBackingBean {
 		return sessionController.getLoggedUser();
 	}
 	
+	public String getLoggedUserEmail() {
+		User loggedUser = getLoggedUser();
+		if (loggedUser != null) {
+			return userController.getUserPrimaryEmail(loggedUser);
+		}
+		
+		return null;
+	}
+	
 	public Locale getLocale() {
 		return sessionController.getLocale();
 	}
