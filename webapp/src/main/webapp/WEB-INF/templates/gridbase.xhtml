@@ -68,6 +68,9 @@
         </h:panelGroup> 
       </ui:insert>
       
+      <!-- UserVoice -->
+      <ui:include src="/facelets/uservoice.xhtml" />
+      
       <!-- Piwik -->
       <h:outputScript name="/scripts/gui/piwik.js" rendered="#{piwikBackingBean.hasPiwikUrl}"></h:outputScript>
       <ui:fragment rendered="#{piwikBackingBean.hasPiwikUrl}">

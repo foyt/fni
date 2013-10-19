@@ -1,0 +1,27 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html">
+  
+  <script>
+    UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/#{userVoiceBackingBean.clientKey}.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s);})();
+
+    UserVoice.push(['set', {
+      accent_color: '#448dd6',
+      trigger_color: 'white',
+      trigger_background_color: 'rgba(46, 49, 51, 0.6)'
+    }]);
+
+    <ui:fragment rendered="#{sessionBackingBean.loggedIn}">
+      UserVoice.push(['identify', {
+        email: '#{sessionBackingBean.loggedUserEmail}',
+        name: '#{sessionBackingBean.loggedUser.fullName}', 
+        created_at: parseInt('#{sessionBackingBean.loggedUser.registrationDate.time}'), 
+        id: parseInt('#{sessionBackingBean.loggedUser.id}')
+      }]);
+    </ui:fragment>
+
+    UserVoice.push(['addTrigger', { mode: 'contact', trigger_position: 'top-right' }]);
+  </script>
+
+</ui:composition>
