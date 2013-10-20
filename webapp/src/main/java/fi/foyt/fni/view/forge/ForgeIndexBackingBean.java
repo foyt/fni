@@ -260,7 +260,7 @@ public class ForgeIndexBackingBean {
 			case IMAGE:
 				return "images";
 			case VECTOR_IMAGE:
-				break;
+				return "vectorimages";
 		}
 
 		return "todo";

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">
+    <h:outputFormat value="#{locales['forge.vectorImages.pageTitle']}">
+      <f:param value="#{forgeVectorImagesBackingBean.vectorImageTitle}"/>
+    </h:outputFormat>
+  </ui:define>
+  <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/fonts.css"/>
+    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/forge-vector-images.css"/>
+  </ui:define>
+  
+  <ui:define name="view-scripts">
+    <script type="text/javascript" src="#{request.contextPath}/uresources/svg-edit/embedapi.js"></script>
+    <h:outputScript name="scripts/gui/forge-vectorimages.js"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <!-- Header -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      <!-- Navigation -->
+  
+      <ui:include src="/facelets/forgenavigation.xhtml">    
+        <ui:param name="folders" value="#{forgeImagesBackingBean.folders}"/>
+      </ui:include>
+      
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{locales['forge.vectorImages.descriptionTitle']}</p>
+        <p class="view-header-description-text">#{locales['forge.vectorImages.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+
+    <!-- Vector Image -->
+
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="forge-vector-image-panel">
+        <h2>#{forgeVectorImagesBackingBean.vectorImageTitle}</h2>
+        <h:panelGroup layout="block" styleClass="forge-vector-image-container">
+          <iframe src="#{request.contextPath}/uresources/svg-edit/svg-editor.html?lang=#{sessionBackingBean.locale.language}" data-content="#{forgeVectorImagesBackingBean.vectorImageContent}"></iframe>
+        </h:panelGroup>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+  </ui:define>
+
+</ui:composition>

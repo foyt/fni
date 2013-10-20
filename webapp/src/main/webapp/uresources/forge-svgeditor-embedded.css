@@ -1,0 +1,10 @@
+#main_button,
+#tool_source,
+.tool_sep {
+  display: none;
+}
+
+#tools_top {
+  left: 2px;
+  display: block !important;
+}

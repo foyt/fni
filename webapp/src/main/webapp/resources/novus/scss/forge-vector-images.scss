@@ -1,0 +1,25 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+h2 {
+  @include header-2;
+  color: $title-color;
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.forge-vector-image-panel {
+  background-color: $panel-background-color;
+}
+
+.forge-vector-image-container {
+  background: #fff;
+  margin: 20px;
+}
+
+.forge-vector-image-container iframe {
+  width: 100%;
+  border: none;
+  height: 600px;
+}
