@@ -1,6 +1,7 @@
 package fi.foyt.fni.view.forge;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -71,6 +72,7 @@ public class ForgeIndexBackingBean {
 		lastViewedOpen = true;
 		starredOpen = true;
 		lastEditedOpen = true;
+		folders = new ArrayList<>();
 		
 		if (ownerId != null && StringUtils.isNotBlank(urlName)) {
 			User owner = userController.findUserById(getOwnerId());
@@ -88,6 +90,13 @@ public class ForgeIndexBackingBean {
 			}
 			
 			folderId = material.getId();
+			Folder folder = (Folder) material;
+			
+			while (folder != null) {
+			  folders.add(0, folder);
+			  folder = folder.getParentFolder();
+			};
+			
 		} else {
 			folderId = null;
 		}
@@ -257,6 +266,45 @@ public class ForgeIndexBackingBean {
 		return "todo";
 	}
 	
+	public String getMaterialIcon(MaterialType type) {
+		switch (type) {
+			case DROPBOX_FILE:
+				return "file";
+			case DROPBOX_FOLDER:
+				return "folder";
+			case DROPBOX_ROOT_FOLDER:
+				return "dropbox";
+			case UBUNTU_ONE_FILE:
+				return "file";
+			case UBUNTU_ONE_FOLDER:
+				return "folder";
+			case UBUNTU_ONE_ROOT_FOLDER:
+				return "ubuntuone";
+			case GOOGLE_DOCUMENT:
+				return "file";
+			case DOCUMENT:
+				return "document";
+			case BINARY:
+				return "file";
+			case FILE:
+				return "file";
+			case PDF:
+				return "pdf";
+			case FOLDER:
+				return "folder";
+			case IMAGE:
+				return "image";
+			case VECTOR_IMAGE:
+				return "vectorimage";
+		}
+
+		return null;
+	}
+	
+	public List<Folder> getFolders() {
+		return folders;
+	}
+	
 	private boolean materialsOpen;
 	private boolean lastViewedOpen;
 	private boolean starredOpen;
@@ -264,4 +312,5 @@ public class ForgeIndexBackingBean {
 	private Long folderId;
 	private Long ownerId;
 	private String urlName;
+	private List<Folder> folders;
 }

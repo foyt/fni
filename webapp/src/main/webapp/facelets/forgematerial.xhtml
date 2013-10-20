@@ -5,20 +5,7 @@
   
   <h:panelGroup layout="block" styleClass="forge-material"> 
     <h:panelGroup layout="block" styleClass="forge-material-icon"> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-folder.png" rendered="#{material.type eq 'FOLDER'}"/> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-ubuntuone.png" rendered="#{material.type eq 'UBUNTU_ONE_ROOT_FOLDER'}"/> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-dropbox.png" rendered="#{material.type eq 'DROPBOX_ROOT_FOLDER'}"/> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-image.png" rendered="#{material.type eq 'IMAGE'}"/> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-document.png" rendered="#{material.type eq 'DOCUMENT'}"/> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-pdf.png" rendered="#{material.type eq 'PDF'}"/> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-vectorimage.png" rendered="#{material.type eq 'VECTOR_IMAGE'}"/> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'FILE'}"/> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'BINARY'}"/> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'GOOGLE_DOCUMENT'}"/> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'DROPBOX_FOLDER'}"/> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'DROPBOX_FILE'}"/> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'UBUNTU_ONE_FOLDER'}"/> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-file.png" rendered="#{material.type eq 'UBUNTU_ONE_FILE'}"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeIndexBackingBean.getMaterialIcon(material.type)}.png"/> 
     </h:panelGroup>
 
     <h:panelGroup layout="block" styleClass="forge-material-info">
