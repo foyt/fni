@@ -32,6 +32,14 @@
         <h:panelGroup styleClass="view-header-navigation-separator"/>
         <h:panelGroup styleClass="view-header-navigation-item">#{forumBackingBean.forum.name}</h:panelGroup>
       </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{forumBackingBean.forum.name}</p>
+        <p class="view-header-description-text">#{forumBackingBean.forum.description}</p>
+      </h:panelGroup>
+
     </h:panelGroup>
     
     <!-- Forums -->
