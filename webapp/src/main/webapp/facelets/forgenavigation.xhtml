@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html">
+  
+  <h:panelGroup layout="block" styleClass="view-header-navigation">
+    <h:panelGroup styleClass="view-header-navigation-item">
+      <h:link outcome="/index.jsf">
+        #{locales['forge.navigation.index']}
+      </h:link>
+    </h:panelGroup>
+    <h:panelGroup styleClass="view-header-navigation-separator"/>
+    <h:panelGroup styleClass="view-header-navigation-item">
+      <h:link outcome="/forge/index.jsf">
+        #{locales['forge.navigation.forge']}
+      </h:link>
+    </h:panelGroup>
+    
+    <ui:repeat var="folder" value="#{folders}">
+      <h:panelGroup styleClass="view-header-navigation-separator"/>
+      <h:panelGroup styleClass="view-header-navigation-item">
+        <h:outputLink value="#{request.contextPath}/forge/folders/#{folder.path}">
+          #{folder.title}
+        </h:outputLink>
+      </h:panelGroup>
+    </ui:repeat>
+  </h:panelGroup>
+  
+</ui:composition>
