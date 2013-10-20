@@ -157,6 +157,10 @@ public class ForumController implements Serializable {
 	public List<ForumPost> listPostsByTopic(ForumTopic topic) {
 		return forumPostDAO.listByTopic(topic);
 	}
+	
+	public List<ForumPost> listPostsByTopic(ForumTopic topic, Integer firstResult, Integer maxResults) {
+		return forumPostDAO.listByTopic(topic, firstResult, maxResults);
+	}
 
 	public ForumPost findLastPostByAuthor(User author) {
 		List<ForumPost> posts = forumPostDAO.listByAuthorSortByCreated(author, 0, 1);
