@@ -34,7 +34,20 @@
     
     <!-- Header -->
     
-    <ui:include src="/facelets/forgeheadersmall.xhtml" />
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      <!-- Navigation -->
+  
+      <ui:include src="/facelets/forgenavigation.xhtml">    
+        <ui:param name="folders" value="#{forgeDocumentsBackingBean.folders}"/>
+      </ui:include>
+      
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{locales['forge.documents.descriptionTitle']}</p>
+        <p class="view-header-description-text">#{locales['forge.documents.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
 
     <!-- Editor -->
     
