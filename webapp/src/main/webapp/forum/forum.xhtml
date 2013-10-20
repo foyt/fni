@@ -6,6 +6,16 @@
   <ui:define name="view-stylesheets">
     <h:outputStylesheet library="novus" name="css/forum.css" />
   </ui:define>
+  
+  <ui:define name="view-scripts">
+    <!-- CKEditor -->
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/ckeditor.js"/>
+    
+    <!-- View Scripts -->
+  
+    <h:outputScript name="scripts/gui/forum-forum.js"/>
+  </ui:define>
 
   <ui:define name="grid-content">
     <!-- Menu -->
@@ -82,6 +92,36 @@
                 
               </h:panelGroup>
             </ui:repeat>
+          </h:panelGroup>
+          
+          <h:panelGroup rendered="#{forumBackingBean.allowTopicCreation}">
+            <h:panelGroup layout="block" styleClass="forum-view-new-topic-container" rendered="#{sessionBackingBean.loggedIn}">
+              <h:panelGroup layout="block" styleClass="forum-view-new-topic-editor-container" style="display: none">
+                <h:form>
+                  <div>
+                    <h:outputLabel value="#{locales['forum.forum.newTopicSubjectLabel']}" />
+                  </div>
+                  <div>
+                    <h:inputText required="true" requiredMessage="#{locales['forum.forum.newTopicSubjectRequired']}" class="forum-view-new-topic-subject" value="#{forumBackingBean.newTopicSubject}" />
+                  </div>
+                  <div>
+                    <h:outputLabel value="#{locales['forum.forum.newTopicContentLabel']}" />
+                  </div>
+                  <div>
+                    <h:inputTextarea required="true" requiredMessage="#{locales['forum.forum.newTopicContentRequired']}" styleClass="forum-view-new-topic-contents-editor" value="#{forumBackingBean.newTopicContents}" />
+                  </div>
+                  <div>
+                    <h:commandButton  class="forum-view-new-topic-button" value="#{locales['forum.forum.newTopicButton']}" action="#{forumBackingBean.newTopic}" />
+                  </div>
+                </h:form>
+              </h:panelGroup>
+              
+              <a href="javascript:void(null)" class="forum-view-new-topic-link">#{locales['forum.forum.newTopicLink']}</a>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="forum-new-topic-login-container" rendered="#{!sessionBackingBean.loggedIn}">
+              <h:outputLink styleClass="forum-new-topic-login-link" value="#{request.contextPath}/login?redirectUrl=#{request.contextPath}/forum/#{forumBackingBean.forum.urlName}">#{locales['forum.forum.newTopicLoginRequired']}</h:outputLink>
+            </h:panelGroup>
           </h:panelGroup>
 
         </h:panelGroup>

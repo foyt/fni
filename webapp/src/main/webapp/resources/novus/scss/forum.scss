@@ -119,3 +119,46 @@ $table-border-color: rgba(255, 255, 255, 0);
   font-weight: bold;
   margin-left: 16px;
 }
+
+.forum-new-topic-login-container, .forum-view-new-topic-container {
+  margin-left: 16px;
+}
+
+.forum-view-new-topic-link, .forum-new-topic-login-link {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 12px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.forum-view-new-topic-editor-container label {
+  font-family: $default-font;
+  color: $default-color;
+  font-weight: bold;
+  font-size: 13px;
+  padding-bottom: 4px;
+  padding-top: 5px;
+  display: block;
+}
+
+.forum-view-new-topic-editor-container input[type="text"] {
+  width: 260px;
+  font-size: 14px;
+  font-family: $default-font;
+  @include box-sizing(border-box);
+}
+
+.forum-view-new-topic-editor-container input[type="submit"] {
+  color: $default-color;
+  font-family: $title-font;
+  font-size: 14px;
+  text-transform: uppercase;
+  padding: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
