@@ -6,6 +6,16 @@
   <ui:define name="view-stylesheets">
     <h:outputStylesheet library="novus" name="css/forum-topic.css" />
   </ui:define>
+  
+  <ui:define name="view-scripts">
+    <!-- CKEditor -->
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/ckeditor.js"/>
+    
+    <!-- View Scripts -->
+  
+    <h:outputScript name="scripts/gui/forum-topic.js"/>
+  </ui:define>
 
   <ui:define name="grid-content">
 
@@ -99,7 +109,7 @@
                   </h:outputFormat>
                 </h:panelGroup>       
                 
-                <h:panelGroup layout="block" styleClass="forum-topic-post-modified" rendered="#{post.modified ne null}">
+                <h:panelGroup layout="block" styleClass="forum-topic-post-modified" rendered="#{post.modified ne post.created}">
                   <h:outputFormat value="#{locales['forum.topic.postModified']}">
                     <f:param value="#{post.modified}"/> 
                   </h:outputFormat>
@@ -107,6 +117,22 @@
               </h:panelGroup>
             </h:panelGroup>
           </ui:repeat>  
+        </h:panelGroup>
+        
+        <h:panelGroup rendered="#{sessionBackingBean.loggedIn}">
+          <h:form>
+            <h:panelGroup layout="block" styleClass="forum-topic-post-editor-container">
+              <h:inputTextarea value="#{forumTopicBackingBean.reply}" class="forum-topic-post-editor"/>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="forum-topic-post-send-container">
+              <h:commandButton value="#{locales['forum.topic.replyButton']}" action="#{forumTopicBackingBean.postReply}" />
+            </h:panelGroup>
+          </h:form>
+        </h:panelGroup>
+        
+        <h:panelGroup layout="block" styleClass="forum-topic-reply-login-container" rendered="#{!sessionBackingBean.loggedIn}">
+          <h:outputLink styleClass="forum-topic-reply-login-link" value="#{request.contextPath}/login?redirectUrl=#{request.contextPath}/forum/#{forumTopicBackingBean.forumUrlName}/#{forumTopicBackingBean.topicUrlName}">#{locales['forum.topic.replyLoginRequired']}</h:outputLink>
         </h:panelGroup>
         
       </h:panelGroup>

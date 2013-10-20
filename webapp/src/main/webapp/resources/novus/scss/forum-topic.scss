@@ -88,8 +88,6 @@ h3 {
 .forum-topic-post-content {
   color: $default-color;
   font-family: $default-font;
-  font-size: 13px;
-  font-weight: bold;
 }
 
 .forum-topic-post-sent, .forum-topic-post-modified {
@@ -101,4 +99,32 @@ h3 {
 
 .forum-topic-post-sent {
   padding-top: 13px;
+}
+
+/* Reply */
+
+.forum-topic-reply-login-container {
+  margin-top: 20px;
+}
+
+.forum-topic-reply-login-link {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 12px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.forum-topic-post-send-container input[type="submit"] {
+  color: $default-color;
+  font-family: $title-font;
+  font-size: 14px;
+  text-transform: uppercase;
+  padding: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
 }

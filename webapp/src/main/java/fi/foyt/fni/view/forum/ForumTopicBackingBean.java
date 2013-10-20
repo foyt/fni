@@ -6,9 +6,12 @@ import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
@@ -25,6 +28,7 @@ import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
+import fi.foyt.fni.utils.faces.FacesUtils;
 
 @RequestScoped
 @Stateful
@@ -57,12 +61,7 @@ public class ForumTopicBackingBean {
 		
 		forum = forumController.findForumByUrlName(getForumUrlName());
 		topic = forumController.findForumTopicByForumAndUrlName(forum, topicUrlName);
-		
-		Long postCount = forumController.countPostsByTopic(topic);
-		Integer pageCount = postCount.intValue() / POST_PER_PAGE;
-		if ((pageCount * POST_PER_PAGE) < postCount) {
-			pageCount++;
-		}
+		long pageCount = getPostCount();
 		
 		posts = forumController.listPostsByTopic(topic, page * POST_PER_PAGE, POST_PER_PAGE);
 		
@@ -131,18 +130,29 @@ public class ForumTopicBackingBean {
 	@LoggedIn
 	@Secure (Permission.FORUM_POST_CREATE)
 	public void postReply() throws IOException {
-		User author = sessionController.getLoggedUser();
-		ForumPost post = forumController.createForumPost(getTopic(), author, getReply());
-
-		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
-		  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
-		  .append("/forum/")
-		  .append(forum.getUrlName())
-		  .append('/')
-		  .append(topic.getUrlName())
-		  .append("#p")
-		  .append(post.getId())
-		  .toString());
+		String content = StringUtils.strip(getReply());
+		if (StringUtils.isEmpty(content)) {
+			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("forum.topic.contentRequired"));
+		} else {
+  		User author = sessionController.getLoggedUser();
+  		ForumPost post = forumController.createForumPost(getTopic(), author, content);
+  
+  		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+  		  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+  		  .append("/forum/")
+  		  .append(forum.getUrlName())
+  		  .append('/')
+  		  .append(topic.getUrlName())
+  		  .append("?page=")
+  		  .append(getPostCount() - 1)
+  		  .append("#p")
+  		  .append(post.getId())
+  		  .toString());
+		}
+	}
+	
+	private long getPostCount() {
+		return Math.round(Math.ceil(new Double(forumController.countPostsByTopic(topic)) / POST_PER_PAGE));
 	}
 	
 	@URLQueryParameter("page")
