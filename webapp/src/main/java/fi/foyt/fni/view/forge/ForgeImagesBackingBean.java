@@ -1,6 +1,7 @@
 package fi.foyt.fni.view.forge;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -12,6 +13,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.materials.MaterialController;
+import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.users.User;
@@ -60,6 +62,7 @@ public class ForgeImagesBackingBean {
 		
 		materialId = material.getId();
 		imageTitle = material.getTitle();
+		folders = ForgeViewUtils.getParentList(material);
 	}
 	
 	public Long getOwnerId() {
@@ -86,8 +89,13 @@ public class ForgeImagesBackingBean {
 		return imageTitle;
 	}
 	
+	public List<Folder> getFolders() {
+		return folders;
+	}
+	
 	private Long ownerId;
 	private String urlPath;
 	private Long materialId;
 	private String imageTitle;
+	private List<Folder> folders;
 }
