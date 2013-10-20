@@ -40,6 +40,11 @@
   text-decoration: none;
 }
 
+.view-header-navigation-item a {
+  color: $title-color;
+  text-decoration: none;
+}
+
 .view-header-navigation-separator:after {
   content: '>>';
 }
