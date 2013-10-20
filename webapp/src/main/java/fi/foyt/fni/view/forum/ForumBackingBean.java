@@ -27,13 +27,14 @@ import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
 
+@SuppressWarnings("el-syntax")
 @RequestScoped
 @Stateful
 @Named
 @URLMappings(mappings = {
   @URLMapping(
 		id = "forum", 
-		pattern = "/forum/#{forumBackingBean.forumUrlName}", 
+		pattern = "/forum/#{ /[a-z_][a-z_]*/ forumBackingBean.forumUrlName}", 
 		viewId = "/forum/forum.jsf"
   )
 })
