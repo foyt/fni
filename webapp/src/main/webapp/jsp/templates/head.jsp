@@ -56,31 +56,3 @@
 <script src="${pageContext.request.contextPath}/resources/scripts/gui/common/uploadcomponent.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/gui/common/treecomponent.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/gui/common/viewmessages.js" type="text/javascript"></script>
-<script type="text/javascript">
-  window.siteMenuBarController = new SiteMenuBarController();
-  window.isLoggedIn = function () {
-    return ${loggedIn};
-  }
-  
-  window.getLocale = function() {
-    if (window._locale == undefined) {
-      window._locale = new fni.locale.FNILocale();
-      window._locale.loadLocale("${pageContext.request.locale}", "${pageContext.request.contextPath}/generic/javascriptlocales.json?locale=${pageContext.request.locale}");
-      window._locale.setLocale("${pageContext.request.locale}");
-    }
-    
-    return window._locale;
-  }
-
-  document.observe("dom:loaded", function() {
-    window.siteMenuBarController.setup();
-    
-    initTooltip();
-    initializeValidation();
-  });
-  
-  Event.observe(window, 'unload', function() {
-    window.siteMenuBarController.destroy();
-  });
-
-</script>
