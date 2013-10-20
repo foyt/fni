@@ -35,7 +35,7 @@
     
     <h:panelGroup layout="block" styleClass="forge-material-actions">
       <h:panelGroup layout="block" styleClass="forge-material-action-edit">
-        <h:outputLink value="javascript:void(null)">
+        <h:outputLink value="#{request.contextPath}/forge/#{forgeIndexBackingBean.getMaterialViewer(material.type)}/#{material.path}">
           <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-edit.png"/> 
           <h:outputLabel value="#{locales['forge.index.materialEditLink']}" />
         </h:outputLink>
