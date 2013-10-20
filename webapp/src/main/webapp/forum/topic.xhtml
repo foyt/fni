@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['forum.forum.pageTitle']}</ui:define>
+  <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/forum-topic.css" />
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:link styleClass="view-header-navigation-item" outcome="/forum/index.jsf">
+          #{locales['forum.forum.navItemForum']}
+        </h:link>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:outputLink value="#{request.contextPath}/forum/#{forumTopicBackingBean.forum.urlName}">
+            #{forumTopicBackingBean.forum.name}
+          </h:outputLink>
+        </h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">#{forumTopicBackingBean.topic.subject}</h:panelGroup>
+      </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{forumTopicBackingBean.forum.name}</p>
+        <p class="view-header-description-text">#{forumTopicBackingBean.forum.description}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <!-- Posts -->
+
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="forum-topic-panel">
+        <h3>#{forumTopicBackingBean.topic.subject}</h3>
+
+        <h:panelGroup layout="block" styleClass="forum-topic-info">
+          
+          <h:panelGroup layout="block" styleClass="forum-topic-created-info">
+            <h:panelGroup styleClass="forum-topic-info-created">
+              <h:outputFormat value="#{locales['forum.topic.infoStarted']}">
+                <f:param value="#{forumTopicBackingBean.topic.created}"/>
+              </h:outputFormat>
+            </h:panelGroup>  
+            
+            <h:outputLink value="#{request.contextPath}/profile/#{forumTopicBackingBean.topic.author.id}">
+              #{forumTopicBackingBean.topic.author.fullName}
+            </h:outputLink>
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="forum-topic-pages">
+            <ui:repeat var="page" value="#{forumTopicBackingBean.pages}">
+              <h:outputLink value="?page=#{page}" styleClass="forum-topic-selected-page" rendered="#{page eq forumTopicBackingBean.page}">
+                #{page + 1}
+              </h:outputLink>
+  
+              <h:outputLink value="?page=#{page}" rendered="#{page ne forumTopicBackingBean.page}">
+                #{page + 1}
+              </h:outputLink>
+            </ui:repeat>
+          </h:panelGroup>    
+        </h:panelGroup>
+        
+        <h:panelGroup layout="block" styleClass="forum-topic-posts">
+          <ui:repeat var="post" value="#{forumTopicBackingBean.posts}">
+            <h:panelGroup layout="block" styleClass="forum-topic-post">
+              <h:panelGroup layout="block" styleClass="forum-topic-post-author-info">
+                <h:panelGroup layout="block" styleClass="forum-topic-post-author-image-container">
+                  <h:graphicImage value="/users/profileImages/#{post.author.id}?width=80&amp;height=80" />
+                </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="forum-topic-post-author-name">
+                  #{post.author.fullName}
+                </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="forum-topic-post-author-posts">
+                  <h:outputFormat value="#{locales['forum.topic.authorPostCount']}">
+                    <f:param value="#{forumTopicBackingBean.getAuthorPostCount(post.author)}"/> 
+                  </h:outputFormat>
+                </h:panelGroup>
+              </h:panelGroup>      
+              
+              <h:panelGroup layout="block" styleClass="forum-topic-post-content-container">
+                <h:panelGroup layout="block" styleClass="forum-topic-post-content">
+                  <h:outputText value="#{post.content}" escape="false"/>
+                </h:panelGroup>
+                          
+                <h:panelGroup layout="block" styleClass="forum-topic-post-sent">
+                  <h:outputFormat value="#{locales['forum.topic.postSent']}">
+                    <f:param value="#{post.created}"/> 
+                  </h:outputFormat>
+                </h:panelGroup>       
+                
+                <h:panelGroup layout="block" styleClass="forum-topic-post-modified" rendered="#{post.modified ne null}">
+                  <h:outputFormat value="#{locales['forum.topic.postModified']}">
+                    <f:param value="#{post.modified}"/> 
+                  </h:outputFormat>
+                </h:panelGroup>
+              </h:panelGroup>
+            </h:panelGroup>
+          </ui:repeat>  
+        </h:panelGroup>
+        
+      </h:panelGroup>
+    </h:panelGroup>
+
+  </ui:define>
+
+</ui:composition>
