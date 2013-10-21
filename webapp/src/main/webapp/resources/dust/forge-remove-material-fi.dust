@@ -1,0 +1,7 @@
+<div title="Poista '{materialName}'?" data-remove-button="Poista" data-cancel-button="Peruuta">
+  <div class="forge-remove-material-dialog">
+    <p>
+      Halutko varmasti poistaa materiaalin '{materialName}'?
+    </p>
+  </div>
+</div>

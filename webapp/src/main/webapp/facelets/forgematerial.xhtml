@@ -42,10 +42,10 @@
       </h:panelGroup>
 
       <h:panelGroup layout="block" styleClass="forge-material-action-delete">
-        <h:outputLink value="javascript:void(null)">
+        <a href="javascript:void(null)" data-material-id="#{material.id}">
           <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-delete.png"/>
           <h:outputLabel value="#{locales['forge.index.materialDeleteLink']}" />
-        </h:outputLink>
+        </a>
       </h:panelGroup>
 
       <h:panelGroup layout="block" styleClass="forge-material-action-print-pdf">

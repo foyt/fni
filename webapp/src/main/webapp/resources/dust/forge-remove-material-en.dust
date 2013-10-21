@@ -1,0 +1,7 @@
+<div title="Remove '{materialName}'?" data-remove-button="Remove" data-cancel-button="Cancel">
+  <div class="forge-remove-material-dialog">
+    <p>
+      Do you really wish to remove '{materialName}'
+    </p>
+  </div>
+</div>

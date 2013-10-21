@@ -3,13 +3,22 @@
   xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['forge.index.pageTitle']}</ui:define>
+  
   <ui:define name="view-stylesheets">
+    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+  
     <h:outputStylesheet library="novus" name="css/fonts.css"/>
     <h:outputStylesheet library="novus" name="css/menu.css"/>
     <h:outputStylesheet library="novus" name="css/forge-index.css"/>
   </ui:define>
   
   <ui:define name="view-scripts">
+    <!-- jQuery UI -->
+    
+    <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    
+    <!-- View Scripts -->
+    
     <h:outputScript name="scripts/gui/forge-index.js"/>
   </ui:define>
 
@@ -143,6 +152,13 @@
         <h:inputHidden value="#{forgeIndexBackingBean.lastViewedOpen}" />
         <h:inputHidden value="#{forgeIndexBackingBean.lastEditedOpen}" />
         <h:inputHidden value="#{forgeIndexBackingBean.starredOpen}" />
+      </h:form>
+    </h:panelGroup>
+    
+    <h:panelGroup layout="block" id="forge-action-form-container" style="display: none">
+      <h:form>
+        <h:inputHidden id="material-id" value="#{forgeMaterialActionBackingBean.materialId}" />
+        <h:commandButton id="delete" action="#{forgeMaterialActionBackingBean.deleteMaterial}"/>
       </h:form>
     </h:panelGroup>
   </ui:define>
