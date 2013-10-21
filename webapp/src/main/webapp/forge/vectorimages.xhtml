@@ -45,10 +45,20 @@
 
     <h:panelGroup layout="block" styleClass="grid_16 tight">
       <h:panelGroup layout="block" styleClass="forge-vector-image-panel">
-        <h2>#{forgeVectorImagesBackingBean.vectorImageTitle}</h2>
-        <h:panelGroup layout="block" styleClass="forge-vector-image-container">
-          <iframe src="#{request.contextPath}/uresources/svg-edit/svg-editor.html?lang=#{sessionBackingBean.locale.language}" data-content="#{forgeVectorImagesBackingBean.vectorImageContent}"></iframe>
-        </h:panelGroup>
+        <h:form>
+          <h2>
+            <h:inputText value="#{forgeVectorImagesBackingBean.vectorImageTitle}" />
+          </h2>
+          
+          <h:panelGroup layout="block" styleClass="forge-vector-image-container">
+            <iframe src="#{request.contextPath}/uresources/svg-edit/svg-editor.html?lang=#{sessionBackingBean.locale.language}" data-content="#{forgeVectorImagesBackingBean.vectorImageContent}"></iframe>
+            <input type="submit" class="forge-vector-image-save" value="#{locales['forge.vectorImages.save']}"/>
+          </h:panelGroup>
+          
+          <h:inputHidden value="#{forgeVectorImagesBackingBean.materialModified}"/>
+          <h:inputHidden id="image-content" value="#{forgeVectorImagesBackingBean.vectorImageContent}" />
+          <h:commandButton id="save" style="display: none" action="#{forgeVectorImagesBackingBean.save}" />
+        </h:form>
       </h:panelGroup>
     </h:panelGroup>
     

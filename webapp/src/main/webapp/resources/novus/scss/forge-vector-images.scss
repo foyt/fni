@@ -4,9 +4,28 @@
 
 h2 {
   @include header-2;
-  color: $title-color;
   padding-top: 20px;
-  padding-left: 20px;
+  padding-left: 16px;
+  padding-right: 20px;
+}
+
+h2 input {
+  color: $title-color;
+  background: none;
+  border: 1px solid transparent;
+  width: 100%;
+  @include box-sizing(border-box);
+  padding-left: 4px;
+}
+
+h2 input:hover {
+  background: #fff;
+  border: 1px dotted #eee;
+}
+
+h2 input:focus {
+  background: #fff;
+  border: 1px inset #eee;
 }
 
 .forge-vector-image-panel {
@@ -14,7 +33,6 @@ h2 {
 }
 
 .forge-vector-image-container {
-  background: #fff;
   margin: 20px;
 }
 
@@ -22,4 +40,19 @@ h2 {
   width: 100%;
   border: none;
   height: 600px;
+}
+
+.forge-vector-image-save {
+  color: $default-color;
+  font-family: $title-font;
+  font-size: 14px;
+  text-transform: uppercase;
+  padding: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

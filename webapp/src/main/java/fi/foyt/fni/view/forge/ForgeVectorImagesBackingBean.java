@@ -1,10 +1,13 @@
 package fi.foyt.fni.view.forge;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -18,7 +21,10 @@ import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
+import fi.foyt.fni.utils.faces.FacesUtils;
 
 @SuppressWarnings("el-syntax")
 @RequestScoped
@@ -41,8 +47,12 @@ public class ForgeVectorImagesBackingBean {
 
 	@Inject
 	private VectorImageController vectorImageController;
+
+	@Inject
+	private SessionController sessionController;
 	
 	@URLAction
+	@LoggedIn
 	public void load() throws FileNotFoundException {
 		// TODO: Security
 		
@@ -66,10 +76,11 @@ public class ForgeVectorImagesBackingBean {
 		
 		VectorImage vectorImage = (VectorImage) material;
 		
-		materialId = material.getId();
-		vectorImageTitle = material.getTitle();
+		materialId = vectorImage.getId();
+		materialModified = vectorImage.getModified().getTime();
+		vectorImageTitle = vectorImage.getTitle();
 		vectorImageContent = vectorImage.getData();
-		folders = ForgeViewUtils.getParentList(material);
+		folders = ForgeViewUtils.getParentList(vectorImage);
 	}
 	
 	public Long getOwnerId() {
@@ -96,6 +107,10 @@ public class ForgeVectorImagesBackingBean {
 		return vectorImageTitle;
 	}
 	
+	public void setVectorImageTitle(String vectorImageTitle) {
+		this.vectorImageTitle = vectorImageTitle;
+	}
+	
 	public List<Folder> getFolders() {
 		return folders;
 	}
@@ -104,9 +119,40 @@ public class ForgeVectorImagesBackingBean {
 		return vectorImageContent;
 	}
 	
+	public void setVectorImageContent(String vectorImageContent) {
+		this.vectorImageContent = vectorImageContent;
+	}
+	
+	public Long getMaterialModified() {
+		return materialModified;
+	}
+	
+	public void setMaterialModified(Long materialModified) {
+		this.materialModified = materialModified;
+	}
+	
+	public void save() throws IOException {
+		// TODO: Security
+		
+		VectorImage vectorImage = vectorImageController.findVectorImageById(materialId);
+		if (getMaterialModified().equals(vectorImage.getModified().getTime())) {
+			vectorImageController.updateVectorImageData(vectorImage, getVectorImageContent(), sessionController.getLoggedUser());
+			vectorImageController.updateVectorImageTitle(vectorImage, getVectorImageTitle(), sessionController.getLoggedUser());
+			
+			FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+  		  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+  		  .append("/forge/vectorimages/")
+  		  .append(vectorImage.getPath())
+  		  .toString());
+		} else {
+			FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("forge.vectorImages.conflictError"));
+		}
+	}
+	
 	private Long ownerId;
 	private String urlPath;
 	private Long materialId;
+	private Long materialModified;
 	private String vectorImageTitle;
 	private String vectorImageContent;
 	private List<Folder> folders;
