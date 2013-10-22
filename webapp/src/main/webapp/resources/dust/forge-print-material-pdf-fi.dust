@@ -1,0 +1,16 @@
+<div title="Tuolosta PDF" data-print-button="Tulosta" data-cancel-button="Peruuta">
+  <div class="forge-print-material-pdf-dialog">
+    <p>Voit ladata tulostetun PDF -tiedoston suoraan tai talentaa sen uudeksi tiedostoksi.</p>
+    <p>Kumman haluaisit tehdä?</p>
+    <div class="forge-print-material-pdf-print-style">
+      <div>
+        <input type="radio" name="print-style" value="download" checked="checked"/> 
+        <label>Ladata suoraan</label>
+      </div>
+      <div>
+        <input type="radio" name="print-style" value="file"/> 
+        <label>Tallentaa uudeksi tiedostoksi</label>
+      </div>
+    </div>
+  </div>
+</div>

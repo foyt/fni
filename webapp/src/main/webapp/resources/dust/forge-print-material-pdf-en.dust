@@ -1,0 +1,16 @@
+<div title="Print to PDF" data-print-button="Print" data-cancel-button="Cancel">
+  <div class="forge-print-material-pdf-dialog">
+    <p>You can either download printed PDF directly or print it into a new file.</p>
+    <p>Which one would you like to do?</p>
+    <div class="forge-print-material-pdf-print-style">
+      <div>
+        <input type="radio" name="print-style" value="download" checked="checked"/> 
+        <label>Download directly</label>
+      </div>
+      <div>
+        <input type="radio" name="print-style" value="file"/> 
+        <label>Print to a new File</label>
+      </div>
+    </div>
+  </div>
+</div>

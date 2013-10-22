@@ -43,4 +43,45 @@
     });
   });
   
+  $(document).on('click', '.forge-material-action-print-pdf a', function (event) {
+    var materialId = $(this).data('material-id');
+    dust.render("forge-print-material-pdf", {
+    }, function(err, html) {
+      if (!err) {
+        var dialog = $(html);
+        dialog.dialog({
+          modal: true,
+          width: 400,
+          buttons: [{
+            'text': dialog.data('print-button'),
+            'click': function(event) { 
+              switch (dialog.find('input[name="print-style"]:checked').val()) {
+                case 'download':
+                  $(this).dialog("close");
+                  window.location.href = CONTEXTPATH + '/forge/pdf/' + materialId;
+                break;
+                case 'file':
+                  var actionForm = $('#forge-action-form-container form');
+                  var prefix = actionForm.attr('name');
+                  $('input[name="' + prefix + ':material-id' + '"]').val(materialId);
+                  $('input[name="' + prefix + ':print-file' + '"]').click();
+                break;
+              }
+            }
+          }, {
+            'text': dialog.data('cancel-button'),
+            'click': function(event) { 
+              $(this).dialog("close");
+            }
+          }]
+        });
+      } else {
+       // TODO: Proper error handling...
+        alert(err);
+      }
+    });
+  });
+  
+  
+  
 }).call(this);
