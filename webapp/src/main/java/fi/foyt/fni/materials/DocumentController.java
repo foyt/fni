@@ -31,10 +31,13 @@ import com.itextpdf.text.DocumentException;
 
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentRevisionDAO;
+import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
+import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.utils.data.TypedData;
@@ -62,7 +65,15 @@ public class DocumentController {
   private DocumentRevisionDAO documentRevisionDAO;
   
   /* Document */
-  
+
+	public Document createDocument(Folder parentFolder, String urlName, String title, User creator) {
+		return createDocument(parentFolder, urlName, title, null, null, creator);
+	}
+
+	public Document createDocument(Folder parentFolder, String urlName, String title, String data, Language language, User creator) {
+		return documentDAO.create(creator, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
+	}
+	
 	public Document findDocumentById(Long documentId) {
 		return documentDAO.findById(documentId);
 	}
@@ -204,4 +215,5 @@ public class DocumentController {
   		documentStream.close();
   	}
 	}
+
 }
