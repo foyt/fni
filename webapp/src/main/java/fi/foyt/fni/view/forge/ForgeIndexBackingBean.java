@@ -1,6 +1,7 @@
 package fi.foyt.fni.view.forge;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -17,10 +19,12 @@ import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
+import fi.foyt.fni.materials.DocumentController;
 import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.TitleComparator;
+import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
@@ -28,6 +32,7 @@ import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
+import fi.foyt.fni.utils.faces.FacesUtils;
 
 @SuppressWarnings("el-syntax")
 @RequestScoped
@@ -58,6 +63,9 @@ public class ForgeIndexBackingBean {
 
 	@Inject
 	private FolderController folderController;
+	
+	@Inject
+	private DocumentController documentController;
 	
 	@Inject
 	private UserController userController;
@@ -155,6 +163,20 @@ public class ForgeIndexBackingBean {
 			User loggedUser = sessionController.getLoggedUser();
 			materialController.unstarMaterial(material, loggedUser);
 		}
+	}
+	
+	@LoggedIn
+	public void createNewDocument() throws IOException {
+		User loggedUser = sessionController.getLoggedUser();
+		Folder parentFolder = folderId != null ? folderController.findFolderById(folderId) : null;
+		String title = FacesUtils.getLocalizedValue("forge.index.untitledDocument");	
+		String urlName = materialController.getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
+		Document document = documentController.createDocument(parentFolder, urlName, title, loggedUser);
+				
+		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+	    .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+	    .append("/forge/documents/" + document.getPath())
+	    .toString());
 	}
 
 	public boolean isMaterialsOpen() {
