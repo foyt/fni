@@ -235,6 +235,63 @@ public class MaterialController {
         return false;
     }
   }
+
+  public boolean isMovableType(MaterialType type) {
+		switch (type) {
+	    case DROPBOX_ROOT_FOLDER:
+	    case UBUNTU_ONE_ROOT_FOLDER:
+	    case DROPBOX_FILE:
+	    case DROPBOX_FOLDER:
+	    case UBUNTU_ONE_FILE:
+	    case UBUNTU_ONE_FOLDER:
+	      return false;
+	    default:
+	    break;
+	  }
+		
+		return true;
+	}
+
+  public boolean isShareableType(MaterialType type) {
+		switch (type) {
+	    case DROPBOX_ROOT_FOLDER:
+	    case UBUNTU_ONE_ROOT_FOLDER:
+	    case DROPBOX_FILE:
+	    case DROPBOX_FOLDER:
+	    case UBUNTU_ONE_FILE:
+	    case UBUNTU_ONE_FOLDER:
+	      return false;
+	    default:
+	    break;
+	  }
+		
+		return true;
+	}
+
+  public boolean isPrintableAsPdfType(MaterialType type) {
+		switch (type) {
+	    case DOCUMENT:
+	      return true;
+	    default:
+	    break;
+	  }
+		
+		return false;
+	}
+
+	public boolean isDeletableType(MaterialType type) {
+		switch (type) {
+	    case DROPBOX_FILE:
+	    case DROPBOX_FOLDER:
+	    case UBUNTU_ONE_FILE:
+	    case UBUNTU_ONE_FOLDER:
+	      return false;
+	    default:
+	    break;
+	  }
+		
+		return true;
+	}
   
   public MaterialBean getMaterialBean(Long materialId) {
     return getMaterialBean(materialDAO.findById(materialId));

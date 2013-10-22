@@ -19,6 +19,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
+import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.TitleComparator;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
@@ -53,6 +54,9 @@ public class ForgeIndexBackingBean {
 	private MaterialController materialController;
 
 	@Inject
+	private MaterialPermissionController materialPermissionController;
+
+	@Inject
 	private FolderController folderController;
 	
 	@Inject
@@ -68,6 +72,8 @@ public class ForgeIndexBackingBean {
 	@URLAction
 	@LoggedIn
 	public void load() throws FileNotFoundException {
+		// TODO: Security
+		
 		materialsOpen = true;
 		lastViewedOpen = true;
 		starredOpen = true;
@@ -304,7 +310,52 @@ public class ForgeIndexBackingBean {
 	public List<Folder> getFolders() {
 		return folders;
 	}
-	
+
+	@LoggedIn
+	public boolean getMaterialEditable(Material material) {
+		if (materialController.isEditableType(material.getType())) {
+			return materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
+		}
+		
+		return false;
+	}
+
+	@LoggedIn
+	public boolean getMaterialDeletable(Material material) {
+		if (materialController.isDeletableType(material.getType())) {
+			return materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
+		}
+		
+		return false;
+	}
+
+	@LoggedIn
+	public boolean getMaterialMovable(Material material) {
+		if (materialController.isMovableType(material.getType())) {
+			return materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
+		}
+		
+		return false;
+	}
+
+	@LoggedIn
+	public boolean getMaterialShareable(Material material) {
+		if (materialController.isShareableType(material.getType())) {
+			return materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
+		}
+		
+		return false;
+	}
+
+	@LoggedIn
+	public boolean getMaterialPrintableAsPdf(Material material) {
+		if (materialController.isPrintableAsPdfType(material.getType())) {
+			return materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material);
+		}
+		
+		return false;
+	}
+
 	private boolean materialsOpen;
 	private boolean lastViewedOpen;
 	private boolean starredOpen;
