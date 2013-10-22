@@ -226,13 +226,7 @@ public class MaterialsDocumentsRESTService extends RESTService {
       }
 		}
     
-    String oldData = null;
-    try {
-	    oldData = new String(document.getData(), "UTF-8");
-    } catch (UnsupportedEncodingException e) {
-			logger.log(Level.SEVERE, "UTF-8 not supported", e);
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ApiMessages.getText(browserLocale, "error.generic.configurationError")).build();
-    }
+    String oldData = document.getData();
 
 		if (!StringUtils.isEmpty(oldData) && !data.equals(oldData)) {
 			Long lastRevision = documentRevisionDAO.maxRevisionByDocument(document);
@@ -301,7 +295,7 @@ public class MaterialsDocumentsRESTService extends RESTService {
   	  ReplacedElementFactory replacedElementFactory = new B64ImgReplacedElementFactory();
   	  renderer.getSharedContext().setReplacedElementFactory(replacedElementFactory);
   	  
-  	  String documentContent = new String(document.getData(), "UTF-8");
+  	  String documentContent = document.getData();
   	  String baseUrl = getApplicationBaseUrl(uriInfo);
   	  String contextPath = servletRequest.getContextPath();
   	  
@@ -452,7 +446,7 @@ public class MaterialsDocumentsRESTService extends RESTService {
 		}
 		
 		try {
-      String bodyContent = new String(document.getData(), "UTF-8");
+      String bodyContent = document.getData();
       String html = HtmlUtils.getAsHtmlText(document.getTitle(), bodyContent);
       return createBinaryResponse(html.getBytes("UTF-8"), "text/html;charset=utf-8");
     } catch (UnsupportedEncodingException e) {

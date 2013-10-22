@@ -1,11 +1,9 @@
 package fi.foyt.fni.persistence.dao.materials;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -31,11 +29,7 @@ public class DocumentDAO extends GenericDAO<Document> {
     Date now = new Date();
 
     Document document = new Document();
-    try {
-      document.setData(data.getBytes("UTF-8"));
-    } catch (UnsupportedEncodingException e) {
-      throw new PersistenceException(e);
-    }
+    document.setData(data);
     document.setCreated(now);
     document.setCreator(creator);
     document.setModified(now);
@@ -92,11 +86,7 @@ public class DocumentDAO extends GenericDAO<Document> {
   public Document updateData(Document document, User modifier, String data) {
     EntityManager entityManager = getEntityManager();
 
-    try {
-      document.setData(data.getBytes("UTF-8"));
-    } catch (UnsupportedEncodingException e) {
-      throw new PersistenceException(e);
-    }
+    document.setData(data);
     document.setModified(new Date());
     document.setModifier(modifier);
     

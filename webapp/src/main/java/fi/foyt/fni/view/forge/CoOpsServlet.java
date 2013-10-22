@@ -107,8 +107,7 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 			return;
 		}
 		
-		String content = new String(document.getData(), "UTF-8");
-		writeJsonResponse(response, new File(document.getId().toString(), document.getTitle(), document.getModified(), revisionNumber, content, COOPS_DOCUMENT_CONTENTTYPE));
+		writeJsonResponse(response, new File(document.getId().toString(), document.getTitle(), document.getModified(), revisionNumber, document.getData(), COOPS_DOCUMENT_CONTENTTYPE));
 	}
 
 	@Override
@@ -166,8 +165,7 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 		byte[] patchData = null;
 		String checksum = null;
 		if (StringUtils.isNotBlank(patch)) {
-	    String oldData = new String(document.getData(), "UTF-8");
-      
+	    String oldData = document.getData();
       PatchResult patchResult = DiffUtils.applyPatch(oldData, patch);
       if (!patchResult.allApplied()) {
       	response.sendError(HttpServletResponse.SC_CONFLICT, "Patching failed");
@@ -241,7 +239,7 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 		}
 
 		Long revisionNumber = documentController.getDocumentRevision(document);
-		writeJsonResponse(response, new Join(COOPS_SUPPORTED_EXTENSIONS, revisionNumber, new String(document.getData(), "UTF-8"), COOPS_DOCUMENT_CONTENTTYPE, UUID.randomUUID().toString()));
+		writeJsonResponse(response, new Join(COOPS_SUPPORTED_EXTENSIONS, revisionNumber, document.getData(), COOPS_DOCUMENT_CONTENTTYPE, UUID.randomUUID().toString()));
 	}
 	
 	private void writeJsonResponse(HttpServletResponse response, Object object) throws IOException {

@@ -306,11 +306,7 @@ public class CKCConnectorImpl implements CKCConnector {
 
     properties.put("metaKeywords", tagsBuilder.toString());
 
-    try {
-      return new LoadResult(status, lastRevision, new String(document.getData(), "UTF-8"), properties);
-    } catch (UnsupportedEncodingException e) {
-      throw new CKCConnectorException(e);
-    }
+    return new LoadResult(status, lastRevision, document.getData(), properties);
   }
 
   @Override
@@ -331,13 +327,7 @@ public class CKCConnectorImpl implements CKCConnector {
     revisionNumber = lastRevision + 1;
 
     if (StringUtils.isNotBlank(patch)) {
-      String oldData;
-      try {
-        oldData = new String(document.getData(), "UTF-8");
-      } catch (UnsupportedEncodingException e) {
-        throw new CKCConnectorException(e);
-      }
-
+      String oldData = document.getData();
       PatchResult patchResult = DiffUtils.applyPatch(oldData, patch);
       if (!patchResult.allApplied()) {
         status = Status.CONFLICT;

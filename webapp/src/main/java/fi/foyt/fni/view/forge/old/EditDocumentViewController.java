@@ -1,6 +1,5 @@
 package fi.foyt.fni.view.forge.old;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,8 +19,8 @@ import fi.foyt.fni.persistence.model.materials.MaterialSettingKey;
 import fi.foyt.fni.persistence.model.materials.MaterialTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.view.Locales;
 import fi.foyt.fni.view.AbstractViewController;
+import fi.foyt.fni.view.Locales;
 import fi.foyt.fni.view.ViewControllerContext;
 import fi.foyt.fni.view.ViewControllerException;
 
@@ -84,49 +83,45 @@ public class EditDocumentViewController extends AbstractViewController {
       
       Document document = documentDAO.findById(documentId);
       
-      try {
-      	StringBuilder keywordsBuilder = new StringBuilder();
-      	List<MaterialTag> materialTags = materialTagDAO.listByMaterial(document);
-      	for (int i = 0, l = materialTags.size(); i < l; i++) {
-      		keywordsBuilder.append(StringEscapeUtils.escapeHtml4(materialTags.get(i).getTag().getText()));
-      		if (i < (l - 1))
-      			keywordsBuilder.append(',');
-      	}
-      	
-        String content = new String(document.getData(), "UTF-8");
-        HtmlBuilder htmlBuilder = new HtmlBuilder(null, content);
-        htmlBuilder.addHeaderTag("title", document.getTitle());
-        htmlBuilder.addHeaderTag("meta", null, "name=\"keywords\" content=\"" + keywordsBuilder.toString() + "\"");
-        htmlBuilder.addHeaderTag("meta", null, "name=\"description\" content=\"" + StringEscapeUtils.escapeHtml4(getDocumentSetting(document, "document.metaDescription")) + "\"");
-        htmlBuilder.addHeaderTag("meta", null, "http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"");
-        
-        if (document.getLanguage() != null) {
-        	String langCode = document.getLanguage().getISO2();
-        	htmlBuilder.addHtmlAttribute("xml:lang", langCode);
-        	htmlBuilder.addHtmlAttribute("lang", langCode);
-        }
-        
-        StringBuilder bodyStyleBuilder = new StringBuilder();
-        
-        addBodyStyle(document, bodyStyleBuilder, "document.textColor", "color");
-        addBodyStyle(document, bodyStyleBuilder, "document.backgroundColor", "background-color");
-    		addBodyStyle(document, bodyStyleBuilder, "document.backgroundImage", "background-image");
-    		addBodyStyle(document, bodyStyleBuilder, "document.backgroundAttachment", "background-attachment");
-    		addBodyStyle(document, bodyStyleBuilder, "document.pageMarginLeft", "margin-left");
-    		addBodyStyle(document, bodyStyleBuilder, "document.pageMarginTop", "margin-top");
-    	  addBodyStyle(document, bodyStyleBuilder, "document.pageMarginRight", "margin-right");
-    	  addBodyStyle(document, bodyStyleBuilder, "document.pageMarginBottom", "margin-bottom");
-        
-        String langDir = getDocumentSetting(document, "document.langDir");
-        if (StringUtils.isNotBlank(langDir)) {
-        	htmlBuilder.addBodyAttribute("dir", langDir);
-        	htmlBuilder.addBodyAttribute("style", bodyStyleBuilder.toString());
-        }
-        
-        context.getRequest().setAttribute("documentContent", htmlBuilder.getHtml());
-      } catch (UnsupportedEncodingException e) {
-      	throw new ViewControllerException(Locales.getText(context.getRequest().getLocale(), "error.generic.configurationError"));
+    	StringBuilder keywordsBuilder = new StringBuilder();
+    	List<MaterialTag> materialTags = materialTagDAO.listByMaterial(document);
+    	for (int i = 0, l = materialTags.size(); i < l; i++) {
+    		keywordsBuilder.append(StringEscapeUtils.escapeHtml4(materialTags.get(i).getTag().getText()));
+    		if (i < (l - 1))
+    			keywordsBuilder.append(',');
+    	}
+    	
+      String content = document.getData();
+      HtmlBuilder htmlBuilder = new HtmlBuilder(null, content);
+      htmlBuilder.addHeaderTag("title", document.getTitle());
+      htmlBuilder.addHeaderTag("meta", null, "name=\"keywords\" content=\"" + keywordsBuilder.toString() + "\"");
+      htmlBuilder.addHeaderTag("meta", null, "name=\"description\" content=\"" + StringEscapeUtils.escapeHtml4(getDocumentSetting(document, "document.metaDescription")) + "\"");
+      htmlBuilder.addHeaderTag("meta", null, "http-equiv=\"content-type\" content=\"text/html; charset=utf-8\"");
+      
+      if (document.getLanguage() != null) {
+      	String langCode = document.getLanguage().getISO2();
+      	htmlBuilder.addHtmlAttribute("xml:lang", langCode);
+      	htmlBuilder.addHtmlAttribute("lang", langCode);
       }
+      
+      StringBuilder bodyStyleBuilder = new StringBuilder();
+      
+      addBodyStyle(document, bodyStyleBuilder, "document.textColor", "color");
+      addBodyStyle(document, bodyStyleBuilder, "document.backgroundColor", "background-color");
+  		addBodyStyle(document, bodyStyleBuilder, "document.backgroundImage", "background-image");
+  		addBodyStyle(document, bodyStyleBuilder, "document.backgroundAttachment", "background-attachment");
+  		addBodyStyle(document, bodyStyleBuilder, "document.pageMarginLeft", "margin-left");
+  		addBodyStyle(document, bodyStyleBuilder, "document.pageMarginTop", "margin-top");
+  	  addBodyStyle(document, bodyStyleBuilder, "document.pageMarginRight", "margin-right");
+  	  addBodyStyle(document, bodyStyleBuilder, "document.pageMarginBottom", "margin-bottom");
+      
+      String langDir = getDocumentSetting(document, "document.langDir");
+      if (StringUtils.isNotBlank(langDir)) {
+      	htmlBuilder.addBodyAttribute("dir", langDir);
+      	htmlBuilder.addBodyAttribute("style", bodyStyleBuilder.toString());
+      }
+      
+      context.getRequest().setAttribute("documentContent", htmlBuilder.getHtml());
       
       Long revision = documentRevisionDAO.maxRevisionByDocument(document);
       if (revision == null)

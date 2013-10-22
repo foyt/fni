@@ -116,7 +116,7 @@ public class DocumentController {
 	  ReplacedElementFactory replacedElementFactory = new B64ImgReplacedElementFactory();
 	  renderer.getSharedContext().setReplacedElementFactory(replacedElementFactory);
 	  
-	  String documentContent = new String(document.getData(), "UTF-8");
+	  String documentContent = document.getData();
 	  org.w3c.dom.Document domDocument = tidyForPdf(document.getTitle(), documentContent);
 	  
 	  try {
