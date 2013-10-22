@@ -2,6 +2,13 @@
 @import "compass";
 @import "styles";
 
+$menu-button-color: #fff;
+$menu-button-background: rgb(71,176, 167);
+$menu-button-border-size: 4px;
+$menu-button-border-color: darken($menu-button-background, 10%);
+$menu-button-background-hover: darken($menu-button-background, 10%);
+$menu-button-width: 240px;
+$menu-button-padding: 25px;
 $header-background-color: #000;
 $header-text-color: #fff;
 $header-background-color-hover: #fff;
@@ -19,6 +26,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 
 .forge-button-panel {
   @include generic-panel;
+  padding: 20px;
 }
 
 .forge-material-panel {
@@ -85,6 +93,83 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   color: $header-text-color;
   padding: 8px;
   font-size: 14px;
+}
+
+/* Menu */
+
+.forge-menu {
+}
+
+.forge-menu-items {
+  display: none;
+}
+
+.forge-menu>a{
+  @include header-2;
+  color: $menu-button-color;
+  background: $menu-button-background;
+  border: $menu-button-border-size solid $menu-button-border-color;
+  border-radius: 12px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  width: $menu-button-width - $menu-button-padding;
+  display: inline-block;
+  vertical-align: top;
+  padding-left: $menu-button-padding;
+}
+
+.forge-menu>.forge-menu-help{
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 13px;
+  display: inline-block;
+  width: 407px - $menu-button-width;
+  margin-left: 20px;
+  padding-top: 6px;
+}
+
+.forge-menu>a:before {
+  content: '+';
+  padding-right: 8px; 
+}
+
+.forge-menu:hover>a {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-bottom-width: 0px;
+  padding-bottom: 7px;
+}
+
+.forge-menu:hover .forge-menu-items {
+  display: block;
+  position: absolute;
+  border-left: $menu-button-border-size solid $menu-button-border-color;
+  border-right: $menu-button-border-size solid $menu-button-border-color;
+  border-bottom: $menu-button-border-size solid $menu-button-border-color;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  background: $menu-button-background;
+  z-index: 9999;
+}
+
+.forge-menu:hover .forge-menu-items a:before {
+  content: '-';
+  padding-right: 8px; 
+}
+
+.forge-menu:hover .forge-menu-items a {
+  @include header-4;
+  color: $menu-button-color;
+  padding-left: $menu-button-padding + 6px;
+  padding-right: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  width: $menu-button-width - ($menu-button-padding + 6px + 8px);
+  display: block;
+}
+
+.forge-menu:hover .forge-menu-items a:hover {
+  background: $menu-button-background-hover;
 }
 
 /* Materials */

@@ -59,13 +59,29 @@
  
       <h:panelGroup layout="block" styleClass="grid_8 alpha slim-right">
         <h:panelGroup layout="block" styleClass="forge-button-panel">
-          NEW
+          <h:panelGroup layout="block" styleClass="forge-menu forge-new-material-menu">
+            <a href="javascript:void(null)">#{locales['forge.index.newMaterialMenu']}</a>
+            <h:panelGroup layout="block" styleClass="forge-menu-help">#{locales['forge.index.newMaterialMenuHelp']}</h:panelGroup>
+            <h:panelGroup layout="block" styleClass="forge-menu-items">
+              <a href="javascript:void(null)">#{locales['forge.index.newMaterialDocumentMenu']}</a>
+              <a href="javascript:void(null)">#{locales['forge.index.newMaterialVectorImageMenu']}</a>
+            </h:panelGroup>          
+          </h:panelGroup>
         </h:panelGroup>
       </h:panelGroup>
  
       <h:panelGroup layout="block" styleClass="grid_8 omega slim-left">
         <h:panelGroup layout="block" styleClass="forge-button-panel">
-         IMPORT
+          <h:panelGroup layout="block" styleClass="forge-menu forge-import-material-menu">
+            <a href="javascript:void(null)">#{locales['forge.index.importMaterialMenu']}</a>
+            <h:panelGroup layout="block" styleClass="forge-menu-help">#{locales['forge.index.importMaterialMenuHelp']}</h:panelGroup>
+            <h:panelGroup layout="block" styleClass="forge-menu-items">
+              <a href="javascript:void(null)">#{locales['forge.index.importMaterialUploadMenu']}</a>
+              <a href="javascript:void(null)">#{locales['forge.index.importMaterialGoogleDocumentsMenu']}</a>
+              <a href="javascript:void(null)">#{locales['forge.index.importMaterialConnectDropboxMenu']}</a>
+              <a href="javascript:void(null)">#{locales['forge.index.importMaterialConnectUbuntuOneMenu']}</a>
+            </h:panelGroup>          
+          </h:panelGroup>
         </h:panelGroup>
       </h:panelGroup>
       
