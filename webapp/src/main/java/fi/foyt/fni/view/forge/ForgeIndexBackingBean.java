@@ -279,9 +279,9 @@ public class ForgeIndexBackingBean {
 			case UBUNTU_ONE_FOLDER:
 				return "folder";
 			case UBUNTU_ONE_ROOT_FOLDER:
-				return "ubuntuone";
+				return "ubuntu-one";
 			case GOOGLE_DOCUMENT:
-				return "file";
+				return "google-drive";
 			case DOCUMENT:
 				return "document";
 			case BINARY:
@@ -295,7 +295,7 @@ public class ForgeIndexBackingBean {
 			case IMAGE:
 				return "image";
 			case VECTOR_IMAGE:
-				return "vectorimage";
+				return "vector-image";
 		}
 
 		return null;
