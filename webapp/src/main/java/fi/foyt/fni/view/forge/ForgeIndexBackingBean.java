@@ -24,10 +24,12 @@ import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.TitleComparator;
+import fi.foyt.fni.materials.VectorImageController;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
+import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
@@ -63,9 +65,12 @@ public class ForgeIndexBackingBean {
 
 	@Inject
 	private FolderController folderController;
-	
+
 	@Inject
 	private DocumentController documentController;
+
+	@Inject
+	private VectorImageController vectorImageController;
 	
 	@Inject
 	private UserController userController;
@@ -179,6 +184,20 @@ public class ForgeIndexBackingBean {
 	    .toString());
 	}
 
+	@LoggedIn
+	public void createNewVectorImage() throws IOException {
+		User loggedUser = sessionController.getLoggedUser();
+		Folder parentFolder = folderId != null ? folderController.findFolderById(folderId) : null;
+		String title = FacesUtils.getLocalizedValue("forge.index.untitledVectorImage");	
+		String urlName = materialController.getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
+		VectorImage vectorImage = vectorImageController.createVectorImage(null, parentFolder, urlName, title, null, loggedUser);
+				
+		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+	    .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+	    .append("/forge/vectorimages/" + vectorImage.getPath())
+	    .toString());
+	}
+	
 	public boolean isMaterialsOpen() {
 		return materialsOpen;
 	}

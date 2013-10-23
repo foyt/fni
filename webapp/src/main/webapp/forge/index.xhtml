@@ -64,7 +64,7 @@
               <h:panelGroup layout="block" styleClass="forge-menu-help">#{locales['forge.index.newMaterialMenuHelp']}</h:panelGroup>
               <h:panelGroup layout="block" styleClass="forge-menu-items">
                 <h:commandLink action="#{forgeIndexBackingBean.createNewDocument}">#{locales['forge.index.newMaterialDocumentMenu']}</h:commandLink>
-                <a href="javascript:void(null)">#{locales['forge.index.newMaterialVectorImageMenu']}</a>
+                <h:commandLink action="#{forgeIndexBackingBean.createNewVectorImage}">#{locales['forge.index.newMaterialVectorImageMenu']}</h:commandLink>
               </h:panelGroup>          
             </h:panelGroup>
           </h:panelGroup>
