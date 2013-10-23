@@ -1,0 +1,51 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+.forge-google-drive-header-container {
+  padding-top: 20px;
+  padding-left: 16px;
+  padding-right: 20px;
+}
+
+h2 {
+  @include header-2;
+  color: $title-color;
+  padding: 0px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.forge-google-drive-link-container:before {
+  content: '-';
+  padding-left: 8px;
+  padding-right: 4px;
+}
+
+.forge-google-drive-link-container {
+  display: inline-block;
+  padding-top: 9px;
+  vertical-align: top;
+}
+
+.forge-google-drive-link-container>a{
+  @include header-5;
+}
+
+.forge-google-drive-panel {
+  background-color: $panel-background-color;
+  padding: 20px;
+}
+
+.forge-google-drive-container {
+  text-align: center;
+}
+
+.forge-google-drive-container iframe {
+  margin-top: 20px;
+  border: 0px;
+  width: 210mm;
+  height: 296mm;
+  box-shadow: 0 0 10px 1px rgb(200, 200, 200);
+  background: #fff;
+}

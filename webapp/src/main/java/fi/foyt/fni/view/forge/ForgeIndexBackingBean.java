@@ -48,7 +48,7 @@ import fi.foyt.fni.utils.faces.FacesUtils;
   ),
 	@URLMapping(
 	  id = "forge-folder", 
-  	pattern = "/forge/folders/#{forgeIndexBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\-]*/ forgeIndexBackingBean.urlName }", 
+  	pattern = "/forge/folders/#{forgeIndexBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\\\-\\:]*/ forgeIndexBackingBean.urlName }", 
 		viewId = "/forge/index.jsf"
   )
 })
@@ -294,8 +294,9 @@ public class ForgeIndexBackingBean {
 			case UBUNTU_ONE_FILE:
 			case UBUNTU_ONE_FOLDER:
 			case UBUNTU_ONE_ROOT_FOLDER:
-			case GOOGLE_DOCUMENT:
 				break;
+			case GOOGLE_DOCUMENT:
+				return "google-drive";
 			case DOCUMENT:
 				return "documents";
 			case BINARY:
