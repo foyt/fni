@@ -27,7 +27,7 @@ import fi.foyt.fni.users.UserController;
 @URLMappings(mappings = { 
 	@URLMapping(
 	  id = "forge-documents", 
-		pattern = "/forge/documents/#{forgeDocumentsBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\-]*/ forgeDocumentsBackingBean.urlPath }", 
+		pattern = "/forge/documents/#{forgeDocumentsBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\\\-\\:]*/ forgeDocumentsBackingBean.urlPath }", 
 		viewId = "/forge/documents.jsf"
   ) 
 })
