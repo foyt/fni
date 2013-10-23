@@ -67,7 +67,7 @@ public class DocumentController {
   /* Document */
 
 	public Document createDocument(Folder parentFolder, String urlName, String title, User creator) {
-		return createDocument(parentFolder, urlName, title, null, null, creator);
+		return createDocument(parentFolder, urlName, title, "", null, creator);
 	}
 
 	public Document createDocument(Folder parentFolder, String urlName, String title, String data, Language language, User creator) {
