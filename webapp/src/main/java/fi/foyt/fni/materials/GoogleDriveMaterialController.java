@@ -36,6 +36,12 @@ public class GoogleDriveMaterialController {
 		return googleDocumentDAO.findById(googleDocumentId);
 	}
 	
+	public String getGoogleDocumentEditLink(GoogleDocument googleDocument) throws IOException, GeneralSecurityException {
+		Drive systemDrive = driveManager.getSystemDrive();
+		File file = driveManager.getFile(systemDrive, googleDocument.getDocumentId());
+		return file.getAlternateLink();
+	}
+	
 	public TypedData getGoogleDocumentData(GoogleDocument googleDocument) throws MalformedURLException, IOException, GeneralSecurityException {
 		Drive systemDrive = driveManager.getSystemDrive();
 		File file = driveManager.getFile(systemDrive, googleDocument.getDocumentId());
