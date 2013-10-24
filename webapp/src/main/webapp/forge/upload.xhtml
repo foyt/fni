@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['forge.upload.pageTitle']}</ui:define>
+  <ui:define name="view-stylesheets">
+    <!-- jQuery UI -->
+    
+    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    
+    <!-- View Styles -->
+
+    <h:outputStylesheet library="novus" name="css/fonts.css" />
+    <h:outputStylesheet library="novus" name="css/menu.css" />
+    <h:outputStylesheet library="novus" name="css/forge-upload.css" />
+  </ui:define>
+
+  <ui:define name="view-scripts">
+    <!-- jQuery UI -->
+
+    <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+    <!-- jquery.fileupload -->
+
+    <script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script>
+    <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+
+    <h:outputScript name="scripts/jquery.fileupload/jquery.iframe-transport.js" />
+    <h:outputScript name="scripts/jquery.fileupload/jquery.fileupload.js" />
+    <h:outputScript name="scripts/jquery.fileupload/jquery.fileupload-process.js"/>
+    <h:outputScript name="scripts/jquery.fileupload/jquery.fileupload-image.js"/>
+
+    <!-- View scripts -->
+
+    <h:outputScript name="scripts/gui/forge-upload.js" />
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+
+    <!-- Header -->
+
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      <!-- Navigation -->
+
+      <ui:include src="/facelets/forgenavigation.xhtml">
+      </ui:include>
+
+      <!-- Description -->
+
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{locales['forge.upload.descriptionTitle']}</p>
+        <p class="view-header-description-text">#{locales['forge.upload.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="forge-upload-panel">
+        
+        <h2>#{locales['forge.upload.uploadTitle']}</h2>
+      
+        <h:panelGroup layout="block" styleClass="forge-upload-field">
+          <input id="forge-upload-field-button" type="file" name="files" multiple="multiple"/>
+          <h:panelGroup layout="block" styleClass="forge-upload-field-info">#{locales['forge.upload.uploadInfo']}</h:panelGroup>
+        </h:panelGroup>
+        
+        <h3>#{locales['forge.upload.filesTitle']}</h3>
+        
+        <h:panelGroup layout="block" styleClass="forge-upload-files">
+        </h:panelGroup>
+        
+        <h:panelGroup layout="block" styleClass="forge-upload-no-files">#{locales['forge.upload.noFiles']}</h:panelGroup>
+        
+        <button class="forge-upload-upload-button" disabled="disabled">#{locales['forge.upload.uploadButton']}</button>
+      </h:panelGroup>
+    </h:panelGroup>
+
+  </ui:define>
+
+</ui:composition>

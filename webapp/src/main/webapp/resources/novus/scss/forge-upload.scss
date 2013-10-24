@@ -1,0 +1,154 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+h2 {
+  @include header-2;
+  color: $title-color;
+}
+
+h3 {
+  @include header-3;
+}
+
+.forge-upload-panel {
+  background-color: $panel-background-color;
+  padding: 20px;
+}
+
+.forge-upload-field {
+  @include box-sizing(border-box);
+  width: 100%;
+  padding: 40px;
+  background: #fff;
+  @include single-box-shadow(rgb(200, 200, 200), 0px, 0px, 10px, 1px);
+  border: 2px dashed #aaa;
+  position: relative;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#forge-upload-field-button {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  @include opacity(0);  
+  cursor: pointer;
+}
+
+.forge-upload-field-info {
+  text-align: center;
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 13px;
+}
+
+.forge-upload-no-files {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 13px;
+  font-weight: bold;    
+  margin-top: 10px;
+}
+
+.forge-upload-file-container {
+  clear: both;
+  margin-top: 10px;
+  background: rgba(0,0,0,0.05);
+  padding: 8px;
+  @include border-radius(8px);
+  position: relative;
+}
+
+.forge-upload-file-progress {
+  width: 100%;
+  height: 12px;
+  margin-top: 4px;
+}
+
+.forge-upload-file {
+  margin-right: 120px;
+}
+
+.forge-upload-file-name {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.forge-upload-file-size, .forge-upload-file-type {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 11px;
+}
+
+.forge-upload-file-preview, .forge-upload-file-icon-pdf, .forge-upload-file-icon-svg, .forge-upload-file-icon-file {
+  float: right;
+}
+
+.forge-upload-file-remove {
+  @include opacity(0.8);  
+}
+
+.forge-upload-file:hover .forge-upload-file-remove {
+  @include opacity(1);  
+}
+
+.forge-upload-file-remove:before {
+  content: 'X';
+  font-family: courier;
+  position: absolute;
+  background: #000; 
+  color: #fff;
+  line-height: 10px;
+  font-size: 16px;
+  padding: 8px;
+  @include border-radius(4px);
+  left: 768px;
+  top: 8px;
+  cursor: pointer;
+}
+
+.forge-upload-file-preview {
+  @include border-radius(5px);
+}
+
+.forge-upload-file-icon-pdf, .forge-upload-file-icon-svg, .forge-upload-file-icon-file {
+  width: 48px;
+  height: 48px;
+}
+
+.forge-upload-file-icon-pdf {
+  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-pdf.png"]}'));
+}
+
+.forge-upload-file-icon-svg {
+  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-vector-image.png"]}'));
+}
+
+.forge-upload-file-icon-file {
+  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-file.png"]}'));
+}
+
+.forge-upload-upload-button {
+  margin-top: 20px;
+  color: $default-color;
+  font-family: $title-font;
+  font-size: 14px;
+  text-transform: uppercase;
+  padding: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.forge-upload-upload-button:disabled {
+  background: #999;
+  cursor: default; 
+}
