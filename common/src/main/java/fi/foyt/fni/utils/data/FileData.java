@@ -1,8 +1,7 @@
-package fi.foyt.fni.utils.fileupload;
+package fi.foyt.fni.utils.data;
 
 import java.util.Date;
 
-import fi.foyt.fni.utils.data.TypedData;
 
 public class FileData extends TypedData {
 

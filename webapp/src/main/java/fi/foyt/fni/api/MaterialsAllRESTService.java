@@ -3,7 +3,6 @@ package fi.foyt.fni.api;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,7 +16,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.activation.MimeTypeParseException;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
@@ -40,9 +38,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.lucene.analysis.Analyzer;
@@ -96,11 +91,8 @@ import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.system.SystemSettingsController;
-import fi.foyt.fni.upload.MonitoredDiskFileItemFactory;
 import fi.foyt.fni.upload.UploadInfo;
 import fi.foyt.fni.upload.UploadInfoFile;
-import fi.foyt.fni.utils.fileupload.FileData;
-import fi.foyt.fni.utils.fileupload.FileUploadUtils;
 import fi.foyt.fni.utils.search.SearchResult;
 
 @Path("/materials/-")
@@ -109,8 +101,6 @@ import fi.foyt.fni.utils.search.SearchResult;
 @Produces ("application/json")
 public class MaterialsAllRESTService extends RESTService {
 	
-  private final static int MAX_UPLOAD_MEMORY = 1024 * 1024;
-  private final static int MAX_UPLOAD_SIZE = 1024 * 1024 * 50;
   private final static String UPLOAD_INFO_SESSION_ATTR = "__upload_info__";
 
 	@Inject
@@ -473,7 +463,7 @@ public class MaterialsAllRESTService extends RESTService {
 
   /**
    * Uploads materials. User needs to be logged in and needs to have modification permission into the parent folder
-   */
+ 
 	@POST
 	@Path ("/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -560,7 +550,7 @@ public class MaterialsAllRESTService extends RESTService {
 		result.put("materials", materialBeans);
 		
 		return Response.ok().build();
-	}
+	}  */
 	
 	@GET
 	@Path ("/uploadStatus")
