@@ -37,6 +37,7 @@ import fi.foyt.fni.persistence.model.materials.UbuntuOneFolder;
 import fi.foyt.fni.persistence.model.materials.UbuntuOneRootFolder;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserToken;
+import fi.foyt.fni.security.UnauthorizedException;
 import fi.foyt.fni.utils.auth.OAuthUtils;
 
 @Dependent
@@ -280,7 +281,11 @@ public class UbuntuOneManager {
   
   public Response getFileContent(User user, UbuntuOneFile file) throws IOException {
     Token ubuntuOneToken = getUbuntuOneToken(user);
-    return getFileContent(ubuntuOneToken, file.getContentPath());
+    if (ubuntuOneToken != null) {
+      return getFileContent(ubuntuOneToken, file.getContentPath());
+    } else {
+    	throw new UnauthorizedException();
+    }
   }
   
   private String extractTitle(String path) {

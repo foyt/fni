@@ -40,6 +40,7 @@ import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserToken;
+import fi.foyt.fni.security.UnauthorizedException;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.auth.OAuthUtils;
 
@@ -207,6 +208,10 @@ public class DropboxManager {
 
   public Response getFileContent(User user, DropboxFile dropboxFile) throws IOException {
     Token dropboxToken = getDropboxToken(user);
+    if (dropboxToken == null) {
+    	throw new UnauthorizedException();
+    }
+    
     OAuthService service = dropboxAuthenticationStrategy.getOAuthService();
 
     String root = systemSettingsController.getSetting(SystemSettingKey.DROPBOX_ROOT);
