@@ -34,6 +34,7 @@ import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.ubuntuone.UbuntuOneController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
@@ -81,6 +82,9 @@ public class ForgeIndexBackingBean {
 
 	@Inject
 	private DropboxController dropboxController;
+
+	@Inject
+	private UbuntuOneController ubuntuOneController;
 
 	@PostConstruct
 	public void init() {
@@ -405,6 +409,11 @@ public class ForgeIndexBackingBean {
 	@LoggedIn
 	public boolean getDropboxLinked() {
 		return dropboxController.findDropboxRootFolderByUser(sessionController.getLoggedUser()) != null;
+	}
+	
+	@LoggedIn
+	public boolean getUbuntuOneLinked() {
+		return ubuntuOneController.findUbuntuOneRootFolderByUser(sessionController.getLoggedUser()) != null;
 	}
 	
 	private boolean materialsOpen;
