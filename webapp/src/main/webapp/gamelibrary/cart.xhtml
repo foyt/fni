@@ -21,13 +21,20 @@
     <!-- Header -->
     
     <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-
       <!-- Navigation -->
       
       <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">#{locales['gamelibrary.index.navigationIndex']}</h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/index.jsf">#{locales['gamelibrary.cart.navigationIndex']}</h:link>
+        </h:panelGroup>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">#{locales['gamelibrary.index.navigationMostRecent']}</h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.cart.navigationGameLibrary']}</h:link>
+        </h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/gamelibrary/cart.jsf">#{locales['gamelibrary.cart.navigationCart']}</h:link>
+        </h:panelGroup>
       </h:panelGroup>
   
       <!-- Description -->
