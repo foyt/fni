@@ -297,12 +297,13 @@ public class ForgeIndexBackingBean {
 	public String getMaterialViewer(MaterialType type) {
 		switch (type) {
 			case DROPBOX_FILE:
+			case UBUNTU_ONE_FILE:
+				break;
 			case DROPBOX_FOLDER:
 			case DROPBOX_ROOT_FOLDER:
-			case UBUNTU_ONE_FILE:
 			case UBUNTU_ONE_FOLDER:
 			case UBUNTU_ONE_ROOT_FOLDER:
-				break;
+				return "folders";
 			case GOOGLE_DOCUMENT:
 				return "google-drive";
 			case DOCUMENT:
