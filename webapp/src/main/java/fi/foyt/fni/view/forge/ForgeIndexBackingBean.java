@@ -3,6 +3,7 @@ package fi.foyt.fni.view.forge;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ocpsoft.pretty.faces.annotation.URLAction;
@@ -24,6 +26,7 @@ import fi.foyt.fni.materials.DocumentController;
 import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
+import fi.foyt.fni.materials.MaterialTypeComparator;
 import fi.foyt.fni.materials.TitleComparator;
 import fi.foyt.fni.materials.VectorImageController;
 import fi.foyt.fni.persistence.model.materials.Document;
@@ -90,6 +93,7 @@ public class ForgeIndexBackingBean {
 	public void init() {
 	}
 
+	@SuppressWarnings("unchecked")
 	@URLAction
 	@LoggedIn
 	public void load() throws FileNotFoundException {
@@ -119,6 +123,8 @@ public class ForgeIndexBackingBean {
 			folderId = material.getId();
 			Folder folder = (Folder) material;
 			
+			materials = materialController.listMaterialsByFolder(sessionController.getLoggedUser(), folder);
+			
 			while (folder != null) {
 			  folders.add(0, folder);
 			  folder = folder.getParentFolder();
@@ -126,18 +132,20 @@ public class ForgeIndexBackingBean {
 			
 		} else {
 			folderId = null;
+			materials = materialController.listMaterialsByFolder(sessionController.getLoggedUser(), null);
 		}
+		
+		Collections.sort(materials, ComparatorUtils.chainedComparator(
+			Arrays.asList(
+        new MaterialTypeComparator(MaterialType.UBUNTU_ONE_ROOT_FOLDER), 
+        new MaterialTypeComparator(MaterialType.DROPBOX_ROOT_FOLDER), 
+        new MaterialTypeComparator(MaterialType.FOLDER),
+				new TitleComparator()
+	    )
+	  ));
 	}
 
 	public List<Material> getMaterials() {
-		Folder folder = null;
-		if (getFolderId() != null) {
-			folder = folderController.findFolderById(getFolderId());
-		}
-		
-		List<Material> materials = materialController.listMaterialsByFolder(sessionController.getLoggedUser(), folder);
-		Collections.sort(materials, new TitleComparator());
-
 		return materials;
 	}
 
@@ -425,4 +433,5 @@ public class ForgeIndexBackingBean {
 	private Long ownerId;
 	private String urlName;
 	private List<Folder> folders;
+	private List<Material> materials;
 }
