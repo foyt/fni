@@ -5,7 +5,11 @@
   xmlns:h="http://java.sun.com/jsf/html" 
   template="/WEB-INF/templates/gridbase.xhtml">
 
-  <ui:define name="page-title">#{locales['gamelibrary.index.pageTitle']}</ui:define>
+  <ui:define name="page-title">
+    <h:outputFormat value="#{locales['gamelibrary.publication.pageTitle']}">
+      <f:param value="#{gameLibraryPublicationBackingBean.publication.name}"/>
+    </h:outputFormat>  
+  </ui:define>
   
   <ui:define name="view-scripts">
     <!-- jQuery Magnific-Popup  -->
@@ -30,19 +34,31 @@
     <ui:include src="/facelets/menu.xhtml" />
     
     <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Breadcrumb -->
+      <!-- Navigation -->
       
       <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">#{locales['gamelibrary.index.navigationIndex']}</h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/index.jsf">#{locales['gamelibrary.publication.navigationIndex']}</h:link>
+        </h:panelGroup>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">#{locales['gamelibrary.index.navigationMostRecent']}</h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.publication.navigationGameLibrary']}</h:link>
+        </h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:outputLink value="#{request.contextPath}/gamelibrary/#{gameLibraryPublicationBackingBean.publication.urlName}">#{gameLibraryPublicationBackingBean.publication.name}</h:outputLink>
+        </h:panelGroup>
       </h:panelGroup>
   
       <!-- Description -->
   
       <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['gamelibrary.index.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['gamelibrary.index.descriptionText']}</p>
+        <p class="view-header-description-title">
+          <h:outputFormat value="#{locales['gamelibrary.publication.descriptionTitle']}">
+            <f:param value="#{gameLibraryPublicationBackingBean.publication.name}"/>
+          </h:outputFormat>  
+        </p>
+        <p class="view-header-description-text">#{locales['gamelibrary.publication.descriptionText']}</p>
       </h:panelGroup>
       
       <!-- Search -->
