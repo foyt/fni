@@ -298,7 +298,7 @@ public class ForgeIndexBackingBean {
 		switch (type) {
 			case DROPBOX_FILE:
 			case UBUNTU_ONE_FILE:
-				break;
+				return "binary";
 			case DROPBOX_FOLDER:
 			case DROPBOX_ROOT_FOLDER:
 			case UBUNTU_ONE_FOLDER:
