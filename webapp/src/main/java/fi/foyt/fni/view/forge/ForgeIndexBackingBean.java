@@ -19,6 +19,7 @@ import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
+import fi.foyt.fni.dropbox.DropboxController;
 import fi.foyt.fni.materials.DocumentController;
 import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
@@ -74,9 +75,12 @@ public class ForgeIndexBackingBean {
 	
 	@Inject
 	private UserController userController;
-	
+
 	@Inject
 	private SessionController sessionController;
+
+	@Inject
+	private DropboxController dropboxController;
 
 	@PostConstruct
 	public void init() {
@@ -397,7 +401,12 @@ public class ForgeIndexBackingBean {
 		
 		return false;
 	}
-
+	
+	@LoggedIn
+	public boolean getDropboxLinked() {
+		return dropboxController.findDropboxRootFolderByUser(sessionController.getLoggedUser()) != null;
+	}
+	
 	private boolean materialsOpen;
 	private boolean lastViewedOpen;
 	private boolean starredOpen;
