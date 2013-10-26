@@ -2,7 +2,7 @@
   'use strict';
   
   $(document).ready(function () {
-    var PLUGIN_DIR = CONTEXTPATH + '/forge/ckplugins';
+    var PLUGIN_DIR = CONTEXTPATH + '/uresources/ckplugins';
     
     CKEDITOR.plugins.addExternal('change', PLUGIN_DIR + '/change/');
     CKEDITOR.plugins.addExternal('coops', PLUGIN_DIR + '/coops/');
@@ -10,13 +10,15 @@
     CKEDITOR.plugins.addExternal('coops-dmp', PLUGIN_DIR + '/coops-dmp/');
     CKEDITOR.plugins.addExternal('coops-ws', PLUGIN_DIR + '/coops-ws/');
     CKEDITOR.plugins.addExternal('mrmonkey', PLUGIN_DIR + '/mrmonkey/');
+    CKEDITOR.plugins.addExternal('docprops', PLUGIN_DIR + '/docprops/');
     
     var editor = CKEDITOR.replace($('.forge-ckdocument-editor').attr('name'), { 
       skin: 'moono',
-      extraPlugins: 'coops,coops-rest,coops-ws,coops-dmp,mrmonkey',
+      extraPlugins: 'coops,coops-rest,coops-ws,coops-dmp,mrmonkey,docprops',
       readOnly: true,
       height: 500,
-      contentsCss: ['//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/contents.css', CONTEXTPATH + '/forge/ckcontents.css' ],
+      fullPage : true,
+      contentsCss: ['//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/contents.css', CONTEXTPATH + '/uresources/forge-ckeditor-embedded.css' ],
       coops: {
         serverUrl: COOPS_SERVER_URL,
         websocket: {
@@ -27,7 +29,7 @@
         }
       },
       toolbar: [
-        { name: 'document', items : [ 'Templates' ] },
+        { name: 'document', items : [ 'Templates', 'DocProps' ] },
         { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
         { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-', 'Scayt' ] },
         { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote', ,'-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
