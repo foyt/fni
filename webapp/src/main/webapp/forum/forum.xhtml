@@ -26,13 +26,17 @@
       <!-- Navigation -->
       
       <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">
+          #{locales['forum.forum.navItemIndex']}
+        </h:link>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
         <h:link styleClass="view-header-navigation-item" outcome="/forum/index.jsf">
           #{locales['forum.forum.navItemForum']}
         </h:link>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">#{forumBackingBean.forum.name}</h:panelGroup>
+        <h:outputLink value="#{request.contextPath}/forum/#{forumBackingBean.forum.urlName}" styleClass="view-header-navigation-item">#{forumBackingBean.forum.name}</h:outputLink>
       </h:panelGroup>
-  
+
       <!-- Description -->
   
       <h:panelGroup layout="block" styleClass="view-header-description">
