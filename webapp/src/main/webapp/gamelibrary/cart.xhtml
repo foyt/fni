@@ -40,8 +40,10 @@
       <!-- Description -->
   
       <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['gamelibrary.cart.descriptionTitle']}</p>
-        <h:link styleClass="gamelibrary-cart-back-link" outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.cart.backToGameLibrary']}</h:link>
+        <p class="view-header-description-title">
+          <span>#{locales['gamelibrary.cart.descriptionTitle']}</span>
+          <h:link styleClass="gamelibrary-cart-back-link" outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.cart.backToGameLibrary']}</h:link>
+        </p>
         <p class="view-header-description-text">#{locales['gamelibrary.cart.descriptionText']}</p>
       </h:panelGroup>
     </h:panelGroup>
