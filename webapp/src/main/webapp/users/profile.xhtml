@@ -32,7 +32,9 @@
       <!-- Navigation -->
       
       <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">#{locales['users.profile.navigationIndex']}</h:panelGroup>
+        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['users.profile.navigationIndex']}</h:link>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:outputLink value="#{request.contextPath}/profile/#{usersProfileBackingBean.userId}" styleClass="view-header-navigation-item">#{usersProfileBackingBean.fullName}</h:outputLink>
       </h:panelGroup>
   
       <!-- Description -->
