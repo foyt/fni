@@ -3,7 +3,10 @@ package fi.foyt.fni.view.forge;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -24,9 +27,15 @@ import fi.foyt.fni.coops.model.File;
 import fi.foyt.fni.coops.model.Join;
 import fi.foyt.fni.coops.model.Patch;
 import fi.foyt.fni.materials.DocumentController;
+import fi.foyt.fni.persistence.model.common.Language;
+import fi.foyt.fni.persistence.model.common.Tag;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
+import fi.foyt.fni.persistence.model.materials.MaterialRevisionSetting;
+import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.system.TagController;
 import fi.foyt.fni.utils.compression.CompressionUtils;
 import fi.foyt.fni.utils.diff.DiffUtils;
 import fi.foyt.fni.utils.diff.PatchResult;
@@ -47,6 +56,12 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 
 	@Inject
 	private SessionController sessionController;
+
+	@Inject
+	private SystemSettingsController systemSettingsController;
+
+	@Inject
+	private TagController tagController;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -152,10 +167,10 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 			return;
 		}
 
-		handlePatchRequest(request, response, document, patch.getRevisionNumber(), patch.getPatch());
+		handlePatchRequest(request, response, document, patch.getRevisionNumber(), patch.getPatch(), patch.getProperties());
 	}
 	
-	protected void handlePatchRequest(HttpServletRequest request, HttpServletResponse response, Document document, Long clientRevisionNumber, String patch) throws IOException {
+	protected void handlePatchRequest(HttpServletRequest request, HttpServletResponse response, Document document, Long clientRevisionNumber, String patch, Map<String, String> properties) throws IOException {
 		Long revisionNumber = documentController.getDocumentRevision(document);
 		if (!revisionNumber.equals(clientRevisionNumber)) {
 			response.sendError(HttpServletResponse.SC_CONFLICT, "Out of sync");
@@ -164,6 +179,8 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 		
 		byte[] patchData = null;
 		String checksum = null;
+		User loggedUser = sessionController.getLoggedUser();
+		
 		if (StringUtils.isNotBlank(patch)) {
 	    String oldData = document.getData();
       PatchResult patchResult = DiffUtils.applyPatch(oldData, patch);
@@ -173,15 +190,54 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
       }
       
       String data = patchResult.getPatchedText();
-      documentController.updateDocumentData(document, data, sessionController.getLoggedUser());
+      documentController.updateDocumentData(document, data, loggedUser);
       checksum = DigestUtils.md5Hex(data);
       patchData = patch.getBytes("UTF-8");
 		}
 
 		Long patchRevisionNumber = revisionNumber + 1;
-    documentController.createDocumentRevision(document, patchRevisionNumber, new Date(), false, false, patchData, checksum);
+    DocumentRevision documentRevision = documentController.createDocumentRevision(document, patchRevisionNumber, new Date(), false, false, patchData, checksum);
     
-    writeJsonResponse(response, new Patch(patchRevisionNumber, null, null));
+    if (properties != null) {
+      Iterator<String> keyIterator = properties.keySet().iterator();
+      while (keyIterator.hasNext()) {
+        String key = keyIterator.next();
+        String value = properties.get(key);
+        if ("title".equals(key)) {
+          // title is saved as a document title
+          documentController.updateDocumentTitle(document, value, loggedUser);
+        } else if ("langCode".equals(key)) {
+          // language is saved as document language property
+        	Language language = systemSettingsController.findLocaleByIso2(value);
+        	documentController.updateDocumentLanguage(document, language, loggedUser);
+        } else if ("metaKeywords".equals(key)) {
+          // keywords are saved as tags
+          List<Tag> tags = new ArrayList<>();
+          
+          String[] tagTexts = value.split(",");
+          for (String tagText : tagTexts) {
+            String trimmedTag = tagText.trim();
+            if (StringUtils.isNotBlank(trimmedTag)) {
+            	Tag tag = tagController.findTagByText(trimmedTag);
+              if (tag == null) {
+              	tag = tagController.createTag(trimmedTag);
+              }
+              tags.add(tag);
+            }
+          }
+          
+        	documentController.setDocumentTags(document, tags);
+        } else {
+          // everything else is saved as document.property
+        	documentController.setDocumentSetting(document, "document." + key, value);
+        }
+        
+        // Everything is saved as revision setting
+        documentController.createDocumentRevisionSetting(documentRevision, "document." + key, value);
+      }
+    }
+    
+    writeJsonResponse(response, new Patch(patchRevisionNumber, null, null, null));
 	}
 
 	private void handleUpdateRequest(HttpServletRequest request, HttpServletResponse response, Document document, Long clientRevisionNumber) throws IOException {
@@ -189,8 +245,8 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 		List<Patch> updateResults = new ArrayList<>();
 		
 		if (documentRevisions.isEmpty()) {
-    	response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-			return;
+    	response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+  		return;
 		}
 		
 		for (DocumentRevision documentRevision : documentRevisions) {
@@ -204,10 +260,20 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
         patch = new String(patchData, "UTF-8");
       }
       
+      Map<String, String> properties = null;
+      
+      List<MaterialRevisionSetting> revisionSettings = documentController.listDocumentRevisionSettings(documentRevision);
+      if (revisionSettings.size() > 0) {
+      	properties = new HashMap<>();
+      	for (MaterialRevisionSetting revisionSetting : revisionSettings) {
+      		properties.put(revisionSetting.getKey().getName(), revisionSetting.getValue());
+      	}
+      }
+      
       if (patch != null) {
-      	updateResults.add(new Patch(documentRevision.getRevision(), patch, documentRevision.getChecksum()));
+      	updateResults.add(new Patch(documentRevision.getRevision(), patch, properties, documentRevision.getChecksum()));
       } else {
-      	updateResults.add(new Patch(documentRevision.getRevision(), null, null));
+      	updateResults.add(new Patch(documentRevision.getRevision(), null, properties, null));
       }
     }
 
@@ -239,7 +305,12 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 		}
 
 		Long revisionNumber = documentController.getDocumentRevision(document);
-		writeJsonResponse(response, new Join(COOPS_SUPPORTED_EXTENSIONS, revisionNumber, document.getData(), COOPS_DOCUMENT_CONTENTTYPE, UUID.randomUUID().toString()));
+		String data = document.getData();
+		if (data == null) {
+			data = "";
+		}
+		
+		writeJsonResponse(response, new Join(COOPS_SUPPORTED_EXTENSIONS, revisionNumber, data, COOPS_DOCUMENT_CONTENTTYPE, UUID.randomUUID().toString()));
 	}
 	
 	private void writeJsonResponse(HttpServletResponse response, Object object) throws IOException {
