@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Cacheable (true)
@@ -55,7 +54,6 @@ public class MaterialRevisionSetting {
   @ManyToOne
   private MaterialSettingKey key;
 
-  @Column (nullable = false)
-  @NotEmpty
+  @Column
   private String value;
 }
