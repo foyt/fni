@@ -102,4 +102,8 @@ public class SystemSettingsController {
 	public List<Country> listCountries() {
 		return countryDAO.listAll();
 	}
+
+	public Language findLocaleByIso2(String iso2) {
+		return languageDAO.findByIso2(iso2);
+	}
 }
