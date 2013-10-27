@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
-@WebServlet (urlPatterns = {"*.page", "*.json"}, name = "ViewDispatcher")
+@WebServlet (urlPatterns = { "*.page" }, name = "ViewDispatcher")
 public class ViewDispatcher extends AbstractViewServlet {
 	
 	@Inject 
