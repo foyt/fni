@@ -3,18 +3,23 @@
   
   $(document).ready(function () {
     var PLUGIN_DIR = CONTEXTPATH + '/uresources/ckplugins';
-    
+
+    CKEDITOR.plugins.addExternal('docprops', PLUGIN_DIR + '/docprops/');
+    CKEDITOR.plugins.addExternal('ajax', PLUGIN_DIR + '/ajax/');
+    CKEDITOR.plugins.addExternal('xml', PLUGIN_DIR + '/xml/');
     CKEDITOR.plugins.addExternal('change', PLUGIN_DIR + '/change/');
     CKEDITOR.plugins.addExternal('coops', PLUGIN_DIR + '/coops/');
     CKEDITOR.plugins.addExternal('coops-rest', PLUGIN_DIR + '/coops-rest/');
     CKEDITOR.plugins.addExternal('coops-dmp', PLUGIN_DIR + '/coops-dmp/');
     CKEDITOR.plugins.addExternal('coops-ws', PLUGIN_DIR + '/coops-ws/');
     CKEDITOR.plugins.addExternal('mrmonkey', PLUGIN_DIR + '/mrmonkey/');
-    CKEDITOR.plugins.addExternal('docprops', PLUGIN_DIR + '/docprops/');
+    CKEDITOR.plugins.addExternal('fnidynlist', PLUGIN_DIR + '/fnidynlist/');
+    CKEDITOR.plugins.addExternal('fnigenericbrowser', PLUGIN_DIR + '/fnigenericbrowser/');
     
     var editor = CKEDITOR.replace($('.forge-ckdocument-editor').attr('name'), { 
       skin: 'moono',
-      extraPlugins: 'coops,coops-rest,coops-ws,coops-dmp,mrmonkey,docprops',
+      language: LOCALE,
+      extraPlugins: 'coops,coops-rest,coops-ws,coops-dmp,mrmonkey,docprops,fnigenericbrowser',
       readOnly: true,
       height: 500,
       fullPage : true,
@@ -27,6 +32,10 @@
           cursorBlinks: true,
           cursorBlinkInterval: 1.2
         }
+      },
+      fniGenericBrowser:{
+        enabledInDialogs: ['image', 'link'],
+        connectorUrl: CONTEXTPATH + '/forge/ckbrowserconnector/'
       },
       toolbar: [
         { name: 'document', items : [ 'Templates', 'DocProps' ] },
