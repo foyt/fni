@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
+@Deprecated
 public abstract class AbstractViewServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 2501078339886319673L;
