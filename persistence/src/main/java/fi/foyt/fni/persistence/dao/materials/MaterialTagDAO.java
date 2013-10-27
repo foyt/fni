@@ -30,20 +30,6 @@ public class MaterialTagDAO extends GenericDAO<MaterialTag> {
 
     return materialTag;
   }
-
-  public List<MaterialTag> listByMaterial(Material material) {
-    EntityManager entityManager = getEntityManager();
-
-    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<MaterialTag> criteria = criteriaBuilder.createQuery(MaterialTag.class);
-    Root<MaterialTag> root = criteria.from(MaterialTag.class);
-    criteria.select(root);
-    criteria.where(
-      criteriaBuilder.equal(root.get(MaterialTag_.material), material)
-    );
-    
-    return entityManager.createQuery(criteria).getResultList();
-  }
   
   public MaterialTag findByMaterialAndTag(Material material, Tag tag) {
     EntityManager entityManager = getEntityManager();
@@ -61,6 +47,35 @@ public class MaterialTagDAO extends GenericDAO<MaterialTag> {
     
     return getSingleResult(entityManager.createQuery(criteria));
   }
+
+  public List<MaterialTag> listByMaterial(Material material) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<MaterialTag> criteria = criteriaBuilder.createQuery(MaterialTag.class);
+    Root<MaterialTag> root = criteria.from(MaterialTag.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(MaterialTag_.material), material)
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+  }
+
+	public List<MaterialTag> listByMaterialAndTagsNotIn(Material material, List<Tag> tags) {
+		EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<MaterialTag> criteria = criteriaBuilder.createQuery(MaterialTag.class);
+    Root<MaterialTag> root = criteria.from(MaterialTag.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(MaterialTag_.material), material),
+      criteriaBuilder.not(root.get(MaterialTag_.tag).in(tags))
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+	}
   
 
 }

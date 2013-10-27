@@ -31,13 +31,23 @@ import com.itextpdf.text.DocumentException;
 
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentRevisionDAO;
+import fi.foyt.fni.persistence.dao.materials.MaterialRevisionSettingDAO;
+import fi.foyt.fni.persistence.dao.materials.MaterialSettingDAO;
+import fi.foyt.fni.persistence.dao.materials.MaterialSettingKeyDAO;
+import fi.foyt.fni.persistence.dao.materials.MaterialTagDAO;
 import fi.foyt.fni.persistence.model.common.Language;
+import fi.foyt.fni.persistence.model.common.Tag;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
+import fi.foyt.fni.persistence.model.materials.MaterialRevision;
+import fi.foyt.fni.persistence.model.materials.MaterialRevisionSetting;
+import fi.foyt.fni.persistence.model.materials.MaterialSetting;
+import fi.foyt.fni.persistence.model.materials.MaterialSettingKey;
+import fi.foyt.fni.persistence.model.materials.MaterialTag;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.utils.data.TypedData;
@@ -63,6 +73,18 @@ public class DocumentController {
 
   @Inject
   private DocumentRevisionDAO documentRevisionDAO;
+
+  @Inject
+  private MaterialTagDAO materialTagDAO;
+
+  @Inject
+  private MaterialSettingKeyDAO materialSettingKeyDAO;
+
+  @Inject
+  private MaterialSettingDAO materialSettingDAO;
+
+  @Inject
+  private MaterialRevisionSettingDAO materialRevisionSettingDAO;
   
   /* Document */
 
@@ -107,6 +129,21 @@ public class DocumentController {
 		}
 		
 		return result;
+	}
+	
+	/* Revision Settings */
+
+	public MaterialRevisionSetting createDocumentRevisionSetting(MaterialRevision materialRevision, String key, String value) {
+		MaterialSettingKey settingKey = materialSettingKeyDAO.findByName(key);
+		if (settingKey != null) {
+			return materialRevisionSettingDAO.create(materialRevision, settingKey, value);
+		}
+		
+		return null;
+	}
+
+	public List<MaterialRevisionSetting> listDocumentRevisionSettings(DocumentRevision documentRevision) {
+		return materialRevisionSettingDAO.listByMaterialRevision(documentRevision);
 	}
 	
 	/* PDF */
@@ -214,6 +251,55 @@ public class DocumentController {
   	} finally {
   		documentStream.close();
   	}
+	}
+
+	public Document updateDocumentTitle(Document document, String title, User modifier) {
+		return documentDAO.updateTitle(document, modifier, title);
+	}
+
+	public Document updateDocumentLanguage(Document document, Language language, User modifier) {
+		return documentDAO.updateLanguage(document, modifier, language);
+	}
+	
+	/* Tags */
+
+	public List<MaterialTag> listDocumentTags(Document document) {
+		return materialTagDAO.listByMaterial(document);
+	}
+	
+	public Document setDocumentTags(Document document, List<Tag> tags) {
+		List<MaterialTag> removeTags = null;
+		if (tags.size() > 0) {
+			removeTags = materialTagDAO.listByMaterialAndTagsNotIn(document, tags);
+		} else {
+			removeTags = materialTagDAO.listByMaterial(document);
+		}
+		
+		for (MaterialTag removeTag : removeTags) {
+			materialTagDAO.delete(removeTag);
+		}
+		
+		for (Tag tag : tags) {
+			if (materialTagDAO.findByMaterialAndTag(document, tag) == null) {
+				materialTagDAO.create(document, tag);
+			}
+		}
+		
+		return document;
+	}
+
+	/* Properties */
+	
+	public void setDocumentSetting(Document document, String key, String value) {
+    MaterialSettingKey settingKey = materialSettingKeyDAO.findByName("document." + key);
+    if (settingKey != null) {
+    	MaterialSetting materialSetting = materialSettingDAO.findByMaterialAndKey(document, settingKey);
+    	if (materialSetting != null) {
+    		materialSettingDAO.updateValue(materialSetting, value);
+    	} else {
+    		materialSettingDAO.create(document, settingKey, value);
+    	}
+    }
 	}
 
 }
