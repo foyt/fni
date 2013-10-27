@@ -60,6 +60,7 @@ public class ForgeImagesBackingBean {
 			throw new FileNotFoundException();
 		}
 		
+		materialPath = material.getPath();
 		materialId = material.getId();
 		imageTitle = material.getTitle();
 		folders = ForgeViewUtils.getParentList(material);
@@ -93,9 +94,14 @@ public class ForgeImagesBackingBean {
 		return folders;
 	}
 	
+	public String getMaterialPath() {
+		return materialPath;
+	}
+	
 	private Long ownerId;
 	private String urlPath;
 	private Long materialId;
 	private String imageTitle;
 	private List<Folder> folders;
+	private String materialPath;
 }
