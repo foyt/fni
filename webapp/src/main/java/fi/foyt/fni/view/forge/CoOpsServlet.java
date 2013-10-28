@@ -67,52 +67,54 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO: Security
 		
-		String pathInfo = StringUtils.removeStart(request.getPathInfo(), "/");
-		String[] path = pathInfo.split("/");
-		if (path.length < 1) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
-			return;
-		}
- 		
-		if (!StringUtils.isNumeric(path[0])) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
-			return;
-		}
-		
-		Long materialId = NumberUtils.createLong(path[0]);
-		Document document = documentController.findDocumentById(materialId);
-		
-		if (document == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not Found");
-			return;
-		}
-		
-		if (path.length == 2 && "join".equals(path[1])) {
-			String[] algorithms = request.getParameterValues("algorithm");
-			String protocolVersion = request.getParameter("protocolVersion");
-			
-			if ((algorithms == null)||(algorithms.length == 0)) {
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
-				return;
-			}
-			
-			if (StringUtils.isBlank(protocolVersion)) {
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
-				return;
-			}
-			
-			handleJoinRequest(request, response, protocolVersion, algorithms, document);
-		} else if (path.length == 2 && "update".equals(path[1])) {
-			Long revisionNumber = NumberUtils.createLong(request.getParameter("revisionNumber"));
-			if (revisionNumber == null) {
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
-				return;
-			}
-			
-			handleUpdateRequest(request, response, document, revisionNumber);
-		} else if (path.length == 1) {
-			Long revisionNumber = NumberUtils.createLong(request.getParameter("revisionNumber"));
-			handleFileRequest(request, response, document, revisionNumber);
+		synchronized (syncObject) {
+  		String pathInfo = StringUtils.removeStart(request.getPathInfo(), "/");
+  		String[] path = pathInfo.split("/");
+  		if (path.length < 1) {
+  			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
+  			return;
+  		}
+   		
+  		if (!StringUtils.isNumeric(path[0])) {
+  			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
+  			return;
+  		}
+  		
+  		Long materialId = NumberUtils.createLong(path[0]);
+  		Document document = documentController.findDocumentById(materialId);
+  		
+  		if (document == null) {
+  			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not Found");
+  			return;
+  		}
+  		
+  		if (path.length == 2 && "join".equals(path[1])) {
+  			String[] algorithms = request.getParameterValues("algorithm");
+  			String protocolVersion = request.getParameter("protocolVersion");
+  			
+  			if ((algorithms == null)||(algorithms.length == 0)) {
+  				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
+  				return;
+  			}
+  			
+  			if (StringUtils.isBlank(protocolVersion)) {
+  				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
+  				return;
+  			}
+  			
+  			handleJoinRequest(request, response, protocolVersion, algorithms, document);
+  		} else if (path.length == 2 && "update".equals(path[1])) {
+  			Long revisionNumber = NumberUtils.createLong(request.getParameter("revisionNumber"));
+  			if (revisionNumber == null) {
+  				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
+  				return;
+  			}
+  			
+  			handleUpdateRequest(request, response, document, revisionNumber);
+  		} else if (path.length == 1) {
+  			Long revisionNumber = NumberUtils.createLong(request.getParameter("revisionNumber"));
+  			handleFileRequest(request, response, document, revisionNumber);
+  		}
 		}
 	}
 	
@@ -326,4 +328,6 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 			outputStream.close();
 		}
 	}
+	
+	private Object syncObject = new Object();
 }
