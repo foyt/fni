@@ -41,6 +41,7 @@
 
               this.getEditor().on("CoOPS:ContentPatch", this._onContentPatch, this);
               this.getEditor().on("CoOPS:ContentRevert", this._onContentRevert, this);
+              this.getEditor().on("propertiesChange", this._onPropertiesChange, this);
     
               this._startUpdatePolling();
 
@@ -69,6 +70,38 @@
                 case 409:
                   this.getEditor().getChangeObserver().resume();
                   this.getEditor().fire("CoOPS:PatchRejected");
+                break;
+                default:
+                  // TODO: Proper error handling
+                  alert('Unknown Error');
+                break;
+              }
+              
+            }, this));
+          },
+          
+          _onPropertiesChange: function (event) {
+            this.getEditor().getChangeObserver().pause();
+            
+            var changedProperties = event.data.properties;
+            var properties = {};
+            
+            for (var i = 0, l = changedProperties.length; i < l; i++) {
+              properties[changedProperties[i].property] = changedProperties[i].currentValue;
+            };
+            
+            this._doPatch(this._editor.config.coops.serverUrl, { properties: properties, revisionNumber : this._revisionNumber }, CKEDITOR.tools.bind(function (status, responseJson, responseText) {
+              switch (status) {
+                case 200:
+                  // Our patch was accepted, yay!
+                  this._revisionNumber = responseJson.revisionNumber;
+
+                  this.getEditor().getChangeObserver().reset();
+                  this.getEditor().getChangeObserver().resume();
+                  
+                  this.getEditor().fire("CoOPS:PatchAccepted", {
+                    revisionNumber: this._revisionNumber
+                  });
                 break;
                 default:
                   // TODO: Proper error handling
@@ -142,7 +175,7 @@
             this._doGet(url, {}, CKEDITOR.tools.bind(function (status, responseJson, responseText) {
               if (status == 200) {
                 this._applyPatches(responseJson);
-              } else if (status == 304) {
+              } else if ((status == 204) || (status == 304)) {
                 // Not modified
               } else {
                 // TODO: Proper error handling
@@ -166,7 +199,8 @@
             if (this._editor.fire("CoOPS:PatchReceived", {
               patch : patch.patch,
               checksum: patch.checksum,
-              revisionNumber: patch.revisionNumber
+              revisionNumber: patch.revisionNumber,
+              properties: patch.properties
             })) {
               this._revisionNumber = patch.revisionNumber;
               callback();

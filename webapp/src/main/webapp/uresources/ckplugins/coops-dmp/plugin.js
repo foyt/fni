@@ -264,11 +264,13 @@
             var patchChecksum = event.data.checksum;
             var revisionNumber = event.data.revisionNumber;
             
-            this._pendingPatches.push({
-              patch: patch,
-              patchChecksum: patchChecksum,
-              revisionNumber: revisionNumber
-            });
+            if (patch && patchChecksum) {
+              this._pendingPatches.push({
+                patch: patch,
+                patchChecksum: patchChecksum,
+                revisionNumber: revisionNumber
+              });
+            }
 
             this._applyNextPatch();
           },

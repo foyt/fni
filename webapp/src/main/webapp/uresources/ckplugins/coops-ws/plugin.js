@@ -26,13 +26,15 @@ CKEDITOR.plugins.add('coops-ws', {
           var revisionNumber = message.revisionNumber;
           var sessionId = message.sessionId;
           var checksum = message.checksum;
+          var properties = message.properties;
 
           if (this._sessionId != sessionId) {
             // Received a patch from other client
             if (editor.fire("CoOPS:PatchReceived", {
               patch : patch,
               checksum: checksum,
-              revisionNumber: revisionNumber
+              revisionNumber: revisionNumber,
+              properties: properties
             })) {
               this._revisionNumber = revisionNumber;
             };
