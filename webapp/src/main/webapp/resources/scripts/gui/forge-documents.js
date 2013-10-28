@@ -4,7 +4,6 @@
   $(document).ready(function () {
     var PLUGIN_DIR = CONTEXTPATH + '/uresources/ckplugins';
 
-    CKEDITOR.plugins.addExternal('docprops', PLUGIN_DIR + '/docprops/');
     CKEDITOR.plugins.addExternal('ajax', PLUGIN_DIR + '/ajax/');
     CKEDITOR.plugins.addExternal('xml', PLUGIN_DIR + '/xml/');
     CKEDITOR.plugins.addExternal('change', PLUGIN_DIR + '/change/');
@@ -12,17 +11,15 @@
     CKEDITOR.plugins.addExternal('coops-rest', PLUGIN_DIR + '/coops-rest/');
     CKEDITOR.plugins.addExternal('coops-dmp', PLUGIN_DIR + '/coops-dmp/');
     CKEDITOR.plugins.addExternal('coops-ws', PLUGIN_DIR + '/coops-ws/');
-    CKEDITOR.plugins.addExternal('mrmonkey', PLUGIN_DIR + '/mrmonkey/');
     CKEDITOR.plugins.addExternal('fnidynlist', PLUGIN_DIR + '/fnidynlist/');
     CKEDITOR.plugins.addExternal('fnigenericbrowser', PLUGIN_DIR + '/fnigenericbrowser/');
     
     var editor = CKEDITOR.replace($('.forge-ckdocument-editor').attr('name'), { 
       skin: 'moono',
       language: LOCALE,
-      extraPlugins: 'coops,coops-rest,coops-ws,coops-dmp,mrmonkey,docprops,fnigenericbrowser',
+      extraPlugins: 'coops,coops-rest,coops-ws,coops-dmp,fnigenericbrowser',
       readOnly: true,
       height: 500,
-      fullPage : true,
       contentsCss: ['//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/contents.css', CONTEXTPATH + '/uresources/forge-ckeditor-embedded.css' ],
       coops: {
         serverUrl: COOPS_SERVER_URL,
@@ -38,7 +35,7 @@
         connectorUrl: CONTEXTPATH + '/forge/ckbrowserconnector/'
       },
       toolbar: [
-        { name: 'document', items : [ 'Templates', 'DocProps' ] },
+        { name: 'document', items : [ 'Templates' ] },
         { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
         { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-', 'Scayt' ] },
         { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote', ,'-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
@@ -73,6 +70,30 @@
       $('.forge-ckdocument-editor-status-saved').css('display', 'block');
     });
     
+    $('.forge-ckdocument-title').change(function (event) {
+      var oldValue = $(this).parent().data('old-value');
+      var value = $(this).val();
+      $(this).parent().data('old-value', value);
+      
+      editor.fire("propertiesChange", {
+        properties : [{
+          property: 'title',
+          oldValue: oldValue,
+          currentValue: value
+        }]
+      });
+    });
+    
+    editor.on("CoOPS:PatchReceived", function (event) {
+      var properties = event.data.properties;
+      if (properties) {
+        for (var i = 0, l = properties.length; i < l; i++) {
+          if (properties[i].property == 'title') {
+            $('.forge-ckdocument-title').val(properties[i].currentValue);
+          }
+        }
+      }
+    });
   });
   
 }).call(this);

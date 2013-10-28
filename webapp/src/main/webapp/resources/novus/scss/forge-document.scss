@@ -7,10 +7,31 @@
 $hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
 
 /* Generic */
-h2 { @include header-2;
-  color: $title-color;
+
+h2 {
+  @include header-2;
   padding-top: 20px;
   padding-bottom: 20px;
+  margin-right: 120px;
+}
+
+h2 input {
+  color: $title-color;
+  background: none;
+  border: 1px solid transparent;
+  width: 100%;
+  @include box-sizing(border-box);
+  padding-left: 4px;
+}
+
+h2 input:hover {
+  background: #fff;
+  border: 1px dotted #eee;
+}
+
+h2 input:focus {
+  background: #fff;
+  border: 1px inset #eee;
 }
 
 .forge-document-panel {

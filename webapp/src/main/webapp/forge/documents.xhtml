@@ -53,7 +53,9 @@
     
     <h:panelGroup layout="block" styleClass="grid_16 tight">
       <h:panelGroup layout="block" styleClass="forge-document-panel">
-        <h2>#{forgeDocumentsBackingBean.documentTitle}</h2>
+        <h2 data-old-value="#{forgeDocumentsBackingBean.documentTitle}">
+          <h:inputText styleClass="forge-ckdocument-title" value="#{forgeDocumentsBackingBean.documentTitle}"/>
+        </h2>
     
         <h:panelGroup styleClass="forge-ckdocument-editor-status">
           <h:panelGroup styleClass="forge-ckdocument-editor-status-loading">
