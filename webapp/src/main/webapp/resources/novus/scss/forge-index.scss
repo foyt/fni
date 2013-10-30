@@ -1,3 +1,4 @@
+@charset "utf-8";
 @import "vars";
 @import "compass";
 @import "styles";
@@ -261,7 +262,6 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   content: '☆';
   color: black;
 }
-
 .forge-material-starred:after {
   content: '★';
   color: orange;
