@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['error.internalError.title']}</ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/error.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <!-- Header -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/index.jsf">#{locales['error.internalError.navigationIndex']}</h:link>
+        </h:panelGroup>
+      </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{locales['error.internalError.descriptionTitle']}</p>
+        <p class="view-header-description-text">#{locales['error.internalError.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="error-panel">
+        <h:panelGroup layout="block" styleClass="error-image-container">
+          <h:graphicImage library="novus" name="/gfx/layout/error-500.png"/> 
+        </h:panelGroup>    
+        <h:panelGroup layout="block" styleClass="error-hint">#{locales['error.internalError.hint']}</h:panelGroup>
+        <h:link styleClass="error-back-to-index" outcome="/index.jsf">#{locales['error.internalError.backToIndex']}</h:link> 
+      </h:panelGroup>
+    </h:panelGroup>
+    
+  </ui:define>
+
+</ui:composition>
