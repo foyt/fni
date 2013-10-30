@@ -1,25 +1,36 @@
 package fi.foyt.fni.view.users;
 
-import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
-import fi.foyt.fni.materials.MaterialController;
+import fi.foyt.fni.auth.AuthenticationController;
+import fi.foyt.fni.persistence.model.auth.AuthSource;
+import fi.foyt.fni.persistence.model.auth.InternalAuth;
+import fi.foyt.fni.persistence.model.auth.UserIdentifier;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserContactFieldType;
 import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
-import fi.foyt.fni.security.UnauthorizedException;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.faces.FacesUtils;
@@ -35,121 +46,195 @@ import fi.foyt.fni.utils.faces.FacesUtils;
   )
 })
 public class EditProfileBackingBean {
-	
-	@Inject
-	private SessionController sessionController;
 
 	@Inject
 	private UserController userController;
+
+	@Inject
+	private SessionController sessionController;
 	
 	@Inject
-	private MaterialController materialController;
-	
-	@PostConstruct
-	public void init() {
-		if (!sessionController.isLoggedIn()) {
-			throw new UnauthorizedException();
-		}
-		
-		User loggedUser = sessionController.getLoggedUser();
-		basicFirstName = loggedUser.getFirstName();
-		basicLastName = loggedUser.getLastName();
-		basicNickname = loggedUser.getNickname();
-		basicAbout = loggedUser.getAbout();
-		basicProfileImageSource = loggedUser.getProfileImageSource();
-		basicEmail = userController.getUserPrimaryEmail(loggedUser);
-
-		contactInfoFieldHomePage = userController.getContactFieldValue(loggedUser, UserContactFieldType.HOME_PAGE);
-		contactInfoFieldBlog = userController.getContactFieldValue(loggedUser, UserContactFieldType.BLOG);
-		contactInfoFieldFacebook = userController.getContactFieldValue(loggedUser, UserContactFieldType.FACEBOOK);
-		contactInfoFieldTwitter = userController.getContactFieldValue(loggedUser, UserContactFieldType.TWITTER);
-		contactInfoFieldLinkedIn = userController.getContactFieldValue(loggedUser, UserContactFieldType.LINKEDIN);
-		contactInfoFieldGooglePlus = userController.getContactFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS);
-		
-		quotaUsed = materialController.getUserMaterialsTotalSize(loggedUser);
-		quotaReserved = materialController.getUserQuota();
-	}
-	
-	public String getBasicFirstName() {
-		return basicFirstName;
-	}
-	
-	public void setBasicFirstName(String basicFirstName) {
-		this.basicFirstName = basicFirstName;
-	}
-	
-	public String getBasicLastName() {
-		return basicLastName;
-	}
-	
-	public void setBasicLastName(String basicLastName) {
-		this.basicLastName = basicLastName;
-	}
-	
-	public String getBasicNickname() {
-		return basicNickname;
-	}
-	
-	public void setBasicNickname(String basicNickname) {
-		this.basicNickname = basicNickname;
-	}
-	
-	public String getBasicEmail() {
-		return basicEmail;
-	}
-	
-	public void setBasicEmail(String basicEmail) {
-		this.basicEmail = basicEmail;
-	}
-	
-	public String getBasicAbout() {
-		return basicAbout;
-	}
-	
-	public void setBasicAbout(String basicAbout) {
-		this.basicAbout = basicAbout;
-	}
-	
-	public UserProfileImageSource getBasicProfileImageSource() {
-		return basicProfileImageSource;
-	}
-	
-	public void setBasicProfileImageSource(UserProfileImageSource basicProfileImageSource) {
-		this.basicProfileImageSource = basicProfileImageSource;
-	}
-	
-	public boolean getBasicHasFniProfileImage() {
-		return userController.hasProfileImage(sessionController.getLoggedUser());
-	}
+	private AuthenticationController authenticationController;
 	
 	@LoggedIn
 	@Secure (Permission.PROFILE_UPDATE)
-	public void basicSave() {
-		userController.updateFirstName(sessionController.getLoggedUser(), getBasicFirstName());
-		userController.updateLastName(sessionController.getLoggedUser(), getBasicLastName());
-		userController.updateNickname(sessionController.getLoggedUser(), getBasicNickname());
-		userController.updateAbout(sessionController.getLoggedUser(), getBasicAbout());
-		userController.updateProfileImageSource(sessionController.getLoggedUser(), getBasicProfileImageSource());
+	@URLAction
+	public void load() throws IOException {
+		User loggedUser = sessionController.getLoggedUser();
+		firstName = loggedUser.getFirstName();
+		lastName = loggedUser.getLastName();
+  	nickname = loggedUser.getNickname();
+  	about = loggedUser.getAbout();
+  	contactInfoFieldHomePage = userController.getContactFieldValue(loggedUser, UserContactFieldType.HOME_PAGE);
+  	contactInfoFieldBlog = userController.getContactFieldValue(loggedUser, UserContactFieldType.BLOG);
+  	contactInfoFieldFacebook = userController.getContactFieldValue(loggedUser, UserContactFieldType.FACEBOOK);
+  	contactInfoFieldTwitter = userController.getContactFieldValue(loggedUser, UserContactFieldType.TWITTER);
+  	contactInfoFieldLinkedIn = userController.getContactFieldValue(loggedUser, UserContactFieldType.LINKEDIN);
+  	contactInfoFieldGooglePlus = userController.getContactFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS);
+  	
+  	profileImageSource = loggedUser.getProfileImageSource();
+		userIdentifiers = authenticationController.listUserIdentifiers(loggedUser);
+		hasFniProfileImage = userController.hasProfileImage(loggedUser);
+		
+		addAuthenticationSourcesSelectItems = new ArrayList<>();
+		
+		boolean hasGoogleAuthSource = false;
+		boolean hasYahooAuthSource = false;
+		boolean hasFacebookAuthSource = false;
+		boolean hasInternalAuthSource = false;
+		
+		for (UserIdentifier userIdentifier : userIdentifiers) {
+			switch (userIdentifier.getAuthSource()) {
+				case GOOGLE:
+					hasGoogleAuthSource = true;
+        break;
+				case FACEBOOK:
+					hasFacebookAuthSource = true;
+				break;
+				case YAHOO:
+					hasYahooAuthSource = true;
+				break;
+				case INTERNAL:
+					hasInternalAuthSource = true;
+				break;
+				default:
+			  break;
+			}
+		}
+		
+		if (!hasGoogleAuthSource) {
+			addAuthenticationSourcesSelectItems.add(new SelectItem(AuthSource.GOOGLE, FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceGoogle")));
+		}
 
-		FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.basicSaved"));
+		if (!hasFacebookAuthSource) {
+			addAuthenticationSourcesSelectItems.add(new SelectItem(AuthSource.FACEBOOK, FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceFacebook")));
+		}
+
+		if (!hasYahooAuthSource) {
+			addAuthenticationSourcesSelectItems.add(new SelectItem(AuthSource.YAHOO, FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceYahoo")));
+		}
+
+		if (!hasInternalAuthSource) {
+			addAuthenticationSourcesSelectItems.add(new SelectItem(AuthSource.INTERNAL, FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceForgeAndIllusion")));
+		}
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public String getAbout() {
+		return about;
+	}
+
+	public void setAbout(String about) {
+		this.about = about;
 	}
 	
+	public UserProfileImageSource getProfileImageSource() {
+		return profileImageSource;
+	}
+	
+	public void setProfileImageSource(UserProfileImageSource profileImageSource) {
+		this.profileImageSource = profileImageSource;
+	}
+
+	public Boolean getHasFniProfileImage() {
+		return hasFniProfileImage;
+	}
+	
+	public List<UserIdentifier> getUserIdentifiers() {
+		return userIdentifiers;
+	}
+	
+	public String getAuthenticationSourceName(AuthSource authSource) {
+		switch (authSource) {
+			case DROPBOX:
+				return FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceDropbox");
+			case FACEBOOK:
+				return FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceFacebook");
+			case GOOGLE:
+				return FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceGoogle");
+			case INTERNAL:
+				return FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceForgeAndIllusion");
+			case UBUNTU_ONE:
+				return FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceUbuntuOne");
+						case YAHOO:
+				return FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceYahoo");
+			default:
+			break;
+		}
+		
+		return null;
+	}
+	
+	public String getNewInternalAuthencationSourcePassword1() {
+		return newInternalAuthencationSourcePassword1;
+	}
+	
+	public void setNewInternalAuthencationSourcePassword1(String newInternalAuthencationSourcePassword1) {
+		this.newInternalAuthencationSourcePassword1 = newInternalAuthencationSourcePassword1;
+	}
+	
+	public String getNewInternalAuthencationSourcePassword2() {
+		return newInternalAuthencationSourcePassword2;
+	}
+	
+	public void setNewInternalAuthencationSourcePassword2(String newInternalAuthencationSourcePassword2) {
+		this.newInternalAuthencationSourcePassword2 = newInternalAuthencationSourcePassword2;
+	}
+	
+	public String getChangePassword1() {
+		return changePassword1;
+	}
+	public void setChangePassword1(String changePassword1) {
+		this.changePassword1 = changePassword1;
+	}
+	
+	public String getChangePassword2() {
+		return changePassword2;
+	}
+	
+	public void setChangePassword2(String changePassword2) {
+		this.changePassword2 = changePassword2;
+	}
+
 	public String getContactInfoFieldHomePage() {
 		return contactInfoFieldHomePage;
 	}
-	
+
 	public void setContactInfoFieldHomePage(String contactInfoFieldHomePage) {
 		this.contactInfoFieldHomePage = contactInfoFieldHomePage;
 	}
-	
+
 	public String getContactInfoFieldBlog() {
 		return contactInfoFieldBlog;
 	}
-	
+
 	public void setContactInfoFieldBlog(String contactInfoFieldBlog) {
 		this.contactInfoFieldBlog = contactInfoFieldBlog;
 	}
-	
+
 	public String getContactInfoFieldFacebook() {
 		return contactInfoFieldFacebook;
 	}
@@ -181,57 +266,137 @@ public class EditProfileBackingBean {
 	public void setContactInfoFieldGooglePlus(String contactInfoFieldGooglePlus) {
 		this.contactInfoFieldGooglePlus = contactInfoFieldGooglePlus;
 	}
+	
+	@LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public List<SelectItem> getAddAuthenticationSourcesSelectItems() {
+		return addAuthenticationSourcesSelectItems;
+	}
+	
+	@LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public void enableFacebookAuthSource() throws IOException {
+		enableAuthSource(AuthSource.FACEBOOK);
+	}
+	
+	@LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public void enableGoogleAuthSource() throws IOException {
+		enableAuthSource(AuthSource.GOOGLE);
+	}
+	
+	@LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public void enableYahooAuthSource() throws IOException {
+		enableAuthSource(AuthSource.YAHOO);
+	}
+	
+	private void enableAuthSource(AuthSource authSource) throws IOException {
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		String contextPath = externalContext.getRequestContextPath();
+
+		switch (authSource) {
+			case FACEBOOK:
+					externalContext.redirect(new StringBuilder()
+					  .append(contextPath)
+					  .append("/login?loginMethod=FACEBOOK&redirectUrl=")
+					  .append(URLEncoder.encode(contextPath + "/editprofile", "UTF-8"))
+					  .toString());
+			  return;
+			case GOOGLE:
+				externalContext.redirect(new StringBuilder()
+	    	  .append(contextPath)
+	  	    .append("/login?loginMethod=GOOGLE&redirectUrl=")
+	  	    .append(URLEncoder.encode(contextPath + "/editprofile", "UTF-8"))
+	  	    .toString());
+			  return;
+			case YAHOO:
+				externalContext.redirect(new StringBuilder()
+	    	  .append(contextPath)
+	  	    .append("/login?loginMethod=YAHOO&redirectUrl=")
+	  	    .append(URLEncoder.encode(contextPath + "/editprofile", "UTF-8"))
+	  	    .toString());
+			  return;
+			default:
+				break;
+		}
+	}
+	
+	@LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public String addNewInternalAuthencationSource() {
+		if (StringUtils.isBlank(getNewInternalAuthencationSourcePassword1())||DigestUtils.md5Hex("").equals(getNewInternalAuthencationSourcePassword1())) {
+			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.editProfile.addInternalAuthenticationSourcePasswordRequired"));
+		} else {
+  		if (!StringUtils.equals(getNewInternalAuthencationSourcePassword1(), getNewInternalAuthencationSourcePassword2())) {
+  			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.editProfile.addInternalAuthenticationSourcePasswordsDoNotMatch"));
+  		} else {
+  			InternalAuth internalAuth = authenticationController.createInternalAuth(sessionController.getLoggedUser(), getNewInternalAuthencationSourcePassword1());
+  			authenticationController.verifyInternalAuth(internalAuth);
+  		}
+		}
+		
+		return "pretty:";
+	}
+	
+	@LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public void removeAuthenticationSource(Long userIdentifierId) {
+		UserIdentifier userIdentifier = authenticationController.findUserIdentifierById(userIdentifierId);
+		if (userIdentifier != null) {
+		  authenticationController.removeUserIdentifier(userIdentifier);
+		}
+	}
 
 	@LoggedIn
 	@Secure (Permission.PROFILE_UPDATE)
-	public void contactInfoSave() {
+	public void save() {
 		User loggedUser = sessionController.getLoggedUser();
 		
-		userController.setContactFieldValue(loggedUser, UserContactFieldType.HOME_PAGE, getContactInfoFieldHomePage());
-		userController.setContactFieldValue(loggedUser, UserContactFieldType.BLOG, getContactInfoFieldBlog());
-		userController.setContactFieldValue(loggedUser, UserContactFieldType.FACEBOOK, getContactInfoFieldFacebook());
-		userController.setContactFieldValue(loggedUser, UserContactFieldType.TWITTER, getContactInfoFieldTwitter());
-		userController.setContactFieldValue(loggedUser, UserContactFieldType.LINKEDIN, getContactInfoFieldLinkedIn());
-		userController.setContactFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS, getContactInfoFieldGooglePlus());
-
-		FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.contactInfoSaved"));
+		userController.updateFirstName(loggedUser, getFirstName());
+		userController.updateLastName(loggedUser, getLastName());
+		userController.updateNickname(loggedUser, getNickname());
+		userController.updateAbout(loggedUser, getAbout());
+		userController.updateProfileImageSource(loggedUser, getProfileImageSource());
+  	userController.setContactFieldValue(loggedUser, UserContactFieldType.HOME_PAGE, getContactInfoFieldHomePage());
+  	userController.setContactFieldValue(loggedUser, UserContactFieldType.BLOG, getContactInfoFieldBlog());
+  	userController.setContactFieldValue(loggedUser, UserContactFieldType.FACEBOOK, getContactInfoFieldFacebook());
+  	userController.setContactFieldValue(loggedUser, UserContactFieldType.TWITTER, getContactInfoFieldTwitter());
+  	userController.setContactFieldValue(loggedUser, UserContactFieldType.LINKEDIN, getContactInfoFieldLinkedIn());
+  	userController.setContactFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS, getContactInfoFieldGooglePlus());
 	}
 	
-	public String getQuotaUsage() {
-		return FileUtils.byteCountToDisplaySize(quotaUsed);
-	}
-
-	public String getQuotaReserved() {
-		return FileUtils.byteCountToDisplaySize(quotaReserved);
-	}
-
-	public String getQuotaPercent() {
-		double quotaPercent = 0;
-		if (quotaUsed > 0) {
-		  quotaPercent = quotaUsed;
-		  quotaPercent /= quotaReserved;
-		  quotaPercent *= 100;
+	@LoggedIn
+	@Secure (Permission.PROFILE_UPDATE)
+	public void changePassword() {
+		if (StringUtils.isBlank(getChangePassword1()) || DigestUtils.md5Hex("").equals(getChangePassword1())) {
+			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.editProfile.changePasswordPasswordRequired"));
+		} else {
+  		if (!StringUtils.equals(getChangePassword1(), getChangePassword2())) {
+  			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.editProfile.changePasswordPasswordsDoNotMatch"));
+  		} else {
+  			authenticationController.setUserPassword(sessionController.getLoggedUser(), getChangePassword1());
+  			FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.changePasswordSuccess"));
+  		}
 		}
-
-		return String.format("%.2f", quotaPercent);
 	}
 	
-	public boolean getQuotaExceeded() {
-		return quotaUsed > quotaReserved;
-	}
-	
-	private String basicFirstName;
-	private String basicLastName;
-	private String basicNickname;
-	private String basicAbout;
-	private String basicEmail;
-	private UserProfileImageSource basicProfileImageSource;
-	private String contactInfoFieldHomePage;
-	private String contactInfoFieldBlog;
-	private String contactInfoFieldFacebook;
-	private String contactInfoFieldTwitter;
-	private String contactInfoFieldLinkedIn;
-	private String contactInfoFieldGooglePlus;
-	private long quotaUsed;
-	private long quotaReserved;	
+	private String firstName;
+	private String lastName;
+	private String nickname;
+	private String about;
+	private Boolean hasFniProfileImage;
+  private UserProfileImageSource profileImageSource;
+  private List<UserIdentifier> userIdentifiers;
+  private List<SelectItem> addAuthenticationSourcesSelectItems;
+  private String newInternalAuthencationSourcePassword1;
+  private String newInternalAuthencationSourcePassword2;
+  private String changePassword1;
+  private String changePassword2;
+  private String contactInfoFieldHomePage;
+  private String contactInfoFieldBlog;
+  private String contactInfoFieldFacebook;
+  private String contactInfoFieldTwitter;
+  private String contactInfoFieldLinkedIn;
+  private String contactInfoFieldGooglePlus;
 }

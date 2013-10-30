@@ -54,6 +54,10 @@ public class AuthenticationController {
 		internalAuthDAO.updateVerified(internalAuth, Boolean.TRUE);
 		userVerificationKeyDAO.delete(verificationKey);
   }
+
+	public void verifyInternalAuth(InternalAuth internalAuth) {
+		internalAuthDAO.updateVerified(internalAuth, Boolean.TRUE);
+	}
 	
 	public void setUserPassword(User user, String encodedPassword) {
 		InternalAuth internalAuth = internalAuthDAO.findByUser(user);
@@ -91,12 +95,15 @@ public class AuthenticationController {
 
 	// UserIdentifier 
 
+	public UserIdentifier findUserIdentifierById(Long userIdentifierId) {
+		return userIdentifierDAO.findById(userIdentifierId);
+	}
+	
 	public List<UserIdentifier> listUserIdentifiers(User user) {
 		return userIdentifierDAO.listByUser(user);
 	}
 	
 	public void removeUserIdentifier(UserIdentifier userIdentifier) {
-		// TODO: Implement rest of the strategies
 		switch (userIdentifier.getAuthSource()) {
 			case INTERNAL:
 				InternalAuth internalAuth = internalAuthDAO.findByUser(userIdentifier.getUser());
@@ -104,8 +111,8 @@ public class AuthenticationController {
 				  internalAuthDAO.delete(internalAuth);
 				}
 		  break;
-		  default:
-		  	throw new RuntimeException("Not implemented");
+			default:
+			break;
 		}
 		
 		List<UserToken> tokens = userTokenDAO.listByUserIdentifier(userIdentifier);

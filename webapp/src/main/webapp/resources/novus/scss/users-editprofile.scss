@@ -1,0 +1,184 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+/* Panel */ 
+
+.user-editprofile-panel {
+  @include generic-panel;
+}
+
+/* Generic */
+
+h3 {
+  @include header-2;
+  margin-bottom: 10px;
+}
+
+/* Forms */
+
+.users-editprofile-field label {
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+  margin-bottom: 8px;
+  width: 150px;
+  display: inline-block;
+}
+
+.users-editprofile-field input[type="text"] {
+  width: 300px;
+  font-size: 14px;
+  font-family: $default-font;
+  @include box-sizing(border-box);
+  margin-bottom: 8px;
+}
+
+.users-editprofile-image-container {
+  position: relative;
+  width: 667px;
+}
+
+.users-editprofile-image-inner-container {
+  position: absolute;
+  right: 0px;
+}
+
+.users-editprofile-image-container a {
+  display: block;
+  text-align: center;
+}
+
+.users-editprofile-image-source label {
+  font-weight: normal;
+  margin-left: 8px;
+  width: auto;
+}
+
+.users-editprofile-image-change {
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold; 
+  color: $default-color;
+  text-decoration: none;
+}
+
+.users-editprofile-add-authentication-source label {
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+  width: 188px;
+  display: inline-block;
+}
+
+.users-editprofile-enabled-authentication-sources>label {
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+  width: 188px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.users-editprofile-add-authentication-source select {
+  width: 260px;
+  font-size: 14px;
+  font-family: $default-font;
+  @include box-sizing(border-box);
+  margin-bottom: 8px;
+}
+
+.users-editprofile-enabled-authentication-source {
+  width: 631px;
+  background: rgba(0, 167, 161, 0.4);
+  padding: 18px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.users-editprofile-enabled-authentication-source label {
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+}
+
+.users-editprofile-authentication-source-change-password {
+  font-size: 16px;
+  font-family: $default-font;
+  font-weight: bold; 
+  font-style: italic;
+  position: absolute;
+  left: 370px;
+  top: 15px;
+  color: $default-color;
+  text-decoration: none;
+}
+
+.users-editprofile-authentication-source-remove {
+  @include header-6;
+  padding:5px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 4px;
+  cursor: pointer;
+  right: 10px;
+  top: 15px;
+  position: absolute;
+}
+
+.users-editprofile-enable-authsource-container a {
+  @include header-5;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.users-editprofile-authentication-source-change-password-container {
+  margin-top: 10px;
+}
+
+.users-editprofile-authentication-source-change-password-container input[type="submit"] {
+  @include header-6;
+  padding:5px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: auto;
+}
+
+input[type="submit"] {
+  @include header-4;
+  width: 256px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  display: block;
+}
+
+/* jQuery UI */
+
+.users-profile-upload-dialog p {
+  font-style: italic;
+  font-size: 14px;
+  margin-top: 16px;
+}
+
+.users-profile-upload-dialog input[type="file"] {
+  margin-top: 16px;
+}
