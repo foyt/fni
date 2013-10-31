@@ -2,6 +2,7 @@ package fi.foyt.fni.view.forge;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -10,6 +11,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.xml.sax.SAXException;
 
 import com.itextpdf.text.DocumentException;
@@ -17,13 +20,17 @@ import com.itextpdf.text.DocumentException;
 import fi.foyt.fni.materials.DocumentController;
 import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
+import fi.foyt.fni.materials.MaterialUserController;
 import fi.foyt.fni.materials.PdfController;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
+import fi.foyt.fni.persistence.model.materials.MaterialRole;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
@@ -34,6 +41,9 @@ public class ForgeMaterialActionBackingBean {
 
 	@Inject
 	private MaterialController materialController;
+
+  @Inject
+  private UserController userController;
 
 	@Inject
 	private DocumentController documentController;
@@ -47,6 +57,9 @@ public class ForgeMaterialActionBackingBean {
 	@Inject
 	private SessionController sessionController;
 
+	@Inject
+	private MaterialUserController materialUserController;
+	
 	public void deleteMaterial() throws IOException {
 		// TODO: Security 
 		
@@ -146,6 +159,47 @@ public class ForgeMaterialActionBackingBean {
     this.moveTargetFolderId = moveTargetFolderId;
   }
 	
+	public String getMaterialSharePublicity() {
+    return materialSharePublicity;
+  }
+	
+	public void setMaterialSharePublicity(String materialSharePublicity) {
+    this.materialSharePublicity = materialSharePublicity;
+  }
+	
+	public Map<String, String> getMaterialShareUsers() {
+    return materialShareUsers;
+  }
+	
+	public void setMaterialShareUsers(Map<String, String> materialShareUsers) {
+    this.materialShareUsers = materialShareUsers;
+  }
+	
+	@LoggedIn
+	public void materialShareSave() {
+	  User loggedUser = sessionController.getLoggedUser();
+	  
+	  Material material = materialController.findMaterialById(getMaterialId());
+	  
+	  Map<String, String> users = getMaterialShareUsers();
+	  for (String userStr : users.keySet()) {
+	    User user = userController.findUserById(NumberUtils.createLong(userStr));
+	    String roleStr = users.get(userStr);
+	    MaterialRole role = StringUtils.isBlank(roleStr) || "NONE".equals(roleStr) ? null : MaterialRole.valueOf(roleStr);
+	    // TODO: Modifier
+	    materialUserController.setMaterialUserRole(user, material, role);
+	  }
+	  
+	  MaterialPublicity publicity = MaterialPublicity.valueOf(getMaterialSharePublicity());
+	  
+	  if (publicity != material.getPublicity()) {
+	    materialController.updateMaterialPublicity(material, publicity, loggedUser);
+	  }
+	}
+	
 	private Long materialId;
 	private Long moveTargetFolderId;
+	private String materialSharePublicity;
+	private Map<String, String> materialShareUsers;
+	
 }

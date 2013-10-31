@@ -437,3 +437,63 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 .forge-move-material-parent:last-child:after {
   content: '';
 }
+
+/* Share dialog */
+
+.forge-share-material-dialog p {
+  font-style: italic;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.forge-share-material-dialog h4 {
+  @include header-4;
+  color: $title-color;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.forge-share-material-publicity-field {
+  height: 20px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.forge-share-material-publicity-field label {
+  font-size: 12px;
+  font-family: $default-font;
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+.forge-share-material-url input[type="text"] {
+  @include box-sizing(border-box); 
+  width: 100%;
+}
+
+.forge-share-material-user {
+  height: 20px;
+  clear: both;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.forge-share-material-user label {
+  font-family: $default-font;
+  font-size: 12px;
+}
+
+.forge-share-material-user select {
+  float: right;
+}
+
+.forge-share-material-invite p {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.forge-share-material-invite input[type="text"] {
+  @include box-sizing(border-box); 
+  width: 100%;
+}

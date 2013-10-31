@@ -1,0 +1,66 @@
+<div title="Materiaalin jakaminen" data-save-button="Tallenna" data-cancel-button="Peruuta" data-role-may-edit="Saa muokata" data-role-may-view="Saa katsella" data-role-none="Ei oikeutta">
+  <div class="forge-share-material-dialog">
+    <p>Voit määrittää ketkä näkevät materiaalin säätämällä sen julkisuutta ja lisätä käyttäjiä muokkaajiksi tai katselijoiksi muokkaajat osiosta.</p>
+    
+    <h4>Julkisuus</h4>
+    
+    <div class="forge-share-material-publicity-field">
+      {@if cond="{public}"}
+        <input type="radio" name="publicity" value="PRIVATE"/>
+      {:else}
+        <input type="radio" name="publicity" value="PRIVATE" checked="checked"/>
+      {/if}
+      <label>Yksityinen</label>
+    </div>
+
+    <div class="forge-share-material-publicity-field">
+      {@if cond="{public}"}
+        <input type="radio" name="publicity" value="PUBLIC" checked="checked"/>
+      {:else}
+        <input type="radio" name="publicity" value="PUBLIC"/>
+      {/if}
+      <label>Julkinen</label>
+    </div>
+    
+    <h4>Julkinen URL</h4>
+    <div class="forge-share-material-url">
+      {@if cond="{public}"}
+        <input type="text" readonly="readonly" value="{publicUrl}"/>
+      {:else}
+        <input type="text" readonly="readonly" value="{publicUrl}" disabled="disabled"/>
+      {/if}
+    </div>
+    
+    <h4>Muokkaajat</h4>
+    <div class="forge-share-material-users">
+    
+      {#users}
+        <div class="forge-share-material-user">
+          <label>{name}</label>
+          <input type="hidden" value="{id}" name="user"/>
+          <select name="role">
+            {@if cond="'{role}' == 'MAY_EDIT'"}
+              <option value="MAY_EDIT" selected="selected">Saa Muokata</option>
+            {:else}  
+              <option>Saa Muokata</option>
+            {/if}
+            {@if cond="'{role}' == 'MAY_VIEW'"}
+              <option value="MAY_VIEW" selected="selected">Saa Katsella</option>
+            {:else}  
+              <option>Saa Katsella</option>
+            {/if}
+            <option value="NONE" >Ei oikeutta</option>
+          </select>
+        </div>
+      {/users}
+    </div>
+    
+    <h4>Lisää muokkaajia</h4>
+    
+    <div class="forge-share-material-invite">
+      <p>Kirjoita kutsuttavan kaverisi nimi kenttään ja valitse se alaspudotusvalikosta</p>
+      <input type="text"/>
+    </div>
+    
+  </div>
+</div>

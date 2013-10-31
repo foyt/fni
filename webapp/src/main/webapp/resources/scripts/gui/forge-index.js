@@ -152,5 +152,101 @@
       }
     });
   });
+
+  $(document).on('click', '.forge-material-action-share a', function (event) {
+    var materialId = $(this).data('material-id');
+    var actionForm = $('#forge-action-form-container form');
+    var prefix = actionForm.attr('name');
+    
+    $.ajax({
+      url : CONTEXTPATH + "/forge/materialShare/",
+      data: {
+      	materialId: materialId 
+      },
+      success : function(data) {
+    	  var autocompleteSource = new Array();
+    	  for (var i = 0, l = data.friends.length; i < l; i++) {
+  	      autocompleteSource.push({
+            label: data.friends[i].name, 
+  	        value: data.friends[i].id 
+		      });
+       	}
+    	  
+        dust.render("forge-share-material", data, function(err, html) {
+  		    if (!err) {
+  		      var dialog = $(html);
+     		    var createRoleSelect = function () {
+  		        var roles = {
+  		          'MAY_EDIT': $(dialog).data('role-may-edit'),
+  		          'MAY_VIEW': $(dialog).data('role-may-view'),
+  		          'NONE': $(dialog).data('role-none')
+  		        };
+  		        	
+  		        var select = $('<select name="role">');
+  		        $.each(roles, function (role, text) {
+  		          select.append($('<option>').attr('value', role).text(text));
+  		        });
+  		        return select;
+  		      };
+  		        
+    		    dialog.dialog({
+  		        modal: true,
+  		        width: 600,
+  		        buttons: [{
+  		          'text': dialog.data('save-button'),
+  		          'click': function(event) { 
+  		            var publicity = $(this).find('input[name="publicity"]:checked').val();
+  		            var users = new Object();
+  		            
+  		            $(this).find('.forge-share-material-user').each(function(index, element) {
+  		              users[$(element).find('input[name="user"]').val()] = $(element).find('select[name="role"]').val();
+  		            });
+
+                  $('input[name="' + prefix + ':material-id' + '"]').val(materialId);
+                  $('input[name="' + prefix + ':material-share-publicity' + '"]').val(publicity);
+                  $('input[name="' + prefix + ':material-share-users' + '"]').val(JSON.stringify(users));
+  	              $('input[name="' + prefix + ':material-share-save' + '"]').click();
+  		          }
+  		        }, {
+  		          'text': dialog.data('cancel-button'),
+  		          'click': function(event) { 
+  		            $(this).dialog("close");
+  		          }
+  	          }]
+            });
+    		    
+    		    dialog.find('input[type="radio"]').change(function (event) {
+    		      if ($(this).val() == 'private') {
+                $(dialog).find('.forge-share-material-url input[type="text"]').attr('disabled', 'disabled');
+    		      } else {
+                $(dialog).find('.forge-share-material-url input[type="text"]').attr('disabled', null);
+    		      }
+    		    });
+    		      
+            dialog.find('.forge-share-material-invite input').autocomplete({
+              source: autocompleteSource,
+              select: function( event, ui ) {
+                var users = $(dialog).find('.forge-share-material-users');
+                var userId = ui.item.value;
+                if (users.find('input[value="' + userId + '"]').length == 0) {
+                  users.append(
+                    $('<div class="forge-share-material-user">')
+    	        	      .append($('<input name="user" type="hidden">').val(userId))
+  	        	        .append($('<label>').text(ui.item.label))
+  	        	        .append(createRoleSelect())); 
+                }
+              },
+              close: function( event, ui ) {
+                $(this).val('');
+              }
+            });
+          } else {
+            // TODO: Proper error handling...
+            alert(err);
+          }
+        });
+      }
+    });
+  });
   
 }).call(this);
