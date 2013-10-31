@@ -77,4 +77,10 @@ public class RequestUtils {
   public static String createUrlName(String text) {
     return createUrlName(text, 20);
   }
+
+  public static String getRequestHostUrl(HttpServletRequest request) {
+    String requestURL = request.getRequestURL().toString();
+    String requestURI = request.getRequestURI();
+    return requestURL.substring(0, requestURL.length() - requestURI.length());     
+  }
 }
