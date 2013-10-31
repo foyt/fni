@@ -1,0 +1,27 @@
+{@if cond="'{id}' != '{materialId}'"}
+<div class="forge-move-material-list-item" data-folder-id="{id}">
+  <div class="forge-move-material-list-item-icon forge-move-material-list-item-icon-{type}"></div>
+  <div class="forge-move-material-list-item-info">
+    <div class="forge-move-material-list-item-title-container">
+      <span class="forge-move-material-list-item-title">{title}</span>
+      <div class="forge-move-material-list-date-container">
+        <span class="forge-move-material-list-modified">{modified}</span>
+      </div>
+      <div class="forge-move-material-list-creator">{creator}</div>
+    </div>
+  </div>
+</div>
+{:else}
+<div class="forge-move-material-list-item forge-move-material-list-item-disabled" data-folder-id="DISABLED">
+  <div class="forge-move-material-list-item-icon forge-move-material-list-item-icon-{type}"></div>
+  <div class="forge-move-material-list-item-info">
+    <div class="forge-move-material-list-item-title-container">
+      <span class="forge-move-material-list-item-title">{title}</span>
+      <div class="forge-move-material-list-date-container">
+        <span class="forge-move-material-list-modified">{modified}</span>
+      </div>
+      <div class="forge-move-material-list-creator">{creator}</div>
+    </div>
+  </div>
+</div>
+{/if}

@@ -15,6 +15,7 @@ import org.xml.sax.SAXException;
 import com.itextpdf.text.DocumentException;
 
 import fi.foyt.fni.materials.DocumentController;
+import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.PdfController;
 import fi.foyt.fni.persistence.model.materials.Document;
@@ -37,12 +38,14 @@ public class ForgeMaterialActionBackingBean {
 	@Inject
 	private DocumentController documentController;
 
-	@Inject
+  @Inject
 	private PdfController pdfController;
+
+  @Inject
+	private FolderController folderController;
 	
 	@Inject
 	private SessionController sessionController;
-
 
 	public void deleteMaterial() throws IOException {
 		// TODO: Security 
@@ -66,6 +69,30 @@ public class ForgeMaterialActionBackingBean {
 			}
 		}
 	}
+
+	@LoggedIn
+	public void moveMaterial() throws IOException {
+    // TODO: Security 
+    
+    Material material = materialController.findMaterialById(getMaterialId());
+    if (material != null) {
+      Folder targetFolder = moveTargetFolderId == null ? null : folderController.findFolderById(moveTargetFolderId);
+      materialController.moveMaterial(material, targetFolder, sessionController.getLoggedUser());
+      
+      if (targetFolder != null) {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+          .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+          .append("/forge/folders/")
+          .append(targetFolder.getPath())
+          .toString());
+      } else {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+          .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+          .append("/forge/")
+          .toString());
+      }
+    }
+  }
 
 	@LoggedIn
 	public void printFile() throws DocumentException, IOException, ParserConfigurationException, SAXException {
@@ -111,5 +138,14 @@ public class ForgeMaterialActionBackingBean {
 		this.materialId = materialId;
 	}
 	
+	public Long getMoveTargetFolderId() {
+    return moveTargetFolderId;
+  }
+	
+	public void setMoveTargetFolderId(Long moveTargetFolderId) {
+    this.moveTargetFolderId = moveTargetFolderId;
+  }
+	
 	private Long materialId;
+	private Long moveTargetFolderId;
 }

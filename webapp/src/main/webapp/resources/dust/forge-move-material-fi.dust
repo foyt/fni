@@ -1,0 +1,8 @@
+<div title="Siirrä" data-move-button="Siirrä" data-cancel-button="Peruuta">
+  <div class="forge-move-material-dialog">
+    <p>Valitse kansio, johon haluat materiaalin siirtää</p>
+    <div class="forge-move-material-list">
+      {>"forge-move-material-list"/}
+    </div>
+  </div>
+</div>

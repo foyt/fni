@@ -1,0 +1,8 @@
+<div title="Move" data-move-button="Move" data-cancel-button="Cancel">
+  <div class="forge-move-material-dialog">
+    <p>Choose a folder you wish to move the material</p>
+    <div class="forge-move-material-list">
+      {>"forge-move-material-list"/}
+    </div>
+  </div>
+</div>

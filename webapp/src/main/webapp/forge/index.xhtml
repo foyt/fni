@@ -16,6 +16,7 @@
     <!-- jQuery UI -->
     
     <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <h:outputScript name="scripts/dust-helpers/dust-helpers-1.1.1.js"/>
     
     <!-- View Scripts -->
     
@@ -174,7 +175,9 @@
     <h:panelGroup layout="block" id="forge-action-form-container" style="display: none">
       <h:form>
         <h:inputHidden id="material-id" value="#{forgeMaterialActionBackingBean.materialId}" />
+        <h:inputHidden id="move-target-folder-id" value="#{forgeMaterialActionBackingBean.moveTargetFolderId}" />
         <h:commandButton id="delete" action="#{forgeMaterialActionBackingBean.deleteMaterial}"/>
+        <h:commandButton id="move" action="#{forgeMaterialActionBackingBean.moveMaterial}"/>
         <h:commandButton id="print-file" action="#{forgeMaterialActionBackingBean.printFile}"/>
       </h:form>
     </h:panelGroup>

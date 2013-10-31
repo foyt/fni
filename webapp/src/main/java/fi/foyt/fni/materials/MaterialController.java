@@ -435,6 +435,9 @@ public class MaterialController {
     } while (true);
   }
 
+  public void moveMaterial(Material material, Folder parentFolder, User modifyingUser) {
+    materialDAO.updateParentFolder(material, parentFolder, modifyingUser);
+  }
   
   public void deleteMaterial(Material material, User deletingUser) {
     

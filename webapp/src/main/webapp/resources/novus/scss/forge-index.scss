@@ -335,3 +335,105 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   font-weight: bold;
   padding-left: 8px;  
 }
+
+/* Move dialog */
+
+.forge-move-material-dialog p, .gamelibrary-manage-file-upload-dialog p {
+  font-style: italic;
+  font-size: 14px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.forge-move-material-list {
+  overflow: auto;
+  overflow-y: scroll;
+  height: 450px;
+}
+
+.forge-move-material-list-item {
+  clear: both;
+  margin-bottom: 8px;
+  padding: 8px;
+  cursor: pointer;
+  height: 48px;
+}
+.forge-move-material-list-item:hover {
+  background-color: $selected-background-color;
+}
+
+.forge-move-material-list-item.forge-move-material-list-item-disabled {
+  background-color: #ddd;
+  cursor: default;
+  opacity: 0.75;
+}
+
+.forge-move-material-list-item-icon-parent {
+  width: 48px;
+  height: 48px;
+  display: block;
+  float: left;
+  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/folder-go-up.png"]}'));
+}
+
+.forge-move-material-list-item-icon-folder {
+  width: 48px;
+  height: 48px;
+  display: block;
+  float: left;
+  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-folder.png"]}'));
+}
+
+.forge-move-material-list-item-info {
+  padding-left: 8px;
+  margin-left: 48px;
+}
+
+.forge-move-material-list-item-title,
+.forge-move-material-list-modified,
+.forge-move-material-list-creator {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 12px;
+  display: block;
+  background-image: none;
+  display: block;
+}
+
+.forge-move-material-list-item-title {
+  font-weight: bold;
+}
+
+.forge-move-material-list-modified {
+  font-size: 10px;
+}
+
+.forge-move-material-parents {
+  border: 1px inset #aaa;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+
+.forge-move-material-parent {
+  display: inline-block;
+  margin-right: 8px;
+  color: $default-color;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-family: $default-font;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.forge-move-material-parent:after {
+  padding-left: 8px;
+  content: '>>';
+}
+
+.forge-move-material-parent:last-child {
+  color: $title-color;
+}
+
+.forge-move-material-parent:last-child:after {
+  content: '';
+}

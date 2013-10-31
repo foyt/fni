@@ -1,0 +1,9 @@
+<div class="forge-move-material-parents">
+  {#parents}
+    <div data-parent-id="{id}" class="forge-move-material-parent">{title}</div>
+  {/parents}
+</div>
+
+{#folders}
+  {>"forge-move-material-list-item"/}
+{/folders}
