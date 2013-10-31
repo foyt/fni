@@ -331,6 +331,10 @@ public class MaterialController {
     return null;
   }
 
+  public Material updateMaterialPublicity(Material material, MaterialPublicity publicity, User modifier) {
+    return materialDAO.updatePublicity(material, publicity, modifier);
+  }
+
   public StarredMaterial starMaterial(Material material, User user) {
     StarredMaterial starredMaterial = starredMaterialDAO.findByMaterialAndUser(material, user);
     Date now = new Date();
