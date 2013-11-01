@@ -21,8 +21,11 @@ import fi.foyt.fni.materials.VectorImageController;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
+import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.security.Secure;
+import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.faces.FacesUtils;
@@ -130,9 +133,10 @@ public class ForgeVectorImagesBackingBean {
 		this.materialModified = materialModified;
 	}
 	
+	@LoggedIn
+	@Secure (Permission.MATERIAL_MODIFY)
+	@SecurityContext (context = "#{forgeVectorImagesBackingBean.materialId}")
 	public void save() throws IOException {
-		// TODO: Security
-		
 		VectorImage vectorImage = vectorImageController.findVectorImageById(materialId);
 		if (getMaterialModified().equals(vectorImage.getModified().getTime())) {
 			vectorImageController.updateVectorImageData(vectorImage, getVectorImageContent(), sessionController.getLoggedUser());
