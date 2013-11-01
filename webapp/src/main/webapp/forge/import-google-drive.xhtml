@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['forge.googleDriveImport.pageTitle']}</ui:define>
+  <ui:define name="view-stylesheets">
+    <!-- View Styles -->
+
+    <h:outputStylesheet library="novus" name="css/fonts.css" />
+    <h:outputStylesheet library="novus" name="css/menu.css" />
+    <h:outputStylesheet library="novus" name="css/forge-import-google-drive.css" />
+  </ui:define>
+
+  <ui:define name="view-scripts">
+    <!-- View scripts -->
+
+    <h:outputScript name="scripts/gui/forge-import-google-drive.js" />
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+
+    <!-- Header -->
+
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      <!-- Navigation -->
+
+      <ui:include src="/facelets/forgenavigation.xhtml">
+      </ui:include>
+
+      <!-- Description -->
+
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{locales['forge.googleDriveImport.descriptionTitle']}</p>
+        <p class="view-header-description-text">#{locales['forge.googleDriveImport.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="forge-import-google-drive-panel">
+        
+        <h2>#{locales['forge.googleDriveImport.googleDriveTitle']}</h2>
+
+        <h:form>
+          <h:panelGroup layout="block" styleClass="forge-import-google-drive">
+            <h:panelGroup layout="block" styleClass="forge-import-google-drive-field" rendered="#{!forgeImportGoogleDriveBackingBean.root}">
+              <h:panelGroup layout="block" styleClass="forge-import-google-drive-check-container">
+                <input type="checkbox" disabled="disabled"/>
+              </h:panelGroup>
+              <h:panelGroup layout="block" styleClass="forge-import-google-drive-icon forge-import-google-drive-icon-folder"></h:panelGroup>
+              <h:outputLink styleClass="forge-import-google-drive-folder-name" value="#{request.contextPath}/forge/import-google-drive">#{locales['forge.googleDriveImport.rootFolder']}</h:outputLink>
+            </h:panelGroup>
+          
+            <ui:repeat var="file" value="#{forgeImportGoogleDriveBackingBean.files}">
+              <h:panelGroup layout="block" styleClass="forge-import-google-drive-field">
+                <h:panelGroup layout="block" styleClass="forge-import-google-drive-check-container">
+                  <ui:fragment rendered="#{file.mimeType ne 'application/vnd.google-apps.folder'}">
+                    <input type="checkbox" value="#{file.id}"/>
+                  </ui:fragment>
+                  <ui:fragment rendered="#{file.mimeType eq 'application/vnd.google-apps.folder'}">
+                    <input type="checkbox" disabled="disabled"/>
+                  </ui:fragment>
+                </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="forge-import-google-drive-icon forge-import-google-drive-icon-#{forgeImportGoogleDriveBackingBean.getFileIcon(file)}"></h:panelGroup>
+                <h:panelGroup styleClass="forge-import-google-drive-file-name" rendered="#{file.mimeType ne 'application/vnd.google-apps.folder'}">#{file.title}</h:panelGroup>
+                <h:outputLink styleClass="forge-import-google-drive-folder-name" value="#{request.contextPath}/forge/import-google-drive/#{file.id}" rendered="#{file.mimeType eq 'application/vnd.google-apps.folder'}">#{file.title}</h:outputLink>
+              </h:panelGroup>
+            </ui:repeat>
+          </h:panelGroup>
+          
+          <button disabled="disabled" class="forge-import-google-drive-button">#{locales['forge.googleDriveImport.importButton']}</button>
+          <h:commandButton style="display: none" id="import-button" action="#{forgeImportGoogleDriveBackingBean.importFiles}" />
+          <h:inputHidden id="import-entry-ids" value="#{forgeImportGoogleDriveBackingBean.importEntryIds}" converter="fi.foyt.fni.jsf.StringListConverter"/>
+        </h:form>
+        
+      </h:panelGroup>
+    </h:panelGroup>
+
+  </ui:define>
+
+</ui:composition>
