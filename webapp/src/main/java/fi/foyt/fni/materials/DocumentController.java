@@ -19,6 +19,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Element;
@@ -98,7 +99,8 @@ public class DocumentController {
   
   /* Document */
 
-	public Document createDocument(Folder parentFolder, String urlName, String title, User creator) {
+	public Document createDocument(Folder parentFolder, String title, User creator) {
+	  String urlName = materialController.getUniqueMaterialUrlName(creator, parentFolder, null, DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())));    
 		return createDocument(parentFolder, urlName, title, "", null, creator);
 	}
 

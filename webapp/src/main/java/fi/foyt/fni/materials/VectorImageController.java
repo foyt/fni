@@ -6,6 +6,7 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 
 import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
@@ -39,7 +40,8 @@ public class VectorImageController {
   
   /* VectorImage */
   
-  public VectorImage createVectorImage(Language language, Folder parentFolder, String urlName, String title, String data, User creator) {
+  public VectorImage createVectorImage(Language language, Folder parentFolder, String title, String data, User creator) {
+    String urlName = materialController.getUniqueMaterialUrlName(creator, parentFolder, null, DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())));    
     return vectorImageDAO.create(creator, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
   }
   

@@ -191,8 +191,7 @@ public class ForgeIndexBackingBean {
 		User loggedUser = sessionController.getLoggedUser();
 		Folder parentFolder = folderId != null ? folderController.findFolderById(folderId) : null;
 		String title = FacesUtils.getLocalizedValue("forge.index.untitledDocument");	
-		String urlName = materialController.getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
-		Document document = documentController.createDocument(parentFolder, urlName, title, loggedUser);
+		Document document = documentController.createDocument(parentFolder, title, loggedUser);
 				
 		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
 	    .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
@@ -205,8 +204,7 @@ public class ForgeIndexBackingBean {
 		User loggedUser = sessionController.getLoggedUser();
 		Folder parentFolder = folderId != null ? folderController.findFolderById(folderId) : null;
 		String title = FacesUtils.getLocalizedValue("forge.index.untitledVectorImage");	
-		String urlName = materialController.getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
-		VectorImage vectorImage = vectorImageController.createVectorImage(null, parentFolder, urlName, title, null, loggedUser);
+		VectorImage vectorImage = vectorImageController.createVectorImage(null, parentFolder, title, null, loggedUser);
 				
 		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
 	    .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
