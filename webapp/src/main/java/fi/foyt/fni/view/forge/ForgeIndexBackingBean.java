@@ -35,6 +35,7 @@ import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.ubuntuone.UbuntuOneController;
@@ -97,8 +98,6 @@ public class ForgeIndexBackingBean {
 	@URLAction
 	@LoggedIn
 	public void load() throws FileNotFoundException {
-		// TODO: Security
-		
 		materialsOpen = true;
 		lastViewedOpen = true;
 		starredOpen = true;
@@ -122,6 +121,10 @@ public class ForgeIndexBackingBean {
 			
 			folderId = material.getId();
 			Folder folder = (Folder) material;
+			
+	    if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), folder)) {
+	      throw new ForbiddenException();
+	    }
 			
 			materials = materialController.listMaterialsByFolder(sessionController.getLoggedUser(), folder);
 			
