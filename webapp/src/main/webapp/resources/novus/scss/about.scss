@@ -1,0 +1,47 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+/* General */
+
+h2 {
+  @include header-2;
+  color: $title-color;
+  padding-bottom: 10px;
+}
+
+h3 {
+  @include header-3;
+  color: $title-color;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.about-panel {
+  background-color: $panel-background-color;
+  padding: 20px;
+}
+
+.history-image {
+  float: left;
+  padding-top: 4px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+p {
+  display: block;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 14px;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+ul li {
+  list-style: circle;
+}

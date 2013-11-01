@@ -2,9 +2,9 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
 
-  <ui:define name="page-title">#{locales['index.title']}</ui:define>
+  <ui:define name="page-title">#{locales['about.pageTitle']}</ui:define>
   <ui:define name="view-stylesheets">
-    <h:outputStylesheet library="novus" name="css/index.css"/>
+    <h:outputStylesheet library="novus" name="css/about.css"/>
   </ui:define>
 
   <ui:define name="grid-content">
@@ -13,13 +13,109 @@
 
     <ui:include src="/facelets/menu.xhtml" />
     
-    <ul>
-      <li>TODO: About Forge &amp; Illusion</li>
-      <li>TODO: TOS</li>
-      <li>TODO: Cookie usage</li>
-      <li>TODO: Thanks</li>
-    </ul>
+    <!-- Banner -->
     
+    <h:panelGroup layout="block" styleClass="grid_16 tight hide_on_mobile">
+      <h:graphicImage library="novus" name="gfx/layout/banner.jpg" />
+    </h:panelGroup>
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="about-panel">
+        <h2>#{locales['about.title']}</h2>
+      
+        <p>Forge &amp; Illusion on roolipelaamisen ymp&#228;rille rakentuva avoin ymp&#228;rist&#246;.</p>
+
+        <h3>Visio</h3>
+        
+        <p>Forge &amp; Illusion on kohtaamispaikka eri puolilla Suomea toimiville roolipelaajille ja peliporukoille. Kunnianhimoinen visiomme on avoimella l&#228;hdekoodilla toteutettu verkkopalvelu, joka tarjoaa yhteis&#246;n niin roolipeliveteraaneille kuin harrastuksen pariin vastik&#228;&#228;n eksyneillekin.</p>
+        <p>Roolipeliyhteis&#246; halutaan laajentaa my&#246;s Suomen rajojen ulkopuolelle, mink&#228; vuoksi Forge &amp; Illusion on olemassa my&#246;s englanninkielisen&#228;. Palvelu on lokalisoitavissa muillekin kielille ja toivomme k&#228;ytt&#228;jien eri maissa tarttuvan rohkeasti &#160;h&#228;rk&#228;&#228; sarvista!</p>
+        <p>Palvelua on kehitetty yhteisty&#246;ss&#228; Otavan Opiston kanssa. Opistolla roolipelej&#228; on k&#228;ytetty muun opetuksen tukena jo useamman vuoden ajan, ja suuri osa pelikirjastossa alussa julkaistavista peleist&#228; on alunperin opiston tarpeisiin tehtyj&#228;.</p>
+        <p>Forge &amp; Illusion on julkaistaessa edelleen keskener&#228;inen. Palvelun nimess&#228; viitataan Illusion-osaan, jonka ensimm&#228;inen versio tullaan julkaisemaan vuoden 2014 aikana. Alla esitell&#228;&#228;n lyhyesti palvelu nykymuodossaan.</p>
+        
+        <h3>Tiedotus</h3>
+        
+        <p>Forge &amp; Illusion -etusivulle on integroitu roolipelaamiseen keskittyv&#228; Pelilauta-niminen verkkolehti. Lehdest&#228; voi lukea ansiokkaasti kirjoitettuja roolipelaamista k&#228;sittelevi&#228; juttuja tai tarjota omaa tarinaasi toimitukseen.</p>
+
+        <h3>Keskustelu</h3>
+        
+        <p>Forge &amp; Illusionissa on foorumi, jossa k&#228;ytt&#228;j&#228;t voivat vapaasti keskustella roolipelaamisesta. Foorumi tukee my&#246;s opetusta. Alkuvaiheessa suuri osa pelikirjastossa julkaistavista peleist&#228; on suunnattu etup&#228;&#228;ss&#228; opetusk&#228;ytt&#246;&#246;n. Toivomme, ett&#228; pelej&#228; opetuksen tukena k&#228;ytt&#228;v&#228;t opettajat (ja opiskelijat) jakavat kokemuksiaan muille k&#228;ytt&#228;jille. T&#228;m&#228;n vuoksi foorumi on sulautettu pelikirjastoon (kts. alla).</p>
+
+        <h3>Jakelu&#160;&#160; &#160;</h3>
+
+        <p>Forge &amp; Illusion pit&#228;&#228; sis&#228;ll&#228;&#228;n pelikirjaston, jossa kuka tahansa voi julkaista roolipelej&#228;. Alkuvaiheessa julkaisu tapahtuu palveluntarjoajan v&#228;lityksell&#228;. Kirjastossa ilmoitetaan pelin lisenssi, jonka pelintekij&#228; itse m&#228;&#228;ritt&#228;&#228;.</p>
+        <p>Julkaistavien pelien s&#228;hk&#246;iset PDF -versiot ovat ilmaisia. &#160;K&#228;ytt&#228;j&#228; voi &#160;niin halutessaan tilata painetun version lisenssin omistajan m&#228;&#228;ritt&#228;m&#228;&#228;n hintaan.</p>
+        
+        <h3>Pelaaminen</h3>
+        
+        <p>Illusion on pelaajille ja pelinjohtajille suunnattu ty&#246;kalupakki, jonka ensimm&#228;inen versio julkaistaan vuoden 2014 aikana. Ominaisuuksiksi suunnitellaan muun muassa seuraavaa:</p>
+        <ul>
+          <li>Nopean luonnostelun mahdollistava karttaty&#246;kalu</li>
+          <li>Interaktiiviset hahmolomakkeet</li>
+          <li>Noppasimulaattori</li>
+          <li>Chat-toiminto</li>
+          <li>Sekalaisia ty&#246;kaluja laskutoimituksista, taulukoista, ynn&#228; muusta selvi&#228;miseen.</li>
+          <li>Joukkotaistelusimulaattori</li>
+          <li>Olentogeneraattori</li>
+        </ul>
+        
+        <p>Ehdotuksia lis&#228;osiksi otetaan vastaan.</p>
+        
+        <h3>Historia</h3>
+        
+        <p><h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-1.jpg" />Forge &amp; Illusionin tarina alkoi vuonna 2002 kahden kaveruksen, Antti Lep&#228;n &#160;ja Leevi Heinosen, suunnitelmasta tehd&#228; ty&#246;kalu hahmolomakkeiden luomista varten. T&#228;t&#228; ty&#246;kalua ei kuitenkaan, suunnitelmista huolimatta, &#160;alettu toteuttaa. &#160;Sen sijaan p&#228;&#228;dyttiin ty&#246;st&#228;m&#228;&#228;n RPG_GUI -nimist&#228; sovellusta.</p>
+        
+        <p>Sovelluksen idea oli laajentunut: yksinkertaisesta hahmolomakegeneraattorista oli nyt tuleva yleisp&#228;tev&#228;, normaaleja pelitilanteita helpottava ty&#246;kalusarja. Vuonna 2003 &#160;kasassa oli jo yksinkertainen ty&#246;p&#246;yt&#228;sovellus (kts. kuva). &#160;Huolimatta suunnitelmista tehd&#228; varsin monipuolinen ty&#246;kalupaketti, jolla luonnistuisi niin kahvinkeitto kuin marjapuuron tekokin, j&#228;i alkuvaiheista k&#228;teen l&#228;hinn&#228; huterasti toiminut olentojen luomish&#228;rveli vailla projektin alkuper&#228;isidean mukaista hahmolomakkeiden luomismahdollisuutta.T&#228;m&#228;n pitemm&#228;lle projekti ei koskaan edennyt. Se sai v&#228;isty&#228; uudenkarhean &#160;RgGUI:n eli RPG_GUI:n verkkoversion tielt&#228;.</p>
+        
+        <p>N&#228;in sai, kenenk&#228;&#228;n sit&#228; viel&#228; k&#228;sitt&#228;m&#228;tt&#228;, alkunsa F&amp;I:n Illusion-puoli.</p>
+        
+        <p><h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-2.jpg" />Vuoden 2003 lopulla alettiin ty&#246;st&#228;&#228; RPG_GUI:n seuraavaa versiota ty&#246;nimell&#228; RgGUI. RgGUI:n oli m&#228;&#228;r&#228; olla valmistumattoman edelt&#228;j&#228;ns&#228; verkossa uudelleensyntynyt versio.</p>
+        
+        <p>Perusidea pysyi samana. Tarkoitus oli edelleen luoda helppok&#228;ytt&#246;inen ja yleisp&#228;tev&#228; ty&#246;kalu pelaajien ja pelinjohtajien tarpeisiin. Vaikka verkko astuikin kuvaan, ei johtoajatus siit&#228;, ett&#228; sovellus on ainoastaan roolipelaamisen apuv&#228;line - ei verkkoroolipeli - ollut muuttunut miksik&#228;&#228;n.</p>
+        
+        <p>Versio toi mukanaan my&#246;s useita uusia ominaisuuksia ja ideoita, kuten olentomallit ja joukkotaistelut sek&#228; pelaajien p&#228;iv&#228;kirjat. N&#228;it&#228; ja monia muita &#160;tuolloin p&#228;&#228;t&#228;&#228;n nostaneita ominaisuuksia suunnitellaan hy&#246;dynnett&#228;v&#228;n Illusionissa.</p>
+        
+        <p>Hahmolomakety&#246;kalu kompastui ajanpuutteeseen.</p>
+        
+        <p><h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-3.jpg" />Vuonna 2004 tekij&#228;porukka totesi RgGUI:n &#160;ehdottomasti olevan &#160;jalostamisen arvoinen projekti.</p>
+        
+        <p>Tilkkut&#228;kkim&#228;isyys oli kuitenkin tehnyt koodista heikkolaatuista ja sen t&#228;hden vaikeaa jatkokehitt&#228;&#228; saati yll&#228;pit&#228;&#228;. Tekij&#228;t p&#228;&#228;ttiv&#228;tkin aloittaa sovelluksen kirjoittamisen puhtaalta p&#246;yd&#228;lt&#228;.</p>
+        
+        <p>Tulosta syntyi. &#160;Sovellukseen lis&#228;ttiin mit&#228; mielikuvituksellisimpia teknisi&#228; innovaatiota, joiden hy&#246;dyllisyys j&#228;i toteuttajillekin osin h&#228;m&#228;r&#228;ksi . Yht&#228; kaikki, pakista puuttui uutuuttaan kiilt&#228;v&#228; hahmolomakety&#246;kalu.</p>
+        
+        <p><h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-4.jpg" />Vuoden 2005 syksyll&#228; ryhm&#228; sai uuden idean pelintekij&#246;it&#228; auttavasta ty&#246;kalusta, jonka avulla olisi mahdollista kirjoittaa pelej&#228; yhteisty&#246;n&#228; ja kaiken kukkuraksi jakaa aikaansaannokset sielunsukulaisten kanssa. Alkuper&#228;isetkin ideat pidettiin toki mieless&#228;. Uuden yhteiskirjoitusty&#246;kalun nimeksi annettiin Forge , kun taas &#160;pelinjohtajan ty&#246;kalusarja kastettiin Illusioniksi.</p>
+        
+        <p>T&#228;ss&#228; vaiheessa joukkoon liittyi &#160;koko yhteis&#246;n iloksi ja riemuksi ensimm&#228;inen graafisesti lahjakas henkil&#246;, muuan Jari Lankinen. Samalla sai alkunsa Forge &amp; Illusion 0.5.</p>
+        
+        <p><h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-5.jpg" />Versio 0,5 ei kuitenkaan koskaan p&#228;&#228;tynyt tuotantoon saakka, sill&#228; ulkoasua pidettiin liian synkk&#228;n&#228;. Vasta versionumeroa 1.0 kantanut tuotos oli kyllin hyv&#228; jaettavaksi ensimm&#228;ist&#228; kertaa avoimena l&#228;hdekoodina kaikelle kansalle.</p>
+        
+        <p>Niin Illusion kuin hahmolomakety&#246;kalukin j&#228;iv&#228;t j&#228;lleen kerran kyydist&#228;.<br/><br/><br/><br/></p>
+        
+        <p><h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-6.png" />Vuonna 2010 &#160;tehtiin ulkoasup&#228;ivitys ja samalla sivuston rakennetta viilattiin nykyaikaisemmaksi. Ty&#246;kalut pysyiv&#228;t kuitenkin suurimmaksi osaksi samoina.<br/><br/></p>
+        
+        <p>P&#228;ivityksen j&#228;lkeen alettiin puhua versiosta 2.0 Hahmolomakety&#246;kalusta tehtiin ensimm&#228;inen toimiva prototyyppi, mutta tuotantovaiheeseen se ei viel&#228;k&#228;&#228;n edennyt.</p>
+        
+        <p><h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-7.png" />Vuonna 2013 sivustoon tehtiin seuraava suuri uudistus. Sen &#160;yhteydess&#228; &#160;palvelun ulkoasu uusittiin kauttaaltaan ja useita v&#228;hemm&#228;n k&#228;ytettyj&#228; toimintoja karsittiin pois.</p>
+        
+        <p>Merkitt&#228;v&#228;n&#228; uutena toimintona palveluun ilmaantui pelikirjasto, jossa k&#228;ytt&#228;j&#228;t voivat julkaista tekemi&#228;&#228;n pelej&#228;. Kirjastosta k&#228;ytt&#228;j&#228;t voivat my&#246;s &#160;vapaasti ladata muiden &#160;tuotoksia. P&#228;ivityksen yhteydess&#228; etusivuun sulautettiin Pelilauta-niminen roolipelaamiseen keskittyv&#228; verkkolehti.</p>
+        
+        <p>Illusion-osan sek&#228; itse&#228;&#228;n odottaa antaneen hahmolomakety&#246;kalun on m&#228;&#228;r&#228; valmistua vuonna 2014. Tekij&#228;ryhm&#228; odottaa t&#228;t&#228; kuin kuuta nousevaa.</p>
+        
+        <h3>Ev&#228;steiden k&#228;ytt&#246;</h3>
+        
+        <p>T&#228;m&#228; sivusto k&#228;ytt&#228;&#228; keksej&#228; eli ev&#228;steit&#228; (cookies). Ev&#228;steet ovat pieni&#228; tekstitiedostoja, joita sivusto tallentaa automaattisesti tietokoneellesi.</p>
+        
+        <p>T&#228;m&#228; sivusto k&#228;ytt&#228;&#228; ev&#228;steit&#228; kahteen eri tarkoitukseen:</p>
+        
+        <ul>
+          <li>sis&#228;&#228;nkirjautumistietojen s&#228;ilytt&#228;miseen</li>
+          <li>sivuston k&#228;yt&#246;n seurantaan (Piwik)</li>
+        </ul>
+        
+        <p>Voit halutessasi kielt&#228;&#228; ev&#228;steiden k&#228;yt&#246;n. Siin&#228; tapauksessa sivusto ei kuitenkaan toimi tarkoitetulla tavalla.</p>
+        
+        <p>Sivusto pyyt&#228;&#228; ensimm&#228;isell&#228; sis&#228;&#228;nkirjautumiskerralla lupaa seurantaev&#228;steiden k&#228;ytt&#246;&#246;n. Mik&#228;li lupaa ei anneta, palvelun k&#228;ytt&#246;&#228; ei seurata.</p>
+      </h:panelGroup>
+    </h:panelGroup>
   </ui:define>
 
 </ui:composition>
