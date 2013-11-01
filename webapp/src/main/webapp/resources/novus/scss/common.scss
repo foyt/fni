@@ -8,11 +8,13 @@
 @media screen and (min-width: $grid-width-desktop) {
   html {
     background: none;
+    min-height: 100%;
   }
   
   body {
     background-color: #8f89b4;
     @include background-image(url('#' + '{resource["novus:gfx/layout/background.svg"]}'));
+    min-height: 100%;
   }
 }
 
