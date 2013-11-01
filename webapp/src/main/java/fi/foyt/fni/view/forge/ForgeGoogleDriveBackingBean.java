@@ -16,9 +16,11 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.materials.GoogleDriveMaterialController;
 import fi.foyt.fni.materials.MaterialController;
+import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.GoogleDocument;
 import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
@@ -47,12 +49,13 @@ public class ForgeGoogleDriveBackingBean {
 	
 	@Inject
 	private SessionController sessionController;
+
+  @Inject
+  private MaterialPermissionController materialPermissionController;
 	
 	@URLAction
 	@LoggedIn
 	public void load() throws IOException, GeneralSecurityException {
-		// TODO: Security
-		
 		if ((getOwnerId() == null)||(getUrlPath() == null)) {
 			throw new FileNotFoundException();
 		}
@@ -63,9 +66,13 @@ public class ForgeGoogleDriveBackingBean {
 		if (!(material instanceof GoogleDocument)) {
 			throw new FileNotFoundException();
 		}
-		
+
+		if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
+      throw new ForbiddenException();
+    }
+    
 		GoogleDocument googleDocument = (GoogleDocument) material;
-		
+    
 		materialId = googleDocument.getId();
 		materialTitle = googleDocument.getTitle();
 		materialPath = "/forge/gdrive/" + materialId; 

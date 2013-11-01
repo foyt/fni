@@ -16,10 +16,12 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.materials.MaterialController;
+import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.VectorImageController;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
+import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
@@ -47,14 +49,15 @@ public class ForgeVectorImagesBackingBean {
 	@Inject
 	private VectorImageController vectorImageController;
 
-	@Inject
-	private SessionController sessionController;
+  @Inject
+  private MaterialPermissionController materialPermissionController;
+
+  @Inject
+  private SessionController sessionController;
 	
 	@URLAction
 	@LoggedIn
 	public void load() throws FileNotFoundException {
-		// TODO: Security
-		
 		if ((getOwnerId() == null)||(getUrlPath() == null)) {
 			throw new FileNotFoundException();
 		}
@@ -65,7 +68,11 @@ public class ForgeVectorImagesBackingBean {
 		if (!(material instanceof VectorImage)) {
 			throw new FileNotFoundException();
 		}
-		
+
+    if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
+      throw new ForbiddenException();
+    }
+    
 		VectorImage vectorImage = (VectorImage) material;
 		
 		materialId = vectorImage.getId();

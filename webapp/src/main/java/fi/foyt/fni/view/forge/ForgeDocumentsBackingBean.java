@@ -13,10 +13,13 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.materials.MaterialController;
+import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
 
 @SuppressWarnings("el-syntax")
@@ -36,13 +39,17 @@ public class ForgeDocumentsBackingBean {
 	private UserController userController;
 	
 	@Inject
+	private SessionController sessionController;
+	
+	@Inject
 	private MaterialController materialController;
+
+  @Inject
+	private MaterialPermissionController materialPermissionController;
 	
 	@URLAction
 	@LoggedIn
 	public void load() throws FileNotFoundException {
-		// TODO: Security
-		
 		if ((getOwnerId() == null)||(getUrlPath() == null)) {
 			throw new FileNotFoundException();
 		}
@@ -54,6 +61,10 @@ public class ForgeDocumentsBackingBean {
 			throw new FileNotFoundException();
 		}
 		
+		if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
+		  throw new ForbiddenException();
+		}
+
 		materialId = material.getId();
 		documentTitle = material.getTitle();
 		folders = ForgeViewUtils.getParentList(material);
