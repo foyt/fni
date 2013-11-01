@@ -584,6 +584,11 @@ public class MaterialController {
     String path = RequestUtils.stripTrailingSlash(completePath);
     String materialPath = RequestUtils.stripPrecedingSlash(path.substring(MATERIALS_PATH.length() + 1));
     
+    PermaLink permaLink = permaLinkDAO.findByPath(materialPath);
+    if (permaLink != null) {
+      return permaLink.getMaterial();
+    }
+    
     String[] pathElements = materialPath.split("/");
     if (pathElements.length >= 2) {
       Long userId = NumberUtils.createLong(pathElements[0]);
