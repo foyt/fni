@@ -2,7 +2,7 @@
 @import "compass";
 @import "styles";
 
-$table-border-color: rgba(255, 255, 255, 0);
+$topic-border-color: rgb(71, 176, 176);
 
 /* Panels*/
 
@@ -11,6 +11,14 @@ $table-border-color: rgba(255, 255, 255, 0);
 }
 
 /* Forums */
+
+.forum-view-forum {
+  margin-top: 50px;
+}
+
+.forum-view-forum:first-child {
+  margin-top: 0px;
+}
 
 .forum-view-forum-name {
   @include header-2;
@@ -49,16 +57,17 @@ $table-border-color: rgba(255, 255, 255, 0);
 
 .forum-view-forum-topic {
   display: table;
+  border-bottom: 1px solid $topic-border-color;
 }
 
 .forum-view-forum-topic:last-child {
-  border-bottom: 1px solid $table-border-color;
+  border-bottom: none;
 }
 
 .forum-view-forum-topic-name {
   font-size: 16px;
   font-family: $default-font;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   font-weight: bold;
 }
 
@@ -69,13 +78,7 @@ $table-border-color: rgba(255, 255, 255, 0);
 
 .forum-view-forum-topic-name-container, .forum-view-forum-topic-activity-container {
   padding: 15px;
-  border-top: 1px solid $table-border-color;
-  border-left: 1px solid $table-border-color;
   display: table-cell;
-}
-
-.forum-view-forum-topic-activity-container {
-  border-right: 1px solid $table-border-color;
 }
 
 .forum-view-forum-topic-name-container {
@@ -87,7 +90,7 @@ $table-border-color: rgba(255, 255, 255, 0);
 }
 
 .forum-view-forum-topic-label, .forum-view-forum-topic-created {
-  font-size: 12px;
+  font-size: 10px;
   font-family: $default-font;
   color: $default-color;
   text-transform: uppercase;
@@ -96,7 +99,7 @@ $table-border-color: rgba(255, 255, 255, 0);
 
 .forum-view-forum-topic-author {
   text-decoration: none;
-  font-size: 12px;
+  font-size: 10px;
   font-family: $default-font;
   color: #00f;
   text-transform: uppercase;

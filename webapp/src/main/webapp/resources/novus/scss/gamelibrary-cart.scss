@@ -68,6 +68,9 @@ $header-text-color: #fff;
   font-family: $default-font;
   font-size: 10px;
   text-transform: uppercase;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #aaa;
 }
 
 .gamelibrary-cart-item-count {
@@ -79,7 +82,7 @@ $header-text-color: #fff;
 }
 
 .gamelibrary-cart-item-name {
-  width: 120px;
+  width: 250px;
 }
 
 .gamelibrary-cart-item-price {

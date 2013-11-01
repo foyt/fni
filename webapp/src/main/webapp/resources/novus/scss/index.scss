@@ -121,8 +121,12 @@ h3 {
 .index-publication-description {
   font-family: $default-font;
   color: $default-color;
-  margin-top: 22px;
+  margin-top: 10px;
   font-weight: bold;
+}
+
+.index-publication:first-child .index-publication-description {
+  margin-right: 20px;
 }
 
 .index-gamelibrary-more-container, .index-forum-more-container {
@@ -163,7 +167,7 @@ h3 {
   font-family: $default-font;
   font-weight: bold;
   font-size: 16px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .index-forum-topic-subject a {
