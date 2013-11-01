@@ -47,17 +47,22 @@
       <h:panelGroup layout="block" styleClass="forge-vector-image-panel">
         <h:form>
           <h2>
-            <h:inputText value="#{forgeVectorImagesBackingBean.vectorImageTitle}" />
+            <h:inputText value="#{forgeVectorImagesBackingBean.vectorImageTitle}" rendered="#{!forgeVectorImagesBackingBean.readOnly}"/>
+            <h:outputFormat value="#{locales['forge.vectorImages.titleReadOnly']}" rendered="#{forgeVectorImagesBackingBean.readOnly}">
+              <f:param value="#{forgeVectorImagesBackingBean.vectorImageTitle}"/>
+            </h:outputFormat>
           </h2>
           
           <h:panelGroup layout="block" styleClass="forge-vector-image-container">
             <iframe src="#{request.contextPath}/uresources/svg-edit/svg-editor.html?lang=#{sessionBackingBean.locale.language}" data-content="#{forgeVectorImagesBackingBean.vectorImageContent}"></iframe>
-            <input type="submit" class="forge-vector-image-save" value="#{locales['forge.vectorImages.save']}"/>
+            <ui:fragment rendered="#{!forgeVectorImagesBackingBean.readOnly}">
+              <input type="submit" class="forge-vector-image-save" value="#{locales['forge.vectorImages.save']}"/>
+            </ui:fragment>
           </h:panelGroup>
           
           <h:inputHidden value="#{forgeVectorImagesBackingBean.materialModified}"/>
           <h:inputHidden id="image-content" value="#{forgeVectorImagesBackingBean.vectorImageContent}" />
-          <h:commandButton id="save" style="display: none" action="#{forgeVectorImagesBackingBean.save}" />
+          <h:commandButton id="save" style="display: none" action="#{forgeVectorImagesBackingBean.save}"/>
         </h:form>
       </h:panelGroup>
     </h:panelGroup>

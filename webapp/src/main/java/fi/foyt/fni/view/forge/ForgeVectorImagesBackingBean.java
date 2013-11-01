@@ -22,6 +22,7 @@ import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.users.Permission;
+import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
@@ -71,10 +72,14 @@ public class ForgeVectorImagesBackingBean {
 		if (!(material instanceof VectorImage)) {
 			throw new FileNotFoundException();
 		}
+		
+		User loggedUser = sessionController.getLoggedUser();
 
-    if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
+    if (!materialPermissionController.hasAccessPermission(loggedUser, material)) {
       throw new ForbiddenException();
     }
+    
+    readOnly = !materialPermissionController.hasModifyPermission(loggedUser, material);
     
 		VectorImage vectorImage = (VectorImage) material;
 		
@@ -133,6 +138,10 @@ public class ForgeVectorImagesBackingBean {
 		this.materialModified = materialModified;
 	}
 	
+	public Boolean getReadOnly() {
+    return readOnly;
+  }
+	
 	@LoggedIn
 	@Secure (Permission.MATERIAL_MODIFY)
 	@SecurityContext (context = "#{forgeVectorImagesBackingBean.materialId}")
@@ -158,5 +167,6 @@ public class ForgeVectorImagesBackingBean {
 	private Long materialModified;
 	private String vectorImageTitle;
 	private String vectorImageContent;
+	private Boolean readOnly;
 	private List<Folder> folders;
 }
