@@ -19,6 +19,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -36,6 +37,7 @@ import fi.foyt.fni.persistence.dao.materials.MaterialRevisionSettingDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialSettingDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialSettingKeyDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialTagDAO;
+import fi.foyt.fni.persistence.dao.materials.PermaLinkDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.common.Tag;
 import fi.foyt.fni.persistence.model.materials.Document;
@@ -50,6 +52,7 @@ import fi.foyt.fni.persistence.model.materials.MaterialSetting;
 import fi.foyt.fni.persistence.model.materials.MaterialSettingKey;
 import fi.foyt.fni.persistence.model.materials.MaterialTag;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
+import fi.foyt.fni.persistence.model.materials.PermaLink;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.html.HtmlUtils;
@@ -89,6 +92,9 @@ public class DocumentController {
 
   @Inject
   private MaterialRevisionSettingDAO materialRevisionSettingDAO;
+
+  @Inject
+  private PermaLinkDAO permaLinkDAO;
   
   /* Document */
 
@@ -258,6 +264,19 @@ public class DocumentController {
 	}
 
 	public Document updateDocumentTitle(Document document, String title, User modifier) {
+	  String oldUrlName = document.getUrlName();
+	  String newUrlName = materialController.getUniqueMaterialUrlName(document.getCreator(), document.getParentFolder(), document, title);
+	  
+	  if (!StringUtils.equals(oldUrlName, newUrlName)) {
+	    String oldPath = document.getPath();
+	    PermaLink permaLink = permaLinkDAO.findByPath(oldPath);
+	    if (permaLink == null) {
+	      permaLink = permaLinkDAO.create(document, oldPath);
+	    }
+
+	    materialDAO.updateUrlName(document, newUrlName, modifier);
+	  }
+	  
 		return (Document) materialDAO.updateTitle(document, title, modifier);
 	}
 
