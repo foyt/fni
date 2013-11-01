@@ -154,19 +154,19 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 }
 
 .forge-menu:hover .forge-menu-items a:before {
-  content: '-';
-  padding-right: 8px; 
 }
 
 .forge-menu:hover .forge-menu-items a {
-  @include header-4;
   color: $menu-button-color;
-  padding-left: $menu-button-padding + 6px;
+  padding-left: $menu-button-padding + 18px;
   padding-right: 8px;
   padding-top: 8px;
   padding-bottom: 8px;
-  width: $menu-button-width - ($menu-button-padding + 6px + 8px);
+  width: $menu-button-width - ($menu-button-padding + 18px + 8px);
   display: block;
+  font-family: $default-font;
+  font-size: 16px;
+  text-decoration: none;
 }
 
 .forge-menu:hover .forge-menu-items a:hover {
