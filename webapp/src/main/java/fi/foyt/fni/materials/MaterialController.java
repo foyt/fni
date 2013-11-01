@@ -427,8 +427,28 @@ public class MaterialController {
         urlMaterial = materialDAO.findByParentFolderAndUrlName(parentFolder, urlName);
       }
       
-      if (urlMaterial == null)
-        return urlName;
+      if (urlMaterial == null) {
+        if (material != null) {
+          String path = null;
+          
+          if (material.getParentFolder() != null)
+            path = material.getParentFolder().getPath() + '/' + urlName;
+          else {
+            path = material.getCreator().getId().toString() + '/' + urlName;
+          }
+          
+          PermaLink permaLink = permaLinkDAO.findByPath(path);
+          if (permaLink != null) {
+            if (permaLink.getMaterial().getId().equals(material.getId())) {
+              return urlName;
+            }
+          } else {
+            return urlName; 
+          }
+        } else {
+          return urlName; 
+        }
+      }
       
       if (material != null) {
         if (urlMaterial != null && urlMaterial.getId().equals(material.getId()))
