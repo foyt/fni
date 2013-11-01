@@ -11,6 +11,11 @@ h3 {
   color: $title-color;
 }
 
+h3 a {
+  text-decoration: none;
+  color: $title-color;
+}
+
 /* Banner */
 
 .index-banner img {

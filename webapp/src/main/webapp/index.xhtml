@@ -31,7 +31,11 @@
     <h:panelGroup layout="block" styleClass="grid_16 tight index-publications-forum">
       <h:panelGroup layout="block" styleClass="grid_12 tight index-publications">
         <h:panelGroup layout="block" styleClass="index-publications-panel">
-          <h3>#{locales['index.gameLibaryPublications']}</h3>
+          <h3>
+            <h:link outcome="/gamelibrary/index.jsf">
+              #{locales['index.gameLibaryPublications']}
+            </h:link>
+          </h3>
         
           <h:panelGroup layout="block" styleClass="index-publications">
             <ui:repeat var="publication" value="#{indexViewBackingBean.latestGameLibraryPublications}">
@@ -68,7 +72,11 @@
           
       <h:panelGroup layout="block" styleClass="grid_4 omega index-forum">
         <h:panelGroup layout="block" styleClass="index-forum-panel">
-          <h3>#{locales['index.forumTopics']}</h3>
+          <h3>
+            <h:link outcome="/forum/index.jsf">
+              #{locales['index.forumTopics']}
+            </h:link>
+          </h3>
           
           <h:panelGroup layout="block" styleClass="index-forum-topics">
             <ui:repeat var="forumTopic" value="#{indexViewBackingBean.latestForumTopics}">
