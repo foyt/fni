@@ -274,7 +274,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 .forge-material-actions {
   height: 0px;
   position: absolute;
-  z-index: 9999;
+  z-index: 9;
   background: $selected-background-color;
   left: 0px;
   margin-top: 56px;
