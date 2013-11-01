@@ -17,7 +17,9 @@ import org.xml.sax.SAXException;
 import com.itextpdf.text.DocumentException;
 
 import fi.foyt.fni.materials.DocumentController;
+import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Document;
+import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.data.TypedData;
@@ -37,11 +39,11 @@ public class ForgePdfServlet extends AbstractTransactionedServlet {
 	@Inject
 	private SessionController sessionController;
 
+  @Inject
+	private MaterialPermissionController materialPermissionController;
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO: Security
-		// TODO: Caching
-		
 		String pathInfo = request.getPathInfo();
 		String documentIdStr = StringUtils.removeStart(pathInfo, "/");
 		if (!StringUtils.isNumeric(documentIdStr)) {
@@ -55,6 +57,19 @@ public class ForgePdfServlet extends AbstractTransactionedServlet {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not Found");
 			return;
 		}
+    
+    User loggedUser = sessionController.getLoggedUser();
+    if (!materialPermissionController.isPublic(loggedUser, document)) {
+      if (loggedUser == null) {
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        return;
+      }
+      
+      if (!materialPermissionController.hasAccessPermission(loggedUser, document)) {
+        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        return;
+      }
+    }
 		
 		String contextPath = request.getContextPath();
 		String baseUrl = request.getRequestURL().toString();
