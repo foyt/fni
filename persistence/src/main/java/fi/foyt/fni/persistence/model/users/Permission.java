@@ -3,6 +3,10 @@ package fi.foyt.fni.persistence.model.users;
 public enum Permission {
 	
 	NONE,
+	
+	MATERIAL_ACCESS,
+	MATERIAL_MODIFY,
+	MATERIAL_DELETE,
 
 	PROFILE_UPDATE,
 	

@@ -9,6 +9,10 @@ public enum Role {
 	/* User */
 	
 	USER (Permission.PROFILE_UPDATE),
+	
+	/* Forge */
+	
+	MATERIAL_USER (Permission.MATERIAL_ACCESS, Permission.MATERIAL_MODIFY, Permission.MATERIAL_DELETE),
 
 	/* Forum */
 	
