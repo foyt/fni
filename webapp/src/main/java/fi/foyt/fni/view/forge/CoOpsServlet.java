@@ -27,6 +27,7 @@ import fi.foyt.fni.coops.model.File;
 import fi.foyt.fni.coops.model.Join;
 import fi.foyt.fni.coops.model.Patch;
 import fi.foyt.fni.materials.DocumentController;
+import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.common.Tag;
 import fi.foyt.fni.persistence.model.materials.Document;
@@ -63,10 +64,11 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 	@Inject
 	private TagController tagController;
 	
+	@Inject
+  private MaterialPermissionController materialPermissionController;
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO: Security
-		
 		synchronized (syncObject) {
   		String pathInfo = StringUtils.removeStart(request.getPathInfo(), "/");
   		String[] path = pathInfo.split("/");
@@ -86,6 +88,16 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
   		if (document == null) {
   			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not Found");
   			return;
+  		}
+  		
+  		if (!sessionController.isLoggedIn()) {
+  		  response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        return;
+  		}
+  		
+  		if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), document)) {
+  		  response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        return;
   		}
   		
   		if (path.length == 2 && "join".equals(path[1])) {
@@ -129,7 +141,7 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 
 	@Override
 	protected void doPatch(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String pathInfo = StringUtils.removeStart(request.getPathInfo(), "/");
+    String pathInfo = StringUtils.removeStart(request.getPathInfo(), "/");
 		String[] path = pathInfo.split("/");
 		if (path.length < 1) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
@@ -148,7 +160,17 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not Found");
 			return;
 		}
-		
+
+    if (!sessionController.isLoggedIn()) {
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+    
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), document)) {
+      response.sendError(HttpServletResponse.SC_FORBIDDEN);
+      return;
+    }
+    
 		Patch patch = null;
 		ServletInputStream inputStream = request.getInputStream();
 		
