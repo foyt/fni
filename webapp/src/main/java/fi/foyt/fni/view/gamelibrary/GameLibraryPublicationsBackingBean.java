@@ -14,6 +14,7 @@ import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
 import fi.foyt.fni.licences.CreativeCommonsLicense;
 import fi.foyt.fni.licences.CreativeCommonsUtils;
+import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationAuthor;
@@ -69,6 +70,14 @@ public class GameLibraryPublicationsBackingBean {
 		}
 		
 		return null;
+	}
+	
+	public Integer getPublicationNumberOfPages(Publication publication) {
+	  if (publication instanceof BookPublication) {
+	    return ((BookPublication) publication).getNumberOfPages();
+	  }
+	  
+	  return null;
 	}
 	
 	public void addPublicationToShoppingCart(Publication publication) {

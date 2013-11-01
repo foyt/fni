@@ -38,7 +38,7 @@
             
             <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail">
               <h:outputLabel value="#{locales['gamelibrary.publications.detailsNumberOfPages']}" />
-              <h:outputText value="#{publication.numberOfPages}" />
+              <h:outputText value="#{gameLibraryPublicationsBackingBean.getPublicationNumberOfPages(publication)}" />
             </h:panelGroup>
             
             <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail" rendered="#{gameLibraryPublicationsBackingBean.getAuthors(publication).size() > 0}">
