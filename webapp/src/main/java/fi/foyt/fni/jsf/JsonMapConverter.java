@@ -10,6 +10,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 @FacesConverter(value = "fi.foyt.fni.jsf.JsonMapConverter")
@@ -20,10 +21,14 @@ public class JsonMapConverter implements Converter {
     ObjectMapper objectMapper = new ObjectMapper();
 
     try {
-      return objectMapper.readValue(value, Map.class);
+      if (StringUtils.isNotBlank(value)) {
+        return objectMapper.readValue(value, Map.class);
+      }
     } catch (IOException e) {
       throw new ConverterException(e);
     }
+
+    return null;
   }
 
   @Override
