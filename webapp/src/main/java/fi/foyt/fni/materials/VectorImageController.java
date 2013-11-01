@@ -6,11 +6,15 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import org.apache.commons.lang.StringUtils;
+
 import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
+import fi.foyt.fni.persistence.dao.materials.PermaLinkDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
+import fi.foyt.fni.persistence.model.materials.PermaLink;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.users.User;
 
@@ -20,17 +24,23 @@ public class VectorImageController {
 
   @Inject
 	private Logger logger;
+  
+  @Inject
+  private MaterialController materialController;
 
   @Inject
 	private MaterialDAO materialDAO;
 	
   @Inject
   private VectorImageDAO vectorImageDAO;
+
+  @Inject
+  private PermaLinkDAO permaLinkDAO;
   
-  /* Document */
+  /* VectorImage */
   
   public VectorImage createVectorImage(Language language, Folder parentFolder, String urlName, String title, String data, User creator) {
-  	return vectorImageDAO.create(creator, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
+    return vectorImageDAO.create(creator, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
   }
   
 	public VectorImage findVectorImageById(Long documentId) {
@@ -42,7 +52,20 @@ public class VectorImageController {
 	}
 
 	public VectorImage updateVectorImageTitle(VectorImage vectorImage, String title, User modifier) {
-		return (VectorImage) materialDAO.updateTitle(vectorImage, title, modifier);
+	  String oldUrlName = vectorImage.getUrlName();
+    String newUrlName = materialController.getUniqueMaterialUrlName(vectorImage.getCreator(), vectorImage.getParentFolder(), vectorImage, title);
+    
+    if (!StringUtils.equals(oldUrlName, newUrlName)) {
+      String oldPath = vectorImage.getPath();
+      PermaLink permaLink = permaLinkDAO.findByPath(oldPath);
+      if (permaLink == null) {
+        permaLink = permaLinkDAO.create(vectorImage, oldPath);
+      }
+
+      materialDAO.updateUrlName(vectorImage, newUrlName, modifier);
+    }
+    
+    return (VectorImage) materialDAO.updateTitle(vectorImage, title, modifier);
 	}
 
 }
