@@ -27,8 +27,11 @@ import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.materials.MaterialRole;
+import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.security.Secure;
+import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.data.TypedData;
@@ -59,33 +62,67 @@ public class ForgeMaterialActionBackingBean {
 
 	@Inject
 	private MaterialUserController materialUserController;
-	
-	public void deleteMaterial() throws IOException {
-		// TODO: Security 
-		
-		Material material = materialController.findMaterialById(getMaterialId());
-		if (material != null) {
-			Folder parentFolder = material.getParentFolder();
-			materialController.deleteMaterial(material, sessionController.getLoggedUser());
-			
-			if (parentFolder != null) {
-				FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
-    		  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
-    		  .append("/forge/folders/")
-    		  .append(parentFolder.getPath())
-    		  .toString());
-			} else {
-				FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
-    		  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
-    		  .append("/forge/")
-    		  .toString());
-			}
-		}
-	}
+  
+  public Long getMaterialId() {
+    return materialId;
+  }
+  
+  public void setMaterialId(Long materialId) {
+    this.materialId = materialId;
+  }
+  
+  public Long getMoveTargetFolderId() {
+    return moveTargetFolderId;
+  }
+  
+  public void setMoveTargetFolderId(Long moveTargetFolderId) {
+    this.moveTargetFolderId = moveTargetFolderId;
+  }
+  
+  public String getMaterialSharePublicity() {
+    return materialSharePublicity;
+  }
+  
+  public void setMaterialSharePublicity(String materialSharePublicity) {
+    this.materialSharePublicity = materialSharePublicity;
+  }
+  
+  public Map<String, String> getMaterialShareUsers() {
+    return materialShareUsers;
+  }
+  
+  public void setMaterialShareUsers(Map<String, String> materialShareUsers) {
+    this.materialShareUsers = materialShareUsers;
+  }
 
-	@LoggedIn
-	public void moveMaterial() throws IOException {
-    // TODO: Security 
+  @LoggedIn
+  @Secure (Permission.MATERIAL_DELETE)
+  @SecurityContext(context = "#{forgeMaterialActionBackingBean.materialId}")
+  public void deleteMaterial() throws IOException {
+    Material material = materialController.findMaterialById(getMaterialId());
+    if (material != null) {
+      Folder parentFolder = material.getParentFolder();
+      materialController.deleteMaterial(material, sessionController.getLoggedUser());
+      
+      if (parentFolder != null) {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+          .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+          .append("/forge/folders/")
+          .append(parentFolder.getPath())
+          .toString());
+      } else {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+          .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+          .append("/forge/")
+          .toString());
+      }
+    }
+  }
+
+  @LoggedIn
+  @Secure (Permission.MATERIAL_MODIFY)
+  @SecurityContext(context = "#{forgeMaterialActionBackingBean.materialId}")
+  public void moveMaterial() throws IOException {
     
     Material material = materialController.findMaterialById(getMaterialId());
     if (material != null) {
@@ -108,8 +145,9 @@ public class ForgeMaterialActionBackingBean {
   }
 
 	@LoggedIn
+	@Secure (Permission.MATERIAL_ACCESS)
+	@SecurityContext(context = "#{forgeMaterialActionBackingBean.materialId}")
 	public void printFile() throws DocumentException, IOException, ParserConfigurationException, SAXException {
-		// TODO: Security
 		// TODO: Proper error handling 
 		
 		Document document = documentController.findDocumentById(getMaterialId());
@@ -143,40 +181,10 @@ public class ForgeMaterialActionBackingBean {
 		}
 	}
 	
-	public Long getMaterialId() {
-		return materialId;
-	}
-	
-	public void setMaterialId(Long materialId) {
-		this.materialId = materialId;
-	}
-	
-	public Long getMoveTargetFolderId() {
-    return moveTargetFolderId;
-  }
-	
-	public void setMoveTargetFolderId(Long moveTargetFolderId) {
-    this.moveTargetFolderId = moveTargetFolderId;
-  }
-	
-	public String getMaterialSharePublicity() {
-    return materialSharePublicity;
-  }
-	
-	public void setMaterialSharePublicity(String materialSharePublicity) {
-    this.materialSharePublicity = materialSharePublicity;
-  }
-	
-	public Map<String, String> getMaterialShareUsers() {
-    return materialShareUsers;
-  }
-	
-	public void setMaterialShareUsers(Map<String, String> materialShareUsers) {
-    this.materialShareUsers = materialShareUsers;
-  }
-	
 	@LoggedIn
-	public void materialShareSave() {
+	@Secure (Permission.MATERIAL_MODIFY)
+  @SecurityContext(context = "#{forgeMaterialActionBackingBean.materialId}")
+  public void materialShareSave() {
 	  User loggedUser = sessionController.getLoggedUser();
 	  
 	  Material material = materialController.findMaterialById(getMaterialId());
