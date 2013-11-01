@@ -20,7 +20,6 @@ import fi.foyt.fni.materials.VectorImageController;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
-import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
@@ -60,16 +59,9 @@ public class ForgeVectorImagesBackingBean {
 			throw new FileNotFoundException();
 		}
 		
-		User owner = userController.findUserById(getOwnerId());
-		if (owner == null) {
-			throw new FileNotFoundException();
-		}
-		
-		Material material = materialController.findByOwnerAndPath(owner, getUrlPath());
-		if (material == null) {
-			throw new FileNotFoundException();
-		}
-		
+    String completePath = "/materials/" + getOwnerId() + "/" + getUrlPath();
+    Material material = materialController.findMaterialByCompletePath(completePath);
+
 		if (!(material instanceof VectorImage)) {
 			throw new FileNotFoundException();
 		}
