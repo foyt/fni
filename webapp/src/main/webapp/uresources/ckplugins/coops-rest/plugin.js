@@ -283,11 +283,12 @@
               
           _doPostRequest: function (method, url, data, contentType, callback) {
             var xhr = this._createXMLHttpRequest();
+            var async = true;
             if (this._useMethodOverride && (method != 'POST')) {
-              xhr.open("POST", url, false);
+              xhr.open("POST", url, async);
               xhr.setRequestHeader("x-http-method-override", method);
             } else {
-              xhr.open(method, url, false);
+              xhr.open(method, url, async);
             }
             
             xhr.setRequestHeader("Content-type", contentType);
@@ -297,10 +298,20 @@
               xhr.setRequestHeader("Content-length", data ? data.length : 0);
               xhr.setRequestHeader("Connection", "close");
             }
-
+            
+            if (async == true) {
+              xhr.onreadystatechange = function() {
+                if (xhr.readyState==4) {
+                  callback(xhr.status, xhr.responseText);
+                }
+              };
+            }
+            
             xhr.send(data);
             
-            callback(xhr.status, xhr.responseText);
+            if (async == false) {
+              callback(xhr.status, xhr.responseText);
+            }
           },
           
           _createXMLHttpRequest: function() {
