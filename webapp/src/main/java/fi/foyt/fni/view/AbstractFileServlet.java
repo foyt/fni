@@ -15,6 +15,8 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import fi.foyt.fni.utils.servlet.RequestUtils;
+
 public abstract class AbstractFileServlet extends AbstractTransactionedServlet {
 
 	private static final long serialVersionUID = 2682138379342291553L;
@@ -33,19 +35,7 @@ public abstract class AbstractFileServlet extends AbstractTransactionedServlet {
 	}
 
 	protected boolean isModifiedSince(HttpServletRequest request, Long lastModified, String eTag) throws IOException {
-		// If 'If-None-Match' header contains * or matches the ETag send 304
-		String ifNoneMatch = request.getHeader("If-None-Match");
-		if ("*".equals(ifNoneMatch) || eTag.equals(ifNoneMatch)) {
-			return false;
-		}
-
-		// If 'If-Modified-Since' header is greater than LastModified send 304.
-		long ifModifiedSince = request.getDateHeader("If-Modified-Since");
-		if ((ifNoneMatch == null) && (ifModifiedSince != -1) && ((ifModifiedSince + 1000) > lastModified)) {
-			return false;
-		}
-
-		return true;
+		return RequestUtils.isModifiedSince(request, lastModified, eTag);
 	}
 
 	protected List<FileItem> getFileItems(HttpServletRequest request) throws FileUploadException {

@@ -1,5 +1,6 @@
 package fi.foyt.fni.utils.servlet;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Enumeration;
@@ -82,5 +83,21 @@ public class RequestUtils {
     String requestURL = request.getRequestURL().toString();
     String requestURI = request.getRequestURI();
     return requestURL.substring(0, requestURL.length() - requestURI.length());     
+  }
+  
+  public static boolean isModifiedSince(HttpServletRequest request, Long lastModified, String eTag) throws IOException {
+    // If 'If-None-Match' header contains * or matches the ETag send 304
+    String ifNoneMatch = request.getHeader("If-None-Match");
+    if ("*".equals(ifNoneMatch) || eTag.equals(ifNoneMatch)) {
+      return false;
+    }
+
+    // If 'If-Modified-Since' header is greater than LastModified send 304.
+    long ifModifiedSince = request.getDateHeader("If-Modified-Since");
+    if ((ifNoneMatch == null) && (ifModifiedSince != -1) && ((ifModifiedSince + 1000) > lastModified)) {
+      return false;
+    }
+
+    return true;
   }
 }
