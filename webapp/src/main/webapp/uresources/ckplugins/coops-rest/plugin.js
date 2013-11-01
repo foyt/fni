@@ -50,8 +50,11 @@
           },
 
           _onContentPatch : function(event) {
-            var patch = event.data.patch;
+            if (this.getEditor().config.coops.readOnly === true) {
+              return;
+            } 
             
+            var patch = event.data.patch;
             this.getEditor().getChangeObserver().pause();
             
             this._doPatch(this._editor.config.coops.serverUrl, { patch: patch, revisionNumber : this._revisionNumber }, CKEDITOR.tools.bind(function (status, responseJson, responseText) {
@@ -81,6 +84,10 @@
           },
           
           _onPropertiesChange: function (event) {
+            if (this.getEditor().config.coops.readOnly === true) {
+              return;
+            } 
+
             this.getEditor().getChangeObserver().pause();
             
             var changedProperties = event.data.properties;

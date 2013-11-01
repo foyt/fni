@@ -17,6 +17,7 @@ import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
@@ -56,15 +57,17 @@ public class ForgeDocumentsBackingBean {
 		
 		String completePath = "/materials/" + getOwnerId() + "/" + getUrlPath();
 		Material material = materialController.findMaterialByCompletePath(completePath);
-
+		User loggedUser = sessionController.getLoggedUser();
+		
 		if (!(material instanceof Document)) {
 			throw new FileNotFoundException();
 		}
 		
-		if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
+		if (!materialPermissionController.hasAccessPermission(loggedUser, material)) {
 		  throw new ForbiddenException();
 		}
-
+		
+		readOnly = !materialPermissionController.hasModifyPermission(loggedUser, material);
 		materialId = material.getId();
 		documentTitle = material.getTitle();
 		folders = ForgeViewUtils.getParentList(material);
@@ -98,9 +101,14 @@ public class ForgeDocumentsBackingBean {
 		return folders;
 	}
 	
+	public Boolean getReadOnly() {
+    return readOnly;
+  }
+	
 	private Long ownerId;
 	private String urlPath;
 	private Long materialId;
 	private String documentTitle;
 	private List<Folder> folders;
+  private Boolean readOnly;
 }

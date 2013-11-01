@@ -23,6 +23,7 @@
       contentsCss: ['//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/contents.css', CONTEXTPATH + '/uresources/forge-ckeditor-embedded.css' ],
       coops: {
         serverUrl: COOPS_SERVER_URL,
+        readOnly: COOPS_READONLY,
         websocket: {
           cursorsVisible: true,
           cursorAlpha: 0.9,

@@ -22,6 +22,7 @@
     
     <script type="text/javascript">
       var COOPS_SERVER_URL = CONTEXTPATH + '/forge/coops/#{forgeDocumentsBackingBean.materialId}';
+      var COOPS_READONLY = #{forgeDocumentsBackingBean.readOnly};
     </script>
     <h:outputScript name="scripts/gui/forge-documents.js"/>
   </ui:define>
@@ -54,7 +55,10 @@
     <h:panelGroup layout="block" styleClass="grid_16 tight">
       <h:panelGroup layout="block" styleClass="forge-document-panel">
         <h2 data-old-value="#{forgeDocumentsBackingBean.documentTitle}">
-          <h:inputText styleClass="forge-ckdocument-title" value="#{forgeDocumentsBackingBean.documentTitle}"/>
+          <h:inputText styleClass="forge-ckdocument-title" value="#{forgeDocumentsBackingBean.documentTitle}" rendered="#{!forgeDocumentsBackingBean.readOnly}"/>
+          <h:outputFormat value="#{locales['forge.documents.titleReadOnly']}" rendered="#{forgeDocumentsBackingBean.readOnly}">
+            <f:param value="#{forgeDocumentsBackingBean.documentTitle}"/>
+          </h:outputFormat>
         </h2>
     
         <h:panelGroup styleClass="forge-ckdocument-editor-status">

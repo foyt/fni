@@ -145,9 +145,11 @@
         if (beforeStartEvent.isConnected()) {
           this.fire("CoOPS:SessionStart");
           this.setData(content, function () {
-            this.getChangeObserver().reset(content);
-            this.getChangeObserver().resume();
-            this.setReadOnly(false);
+            if (this.config.coops.readOnly !== true) {
+              this.getChangeObserver().reset(content);
+              this.getChangeObserver().resume();
+              this.setReadOnly(false);  
+            }
           });
         } else {
           // TODO: Proper error handling
