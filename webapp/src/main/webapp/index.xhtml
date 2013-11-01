@@ -103,7 +103,9 @@
     
     <h:panelGroup layout="block" styleClass="grid_12 tight index-blog">
       <h:panelGroup layout="block" styleClass="index-blog-panel">
-        <h3>#{locales['index.blog']}</h3>
+        <h3>
+          <h:outputLink value="http://loki.pelilauta.fi/wordpress/">#{locales['index.blog']}</h:outputLink>
+        </h3>
         
         <h:panelGroup layout="block" styleClass="index-blog-entries">
           <ui:repeat var="blogEntry" value="#{indexViewBackingBean.latestBlogEntries}">
