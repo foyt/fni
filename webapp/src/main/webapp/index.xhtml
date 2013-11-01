@@ -37,7 +37,7 @@
             <ui:repeat var="publication" value="#{indexViewBackingBean.latestGameLibraryPublications}">
               <h:panelGroup layout="block" styleClass="grid_6 tight index-publication">
                 <h:panelGroup layout="block" styleClass="index-publication-image" rendered="#{publication.defaultImage ne null}">
-                  <h:graphicImage value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?width=200&amp;height=200"/>
+                  <h:graphicImage value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=200"/>
                 </h:panelGroup>     
                 
                 <h4>
