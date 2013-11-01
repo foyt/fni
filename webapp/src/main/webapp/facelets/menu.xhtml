@@ -7,12 +7,14 @@
   <h:outputScript name="scripts/gui/menu.js" target="head"/>
 
   <h:panelGroup layout="block" styleClass="grid_16 tight index-menu"> 
-    <h:panelGroup layout="block" styleClass="grid_3 hide_on_mobile menu-logo">
-      <h:panelGroup layout="block" styleClass="menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
-      <h:panelGroup layout="block" styleClass="menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
-      <h:panelGroup layout="block" styleClass="menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
-      <h:panelGroup layout="block" styleClass="menu-logo-text">#{locales['menu.logoText']}</h:panelGroup>
-    </h:panelGroup>
+    <h:link outcome="/index.jsf">
+      <h:panelGroup layout="block" styleClass="grid_3 hide_on_mobile menu-logo">
+        <h:panelGroup layout="block" styleClass="menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
+        <h:panelGroup layout="block" styleClass="menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
+        <h:panelGroup layout="block" styleClass="menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
+        <h:panelGroup layout="block" styleClass="menu-logo-text">#{locales['menu.logoText']}</h:panelGroup>
+      </h:panelGroup>
+    </h:link>
     
     <h:panelGroup layout="block" styleClass="grid_8 menu-navigation-container">
       <h:link outcome="/index.jsf">#{locales['menu.menuFrontPage']}</h:link>
