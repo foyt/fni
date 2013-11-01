@@ -65,10 +65,13 @@ public class GameLibraryEditPublicationBackingBean {
 		if (sessionController.isLoggedIn()) {
   		licenseSelectItems = createLicenseSelectItems();
   		tagSelectItems = createTagSelectItems();
-  		addExistingTag = (String) tagSelectItems.get(1).getSelectItems()[0].getValue();
   		authorSelectItems = createAuthorSelectItems();
   		creativeCommonsDerivativesSelectItems = createCreativeCommonsDerivativesSelectItems();
   		creativeCommonsCommercialSelectItems = createCreativeCommsonCommercialSelectItems();
+
+  		if (tagSelectItems.size() > 0 && tagSelectItems.get(1).getSelectItems().length > 0) {
+        addExistingTag = (String) tagSelectItems.get(1).getSelectItems()[0].getValue();
+      }
 		}
 	}
 	
