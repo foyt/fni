@@ -31,6 +31,7 @@ import com.itextpdf.text.DocumentException;
 
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentRevisionDAO;
+import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialRevisionSettingDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialSettingDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialSettingKeyDAO;
@@ -67,6 +68,9 @@ public class DocumentController {
 
 	@Inject
 	private MaterialPermissionController materialPermissionController;
+	
+	@Inject
+	private MaterialDAO materialDAO;
 	
   @Inject
   private DocumentDAO documentDAO;
@@ -254,7 +258,7 @@ public class DocumentController {
 	}
 
 	public Document updateDocumentTitle(Document document, String title, User modifier) {
-		return documentDAO.updateTitle(document, modifier, title);
+		return (Document) materialDAO.updateTitle(document, title, modifier);
 	}
 
 	public Document updateDocumentLanguage(Document document, Language language, User modifier) {

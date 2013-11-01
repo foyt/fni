@@ -60,17 +60,6 @@ public class ImageDAO extends GenericDAO<Image> {
     
     return entityManager.createQuery(criteria).getResultList();
   }
-  
-  public Image updateTitle(Image image, User modifier, String title) {
-    EntityManager entityManager = getEntityManager();
-
-    image.setTitle(title);
-    image.setModified(new Date());
-    image.setModifier(modifier);
-    
-    image = entityManager.merge(image);
-    return image;
-  }
 
   public Image updateData(Image image, User modifier, byte[] data) {
     EntityManager entityManager = getEntityManager();

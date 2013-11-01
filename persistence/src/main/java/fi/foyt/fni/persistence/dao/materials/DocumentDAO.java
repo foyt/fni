@@ -72,17 +72,6 @@ public class DocumentDAO extends GenericDAO<Document> {
     return (Long) query.getSingleResult();
   }
 
-  public Document updateTitle(Document document, User modifier, String title) {
-    EntityManager entityManager = getEntityManager();
-
-    document.setTitle(title);
-    document.setModified(new Date());
-    document.setModifier(modifier);
-    
-    document = entityManager.merge(document);
-    return document;
-  }
-
   public Document updateData(Document document, User modifier, String data) {
     EntityManager entityManager = getEntityManager();
 

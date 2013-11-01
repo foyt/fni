@@ -65,17 +65,6 @@ public class VectorImageDAO extends GenericDAO<VectorImage> {
     return entityManager.createQuery(criteria).getSingleResult();
   }
 
-  public VectorImage updateTitle(VectorImage vectorImage, User modifier, String title) {
-    EntityManager entityManager = getEntityManager();
-
-    vectorImage.setTitle(title);
-    vectorImage.setModified(new Date());
-    vectorImage.setModifier(modifier);
-    
-    entityManager.persist(vectorImage);
-    return vectorImage;
-  }
-
   public VectorImage updateData(VectorImage vectorImage, User modifier, String data) {
     EntityManager entityManager = getEntityManager();
 

@@ -6,6 +6,7 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Folder;
@@ -16,10 +17,13 @@ import fi.foyt.fni.persistence.model.users.User;
 @Dependent
 @Stateful
 public class VectorImageController {
-	
-	@Inject
+
+  @Inject
 	private Logger logger;
 
+  @Inject
+	private MaterialDAO materialDAO;
+	
   @Inject
   private VectorImageDAO vectorImageDAO;
   
@@ -38,7 +42,7 @@ public class VectorImageController {
 	}
 
 	public VectorImage updateVectorImageTitle(VectorImage vectorImage, String title, User modifier) {
-		return vectorImageDAO.updateTitle(vectorImage, modifier, title);
+		return (VectorImage) materialDAO.updateTitle(vectorImage, title, modifier);
 	}
 
 }
