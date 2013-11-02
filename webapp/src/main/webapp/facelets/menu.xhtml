@@ -17,7 +17,10 @@
     </h:link>
     
     <h:panelGroup layout="block" styleClass="grid_8 menu-navigation-container">
+      <!-- 
+      Hidden because it's kinda useless as the logo acts as a home link
       <h:link outcome="/index.jsf">#{locales['menu.menuFrontPage']}</h:link>
+      -->
       <h:link outcome="/forge/index.jsf">#{locales['menu.menuForge']}</h:link>
       <!-- 
       Hidden because Illusion will not be ready for a while
@@ -25,6 +28,7 @@
       -->
       <h:link outcome="/gamelibrary/index.jsf">#{locales['menu.menuGameLibrary']}</h:link>
       <h:link outcome="/forum/index.jsf">#{locales['menu.menuForum']}</h:link>
+      <h:link outcome="/about.jsf">#{locales['menu.menuAbout']}</h:link>
     </h:panelGroup>
     
     <h:panelGroup layout="block" styleClass="grid_5 menu-tools-container">
