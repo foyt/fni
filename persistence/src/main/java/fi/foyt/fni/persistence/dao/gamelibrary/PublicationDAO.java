@@ -111,6 +111,11 @@ public class PublicationDAO extends GenericDAO<Publication> {
 		return publication;
 	}
 
+  public Publication updateUrlName(Publication publication, String urlName) {
+    publication.setUrlName(urlName);
+    return persist(publication);
+  }
+
 	public Publication updateDescription(Publication publication, String description) {
 		publication.setDescription(description);
 		getEntityManager().persist(publication);

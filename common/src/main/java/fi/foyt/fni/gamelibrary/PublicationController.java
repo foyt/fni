@@ -227,7 +227,13 @@ public class PublicationController {
 	}
 
 	public Publication updateName(Publication publication, String name) {
-		return publicationDAO.updateName(publication, name);
+	  if (!name.equals(publication.getName())) {
+      String urlName = createUrlName(publication, name);
+ 	    publicationDAO.updateUrlName(publication, urlName);
+		  return publicationDAO.updateName(publication, name);
+	  }
+	  
+	  return publication;
 	}
 
 	public Publication updatePublicationAuthors(Publication publication, List<User> authors) {
@@ -419,6 +425,10 @@ public class PublicationController {
 	}
 	
 	private String createUrlName(String name) {
+	  return createUrlName(null, name);
+	}
+	
+	private String createUrlName(Publication publication, String name) {
 		int maxLength = 20;
 		int padding = 0;
 		do {
@@ -427,9 +437,13 @@ public class PublicationController {
 				urlName = urlName.concat(StringUtils.repeat('_', padding));
 			}
 			
-			Publication publication = publicationDAO.findByUrlName(urlName);
-			if (publication == null) {
+			Publication existingPublication = publicationDAO.findByUrlName(urlName);
+			if (existingPublication == null) {
 				return urlName;
+			}
+			
+			if (publication != null && existingPublication.getId().equals(existingPublication.getId())) {
+			  return urlName;
 			}
 			
 			if (maxLength < name.length()) {
