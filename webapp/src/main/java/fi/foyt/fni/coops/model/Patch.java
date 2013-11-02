@@ -7,11 +7,12 @@ public class Patch {
 	public Patch() {
 	}
 	
-	public Patch( Long revisionNumber, String patch, Map<String, String> properties, String checksum) {
+	public Patch( Long revisionNumber, String patch, Map<String, String> properties, String checksum, String clientId) {
 		this.patch = patch;
 		this.properties = properties;
 		this.revisionNumber = revisionNumber;
 		this.checksum = checksum;
+		this.clientId = clientId;
 	}
 	
 	public String getPatch() {
@@ -46,8 +47,17 @@ public class Patch {
 		this.checksum = checksum;
 	}
 	
+	public String getClientId() {
+    return clientId;
+  }
+	
+	public void setClientId(String clientId) {
+    this.clientId = clientId;
+  }
+	
 	private String patch;
 	private Map<String, String> properties;
 	private Long revisionNumber;
 	private String checksum;
+	private String clientId;
 }

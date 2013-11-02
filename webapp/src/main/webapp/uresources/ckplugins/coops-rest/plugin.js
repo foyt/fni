@@ -38,6 +38,7 @@
               
               this._useMethodOverride = joinData.extensions.indexOf('x-http-method-override') > -1;
               this._revisionNumber = joinData.revisionNumber;
+              this._clientId = joinData.clientId;
 
               this.getEditor().on("CoOPS:ContentPatch", this._onContentPatch, this);
               this.getEditor().on("CoOPS:ContentRevert", this._onContentRevert, this);
@@ -57,18 +58,10 @@
             var patch = event.data.patch;
             this.getEditor().getChangeObserver().pause();
             
-            this._doPatch(this._editor.config.coops.serverUrl, { patch: patch, revisionNumber : this._revisionNumber }, CKEDITOR.tools.bind(function (status, responseJson, responseText) {
+            this._doPatch(this._editor.config.coops.serverUrl, { patch: patch, revisionNumber : this._revisionNumber, clientId: this._clientId }, CKEDITOR.tools.bind(function (status, responseJson, responseText) {
               switch (status) {
-                case 200:
-                  // Our patch was accepted, yay!
-                  this._revisionNumber = responseJson.revisionNumber;
-
-                  this.getEditor().getChangeObserver().reset();
-                  this.getEditor().getChangeObserver().resume();
-                  
-                  this.getEditor().fire("CoOPS:PatchAccepted", {
-                    revisionNumber: this._revisionNumber
-                  });
+                case 204:
+                  // Request was ok
                 break;
                 case 409:
                   this.getEditor().getChangeObserver().resume();
@@ -203,15 +196,26 @@
           },
           
           _applyPatch: function (patch, callback) {
-            if (this._editor.fire("CoOPS:PatchReceived", {
-              patch : patch.patch,
-              checksum: patch.checksum,
-              revisionNumber: patch.revisionNumber,
-              properties: patch.properties
-            })) {
+            if (this._clientId != patch.clientId) {
+              // Received a patch from other client
+              if (this._editor.fire("CoOPS:PatchReceived", {
+                patch : patch.patch,
+                checksum: patch.checksum,
+                revisionNumber: patch.revisionNumber,
+                properties: patch.properties
+              })) {
+                this._revisionNumber = patch.revisionNumber;
+                callback();
+              };
+            } else {
+              // Our patch was accepted, yay!
               this._revisionNumber = patch.revisionNumber;
-              callback();
-            };
+
+              this.getEditor().getChangeObserver().resume();
+              this.getEditor().fire("CoOPS:PatchAccepted", {
+                revisionNumber: this._revisionNumber
+              });
+            }
           },
 
           _doGet: function (url, parameters, callback) {

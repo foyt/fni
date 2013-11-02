@@ -2,12 +2,12 @@ package fi.foyt.fni.coops.model;
 
 public class Join {
 
-	public Join(String[] extensions, Long revisionNumber, String content, String contentType, String sessionId) {
+	public Join(String[] extensions, Long revisionNumber, String content, String contentType, String clientId) {
 		this.extensions = extensions;
 		this.revisionNumber = revisionNumber;
 		this.content = content;
 		this.contentType = contentType;
-		this.sessionId = sessionId;
+		this.clientId = clientId;
 	}
 
 	public String[] getExtensions() {
@@ -25,14 +25,14 @@ public class Join {
 	public String getContentType() {
 		return contentType;
 	}
-
-	public String getSessionId() {
-		return sessionId;
-	}
+	
+	public String getClientId() {
+    return clientId;
+  }
 
 	private String[] extensions;
 	private Long revisionNumber;
 	private String content;
 	private String contentType;
-	private String sessionId;
+	private String clientId;
 }

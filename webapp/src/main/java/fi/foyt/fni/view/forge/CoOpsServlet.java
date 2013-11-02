@@ -191,10 +191,10 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 			return;
 		}
 
-		handlePatchRequest(request, response, document, patch.getRevisionNumber(), patch.getPatch(), patch.getProperties());
+		handlePatchRequest(request, response, document, patch.getRevisionNumber(), patch.getPatch(), patch.getClientId(), patch.getProperties());
 	}
 	
-	protected void handlePatchRequest(HttpServletRequest request, HttpServletResponse response, Document document, Long clientRevisionNumber, String patch, Map<String, String> properties) throws IOException {
+	protected void handlePatchRequest(HttpServletRequest request, HttpServletResponse response, Document document, Long clientRevisionNumber, String patch, String clientId, Map<String, String> properties) throws IOException {
 		Long revisionNumber = documentController.getDocumentRevision(document);
 		if (!revisionNumber.equals(clientRevisionNumber)) {
 			response.sendError(HttpServletResponse.SC_CONFLICT, "Out of sync");
@@ -220,7 +220,7 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 		}
 
 		Long patchRevisionNumber = revisionNumber + 1;
-    DocumentRevision documentRevision = documentController.createDocumentRevision(document, patchRevisionNumber, new Date(), false, false, patchData, checksum);
+    DocumentRevision documentRevision = documentController.createDocumentRevision(document, patchRevisionNumber, new Date(), false, false, patchData, checksum, clientId);
     
     if (properties != null) {
       Iterator<String> keyIterator = properties.keySet().iterator();
@@ -260,8 +260,8 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
         documentController.createDocumentRevisionSetting(documentRevision, "document." + key, value);
       }
     }
-    
-    writeJsonResponse(response, new Patch(patchRevisionNumber, null, null, null));
+
+    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 	}
 
 	private void handleUpdateRequest(HttpServletRequest request, HttpServletResponse response, Document document, Long clientRevisionNumber) throws IOException {
@@ -295,9 +295,9 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
       }
       
       if (patch != null) {
-      	updateResults.add(new Patch(documentRevision.getRevision(), patch, properties, documentRevision.getChecksum()));
+      	updateResults.add(new Patch(documentRevision.getRevision(), patch, properties, documentRevision.getChecksum(), documentRevision.getClientId()));
       } else {
-      	updateResults.add(new Patch(documentRevision.getRevision(), null, properties, null));
+      	updateResults.add(new Patch(documentRevision.getRevision(), null, properties, null, documentRevision.getClientId()));
       }
     }
 
