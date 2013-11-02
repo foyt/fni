@@ -90,18 +90,14 @@
               properties[changedProperties[i].property] = changedProperties[i].currentValue;
             };
             
-            this._doPatch(this._editor.config.coops.serverUrl, { properties: properties, revisionNumber : this._revisionNumber }, CKEDITOR.tools.bind(function (status, responseJson, responseText) {
+            this._doPatch(this._editor.config.coops.serverUrl, { properties: properties, revisionNumber : this._revisionNumber, clientId: this._clientId  }, CKEDITOR.tools.bind(function (status, responseJson, responseText) {
               switch (status) {
-                case 200:
-                  // Our patch was accepted, yay!
-                  this._revisionNumber = responseJson.revisionNumber;
-
-                  this.getEditor().getChangeObserver().reset();
+                case 204:
+                  // Request was ok
+                break;
+                case 409:
                   this.getEditor().getChangeObserver().resume();
-                  
-                  this.getEditor().fire("CoOPS:PatchAccepted", {
-                    revisionNumber: this._revisionNumber
-                  });
+                  this.getEditor().fire("CoOPS:PatchRejected");
                 break;
                 default:
                   // TODO: Proper error handling
