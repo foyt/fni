@@ -11,14 +11,14 @@ import javax.ejb.EJBException;
 import javax.el.ELException;
 import javax.enterprise.inject.CreationException;
 import javax.faces.FacesException;
-import javax.faces.application.ViewHandler;
-import javax.faces.component.UIViewRoot;
+import javax.faces.application.NavigationHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +28,7 @@ import com.ocpsoft.pretty.PrettyException;
 
 import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.UnauthorizedException;
+import fi.foyt.fni.system.ErrorUtils;
 
 public class ExceptionHandler extends ExceptionHandlerWrapper {
 
@@ -93,8 +94,11 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
         } else {
           externalContext.setResponseStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
           renderView("/error/internal-error.jsf");
-          exception.printStackTrace();
-        }
+          String recipient = System.getProperty("fni-error-email");
+          if (StringUtils.isNotBlank(recipient) && (externalContext.getRequest() instanceof HttpServletRequest) && (externalContext.getResponse() instanceof HttpServletResponse)) {
+            ErrorUtils.mailError(recipient, (HttpServletRequest) externalContext.getRequest(), (HttpServletResponse) externalContext.getResponse(), exception);
+          }
+        } 
       } finally {
         queuedEventIterator.remove();
       }
@@ -105,9 +109,8 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
 
   private void renderView(String viewId) {
     FacesContext facesContext = FacesContext.getCurrentInstance();
-    ViewHandler viewHandler = facesContext.getApplication().getViewHandler();
-    UIViewRoot viewRoot = viewHandler.createView(facesContext, viewId);
-    facesContext.setViewRoot(viewRoot);
-    facesContext.renderResponse();
+    NavigationHandler navigationHandler = facesContext.getApplication().getNavigationHandler(); 
+    navigationHandler.handleNavigation(facesContext, null, viewId);  
+    facesContext.renderResponse(); 
   }
 }
