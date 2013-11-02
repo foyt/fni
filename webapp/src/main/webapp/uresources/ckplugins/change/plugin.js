@@ -634,7 +634,8 @@
       });
       
       // TODO: This should be configurable
-      var propertyHandlers = [
+      
+      var propertyHandlers = editor.config.fullPage ? [
         new TitlePropertyHandler(), 
         new LangDirPropertyHandler(), 
         new LangCodePropertyHandler(), 
@@ -652,7 +653,7 @@
         new MetaPropertyHandler("metaDescription", "description"), 
         new MetaPropertyHandler("metaAuthor", "author"), 
         new MetaPropertyHandler("metaCopyright", "copyright")      
-      ];
+      ] : [];
 
       var changeObserver = null;
       if ((typeof (window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver) == 'function')) {
