@@ -20,9 +20,7 @@ public class VectorImageRevisionDAO extends GenericDAO<VectorImageRevision> {
 
 	private static final long serialVersionUID = 1L;
 
-	public VectorImageRevision create(VectorImage vectorImage, Long revision, Date created, Boolean compressed, Boolean completeRevision, byte[] data, String title, Language language, String checksum) {
-    EntityManager entityManager = getEntityManager();
-
+	public VectorImageRevision create(VectorImage vectorImage, Long revision, Date created, Boolean compressed, Boolean completeRevision, byte[] data, String title, Language language, String checksum, String clientId) {
     VectorImageRevision vectorImageRevision = new VectorImageRevision();
     vectorImageRevision.setCreated(created);
     vectorImageRevision.setCompleteRevision(completeRevision);
@@ -34,10 +32,9 @@ public class VectorImageRevisionDAO extends GenericDAO<VectorImageRevision> {
     vectorImageRevision.setVectorImage(vectorImage);
     vectorImageRevision.setRevision(revision);
     vectorImageRevision.setChecksum(checksum);
+    vectorImageRevision.setClientId(clientId);
     
-    entityManager.persist(vectorImageRevision);
-
-    return vectorImageRevision;
+    return persist(vectorImageRevision);
   }
 	
 	public List<VectorImageRevision> listByVectorImage(VectorImage vectorImage) {

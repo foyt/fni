@@ -20,9 +20,7 @@ public class DocumentRevisionDAO extends GenericDAO<DocumentRevision> {
 
 	private static final long serialVersionUID = 1L;
 
-	public DocumentRevision create(Document document, Long revision, Date created, Boolean compressed, Boolean completeRevision, byte[] data, String checksum, String title, Language language) {
-    EntityManager entityManager = getEntityManager();
-
+	public DocumentRevision create(Document document, Long revision, Date created, Boolean compressed, Boolean completeRevision, byte[] data, String checksum, String title, Language language, String clientId) {
     DocumentRevision documentRevision = new DocumentRevision();
     documentRevision.setCreated(created);
     documentRevision.setCompleteRevision(completeRevision);
@@ -34,10 +32,9 @@ public class DocumentRevisionDAO extends GenericDAO<DocumentRevision> {
     documentRevision.setDocument(document);
     documentRevision.setRevision(revision);
     documentRevision.setChecksum(checksum);
+    documentRevision.setClientId(clientId);
     
-    entityManager.persist(documentRevision);
-
-    return documentRevision;
+    return persist(documentRevision);
   }
 	
 	public List<DocumentRevision> listByDocument(Document document) {
