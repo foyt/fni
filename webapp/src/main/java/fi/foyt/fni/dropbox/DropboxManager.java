@@ -114,7 +114,11 @@ public class DropboxManager {
             parameters.put("cursor", dropboxRootFolder.getDeltaCursor());
 
           JSONObject response = new JSONObject(OAuthUtils.doPostRequest(service, dropboxToken, "https://api.dropbox.com/1/delta", parameters).getBody());
-          hasMore = response.getBoolean("has_more");
+          hasMore = response.optBoolean("has_more");
+          if (hasMore == null) {
+            hasMore = false;
+          }
+          
           Boolean reset = response.getBoolean("reset");
           String cursor = response.getString("cursor");
           Date now = new Date();
