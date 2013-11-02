@@ -10,11 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import fi.foyt.fni.persistence.model.common.Language;
 
 @Entity
 @Inheritance (strategy=InheritanceType.JOINED)
@@ -30,22 +27,6 @@ public class MaterialRevision {
   
   public void setData(byte[] data) {
     this.data = data;
-  }
-  
-  public String getTitle() {
-	  return title;
-  }
-  
-  public void setTitle(String title) {
-	  this.title = title;
-  }
-  
-  public Language getLanguage() {
-	  return language;
-  }
-  
-  public void setLanguage(Language language) {
-	  this.language = language;
   }
   
   public Date getCreated() {
@@ -103,11 +84,6 @@ public class MaterialRevision {
   @Column
   @Lob
   private byte[] data;
-  
-  private String title;
-  
-  @ManyToOne
-  private Language language;
   
   @Column (nullable = false)
   @Temporal (TemporalType.TIMESTAMP)

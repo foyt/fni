@@ -10,7 +10,6 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision_;
@@ -20,15 +19,13 @@ public class DocumentRevisionDAO extends GenericDAO<DocumentRevision> {
 
 	private static final long serialVersionUID = 1L;
 
-	public DocumentRevision create(Document document, Long revision, Date created, Boolean compressed, Boolean completeRevision, byte[] data, String checksum, String title, Language language, String clientId) {
+	public DocumentRevision create(Document document, Long revision, Date created, Boolean compressed, Boolean completeRevision, byte[] data, String checksum, String clientId) {
     DocumentRevision documentRevision = new DocumentRevision();
     documentRevision.setCreated(created);
     documentRevision.setCompleteRevision(completeRevision);
     documentRevision.setCompressed(compressed);
     documentRevision.setCreated(created);
     documentRevision.setData(data);
-    documentRevision.setTitle(title);
-    documentRevision.setLanguage(language);
     documentRevision.setDocument(document);
     documentRevision.setRevision(revision);
     documentRevision.setChecksum(checksum);
@@ -80,25 +77,5 @@ public class DocumentRevisionDAO extends GenericDAO<DocumentRevision> {
     );
     
     return entityManager.createQuery(criteria).getSingleResult();
-  }
-  
-  public DocumentRevision updateTitle(DocumentRevision documentRevision, String title) {
-    EntityManager entityManager = getEntityManager();
-	
-    documentRevision.setTitle(title);
-    
-    entityManager.persist(documentRevision);
-    
-    return documentRevision;
-  }
-  
-  public DocumentRevision updateLanguage(DocumentRevision documentRevision, Language language) {
-    EntityManager entityManager = getEntityManager();
-	
-    documentRevision.setLanguage(language);
-    
-    entityManager.persist(documentRevision);
-    
-    return documentRevision;
   }
 }

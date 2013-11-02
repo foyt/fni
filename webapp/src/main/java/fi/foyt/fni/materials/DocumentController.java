@@ -119,7 +119,7 @@ public class DocumentController {
 	/* Revisions */
 	
 	public DocumentRevision createDocumentRevision(Document document, Long revisionNumber, Date created, boolean compressed, boolean completeVersion, byte[] revisionBytes, String checksum, String clientId) {
-	  return documentRevisionDAO.create(document, revisionNumber, created, compressed, completeVersion, revisionBytes, checksum, null, null, clientId);
+	  return documentRevisionDAO.create(document, revisionNumber, created, compressed, completeVersion, revisionBytes, checksum, clientId);
 	}
 
 	public List<DocumentRevision> listDocumentRevisionsAfter(Document document, Long revisionNumber) {

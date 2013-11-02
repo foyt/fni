@@ -10,7 +10,6 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.materials.VectorImageRevision;
 import fi.foyt.fni.persistence.model.materials.VectorImageRevision_;
@@ -20,15 +19,13 @@ public class VectorImageRevisionDAO extends GenericDAO<VectorImageRevision> {
 
 	private static final long serialVersionUID = 1L;
 
-	public VectorImageRevision create(VectorImage vectorImage, Long revision, Date created, Boolean compressed, Boolean completeRevision, byte[] data, String title, Language language, String checksum, String clientId) {
+	public VectorImageRevision create(VectorImage vectorImage, Long revision, Date created, Boolean compressed, Boolean completeRevision, byte[] data, String checksum, String clientId) {
     VectorImageRevision vectorImageRevision = new VectorImageRevision();
     vectorImageRevision.setCreated(created);
     vectorImageRevision.setCompleteRevision(completeRevision);
     vectorImageRevision.setCompressed(compressed);
     vectorImageRevision.setCreated(created);
     vectorImageRevision.setData(data);
-    vectorImageRevision.setTitle(title);
-    vectorImageRevision.setLanguage(language);
     vectorImageRevision.setVectorImage(vectorImage);
     vectorImageRevision.setRevision(revision);
     vectorImageRevision.setChecksum(checksum);
