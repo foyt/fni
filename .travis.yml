@@ -13,7 +13,7 @@ env:
   - secure: B4u4PrwBUieM4aVb97zL+JrjVvHblr0yeGn2leh/30IrO2es7Vyyv2mzKEFdrkov7v/iI03C8gP0mDjL1XcWKfm7HG6Fit/C/31Q3FHbSe+Xoh3F0IOdcXsytnza5iwU9RS9h7V3BPbC1RKcPXAbLWoMEYNeQnzi9xQNaKOgvZQ=
 after_success:
 - python travis/m2conf.py
-- mvn clean deploy --settings ~/.m2/mySettings.xml
+- mvn deploy --settings ~/.m2/mySettings.xml
 - sudo apt-get install ruby1.9.1 git
 - sudo gem install rhc
 - git config --global user.email "build@travis-ci.org"
@@ -21,8 +21,9 @@ after_success:
 - ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 - echo -e "Host ${STAGING_HOST}\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - rhc sshkey-add travis ~/.ssh/id_rsa.pub -l $STAGING_USERNAME -p $STAGING_PASSWORD
+- cd ~
 - git clone $STAGING_GIT
-- cp $TRAVIS_BUILD_DIR/fni/target/webapp.war ~/fnistaging/deployments/ROOT.war
+- cp $TRAVIS_BUILD_DIR/webapp/target/webapp-*.war ~/fnistaging/deployments/ROOT.war
 - cd ~/fnistaging
 - git add deployments/ROOT.war
 - git commit -m "Automatic build"
