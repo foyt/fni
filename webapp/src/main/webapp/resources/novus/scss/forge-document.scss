@@ -22,6 +22,7 @@ h2 input {
   width: 100%;
   @include box-sizing(border-box);
   padding-left: 4px;
+  font-family: $default-font;
 }
 
 h2 input:hover {
