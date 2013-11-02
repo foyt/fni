@@ -88,11 +88,11 @@
     editor.on("CoOPS:PatchReceived", function (event) {
       var properties = event.data.properties;
       if (properties) {
-        for (var i = 0, l = properties.length; i < l; i++) {
-          if (properties[i].property == 'title') {
-            $('.forge-ckdocument-title').val(properties[i].currentValue);
+        $.each(properties, function (key, value) {
+          if (key == 'title') {
+            $('.forge-ckdocument-title').val(value);
           }
-        }
+        });
       }
     });
   });
