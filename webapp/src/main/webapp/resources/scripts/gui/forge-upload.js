@@ -85,10 +85,20 @@
       });
     });
     
+    function submitNextFile() {
+      var nextFile = $('.forge-upload-file-container');
+      if (nextFile.length > 0) {
+        $(nextFile[0]).data().submit().always(function () {
+          $(this).remove();
+          updateFileCount();
+          submitNextFile();
+        });
+      }
+    }
+    
     $('.forge-upload-upload-button').click(function (e) {
       $('.forge-upload-file-container').data().submit().always(function () {
-        $(this).remove();
-        updateFileCount();
+        submitNextFile();
       });
     });
     
