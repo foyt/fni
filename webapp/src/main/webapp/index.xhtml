@@ -3,7 +3,24 @@
   xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['index.title']}</ui:define>
+  
+  <ui:define name="view-scripts">
+    <!-- jQuery Magnific-Popup  -->
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/0.8.9/jquery.magnific-popup.min.js"></script>
+    
+    <!-- View scripts -->
+    
+    <h:outputScript name="scripts/gui/index.js"/>
+  </ui:define>
+  
   <ui:define name="view-stylesheets">
+    <!-- jQuery Magnific-Popup  -->
+
+    <h:outputStylesheet library="novus" name="css/magnific-popup.css"/>
+    
+    <!-- View styles -->
+    
     <h:outputStylesheet library="novus" name="css/index.css"/>
   </ui:define>
 
@@ -41,7 +58,9 @@
             <ui:repeat var="publication" value="#{indexViewBackingBean.latestGameLibraryPublications}">
               <h:panelGroup layout="block" styleClass="grid_6 tight index-publication">
                 <h:panelGroup layout="block" styleClass="index-publication-image" rendered="#{publication.defaultImage ne null}">
-                  <h:graphicImage value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=200"/>
+                  <h:outputLink styleClass="index-publication-image-link" value="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
+                    <h:graphicImage value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=200"/>
+                  </h:outputLink>
                 </h:panelGroup>     
                 
                 <h4>
