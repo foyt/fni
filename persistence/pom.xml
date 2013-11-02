@@ -1,57 +1,57 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
   <artifactId>persistence</artifactId>
   <packaging>jar</packaging>
   <name>Forge &amp; Illusion - Persistence</name>
   <description>Forge &amp; Illusion - Persistence</description>
-  
+
   <parent>
     <groupId>fi.foyt.fni</groupId>
     <artifactId>parent</artifactId>
     <version>3.0.0-SNAPSHOT</version>
-    <relativePath>../parent/pom.xml</relativePath>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
   <dependencies>
     <!-- JBoss -->
-  
+
     <dependency>
       <groupId>org.jboss.spec</groupId>
       <artifactId>jboss-javaee-6.0</artifactId>
       <type>pom</type>
       <scope>provided</scope>
     </dependency>
-  
+
     <!-- Hibernate -->
-  
-  	<dependency>
-  		<groupId>org.hibernate</groupId>
-  		<artifactId>hibernate-entitymanager</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.hibernate</groupId>
-  		<artifactId>hibernate-core</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.hibernate</groupId>
-  		<artifactId>hibernate-validator</artifactId>
-  	</dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-search</artifactId>
     </dependency>
-  	
-  	<!-- Commons -->
-  	
-  	<dependency>
-  		<groupId>org.apache.commons</groupId>
-  		<artifactId>commons-lang3</artifactId>
-  	</dependency>
+
+    <!-- Commons -->
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
   </dependencies>
-  
+
   <build>
     <plugins>
-    <plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
@@ -59,7 +59,6 @@
           <source>${maven.compiler.source}</source>
           <target>${maven.compiler.target}</target>
           <encoding>${project.build.sourceEncoding}</encoding>
-          <compilerArgument>-proc:none</compilerArgument>
         </configuration>
       </plugin>
       <plugin>
@@ -76,12 +75,14 @@
         <executions>
           <execution>
             <id>process-metamodel</id>
-            <phase>generate-sources</phase>
             <goals>
               <goal>process</goal>
             </goals>
-            <inherited>false</inherited>
+            <phase>generate-sources</phase>
             <configuration>
+              <includes>
+                <include>**fi/foyt/fni/persistence/model/**/*.java</include>
+              </includes>
               <outputDirectory>${basedir}/src/main/.metamodel</outputDirectory>
               <processors>
                 <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
@@ -112,6 +113,6 @@
       </plugin>
     </plugins>
   </build>
-  
-  
+
+
 </project>

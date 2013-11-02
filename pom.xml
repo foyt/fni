@@ -1,22 +1,161 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
- 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <groupId>fi.foyt.fni</groupId>
-  <artifactId>module</artifactId>
+  <artifactId>parent</artifactId>
+  <version>3.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <version>1.0</version>
+  <name>Forge &amp; Illusion - Parent</name>
+  <description>Forge &amp; Illusion - parent pom.xml</description>
+  <url>https://github.com/foyt/fni</url>
 
-  <name>Forge &amp; Illusion - Module</name>
+  <organization>
+    <name>Foyt</name>
+    <url>www.foyt.fi</url>
+  </organization>
+  
+  <scm>
+    <developerConnection>scm:git:git@github.com:foyt/fni.git</developerConnection>
+    <url>git@github.com:foyt/fni.git</url>
+    <connection>scm:git:git@github.com:foyt/fni.git</connection>
+  </scm>
+  
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/foyt/fni/issues</url>
+  </issueManagement>
+  
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License, Version 3</name>
+      <url>http://www.gnu.org/licenses/lgpl.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <developers>
+    <developer>
+      <id>anttileppa</id>
+      <email>antti.leppa@foyt.fi</email>
+      <name>Antti Leppä</name>
+      <organization>Foyt</organization>
+      <organizationUrl>http://www.foyt.fi</organizationUrl>
+      <roles>
+        <role>Owner</role>
+      </roles>
+    </developer>
+  </developers>
 
+  <properties>
+    <!-- Project -->
+    
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    
+    <!-- Maven -->
+    
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+    
+    <!-- JBoss -->
+    
+    <jboss.home>${env.JBOSS_HOME}</jboss.home>
+    <jboss.domain>default</jboss.domain>
+    <jboss.version>7.1.1.Final</jboss.version>
+    
+    <!-- Hibernate -->
+    
+    <hibernate-jpamodelgen.version>1.2.0.Final</hibernate-jpamodelgen.version>
+  </properties>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>fi.foyt.fni</groupId>
+        <artifactId>bom</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.jboss.as</groupId>
+        <artifactId>jboss-as-parent</artifactId>
+        <version>${jboss.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+    <repository>
+      <id>repository.jboss.org</id>
+      <name>JBoss Repository</name>
+      <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+    </repository>
+
+    <!-- CNGram -->
+    
+    <repository>
+      <id>ObjectWEB</id>
+      <name>ObjectWEB</name>
+      <url>http://maven.ow2.org/maven2/</url>
+    </repository>
+    
+    <repository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+  </repositories>
+  
   <modules>
     <module>webapp</module>
     <module>bom</module>
     <module>common</module>
     <module>persistence</module>
-    <module>parent</module>
   </modules>
-
+  
 </project>
