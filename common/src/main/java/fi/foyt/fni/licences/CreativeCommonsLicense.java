@@ -9,6 +9,7 @@ public class CreativeCommonsLicense {
 	public static final String ICON_PREFIX = "http://i.creativecommons.org/l/";
 	public static final String NORMAL_ICON = "88x31.png";
 	public static final String COMPACT_ICON = "80x15.png";
+	private static final String DEFAULT_VERSION = "3.0";
 		
 	public CreativeCommonsLicense(String[] properties, String version, String jurisdiction) {
 		this.properties = properties;
@@ -21,10 +22,12 @@ public class CreativeCommonsLicense {
 		
 		urlBuilder.append(ICON_PREFIX);
 		urlBuilder.append(StringUtils.join(properties, '-'));
+    urlBuilder.append('/');
 		
 		if (StringUtils.isNotBlank(version)) {
-		  urlBuilder.append('/');
 		  urlBuilder.append(version);
+		} else {
+      urlBuilder.append(DEFAULT_VERSION);
 		}
 		
 		if (StringUtils.isNotBlank(jurisdiction)) {
@@ -51,11 +54,6 @@ public class CreativeCommonsLicense {
 		return getIconUrl(true);
 	}
 	
-	/**
-	 * Returns whether 
-	 * 
-	 * @return
-	 */
 	public boolean getPublicDomain() {
 		return properties[0].equals("publicdomain");
 	}
@@ -81,10 +79,12 @@ public class CreativeCommonsLicense {
 		
 		urlBuilder.append(URL_PREFIX);
 		urlBuilder.append(StringUtils.join(properties, '-'));
+    urlBuilder.append('/');
 		
 		if (StringUtils.isNotBlank(version)) {
-  		urlBuilder.append('/');
 	  	urlBuilder.append(version);
+		} else {
+      urlBuilder.append(DEFAULT_VERSION);
 		}
 		
 		if (StringUtils.isNotBlank(jurisdiction)) {
