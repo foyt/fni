@@ -1,8 +1,12 @@
-# Language 
 language: java
-# JDK
 jdk:
-  - openjdk7
-# Fix for See https://github.com/Jasig/sass-maven-plugin/issues/47
+- openjdk7
 before_install:
-  - unset GEM_PATH
+- unset GEM_PATH
+env:
+  global:
+  - secure: nSldmFh+YCDB2zErXTzy2wkTnw7QLDGYR53apjR7N033WyotFHM8suiVUkFN1OCw1b7qTk2FnikJ5+5KbiI5wxm+4v07Qc0MQtBAV7bdeE1efLgdp335L2/DETSEY+Hiz6WQThmMOYooM1Z0qn3UO80fGiGD9FMkShbmQKuGUe4=
+  - secure: DgqS4PrNEmnOblJNe+qeSGsiOtVb5qMgEtTrMD1Y+FdOyWER/orgMOGDWy/xtbbS1dbaCmATOdRxsvXJqRrPaNZLcWZ8e+9d/L3XWYmoBRaGDiH1eVjUUibK79xOUyrBChLCEOkgfuIKHr3nkiPfDWRb5a6CsNn0cbPu56+8j64=
+after_success:
+- python travis/m2conf.py
+- mvn clean deploy --settings ~/.m2/mySettings.xml
