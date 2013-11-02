@@ -54,7 +54,7 @@ import fi.foyt.fni.utils.faces.FacesUtils;
   ),
 	@URLMapping(
 	  id = "forge-folder", 
-  	pattern = "/forge/folders/#{forgeIndexBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\\\-\\:]*/ forgeIndexBackingBean.urlName }", 
+  	pattern = "/forge/folders/#{forgeIndexBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\\\-\\:\\,]*/ forgeIndexBackingBean.urlName }", 
 		viewId = "/forge/index.jsf"
   )
 })

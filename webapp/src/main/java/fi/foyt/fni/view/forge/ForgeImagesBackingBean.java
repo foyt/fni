@@ -29,7 +29,7 @@ import fi.foyt.fni.users.UserController;
 @URLMappings(mappings = { 
 	@URLMapping(
 	  id = "forge-images", 
-   	pattern = "/forge/images/#{forgeImagesBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\\\-\\:]*/ forgeImagesBackingBean.urlPath }", 
+   	pattern = "/forge/images/#{forgeImagesBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\\\-\\:\\,]*/ forgeImagesBackingBean.urlPath }", 
 		viewId = "/forge/images.jsf"
   ) 
 })

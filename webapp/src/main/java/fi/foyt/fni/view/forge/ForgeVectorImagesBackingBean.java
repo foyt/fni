@@ -38,7 +38,7 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @URLMappings(mappings = { 
 	@URLMapping(
 	  id = "forge-vectorimages", 
-   	pattern = "/forge/vectorimages/#{forgeVectorImagesBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\\\-\\:]*/ forgeVectorImagesBackingBean.urlPath }", 
+   	pattern = "/forge/vectorimages/#{forgeVectorImagesBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\\\-\\:\\,]*/ forgeVectorImagesBackingBean.urlPath }", 
 		viewId = "/forge/vectorimages.jsf"
   ) 
 })
