@@ -1,0 +1,8 @@
+# Language 
+language: java
+# JDK
+jdk:
+  - openjdk7
+# Fix for See https://github.com/Jasig/sass-maven-plugin/issues/47
+before_install:
+  - unset GEM_PATH
