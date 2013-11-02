@@ -136,7 +136,8 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
 			return;
 		}
 		
-		writeJsonResponse(response, new File(document.getId().toString(), document.getTitle(), document.getModified(), revisionNumber, document.getData(), COOPS_DOCUMENT_CONTENTTYPE));
+		Long documentRevisionNumber = documentController.getDocumentRevision(document);
+		writeJsonResponse(response, new File(document.getId().toString(), document.getTitle(), document.getModified(), documentRevisionNumber, document.getData(), COOPS_DOCUMENT_CONTENTTYPE));
 	}
 
 	@Override
@@ -290,7 +291,8 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
       if (revisionSettings.size() > 0) {
       	properties = new HashMap<>();
       	for (MaterialRevisionSetting revisionSetting : revisionSettings) {
-      		properties.put(revisionSetting.getKey().getName(), revisionSetting.getValue());
+      	  String key = StringUtils.removeStart(revisionSetting.getKey().getName(), "document.");
+      		properties.put(key, revisionSetting.getValue());
       	}
       }
       
