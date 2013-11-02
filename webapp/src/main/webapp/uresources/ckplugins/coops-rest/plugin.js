@@ -287,9 +287,23 @@
           
           _doGetRequest: function (url, parameters, callback) {
             var xhr = this._createXMLHttpRequest();
-            xhr.open("get", url + ((parameters.length > 0) ? '?' + this._processParameters(parameters) : ''), false);
+            var async = true;
+            
+            xhr.open("get", url + ((parameters.length > 0) ? '?' + this._processParameters(parameters) : ''), async);
+            
+            if (async == true) {
+              xhr.onreadystatechange = function() {
+                if (xhr.readyState==4) {
+                  callback(xhr.status, xhr.responseText);
+                }
+              };
+            }
+            
             xhr.send(null);
-            callback(xhr.status, xhr.responseText);
+
+            if (async == false) {
+              callback(xhr.status, xhr.responseText);
+            }
           },
               
           _doPostRequest: function (method, url, data, contentType, callback) {
