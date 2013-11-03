@@ -2,7 +2,7 @@
   <div class="forge-create-folder-dialog">
     <p>Enter Name for new Folder</p>
     <div class="forge-create-folder-name-container">
-      <input required="required" name="name" type="text"/>
+      <input class="forge-create-folder-name" required="required" name="name" type="text"/>
     </div>
   </div>
 </div>

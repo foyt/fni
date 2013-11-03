@@ -497,3 +497,17 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   @include box-sizing(border-box); 
   width: 100%;
 }
+
+/* Create Folder */
+
+.forge-create-folder-dialog p {
+  font-style: italic;
+  font-size: 14px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.forge-create-folder-dialog  .forge-create-folder-name {
+  @include box-sizing(border-box); 
+  width: 100%;
+}
