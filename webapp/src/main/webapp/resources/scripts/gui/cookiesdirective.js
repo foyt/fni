@@ -8,7 +8,7 @@
       privacyPolicyUri: CONTEXTPATH + '/about.jsf#cookies',
       cookieScripts: 'Piwik',
       scriptWrapper: function() {
-        if (PIWIK_BASEURL) {
+        if ((typeof PIWIK_BASEURL) != 'undefined') {
           $.cookiesDirective.loadScript({
             uri: '//' + PIWIK_BASEURL + '/piwik.js'
           });
