@@ -17,6 +17,7 @@ env:
   - secure: etcZoy0laS5f4eFRyJ7poQypx3xM70lyYYb1BhO+z0zfEu4hWQAcltVIflcIVo0GAM4ELUyDu/UyaGB2h9p/BQ0DFjalP39dTTaq9VtJsu2T+cP5oWEbREvahrF6g3+RtUWE9DUzfO/Vo0stT8nv/1UMH9iUTDcqkMUOiLJy72k=
   - secure: n32HCUYA47/GtshHLOQYUrS7+A0qXH5XeAfhTCvnYt2wjiRyxOTirH87QVa2IXg+y2DFuFvvk2AU47PUaar3sVFLxOsmfWchzTWVoiIDIGZ9S9rMtqsNuzzrCpsCI+PUmS0hUbf3GF7fAAajZft8hjSI1N960rmvQg/kr2n0oMg=
 after_success:
+- pushd .
 - python travis/m2conf.py
 - mvn deploy --settings ~/.m2/mySettings.xml
 - sudo apt-get install ruby1.9.1 git
@@ -35,5 +36,6 @@ after_success:
 - git push
 - rhc sshkey-remove travis -l $STAGING_USERNAME -p $STAGING_PASSWORD
 - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
-- cd ~/foyt/fni/selenium-tests
+- popd
+- cd fni/selenium-tests
 - mvn test
