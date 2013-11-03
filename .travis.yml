@@ -3,6 +3,9 @@ jdk:
 - openjdk7
 before_install:
 - unset GEM_PATH
+branches:
+  only:
+  - devel
 env:
   global:
   - secure: nSldmFh+YCDB2zErXTzy2wkTnw7QLDGYR53apjR7N033WyotFHM8suiVUkFN1OCw1b7qTk2FnikJ5+5KbiI5wxm+4v07Qc0MQtBAV7bdeE1efLgdp335L2/DETSEY+Hiz6WQThmMOYooM1Z0qn3UO80fGiGD9FMkShbmQKuGUe4=
