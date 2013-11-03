@@ -249,4 +249,31 @@
     });
   });
   
+  $(document).on('click', '.forge-new-material-folder', function (event) {
+    dust.render("forge-create-folder", {
+    }, function(err, html) {
+      if (!err) {
+        var dialog = $(html);
+        dialog.dialog({
+          modal: true,
+          width: 400,
+          buttons: [{
+            'text': dialog.data('create-button'),
+            'click': function(event) { 
+              alert('blll');
+            }
+          }, {
+            'text': dialog.data('cancel-button'),
+            'click': function(event) { 
+              $(this).dialog("close");
+            }
+          }]
+        });
+      } else {
+       // TODO: Proper error handling...
+        alert(err);
+      }
+    });
+  });
+  
 }).call(this);
