@@ -1,0 +1,8 @@
+<div title="Create Folder" data-create-button="Create" data-cancel-button="Cancel">
+  <div class="forge-create-folder-dialog">
+    <p>Enter Name for new Folder</p>
+    <div class="forge-create-folder-name-container">
+      <input class="forge-create-folder-name" required="required" name="name" type="text"/>
+    </div>
+  </div>
+</div>

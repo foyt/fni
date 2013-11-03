@@ -249,4 +249,38 @@
     });
   });
   
+  $(document).on('click', '.forge-new-material-folder', function (event) {
+    var parentFolderId = $(this).data('parent-folder-id');
+    var actionForm = $('#forge-action-form-container form');
+    var prefix = actionForm.attr('name');
+    
+    dust.render("forge-create-folder", {
+    }, function(err, html) {
+      if (!err) {
+        var dialog = $(html);
+        dialog.dialog({
+          modal: true,
+          width: 400,
+          buttons: [{
+            'text': dialog.data('create-button'),
+            'click': function(event) {
+              var title = $(dialog).find('.forge-create-folder-name').val();
+              $('input[name="' + prefix + ':parent-folder-id' + '"]').val(parentFolderId);
+              $('input[name="' + prefix + ':new-folder-name' + '"]').val(title);
+              $('input[name="' + prefix + ':new-folder' + '"]').click();
+            }
+          }, {
+            'text': dialog.data('cancel-button'),
+            'click': function(event) { 
+              $(this).dialog("close");
+            }
+          }]
+        });
+      } else {
+       // TODO: Proper error handling...
+        alert(err);
+      }
+    });
+  });
+  
 }).call(this);

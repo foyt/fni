@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -20,6 +21,7 @@ import com.itextpdf.text.DocumentException;
 import fi.foyt.fni.materials.DocumentController;
 import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
+import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.MaterialUserController;
 import fi.foyt.fni.materials.PdfController;
 import fi.foyt.fni.persistence.model.materials.Document;
@@ -32,6 +34,7 @@ import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
+import fi.foyt.fni.security.UnauthorizedException;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.data.TypedData;
@@ -60,8 +63,11 @@ public class ForgeMaterialActionBackingBean {
 	@Inject
 	private SessionController sessionController;
 
-	@Inject
+  @Inject
 	private MaterialUserController materialUserController;
+
+  @Inject
+	private MaterialPermissionController materialPermissionController;
   
   public Long getMaterialId() {
     return materialId;
@@ -77,6 +83,14 @@ public class ForgeMaterialActionBackingBean {
   
   public void setMoveTargetFolderId(Long moveTargetFolderId) {
     this.moveTargetFolderId = moveTargetFolderId;
+  }
+  
+  public Long getParentFolderId() {
+    return parentFolderId;
+  }
+  
+  public void setParentFolderId(Long parentFolderId) {
+    this.parentFolderId = parentFolderId;
   }
   
   public String getMaterialSharePublicity() {
@@ -95,6 +109,14 @@ public class ForgeMaterialActionBackingBean {
     this.materialShareUsers = materialShareUsers;
   }
 
+  public String getNewFolderName() {
+    return newFolderName;
+  }
+  
+  public void setNewFolderName(String newFolderName) {
+    this.newFolderName = newFolderName;
+  }
+  
   @LoggedIn
   @Secure (Permission.MATERIAL_DELETE)
   @SecurityContext(context = "#{forgeMaterialActionBackingBean.materialId}")
@@ -205,9 +227,32 @@ public class ForgeMaterialActionBackingBean {
 	  }
 	}
 	
+	@LoggedIn
+  public void newFolder() throws IOException {
+	  if (StringUtils.isBlank(getNewFolderName())) {
+	    FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("forge.newFolder.nameRequired"));
+	  } else {
+	    User loggedUser = sessionController.getLoggedUser();
+  	  Folder parentFolder = getParentFolderId() != null ? folderController.findFolderById(getParentFolderId()) : null;
+  	  if (parentFolder != null) {
+  	    if (!materialPermissionController.hasModifyPermission(loggedUser, parentFolder)) {
+  	      throw new UnauthorizedException();
+  	    }
+  	  }
+  	  
+	    Folder folder = folderController.createFolder(parentFolder, getNewFolderName(), loggedUser);
+      FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+        .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+        .append("/forge/folders/")
+        .append(folder.getPath())
+        .toString());
+	  }
+	}
+	
 	private Long materialId;
+	private Long parentFolderId;
 	private Long moveTargetFolderId;
 	private String materialSharePublicity;
 	private Map<String, String> materialShareUsers;
-	
+	private String newFolderName;
 }
