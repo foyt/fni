@@ -202,28 +202,6 @@
       <groupId>net.java.dev.rome</groupId>
       <artifactId>rome</artifactId>
     </dependency>
-    
-    <!-- Tests -->
-    
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.saucelabs</groupId>
-      <artifactId>sauce_junit</artifactId>
-      <version>[1.0.0,)</version>
-      <scope>test</scope>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-server</artifactId>
-      <version>2.29.0</version>
-    </dependency>
-    
   </dependencies>
   
   <build>
@@ -276,15 +254,6 @@
           </execution>
         </executions>
       </plugin>
-      <!-- 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.12.4</version>
-        <configuration>
-          <redirectTestOutputToFile>true</redirectTestOutputToFile>
-        </configuration>
-      </plugin> -->
     </plugins>
   </build>
   
@@ -312,19 +281,6 @@
       <id>ckc-plugin-googlecode</id>
       <name>CKC Maven Repository</name>
       <url>http://ckc-plugin.googlecode.com/svn/repository</url>
-    </repository>
-    
-    <!-- SauceLabs -->
-    
-    <repository>
-      <id>saucelabs-repository</id>
-      <url>http://repository-saucelabs.forge.cloudbees.com/release</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
     </repository>
   </repositories>
 
