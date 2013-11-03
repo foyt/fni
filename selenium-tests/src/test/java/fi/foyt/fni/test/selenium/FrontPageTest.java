@@ -1,10 +1,13 @@
 package fi.foyt.fni.test.selenium;
 
+import static org.junit.Assert.*;
+
 import java.net.URL;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -27,6 +30,7 @@ public class FrontPageTest {
     capabilities.setCapability("platform", Platform.XP);
     capabilities.setCapability("tunnel-identifier", travisJobNumber);
     capabilities.setCapability("build", travisJobNumber);
+    capabilities.setCapability("general.useragent.ocale", "en-US");
       
     this.driver = new RemoteWebDriver(new URL("http://" + username + ":" + accessKey + "@" + host + ":" + port + "/wd/hub"), capabilities);
   }
@@ -34,21 +38,18 @@ public class FrontPageTest {
   @Test
   public void testFrontPageEn() throws Exception {
     driver.get(STAGING_URL);
+    assertEquals("Forge & Illusion", driver.getTitle());
 
-//    selenium.addCustomRequestHeader("Accept-Language", "en-US");
-//    selenium.waitForPageToLoad("60000");
-//    
-//    // Check titles
-//    assertEquals("Forge & Illusion", selenium.getTitle());
-//    assertEquals("Forge & Illusion is a role-playing game oriented environment for game production and playing.", selenium.getText("css=p.index-description-text"));
-//    assertEquals("Latest Game Library Publications", selenium.getText("link=Latest Game Library Publications"));
-//    assertEquals("Latest Forum Topics", selenium.getText("link=Latest Forum Topics"));
-//    assertEquals("News", selenium.getText("link=News"));
-//    
-//    // Check links
-//    assertEquals("More >>", selenium.getText("link=More >>"));
-//    assertEquals("More >>", selenium.getText("css=a.index-forum-more"));
-//    assertEquals("More >>", selenium.getText("css=a.index-blog-more"));
+    // Check titles
+    assertEquals("Forge & Illusion is a role-playing game oriented environment for game production and playing.", driver.findElement(By.cssSelector("p.index-description-text")).getText());
+    assertEquals("Latest Game Library Publications", driver.findElement(By.cssSelector(".index-publications-panel>h3>a")).getText());
+    assertEquals("Latest Forum Topics", driver.findElement(By.cssSelector(".index-forum-panel>h3>a")).getText());
+    assertEquals("News", driver.findElement(By.cssSelector(".index-blog-panel>h3>a")).getText());
+    
+    // Check links
+    assertEquals("More >>", driver.findElement(By.cssSelector(".index-gamelibrary-more")).getText());
+    assertEquals("More >>", driver.findElement(By.cssSelector("a.index-forum-more")).getText());
+    assertEquals("More >>", driver.findElement(By.cssSelector("a.index-blog-more")).getText());
   }
 
   @After
