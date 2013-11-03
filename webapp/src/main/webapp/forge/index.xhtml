@@ -66,7 +66,7 @@
               <h:panelGroup layout="block" styleClass="forge-menu-items">
                 <h:commandLink action="#{forgeIndexBackingBean.createNewDocument}">#{locales['forge.index.newMaterialDocumentMenu']}</h:commandLink>
                 <h:commandLink action="#{forgeIndexBackingBean.createNewVectorImage}">#{locales['forge.index.newMaterialVectorImageMenu']}</h:commandLink>
-                <a class="forge-new-material-folder" href="javascript:void(null)">#{locales['forge.index.newMaterialCreateFolderMenu']}</a>
+                <a class="forge-new-material-folder" href="javascript:void(null)" data-parent-folder-id="#{forgeIndexBackingBean.folderId}">#{locales['forge.index.newMaterialCreateFolderMenu']}</a>
               </h:panelGroup>          
             </h:panelGroup>
           </h:panelGroup>
@@ -176,13 +176,16 @@
     <h:panelGroup layout="block" id="forge-action-form-container" style="display: none">
       <h:form>
         <h:inputHidden id="material-id" value="#{forgeMaterialActionBackingBean.materialId}" />
+        <h:inputHidden id="parent-folder-id" value="#{forgeMaterialActionBackingBean.parentFolderId}" />
         <h:inputHidden id="move-target-folder-id" value="#{forgeMaterialActionBackingBean.moveTargetFolderId}" />
         <h:inputHidden id="material-share-publicity" value="#{forgeMaterialActionBackingBean.materialSharePublicity}" />
         <h:inputHidden id="material-share-users" value="#{forgeMaterialActionBackingBean.materialShareUsers}" converter="fi.foyt.fni.jsf.JsonMapConverter"/>
+        <h:inputHidden id="new-folder-name" value="#{forgeMaterialActionBackingBean.newFolderName}"/>
         <h:commandButton id="delete" action="#{forgeMaterialActionBackingBean.deleteMaterial}"/>
         <h:commandButton id="move" action="#{forgeMaterialActionBackingBean.moveMaterial}"/>
         <h:commandButton id="print-file" action="#{forgeMaterialActionBackingBean.printFile}"/>
         <h:commandButton id="material-share-save" action="#{forgeMaterialActionBackingBean.materialShareSave}"/>
+        <h:commandButton id="new-folder" action="#{forgeMaterialActionBackingBean.newFolder}"/>
       </h:form>
     </h:panelGroup>
   </ui:define>

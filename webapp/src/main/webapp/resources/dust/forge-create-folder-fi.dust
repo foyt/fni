@@ -1,0 +1,8 @@
+<div title="Luo kansio" data-create-button="Luo" data-cancel-button="Peruuta">
+  <div class="forge-create-folder-dialog">
+    <p>Anna nimi uudelle kansiolle</p>
+    <div class="forge-create-folder-name-container">
+      <input class="forge-create-folder-name" required="required" name="name" type="text"/>
+    </div>
+  </div>
+</div>
