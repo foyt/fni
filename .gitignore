@@ -1,2 +1,4 @@
 compile.sh
 .DS_Store
+/.settings
+/.project
