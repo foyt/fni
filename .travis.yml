@@ -35,4 +35,5 @@ after_success:
 - git push
 - rhc sshkey-remove travis -l $STAGING_USERNAME -p $STAGING_PASSWORD
 - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
+- cd ~/foyt/fni/selenium-tests
 - mvn test
