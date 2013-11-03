@@ -24,12 +24,15 @@ public class FrontPageTest {
     String travisJobNumber = System.getProperty("TRAVIS_JOB_NUMBER");
     String host = "localhost";
     String port = "4445";
-
+    
     DesiredCapabilities capabilities = DesiredCapabilities.firefox();
     capabilities.setCapability("version", "17");
     capabilities.setCapability("platform", Platform.XP);
-    capabilities.setCapability("tunnel-identifier", travisJobNumber);
-    capabilities.setCapability("build", travisJobNumber);
+    if (travisJobNumber != null) {
+      capabilities.setCapability("tunnel-identifier", travisJobNumber);
+      capabilities.setCapability("build", travisJobNumber);
+    }
+    
     capabilities.setCapability("general.useragent.ocale", "en-US");
       
     this.driver = new RemoteWebDriver(new URL("http://" + username + ":" + accessKey + "@" + host + ":" + port + "/wd/hub"), capabilities);
