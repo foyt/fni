@@ -1,10 +1,17 @@
 package fi.foyt.fni.persistence.dao.gamelibrary;
 
 import java.util.Date;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
+import fi.foyt.fni.persistence.model.gamelibrary.Order_;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
 import fi.foyt.fni.persistence.model.users.Address;
 import fi.foyt.fni.persistence.model.users.User;
@@ -37,6 +44,18 @@ public class OrderDAO extends GenericDAO<Order> {
 		order.setShippingCosts(shippingCosts);
 
 		return persist(order);
+	}
+	
+	public List<Order> listByOrderStatus(OrderStatus orderStatus) {
+	  EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Order> criteria = criteriaBuilder.createQuery(Order.class);
+    Root<Order> root = criteria.from(Order.class);
+    criteria.select(root);
+    criteria.where(criteriaBuilder.equal(root.get(Order_.orderStatus), orderStatus));
+
+    return entityManager.createQuery(criteria).getResultList();
 	}
 
 	public Order updateOrderStatus(Order order, OrderStatus orderStatus) {

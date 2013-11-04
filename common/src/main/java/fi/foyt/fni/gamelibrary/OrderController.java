@@ -44,6 +44,14 @@ public class OrderController implements Serializable {
 	@OrderCanceled
 	private Event<OrderEvent> orderCanceledEvent;
 
+  @Inject
+  @OrderShipped
+  private Event<OrderEvent> orderShippedEvent;
+
+  @Inject
+  @OrderDelivered
+  private Event<OrderEvent> orderDeliveredEvent;
+  
 	@Inject
 	private OrderDAO orderDAO;
 	
@@ -63,6 +71,10 @@ public class OrderController implements Serializable {
 		return orderDAO.findById(orderId);
 	}
 	
+  public List<Order> listOrdersByStatus(OrderStatus status) {
+    return orderDAO.listByOrderStatus(status);
+  }
+  
 	public List<Order> listOrdersByPublication(Publication publication) {
 		return orderItemDAO.listOrdersByPublication(publication);
 	}
@@ -87,6 +99,20 @@ public class OrderController implements Serializable {
 		orderCanceledEvent.fire(new OrderEvent(sessionController.getLocale(), order.getId()));
 		return order;
 	}
+
+  public Order updateOrderAsShipped(Order order) {
+    Date now = new Date();
+    order = orderDAO.updateOrderStatus(orderDAO.updateCanceled(order, now), OrderStatus.SHIPPED);
+    orderShippedEvent.fire(new OrderEvent(sessionController.getLocale(), order.getId()));
+    return order;
+  }
+
+  public Order updateOrderAsDelivered(Order order) {
+    Date now = new Date();
+    order = orderDAO.updateOrderStatus(orderDAO.updateCanceled(order, now), OrderStatus.DELIVERED);
+    orderDeliveredEvent.fire(new OrderEvent(sessionController.getLocale(), order.getId()));
+    return order;
+  }
 	
 	/* OrderItem */
 	
