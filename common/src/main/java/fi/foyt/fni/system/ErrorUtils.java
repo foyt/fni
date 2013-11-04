@@ -2,6 +2,7 @@ package fi.foyt.fni.system;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.SocketException;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.logging.Level;
@@ -17,6 +18,10 @@ import fi.foyt.fni.utils.mail.MailUtils;
 public class ErrorUtils {
 
   public static void mailError(String recipient, ServletRequest request, ServletResponse response, Throwable t) {
+    if (t instanceof SocketException) {
+      return;
+    }
+    
     try {
       String subject = "Error occurred on Forge & Illusion";
       StringWriter contentWriter = new StringWriter();
