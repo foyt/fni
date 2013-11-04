@@ -52,7 +52,6 @@
   </developers>
   
   <properties>
-    <fni.version>3.0.0-SNAPSHOT</fni.version>
     <hibenate-search.version>4.3.0.Final</hibenate-search.version>
     <instrumentation-hibernate.version>4.0.1.Final</instrumentation-hibernate.version>
     <prettyfaces-jsf2.version>3.3.3</prettyfaces-jsf2.version>
@@ -90,13 +89,13 @@
       <dependency>
         <groupId>fi.foyt.fni</groupId>
         <artifactId>persistence</artifactId>
-        <version>${fni.version}</version>
+        <version>${project.version}</version>
       </dependency>
 
       <dependency>
         <groupId>fi.foyt.fni</groupId>
         <artifactId>common</artifactId>
-        <version>${fni.version}</version>
+        <version>${project.version}</version>
       </dependency>
       
       <!-- Paytrail -->
