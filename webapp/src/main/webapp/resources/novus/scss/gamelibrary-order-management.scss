@@ -1,0 +1,74 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+/* Generic */
+
+h3 {
+  @include header-3;
+  color: $title-color;
+  margin-bottom: 18px;
+}
+
+/* Panels */
+
+.gamelibrary-order-management-panel {
+  @include generic-panel;
+}
+
+/* Actions
+
+.gamelibrary-manage-actions {
+  margin-bottom: 18px;
+}
+
+.gamelibrary-manage-actions input[type="submit"] {
+  color: $default-color;
+  font-family: $title-font;
+  font-size: 14px;
+  text-transform: uppercase;
+  padding: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Lists */
+
+.gamelibrary-manage-orders-list {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 12px;
+  width: 100%;
+  border-spacing: 1px;
+  border-collapse: separate;
+  margin-bottom: 40px;
+}
+
+.gamelibrary-manage-orders-list th {
+  font-weight: bold;
+  padding: 4px;
+}
+
+.gamelibrary-manage-orders-list td {
+  padding: {
+    top: 4px;
+    bottom: 4px;
+    left: 8px;
+  }
+  background: rgba(200, 200, 200, 0.3);
+}
+
+.gamelibrary-manage-orders-list td a {
+  color: $default-color;
+  text-decoration: none; 
+}
+
+.gamelibrary-manage-orders-actions a {
+  color: $default-color;
+  text-transform: uppercase; 
+  text-decoration: none;
+  margin-right: 8px;
+}

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['gamelibrary.orderManagement.pageTitle']}</ui:define>
+  
+  <ui:define name="view-scripts">
+    <!-- View scripts -->
+    
+    <h:outputScript name="scripts/gui/gamelibrary-order-management.js"/>
+  </ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <!-- View Styles -->
+  
+    <h:outputStylesheet library="novus" name="css/gamelibrary-order-management.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <!-- Header -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:panelGroup styleClass="view-header-navigation-item">#{locales['gamelibrary.orderManagement.navigationIndex']}</h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">#{locales['gamelibrary.orderManagement.navigationGameLibrary']}</h:panelGroup>
+      </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{locales['gamelibrary.orderManagement.descriptionTitle']}</p>
+        <p class="view-header-description-text">#{locales['gamelibrary.orderManagement.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <!-- View Content -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="gamelibrary-order-management-panel">
+        
+        <!-- order lists -->
+        
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list">
+          <h3>#{locales['gamelibrary.orderManagement.ordersNewTitle']}</h3>
+          
+          <ui:include src="/facelets/gamelibrarymanageorderslist.xhtml">
+            <ui:param name="orders" value="#{gameLibraryOrderManamentBackingBean.ordersNew}"/>
+          </ui:include>
+        </h:panelGroup>
+        
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list">
+          <h3>#{locales['gamelibrary.orderManagement.ordersCanceledTitle']}</h3>
+          
+          <ui:include src="/facelets/gamelibrarymanageorderslist.xhtml">
+            <ui:param name="orders" value="#{gameLibraryOrderManamentBackingBean.ordersCanceled}"/>
+          </ui:include>
+        </h:panelGroup>
+        
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list">
+          <h3>#{locales['gamelibrary.orderManagement.ordersPaidTitle']}</h3>
+          
+          <ui:include src="/facelets/gamelibrarymanageorderslist.xhtml">
+            <ui:param name="orders" value="#{gameLibraryOrderManamentBackingBean.ordersPaid}"/>
+          </ui:include>
+        </h:panelGroup>
+        
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list">
+          <h3>#{locales['gamelibrary.orderManagement.ordersWaitingForDeliveryTitle']}</h3>
+          
+          <ui:include src="/facelets/gamelibrarymanageorderslist.xhtml">
+            <ui:param name="orders" value="#{gameLibraryOrderManamentBackingBean.ordersWaitingForDelivery}"/>
+          </ui:include>
+        </h:panelGroup>
+        
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list">
+          <h3>#{locales['gamelibrary.orderManagement.ordersShippedTitle']}</h3>
+          
+          <ui:include src="/facelets/gamelibrarymanageorderslist.xhtml">
+            <ui:param name="orders" value="#{gameLibraryOrderManamentBackingBean.ordersShipped}"/>
+          </ui:include>
+        </h:panelGroup>
+        
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list">
+          <h3>#{locales['gamelibrary.orderManagement.ordersDeliveredTitle']}</h3>
+          
+          <ui:include src="/facelets/gamelibrarymanageorderslist.xhtml">
+            <ui:param name="orders" value="#{gameLibraryOrderManamentBackingBean.ordersDelivered}"/>
+          </ui:include>
+        </h:panelGroup>
+      </h:panelGroup>
+    </h:panelGroup>   
+  </ui:define>
+
+</ui:composition>

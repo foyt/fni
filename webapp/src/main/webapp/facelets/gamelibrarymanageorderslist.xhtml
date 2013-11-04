@@ -1,0 +1,71 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html">          
+          
+  <h:dataTable styleClass="gamelibrary-manage-orders-list" var="order" value="#{orders}">
+    <h:column>
+      <f:facet name="header">#{locales['gamelibrary.orderManagement.orderIdLabel']}</f:facet>
+      <h:outputLink value="#{request.contextPath}/gamelibrary/orders/#{order.id}">#{order.id}</h:outputLink>
+    </h:column>
+    <h:column>
+      <f:facet name="header">#{locales['gamelibrary.orderManagement.orderCustomerLabel']}</f:facet>
+      <ui:fragment rendered="#{!empty(order.customerCompany)}">#{order.customerCompany} / </ui:fragment>
+      #{order.customerFirstName} #{order.customerLastName} &lt;#{order.customerEmail}&gt;
+      <h:panelGroup styleClass="gamelibrary-manage-orders-actions">
+        <h:form>
+          <h:commandLink action="#{gameLibraryOrderManamentBackingBean.moveToCanceled(order.id)}" value="#{locales['gamelibrary.orderManagement.orderActionMoveToCanceled']}" />
+          <h:commandLink action="#{gameLibraryOrderManamentBackingBean.moveToPaid(order.id)}" value="#{locales['gamelibrary.orderManagement.orderActionMoveToPaid']}" />
+          <h:commandLink action="#{gameLibraryOrderManamentBackingBean.moveToShipped(order.id)}" value="#{locales['gamelibrary.orderManagement.orderActionMoveToShipped']}" />
+          <h:commandLink action="#{gameLibraryOrderManamentBackingBean.moveToDelivered(order.id)}" value="#{locales['gamelibrary.orderManagement.orderActionMoveToDelivered']}" />
+        </h:form>
+      </h:panelGroup>
+    </h:column>
+    <h:column>
+      <f:facet name="header">#{locales['gamelibrary.orderManagement.orderMobileLabel']}</f:facet>
+      <h:panelGroup layout="block" styleClass="gamelibrary-manage-orders-phone-field">
+        #{order.customerMobile}
+      </h:panelGroup>
+      <h:panelGroup layout="block" styleClass="gamelibrary-manage-orders-phone-field">
+        #{order.customerPhone}
+      </h:panelGroup>
+    </h:column>
+    <h:column>
+      <f:facet name="header">#{locales['gamelibrary.orderManagement.orderAddressLabel']}</f:facet>
+      <h:panelGroup layout="block" styleClass="gamelibrary-manage-orders-address-field">
+        #{order.deliveryAddress.street1} #{order.deliveryAddress.street2}
+      </h:panelGroup>
+      <h:panelGroup layout="block" styleClass="gamelibrary-manage-orders-address-field">
+        #{order.deliveryAddress.postalCode} #{order.deliveryAddress.city} #{order.deliveryAddress.country.name}
+      </h:panelGroup>
+    </h:column>
+    <h:column>
+      <f:facet name="header">#{locales['gamelibrary.orderManagement.orderCostsLabel']}</f:facet>
+      <h:outputText value="#{gameLibraryOrderManamentBackingBean.getOrderTotalPrice(order.id)}" >
+        <f:convertNumber currencyCode="EUR" type="currency" />
+      </h:outputText>
+    </h:column>
+    <h:column>
+      <f:facet name="header">#{locales['gamelibrary.orderManagement.orderDateLabel']}</f:facet>
+      <h:outputText value="#{order.created}" rendered="#{order.orderStatus eq 'NEW'}">
+        <f:convertDateTime type="date"/>
+      </h:outputText>
+      <h:outputText value="#{order.paid}" rendered="#{(order.orderStatus eq 'PAID')||(order.orderStatus eq 'WAITING_FOR_DELIVERY')}">
+        <f:convertDateTime type="date"/>
+      </h:outputText>
+      <h:outputText value="#{order.shipped}" rendered="#{order.orderStatus eq 'SHIPPED'}">
+        <f:convertDateTime type="date"/>
+      </h:outputText>
+      <h:outputText value="#{order.delivered}" rendered="#{order.orderStatus eq 'DELIVERED'}">
+        <f:convertDateTime type="date"/>
+      </h:outputText>
+    </h:column>
+    <h:column>
+      <f:facet name="header">#{locales['gamelibrary.orderManagement.orderNotesLabel']}</f:facet>
+      <span title="#{order.notes}">
+        #{order.notes.length() gt 20 ? order.notes.substring(0, 17).concat('...') : order.notes}
+      </span>
+    </h:column>
+  </h:dataTable>
+  
+</ui:composition>
