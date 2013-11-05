@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>selenium-tests</artifactId>
   <groupId>fi.foyt.fni</groupId>
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.0.2</version>
   <packaging>jar</packaging>
   <name>Selenium tests</name>
   <description>Selenium tests for Forge &amp; Illusion</description>
