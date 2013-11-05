@@ -2,6 +2,8 @@ package fi.foyt.fni.session;
 
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
@@ -18,12 +20,16 @@ import fi.foyt.fni.persistence.model.users.Role;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.persistence.model.users.UserToken;
+import fi.foyt.fni.system.SystemSettingsController;
 
 @SessionScoped
 @Stateful
 public class SessionController implements Serializable {
   
 	private static final long serialVersionUID = -441183766079031359L;
+	
+	@Inject
+	private Logger logger;
 
 	@Inject
 	@Login
@@ -38,6 +44,9 @@ public class SessionController implements Serializable {
 
   @Inject
   private UserTokenDAO userTokenDAO;
+
+  @Inject  
+  private SystemSettingsController systemSettingsController;
   
   public boolean isLoggedIn() {
     return loggedUserId != null;
@@ -151,8 +160,14 @@ public class SessionController implements Serializable {
     if (locale == null) {
       User user = getLoggedUser();
       
-      if (user != null && StringUtils.isNotBlank(user.getLocale()))
-        return LocaleUtils.toLocale(user.getLocale());
+      if (user != null && StringUtils.isNotBlank(user.getLocale())) {
+        try {
+          return LocaleUtils.toLocale(user.getLocale());
+        } catch (IllegalArgumentException e) {
+          // Invalid locale has somehow ended up in the database
+          logger.log(Level.SEVERE, "Invalid locale found from User", e);
+        }
+      }
       
       return Locale.getDefault();
     }
