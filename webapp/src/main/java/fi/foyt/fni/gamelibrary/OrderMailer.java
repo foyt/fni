@@ -30,6 +30,68 @@ public class OrderMailer {
 
 	@Inject
 	private SystemSettingsController systemSettingsController;
+	
+	public void onOrderShipped(@Observes @OrderShipped OrderEvent event) {
+	  if (event.getOrderId() != null) {
+      Order order = orderController.findOrderById(event.getOrderId()); 
+      if (order != null) {
+        Locale locale = event.getLocale();
+        String customerName = order.getCustomerFirstName() + ' ' + order.getCustomerLastName();
+        String customerEmail = order.getCustomerEmail();
+        
+        List<OrderItem> items = orderController.listOrderItems(order);
+        
+        StringBuilder contentBuilder = new StringBuilder();
+        contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.shipped.contentGreeting", customerName, order.getId()));
+        contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.shipped.contentText"));
+        
+        if (order.getDeliveryAddress() != null) {
+          String streetAddress = order.getDeliveryAddress().getStreet1();
+          if (StringUtils.isNotBlank(order.getDeliveryAddress().getStreet2())) {
+            streetAddress += '\n' + order.getDeliveryAddress().getStreet2();
+          }
+          contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.shipped.contentAddress", streetAddress, order.getDeliveryAddress().getPostalCode() + ' ' + order.getDeliveryAddress().getCity(), order.getDeliveryAddress().getCountry().getName()));
+        }
+        
+        Double totalCosts = 0d;
+        
+        StringBuilder itemsList = new StringBuilder();
+        for (int i = 0, l = items.size(); i < l; i++) {
+          OrderItem item = items.get(i);
+          itemsList.append(item.getCount());
+          itemsList.append(" x ");
+          itemsList.append(item.getName());
+          if (i < (l - 1)) {
+            itemsList.append('\n');
+          }
+          
+          totalCosts += item.getUnitPrice() * item.getCount();
+        }
+        
+        totalCosts += order.getShippingCosts();
+        NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(locale);
+        currencyInstance.setCurrency(Currency.getInstance("EUR"));
+        String totalCostsFormatted = currencyInstance.format(totalCosts);
+        
+        contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.shipped.contentProducts", itemsList.toString(), totalCostsFormatted));
+        contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.shipped.contentFooter"));
+        
+        String subject = getLocalizedValue(locale, "gamelibrary.mail.shipped.subject");
+        String content = contentBuilder.toString();
+        
+        try {
+          notifyShopOwner("Fwd: " + subject, content);
+        } catch (MessagingException e) {
+          logger.severe("Failed to notify shop owner of mail payment");
+        }
+        notifyCustomer(customerName, customerEmail, subject, content);
+      } else {
+        logger.severe("Tried to mail 'waiting for delivery' mail for non-existing order");
+      }
+    } else {
+      logger.severe("Tried to mail 'waiting for delivery' mail for non-existing orderId");
+    }
+	}
 
 	public void onOrderWaitingForDelivery(@Observes @OrderWaitingForDelivery OrderEvent event) {
 		if (event.getOrderId() != null) {
@@ -40,17 +102,17 @@ public class OrderMailer {
   	    String customerEmail = order.getCustomerEmail();
   	    
   		  List<OrderItem> items = orderController.listOrderItems(order);
-  	    
+  		  
   	    StringBuilder contentBuilder = new StringBuilder();
-  	    contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.contentGreeting", customerName, order.getId()));
-  	    contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.contentWaitingForDelivery"));
+  	    contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.waitingForDelivery.contentGreeting", customerName, order.getId()));
+  	    contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.waitingForDelivery.contentText"));
   	            
   	    if (order.getDeliveryAddress() != null) {
   	      String streetAddress = order.getDeliveryAddress().getStreet1();
   	      if (StringUtils.isNotBlank(order.getDeliveryAddress().getStreet2())) {
   	        streetAddress += '\n' + order.getDeliveryAddress().getStreet2();
   	      }
-  	      contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.contentAddress", streetAddress, order.getDeliveryAddress().getPostalCode() + ' ' + order.getDeliveryAddress().getCity(), order.getDeliveryAddress().getCountry().getName()));
+  	      contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.waitingForDelivery.contentAddress", streetAddress, order.getDeliveryAddress().getPostalCode() + ' ' + order.getDeliveryAddress().getCity(), order.getDeliveryAddress().getCountry().getName()));
   	    }
   	    
   	    Double totalCosts = 0d;
@@ -73,10 +135,10 @@ public class OrderMailer {
   	    currencyInstance.setCurrency(Currency.getInstance("EUR"));
   	    String totalCostsFormatted = currencyInstance.format(totalCosts);
   	    
-  	    contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.contentProducts", itemsList.toString(), totalCostsFormatted));
-  	    contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.contentFooter"));
+  	    contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.waitingForDelivery.contentProducts", itemsList.toString(), totalCostsFormatted));
+  	    contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.waitingForDelivery.contentFooter"));
   	    
-  	    String subject = getLocalizedValue(locale, "gamelibrary.mail.subjectWaitingForDelivery");
+  	    String subject = getLocalizedValue(locale, "gamelibrary.mail.waitingForDelivery.subject");
   		  String content = contentBuilder.toString();
   	    
   		  try {
