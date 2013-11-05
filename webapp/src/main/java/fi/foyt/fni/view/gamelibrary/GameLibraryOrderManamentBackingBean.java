@@ -119,7 +119,11 @@ public class GameLibraryOrderManamentBackingBean {
   public String moveToPaid(Long orderId) throws FileNotFoundException {
     Order order = orderController.findOrderById(orderId);
     if (order != null) {
-      orderController.updateOrderAsPaid(order);
+      if (order.getDeliveryAddress() == null) {
+        orderController.updateOrderAsPaid(order);
+      } else {
+        orderController.updateOrderAsWaitingForDelivery(order);
+      }
     } else {
       throw new FileNotFoundException();
     }
