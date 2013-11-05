@@ -8,6 +8,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringUtils;
+
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
@@ -86,5 +88,13 @@ public class GameLibraryPublicationsBackingBean {
 	
 	public CreativeCommonsLicense getCreativeCommonsLicense(Publication publication) {
 		return CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
+	}
+	
+	public String replaceDescriptionLineBreaks(String description) {
+	  if (StringUtils.isNotBlank(description)) {
+	    return description.replace("\n", "<br/>");  
+	  }
+	  
+	  return null;
 	}
 }

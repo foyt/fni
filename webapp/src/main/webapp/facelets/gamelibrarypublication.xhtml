@@ -25,7 +25,7 @@
   
         <h:panelGroup layout="block" styleClass="gamelibrary-publication-info">
           <h:panelGroup layout="block" styleClass="gamelibrary-publication-description">
-            #{publication.description}
+            <h:outputText value="#{gameLibraryPublicationsBackingBean.replaceDescriptionLineBreaks(publication.description)}" escape="false"/>
           </h:panelGroup>
           
           <h:panelGroup layout="block" styleClass="gamelibrary-publication-details">
