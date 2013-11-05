@@ -1,5 +1,6 @@
 package fi.foyt.fni.view.forum;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
@@ -47,8 +48,11 @@ public class ForumBackingBean {
 	private SessionController sessionController;
 
 	@URLAction
-	public void load() {
+	public void load() throws FileNotFoundException {
 		forum = forumController.findForumByUrlName(getForumUrlName());
+		if (forum == null) {
+		  throw new FileNotFoundException();
+		}
 		
 		topics = forumController.listTopicsByForum(forum);
 		Collections.sort(topics, new Comparator<ForumTopic>() {
