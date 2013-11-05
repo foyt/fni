@@ -14,10 +14,10 @@
       #{order.customerFirstName} #{order.customerLastName} &lt;#{order.customerEmail}&gt;
       <h:panelGroup styleClass="gamelibrary-manage-orders-actions">
         <h:form>
-          <h:commandLink action="#{gameLibraryOrderManamentBackingBean.moveToCanceled(order.id)}" value="#{locales['gamelibrary.orderManagement.orderActionMoveToCanceled']}" />
-          <h:commandLink action="#{gameLibraryOrderManamentBackingBean.moveToPaid(order.id)}" value="#{locales['gamelibrary.orderManagement.orderActionMoveToPaid']}" />
-          <h:commandLink action="#{gameLibraryOrderManamentBackingBean.moveToShipped(order.id)}" value="#{locales['gamelibrary.orderManagement.orderActionMoveToShipped']}" />
-          <h:commandLink action="#{gameLibraryOrderManamentBackingBean.moveToDelivered(order.id)}" value="#{locales['gamelibrary.orderManagement.orderActionMoveToDelivered']}" />
+          <h:commandLink rendered="#{order.orderStatus ne 'CANCELED'}" action="#{gameLibraryOrderManamentBackingBean.moveToCanceled(order.id)}" value="#{locales['gamelibrary.orderManagement.orderActionMoveToCanceled']}" />
+          <h:commandLink rendered="#{(order.orderStatus ne 'WAITING_FOR_DELIVERY')and(order.orderStatus ne 'PAID')}" action="#{gameLibraryOrderManamentBackingBean.moveToPaid(order.id)}" value="#{locales['gamelibrary.orderManagement.orderActionMoveToPaid']}" />
+          <h:commandLink rendered="#{order.orderStatus ne 'SHIPPED'}" action="#{gameLibraryOrderManamentBackingBean.moveToShipped(order.id)}" value="#{locales['gamelibrary.orderManagement.orderActionMoveToShipped']}" />
+          <h:commandLink rendered="#{order.orderStatus ne 'DELIVERED'}" action="#{gameLibraryOrderManamentBackingBean.moveToDelivered(order.id)}" value="#{locales['gamelibrary.orderManagement.orderActionMoveToDelivered']}" />
         </h:form>
       </h:panelGroup>
     </h:column>
