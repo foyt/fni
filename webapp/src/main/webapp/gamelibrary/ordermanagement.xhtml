@@ -51,7 +51,7 @@
         
         <!-- order lists -->
         
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list">
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list" rendered="#{!empty(gameLibraryOrderManamentBackingBean.ordersNew)}">
           <h3>#{locales['gamelibrary.orderManagement.ordersNewTitle']}</h3>
           
           <ui:include src="/facelets/gamelibrarymanageorderslist.xhtml">
@@ -59,7 +59,7 @@
           </ui:include>
         </h:panelGroup>
         
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list">
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list" rendered="#{!empty(gameLibraryOrderManamentBackingBean.ordersCanceled)}">
           <h3>#{locales['gamelibrary.orderManagement.ordersCanceledTitle']}</h3>
           
           <ui:include src="/facelets/gamelibrarymanageorderslist.xhtml">
@@ -67,7 +67,7 @@
           </ui:include>
         </h:panelGroup>
         
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list">
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list" rendered="#{!empty(gameLibraryOrderManamentBackingBean.ordersPaid)}">
           <h3>#{locales['gamelibrary.orderManagement.ordersPaidTitle']}</h3>
           
           <ui:include src="/facelets/gamelibrarymanageorderslist.xhtml">
@@ -75,7 +75,7 @@
           </ui:include>
         </h:panelGroup>
         
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list">
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list" rendered="#{!empty(gameLibraryOrderManamentBackingBean.ordersWaitingForDelivery)}">
           <h3>#{locales['gamelibrary.orderManagement.ordersWaitingForDeliveryTitle']}</h3>
           
           <ui:include src="/facelets/gamelibrarymanageorderslist.xhtml">
@@ -83,7 +83,7 @@
           </ui:include>
         </h:panelGroup>
         
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list">
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list" rendered="#{!empty(gameLibraryOrderManamentBackingBean.ordersShipped)}">
           <h3>#{locales['gamelibrary.orderManagement.ordersShippedTitle']}</h3>
           
           <ui:include src="/facelets/gamelibrarymanageorderslist.xhtml">
@@ -91,7 +91,7 @@
           </ui:include>
         </h:panelGroup>
         
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list">
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list" rendered="#{!empty(gameLibraryOrderManamentBackingBean.ordersDelivered)}">
           <h3>#{locales['gamelibrary.orderManagement.ordersDeliveredTitle']}</h3>
           
           <ui:include src="/facelets/gamelibrarymanageorderslist.xhtml">
