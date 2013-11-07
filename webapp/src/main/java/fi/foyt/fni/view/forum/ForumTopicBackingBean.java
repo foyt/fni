@@ -1,5 +1,6 @@
 package fi.foyt.fni.view.forum;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,20 +55,33 @@ public class ForumTopicBackingBean {
 	private SessionController sessionController;
 	
 	@URLAction
-	public void load() {
+	public void load() throws FileNotFoundException {
 		if (page == null) {
 			page = 0;
 		}
 		
 		forum = forumController.findForumByUrlName(getForumUrlName());
+		if (forum == null) {
+		  throw new FileNotFoundException();
+		}
+		
 		topic = forumController.findForumTopicByForumAndUrlName(forum, topicUrlName);
-		long pageCount = getPostCount();
+    if (topic == null) {
+      throw new FileNotFoundException();
+    }
+
+    long pageCount = getPostCount();
 		
 		posts = forumController.listPostsByTopic(topic, page * POST_PER_PAGE, POST_PER_PAGE);
 		
 		pages = new ArrayList<>();
 		for (int i = 0; i < pageCount; i++) {
 			pages.add(i);
+		}
+
+		forumController.updateTopicViews(topic, topic.getViews() + 1);
+		for (ForumPost post : posts) {
+		  forumController.updatePostViews(post, post.getViews() + 1);
 		}
 	}
 	
