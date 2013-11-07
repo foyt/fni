@@ -6,6 +6,7 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,6 +22,14 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.util.Version;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.FullTextQuery;
 
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
@@ -63,6 +72,7 @@ import fi.foyt.fni.persistence.model.materials.MaterialTag;
 import fi.foyt.fni.persistence.model.materials.MaterialThumbnail;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.materials.MaterialView;
+import fi.foyt.fni.persistence.model.materials.Pdf;
 import fi.foyt.fni.persistence.model.materials.PermaLink;
 import fi.foyt.fni.persistence.model.materials.StarredMaterial;
 import fi.foyt.fni.persistence.model.materials.UbuntuOneFile;
@@ -77,61 +87,66 @@ import fi.foyt.fni.utils.html.HtmlUtils;
 import fi.foyt.fni.utils.images.ImageUtils;
 import fi.foyt.fni.utils.language.GuessedLanguage;
 import fi.foyt.fni.utils.language.LanguageUtils;
+import fi.foyt.fni.utils.search.SearchResult;
+import fi.foyt.fni.utils.search.SearchResultScoreComparator;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @RequestScoped
 @Stateful
 public class MaterialController {
 
-	private static final String MATERIALS_PATH = "materials";
+  private static final String MATERIALS_PATH = "materials";
   private static final long DEFAULT_MATERIAL_SIZE = 2048;
   private static final long DEFAULT_QUOTA = 1024 * 1024 * 10;
 
   @Inject
-	private Logger logger;
-	
-	@Inject
-	private LanguageDAO languageDAO;
-	
+  private Logger logger;
+
+  @Inject
+  private FullTextEntityManager fullTextEntityManager;
+
+  @Inject
+  private LanguageDAO languageDAO;
+
   @Inject
   private MaterialDAO materialDAO;
 
   @Inject
   private FolderDAO folderDAO;
-  
+
   @Inject
   private FileDAO fileDAO;
-  
+
   @Inject
   private PdfDAO pdfDAO;
-  
+
   @Inject
   private ImageDAO imageDAO;
-  
+
   @Inject
   private BinaryDAO binaryDAO;
-  
+
   @Inject
   private DropboxFileDAO dropboxFileDAO;
-  
+
   @Inject
   private UbuntuOneFileDAO ubuntuOneFileDAO;
 
   @Inject
   private GoogleDocumentDAO googleDocumentDAO;
-  
+
   @Inject
   private PermaLinkDAO permaLinkDAO;
 
   @Inject
   private StarredMaterialDAO starredMaterialDAO;
-  
+
   @Inject
   private MaterialViewDAO materialViewDAO;
-  
+
   @Inject
   private UserDAO userDAO;
-  
+
   @Inject
   private MaterialTagDAO materialTagDAO;
 
@@ -143,83 +158,86 @@ public class MaterialController {
 
   @Inject
   private DocumentDAO documentDAO;
-  
+
   @Inject
   private DocumentRevisionDAO documentRevisionDAO;
 
   @Inject
   private VectorImageDAO vectorImageDAO;
-  
+
   @Inject
   private VectorImageRevisionDAO vectorImageRevisionDAO;
-  
+
   @Inject
   private DriveManager driveManager;
 
+  @Inject
+  private MaterialPermissionController materialPermissionController;
+
   public String getMaterialMimeType(Material material) {
     switch (material.getType()) {
+    case DOCUMENT:
+      return "text/html";
+    case FILE:
+      return fileDAO.findById(material.getId()).getContentType();
+    case IMAGE:
+      return imageDAO.findById(material.getId()).getContentType();
+    case PDF:
+      return pdfDAO.findById(material.getId()).getContentType();
+    case VECTOR_IMAGE:
+      return "image/svg+xml";
+    case DROPBOX_FILE:
+      return dropboxFileDAO.findById(material.getId()).getMimeType();
+    case UBUNTU_ONE_FILE:
+      return ubuntuOneFileDAO.findById(material.getId()).getMimeType();
+    case GOOGLE_DOCUMENT:
+      GoogleDocument googleDocument = googleDocumentDAO.findById(material.getId());
+      switch (googleDocument.getDocumentType()) {
       case DOCUMENT:
         return "text/html";
-      case FILE:
-        return fileDAO.findById(material.getId()).getContentType();
-      case IMAGE:
-        return imageDAO.findById(material.getId()).getContentType();
-      case PDF:
-        return pdfDAO.findById(material.getId()).getContentType();
-      case VECTOR_IMAGE:
+      case DRAWING:
         return "image/svg+xml";
-      case DROPBOX_FILE:
-        return dropboxFileDAO.findById(material.getId()).getMimeType();
-      case UBUNTU_ONE_FILE:
-        return ubuntuOneFileDAO.findById(material.getId()).getMimeType();
-      case GOOGLE_DOCUMENT:
-        GoogleDocument googleDocument = googleDocumentDAO.findById(material.getId());
-        switch (googleDocument.getDocumentType()) {
-          case DOCUMENT:
-            return "text/html";
-          case DRAWING:
-            return "image/svg+xml";
-          case SPREADSHEET:
-            return "application/vnd.oasis.opendocument.spreadsheet";
-          case PRESENTATION:
-            return "application/vnd.oasis.opendocument.presentation";
-          default:
-            return "application/octet-stream";
-        }
+      case SPREADSHEET:
+        return "application/vnd.oasis.opendocument.spreadsheet";
+      case PRESENTATION:
+        return "application/vnd.oasis.opendocument.presentation";
       default:
         return "application/octet-stream";
+      }
+    default:
+      return "application/octet-stream";
     }
   }
 
   public MaterialArchetype getMaterialArchetype(Material material) {
     switch (material.getType()) {
-      case DOCUMENT:
-        return MaterialArchetype.DOCUMENT;
-      case FILE:
-        return MaterialArchetype.FILE;
-      case FOLDER:
-      case DROPBOX_FOLDER:
-      case DROPBOX_ROOT_FOLDER:
-      case UBUNTU_ONE_FOLDER:
-      case UBUNTU_ONE_ROOT_FOLDER:
-        return MaterialArchetype.FOLDER;
-      case IMAGE:
-        return MaterialArchetype.IMAGE;
-      case VECTOR_IMAGE:
-        return MaterialArchetype.VECTOR_IMAGE;
-      case PDF:
-        return MaterialArchetype.PDF;
-      case DROPBOX_FILE:
-        return getDropboxFileArchetype(dropboxFileDAO.findById(material.getId()));
-      case UBUNTU_ONE_FILE:
-        return getUbuntuOneFileArchetype(ubuntuOneFileDAO.findById(material.getId()));
-      case GOOGLE_DOCUMENT:
-        return getGoogleDocumentArchetype(googleDocumentDAO.findById(material.getId()));
-      default:
-        return MaterialArchetype.FILE;
+    case DOCUMENT:
+      return MaterialArchetype.DOCUMENT;
+    case FILE:
+      return MaterialArchetype.FILE;
+    case FOLDER:
+    case DROPBOX_FOLDER:
+    case DROPBOX_ROOT_FOLDER:
+    case UBUNTU_ONE_FOLDER:
+    case UBUNTU_ONE_ROOT_FOLDER:
+      return MaterialArchetype.FOLDER;
+    case IMAGE:
+      return MaterialArchetype.IMAGE;
+    case VECTOR_IMAGE:
+      return MaterialArchetype.VECTOR_IMAGE;
+    case PDF:
+      return MaterialArchetype.PDF;
+    case DROPBOX_FILE:
+      return getDropboxFileArchetype(dropboxFileDAO.findById(material.getId()));
+    case UBUNTU_ONE_FILE:
+      return getUbuntuOneFileArchetype(ubuntuOneFileDAO.findById(material.getId()));
+    case GOOGLE_DOCUMENT:
+      return getGoogleDocumentArchetype(googleDocumentDAO.findById(material.getId()));
+    default:
+      return MaterialArchetype.FILE;
     }
   }
-  
+
   public MimeType parseMimeType(String mimeType) throws MimeTypeParseException {
     MimeType type = new MimeType(mimeType);
     return type;
@@ -227,90 +245,91 @@ public class MaterialController {
 
   public boolean isEditableType(MaterialType materialType) {
     switch (materialType) {
-      case DOCUMENT:
-      case FOLDER:
-      case VECTOR_IMAGE:
-        return true;
-      default:
-        return false;
+    case DOCUMENT:
+    case FOLDER:
+    case VECTOR_IMAGE:
+      return true;
+    default:
+      return false;
     }
   }
 
   public boolean isMovableType(MaterialType type) {
-		switch (type) {
-	    case DROPBOX_ROOT_FOLDER:
-	    case UBUNTU_ONE_ROOT_FOLDER:
-	    case DROPBOX_FILE:
-	    case DROPBOX_FOLDER:
-	    case UBUNTU_ONE_FILE:
-	    case UBUNTU_ONE_FOLDER:
-	      return false;
-	    default:
-	    break;
-	  }
-		
-		return true;
-	}
+    switch (type) {
+    case DROPBOX_ROOT_FOLDER:
+    case UBUNTU_ONE_ROOT_FOLDER:
+    case DROPBOX_FILE:
+    case DROPBOX_FOLDER:
+    case UBUNTU_ONE_FILE:
+    case UBUNTU_ONE_FOLDER:
+      return false;
+    default:
+      break;
+    }
+
+    return true;
+  }
 
   public boolean isShareableType(MaterialType type) {
-		switch (type) {
-	    case DROPBOX_ROOT_FOLDER:
-	    case UBUNTU_ONE_ROOT_FOLDER:
-	    case DROPBOX_FILE:
-	    case DROPBOX_FOLDER:
-	    case UBUNTU_ONE_FILE:
-	    case UBUNTU_ONE_FOLDER:
-	      return false;
-	    default:
-	    break;
-	  }
-		
-		return true;
-	}
+    switch (type) {
+    case DROPBOX_ROOT_FOLDER:
+    case UBUNTU_ONE_ROOT_FOLDER:
+    case DROPBOX_FILE:
+    case DROPBOX_FOLDER:
+    case UBUNTU_ONE_FILE:
+    case UBUNTU_ONE_FOLDER:
+      return false;
+    default:
+      break;
+    }
+
+    return true;
+  }
 
   public boolean isPrintableAsPdfType(MaterialType type) {
-		switch (type) {
-	    case DOCUMENT:
-	      return true;
-	    default:
-	    break;
-	  }
-		
-		return false;
-	}
+    switch (type) {
+    case DOCUMENT:
+      return true;
+    default:
+      break;
+    }
 
-	public boolean isDeletableType(MaterialType type) {
-		switch (type) {
-	    case DROPBOX_FILE:
-	    case DROPBOX_FOLDER:
-	    case UBUNTU_ONE_FILE:
-	    case UBUNTU_ONE_FOLDER:
-	      return false;
-	    default:
-	    break;
-	  }
-		
-		return true;
-	}
-  
+    return false;
+  }
+
+  public boolean isDeletableType(MaterialType type) {
+    switch (type) {
+    case DROPBOX_FILE:
+    case DROPBOX_FOLDER:
+    case UBUNTU_ONE_FILE:
+    case UBUNTU_ONE_FOLDER:
+      return false;
+    default:
+      break;
+    }
+
+    return true;
+  }
+
   public MaterialBean getMaterialBean(Long materialId) {
     return getMaterialBean(materialDAO.findById(materialId));
   }
-  
+
   public MaterialBean getMaterialBean(Material material) {
     String mimeType = getMaterialMimeType(material);
-    return new MaterialBean(material.getId(), material.getTitle(), material.getType(), getMaterialArchetype(material), mimeType, material.getModified(), material.getCreated());
+    return new MaterialBean(material.getId(), material.getTitle(), material.getType(), getMaterialArchetype(material), mimeType, material.getModified(),
+        material.getCreated());
   }
 
-	public Material findMaterialById(Long materialId) {
-		return materialDAO.findById(materialId);
-	}
+  public Material findMaterialById(Long materialId) {
+    return materialDAO.findById(materialId);
+  }
 
   public Material findMaterialByPath(Folder rootFolder, String path) {
     int lastSlash = path.lastIndexOf('/');
     String urlName;
     Folder parentFolder;
-    
+
     if (lastSlash != -1) {
       path = path.substring(0, lastSlash);
       urlName = path.substring(lastSlash + 1);
@@ -319,16 +338,123 @@ public class MaterialController {
       urlName = path;
       parentFolder = rootFolder;
     }
-    
+
     return materialDAO.findByParentFolderAndUrlName(parentFolder, urlName);
   }
-  
+
   public Material findMaterialByPermaLink(String path) {
     PermaLink permaLink = permaLinkDAO.findByPath(path);
     if (permaLink != null)
-      return permaLink.getMaterial(); 
-    
+      return permaLink.getMaterial();
+
     return null;
+  }
+
+  private List<SearchResult<Material>> searchMaterialByTitleAndContent(User user, String[] criterias, int maxResults) throws ParseException {
+    List<SearchResult<Material>> result = new ArrayList<>();
+
+    // find by title and content
+    StringBuilder queryStringBuilder = new StringBuilder();
+    queryStringBuilder.append("+(");
+    for (int i = 0, l = criterias.length; i < l; i++) {
+      String criteria = QueryParser.escape(criterias[i]);
+
+      queryStringBuilder.append("title:");
+      queryStringBuilder.append(criteria);
+      queryStringBuilder.append("* ");
+
+      queryStringBuilder.append("contentPlain:");
+      queryStringBuilder.append(criteria);
+      queryStringBuilder.append("* ");
+
+      if (i < l - 1)
+        queryStringBuilder.append(' ');
+    }
+
+    queryStringBuilder.append(")");
+
+    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+    QueryParser parser = new QueryParser(Version.LUCENE_35, "", analyzer);
+
+    Query luceneQuery = parser.parse(queryStringBuilder.toString());
+    FullTextQuery query = (FullTextQuery) fullTextEntityManager.createFullTextQuery(luceneQuery, 
+        Document.class, File.class, Folder.class, GoogleDocument.class, Image.class, Pdf.class, VectorImage.class);
+    query.setProjection(FullTextQuery.SCORE, FullTextQuery.THIS);
+    query.setMaxResults(maxResults);
+    
+    @SuppressWarnings("unchecked")
+    List<Object[]> resultRows = query.getResultList();
+
+    for (Object[] resultRow : resultRows) {
+      Float score = (Float) resultRow[0];
+      Material material = (Material) resultRow[1];
+      if (material != null) {
+        if (materialPermissionController.isPublic(user, material) || materialPermissionController.hasAccessPermission(user, material)) {
+          result.add(new SearchResult<Material>(material, material.getTitle(), material.getPath(), material.getTitle(), null, score));
+        }
+      }
+    }
+
+    return result;
+  }
+
+  private List<SearchResult<Material>> searchMaterialByTags(User user, String[] criterias, int maxResults) throws ParseException {
+    List<SearchResult<Material>> result = new ArrayList<>();
+
+    // find by title and content
+    StringBuilder queryStringBuilder = new StringBuilder();
+    queryStringBuilder.append("+(");
+    for (int i = 0, l = criterias.length; i < l; i++) {
+      String criteria = QueryParser.escape(criterias[i]);
+
+      queryStringBuilder.append("tag.text:");
+      queryStringBuilder.append(criteria);
+      queryStringBuilder.append("* ");
+
+      if (i < l - 1)
+        queryStringBuilder.append(' ');
+    }
+
+    queryStringBuilder.append(")");
+
+    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+    QueryParser parser = new QueryParser(Version.LUCENE_35, "", analyzer);
+
+    Query luceneQuery = parser.parse(queryStringBuilder.toString());
+    FullTextQuery query = (FullTextQuery) fullTextEntityManager.createFullTextQuery(luceneQuery, MaterialTag.class);
+    query.setProjection(FullTextQuery.SCORE, FullTextQuery.THIS);
+    query.setMaxResults(maxResults);
+    @SuppressWarnings("unchecked")
+    List<Object[]> resultRows = query.getResultList();
+
+    for (Object[] resultRow : resultRows) {
+      Float score = (Float) resultRow[0];
+      MaterialTag materialTag = (MaterialTag) resultRow[1];
+      Material material = materialTag.getMaterial();
+      if (material != null) {
+        if (materialPermissionController.isPublic(user, material) || materialPermissionController.hasAccessPermission(user, material)) {
+          result.add(new SearchResult<Material>(material, material.getTitle(), material.getPath(), material.getTitle(), null, score));
+        }
+      }
+    }
+
+    return result;
+  }
+
+  public List<SearchResult<Material>> searchMaterials(User user, String text, int maxResults) throws ParseException {
+    String[] criterias = text.replace(",", " ").replaceAll("\\s+", " ").split(" ");
+    List<SearchResult<Material>> results = new ArrayList<>();
+
+    results.addAll(searchMaterialByTitleAndContent(user, criterias, maxResults));
+    results.addAll(searchMaterialByTags(user, criterias, maxResults));
+
+    Collections.sort(results, new SearchResultScoreComparator<Material>());
+
+    while (results.size() > maxResults) {
+      results.remove(results.size() - 1);
+    }
+    
+    return Collections.unmodifiableList(results);
   }
 
   public Material updateMaterialPublicity(Material material, MaterialPublicity publicity, User modifier) {
@@ -338,12 +464,12 @@ public class MaterialController {
   public StarredMaterial starMaterial(Material material, User user) {
     StarredMaterial starredMaterial = starredMaterialDAO.findByMaterialAndUser(material, user);
     Date now = new Date();
-    
+
     if (starredMaterial == null)
       starredMaterial = starredMaterialDAO.create(material, user, now);
     else
       starredMaterialDAO.updateCreated(starredMaterial, now);
-    
+
     return starredMaterial;
   }
 
@@ -352,63 +478,64 @@ public class MaterialController {
     if (starredMaterial != null)
       starredMaterialDAO.delete(starredMaterial);
   }
-  
+
   public List<Material> listStarredMaterialsByUser(User user, Integer firstResult, Integer maxResults) {
     List<Material> materials = new ArrayList<Material>();
-    
+
     List<StarredMaterial> starredMaterials = starredMaterialDAO.listByUserSortByCreated(user, firstResult, maxResults);
     for (StarredMaterial starredMaterial : starredMaterials) {
       materials.add(starredMaterial.getMaterial());
     }
-    
+
     return materials;
   }
-  
+
   public List<Material> listStarredMaterialsByUser(User user) {
     List<Material> materials = new ArrayList<Material>();
-    
+
     List<StarredMaterial> starredMaterials = starredMaterialDAO.listByUserSortByCreated(user);
     for (StarredMaterial starredMaterial : starredMaterials) {
       materials.add(starredMaterial.getMaterial());
     }
-    
+
     return materials;
   }
-  
+
   public List<Material> listViewedMaterialsByUser(User user, Integer firstResult, Integer maxResults) {
     List<Material> materials = new ArrayList<Material>();
-    
+
     List<MaterialView> viewedMaterials = materialViewDAO.listByUserSortByViewed(user, firstResult, maxResults);
     for (MaterialView viewedMaterial : viewedMaterials) {
       materials.add(viewedMaterial.getMaterial());
     }
-    
+
     return materials;
   }
-  
+
   public List<Material> listModifiedMaterialsByUser(User user, Integer firstResult, Integer maxResults) {
-  	return materialDAO.listByModifierExcludingTypesSortByModified(user, Arrays.asList(new MaterialType[] {MaterialType.FOLDER}), firstResult, maxResults);
+    return materialDAO.listByModifierExcludingTypesSortByModified(user, Arrays.asList(new MaterialType[] { MaterialType.FOLDER }), firstResult, maxResults);
   }
-  
+
   @SuppressWarnings("unchecked")
   public List<Material> listMaterialsByFolder(User user, Folder folder) {
     List<MaterialRole> roles = Arrays.asList(MaterialRole.MAY_EDIT, MaterialRole.MAY_VIEW);
-    
+
     if (folder != null) {
       return materialDAO.listByParentFolder(folder);
     } else {
       return (List<Material>) CollectionUtils.union(materialDAO.listByRootFolderAndCreator(user), materialDAO.listByRootFolderAndUserAndRoles(user, roles));
     }
   }
-  
+
   @SuppressWarnings("unchecked")
   public List<Material> listMaterialsByFolderAndTypes(User user, Folder folder, Collection<MaterialType> types) {
     List<MaterialRole> roles = Arrays.asList(MaterialRole.MAY_EDIT, MaterialRole.MAY_VIEW);
-    
+
     if (folder != null) {
       return materialDAO.listByParentFolderAndTypes(folder, types);
     } else {
-      return (List<Material>) CollectionUtils.union(materialDAO.listByRootFolderAndTypesAndCreator(types, user), materialDAO.listByRootFolderAndUserAndTypesAndRoles(user, types, roles));
+      return (List<Material>) CollectionUtils.union(materialDAO.listByRootFolderAndTypesAndCreator(types, user),
+          materialDAO.listByRootFolderAndUserAndTypesAndRoles(user, types, roles));
     }
   }
 
@@ -426,72 +553,109 @@ public class MaterialController {
       } else {
         urlMaterial = materialDAO.findByParentFolderAndUrlName(parentFolder, urlName);
       }
-      
+
       if (urlMaterial == null) {
         if (material != null) {
           String path = null;
-          
+
           if (material.getParentFolder() != null)
             path = material.getParentFolder().getPath() + '/' + urlName;
           else {
             path = material.getCreator().getId().toString() + '/' + urlName;
           }
-          
+
           PermaLink permaLink = permaLinkDAO.findByPath(path);
           if (permaLink != null) {
             if (permaLink.getMaterial().getId().equals(material.getId())) {
               return urlName;
             }
           } else {
-            return urlName; 
+            return urlName;
           }
         } else {
-          return urlName; 
+          return urlName;
         }
       }
-      
+
       if (material != null) {
         if (urlMaterial != null && urlMaterial.getId().equals(material.getId()))
           return urlName;
       }
-      
+
       urlName = baseName + '_' + (++i);
     } while (true);
   }
 
+  public String getForgeMaterialViewerName(MaterialType type) {
+    switch (type) {
+      case DROPBOX_FILE:
+      case UBUNTU_ONE_FILE:
+        return "binary";
+      case DROPBOX_FOLDER:
+      case DROPBOX_ROOT_FOLDER:
+      case UBUNTU_ONE_FOLDER:
+      case UBUNTU_ONE_ROOT_FOLDER:
+        return "folders";
+      case GOOGLE_DOCUMENT:
+        return "google-drive";
+      case DOCUMENT:
+        return "documents";
+      case BINARY:
+      case FILE:
+      case PDF:
+        return "binary";
+      case FOLDER:
+        return "folders";
+      case IMAGE:
+        return "images";
+      case VECTOR_IMAGE:
+        return "vectorimages";
+    }
+  
+    return "todo";
+  }
+  
+  public String getForgeMaterialViewerUrl(Material material) {
+    return new StringBuilder()
+      .append("/forge/")
+      .append(getForgeMaterialViewerName(material.getType()))
+      .append('/')
+      .append(material.getPath())
+      .toString();
+  }
+  
   public void moveMaterial(Material material, Folder parentFolder, User modifyingUser) {
     materialDAO.updateParentFolder(material, parentFolder, modifyingUser);
   }
-  
+
   public void deleteMaterial(Material material, User deletingUser) {
-    
+
     switch (material.getType()) {
-      case FOLDER:
-      case DROPBOX_ROOT_FOLDER:
-      case DROPBOX_FOLDER:
-      case UBUNTU_ONE_ROOT_FOLDER:
-      case UBUNTU_ONE_FOLDER:
-        /** 
-         * When removing Ubuntu One or Dropbox folder, all child resources have to be
-         * removed also
-         */ 
-        recursiveDelete(folderDAO.findById(material.getId()), deletingUser);
+    case FOLDER:
+    case DROPBOX_ROOT_FOLDER:
+    case DROPBOX_FOLDER:
+    case UBUNTU_ONE_ROOT_FOLDER:
+    case UBUNTU_ONE_FOLDER:
+      /**
+       * When removing Ubuntu One or Dropbox folder, all child resources have to be removed also
+       */
+      recursiveDelete(folderDAO.findById(material.getId()), deletingUser);
       break;
-      case DOCUMENT:
-        Document document = (Document) material;
-        List<DocumentRevision> documentRevisions = documentRevisionDAO.listByDocument(document);
-        for (DocumentRevision documentRevision : documentRevisions) {
-          documentRevisionDAO.delete(documentRevision);
-        }
+    case DOCUMENT:
+      Document document = (Document) material;
+      List<DocumentRevision> documentRevisions = documentRevisionDAO.listByDocument(document);
+      for (DocumentRevision documentRevision : documentRevisions) {
+        documentRevisionDAO.delete(documentRevision);
+      }
       break;
-      case VECTOR_IMAGE:
-        VectorImage vectorImage = (VectorImage) material;
-        List<VectorImageRevision> vectorImageRevisions = vectorImageRevisionDAO.listByVectorImage(vectorImage);
-        for (VectorImageRevision vectorImageRevision : vectorImageRevisions) {
-          vectorImageRevisionDAO.delete(vectorImageRevision);
-        }
+    case VECTOR_IMAGE:
+      VectorImage vectorImage = (VectorImage) material;
+      List<VectorImageRevision> vectorImageRevisions = vectorImageRevisionDAO.listByVectorImage(vectorImage);
+      for (VectorImageRevision vectorImageRevision : vectorImageRevisions) {
+        vectorImageRevisionDAO.delete(vectorImageRevision);
+      }
       break;
-      default:
+    default:
       break;
     }
 
@@ -499,32 +663,32 @@ public class MaterialController {
     for (MaterialTag tag : tags) {
       materialTagDAO.delete(tag);
     }
-    
+
     List<StarredMaterial> starredMaterials = starredMaterialDAO.listByMaterial(material);
     for (StarredMaterial starredMaterial : starredMaterials) {
       starredMaterialDAO.delete(starredMaterial);
     }
-    
+
     List<PermaLink> permaLinks = permaLinkDAO.listByMaterial(material);
     for (PermaLink permaLink : permaLinks) {
       permaLinkDAO.delete(permaLink);
     }
-    
+
     List<UserMaterialRole> userMaterialRoles = userMaterialRoleDAO.listByMaterial(material);
     for (UserMaterialRole userMaterialRole : userMaterialRoles) {
       userMaterialRoleDAO.delete(userMaterialRole);
     }
-    
+
     List<MaterialThumbnail> thumbnails = materialThumbnailDAO.listByMaterial(material);
     for (MaterialThumbnail thumbnail : thumbnails) {
       materialThumbnailDAO.delete(thumbnail);
     }
-    
+
     List<MaterialView> materialViews = materialViewDAO.listByMaterial(material);
     for (MaterialView materialView : materialViews) {
       materialViewDAO.delete(materialView);
     }
-    
+
     materialDAO.delete(material);
   }
 
@@ -532,18 +696,19 @@ public class MaterialController {
     StarredMaterial starredMaterial = starredMaterialDAO.findByMaterialAndUser(material, user);
     return starredMaterial != null;
   }
-  
+
   /**
    * Returns material size in bytes.
    * 
-   * @param material material
+   * @param material
+   *          material
    * @return material size in bytes
    */
-	@LoggedIn
+  @LoggedIn
   public long getUserMaterialsTotalSize(User user) {
     // Count of materials multiplied by default material size as a base value
     long materialTotalSize = materialDAO.countByCreator(user) * DEFAULT_MATERIAL_SIZE;
-    
+
     // Documents,
     long documensTotalSize = documentDAO.lengthDataByCreator(user);
     // VectorImages,
@@ -551,17 +716,14 @@ public class MaterialController {
     // and Binaries include significant amount of data besides default size
     // so we calculate them separately
     long binariesTotalSize = binaryDAO.lengthDataByCreator(user);
-    
-    return materialTotalSize + 
-        documensTotalSize + 
-        vectorImagesTotalSize + 
-        binariesTotalSize;
+
+    return materialTotalSize + documensTotalSize + vectorImagesTotalSize + binariesTotalSize;
   }
 
   public long getUserQuota() {
     return DEFAULT_QUOTA;
-  } 
-  
+  }
+
   public MaterialThumbnail getImageThumbnail(fi.foyt.fni.persistence.model.materials.Image image, ImageSize size) throws IOException {
     MaterialThumbnail materialThumbnail = materialThumbnailDAO.findByMaterialAndSize(image, size);
     if (materialThumbnail == null) {
@@ -573,22 +735,22 @@ public class MaterialController {
         TypedData resizedImage = fi.foyt.fni.utils.images.ImageUtils.resizeImage(originalData, size.getWidth(), size.getHeight(), null);
         materialThumbnail = materialThumbnailDAO.create(image, size, resizedImage.getData(), resizedImage.getContentType());
       }
-      
+
       return materialThumbnail;
     }
 
     return materialThumbnail;
   }
-	
-	public Material findMaterialByCompletePath(String completePath) {
+
+  public Material findMaterialByCompletePath(String completePath) {
     String path = RequestUtils.stripTrailingSlash(completePath);
     String materialPath = RequestUtils.stripPrecedingSlash(path.substring(MATERIALS_PATH.length() + 1));
-    
+
     PermaLink permaLink = permaLinkDAO.findByPath(materialPath);
     if (permaLink != null) {
       return permaLink.getMaterial();
     }
-    
+
     String[] pathElements = materialPath.split("/");
     if (pathElements.length >= 2) {
       Long userId = NumberUtils.createLong(pathElements[0]);
@@ -611,165 +773,164 @@ public class MaterialController {
       if (parentFolder != null)
         return materialDAO.findByParentFolderAndUrlName(parentFolder, pathElements[pathElements.length - 1]);
       else
-      	return materialDAO.findByRootFolderAndUrlName(owner, pathElements[pathElements.length - 1]);
+        return materialDAO.findByRootFolderAndUrlName(owner, pathElements[pathElements.length - 1]);
     }
-    
+
     return null;
-	}
-	
-	public Material findByOwnerAndPath(User owner, String path) {
-		if (StringUtils.isBlank(path) || (owner == null)) {
-			return null;
-		}
-		
-		String[] pathElements = path.split("/");
-		Folder parentFolder = null;
-		
-		for (int i = 0, l = pathElements.length - 1; i < l; i++) {
+  }
+
+  public Material findByOwnerAndPath(User owner, String path) {
+    if (StringUtils.isBlank(path) || (owner == null)) {
+      return null;
+    }
+
+    String[] pathElements = path.split("/");
+    Folder parentFolder = null;
+
+    for (int i = 0, l = pathElements.length - 1; i < l; i++) {
       String pathElement = pathElements[i];
       if (parentFolder != null)
         parentFolder = (Folder) materialDAO.findByParentFolderAndUrlName(parentFolder, pathElement);
       else
         parentFolder = (Folder) materialDAO.findByRootFolderAndUrlName(owner, pathElement);
     }
-		
-		if (parentFolder != null)
+
+    if (parentFolder != null)
       return materialDAO.findByParentFolderAndUrlName(parentFolder, pathElements[pathElements.length - 1]);
     else
-    	return materialDAO.findByRootFolderAndUrlName(owner, pathElements[pathElements.length - 1]);
-	}
-
-	
-	public Material createMaterial(Folder parentFolder, User user, FileData fileData) throws MimeTypeParseException, IOException, GeneralSecurityException {
-		MimeType mimeType = parseMimeType(fileData.getContentType());
-
-		if ("image".equals(mimeType.getPrimaryType())) {
-			if ("svg".equals(mimeType.getSubType())||"svg+xml".equals(mimeType.getSubType())) {
-				return createVectorImage(parentFolder, user, new String(fileData.getData(), "UTF-8"), fileData.getFileName());
-			} else {
-				if (fileData.getContentType().equals("image/png")) {
-					return createImage(parentFolder, user, fileData.getData(), fileData.getContentType(), fileData.getFileName());
-			  } else {
-			  	return uploadImage(parentFolder, user, fileData);
-				}
-			}
-		} else {
-			switch (mimeType.getBaseType()) {
-				case "application/pdf":
-					return uploadPdf(parentFolder, user, fileData);
-				case "text/plain":
-					return uploadText(parentFolder, user, fileData);
-				case "text/html":
-				case "application/xhtml+xml":
-					return uploadHtml(parentFolder, user, fileData);
-				case "application/vnd.oasis.opendocument.text":
-				case "application/vnd.sun.xml.writer":
-				case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-				case "application/msword":
-				case "application/x-mswrite":
-				case "application/rtf":
-				case "text/richtext":
-					return uploadDocument(parentFolder, user, fileData);
-				case "application/vnd.openxmlformats-officedocument.presentationml.slideshow":
-				case "application/vnd.ms-powerpoint":
-			  	// TODO: Warning: presentation
-					return uploadDocument(parentFolder, user, fileData);
-				case "application/vnd.ms-excel":
-				case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-				case "application/vnd.oasis.opendocument.spreadsheet":
-				case "text/csv":
-				case "text/tab-separated-values":
-				  // TODO: Warning, spreadsheet
-					return uploadDocument(parentFolder, user, fileData);
-			}
-		}
-		
-		return createFile(parentFolder, user, fileData.getData(), fileData.getContentType(), fileData.getFileName());
-	}
-	
-	private Material createFile(Folder parentFolder, User loggedUser, byte[] data, String contentType, String title) {
-		String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
-		Date now = new Date();
-
-		return fileDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, contentType, MaterialPublicity.PRIVATE);
+      return materialDAO.findByRootFolderAndUrlName(owner, pathElements[pathElements.length - 1]);
   }
 
-	private Material uploadImage(Folder parentFolder, User loggedUser, FileData fileData) throws IOException {
-		TypedData imageData = ImageUtils.convertToPng(fileData);
-		return createImage(parentFolder, loggedUser, imageData.getData(), imageData.getContentType(), fileData.getFileName());
+  public Material createMaterial(Folder parentFolder, User user, FileData fileData) throws MimeTypeParseException, IOException, GeneralSecurityException {
+    MimeType mimeType = parseMimeType(fileData.getContentType());
+
+    if ("image".equals(mimeType.getPrimaryType())) {
+      if ("svg".equals(mimeType.getSubType()) || "svg+xml".equals(mimeType.getSubType())) {
+        return createVectorImage(parentFolder, user, new String(fileData.getData(), "UTF-8"), fileData.getFileName());
+      } else {
+        if (fileData.getContentType().equals("image/png")) {
+          return createImage(parentFolder, user, fileData.getData(), fileData.getContentType(), fileData.getFileName());
+        } else {
+          return uploadImage(parentFolder, user, fileData);
+        }
+      }
+    } else {
+      switch (mimeType.getBaseType()) {
+      case "application/pdf":
+        return uploadPdf(parentFolder, user, fileData);
+      case "text/plain":
+        return uploadText(parentFolder, user, fileData);
+      case "text/html":
+      case "application/xhtml+xml":
+        return uploadHtml(parentFolder, user, fileData);
+      case "application/vnd.oasis.opendocument.text":
+      case "application/vnd.sun.xml.writer":
+      case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+      case "application/msword":
+      case "application/x-mswrite":
+      case "application/rtf":
+      case "text/richtext":
+        return uploadDocument(parentFolder, user, fileData);
+      case "application/vnd.openxmlformats-officedocument.presentationml.slideshow":
+      case "application/vnd.ms-powerpoint":
+        // TODO: Warning: presentation
+        return uploadDocument(parentFolder, user, fileData);
+      case "application/vnd.ms-excel":
+      case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+      case "application/vnd.oasis.opendocument.spreadsheet":
+      case "text/csv":
+      case "text/tab-separated-values":
+        // TODO: Warning, spreadsheet
+        return uploadDocument(parentFolder, user, fileData);
+      }
+    }
+
+    return createFile(parentFolder, user, fileData.getData(), fileData.getContentType(), fileData.getFileName());
   }
-	
-	public Image createImage(Folder parentFolder, User loggedUser, byte[] data, String contentType, String title) {
-		Date now = new Date();
-		String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
-		return imageDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, contentType, MaterialPublicity.PRIVATE);
+
+  private Material createFile(Folder parentFolder, User loggedUser, byte[] data, String contentType, String title) {
+    String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
+    Date now = new Date();
+
+    return fileDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, contentType, MaterialPublicity.PRIVATE);
   }
 
-	public Image updateImageContent(Image image, String contentType, byte[] data, User modifier) {
-		return imageDAO.updateData(imageDAO.updateContentType(image, modifier, contentType), modifier, data);
-	}
-
-	private Material createVectorImage(Folder parentFolder, User loggedUser, String data, String title) {
-		String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
-	  return vectorImageDAO.create(loggedUser, null, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
+  private Material uploadImage(Folder parentFolder, User loggedUser, FileData fileData) throws IOException {
+    TypedData imageData = ImageUtils.convertToPng(fileData);
+    return createImage(parentFolder, loggedUser, imageData.getData(), imageData.getContentType(), fileData.getFileName());
   }
 
-	private Material uploadPdf(Folder parentFolder, User loggedUser, FileData fileData) {
-		return createPdf(parentFolder, loggedUser, fileData.getData(), fileData.getFileName());
-	}
-
-	private Material uploadHtml(Folder parentFolder, User loggedUser, FileData fileData) throws UnsupportedEncodingException {
-		String data = new String(fileData.getData(), "UTF");
-		return createDocument(parentFolder, loggedUser, data, fileData.getFileName());
+  public Image createImage(Folder parentFolder, User loggedUser, byte[] data, String contentType, String title) {
+    Date now = new Date();
+    String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
+    return imageDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, contentType, MaterialPublicity.PRIVATE);
   }
 
-	private Material uploadText(Folder parentFolder, User loggedUser, FileData fileData) throws UnsupportedEncodingException {
-  	
-		String title = fileData.getFileName();
-		String bodyContent = StringEscapeUtils.escapeHtml4(new String(fileData.getData(), "UTF-8")); 
-		bodyContent = bodyContent.replaceAll("\n", "<br/>");
+  public Image updateImageContent(Image image, String contentType, byte[] data, User modifier) {
+    return imageDAO.updateData(imageDAO.updateContentType(image, modifier, contentType), modifier, data);
+  }
+
+  private Material createVectorImage(Folder parentFolder, User loggedUser, String data, String title) {
+    String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
+    return vectorImageDAO.create(loggedUser, null, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
+  }
+
+  private Material uploadPdf(Folder parentFolder, User loggedUser, FileData fileData) {
+    return createPdf(parentFolder, loggedUser, fileData.getData(), fileData.getFileName());
+  }
+
+  private Material uploadHtml(Folder parentFolder, User loggedUser, FileData fileData) throws UnsupportedEncodingException {
+    String data = new String(fileData.getData(), "UTF");
+    return createDocument(parentFolder, loggedUser, data, fileData.getFileName());
+  }
+
+  private Material uploadText(Folder parentFolder, User loggedUser, FileData fileData) throws UnsupportedEncodingException {
+
+    String title = fileData.getFileName();
+    String bodyContent = StringEscapeUtils.escapeHtml4(new String(fileData.getData(), "UTF-8"));
+    bodyContent = bodyContent.replaceAll("\n", "<br/>");
     String data = HtmlUtils.getAsHtmlText(title, bodyContent);
 
-		return createDocument(parentFolder, loggedUser, data, title);
+    return createDocument(parentFolder, loggedUser, data, title);
   }
 
-	private Material uploadDocument(Folder parentFolder, User loggedUser, FileData fileData) throws IOException, GeneralSecurityException {
-		Drive drive = driveManager.getSystemDrive();
-		
-		File file = driveManager.insertFile(drive, fileData.getFileName(), null, fileData.getContentType(), null, true, fileData.getData());
-		try { 
-			TypedData htmlData = driveManager.exportFile(drive, file, "text/html");
-			return createDocument(parentFolder, loggedUser, new String(htmlData.getData(), "UTF-8"), fileData.getFileName());
-		} finally {
-		  driveManager.deleteFile(drive, file);
-		}
-	}
-	
-	private Material createDocument(Folder parentFolder, User loggedUser, String data, String title) {
-		List<GuessedLanguage> guessedLanguages;
-		Language language = null;
-		try {
-			guessedLanguages = LanguageUtils.getGuessedLanguages(data, 0.2);
-			if (guessedLanguages.size() > 0) {
-				String languageCode = guessedLanguages.get(0).getLanguageCode();
-				language = languageDAO.findByIso2(languageCode);
-			}
-		} catch (IOException e) {
-			// It's really not very serious if language detection fails.
-			logger.log(Level.WARNING, "Language detection failed", e);
-		}
-		
-		String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
+  private Material uploadDocument(Folder parentFolder, User loggedUser, FileData fileData) throws IOException, GeneralSecurityException {
+    Drive drive = driveManager.getSystemDrive();
 
-		return documentDAO.create(loggedUser, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
-	}
-	
-	private Material createPdf(Folder parentFolder, User loggedUser, byte[] data, String title) {
-		String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
-		Date now = new Date();
+    File file = driveManager.insertFile(drive, fileData.getFileName(), null, fileData.getContentType(), null, true, fileData.getData());
+    try {
+      TypedData htmlData = driveManager.exportFile(drive, file, "text/html");
+      return createDocument(parentFolder, loggedUser, new String(htmlData.getData(), "UTF-8"), fileData.getFileName());
+    } finally {
+      driveManager.deleteFile(drive, file);
+    }
+  }
 
-		return pdfDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
-	}
+  private Material createDocument(Folder parentFolder, User loggedUser, String data, String title) {
+    List<GuessedLanguage> guessedLanguages;
+    Language language = null;
+    try {
+      guessedLanguages = LanguageUtils.getGuessedLanguages(data, 0.2);
+      if (guessedLanguages.size() > 0) {
+        String languageCode = guessedLanguages.get(0).getLanguageCode();
+        language = languageDAO.findByIso2(languageCode);
+      }
+    } catch (IOException e) {
+      // It's really not very serious if language detection fails.
+      logger.log(Level.WARNING, "Language detection failed", e);
+    }
+
+    String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
+
+    return documentDAO.create(loggedUser, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
+  }
+
+  private Material createPdf(Folder parentFolder, User loggedUser, byte[] data, String title) {
+    String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
+    Date now = new Date();
+
+    return pdfDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
+  }
 
   private MaterialArchetype getDropboxFileArchetype(DropboxFile material) {
     return getArchetypeByMimeType(material.getMimeType());
@@ -782,30 +943,30 @@ public class MaterialController {
   private MaterialArchetype getGoogleDocumentArchetype(GoogleDocument material) {
     GoogleDocumentType googleDocumentType = material.getDocumentType();
     switch (googleDocumentType) {
-      case DOCUMENT:
-        return MaterialArchetype.DOCUMENT;
-      case DRAWING:
-        return MaterialArchetype.VECTOR_IMAGE;
-      case FOLDER:
-        return MaterialArchetype.FOLDER;
-      case PRESENTATION:
-        return MaterialArchetype.PRESENTATION;
-      case SPREADSHEET:
-        return MaterialArchetype.SPREADSHEET;
-			case FILE:
-				return MaterialArchetype.FILE;
+    case DOCUMENT:
+      return MaterialArchetype.DOCUMENT;
+    case DRAWING:
+      return MaterialArchetype.VECTOR_IMAGE;
+    case FOLDER:
+      return MaterialArchetype.FOLDER;
+    case PRESENTATION:
+      return MaterialArchetype.PRESENTATION;
+    case SPREADSHEET:
+      return MaterialArchetype.SPREADSHEET;
+    case FILE:
+      return MaterialArchetype.FILE;
     }
 
     return MaterialArchetype.FILE;
   }
-  
+
   private MaterialArchetype getArchetypeByMimeType(String mimeType) {
     try {
       MimeType parsedMimeType = parseMimeType(mimeType);
       if ("image".equals(parsedMimeType.getPrimaryType())) {
-        if (("svg".equals(parsedMimeType.getSubType()))||("svg+xml".equals(parsedMimeType.getSubType())))
+        if (("svg".equals(parsedMimeType.getSubType())) || ("svg+xml".equals(parsedMimeType.getSubType())))
           return MaterialArchetype.VECTOR_IMAGE;
-        
+
         return MaterialArchetype.IMAGE;
       } else {
         if ("text".equals(parsedMimeType.getBaseType())) {
@@ -813,18 +974,18 @@ public class MaterialController {
             return MaterialArchetype.DOCUMENT;
           }
         }
-        
+
         if ("application".equals(parsedMimeType.getBaseType()) && "pdf".equals(parsedMimeType.getSubType())) {
           return MaterialArchetype.PDF;
         }
-        
+
         return MaterialArchetype.FILE;
       }
     } catch (MimeTypeParseException e) {
       return MaterialArchetype.FILE;
     }
   }
-  
+
   private void recursiveDelete(Folder folder, User user) {
     List<Material> childMaterials = materialDAO.listByParentFolder(folder);
     for (Material childMaterial : childMaterials) {
@@ -837,35 +998,36 @@ public class MaterialController {
     }
   }
 
-	public GoogleDocument findGoogleDocumentByCreatorAndDocumentId(User creator, String documentId) {
-		return googleDocumentDAO.findByCreatorAndDocumentId(creator, documentId);
-	}
+  public GoogleDocument findGoogleDocumentByCreatorAndDocumentId(User creator, String documentId) {
+    return googleDocumentDAO.findByCreatorAndDocumentId(creator, documentId);
+  }
 
-	public GoogleDocument createGoogleDocument(User creator, Language language, Folder parentFolder, String title, String documentId, String mimeType, MaterialPublicity publicity) {
-		String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, title);
-		
-		GoogleDocumentType documentType = GoogleDocumentType.FILE;
-		
-		switch (mimeType) {
-			case "application/vnd.google-apps.drawing":
-				documentType = GoogleDocumentType.DRAWING;
-			break;
-			case "application/vnd.google-apps.spreadsheet":
-				documentType = GoogleDocumentType.SPREADSHEET;
-		  break;
-			case "application/vnd.google-apps.presentation":
-				documentType = GoogleDocumentType.PRESENTATION;
-		  break;
-			case "application/vnd.google-apps.document":
-				documentType = GoogleDocumentType.DOCUMENT;
-			break;
-		}
-		
-		return googleDocumentDAO.create(creator, language, parentFolder, urlName, title, documentId, documentType, publicity);
-	}
+  public GoogleDocument createGoogleDocument(User creator, Language language, Folder parentFolder, String title, String documentId, String mimeType,
+      MaterialPublicity publicity) {
+    String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, title);
 
-	public GoogleDocument findGoogleDocumentById(Long id) {
-		return googleDocumentDAO.findById(id);
-	}
+    GoogleDocumentType documentType = GoogleDocumentType.FILE;
+
+    switch (mimeType) {
+    case "application/vnd.google-apps.drawing":
+      documentType = GoogleDocumentType.DRAWING;
+      break;
+    case "application/vnd.google-apps.spreadsheet":
+      documentType = GoogleDocumentType.SPREADSHEET;
+      break;
+    case "application/vnd.google-apps.presentation":
+      documentType = GoogleDocumentType.PRESENTATION;
+      break;
+    case "application/vnd.google-apps.document":
+      documentType = GoogleDocumentType.DOCUMENT;
+      break;
+    }
+
+    return googleDocumentDAO.create(creator, language, parentFolder, urlName, title, documentId, documentType, publicity);
+  }
+
+  public GoogleDocument findGoogleDocumentById(Long id) {
+    return googleDocumentDAO.findById(id);
+  }
 
 }

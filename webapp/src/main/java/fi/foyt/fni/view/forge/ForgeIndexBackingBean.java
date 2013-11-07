@@ -304,32 +304,7 @@ public class ForgeIndexBackingBean {
 	}
 	
 	public String getMaterialViewer(MaterialType type) {
-		switch (type) {
-			case DROPBOX_FILE:
-			case UBUNTU_ONE_FILE:
-				return "binary";
-			case DROPBOX_FOLDER:
-			case DROPBOX_ROOT_FOLDER:
-			case UBUNTU_ONE_FOLDER:
-			case UBUNTU_ONE_ROOT_FOLDER:
-				return "folders";
-			case GOOGLE_DOCUMENT:
-				return "google-drive";
-			case DOCUMENT:
-				return "documents";
-			case BINARY:
-			case FILE:
-			case PDF:
-				return "binary";
-			case FOLDER:
-				return "folders";
-			case IMAGE:
-				return "images";
-			case VECTOR_IMAGE:
-				return "vectorimages";
-		}
-
-		return "todo";
+		return materialController.getForgeMaterialViewerName(type);
 	}
 	
 	public String getMaterialIcon(MaterialType type) {
