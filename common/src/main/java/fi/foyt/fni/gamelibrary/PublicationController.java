@@ -173,7 +173,7 @@ public class PublicationController {
     	  .append("/gamelibrary/")
     	  .append(searchResult.getUrlName())
     	  .toString();
-    	result.add(new SearchResult<Publication>(searchResult, searchResult.getName(), link, null, null));
+    	result.add(new SearchResult<Publication>(searchResult, searchResult.getName(), link, null, null, null));
     	
     	if (maxHits != null && result.size() >= maxHits) {
     		return result;

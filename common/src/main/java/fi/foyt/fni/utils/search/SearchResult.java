@@ -5,14 +5,16 @@ import java.util.List;
 public class SearchResult<T> {
 	
 	public SearchResult(T entity, String title, String link, String text) {
-	  this(entity, title, link, text, null);
+	  this(entity, title, link, text, null, null);
   }
 	
-	public SearchResult(T entity, String title, String link, String text, List<String> tags) {
+	public SearchResult(T entity, String title, String link, String text, List<String> tags, Float score) {
 	  this.entity = entity;
 	  this.title = title;
 	  this.link = link;
 	  this.text = text;
+	  this.tags = tags;
+	  this.score = score;
   }
 
 	public T getEntity() {
@@ -55,9 +57,14 @@ public class SearchResult<T> {
 	  this.tags = tags;
   }
 	
+	public Float getScore() {
+    return score;
+  }
+	
 	private String title;
 	private String text;
 	private String link;
 	private List<String> tags;
 	private T entity;
+	private Float score;
 }
