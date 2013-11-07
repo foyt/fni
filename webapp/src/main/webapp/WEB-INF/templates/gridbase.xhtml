@@ -6,6 +6,10 @@
   <f:view locale="#{sessionBackingBean.locale}">
     <ui:insert name="metadata"/>
     <h:head>
+      <!-- Favicon -->
+      
+      <link rel="icon" type="image/png" href="#{request.contextPath}/favicon.png"/>
+     
       <!-- Title -->
     
       <title><ui:insert name="page-title"></ui:insert></title>
