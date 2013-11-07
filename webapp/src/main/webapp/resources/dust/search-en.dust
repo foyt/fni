@@ -23,3 +23,16 @@
 {:else}
   <div class="menu-tools-search-no-result">No forum posts found</div>
 {/FORUM}
+
+<h4>Forge</h4>
+{?FORGE}
+  {#FORGE}
+    <div>
+      <h5>
+        <a href="{link}">{name}</a>
+      </h5>
+    </div>
+  {/FORGE} 
+{:else}
+  <div class="menu-tools-search-no-result">No Forge materials found</div>
+{/FORGE}
