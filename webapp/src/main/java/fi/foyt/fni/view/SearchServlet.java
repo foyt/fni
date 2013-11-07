@@ -20,8 +20,12 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.PublicationController;
+import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 
@@ -33,8 +37,14 @@ public class SearchServlet extends AbstractTransactionedServlet {
 	@Inject
 	private PublicationController publicationController;
 
-	@Inject
+  @Inject
 	private ForumController forumController;
+
+  @Inject
+	private MaterialController materialController;
+
+  @Inject
+  private SessionController sessionController;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -93,7 +103,7 @@ public class SearchServlet extends AbstractTransactionedServlet {
 			case BLOG:
 				return searchBlog(queryText);
 			case FORGE:
-				return searchForge(queryText);
+				return searchForge(contextPath, queryText);
 			case FORUM:
 				return searchForum(contextPath, queryText);
 			case USERS:
@@ -123,8 +133,21 @@ public class SearchServlet extends AbstractTransactionedServlet {
 		return result;
 	}
 	
-	private List<Map<String, Object>> searchForge(String queryText) throws ParseException {
+	private List<Map<String, Object>> searchForge(String contextPath, String queryText) throws ParseException {
+	  User loggedUser = sessionController.getLoggedUser();
+	  
 		List<Map<String, Object>> result = new ArrayList<>();
+		
+		List<SearchResult<Material>> searchResults = materialController.searchMaterials(loggedUser, queryText, 3);
+		for (SearchResult<Material> searchResult : searchResults) {
+		  String link = materialController.getForgeMaterialViewerUrl(searchResult.getEntity());
+		  
+      Map<String, Object> jsonItem = new HashMap<>();
+      jsonItem.put("name", searchResult.getTitle());
+      jsonItem.put("link", contextPath + link);
+      result.add(jsonItem);
+    }
+		
 		return result;
 	}
 	
