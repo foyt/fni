@@ -1,3 +1,5 @@
+@import "_placeholderText";
+
 @mixin header {
   text-decoration: none;
   font-family: $title-font;
@@ -50,3 +52,18 @@
   padding-right: 20px;
   margin-top: 10px;
 }
+
+@mixin generic-search {
+  font-size: 16px;
+  padding-top:5px;
+  padding-bottom: 5px;
+  padding-left: 12px;
+  margin-right: 120px;
+  width: 100%;
+  border: none;
+  @include border-radius(12px);
+  @include box-sizing(border-box); 
+  @include input-placeholder {
+    font-size: 20px;
+  }
+};

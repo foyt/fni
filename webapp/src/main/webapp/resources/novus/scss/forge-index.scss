@@ -52,15 +52,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 }
 
 .forge-search {
-  margin-right: 120px;
-  font-size: 16px;
-  padding-top:5px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  @include border-radius(12px);
-  @include box-sizing(border-box); 
-  width: 100%;
-  border: none;
+  @include generic-search;
 }
 
 .forge-search-result {
