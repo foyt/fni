@@ -161,6 +161,7 @@ public class User {
   @Field
   private String lastName;  
   
+  @Field
   private String nickname;  
   
   @Column (nullable=false)
