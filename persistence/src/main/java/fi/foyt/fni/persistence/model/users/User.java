@@ -184,6 +184,7 @@ public class User {
   private Date premiumExpires;
   
   @Column (nullable=false, columnDefinition = "BIT")
+  @Field
   private Boolean archived;
   
   private String company;

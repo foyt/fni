@@ -184,7 +184,7 @@ public class UserController {
       Float score = (Float) resultRow[0];
       UserEmail userEmail = (UserEmail) resultRow[1];
       User user = userEmail.getUser();
-      if (user != null) {
+      if ((user != null) && (!user.getArchived())) {
         result.add(new SearchResult<User>(user, user.getFullName(), "/profile/" + user.getId(), user.getFullName(), null, score));
       }
     }
@@ -217,7 +217,7 @@ public class UserController {
         queryStringBuilder.append(' ');
     }
 
-    queryStringBuilder.append(")");
+    queryStringBuilder.append(") AND +(archived:false)");
 
     Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
     QueryParser parser = new QueryParser(Version.LUCENE_35, "", analyzer);
