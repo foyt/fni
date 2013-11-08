@@ -26,6 +26,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 
@@ -42,6 +43,9 @@ public class SearchServlet extends AbstractTransactionedServlet {
 
   @Inject
 	private MaterialController materialController;
+
+  @Inject
+  private UserController userController;
 
   @Inject
   private SessionController sessionController;
@@ -107,7 +111,7 @@ public class SearchServlet extends AbstractTransactionedServlet {
 			case FORUM:
 				return searchForum(contextPath, queryText);
 			case USERS:
-				return searchUsers(queryText);
+				return searchUsers(contextPath, queryText);
 		}
 		
 		return null;
@@ -165,9 +169,18 @@ public class SearchServlet extends AbstractTransactionedServlet {
 		return result;
 	}
 	
-	private List<Map<String, Object>> searchUsers(String queryText) throws ParseException {
-		List<Map<String, Object>> result = new ArrayList<>();
-		return result;
+	private List<Map<String, Object>> searchUsers(String contextPath, String queryText) throws ParseException {
+	  List<Map<String, Object>> result = new ArrayList<>();
+    
+    List<SearchResult<User>> searchResults = userController.searchUsers(queryText, 3);
+    for (SearchResult<User> searchResult : searchResults) {
+      Map<String, Object> jsonItem = new HashMap<>();
+      jsonItem.put("name", searchResult.getTitle());
+      jsonItem.put("link", contextPath + searchResult.getLink());
+      result.add(jsonItem);
+    }
+    
+    return result;
 	}
 	
 	private enum Source {
