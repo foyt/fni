@@ -36,3 +36,16 @@
 {:else}
   <div class="menu-tools-search-no-result">Ei löydettyjä Forge materiaaleja</div>
 {/FORGE}
+
+<h4>Käyttäjät</h4>
+{?USERS}
+  {#USERS}
+    <div>
+      <h5>
+        <a href="{link}">{name}</a>
+      </h5>
+    </div>
+  {/USERS} 
+{:else}
+  <div class="menu-tools-search-no-result">Ei löydettyjä käyttäjiä</div>
+{/USERS}

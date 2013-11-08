@@ -36,3 +36,16 @@
 {:else}
   <div class="menu-tools-search-no-result">No Forge materials found</div>
 {/FORGE}
+
+<h4>Users</h4>
+{?USERS}
+  {#USERS}
+    <div>
+      <h5>
+        <a href="{link}">{name}</a>
+      </h5>
+    </div>
+  {/USERS} 
+{:else}
+  <div class="menu-tools-search-no-result">No users found</div>
+{/USERS}
