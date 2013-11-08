@@ -1,0 +1,7 @@
+{?USERS}
+  {#USERS}
+    <a href="{link}">{name}</a>
+  {/USERS} 
+{:else}
+  <div class="users-profile-search-no-result">Ei löydettyjä käyttäjiä</div>
+{/USERS}
