@@ -65,6 +65,10 @@ public class UsersProfileBackingBean {
 			throw new FileNotFoundException();
 		}
 		
+		if (user.getArchived()) {
+		  throw new FileNotFoundException();
+		}
+		
 		StringBuilder fullNameBuilder = new StringBuilder();
 		if (StringUtils.isNotBlank(user.getFullName())) {
 			fullNameBuilder.append(user.getFullName());
