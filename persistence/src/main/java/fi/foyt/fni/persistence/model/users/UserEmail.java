@@ -11,12 +11,15 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Cacheable (true)
 @Cache (usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+@Indexed
 public class UserEmail {
 
   public Long getId() {
@@ -58,6 +61,7 @@ public class UserEmail {
   @NotNull
   @NotEmpty
   @Email
+  @Field
   private String email;
   
   @Column (nullable = false, name = "primaryEmail", columnDefinition = "BIT")
