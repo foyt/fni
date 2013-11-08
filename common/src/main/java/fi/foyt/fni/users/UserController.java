@@ -1,5 +1,7 @@
 package fi.foyt.fni.users;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -9,6 +11,14 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.util.Version;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.FullTextQuery;
 
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.users.AddressDAO;
@@ -36,6 +46,8 @@ import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.persistence.model.users.UserSetting;
 import fi.foyt.fni.persistence.model.users.UserSettingKey;
 import fi.foyt.fni.utils.data.TypedData;
+import fi.foyt.fni.utils.search.SearchResult;
+import fi.foyt.fni.utils.search.SearchResultScoreComparator;
 
 @Dependent
 @Stateful
@@ -68,8 +80,11 @@ public class UserController {
 	@Inject
 	private UserImageDAO userImageDAO;
 
-	@Inject
+  @Inject
 	private AddressDAO addressDAO;
+
+  @Inject
+	private FullTextEntityManager fullTextEntityManager;
 	
 	/* User */
 	
@@ -135,6 +150,111 @@ public class UserController {
 	public User updateUserPhone(User user, String phone) {
   	return userDAO.updatePhone(user, phone);
 	}
+
+  private List<SearchResult<User>> searchUsersByEmail(String[] criterias, int maxResults) throws ParseException {
+    List<SearchResult<User>> result = new ArrayList<>();
+
+    // find by title and content
+    StringBuilder queryStringBuilder = new StringBuilder();
+    queryStringBuilder.append("+(");
+    for (int i = 0, l = criterias.length; i < l; i++) {
+      String criteria = QueryParser.escape(criterias[i]);
+
+      queryStringBuilder.append("email:");
+      queryStringBuilder.append(criteria);
+      queryStringBuilder.append("* ");
+
+      if (i < l - 1)
+        queryStringBuilder.append(' ');
+    }
+
+    queryStringBuilder.append(")");
+
+    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+    QueryParser parser = new QueryParser(Version.LUCENE_35, "", analyzer);
+
+    Query luceneQuery = parser.parse(queryStringBuilder.toString());
+    FullTextQuery query = (FullTextQuery) fullTextEntityManager.createFullTextQuery(luceneQuery, UserEmail.class);
+    query.setProjection(FullTextQuery.SCORE, FullTextQuery.THIS);
+    query.setMaxResults(maxResults);
+    @SuppressWarnings("unchecked")
+    List<Object[]> resultRows = query.getResultList();
+
+    for (Object[] resultRow : resultRows) {
+      Float score = (Float) resultRow[0];
+      UserEmail userEmail = (UserEmail) resultRow[1];
+      User user = userEmail.getUser();
+      if (user != null) {
+        result.add(new SearchResult<User>(user, user.getFullName(), "/profile/" + user.getId(), user.getFullName(), null, score));
+      }
+    }
+
+    return result;
+  }
+
+  private List<SearchResult<User>> searchUsersByName(String[] criterias, int maxResults) throws ParseException {
+    List<SearchResult<User>> result = new ArrayList<>();
+
+    // find by title and content
+    StringBuilder queryStringBuilder = new StringBuilder();
+    queryStringBuilder.append("+(");
+    for (int i = 0, l = criterias.length; i < l; i++) {
+      String criteria = QueryParser.escape(criterias[i]);
+
+      queryStringBuilder.append("firstName:");
+      queryStringBuilder.append(criteria);
+      queryStringBuilder.append("* ");
+
+      queryStringBuilder.append("lastName:");
+      queryStringBuilder.append(criteria);
+      queryStringBuilder.append("* ");
+
+      queryStringBuilder.append("nickname:");
+      queryStringBuilder.append(criteria);
+      queryStringBuilder.append("* ");
+
+      if (i < l - 1)
+        queryStringBuilder.append(' ');
+    }
+
+    queryStringBuilder.append(")");
+
+    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+    QueryParser parser = new QueryParser(Version.LUCENE_35, "", analyzer);
+
+    Query luceneQuery = parser.parse(queryStringBuilder.toString());
+    FullTextQuery query = (FullTextQuery) fullTextEntityManager.createFullTextQuery(luceneQuery, User.class);
+    query.setProjection(FullTextQuery.SCORE, FullTextQuery.THIS);
+    query.setMaxResults(maxResults);
+    @SuppressWarnings("unchecked")
+    List<Object[]> resultRows = query.getResultList();
+
+    for (Object[] resultRow : resultRows) {
+      Float score = (Float) resultRow[0];
+      User user = (User) resultRow[1];
+      if (user != null) {
+        result.add(new SearchResult<User>(user, user.getFullName(), "/profile/" + user.getId(), user.getFullName(), null, score));
+      }
+    }
+
+    return result;
+  }
+
+  public List<SearchResult<User>> searchUsers(String text, int maxResults) throws ParseException {
+    String[] criterias = text.replace(",", " ").replaceAll("\\s+", " ").split(" ");
+    List<SearchResult<User>> results = new ArrayList<>();
+
+    results.addAll(searchUsersByEmail(criterias, maxResults));
+    results.addAll(searchUsersByName(criterias, maxResults));
+
+    Collections.sort(results, new SearchResultScoreComparator<User>());
+
+    while (results.size() > maxResults) {
+      results.remove(results.size() - 1);
+    }
+    
+    return Collections.unmodifiableList(results);
+  }
 	
 	/* Email */
 	
