@@ -69,7 +69,7 @@
         
         <h:panelGroup layout="block" styleClass="gamelibrary-publication-footer">
           <h:panelGroup layout="block" styleClass="gamelibrary-publication-footer-row">
-            <h:outputLink styleClass="gamelibrary-publication-action" value="#{request.contextPath}/gamelibrary/publicationFiles/#{publication.id}">#{locales['gamelibrary.publications.downloadFreePdf']}</h:outputLink>
+            <h:outputLink styleClass="gamelibrary-publication-action" value="#{request.contextPath}/gamelibrary/publicationFiles/#{publication.id}" rendered="#{gameLibraryPublicationsBackingBean.isPublicationDownloadable(publication)}">#{locales['gamelibrary.publications.downloadFreePdf']}</h:outputLink>
           </h:panelGroup>
 
           <h:panelGroup layout="block" styleClass="gamelibrary-publication-footer-row">
@@ -78,7 +78,7 @@
                 <f:param value="#{gameLibraryPublicationsBackingBean.getPublicationCommentCount(publication)}"/>
               </h:outputFormat>
             </h:outputLink>
-            <h:commandLink styleClass="gamelibrary-publication-action" value="#{locales['gamelibrary.publications.addToShoppingCart']}" action="#{gameLibraryPublicationsBackingBean.addPublicationToShoppingCart(publication)}" />
+            <h:commandLink styleClass="gamelibrary-publication-action" value="#{locales['gamelibrary.publications.addToShoppingCart']}" rendered="#{gameLibraryPublicationsBackingBean.isPublicationPurchasable(publication)}" action="#{gameLibraryPublicationsBackingBean.addPublicationToShoppingCart(publication)}" />
           </h:panelGroup>
         </h:panelGroup>
         
