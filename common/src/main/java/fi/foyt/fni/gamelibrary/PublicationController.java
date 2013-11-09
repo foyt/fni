@@ -205,21 +205,13 @@ public class PublicationController {
 	public Publication updateWeight(Publication publication, Double weight) {
 		return publicationDAO.updateWeight(publication, weight);
 	}
-
-	public Publication updateRequiresDelivery(Publication publication, Boolean requiresDelivery) {
-		return publicationDAO.updateRequiresDelivery(publication, requiresDelivery);
-	}
-
+	
 	public Publication updatePublished(Publication publication, Boolean published) {
 		return publicationDAO.updatePublished(publication, published);
 	}
 
 	public Publication updatePrice(Publication publication, Double price) {
 		return publicationDAO.updatePrice(publication, price);
-	}
-
-	public Publication updatePurchasable(Publication publication, Boolean purchasable) {
-		return publicationDAO.updatePurchasable(publication, purchasable);
 	}
 
 	public Publication updateDescription(Publication publication, String description) {
@@ -346,13 +338,13 @@ public class PublicationController {
 	
 	/* BookPublications */
 
-	public BookPublication createBookPublication(User creator, String name, String description, Boolean requiresDelivery, Boolean downloadable, Boolean purchasable, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, List<GameLibraryTag> tags) {
+	public BookPublication createBookPublication(User creator, String name, String description, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, List<GameLibraryTag> tags) {
 		
 		Date now = new Date();
 		String urlName = createUrlName(name);
 
-		BookPublication bookPublication = bookPublicationDAO.create(name, urlName, description, price, downloadable, purchasable, defaultImage, 
-				now, creator, now, creator, Boolean.FALSE, requiresDelivery, height, width, depth, weight, numberOfPages, license, null);
+		BookPublication bookPublication = bookPublicationDAO.create(name, urlName, description, price, defaultImage, 
+				now, creator, now, creator, Boolean.FALSE, height, width, depth, weight, numberOfPages, license, null);
 
 		if (tags != null) {
 		  for (GameLibraryTag tag : tags) {
@@ -362,10 +354,6 @@ public class PublicationController {
 		
 		return bookPublication;
 	}
-
-	public BookPublication createBookPublication(User creator, String name, String license) {
-		return createBookPublication(creator, name, null, false, false, false, 0d, null, 0, 0, 0, 0d, 0, license, null);
-	}
 	
 	public BookPublication findBookPublicationById(Long id) {
 		return bookPublicationDAO.findById(id);
@@ -373,10 +361,6 @@ public class PublicationController {
 	
 	public BookPublication updateNumberOfPages(BookPublication bookPublication, Integer numberOfPages) {
 		return bookPublicationDAO.updateNumberOfPages(bookPublication, numberOfPages);
-	}
-
-	public BookPublication updateDownloadable(BookPublication bookPublication, Boolean downloadable) {
-		return bookPublicationDAO.updateDownloadable(bookPublication, downloadable);
 	}
 
   public BookPublication deleteBookPublicationDownloableFile(BookPublication bookPublication) {

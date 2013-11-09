@@ -152,12 +152,6 @@ public class PublicationDAO extends GenericDAO<Publication> {
 		return publication;
 	}
 
-	public Publication updateRequiresDelivery(Publication publication, Boolean requiresDelivery) {
-		publication.setRequiresDelivery(requiresDelivery);
-		getEntityManager().persist(publication);
-		return publication;
-	}
-
 	public Publication updateWidth(Publication publication, Integer width) {
 		publication.setWidth(width);
 		getEntityManager().persist(publication);
@@ -178,12 +172,6 @@ public class PublicationDAO extends GenericDAO<Publication> {
 
 	public Publication updateWeight(Publication publication, Double weight) {
 		publication.setWeight(weight);
-		getEntityManager().persist(publication);
-    return publication;
-	}
-
-	public Publication updatePurchasable(Publication publication, Boolean purchasable) {
-		publication.setPurchasable(purchasable);
 		getEntityManager().persist(publication);
     return publication;
 	}

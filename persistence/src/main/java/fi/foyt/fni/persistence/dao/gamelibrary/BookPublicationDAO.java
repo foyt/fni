@@ -16,22 +16,19 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
   
 	private static final long serialVersionUID = 1L;
 
-	public BookPublication create(String name, String urlName, String description, Double price, Boolean downloadable, Boolean purchasable, PublicationImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Boolean requiresDelivery, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, ForumTopic forumTopic) {
+	public BookPublication create(String name, String urlName, String description, Double price, PublicationImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, ForumTopic forumTopic) {
     
 		BookPublication bookPublication = new BookPublication();
     bookPublication.setCreated(created);
     bookPublication.setCreator(creator);
     bookPublication.setDefaultImage(defaultImage);
     bookPublication.setDescription(description);
-    bookPublication.setDownloadable(downloadable);
     bookPublication.setModified(modified);
     bookPublication.setModifier(modifier);
     bookPublication.setName(name);
     bookPublication.setUrlName(urlName);
     bookPublication.setPrice(price);
     bookPublication.setPublished(published);
-    bookPublication.setRequiresDelivery(requiresDelivery);
-    bookPublication.setPurchasable(purchasable);
     bookPublication.setHeight(height);
     bookPublication.setWidth(width);
     bookPublication.setDepth(depth);
@@ -42,12 +39,6 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
     
     getEntityManager().persist(bookPublication);
     
-    return bookPublication;
-	}
-
-	public BookPublication updateDownloadable(BookPublication bookPublication, Boolean downloadable) {
-		bookPublication.setDownloadable(downloadable);
-		getEntityManager().persist(bookPublication);
     return bookPublication;
 	}
 

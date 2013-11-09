@@ -147,22 +147,6 @@
             <h:inputHidden value="#{gameLibraryEditPublicationBackingBean.authorIds}" converter="fi.foyt.fni.jsf.LongListConverter"/>
             <h:inputHidden value="#{gameLibraryEditPublicationBackingBean.authorNames}" converter="fi.foyt.fni.jsf.StringListConverter"/>
           </h:panelGroup>
-
-          <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-form-section">
-            <h:outputLabel value="#{locales['gamelibrary.editPublication.settingsLabel']}" />
-            <div>
-              <h:selectBooleanCheckbox name="requires-delivery" value="#{gameLibraryEditPublicationBackingBean.requiresDelivery}"/>
-              <h:outputLabel value="#{locales['gamelibrary.editPublication.requiredDeliveryLabel']}" />
-            </div>
-            <div>
-              <h:selectBooleanCheckbox name="purchasable" value="#{gameLibraryEditPublicationBackingBean.purchasable}"/>
-              <h:outputLabel value="#{locales['gamelibrary.editPublication.purchasableLabel']}" />
-            </div>
-            <div>
-              <h:selectBooleanCheckbox name="purchasable" value="#{gameLibraryEditPublicationBackingBean.downloadable}"/>
-              <h:outputLabel value="#{locales['gamelibrary.editPublication.downloadableLabel']}" />
-            </div>
-          </h:panelGroup>
       
           <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-form-section">
             <h:outputLabel value="#{locales['gamelibrary.editPublication.detailsLabel']}" />

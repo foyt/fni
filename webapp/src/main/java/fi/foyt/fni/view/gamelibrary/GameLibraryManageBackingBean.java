@@ -90,7 +90,19 @@ public class GameLibraryManageBackingBean {
   @LoggedIn
   @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public void createBookPublication() throws IOException {
-  	BookPublication bookPublication = publicationController.createBookPublication(sessionController.getLoggedUser(), FacesUtils.getLocalizedValue("gamelibrary.manage.untitledBookName"), DEFAULT_LICENSE);
+  	BookPublication bookPublication = publicationController.createBookPublication(
+  	    sessionController.getLoggedUser(), 
+  	    FacesUtils.getLocalizedValue("gamelibrary.manage.untitledBookName"), 
+  	    null,
+  	    0d,
+  	    null,
+  	    null,
+  	    null,
+  	    null,
+  	    null,
+  	    null,
+  	    DEFAULT_LICENSE,
+  	    null);
   	
   	FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
   	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())

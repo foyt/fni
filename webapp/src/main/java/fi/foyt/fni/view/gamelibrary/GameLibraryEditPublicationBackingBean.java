@@ -84,8 +84,6 @@ public class GameLibraryEditPublicationBackingBean {
 		name = publication.getName();
 		description = publication.getDescription();
 		price = publication.getPrice();
-		requiresDelivery = publication.getRequiresDelivery();
-		purchasable = publication.getPurchasable();
 		weight = publication.getWeight();
 		width = publication.getWidth();
 		height = publication.getHeight();
@@ -107,7 +105,6 @@ public class GameLibraryEditPublicationBackingBean {
 		
 		if (publication instanceof BookPublication) {
 			BookPublication bookPublication = (BookPublication) publication;
-			downloadable = bookPublication.getDownloadable();
 			numberOfPages = bookPublication.getNumberOfPages();
 		}
 		
@@ -160,30 +157,6 @@ public class GameLibraryEditPublicationBackingBean {
 
 	public void setPrice(Double price) {
 		this.price = price;
-	}
-
-	public Boolean getRequiresDelivery() {
-		return requiresDelivery;
-	}
-
-	public void setRequiresDelivery(Boolean requiresDelivery) {
-		this.requiresDelivery = requiresDelivery;
-	}
-
-	public Boolean getDownloadable() {
-		return downloadable;
-	}
-
-	public void setDownloadable(Boolean downloadable) {
-		this.downloadable = downloadable;
-	}
-
-	public Boolean getPurchasable() {
-		return purchasable;
-	}
-
-	public void setPurchasable(Boolean purchasable) {
-		this.purchasable = purchasable;
 	}
 
 	public Double getWeight() {
@@ -409,16 +382,12 @@ public class GameLibraryEditPublicationBackingBean {
 			publicationController.updateName(bookPublication, getName());
 			publicationController.updateDescription(bookPublication, getDescription());
 			publicationController.updatePrice(bookPublication, getPrice());
-			publicationController.updateRequiresDelivery(bookPublication, getRequiresDelivery());
-			publicationController.updatePurchasable(bookPublication, getPurchasable());
 			publicationController.updateWeight(publication, getWeight());
 			publicationController.updateDimensions(publication, getWidth(), getHeight(), getDepth());
 			publicationController.updatePublicationAuthors(publication, authors);
 			publicationController.updateLicense(publication, license);
 			publicationController.updateTags(bookPublication, tags);
-			
 			publicationController.updateNumberOfPages(bookPublication, getNumberOfPages());
-			publicationController.updateDownloadable(bookPublication, getDownloadable());
 			publicationController.updatedModified(bookPublication, sessionController.getLoggedUser(), new Date());
 		} else {
 			throw new FaceletException("Not implemented");
@@ -487,9 +456,6 @@ public class GameLibraryEditPublicationBackingBean {
 	private String name;
 	private String description;
 	private Double price;
-	private Boolean requiresDelivery;
-	private Boolean downloadable;
-	private Boolean purchasable;
 	private Double weight;
 	private Integer width;
 	private Integer height;

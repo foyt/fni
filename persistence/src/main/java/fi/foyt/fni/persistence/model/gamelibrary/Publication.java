@@ -113,22 +113,6 @@ public class Publication {
     this.modifier = modifier;
   }
   
-  public Boolean getRequiresDelivery() {
-		return requiresDelivery;
-	}
-  
-  public void setRequiresDelivery(Boolean requiresDelivery) {
-		this.requiresDelivery = requiresDelivery;
-	}
-  
-  public Boolean getPurchasable() {
-		return purchasable;
-	}
-  
-  public void setPurchasable(Boolean purchasable) {
-		this.purchasable = purchasable;
-	}
-  
   public Double getWeight() {
 		return weight;
 	}
@@ -242,14 +226,6 @@ public class Publication {
 
   @ManyToOne
   private User modifier;
-  
-  @NotNull
-  @Column (nullable = false, columnDefinition = "BIT")
-  private Boolean requiresDelivery;
-  
-  @NotNull
-  @Column (nullable = false, columnDefinition = "BIT")
-  private Boolean purchasable;
   
   private Double weight;
   
