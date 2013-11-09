@@ -81,7 +81,23 @@ public class GameLibraryPublicationsBackingBean {
 	  
 	  return null;
 	}
-	
+  
+  public boolean isPublicationDownloadable(Publication publication) {
+    if (publication instanceof BookPublication) {
+      return ((BookPublication) publication).getDownloadableFile() != null;
+    }
+    
+    return false;
+  }
+
+  public boolean isPublicationPurchasable(Publication publication) {
+    if (publication instanceof BookPublication) {
+      return ((BookPublication) publication).getPrintableFile() != null;
+    }
+    
+    return false;
+  }
+  
 	public void addPublicationToShoppingCart(Publication publication) {
 		sessionShoppingCartController.addPublication(publication);
 	}
