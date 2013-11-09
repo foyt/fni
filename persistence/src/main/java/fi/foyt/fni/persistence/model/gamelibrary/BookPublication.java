@@ -13,13 +13,21 @@ import org.hibernate.search.annotations.Indexed;
 @Indexed
 public class BookPublication extends Publication {
 	
-	public PublicationFile getFile() {
-		return file;
-	}
+	public PublicationFile getPrintableFile() {
+    return printableFile;
+  }
 	
-	public void setFile(PublicationFile file) {
-		this.file = file;
-	}
+	public void setPrintableFile(PublicationFile printableFile) {
+    this.printableFile = printableFile;
+  }
+	
+	public PublicationFile getDownloadableFile() {
+    return downloadableFile;
+  }
+	
+	public void setDownloadableFile(PublicationFile downloadableFile) {
+    this.downloadableFile = downloadableFile;
+  }
 
 	public Boolean getDownloadable() {
 		return downloadable;
@@ -38,8 +46,11 @@ public class BookPublication extends Publication {
 	}
 	
 	@ManyToOne
-	private PublicationFile file;
-	
+	private PublicationFile downloadableFile;
+
+  @ManyToOne
+  private PublicationFile printableFile;
+  
   @Column (nullable=false, columnDefinition = "BIT")
   @NotNull
 	private Boolean downloadable;

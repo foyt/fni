@@ -57,10 +57,14 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
     return bookPublication;
 	}
 
-	public BookPublication updateFile(BookPublication bookPublication, PublicationFile file) {
-		bookPublication.setFile(file);
-		getEntityManager().persist(bookPublication);
-		return bookPublication;
-	}
-  
+  public BookPublication updateDownlodableFile(BookPublication bookPublication, PublicationFile downloadableFile) {
+    bookPublication.setDownloadableFile(downloadableFile);
+    return persist(bookPublication);
+  }
+
+  public BookPublication updatePrintableFile(BookPublication bookPublication, PublicationFile printableFile) {
+    bookPublication.setPrintableFile(printableFile);
+    return persist(bookPublication);
+  }
+
 }
