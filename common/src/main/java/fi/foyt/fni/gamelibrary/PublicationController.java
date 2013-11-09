@@ -22,7 +22,7 @@ import org.hibernate.search.jpa.FullTextQuery;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.dao.gamelibrary.BookPublicationDAO;
-import fi.foyt.fni.persistence.dao.gamelibrary.BookPublicationFileDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.PublicationFileDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationAuthorDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationImageDAO;
@@ -60,7 +60,7 @@ public class PublicationController {
 	private BookPublicationDAO bookPublicationDAO;
 
 	@Inject
-	private BookPublicationFileDAO bookPublicationFileDAO;
+	private PublicationFileDAO publicationFileDAO;
 
 	@Inject
 	private PublicationAuthorDAO publicationAuthorDAO;
@@ -309,11 +309,8 @@ public class PublicationController {
 		}
 		
 		if (publication instanceof BookPublication) {
-			PublicationFile file = ((BookPublication) publication).getFile();
-			if (file != null) {
-				updateBookPublicationFile((BookPublication) publication, null);
-			  deleteFilePublicationFile(file);
-			}
+      deleteBookPublicationDownloableFile((BookPublication) publication);
+      deleteBookPublicationPrintableFile((BookPublication) publication);
 		}
 		
 		for (PublicationTag publicationTag : gameLibraryTagController.listPublicationTags(publication)) {
@@ -382,29 +379,61 @@ public class PublicationController {
 		return bookPublicationDAO.updateDownloadable(bookPublication, downloadable);
 	}
 
-	public BookPublication updateBookPublicationFile(BookPublication bookPublication, PublicationFile file) {
-		return bookPublicationDAO.updateFile(bookPublication, file);
-	}
+  public BookPublication deleteBookPublicationDownloableFile(BookPublication bookPublication) {
+    PublicationFile downloadableFile = bookPublication.getDownloadableFile();
+    if (downloadableFile != null) {
+      bookPublicationDAO.updateDownlodableFile(bookPublication, null);
+      deletePublicationFile(downloadableFile);
+    }
+    
+    return bookPublication;
+  }
+
+  public BookPublication deleteBookPublicationPrintableFile(BookPublication bookPublication) {
+    PublicationFile printableFile = bookPublication.getPrintableFile();
+    if (printableFile != null) {
+      bookPublicationDAO.updatePrintableFile(bookPublication, null);
+      deletePublicationFile(printableFile);
+    }
+    
+    return bookPublication;
+  }
 
 	/* PublicationFile */
-
-	public PublicationFile createBookPublicationFile(BookPublication bookPublication, String contentType, byte[] content, User creator) {
-		PublicationFile file = bookPublicationFileDAO.create(content, contentType);
-		updatedModified(bookPublication, creator, new Date());
-		bookPublicationDAO.updateFile(bookPublication, file);
-		return file;
+	
+	public PublicationFile createPublicationFile(byte[] content, String contentType) {
+	  return publicationFileDAO.create(content, contentType);
 	}
 	
-	public PublicationFile updateBookPublicationFile(BookPublication bookPublication, String contentType, byte[] content, User modifier) {
-		PublicationFile file = bookPublicationFileDAO.updateContent(bookPublicationFileDAO.updateContentType(bookPublication.getFile(), contentType), content);
-		updatedModified(bookPublication, modifier, new Date());
-		bookPublicationDAO.updateFile(bookPublication, file);
-		return file;
+	public void deletePublicationFile(PublicationFile publicationFile) {
+	  publicationFileDAO.delete(publicationFile);
 	}
 	
-	public void deleteFilePublicationFile(PublicationFile publicationFile) {
-		bookPublicationFileDAO.delete(publicationFile);
+	public BookPublication setBookPublicationDownloadableFile(BookPublication bookPublication, byte[] content, String contentType, User creator) {
+	  PublicationFile downloadableFile = bookPublication.getDownloadableFile();
+	  if (downloadableFile == null) {
+	    downloadableFile = createPublicationFile(content, contentType);
+	    bookPublicationDAO.updateDownlodableFile(bookPublication, downloadableFile);
+	  } else {
+	    publicationFileDAO.updateContent(downloadableFile, content);
+	    publicationFileDAO.updateContentType(downloadableFile, contentType);
+	  }
+	  
+    return (BookPublication) updatedModified(bookPublication, creator, new Date());
 	}
+  
+  public BookPublication setBookPublicationPrintableFile(BookPublication bookPublication, byte[] content, String contentType, User creator) {
+    PublicationFile printableFile = bookPublication.getPrintableFile();
+    if (printableFile == null) {
+      printableFile = createPublicationFile(content, contentType);
+      bookPublicationDAO.updatePrintableFile(bookPublication, printableFile);
+    } else {
+      publicationFileDAO.updateContent(printableFile, content);
+      publicationFileDAO.updateContentType(printableFile, contentType);
+    }
+    
+    return (BookPublication) updatedModified(bookPublication, creator, new Date());
+  }
 	
 	/* PublicationAuthor */
 	
