@@ -124,7 +124,7 @@ td.gamelibrary-manage-publicationlist-image {
 
 /* jQuery UI */
 
-.gamelibrary-manage-image-upload-dialog p, .gamelibrary-manage-file-upload-dialog p {
+.gamelibrary-manage-image-upload-dialog p, .gamelibrary-manage-file-upload-dialog p, .gamelibrary-manage-printable-upload-dialog p {
   font-style: italic;
   font-size: 14px;
   margin-top: 8px;
@@ -136,6 +136,6 @@ td.gamelibrary-manage-publicationlist-image {
   margin-top: 16px;
 }
 
-.gamelibrary-manage-image-upload-dialog input[type="file"], .gamelibrary-manage-file-upload-dialog input[type="file"] {
+.gamelibrary-manage-image-upload-dialog input[type="file"], .gamelibrary-manage-file-upload-dialog input[type="file"], .gamelibrary-manage-printable-upload-dialog input[type="file"] {
   margin-top: 16px;
 }

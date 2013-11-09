@@ -29,8 +29,14 @@
         </h:panelGroup>
         
         <h:panelGroup rendered="#{!publication.published}">
-          <a class="gamelibrary-manage-upload-file-link" href="javascript:void(null)" data-publication-id="#{publication.id}">
+          <a class="gamelibrary-manage-upload-downloadable-link" href="javascript:void(null)" data-publication-id="#{publication.id}">
             #{locales['gamelibrary.manage.publicationUploadPDF']}
+          </a>
+        </h:panelGroup>
+        
+        <h:panelGroup rendered="#{!publication.published}">
+          <a class="gamelibrary-manage-upload-printable-link" href="javascript:void(null)" data-publication-id="#{publication.id}">
+            #{locales['gamelibrary.manage.publicationUploadPrintable']}
           </a>
         </h:panelGroup>
         
@@ -94,11 +100,13 @@
     <h:column>
       <f:facet name="header"></f:facet>
       <ui:fragment rendered="#{gameLibraryManageBackingBean.getBookPublication(publication) ne null}">
-        <h:graphicImage title="#{locales['gamelibrary.manage.publicationImageDownloadableMissingFileTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-downloadable-missing-file.png" rendered="#{(gameLibraryManageBackingBean.getBookPublication(publication).downloadable)and(publication.file eq null)}"/>
-        <h:graphicImage title="#{locales['gamelibrary.manage.publicationImageDownloadableTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-downloadable.png" rendered="#{(gameLibraryManageBackingBean.getBookPublication(publication).downloadable)and(publication.file ne null)}"/>
+        <h:graphicImage title="#{locales['gamelibrary.manage.publicationImageDownloadableMissingFileTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-downloadable-missing-file.png" rendered="#{(gameLibraryManageBackingBean.getBookPublication(publication).downloadable)and(publication.downloadableFile eq null)}"/>
+        <h:graphicImage title="#{locales['gamelibrary.manage.publicationImageDownloadableTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-downloadable.png" rendered="#{(gameLibraryManageBackingBean.getBookPublication(publication).downloadable)and(publication.downloadableFile ne null)}"/>
+
+        <h:graphicImage title="#{locales['gamelibrary.manage.publicationImageRequiresDeliveryTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-requires-delivery-missing-file.png" rendered="#{(gameLibraryManageBackingBean.getBookPublication(publication).requiresDelivery)and(publication.printableFile eq null)}"/>
+        <h:graphicImage title="#{locales['gamelibrary.manage.publicationImageRequiresDeliveryTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-requires-delivery.png" rendered="#{(gameLibraryManageBackingBean.getBookPublication(publication).requiresDelivery)and(publication.printableFile ne null)}"/>
       </ui:fragment>
       <h:graphicImage title="#{locales['gamelibrary.manage.publicationImagePurchasableTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-purchasable.png" rendered="#{publication.purchasable}"/>
-      <h:graphicImage title="#{locales['gamelibrary.manage.publicationImageRequiresDeliveryTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-requires-delivery.png" rendered="#{publication.requiresDelivery}"/>
     </h:column>
   </h:dataTable>
 

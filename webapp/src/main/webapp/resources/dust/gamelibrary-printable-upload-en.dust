@@ -1,8 +1,10 @@
-<div title="Lataa PDF -tiedosto" data-upload-button="Lataa" data-cancel-button="Peruuta">
-  <div class="gamelibrary-manage-file-upload-dialog">
+<div title="Upload Printable file" data-upload-button="Upload" data-cancel-button="Cancel">
+  <div class="gamelibrary-manage-printable-upload-dialog">
     <form target="_upload_file_" method="post" enctype="multipart/form-data" action="{@contextPath/}/gamelibrary/publicationFiles/{publicationId}"> 
+      <input type="hidden" value="PRINTABLE" name="type"/>
+      
       <p>
-        Valitse ladattava PDF -tiedosto.
+        Choose a printable file to be uploaded.
       </p>
     
       <div>

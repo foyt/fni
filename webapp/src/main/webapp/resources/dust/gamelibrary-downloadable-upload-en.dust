@@ -1,6 +1,7 @@
 <div title="Upload PDF file" data-upload-button="Upload" data-cancel-button="Cancel">
   <div class="gamelibrary-manage-file-upload-dialog">
     <form target="_upload_file_" method="post" enctype="multipart/form-data" action="{@contextPath/}/gamelibrary/publicationFiles/{publicationId}"> 
+      <input type="hidden" value="DOWNLOADABLE" name="type"/>
       <p>
         Choose a PDF file to be uploaded.
       </p>
