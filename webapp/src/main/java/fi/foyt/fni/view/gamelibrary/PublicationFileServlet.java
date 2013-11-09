@@ -63,7 +63,7 @@ public class PublicationFileServlet extends AbstractFileServlet {
 		}
 		
 		// BookPublication does not have a file, send 404
-		PublicationFile file = bookPublication.getFile();
+		PublicationFile file = bookPublication.getDownloadableFile();
 		if (file == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
@@ -127,6 +127,8 @@ public class PublicationFileServlet extends AbstractFileServlet {
 			return;
 		}
 		
+		FileType fileType = null;
+		
 		try {
 			TypedData file = null;
 			List<FileItem> items = getFileItems(request);
@@ -138,13 +140,25 @@ public class PublicationFileServlet extends AbstractFileServlet {
 					} else {
 						file = new TypedData(item.get(), item.getContentType());
 					}
-				} 
+				} else {
+				  if ("type".equals(item.getFieldName())) {
+				    fileType = FileType.valueOf(new String(item.get()));
+				  }
+				}
 			}
 			
-			if (bookPublication.getFile() != null) {
-				publicationController.updateBookPublicationFile(bookPublication, file.getContentType(), file.getData(), loggedUser);
-			} else {
-				publicationController.createBookPublicationFile(bookPublication, file.getContentType(), file.getData(), loggedUser);
+			if (fileType == null) {
+			  response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        return;
+			}
+			
+			switch (fileType) {
+        case DOWNLOADABLE:
+          publicationController.setBookPublicationDownloadableFile(bookPublication, file.getData(), file.getContentType(), loggedUser);
+        break;
+        case PRINTABLE:
+          publicationController.setBookPublicationPrintableFile(bookPublication, file.getData(), file.getContentType(), loggedUser);
+        break;
 			}
 
 			response.sendRedirect(new StringBuilder()
@@ -163,5 +177,10 @@ public class PublicationFileServlet extends AbstractFileServlet {
 		StringBuilder eTagBuilder = new StringBuilder();
 		eTagBuilder.append("W/").append(modified.getTime());
 		return eTagBuilder.toString();
+	}
+	
+	private enum FileType {
+	  DOWNLOADABLE,
+	  PRINTABLE
 	}
 }
