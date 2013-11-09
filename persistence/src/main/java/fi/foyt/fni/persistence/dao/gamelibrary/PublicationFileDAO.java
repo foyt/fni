@@ -1,12 +1,11 @@
 package fi.foyt.fni.persistence.dao.gamelibrary;
 
-
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationFile;
 
 @DAO
-public class BookPublicationFileDAO extends GenericDAO<PublicationFile> {
+public class PublicationFileDAO extends GenericDAO<PublicationFile> {
   
 	private static final long serialVersionUID = 1L;
 
@@ -14,8 +13,7 @@ public class BookPublicationFileDAO extends GenericDAO<PublicationFile> {
 		PublicationFile publicationFile = new PublicationFile();
 		publicationFile.setContent(content);
 		publicationFile.setContentType(contentType);
-		getEntityManager().persist(publicationFile);
-		return publicationFile;
+		return persist(publicationFile);
 	}
 
 	public PublicationFile updateContentType(PublicationFile publicationFile, String contentType) {
