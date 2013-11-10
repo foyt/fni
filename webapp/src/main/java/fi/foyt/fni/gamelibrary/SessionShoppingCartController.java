@@ -160,7 +160,7 @@ public class SessionShoppingCartController {
 			customerPhone = loggedUser.getPhone();
 		}
 		
-		Order order = orderDAO.create(shoppingCart.getCustomer(), customerCompany, customerEmail, customerFirstName, customerLastName, customerMobile, customerPhone, 
+		Order order = orderDAO.create(shoppingCart.getCustomer(), null, customerCompany, customerEmail, customerFirstName, customerLastName, customerMobile, customerPhone, 
 				OrderStatus.CANCELED, null, null, shoppingCart.getDeliveryAddress(), now, now, null, null, null);
 		
 		List<ShoppingCartItem> shoppingCartItems = shoppingCartItemDAO.listByCart(shoppingCart);

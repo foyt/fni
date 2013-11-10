@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -430,11 +431,14 @@ public class ShoppingCartBackingBean implements Serializable {
 		String firstName = getPayerFirstName();
 		String lastName = getPayerLastName();
 		String email = getPayerEmail();
+		String accessKey = null;
 
 		if (loggedUser != null) {
 			userController.updateUserCompany(loggedUser, company);
 			userController.updateUserMobile(loggedUser, mobile);
 			userController.updateUserPhone(loggedUser, phone);
+		} else {
+		  accessKey = UUID.randomUUID().toString();
 		}
 
 		Contact contact = new Contact(firstName, lastName, email, new fi.foyt.paytrail.rest.Address(streetAddess, address.getPostalCode(), address.getCity(),
@@ -445,7 +449,7 @@ public class ShoppingCartBackingBean implements Serializable {
 		Address orderAddress = userController.createAddress(address.getUser(), AddressType.DELIVERY_ARCHIVED, address.getStreet1(), address.getStreet2(),
 				address.getPostalCode(), address.getCity(), address.getCountry());
 
-		Order order = orderController.createOrder(loggedUser, company, email, firstName, lastName, mobile, phone, OrderStatus.NEW, 
+		Order order = orderController.createOrder(loggedUser, accessKey, company, email, firstName, lastName, mobile, phone, OrderStatus.NEW, 
 				getDeliveryCosts(), notes, orderAddress);
 
 		OrderDetails orderDetails = new OrderDetails(1, contact);
