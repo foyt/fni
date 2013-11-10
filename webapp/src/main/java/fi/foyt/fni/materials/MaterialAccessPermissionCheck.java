@@ -1,5 +1,7 @@
 package fi.foyt.fni.materials;
 
+import java.util.Map;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -25,7 +27,7 @@ public class MaterialAccessPermissionCheck implements PermissionCheckImplementat
   private SessionController sessionController;
 
 	@Override
-	public boolean checkPermission(Long materialId) {
+	public boolean checkPermission(Long materialId, Map<String, Object> parameters) {
 	  Material material = null;
 	  if (materialId != null) {
 	    material = materialController.findMaterialById(materialId);

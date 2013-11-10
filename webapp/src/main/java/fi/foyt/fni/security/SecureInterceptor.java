@@ -3,7 +3,9 @@ package fi.foyt.fni.security;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -49,13 +51,13 @@ public class SecureInterceptor implements Serializable {
 	}
 
 	@SuppressWarnings("serial")
-	private boolean invokePermissionChecks(final Permission permission, Method method, Object[] parameters) {
+	private boolean invokePermissionChecks(final Permission permission, Method method, Object[] methodParameters) {
 		Object contextParameter = null;
 		
 		SecurityContext securityContext = method.getAnnotation(SecurityContext.class);
 		if (securityContext != null) {
 			if (StringUtils.isNotBlank(securityContext.context())) {
-				contextParameter = evaluateContext(securityContext.context());
+				contextParameter = evaluateExpression(securityContext.context());
 			} else {
 				throw new SecurityException("SecurityContext requires a context when used in method body");
 			}
@@ -65,7 +67,7 @@ public class SecureInterceptor implements Serializable {
   			Annotation[] annotations = parameterAnnotations[i];
   			for (Annotation annotation : annotations) {
   				if (annotation instanceof SecurityContext) {
-  					contextParameter = parameters[i];
+  					contextParameter = methodParameters[i];
   					break;
   				}
   				
@@ -74,6 +76,15 @@ public class SecureInterceptor implements Serializable {
   				}
   			}
   		};
+		}
+		
+		Map<String, Object> parameters = new HashMap<>();
+		SecurityParams params = method.getAnnotation(SecurityParams.class);
+		if (params != null) {
+  		for (SecurityParam param : params.value()) {
+  		  Object value = evaluateExpression(param.value());
+  		  parameters.put(param.name(), value);
+  		}
 		}
 		
 		PermissionCheck permissionCheckAnnotation = new PermissionCheckQualifier() { 
@@ -87,7 +98,7 @@ public class SecureInterceptor implements Serializable {
 		while (permissionCheckIterator.hasNext()) {
 			@SuppressWarnings("unchecked")
 			PermissionCheckImplementation<Object> permissionCheck = (PermissionCheckImplementation<Object>) permissionCheckIterator.next();
-			if (!permissionCheck.checkPermission(contextParameter)) {
+			if (!permissionCheck.checkPermission(contextParameter, parameters)) {
 				return false;
 			}
 		}
@@ -95,7 +106,7 @@ public class SecureInterceptor implements Serializable {
 		return true;
 	}
 	
-	private Object evaluateContext(String expression) {
+	private Object evaluateExpression(String expression) {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		ExpressionFactory expressionFactory = facesContext.getApplication().getExpressionFactory();
 		ELContext elContext = facesContext.getELContext();

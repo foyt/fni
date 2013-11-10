@@ -1,5 +1,7 @@
 package fi.foyt.fni.forum;
 
+import java.util.Map;
+
 import javax.ejb.Stateless;
 
 import fi.foyt.fni.persistence.model.forum.Forum;
@@ -13,7 +15,7 @@ import fi.foyt.fni.security.SecurityException;
 public class ForumTopicCreatePermissionCheck implements PermissionCheckImplementation<Forum> {
 
 	@Override
-	public boolean checkPermission(Forum forum) {
+	public boolean checkPermission(Forum forum, Map<String, Object> parameters) {
 		if (forum == null) {
 			throw new SecurityException("Could not resolve forum while checking permission for FORUM_TOPIC_CREATE");
 		}
