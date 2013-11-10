@@ -20,6 +20,7 @@ import org.apache.lucene.util.Version;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 
+import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.users.AddressDAO;
 import fi.foyt.fni.persistence.dao.users.UserContactFieldDAO;
@@ -82,6 +83,9 @@ public class UserController {
 
   @Inject
 	private AddressDAO addressDAO;
+
+  @Inject
+  private AuthenticationController authenticationController;
 
   @Inject
 	private FullTextEntityManager fullTextEntityManager;
@@ -255,6 +259,21 @@ public class UserController {
     
     return Collections.unmodifiableList(results);
   }
+  
+  public void archiveUser(User user) {
+    List<UserEmail> userEmails = listUserEmailsByUser(user);
+
+    for (UserEmail userEmail : userEmails) {
+      userEmailDAO.delete(userEmail);
+    }
+    
+    List<UserIdentifier> userIdentifiers = authenticationController.listUserIdentifiers(user);
+    for (UserIdentifier userIdentifier : userIdentifiers) {
+      authenticationController.removeUserIdentifier(userIdentifier);
+    }
+    
+    userDAO.updateArchived(user, Boolean.TRUE);
+  }
 	
 	/* Email */
 	
@@ -268,6 +287,10 @@ public class UserController {
 	
 	public UserEmail findByEmail(String email) {
 		return userEmailDAO.findByEmail(email);
+	}
+	
+	public List<UserEmail> listUserEmailsByUser(User user) {
+	  return userEmailDAO.listByUser(user);
 	}
 	
 	/* Friends */

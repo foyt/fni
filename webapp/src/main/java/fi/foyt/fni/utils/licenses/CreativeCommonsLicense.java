@@ -1,4 +1,4 @@
-package fi.foyt.fni.licences;
+package fi.foyt.fni.utils.licenses;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;

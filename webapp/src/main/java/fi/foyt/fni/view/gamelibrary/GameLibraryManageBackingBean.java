@@ -16,8 +16,6 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.ShoppingCartController;
-import fi.foyt.fni.licences.CreativeCommonsLicense;
-import fi.foyt.fni.licences.CreativeCommonsUtils;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.users.Permission;
@@ -25,6 +23,8 @@ import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.faces.FacesUtils;
+import fi.foyt.fni.utils.licenses.CreativeCommonsLicense;
+import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 
 
 @RequestScoped

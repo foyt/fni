@@ -91,12 +91,6 @@
         <artifactId>persistence</artifactId>
         <version>${project.version}</version>
       </dependency>
-
-      <dependency>
-        <groupId>fi.foyt.fni</groupId>
-        <artifactId>common</artifactId>
-        <version>${project.version}</version>
-      </dependency>
       
       <!-- Paytrail -->
       

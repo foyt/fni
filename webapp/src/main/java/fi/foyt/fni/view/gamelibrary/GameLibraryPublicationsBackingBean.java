@@ -14,14 +14,14 @@ import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
-import fi.foyt.fni.licences.CreativeCommonsLicense;
-import fi.foyt.fni.licences.CreativeCommonsUtils;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationAuthor;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.utils.licenses.CreativeCommonsLicense;
+import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 
 @RequestScoped
 @Named

@@ -1,4 +1,4 @@
-package fi.foyt.fni.licences;
+package fi.foyt.fni.utils.licenses;
 
 import java.util.ArrayList;
 import java.util.List;

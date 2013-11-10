@@ -19,8 +19,6 @@ import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
-import fi.foyt.fni.licences.CreativeCommonsLicense;
-import fi.foyt.fni.licences.CreativeCommonsUtils;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
@@ -30,6 +28,8 @@ import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserContactFieldType;
 import fi.foyt.fni.users.UserController;
+import fi.foyt.fni.utils.licenses.CreativeCommonsLicense;
+import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 
 @RequestScoped
 @Stateful

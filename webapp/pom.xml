@@ -83,6 +83,13 @@
       <artifactId>hibernate-infinispan</artifactId>
       <scope>provided</scope>
     </dependency>
+
+    <!-- NGram -->
+
+    <dependency>
+      <groupId>de.spieleck.app.ngramj</groupId>
+      <artifactId>cngram</artifactId>
+    </dependency>
     
     <!-- Apache Commons -->
 
@@ -114,11 +121,6 @@
   	  <artifactId>persistence</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>fi.foyt.fni</groupId>
-      <artifactId>common</artifactId>
-    </dependency>
-    
     <!-- Paytrail -->
       
     <dependency>
