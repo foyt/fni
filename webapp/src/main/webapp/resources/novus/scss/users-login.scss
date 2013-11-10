@@ -6,13 +6,19 @@
 
 .user-login-login-panel, .user-login-register-panel {
   @include generic-panel;
-  height: 377px;
+  height: 432px;
+  margin-bottom: 40px;
 }
 
 /* Generic */
 
 h3 {
   @include header-2;
+  margin-bottom: 10px;
+}
+
+h4 {
+  @include header-3;
   margin-bottom: 10px;
 }
 
@@ -43,7 +49,7 @@ h3 {
 }
 
 .user-login-external { 
-  margin-top: 8px;
+  margin-top: 20px;
 }
 
 .user-login-external-label {
