@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
@@ -48,7 +49,7 @@ public class PaytrailServlet extends AbstractTransactionedServlet {
 		Order order = orderController.findOrderById(orderId);
 		if (order != null) {
 			orderController.updateOrderAsCanceled(order);
-			response.sendRedirect(request.getContextPath() + "/gamelibrary/orders/" + order.getId());
+			response.sendRedirect(request.getContextPath() + getOrderUrl(order));
 		} else {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
@@ -67,7 +68,7 @@ public class PaytrailServlet extends AbstractTransactionedServlet {
 					orderController.updateOrderAsWaitingForDelivery(order);
 				}
 
-				response.sendRedirect(request.getContextPath() + "/gamelibrary/orders/" + order.getId());
+				response.sendRedirect(request.getContextPath() + getOrderUrl(order));
 			} else {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 				return;
@@ -86,6 +87,18 @@ public class PaytrailServlet extends AbstractTransactionedServlet {
 		String authCode = request.getParameter("RETURN_AUTHCODE");
 
 		return paytrailService.confirmPayment(orderNumber, timestamp, paid, method, authCode);
+	}
+	
+	private String getOrderUrl(Order order) {
+	  StringBuilder resultBuilder = new StringBuilder()
+	    .append("/gamelibrary/orders/")
+	    .append(order.getId());
+	  
+	  if (StringUtils.isNotBlank(order.getAccessKey())) {
+	    resultBuilder.append("?key=").append(order.getAccessKey());
+	  }
+	  
+	  return resultBuilder.toString();
 	}
 
 	private String getPathAction(HttpServletRequest req) {
