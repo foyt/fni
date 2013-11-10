@@ -40,6 +40,8 @@ public class VerifyBackingBean {
 		if (verificationKey == null) {
 			FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("users.verification.invalidVerificationKey"));
 		} else {
+		  FacesUtils.addPostRedirectMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.verification.userVerifiedMessage"));
+		  
 			InternalAuth internalAuth = authenticationController.findInternalAuthByUser(verificationKey.getUser());
 			if (internalAuth != null) {
   			authenticationController.verifyInternalAuth(verificationKey, internalAuth);
