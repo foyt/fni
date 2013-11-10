@@ -56,9 +56,11 @@ public class SessionController implements Serializable {
     User loggedUser = getLoggedUser();
     if (loggedUser != null) {
     	return convertUserRole(loggedUser.getRole());
+    } else {
+      return new Role[] {
+        Role.ANONYMOUS
+      };
     }
-    
-    return null;
   }
   
   public boolean hasLoggedUserRole(Role role) {

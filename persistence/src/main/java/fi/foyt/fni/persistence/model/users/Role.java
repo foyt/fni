@@ -1,6 +1,8 @@
 package fi.foyt.fni.persistence.model.users;
 
 public enum Role {
+  
+  ANONYMOUS (Permission.GAMELIBRARY_VIEW_ORDER),
 	
 	/* Guest */
 	
