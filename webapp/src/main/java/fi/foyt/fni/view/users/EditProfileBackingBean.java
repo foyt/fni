@@ -364,13 +364,15 @@ public class EditProfileBackingBean {
   	userController.setContactFieldValue(loggedUser, UserContactFieldType.TWITTER, getContactInfoFieldTwitter());
   	userController.setContactFieldValue(loggedUser, UserContactFieldType.LINKEDIN, getContactInfoFieldLinkedIn());
   	userController.setContactFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS, getContactInfoFieldGooglePlus());
+  	
+    FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.savedMessage"));
 	}
 	
 	@LoggedIn
 	@Secure (Permission.PROFILE_UPDATE)
 	public void changePassword() {
 		if (StringUtils.isBlank(getChangePassword1()) || DigestUtils.md5Hex("").equals(getChangePassword1())) {
-			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.editProfile.changePasswordPasswordRequired"));
+      FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.editProfile.changePasswordPasswordRequired"));
 		} else {
   		if (!StringUtils.equals(getChangePassword1(), getChangePassword2())) {
   			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.editProfile.changePasswordPasswordsDoNotMatch"));
