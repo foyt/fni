@@ -61,7 +61,10 @@
       <!-- Description -->
   
       <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['users.editProfile.descriptionTitle']}</p>
+        <p class="view-header-description-title">
+          <span>#{locales['users.editProfile.descriptionTitle']}</span>
+          <h:outputLink value="#{request.contextPath}/profile/#{sessionBackingBean.loggedUser.id}">#{locales['users.editProfile.viewProfileLink']}</h:outputLink>
+        </p>
         <p class="view-header-description-text">#{locales['users.editProfile.descriptionText']}</p>
       </h:panelGroup>
     </h:panelGroup>

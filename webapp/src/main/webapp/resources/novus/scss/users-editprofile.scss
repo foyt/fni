@@ -15,6 +15,24 @@ h3 {
   margin-bottom: 10px;
 }
 
+/* Header */
+
+.view-header-description-title a {
+  font-size: 16px;
+  font-family: $default-font;
+  color: $header-text-color;
+  padding-left: 20px;
+  font-style: italic;
+  font-weight: bold;
+  text-decoration: none;
+  text-transform: none;
+}
+
+.view-header-description-title a:after {
+  content: '>>';
+  padding-left: 8px;
+}
+
 /* Forms */
 
 .users-editprofile-field label {
