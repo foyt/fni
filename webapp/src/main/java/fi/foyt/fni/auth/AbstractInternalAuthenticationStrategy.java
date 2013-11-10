@@ -35,7 +35,7 @@ public abstract class AbstractInternalAuthenticationStrategy extends Authenticat
 			throw new UserNotConfirmedException();
 		
 		String token = UUID.randomUUID().toString();
-		String identifier = "INTERNAL-" + internalAuth.getId();
+		String identifier = "INTERNAL-" + user.getId();
 		
     return loginUser(AuthSource.INTERNAL, username, token, null, null, identifier, Arrays.asList(username), null, null, null, null, null);
   }
