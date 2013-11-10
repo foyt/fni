@@ -11,12 +11,18 @@ import javax.inject.Named;
 import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
 
 import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
 import fi.foyt.fni.persistence.model.users.Address;
+import fi.foyt.fni.persistence.model.users.Permission;
+import fi.foyt.fni.security.Secure;
+import fi.foyt.fni.security.SecurityContext;
+import fi.foyt.fni.security.SecurityParam;
+import fi.foyt.fni.security.SecurityParams;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
 @Stateful
@@ -34,8 +40,11 @@ public class OrderBackingBean {
 	private OrderController orderController;
 
 	@URLAction
-//	@Secure (Permission.GAMELIBRARY_VIEW_ORDER)
-//	@SecurityContext (context = "#{orderBackingBean.orderId}")
+	@Secure (Permission.GAMELIBRARY_VIEW_ORDER)
+	@SecurityContext (context = "#{orderBackingBean.orderId}")
+	@SecurityParams (
+    @SecurityParam (name="accessKey", value="#{orderBackingBean.accessKey}")
+	)
 	public void init() {
 		Order order = orderController.findOrderById(getOrderId());
 		orderStatus = order.getOrderStatus();
@@ -145,6 +154,14 @@ public class OrderBackingBean {
 	public Date getCanceled() {
 		return canceled;
 	}
+	
+	public String getAccessKey() {
+    return accessKey;
+  }
+	
+	public void setAccessKey(String accessKey) {
+    this.accessKey = accessKey;
+  }
 
   private Long orderId;
 	private OrderStatus orderStatus;
@@ -162,4 +179,7 @@ public class OrderBackingBean {
   private Date shipped;
   private Date delivered;
   private Date canceled; 
+  
+  @URLQueryParameter ("key") 
+  private String accessKey;
 }
