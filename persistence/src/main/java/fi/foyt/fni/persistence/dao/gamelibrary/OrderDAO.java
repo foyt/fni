@@ -21,11 +21,13 @@ public class OrderDAO extends GenericDAO<Order> {
 
 	private static final long serialVersionUID = 1L;
 
-	public Order create(User customer, String customerCompany, String customerEmail, String customerFirstName, String customerLastName, String customerMobile,
+	public Order create(User customer, String accessKey, String customerCompany, String customerEmail, String customerFirstName, String customerLastName, String customerMobile,
 			String customerPhone, OrderStatus orderStatus, Double shippingCosts, String notes, Address deliveryAddress, Date created, Date canceled, Date paid,
 			Date shipped, Date delivered) {
-		Order order = new Order();
+		
+	  Order order = new Order();
 
+		order.setAccessKey(accessKey);
 		order.setCanceled(canceled);
 		order.setCreated(created);
 		order.setCustomer(customer);

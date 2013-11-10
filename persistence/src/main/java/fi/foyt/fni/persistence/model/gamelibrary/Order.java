@@ -157,6 +157,14 @@ public class Order {
     this.notes = notes;
   }
   
+  public String getAccessKey() {
+    return accessKey;
+  }
+  
+  public void setAccessKey(String accessKey) {
+    this.accessKey = accessKey;
+  }
+  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
@@ -211,4 +219,6 @@ public class Order {
   @Basic (fetch=FetchType.LAZY)
   @Lob
   private String notes;
+  
+  private String accessKey;
 }
