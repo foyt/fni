@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
@@ -32,13 +33,18 @@ import org.hibernate.search.jpa.FullTextQuery;
 
 import fi.foyt.fni.persistence.dao.forum.ForumCategoryDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumDAO;
+import fi.foyt.fni.persistence.dao.forum.ForumFollowerDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumPostDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumTopicDAO;
+import fi.foyt.fni.persistence.dao.forum.ForumTopicFollowerDAO;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumCategory;
+import fi.foyt.fni.persistence.model.forum.ForumFollower;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
+import fi.foyt.fni.persistence.model.forum.ForumTopicFollower;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
@@ -63,8 +69,21 @@ public class ForumController implements Serializable {
 	@Inject
 	private ForumTopicDAO forumTopicDAO;
 
-	@Inject
+  @Inject
 	private ForumPostDAO forumPostDAO;
+
+  @Inject
+  private ForumFollowerDAO forumFollowerDAO;
+
+  @Inject
+  private ForumTopicFollowerDAO forumTopicFollowerDAO;
+
+  @Inject
+	private SessionController sessionController;
+	
+	@Inject
+	@ForumPostCreated
+	private Event<ForumPostEvent> postCreatedEvent;
 	
 	// Categories
 	
@@ -142,9 +161,15 @@ public class ForumController implements Serializable {
 
 	public ForumPost createForumPost(ForumTopic topic, User author, String content) {
 		Date now = new Date();
-		return forumPostDAO.create(topic, author, now, now, content, 0l);
+		ForumPost forumPost = forumPostDAO.create(topic, author, now, now, content, 0l);
+		postCreatedEvent.fire(new ForumPostEvent(sessionController.getLocale(), forumPost.getId()));
+		return forumPost;
 	}
-	
+
+  public ForumPost findForumPostById(Long id) {
+    return forumPostDAO.findById(id);
+  }
+  
 	public ForumPost findLastTopicPost(ForumTopic forumTopic) {
 		ForumPost lastTopicPost = null;
     List<ForumPost> forumPosts = forumPostDAO.listByTopicSortByCreated(forumTopic, 0, 1);
@@ -315,7 +340,19 @@ public class ForumController implements Serializable {
 		
 		return null;
 	}
+	
+	/* ForumFollowers */
 
+  public List<ForumFollower> listForumFollowers(Forum forum) {
+    return forumFollowerDAO.listByForum(forum); 
+  }
+  
+	/* ForumTopicFollower */
+
+  public List<ForumTopicFollower> listForumTopicFollowers(ForumTopic forumTopic) {
+    return forumTopicFollowerDAO.listByForumTopic(forumTopic);
+  }
+  
 	private String createUrlName(Forum forum, String subject) {
 		int maxLength = 20;
 		int padding = 0;
@@ -337,5 +374,5 @@ public class ForumController implements Serializable {
 			}
 		} while (true);
 	}
-
+	
 }
