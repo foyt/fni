@@ -3,6 +3,7 @@ package fi.foyt.fni.view.forum;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateful;
@@ -65,11 +66,17 @@ public class ForumTopicBackingBean {
 		  throw new FileNotFoundException();
 		}
 		
-		topic = forumController.findForumTopicByForumAndUrlName(forum, topicUrlName);
+		ForumTopic topic = forumController.findForumTopicByForumAndUrlName(forum, topicUrlName);
     if (topic == null) {
       throw new FileNotFoundException();
     }
-
+    
+    topicId = topic.getId();
+    topicSubject = topic.getSubject();
+    topicAuthorId = topic.getAuthor().getId();
+    topicAuthorName = topic.getAuthor().getFullName();
+    topicCreated = topic.getCreated();
+    
     long pageCount = getPostCount();
 		
 		posts = forumController.listPostsByTopic(topic, page * POST_PER_PAGE, POST_PER_PAGE);
@@ -101,9 +108,9 @@ public class ForumTopicBackingBean {
 		return forum;
 	}
 	
-	public ForumTopic getTopic() {
-		return topic;
-	}
+	public Long getTopicId() {
+    return topicId;
+  }
 	
 	public String getForumUrlName() {
 		return forumUrlName;
@@ -141,6 +148,22 @@ public class ForumTopicBackingBean {
 		this.reply = reply;
 	}
 
+	public Long getTopicAuthorId() {
+    return topicAuthorId;
+  }
+	
+	public String getTopicAuthorName() {
+    return topicAuthorName;
+  }
+	
+	public String getTopicSubject() {
+    return topicSubject;
+  }
+	
+	public Date getTopicCreated() {
+    return topicCreated;
+  }
+	
 	@LoggedIn
 	@Secure (Permission.FORUM_POST_CREATE)
 	public void postReply() throws IOException {
@@ -148,8 +171,9 @@ public class ForumTopicBackingBean {
 		if (StringUtils.isEmpty(content)) {
 			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("forum.topic.contentRequired"));
 		} else {
+		  ForumTopic topic = forumController.findForumTopicById(getTopicId());
   		User author = sessionController.getLoggedUser();
-  		ForumPost post = forumController.createForumPost(getTopic(), author, content);
+  		ForumPost post = forumController.createForumPost(topic, author, content);
   
   		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
   		  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
@@ -165,13 +189,31 @@ public class ForumTopicBackingBean {
 		}
 	}
 	
-	public String watchTopic() {
+	public boolean getWatchingTopic() {
+	  if (!sessionController.isLoggedIn()) {
+	    return false;
+	  }
 	  
-	  
-	  return "pretty:forum-topic";
+	  ForumTopic topic = forumController.findForumTopicById(getTopicId());
+	  return forumController.isWatchingTopic(sessionController.getLoggedUser(), topic);
 	}
 	
+	@LoggedIn
+  public String watchTopic() {
+	  ForumTopic topic = forumController.findForumTopicById(getTopicId());
+    forumController.addTopicWatcher(sessionController.getLoggedUser(), topic);
+    return "pretty:forum-topic";
+  }
+	
+	@LoggedIn
+  public String stopWatchingTopic() {
+    ForumTopic topic = forumController.findForumTopicById(getTopicId());
+    forumController.removeTopicWatcher(sessionController.getLoggedUser(), topic);
+    return "pretty:forum-topic";
+  }
+	
 	private long getPostCount() {
+	  ForumTopic topic = forumController.findForumTopicById(getTopicId());
 		return Math.round(Math.ceil(new Double(forumController.countPostsByTopic(topic)) / POST_PER_PAGE));
 	}
 	
@@ -179,7 +221,11 @@ public class ForumTopicBackingBean {
 	private Integer page;
 	private List<Integer> pages;
 	private Forum forum;
-	private ForumTopic topic;
+	private Long topicId;
+	private String topicSubject;
+	private String topicAuthorName;
+	private Long topicAuthorId;
+	private Date topicCreated;
 	private String forumUrlName;
 	private String topicUrlName;
 	private List<ForumPost> posts;

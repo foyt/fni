@@ -101,11 +101,15 @@ public class ForumController implements Serializable {
 	}
 	
 	// Topics
-
+  
 	public ForumTopic createTopic(Forum forum, String subject, User author) {
 		Date now = new Date();
 		return forumTopicDAO.create(forum, author, now, now, createUrlName(forum, subject), subject, 0l);
 	}
+
+  public ForumTopic findForumTopicById(Long topicId) {
+    return forumTopicDAO.findById(topicId);
+  }
 
 	public ForumTopic findForumTopicByForumAndUrlName(Forum forum, String urlName) {
 		return forumTopicDAO.findByForumAndUrlName(forum, urlName);
@@ -340,6 +344,24 @@ public class ForumController implements Serializable {
 
   public List<ForumTopicWatcher> listForumTopicWatchers(ForumTopic forumTopic) {
     return forumTopicWatcherDAO.listByForumTopic(forumTopic);
+  }
+  
+  public void addTopicWatcher(User user, ForumTopic forumTopic) {
+    if (!isWatchingTopic(user, forumTopic)) {
+      forumTopicWatcherDAO.create(forumTopic, user);
+    }
+  }
+  
+  public void removeTopicWatcher(User user, ForumTopic forumTopic) {
+    ForumTopicWatcher topicWatcher = forumTopicWatcherDAO.findByUserAndForumTopic(user, forumTopic);
+    if (topicWatcher != null) {
+      forumTopicWatcherDAO.delete(topicWatcher);
+    }
+  }
+
+  public boolean isWatchingTopic(User user, ForumTopic forumTopic) {
+    ForumTopicWatcher topicWatcher = forumTopicWatcherDAO.findByUserAndForumTopic(user, forumTopic);
+    return topicWatcher != null;
   }
   
 	private String createUrlName(Forum forum, String subject) {

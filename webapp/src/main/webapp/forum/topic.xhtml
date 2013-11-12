@@ -39,8 +39,8 @@
           #{forumTopicBackingBean.forum.name}
         </h:outputLink>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:outputLink styleClass="view-header-navigation-item" value="#{request.contextPath}/forum/#{forumTopicBackingBean.forum.urlName}/#{forumTopicBackingBean.topic.urlName}">
-          #{forumTopicBackingBean.topic.subject}
+        <h:outputLink styleClass="view-header-navigation-item" value="#{request.contextPath}/forum/#{forumTopicBackingBean.forum.urlName}/#{forumTopicBackingBean.topicUrlName}">
+          #{forumTopicBackingBean.topicSubject}
         </h:outputLink>
       </h:panelGroup>
   
@@ -57,20 +57,23 @@
     <h:panelGroup layout="block" styleClass="grid_16 tight">
       <h:panelGroup layout="block" styleClass="forum-topic-panel">
         <h:form rendered="#{sessionBackingBean.loggedIn}"> 
-          <h:commandLink styleClass="forum-topic-watch-link" value="#{locales['forum.topic.watchTopic']}" action="#{forumTopicBackingBean.watchTopic}" />
+          <h:commandLink rendered="#{!forumTopicBackingBean.watchingTopic}" styleClass="forum-topic-watch-link" value="#{locales['forum.topic.watchTopic']}" action="#{forumTopicBackingBean.watchTopic}" />
+          <h:commandLink rendered="#{forumTopicBackingBean.watchingTopic}" styleClass="forum-topic-stop-watching-link" value="#{locales['forum.topic.stopWatchTopic']}" action="#{forumTopicBackingBean.stopWatchingTopic}" />
+          
+        
         </h:form>
         
-        <h3>#{forumTopicBackingBean.topic.subject}</h3>
+        <h3>#{forumTopicBackingBean.topicSubject}</h3>
         <h:panelGroup layout="block" styleClass="forum-topic-info">
           
           <h:panelGroup layout="block" styleClass="forum-topic-created-info">
             <h:panelGroup styleClass="forum-topic-info-created">
               <h:outputFormat value="#{locales['forum.topic.infoStarted']}">
-                <f:param value="#{forumTopicBackingBean.topic.created}"/>
+                <f:param value="#{forumTopicBackingBean.topicCreated}"/>
               </h:outputFormat>
             </h:panelGroup>  
-            <h:outputLink value="#{request.contextPath}/profile/#{forumTopicBackingBean.topic.author.id}">
-              #{forumTopicBackingBean.topic.author.fullName}
+            <h:outputLink value="#{request.contextPath}/profile/#{forumTopicBackingBean.topicAuthorId}">
+              #{forumTopicBackingBean.topicAuthorName}
             </h:outputLink>
           </h:panelGroup>
           

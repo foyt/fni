@@ -26,6 +26,23 @@ public class ForumTopicWatcherDAO extends GenericDAO<ForumTopicWatcher> {
 	  return persist(forumTopicWatcher);
 	}
 
+  public ForumTopicWatcher findByUserAndForumTopic(User user, ForumTopic forumTopic) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<ForumTopicWatcher> criteria = criteriaBuilder.createQuery(ForumTopicWatcher.class);
+    Root<ForumTopicWatcher> root = criteria.from(ForumTopicWatcher.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.and(
+        criteriaBuilder.equal(root.get(ForumTopicWatcher_.user), user),
+        criteriaBuilder.equal(root.get(ForumTopicWatcher_.topic), forumTopic)
+      )
+    );
+
+    return getSingleResult(entityManager.createQuery(criteria));
+  }
+  
   public List<ForumTopicWatcher> listByForumTopic(ForumTopic forumTopic) {
     EntityManager entityManager = getEntityManager();
 
