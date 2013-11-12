@@ -39,6 +39,16 @@ h3 {
   color: blue;
 }
 
+.forum-topic-watch-link {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 12px;
+  text-decoration: none;
+  text-transform: uppercase;
+  float: right;
+  margin-top: 6px; 
+}
+
 /* Pages */
 
 .forum-topic-pages {

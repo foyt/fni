@@ -56,8 +56,11 @@
 
     <h:panelGroup layout="block" styleClass="grid_16 tight">
       <h:panelGroup layout="block" styleClass="forum-topic-panel">
+        <h:form rendered="#{sessionBackingBean.loggedIn}"> 
+          <h:commandLink styleClass="forum-topic-watch-link" value="#{locales['forum.topic.watchTopic']}" action="#{forumTopicBackingBean.watchTopic}" />
+        </h:form>
+        
         <h3>#{forumTopicBackingBean.topic.subject}</h3>
-
         <h:panelGroup layout="block" styleClass="forum-topic-info">
           
           <h:panelGroup layout="block" styleClass="forum-topic-created-info">
@@ -66,7 +69,6 @@
                 <f:param value="#{forumTopicBackingBean.topic.created}"/>
               </h:outputFormat>
             </h:panelGroup>  
-            
             <h:outputLink value="#{request.contextPath}/profile/#{forumTopicBackingBean.topic.author.id}">
               #{forumTopicBackingBean.topic.author.fullName}
             </h:outputLink>

@@ -165,6 +165,12 @@ public class ForumTopicBackingBean {
 		}
 	}
 	
+	public String watchTopic() {
+	  
+	  
+	  return "pretty:forum-topic";
+	}
+	
 	private long getPostCount() {
 		return Math.round(Math.ceil(new Double(forumController.countPostsByTopic(topic)) / POST_PER_PAGE));
 	}
