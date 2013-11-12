@@ -106,7 +106,9 @@ public class ForumController implements Serializable {
   
 	public ForumTopic createTopic(Forum forum, String subject, User author) {
 		Date now = new Date();
-		return forumTopicDAO.create(forum, author, now, now, createUrlName(forum, subject), subject, 0l);
+		ForumTopic topic = forumTopicDAO.create(forum, author, now, now, createUrlName(forum, subject), subject, 0l);
+    addTopicWatcher(author, topic);
+    return topic;
 	}
 
   public ForumTopic findForumTopicById(Long topicId) {
@@ -163,6 +165,7 @@ public class ForumController implements Serializable {
 	public ForumPost createForumPost(ForumTopic topic, User author, String content) {
 		Date now = new Date();
 		ForumPost forumPost = forumPostDAO.create(topic, author, now, now, content, 0l);
+		addTopicWatcher(author, topic);
 		postCreatedEvent.fire(new ForumPostEvent(FacesUtils.getLocalAddress(false), FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath(), sessionController.getLocale(), forumPost.getId()));
 		return forumPost;
 	}
