@@ -33,16 +33,14 @@ import org.hibernate.search.jpa.FullTextQuery;
 
 import fi.foyt.fni.persistence.dao.forum.ForumCategoryDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumDAO;
-import fi.foyt.fni.persistence.dao.forum.ForumFollowerDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumPostDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumTopicDAO;
-import fi.foyt.fni.persistence.dao.forum.ForumTopicFollowerDAO;
+import fi.foyt.fni.persistence.dao.forum.ForumTopicWatcherDAO;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumCategory;
-import fi.foyt.fni.persistence.model.forum.ForumFollower;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
-import fi.foyt.fni.persistence.model.forum.ForumTopicFollower;
+import fi.foyt.fni.persistence.model.forum.ForumTopicWatcher;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.search.SearchResult;
@@ -73,10 +71,7 @@ public class ForumController implements Serializable {
 	private ForumPostDAO forumPostDAO;
 
   @Inject
-  private ForumFollowerDAO forumFollowerDAO;
-
-  @Inject
-  private ForumTopicFollowerDAO forumTopicFollowerDAO;
+  private ForumTopicWatcherDAO forumTopicWatcherDAO;
 
   @Inject
 	private SessionController sessionController;
@@ -340,17 +335,11 @@ public class ForumController implements Serializable {
 		
 		return null;
 	}
-	
-	/* ForumFollowers */
+	  
+	/* ForumTopicWatchers */
 
-  public List<ForumFollower> listForumFollowers(Forum forum) {
-    return forumFollowerDAO.listByForum(forum); 
-  }
-  
-	/* ForumTopicFollower */
-
-  public List<ForumTopicFollower> listForumTopicFollowers(ForumTopic forumTopic) {
-    return forumTopicFollowerDAO.listByForumTopic(forumTopic);
+  public List<ForumTopicWatcher> listForumTopicWatchers(ForumTopic forumTopic) {
+    return forumTopicWatcherDAO.listByForumTopic(forumTopic);
   }
   
 	private String createUrlName(Forum forum, String subject) {
