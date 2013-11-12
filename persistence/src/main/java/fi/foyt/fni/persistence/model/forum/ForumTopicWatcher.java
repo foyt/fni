@@ -11,7 +11,7 @@ import fi.foyt.fni.persistence.model.users.User;
 
 @Entity
 @Cacheable (true)
-public class ForumTopicFollower {
+public class ForumTopicWatcher {
 
   public Long getId() {
     return id;
