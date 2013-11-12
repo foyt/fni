@@ -44,7 +44,7 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 	})
 public class ForumTopicBackingBean {
 	
-	private static final int POST_PER_PAGE = 3;
+	public static final int POST_PER_PAGE = 3;
 	
 	@Inject
 	private UserController userController;
