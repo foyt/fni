@@ -24,7 +24,10 @@ public class ErrorMailerFilter implements Filter {
       String recipient = System.getProperty("fni-error-email");
       if (StringUtils.isNotBlank(recipient)) {
 		    ErrorUtils.mailError(recipient, request, response, t);
+      } else {
+        t.printStackTrace();
       }
+      
 		  throw t;
 		}
 	}

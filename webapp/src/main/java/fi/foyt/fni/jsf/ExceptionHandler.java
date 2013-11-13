@@ -97,6 +97,8 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
           String recipient = System.getProperty("fni-error-email");
           if (StringUtils.isNotBlank(recipient) && (externalContext.getRequest() instanceof HttpServletRequest) && (externalContext.getResponse() instanceof HttpServletResponse)) {
             ErrorUtils.mailError(recipient, (HttpServletRequest) externalContext.getRequest(), (HttpServletResponse) externalContext.getResponse(), exception);
+          } else {
+            exception.printStackTrace();
           }
         } 
       } finally {
