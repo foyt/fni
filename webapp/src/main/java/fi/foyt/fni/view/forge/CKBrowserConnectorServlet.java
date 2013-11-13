@@ -24,7 +24,6 @@ import org.json.JSONObject;
 
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.materials.FolderController;
-import fi.foyt.fni.materials.MaterialArchetype;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.MaterialTypeComparator;
@@ -133,29 +132,21 @@ public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
     ));
 
     for (Material material : materials) {
-      MaterialArchetype archetype = materialController.getMaterialArchetype(material);
-
+      boolean folder = material instanceof Folder;
+      
       switch (dialog) {
         case LINK:
-          switch (archetype) {
-            case FOLDER:
-              materialsJson.put(createMaterialObject(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Folder", getIcon(material), material.getModified(), 0, material.getCreator()));
-            break;
-            default:
-              materialsJson.put(createMaterialObject(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Normal", getIcon(material), material.getModified(), 0, material.getCreator()));
-            break;
+          if (folder) {
+            materialsJson.put(createMaterialObject(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Folder", getIcon(material), material.getModified(), 0, material.getCreator()));
+          } else {
+            materialsJson.put(createMaterialObject(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Normal", getIcon(material), material.getModified(), 0, material.getCreator()));
           }
         break;
         case IMAGE:
-          switch (archetype) {
-            case IMAGE:
-              materialsJson.put(createMaterialObject(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Normal", getIcon(material), material.getModified(), 0, material.getCreator()));
-            break;
-            case FOLDER:
-              materialsJson.put(createMaterialObject(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Folder", getIcon(material), material.getModified(), 0, material.getCreator()));
-            break;
-            default:
-            break;
+          if (folder) {
+            materialsJson.put(createMaterialObject(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Normal", getIcon(material), material.getModified(), 0, material.getCreator()));
+          } else {
+            materialsJson.put(createMaterialObject(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Folder", getIcon(material), material.getModified(), 0, material.getCreator()));
           }
         break;
       }
@@ -181,15 +172,16 @@ public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
 	  
     if (material.getType() == MaterialType.UBUNTU_ONE_ROOT_FOLDER)
       return "ubuntu-one-folder";
+    
+    if (material instanceof Folder) {
+      return "folder";
+    }
 
-    MaterialArchetype materialArchetype = materialController.getMaterialArchetype(material);
-	  switch (materialArchetype) {
+	  switch (material.getType()) {
 	    case DOCUMENT:
         return "document";
 	    case FILE:
         return "file";
-	    case FOLDER:
-        return "folder";
 	    case IMAGE:
         return "image";
       case PDF:
@@ -197,7 +189,7 @@ public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
       case VECTOR_IMAGE:
         return "vectorimage";
       default:
-        return "";
+        return "file";
 	  }
   }
 
