@@ -59,10 +59,8 @@ import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
-import fi.foyt.fni.persistence.model.materials.DropboxFile;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.GoogleDocument;
-import fi.foyt.fni.persistence.model.materials.GoogleDocumentType;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.ImageSize;
 import fi.foyt.fni.persistence.model.materials.Material;
@@ -75,7 +73,6 @@ import fi.foyt.fni.persistence.model.materials.MaterialView;
 import fi.foyt.fni.persistence.model.materials.Pdf;
 import fi.foyt.fni.persistence.model.materials.PermaLink;
 import fi.foyt.fni.persistence.model.materials.StarredMaterial;
-import fi.foyt.fni.persistence.model.materials.UbuntuOneFile;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.materials.VectorImageRevision;
@@ -174,6 +171,9 @@ public class MaterialController {
   @Inject
   private MaterialPermissionController materialPermissionController;
 
+  @Inject
+  private GoogleDriveMaterialController googleDriveMaterialController;
+
   public String getMaterialMimeType(Material material) {
     switch (material.getType()) {
     case DOCUMENT:
@@ -192,49 +192,9 @@ public class MaterialController {
       return ubuntuOneFileDAO.findById(material.getId()).getMimeType();
     case GOOGLE_DOCUMENT:
       GoogleDocument googleDocument = googleDocumentDAO.findById(material.getId());
-      switch (googleDocument.getDocumentType()) {
-      case DOCUMENT:
-        return "text/html";
-      case DRAWING:
-        return "image/svg+xml";
-      case SPREADSHEET:
-        return "application/vnd.oasis.opendocument.spreadsheet";
-      case PRESENTATION:
-        return "application/vnd.oasis.opendocument.presentation";
-      default:
-        return "application/octet-stream";
-      }
+      return googleDocument.getMimeType();
     default:
       return "application/octet-stream";
-    }
-  }
-
-  public MaterialArchetype getMaterialArchetype(Material material) {
-    switch (material.getType()) {
-    case DOCUMENT:
-      return MaterialArchetype.DOCUMENT;
-    case FILE:
-      return MaterialArchetype.FILE;
-    case FOLDER:
-    case DROPBOX_FOLDER:
-    case DROPBOX_ROOT_FOLDER:
-    case UBUNTU_ONE_FOLDER:
-    case UBUNTU_ONE_ROOT_FOLDER:
-      return MaterialArchetype.FOLDER;
-    case IMAGE:
-      return MaterialArchetype.IMAGE;
-    case VECTOR_IMAGE:
-      return MaterialArchetype.VECTOR_IMAGE;
-    case PDF:
-      return MaterialArchetype.PDF;
-    case DROPBOX_FILE:
-      return getDropboxFileArchetype(dropboxFileDAO.findById(material.getId()));
-    case UBUNTU_ONE_FILE:
-      return getUbuntuOneFileArchetype(ubuntuOneFileDAO.findById(material.getId()));
-    case GOOGLE_DOCUMENT:
-      return getGoogleDocumentArchetype(googleDocumentDAO.findById(material.getId()));
-    default:
-      return MaterialArchetype.FILE;
     }
   }
 
@@ -309,16 +269,6 @@ public class MaterialController {
     }
 
     return true;
-  }
-
-  public MaterialBean getMaterialBean(Long materialId) {
-    return getMaterialBean(materialDAO.findById(materialId));
-  }
-
-  public MaterialBean getMaterialBean(Material material) {
-    String mimeType = getMaterialMimeType(material);
-    return new MaterialBean(material.getId(), material.getTitle(), material.getType(), getMaterialArchetype(material), mimeType, material.getModified(),
-        material.getCreated());
   }
 
   public Material findMaterialById(Long materialId) {
@@ -586,7 +536,9 @@ public class MaterialController {
     } while (true);
   }
 
-  public String getForgeMaterialViewerName(MaterialType type) {
+  public String getForgeMaterialViewerName(Material material) {
+    MaterialType type = material.getType();
+    
     switch (type) {
       case DROPBOX_FILE:
       case UBUNTU_ONE_FILE:
@@ -597,7 +549,20 @@ public class MaterialController {
       case UBUNTU_ONE_ROOT_FOLDER:
         return "folders";
       case GOOGLE_DOCUMENT:
-        return "google-drive";
+        GoogleDocument googleDocument = (GoogleDocument) material;
+        String mimeType = googleDocument.getMimeType();
+        GoogleDriveType googleDriveType = GoogleDriveType.findByMimeType(mimeType);
+        if (googleDriveType != null) {
+          switch (googleDriveType) {
+            case DOCUMENT:
+            case SPREADSHEET:
+              return "google-drive";
+            default:
+            break;
+          }
+        }
+        
+        return "binary";
       case DOCUMENT:
         return "documents";
       case BINARY:
@@ -618,7 +583,7 @@ public class MaterialController {
   public String getForgeMaterialViewerUrl(Material material) {
     return new StringBuilder()
       .append("/forge/")
-      .append(getForgeMaterialViewerName(material.getType()))
+      .append(getForgeMaterialViewerName(material))
       .append('/')
       .append(material.getPath())
       .toString();
@@ -932,98 +897,15 @@ public class MaterialController {
     return pdfDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
   }
 
-  private MaterialArchetype getDropboxFileArchetype(DropboxFile material) {
-    return getArchetypeByMimeType(material.getMimeType());
-  }
-
-  private MaterialArchetype getUbuntuOneFileArchetype(UbuntuOneFile material) {
-    return getArchetypeByMimeType(material.getMimeType());
-  }
-
-  private MaterialArchetype getGoogleDocumentArchetype(GoogleDocument material) {
-    GoogleDocumentType googleDocumentType = material.getDocumentType();
-    switch (googleDocumentType) {
-    case DOCUMENT:
-      return MaterialArchetype.DOCUMENT;
-    case DRAWING:
-      return MaterialArchetype.VECTOR_IMAGE;
-    case FOLDER:
-      return MaterialArchetype.FOLDER;
-    case PRESENTATION:
-      return MaterialArchetype.PRESENTATION;
-    case SPREADSHEET:
-      return MaterialArchetype.SPREADSHEET;
-    case FILE:
-      return MaterialArchetype.FILE;
-    }
-
-    return MaterialArchetype.FILE;
-  }
-
-  private MaterialArchetype getArchetypeByMimeType(String mimeType) {
-    try {
-      MimeType parsedMimeType = parseMimeType(mimeType);
-      if ("image".equals(parsedMimeType.getPrimaryType())) {
-        if (("svg".equals(parsedMimeType.getSubType())) || ("svg+xml".equals(parsedMimeType.getSubType())))
-          return MaterialArchetype.VECTOR_IMAGE;
-
-        return MaterialArchetype.IMAGE;
-      } else {
-        if ("text".equals(parsedMimeType.getBaseType())) {
-          if ("html".equals(parsedMimeType.getSubType())) {
-            return MaterialArchetype.DOCUMENT;
-          }
-        }
-
-        if ("application".equals(parsedMimeType.getBaseType()) && "pdf".equals(parsedMimeType.getSubType())) {
-          return MaterialArchetype.PDF;
-        }
-
-        return MaterialArchetype.FILE;
-      }
-    } catch (MimeTypeParseException e) {
-      return MaterialArchetype.FILE;
-    }
-  }
-
   private void recursiveDelete(Folder folder, User user) {
     List<Material> childMaterials = materialDAO.listByParentFolder(folder);
     for (Material childMaterial : childMaterials) {
-      MaterialArchetype archetype = getMaterialArchetype(childMaterial);
-      if (archetype == MaterialArchetype.FOLDER) {
-        recursiveDelete(folderDAO.findById(childMaterial.getId()), user);
+      if (childMaterial instanceof Folder) {
+        recursiveDelete((Folder) childMaterial, user);
       }
 
       deleteMaterial(childMaterial, user);
     }
-  }
-
-  public GoogleDocument findGoogleDocumentByCreatorAndDocumentId(User creator, String documentId) {
-    return googleDocumentDAO.findByCreatorAndDocumentId(creator, documentId);
-  }
-
-  public GoogleDocument createGoogleDocument(User creator, Language language, Folder parentFolder, String title, String documentId, String mimeType,
-      MaterialPublicity publicity) {
-    String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, title);
-
-    GoogleDocumentType documentType = GoogleDocumentType.FILE;
-
-    switch (mimeType) {
-    case "application/vnd.google-apps.drawing":
-      documentType = GoogleDocumentType.DRAWING;
-      break;
-    case "application/vnd.google-apps.spreadsheet":
-      documentType = GoogleDocumentType.SPREADSHEET;
-      break;
-    case "application/vnd.google-apps.presentation":
-      documentType = GoogleDocumentType.PRESENTATION;
-      break;
-    case "application/vnd.google-apps.document":
-      documentType = GoogleDocumentType.DOCUMENT;
-      break;
-    }
-
-    return googleDocumentDAO.create(creator, language, parentFolder, urlName, title, documentId, documentType, publicity);
   }
 
   public GoogleDocument findGoogleDocumentById(Long id) {
