@@ -18,10 +18,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.scribe.model.Response;
 
-import com.google.api.services.drive.Drive;
-
 import fi.foyt.fni.drive.DriveManager;
 import fi.foyt.fni.dropbox.DropboxManager;
+import fi.foyt.fni.materials.GoogleDriveMaterialController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Binary;
@@ -57,6 +56,9 @@ public class MaterialsServlet extends AbstractTransactionedServlet {
 
   @Inject
 	private MaterialController materialController;
+  
+  @Inject
+  private GoogleDriveMaterialController googleDriveMaterialController;
 
 	@Inject
 	private DropboxManager dropboxManager;
@@ -100,13 +102,14 @@ public class MaterialsServlet extends AbstractTransactionedServlet {
 				data = getBinaryMaterialData((File) material);
 			break;
 			case GOOGLE_DOCUMENT:
-				try {
-					data = getGoogleDocument((GoogleDocument) material);
-				} catch (GeneralSecurityException e) {
-					logger.log(Level.SEVERE, "Error occured while retrieving GoogleDocument data", e);
-					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		  		return;
-				}
+        try {
+          TypedData typedData = googleDriveMaterialController.getGoogleDocumentData((GoogleDocument) material);
+          data = new FileData(null, material.getUrlName(), typedData.getData(), typedData.getContentType(), typedData.getModified());
+        } catch (GeneralSecurityException e) {
+          logger.log(Level.SEVERE, "Could not serve Google Drive File", e);
+          response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+          return;
+        }
 			break;
 			case DROPBOX_FILE:
 				data = getDropboxMaterialData((DropboxFile) material);
@@ -151,37 +154,6 @@ public class MaterialsServlet extends AbstractTransactionedServlet {
 
 	private FileData getVectorImageData(VectorImage vectorImage) throws UnsupportedEncodingException {
 		return new FileData(null, null, vectorImage.getData().getBytes("UTF-8"), "image/svg+xml", vectorImage.getModified());
-	}
-
-	private FileData getGoogleDocument(GoogleDocument googleDocument) throws IOException, GeneralSecurityException {
-		Drive systemDrive = driveManager.getSystemDrive();
-		com.google.api.services.drive.model.File file = driveManager.getFile(systemDrive, googleDocument.getDocumentId());
-		TypedData typedData = null;
-		String fileName = null;
-		
-		switch (googleDocument.getDocumentType()) {
-			case DOCUMENT:
-				typedData = driveManager.exportFile(systemDrive, file, "text/html");
-			break;
-			case DRAWING:
-				typedData = driveManager.exportFile(systemDrive, file, "image/png");
-			break;
-			case PRESENTATION:
-				typedData = driveManager.exportFile(systemDrive, file, "application/pdf");
-				fileName = googleDocument.getUrlName();
-			break;
-			case SPREADSHEET:
-				typedData = driveManager.exportSpreadsheet(systemDrive, file);
-			break;
-			case FOLDER:
-			break;
-			case FILE:
-				typedData = driveManager.downloadFile(systemDrive, file);
-				fileName = googleDocument.getUrlName();
-			break;
-		}
-		
-		return new FileData(null, fileName, typedData.getData(), typedData.getContentType(), typedData.getModified());
 	}
 
 	private FileData getBinaryMaterialData(Binary binary) {
