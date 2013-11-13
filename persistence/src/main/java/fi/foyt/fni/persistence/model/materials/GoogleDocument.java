@@ -30,12 +30,12 @@ public class GoogleDocument extends Material {
     this.documentId = documentId;
   }
   
-  public GoogleDocumentType getDocumentType() {
-    return documentType;
+  public String getMimeType() {
+    return mimeType;
   }
-  
-  public void setDocumentType(GoogleDocumentType documentType) {
-    this.documentType = documentType;
+
+  public void setMimeType(String mimeType) {
+    this.mimeType = mimeType;
   }
   
   @NotNull
@@ -45,5 +45,6 @@ public class GoogleDocument extends Material {
   
   @NotNull
   @Column (nullable = false)
-  private GoogleDocumentType documentType;
+  @NotEmpty
+  private String mimeType;
 }
