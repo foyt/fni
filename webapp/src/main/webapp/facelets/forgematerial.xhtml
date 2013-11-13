@@ -10,7 +10,7 @@
 
     <h:panelGroup layout="block" styleClass="forge-material-info">
       <h:panelGroup layout="block" styleClass="forge-material-title-container">
-        <h:outputLink styleClass="forge-material-title" value="#{request.contextPath}/forge/#{forgeIndexBackingBean.getMaterialViewer(material.type)}/#{material.path}" title="#{material.title}">
+        <h:outputLink styleClass="forge-material-title" value="#{request.contextPath}/forge/#{forgeIndexBackingBean.getMaterialViewer(material)}/#{material.path}" title="#{material.title}">
           #{material.title.length() gt 30 ? material.title.substring(0, 27).concat('...') : material.title}
         </h:outputLink>
         
@@ -35,14 +35,14 @@
     
     <h:panelGroup layout="block" styleClass="forge-material-actions">
       <h:panelGroup layout="block" styleClass="forge-material-action-edit" rendered="#{forgeIndexBackingBean.getMaterialEditable(material)}">
-        <h:outputLink value="#{request.contextPath}/forge/#{forgeIndexBackingBean.getMaterialViewer(material.type)}/#{material.path}">
+        <h:outputLink value="#{request.contextPath}/forge/#{forgeIndexBackingBean.getMaterialViewer(material)}/#{material.path}">
           <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-edit.png"/> 
           <h:outputLabel value="#{locales['forge.index.materialEditLink']}" />
         </h:outputLink>
       </h:panelGroup>
       
       <h:panelGroup layout="block" styleClass="forge-material-action-view" rendered="#{!forgeIndexBackingBean.getMaterialEditable(material)}">
-        <h:outputLink value="#{request.contextPath}/forge/#{forgeIndexBackingBean.getMaterialViewer(material.type)}/#{material.path}">
+        <h:outputLink value="#{request.contextPath}/forge/#{forgeIndexBackingBean.getMaterialViewer(material)}/#{material.path}">
           <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-view.png"/> 
           <h:outputLabel value="#{locales['forge.index.materialViewLink']}" />
         </h:outputLink>

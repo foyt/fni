@@ -303,8 +303,8 @@ public class ForgeIndexBackingBean {
 		this.urlName = urlName;
 	}
 	
-	public String getMaterialViewer(MaterialType type) {
-		return materialController.getForgeMaterialViewerName(type);
+	public String getMaterialViewer(Material material) {
+		return materialController.getForgeMaterialViewerName(material);
 	}
 	
 	public String getMaterialIcon(MaterialType type) {
