@@ -1,5 +1,6 @@
 package fi.foyt.fni.view.forge;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -26,10 +27,12 @@ import com.google.api.services.drive.model.Permission;
 import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
 
 import fi.foyt.fni.drive.DriveManager;
 import fi.foyt.fni.materials.FolderController;
-import fi.foyt.fni.materials.MaterialController;
+import fi.foyt.fni.materials.GoogleDriveMaterialController;
+import fi.foyt.fni.materials.GoogleDriveType;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
@@ -68,7 +71,7 @@ public class ForgeImportGoogleDriveBackingBean {
   private SessionController sessionController;
 
   @Inject
-  private MaterialController materialController;
+  private GoogleDriveMaterialController googleDriveMaterialController;
 
   @Inject
   private MaterialPermissionController materialPermissionController;
@@ -89,6 +92,17 @@ public class ForgeImportGoogleDriveBackingBean {
     UserToken userToken = sessionController.getLoggedUserToken();
     User loggedUser = userToken.getUserIdentifier().getUser();
     String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+    
+    if (parentFolderId != null) {
+      Folder parentFolder = parentFolderId != null ? folderController.findFolderById(parentFolderId) : null;
+      if (parentFolder != null) {
+        if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
+          throw new ForbiddenException();
+        }
+      } else {
+        throw new FileNotFoundException();
+      }
+    }
 
     if (AuthUtils.getInstance().isExpired(userToken) || !AuthUtils.getInstance().isGrantedScope(userToken, REQUIRED_SCOPE)) {
       // We need authorization from Google
@@ -114,11 +128,13 @@ public class ForgeImportGoogleDriveBackingBean {
       }
       
       for (File file : fileList.getItems()) {
-        if (materialController.findGoogleDocumentByCreatorAndDocumentId(loggedUser, file.getId()) == null) {
-          files.add(file);
+        if (!file.getMimeType().equals(GoogleDriveType.FORM.getMimeType())) {
+          if (googleDriveMaterialController.findGoogleDocumentByCreatorAndDocumentId(loggedUser, file.getId()) == null) {
+            files.add(file);
+          }
         }
       }
-      
+
       Collections.sort(files, ComparatorUtils.chainedComparator(
         Arrays.asList(
           new MimeTypeComparator("application/vnd.google-apps.folder"),
@@ -126,8 +142,6 @@ public class ForgeImportGoogleDriveBackingBean {
         )
       ));
     }
-    
-    parentFolderId = null;
 	}
 
 	public boolean isRoot() {
@@ -169,7 +183,7 @@ public class ForgeImportGoogleDriveBackingBean {
     User loggedUser = userToken.getUserIdentifier().getUser();
     
     for (String entryId : importEntryIds) {
-      if (materialController.findGoogleDocumentByCreatorAndDocumentId(loggedUser, entryId) == null) {
+      if (googleDriveMaterialController.findGoogleDocumentByCreatorAndDocumentId(loggedUser, entryId) == null) {
         try {
           File file = driveManager.getFile(drive, entryId);
 
@@ -179,7 +193,7 @@ public class ForgeImportGoogleDriveBackingBean {
             permission.setType("user");
             permission.setValue(accountUser);
             driveManager.insertPermission(drive, file.getId(), permission);
-            materialController.createGoogleDocument(loggedUser, null, parentFolder, file.getTitle(), file.getId(), file.getMimeType(), MaterialPublicity.PRIVATE);
+            googleDriveMaterialController.createGoogleDocument(loggedUser, null, parentFolder, file.getTitle(), file.getId(), file.getMimeType(), MaterialPublicity.PRIVATE);
           }
           
         } catch (IOException e) {
@@ -203,6 +217,14 @@ public class ForgeImportGoogleDriveBackingBean {
     }
 	}
 	
+	public Long getParentFolderId() {
+    return parentFolderId;
+  }
+	
+	public void setParentFolderId(Long parentFolderId) {
+    this.parentFolderId = parentFolderId;
+  }
+	
 	public String getFileIcon(File file) {
 	  switch (file.getMimeType()) {
 	    case "application/vnd.google-apps.folder":
@@ -224,6 +246,8 @@ public class ForgeImportGoogleDriveBackingBean {
 	private String folderId;
   private List<File> files;
   private List<String> importEntryIds;
+  
+  @URLQueryParameter ("parentFolderId")
   private Long parentFolderId;
   
   private class MimeTypeComparator implements Comparator<File> {
