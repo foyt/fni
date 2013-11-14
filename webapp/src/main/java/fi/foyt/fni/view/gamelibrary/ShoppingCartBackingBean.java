@@ -88,12 +88,17 @@ public class ShoppingCartBackingBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		countrySelectItems = new ArrayList<>();
-
+/**
+    // TODO: Enable other countries
 		List<Country> countries = systemSettingsController.listCountries();
 		for (Country country : countries) {
 			countrySelectItems.add(new SelectItem(country.getId(), country.getName()));
 		}
-
+**/
+		
+		Country finland = systemSettingsController.findCountryByCode("FI");
+		countrySelectItems.add(new SelectItem(finland.getId(), finland.getName()));
+		
 		payerCountryId = systemSettingsController.getDefaultCountry().getId();
 		deliveryMethodId = deliveryMehtodsController.getDefaultDeliveryMethod().getId();
 		shoppingCartItems = new ArrayList<>();
