@@ -14,7 +14,9 @@ public class DeliveryMehtodsController {
 	@PostConstruct
 	public void init() {
 		deliveryMethods = new ArrayList<>();
-		deliveryMethods.add(new PostiDeliveryMethod());
+		deliveryMethods.add(new PostiFreeDeliveryMethod());
+		
+//		deliveryMethods.add(new PostiDeliveryMethod());
 //		deliveryMethods.add(new KopiopisteDeliveryMethod());
 	}
 	
