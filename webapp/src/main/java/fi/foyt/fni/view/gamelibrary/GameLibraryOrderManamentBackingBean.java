@@ -95,7 +95,9 @@ public class GameLibraryOrderManamentBackingBean {
         result += orderItem.getUnitPrice() * orderItem.getCount(); 
       }
       
-      result += order.getShippingCosts();
+      if (order.getShippingCosts() != null) {
+        result += order.getShippingCosts();
+      }
     }
     
     return result;
