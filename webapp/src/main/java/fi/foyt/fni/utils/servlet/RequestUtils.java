@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Enumeration;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -72,7 +73,12 @@ public class RequestUtils {
     if (StringUtils.isBlank(urlName))
       return null;
     
-    return StringUtils.lowerCase(StringUtils.substring(StringUtils.stripAccents(urlName.replaceAll(" ", "_")).replaceAll("[^a-zA-Z0-9\\ -\\.\\_]", ""), 0, maxLength));
+    urlName = StringUtils.lowerCase(StringUtils.substring(StringUtils.stripAccents(urlName.replaceAll(" ", "_")).replaceAll("[^a-zA-Z0-9\\-\\.\\_]", ""), 0, maxLength));
+    if (StringUtils.isBlank(urlName)) {
+      urlName = UUID.randomUUID().toString();
+    }
+    
+    return urlName;
   }
   
   public static String createUrlName(String text) {
