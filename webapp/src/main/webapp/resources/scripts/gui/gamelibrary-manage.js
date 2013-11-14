@@ -40,7 +40,7 @@
   });
   
   $(document).on('click', '.gamelibrary-manage-upload-downloadable-link', function (event) {
-    dust.render("gamelibrary-file-upload", {
+    dust.render("gamelibrary-downloadable-upload", {
       publicationId: $(this).data('publication-id')
     }, function(err, html) {
       if (!err) {
