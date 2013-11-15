@@ -172,16 +172,11 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
       return;
     }
     
-		Patch patch = null;
 		ServletInputStream inputStream = request.getInputStream();
 		
-		try {
-		  ObjectMapper objectMapper = new ObjectMapper();
-		  patch = objectMapper.readValue(inputStream, Patch.class);
-		} finally {
-			inputStream.close();
-		}
-		
+		ObjectMapper objectMapper = new ObjectMapper();
+		Patch patch = objectMapper.readValue(inputStream, Patch.class);
+
 		if (patch == null) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
 			return;
@@ -349,7 +344,6 @@ public class CoOpsServlet extends AbstractTransactionedServlet {
   		objectMapper.writeValue(outputStream, object);
 		} finally {
 			outputStream.flush();
-			outputStream.close();
 		}
 	}
 	
