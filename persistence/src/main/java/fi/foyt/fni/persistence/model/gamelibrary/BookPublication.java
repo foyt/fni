@@ -1,8 +1,10 @@
 package fi.foyt.fni.persistence.model.gamelibrary;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.search.annotations.Indexed;
 
@@ -35,6 +37,22 @@ public class BookPublication extends Publication {
 		this.numberOfPages = numberOfPages;
 	}
 	
+	public Long getDownloadCount() {
+    return downloadCount;
+  }
+	
+	public void setDownloadCount(Long downloadCount) {
+    this.downloadCount = downloadCount;
+  }
+	
+	public Long getPrintCount() {
+    return printCount;
+  }
+	
+	public void setPrintCount(Long printCount) {
+    this.printCount = printCount;
+  }
+	
 	@ManyToOne
 	private PublicationFile downloadableFile;
 
@@ -42,4 +60,12 @@ public class BookPublication extends Publication {
   private PublicationFile printableFile;
   
   private Integer numberOfPages;
+  
+  @Column (nullable = false)
+  @NotNull  
+  private Long downloadCount;
+  
+  @Column (nullable = false)
+  @NotNull
+  private Long printCount;
 }

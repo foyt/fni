@@ -344,7 +344,7 @@ public class PublicationController {
 		String urlName = createUrlName(name);
 
 		BookPublication bookPublication = bookPublicationDAO.create(name, urlName, description, price, defaultImage, 
-				now, creator, now, creator, Boolean.FALSE, height, width, depth, weight, numberOfPages, license, null);
+				now, creator, now, creator, Boolean.FALSE, height, width, depth, weight, numberOfPages, license, null, 0l, 0l);
 
 		if (tags != null) {
 		  for (GameLibraryTag tag : tags) {

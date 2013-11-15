@@ -16,7 +16,7 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
   
 	private static final long serialVersionUID = 1L;
 
-	public BookPublication create(String name, String urlName, String description, Double price, PublicationImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, ForumTopic forumTopic) {
+	public BookPublication create(String name, String urlName, String description, Double price, PublicationImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, ForumTopic forumTopic, Long downloadCount, Long printCount) {
     
 		BookPublication bookPublication = new BookPublication();
     bookPublication.setCreated(created);
@@ -36,6 +36,8 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
     bookPublication.setNumberOfPages(numberOfPages);
     bookPublication.setLicense(license);
     bookPublication.setForumTopic(forumTopic);
+    bookPublication.setDownloadCount(downloadCount);
+    bookPublication.setPrintCount(printCount);
     
     getEntityManager().persist(bookPublication);
     
@@ -55,6 +57,16 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
 
   public BookPublication updatePrintableFile(BookPublication bookPublication, PublicationFile printableFile) {
     bookPublication.setPrintableFile(printableFile);
+    return persist(bookPublication);
+  }
+
+  public BookPublication updateDownloadCount(BookPublication bookPublication, Long downloadCount) {
+    bookPublication.setDownloadCount(downloadCount);
+    return persist(bookPublication);
+  }
+
+  public BookPublication updatePrintCount(BookPublication bookPublication, Long printCount) {
+    bookPublication.setPrintCount(printCount);
     return persist(bookPublication);
   }
 
