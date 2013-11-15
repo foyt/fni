@@ -360,8 +360,16 @@ public class PublicationController {
 	}
 	
 	public BookPublication updateNumberOfPages(BookPublication bookPublication, Integer numberOfPages) {
-		return bookPublicationDAO.updateNumberOfPages(bookPublication, numberOfPages);
-	}
+    return bookPublicationDAO.updateNumberOfPages(bookPublication, numberOfPages);
+  }
+  
+	public BookPublication updateBookPublicationDownloadCount(BookPublication bookPublication, Long downloadCount) {
+    return bookPublicationDAO.updateDownloadCount(bookPublication, downloadCount);
+  }
+  
+  public BookPublication incBookPublicationDownloadCount(BookPublication bookPublication) {
+    return updateBookPublicationDownloadCount(bookPublication, bookPublication.getDownloadCount() + 1);
+  }
 
   public BookPublication deleteBookPublicationDownloableFile(BookPublication bookPublication) {
     PublicationFile downloadableFile = bookPublication.getDownloadableFile();

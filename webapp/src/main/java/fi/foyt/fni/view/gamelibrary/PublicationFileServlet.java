@@ -68,6 +68,8 @@ public class PublicationFileServlet extends AbstractFileServlet {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
+		
+		publicationController.incBookPublicationDownloadCount(bookPublication);
 
 		String fileName = bookPublication.getUrlName();
 		if ("application/pdf".equals(file.getContentType())) {
