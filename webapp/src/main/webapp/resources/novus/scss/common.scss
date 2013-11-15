@@ -65,6 +65,30 @@
   color: $header-text-color;
 }
 
+/* Footer */
+
+.footer {
+  height: 86px;
+  background: #000;
+  margin-top: 100px;
+}
+
+.footer-logo-foyt {
+  margin-top: 23px;
+  @include background-image(url('#' + '{resource["novus:gfx/layout/logo-foyt.png"]}'));
+  width: 151px;
+  height: 40px;
+  display: block;
+}
+
+.footer-logo-oo {
+  margin-top: 13px;
+  @include background-image(url('#' + '{resource["novus:gfx/layout/logo-oo.png"]}'));
+  width: 309px;
+  height: 60px;
+  display: block;
+}
+
 /* jQuery ui */
 
 .ui-widget {

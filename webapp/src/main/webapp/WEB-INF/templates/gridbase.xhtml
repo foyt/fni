@@ -72,7 +72,22 @@
         </h:panelGroup> 
       </ui:insert>
 
-      <ui:insert name="footer"></ui:insert>
+      <ui:insert name="footer">
+        <h:panelGroup layout="block" styleClass="footer">
+          <h:panelGroup layout="block" styleClass="container_16">
+            <h:panelGroup layout="block" styleClass="grid_8">
+              <h:panelGroup layout="block" styleClass="footer-logo-container">
+                <h:panelGroup layout="block" styleClass="footer-logo-oo"></h:panelGroup>
+              </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup layout="block" styleClass="grid_8">
+              <h:panelGroup layout="block" styleClass="footer-logo-container">
+                <h:panelGroup layout="block" styleClass="footer-logo-foyt"></h:panelGroup>
+              </h:panelGroup>
+            </h:panelGroup>
+          </h:panelGroup>
+        </h:panelGroup>
+      </ui:insert>
       
       <!-- UserVoice -->
       <ui:include src="/facelets/uservoice.xhtml" />

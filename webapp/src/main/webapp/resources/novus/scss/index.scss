@@ -3,8 +3,6 @@
 @import "styles";
 
 $description-color: #ADD6F0;
-$footer-shadow-color: rgba(255, 255, 255, 0.7);
-$footer-text-color: #fff;
  
 /* General */
 
@@ -288,63 +286,4 @@ h3 a {
   text-decoration: none;
   font-weight: bold;
   font-style: italic;
-}
-
-/* Footer */
-
-.index-footer {
-  height: 86px;
-  background: #000;
-  margin-top: 140px;
-}
-
-.index-footer-logo-text,
-.index-footer-logo-shadow {
-  font-family: $title-font;
-  font-size: 29px;
-  text-transform: uppercase;
-  display: inline-block;
-}
-
-.index-footer-logo-text { 
-  color: $footer-text-color;
-}
-
-.index-footer-logo-shadow {
-  color: transparent;
-  position: absolute;
-  text-shadow: 0px 0px 10px $footer-shadow-color;
-}
-
-.index-footer-logo-container {
-  padding-top: 30px;
-  text-align: center;
-  width: 320px;
-  display: inline-block;
-}
-
-.index-footer-logo-container:first-child {
-  text-align: left;
-}
-
-.index-footer-logo-container:last-child {
-  text-align: right;
-}
-
-.index-footer-logo {
-  display: inline-block;
-}
-
-.index-footer-logo-foyt {
-  @include background-image(url('#' + '{resource["novus:gfx/layout/logo-foyt.png"]}'));
-  width: 86px;
-  height: 23px;
-  display: inline-block;
-}
-
-.index-footer-logo-oo {
-  @include background-image(url('#' + '{resource["novus:gfx/layout/logo-oo.png"]}'));
-  width: 301px;
-  height: 23px;
-  display: inline-block;
 }
