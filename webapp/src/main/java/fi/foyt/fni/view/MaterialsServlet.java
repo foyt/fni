@@ -144,7 +144,6 @@ public class MaterialsServlet extends AbstractTransactionedServlet {
 			outputStream.write(data.getData());
 		} finally {
 			outputStream.flush();
-			outputStream.close();
 		}
 	}
 
