@@ -9,6 +9,7 @@ public enum SystemSettingKey {
 	SYSTEM_MAILER_NAME,
 	SYSTEM_MAILER_MAIL,
 	PIWIK_URL,
+  PIWIK_SITEID,
 	USERVOICE_CLIENT_KEY,
 
 	/* Guest */
