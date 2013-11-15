@@ -99,7 +99,6 @@ public class ForgePdfServlet extends AbstractTransactionedServlet {
 			outputStream.write(pdfData.getData());
 		} finally {
 			outputStream.flush();
-			outputStream.close();
 		}
 	}
 }
