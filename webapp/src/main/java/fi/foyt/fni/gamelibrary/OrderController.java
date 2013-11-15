@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.dao.gamelibrary.OrderDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.OrderItemDAO;
+import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
@@ -25,8 +26,11 @@ public class OrderController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject
+  @Inject
 	private SessionController sessionController;
+
+  @Inject
+	private PublicationController publicationController;
 
 	@Inject
 	@OrderCreated
@@ -103,6 +107,15 @@ public class OrderController implements Serializable {
   public Order updateOrderAsShipped(Order order) {
     Date now = new Date();
     order = orderDAO.updateOrderStatus(orderDAO.updateCanceled(order, now), OrderStatus.SHIPPED);
+    
+    List<OrderItem> orderItems = orderItemDAO.listByOrder(order);
+    for (OrderItem orderItem : orderItems) {
+      if (orderItem.getPublication() instanceof BookPublication) {
+        BookPublication bookPublication = (BookPublication) orderItem.getPublication();
+        publicationController.incBookPublicationPrintCount(bookPublication);
+      }
+    }
+    
     orderShippedEvent.fire(new OrderEvent(sessionController.getLocale(), order.getId()));
     return order;
   }

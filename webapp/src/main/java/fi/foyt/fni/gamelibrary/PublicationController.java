@@ -362,13 +362,21 @@ public class PublicationController {
 	public BookPublication updateNumberOfPages(BookPublication bookPublication, Integer numberOfPages) {
     return bookPublicationDAO.updateNumberOfPages(bookPublication, numberOfPages);
   }
-  
-	public BookPublication updateBookPublicationDownloadCount(BookPublication bookPublication, Long downloadCount) {
+
+  public BookPublication updateBookPublicationDownloadCount(BookPublication bookPublication, Long downloadCount) {
     return bookPublicationDAO.updateDownloadCount(bookPublication, downloadCount);
+  }
+  
+  public BookPublication updateBookPublicationPrintCount(BookPublication bookPublication, Long printCount) {
+    return bookPublicationDAO.updatePrintCount(bookPublication, printCount);
   }
   
   public BookPublication incBookPublicationDownloadCount(BookPublication bookPublication) {
     return updateBookPublicationDownloadCount(bookPublication, bookPublication.getDownloadCount() + 1);
+  }
+
+  public BookPublication incBookPublicationPrintCount(BookPublication bookPublication) {
+    return updateBookPublicationPrintCount(bookPublication, bookPublication.getPrintCount() + 1);
   }
 
   public BookPublication deleteBookPublicationDownloableFile(BookPublication bookPublication) {
