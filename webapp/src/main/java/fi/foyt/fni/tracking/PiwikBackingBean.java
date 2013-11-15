@@ -1,5 +1,6 @@
 package fi.foyt.fni.tracking;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -18,12 +19,24 @@ public class PiwikBackingBean {
 	@Inject
 	private SystemSettingsController systemSettingsController;
 	
+	@PostConstruct
+	public void init() {
+	  piwikUrl = systemSettingsController.getSetting(SystemSettingKey.PIWIK_URL);
+	  piwikSiteId = systemSettingsController.getSetting(SystemSettingKey.PIWIK_SITEID); 
+	}
+	
 	public String getPiwikUrl() {
-		return systemSettingsController.getSetting(SystemSettingKey.PIWIK_URL);
+    return piwikUrl;
+	}
+	
+	public String getPiwikSiteId() {
+    return piwikSiteId;
 	}
 	
 	public boolean getHasPiwikUrl() {
 		return StringUtils.isNotBlank(getPiwikUrl());
 	}
 	
+	private String piwikUrl;
+	private String piwikSiteId;
 }
