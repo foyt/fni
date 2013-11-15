@@ -474,7 +474,7 @@ public class ShoppingCartBackingBean implements Serializable {
 				}
 			}
 
-			if (order.getShippingCosts() != null) {
+			if ((order.getShippingCosts() != null) && (order.getShippingCosts() > 0)) {
 				paytrailService.addProduct(payment, "Delivery", "", 1d, order.getShippingCosts(), VAT_PERCENT, 0d, Product.TYPE_POSTAL);
 			}
 
