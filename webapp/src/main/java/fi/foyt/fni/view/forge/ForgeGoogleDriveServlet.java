@@ -104,7 +104,6 @@ public class ForgeGoogleDriveServlet extends AbstractTransactionedServlet {
 			outputStream.write(data.getData());
 		} finally {
 			outputStream.flush();
-			outputStream.close();
 		}
 	}
 
