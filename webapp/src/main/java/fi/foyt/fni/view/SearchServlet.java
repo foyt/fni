@@ -90,7 +90,6 @@ public class SearchServlet extends AbstractTransactionedServlet {
 				outputStream.write(objectMapper.writeValueAsBytes(results));
 			} finally {
 				outputStream.flush();
-				outputStream.close();
 			}
 			
 			response.setStatus(HttpServletResponse.SC_OK);

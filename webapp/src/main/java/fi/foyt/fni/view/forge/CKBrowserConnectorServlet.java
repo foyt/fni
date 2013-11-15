@@ -162,7 +162,6 @@ public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
     	printWriter.write(result.toString());
     } finally {
     	printWriter.flush();
-    	printWriter.close();
     }
   }
 	

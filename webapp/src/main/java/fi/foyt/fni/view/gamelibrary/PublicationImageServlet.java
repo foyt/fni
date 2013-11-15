@@ -102,7 +102,6 @@ public class PublicationImageServlet extends AbstractFileServlet {
 			outputStream.write(data.getData());
 		} finally {
 			outputStream.flush();
-			outputStream.close();
 		}
 	}
 
@@ -186,7 +185,6 @@ public class PublicationImageServlet extends AbstractFileServlet {
 			mapper.writeValue(writer, result);
 		} finally {
 			writer.flush();
-			writer.close();
 		}
 	}
 

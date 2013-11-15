@@ -112,7 +112,6 @@ public class FolderBrowserServlet extends AbstractTransactionedServlet {
       objectMapper.writeValue(printWriter, result);
     } finally {
       printWriter.flush();
-      printWriter.close();
     }
 	}
   

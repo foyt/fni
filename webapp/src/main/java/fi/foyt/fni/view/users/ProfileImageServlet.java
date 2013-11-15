@@ -113,7 +113,6 @@ public class ProfileImageServlet extends AbstractFileServlet {
 			outputStream.write(profileImage.getData());
 		} finally {
 			outputStream.flush();
-			outputStream.close();
 		}
 	}
 

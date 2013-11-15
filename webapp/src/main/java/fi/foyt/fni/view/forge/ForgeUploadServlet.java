@@ -90,7 +90,6 @@ public class ForgeUploadServlet extends AbstractFileServlet {
 			mapper.writeValue(writer, result);
 		} finally {
 			writer.flush();
-			writer.close();
 		}
 	}
 	
