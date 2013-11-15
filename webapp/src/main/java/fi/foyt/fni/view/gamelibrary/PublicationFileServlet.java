@@ -98,7 +98,6 @@ public class PublicationFileServlet extends AbstractFileServlet {
 			outputStream.write(data.getData());
 		} finally {
 			outputStream.flush();
-			outputStream.close();
 		}
 	}
 

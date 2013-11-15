@@ -101,7 +101,6 @@ public class MaterialShareServlet extends AbstractTransactionedServlet {
       objectMapper.writeValue(printWriter, result);
     } finally {
       printWriter.flush();
-      printWriter.close();
     }
 	}
 	
