@@ -2,6 +2,7 @@ package fi.foyt.fni.view.gamelibrary;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -13,19 +14,27 @@ import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
+import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.ShoppingCartController;
+import fi.foyt.fni.i18n.ExternalLocales;
+import fi.foyt.fni.persistence.model.common.Language;
+import fi.foyt.fni.persistence.model.forum.Forum;
+import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.Permission;
+import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 import fi.foyt.fni.utils.licenses.CreativeCommonsLicense;
 import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
-
 
 @RequestScoped
 @Named
@@ -49,9 +58,18 @@ public class GameLibraryManageBackingBean {
 	
 	@Inject
 	private SessionController sessionController;
-	
-	@Inject
+
+  @Inject
 	private PublicationController publicationController;
+
+  @Inject
+	private ForumController forumController;
+
+  @Inject
+  private UserController userController;
+
+  @Inject
+  private SystemSettingsController systemSettingsController;
 
   @URLAction
   @LoggedIn
@@ -90,6 +108,8 @@ public class GameLibraryManageBackingBean {
   @LoggedIn
   @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public void createBookPublication() throws IOException {
+    Language defaultLanguage = systemSettingsController.getDefaultLanguage();
+    
   	BookPublication bookPublication = publicationController.createBookPublication(
   	    sessionController.getLoggedUser(), 
   	    FacesUtils.getLocalizedValue("gamelibrary.manage.untitledBookName"), 
@@ -102,7 +122,8 @@ public class GameLibraryManageBackingBean {
   	    null,
   	    null,
   	    DEFAULT_LICENSE,
-  	    null);
+  	    null,
+  	    defaultLanguage);
   	
   	FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
   	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
@@ -116,6 +137,27 @@ public class GameLibraryManageBackingBean {
   @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public void publish(Long publicationId) {
   	Publication publication = publicationController.findPublicationById(publicationId);
+  	
+  	if (publication.getForumTopic() == null) {
+  	  Long forumId = systemSettingsController.getLongSetting(SystemSettingKey.GAMELIBRARY_PUBLICATION_FORUM_ID);
+  	  String systemUserEmail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_USER_EMAIL);
+  	  User systemUser = userController.findUserByEmail(systemUserEmail);
+  	  Forum gameLibraryForum = forumController.findForumById(forumId);
+  	  
+  	  if ((gameLibraryForum != null) && (systemUser != null)) {
+        String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+  	    String subject = publication.getName();
+  	    String link = contextPath + "/gamelibrary/" + publication.getUrlName();
+  	    
+        Locale publicationLocale = publication.getLanguage().getLocale();
+        String initialMessage = ExternalLocales.getText(publicationLocale, "gamelibrary.forum.initialMessage", link, subject);
+  	    
+        ForumTopic topic = forumController.createTopic(gameLibraryForum, subject, systemUser);
+  	    forumController.createForumPost(topic, systemUser, initialMessage);
+  	    publicationController.updatePublicationForumTopic(publication, topic);
+  	  }
+  	}
+  	
   	publicationController.publishPublication(publication);
 	}
   
