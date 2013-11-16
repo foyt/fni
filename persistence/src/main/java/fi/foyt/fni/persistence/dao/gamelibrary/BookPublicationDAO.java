@@ -5,6 +5,7 @@ import java.util.Date;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
+import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationFile;
@@ -16,7 +17,7 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
   
 	private static final long serialVersionUID = 1L;
 
-	public BookPublication create(String name, String urlName, String description, Double price, PublicationImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, ForumTopic forumTopic, Long downloadCount, Long printCount) {
+	public BookPublication create(String name, String urlName, String description, Double price, PublicationImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, ForumTopic forumTopic, Language language, Long downloadCount, Long printCount) {
     
 		BookPublication bookPublication = new BookPublication();
     bookPublication.setCreated(created);
@@ -36,6 +37,7 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
     bookPublication.setNumberOfPages(numberOfPages);
     bookPublication.setLicense(license);
     bookPublication.setForumTopic(forumTopic);
+    bookPublication.setLanguage(language);
     bookPublication.setDownloadCount(downloadCount);
     bookPublication.setPrintCount(printCount);
     

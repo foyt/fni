@@ -27,6 +27,7 @@ import fi.foyt.fni.persistence.dao.gamelibrary.PublicationAuthorDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationImageDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationTagDAO;
+import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
@@ -338,13 +339,13 @@ public class PublicationController {
 	
 	/* BookPublications */
 
-	public BookPublication createBookPublication(User creator, String name, String description, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, List<GameLibraryTag> tags) {
+	public BookPublication createBookPublication(User creator, String name, String description, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, List<GameLibraryTag> tags, Language language) {
 		
 		Date now = new Date();
 		String urlName = createUrlName(name);
 
 		BookPublication bookPublication = bookPublicationDAO.create(name, urlName, description, price, defaultImage, 
-				now, creator, now, creator, Boolean.FALSE, height, width, depth, weight, numberOfPages, license, null, 0l, 0l);
+				now, creator, now, creator, Boolean.FALSE, height, width, depth, weight, numberOfPages, license, null, language, 0l, 0l);
 
 		if (tags != null) {
 		  for (GameLibraryTag tag : tags) {

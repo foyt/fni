@@ -11,6 +11,7 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
+import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
@@ -185,5 +186,10 @@ public class PublicationDAO extends GenericDAO<Publication> {
 		publication.setForumTopic(forumTopic);
 		return persist(publication);
 	}
+
+  public Publication updateLanguage(Publication publication, Language language) {
+    publication.setLanguage(language);
+    return persist(publication);
+  }
 
 }

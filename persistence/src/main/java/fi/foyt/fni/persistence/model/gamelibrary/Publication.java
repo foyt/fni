@@ -22,6 +22,7 @@ import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.users.User;
 
@@ -161,6 +162,14 @@ public class Publication {
 		this.forumTopic = forumTopic;
 	}
   
+  public Language getLanguage() {
+    return language;
+  }
+  
+  public void setLanguage(Language language) {
+    this.language = language;
+  }
+  
   @Transient
   @Field
   public String getDescriptionPlain() {
@@ -242,4 +251,7 @@ public class Publication {
   @NotEmpty
   @Column(nullable = false)
   private String license;
+  
+  @ManyToOne
+  private Language language;
 }
