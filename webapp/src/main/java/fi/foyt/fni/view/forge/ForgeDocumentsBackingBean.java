@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -71,6 +72,7 @@ public class ForgeDocumentsBackingBean {
 		materialId = material.getId();
 		documentTitle = material.getTitle();
 		folders = ForgeViewUtils.getParentList(material);
+		documentReadOnlyLink = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + completePath;
 	}
 	
 	public Long getOwnerId() {
@@ -105,10 +107,15 @@ public class ForgeDocumentsBackingBean {
     return readOnly;
   }
 	
+	public String getDocumentReadOnlyLink() {
+    return documentReadOnlyLink;
+  }
+	
 	private Long ownerId;
 	private String urlPath;
 	private Long materialId;
 	private String documentTitle;
 	private List<Folder> folders;
   private Boolean readOnly;
+  private String documentReadOnlyLink;
 }

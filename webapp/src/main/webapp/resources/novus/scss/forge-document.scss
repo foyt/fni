@@ -35,6 +35,15 @@ h2 input:focus {
   border: 1px inset #eee;
 }
 
+.forge-document-readonly-link-container {
+  position: absolute;
+  right: 20px;
+}
+
+.forge-document-readonly-link-container>a{
+  @include header-5;
+}
+
 .forge-document-panel {
   background-color: $panel-background-color;
   padding: 20px;

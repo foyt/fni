@@ -54,6 +54,10 @@
     
     <h:panelGroup layout="block" styleClass="grid_16 tight">
       <h:panelGroup layout="block" styleClass="forge-document-panel">
+        <h:panelGroup layout="block" styleClass="forge-document-readonly-link-container">
+          <h:outputLink target="_blank" value="#{forgeDocumentsBackingBean.documentReadOnlyLink}">#{locales['forge.documents.publicLink']}</h:outputLink>
+        </h:panelGroup>
+        
         <h2 data-old-value="#{forgeDocumentsBackingBean.documentTitle}">
           <h:inputText styleClass="forge-ckdocument-title" value="#{forgeDocumentsBackingBean.documentTitle}" rendered="#{!forgeDocumentsBackingBean.readOnly}"/>
           <h:outputFormat value="#{locales['forge.documents.titleReadOnly']}" rendered="#{forgeDocumentsBackingBean.readOnly}">
