@@ -7,6 +7,7 @@
     CKEDITOR.plugins.addExternal('ajax', PLUGIN_DIR + '/ajax/');
     CKEDITOR.plugins.addExternal('xml', PLUGIN_DIR + '/xml/');
     CKEDITOR.plugins.addExternal('change', PLUGIN_DIR + '/change/');
+    CKEDITOR.plugins.addExternal('autogrow', PLUGIN_DIR + '/autogrow/');
     CKEDITOR.plugins.addExternal('coops', PLUGIN_DIR + '/coops/');
     CKEDITOR.plugins.addExternal('coops-rest', PLUGIN_DIR + '/coops-rest/');
     CKEDITOR.plugins.addExternal('coops-dmp', PLUGIN_DIR + '/coops-dmp/');
@@ -17,7 +18,8 @@
     var editor = CKEDITOR.replace($('.forge-ckdocument-editor').attr('name'), { 
       skin: 'moono',
       language: LOCALE,
-      extraPlugins: 'coops,coops-rest,coops-ws,coops-dmp,fnigenericbrowser',
+      extraPlugins: 'coops,coops-rest,coops-ws,coops-dmp,fnigenericbrowser,autogrow',
+      autoGrow_onStartup: true,
       readOnly: true,
       height: 500,
       contentsCss: ['//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/contents.css', CONTEXTPATH + '/uresources/forge-ckeditor-embedded.css' ],
