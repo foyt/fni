@@ -78,7 +78,10 @@
               <a href="javascript:void(null)">#{locales['forge.index.importMaterialMenu']}</a>
               <h:panelGroup layout="block" styleClass="forge-menu-help">#{locales['forge.index.importMaterialMenuHelp']}</h:panelGroup>
               <h:panelGroup layout="block" styleClass="forge-menu-items">
-                <h:link outcome="/forge/upload.jsf">#{locales['forge.index.importMaterialUploadMenu']}</h:link>
+                <h:link outcome="/forge/upload.jsf">
+                  #{locales['forge.index.importMaterialUploadMenu']}
+                  <f:param name="parentFolderId" value="#{forgeIndexBackingBean.folderId}"/>
+                </h:link>
                 <h:link outcome="/forge/import-google-drive.jsf">
                   <f:param name="parentFolderId" value="#{forgeIndexBackingBean.folderId}"/>
                   #{locales['forge.index.importMaterialGoogleDocumentsMenu']}
