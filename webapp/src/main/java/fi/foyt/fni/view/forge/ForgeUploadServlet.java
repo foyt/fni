@@ -17,8 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Folder;
@@ -33,8 +36,11 @@ public class ForgeUploadServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = -4376406243780463521L;
 
-	@Inject
+  @Inject
 	private MaterialController materialController;
+
+  @Inject
+	private FolderController folderController;
 
 	@Inject
 	private MaterialPermissionController materialPermissionController;
@@ -42,12 +48,32 @@ public class ForgeUploadServlet extends AbstractFileServlet {
 	@Inject
 	private SessionController sessionController;
 
-	@SuppressWarnings("unused")
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (!sessionController.isLoggedIn()) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 			return;
+		}
+		
+		Folder parentFolder = null;
+		String parentFolderIdParameter = request.getParameter("parentFolderId");
+		if (StringUtils.isNotBlank(parentFolderIdParameter)) {
+		  Long parentFolderId = NumberUtils.createLong(parentFolderIdParameter);
+		  if (parentFolderId != null) {
+		    parentFolder = folderController.findFolderById(parentFolderId);
+	      if (parentFolder != null) {
+	        if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
+	          response.sendError(HttpServletResponse.SC_FORBIDDEN);
+	          return;
+	        }
+	      } else {
+	        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+	        return;
+	      }
+		  } else {
+	      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	      return;
+		  }
 		}
 		
 		User loggedUser = sessionController.getLoggedUser();
@@ -63,13 +89,6 @@ public class ForgeUploadServlet extends AbstractFileServlet {
 				}
 			}
 			
-			Folder parentFolder = null;
-
-			if ((parentFolder != null) && (!materialPermissionController.hasModifyPermission(loggedUser, parentFolder))) {
-				response.sendError(HttpServletResponse.SC_FORBIDDEN);
-				return;
-			}
-
 			for (FileData file : files) {
 				Material material = materialController.createMaterial(parentFolder, loggedUser, file);
 				resultItems.add(new UploadResultItem(material.getId().toString(), file.getData().length, "N/A", "N/A", "N/A", "DELETE"));
