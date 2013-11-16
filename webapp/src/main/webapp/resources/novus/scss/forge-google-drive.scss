@@ -16,16 +16,9 @@ h2 {
   vertical-align: top;
 }
 
-.forge-google-drive-link-container:before {
-  content: '-';
-  padding-left: 8px;
-  padding-right: 4px;
-}
-
 .forge-google-drive-link-container {
-  display: inline-block;
-  padding-top: 9px;
-  vertical-align: top;
+  position: absolute;
+  right: 20px;
 }
 
 .forge-google-drive-link-container>a{
@@ -34,7 +27,8 @@ h2 {
 
 .forge-google-drive-panel {
   background-color: $panel-background-color;
-  padding: 20px;
+  padding: 20px 20px 70px;
+  position: relative;
 }
 
 .forge-google-drive-container {
