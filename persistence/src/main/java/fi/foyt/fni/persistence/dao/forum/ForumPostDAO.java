@@ -151,7 +151,7 @@ public class ForumPostDAO extends GenericDAO<ForumPost> {
     CriteriaQuery<ForumTopic> criteria = criteriaBuilder.createQuery(ForumTopic.class);
     Root<ForumPost> root = criteria.from(ForumPost.class);
     Join<ForumPost, ForumTopic> topicJoin = root.join(ForumPost_.topic);
-    criteria.select(root.get(ForumPost_.topic));
+    criteria.select(root.get(ForumPost_.topic)).distinct(true);
     criteria.orderBy(criteriaBuilder.desc(root.get(ForumPost_.created)));
     criteria.where(
   		criteriaBuilder.equal(topicJoin.get(ForumTopic_.forum), forum)
