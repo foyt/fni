@@ -240,23 +240,15 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 }
 
 .forge-material-star {
-  text-decoration: none;
-  font-family: "PT Sans", sans-serif;
-  text-shadow: 0 0 1px #000000;
   position: absolute;
-  margin-top: -2px;
-  margin-left: 8px;
-  outline: none;
-  text-transform: uppercase;
+  @include background-image(url('#' + '{resource["novus:gfx/icons/10x10/forge/material-star.png"]}'));
+  width: 10px;
+  height: 10px;
+  margin-left: 6px;
 }
 
-.forge-material-star:after {
-  content: '☆';
-  color: black;
-}
-.forge-material-starred:after {
-  content: '★';
-  color: orange;
+.forge-material-starred {
+  @include background-image(url('#' + '{resource["novus:gfx/icons/10x10/forge/material-starred.png"]}'));
 }
 
 .forge-material:hover {
