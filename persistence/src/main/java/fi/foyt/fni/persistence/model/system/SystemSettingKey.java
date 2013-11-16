@@ -5,6 +5,7 @@ public enum SystemSettingKey {
 	/* System Wide */
 	
 	DEFAULT_LOCALE,
+	DEFAULT_LANGUAGE,
 	SYSTEM_USER_EMAIL,
 	SYSTEM_MAILER_NAME,
 	SYSTEM_MAILER_MAIL,

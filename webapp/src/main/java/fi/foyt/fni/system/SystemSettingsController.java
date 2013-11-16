@@ -83,6 +83,10 @@ public class SystemSettingsController {
 		return languageDAO.listAll();
 	}
 	
+  public Language getDefaultLanguage() {
+    return languageDAO.findByIso2(getSetting(SystemSettingKey.DEFAULT_LANGUAGE));
+  }
+	
 	public List<Language> listLocalizedLanguages() {
 		return languageDAO.listByLocalized(Boolean.TRUE);
 	}
@@ -106,4 +110,5 @@ public class SystemSettingsController {
 	public Language findLocaleByIso2(String iso2) {
 		return languageDAO.findByIso2(iso2);
 	}
+
 }
