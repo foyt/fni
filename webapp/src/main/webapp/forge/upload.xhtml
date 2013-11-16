@@ -75,6 +75,8 @@
         <h:panelGroup layout="block" styleClass="forge-upload-no-files">#{locales['forge.upload.noFiles']}</h:panelGroup>
         
         <button class="forge-upload-upload-button" disabled="disabled">#{locales['forge.upload.uploadButton']}</button>
+        
+        <input type="hidden" value="#{forgeUploadBackingBean.parentFolderId}" name="parentFolderId"/>
       </h:panelGroup>
     </h:panelGroup>
 

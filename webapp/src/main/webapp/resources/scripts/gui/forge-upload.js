@@ -26,8 +26,14 @@
   };
   
   $(document).ready(function() {
+    var parentFolderId = $('input[name="parentFolderId"]').val();
+    var uploadUrl = CONTEXTPATH + '/forge/upload/';
+    if (parentFolderId) {
+      uploadUrl += '?parentFolderId=' + parentFolderId;
+    }
+    
     $('#forge-upload-field-button').fileupload({
-      url : CONTEXTPATH + '/forge/upload/',
+      url: uploadUrl,
       autoUpload: false,
       dataType : 'json',
       maxFileSize: 5000000, 
