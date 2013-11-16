@@ -114,7 +114,6 @@ h3 a {
 .index-publication-tag {
   font-family: $default-font;
   font-size: 10px;
-  font-weight: bold;
   text-transform: uppercase;
   padding-right: 13px;
 }
@@ -128,7 +127,7 @@ h3 a {
   font-family: $default-font;
   color: $default-color;
   margin-top: 10px;
-  font-weight: bold;
+  font-size: 13px;
   padding-right: 20px;  
 }
 
@@ -255,9 +254,8 @@ h3 a {
 .index-blog-entry-content {
   font-family: $default-font;
   color: $default-color;
-  font-size: 16px;
+  font-size: 13px;
   margin-top: 20px;
-  font-weight: bold;
 }
 
 .index-blog-entry-more-container {
