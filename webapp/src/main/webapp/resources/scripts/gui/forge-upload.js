@@ -103,9 +103,7 @@
     }
     
     $('.forge-upload-upload-button').click(function (e) {
-      $('.forge-upload-file-container').data().submit().always(function () {
-        submitNextFile();
-      });
+      submitNextFile();
     });
     
     $(document).on('click','.forge-upload-file-remove', function (e) {
