@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,6 +43,8 @@ import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @WebServlet ( urlPatterns = "/materials/*")
 public class MaterialsServlet extends AbstractTransactionedServlet {
+  
+  private static final String DOCUMENT_TEMPLATE = "<!DOCTYPE HTML><html><head><meta charset=\"UTF-8\"><title>{0}</title><link rel=\"StyleSheet\" href=\"{1}\"/></head><body>{2}</body></html>";
 	
 	private static final long serialVersionUID = -5739692573670665390L;
 
@@ -90,7 +93,7 @@ public class MaterialsServlet extends AbstractTransactionedServlet {
 				data = getBinaryMaterialData((Image) material);
 			break;
 			case DOCUMENT:
-				data = getDocumentData((Document) material);
+				data = getDocumentData(request.getContextPath(), (Document) material);
 			break;
 			case VECTOR_IMAGE:
 				data = getVectorImageData((VectorImage) material);
@@ -147,8 +150,12 @@ public class MaterialsServlet extends AbstractTransactionedServlet {
 		}
 	}
 
-	private FileData getDocumentData(Document document) throws UnsupportedEncodingException {
-		return new FileData(null, null, document.getData().getBytes("UTF-8"), "text/html", document.getModified());
+	private FileData getDocumentData(String contextPath, Document document) throws UnsupportedEncodingException {
+	  String bodyContent = document.getData();
+	  String title = document.getTitle();
+	  String styleSheet = contextPath + "/uresources/material-document-style.css";
+	  String htmlContent = MessageFormat.format(DOCUMENT_TEMPLATE, title, styleSheet, bodyContent);
+		return new FileData(null, null, htmlContent.getBytes("UTF-8"), "text/html", document.getModified());
 	}
 
 	private FileData getVectorImageData(VectorImage vectorImage) throws UnsupportedEncodingException {
