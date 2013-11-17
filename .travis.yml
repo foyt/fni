@@ -16,6 +16,8 @@ env:
   - secure: B4u4PrwBUieM4aVb97zL+JrjVvHblr0yeGn2leh/30IrO2es7Vyyv2mzKEFdrkov7v/iI03C8gP0mDjL1XcWKfm7HG6Fit/C/31Q3FHbSe+Xoh3F0IOdcXsytnza5iwU9RS9h7V3BPbC1RKcPXAbLWoMEYNeQnzi9xQNaKOgvZQ=
   - secure: etcZoy0laS5f4eFRyJ7poQypx3xM70lyYYb1BhO+z0zfEu4hWQAcltVIflcIVo0GAM4ELUyDu/UyaGB2h9p/BQ0DFjalP39dTTaq9VtJsu2T+cP5oWEbREvahrF6g3+RtUWE9DUzfO/Vo0stT8nv/1UMH9iUTDcqkMUOiLJy72k=
   - secure: n32HCUYA47/GtshHLOQYUrS7+A0qXH5XeAfhTCvnYt2wjiRyxOTirH87QVa2IXg+y2DFuFvvk2AU47PUaar3sVFLxOsmfWchzTWVoiIDIGZ9S9rMtqsNuzzrCpsCI+PUmS0hUbf3GF7fAAajZft8hjSI1N960rmvQg/kr2n0oMg=
+  - SAUCE_HOST=localhost
+  - SAUCE_PORT=4445
 after_success:
 - python travis/m2conf.py
 - mvn deploy --settings ~/.m2/mySettings.xml
