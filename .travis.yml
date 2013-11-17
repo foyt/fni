@@ -23,7 +23,6 @@ after_success:
 - mvn deploy --settings ~/.m2/mySettings.xml
 - sudo apt-get install ruby1.9.1 git
 - sudo gem install rhc
-- rhc app-tidy fnistaging -l $STAGING_USERNAME -p $STAGING_PASSWORD
 - git config --global user.email "build@travis-ci.org"
 - git config --global user.name "Travis CI"
 - git config --global pack.windowMemory 10m 
