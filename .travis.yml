@@ -23,8 +23,11 @@ after_success:
 - mvn deploy --settings ~/.m2/mySettings.xml
 - sudo apt-get install ruby1.9.1 git
 - sudo gem install rhc
+- rhc app-tidy fnistaging -l $STAGING_USERNAME -p $STAGING_PASSWORD
 - git config --global user.email "build@travis-ci.org"
 - git config --global user.name "Travis CI"
+- git config --global pack.windowMemory 10m 
+- git config --global pack.packSizeLimit 20m
 - ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 - echo -e "Host ${STAGING_HOST}\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - rhc sshkey-add travis ~/.ssh/id_rsa.pub -l $STAGING_USERNAME -p $STAGING_PASSWORD
@@ -35,7 +38,6 @@ after_success:
 - git add deployments/ROOT.war
 - git commit -m "Automatic build"
 - git push
-- rhc app-tidy fnistaging -l $STAGING_USERNAME -p $STAGING_PASSWORD
 - rhc sshkey-remove travis -l $STAGING_USERNAME -p $STAGING_PASSWORD
 - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
 - cd ~/build/foyt/fni/selenium-tests
