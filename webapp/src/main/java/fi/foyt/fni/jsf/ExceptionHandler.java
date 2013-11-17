@@ -72,7 +72,10 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
 
             PrettyContext prettyContext = PrettyContext.getCurrentInstance();
             if (prettyContext != null) {
-              redirectUrl = new StringBuilder(externalContext.getRequestContextPath()).append(prettyContext.getRequestURL().toString()).toString();
+              redirectUrl = new StringBuilder(externalContext.getRequestContextPath())
+                .append(prettyContext.getRequestURL().toString())
+                .append(prettyContext.getRequestQueryString().toQueryString())
+                .toString();
             }
 
             StringBuilder redirectBuilder = new StringBuilder().append(externalContext.getRequestContextPath()).append("/login/");
