@@ -590,7 +590,23 @@ public class MaterialController {
   }
   
   public void moveMaterial(Material material, Folder parentFolder, User modifyingUser) {
+    updateMaterialPermaLinks(material);
     materialDAO.updateParentFolder(material, parentFolder, modifyingUser);
+  }
+  
+  private void updateMaterialPermaLinks(Material material) {
+    if (material instanceof Folder) {
+      List<Material> children = materialDAO.listByParentFolder((Folder) material);
+      for (Material child : children) {
+        updateMaterialPermaLinks(child);
+      }
+    }
+    
+    String oldPath = material.getPath();
+    PermaLink permaLink = permaLinkDAO.findByPath(oldPath);
+    if (permaLink == null) {
+      permaLink = permaLinkDAO.create(material, oldPath);
+    }
   }
 
   public void deleteMaterial(Material material, User deletingUser) {
