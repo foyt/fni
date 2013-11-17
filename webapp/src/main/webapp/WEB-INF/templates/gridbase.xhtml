@@ -57,6 +57,8 @@
         </script>
       </ui:fragment>
 
+      <h:outputScript name="/scripts/gui/messages.js"></h:outputScript>
+
       <ui:insert name="view-stylesheets"/>
       <ui:insert name="view-scripts"/>
       <ui:insert name="view-custom-head"/>
@@ -64,7 +66,41 @@
     <h:body>
       <h:panelGroup layout="block" styleClass="jsf-messages-container">
         <ui:insert name="messages">
-          <h:messages globalOnly="false" errorClass="error" fatalClass="error" warnClass="warning" infoClass="info"/>
+          <ul>
+            <ui:repeat var="message" value="#{facesContext.messageList}">
+              <ui:fragment rendered="#{message.severity.ordinal eq 0}">
+                <li class="info">
+                  <span>#{message.summary}</span>
+                  <a href="javascript:void(null)"></a>
+                </li>
+              </ui:fragment>
+              <ui:fragment rendered="#{message.severity.ordinal eq 1}">
+                <li class="warning">
+                  <span>#{message.summary}</span>
+                  <a href="javascript:void(null)"></a>
+                </li>
+              </ui:fragment>
+              <ui:fragment rendered="#{message.severity.ordinal eq 2}">
+                <li class="error">
+                  <span>#{message.summary}</span>
+                  <a href="javascript:void(null)"></a>
+                </li>
+              </ui:fragment>
+              <ui:fragment rendered="#{message.severity.ordinal eq 3}">
+                <li class="error">
+                  <span>#{message.summary}</span>
+                  <a href="javascript:void(null)"></a>
+                </li>
+              </ui:fragment>
+              <ui:fragment rendered="#{message.severity.ordinal gt 3}">
+                <li>
+                  <span>#{message.summary}</span>
+                  <a href="javascript:void(null)"></a>
+                </li>
+              </ui:fragment>
+            </ui:repeat>
+          </ul>
+          <h:messages globalOnly="false" style="display: none"/>
         </ui:insert>
       </h:panelGroup>
       

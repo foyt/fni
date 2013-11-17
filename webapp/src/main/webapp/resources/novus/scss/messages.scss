@@ -46,6 +46,31 @@ $error-text-color: #fff;
   border-bottom-right-radius: 8px;
 }
 
+.jsf-messages-container ul li a {
+  position: absolute;
+  right: 8px;
+  cursor: pointer;
+  top: 5px;
+  text-decoration: none;
+  background: rgba(255,255,255,0.25);
+  padding: 0px;
+  @include border-radius(4px);
+  font-family: courier;
+  font-size: 22px;
+  color: #000;
+  line-height: 22px;
+  padding-left: 3px;
+  padding-right: 2px;
+}
+
+.jsf-messages-container ul li a:after {
+  content: 'X';
+}
+
+.jsf-messages-container ul li:hover a {
+  color: #fff;
+}
+
 .jsf-messages-container ul li.info {
   background: $info-background-color;
   color: $info-text-color;
