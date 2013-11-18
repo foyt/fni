@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +28,7 @@ import fi.foyt.fni.persistence.dao.materials.FolderDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
 import fi.foyt.fni.persistence.dao.materials.UbuntuOneFileDAO;
 import fi.foyt.fni.persistence.dao.materials.UbuntuOneFolderDAO;
+import fi.foyt.fni.persistence.dao.materials.UbuntuOneRootFolderDAO;
 import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.auth.UserIdentifier;
@@ -44,7 +46,7 @@ import fi.foyt.fni.utils.auth.OAuthUtils;
 @Stateful
 public class UbuntuOneManager {
   
-  private static final int MAX_NEW_FILES = 10;
+  private static final int MAX_FILES = 10;
 
   @Inject
   private Logger logger;
@@ -69,10 +71,13 @@ public class UbuntuOneManager {
 
   @Inject
   private UbuntuOneFileDAO ubuntuOneFileDAO;
+
+  @Inject
+  private UbuntuOneRootFolderDAO ubuntuOneRootFolderDAO;
   
   @Inject
   private UbuntuOneAuthenticationStrategy ubuntuOneAuthenticationStrategy;
-
+  
   public Token getUbuntuOneToken(User user) {
     List<UserIdentifier> ubuntuOneIdentifiers = userIdentifierDAO.listByAuthSourceAndUser(AuthSource.UBUNTU_ONE, user);
     for (UserIdentifier ubuntuOneIdentifier : ubuntuOneIdentifiers) {
@@ -105,10 +110,10 @@ public class UbuntuOneManager {
             String childKey = child.getString("key");
             if ("directory".equals(child.getString("kind"))) {
               JSONObject folderEntity = loadEntity(service, ubuntuOneToken, volumeRoot + child.getString("path"));
-              synchronizeEntry(service, ubuntuOneToken, user, ubuntuOneRootFolder, folderEntity);
+              synchronizeEntry(service, ubuntuOneToken, user, ubuntuOneRootFolder, folderEntity, 0);
               existingFolderKeys.remove(childKey);
             } else {
-              synchronizeEntry(service, ubuntuOneToken, user, ubuntuOneRootFolder, child);
+              synchronizeEntry(service, ubuntuOneToken, user, ubuntuOneRootFolder, child, 0);
               existingFileKeys.remove(childKey);
             }
           }
@@ -126,6 +131,7 @@ public class UbuntuOneManager {
           materialController.deleteMaterial(ubuntuOneFile, user);
         } 
 
+        ubuntuOneRootFolderDAO.updateLastSynchronized(ubuntuOneRootFolder, new Date(), user);
       } catch (JSONException e) {
         logger.log(Level.SEVERE, "Failed to parse Ubuntu One delta JSON", e);
       } catch (IOException e) {
@@ -144,10 +150,9 @@ public class UbuntuOneManager {
     }
   }
 
-  private void synchronizeEntry(OAuthService service, Token ubuntuOneToken, User user, Folder parentFolder, JSONObject jsonEntity) throws JSONException, IOException {
-    if (newFilesAdded > MAX_NEW_FILES) {
-      // When new file count has exceeded maximum count we stop the synchronization.
-      return;
+  private int synchronizeEntry(OAuthService service, Token ubuntuOneToken, User user, Folder parentFolder, JSONObject jsonEntity, int filesProcessed) throws JSONException, IOException {
+    if (filesProcessed >= MAX_FILES) {
+      return filesProcessed;
     }
     
     String kind = jsonEntity.getString("kind");
@@ -159,14 +164,16 @@ public class UbuntuOneManager {
 
     if ("directory".equals(kind)) {
       JSONObject folderEntity = loadEntity(service, ubuntuOneToken, jsonEntity.getString("resource_path"));
-      synchronizeFolder(service, ubuntuOneToken, user, parentFolder, folderEntity, key, contentPath, title, generation);
+      filesProcessed = synchronizeFolder(service, ubuntuOneToken, user, parentFolder, folderEntity, key, contentPath, title, generation, filesProcessed);
     } else if ("file".equals(kind)) {
-      syncronizeFile(ubuntuOneToken, user, parentFolder, key, contentPath, title, generation);
+      filesProcessed = syncronizeFile(ubuntuOneToken, user, parentFolder, key, contentPath, title, generation, filesProcessed);
     }
+    
+    return filesProcessed;
   }
 
-  private void synchronizeFolder(OAuthService service, Token ubuntuOneToken, User user, Folder parentFolder, 
-      JSONObject jsonEntity, String key, String contentPath, String title, Long generation) throws JSONException, IOException {
+  private int synchronizeFolder(OAuthService service, Token ubuntuOneToken, User user, Folder parentFolder, 
+      JSONObject jsonEntity, String key, String contentPath, String title, Long generation, int filesProcessed) throws JSONException, IOException {
     
     List<String> existingFileKeys = null;
     List<String> existingFolderKeys = null;
@@ -207,10 +214,10 @@ public class UbuntuOneManager {
         if ("directory".equals(child.getString("kind"))) {
           existingFolderKeys.remove(childKey);
           JSONObject folderEntity = loadEntity(service, ubuntuOneToken, child.getString("resource_path"));
-          synchronizeEntry(service, ubuntuOneToken, user, folder, folderEntity);
+          filesProcessed = synchronizeEntry(service, ubuntuOneToken, user, folder, folderEntity, filesProcessed);
         } else {
           existingFileKeys.remove(childKey);
-          synchronizeEntry(service, ubuntuOneToken, user, folder, child);
+          filesProcessed = synchronizeEntry(service, ubuntuOneToken, user, folder, child, filesProcessed);
         }
       }
     }
@@ -226,9 +233,11 @@ public class UbuntuOneManager {
       logger.info("Deleted Ubuntu One File: " + ubuntuOneFile.getContentPath());
       materialController.deleteMaterial(ubuntuOneFile, user);
     } 
+    
+    return filesProcessed;
   }
 
-  private void syncronizeFile(Token ubuntuOneToken, User user, Folder parentFolder, String key, String contentPath, String title, Long generation) {
+  private int syncronizeFile(Token ubuntuOneToken, User user, Folder parentFolder, String key, String contentPath, String title, Long generation, int filesProcessed) {
     UbuntuOneFile file = ubuntuOneFileDAO.findByUbuntuOneKey(key);
     if (file != null) {
       // File exists
@@ -242,6 +251,8 @@ public class UbuntuOneManager {
         ubuntuOneFileDAO.updateContentPath(file, contentPath, user);
 
         logger.info("Updated Ubuntu One File " + file.getContentPath() + " to generation " + file.getGeneration());
+
+        filesProcessed++;
       }
     } else {
       // File is new
@@ -259,11 +270,13 @@ public class UbuntuOneManager {
           logger.log(Level.WARNING, "Failed to import file from Ubuntu One: " + contentPath + ", error code: " + response.getCode());
         }
         
-        newFilesAdded++;
+        filesProcessed++;
       } catch (IOException e) {
         logger.log(Level.SEVERE, "Failed to import file from Ubuntu One: " + contentPath, e);
       }
     }
+    
+    return filesProcessed;
   }
   
   public Response getFileContent(Token ubuntuOneToken, String contentPath) throws IOException {
@@ -296,7 +309,5 @@ public class UbuntuOneManager {
 
     return path;
   }
-  
-  private int newFilesAdded = 0;
 }
 

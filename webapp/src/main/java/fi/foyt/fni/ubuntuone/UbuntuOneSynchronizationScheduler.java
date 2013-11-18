@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Schedule;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.dao.DAO;
@@ -12,7 +12,7 @@ import fi.foyt.fni.persistence.dao.materials.UbuntuOneRootFolderDAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.model.materials.UbuntuOneRootFolder;
 
-@Stateless
+@Singleton
 public class UbuntuOneSynchronizationScheduler {
 
   @Inject
