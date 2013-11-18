@@ -22,8 +22,8 @@ public class FrontPageTest {
     String username = System.getProperty("SAUCE_USERNAME");
     String accessKey = System.getProperty("SAUCE_ACCESS_KEY");
     String travisJobNumber = System.getProperty("TRAVIS_JOB_NUMBER");
-    String host = "localhost";
-    String port = "4445";
+    String host = System.getProperty("SAUCE_HOST"); 
+    String port = System.getProperty("SAUCE_PORT"); 
     
     DesiredCapabilities capabilities = DesiredCapabilities.firefox();
     capabilities.setCapability("version", "17");
@@ -33,7 +33,7 @@ public class FrontPageTest {
       capabilities.setCapability("build", travisJobNumber);
     }
     
-    capabilities.setCapability("general.useragent.ocale", "en-US");
+    capabilities.setCapability("general.useragent.locale", "en-US");
       
     this.driver = new RemoteWebDriver(new URL("http://" + username + ":" + accessKey + "@" + host + ":" + port + "/wd/hub"), capabilities);
   }
