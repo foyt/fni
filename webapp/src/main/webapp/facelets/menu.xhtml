@@ -56,6 +56,7 @@
         
         <li class="menu-tools-account-list" style="display: none">
           <ul><h:link value="#{locales['menu.toolAccountEditProfile']}" outcome="/users/editprofile.jsf" /></ul>
+          <ul><h:outputLink value="#{request.contextPath}/profile/#{sessionBackingBean.loggedUser.id}">#{locales['menu.toolAccountViewProfile']}</h:outputLink></ul>
           <ul><h:link value="#{locales['menu.toolAccountLogout']}" outcome="/users/logout.jsf" /></ul>
         </li>
       </h:panelGroup>
