@@ -39,7 +39,12 @@
   }
   
   $(document).on('click', '.menu-about', function (e) {
-    $(this).closest('.menu-about-container').find('.menu-about-list').show();
+    var container = $(this).closest('.menu-about-container');
+    var list = container.find('.menu-about-list');
+    var offset = (container.width() - $(this).width()) / 2;
+
+    list.css('margin-left', (offset - 8) + 'px');
+    list.show();
     
     $(document).one('click', function (e) {
       $('.menu-about-list').hide();
