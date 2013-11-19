@@ -12,6 +12,7 @@ $menu-logo-shadow-color: rgba(255, 255, 255, 0.7);
 $menu-logo-font: "Bebas Neue",sans-serif;
 $search-box-width: 67px;
 $search-box-width-focus: 175px; 
+$nav-item-width: 115px;
 
 .index-menu {
   background: $menu-background-color;
@@ -51,7 +52,7 @@ $search-box-width-focus: 175px;
   font-size: 13px;
   font-family: $default-font;
   text-decoration: none;
-  width: 115px;
+  width: $nav-item-width;
   text-align: center;
   display: inline-block;
   padding-top: 5px;
@@ -159,7 +160,7 @@ $search-box-width-focus: 175px;
   font-size: 13px;
 }
 
-.menu-tools-locale-container, .menu-tools-account-container {
+.menu-tools-locale-container, .menu-tools-account-container, .menu-about-container {
   display: inline-block;
 }
 
@@ -167,7 +168,7 @@ $search-box-width-focus: 175px;
   text-transform: uppercase;
 }
 
-.menu-tools-locale-list, .menu-tools-account-list {
+.menu-tools-locale-list, .menu-tools-account-list, .menu-about-list {
   position: absolute;
   background: $menu-background-color;
   font-family: $default-font;
@@ -175,7 +176,7 @@ $search-box-width-focus: 175px;
   list-style: none;
 }
 
-.menu-tools-locale-list ul a, .menu-tools-account-list ul a {
+.menu-tools-locale-list ul a, .menu-tools-account-list ul a, .menu-about-list a {
   color: $menu-text-color;
   padding: 8px;
   font-size: 13px;
@@ -183,11 +184,24 @@ $search-box-width-focus: 175px;
   @include box-sizing(border-box);
 }
 
-.menu-tools-locale-list ul a:hover, .menu-tools-account-list ul a:hover {
+.menu-tools-locale-list ul a:hover, .menu-tools-account-list ul a:hover, .menu-about-list a:hover {
   color:$menu-text-color-hover;
   background: $menu-background-color-hover;
 }
 
 .menu-tools-locale, .menu-tools-account, .menu-tools-login {
   margin-right: 20px;
+}
+
+.menu-about-container {
+  width: $nav-item-width;
+  text-align: center;
+}
+
+.menu-about-container>a {
+  width: auto;
+}
+
+.menu-about-list a {
+  text-align: left;
 }

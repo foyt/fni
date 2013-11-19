@@ -38,6 +38,14 @@
     }
   }
   
+  $(document).on('click', '.menu-about', function (e) {
+    $(this).closest('.menu-about-container').find('.menu-about-list').show();
+    
+    $(document).one('click', function (e) {
+      $('.menu-about-list').hide();
+    });
+  });
+  
   $(document).on('click', '.menu-tools-locale', function (e) {
     $(this).closest('.menu-tools-locale-container').find('.menu-tools-locale-list').show();
     

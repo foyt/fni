@@ -28,7 +28,19 @@
       -->
       <h:link outcome="/gamelibrary/index.jsf">#{locales['menu.menuGameLibrary']}</h:link>
       <h:link outcome="/forum/index.jsf">#{locales['menu.menuForum']}</h:link>
-      <h:link outcome="/about.jsf">#{locales['menu.menuAbout']}</h:link>
+      
+      <h:panelGroup layout="block" styleClass="menu-about-container">
+        <h:outputLink value="javascript:void(null)" styleClass="menu-about">#{locales['menu.menuAbout']}</h:outputLink>
+        <li class="menu-about-list" style="display: none">
+          <ul><h:outputLink value="#{request.contextPath}/about.jsf#vision">#{locales['menu.menuAboutVision']}</h:outputLink></ul>
+          <ul><h:outputLink value="#{request.contextPath}/about.jsf#information">#{locales['menu.menuAboutInformation']}</h:outputLink></ul>
+          <ul><h:outputLink value="#{request.contextPath}/about.jsf#forum">#{locales['menu.menuAboutForum']}</h:outputLink></ul>
+          <ul><h:outputLink value="#{request.contextPath}/about.jsf#distribution">#{locales['menu.menuAboutDistribution']}</h:outputLink></ul>
+          <ul><h:outputLink value="#{request.contextPath}/about.jsf#gameplay">#{locales['menu.menuAboutGameplay']}</h:outputLink></ul>
+          <ul><h:outputLink value="#{request.contextPath}/about.jsf#history">#{locales['menu.menuAboutHistory']}</h:outputLink></ul>
+          <ul><h:outputLink value="#{request.contextPath}/about.jsf#cookies">#{locales['menu.menuAboutCookies']}</h:outputLink></ul>
+        </li>
+      </h:panelGroup>
     </h:panelGroup>
     
     <h:panelGroup layout="block" styleClass="grid_5 menu-tools-container">
