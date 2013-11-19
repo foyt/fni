@@ -69,7 +69,7 @@
     
     <!-- Paytrail -->
     
-    <paytrail-sdk.version>1.0.0-SNAPSHOT</paytrail-sdk.version>
+    <paytrail-sdk.version>1.0.0</paytrail-sdk.version>
     
     <!-- Rome -->
 
