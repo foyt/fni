@@ -80,16 +80,9 @@ public class MaterialShareServlet extends AbstractTransactionedServlet {
 		  users.add(new MaterialUser(materialUser.getUser().getId(), materialUser.getUser().getFullName(), materialUser.getRole()));
 		}
 		
-    List<MaterialUser> friends = new ArrayList<>();
-		List<User> userFriends = userController.listUserFriends(loggedUser);
-		for (User friend : userFriends) {
-      friends.add(new MaterialUser(friend.getId(), friend.getFullName(), null));
-    }
-		
 		String contextPath = request.getContextPath();
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("users", users);
-    result.put("friends", friends);
 		result.put("publicUrl", RequestUtils.getRequestHostUrl(request) + contextPath + "/materials/" + material.getPath());
     result.put("public", materialPermissionController.isPublic(loggedUser, material));
 		
