@@ -21,6 +21,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
+import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
@@ -31,6 +32,7 @@ import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 import fi.foyt.fni.utils.licenses.CreativeCommonsLicense;
@@ -57,8 +59,11 @@ public class GameLibraryEditPublicationBackingBean {
 	@Inject
 	private SessionController sessionController;
 
-	@Inject
+  @Inject
 	private UserController userController;
+
+  @Inject
+	private SystemSettingsController systemSettingsController;
 	
 	@PostConstruct
 	public void load() {
@@ -68,14 +73,27 @@ public class GameLibraryEditPublicationBackingBean {
   		authorSelectItems = createAuthorSelectItems();
   		creativeCommonsDerivativesSelectItems = createCreativeCommonsDerivativesSelectItems();
   		creativeCommonsCommercialSelectItems = createCreativeCommsonCommercialSelectItems();
-
+  		languageSelectItems = createLanguageSelectItems();
+  		
   		if (tagSelectItems.size() > 0 && tagSelectItems.get(1).getSelectItems().length > 0) {
         addExistingTag = (String) tagSelectItems.get(1).getSelectItems()[0].getValue();
       }
 		}
 	}
 	
-	@URLAction (onPostback = false)
+	private List<SelectItem> createLanguageSelectItems() {
+	  List<SelectItem> result = new ArrayList<>();
+	  
+	  List<Language> languages = systemSettingsController.listLanguages();
+	  for (Language language : languages) {
+	    String name = FacesUtils.getLocalizedValue("generic.languages." + language.getISO3());
+	    result.add(new SelectItem(language.getId(), name));
+	  }
+	  
+    return result;
+  }
+
+  @URLAction (onPostback = false)
 	@LoggedIn
 	@Secure(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
 	public void init() {
@@ -89,6 +107,7 @@ public class GameLibraryEditPublicationBackingBean {
 		height = publication.getHeight();
 		depth = publication.getDepth();
 		tags = new ArrayList<>();
+		languageId = publication.getLanguage().getId();
 		
 		List<PublicationTag> publicationTags = gameLibraryTagController.listPublicationTags(publication);
 		for (PublicationTag publicationTag : publicationTags) {
@@ -134,6 +153,14 @@ public class GameLibraryEditPublicationBackingBean {
 	public void setPublicationId(Long publicationId) {
 		this.publicationId = publicationId;
 	}
+	
+	public Long getLanguageId() {
+    return languageId;
+  }
+	
+	public void setLanguageId(Long languageId) {
+    this.languageId = languageId;
+  }
 
 	public String getName() {
 		return name;
@@ -315,6 +342,10 @@ public class GameLibraryEditPublicationBackingBean {
 		return creativeCommonsDerivativesSelectItems;
 	}
 	
+	public List<SelectItem> getLanguageSelectItems() {
+    return languageSelectItems;
+  }
+	
 	public void addTag() {
 		String tag = getAddExistingTag();
 		if ("_NEW_".equals(tag)) {
@@ -379,6 +410,8 @@ public class GameLibraryEditPublicationBackingBean {
 		  	authors.add(author);
 		  }
 		  
+		  Language language = systemSettingsController.findLocaleById(languageId);
+		  
 			publicationController.updateName(bookPublication, getName());
 			publicationController.updateDescription(bookPublication, getDescription());
 			publicationController.updatePrice(bookPublication, getPrice());
@@ -388,6 +421,7 @@ public class GameLibraryEditPublicationBackingBean {
 			publicationController.updateLicense(publication, license);
 			publicationController.updateTags(bookPublication, tags);
 			publicationController.updateNumberOfPages(bookPublication, getNumberOfPages());
+      publicationController.updatePublicationLanguage(bookPublication, language);
 			publicationController.updatedModified(bookPublication, sessionController.getLoggedUser(), new Date());
 		} else {
 			throw new FaceletException("Not implemented");
@@ -453,6 +487,7 @@ public class GameLibraryEditPublicationBackingBean {
 	}
 	
 	private Long publicationId;
+	private Long languageId;
 	private String name;
 	private String description;
 	private Double price;
@@ -479,6 +514,7 @@ public class GameLibraryEditPublicationBackingBean {
 	private List<SelectItem> licenseSelectItems;
  	private List<SelectItemGroup> tagSelectItems;
  	private List<SelectItem> authorSelectItems;
+ 	private List<SelectItem> languageSelectItems;
  	
  	public enum LicenseType {
 		CREATIVE_COMMONS,
