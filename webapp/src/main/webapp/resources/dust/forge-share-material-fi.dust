@@ -58,7 +58,7 @@
     <h4>Lisää muokkaajia</h4>
     
     <div class="forge-share-material-invite">
-      <p>Kirjoita kutsuttavan kaverisi nimi kenttään ja valitse se alaspudotusvalikosta</p>
+      <p>Kirjoita kutsuttavan käyttäjän nimi kenttään ja valitse hänet alaspudotusvalikosta</p>
       <input type="text"/>
     </div>
     

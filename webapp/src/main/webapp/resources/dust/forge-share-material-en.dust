@@ -58,7 +58,7 @@
     <h4>Add a User</h4>
     
     <div class="forge-share-material-invite">
-      <p>Type name of your friend you wish to invite to this material</p>
+      <p>Type a name of the user you wish to invite and choose him/her from the drop-down menu</p>
       <input type="text"/>
     </div>
     
