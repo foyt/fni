@@ -78,6 +78,10 @@ public class SystemSettingsController {
 	public String getThemePath(HttpServletRequest request) {
 		return request.getContextPath() + "/themes/" + getTheme();
 	}
+
+  public Language findLocaleById(Long languageId) {
+    return languageDAO.findById(languageId);
+  }
 	
 	public List<Language> listLanguages() {
 		return languageDAO.listAll();
