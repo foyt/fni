@@ -219,6 +219,10 @@ public class PublicationController {
 		return publicationDAO.updateDescription(publication, description);
 	}
 
+  public Publication updatePublicationLanguage(Publication publication, Language language) {
+    return publicationDAO.updateLanguage(publication, language);
+  }
+  
 	public Publication updateName(Publication publication, String name) {
 	  if (!name.equals(publication.getName())) {
       String urlName = createUrlName(publication, name);
@@ -483,5 +487,6 @@ public class PublicationController {
 			}
 		} while (true);
 	}
+
 
 }
