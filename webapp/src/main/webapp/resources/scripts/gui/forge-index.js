@@ -212,14 +212,6 @@
       	materialId: materialId 
       },
       success : function(data) {
-    	  var autocompleteSource = new Array();
-    	  for (var i = 0, l = data.friends.length; i < l; i++) {
-  	      autocompleteSource.push({
-            label: data.friends[i].name, 
-  	        value: data.friends[i].id 
-		      });
-       	}
-    	  
         dust.render("forge-share-material", data, function(err, html) {
   		    if (!err) {
   		      var dialog = $(html);
@@ -270,24 +262,39 @@
                 $(dialog).find('.forge-share-material-url input[type="text"]').attr('disabled', null);
     		      }
     		    });
-    		      
-            dialog.find('.forge-share-material-invite input').autocomplete({
-              source: autocompleteSource,
-              select: function( event, ui ) {
+    		    
+    		    dialog.find('.forge-share-material-invite input').autocomplete({
+    		      source: function( request, response ) {
+    		        $.getJSON(CONTEXTPATH + "/search/", {
+    		          q: this.term,
+    	            source: 'USERS',
+    	            maxHits: 7
+    		        }, function (data, status, xhr) {
+    		          var users = data['USERS'];
+    		          
+    		          response( $.map( users, function( user ) {
+    		            return {
+    		              label: user.name,
+    		              value: user.id
+    		            };
+    		          }));
+    		        });
+  		        },
+  		        select: function( event, ui ) {
                 var users = $(dialog).find('.forge-share-material-users');
                 var userId = ui.item.value;
                 if (users.find('input[value="' + userId + '"]').length == 0) {
                   users.append(
                     $('<div class="forge-share-material-user">')
-    	        	      .append($('<input name="user" type="hidden">').val(userId))
-  	        	        .append($('<label>').text(ui.item.label))
-  	        	        .append(createRoleSelect())); 
+                      .append($('<input name="user" type="hidden">').val(userId))
+                      .append($('<label>').text(ui.item.label))
+                      .append(createRoleSelect())); 
                 }
               },
               close: function( event, ui ) {
                 $(this).val('');
               }
-            });
+    		    });
           } else {
             // TODO: Proper error handling...
             alert(err);
