@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryParser.ParseException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -58,6 +59,12 @@ public class SearchServlet extends AbstractTransactionedServlet {
 			return;
 		}
 		
+		int maxHits = 3;
+		String maxHitsParamter = request.getParameter("maxHits");
+		if (StringUtils.isNumeric(maxHitsParamter)) {
+		  maxHits = NumberUtils.createInteger(maxHitsParamter);
+		}
+		
 		List<Source> sources = null;
 		String[] sourceParameters = request.getParameterValues("source");
 		if ((sourceParameters == null)||(sourceParameters.length == 0)) {
@@ -79,7 +86,7 @@ public class SearchServlet extends AbstractTransactionedServlet {
 		
 		try {
 			for (Source source : sources) {
-				results.put(source.toString(), executeSearch(source, request.getContextPath(), queryText));
+				results.put(source.toString(), executeSearch(source, request.getContextPath(), queryText, maxHits));
 			}
 
 			response.setContentType("application/json");
@@ -99,30 +106,31 @@ public class SearchServlet extends AbstractTransactionedServlet {
 		}
 	}
 	
-	private List<Map<String, Object>> executeSearch(Source source, String contextPath, String queryText) throws ParseException {
+	private List<Map<String, Object>> executeSearch(Source source, String contextPath, String queryText, int maxHits) throws ParseException {
 		switch (source) {
 			case GAMELIBRARY:
-			  return searchGameLibrary(contextPath, queryText);
+			  return searchGameLibrary(contextPath, queryText, maxHits);
 			case BLOG:
-				return searchBlog(queryText);
+				return searchBlog(queryText, maxHits);
 			case FORGE:
-				return searchForge(contextPath, queryText);
+				return searchForge(contextPath, queryText, maxHits);
 			case FORUM:
-				return searchForum(contextPath, queryText);
+				return searchForum(contextPath, queryText, maxHits);
 			case USERS:
-				return searchUsers(contextPath, queryText);
+				return searchUsers(contextPath, queryText, maxHits);
 		}
 		
 		return null;
 	}
 	
-	private List<Map<String, Object>> searchGameLibrary(String contextPath, String queryText) throws ParseException {
+	private List<Map<String, Object>> searchGameLibrary(String contextPath, String queryText, int maxHits) throws ParseException {
 		List<Map<String, Object>> result = new ArrayList<>();
 
-		List<SearchResult<Publication>> searchResults = publicationController.searchPublications(queryText, 3);
+		List<SearchResult<Publication>> searchResults = publicationController.searchPublications(queryText, maxHits);
 		
 		for (SearchResult<Publication> searchResult : searchResults) {
 			Map<String, Object> jsonItem = new HashMap<>();
+      jsonItem.put("id", searchResult.getEntity().getId());
 			jsonItem.put("name", searchResult.getTitle());
 			jsonItem.put("link", contextPath + searchResult.getLink());
 			result.add(jsonItem);
@@ -131,21 +139,22 @@ public class SearchServlet extends AbstractTransactionedServlet {
 		return result;
 	}
 	
-	private List<Map<String, Object>> searchBlog(String queryText) throws ParseException {
+	private List<Map<String, Object>> searchBlog(String queryText, int maxHits) throws ParseException {
 		List<Map<String, Object>> result = new ArrayList<>();
 		return result;
 	}
 	
-	private List<Map<String, Object>> searchForge(String contextPath, String queryText) throws ParseException {
+	private List<Map<String, Object>> searchForge(String contextPath, String queryText, int maxHits) throws ParseException {
 	  User loggedUser = sessionController.getLoggedUser();
 	  
 		List<Map<String, Object>> result = new ArrayList<>();
 		
-		List<SearchResult<Material>> searchResults = materialController.searchMaterials(loggedUser, queryText, 3);
+		List<SearchResult<Material>> searchResults = materialController.searchMaterials(loggedUser, queryText, maxHits);
 		for (SearchResult<Material> searchResult : searchResults) {
 		  String link = materialController.getForgeMaterialViewerUrl(searchResult.getEntity());
 		  
       Map<String, Object> jsonItem = new HashMap<>();
+      jsonItem.put("id", searchResult.getEntity().getId());
       jsonItem.put("name", searchResult.getTitle());
       jsonItem.put("link", contextPath + link);
       result.add(jsonItem);
@@ -154,12 +163,13 @@ public class SearchServlet extends AbstractTransactionedServlet {
 		return result;
 	}
 	
-	private List<Map<String, Object>> searchForum(String contextPath, String queryText) throws ParseException {
+	private List<Map<String, Object>> searchForum(String contextPath, String queryText, int maxHits) throws ParseException {
 		List<Map<String, Object>> result = new ArrayList<>();
 		
-		List<SearchResult<ForumTopic>> searchResults = forumController.searchTopics(queryText, 3);
+		List<SearchResult<ForumTopic>> searchResults = forumController.searchTopics(queryText, maxHits);
 		for (SearchResult<ForumTopic> searchResult : searchResults) {
 			Map<String, Object> jsonItem = new HashMap<>();
+      jsonItem.put("id", searchResult.getEntity().getId());
 			jsonItem.put("name", searchResult.getTitle());
 			jsonItem.put("link", contextPath + searchResult.getLink());
 			result.add(jsonItem);
@@ -168,12 +178,13 @@ public class SearchServlet extends AbstractTransactionedServlet {
 		return result;
 	}
 	
-	private List<Map<String, Object>> searchUsers(String contextPath, String queryText) throws ParseException {
+	private List<Map<String, Object>> searchUsers(String contextPath, String queryText, int maxHits) throws ParseException {
 	  List<Map<String, Object>> result = new ArrayList<>();
     
-    List<SearchResult<User>> searchResults = userController.searchUsers(queryText, 3);
+    List<SearchResult<User>> searchResults = userController.searchUsers(queryText, maxHits);
     for (SearchResult<User> searchResult : searchResults) {
       Map<String, Object> jsonItem = new HashMap<>();
+      jsonItem.put("id", searchResult.getEntity().getId());
       jsonItem.put("name", searchResult.getTitle());
       jsonItem.put("link", contextPath + searchResult.getLink());
       result.add(jsonItem);
