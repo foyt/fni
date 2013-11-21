@@ -138,14 +138,14 @@
           <h:panelGroup layout="block" rendered="#{!empty(usersProfileBackingBean.contactFieldFacebook)}" styleClass="users-profile-contact-info">
             <h:outputLabel value="#{locales['users.profile.contactInformationFacebook']}" />
             <div>
-              <h:outputLink value="#{locales['users.profile.contactInformationFacebook']}" target="_blank">#{usersProfileBackingBean.contactFieldFacebook}</h:outputLink>
+              <h:outputLink value="#{usersProfileBackingBean.contactFieldFacebook}" target="_blank">#{usersProfileBackingBean.contactFieldFacebook}</h:outputLink>
             </div>
           </h:panelGroup>
 
           <h:panelGroup layout="block" rendered="#{!empty(usersProfileBackingBean.contactFieldTwitter)}" styleClass="users-profile-contact-info">
             <h:outputLabel value="#{locales['users.profile.contactInformationTwitter']}" />
             <div>
-              <h:outputLink value="#{locales['users.profile.contactInformationTwitter']}" target="_blank">#{usersProfileBackingBean.contactFieldTwitter}</h:outputLink>
+              <h:outputLink value="#{usersProfileBackingBean.contactFieldTwitter}" target="_blank">#{usersProfileBackingBean.contactFieldTwitter}</h:outputLink>
             </div>
           </h:panelGroup>
 
