@@ -93,6 +93,23 @@
         </ul>
         <p>#{locales['about.cookiesText3']}</p>
         <p>#{locales['about.cookiesText4']}</p>
+        
+        <h3 id="acknowledgements">#{locales['about.acknowledgementsTitle']}</h3>
+        <p><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.acknowledgementsText1'])}" escape="false"/></p>
+        <p><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.acknowledgementsText2'])}" escape="false"/></p>
+        
+        <h3 id="opensource">#{locales['about.openSourceTitle']}</h3>
+        <p>#{locales['about.openSourceText1']}</p>
+        <p><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.openSourceText2'])}" escape="false"/></p>
+        <ul>
+          <li><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.openSourceBullet1'])}" escape="false"/></li>
+          <li><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.openSourceBullet2'])}" escape="false"/></li>
+          <li><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.openSourceBullet3'])}" escape="false"/></li>                          
+        </ul>
+                
+        <h3 id="contact">#{locales['about.contactTitle']}</h3>
+        <p>#{locales['about.contactText']}</p>
+                
       </h:panelGroup>
     </h:panelGroup>
   </ui:define>
