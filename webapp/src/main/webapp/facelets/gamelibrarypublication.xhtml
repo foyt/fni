@@ -29,7 +29,7 @@
           </h:panelGroup>
           
           <h:panelGroup layout="block" styleClass="gamelibrary-publication-details">
-            <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail">
+            <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail" rendered="#{gameLibraryPublicationsBackingBean.isPublicationPurchasable(publication)}">
               <h:outputLabel value="#{locales['gamelibrary.publications.detailsPrice']}" />
               <h:outputFormat value="#{publication.price}">
                 <f:convertNumber currencyCode="EUR" type="currency" />
