@@ -13,6 +13,7 @@ $menu-logo-font: "Bebas Neue",sans-serif;
 $search-box-width: 67px;
 $search-box-width-focus: 175px; 
 $nav-item-width: 115px;
+$menu-z-index: 9999;
 
 .index-menu {
   background: $menu-background-color;
@@ -174,6 +175,7 @@ $nav-item-width: 115px;
   font-family: $default-font;
   margin-left: -8px;
   list-style: none;
+  z-index: $menu-z-index;
 }
 
 .menu-tools-locale-list ul a, .menu-tools-account-list ul a, .menu-about-list a {
