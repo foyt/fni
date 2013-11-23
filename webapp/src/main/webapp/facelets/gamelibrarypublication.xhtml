@@ -60,7 +60,7 @@
             <ui:fragment rendered="#{(gameLibraryPublicationsBackingBean.getCreativeCommonsLicense(publication) eq null)and(!empty(publication.license))}">
               <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail">
                 <h:outputLabel value="#{locales['gamelibrary.publications.licenseOther']}"/>
-                <h:outputText value="#{publication.license}"/>
+                <h:outputLink value="#{publication.license}" target="_blank">#{publication.license}</h:outputLink>
               </h:panelGroup>
             </ui:fragment>
 

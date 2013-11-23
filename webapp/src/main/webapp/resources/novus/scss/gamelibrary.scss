@@ -124,6 +124,11 @@ $header-text-color-hover: #000;
   font-weight: bold;
 }
 
+.gamelibrary-publication-detail a {
+  text-decoration: none;
+  color: $default-color;
+}
+
 .gamelibrary-publication-creative-commans-license-container {
   margin-top: 8px;
   display: inline-block;
