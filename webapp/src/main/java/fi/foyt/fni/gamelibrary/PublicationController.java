@@ -89,18 +89,31 @@ public class PublicationController {
 		return publicationDAO.listAll();
 	}
 
-	public List<Publication> listPublicationsByTags(String... tags) {
+	public List<Publication> listPublicationsByPublishedAndTags(boolean includeUnpublished, String... tags) {
 		List<GameLibraryTag> gameLibraryTags = new ArrayList<>();
 
 		for (String tag : tags) {
 			gameLibraryTags.add(gameLibraryTagController.findTagByText(tag));
 		}
 
-		return listPublicationsByTags(gameLibraryTags);
+		return listPublicationsByPublishedAndTags(includeUnpublished, gameLibraryTags);
 	}
 
-	public List<Publication> listPublicationsByTags(List<GameLibraryTag> gameLibraryTags) {
-		return publicationTagDAO.listPublicationsByGameLibraryTags(gameLibraryTags);
+	public List<Publication> listPublicationsByPublishedAndTags(boolean includeUnpublished, List<GameLibraryTag> gameLibraryTags) {
+	  List<Publication> publications = publicationTagDAO.listPublicationsByGameLibraryTags(gameLibraryTags);
+	  if (includeUnpublished) {
+	    return publications;
+	  } else {
+	    List<Publication> result = new ArrayList<>();
+	    
+		  for (Publication publication : publications) {
+		    if (publication.getPublished()) {
+		      result.add(publication);
+		    }
+		  }
+		  
+		  return result;
+	  }
 	}
 
 	public List<Publication> listRecentPublications(int maxRecentPublication) {
