@@ -48,7 +48,7 @@ import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 })
 public class GameLibraryManageBackingBean {
 	
-	private static final String DEFAULT_LICENSE = "http://creativecommons.org/licenses/by-sa/3.0/";
+	private static final String DEFAULT_LICENSE = "https://creativecommons.org/licenses/by-sa/3.0/";
 	
 	@Inject
 	private OrderController orderController;
