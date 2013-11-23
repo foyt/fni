@@ -25,7 +25,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 })
 public class GameLibraryIndexBackingBean {
   
-	private static final int MAX_RECENT_PUBLICATIONS = 5;
+	private static final int MAX_RECENT_PUBLICATIONS = 15;
 
 	@Inject
 	private PublicationController publicationController;
