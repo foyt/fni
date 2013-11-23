@@ -29,7 +29,7 @@ public class GameLibraryTagsBackingBean {
 	private PublicationController publicationController;
 	
 	public List<Publication> getPublications() {
-		return publicationController.listPublicationsByTags(tag);
+		return publicationController.listPublicationsByPublishedAndTags(false, tag);
 	}
 	
 	public String getTag() {
