@@ -1,6 +1,7 @@
 package fi.foyt.fni.view.gamelibrary;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import javax.faces.view.facelets.FaceletException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ocpsoft.pretty.faces.annotation.URLAction;
@@ -33,6 +35,8 @@ import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.users.FirstNameComparator;
+import fi.foyt.fni.users.LastNameComparator;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 import fi.foyt.fni.utils.licenses.CreativeCommonsLicense;
@@ -454,12 +458,16 @@ public class GameLibraryEditPublicationBackingBean {
 		return result;
 	}
 	
-	private List<SelectItem> createAuthorSelectItems() {
+	@SuppressWarnings("unchecked")
+  private List<SelectItem> createAuthorSelectItems() {
 		List<SelectItem> result = new ArrayList<>(); 
-		User loggedUser = sessionController.getLoggedUser();
-
-		result.add(new SelectItem(loggedUser.getId(), loggedUser.getFullName()));
-		List<User> users = userController.listUserFriends(loggedUser);
+		List<User> users = userController.listUsers();
+		
+    Collections.sort(users, ComparatorUtils.chainedComparator(
+      new LastNameComparator(), 
+      new FirstNameComparator()
+    ));
+		
 		for (User user : users) {
 			result.add(new SelectItem(user.getId(), user.getFullName()));
 		}
