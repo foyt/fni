@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -216,7 +215,7 @@ public class Order {
   @Temporal (TemporalType.TIMESTAMP)
   private Date canceled;  
   
-  @Basic (fetch=FetchType.LAZY)
+  @Basic
   @Lob
   private String notes;
   
