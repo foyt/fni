@@ -44,7 +44,7 @@ public class FrontPageTest {
     assertEquals("Forge & Illusion", driver.getTitle());
 
     // Check titles
-    assertEquals("Forge & Illusion is a role-playing game oriented environment for game production and playing.", driver.findElement(By.cssSelector("p.index-description-text")).getText());
+    assertEquals("Forge & Illusion is an open platform built for roleplaying and roleplayers.", driver.findElement(By.cssSelector("p.index-description-text")).getText());
     assertEquals("Latest Game Library Publications", driver.findElement(By.cssSelector(".index-publications-panel>h3>a")).getText());
     assertEquals("Latest Forum Topics", driver.findElement(By.cssSelector(".index-forum-panel>h3>a")).getText());
     assertEquals("News", driver.findElement(By.cssSelector(".index-blog-panel>h3>a")).getText());
