@@ -23,7 +23,7 @@ import com.saucelabs.junit.Parallelized;
 @RunWith(Parallelized.class)
 public class FrontPageTest {
   
-  private static final String STAGING_URL = "http://fnistaging-foyt.rhcloud.com/";
+  private static final String STAGING_URL = "http://staging.forgeandillusion.net";
 
   @Parameterized.Parameters
   public static LinkedList<DesiredCapabilities[]> browsers() throws Exception {
