@@ -11,7 +11,6 @@ env:
   - secure: nSldmFh+YCDB2zErXTzy2wkTnw7QLDGYR53apjR7N033WyotFHM8suiVUkFN1OCw1b7qTk2FnikJ5+5KbiI5wxm+4v07Qc0MQtBAV7bdeE1efLgdp335L2/DETSEY+Hiz6WQThmMOYooM1Z0qn3UO80fGiGD9FMkShbmQKuGUe4=
   - secure: DgqS4PrNEmnOblJNe+qeSGsiOtVb5qMgEtTrMD1Y+FdOyWER/orgMOGDWy/xtbbS1dbaCmATOdRxsvXJqRrPaNZLcWZ8e+9d/L3XWYmoBRaGDiH1eVjUUibK79xOUyrBChLCEOkgfuIKHr3nkiPfDWRb5a6CsNn0cbPu56+8j64=
   - secure: S53A1yLegZY4yS/GP5bZzjARYTnv7aW8JebqxDEqtfktieslo5HUbOW07lgk+saUTyaDMn6k2yvEsHJmaqHUzCZ0N92BMH08vz3v1l7H/8DGVRpLQsfo0YQBthlu9IrNnIXV9ZUcup8Azksv+VOLjgQ03LWpD3QU4HV/H5NStpw=
-  - secure: Wx63o17ytX/e9fsdQ3tX/3O557MyMW40M9Oco/VvzfgI46slzWJSGFJqkljKbHi0/xLVWzuGdZQtNDlwP4RUNXBxqe7P5eQMri9qbchrOCCLtQrT3gY5SaiV5SPAHzUK+21CF6RrY0DhVwgJJo0G4koX0E6PK7CiXC1R2Cj6MMU=
   - secure: WrCYB05Px1tBQFXzRjJV1j7FriDfOtQHo/F8YbY2FKNUS42g3VigO3L9nPZqz21KMbWPCg/3FoO3H168fHf7FiIhvCy0r4BwNsQFRUl/yL0bb0u2l9Ay/19Xp1gnyc1Sjwq80bhn9cqMFUVsrbeHA/O3SNodcPDS1Y2Y0oXGrbM=
   - secure: B4u4PrwBUieM4aVb97zL+JrjVvHblr0yeGn2leh/30IrO2es7Vyyv2mzKEFdrkov7v/iI03C8gP0mDjL1XcWKfm7HG6Fit/C/31Q3FHbSe+Xoh3F0IOdcXsytnza5iwU9RS9h7V3BPbC1RKcPXAbLWoMEYNeQnzi9xQNaKOgvZQ=
   - secure: etcZoy0laS5f4eFRyJ7poQypx3xM70lyYYb1BhO+z0zfEu4hWQAcltVIflcIVo0GAM4ELUyDu/UyaGB2h9p/BQ0DFjalP39dTTaq9VtJsu2T+cP5oWEbREvahrF6g3+RtUWE9DUzfO/Vo0stT8nv/1UMH9iUTDcqkMUOiLJy72k=
@@ -29,7 +28,7 @@ after_success:
 - echo -e "Host ${STAGING_HOST}\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 - rhc sshkey-add travis ~/.ssh/id_rsa.pub -l $STAGING_USERNAME -p $STAGING_PASSWORD
 - cd ~
-- git clone $STAGING_GIT
+- rhc git-clone -a fnistaging -l $STAGING_USERNAME -p $STAGING_PASSWORD
 - cp $TRAVIS_BUILD_DIR/webapp/target/webapp-*.war ~/fnistaging/deployments/ROOT.war
 - cd ~/fnistaging
 - git add deployments/ROOT.war
