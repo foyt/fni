@@ -31,7 +31,7 @@ public class FrontPageTest {
     
     Map<String, Object> extraCapabilities = new HashMap<>();
     
-    String travisJobNumber = System.getProperty("TRAVIS_JOB_NUMBER");
+    String travisJobNumber = System.getenv("TRAVIS_JOB_NUMBER");
     if (travisJobNumber != null) {
       extraCapabilities.put("tunnel-identifier", travisJobNumber);
       extraCapabilities.put("build", travisJobNumber);
@@ -101,19 +101,19 @@ public class FrontPageTest {
   
   public FrontPageTest(DesiredCapabilities capabilities) {
     super();
+    
     this.capabilities = capabilities;
   }
   
   @Before
   public void setUp() throws Exception {
-    String username = System.getProperty("SAUCE_USERNAME");
-    String accessKey = System.getProperty("SAUCE_ACCESS_KEY");
-    String host = System.getProperty("SAUCE_HOST"); 
-    String port = System.getProperty("SAUCE_PORT"); 
-    
+    String username = System.getenv("SAUCE_USERNAME");
+    String accessKey = System.getenv("SAUCE_ACCESS_KEY");
+    String host = System.getenv("SAUCE_HOST"); 
+    String port = System.getenv("SAUCE_PORT"); 
     this.driver = new RemoteWebDriver(new URL("http://" + username + ":" + accessKey + "@" + host + ":" + port + "/wd/hub"), capabilities);
   }
-
+  
   @Test
   public void testFrontPageEn() throws Exception {
     driver.get(STAGING_URL);
