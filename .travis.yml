@@ -26,7 +26,7 @@ after_success:
 - git config --global user.name "Travis CI"
 - ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 - echo -e "Host ${STAGING_HOST}\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-- rhc sshkey-add travis ~/.ssh/id_rsa.pub -l $STAGING_USERNAME -p $STAGING_PASSWORD
+- rhc sshkey-add travis-${TRAVIS_JOB_NUMBER} ~/.ssh/id_rsa.pub -l $STAGING_USERNAME -p $STAGING_PASSWORD
 - cd ~
 - rhc git-clone -a fnistaging -l $STAGING_USERNAME -p $STAGING_PASSWORD
 - cp $TRAVIS_BUILD_DIR/webapp/target/webapp-*.war ~/fnistaging/deployments/ROOT.war
@@ -34,7 +34,7 @@ after_success:
 - git add deployments/ROOT.war
 - git commit -m "Automatic build"
 - git push
-- rhc sshkey-remove travis -l $STAGING_USERNAME -p $STAGING_PASSWORD
+- rhc sshkey-remove travis-${TRAVIS_JOB_NUMBER} -l $STAGING_USERNAME -p $STAGING_PASSWORD
 - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
 - cd ~/build/foyt/fni/selenium-tests
 - mvn test
