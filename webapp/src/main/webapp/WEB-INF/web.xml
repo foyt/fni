@@ -11,6 +11,20 @@
     <param-value>true</param-value>
   </context-param>
   
+  <!-- Disabled https forcing on publication images -->
+  
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>secure</web-resource-name>
+      <url-pattern>/gamelibrary/publicationImages/*</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>NONE</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+  
+  <!-- Forge Game Library to use https -->
+  
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>secure</web-resource-name>
