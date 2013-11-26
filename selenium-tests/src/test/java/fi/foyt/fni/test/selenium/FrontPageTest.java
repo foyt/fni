@@ -118,7 +118,17 @@ public class FrontPageTest {
   public void testFrontPageEn() throws Exception {
     driver.get(STAGING_URL);
     assertEquals("Forge & Illusion", driver.getTitle());
-
+    
+    // Menu
+    
+    // Navigation
+    
+    // TODO: Index
+    // TODO: About
+    assertEquals("Forge", driver.findElement(By.cssSelector(".index-menu .menu-navigation-container a:nth-child(0)")).getText());
+    assertEquals("Game Library", driver.findElement(By.cssSelector(".index-menu .menu-navigation-container a:nth-child(1)")).getText());
+    assertEquals("Forum", driver.findElement(By.cssSelector(".index-menu .menu-navigation-container a:nth-child(2)")).getText());
+    
     // Check titles
     assertEquals("Forge & Illusion is an open platform built for roleplaying and roleplayers.", driver.findElement(By.cssSelector("p.index-description-text")).getText());
     assertEquals("LATEST GAME LIBRARY PUBLICATIONS", driver.findElement(By.cssSelector(".index-publications-panel>h3>a")).getText());
