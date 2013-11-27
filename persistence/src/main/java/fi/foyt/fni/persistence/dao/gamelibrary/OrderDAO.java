@@ -76,8 +76,13 @@ public class OrderDAO extends GenericDAO<Order> {
 	}
 
 	public Order updateCanceled(Order order, Date canceled) {
-		order.setCanceled(canceled);
-		return persist(order);
+	  order.setCanceled(canceled);
+    return persist(order);
 	}
+
+  public Order updateDelivered(Order order, Date delivered) {
+    order.setDelivered(delivered);
+    return persist(order);
+  }
 
 }

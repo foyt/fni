@@ -106,7 +106,7 @@ public class OrderController implements Serializable {
 
   public Order updateOrderAsShipped(Order order) {
     Date now = new Date();
-    order = orderDAO.updateOrderStatus(orderDAO.updateCanceled(order, now), OrderStatus.SHIPPED);
+    order = orderDAO.updateOrderStatus(orderDAO.updateShipped(order, now), OrderStatus.SHIPPED);
     
     List<OrderItem> orderItems = orderItemDAO.listByOrder(order);
     for (OrderItem orderItem : orderItems) {
@@ -122,7 +122,7 @@ public class OrderController implements Serializable {
 
   public Order updateOrderAsDelivered(Order order) {
     Date now = new Date();
-    order = orderDAO.updateOrderStatus(orderDAO.updateCanceled(order, now), OrderStatus.DELIVERED);
+    order = orderDAO.updateOrderStatus(orderDAO.updateDelivered(order, now), OrderStatus.DELIVERED);
     orderDeliveredEvent.fire(new OrderEvent(sessionController.getLocale(), order.getId()));
     return order;
   }
