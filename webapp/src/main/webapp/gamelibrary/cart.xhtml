@@ -193,7 +193,14 @@
             </h:panelGroup>
             
             <h:panelGroup layout="block" class="gamelibrary-cart-summary-field">
-              <h:outputLabel value="#{locales['gamelibrary.cart.summaryTaxLabel']}" />
+              <h:outputLabel rendered="#{shoppingCartBackingBean.vatRegistered}">
+                <h:outputFormat value="#{locales['gamelibrary.cart.summaryTaxLabel']}">
+                  <f:param value="#{shoppingCartBackingBean.vatPercent}"/>
+                </h:outputFormat>
+              </h:outputLabel>
+              <h:outputLabel rendered="#{!shoppingCartBackingBean.vatRegistered}">
+                #{locales['gamelibrary.cart.summaryNotVatRegistered']}
+              </h:outputLabel>
               <h:panelGroup class="gamelibrary-cart-summary-value">
                 <h:outputText value="#{shoppingCartBackingBean.taxAmount}" >
                   <f:convertNumber currencyCode="EUR" type="currency" />

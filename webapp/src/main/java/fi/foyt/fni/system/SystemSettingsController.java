@@ -25,6 +25,8 @@ import fi.foyt.fni.users.UserController;
 public class SystemSettingsController {
 	
 	private static final String DEFAULT_COUNTRY_CODE = "FI";
+  private final static double VAT_PERCENT = 0;
+  private final static boolean VAT_REGISTERED = false;
 
 	@Inject
 	private SystemSettingDAO systemSettingDAO;
@@ -115,4 +117,12 @@ public class SystemSettingsController {
 		return languageDAO.findByIso2(iso2);
 	}
 
+	public double getVatPercent() {
+    return VAT_PERCENT;
+  }
+	
+	public boolean isVatRegistered() {
+    return VAT_REGISTERED;
+  }
+	
 }

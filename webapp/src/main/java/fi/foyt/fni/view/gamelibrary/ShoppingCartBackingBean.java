@@ -58,7 +58,6 @@ import fi.foyt.paytrail.rest.UrlSet;
 @URLMappings(mappings = { @URLMapping(id = "gamelibrary-cart", pattern = "/gamelibrary/cart/", viewId = "/gamelibrary/cart.jsf") })
 public class ShoppingCartBackingBean implements Serializable {
 
-	private final static double VAT_PERCENT = 24;
 	private static final long serialVersionUID = -5130175554468783304L;
 	
 	@Inject
@@ -293,9 +292,17 @@ public class ShoppingCartBackingBean implements Serializable {
 
 	public Double getTaxAmount() {
 		double itemCosts = getItemCosts();
-		return itemCosts - (itemCosts / (1 + (VAT_PERCENT / 100)));
+		return itemCosts - (itemCosts / (1 + (systemSettingsController.getVatPercent() / 100)));
 	}
 
+  public Double getVatPercent() {
+    return systemSettingsController.getVatPercent();
+  }
+
+  public boolean getVatRegistered() {
+    return systemSettingsController.isVatRegistered();
+  }
+	
 	private Double getDeliveryCosts(String deliveryMethodId) {
 		DeliveryMethod deliveryMethod = deliveryMehtodsController.findDeliveryMethod(deliveryMethodId);
 		if (deliveryMethod != null) {
@@ -462,6 +469,8 @@ public class ShoppingCartBackingBean implements Serializable {
 		String orderNumber = order.getId().toString();
 		Payment payment = new Payment(orderNumber, orderDetails, urlSet);
 		payment.setDescription(notes);
+		
+		double vatPercent = systemSettingsController.getVatPercent();
 
 		try {
 			List<ShoppingCartItem> shoppingCartItems = sessionShoppingCartController.getShoppingCartItems();
@@ -471,12 +480,12 @@ public class ShoppingCartBackingBean implements Serializable {
   				OrderItem orderItem = orderController.createOrderItem(order, publication, publication.getName(), publication.getPrice(), shoppingCartItem.getCount());
   
   				paytrailService.addProduct(payment, orderItem.getName(), "#" + orderItem.getId().toString(), 
-  						orderItem.getCount().doubleValue(), orderItem.getUnitPrice(), VAT_PERCENT, 0d, Product.TYPE_NORMAL);
+  						orderItem.getCount().doubleValue(), orderItem.getUnitPrice(), vatPercent, 0d, Product.TYPE_NORMAL);
 				}
 			}
 
 			if ((order.getShippingCosts() != null) && (order.getShippingCosts() > 0)) {
-				paytrailService.addProduct(payment, "Delivery", "", 1d, order.getShippingCosts(), VAT_PERCENT, 0d, Product.TYPE_POSTAL);
+				paytrailService.addProduct(payment, "Delivery", "", 1d, order.getShippingCosts(), vatPercent, 0d, Product.TYPE_POSTAL);
 			}
 
 			sessionShoppingCartController.deleteShoppingCart();

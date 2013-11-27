@@ -23,6 +23,7 @@ import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.security.SecurityParam;
 import fi.foyt.fni.security.SecurityParams;
+import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
 @Stateful
@@ -36,8 +37,11 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 })
 public class OrderBackingBean {
 
-	@Inject
+  @Inject
 	private OrderController orderController;
+
+  @Inject
+	private SystemSettingsController systemSettingsController;
 
 	@URLAction
 	@Secure (Permission.GAMELIBRARY_VIEW_ORDER)
@@ -162,7 +166,31 @@ public class OrderBackingBean {
 	public void setAccessKey(String accessKey) {
     this.accessKey = accessKey;
   }
+	
+	public Double getOrderTotal() {
+	  Double total = 0d;
+	  
+	  for (OrderItem orderItem : getOrderItems()) {
+	    total += orderItem.getCount() * orderItem.getUnitPrice();
+	  }
+	  
+	  return total;
+	}
+	
+	public Double getTaxAmount() {
+	  double vatPercent = systemSettingsController.getVatPercent();
+    double itemCosts = getOrderTotal();
+    return itemCosts - (itemCosts / (1 + (vatPercent / 100)));
+  }
 
+  public Double getVatPercent() {
+    return systemSettingsController.getVatPercent();
+  }
+
+  public boolean getVatRegistered() {
+    return systemSettingsController.isVatRegistered();
+  }
+  
   private Long orderId;
 	private OrderStatus orderStatus;
 	private String customerCompany;

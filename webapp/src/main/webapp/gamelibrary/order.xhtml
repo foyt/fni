@@ -123,6 +123,29 @@
             </h:column>
           </h:dataTable>
           
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-total-container">
+            <h:outputLabel value="#{locales['gamelibrary.order.totalLabel']}" />
+            <h:panelGroup layout="block" styleClass="gamelibrary-order-total">
+              <h:outputText value="#{orderBackingBean.orderTotal}">
+                <f:convertNumber currencyCode="EUR" type="currency" />
+              </h:outputText>
+            </h:panelGroup>          
+          </h:panelGroup>    
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-tax-container">
+            <h:outputLabel rendered="#{orderBackingBean.vatRegistered}">
+              <h:outputFormat value="#{locales['gamelibrary.order.taxLabel']}">
+                <f:param value="#{orderBackingBean.vatPercent}"/>
+              </h:outputFormat>
+            </h:outputLabel>
+            <h:outputLabel rendered="#{!orderBackingBean.vatRegistered}">#{locales['gamelibrary.cart.summaryNotVatRegistered']}</h:outputLabel>
+            <h:panelGroup layout="block" styleClass="gamelibrary-order-tax">
+              <h:outputText value="#{orderBackingBean.taxAmount}">
+                <f:convertNumber currencyCode="EUR" type="currency" />
+              </h:outputText>
+            </h:panelGroup>          
+          </h:panelGroup>       
+          
         </h:panelGroup>
        
         <h:panelGroup layout="block" styleClass="gamelibrary-order-notes" rendered="#{!empty(orderBackingBean.notes)}">
