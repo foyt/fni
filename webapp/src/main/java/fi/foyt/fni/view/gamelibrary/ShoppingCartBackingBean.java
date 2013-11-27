@@ -292,7 +292,8 @@ public class ShoppingCartBackingBean implements Serializable {
 	}
 
 	public Double getTaxAmount() {
-		return getItemCosts() * (VAT_PERCENT / 100);
+		double itemCosts = getItemCosts();
+		return itemCosts - (itemCosts / (1 + (VAT_PERCENT / 100)));
 	}
 
 	private Double getDeliveryCosts(String deliveryMethodId) {
