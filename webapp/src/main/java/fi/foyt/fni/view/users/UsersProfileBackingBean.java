@@ -107,12 +107,12 @@ public class UsersProfileBackingBean {
 			}
 		}
 		
-		contactFieldHomePage = userController.getContactFieldValue(user, UserContactFieldType.HOME_PAGE);
-		contactFieldBlog = userController.getContactFieldValue(user, UserContactFieldType.BLOG);
-		contactFieldFacebook = userController.getContactFieldValue(user, UserContactFieldType.FACEBOOK);
-		contactFieldTwitter = userController.getContactFieldValue(user, UserContactFieldType.TWITTER);
-		contactFieldLinkedIn = userController.getContactFieldValue(user, UserContactFieldType.LINKEDIN);
-		contactFieldGooglePlus = userController.getContactFieldValue(user, UserContactFieldType.GOOGLE_PLUS);
+		contactFieldHomePage = getContactField(user, UserContactFieldType.HOME_PAGE);
+		contactFieldBlog = getContactField(user, UserContactFieldType.BLOG);
+		contactFieldFacebook = getContactField(user, UserContactFieldType.FACEBOOK);
+		contactFieldTwitter = getContactField(user, UserContactFieldType.TWITTER);
+		contactFieldLinkedIn = getContactField(user, UserContactFieldType.LINKEDIN);
+		contactFieldGooglePlus = getContactField(user, UserContactFieldType.GOOGLE_PLUS);
 		hasContactInformation = StringUtils.isNotBlank(contactFieldHomePage)||
 				StringUtils.isNotBlank(contactFieldBlog)||
 				StringUtils.isNotBlank(contactFieldFacebook)||
@@ -121,7 +121,21 @@ public class UsersProfileBackingBean {
 				StringUtils.isNotBlank(contactFieldGooglePlus);
 	}
 	
-	public Long getUserId() {
+	private String getContactField(User user, UserContactFieldType contactFieldType) {
+	  return prepareContactField(userController.getContactFieldValue(user, contactFieldType));
+	}
+	
+	private String prepareContactField(String value) {
+	  if (StringUtils.isNotBlank(value)) {
+	    if ((!StringUtils.startsWith(value, "http://")) && (!StringUtils.startsWith(value, "https://"))) {
+	      return "http://" + value;
+	    }
+	  }
+	  
+    return value;
+  }
+
+  public Long getUserId() {
 		return userId;
 	}
 	
