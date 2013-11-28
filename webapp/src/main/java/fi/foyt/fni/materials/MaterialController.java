@@ -393,10 +393,8 @@ public class MaterialController {
 
   public List<SearchResult<Material>> searchMaterials(User user, String text, int maxResults) throws ParseException {
     String[] criterias = text.replace(",", " ").replaceAll("\\s+", " ").split(" ");
-    List<SearchResult<Material>> results = new ArrayList<>();
-
-    results.addAll(searchMaterialByTitleAndContent(user, criterias, maxResults));
-    results.addAll(searchMaterialByTags(user, criterias, maxResults));
+    List<SearchResult<Material>> results = searchMaterialByTitleAndContent(user, criterias, maxResults);
+    addSearchResults(results, searchMaterialByTags(user, criterias, maxResults));
 
     Collections.sort(results, new SearchResultScoreComparator<Material>());
 
@@ -405,6 +403,19 @@ public class MaterialController {
     }
     
     return Collections.unmodifiableList(results);
+  }
+  
+  private void addSearchResults(List<SearchResult<Material>> results, List<SearchResult<Material>> items) {
+    List<Long> existingIds = new ArrayList<>();
+    for (SearchResult<Material> result : results) {
+      existingIds.add(result.getEntity().getId());
+    }
+    
+    for (SearchResult<Material> item : items) {
+      if (!existingIds.contains(item.getEntity().getId())) {
+        results.add(item);
+      }
+    }
   }
 
   public Material updateMaterialPublicity(Material material, MaterialPublicity publicity, User modifier) {

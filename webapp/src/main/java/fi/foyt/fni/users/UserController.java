@@ -246,10 +246,8 @@ public class UserController {
 
   public List<SearchResult<User>> searchUsers(String text, int maxResults) throws ParseException {
     String[] criterias = text.replace(",", " ").replaceAll("\\s+", " ").split(" ");
-    List<SearchResult<User>> results = new ArrayList<>();
-
-    results.addAll(searchUsersByEmail(criterias, maxResults));
-    results.addAll(searchUsersByName(criterias, maxResults));
+    List<SearchResult<User>> results = searchUsersByEmail(criterias, maxResults);
+    addSearchResults(results, searchUsersByName(criterias, maxResults));
 
     Collections.sort(results, new SearchResultScoreComparator<User>());
 
@@ -258,6 +256,19 @@ public class UserController {
     }
     
     return Collections.unmodifiableList(results);
+  }
+  
+  private void addSearchResults(List<SearchResult<User>> results, List<SearchResult<User>> items) {
+    List<Long> existingIds = new ArrayList<>();
+    for (SearchResult<User> result : results) {
+      existingIds.add(result.getEntity().getId());
+    }
+    
+    for (SearchResult<User> item : items) {
+      if (!existingIds.contains(item.getEntity().getId())) {
+        results.add(item);
+      }
+    }
   }
   
   public void archiveUser(User user) {
