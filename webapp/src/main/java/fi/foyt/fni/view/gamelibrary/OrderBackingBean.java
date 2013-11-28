@@ -1,5 +1,6 @@
 package fi.foyt.fni.view.gamelibrary;
 
+import java.io.FileNotFoundException;
 import java.util.Date;
 import java.util.List;
 
@@ -26,12 +27,13 @@ import fi.foyt.fni.security.SecurityParams;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
+@SuppressWarnings("el-syntax")
 @Stateful
 @RequestScoped
 @Named
 @URLMappings(mappings = { 
 		@URLMapping(id = "gamelibrary-order", 
-				pattern = "/gamelibrary/orders/#{orderBackingBean.orderId}", 
+				pattern = "/gamelibrary/orders/#{ /[0-9]*/ orderBackingBean.orderId}", 
 				viewId = "/gamelibrary/order.jsf"
 		) 
 })
@@ -49,8 +51,12 @@ public class OrderBackingBean {
 	@SecurityParams (
     @SecurityParam (name="accessKey", value="#{orderBackingBean.accessKey}")
 	)
-	public void init() {
+	public void init() throws FileNotFoundException {
 		Order order = orderController.findOrderById(getOrderId());
+		if (order == null) {
+		  throw new FileNotFoundException();
+		}
+		
 		orderStatus = order.getOrderStatus();
 		customerCompany = order.getCustomerCompany();
 		customerFirstName = order.getCustomerFirstName();
