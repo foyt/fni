@@ -31,13 +31,14 @@ import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.licenses.CreativeCommonsLicense;
 import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 
+@SuppressWarnings("el-syntax")
 @RequestScoped
 @Stateful
 @Named
 @URLMappings(mappings = {
   @URLMapping(
 		id = "users-profile", 
-		pattern = "/profile/#{usersProfileBackingBean.userId}", 
+		pattern = "/profile/#{ /[0-9]*/ usersProfileBackingBean.userId}", 
 		viewId = "/users/profile.jsf"
   )
 })
