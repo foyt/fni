@@ -68,12 +68,27 @@ public class OrderMailer {
           totalCosts += item.getUnitPrice() * item.getCount();
         }
         
-        totalCosts += order.getShippingCosts();
+        if (order.getShippingCosts() != null) {
+          totalCosts += order.getShippingCosts();
+        }
+        
         NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(locale);
         currencyInstance.setCurrency(Currency.getInstance("EUR"));
         String totalCostsFormatted = currencyInstance.format(totalCosts);
+
+        double vatPercent = systemSettingsController.getVatPercent();
+        double tax = totalCosts - (totalCosts / (1 + (vatPercent / 100)));
         
-        contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.shipped.contentProducts", itemsList.toString(), totalCostsFormatted));
+        String taxAmount = currencyInstance.format(tax);
+        String vatText = null;
+        
+        if (!systemSettingsController.isVatRegistered()) {
+          vatText = getLocalizedValue(locale, "gamelibrary.mail.notVatRegistered");
+        } else {
+          vatText = getLocalizedValue(locale, "gamelibrary.mail.vatPercentage", tax);
+        }
+        
+        contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.shipped.contentProducts", itemsList.toString(), totalCostsFormatted, taxAmount, vatText));
         contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.shipped.contentFooter"));
         
         String subject = getLocalizedValue(locale, "gamelibrary.mail.shipped.subject");
@@ -130,12 +145,27 @@ public class OrderMailer {
   	      totalCosts += item.getUnitPrice() * item.getCount();
   	    }
   	    
-  	    totalCosts += order.getShippingCosts();
+  	    if (order.getShippingCosts() != null) {
+  	      totalCosts += order.getShippingCosts();
+  	    }
+  	    
   	    NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(locale);
   	    currencyInstance.setCurrency(Currency.getInstance("EUR"));
   	    String totalCostsFormatted = currencyInstance.format(totalCosts);
   	    
-  	    contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.waitingForDelivery.contentProducts", itemsList.toString(), totalCostsFormatted));
+  	    double vatPercent = systemSettingsController.getVatPercent();
+        double tax = totalCosts - (totalCosts / (1 + (vatPercent / 100)));
+        
+        String taxAmount = currencyInstance.format(tax);
+        String vatText = null;
+        
+        if (!systemSettingsController.isVatRegistered()) {
+          vatText = getLocalizedValue(locale, "gamelibrary.mail.notVatRegistered");
+        } else {
+          vatText = getLocalizedValue(locale, "gamelibrary.mail.vatPercentage", tax);
+        }
+  	    
+  	    contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.waitingForDelivery.contentProducts", itemsList.toString(), totalCostsFormatted, taxAmount, vatText));
   	    contentBuilder.append(getLocalizedValue(locale, "gamelibrary.mail.waitingForDelivery.contentFooter"));
   	    
   	    String subject = getLocalizedValue(locale, "gamelibrary.mail.waitingForDelivery.subject");
@@ -158,11 +188,11 @@ public class OrderMailer {
   private void notifyCustomer(String customerName, String customerEmail, String subject, String content) {
     String fromName = systemSettingsController.getSetting(SystemSettingKey.GAMELIBRARY_ORDERMAILER_NAME);
     String fromMail = systemSettingsController.getSetting(SystemSettingKey.GAMELIBRARY_ORDERMAILER_MAIL);
-    
+
     try {
     	MailUtils.sendMail(fromMail, fromName, customerEmail, customerName, subject, content, "text/plain");
     } catch (MessagingException e) {
-    	logger.log(Level.SEVERE, "Failed to send 'waiting for delivery' mail", e);
+    	logger.log(Level.SEVERE, "Failed to send email to customer", e);
     }
   }
   
@@ -171,7 +201,7 @@ public class OrderMailer {
     String shopOwnerEmail = systemSettingsController.getSetting(SystemSettingKey.GAMELIBRARY_SHOP_OWNER_MAIL);
     String fromName = systemSettingsController.getSetting(SystemSettingKey.GAMELIBRARY_ORDERMAILER_NAME);
     String fromMail = systemSettingsController.getSetting(SystemSettingKey.GAMELIBRARY_ORDERMAILER_MAIL);
-    
+
     MailUtils.sendMail(fromMail, fromName, shopOwnerEmail, shopOwnerName, subject, content, "text/plain");
   }
 
