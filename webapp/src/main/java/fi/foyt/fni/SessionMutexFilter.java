@@ -14,7 +14,21 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(urlPatterns = "*")
+@WebFilter(servletNames = { 
+  "search",
+  "materials",
+  "users-profileimage", 
+  "gamelibrary-publicationimage", 
+  "gamelibrary-publicationfile",
+  "gamelibrary-paytrail",
+  "forge-folderbrowser",
+  "forge-binary",
+  "forge-googledrive",
+  "forge-pdf",
+  "forge-materialshare",
+  "forge-ckbrowser",
+  "forge-upload" 
+} )
 public class SessionMutexFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
