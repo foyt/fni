@@ -18,7 +18,7 @@
       }
       
       this.doGet(url, function (responseJson) {
-        callback(responseJson.materials);
+        callback(responseJson);
       }, function () {
         alert('Could not execute listMaterials method');
       });
