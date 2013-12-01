@@ -148,3 +148,7 @@ h2 input:focus {
 .fniDynListRow .fniDynListCell .fnigenericbrowser-modified {
   font-size: 10px;
 }
+
+.fniDynListRow .fniDynListCell * {
+  cursor: pointer;
+}
