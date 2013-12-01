@@ -16,7 +16,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 import fi.foyt.paytrail.PaytrailService;
 
-@WebServlet(urlPatterns = "/gamelibrary/paytrail/*")
+@WebServlet(urlPatterns = "/gamelibrary/paytrail/*", name = "gamelibrary-paytrail")
 public class PaytrailServlet extends AbstractTransactionedServlet {
 
 	private static final long serialVersionUID = 1L;

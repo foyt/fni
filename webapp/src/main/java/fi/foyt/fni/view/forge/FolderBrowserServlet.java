@@ -31,7 +31,7 @@ import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 
-@WebServlet(urlPatterns = "/forge/folderbrowser/")
+@WebServlet(urlPatterns = "/forge/folderbrowser/", name = "forge-folderbrowser")
 public class FolderBrowserServlet extends AbstractTransactionedServlet {
 
 	private static final long serialVersionUID = -1L;

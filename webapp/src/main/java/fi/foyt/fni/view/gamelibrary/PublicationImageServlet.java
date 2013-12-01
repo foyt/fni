@@ -31,7 +31,7 @@ import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.images.ImageUtils;
 import fi.foyt.fni.view.AbstractFileServlet;
 
-@WebServlet(urlPatterns = "/gamelibrary/publicationImages/*")
+@WebServlet(urlPatterns = "/gamelibrary/publicationImages/*", name = "gamelibrary-publicationimage")
 public class PublicationImageServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = 8109481247044843102L;

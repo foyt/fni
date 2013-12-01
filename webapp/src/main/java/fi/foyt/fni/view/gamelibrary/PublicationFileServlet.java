@@ -23,7 +23,7 @@ import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.view.AbstractFileServlet;
 
-@WebServlet(urlPatterns = "/gamelibrary/publicationFiles/*")
+@WebServlet(urlPatterns = "/gamelibrary/publicationFiles/*", name = "gamelibrary-publicationfile")
 public class PublicationFileServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = -5117742561225873455L;

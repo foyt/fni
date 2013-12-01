@@ -28,7 +28,7 @@ import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.images.ImageUtils;
 import fi.foyt.fni.view.AbstractFileServlet;
 
-@WebServlet(urlPatterns = "/users/profileImages/*")
+@WebServlet(urlPatterns = "/users/profileImages/*", name = "users-profileimage")
 public class ProfileImageServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = 8109481247044843102L;

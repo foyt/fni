@@ -31,7 +31,7 @@ import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 
-@WebServlet(urlPatterns = "/search/")
+@WebServlet(urlPatterns = "/search/", name = "search")
 public class SearchServlet extends AbstractTransactionedServlet {
 
 	private static final long serialVersionUID = 5027578435195813091L;

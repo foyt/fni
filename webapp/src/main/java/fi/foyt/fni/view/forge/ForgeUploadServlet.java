@@ -31,7 +31,7 @@ import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.FileData;
 import fi.foyt.fni.view.AbstractFileServlet;
 
-@WebServlet(urlPatterns = "/forge/upload/")
+@WebServlet(urlPatterns = "/forge/upload/", name = "forge-upload" )
 public class ForgeUploadServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = -4376406243780463521L;

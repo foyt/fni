@@ -41,7 +41,7 @@ import fi.foyt.fni.utils.data.FileData;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
-@WebServlet ( urlPatterns = "/materials/*")
+@WebServlet ( urlPatterns = "/materials/*", name = "materials")
 public class MaterialsServlet extends AbstractTransactionedServlet {
   
   private static final String DOCUMENT_TEMPLATE = "<!DOCTYPE HTML><html><head><meta charset=\"UTF-8\"><title>{0}</title><link rel=\"StyleSheet\" href=\"{1}\"/></head><body>{2}</body></html>";

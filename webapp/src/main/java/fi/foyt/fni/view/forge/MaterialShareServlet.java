@@ -28,7 +28,7 @@ import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 
-@WebServlet(urlPatterns = "/forge/materialShare/")
+@WebServlet(urlPatterns = "/forge/materialShare/", name = "forge-materialshare")
 public class MaterialShareServlet extends AbstractTransactionedServlet {
 
 	private static final long serialVersionUID = -1L;

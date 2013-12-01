@@ -25,7 +25,7 @@ import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 
-@WebServlet(urlPatterns = "/forge/pdf/*")
+@WebServlet(urlPatterns = "/forge/pdf/*", name = "forge-pdf")
 public class ForgePdfServlet extends AbstractTransactionedServlet {
 
 	private static final long serialVersionUID = -1L;

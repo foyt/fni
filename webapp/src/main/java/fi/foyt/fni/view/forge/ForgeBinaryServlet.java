@@ -12,7 +12,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 
-@WebServlet(urlPatterns = "/forge/binary/*")
+@WebServlet(urlPatterns = "/forge/binary/*", name = "forge-binary")
 public class ForgeBinaryServlet extends AbstractTransactionedServlet {
 
 	private static final long serialVersionUID = -1L;

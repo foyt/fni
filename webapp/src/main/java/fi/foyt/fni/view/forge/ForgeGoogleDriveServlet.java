@@ -25,7 +25,7 @@ import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 
-@WebServlet(urlPatterns = "/forge/gdrive/*")
+@WebServlet(urlPatterns = "/forge/gdrive/*", name = "forge-googledrive")
 public class ForgeGoogleDriveServlet extends AbstractTransactionedServlet {
 
 	private static final long serialVersionUID = -1L;

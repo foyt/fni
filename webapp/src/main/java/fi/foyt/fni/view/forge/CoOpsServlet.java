@@ -42,7 +42,7 @@ import fi.foyt.fni.utils.diff.DiffUtils;
 import fi.foyt.fni.utils.diff.PatchResult;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 
-@WebServlet(urlPatterns = "/forge/coops/*")
+@WebServlet(urlPatterns = "/forge/coops/*", name = "forge-coops")
 public class CoOpsServlet extends AbstractTransactionedServlet {
 
 	private static final long serialVersionUID = -1L;

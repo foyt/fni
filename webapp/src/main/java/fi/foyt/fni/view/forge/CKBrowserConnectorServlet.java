@@ -35,7 +35,7 @@ import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 
-@WebServlet(urlPatterns = "/forge/ckbrowserconnector/")
+@WebServlet(urlPatterns = "/forge/ckbrowserconnector/", name = "forge-ckbrowser")
 public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
 
 	private static final long serialVersionUID = -1L;
