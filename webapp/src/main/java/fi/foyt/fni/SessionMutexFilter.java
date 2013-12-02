@@ -27,7 +27,8 @@ import javax.servlet.http.HttpSession;
   "forge-pdf",
   "forge-materialshare",
   "forge-ckbrowser",
-  "forge-upload" 
+  "forge-upload",
+  "forge-coops"
 } )
 public class SessionMutexFilter implements Filter {
 
