@@ -13,9 +13,8 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.scribe.model.Response;
 import org.scribe.model.Token;
 import org.scribe.oauth.OAuthService;
@@ -113,14 +112,14 @@ public class DropboxManager {
           if (StringUtils.isNotBlank(dropboxRootFolder.getDeltaCursor()))
             parameters.put("cursor", dropboxRootFolder.getDeltaCursor());
 
-          JSONObject response = new JSONObject(OAuthUtils.doPostRequest(service, dropboxToken, "https://api.dropbox.com/1/delta", parameters).getBody());
-          hasMore = response.optBoolean("has_more");
+          Map<String, Object> deltaResponse = serializeMap(OAuthUtils.doPostRequest(service, dropboxToken, "https://api.dropbox.com/1/delta", parameters).getBody());
+          hasMore = (Boolean) deltaResponse.get("has_more");
           if (hasMore == null) {
             hasMore = false;
           }
           
-          Boolean reset = response.getBoolean("reset");
-          String cursor = response.getString("cursor");
+          Boolean reset = (Boolean) deltaResponse.get("reset");
+          String cursor = (String) deltaResponse.get("cursor");
           Date now = new Date();
 
           if (reset) {
@@ -130,11 +129,14 @@ public class DropboxManager {
             }
           }
 
-          JSONArray entries = response.getJSONArray("entries");
-          for (int i = 0, l = entries.length(); i < l; i++) {
-            JSONArray entry = entries.getJSONArray(i);
-            String entryPath = entry.getString(0);
-            JSONObject metaData = entry.optJSONObject(1);
+          @SuppressWarnings("unchecked")
+          List<Object> entries = (List<Object>) deltaResponse.get("entries");
+          for (int i = 0, l = entries.size(); i < l; i++) {
+            @SuppressWarnings("unchecked")
+            List<Object> entry = (List<Object>) entries.get(i);
+            String entryPath = (String) entry.get(0);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> metaData = (Map<String, Object>) entry.get(1);
             if (metaData == null) {
               DropboxFile dropboxFile = dropboxFileDAO.findByDropboxPath(entryPath);
               if (dropboxFile != null) {
@@ -157,8 +159,8 @@ public class DropboxManager {
               // String root = metaData.getString("root");
               // String icon = metaData.getString("icon");
               // String size = metaData.getString("size");
-              Boolean isDir = metaData.getBoolean("is_dir");
-              String path = metaData.getString("path");
+              Boolean isDir = (Boolean) metaData.get("is_dir");
+              String path = (String) metaData.get("path");
               String[] parents = path.split("/");
 
               Folder parentFolder = null;
@@ -188,7 +190,7 @@ public class DropboxManager {
                 dropboxFolderDAO.create(user, now, user, now, parentFolder, urlName, title, MaterialPublicity.PRIVATE, entryPath);
                 logger.info("Created new dropbox folder: " + title);
               } else {
-                String mimeType = metaData.optString("mime_type");
+                String mimeType = (String) metaData.get("mime_type");
                 // String clientMtime = metaData.optString("client_mtime");
                 dropboxFileDAO.create(user, null, parentFolder, urlName, title, MaterialPublicity.PRIVATE, entryPath, mimeType);
                 logger.info("Created new dropbox file: " + title);
@@ -198,11 +200,16 @@ public class DropboxManager {
 
           dropboxRootFolderDAO.updateDeltaCursor(dropboxRootFolder, cursor, user);
           dropboxRootFolderDAO.updateLastSynchronized(dropboxRootFolder, new Date(), user);
-        } catch (JSONException e) {
+        } catch (IOException e) {
           logger.log(Level.SEVERE, "Failed to read Dropbox Delta JSON", e);
         }
       }
     }
+  }
+
+  private Map<String, Object> serializeMap(String string) throws IOException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    return objectMapper.readValue(string, new TypeReference<Map<String, Object>>(){});
   }
 
   public DropboxFile getFile(String path) {
