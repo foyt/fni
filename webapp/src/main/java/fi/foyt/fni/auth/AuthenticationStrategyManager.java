@@ -2,12 +2,12 @@ package fi.foyt.fni.auth;
 
 import java.util.logging.Logger;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 
-@RequestScoped
+@Dependent
 public class AuthenticationStrategyManager {
 	
 	@Inject
@@ -35,9 +35,7 @@ public class AuthenticationStrategyManager {
   private GuestAuthenticationStrategy guestAuthenticationStrategy;
 
   public AuthenticationStrategy getStrategy(AuthSource authSource) {
-  	logger.info("trying to find strategy for source " + authSource);
-  	
-    switch (authSource) {
+  	switch (authSource) {
       case GOOGLE:
         return googleAuthenticationStrategy;
       case YAHOO:
