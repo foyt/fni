@@ -14,9 +14,8 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.scribe.model.Response;
 import org.scribe.model.Token;
 import org.scribe.oauth.OAuthService;
@@ -102,14 +101,14 @@ public class UbuntuOneManager {
         List<String> existingFileKeys = ubuntuOneFileDAO.listUbuntuOneKeysByParentFolderAndCreator(ubuntuOneRootFolder, user);
         List<String> existingFolderKeys = ubuntuOneFolderDAO.listUbuntuOneKeysByParentFolderAndCreator(ubuntuOneRootFolder, user);
 
-        JSONObject rootEntity = loadEntity(service, ubuntuOneToken, volumeRoot);
-        if (rootEntity.getBoolean("has_children")) {
-          JSONArray children = rootEntity.getJSONArray("children");
-          for (int i = 0, l = children.length(); i < l; i++) {
-            JSONObject child = children.getJSONObject(i);
-            String childKey = child.getString("key");
-            if ("directory".equals(child.getString("kind"))) {
-              JSONObject folderEntity = loadEntity(service, ubuntuOneToken, volumeRoot + child.getString("path"));
+        UbuntuOneNode rootEntity = loadEntity(service, ubuntuOneToken, volumeRoot);
+        if (rootEntity.getHasChildren()) {
+          List<UbuntuOneNode> children = rootEntity.getChildren();
+          for (int i = 0, l = children.size(); i < l; i++) {
+            UbuntuOneNode child = children.get(i);
+            String childKey = child.getKey();
+            if ("directory".equals(child.getKind())) {
+              UbuntuOneNode folderEntity = loadEntity(service, ubuntuOneToken, volumeRoot + child.getPath());
               synchronizeEntry(service, ubuntuOneToken, user, ubuntuOneRootFolder, folderEntity, 0);
               existingFolderKeys.remove(childKey);
             } else {
@@ -132,48 +131,49 @@ public class UbuntuOneManager {
         } 
 
         ubuntuOneRootFolderDAO.updateLastSynchronized(ubuntuOneRootFolder, new Date(), user);
-      } catch (JSONException e) {
-        logger.log(Level.SEVERE, "Failed to parse Ubuntu One delta JSON", e);
       } catch (IOException e) {
         logger.log(Level.SEVERE, "Ubuntu One Service request failed", e);
       }
     }
   }
   
-  private JSONObject loadEntity(OAuthService service, Token ubuntuOneToken, String path) throws IOException, JSONException {
+  private UbuntuOneNode loadEntity(OAuthService service, Token ubuntuOneToken, String path) throws IOException {
     String requestPath = String.format("https://one.ubuntu.com/api/file_storage/v1%s?%s", escapePath(path), "include_children=true");
     Response response = OAuthUtils.doGetRequest(service, ubuntuOneToken, requestPath);
     if (response.getCode() == 200) {
-      return new JSONObject(response.getBody());
+      ObjectMapper objectMapper = new ObjectMapper();
+      return objectMapper.readValue(response.getBody(), UbuntuOneNode.class);
     } else {
       throw new IOException("Ubuntu One Service request failed with error code: " + response.getCode());
     }
   }
 
-  private int synchronizeEntry(OAuthService service, Token ubuntuOneToken, User user, Folder parentFolder, JSONObject jsonEntity, int filesProcessed) throws JSONException, IOException {
+  private int synchronizeEntry(OAuthService service, Token ubuntuOneToken, User user, Folder parentFolder, UbuntuOneNode ubuntuOneNode, int filesProcessed) throws IOException {
     if (filesProcessed >= MAX_FILES) {
       return filesProcessed;
     }
     
-    String kind = jsonEntity.getString("kind");
-    String key = jsonEntity.getString("key");
-    String path = jsonEntity.getString("path");
-    String contentPath = jsonEntity.getString("content_path");
-    String title = extractTitle(path);
-    Long generation = jsonEntity.getLong("generation");
-
-    if ("directory".equals(kind)) {
-      JSONObject folderEntity = loadEntity(service, ubuntuOneToken, jsonEntity.getString("resource_path"));
-      filesProcessed = synchronizeFolder(service, ubuntuOneToken, user, parentFolder, folderEntity, key, contentPath, title, generation, filesProcessed);
-    } else if ("file".equals(kind)) {
-      filesProcessed = syncronizeFile(ubuntuOneToken, user, parentFolder, key, contentPath, title, generation, filesProcessed);
+    if (ubuntuOneNode.getIsLive()) {
+      String kind = ubuntuOneNode.getKind();
+      String key = ubuntuOneNode.getKey();
+      String path = ubuntuOneNode.getPath();
+      String contentPath = ubuntuOneNode.getContentPath();
+      String title = extractTitle(path);
+      Long generation = ubuntuOneNode.getGeneration();
+  
+      if ("directory".equals(kind)) {
+        UbuntuOneNode folderEntity = loadEntity(service, ubuntuOneToken, ubuntuOneNode.getResource_path());
+        filesProcessed = synchronizeFolder(service, ubuntuOneToken, user, parentFolder, folderEntity, key, contentPath, title, generation, filesProcessed);
+      } else if ("file".equals(kind)) {
+        filesProcessed = syncronizeFile(ubuntuOneToken, user, parentFolder, key, contentPath, title, generation, filesProcessed);
+      }
     }
     
     return filesProcessed;
   }
 
   private int synchronizeFolder(OAuthService service, Token ubuntuOneToken, User user, Folder parentFolder, 
-      JSONObject jsonEntity, String key, String contentPath, String title, Long generation, int filesProcessed) throws JSONException, IOException {
+      UbuntuOneNode ubuntuOneNode, String key, String contentPath, String title, Long generation, int filesProcessed) throws IOException {
     
     List<String> existingFileKeys = null;
     List<String> existingFolderKeys = null;
@@ -205,15 +205,15 @@ public class UbuntuOneManager {
       logger.info("Added new Ubuntu One Folder " + folder.getContentPath() + " generation " + folder.getGeneration());
     }
 
-    if (jsonEntity.getBoolean("has_children")) {
-      JSONArray children = jsonEntity.getJSONArray("children");
-      for (int i = 0, l = children.length(); i < l; i++) {
-        JSONObject child = children.getJSONObject(i);
-        String childKey = child.getString("key");
+    if (ubuntuOneNode.getHasChildren()) {
+      List<UbuntuOneNode> children = ubuntuOneNode.getChildren();
+      for (int i = 0, l = children.size(); i < l; i++) {
+        UbuntuOneNode child = children.get(i);
+        String childKey = child.getKey();
         
-        if ("directory".equals(child.getString("kind"))) {
+        if ("directory".equals(child.getKind())) {
           existingFolderKeys.remove(childKey);
-          JSONObject folderEntity = loadEntity(service, ubuntuOneToken, child.getString("resource_path"));
+          UbuntuOneNode folderEntity = loadEntity(service, ubuntuOneToken, child.getResource_path());
           filesProcessed = synchronizeEntry(service, ubuntuOneToken, user, folder, folderEntity, filesProcessed);
         } else {
           existingFileKeys.remove(childKey);
@@ -308,6 +308,210 @@ public class UbuntuOneManager {
     }
 
     return path;
+  }
+  
+  public static class UbuntuOneNode {
+
+    public String getResource_path() {
+      return resource_path;
+    }
+
+    public void setResource_path(String resource_path) {
+      this.resource_path = resource_path;
+    }
+
+    public String getKind() {
+      return kind;
+    }
+
+    public void setKind(String kind) {
+      this.kind = kind;
+    }
+
+    public String getPath() {
+      return path;
+    }
+
+    public void setPath(String path) {
+      this.path = path;
+    }
+
+    public Boolean getIsPublic() {
+      return isPublic;
+    }
+
+    public void setIsPublic(Boolean isPublic) {
+      this.isPublic = isPublic;
+    }
+
+    public String getParentPath() {
+      return parentPath;
+    }
+
+    public void setParentPath(String parentPath) {
+      this.parentPath = parentPath;
+    }
+
+    public String getVolumePath() {
+      return volumePath;
+    }
+
+    public void setVolumePath(String volumePath) {
+      this.volumePath = volumePath;
+    }
+
+    public String getKey() {
+      return key;
+    }
+
+    public void setKey(String key) {
+      this.key = key;
+    }
+
+    public Date getWhenCreated() {
+      return whenCreated;
+    }
+
+    public void setWhenCreated(Date whenCreated) {
+      this.whenCreated = whenCreated;
+    }
+
+    public Date getWhenChanged() {
+      return whenChanged;
+    }
+
+    public void setWhenChanged(Date whenChanged) {
+      this.whenChanged = whenChanged;
+    }
+
+    public Long getGeneration() {
+      return generation;
+    }
+
+    public void setGeneration(Long generation) {
+      this.generation = generation;
+    }
+
+    public Long getGenerationCreated() {
+      return generationCreated;
+    }
+
+    public void setGenerationCreated(Long generationCreated) {
+      this.generationCreated = generationCreated;
+    }
+
+    public String getContentPath() {
+      return contentPath;
+    }
+
+    public void setContentPath(String contentPath) {
+      this.contentPath = contentPath;
+    }
+
+    public String getHash() {
+      return hash;
+    }
+
+    public void setHash(String hash) {
+      this.hash = hash;
+    }
+
+    public String getPublicUrl() {
+      return publicUrl;
+    }
+
+    public void setPublicUrl(String publicUrl) {
+      this.publicUrl = publicUrl;
+    }
+
+    public Long getSize() {
+      return size;
+    }
+
+    public void setSize(Long size) {
+      this.size = size;
+    }
+
+    public Boolean getHasChildren() {
+      return hasChildren;
+    }
+
+    public void setHasChildren(Boolean hasChildren) {
+      this.hasChildren = hasChildren;
+    }
+
+    public Boolean getIsRoot() {
+      return isRoot;
+    }
+
+    public void setIsRoot(Boolean isRoot) {
+      this.isRoot = isRoot;
+    }
+
+    public List<UbuntuOneNode> getChildren() {
+      return children;
+    }
+
+    public void setChildren(List<UbuntuOneNode> children) {
+      this.children = children;
+    }
+
+    public Boolean getIsLive() {
+      return isLive;
+    }
+
+    public void setIsLive(Boolean isLive) {
+      this.isLive = isLive;
+    }
+
+    private String resource_path;
+
+    private String kind;
+
+    private String path;
+
+    @JsonProperty("is_public")
+    private Boolean isPublic;
+
+    @JsonProperty("parent_path")
+    private String parentPath;
+
+    @JsonProperty("volume_path")
+    private String volumePath;
+
+    private String key;
+
+    @JsonProperty("when_created")
+    private Date whenCreated;
+
+    @JsonProperty("when_changed")
+    private Date whenChanged;
+
+    private Long generation;
+
+    @JsonProperty("generation_created")
+    private Long generationCreated;
+
+    @JsonProperty("content_path")
+    private String contentPath;
+
+    private String hash;
+
+    @JsonProperty("public_url")
+    private String publicUrl;
+
+    private Long size;
+
+    @JsonProperty("has_children")
+    private Boolean hasChildren;
+
+    @JsonProperty("is_root")
+    private Boolean isRoot;
+
+    private List<UbuntuOneNode> children;
+
+    @JsonProperty("is_live")
+    private Boolean isLive;
   }
 }
 
