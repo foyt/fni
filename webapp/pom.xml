@@ -154,15 +154,6 @@
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
-    
-    <!-- CKC Connector -->
-
-    <dependency>
-      <groupId>fi.foyt.ckc</groupId>
-      <artifactId>connector</artifactId>
-      <type>jar</type>
-      <scope>compile</scope>
-    </dependency>
 
     <!-- Diff patch match -->
 
@@ -275,14 +266,6 @@
       <id>google-diff-patch-match</id>
       <name>google-diff-patch-match</name>
       <url>http://google-diff-match-patch.googlecode.com/svn/trunk/maven/</url>
-    </repository>
-    
-    <!-- CKC -->
-
-    <repository>
-      <id>ckc-plugin-googlecode</id>
-      <name>CKC Maven Repository</name>
-      <url>http://ckc-plugin.googlecode.com/svn/repository</url>
     </repository>
   </repositories>
 

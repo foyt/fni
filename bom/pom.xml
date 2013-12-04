@@ -200,14 +200,6 @@
         <artifactId>jtidy</artifactId>
         <version>${jtidy.version}</version>
       </dependency>
-      
-      <!-- CKC Connector -->
-      
-      <dependency>
-        <groupId>fi.foyt.ckc</groupId>
-        <artifactId>connector</artifactId>
-        <version>${ckc-connector.version}</version>
-      </dependency>
 
       <!-- Google Drive API -->      
     
