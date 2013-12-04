@@ -1,5 +1,6 @@
 package fi.foyt.fni.auth;
 
+import java.io.Serializable;
 import java.util.logging.Logger;
 
 import javax.enterprise.context.Dependent;
@@ -8,9 +9,11 @@ import javax.inject.Inject;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 
 @Dependent
-public class AuthenticationStrategyManager {
+public class AuthenticationStrategyManager implements Serializable {
 	
-	@Inject
+  private static final long serialVersionUID = 3502263654436028790L;
+
+  @Inject
 	private Logger logger;
 
   @Inject
