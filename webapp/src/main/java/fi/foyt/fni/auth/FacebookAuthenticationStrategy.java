@@ -1,5 +1,6 @@
 package fi.foyt.fni.auth;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,13 +10,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.scribe.builder.api.FacebookApi;
 import org.scribe.model.Token;
 import org.scribe.oauth.OAuthService;
@@ -26,7 +27,7 @@ import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.auth.OAuthUtils;
 
-@RequestScoped
+@Dependent
 public class FacebookAuthenticationStrategy extends OAuthAuthenticationStrategy {
 
 	@Inject
@@ -71,7 +72,9 @@ public class FacebookAuthenticationStrategy extends OAuthAuthenticationStrategy 
   @Override
   protected UserToken handleLogin(Locale locale, OAuthService service, Token accessToken, String[] grantedScopes) throws MultipleEmailAccountsException, EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException, ExternalLoginFailedException {
     try {
-      JSONObject meObject = new JSONObject(OAuthUtils.doGetRequest(service, accessToken, "https://graph.facebook.com/me").getBody());
+      ObjectMapper objectMapper = new ObjectMapper();
+      String response = OAuthUtils.doGetRequest(service, accessToken, "https://graph.facebook.com/me").getBody();
+      FacebookUser meObject = objectMapper.readValue(response, FacebookUser.class);
       Integer expiresIn = extractExpires(accessToken);
       Date expires = null;
       if (expiresIn != null) {
@@ -81,19 +84,15 @@ public class FacebookAuthenticationStrategy extends OAuthAuthenticationStrategy 
         expires = calendar.getTime(); 
       }
       
-      String localeParam = meObject.getString("locale");
-      String id = meObject.getString("id");
-      String firstName = meObject.getString("first_name");
-      String lastName = meObject.getString("last_name");
-      String email = meObject.getString("email");
-      String username = meObject.getString("username");
-      Locale userLocale = null;
-      
-      if (StringUtils.isNotBlank(localeParam))
-        userLocale = new Locale(localeParam);
+      String id = meObject.getId();
+      String firstName = meObject.getFirstName();
+      String lastName = meObject.getLastName();
+      String email = meObject.getEmail();
+      String username = meObject.getUsername();
+      Locale userLocale = meObject.getLocale();
       
       return loginUser(AuthSource.FACEBOOK, username, accessToken.getToken(), accessToken.getSecret(), expires, id, Arrays.asList(email), firstName, lastName, null, userLocale, grantedScopes);
-    } catch (JSONException e) {
+    } catch (IOException e) {
     	throw new ExternalLoginFailedException();
     }
   };
@@ -113,5 +112,102 @@ public class FacebookAuthenticationStrategy extends OAuthAuthenticationStrategy 
       return null;
     }
   }
+  
+  @JsonIgnoreProperties(ignoreUnknown = true)
+  @SuppressWarnings ("unused")
+  private static class FacebookUser {
+    
+    public String getId() {
+      return id;
+    }
+
+    public void setId(String id) {
+      this.id = id;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
+
+    public String getFirstName() {
+      return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+      this.firstName = firstName;
+    }
+
+    public String getLastName() {
+      return lastName;
+    }
+
+    public void setLastName(String lastName) {
+      this.lastName = lastName;
+    }
+
+    public String getLink() {
+      return link;
+    }
+
+    public void setLink(String link) {
+      this.link = link;
+    }
+
+    public String getUsername() {
+      return username;
+    }
+
+    public void setUsername(String username) {
+      this.username = username;
+    }
+
+    public String getGender() {
+      return gender;
+    }
+
+    public void setGender(String gender) {
+      this.gender = gender;
+    }
+
+    public Locale getLocale() {
+      return locale;
+    }
+
+    public void setLocale(Locale locale) {
+      this.locale = locale;
+    }
+    
+    public String getEmail() {
+      return email;
+    }
+    
+    public void setEmail(String email) {
+      this.email = email;
+    }
+
+    private String id;
+    
+    private String name;
+    
+    @JsonProperty ("first_name")
+    private String firstName;
+    
+    @JsonProperty ("last_name")
+    private String lastName;
+    
+    private String link;
+    
+    private String username;
+    
+    private String gender;
+    
+    private Locale locale;
+    
+    private String email;
+  } 
 
 }
