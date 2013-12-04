@@ -1,6 +1,7 @@
 package fi.foyt.fni.ubuntuone;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
@@ -10,7 +11,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
@@ -42,9 +42,10 @@ import fi.foyt.fni.security.UnauthorizedException;
 import fi.foyt.fni.utils.auth.OAuthUtils;
 
 @Dependent
-@Stateful
-public class UbuntuOneManager {
+public class UbuntuOneManager implements Serializable {
   
+  private static final long serialVersionUID = 2171055262186848633L;
+
   private static final int MAX_FILES = 10;
 
   @Inject

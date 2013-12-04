@@ -1,6 +1,7 @@
 package fi.foyt.fni.dropbox;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +9,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
@@ -44,8 +44,9 @@ import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.auth.OAuthUtils;
 
 @Dependent
-@Stateful
-public class DropboxManager {
+public class DropboxManager implements Serializable {
+
+  private static final long serialVersionUID = -1726856277015582236L;
 
   @Inject
   private Logger logger;
