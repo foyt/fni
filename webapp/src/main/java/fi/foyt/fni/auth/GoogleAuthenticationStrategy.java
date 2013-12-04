@@ -1,5 +1,6 @@
 package fi.foyt.fni.auth;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -8,13 +9,13 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import org.apache.commons.codec.net.URLCodec;
-import org.apache.commons.lang3.StringUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.scribe.builder.api.DefaultApi20;
 import org.scribe.extractors.AccessTokenExtractor;
 import org.scribe.extractors.JsonTokenExtractor;
@@ -34,7 +35,7 @@ import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.auth.OAuthUtils;
 
-@RequestScoped
+@Dependent
 public class GoogleAuthenticationStrategy extends OAuthAuthenticationStrategy {
 
 	@Inject
@@ -131,13 +132,14 @@ public class GoogleAuthenticationStrategy extends OAuthAuthenticationStrategy {
       
       if (config.hasScope())
         request.addBodyParameter(OAuthConstants.SCOPE, config.getScope());
-      
+
       Response response = request.send();
 
+      ObjectMapper objectMapper = new ObjectMapper();
       try {
-        JSONObject jsonObject = new JSONObject(response.getBody());
-        return api.getAccessTokenExtractor().extract(jsonObject.toString(0));
-      } catch (JSONException e) {
+        String tokenJson = objectMapper.writeValueAsString(objectMapper.readTree(response.getBody()));
+        return api.getAccessTokenExtractor().extract(tokenJson);
+      } catch (IOException e) {
         return null;
       }
     }
@@ -150,32 +152,101 @@ public class GoogleAuthenticationStrategy extends OAuthAuthenticationStrategy {
   protected UserToken handleLogin(Locale locale, OAuthService service, Token accessToken, String[] grantedScopes) throws MultipleEmailAccountsException,
   		EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException, ExternalLoginFailedException {
     try {
-      JSONObject rawJson = new JSONObject(accessToken.getRawResponse());
-      int expiresIn = rawJson.getInt("expires_in");
+      ObjectMapper objectMapper = new ObjectMapper();
+      
+      GoogleAccessToken rawAccessToken = objectMapper.readValue(accessToken.getRawResponse(), GoogleAccessToken.class);
       
       Calendar calendar = new GregorianCalendar();
       calendar.setTime(new Date());
-      calendar.add(Calendar.SECOND, expiresIn);
+      calendar.add(Calendar.SECOND, rawAccessToken.getExpiresIn());
       Date expires = calendar.getTime();
 
       // Requires https://www.googleapis.com/auth/userinfo.email and https://www.googleapis.com/auth/userinfo.profile scopes
       
-      JSONObject userInfoObject = new JSONObject(OAuthUtils.doGetRequest(service, accessToken, "https://www.googleapis.com/oauth2/v1/userinfo?alt=json").getBody());
-      String identifier = userInfoObject.getString("id");
-      String email = userInfoObject.getString("email");
-      String firstName = userInfoObject.getString("given_name");
-      String lastName = userInfoObject.getString("family_name");
-      String localeString = userInfoObject.optString("locale");
-      Locale userLocale = null;
-      
-      if (StringUtils.isNotBlank(localeString)) {
-        userLocale = new Locale(localeString);
-      }
+      String response = OAuthUtils.doGetRequest(service, accessToken, "https://www.googleapis.com/oauth2/v1/userinfo?alt=json").getBody();
+      GoogleUserInfo userInfoObject = objectMapper.readValue(response, GoogleUserInfo.class);
+      String identifier = userInfoObject.getId();
+      String email = userInfoObject.getEmail();
+      String firstName = userInfoObject.getGivenName();
+      String lastName = userInfoObject.getFamilyName();
+      Locale userLocale = userInfoObject.getLocale();
 
       return loginUser(AuthSource.GOOGLE, email, accessToken.getToken(), accessToken.getSecret(), expires, identifier, Arrays.asList(email), firstName, lastName, null, userLocale, grantedScopes);
-    } catch (JSONException e) {
+    } catch (IOException e) {
     	throw new ExternalLoginFailedException();
     }
   };
 
+  @SuppressWarnings ("unused")
+  @JsonIgnoreProperties (ignoreUnknown = true)
+  private static class GoogleAccessToken {
+    
+    public Integer getExpiresIn() {
+      return expiresIn;
+    }
+    
+    public void setExpiresIn(Integer expiresIn) {
+      this.expiresIn = expiresIn;
+    }
+    
+    @JsonProperty ("expires_in")
+    private Integer expiresIn;
+  }
+  
+  @SuppressWarnings ("unused")
+  @JsonIgnoreProperties (ignoreUnknown = true)
+  private static class GoogleUserInfo {
+    
+    public String getId() {
+      return id;
+    }
+
+    public void setId(String id) {
+      this.id = id;
+    }
+
+    public String getEmail() {
+      return email;
+    }
+
+    public void setEmail(String email) {
+      this.email = email;
+    }
+
+    public String getGivenName() {
+      return givenName;
+    }
+
+    public void setGivenName(String givenName) {
+      this.givenName = givenName;
+    }
+
+    public String getFamilyName() {
+      return familyName;
+    }
+
+    public void setFamilyName(String familyName) {
+      this.familyName = familyName;
+    }
+
+    public Locale getLocale() {
+      return locale;
+    }
+
+    public void setLocale(Locale locale) {
+      this.locale = locale;
+    }
+
+    private String id;
+    
+    private String email;
+    
+    @JsonProperty ("given_name")
+    private String givenName;
+    
+    @JsonProperty ("family_name")
+    private String familyName;
+    
+    private Locale locale;
+  }
 }
