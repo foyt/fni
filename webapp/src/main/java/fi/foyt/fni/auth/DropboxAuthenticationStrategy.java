@@ -1,5 +1,6 @@
 package fi.foyt.fni.auth;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 
@@ -7,8 +8,9 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.scribe.builder.api.DropBoxApi;
 import org.scribe.model.Token;
 import org.scribe.oauth.OAuthService;
@@ -62,11 +64,13 @@ public class DropboxAuthenticationStrategy extends OAuthAuthenticationStrategy {
   @Override
   protected UserToken handleLogin(Locale locale, OAuthService service, Token accessToken, String[] grantedScopes) throws MultipleEmailAccountsException, EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException, ExternalLoginFailedException {
     try {
-      JSONObject userInfoObject = new JSONObject(OAuthUtils.doGetRequest(service, accessToken, "https://api.dropbox.com/1/account/info").getBody());
-      String uid = userInfoObject.getString("uid");
-      String displayName = userInfoObject.getString("display_name");
+      ObjectMapper objectMapper = new ObjectMapper();
+      
+      DropboxUserInfo userInfoObject = objectMapper.readValue(OAuthUtils.doGetRequest(service, accessToken, "https://api.dropbox.com/1/account/info").getBody(), DropboxUserInfo.class);
+      String uid = userInfoObject.getUid();
+      String displayName = userInfoObject.getDisplayName();
       String[] names = splitNames(displayName);
-      String country = userInfoObject.getString("country");
+      String country = userInfoObject.getCountry();
       Locale userLocale = locale;
       String sourceId = displayName;
       
@@ -76,7 +80,7 @@ public class DropboxAuthenticationStrategy extends OAuthAuthenticationStrategy {
       }
 
       return loginUser(AuthSource.DROPBOX, sourceId, accessToken.getToken(), accessToken.getSecret(), null, uid, null, names[0], names[1], null, userLocale, null);
-    } catch (JSONException e) {
+    } catch (IOException e) {
     	throw new ExternalLoginFailedException();
     }
   }
@@ -97,5 +101,41 @@ public class DropboxAuthenticationStrategy extends OAuthAuthenticationStrategy {
       firstName,
       lastName
     };
+  }
+  
+  @SuppressWarnings ("unused")
+  @JsonIgnoreProperties (ignoreUnknown = true)
+  private static class DropboxUserInfo {
+    
+    public String getUid() {
+      return uid;
+    }
+    
+    public void setUid(String uid) {
+      this.uid = uid;
+    }
+    
+    public String getCountry() {
+      return country;
+    }
+    
+    public void setCountry(String country) {
+      this.country = country;
+    }
+    
+    public String getDisplayName() {
+      return displayName;
+    }
+    
+    public void setDisplayName(String displayName) {
+      this.displayName = displayName;
+    }
+    
+    private String uid;
+    
+    private String country;
+    
+    @JsonProperty ("display_name")
+    private String displayName;
   }
 }
