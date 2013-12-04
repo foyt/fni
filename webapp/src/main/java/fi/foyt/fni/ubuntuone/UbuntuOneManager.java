@@ -309,8 +309,9 @@ public class UbuntuOneManager {
 
     return path;
   }
-  
-  public static class UbuntuOneNode {
+
+  @SuppressWarnings ("unused")
+  private static class UbuntuOneNode {
 
     public String getResource_path() {
       return resource_path;

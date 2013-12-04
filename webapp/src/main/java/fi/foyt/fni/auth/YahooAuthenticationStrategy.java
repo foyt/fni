@@ -84,8 +84,7 @@ public class YahooAuthenticationStrategy extends OAuthAuthenticationStrategy {
       
       ObjectMapper objectMapper = new ObjectMapper();
       
-      String z = OAuthUtils.doGetRequest(service, accessToken, "http://social.yahooapis.com/v1/me/guid?format=json").getBody();
-      YahooGuid guid = objectMapper.readValue(z, YahooGuid.class);
+      YahooGuid guid = objectMapper.readValue(OAuthUtils.doGetRequest(service, accessToken, "http://social.yahooapis.com/v1/me/guid?format=json").getBody(), YahooGuid.class);
       Map<String, Object> response = objectMapper.readValue(OAuthUtils.doGetRequest(service, accessToken, "http://social.yahooapis.com/v1/user/ " + guid.getValue() + "/profile?format=json").getBody(), new TypeReference<Map<String, Object>>() { });
       @SuppressWarnings("unchecked")
       Map<String, Object> profileObject = (Map<String, Object>) response.get("profile");
@@ -127,8 +126,9 @@ public class YahooAuthenticationStrategy extends OAuthAuthenticationStrategy {
       return null;
     }
   }
-  
-  public static class YahooGuid {
+
+  @SuppressWarnings ("unused")
+  private static class YahooGuid {
     
     public String getUri() {
       return uri;
