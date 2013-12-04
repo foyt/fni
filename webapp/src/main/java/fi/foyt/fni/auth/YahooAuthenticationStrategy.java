@@ -1,5 +1,6 @@
 package fi.foyt.fni.auth;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,14 +11,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.scribe.builder.api.YahooApi;
 import org.scribe.model.Token;
 import org.scribe.oauth.OAuthService;
@@ -28,7 +28,7 @@ import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.auth.OAuthUtils;
 
-@RequestScoped
+@Dependent
 public class YahooAuthenticationStrategy extends OAuthAuthenticationStrategy {
 	
 	@Inject
@@ -82,29 +82,32 @@ public class YahooAuthenticationStrategy extends OAuthAuthenticationStrategy {
         expires = calendar.getTime(); 
       }
       
-      JSONObject guidObject = new JSONObject(OAuthUtils.doGetRequest(service, accessToken, "http://social.yahooapis.com/v1/me/guid?format=json").getBody());
-      String guid = guidObject.getJSONObject("guid").getString("value");
+      ObjectMapper objectMapper = new ObjectMapper();
       
-      JSONObject profileObject = new JSONObject(OAuthUtils.doGetRequest(service, accessToken, "http://social.yahooapis.com/v1/user/" + guid + "/profile?format=json").getBody()).getJSONObject("profile");
+      String z = OAuthUtils.doGetRequest(service, accessToken, "http://social.yahooapis.com/v1/me/guid?format=json").getBody();
+      YahooGuid guid = objectMapper.readValue(z, YahooGuid.class);
+      Map<String, Object> response = objectMapper.readValue(OAuthUtils.doGetRequest(service, accessToken, "http://social.yahooapis.com/v1/user/ " + guid.getValue() + "/profile?format=json").getBody(), new TypeReference<Map<String, Object>>() { });
+      @SuppressWarnings("unchecked")
+      Map<String, Object> profileObject = (Map<String, Object>) response.get("profile");
       
       List<String> emails = new ArrayList<String>();
-      String nickname = profileObject.optString("nickname");
-      String familyName = profileObject.optString("familyName");
-      String givenName = profileObject.optString("givenName");
+      String nickname = (String) profileObject.get("nickname");
+      String familyName = (String) profileObject.get("familyName");
+      String givenName = (String) profileObject.get("givenName");
       
       if (StringUtils.isBlank(givenName) && StringUtils.isNotBlank(nickname))
         givenName = nickname;
       
-      JSONArray emailsJson = profileObject.getJSONArray("emails");
-      for (int i = 0, l = emailsJson.length(); i < l; i++) {
-        JSONObject emailObject = emailsJson.getJSONObject(i);
-        emails.add(emailObject.getString("handle"));
+      @SuppressWarnings("unchecked")
+      List<Map<String, Object>> emailsJson = (List<Map<String, Object>>) profileObject.get("emails");
+      for (Map<String, Object> emailObject : emailsJson) {
+        emails.add((String) emailObject.get("handle"));
       }
       
       String sourceId = emails.size() > 0 ? emails.get(0) : givenName + (StringUtils.isNotBlank(familyName) ? ' ' + familyName : "");
       
-      return loginUser(AuthSource.YAHOO, sourceId, accessToken.getToken(), accessToken.getSecret(), expires, guid, emails, familyName, givenName, nickname, null, grantedScopes);
-    } catch (JSONException e) {
+      return loginUser(AuthSource.YAHOO, sourceId, accessToken.getToken(), accessToken.getSecret(), expires, guid.getValue(), emails, familyName, givenName, nickname, null, grantedScopes);
+    } catch (IOException e) {
     	throw new ExternalLoginFailedException();
     }
   };
@@ -123,5 +126,28 @@ public class YahooAuthenticationStrategy extends OAuthAuthenticationStrategy {
     } catch (Exception e) {
       return null;
     }
+  }
+  
+  public static class YahooGuid {
+    
+    public String getUri() {
+      return uri;
+    }
+    
+    public void setUri(String uri) {
+      this.uri = uri;
+    }
+    
+    public String getValue() {
+      return value;
+    }
+    
+    
+    public void setValue(String value) {
+      this.value = value;
+    }
+    
+    private String uri;
+    private String value;
   }
 }
