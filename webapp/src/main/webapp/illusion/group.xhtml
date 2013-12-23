@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">
+    <h:outputFormat value="#{locales['illusion.group.pageTitle']}">
+      <f:param value="#{illusionGroupBackingBean.name}"/>
+    </h:outputFormat>
+  </ui:define>
+  
+  <ui:define name="view-scripts">
+    <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <h:outputScript name="scripts/sharedspace/tosstable.js"/>
+    <h:outputScript name="scripts/gui/illusion-group.js"/>
+  </ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <h:outputStylesheet library="novus" name="css/fonts.css"/>
+    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/illusion.css"/>
+  </ui:define>  
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+
+    <!-- Coming soon -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      
+      <h:panelGroup layout="block" styleClass="illusion-items grid_2">
+        <h:panelGroup layout="block" styleClass="illusion-item-group">
+          <label>Dice</label>
+          <h:panelGroup layout="block" styleClass="illusion-item illusion-item-die"/>
+        </h:panelGroup>
+        <h:panelGroup layout="block" styleClass="illusion-item-group">
+          <label>Stuff</label>
+          <h:panelGroup layout="block" styleClass="illusion-item illusion-item-link"/>
+          <h:panelGroup layout="block" styleClass="illusion-item illusion-item-pdf"/>
+          <h:panelGroup layout="block" styleClass="illusion-item illusion-item-audio"/>
+        </h:panelGroup>
+      </h:panelGroup>
+      
+      <h:panelGroup layout="block" styleClass="grid_14 illusion-tables-container">
+        <h:panelGroup layout="block" styleClass="illusion-tables"></h:panelGroup>
+        <h:panelGroup layout="block" styleClass="illusion-participants"></h:panelGroup>        
+      </h:panelGroup>
+            
+    </h:panelGroup>
+    
+  </ui:define>
+
+</ui:composition>
