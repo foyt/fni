@@ -1,12 +1,5 @@
-@import "vars";
-@import "compass";
-@import "styles";
-
-.illusion-items {
-}
-
 .illusion-item {
-  border: 1px solid rgba(0,0,0,0.5);
+  border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   cursor: move;
   background-size: 90% 90%;
@@ -19,30 +12,29 @@
 }
 
 .illusion-item-die {
-  background-image: url('http://openclipart.org/image/256px/svg_to_png/21223/ClayDowling_D20.png');
+  background-image: url("http://openclipart.org/image/256px/svg_to_png/21223/ClayDowling_D20.png");
 }
 
 .illusion-item-audio {
-  background-image: url('https://cdn1.iconfinder.com/data/icons/crystalproject/crystal_project_256x256/apps/lsongs.png');
+  background-image: url("https://cdn1.iconfinder.com/data/icons/crystalproject/crystal_project_256x256/apps/lsongs.png");
 }
 
 .illusion-item-link {
-  background-image: url('https://cdn1.iconfinder.com/data/icons/crystalproject/crystal_project_256x256/filesystems/Globe.png');
+  background-image: url("https://cdn1.iconfinder.com/data/icons/crystalproject/crystal_project_256x256/filesystems/Globe.png");
 }
 
 .illusion-item-pdf {
-  background-image: url('https://cdn1.iconfinder.com/data/icons/nuvola2/128x128/mimetypes/pdf.png');
+  background-image: url("https://cdn1.iconfinder.com/data/icons/nuvola2/128x128/mimetypes/pdf.png");
 }
 
 /* Tables */
-
 .illusion-tables-container {
   position: relative;
 }
 
 .illusion-tables {
   height: 500px;
-  background-color: rgba(255,255,255,0.2);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .illusion-table {
@@ -50,13 +42,12 @@
 }
 
 /* Participants */
-
 .illusion-participants {
   position: absolute;
   bottom: 0px;
   left: 0px;
   right: 0px;
-  background: rgba(255,0,0,0.2);
+  background: rgba(255, 0, 0, 0.2);
   overflow-x: auto;
 }
 
@@ -75,3 +66,115 @@
   max-height: 58px;
 }
 
+/* Map */
+.map-container {
+  margin-top: 20px;
+  position: relative;
+}
+
+.map-canvas {
+  width: 860px;
+  background: white;
+  border: 1px solid black;
+}
+
+.map-tools {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 86px;
+  background: #fff;
+  border: 1px solid #000;
+}
+
+.map-tool {
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 1px solid #000;
+  margin: 4px;
+  cursor: pointer;
+}
+
+.map-tool-area {
+  background-image: url("https://cdn1.iconfinder.com/data/icons/crystalproject/Open-Office-Icons/stock_node-close-path.png");
+}
+
+.map-tool-brush {
+  background-image: url("https://cdn1.iconfinder.com/data/icons/gnomeicontheme/24x24/stock/image/stock_draw-freeform-line.png");
+}
+
+.map-tool-path {
+  background-image: url("https://cdn1.iconfinder.com/data/icons/crystalproject/Open-Office-Icons/stock_draw-line-connector-ends-with-circle.png");
+}
+
+.map-paint-container {
+  display: block;
+  position: relative;
+  clear: both;
+  padding-left: 10px;
+  padding-bottom: 10px;
+}
+
+.map-foreground-paint, .map-background-paint {
+  width: 48px;
+  height: 32px;
+  padding: 1px;
+  border: 1px solid #000;
+  cursor: pointer;
+}
+
+.map-foreground-paint {
+  position: relative;
+  z-index: 1;
+}
+
+.map-background-paint {
+  margin-left: 15px;
+  margin-top: -25px;
+  position: relative;
+  z-index: 0;
+}
+
+.map-paint-color-preview {
+  /* TODO Image is from Spectrum, check licnse */
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==");
+  float: right;
+  height: 32px;
+  width: 32px;
+}
+
+.map-paint-color-preview>span{
+  width: inherit;
+  height: inherit;
+  display: block;
+}
+
+.map-paint-fav-patterns {
+  background-color: #ECECEC;
+  border: 1px solid #F0C49B;
+  width: 172px;
+  padding: 10px;  
+}
+
+
+.map-paint-fav-pattern {
+  cursor: pointer;
+}
+
+.map-paint-fav-pattern img {
+  max-width: 32px;
+  max-height: 32px;
+}
+
+.map-paint-fav-pattern label {
+  margin-left: 8px;
+  vertical-align: top;  
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 8px;
+  cursor: pointer;
+}
