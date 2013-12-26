@@ -86,6 +86,11 @@ td.gamelibrary-manage-publicationlist-image {
   font-weight: bold;
 }
 
+.gamelibrary-manage-publicationlist-name a {
+  color: $default-color;
+  text-decoration: none;
+}
+
 .gamelibrary-manage-publicationlist-actions form {
   display: inline-block;
 }
