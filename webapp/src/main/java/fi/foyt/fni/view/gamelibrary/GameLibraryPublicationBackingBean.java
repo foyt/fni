@@ -33,9 +33,12 @@ public class GameLibraryPublicationBackingBean {
   @Inject
   private SessionController sessionController;
   
+  @Inject
+  private PublicationController publicationController;
+  
   @URLAction
   public void init() throws FileNotFoundException {
-    Publication publication = publicationController.findPublicationByUrlName(getUrlName());
+    publication = publicationController.findPublicationByUrlName(getUrlName());
     if (publication == null) {
       throw new FileNotFoundException();
     }
@@ -49,15 +52,10 @@ public class GameLibraryPublicationBackingBean {
         throw new ForbiddenException();
       }
     }
-    
-    publicationId = publication.getId();
   }
   
-	@Inject
-	private PublicationController publicationController;
-	
 	public Publication getPublication() {
-		return publicationController.findPublicationById(publicationId);
+		return publication;
 	}
 	
 	public String getUrlName() {
@@ -69,6 +67,5 @@ public class GameLibraryPublicationBackingBean {
 	}
 	
 	private String urlName;
-	
-	private Long publicationId;
+	private Publication publication;
 }

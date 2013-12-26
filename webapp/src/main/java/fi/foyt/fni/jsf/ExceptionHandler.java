@@ -28,12 +28,16 @@ import com.ocpsoft.pretty.PrettyException;
 
 import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.UnauthorizedException;
+import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.ErrorUtils;
 
 public class ExceptionHandler extends ExceptionHandlerWrapper {
 
   @Inject
   private Logger logger;
+
+  @Inject
+  private SessionController sessionController;
 
   private final javax.faces.context.ExceptionHandler wrapped;
 
@@ -98,10 +102,17 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
           externalContext.setResponseStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
           renderView("/error/internal-error.jsf");
           String recipient = System.getProperty("fni-error-email");
-          if (StringUtils.isNotBlank(recipient) && (externalContext.getRequest() instanceof HttpServletRequest) && (externalContext.getResponse() instanceof HttpServletResponse)) {
-            ErrorUtils.mailError(recipient, (HttpServletRequest) externalContext.getRequest(), (HttpServletResponse) externalContext.getResponse(), exception);
-          } else {
-            exception.printStackTrace();
+          if (ErrorUtils.isReportableException(exception)) {
+            if (StringUtils.isNotBlank(recipient) && (externalContext.getRequest() instanceof HttpServletRequest) && (externalContext.getResponse() instanceof HttpServletResponse)) {
+              Long loggedUserId = null;
+              if (sessionController.isLoggedIn()) {
+                loggedUserId = sessionController.getLoggedUserId();
+              }
+              
+              ErrorUtils.mailError(recipient, (HttpServletRequest) externalContext.getRequest(), (HttpServletResponse) externalContext.getResponse(), exception, loggedUserId);
+            } else {
+              exception.printStackTrace();
+            }
           }
         } 
       } finally {

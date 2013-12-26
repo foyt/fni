@@ -17,22 +17,36 @@ import fi.foyt.fni.utils.mail.MailUtils;
 
 public class ErrorUtils {
 
-  public static void mailError(String recipient, ServletRequest request, ServletResponse response, Throwable t) {
-    if (t instanceof SocketException) {
-      return;
+  public static boolean isReportableException(Throwable throwable) {
+    Throwable current = throwable;
+    while (current != null) {
+      if (current instanceof SocketException) {
+        return false;
+      }
+
+      Throwable cause = current.getCause();
+      if (current.equals(cause)) {
+        break;
+      }
+
+      current = cause;
     }
-    
+
+    return true;
+  }
+
+  public static void mailError(String recipient, ServletRequest request, ServletResponse response, Throwable t, Long loggedUserId) {
     try {
       String subject = "Error occurred on Forge & Illusion";
       StringWriter contentWriter = new StringWriter();
-      
+
       contentWriter.append("Error details:\n\n");
       contentWriter.append("When: ").append(new Date().toString()).append('\n');
 
       if (request instanceof HttpServletRequest) {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         contentWriter.append("Where: " + httpRequest.getRequestURL().toString()).append('\n');
-        
+
         contentWriter.append("Request Headers:\n");
         Enumeration<String> headerNames = httpRequest.getHeaderNames();
         while (headerNames.hasMoreElements()) {
@@ -40,7 +54,7 @@ public class ErrorUtils {
           String headerValue = httpRequest.getHeader(headerName);
           contentWriter.append("  ").append(headerName).append(": ").append(headerValue).append('\n');
         }
-        
+
         HttpSession session = httpRequest.getSession();
         if (session != null) {
           contentWriter.append("Session id:").append(session.getId()).append('\n');
@@ -53,11 +67,18 @@ public class ErrorUtils {
           }
         }
       }
+
+      contentWriter.append('\n');
+      if (loggedUserId != null) {
+        contentWriter.append("Logged User Id: " + loggedUserId + "\n");
+      } else {
+        contentWriter.append("User not logged in\n");
+      }
       
       contentWriter.append('\n');
       contentWriter.append("Stack trace: \n");
       contentWriter.append('\n');
-      
+
       PrintWriter stackTraceWriter = new PrintWriter(contentWriter, false);
       try {
         t.printStackTrace(stackTraceWriter);
@@ -65,7 +86,7 @@ public class ErrorUtils {
         stackTraceWriter.flush();
         stackTraceWriter.close();
       }
-      
+
       MailUtils.sendMail(recipient, recipient, recipient, recipient, subject, contentWriter.toString(), "text/plain");
     } catch (Throwable e) {
       try {
@@ -74,5 +95,5 @@ public class ErrorUtils {
       }
     }
   }
-  
+
 }
