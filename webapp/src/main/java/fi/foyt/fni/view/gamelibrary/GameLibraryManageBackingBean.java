@@ -135,7 +135,7 @@ public class GameLibraryManageBackingBean {
   
   @LoggedIn
   @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
-  public void publish(Long publicationId) {
+  public String publish(Long publicationId) {
   	Publication publication = publicationController.findPublicationById(publicationId);
   	
   	if (publication.getForumTopic() == null) {
@@ -159,13 +159,15 @@ public class GameLibraryManageBackingBean {
   	}
   	
   	publicationController.publishPublication(publication);
+    return "pretty:gamelibrary-manage";
 	}
   
   @LoggedIn
   @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
-  public void unpublish(Long publicationId) {
+  public String unpublish(Long publicationId) {
   	Publication publication = publicationController.findPublicationById(publicationId);
   	publicationController.unpublishPublication(publication);
+  	return "pretty:gamelibrary-manage";
 	}
 	
   @LoggedIn
@@ -186,9 +188,10 @@ public class GameLibraryManageBackingBean {
   
   @LoggedIn
   @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
-  public void remove(Long publicationId) {
+  public String remove(Long publicationId) {
   	Publication publication = publicationController.findPublicationById(publicationId);
   	publicationController.deletePublication(publication);
+    return "pretty:gamelibrary-manage";
 	}
 
 }
