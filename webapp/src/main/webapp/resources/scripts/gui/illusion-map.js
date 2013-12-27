@@ -380,24 +380,24 @@
       this.element.trigger(jQuery.Event("canvas.beforeredraw"));
 
       if (this.offscreenDirty() || this.screenDirty()) {
-        /**
-        var oldData = null;
-        
-        if (this.offscreenDirty()) {
-          oldData = this.element[0].toDataURL();
+        if (!this.offscreenDirty()) {
+          this.flipToScreen();
+        } else {
+          var screenCtx = this.screenCtx();
+          
+          var oldData = screenCtx.getImageData(0, 0, this.options.width, this.options.height);
+          var newData = this.offscreenCtx().getImageData(0, 0, this.options.width, this.options.height);
+          var changes = new Object();
+          
+          for (var i = 0; i < oldData.data.length; i+= 4) {
+            if (oldData.data[i] !== newData.data[i]) {
+              changes[i] = newData.data[i];
+            }
+          }
+          
+          screenCtx.putImageData(newData, 0, 0);
         }
-        **/
-        this.flipToScreen();
         
-        if (this.offscreenDirty()) {
-          /**
-          var newData = this.element[0].toDataURL();
-          var diff = this._diffMatchPatch.diff_main(oldData, newData);
-          this._diffMatchPatch.diff_cleanupEfficiency(diff);
-          var patch = this._diffMatchPatch.patch_toText(this._diffMatchPatch.patch_make(oldData, diff));
-          **/
-        }
-              
         this.screenDirty(false);
         this.offscreenDirty(false);
       }
