@@ -67,14 +67,13 @@
 }
 
 /* Map */
-.map-container {
+.map {
   margin-top: 20px;
   position: relative;
 }
 
 .map-canvas {
   width: 860px;
-  background: white;
   border: 1px solid black;
 }
 
@@ -87,16 +86,22 @@
   border: 1px solid #000;
 }
 
-.map-tool {
+.map-button-tool {
   width: 32px;
   height: 32px;
   background: #fff;
   display: inline-block;
   background-repeat: no-repeat;
   background-position: center;
-  border: 1px solid #000;
+  border: 1px solid #aaa;
   margin: 4px;
   cursor: pointer;
+  vertical-align: top;
+}
+
+.map-button-tool-selected {
+  border: 2px solid #000;
+  margin: 3px;
 }
 
 .map-tool-area {
@@ -111,12 +116,13 @@
   background-image: url("https://cdn1.iconfinder.com/data/icons/crystalproject/Open-Office-Icons/stock_draw-line-connector-ends-with-circle.png");
 }
 
-.map-paint-container {
+.map-tool-paints {
   display: block;
   position: relative;
   clear: both;
   padding-left: 10px;
   padding-bottom: 10px;
+  margin-top: 10px;
 }
 
 .map-foreground-paint, .map-background-paint {

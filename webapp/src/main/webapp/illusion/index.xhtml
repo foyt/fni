@@ -15,6 +15,7 @@
   <ui:define name="view-scripts">
     <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script type="text/javascript" src="https://raw.github.com/bgrins/spectrum/master/spectrum.js"></script>
+    <h:outputScript name="scripts/diff_match_patch/diff_match_patch.js"/>
     <h:outputScript name="scripts/simplify/simplify.js"/>
     <h:outputScript name="scripts/gui/illusion-map.js"/>
   </ui:define>
@@ -27,23 +28,7 @@
 
     <h:panelGroup layout="block" styleClass="grid_16 tight">
       <h:panelGroup layout="block" styleClass="map-container">
-        <canvas width="800" height="800" class="map-canvas"></canvas>
-        
-        <h:panelGroup layout="block" styleClass="map-tools">
-          <h:panelGroup layout="block" styleClass="map-tool map-tool-brush"></h:panelGroup>
-          <h:panelGroup layout="block" styleClass="map-tool map-tool-area"></h:panelGroup>
-          <h:panelGroup layout="block" styleClass="map-tool map-tool-path"></h:panelGroup>   
-          
-          <h:panelGroup layout="block" styleClass="map-paint-container">
-            <h:panelGroup layout="block" styleClass="map-foreground-paint" style="background-color: #fff"></h:panelGroup> 
-            <h:panelGroup layout="block" styleClass="map-background-paint" style="background-color: #000"></h:panelGroup>  
-          </h:panelGroup>   
-        </h:panelGroup>
-        
       </h:panelGroup>
-      
-      
-          
     </h:panelGroup>
     
   </ui:define>

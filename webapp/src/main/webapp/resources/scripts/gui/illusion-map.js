@@ -1,14 +1,145 @@
 (function() {
   'use strict';
+  
+  $.widget("custom.illusionMapButtonTool", {
+    options : {},
+    _create : function() {
+      this.element
+        .on("click", $.proxy(this._onClick, this))
+        .addClass('map-tool map-button-tool');
+    },
+    
+    _onClick: function (event) {
+      this.element.closest('.map-tools').find('.map-button-tool-selected').illusionMapButtonTool("deactivate");
+      this.element.illusionMapButtonTool("activate");
+    },
+    
+    activate: function () {
+      this.element.addClass('map-button-tool-selected');
+      if (this.options.activate) {
+        this.options.activate.call(this.element);
+      }
+    },
+    
+    deactivate: function () {
+      this.element.removeClass('map-button-tool-selected');
+      if (this.options.activate) {
+        this.options.deactivate.call(this.element);
+      }
+    },
+    
+    _destroy : function() {
+    }
+  });
+  
+  $.widget("custom.illusionMapToolBrush", {
+    options : {},
+    _create : function() {
+      this._canvasMouseMoveListener = $.proxy(this._onCanvasMouseMove, this);
+      this._canvasMouseDragListener = $.proxy(this._onCanvasMouseDrag, this);
+      this._canvasAfterRedrawListener = $.proxy(this._onCanvasAfterRedraw, this);
+      
+      this._canvas = this.element.closest('.map').find('.map-canvas');
+      this._cursorX = null;
+      this._cursorY = null;
+      
+      this.element
+        .illusionMapButtonTool({
+          activate: $.proxy(this._onActivate, this),
+          deactivate: $.proxy(this._onDeactivate, this)
+        })
+        .addClass('map-tool-brush');
+    },
+    
+    _getCanvas: function () {
+      return this._canvas;
+    },
+    
+    _getRadius: function () {
+      // TODO: Move to tool options
+      return 10;
+    },
+    
+    _setStyle: function (context) {
+      this.element.closest('.map').find('.map-tool-paints').illusionMapToolPaints("setForegroundStyle", context);
+    },
+    
+    _onActivate: function (event) {
+      this._getCanvas().on("canvas.mousemove", this._canvasMouseMoveListener);
+      this._getCanvas().on("canvas.mousedrag", this._canvasMouseDragListener);
+      this._getCanvas().on("canvas.afterredraw", this._canvasAfterRedrawListener);
+    },
+    
+    _onDeactivate: function (event) {
+      this._getCanvas().off("canvas.mousemove", this._canvasMouseMoveListener);
+      this._getCanvas().off("canvas.mousedrag", this._canvasMouseDragListener);
+      this._getCanvas().off("canvas.afterredraw", this._canvasAfterRedrawListener);
+    },
+    
+    _onCanvasAfterRedraw: function (event) {
+      this._getCanvas().illusionMapCanvas('drawScreen', $.proxy(function (screenCtx) {
+        this._setStyle(screenCtx);
+        screenCtx.beginPath();
+        screenCtx.arc(this._cursorX, this._cursorY, this._getRadius(), 0, 2 * Math.PI, false);
+        screenCtx.closePath();  
+        
+        screenCtx.fill();
+      }, this));
+    },
+    
+    _onCanvasMouseMove: function (event) {
+      this._cursorX = event.canvasX;
+      this._cursorY = event.canvasY;
+    },
+    
+    _onCanvasMouseDrag: function (event) {
+      this._getCanvas().illusionMapCanvas('drawOffscreen', $.proxy(function (offscreenCtx) {
+        this._setStyle(offscreenCtx);
+        offscreenCtx.beginPath();
+        offscreenCtx.arc(event.canvasX, event.canvasY, this._getRadius(), 0, 2 * Math.PI, false);
+        offscreenCtx.closePath();
+        offscreenCtx.fill();
+      }, this));
+    },
+    
+    _destroy : function() {
+    }
+  });
+  
+  $.widget("custom.illusionMapToolArea", {
+    options : {},
+    _create : function() {
+      this.element
+        .illusionMapButtonTool()
+        .addClass('map-tool-area');
+    },
+
+    _destroy : function() {
+    }
+  });
+  
+  $.widget("custom.illusionMapToolPath", {
+    options : {},
+    _create : function() {
+      this.element
+        .illusionMapButtonTool()
+        .addClass('map-tool-path');
+    },
+    
+    _destroy : function() {
+    }
+  });
 
   $.widget("custom.illusionMapToolPaint", {
     options : {},
     _create : function() {
       this.element
         .click($.proxy(this._onClick, this));
+      
+      this._setPaint(this.options.type, this.options.value);
     },
     _onClick: function (event) {
-      var dialogElement = $('<div>');
+      this._dialog = $('<div>');
       var tabsElement = $('<div>');
 
       var prefix = new Date().getTime() + '-';
@@ -20,7 +151,7 @@
 
       tabsElement.append(this._tabLabels);
       tabsElement.append(this._tabs);
-      dialogElement.append(tabsElement);
+      this._dialog.append(tabsElement);
       
       $('<li>')
         .append(
@@ -47,12 +178,12 @@
       var patterns = $('<div>')
         .addClass('map-paint-fav-patterns');
       
-      this._addPattern(patterns, 'http://dev.forgeandillusion.net:8080/fni/test/Tiles/Wood/woodchip_medic-e.png');
-      this._addPattern(patterns, 'http://dev.forgeandillusion.net:8080/fni/test/Tiles/Cave/00473-Cave_Floor_1.png');
+      this._addPattern(patterns, 'http://ubuntuone.com/5H1ofuBc7XVIPWMzYjZntO');
+      this._addPattern(patterns, 'http://ubuntuone.com/0q7Bor5Ttk1ZALAhweBTF1');
       patternTabContent.append(patterns);
       
       tabsElement.tabs();
-      dialogElement.dialog();
+      this._dialog.dialog();
 
       var colorInput = $('<input>').appendTo(colorTabContent);
       var colorPreview = $('<div>')
@@ -71,8 +202,46 @@
         }
       });
     },
-    _setPaint: function () {
-      
+    setStyle: function (context) {
+      switch (this._paintType) {
+        case 'color':
+          context.fillStyle = this._paintValue;
+        break;
+        case 'pattern':
+          context.fillStyle = this._paintPattern;
+        break;
+      }
+    },
+    
+    _setPaint: function (type, value) {
+      switch (type) {
+        case 'color':
+          this.element.css({
+            'backgroundColor': value, 
+            'backgroundImage': 'none'
+          });
+
+          this._paintType = type;
+          this._paintValue = value;
+        break;
+        case 'pattern':
+          var image = new Image();
+          image.onload = $.proxy(function () {
+            var canvas = this.element.closest('.map').find('.map-canvas');
+            this._paintPattern = canvas.illusionMapCanvas("offscreenCtx")
+              .createPattern(image, "repeat");
+            
+            this.element.css({
+              'backgroundColor': null, 
+              'backgroundImage': 'url(' + value + ')'
+            });
+            
+            this._paintType = type;
+            this._paintValue = value;
+          }, this);          
+          image.src = value;
+        break;
+      }
     },
     
     _addPattern: function (patterns, src) {
@@ -93,8 +262,40 @@
         .appendTo(patterns)
         .click(function (e) {
           _this._setPaint("pattern", $(this).data('src'));
+          _this._dialog.dialog("close");
         });
     },
+    _destroy : function() {
+    }
+  });
+  
+  $.widget("custom.illusionMapToolPaints", {
+    options : {},
+    _create : function() {
+      this._foregroundPaint = $('<div>')
+        .addClass('map-foreground-paint')
+        .illusionMapToolPaint({
+          type: this.options.foreground.type,
+          value: this.options.foreground.value
+        });
+      
+      this._backgroundPaint = $('<div>')
+        .addClass('map-background-paint')
+        .illusionMapToolPaint({
+          type: this.options.background.type,
+          value: this.options.background.value
+        });
+    
+      this.element
+        .addClass('map-tool map-tool-paints')
+        .append(this._foregroundPaint)
+        .append(this._backgroundPaint);  
+    },
+    
+    setForegroundStyle: function (context) {
+      this._foregroundPaint.illusionMapToolPaint("setStyle", context);
+    },
+    
     _destroy : function() {
     }
   });
@@ -102,11 +303,148 @@
   $.widget("custom.illusionMapTools", {
     options : {},
     _create : function() {
-      this._foregroundPaint = this.element.find('.map-foreground-paint')
-        .illusionMapToolPaint();
+      this.element.addClass("map-tools");
+    },
+    _destroy : function() {
+    }
+  });
+  
+  $.widget("custom.illusionMapCanvas", {
+    options : {},
+    _create : function() {
+      this._mouseDown = false;
+      this._offscreenDirty = false;
+      this._screenDirty = false;
+      this._diffMatchPatch = new diff_match_patch();
+
+      this.element
+        .attr({
+          width: this.options.width,
+          height: this.options.height
+        })
+        .on("mousedown", $.proxy(this._onMouseDown, this))
+        .on("mouseup", $.proxy(this._onMouseUp, this))
+        .on("mousemove", $.proxy(this._onMouseMove, this))
+        .addClass('map-canvas');
       
-      this._backgroundPaint = this.element.find('.map-background-paint')
-        .illusionMapToolPaint();
+      this._offscreenCanvas = $('<canvas>')
+        .attr({
+          width: this.options.width,
+          height: this.options.height
+        });
+      
+      this._scheduleRedraw();
+    },
+    
+    offscreenCtx: function () {
+      return this._offscreenCanvas[0].getContext("2d");
+    },
+    
+    screenCtx: function () {
+      return this.element[0].getContext("2d");
+    },
+
+    screenDirty: function (value) {
+      if (value !== undefined) {
+        this._screenDirty = value;
+      } else {
+        return this._screenDirty;
+      }
+    },
+    
+    offscreenDirty: function (value) {
+      if (value !== undefined) {
+        this._offscreenDirty = value;
+      } else {
+        return this._offscreenDirty;
+      }
+    },
+
+    drawScreen: function (func) {
+      func.call(this, this.screenCtx());
+      this.screenDirty(true);
+    },
+    
+    drawOffscreen: function (func) {
+      func.call(this, this.offscreenCtx());
+      this.offscreenDirty(true);
+    },
+    
+    flipToScreen: function () {
+      var screenCtx = this.screenCtx();
+      screenCtx.clearRect(0, 0, this.options.width, this.options.height); 
+      screenCtx.drawImage(this._offscreenCanvas[0], 0, 0, this.options.width, this.options.height);
+    },
+    
+    _scheduleRedraw: function () {
+      this.element.trigger(jQuery.Event("canvas.beforeredraw"));
+
+      if (this.offscreenDirty() || this.screenDirty()) {
+        /**
+        var oldData = null;
+        
+        if (this.offscreenDirty()) {
+          oldData = this.element[0].toDataURL();
+        }
+        **/
+        this.flipToScreen();
+        
+        if (this.offscreenDirty()) {
+          /**
+          var newData = this.element[0].toDataURL();
+          var diff = this._diffMatchPatch.diff_main(oldData, newData);
+          this._diffMatchPatch.diff_cleanupEfficiency(diff);
+          var patch = this._diffMatchPatch.patch_toText(this._diffMatchPatch.patch_make(oldData, diff));
+          **/
+        }
+              
+        this.screenDirty(false);
+        this.offscreenDirty(false);
+      }
+
+      this.element.trigger(jQuery.Event("canvas.afterredraw"));
+
+      this._redrawTimeoutId = setTimeout($.proxy(this._scheduleRedraw, this), 5); 
+    },
+    
+    _onMouseDown: function (e) {
+      var offset = this.element.offset();
+      
+      this.element.trigger(jQuery.Event("canvas.mousedown", {
+        originalEvent: e,
+        canvasX: e.pageX - offset.left,
+        canvasY: e.pageY - offset.top,
+      }));
+      
+      this._mouseDown = true;
+    },
+    _onMouseUp: function (e) {
+      var offset = this.element.offset();
+      
+      this.element.trigger(jQuery.Event("canvas.mouseup", {
+        originalEvent: e,
+        canvasX: e.pageX - offset.left,
+        canvasY: e.pageY - offset.top,
+      }));
+      
+      this._mouseDown = false;
+    },
+    _onMouseMove: function (e) {
+      var offset = this.element.offset();
+      
+      this.element.trigger(jQuery.Event("canvas.mousemove", {
+        originalEvent: e,
+        canvasX: e.pageX - offset.left,
+        canvasY: e.pageY - offset.top,
+      }));
+      
+      if (this._mouseDown) {
+        this.element.trigger(jQuery.Event("canvas.mousedrag", {
+          originalEvent: e,
+          canvasX: e.pageX - offset.left,
+          canvasY: e.pageY - offset.top,
+        }));
+      }
     },
     _destroy : function() {
     }
@@ -115,34 +453,23 @@
   $.widget("custom.illusionMap", {
     options : {},
     _create : function() {
-      this._mouseDown = false;
+      this.element.addClass('map');
+    },
+    _destroy : function() {
+    }
+  });
+  
+/**  
+  $.widget("custom.illusionMap", {
+    options : {},
+    _create : function() {
+      
       
       this.element
-        .on("mousedown", $.proxy(this._onMouseDown, this))
-        .on("mouseup", $.proxy(this._onMouseUp, this))
-        .on("mousemove", $.proxy(this._onMouseMove, this))
+        
         .on("illusionmapmousedragstart", $.proxy(this._onMouseDragStart, this))
         .on("illusionmapmousedragend", $.proxy(this._onMouseDragEnd, this))
         .on("illusionmapmousedrag", $.proxy(this._onMouseDrag, this));
-    },
-    _onMouseDown: function (e) {
-      if (!this._mouseDown) {
-        this._trigger("mousedragstart", e);
-      }
-      
-      this._mouseDown = true;
-    },
-    _onMouseUp: function (e) {
-      if (this._mouseDown) {
-        this._trigger("mousedragend", e);
-      }
-      
-      this._mouseDown = false;
-    },
-    _onMouseMove: function (e) {
-      if (this._mouseDown) {
-        this._trigger("mousedrag", e);
-      }
     },
     _onMouseDragStart: function (e) {
       this._dragPath = new Array();
@@ -196,7 +523,7 @@
       ctx.closePath();
     }
   });
-  
+  **/
   $(document).ready(function() {
 //    var image = new Image();
 //    image.src = CONTEXTPATH + '/test/forest03.png';
@@ -252,8 +579,35 @@
 //      
 //    });
     
-    $('.map-tools').illusionMapTools({
-      paint: {
+    var map = $('<div>')
+      .appendTo($('.map-container'))
+      .illusionMap();
+    
+    $('<canvas>')
+      .appendTo(map)
+      .illusionMapCanvas({
+        width: 800,
+        height: 800
+      });
+    
+    var tools = $('<div>').illusionMapTools()
+      .appendTo(map);
+    
+    $('<div>')
+      .appendTo(tools)
+      .illusionMapToolBrush();
+       
+    $('<div>')
+      .appendTo(tools)
+      .illusionMapToolArea();
+       
+    $('<div>')
+      .appendTo(tools)
+      .illusionMapToolPath();
+       
+    $('<div>')
+      .appendTo(tools)
+      .illusionMapToolPaints({
         foreground: {
           type: 'color',
           value: '#fff'
@@ -262,8 +616,7 @@
           type: 'color',
           value: '#000'
         }
-      }
-    });
+      });
   });
   
 }).call(this);
