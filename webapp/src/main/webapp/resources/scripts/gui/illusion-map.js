@@ -310,12 +310,14 @@
   });
   
   $.widget("custom.illusionMapCanvas", {
-    options : {},
+    options : {
+      redrawInternal: 5,
+      changePollInternal: 200
+    },
     _create : function() {
       this._mouseDown = false;
       this._offscreenDirty = false;
       this._screenDirty = false;
-      this._diffMatchPatch = new diff_match_patch();
 
       this.element
         .attr({
@@ -332,8 +334,10 @@
           width: this.options.width,
           height: this.options.height
         });
+      this._currentData = this._getOffscreenData();
       
       this._scheduleRedraw();
+      this._scheduleChangePolling();
     },
     
     offscreenCtx: function () {
@@ -380,31 +384,55 @@
       this.element.trigger(jQuery.Event("canvas.beforeredraw"));
 
       if (this.offscreenDirty() || this.screenDirty()) {
-        if (!this.offscreenDirty()) {
-          this.flipToScreen();
-        } else {
-          var screenCtx = this.screenCtx();
-          
-          var oldData = screenCtx.getImageData(0, 0, this.options.width, this.options.height);
-          var newData = this.offscreenCtx().getImageData(0, 0, this.options.width, this.options.height);
-          var changes = new Object();
-          
-          for (var i = 0; i < oldData.data.length; i+= 4) {
-            if (oldData.data[i] !== newData.data[i]) {
-              changes[i] = newData.data[i];
-            }
-          }
-          
-          screenCtx.putImageData(newData, 0, 0);
-        }
-        
+        /**
+        if (this.offscreenDirty()) {
+          this._currentData = this._getOffscreenData();
+        } 
+        **/
+        this.flipToScreen();
         this.screenDirty(false);
         this.offscreenDirty(false);
       }
-
+      
       this.element.trigger(jQuery.Event("canvas.afterredraw"));
 
-      this._redrawTimeoutId = setTimeout($.proxy(this._scheduleRedraw, this), 5); 
+      this._redrawTimeoutId = setTimeout($.proxy(this._scheduleRedraw, this), this.options.redrawInternal); 
+    },
+    
+    _scheduleChangePolling: function () {
+      var currentData = this._getOffscreenData();
+
+      var diff = this._diffImageData(this._currentData, currentData);
+      if (!diff.matches) {
+        this._currentData = currentData;
+        
+        this.element.trigger(jQuery.Event("canvas.changed"), {
+          changes: diff.changes
+        });
+      }
+
+      this._redrawTimeoutId = setTimeout($.proxy(this._scheduleChangePolling, this), this.options.changePollInternal); 
+    },
+    
+    _getOffscreenData: function () {
+      return this.offscreenCtx().getImageData(0, 0, this.options.width, this.options.height);
+    },
+    
+    _diffImageData: function (data1, data2) {
+      var changes = new Object();
+      var matches = true;
+      
+      for (var i = 0; i < data1.data.length; i+= 4) {
+        if (data1.data[i] !== data2.data[i]) {
+          changes[i] = data2.data[i];
+          matches = false;
+        }
+      }
+      
+      return {
+        changes: changes,
+        matches: matches
+      };
     },
     
     _onMouseDown: function (e) {
@@ -588,6 +616,9 @@
       .illusionMapCanvas({
         width: 800,
         height: 800
+      })
+      .on("canvas.changed", function (event, data) {
+        console.log(["changed", data, data.changes]);
       });
     
     var tools = $('<div>').illusionMapTools()
