@@ -1,6 +1,43 @@
 (function() {
   'use strict';
   
+  function RGBAsToInts (rgbas) {
+    var ints = new Array(rgbas.length >> 2);
+    for (var i = 0, l = rgbas.length; i < l; i += 4) {
+      ints[i >> 2] = ((rgbas[i] << 24) + (rgbas[i + 1] << 16) + (rgbas[i + 2] << 8) + (rgbas[i + 3] << 0)) >>> 0;
+    }
+    
+    return ints;
+  };
+
+  function IntsToRGBAs (ints) {
+    var result = new Array(ints.length << 2);
+    
+    for (var i = 0, l = ints.length; i < l; i++) {
+      var ri = i << 2;
+      result[ri] = (ints[i] & 4278190080) >>> 24;
+      result[ri + 1] = (ints[i] & 16711680) >>> 16;
+      result[ri + 2] = (ints[i] & 65280) >>> 8;
+      result[ri + 3] = (ints[i] & 255) >>> 0;
+    }
+    
+    return result;
+  };
+  
+  function RGBAToInt (r, g, b, a) {
+    return RGBAsToInts([r, g, b, a]);
+  };
+  
+  function IntToRGBA (int) {
+    return IntsToRGBAs([int]);
+  };
+  
+  function indexToCoords(index, screenWidth) {
+    var y = Math.floor(index / screenWidth);
+    var x = index - (y * screenWidth);
+    return [x, y];
+  };
+  
   $.widget("custom.illusionMapButtonTool", {
     options : {},
     _create : function() {
@@ -227,6 +264,15 @@
         case 'pattern':
           var image = new Image();
           image.onload = $.proxy(function () {
+            var tempCanvas = $('<canvas>')
+              .attr({
+                width: image.width,
+                height: image.height
+              })[0];
+            
+            tempCanvas.getContext("2d").drawImage(image, 0, 0);
+            image.src = tempCanvas.toDataURL();
+            
             var canvas = this.element.closest('.map').find('.map-canvas');
             this._paintPattern = canvas.illusionMapCanvas("offscreenCtx")
               .createPattern(image, "repeat");
@@ -334,6 +380,7 @@
           width: this.options.width,
           height: this.options.height
         });
+
       this._currentData = this._getOffscreenData();
       
       this._scheduleRedraw();
@@ -401,7 +448,6 @@
     
     _scheduleChangePolling: function () {
       var currentData = this._getOffscreenData();
-
       var diff = this._diffImageData(this._currentData, currentData);
       if (!diff.matches) {
         this._currentData = currentData;
@@ -415,19 +461,27 @@
     },
     
     _getOffscreenData: function () {
-      return this.offscreenCtx().getImageData(0, 0, this.options.width, this.options.height);
+       var imageData = this.offscreenCtx().getImageData(0, 0, this.options.width, this.options.height);
+       return RGBAsToInts(imageData.data);
     },
     
     _diffImageData: function (data1, data2) {
-      var changes = new Object();
+      var changes = new Array();
       var matches = true;
       
-      for (var i = 0; i < data1.data.length; i+= 4) {
-        if (data1.data[i] !== data2.data[i]) {
-          changes[i] = data2.data[i];
+      for (var i = 0; i < data1.length; i++) {
+        if (data1[i] !== data2[i]) {
+          var coordinate = indexToCoords(i, this.options.width);          
+          
+          changes.push({
+            x: coordinate[0],
+            y: coordinate[1],
+            value: data2[i]
+          });
+          
           matches = false;
         }
-      }
+      };
       
       return {
         changes: changes,
@@ -614,11 +668,25 @@
     $('<canvas>')
       .appendTo(map)
       .illusionMapCanvas({
-        width: 800,
-        height: 800
+        width: 860,
+        height: 300
       })
       .on("canvas.changed", function (event, data) {
-        console.log(["changed", data, data.changes]);
+        var replyttaja = document.getElementById('replykaattori');
+        var ctx = replyttaja.getContext('2d');
+        var imageData = ctx.getImageData(0, 0, 860, 300);
+        
+        $.each(data.changes, function (index, change) {
+          var dataIndex = (change.x + (change.y * 860));
+          var rgba = IntToRGBA(change.value);
+
+          imageData.data[(dataIndex * 4) + 0] = rgba[0];
+          imageData.data[(dataIndex * 4) + 1] = rgba[1];
+          imageData.data[(dataIndex * 4) + 2] = rgba[2];
+          imageData.data[(dataIndex * 4) + 3] = rgba[3];
+        });
+        
+        ctx.putImageData(imageData, 0, 0, 0, 0, 860, 300);
       });
     
     var tools = $('<div>').illusionMapTools()
