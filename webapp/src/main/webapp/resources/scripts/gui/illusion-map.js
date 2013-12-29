@@ -215,8 +215,8 @@
       var patterns = $('<div>')
         .addClass('map-paint-fav-patterns');
       
-      this._addPattern(patterns, 'http://ubuntuone.com/5H1ofuBc7XVIPWMzYjZntO');
-      this._addPattern(patterns, 'http://ubuntuone.com/0q7Bor5Ttk1ZALAhweBTF1');
+      this._addPattern(patterns, CONTEXTPATH + '/illusion/mapImage?url=http://ubuntuone.com/5H1ofuBc7XVIPWMzYjZntO');
+      this._addPattern(patterns, CONTEXTPATH + '/illusion/mapImage?url=http://ubuntuone.com/0q7Bor5Ttk1ZALAhweBTF1');
       patternTabContent.append(patterns);
       
       tabsElement.tabs();
@@ -264,15 +264,6 @@
         case 'pattern':
           var image = new Image();
           image.onload = $.proxy(function () {
-            var tempCanvas = $('<canvas>')
-              .attr({
-                width: image.width,
-                height: image.height
-              })[0];
-            
-            tempCanvas.getContext("2d").drawImage(image, 0, 0);
-            image.src = tempCanvas.toDataURL();
-            
             var canvas = this.element.closest('.map').find('.map-canvas');
             this._paintPattern = canvas.illusionMapCanvas("offscreenCtx")
               .createPattern(image, "repeat");
