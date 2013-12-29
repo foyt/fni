@@ -65,6 +65,10 @@
       }
     },
     
+    styleContext: function (context) {
+      this.element.closest('.map').find('.map-tool-paints').illusionMapToolPaints("setForegroundStyle", context);
+    },
+    
     _destroy : function() {
     }
   });
@@ -88,34 +92,27 @@
         .addClass('map-tool-brush');
     },
     
-    _getCanvas: function () {
-      return this._canvas;
-    },
-    
     _getRadius: function () {
       // TODO: Move to tool options
       return 10;
     },
     
-    _setStyle: function (context) {
-      this.element.closest('.map').find('.map-tool-paints').illusionMapToolPaints("setForegroundStyle", context);
-    },
-    
     _onActivate: function (event) {
-      this._getCanvas().on("canvas.mousemove", this._canvasMouseMoveListener);
-      this._getCanvas().on("canvas.mousedrag", this._canvasMouseDragListener);
-      this._getCanvas().on("canvas.afterredraw", this._canvasAfterRedrawListener);
+      this._canvas.on("canvas.mousemove", this._canvasMouseMoveListener);
+      this._canvas.on("canvas.mousedrag", this._canvasMouseDragListener);
+      this._canvas.on("canvas.afterredraw", this._canvasAfterRedrawListener);
     },
     
     _onDeactivate: function (event) {
-      this._getCanvas().off("canvas.mousemove", this._canvasMouseMoveListener);
-      this._getCanvas().off("canvas.mousedrag", this._canvasMouseDragListener);
-      this._getCanvas().off("canvas.afterredraw", this._canvasAfterRedrawListener);
+      this._canvas.off("canvas.mousemove", this._canvasMouseMoveListener);
+      this._canvas.off("canvas.mousedrag", this._canvasMouseDragListener);
+      this._canvas.off("canvas.afterredraw", this._canvasAfterRedrawListener);
     },
     
     _onCanvasAfterRedraw: function (event) {
-      this._getCanvas().illusionMapCanvas('drawScreen', $.proxy(function (screenCtx) {
-        this._setStyle(screenCtx);
+      this._canvas.illusionMapCanvas('drawScreen', $.proxy(function (screenCtx) {
+        $(this.element).illusionMapButtonTool("styleContext", screenCtx);
+        
         screenCtx.beginPath();
         screenCtx.arc(this._cursorX, this._cursorY, this._getRadius(), 0, 2 * Math.PI, false);
         screenCtx.closePath();  
@@ -130,8 +127,8 @@
     },
     
     _onCanvasMouseDrag: function (event) {
-      this._getCanvas().illusionMapCanvas('drawOffscreen', $.proxy(function (offscreenCtx) {
-        this._setStyle(offscreenCtx);
+      this._canvas.illusionMapCanvas('drawOffscreen', $.proxy(function (offscreenCtx) {
+        $(this.element).illusionMapButtonTool("styleContext", offscreenCtx);
         offscreenCtx.beginPath();
         offscreenCtx.arc(event.canvasX, event.canvasY, this._getRadius(), 0, 2 * Math.PI, false);
         offscreenCtx.closePath();
@@ -146,11 +143,82 @@
   $.widget("custom.illusionMapToolArea", {
     options : {},
     _create : function() {
+      this._canvasMouseUpListener = $.proxy(this._onCanvasMouseUp, this);
+      this._canvasMouseDownListener = $.proxy(this._onCanvasMouseDown, this);
+      this._canvasMouseDragListener = $.proxy(this._onCanvasMouseDrag, this);
+      this._canvasAfterRedrawListener = $.proxy(this._onCanvasAfterRedraw, this);
+      
+      this._canvas = this.element.closest('.map').find('.map-canvas');
+      this._dragPath = null;
+      
       this.element
-        .illusionMapButtonTool()
+        .illusionMapButtonTool({
+          activate: $.proxy(this._onActivate, this),
+          deactivate: $.proxy(this._onDeactivate, this)
+        })
         .addClass('map-tool-area');
     },
+    
+    _onActivate: function (event) {
+      this._canvas.on("mousedown", this._canvasMouseDownListener);
+      this._canvas.on("mouseup", this._canvasMouseUpListener);
+      this._canvas.on("canvas.mousedrag", this._canvasMouseDragListener);
+      this._canvas.on("canvas.afterredraw", this._canvasAfterRedrawListener);
+    },
+    
+    _onDeactivate: function (event) {
+      this._canvas.off("mousedown", this._canvasMouseDownListener);
+      this._canvas.off("mouseup", this._canvasMouseUpListener);
+      this._canvas.off("canvas.mousedrag", this._canvasMouseDragListener);
+      this._canvas.off("canvas.afterredraw", this._canvasAfterRedrawListener);
+    },
 
+    _onCanvasMouseDown: function (event) {
+      this._dragPath = new Array();
+    },
+
+    _onCanvasMouseDrag: function (event) {
+      this._dragPath.push({
+        x: event.canvasX,
+        y: event.canvasY
+      });
+      
+      this._dragPath = simplify(this._dragPath, 1, true);
+    },
+
+    _onCanvasMouseUp: function (event) {
+      this._canvas.illusionMapCanvas('drawOffscreen', $.proxy(function (offscreenCtx) {
+        this._drawPath(offscreenCtx);
+      }, this));
+      
+      this._dragPath = null;
+    },
+    
+    _onCanvasAfterRedraw: function (event) {
+      if (this._dragPath != null) {
+        this._canvas.illusionMapCanvas('drawScreen', $.proxy(function (screenCtx) {
+          this._drawPath(screenCtx);
+        }, this));
+      }
+    },
+    
+    _drawPath: function (context) {
+      $(this.element).illusionMapButtonTool("styleContext", context);
+      
+      context.beginPath();
+      if (this._dragPath.length > 0) {
+        for (var i = 0, l = this._dragPath.length; i < l; i++) {
+          var p = this._dragPath[i];
+          if (p) {
+            context.lineTo(p.x, p.y);
+          }
+        }
+      }
+
+      context.closePath(); 
+      context.fill();
+    },
+    
     _destroy : function() {
     }
   });
@@ -532,126 +600,7 @@
     }
   });
   
-/**  
-  $.widget("custom.illusionMap", {
-    options : {},
-    _create : function() {
-      
-      
-      this.element
-        
-        .on("illusionmapmousedragstart", $.proxy(this._onMouseDragStart, this))
-        .on("illusionmapmousedragend", $.proxy(this._onMouseDragEnd, this))
-        .on("illusionmapmousedrag", $.proxy(this._onMouseDrag, this));
-    },
-    _onMouseDragStart: function (e) {
-      this._dragPath = new Array();
-      
-      console.log("Dragstart");
-    },
-    _onMouseDrag: function (e) {
-      // var ctx = this.element.context.getContext('2d');
-      // ctx.clearRect(0, 0, 800, 400);
-
-      var offset = this.element.offset();
-      
-      this._dragPath.push({
-        x: e.pageX - offset.left,
-        y: e.pageY - offset.top
-      });
-      this._dragPath = simplify(this._dragPath, 1, true);
-      
-      this._plotPath(this._dragPath, "#f00");
-    },
-    _onMouseDragEnd: function (e) {
-      console.log("path " + this._dragPath.length);
-      console.log("Dragend");
-    },
-    _destroy : function() {
-    },
-    _plotPath: function (path, color) {
-      var ctx = this.element.context.getContext('2d');
-      
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 2;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      
-      ctx.fillStyle = ctx.createPattern(this.options.patternImage, "repeat");
-      ctx.beginPath();
-
-      if (path.length > 0) {
-        for (var i = 0, l = path.length; i < l; i++) {
-          var p = path[i];
-          if (p) {
-            ctx.lineTo(p.x, p.y);
-          }
-        }
-        
-        ctx.lineTo(path[0].x, path[0].y);
-      }
-
-      // ctx.stroke();
-      ctx.fill();
-      ctx.closePath();
-    }
-  });
-  **/
   $(document).ready(function() {
-//    var image = new Image();
-//    image.src = CONTEXTPATH + '/test/forest03.png';
-//    image.onload = function (e) {
-
-//    $('.select').autocomplete({
-//      source: function( request, response ) {
-//        var term = this.term.toLowerCase();
-//        
-//        $.getJSON(CONTEXTPATH + "/test/files.json", {
-//        }, function (data, status, xhr) {
-//          var images = data['images'];
-//          
-//          for (var i = images.length - 1; i >= 0; i--) {
-//            if (images[i].toLowerCase().indexOf(term) == -1) {
-//              images.splice(i, 1);
-//            }
-//          }
-//          
-//          response( $.map( images, function( image ) {
-//            return {
-//              label: image,
-//              value: 'http://dev.forgeandillusion.net:8080/fni/test/Tiles/' + image
-//            };
-//          }));
-//        });
-//      },
-//      select: function( event, ui ) {
-//        var image = $('<img>')
-//         .attr('src', ui.item.value)
-//         .css({
-//           'maxWidth': '32px'
-//         });
-//        
-//        $('.images').append(image);
-//        
-//        /**
-//        var users = $(dialog).find('.forge-share-material-users');
-//        var userId = ui.item.value;
-//        if (users.find('input[value="' + userId + '"]').length == 0) {
-//          users.append(
-//            $('<div class="forge-share-material-user">')
-//              .append($('<input name="user" type="hidden">').val(userId))
-//              .append($('<label>').text(ui.item.label))
-//              .append(createRoleSelect())); 
-//        }
-//        
-//        **/
-//      }
-//    });
-//
-//    $('#map').illusionMap({
-//      
-//    });
-    
     var map = $('<div>')
       .appendTo($('.map-container'))
       .illusionMap();
