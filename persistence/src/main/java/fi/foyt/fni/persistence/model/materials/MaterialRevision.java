@@ -69,12 +69,12 @@ public class MaterialRevision {
     this.revision = revision;
   }
   
-  public String getClientId() {
-    return clientId;
+  public String getSessionId() {
+    return sessionId;
   }
   
-  public void setClientId(String clientId) {
-    this.clientId = clientId;
+  public void setSessionId(String sessionId) {
+    this.sessionId = sessionId;
   }
   
   @Id
@@ -100,5 +100,5 @@ public class MaterialRevision {
   @Column (nullable = false, updatable = false)
   private Long revision;
   
-  private String clientId;
+  private String sessionId;
 }

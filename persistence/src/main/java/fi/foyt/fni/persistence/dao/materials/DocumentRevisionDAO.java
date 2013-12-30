@@ -19,7 +19,7 @@ public class DocumentRevisionDAO extends GenericDAO<DocumentRevision> {
 
 	private static final long serialVersionUID = 1L;
 
-	public DocumentRevision create(Document document, Long revision, Date created, Boolean compressed, Boolean completeRevision, byte[] data, String checksum, String clientId) {
+	public DocumentRevision create(Document document, Long revision, Date created, Boolean compressed, Boolean completeRevision, byte[] data, String checksum, String sessionId) {
     DocumentRevision documentRevision = new DocumentRevision();
     documentRevision.setCreated(created);
     documentRevision.setCompleteRevision(completeRevision);
@@ -29,7 +29,7 @@ public class DocumentRevisionDAO extends GenericDAO<DocumentRevision> {
     documentRevision.setDocument(document);
     documentRevision.setRevision(revision);
     documentRevision.setChecksum(checksum);
-    documentRevision.setClientId(clientId);
+    documentRevision.setSessionId(sessionId);
     
     return persist(documentRevision);
   }
