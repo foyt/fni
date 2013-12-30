@@ -43,7 +43,6 @@ import fi.foyt.fni.persistence.dao.materials.DropboxFileDAO;
 import fi.foyt.fni.persistence.dao.materials.FileDAO;
 import fi.foyt.fni.persistence.dao.materials.FolderDAO;
 import fi.foyt.fni.persistence.dao.materials.GoogleDocumentDAO;
-import fi.foyt.fni.persistence.dao.materials.ImageDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialTagDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialThumbnailDAO;
@@ -118,9 +117,6 @@ public class MaterialController {
   private PdfDAO pdfDAO;
 
   @Inject
-  private ImageDAO imageDAO;
-
-  @Inject
   private BinaryDAO binaryDAO;
 
   @Inject
@@ -173,30 +169,9 @@ public class MaterialController {
 
   @Inject
   private GoogleDriveMaterialController googleDriveMaterialController;
-
-  public String getMaterialMimeType(Material material) {
-    switch (material.getType()) {
-    case DOCUMENT:
-      return "text/html";
-    case FILE:
-      return fileDAO.findById(material.getId()).getContentType();
-    case IMAGE:
-      return imageDAO.findById(material.getId()).getContentType();
-    case PDF:
-      return pdfDAO.findById(material.getId()).getContentType();
-    case VECTOR_IMAGE:
-      return "image/svg+xml";
-    case DROPBOX_FILE:
-      return dropboxFileDAO.findById(material.getId()).getMimeType();
-    case UBUNTU_ONE_FILE:
-      return ubuntuOneFileDAO.findById(material.getId()).getMimeType();
-    case GOOGLE_DOCUMENT:
-      GoogleDocument googleDocument = googleDocumentDAO.findById(material.getId());
-      return googleDocument.getMimeType();
-    default:
-      return "application/octet-stream";
-    }
-  }
+  
+  @Inject
+  private ImageController imageController;
 
   public MimeType parseMimeType(String mimeType) throws MimeTypeParseException {
     MimeType type = new MimeType(mimeType);
@@ -801,7 +776,7 @@ public class MaterialController {
         return createVectorImage(parentFolder, user, new String(fileData.getData(), "UTF-8"), fileData.getFileName());
       } else {
         if (fileData.getContentType().equals("image/png")) {
-          return createImage(parentFolder, user, fileData.getData(), fileData.getContentType(), fileData.getFileName());
+          return imageController.createImage(parentFolder, user, fileData.getData(), fileData.getContentType(), fileData.getFileName());
         } else {
           return uploadImage(parentFolder, user, fileData);
         }
@@ -849,17 +824,7 @@ public class MaterialController {
 
   private Material uploadImage(Folder parentFolder, User loggedUser, FileData fileData) throws IOException {
     TypedData imageData = ImageUtils.convertToPng(fileData);
-    return createImage(parentFolder, loggedUser, imageData.getData(), imageData.getContentType(), fileData.getFileName());
-  }
-
-  public Image createImage(Folder parentFolder, User loggedUser, byte[] data, String contentType, String title) {
-    Date now = new Date();
-    String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
-    return imageDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, contentType, MaterialPublicity.PRIVATE);
-  }
-
-  public Image updateImageContent(Image image, String contentType, byte[] data, User modifier) {
-    return imageDAO.updateData(imageDAO.updateContentType(image, modifier, contentType), modifier, data);
+    return imageController.createImage(parentFolder, loggedUser, imageData.getData(), imageData.getContentType(), fileData.getFileName());
   }
 
   private Material createVectorImage(Folder parentFolder, User loggedUser, String data, String title) {
