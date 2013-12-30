@@ -38,7 +38,7 @@
               
               this._useMethodOverride = joinData.extensions.indexOf('x-http-method-override') > -1;
               this._revisionNumber = joinData.revisionNumber;
-              this._clientId = joinData.clientId;
+              this._sessionId = joinData.sessionId;
 
               this.getEditor().on("CoOPS:ContentPatch", this._onContentPatch, this);
               this.getEditor().on("CoOPS:ContentRevert", this._onContentRevert, this);
@@ -58,7 +58,7 @@
             var patch = event.data.patch;
             this.getEditor().getChangeObserver().pause();
             
-            this._doPatch(this._editor.config.coops.serverUrl, { patch: patch, revisionNumber : this._revisionNumber, clientId: this._clientId }, CKEDITOR.tools.bind(function (status, responseJson, responseText) {
+            this._doPatch(this._editor.config.coops.serverUrl, { patch: patch, revisionNumber : this._revisionNumber, sessionId: this._sessionId }, CKEDITOR.tools.bind(function (status, responseJson, responseText) {
               switch (status) {
                 case 204:
                   // Request was ok
@@ -90,7 +90,7 @@
               properties[changedProperties[i].property] = changedProperties[i].currentValue;
             };
             
-            this._doPatch(this._editor.config.coops.serverUrl, { properties: properties, revisionNumber : this._revisionNumber, clientId: this._clientId  }, CKEDITOR.tools.bind(function (status, responseJson, responseText) {
+            this._doPatch(this._editor.config.coops.serverUrl, { properties: properties, revisionNumber : this._revisionNumber, sessionId: this._sessionId  }, CKEDITOR.tools.bind(function (status, responseJson, responseText) {
               switch (status) {
                 case 204:
                   // Request was ok
@@ -192,7 +192,7 @@
           },
           
           _applyPatch: function (patch, callback) {
-            if (this._clientId != patch.clientId) {
+            if (this._sessionId != patch.sessionId) {
               // Received a patch from other client
               if (this._editor.fire("CoOPS:PatchReceived", {
                 patch : patch.patch,
