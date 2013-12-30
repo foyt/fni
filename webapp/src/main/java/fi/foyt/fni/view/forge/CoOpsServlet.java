@@ -183,7 +183,7 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
     }
 
     Long patchRevisionNumber = revisionNumber + 1;
-    DocumentRevision documentRevision = documentController.createDocumentRevision(document, patchRevisionNumber, new Date(), false, false, patchData, checksum, patch.getClientId());
+    DocumentRevision documentRevision = documentController.createDocumentRevision(document, patchRevisionNumber, new Date(), false, false, patchData, checksum, patch.getSessionId());
     
     Map<String, String> properties = patch.getProperties();
     if (properties != null) {
@@ -283,9 +283,9 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
       }
       
       if (patch != null) {
-        updateResults.add(new Patch(documentRevision.getRevision(), patch, properties, documentRevision.getChecksum(), documentRevision.getClientId()));
+        updateResults.add(new Patch(documentRevision.getRevision(), patch, properties, documentRevision.getChecksum(), documentRevision.getSessionId()));
       } else {
-        updateResults.add(new Patch(documentRevision.getRevision(), null, properties, null, documentRevision.getClientId()));
+        updateResults.add(new Patch(documentRevision.getRevision(), null, properties, null, documentRevision.getSessionId()));
       }
     }
 
