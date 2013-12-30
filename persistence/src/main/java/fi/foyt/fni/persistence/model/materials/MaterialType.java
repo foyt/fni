@@ -4,6 +4,7 @@ public enum MaterialType {
   DOCUMENT,
   IMAGE,
   PDF,
+  MAP,
   FILE,
   FOLDER,
   BINARY,
