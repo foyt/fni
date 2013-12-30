@@ -152,7 +152,7 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
       throw new CoOpsNotFoundException();
     }
     
-    if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), document)) {
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), document)) {
       throw new CoOpsForbiddenException();
     }
     
