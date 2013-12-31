@@ -415,7 +415,12 @@
   });
   
   $.widget("custom.illusionMapCoOps", {
+    options: {
+      changePollInternal: 200
+    },
     _create : function() {
+      this._pollingChanges = false;
+      
       this.element
         .on("coops.join", $.proxy(this._onCoOpsJoin, this));
       
@@ -428,6 +433,61 @@
       });
     },
     
+    _pollChanges: function () {
+      if (this._pollingChanges == true) {
+        var currentData = this.element.illusionMapCanvas("offscreenData");
+        
+        var diff = this._diffImageData(this._currentData, currentData);
+        if (!diff.matches) {
+          this._currentData = currentData;
+          
+          this.element.trigger(jQuery.Event("coops.changed"), {
+            changes: diff.changes
+          });
+        }
+          
+        this._changePollTimeoutId = setTimeout($.proxy(this._pollChanges, this), this.options.changePollInternal); 
+      }
+    },
+    
+    _startChangePolling: function () {
+      if (this._pollingChanges == false) {
+        this._pollingChanges = true;
+        this._pollChanges();
+      }
+    },
+    
+    _stopChangePolling: function () {
+      if (this._pollingChanges == true) {
+        clearTimeout(this._changePollTimeoutId);
+        this._pollingChanges = false;
+      }
+    },
+       
+    _diffImageData: function (data1, data2) {
+      var changes = new Array();
+      var matches = true;
+      
+      for (var i = 0; i < data1.length; i++) {
+        if (data1[i] !== data2[i]) {
+          var coordinate = indexToCoords(i, this.element.width());          
+          
+          changes.push({
+            x: coordinate[0],
+            y: coordinate[1],
+            v: data2[i]
+          });
+          
+          matches = false;
+        }
+      };
+      
+      return {
+        changes: changes,
+        matches: matches
+      };
+    },
+    
     _onJoinRequstSuccess: function (data, textStatus, jqXHR) {
       var imageUrl = 'data:' + data.contentType + ';base64,' + data.content;
       $(this.element).illusionMapCanvas("loadImage", imageUrl);
@@ -438,12 +498,16 @@
     
     _onCoOpsJoin: function (event, data) {
       this.element
-        .on("canvas.changed", $.proxy(this._onCanvasChanged, this));
+        .on("coops.changed", $.proxy(this._onCoOpsChanged, this));
       
       this._pollUpdates();
+      this._currentData = this.element.illusionMapCanvas("offscreenData");
+      this._startChangePolling();
     },
     
-    _onCanvasChanged: function (event, data) {
+    _onCoOpsChanged: function (event, data) {
+      this._stopChangePolling();
+
       $.ajax(this.options.serverUrl, {
         type: 'PATCH',
         data: JSON.stringify({
@@ -451,22 +515,21 @@
           'revisionNumber': this._revisionNumber, 
           'sessionId': this._sessionId 
         }),
-        done: function (data, textStatus, jqXHR) {
+        done: $.proxy(function (data, textStatus, jqXHR) {
           var status = jqXHR.status;
           switch (status) {
             case 204:
               // Request was ok
             break;
             case 409:
-              // this.getEditor().getChangeObserver().resume();
-              // this.getEditor().fire("CoOPS:PatchRejected");
+              // Patch was rejected
             break;
             default:
               // TODO: Proper error handling
               alert('Unknown Error');
             break;
           }
-        }
+        }, this)
       });
     },
     _pollUpdates : function() {
@@ -524,6 +587,7 @@
       } else {
         // Our patch was accepted, yay!
         this._revisionNumber = patch.revisionNumber;
+        this._startChangePolling();
       }
     }
     
@@ -531,8 +595,7 @@
   
   $.widget("custom.illusionMapCanvas", {
     options : {
-      redrawInternal: 5,
-      changePollInternal: 200
+      redrawInternal: 5
     },
     _create : function() {
       this._mouseDown = false;
@@ -554,11 +617,8 @@
           width: this.options.width,
           height: this.options.height
         });
-
-      this._currentData = this._getOffscreenData();
       
       this._scheduleRedraw();
-      this._scheduleChangePolling();
     },
     
     offscreenCtx: function () {
@@ -615,11 +675,6 @@
       this.element.trigger(jQuery.Event("canvas.beforeredraw"));
 
       if (this.offscreenDirty() || this.screenDirty()) {
-        /**
-        if (this.offscreenDirty()) {
-          this._currentData = this._getOffscreenData();
-        } 
-        **/
         this.flipToScreen();
         this.screenDirty(false);
         this.offscreenDirty(false);
@@ -630,47 +685,9 @@
       this._redrawTimeoutId = setTimeout($.proxy(this._scheduleRedraw, this), this.options.redrawInternal); 
     },
     
-    _scheduleChangePolling: function () {
-      var currentData = this._getOffscreenData();
-      var diff = this._diffImageData(this._currentData, currentData);
-      if (!diff.matches) {
-        this._currentData = currentData;
-        
-        this.element.trigger(jQuery.Event("canvas.changed"), {
-          changes: diff.changes
-        });
-      }
-
-      this._redrawTimeoutId = setTimeout($.proxy(this._scheduleChangePolling, this), this.options.changePollInternal); 
-    },
-    
-    _getOffscreenData: function () {
+    offscreenData: function () {
        var imageData = this.offscreenCtx().getImageData(0, 0, this.options.width, this.options.height);
        return RGBAsToInts(imageData.data);
-    },
-    
-    _diffImageData: function (data1, data2) {
-      var changes = new Array();
-      var matches = true;
-      
-      for (var i = 0; i < data1.length; i++) {
-        if (data1[i] !== data2[i]) {
-          var coordinate = indexToCoords(i, this.options.width);          
-          
-          changes.push({
-            x: coordinate[0],
-            y: coordinate[1],
-            v: data2[i]
-          });
-          
-          matches = false;
-        }
-      };
-      
-      return {
-        changes: changes,
-        matches: matches
-      };
     },
     
     _onMouseDown: function (e) {
@@ -684,6 +701,7 @@
       
       this._mouseDown = true;
     },
+    
     _onMouseUp: function (e) {
       var offset = this.element.offset();
       
@@ -695,6 +713,7 @@
       
       this._mouseDown = false;
     },
+    
     _onMouseMove: function (e) {
       var offset = this.element.offset();
       
