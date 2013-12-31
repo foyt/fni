@@ -414,6 +414,121 @@
     }
   });
   
+  $.widget("custom.illusionMapCoOps", {
+    _create : function() {
+      this.element
+        .on("coops.join", $.proxy(this._onCoOpsJoin, this));
+      
+      $.ajax(this.options.serverUrl + '/join', {
+        data: {
+          'algorithm': 'uint2darr-lw',
+          'protocolVersion': '1.0.0draft2'
+        },
+        success: $.proxy(this._onJoinRequstSuccess, this)
+      });
+    },
+    
+    _onJoinRequstSuccess: function (data, textStatus, jqXHR) {
+      var imageUrl = 'data:' + data.contentType + ';base64,' + data.content;
+      $(this.element).illusionMapCanvas("loadImage", imageUrl);
+      this._sessionId = data.sessionId;
+      this._revisionNumber = data.revisionNumber;
+      this.element.trigger("coops.join", data);
+    },
+    
+    _onCoOpsJoin: function (event, data) {
+      this.element
+        .on("canvas.changed", $.proxy(this._onCanvasChanged, this));
+      
+      this._pollUpdates();
+    },
+    
+    _onCanvasChanged: function (event, data) {
+      $.ajax(this.options.serverUrl, {
+        type: 'PATCH',
+        data: JSON.stringify({
+          'patch': JSON.stringify(data.changes),
+          'revisionNumber': this._revisionNumber, 
+          'sessionId': this._sessionId 
+        }),
+        done: function (data, textStatus, jqXHR) {
+          var status = jqXHR.status;
+          switch (status) {
+            case 204:
+              // Request was ok
+            break;
+            case 409:
+              // this.getEditor().getChangeObserver().resume();
+              // this.getEditor().fire("CoOPS:PatchRejected");
+            break;
+            default:
+              // TODO: Proper error handling
+              alert('Unknown Error');
+            break;
+          }
+        }
+      });
+    },
+    _pollUpdates : function() {
+      $.ajax(this.options.serverUrl + '/update', {
+        data: {
+          'revisionNumber': this._revisionNumber
+        }
+      })
+      .done($.proxy(function (data, textStatus, jqXHR) {
+        var status = jqXHR.status;
+        switch (status) {
+          case 200:
+            this._applyPatches(data);
+          break;
+          case 204:
+          case 304:
+            // Not modified
+          break;
+          default:
+            // TODO: Proper error handling
+            alert(textStatus);
+          break;
+        }
+        
+        setTimeout($.proxy(function () {
+          this._pollUpdates();
+        }, this), 500);
+      }, this));
+      
+    },
+    
+    _applyPatches: function (patches) {
+      var patch = patches.splice(0, 1)[0];
+      this._applyPatch(patch, $.proxy(function () {
+        if (patches.length > 0) {
+          this._applyPatches(patches);
+        }
+      }, this));
+    },
+    
+    _applyPatch: function (patch, callback) {
+      if (this._sessionId != patch.sessionId) {
+        this.element.illusionMapCanvas('drawOffscreen', $.proxy(function (offscreenCtx) {
+          var changes = JSON.parse(patch.patch);
+          for (var i = 0, l = changes.length; i < l; i++) {
+            var change = changes[i];
+            var rgba = IntToRGBA(change.v);
+            
+            offscreenCtx.fillStyle = 'rgba(' + rgba.join(',') + ')';
+            offscreenCtx.fillRect(change.x, change.y, 1, 1);
+          }
+        }, this));
+
+        this._revisionNumber = patch.revisionNumber;
+      } else {
+        // Our patch was accepted, yay!
+        this._revisionNumber = patch.revisionNumber;
+      }
+    }
+    
+  });
+  
   $.widget("custom.illusionMapCanvas", {
     options : {
       redrawInternal: 5,
@@ -486,6 +601,16 @@
       screenCtx.drawImage(this._offscreenCanvas[0], 0, 0, this.options.width, this.options.height);
     },
     
+    loadImage: function (url) {
+      var imageObj = new Image();
+      imageObj.onload = $.proxy(function() {
+        this.drawOffscreen(function (context) {
+          context.drawImage(imageObj, 0, 0);
+        });
+      }, this);
+      imageObj.src = url;
+    },
+    
     _scheduleRedraw: function () {
       this.element.trigger(jQuery.Event("canvas.beforeredraw"));
 
@@ -535,7 +660,7 @@
           changes.push({
             x: coordinate[0],
             y: coordinate[1],
-            value: data2[i]
+            v: data2[i]
           });
           
           matches = false;
@@ -611,22 +736,8 @@
         width: 860,
         height: 300
       })
-      .on("canvas.changed", function (event, data) {
-        var replyttaja = document.getElementById('replykaattori');
-        var ctx = replyttaja.getContext('2d');
-        var imageData = ctx.getImageData(0, 0, 860, 300);
-        
-        $.each(data.changes, function (index, change) {
-          var dataIndex = (change.x + (change.y * 860));
-          var rgba = IntToRGBA(change.value);
-
-          imageData.data[(dataIndex * 4) + 0] = rgba[0];
-          imageData.data[(dataIndex * 4) + 1] = rgba[1];
-          imageData.data[(dataIndex * 4) + 2] = rgba[2];
-          imageData.data[(dataIndex * 4) + 3] = rgba[3];
-        });
-        
-        ctx.putImageData(imageData, 0, 0, 0, 0, 860, 300);
+      .illusionMapCoOps({
+        serverUrl: CONTEXTPATH + '/forge/coops/' + '3003'
       });
     
     var tools = $('<div>').illusionMapTools()
