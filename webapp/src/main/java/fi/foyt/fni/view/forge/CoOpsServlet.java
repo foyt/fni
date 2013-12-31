@@ -1,5 +1,10 @@
 package fi.foyt.fni.view.forge;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -10,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -221,7 +227,7 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
     }
 	}
 	
-	private void handlePatchImage(Image image, Patch patch) throws CoOpsUsageException, CoOpsConflictException {
+	private void handlePatchImage(Image image, Patch patch) throws CoOpsUsageException, CoOpsConflictException, CoOpsInternalErrorException {
 	  Long revisionNumber = imageController.getImageRevision(image);
     if (!revisionNumber.equals(patch.getRevisionNumber())) {
       throw new CoOpsConflictException();
@@ -232,6 +238,12 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
     User loggedUser = sessionController.getLoggedUser();
     
     if (StringUtils.isNotBlank(patch.getPatch())) {
+      try {
+        patchData = patch.getPatch().getBytes("UTF-8");
+      } catch (UnsupportedEncodingException e1) {
+        throw new CoOpsInternalErrorException(e1);
+      }
+      
       ObjectMapper objectMapper = new ObjectMapper();
       
       UInt2DArrLWChange[] changes;
@@ -241,29 +253,50 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
         throw new CoOpsUsageException();
       }
 
-      
       if (changes.length > 0) {
-        Integer imageWidth = 860; // TODO: Image width
         byte[] data = image.getData();
-        for (UInt2DArrLWChange change : changes) {
-          int offset = (change.getX() + (change.getY() * imageWidth)) << 2;
-          if (offset >= data.length) {
-            throw new CoOpsUsageException();
+        Graphics2D graphics2d = null;
+        BufferedImage bufferedImage = null;
+       
+        try {
+          ByteArrayInputStream dataInputStream = new ByteArrayInputStream(data);
+          try {
+            bufferedImage = ImageIO.read(dataInputStream);
+            graphics2d = bufferedImage.createGraphics();
+          } finally {
+            dataInputStream.close();
           }
-          
-          long v = change.getV();
-          byte r = (byte) ((v & 4278190080l) >> 24);
-          byte g = (byte) ((v & 16711680) >> 16);
-          byte b = (byte) ((v & 65280) >> 8);
-          byte a = (byte) (v & 255);
-
-          data[offset] = r;
-          data[offset + 1] = g;
-          data[offset + 2] = b;
-          data[offset + 3] = a;
+        } catch (IOException e) {
+          throw new CoOpsInternalErrorException(e);
+        }
+       
+        try {
+          for (UInt2DArrLWChange change : changes) {
+            long v = change.getV();
+            int r = (short) ((v & 4278190080l) >> 24);
+            int g = (short) ((v & 16711680) >> 16);
+            int b = (short) ((v & 65280) >> 8);
+            int a = (short) (v & 255);
+            
+            graphics2d.setColor(new Color(r, g, b, a));
+            graphics2d.drawRect(change.getX(), change.getY(), 1, 1);
+          }
+        } finally {
+          graphics2d.dispose();
         }
         
-        imageController.updateImageContent(image, image.getContentType(), data, sessionController.getLoggedUser());
+        try {
+          ByteArrayOutputStream dataOutputStream = new ByteArrayOutputStream();
+          try {
+            ImageIO.write(bufferedImage, "png", dataOutputStream);          
+            dataOutputStream.flush();
+            imageController.updateImageContent(image, image.getContentType(), dataOutputStream.toByteArray(), sessionController.getLoggedUser());
+          } finally {
+            dataOutputStream.close();
+          }
+        } catch (IOException e) {
+          throw new CoOpsInternalErrorException(e);
+        }
       }
     }
 
