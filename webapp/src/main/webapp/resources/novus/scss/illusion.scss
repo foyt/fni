@@ -124,7 +124,7 @@
   margin-top: 10px;
 }
 
-.map-foreground-paint, .map-background-paint {
+.map-fill-paint, .map-stroke-paint {
   width: 48px;
   height: 32px;
   padding: 1px;
@@ -132,12 +132,12 @@
   cursor: pointer;
 }
 
-.map-foreground-paint {
+.map-fill-paint {
   position: relative;
   z-index: 1;
 }
 
-.map-background-paint {
+.map-stroke-paint {
   margin-left: 15px;
   margin-top: -25px;
   position: relative;

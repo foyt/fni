@@ -38,6 +38,43 @@
     return [x, y];
   };
   
+  var Paint = function (type, value) {
+    this._type = type;
+    this._value = value;
+  };
+  
+  Paint.prototype.getType = function () {
+    return this._type;
+  };
+  
+  Paint.prototype.getValue = function () {
+    return this._value;
+  };
+  
+  Paint.prototype.toCSS = function () {
+    switch (this._type) {
+      case 'color':
+        return this._value;
+      break;
+      case 'pattern':
+        return 'url(' + this._value + ')';        
+      break;
+    }
+  };
+  
+  Paint.prototype.toCanvasStyle = function () {
+    switch (this._type) {
+      case 'color':
+        return this._value;
+      break;
+      case 'pattern': 
+        var patternImage = new Image();
+        patternImage.src = this._value;
+        return $('<canvas>')[0].getContext("2d").createPattern(patternImage, 'repeat');
+      break;
+    }
+  };
+  
   $.widget("custom.illusionMapButtonTool", {
     options : {},
     _create : function() {
@@ -65,8 +102,8 @@
       }
     },
     
-    styleContext: function (context) {
-      this.element.closest('.map').find('.map-tool-paints').illusionMapToolPaints("setForegroundStyle", context);
+    applyStyle: function (context) {
+      this.element.closest('.map').find('.map-tool-paints').illusionMapToolPaints("applyStyle", context);
     },
     
     _destroy : function() {
@@ -111,7 +148,7 @@
     
     _onCanvasAfterRedraw: function (event) {
       this._canvas.illusionMapCanvas('drawScreen', $.proxy(function (screenCtx) {
-        $(this.element).illusionMapButtonTool("styleContext", screenCtx);
+        $(this.element).illusionMapButtonTool("applyStyle", screenCtx);
         
         screenCtx.beginPath();
         screenCtx.arc(this._cursorX, this._cursorY, this._getRadius(), 0, 2 * Math.PI, false);
@@ -128,7 +165,7 @@
     
     _onCanvasMouseDrag: function (event) {
       this._canvas.illusionMapCanvas('drawOffscreen', $.proxy(function (offscreenCtx) {
-        $(this.element).illusionMapButtonTool("styleContext", offscreenCtx);
+        $(this.element).illusionMapButtonTool("applyStyle", offscreenCtx);
         offscreenCtx.beginPath();
         offscreenCtx.arc(event.canvasX, event.canvasY, this._getRadius(), 0, 2 * Math.PI, false);
         offscreenCtx.closePath();
@@ -203,7 +240,7 @@
     },
     
     _drawPath: function (context) {
-      $(this.element).illusionMapButtonTool("styleContext", context);
+      $(this.element).illusionMapButtonTool("applyStyle", context);
       
       context.beginPath();
       if (this._dragPath.length > 0) {
@@ -234,142 +271,127 @@
     _destroy : function() {
     }
   });
-
-  $.widget("custom.illusionMapToolPaint", {
-    options : {},
+ 
+  $.widget("custom.illusionMapPaintPicker", {
     _create : function() {
-      this.element
-        .click($.proxy(this._onClick, this));
+      this._tabNamePrefix = new Date().getTime() + '-';
       
-      this._setPaint(this.options.type, this.options.value);
-    },
-    _onClick: function (event) {
-      this._dialog = $('<div>');
-      var tabsElement = $('<div>');
-
-      var prefix = new Date().getTime() + '-';
-      var colorTabId = prefix + 'color';
-      var patternTabId = prefix + 'pattern';
-
-      this._tabLabels = $('<ul>');
-      this._tabs = $('<div>');
-
-      tabsElement.append(this._tabLabels);
-      tabsElement.append(this._tabs);
-      this._dialog.append(tabsElement);
-      
-      $('<li>')
-        .append(
-          $('<a>')
-            .text('Color')
-            .attr('href', '#' + colorTabId))
-        .appendTo(this._tabLabels);
-      
-      $('<li>')
-        .append(
-          $('<a>')
-            .text('Pattern')
-            .attr('href', '#' + patternTabId))
-        .appendTo(this._tabLabels);
-
-      var colorTabContent = $('<div>')
-        .attr('id', colorTabId)
-        .appendTo(tabsElement);
-      
-      var patternTabContent = $('<div>')
-        .attr('id', patternTabId)
-        .appendTo(tabsElement);
-      
-      var patterns = $('<div>')
-        .addClass('map-paint-fav-patterns');
-      
-      this._addPattern(patterns, CONTEXTPATH + '/illusion/mapImage?url=http://ubuntuone.com/5H1ofuBc7XVIPWMzYjZntO');
-      this._addPattern(patterns, CONTEXTPATH + '/illusion/mapImage?url=http://ubuntuone.com/0q7Bor5Ttk1ZALAhweBTF1');
-      patternTabContent.append(patterns);
-      
-      tabsElement.tabs();
-      this._dialog.dialog();
-
-      var colorInput = $('<input>').appendTo(colorTabContent);
-      var colorPreview = $('<div>')
-        .addClass('map-paint-color-preview')
-        .append('<span>')
-        .appendTo(colorTabContent);
-      
-      colorInput.spectrum({
-        flat: true,
-        showInput: false,
-        showButtons: false,
-        showAlpha: true,
-        clickoutFiresChange: true,
-        move: function(color) {
-          colorPreview.find('span').css("backgroundColor", color.toRgbString());
-        }
-      });
-    },
-    setStyle: function (context) {
-      switch (this._paintType) {
-        case 'color':
-          context.fillStyle = this._paintValue;
-        break;
-        case 'pattern':
-          context.fillStyle = this._paintPattern;
-        break;
-      }
-    },
-    
-    _setPaint: function (type, value) {
-      switch (type) {
-        case 'color':
-          this.element.css({
-            'backgroundColor': value, 
-            'backgroundImage': 'none'
-          });
-
-          this._paintType = type;
-          this._paintValue = value;
-        break;
-        case 'pattern':
-          var image = new Image();
-          image.onload = $.proxy(function () {
-            var canvas = this.element.closest('.map').find('.map-canvas');
-            this._paintPattern = canvas.illusionMapCanvas("offscreenCtx")
-              .createPattern(image, "repeat");
-            
-            this.element.css({
-              'backgroundColor': null, 
-              'backgroundImage': 'url(' + value + ')'
-            });
-            
-            this._paintType = type;
-            this._paintValue = value;
-          }, this);          
-          image.src = value;
-        break;
-      }
-    },
-    
-    _addPattern: function (patterns, src) {
-      var lastSlashIndex = src.lastIndexOf('/');
-      var fileName = lastSlashIndex > -1 ? src.substring(lastSlashIndex + 1) : src;
       var _this = this;
-      
-      $('<div>')
-        .addClass('map-paint-fav-pattern')
-        .data('src', src)
-        .append(
-            $('<img>')
-              .attr('src', src)
-        )
-        .append(
-          $('<label>').text(fileName)
-        )
-        .appendTo(patterns)
-        .click(function (e) {
-          _this._setPaint("pattern", $(this).data('src'));
-          _this._dialog.dialog("close");
+      this.element
+        .dialog({
+          width: 400,
+          height: 337,
+          buttons: [{
+            'text': 'Ok',
+            'click': function () {
+              $(this).dialog("close"); 
+              if (_this.options.ok) {
+                _this.options.ok(_this._paint);
+              }
+            }
+          }, {
+            'text': 'Cancel',
+            'click': function () {
+              $(this).dialog("close"); 
+            }
+          }]
         });
+
+      this._tabs = $('<div>')
+        .css({
+          'display': 'inline-block',
+          'width': '297px'        
+        });
+      this._tabLabels = $('<ul>').appendTo(this._tabs);
+      this._tabContents = $('<div>').appendTo(this._tabs);
+      
+      this._colorTab = this._addTab('color', 'Color');
+      
+      $('<input>')
+        .appendTo(this._colorTab)
+        .spectrum({
+          flat: true,
+          showInput: false,
+          showButtons: false,
+          showAlpha: true,
+          clickoutFiresChange: true,
+          move: $.proxy(function(color) {
+            this._selectPaint("color", color.toRgbString());
+          }, this)
+        });
+      
+      this._patternTab = this._addTab('pattern', 'Pattern');
+      var patternImages = $('<div>')
+        .appendTo(this._patternTab);
+      
+      for (var i = 0, l = this.options.patterns.length; i < l; i++) {
+        var pattern = this.options.patterns[i];
+        $('<img>')
+          .css({
+            'maxWidth': '48px',
+            'maxHeight': '48px'
+          })
+          .attr("src", pattern.url)
+          .attr("title", pattern.name)
+          .appendTo(patternImages)
+          .click(function () {
+            var canvas = $('<canvas>')
+              .attr({
+                width: $(this).width(),
+                height: $(this).height()
+              })[0];
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage($(this)[0], 0, 0);
+            _this._selectPaint('pattern', canvas.toDataURL());
+          });
+      }
+      
+      this._preview = $('<div>')
+        .css({
+          'width': '64px',
+          'marginLeft': '0.5em',
+          'display': 'inline-block',
+          'vertical-align': 'top'
+        });
+
+      this._previewPaint = $('<div>')
+        .addClass('ui-widget-content ui-corner-all')
+        .css({
+          'width': '64px',
+          'height': '64px',
+          "marginBottom": "0.5em"
+        }).appendTo(this._preview);
+      
+      this._tabs.appendTo(this.element);
+      this._preview.appendTo(this.element);
+
+      this._tabs.tabs();
+      
+      this._selectPaint(this.options.type, this.options.value);
     },
+    
+    _selectPaint: function (type, value) {
+      this._paint = new Paint(type, value);
+      this._previewPaint.css("background", this._paint.toCSS());    
+    },
+   
+    _addTab: function (name, label) {
+      $('<li>')
+        .append(
+          $('<a>')
+            .text(label)
+            .attr('href', '#' + this._tabNamePrefix + name))
+        .appendTo(this._tabLabels);
+      
+      return $('<div>')
+        .css({
+          'height': '186px',
+          "padding": "0.5em"
+        })
+        .attr('id', this._tabNamePrefix + name)
+        .appendTo(this._tabContents);
+    },
+    
     _destroy : function() {
     }
   });
@@ -377,28 +399,62 @@
   $.widget("custom.illusionMapToolPaints", {
     options : {},
     _create : function() {
-      this._foregroundPaint = $('<div>')
-        .addClass('map-foreground-paint')
-        .illusionMapToolPaint({
-          type: this.options.foreground.type,
-          value: this.options.foreground.value
-        });
+      this._fill = new Paint(this.options.fill.type, this.options.fill.value);
+      this._stroke = new Paint(this.options.stroke.type, this.options.stroke.value);
       
-      this._backgroundPaint = $('<div>')
-        .addClass('map-background-paint')
-        .illusionMapToolPaint({
-          type: this.options.background.type,
-          value: this.options.background.value
-        });
-    
+      this._fillPaint = $('<div>')
+        .addClass('map-fill-paint')
+        .click($.proxy(this._onFillClick, this));
+      
+      this._strokePaint = $('<div>')
+        .addClass('map-stroke-paint')
+        .click($.proxy(this._onStrokeClick, this));
+
       this.element
         .addClass('map-tool map-tool-paints')
-        .append(this._foregroundPaint)
-        .append(this._backgroundPaint);  
+        .append(this._fillPaint)
+        .append(this._strokePaint);  
     },
     
-    setForegroundStyle: function (context) {
-      this._foregroundPaint.illusionMapToolPaint("setStyle", context);
+    applyStyle: function (context) {
+      context.fillStyle = this._fill.toCanvasStyle();
+      context.strokeStyle = this._stroke.toCanvasStyle();
+    },
+    
+    _loadPatterns: function (callback) {
+      this.options.patterns(function (patterns) {
+        callback(patterns);
+      });
+    },
+    
+    _onFillClick: function () {
+      this._loadPatterns($.proxy(function (patterns) {
+        $('<div>')
+          .illusionMapPaintPicker({
+            type: this._fill.getType(),
+            value: this._fill.getValue(),
+            patterns: patterns,
+            ok: $.proxy(function (paint) {
+              this._fill = paint;
+              this._fillPaint.css("background", paint.toCSS());
+            }, this)
+          });
+      }, this));
+    },
+    
+    _onStrokeClick: function () {
+      this._loadPatterns($.proxy(function (patterns) {
+        $('<div>')
+          .illusionMapPaintPicker({
+            type: this._stroke.getType(),
+            value: this._stroke.getValue(),
+            patterns: patterns,
+            ok: $.proxy(function (type, value, cssPaint) {
+              this._stroke = paint;
+              this._strokePaint.css("background", paint.toCSS());
+            }, this)
+          });
+      }, this));
     },
     
     _destroy : function() {
@@ -436,16 +492,19 @@
     _pollChanges: function () {
       if (this._pollingChanges == true) {
         var currentData = this.element.illusionMapCanvas("offscreenData");
-        
-        var diff = this._diffImageData(this._currentData, currentData);
-        if (!diff.matches) {
+        if (this._currentData) {
+          var diff = this._diffImageData(this._currentData, currentData);
+          if (!diff.matches) {
+            this._currentData = currentData;
+            
+            this.element.trigger(jQuery.Event("coops.changed"), {
+              changes: diff.changes
+            });
+          }
+        } else {
           this._currentData = currentData;
-          
-          this.element.trigger(jQuery.Event("coops.changed"), {
-            changes: diff.changes
-          });
         }
-          
+
         this._changePollTimeoutId = setTimeout($.proxy(this._pollChanges, this), this.options.changePollInternal); 
       }
     },
@@ -756,7 +815,7 @@
         height: 300
       })
       .illusionMapCoOps({
-        serverUrl: CONTEXTPATH + '/forge/coops/' + '3003'
+        serverUrl: CONTEXTPATH + '/forge/coops/' + '3004'
       });
     
     var tools = $('<div>').illusionMapTools()
@@ -777,15 +836,24 @@
     $('<div>')
       .appendTo(tools)
       .illusionMapToolPaints({
-        foreground: {
+        fill: {
           type: 'color',
           value: '#fff'
         },
-        background: {
+        stroke: {
           type: 'color',
           value: '#000'
+        },
+        patterns: function(response) {
+          response([{
+            name: 'Water 1',
+            url: CONTEXTPATH + '/illusion/mapImage?url=http://ubuntuone.com/5H1ofuBc7XVIPWMzYjZntO',
+          }, {
+            name: 'Grass 1',
+            url: CONTEXTPATH + '/illusion/mapImage?url=http://ubuntuone.com/0q7Bor5Ttk1ZALAhweBTF1'
+          }]);
         }
       });
   });
-  
+
 }).call(this);
