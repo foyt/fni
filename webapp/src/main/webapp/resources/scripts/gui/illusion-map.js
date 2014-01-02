@@ -70,7 +70,8 @@
       case 'pattern': 
         var patternImage = new Image();
         patternImage.src = this._value;
-        return $('<canvas>')[0].getContext("2d").createPattern(patternImage, 'repeat');
+        return $('<canvas>')[0]
+          .getContext("2d").createPattern(patternImage, 'repeat');
       break;
     }
   };
@@ -337,8 +338,8 @@
           .click(function () {
             var canvas = $('<canvas>')
               .attr({
-                width: $(this).width(),
-                height: $(this).height()
+                width: $(this).prop('naturalWidth'),
+                height: $(this).prop('naturalHeight')
               })[0];
             var ctx = canvas.getContext("2d");
             ctx.drawImage($(this)[0], 0, 0);
