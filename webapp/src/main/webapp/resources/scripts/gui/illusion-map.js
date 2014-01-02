@@ -497,7 +497,6 @@
           var diff = this._diffImageData(this._currentData, currentData);
           if (!diff.matches) {
             this._currentData = currentData;
-            
             this.element.trigger(jQuery.Event("coops.changed"), {
               changes: diff.changes
             });
@@ -523,7 +522,7 @@
         this._pollingChanges = false;
       }
     },
-       
+
     _diffImageData: function (data1, data2) {
       var changes = new Array();
       var matches = true;
@@ -531,13 +530,7 @@
       for (var i = 0; i < data1.length; i++) {
         if (data1[i] !== data2[i]) {
           var coordinate = indexToCoords(i, this.element.width());          
-          
-          changes.push({
-            x: coordinate[0],
-            y: coordinate[1],
-            v: data2[i]
-          });
-          
+          changes.push(coordinate[0], coordinate[1], data2[i]);
           matches = false;
         }
       };
