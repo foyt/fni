@@ -1,6 +1,8 @@
 (function() {
   'use strict';
   
+  var TRANSPARENT_BACKGROUND= "data:image/png;base64,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";
+  
   function RGBAsToInts (rgbas) {
     var ints = new Array(rgbas.length >> 2);
     for (var i = 0, l = rgbas.length; i < l; i += 4) {
@@ -400,6 +402,9 @@
   $.widget("custom.illusionMapToolPaints", {
     options : {},
     _create : function() {
+      this.element
+        .addClass('map-tool map-tool-paints');
+
       this._fill = new Paint(this.options.fill.type, this.options.fill.value);
       this._stroke = new Paint(this.options.stroke.type, this.options.stroke.value);
       
@@ -411,10 +416,17 @@
         .addClass('map-stroke-paint')
         .click($.proxy(this._onStrokeClick, this));
 
-      this.element
-        .addClass('map-tool map-tool-paints')
+      $('<div>')
         .append(this._fillPaint)
-        .append(this._strokePaint);  
+        .css({
+          'background': TRANSPARENT_BACKGROUND
+        }).appendTo(this.element);
+        
+      $('<div>')
+        .append(this._strokePaint)
+        .css({
+          'background': TRANSPARENT_BACKGROUND
+        }).appendTo(this.element);
     },
     
     applyStyle: function (context) {
@@ -473,10 +485,12 @@
   
   $.widget("custom.illusionMapCoOps", {
     options: {
-      changePollInternal: 200
+      changePollInternal: 200,
+      changeFlushInternal: 200
     },
     _create : function() {
       this._pollingChanges = false;
+      this._unsavedChanges = null;
       
       this.element
         .on("coops.join", $.proxy(this._onCoOpsJoin, this));
@@ -492,17 +506,15 @@
     
     _pollChanges: function () {
       if (this._pollingChanges == true) {
-        var currentData = this.element.illusionMapCanvas("offscreenData");
-        if (this._currentData) {
-          var diff = this._diffImageData(this._currentData, currentData);
-          if (!diff.matches) {
-            this._currentData = currentData;
-            this.element.trigger(jQuery.Event("coops.changed"), {
-              changes: diff.changes
-            });
-          }
-        } else {
-          this._currentData = currentData;
+        var data = this.element.illusionMapCanvas("offscreenData");
+
+        var diff = this._diffImageData(this._currentData, data);
+        if (!diff.matches) {
+          this.element.trigger(jQuery.Event("coops.changed"), {
+            changes: diff.changes
+          });
+          
+          this._currentData = data;
         }
 
         this._changePollTimeoutId = setTimeout($.proxy(this._pollChanges, this), this.options.changePollInternal); 
@@ -511,6 +523,7 @@
     
     _startChangePolling: function () {
       if (this._pollingChanges == false) {
+        console.log("START");
         this._pollingChanges = true;
         this._pollChanges();
       }
@@ -518,6 +531,7 @@
     
     _stopChangePolling: function () {
       if (this._pollingChanges == true) {
+        console.log("STOP");
         clearTimeout(this._changePollTimeoutId);
         this._pollingChanges = false;
       }
@@ -543,82 +557,137 @@
     
     _onJoinRequstSuccess: function (data, textStatus, jqXHR) {
       var imageUrl = 'data:' + data.contentType + ';base64,' + data.content;
-      $(this.element).illusionMapCanvas("loadImage", imageUrl);
-      this._sessionId = data.sessionId;
-      this._revisionNumber = data.revisionNumber;
-      this.element.trigger("coops.join", data);
+      $(this.element).illusionMapCanvas("loadImage", imageUrl, $.proxy(function () {
+        this._sessionId = data.sessionId;
+        this._revisionNumber = data.revisionNumber;
+        this.element.trigger("coops.join", data);
+      }, this));
     },
     
     _onCoOpsJoin: function (event, data) {
       this.element
-        .on("coops.changed", $.proxy(this._onCoOpsChanged, this));
-      
+        .on("coops.changed", $.proxy(this._onCoOpsChanged, this))
+        .on("coops.patchaccepted", $.proxy(this._onCoOpsPatchAccepted, this))
+        .on("coops.patchapplied", $.proxy(this._onCoOpsPatchApplied, this));
+
       this._pollUpdates();
+      this._flushChanges();
       this._currentData = this.element.illusionMapCanvas("offscreenData");
       this._startChangePolling();
     },
     
     _onCoOpsChanged: function (event, data) {
-      this._stopChangePolling();
-
-      $.ajax(this.options.serverUrl, {
-        type: 'PATCH',
-        data: JSON.stringify({
-          'patch': JSON.stringify(data.changes),
-          'revisionNumber': this._revisionNumber, 
-          'sessionId': this._sessionId 
-        }),
-        done: $.proxy(function (data, textStatus, jqXHR) {
-          var status = jqXHR.status;
-          switch (status) {
-            case 204:
-              // Request was ok
-            break;
-            case 409:
-              // Patch was rejected
-            break;
-            default:
-              // TODO: Proper error handling
-              alert('Unknown Error');
-            break;
-          }
-        }, this)
-      });
+      if (this._unsavedChanges) {
+// TODO: Remove duplicates        
+//        var keys = new Array();
+//        for (var i = 0, l = data.changes.length; i < l; i += 3) {
+//          keys.push(data.changes[i] + ',' + data.changes[i + 1]);
+//        }
+//        
+//        for (var i = this._unsavedChanges.length - 3; i >= 0; i -= 3) {
+//          var key = this._unsavedChanges[i] + ',' + this._unsavedChanges[i + 1];
+//          if (keys.indexOf(key) != -1) {
+//            this._unsavedChanges.splice(i, 3);
+//          }
+//        }
+        this._unsavedChanges.push(data.changes);
+      } else {
+        this._unsavedChanges = data.changes;
+      }
     },
+    
+    _onCoOpsPatchAccepted: function (event, data) {
+      this._revisionNumber = data.revisionNumber;
+      this._unsavedChanges = null;
+    },
+    
+    _onCoOpsPatchApplied: function (event, data) {
+      this._revisionNumber = data.revisionNumber;
+    },
+    
     _pollUpdates : function() {
       $.ajax(this.options.serverUrl + '/update', {
         data: {
           'revisionNumber': this._revisionNumber
-        }
-      })
-      .done($.proxy(function (data, textStatus, jqXHR) {
-        var status = jqXHR.status;
-        switch (status) {
-          case 200:
-            this._applyPatches(data);
-          break;
-          case 204:
-          case 304:
-            // Not modified
-          break;
-          default:
-            // TODO: Proper error handling
-            alert(textStatus);
-          break;
-        }
-        
-        setTimeout($.proxy(function () {
-          this._pollUpdates();
-        }, this), 500);
-      }, this));
+        },
+        complete: $.proxy(function (jqXHR, textStatus) {
+          var status = jqXHR.status;
+          switch (status) {
+            case 200:
+              var data = $.parseJSON(jqXHR.responseText);
+              this._stopChangePolling();
+              this._applyPatches(data, $.proxy(function () {
+                this._startChangePolling();
+              }, this));
+            break;
+            case 204:
+            case 304:
+              // Not modified
+            break;
+            default:
+              // TODO: Proper error handling
+              alert(textStatus);
+            break;
+          }
+          
+          setTimeout($.proxy(function () {
+            this._pollUpdates();
+          }, this), this.options.changePollInternal);
+        }, this)
+      });
       
     },
     
-    _applyPatches: function (patches) {
+    _flushChanges : function() {
+      if (this._unsavedChanges) {
+        var patches = this._unsavedChanges;
+        
+        this._stopChangePolling();
+        
+        $.ajax(this.options.serverUrl, {
+          type: 'PATCH',
+          data: JSON.stringify({
+            'patch': JSON.stringify(patches),
+            'revisionNumber': this._revisionNumber, 
+            'sessionId': this._sessionId 
+          }),
+          complete: $.proxy(function (jqXHR, textStatus) {
+            var status = jqXHR.status;
+            switch (status) {
+              case 204:
+                // Request was ok
+              break;
+              case 409:
+                // Patch was rejected
+              break;
+              default:
+                // TODO: Proper error handling
+                alert('Unknown Error');
+              break;
+            }
+            
+            setTimeout($.proxy(function () {
+              this._flushChanges();
+            }, this), this.options.changeFlushInternal);
+          }, this)
+        });
+      } else {
+        setTimeout($.proxy(function () {
+          this._flushChanges();
+        }, this), this.options.changeFlushInternal);
+      }
+
+    },
+    
+    _applyPatches: function (patches, callback) {
       var patch = patches.splice(0, 1)[0];
       this._applyPatch(patch, $.proxy(function () {
         if (patches.length > 0) {
-          this._applyPatches(patches);
+          this._applyPatches(patches, callback);
+        } else {
+          if (callback) {
+            callback.call(this);
+          }
         }
       }, this));
     },
@@ -627,20 +696,31 @@
       if (this._sessionId != patch.sessionId) {
         this.element.illusionMapCanvas('drawOffscreen', $.proxy(function (offscreenCtx) {
           var changes = JSON.parse(patch.patch);
-          for (var i = 0, l = changes.length; i < l; i++) {
-            var change = changes[i];
-            var rgba = IntToRGBA(change.v);
-            
+          for (var i = 0, l = changes.length; i < l; i += 3) {
+            var x = changes[i];
+            var y = changes[i + 1];
+            var v = changes[i + 2];
+            var rgba = IntToRGBA(v);
             offscreenCtx.fillStyle = 'rgba(' + rgba.join(',') + ')';
-            offscreenCtx.fillRect(change.x, change.y, 1, 1);
+            offscreenCtx.fillRect(x, y, 1, 1);
           }
         }, this));
 
-        this._revisionNumber = patch.revisionNumber;
+        this.element.trigger(jQuery.Event("coops.patchapplied"), {
+          revisionNumber: patch.revisionNumber
+        });
+
+        if (callback) {
+          callback.call(this);
+        }
       } else {
-        // Our patch was accepted, yay!
-        this._revisionNumber = patch.revisionNumber;
-        this._startChangePolling();
+        this.element.trigger(jQuery.Event("coops.patchaccepted"), {
+          revisionNumber: patch.revisionNumber
+        });
+
+        if (callback) {
+          callback.call(this);
+        }
       }
     }
     
@@ -659,6 +739,9 @@
         .attr({
           width: this.options.width,
           height: this.options.height
+        })
+        .css({
+          'background': 'url(' + TRANSPARENT_BACKGROUND + ')'
         })
         .on("mousedown", $.proxy(this._onMouseDown, this))
         .on("mouseup", $.proxy(this._onMouseUp, this))
@@ -714,12 +797,15 @@
       screenCtx.drawImage(this._offscreenCanvas[0], 0, 0, this.options.width, this.options.height);
     },
     
-    loadImage: function (url) {
+    loadImage: function (url, callback) {
       var imageObj = new Image();
       imageObj.onload = $.proxy(function() {
-        this.drawOffscreen(function (context) {
+        this.drawOffscreen($.proxy(function (context) {
           context.drawImage(imageObj, 0, 0);
-        });
+          if (callback) {
+            callback.call(this);
+          }
+        }, this));
       }, this);
       imageObj.src = url;
     },
@@ -809,7 +895,9 @@
         height: 300
       })
       .illusionMapCoOps({
-        serverUrl: CONTEXTPATH + '/forge/coops/' + '3004'
+        serverUrl: CONTEXTPATH + '/forge/coops/' + '3004',
+        changePollInternal: 1000,
+        changeFlushInternal: 1000
       });
     
     var tools = $('<div>').illusionMapTools()
