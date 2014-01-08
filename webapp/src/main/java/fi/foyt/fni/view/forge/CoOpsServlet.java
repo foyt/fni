@@ -49,6 +49,7 @@ import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.ImageRevision;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialRevisionSetting;
+import fi.foyt.fni.persistence.model.materials.MaterialSetting;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
@@ -120,13 +121,29 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
 	private File handleFileDocument(Document document) {
     Long revisionNumber = documentController.getDocumentRevision(document);
     String data = document.getData();
-    return new File(document.getId().toString(), document.getTitle(), document.getModified(), revisionNumber, data, COOPS_DOCUMENT_CONTENTTYPE);
+
+    Map<String, String> properties = new HashMap<>();
+    List<MaterialSetting> settings = documentController.listDocumentSettings(document);
+    for (MaterialSetting setting : settings) {
+      String key = StringUtils.removeStart(setting.getKey().getName(), "document.");
+      properties.put(key, setting.getValue());
+    }
+
+    return new File(revisionNumber, document.getTitle(), data, COOPS_DOCUMENT_CONTENTTYPE, properties);
 	}
 
   private File handleFileImage(Image image) {
     Long revisionNumber = imageController.getImageRevision(image);
     String data = Base64.encodeBase64String(image.getData());
-    return new File(image.getId().toString(), image.getTitle(), image.getModified(), revisionNumber, data, image.getContentType());
+
+    Map<String, String> properties = new HashMap<>();
+    List<MaterialSetting> settings = imageController.listImageSettings(image);
+    for (MaterialSetting setting : settings) {
+      String key = StringUtils.removeStart(setting.getKey().getName(), "image.");
+      properties.put(key, setting.getValue());
+    }
+    
+    return new File(revisionNumber, image.getTitle(), data, image.getContentType(), properties);
   }
 	
 	@Override
