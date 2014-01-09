@@ -1,17 +1,16 @@
 package fi.foyt.fni.coops.model;
 
+import java.util.Map;
+
 public class Join {
 
-	public Join(String[] extensions, Long revisionNumber, String content, String contentType, String sessionId) {
+	public Join(Map<String, Map<String, String>> extensions, Long revisionNumber, String content, String contentType, String sessionId, Map<String, String> properties) {
 		this.extensions = extensions;
 		this.revisionNumber = revisionNumber;
 		this.content = content;
 		this.contentType = contentType;
 		this.sessionId = sessionId;
-	}
-
-	public String[] getExtensions() {
-		return extensions;
+		this.properties = properties;
 	}
 
 	public Long getRevisionNumber() {
@@ -29,10 +28,19 @@ public class Join {
 	public String getSessionId() {
     return sessionId;
   }
-
-	private String[] extensions;
+	
+	public Map<String, String> getProperties() {
+    return properties;
+  }
+	
+	public Map<String, Map<String, String>> getExtensions() {
+    return extensions;
+  }
+	
 	private Long revisionNumber;
 	private String content;
 	private String contentType;
 	private String sessionId;
+	private Map<String, String> properties;
+  private Map<String, Map<String, String>> extensions;
 }
