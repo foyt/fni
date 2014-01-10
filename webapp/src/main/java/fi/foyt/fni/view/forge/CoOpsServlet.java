@@ -236,7 +236,7 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
 	}
 	
 	private void handlePatchImage(Image image, Patch patch) throws CoOpsUsageException, CoOpsConflictException, CoOpsInternalErrorException {
-	  Long revisionNumber = imageController.getImageRevision(image);
+    Long revisionNumber = imageController.getImageRevision(image);
     if (!revisionNumber.equals(patch.getRevisionNumber())) {
       throw new CoOpsConflictException();
     } 
@@ -254,9 +254,9 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
       
       ObjectMapper objectMapper = new ObjectMapper();
       
-      UInt2DArrLWChange[] changes;
+      long[] changes;
       try {
-        changes = objectMapper.readValue(patch.getPatch(), UInt2DArrLWChange[].class);
+        changes = objectMapper.readValue(patch.getPatch(), long[].class);
       } catch (IOException e) {
         throw new CoOpsUsageException();
       }
@@ -279,15 +279,17 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
         }
        
         try {
-          for (UInt2DArrLWChange change : changes) {
-            long v = change.getV();
+          for (int i = 0, l = changes.length; i < l; i += 3) {
+            long x = changes[i];
+            long y = changes[i + 1];
+            long v = changes[i + 2];
             int r = (short) ((v & 4278190080l) >> 24);
             int g = (short) ((v & 16711680) >> 16);
             int b = (short) ((v & 65280) >> 8);
             int a = (short) (v & 255);
             
             graphics2d.setColor(new Color(r, g, b, a));
-            graphics2d.drawRect(change.getX(), change.getY(), 1, 1);
+            graphics2d.drawRect((int) x, (int) y, 1, 1);
           }
         } finally {
           graphics2d.dispose();
@@ -544,40 +546,6 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
     
     return updateResults;
   }
-
-	private static class UInt2DArrLWChange {
-	  
-	  public Integer getX() {
-      return x;
-    }
-	  
-	  @SuppressWarnings("unused")
-    public void setX(Integer x) {
-      this.x = x;
-    }
-	  
-	  public Integer getY() {
-      return y;
-    }
-	  
-	  @SuppressWarnings("unused")
-    public void setY(Integer y) {
-      this.y = y;
-    }
-	  
-	  public Long getV() {
-      return v;
-    }
-	  
-	  @SuppressWarnings("unused")
-    public void setV(Long v) {
-      this.v = v;
-    }
-	  
-	  private Integer x;
-	  private Integer y;
-	  private Long v;
-	};
 
   private Map<String, String> settingToProperties(String prefix, List<MaterialSetting> settings) {
     Map<String, String> properties = new HashMap<>();
