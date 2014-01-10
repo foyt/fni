@@ -3,7 +3,7 @@
     CKEDITOR.coops = {};
   }
   
-  var PROTOCOL_VERSION = '1.0.0draft2';
+  var PROTOCOL_VERSION = '1.0.0';
   
   CKEDITOR.coops.Feature = CKEDITOR.tools.createClass({   
     $: function(editor) {
