@@ -20,7 +20,7 @@ env:
 after_success:
 - python travis/m2conf.py
 - mvn deploy --settings ~/.m2/mySettings.xml
-- sudo apt-get install ruby1.9.1 git
+- sudo apt-get install ruby1.9.1
 - sudo gem install rhc
 - git config --global user.email "build@travis-ci.org"
 - git config --global user.name "Travis CI"
