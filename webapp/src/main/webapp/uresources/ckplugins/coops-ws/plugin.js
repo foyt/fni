@@ -268,7 +268,7 @@ CKEDITOR.plugins.add('coops-ws', {
           if (!event.data.isConnected()) {
             try {
               var joinData = event.data.joinData;
-              if (joinData.extensions.indexOf('websockets') == -1) {
+              if (joinData.extensions['websockets'] == undefined) {
                 // Server does not support websocket extension
                 return;
               }
@@ -280,13 +280,13 @@ CKEDITOR.plugins.add('coops-ws', {
               
               var secure = window.location.protocol.indexOf('https') == 0;
               if (secure) {
-                if (joinData.secureWebSocketUrl) {
-                  webSocketUrl = joinData.secureWebSocketUrl;
+                if (joinData.extensions['websockets'].secureWebSocketUrl) {
+                  webSocketUrl = joinData.extensions['websockets'].secureWebSocketUrl;
                 } else {
                   throw new Error("CoOPS Server does not support secure websocket connections");
                 }
               } else {
-                webSocketUrl = joinData.unsecureWebSocketUrl;
+                webSocketUrl = joinData.extensions['websockets'].unsecureWebSocketUrl;
               }
   
               try {

@@ -327,4 +327,8 @@ public class DocumentController {
     }
 	}
 
+  public List<MaterialSetting> listDocumentSettings(Document document) {
+    return materialSettingDAO.listByMaterial(document);
+  }
+
 }

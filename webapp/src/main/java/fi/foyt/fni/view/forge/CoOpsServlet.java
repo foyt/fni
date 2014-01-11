@@ -49,6 +49,7 @@ import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.ImageRevision;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialRevisionSetting;
+import fi.foyt.fni.persistence.model.materials.MaterialSetting;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
@@ -120,13 +121,17 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
 	private File handleFileDocument(Document document) {
     Long revisionNumber = documentController.getDocumentRevision(document);
     String data = document.getData();
-    return new File(document.getId().toString(), document.getTitle(), document.getModified(), revisionNumber, data, COOPS_DOCUMENT_CONTENTTYPE);
+    Map<String, String> properties = settingToProperties("document.", documentController.listDocumentSettings(document));
+
+    return new File(revisionNumber, document.getTitle(), data, COOPS_DOCUMENT_CONTENTTYPE, properties);
 	}
 
   private File handleFileImage(Image image) {
     Long revisionNumber = imageController.getImageRevision(image);
     String data = Base64.encodeBase64String(image.getData());
-    return new File(image.getId().toString(), image.getTitle(), image.getModified(), revisionNumber, data, image.getContentType());
+    Map<String, String> properties = settingToProperties("image.", imageController.listImageSettings(image));
+    
+    return new File(revisionNumber, image.getTitle(), data, image.getContentType(), properties);
   }
 	
 	@Override
@@ -187,14 +192,17 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
     if (data == null) {
       data = "";
     }
+    Map<String, String> properties = settingToProperties("document.", documentController.listDocumentSettings(document));
     
-    return new Join(COOPS_SUPPORTED_EXTENSIONS, revisionNumber, data, COOPS_DOCUMENT_CONTENTTYPE, UUID.randomUUID().toString()); 
+    return new Join(COOPS_SUPPORTED_EXTENSIONS, revisionNumber, data, COOPS_DOCUMENT_CONTENTTYPE, UUID.randomUUID().toString(), properties); 
   }
   
   private Join handleJoinImage(Image image) {
     Long revisionNumber = imageController.getImageRevision(image);
     String data = (image.getData() != null) ? Base64.encodeBase64String(image.getData()) : "";
-    return new Join(COOPS_SUPPORTED_EXTENSIONS, revisionNumber, data, image.getContentType(), UUID.randomUUID().toString()); 
+    Map<String, String> properties = settingToProperties("image.", imageController.listImageSettings(image));
+    
+    return new Join(COOPS_SUPPORTED_EXTENSIONS, revisionNumber, data, image.getContentType(), UUID.randomUUID().toString(), properties); 
   }
 	
 	@Override
@@ -228,7 +236,7 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
 	}
 	
 	private void handlePatchImage(Image image, Patch patch) throws CoOpsUsageException, CoOpsConflictException, CoOpsInternalErrorException {
-	  Long revisionNumber = imageController.getImageRevision(image);
+    Long revisionNumber = imageController.getImageRevision(image);
     if (!revisionNumber.equals(patch.getRevisionNumber())) {
       throw new CoOpsConflictException();
     } 
@@ -538,7 +546,17 @@ public class CoOpsServlet extends AbstractCoOpsServlet {
     
     return updateResults;
   }
-  
+
+  private Map<String, String> settingToProperties(String prefix, List<MaterialSetting> settings) {
+    Map<String, String> properties = new HashMap<>();
+    for (MaterialSetting setting : settings) {
+      String key = StringUtils.removeStart(setting.getKey().getName(), prefix);
+      properties.put(key, setting.getValue());
+    }
+    
+    return properties;
+  }
+	
 	static {
 	  COOPS_SUPPORTED_ALGORITHMS = new HashMap<MaterialType, String[]>();
     COOPS_SUPPORTED_ALGORITHMS.put(MaterialType.DOCUMENT, new String[] { "dmp" });

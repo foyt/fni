@@ -114,6 +114,10 @@ public class ImageController {
       }
     }
   }
+
+  public List<MaterialSetting> listImageSettings(Image image) {
+    return materialSettingDAO.listByMaterial(image);
+  }
   
   /* Tags */
 

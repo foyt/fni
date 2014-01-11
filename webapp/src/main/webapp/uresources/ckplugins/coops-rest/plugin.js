@@ -36,7 +36,7 @@
             if (!event.data.isConnected()) {
               var joinData = event.data.joinData;
               
-              this._useMethodOverride = joinData.extensions.indexOf('x-http-method-override') > -1;
+              this._useMethodOverride = joinData.extensions['x-http-method-override'] != undefined;
               this._revisionNumber = joinData.revisionNumber;
               this._sessionId = joinData.sessionId;
 

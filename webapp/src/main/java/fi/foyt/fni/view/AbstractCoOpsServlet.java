@@ -1,7 +1,9 @@
 package fi.foyt.fni.view;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -29,8 +31,8 @@ public abstract class AbstractCoOpsServlet extends AbstractTransactionedServlet 
 
   private static final long serialVersionUID = 8935720662817093544L;
   
-  protected final static String COOPS_PROTOCOL_VERSION = "1.0.0draft2";
-  protected final static String[] COOPS_SUPPORTED_EXTENSIONS = { "x-http-method-override" };
+  protected final static String COOPS_PROTOCOL_VERSION = "1.0.0";
+  protected final static Map<String, Map<String, String>> COOPS_SUPPORTED_EXTENSIONS;
 
   @Inject
   private SessionController sessionController;
@@ -256,4 +258,9 @@ public abstract class AbstractCoOpsServlet extends AbstractTransactionedServlet 
   }
   
   private Object syncObject = new Object();
+  
+  static {
+    COOPS_SUPPORTED_EXTENSIONS = new HashMap<>();
+    COOPS_SUPPORTED_EXTENSIONS.put("x-http-method-override", new HashMap<String, String>());
+  }
 }

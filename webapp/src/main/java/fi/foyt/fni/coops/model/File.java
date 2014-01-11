@@ -1,46 +1,61 @@
 package fi.foyt.fni.coops.model;
 
-import java.util.Date;
+import java.util.Map;
 
 public class File {
-	
-	public File(String id, String name, Date modified, Long revisionNumber, String content, String contentType) {
-		this.id = id;
-		this.name = name;
-		this.modified = modified;
-		this.revisionNumber = revisionNumber;
-		this.content = content;
-		this.contentType = contentType;
-	}
 
-	public String getId() {
-		return id;
-	}
+  public File(Long revisionNumber, String name, String content, String contentType, Map<String, String> properties) {
+    super();
+    this.revisionNumber = revisionNumber;
+    this.name = name;
+    this.content = content;
+    this.contentType = contentType;
+    this.properties = properties;
+  }
 
-	public String getName() {
-		return name;
-	}
+  public Long getRevisionNumber() {
+    return revisionNumber;
+  }
 
-	public Date getModified() {
-		return modified;
-	}
+  public void setRevisionNumber(Long revisionNumber) {
+    this.revisionNumber = revisionNumber;
+  }
 
-	public Long getRevisionNumber() {
-		return revisionNumber;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public String getContent() {
-		return content;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public String getContentType() {
-		return contentType;
-	}
+  public String getContent() {
+    return content;
+  }
 
-	private String id;
-	private String name;
-	private Date modified;
-	private Long revisionNumber;
-	private String content;
-	private String contentType;
+  public void setContent(String content) {
+    this.content = content;
+  }
+
+  public String getContentType() {
+    return contentType;
+  }
+
+  public void setContentType(String contentType) {
+    this.contentType = contentType;
+  }
+
+  public Map<String, String> getProperties() {
+    return properties;
+  }
+
+  public void setProperties(Map<String, String> properties) {
+    this.properties = properties;
+  }
+
+  private Long revisionNumber;
+  private String name;
+  private String content;
+  private String contentType;
+  private Map<String, String> properties;
 }
