@@ -33,7 +33,7 @@ public class IllusionGroupBackingBean {
   @URLAction
   @LoggedIn
   public void load() throws FileNotFoundException {
-    IllusionGroup illusionGroup = illusionGroupController.findIllusionSpaceByUrlName(getUrlName());
+    IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
     if (illusionGroup == null) {
       throw new FileNotFoundException();
     }
