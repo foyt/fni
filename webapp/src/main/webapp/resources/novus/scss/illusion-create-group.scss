@@ -1,0 +1,68 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+/* Panel */ 
+
+.illusion-create-group-panel {
+  @include generic-panel;
+}
+
+/* Generic */
+
+h3 {
+  @include header-2;
+  margin-bottom: 10px;
+}
+
+/* Header */
+
+.view-header-description-title a {
+  font-size: 16px;
+  font-family: $default-font;
+  color: $header-text-color;
+  padding-left: 20px;
+  font-style: italic;
+  font-weight: bold;
+  text-decoration: none;
+  text-transform: none;
+}
+
+.view-header-description-title a:after {
+  content: '>>';
+  padding-left: 8px;
+}
+
+/* Forms */
+
+.illusion-create-group-field label {
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+  margin-bottom: 8px;
+  width: 150px;
+  display: inline-block;
+}
+
+.illusion-create-group-field input[type="text"] {
+  width: 300px;
+  font-size: 14px;
+  font-family: $default-font;
+  @include box-sizing(border-box);
+  margin-bottom: 8px;
+}
+
+.illusion-create-group-save {
+  @include header-4;
+  width: 256px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  display: block;
+  text-align: center;
+}

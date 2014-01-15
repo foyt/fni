@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['illusion.createGroup.pageTitle']}</ui:define>
+ 
+  <ui:define name="view-scripts">
+    <!-- Strophe -->
+    
+    <h:outputScript name="scripts/strophe/strophe.js"/>
+    <h:outputScript name="scripts/strophe/plugins/strophe.muc.js"/>
+    <h:outputScript name="scripts/strophe/plugins/strophe.x.js"/>
+    
+    <!-- View scripts -->
+    
+    <h:outputScript name="scripts/gui/illusion-create-group.js"></h:outputScript>
+  </ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <!-- View styles -->
+    
+    <h:outputStylesheet library="novus" name="css/illusion-create-group.css"/>
+    
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+
+    <!-- Header -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['illusion.createGroup.navigationIndex']}</h:link>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:link styleClass="view-header-navigation-item" outcome="/illusion/creategroup.jsf">#{locales['illusion.createGroup.navigationCreateGroup']}</h:link>
+      </h:panelGroup>
+        
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">
+          <span>#{locales['illusion.createGroup.descriptionTitle']}</span>
+        </p>
+        <p class="view-header-description-text">#{locales['illusion.createGroup.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="grid_16 alpha slim-right">
+        <h:panelGroup layout="block" styleClass="illusion-create-group-panel">
+          <h3>#{locales['illusion.createGroup.createGroupTitle']}</h3>
+          
+          <input type="hidden" value="#{illusionCreateGroupBackingBean.xmppBoshService}" id="xmpp-bosh-service"/>
+          <input type="hidden" value="#{illusionCreateGroupBackingBean.xmppUserJid}" id="xmpp-user-jid"/>
+          <input type="hidden" value="#{illusionCreateGroupBackingBean.xmppPassword}" id="xmpp-password"/>
+          <input type="hidden" value="#{illusionCreateGroupBackingBean.userNickname}" id="user-nickname"/>
+
+          <h:form>
+            <h:panelGroup layout="block" styleClass="illusion-create-group-field">
+              <h:outputLabel value="#{locales['illusion.createGroup.nameLabel']}" />
+              <h:inputText id="name" value="#{illusionCreateGroupBackingBean.name}" required="true" requiredMessage="#{locales['illusion.createGroup.nameRequired']}">
+                <f:ajax execute="@form" render="@form"/>
+              </h:inputText>
+            </h:panelGroup>  
+            
+            <h:panelGroup layout="block" styleClass="illusion-create-group-field">
+              <h:outputLabel value="#{locales['illusion.createGroup.urlNameLabel']}" />
+              <h:inputText id="urlName" value="#{illusionCreateGroupBackingBean.urlName}" disabled="true" readonly="true"/>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="illusion-create-group-field">
+              <h:outputLabel value="#{locales['illusion.createGroup.chatRoomLabel']}" />
+              <h:inputText id="xmpp-room" value="#{illusionCreateGroupBackingBean.xmppRoom}" disabled="true" readonly="true"/>
+            </h:panelGroup>  
+
+            <h:panelGroup layout="block" styleClass="illusion-create-group-field">
+              <input class="illusion-create-group-save" type="submit" value="#{locales['illusion.createGroup.saveButton']}"/>
+              <h:commandButton id="save" style="display:none" action="#{illusionCreateGroupBackingBean.save}"/>
+            </h:panelGroup>
+          </h:form>
+        </h:panelGroup>
+      </h:panelGroup>
+    </h:panelGroup>
+  </ui:define>
+
+</ui:composition>

@@ -1,0 +1,154 @@
+package fi.foyt.fni.view.illusion;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
+import javax.ejb.Stateful;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.ocpsoft.pretty.faces.annotation.URLAction;
+import com.ocpsoft.pretty.faces.annotation.URLAction.PhaseId;
+import com.ocpsoft.pretty.faces.annotation.URLMapping;
+import com.ocpsoft.pretty.faces.annotation.URLMappings;
+
+import fi.foyt.fni.chat.ChatCredentialsController;
+import fi.foyt.fni.illusion.IllusionGroupController;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
+import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.utils.servlet.RequestUtils;
+
+@RequestScoped
+@Stateful
+@Named
+@URLMappings(mappings = {
+  @URLMapping(
+		id = "illusion-create-group", 
+		pattern = "/illusion/creategroup", 
+		viewId = "/illusion/creategroup.jsf"
+  )
+})
+public class IllusionCreateGroupBackingBean {
+
+  @Inject
+  private SessionController sessionController;
+  
+  @Inject
+  private SystemSettingsController systemSettingsController;
+  
+  @Inject
+  private ChatCredentialsController chatCredentialsController;
+
+  @Inject
+  private IllusionGroupController illusionGroupController;
+  
+	@LoggedIn
+// TODO: Security
+	@URLAction
+	public void load() throws IOException, GeneralSecurityException {
+	  User user = sessionController.getLoggedUser();
+
+	  userNickname = StringUtils.isNotBlank(user.getNickname()) ? user.getNickname() : user.getFullName();
+	  
+	  xmppUserJid = chatCredentialsController.getUserJidByUser(user);
+    xmppPassword = chatCredentialsController.getPasswordByUser(user);
+    xmppBoshService = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOSH_SERVICE);
+    xmppMucHost = systemSettingsController.getSetting(SystemSettingKey.CHAT_MUC_HOST);
+
+    resolveNames();
+	}
+	
+	@URLAction (phaseId = PhaseId.INVOKE_APPLICATION)
+  public void applyValues() {
+    resolveNames();
+	}
+	
+	public String getName() {
+    return name;
+  }
+	
+	public void setName(String name) {
+    this.name = name;
+  }
+
+	public String getXmppUserJid() {
+    return xmppUserJid;
+  }
+	
+	public String getXmppPassword() {
+    return xmppPassword;
+  }
+	
+	public String getXmppBoshService() {
+    return xmppBoshService;
+  }
+  
+  public String getXmppRoom() {
+    return xmppRoom;
+  }
+  
+	public String getUserNickname() {
+    return userNickname;
+  }
+	
+	public String getUrlName() {
+    return urlName;
+  }
+	
+	private void resolveNames() {
+	  this.urlName = createUrlName(getName());
+	  this.xmppRoom = urlName + '@' + xmppMucHost;
+	}
+	
+	private String createUrlName(String name) {
+    int maxLength = 20;
+    int padding = 0;
+    do {
+      String urlName = RequestUtils.createUrlName(name, maxLength);
+      if (padding > 0) {
+        urlName = urlName.concat(StringUtils.repeat('_', padding));
+      }
+      
+      IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(urlName);
+      if (illusionGroup == null) {
+        return urlName;
+      }
+      
+      if (maxLength < name.length()) {
+        maxLength++;
+      } else {
+        padding++;
+      }
+    } while (true);
+  }
+	
+  @LoggedIn
+// TODO: Security
+  public void save() throws IOException {
+    IllusionGroup illusionGroup = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getXmppRoom());
+    String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+    
+    FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+      .append(contextPath)
+      .append("/illusion/group/")
+      .append(illusionGroup.getUrlName())
+      .toString());
+  }
+	
+	private String name;
+	private String xmppBoshService;
+	private String xmppUserJid;
+	private String xmppPassword;
+	private String xmppMucHost;
+  private String xmppRoom;
+	private String userNickname;
+	private String urlName;
+}
