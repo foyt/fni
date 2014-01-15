@@ -14,11 +14,15 @@ public class IllusionGroupController {
   @Inject
   private IllusionGroupDAO illusionGroupDAO;
 
+  public IllusionGroup createIllusionGroup(String urlName, String name, String xmppRoom) {
+    return illusionGroupDAO.create(urlName, name, xmppRoom);
+  }
+
   public IllusionGroup findIllusionSpaceById(Long id) {
     return illusionGroupDAO.findById(id);
   }
 
-  public IllusionGroup findIllusionSpaceByUrlName(String urlName) {
+  public IllusionGroup findIllusionGroupByUrlName(String urlName) {
     return illusionGroupDAO.findByUrlName(urlName);
   }
 
