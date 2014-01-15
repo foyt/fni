@@ -37,6 +37,14 @@ public class IllusionGroup {
     this.urlName = urlName;
   }
   
+  public String getXmppRoom() {
+    return xmppRoom;
+  }
+
+  public void setXmppRoom(String xmppRoom) {
+    this.xmppRoom = xmppRoom;
+  }
+  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
@@ -50,4 +58,9 @@ public class IllusionGroup {
   @NotEmpty
   @Column (nullable = false, unique = true)
   private String urlName;
+  
+  @NotNull
+  @NotEmpty
+  @Column (nullable = false, unique = true)
+  private String xmppRoom;
 }
