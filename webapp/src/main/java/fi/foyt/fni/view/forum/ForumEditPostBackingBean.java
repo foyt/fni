@@ -39,6 +39,7 @@ public class ForumEditPostBackingBean {
   
   @URLAction
   @Secure (Permission.FORUM_POST_MODIFY)
+  @SecurityContext (context = "#{forumEditPostBackingBean.postId}")
   public void init() throws FileNotFoundException {
     forum = forumController.findForumByUrlName(getForumUrlName());
     if (forum == null) {
