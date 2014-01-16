@@ -47,7 +47,6 @@ import fi.foyt.fni.persistence.model.users.UserVerificationKey;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
-import fi.foyt.fni.utils.auth.AuthUtils;
 import fi.foyt.fni.utils.faces.FacesUtils;
 import fi.foyt.fni.utils.mail.MailUtils;
 
@@ -88,8 +87,9 @@ public class LoginBackingBean {
 		String loginMethod = externalContext.getRequestParameterMap().get("loginMethod");
 
 		String redirectUrl = externalContext.getRequestParameterMap().get("redirectUrl");
-		if (StringUtils.isNotBlank(redirectUrl))
-			AuthUtils.getInstance().storeRedirectUrl((HttpSession) externalContext.getSession(true), redirectUrl);
+		if (StringUtils.isNotBlank(redirectUrl)) {
+		  sessionController.setRedirectUrl(redirectUrl);
+		}
 
 		if (StringUtils.isNotBlank(loginMethod)) {
 			AuthSource authSource = AuthSource.valueOf(loginMethod);
@@ -133,7 +133,7 @@ public class LoginBackingBean {
 					UserToken userToken = authenticationStrategy.accessToken(session, locale, parameters);
 					if (userToken != null) {
 						sessionController.login(userToken);
-						String redirectUrl = AuthUtils.getInstance().retrieveRedirectUrl(session);
+						String redirectUrl = sessionController.getRedirectUrl();
 						if (StringUtils.isBlank(redirectUrl)) {
 							externalContext.redirect(new StringBuilder().append(externalContext.getRequestContextPath()).append("/").toString());
 						} else {
@@ -317,7 +317,7 @@ public class LoginBackingBean {
 							UserToken userToken = oAuthStrategy.accessToken(session, locale, parameters);
 							if (userToken != null) {
 								sessionController.login(userToken);
-								String redirectUrl = AuthUtils.getInstance().retrieveRedirectUrl(session);
+								String redirectUrl = sessionController.getRedirectUrl();
 								if (StringUtils.isBlank(redirectUrl)) {
 									redirectUrl = new StringBuilder()
 									  .append(externalContext.getRequestContextPath())

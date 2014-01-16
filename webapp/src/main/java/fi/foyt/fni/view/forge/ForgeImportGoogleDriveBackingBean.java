@@ -104,7 +104,7 @@ public class ForgeImportGoogleDriveBackingBean {
       }
     }
 
-    if (AuthUtils.getInstance().isExpired(userToken) || !AuthUtils.getInstance().isGrantedScope(userToken, REQUIRED_SCOPE)) {
+    if (AuthUtils.isExpired(userToken) || !AuthUtils.isGrantedScope(userToken, REQUIRED_SCOPE)) {
       // We need authorization from Google
       
       String redirectUrl = contextPath + "/forge/import-google-drive";
