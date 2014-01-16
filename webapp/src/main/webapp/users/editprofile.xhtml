@@ -6,11 +6,6 @@
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['users.editProfile.pageTitle']}</ui:define>
- 
-  <ui:define name="metadata">
-    <f:event type="preRenderView" listener="#{loginBackingBean.preRenderViewListener}"/>
-  </ui:define>
- 
   <ui:define name="view-scripts">
     <!-- CKEditor -->
   
