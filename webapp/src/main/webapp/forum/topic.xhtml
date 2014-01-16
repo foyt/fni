@@ -59,8 +59,6 @@
         <h:form rendered="#{sessionBackingBean.loggedIn}"> 
           <h:commandLink rendered="#{!forumTopicBackingBean.watchingTopic}" styleClass="forum-topic-watch-link" value="#{locales['forum.topic.watchTopic']}" action="#{forumTopicBackingBean.watchTopic}" />
           <h:commandLink rendered="#{forumTopicBackingBean.watchingTopic}" styleClass="forum-topic-stop-watching-link" value="#{locales['forum.topic.stopWatchTopic']}" action="#{forumTopicBackingBean.stopWatchingTopic}" />
-          
-        
         </h:form>
         
         <h3>#{forumTopicBackingBean.topicSubject}</h3>
@@ -112,17 +110,27 @@
                   <h:outputText value="#{post.content}" escape="false"/>
                 </h:panelGroup>
                           
-                <h:panelGroup layout="block" styleClass="forum-topic-post-sent">
-                  <h:outputFormat value="#{locales['forum.topic.postSent']}">
-                    <f:param value="#{post.created}"/> 
-                  </h:outputFormat>
-                </h:panelGroup>       
-                
-                <h:panelGroup layout="block" styleClass="forum-topic-post-modified" rendered="#{post.modified ne post.created}">
-                  <h:outputFormat value="#{locales['forum.topic.postModified']}">
-                    <f:param value="#{post.modified}"/> 
-                  </h:outputFormat>
-                </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="forum-topic-post-footer">
+                  <h:panelGroup layout="block" styleClass="forum-topic-post-edit-container">
+                    <h:outputLink styleClass="forum-topic-post-edit" value="#{request.contextPath}/forum/#{post.topic.forum.urlName}/#{post.topic.urlName}/edit/#{post.id}" rendered="#{forumTopicBackingBean.getMayModifyPost(post)}">
+                      #{locales['forum.topic.editPost']}
+                    </h:outputLink>
+                  </h:panelGroup>
+
+                  <h:panelGroup layout="block" styleClass="forum-topic-post-dates-container">
+                    <h:panelGroup layout="block" styleClass="forum-topic-post-sent">
+                      <h:outputFormat value="#{locales['forum.topic.postSent']}">
+                        <f:param value="#{post.created}"/> 
+                      </h:outputFormat>
+                    </h:panelGroup>         
+                  
+                    <h:panelGroup layout="block" styleClass="forum-topic-post-modified" rendered="#{post.modified ne post.created}">
+                      <h:outputFormat value="#{locales['forum.topic.postModified']}">
+                        <f:param value="#{post.modified}"/> 
+                      </h:outputFormat>
+                    </h:panelGroup>
+                  </h:panelGroup>
+                </h:panelGroup> 
               </h:panelGroup>
             </h:panelGroup>
           </ui:repeat>  
