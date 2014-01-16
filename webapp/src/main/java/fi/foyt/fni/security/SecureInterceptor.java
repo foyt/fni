@@ -4,15 +4,11 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
-import javax.enterprise.util.AnnotationLiteral;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -29,13 +25,12 @@ import fi.foyt.fni.session.SessionController;
 public class SecureInterceptor implements Serializable {
 
 	private static final long serialVersionUID = 1717214145781666931L;
+	
+	@Inject
+	private SecurityController securityController;
 
 	@Inject
 	private SessionController sessionController;
-	
-	@Inject
-	@Any
-	private Instance<PermissionCheckImplementation<?>> permissionChecks;
 	
 	@AroundInvoke
 	public Object aroundInvoke(InvocationContext ic) throws Exception {
@@ -50,7 +45,6 @@ public class SecureInterceptor implements Serializable {
 		throw new ForbiddenException();
 	}
 
-	@SuppressWarnings("serial")
 	private boolean invokePermissionChecks(final Permission permission, Method method, Object[] methodParameters) {
 		Object contextParameter = null;
 		
@@ -87,23 +81,7 @@ public class SecureInterceptor implements Serializable {
   		}
 		}
 		
-		PermissionCheck permissionCheckAnnotation = new PermissionCheckQualifier() { 
-			@Override
-			public Permission value() {
-				return permission;
-			}
-		};
-		 
-		Iterator<PermissionCheckImplementation<?>> permissionCheckIterator = permissionChecks.select(permissionCheckAnnotation).iterator();
-		while (permissionCheckIterator.hasNext()) {
-			@SuppressWarnings("unchecked")
-			PermissionCheckImplementation<Object> permissionCheck = (PermissionCheckImplementation<Object>) permissionCheckIterator.next();
-			if (!permissionCheck.checkPermission(contextParameter, parameters)) {
-				return false;
-			}
-		}
-
-		return true;
+		return securityController.checkPermission(permission, contextParameter, parameters);
 	}
 	
 	private Object evaluateExpression(String expression) {
@@ -113,9 +91,5 @@ public class SecureInterceptor implements Serializable {
     ValueExpression valueExpression = expressionFactory.createValueExpression(elContext, expression, Object.class);
     return valueExpression.getValue(elContext);
 	}
-	
-	@SuppressWarnings ("all")
-	private abstract class PermissionCheckQualifier extends AnnotationLiteral<PermissionCheck> implements PermissionCheck {
-  };
 	
 }
