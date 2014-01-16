@@ -17,7 +17,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,16 +27,11 @@ import com.ocpsoft.pretty.PrettyException;
 
 import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.UnauthorizedException;
-import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.ErrorUtils;
 
 public class ExceptionHandler extends ExceptionHandlerWrapper {
 
-  @Inject
-  private Logger logger;
-
-  @Inject
-  private SessionController sessionController;
+  private Logger logger = Logger.getGlobal();
 
   private final javax.faces.context.ExceptionHandler wrapped;
 
@@ -104,12 +98,7 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
           String recipient = System.getProperty("fni-error-email");
           if (ErrorUtils.isReportableException(exception)) {
             if (StringUtils.isNotBlank(recipient) && (externalContext.getRequest() instanceof HttpServletRequest) && (externalContext.getResponse() instanceof HttpServletResponse)) {
-              Long loggedUserId = null;
-              if (sessionController.isLoggedIn()) {
-                loggedUserId = sessionController.getLoggedUserId();
-              }
-              
-              ErrorUtils.mailError(recipient, (HttpServletRequest) externalContext.getRequest(), (HttpServletResponse) externalContext.getResponse(), exception, loggedUserId);
+              ErrorUtils.mailError(recipient, (HttpServletRequest) externalContext.getRequest(), (HttpServletResponse) externalContext.getResponse(), exception, null);
             } else {
               exception.printStackTrace();
             }
