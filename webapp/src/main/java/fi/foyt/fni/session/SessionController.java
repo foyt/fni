@@ -187,8 +187,18 @@ public class SessionController implements Serializable {
   public void setLocale(Locale locale) {
     this.locale = locale;
   }
+
+
+  public void setRedirectUrl(String redirectUrl) {
+    this.redirectUrl = redirectUrl;
+  }
+
+  public String getRedirectUrl() {
+    return redirectUrl;
+  }
   
   private Long loggedUserId = null;
   private Locale locale = null;
   private Long loggedUserTokenId;
+  private String redirectUrl;
 }

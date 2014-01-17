@@ -28,6 +28,7 @@ import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
+import fi.foyt.fni.security.SecurityController;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.faces.FacesUtils;
@@ -54,6 +55,9 @@ public class ForumTopicBackingBean {
 
 	@Inject
 	private SessionController sessionController;
+	
+	@Inject
+	private SecurityController securityController;
 	
 	@URLAction
 	public void load() throws FileNotFoundException {
@@ -163,6 +167,10 @@ public class ForumTopicBackingBean {
 	public Date getTopicCreated() {
     return topicCreated;
   }
+	
+	public boolean getMayModifyPost(ForumPost forumPost) {
+	  return securityController.checkPermission(Permission.FORUM_POST_MODIFY, forumPost.getId());
+	}
 	
 	@LoggedIn
 	@Secure (Permission.FORUM_POST_CREATE)

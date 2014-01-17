@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['forum.editPost.pageTitle']}</ui:define>
+  <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/forum-edit-post.css" />
+  </ui:define>
+  
+  <ui:define name="view-scripts">
+    <!-- CKEditor -->
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/ckeditor.js"/>
+    
+    <!-- View Scripts -->
+  
+    <h:outputScript name="scripts/gui/forum-edit-post.js"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      <!-- Navigation -->
+
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">
+          #{locales['forum.editPost.navItemIndex']}
+        </h:link>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:link styleClass="view-header-navigation-item" outcome="/forum/index.jsf">
+          #{locales['forum.editPost.navItemForum']}
+        </h:link>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:outputLink styleClass="view-header-navigation-item" value="#{request.contextPath}/forum/#{forumEditPostBackingBean.forum.urlName}">
+          #{forumEditPostBackingBean.forum.name}
+        </h:outputLink>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:outputLink styleClass="view-header-navigation-item" value="#{request.contextPath}/forum/#{forumEditPostBackingBean.forum.urlName}/#{forumEditPostBackingBean.topicUrlName}">
+          #{forumEditPostBackingBean.topic.subject}
+        </h:outputLink>
+        <!-- TODO: Edit Link -->
+      </h:panelGroup>
+
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{forumEditPostBackingBean.forum.name}</p>
+        <p class="view-header-description-text">#{forumEditPostBackingBean.forum.description}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <!-- Edit Form -->
+
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="forum-edit-post-panel">
+        <h3>#{locales['forum.editPost.editPostTitle']}</h3>
+        
+        <h:panelGroup>
+          <h:form>
+            <h:panelGroup layout="block" styleClass="forum-post-editor-container">
+              <h:inputTextarea value="#{forumEditPostBackingBean.postContent}" class="forum-post-editor"/>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" styleClass="forum-post-send-container">
+              <h:commandButton value="#{locales['forum.editPost.save']}" action="#{forumEditPostBackingBean.save}" />
+            </h:panelGroup>
+          </h:form>
+        </h:panelGroup>
+      </h:panelGroup>
+    </h:panelGroup>
+
+  </ui:define>
+
+</ui:composition>

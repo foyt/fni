@@ -204,6 +204,17 @@ public class ForumController implements Serializable {
 		return forumPostDAO.countByAuthor(author);
   }
 
+  public Integer getIndexOfPostInTopic(ForumPost forumPost) {
+    List<ForumPost> posts = forumPostDAO.listByTopic(forumPost.getTopic());
+    for (int i = 0, l = posts.size(); i < l; i++) {
+      if (posts.get(i).getId().equals(forumPost.getId())) {
+        return i;
+      }
+    }
+
+    return null;
+  }
+
 	public ForumPost updatePostViews(ForumPost post, long views) {
     return forumPostDAO.updateViews(post, views);
 	}
@@ -211,6 +222,10 @@ public class ForumController implements Serializable {
 	public Long countPostsByForum(Forum forum) {
 		return forumPostDAO.countByForum(forum);
 	}
+
+  public ForumPost updateForumPostContent(ForumPost forumPost, String postContent) {
+    return forumPostDAO.updateModified(forumPostDAO.updateContent(forumPost, postContent), new Date());
+  }
 
 	public List<SearchResult<ForumTopic>> searchTopics(String text) {
 		return searchTopics(text, null);

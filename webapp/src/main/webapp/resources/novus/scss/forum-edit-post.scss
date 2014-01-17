@@ -1,0 +1,33 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+$border-color: rgb(71, 176, 176);
+
+/* Generic */
+
+h3 {
+  @include header-3;
+  color: $title-color;
+  margin-bottom: 19px;
+}
+
+/* Panels*/
+
+.forum-edit-post-panel {
+  @include generic-panel;
+}
+
+.forum-post-send-container input[type="submit"] {
+  color: $default-color;
+  font-family: $title-font;
+  font-size: 14px;
+  text-transform: uppercase;
+  padding: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}

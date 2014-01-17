@@ -71,9 +71,7 @@ public class ErrorUtils {
       contentWriter.append('\n');
       if (loggedUserId != null) {
         contentWriter.append("Logged User Id: " + loggedUserId + "\n");
-      } else {
-        contentWriter.append("User not logged in\n");
-      }
+      } 
       
       contentWriter.append('\n');
       contentWriter.append("Stack trace: \n");

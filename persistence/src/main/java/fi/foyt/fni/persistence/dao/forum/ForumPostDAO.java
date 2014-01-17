@@ -231,4 +231,14 @@ public class ForumPostDAO extends GenericDAO<ForumPost> {
     return forumPost;
   }
 
+  public ForumPost updateContent(ForumPost forumPost, String content) {
+    forumPost.setContent(content);
+    return persist(forumPost);
+  }
+
+  public ForumPost updateModified(ForumPost forumPost, Date modified) {
+    forumPost.setModified(modified);
+    return persist(forumPost);
+  }
+
 }

@@ -98,6 +98,21 @@ h3 {
 .forum-topic-post-content {
   color: $default-color;
   font-family: $default-font;
+  width: 800px;
+}
+
+.forum-topic-post-footer {
+  clear: both;
+  padding-top: 13px;
+}
+
+.forum-topic-post-edit-container {
+  float: right;
+}
+
+.forum-topic-post-dates-container {
+  float: left;
+  vertical-align: top;
 }
 
 .forum-topic-post-sent, .forum-topic-post-modified {
@@ -107,8 +122,12 @@ h3 {
   text-transform: uppercase;
 }
 
-.forum-topic-post-sent {
-  padding-top: 13px;
+.forum-topic-post-edit {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase; 
+  text-decoration: none;
 }
 
 /* Reply */
