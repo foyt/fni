@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  template="/WEB-INF/templates/gridbase.xhtml">
+  
+  <ui:define name="view-scripts">
+    <!-- Strophe -->
+    
+    <h:outputScript name="scripts/strophe/strophe.js"/>
+    <h:outputScript name="scripts/strophe/plugins/strophe.muc.js"/>
+    <h:outputScript name="scripts/strophe/plugins/strophe.register.js"/>
+    
+    <!-- View scripts -->
+    
+    <h:outputScript name="scripts/gui/admin-manage-xmpp-users.js"></h:outputScript>
+  </ui:define>
+
+  <ui:define name="view-stylesheets">
+    <!-- View styles -->
+    
+    <h:outputStylesheet library="novus" name="css/admin-manage-xmpp-users.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="grid_16 alpha slim-right">
+        <h:panelGroup layout="block" styleClass="admin-manage-xmpp-users-panel">
+          <input type="hidden" value="#{adminManageXmppUsersBackingBean.xmppBoshService}" id="xmpp-bosh-service"/>
+          <input type="hidden" value="#{adminManageXmppUsersBackingBean.xmppDomain}" id="xmpp-domain"/>
+          
+          <h:panelGroup layout="block" styleClass="admin-manage.xmpp-users">
+          
+            <h:panelGroup layout="block" styleClass="manage-xmpp-mass-ops">
+              <a class="manage-xmpp-mass-op manage-xmpp-mass-check" href="javascript:void(null)">#{locales['admin.manageXmppUsers.checkAll']}</a>
+              <a class="manage-xmpp-mass-op manage-xmpp-mass-create" href="javascript:void(null)">#{locales['admin.manageXmppUsers.createAll']}</a>
+            </h:panelGroup>
+
+            <div class="manage-xmpp-users-headers"> 
+              <div class="manage-xmpp-users-header manage-xmpp-user-email-header">#{locales['admin.manageXmppUsers.emailLabel']}</div>
+              <div class="manage-xmpp-users-header manage-xmpp-user-credentials-header">#{locales['admin.manageXmppUsers.credentialsLabel']}</div>
+              <div class="manage-xmpp-users-header manage-xmpp-user-status-header">#{locales['admin.manageXmppUsers.statusLabel']}</div>
+              <div class="manage-xmpp-users-header manage-xmpp-user-actions-header"></div>
+            </div>
+          
+            <ui:repeat var="user" value="#{adminManageXmppUsersBackingBean.users}">
+              <ui:fragment rendered="#{adminManageXmppUsersBackingBean.hasXmppUserJid(user)}">
+                <div class="manage-xmpp-user" data-user-id="#{user.id}" 
+                  data-user-email="#{adminManageXmppUsersBackingBean.getUserEmail(user)}"
+                  data-user-password="#{adminManageXmppUsersBackingBean.getXmppUserPassword(user)}" 
+                  data-user-jid="#{adminManageXmppUsersBackingBean.getXmppUserJid(user)}"
+                  data-status="UNCHECKED"> 
+                  
+                  <div class="manage-xmpp-user-email"><h:outputLabel value="#{adminManageXmppUsersBackingBean.getUserEmail(user)}" /></div>
+                  <div class="manage-xmpp-user-credentials"><h:outputLabel value="#{adminManageXmppUsersBackingBean.getXmppUserJid(user)} / #{adminManageXmppUsersBackingBean.getXmppUserPassword(user)}" /></div>
+                  <div class="manage-xmpp-user-status"></div>
+                  <div class="manage-xmpp-user-actions"></div>
+                </div> 
+              </ui:fragment>
+              
+              <ui:fragment rendered="#{!adminManageXmppUsersBackingBean.hasXmppUserJid(user)}">
+                <div class="manage-xmpp-user" data-user-id="#{user.id}" 
+                  data-user-email="#{adminManageXmppUsersBackingBean.getUserEmail(user)}"
+                  data-user-password="#{adminManageXmppUsersBackingBean.getGeneratedXmppPassword(user)}" 
+                  data-user-jid="#{adminManageXmppUsersBackingBean.getGeneratedXmppUserJid(user)}"
+                  data-status="MISSING_JID"> 
+                  
+                  <div class="manage-xmpp-user-email"><h:outputLabel value="#{adminManageXmppUsersBackingBean.getUserEmail(user)}" /></div>
+                  <div class="manage-xmpp-user-credentials"><h:outputLabel value="#{adminManageXmppUsersBackingBean.getGeneratedXmppUserJid(user)} / #{adminManageXmppUsersBackingBean.getGeneratedXmppPassword(user)}" /></div>
+                  <div class="manage-xmpp-user-status"></div>
+                  <div class="manage-xmpp-user-actions"></div>
+                </div> 
+                
+              </ui:fragment>
+            </ui:repeat>
+          </h:panelGroup>
+        </h:panelGroup>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <input type="hidden" id="js-locales" data-create-link="#{locales['admin.manageXmppUsers.createLink']}" data-check-link="#{locales['admin.manageXmppUsers.checkLink']}"/>
+    
+    <h:form style="display: none" id="register-form">
+      <h:inputHidden id="user-id" value="#{adminManageXmppUsersBackingBean.registeredUserId}" />
+      <h:inputHidden id="user-jid" value="#{adminManageXmppUsersBackingBean.registeredUserJid}" />
+      <h:inputHidden id="user-password" value="#{adminManageXmppUsersBackingBean.registeredUserPassword}" />
+      <h:commandButton id="save" action="#{adminManageXmppUsersBackingBean.saveRegisteredUser}">
+        <f:ajax execute="@form"/>
+      </h:commandButton>
+    </h:form>
+
+  </ui:define>
+
+</ui:composition>
