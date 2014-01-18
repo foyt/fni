@@ -40,6 +40,18 @@ public class UserChatCredentialsDAO extends GenericDAO<UserChatCredentials> {
     return getSingleResult(entityManager.createQuery(criteria));
   }
 
+  public UserChatCredentials findByUserJid(String userJid) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<UserChatCredentials> criteria = criteriaBuilder.createQuery(UserChatCredentials.class);
+    Root<UserChatCredentials> root = criteria.from(UserChatCredentials.class);
+    criteria.select(root);
+    criteria.where(criteriaBuilder.equal(root.get(UserChatCredentials_.userJid), userJid));
+    
+    return getSingleResult(entityManager.createQuery(criteria));
+  }
+
   public UserChatCredentials updateUserJid(UserChatCredentials userChatToken, String userJid) {
     userChatToken.setUserJid(userJid);
     
@@ -55,4 +67,5 @@ public class UserChatCredentialsDAO extends GenericDAO<UserChatCredentials> {
     
     return userChatToken;
   }
+
 }
