@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cache;
@@ -45,6 +46,14 @@ public class IllusionGroup {
     this.xmppRoom = xmppRoom;
   }
   
+  public String getDescription() {
+    return description;
+  }
+  
+  public void setDescription(String description) {
+    this.description = description;
+  }
+  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
@@ -53,6 +62,9 @@ public class IllusionGroup {
   @NotEmpty
   @Column (nullable = false)
   private String name;
+  
+  @Lob
+  private String description;
   
   @NotNull
   @NotEmpty

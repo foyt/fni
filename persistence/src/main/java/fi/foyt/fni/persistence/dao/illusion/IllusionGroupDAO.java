@@ -15,10 +15,11 @@ public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionGroup create(String urlName, String name, String xmppRoom) {
+	public IllusionGroup create(String urlName, String name, String description, String xmppRoom) {
 		IllusionGroup illusionSpace = new IllusionGroup();
 		
 		illusionSpace.setName(name);
+		illusionSpace.setDescription(description);
 		illusionSpace.setUrlName(urlName);
 		illusionSpace.setXmppRoom(xmppRoom);
 		
