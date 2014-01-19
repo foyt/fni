@@ -10,47 +10,71 @@
   
   <ui:define name="view-scripts">
     <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    <h:outputScript name="scripts/sharedspace/tosstable.js"/>
+    
+    <!-- Strophe -->
+    
+    <h:outputScript name="scripts/strophe/strophe.js"/>
+    <h:outputScript name="scripts/strophe/plugins/strophe.muc.js"/>
+    
+    <!-- View Scripts -->
+    
     <h:outputScript name="scripts/gui/illusion-group.js"/>
   </ui:define>
   
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    <h:outputStylesheet library="novus" name="css/fonts.css"/>
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
-    <h:outputStylesheet library="novus" name="css/illusion.css"/>
+
+    <h:outputStylesheet library="novus" name="css/illusion-group.css"/>
   </ui:define>  
 
   <ui:define name="grid-content">
 
+    <div class="illusion-group-chat-splash-container"></div>
+
     <!-- Menu -->
 
     <ui:include src="/facelets/menu.xhtml" />
-
-    <!-- Coming soon -->
     
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/index.jsf">#{locales['illusion.group.navigationIndex']}</h:link>
+        </h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/gamelibrary/index.jsf">#{locales['illusion.group.navigationIllusion']}</h:link>
+        </h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:outputLink value="#{request.contextPath}/illusion/group/#{illusionGroupBackingBean.urlName}">#{illusionGroupBackingBean.name}</h:outputLink>
+        </h:panelGroup>
+      </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{illusionGroupBackingBean.name}</p>
+        <p class="view-header-description-text">#{illusionGroupBackingBean.description}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+
+    <!-- Content -->
+
     <h:panelGroup layout="block" styleClass="grid_16 tight">
       
-      <h:panelGroup layout="block" styleClass="illusion-items grid_2">
-        <h:panelGroup layout="block" styleClass="illusion-item-group">
-          <label>Dice</label>
-          <h:panelGroup layout="block" styleClass="illusion-item illusion-item-die"/>
-        </h:panelGroup>
-        <h:panelGroup layout="block" styleClass="illusion-item-group">
-          <label>Stuff</label>
-          <h:panelGroup layout="block" styleClass="illusion-item illusion-item-link"/>
-          <h:panelGroup layout="block" styleClass="illusion-item illusion-item-pdf"/>
-          <h:panelGroup layout="block" styleClass="illusion-item illusion-item-audio"/>
-        </h:panelGroup>
-      </h:panelGroup>
+      <input type="hidden" value="#{illusionGroupBackingBean.xmppBoshService}" id="xmpp-bosh-service"/>
+      <input type="hidden" value="#{illusionGroupBackingBean.xmppUserJid}" id="xmpp-user-jid"/>
+      <input type="hidden" value="#{illusionGroupBackingBean.xmppPassword}" id="xmpp-password"/>
+      <input type="hidden" value="#{illusionGroupBackingBean.xmppRoom}" id="xmpp-room"/>
+      <input type="hidden" value="#{illusionGroupBackingBean.userNickname}" id="user-nickname"/>
       
-      <h:panelGroup layout="block" styleClass="grid_14 illusion-tables-container">
-        <h:panelGroup layout="block" styleClass="illusion-tables"></h:panelGroup>
-        <h:panelGroup layout="block" styleClass="illusion-participants"></h:panelGroup>        
+      <h:panelGroup layout="block" styleClass="illusion-group-panel">
+        <textarea class="illusion-group-chat-input"></textarea>
       </h:panelGroup>
-            
     </h:panelGroup>
-    
+
   </ui:define>
 
 </ui:composition>

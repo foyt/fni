@@ -1,78 +1,84 @@
 (function() {
   'use strict';
   
-  $.widget("custom.illusionParticipant", {
-    options : {},
-    _create : function() {
-      this.element
-        .addClass('illusion-participant')
-        .append(
-          $('<img>').attr('src', this.options.imageUrl)
-        ).click(function () {
-          $('.illusion-table').hide();
-          var table = $(this).illusionParticipant("option", "table");
-          $(table)
-            .show()
-            .illusionTable('changeImage', 'static', {
-              imageUrl: $(this).illusionParticipant("option", "imageUrl")
-            });
-        });
-    },
-    _destroy : function() {
-    }
-  });
-  
-  $.widget("custom.illusionTable", {
-    options : {},
-    _create : function() {
-      this.element
-        .tosstable()
-        .addClass('illusion-table');
-    },
-    changeImage: function (type, opts) {
-      switch (type) {
-        case 'static':
-          $(this.element)
-            .css({
-              'background-image': "url('" + opts.imageUrl + "'",
-              'background-size': '90% 90%',
-              'background-position': 'center', 
-              'background-repeat': 'no-repeat'
-            });
-        break;
-      }
-    },
-      
-    _destroy : function() {
-    }
-  });
-  
-  
-  function createParticipant(imageUrl) {
-    var table = $('<div>')
-      .illusionTable()
-      .hide();
-    
-    var icon = $('<div>')
-      .illusionParticipant({
-        table: table,
-        imageUrl: imageUrl
-      });
-    
-    $('.illusion-participants').append(icon);
-    $('.illusion-tables').append(table);
-  }
+  function showSlash(message) {
+    $('.illusion-group-chat-splash-container').append(
+      $('<div>')
+        .hide()
+        .addClass('illusion-group-chat-splash-text')
+        .text(message)
+        .show("fade")
+        .delay(10000)
+        .hide("puff")
+    );  
+  };
   
   $(document).ready(function() {
-    $('.illusion-item').tossable();
-    createParticipant('http://farm5.staticflickr.com/4118/4857026160_be2146d4fa.jpg');
-    createParticipant('http://farm3.staticflickr.com/2625/3774896826_a9eb810112.jpg');
-    createParticipant('http://farm9.staticflickr.com/8037/8056870326_24befc3c2f.jpg');
-    createParticipant('http://farm2.staticflickr.com/1233/4726132269_aa71fe7a4c.jpg');
+    var boshService = $('#xmpp-bosh-service').val();
+    var userJid = $('#xmpp-user-jid').val();
+    var password = $('#xmpp-password').val();
+    $('.illusion-group-chat-input').attr('disabled', 'disabled');
+    
+    var stropheConnection = new Strophe.Connection(boshService);
+    stropheConnection.connect(userJid, password, function (status) {
+      if (status == Strophe.Status.CONNFAIL) {
+        // TODO: Proper error handling...
+        alert('Xmpp Connection Failed');
+      } else if (status == Strophe.Status.CONNECTED) {
+        $(document).trigger('strophe.connect', {
+          stropheConnection: stropheConnection
+        });
+      };
+    }); 
   });
   
-  $(document).on("illusion-table-show", ".illusion-table", function (e) {
-    
-  });
+  $(document).on('strophe.connect', function (event, data) {
+    var stropheConnection = data.stropheConnection;
+    var roomName = $('#xmpp-room').val();
+    var nickname = $('#user-nickname').val();
 
+    stropheConnection.muc.join(roomName, nickname, function msg_handler_cb(messageXml, room) {
+      var from = messageXml.getAttribute('from');
+      var to = messageXml.getAttribute('to');
+      var bodyElement = messageXml.getElementsByTagName('body')[0];
+      var delayElement = messageXml.getElementsByTagName('delay')[0];
+      var xElement = messageXml.getElementsByTagName('x')[0];
+        
+      $(document).trigger('strophe.muc.message', {
+        message: messageXml,
+        room: room,
+        from: from,
+        to: to,
+        body: bodyElement ? Strophe.getText(bodyElement) : null,
+        delay: delayElement ? delayElement.getAttribute('stamp') : null,
+        x: xElement ? xElement.getAttribute('stamp') : null
+      });
+      
+      return true;
+    }, function pres_handler_cb(presenceXml, room) {
+      $(document).trigger('strophe.muc.join', {
+        stropheConnection: stropheConnection,
+        room: room
+      });
+
+      return true;
+    });
+  });
+  
+  $(document).on('strophe.muc.join', function (event, data) {
+    var room = data.room;
+    
+    $('.illusion-group-chat-input').removeAttr('disabled');
+    $('.illusion-group-chat-input').keydown(function (event){
+      if (event.keyCode == 13) {
+        room.groupchat($(this).val());
+        $(this).val('');
+      }
+    });
+  });
+  
+  $(document).on('strophe.muc.message', function (event, data) {
+    showSlash(data.body);
+  });
+  
 }).call(this);

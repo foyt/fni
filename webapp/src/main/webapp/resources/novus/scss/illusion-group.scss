@@ -1,0 +1,32 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+/* Panel */ 
+
+.illusion-group-panel {
+  @include generic-panel;
+}
+
+/* Generic */
+
+h3 {
+  @include header-2;
+  margin-bottom: 10px;
+}
+
+/* Slash */
+
+.illusion-group-chat-splash-container {
+  position: absolute;
+  width: 920px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.illusion-group-chat-splash-text {
+  font-family: $default-font;
+  font-size: 38px;
+  color: #e0e;
+  text-shadow: -1px 0 rgba(0, 0, 200, 0.4), 0 1px rgba(0, 0, 200, 0.4), 1px 0 rgba(0, 0, 200, 0.4), 0 -1px rgba(0, 0, 200, 0.4);
+}
