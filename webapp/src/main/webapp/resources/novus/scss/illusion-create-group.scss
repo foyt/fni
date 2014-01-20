@@ -39,12 +39,23 @@ h3 {
   font-size: 13px;
   font-family: $default-font;
   font-weight: bold;
-  margin-bottom: 8px;
   width: 150px;
   display: inline-block;
+  vertical-align: top;
+  margin-bottom: 4px;
+  margin-top: 4px;
 }
 
 .illusion-create-group-field input[type="text"] {
+  width: 300px;
+  font-size: 14px;
+  font-family: $default-font;
+  @include box-sizing(border-box);
+  margin-bottom: 8px;
+}
+
+.illusion-create-group-field textarea {
+  height: 120px;
   width: 300px;
   font-size: 14px;
   font-family: $default-font;

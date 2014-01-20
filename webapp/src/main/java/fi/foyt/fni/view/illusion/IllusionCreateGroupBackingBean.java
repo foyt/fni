@@ -78,6 +78,14 @@ public class IllusionCreateGroupBackingBean {
 	public void setName(String name) {
     this.name = name;
   }
+	
+	public String getDescription() {
+    return description;
+  }
+	
+	public void setDescription(String description) {
+    this.description = description;
+  }
 
 	public String getXmppUserJid() {
     return xmppUserJid;
@@ -133,7 +141,7 @@ public class IllusionCreateGroupBackingBean {
   @LoggedIn
 // TODO: Security
   public void save() throws IOException {
-    IllusionGroup illusionGroup = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getXmppRoom());
+    IllusionGroup illusionGroup = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getDescription(), getXmppRoom());
     String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
     
     FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
@@ -144,6 +152,7 @@ public class IllusionCreateGroupBackingBean {
   }
 	
 	private String name;
+	private String description;
 	private String xmppBoshService;
 	private String xmppUserJid;
 	private String xmppPassword;

@@ -70,8 +70,13 @@
               <h:inputText id="name" value="#{illusionCreateGroupBackingBean.name}" required="true" requiredMessage="#{locales['illusion.createGroup.nameRequired']}">
                 <f:ajax execute="@form" render="@form"/>
               </h:inputText>
+            </h:panelGroup>
+             
+            <h:panelGroup layout="block" styleClass="illusion-create-group-field">
+              <h:outputLabel value="#{locales['illusion.createGroup.descriptionLabel']}" />
+              <h:inputTextarea id="description" value="#{illusionCreateGroupBackingBean.description}"/>
             </h:panelGroup>  
-            
+
             <h:panelGroup layout="block" styleClass="illusion-create-group-field">
               <h:outputLabel value="#{locales['illusion.createGroup.urlNameLabel']}" />
               <h:inputText id="urlName" value="#{illusionCreateGroupBackingBean.urlName}" disabled="true" readonly="true"/>
