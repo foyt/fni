@@ -56,11 +56,19 @@
       
       return true;
     }, function pres_handler_cb(presenceXml, room) {
-      $(document).trigger('strophe.muc.join', {
-        stropheConnection: stropheConnection,
-        room: room
-      });
+      var xElement = presenceXml.getElementsByTagName('x')[0];
+      if (xElement) {
+        var statusElement = xElement.getElementsByTagName('status')[0];
+        if (statusElement && ("110" == statusElement.getAttribute("code"))) {
+          $(document).trigger('strophe.muc.join', {
+            stropheConnection: stropheConnection,
+            room: room
+          });
+        }
+      }
 
+      return true;
+    }, function roster_cb(rosterXml, room) {
       return true;
     });
   });
