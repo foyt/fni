@@ -42,6 +42,11 @@
               "var": "muc#roomconfig_publicroom",
               "required": true,
               "value": "0"
+            }), new Strophe.x.Field({
+              "type": "boolean",
+              "var": "muc#muc_nonanonymous",
+              "required": true,
+              "value": "1"
             })]
           }), function () {
             $('input[name="' + prefix + ':save' + '"]').click();
