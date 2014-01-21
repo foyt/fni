@@ -21,6 +21,16 @@ h3 {
   background: #eee;
   padding: 8px;
   margin: 8px;
+  position: relative;
+  min-height: 52px;
+  border: 1px solid #aaa;
+}
+
+.illusion-group-chat-message-avatar {
+  position: absolute;
+  right: 8px;
+  top: 28px;
+  border-radius: 8px;
 }
 
 .illusion-group-chat-message-from {
@@ -61,4 +71,11 @@ h3 {
   font-size: 38px;
   color: #e0e;
   text-shadow: -1px 0 rgba(0, 0, 200, 0.4), 0 1px rgba(0, 0, 200, 0.4), 1px 0 rgba(0, 0, 200, 0.4), 0 -1px rgba(0, 0, 200, 0.4);
+}
+
+.illusion-group-chat-input {
+  margin: 8px;
+  width: 902px;
+  height: 120px;
+  border: 1px solid #aaa;
 }

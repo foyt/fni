@@ -17,6 +17,8 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import fi.foyt.fni.chat.ChatCredentialsController;
+import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
@@ -38,23 +40,39 @@ public class ProfileImageServlet extends AbstractFileServlet {
 	@Inject
 	private UserController userController;
 
-	@Inject
+  @Inject
 	private SessionController sessionController;
+
+  @Inject
+	private ChatCredentialsController chatCredentialsController;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// PublicationImageId could not be resolved, send 404
-		Long userId = getPathId(request);
-		if (userId == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-			return;
+	  User user = null;
+	  
+	  String lastBlock = getPathLastBlock(request);
+		if (StringUtils.isNumeric(lastBlock)) {
+		  Long userId = NumberUtils.createLong(lastBlock);
+	    // user id could not be resolved, send 404
+	    if (userId == null) {
+	      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+	      return;
+	    }
+	    
+	    user = userController.findUserById(userId);
+	  } else {
+		  if (StringUtils.startsWith(lastBlock, "jid:")) {
+		    UserChatCredentials chatCredentials = chatCredentialsController.findUserChatCredentialsByUserJid(StringUtils.stripStart(lastBlock, "jid:"));
+		    if (chatCredentials != null) {
+		      user = chatCredentials.getUser();
+		    }
+		  }
 		}
 
-		User user = userController.findUserById(userId);
-		if (user == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
-			return;
-		}
+    if (user == null) {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      return;
+    }
 		
 		Integer width = NumberUtils.createInteger(request.getParameter("width"));
 		Integer height = NumberUtils.createInteger(request.getParameter("height"));

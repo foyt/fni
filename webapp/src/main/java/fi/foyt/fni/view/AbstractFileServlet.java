@@ -22,11 +22,15 @@ public abstract class AbstractFileServlet extends AbstractTransactionedServlet {
 	private static final long serialVersionUID = 2682138379342291553L;
 
 	protected static final long DEFAULT_EXPIRE_TIME = 1000 * 60 * 60;
+	
+	protected String getPathLastBlock(HttpServletRequest req) {
+    String pathInfo = req.getPathInfo();
+    int lastSlash = pathInfo.lastIndexOf('/');
+    return pathInfo.substring(lastSlash + 1);
+	}
 
 	protected Long getPathId(HttpServletRequest req) {
-		String pathInfo = req.getPathInfo();
-		int lastSlash = pathInfo.lastIndexOf('/');
-		String lastBlock = pathInfo.substring(lastSlash + 1);
+	  String lastBlock = getPathLastBlock(req);
 		if (StringUtils.isNumeric(lastBlock)) {
 			return NumberUtils.createLong(lastBlock);
 		}
