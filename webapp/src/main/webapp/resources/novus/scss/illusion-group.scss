@@ -15,6 +15,38 @@ h3 {
   margin-bottom: 10px;
 }
 
+/* Chat messages */
+
+.illusion-group-chat-message {
+  background: #eee;
+  padding: 8px;
+  margin: 8px;
+}
+
+.illusion-group-chat-message-from {
+  font-weight: bold;
+}
+
+.illusion-group-chat-message-sent {
+  float: right;
+}
+
+.illusion-group-chat-message-sent, .illusion-group-chat-message-from {
+  display: inline-block;
+  margin-bottom: 4px;
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 10px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.illusion-group-chat-message-body {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 14px;
+}
+
 /* Slash */
 
 .illusion-group-chat-splash-container {

@@ -78,7 +78,33 @@
   });
   
   $(document).on('strophe.muc.message', function (event, data) {
-    showSlash(data.body);
+    var time = new Date();
+
+    if (!data.delay) {
+      showSlash(data.body);
+    } else {
+      time.setTime(Date.parse(data.delay));
+    }
+    
+    $('.illusion-group-chat-messages').append(
+      $('<div>')
+        .addClass('illusion-group-chat-message')
+        .append($('<div>')
+          .addClass('illusion-group-chat-message-sent')
+          .text(time.toUTCString())
+        )
+        .append($('<div>')
+          .addClass('illusion-group-chat-message-from')
+          .text(Strophe.getResourceFromJid(data.from))
+        )
+        .append($('<div>')
+          .addClass('illusion-group-chat-message-body')
+          .html((data.body||'').replace(/\n/g, '<br/>'))
+        )
+    );
+    
+    
+    
   });
   
 }).call(this);
