@@ -78,6 +78,22 @@
             stropheConnection: stropheConnection,
             room: room
           });
+          
+          return true;
+        }
+        
+        var item = xElement.getElementsByTagName('item')[0];
+        if (item) {
+          $(document).trigger('strophe.muc.presense', {
+            stropheConnection: stropheConnection,
+            room: room,
+            affiliation: item.getAttribute('affiliation'),
+            jid: item.getAttribute('jid'),
+            nick: item.getAttribute('nick'),
+            role: item.getAttribute('role')
+          });
+          
+          return true;
         }
       }
 
