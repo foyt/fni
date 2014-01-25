@@ -49,8 +49,8 @@ public class IllusionCreateGroupBackingBean {
 
   @Inject
   private IllusionGroupController illusionGroupController;
-  
-	@LoggedIn
+
+  @LoggedIn
 // TODO: Security
 	@URLAction
 	public void load() throws IOException, GeneralSecurityException {
@@ -62,6 +62,7 @@ public class IllusionCreateGroupBackingBean {
     xmppPassword = chatCredentialsController.getPasswordByUser(user);
     xmppBoshService = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOSH_SERVICE);
     xmppMucHost = systemSettingsController.getSetting(SystemSettingKey.CHAT_MUC_HOST);
+    chatBotJid = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOT_JID);
 
     resolveNames();
 	}
@@ -101,6 +102,10 @@ public class IllusionCreateGroupBackingBean {
   
   public String getXmppRoom() {
     return xmppRoom;
+  }
+  
+  public String getChatBotJid() {
+    return chatBotJid;
   }
   
 	public String getUserNickname() {
@@ -158,6 +163,7 @@ public class IllusionCreateGroupBackingBean {
 	private String xmppPassword;
 	private String xmppMucHost;
   private String xmppRoom;
+  private String chatBotJid;
 	private String userNickname;
 	private String urlName;
 }
