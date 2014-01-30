@@ -13,10 +13,34 @@ import javax.imageio.ImageIO;
 import fi.foyt.fni.utils.data.TypedData;
 
 public class ImageUtils {
-
+  
+  public static BufferedImage readBufferedImage(TypedData originalData) throws IOException {
+    ByteArrayInputStream inputStream = new ByteArrayInputStream(originalData.getData());
+    try {
+      return ImageIO.read(inputStream);
+    } finally {
+      inputStream.close();
+    }
+  }
+  
+  public static TypedData writeBufferedImage(BufferedImage image) throws IOException {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    
+    if (ImageIO.write(image, "png", baos)) {
+      baos.flush();
+      baos.close();
+      return new TypedData(baos.toByteArray(), "image/png", new Date(System.currentTimeMillis()));
+    }
+    
+    return null;
+  }
+  
   public static TypedData resizeImage(TypedData originalData, Integer maxWidth, Integer maxHeight, ImageObserver imageObserver) throws IOException {
-    BufferedImage image = ImageIO.read(new ByteArrayInputStream(originalData.getData()));
-
+    BufferedImage image = readBufferedImage(originalData);
+    return writeBufferedImage(resizeImage(image, maxWidth, maxHeight, imageObserver));
+  }
+  
+  public static BufferedImage resizeImage(BufferedImage image, Integer maxWidth, Integer maxHeight, ImageObserver imageObserver) throws IOException {
     int width = maxWidth;
     int height = maxHeight;
 
@@ -46,21 +70,12 @@ public class ImageUtils {
     	} catch (Exception e) {
     	}
     }
-    	
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
     
-    if (ImageIO.write(renderedImage, "png", baos)) {
-      baos.flush();
-      baos.close();
-      return new TypedData(baos.toByteArray(), "image/png", new Date(System.currentTimeMillis()));
-    }
-    
-    return null;
+    return renderedImage;
   }
 
-
   public static TypedData convertToPng(TypedData originalData) throws IOException {
-  	BufferedImage image = ImageIO.read(new ByteArrayInputStream(originalData.getData()));
+  	BufferedImage image = readBufferedImage(originalData);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     
   	if (ImageIO.write(image, "png", baos)) {
