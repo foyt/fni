@@ -113,6 +113,26 @@ h3 {
   font-size: 14px;
 }
 
+.illusion-group-chat-fudge-minus,
+.illusion-group-chat-fudge-empty,
+.illusion-group-chat-fudge-plus {
+  width: 12px;
+  height: 12px;
+  display: inline-block;	
+}
+
+.illusion-group-chat-fudge-minus {
+  background: url('#' + '{resource["novus:gfx/icons/12x12/illusion/fudge-die-minus.png"]}') no-repeat center center;
+}
+
+.illusion-group-chat-fudge-empty {
+  background: url('#' + '{resource["novus:gfx/icons/12x12/illusion/fudge-die-empty.png"]}') no-repeat center center;
+}
+
+.illusion-group-chat-fudge-plus {
+  background: url('#' + '{resource["novus:gfx/icons/12x12/illusion/fudge-die-plus.png"]}') no-repeat center center;
+}
+
 /* Slash */
 
 .illusion-group-chat-splash-container {

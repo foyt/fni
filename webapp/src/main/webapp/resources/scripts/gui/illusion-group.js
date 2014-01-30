@@ -218,7 +218,11 @@
       )
       .append($('<div>')
         .addClass('illusion-group-chat-message-body')
-        .html((data.body||'').replace(/\n/g, '<br/>'))
+        .html((data.body||'')
+        		.replace(/\n/g, '<br/>')
+        		.replace(/\[\ \+\ \]/g, '<span class="illusion-group-chat-fudge-plus"/>')
+        		.replace(/\[\ \ \ \]/g, '<span class="illusion-group-chat-fudge-empty"/>')
+        		.replace(/\[\ \-\ \]/g, '<span class="illusion-group-chat-fudge-minus"/>'))
       );
     
     var messages = $('.illusion-group-chat-messages');
