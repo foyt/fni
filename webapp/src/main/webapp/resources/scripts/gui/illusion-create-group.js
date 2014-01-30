@@ -72,6 +72,8 @@
   $(document).on('strophe.muc.join', function (event, data) {
     var room = data.room;
     var stropheConnection = data.stropheConnection;
+    var prefix = $('.illusion-create-group-panel form').closest('form').attr('name');
+    var description = $('textarea[name="' + prefix + ':description' + '"]').val();
     
     room.configure(function () {
       stropheConnection.muc.saveConfiguration(room.name, new Strophe.x.Form({
@@ -87,10 +89,25 @@
           "required": true,
           "value": "0"
         }), new Strophe.x.Field({
+          "type": "list-single",
+          "var": "muc#roomconfig_anonymity",
+          "required": true,
+          "value": "nonanonymous"
+        }), new Strophe.x.Field({
           "type": "boolean",
-          "var": "muc#muc_nonanonymous",
+          "var": "muc#roomconfig_changesubject",
+          "required": true,
+          "value": "0"
+        }), new Strophe.x.Field({
+          "type": "boolean",
+          "var": "muc#roomconfig_membersonly",
           "required": true,
           "value": "1"
+        }), new Strophe.x.Field({
+          "type": "text-single",
+          "var": "muc#roomconfig_roomdesc",
+          "required": true,
+          "value": description
         })]
       }), function () {
         room.invite(chatBotJid, "Please join us");
