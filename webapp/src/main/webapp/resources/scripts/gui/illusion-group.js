@@ -1,5 +1,67 @@
 (function() {
   'use strict';
+
+  function getAvatarUrl(userJid, size) {
+	var groupJid = $('#xmpp-room').val();
+    var groupUrlName = Strophe.getNodeFromJid(groupJid);
+    return CONTEXTPATH + '/illusion/groupAvatar/' + groupUrlName + '/' + userJid + '?size=' + size;
+  };
+  
+  function addParticipant(userJid) {
+	  
+	$('<div>')
+	  .addClass('illusion-group-participant')
+	  .append($('<div>')
+	    .addClass("illusion-group-participant-image-container")
+	    .append($('<img>')
+	      .addClass('illusion-group-participant-image')
+	      .attr('src', getAvatarUrl(userJid, 90))
+	    )
+	    .append($('<div>').addClass('illusion-group-participant-image-cover'))
+	    .append($('<ul>')
+	      .addClass('illusion-group-participant-menu')
+	      .append($('<li>')
+	        .append(
+	    	  $('<a>')
+	    	    .attr('href', '#')
+                .data('action', 'showCharacterSheet')
+                .text('Näytä hahmolomake')
+            )
+          )
+          .append($('<li>')
+            .append($('<a>')
+  	    	  .attr('href', '#')
+  	    	  .text('Hallinnoi')
+	    	)
+    	    .append($('<ul>')
+    	      .append($('<li>')
+    	        .append($('<a>')
+  	    	      .attr('href', '#')
+  	    	      .data('action', 'makeGameMaster')
+                  .text('Nosta pelinjohtajaksi') 
+                )
+    	      )
+    	      .append($('<li>')
+    	        .append($('<a>')
+    	  	      .attr('href', '#')
+    	  	      .data('action', 'kick')
+    	          .text('Heitä Ulos') 
+    	        )
+    	      )
+  	    	)
+          )
+          .hide()
+          .menu({
+            select: function( event, ui ) {
+              event.preventDefault();
+        	  $(this).hide();
+        	  var action = ui.item.find('a').data('action');
+        	  $(document).trigger('illusion.menu.' + action, { });
+        	}
+          })
+	    )
+	  ).appendTo('.illusion-group-participants');
+  };
   
   function showSlash(message) {
     $('.illusion-group-chat-splash-container').append(
@@ -30,6 +92,12 @@
         });
       };
     }); 
+  });
+  
+  $(window).click(function (event) {
+	if ($(event.target).closest('.illusion-group-participant').length == 0) {
+      $('.illusion-group-participant-menu').hide();
+    }
   });
   
   $(document).on('strophe.connect', function (event, data) {
@@ -116,6 +184,10 @@
     });
   });
   
+  $(document).on('strophe.muc.presense', function (event, data) {
+    addParticipant(data.jid);
+  });
+  
   $(document).on('strophe.muc.message', function (event, data) {
     var time = new Date();
 
@@ -130,7 +202,7 @@
     if (data.fromJid) {
       message.append($('<img>')
         .addClass('illusion-group-chat-message-avatar')
-        .attr("src", CONTEXTPATH + '/users/profileImages/jid:' + data.fromJid + "?width=32&height=32")
+        .attr("src", getAvatarUrl(data.fromJid, 32))
       );
     };
     
@@ -149,7 +221,19 @@
         .html((data.body||'').replace(/\n/g, '<br/>'))
       );
     
-    $('.illusion-group-chat-messages').append(message);
+    var messages = $('.illusion-group-chat-messages');
+    
+    messages
+      .append(message)
+      .scrollTo(message);
+  });
+  
+  $(document).on("click", '.illusion-group-participant .illusion-group-participant-image', function (event) {
+	$(this).closest('.illusion-group-participant').find('.illusion-group-participant-menu').show();
+  });
+  
+  $(document).on('illusion.menu.showCharacterSheet', function (event, data) {
+	 alert('TODO: Show Character Sheet!');
   });
   
 }).call(this);

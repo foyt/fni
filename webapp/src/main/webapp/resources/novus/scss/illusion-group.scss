@@ -2,10 +2,15 @@
 @import "compass";
 @import "styles";
 
+$participant-image-size: 90px;
+$participant-lens-color-start: rgba(255, 255, 255, 0);
+$participant-lens-color-end: rgba(255, 255, 255, 0.5);
+
 /* Panel */ 
 
 .illusion-group-panel {
   @include generic-panel;
+  position: relative;
 }
 
 /* Generic */
@@ -15,7 +20,58 @@ h3 {
   margin-bottom: 10px;
 }
 
+/* Participants */
+
+.illusion-group-participants { 
+  position: absolute;
+  right: -$participant-image-size / 2;
+}
+
+.illusion-group-participant {
+  width: 90px;
+  margin-bottom: 8px;
+  z-index: 99;
+  position: relative;
+}
+
+.illusion-group-participant .ui-menu {
+  margin-top: -40px;
+  margin-left: 60px;
+  position: absolute;
+}
+
+.illusion-group-participant .ui-menu li a {
+  white-space: nowrap;
+}
+
+.illusion-group-participant:hover .illusion-group-participant-image-cover {
+  display: none;
+}
+
+.illusion-group-participant-image-container {
+  position: relative;
+  width: 90px;
+}
+
+.illusion-group-participant-image {
+  border-radius: $participant-image-size / 2;
+}
+
+.illusion-group-participant-image-cover {
+  @include background-image(radial-gradient(center, ellipse cover, $participant-lens-color-start, $participant-lens-color-end));
+  width: $participant-image-size;
+  height: $participant-image-size;
+  position: absolute;
+  top: 0px;
+  border-radius: $participant-image-size / 2;
+}
+
 /* Chat messages */
+
+.illusion-group-chat-messages {
+  height: 600px;
+  overflow: auto;
+}
 
 .illusion-group-chat-message {
   background: #eee;
