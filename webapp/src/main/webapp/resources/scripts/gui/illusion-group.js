@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-
+  
   function getAvatarUrl(userJid, size) {
 	var groupJid = $('#xmpp-room').val();
     var groupUrlName = Strophe.getNodeFromJid(groupJid);
@@ -75,10 +75,18 @@
     );  
   };
   
+  var boshService = null;
+  var userJid = null;
+  var password = null;
+  var chatBotJid = null;
+  var chatBotNick = null;
+  
   $(document).ready(function() {
-    var boshService = $('#xmpp-bosh-service').val();
-    var userJid = $('#xmpp-user-jid').val();
-    var password = $('#xmpp-password').val();
+    boshService = $('#xmpp-bosh-service').val();
+    userJid = $('#xmpp-user-jid').val();
+    password = $('#xmpp-password').val();
+    chatBotJid = $('#chat-bot-jid').val();
+    
     $('.illusion-group-chat-input').attr('disabled', 'disabled');
     
     var stropheConnection = new Strophe.Connection(boshService);
@@ -173,19 +181,49 @@
   
   $(document).on('strophe.muc.join', function (event, data) {
     var room = data.room;
+    var stropheConnection = data.stropheConnection;
     
     $('.illusion-group-chat-input').removeAttr('disabled');
     $('.illusion-group-chat-input').keydown(function (event){
       if (event.keyCode == 13) {
         event.preventDefault();
-        room.groupchat($(this).val());
+        
+        var message = $(this).val();
+        if (message) {
+          if (message.indexOf('/') == 0) {
+            var commandText = message.substring(1);
+            var argIndex = commandText.indexOf(' ');
+            var command = null;
+            var commandArgs = null;
+
+            if (argIndex > -1) {
+              command = commandText.substring(0, argIndex);
+              commandArgs = commandText.substring(argIndex + 1);
+              
+              $(document).trigger('illusion.chat.command.' + command, {
+                args: commandArgs,
+                stropheConnection: stropheConnection,
+                room: room
+              });
+            } else {
+              command = commandText;
+            }
+          } else {
+            room.groupchat($(this).val());
+          }
+        }
+
         $(this).val(null);
       }
     });
   });
   
   $(document).on('strophe.muc.presense', function (event, data) {
-    addParticipant(data.jid);
+    if (data.jid == chatBotJid) {
+	  chatBotNick = data.nick;
+	} else {
+      addParticipant(data.jid);
+	}
   });
   
   $(document).on('strophe.muc.message', function (event, data) {
@@ -238,6 +276,20 @@
   
   $(document).on('illusion.menu.showCharacterSheet', function (event, data) {
 	 alert('TODO: Show Character Sheet!');
+  });
+  
+  /* Chat commands */
+  
+  $(document).on("illusion.chat.command.roll", function (event, data) {
+	var room = data.room;
+	room.message(chatBotNick, '/roll ' + data.args, null, 'chat');
+  });
+  
+  $(document).on("illusion.chat.command.invite", function (event, data) {
+	if (data.args) {
+	  // TODO: Only game master should be able to do this...
+	  room.invite(data.args);
+	}
   });
   
 }).call(this);

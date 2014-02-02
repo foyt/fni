@@ -60,6 +60,7 @@ public class IllusionGroupBackingBean {
     xmppUserJid = chatCredentialsController.getUserJidByUser(loggedUser);
     xmppPassword = chatCredentialsController.getPasswordByUser(loggedUser);
     xmppBoshService = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOSH_SERVICE);
+    chatBotJid = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOT_JID);
   }
 
   public String getUrlName() {
@@ -125,6 +126,10 @@ public class IllusionGroupBackingBean {
   public void setUserNickname(String userNickname) {
     this.userNickname = userNickname;
   }
+  
+  public String getChatBotJid() {
+    return chatBotJid;
+  }
 
   private Long id;
   private String urlName;
@@ -135,4 +140,5 @@ public class IllusionGroupBackingBean {
   private String xmppPassword;
   private String xmppRoom;
   private String userNickname;
+  private String chatBotJid;
 }
