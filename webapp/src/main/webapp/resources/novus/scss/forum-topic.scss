@@ -101,6 +101,19 @@ h3 {
   width: 800px;
 }
 
+.forum-topic-post-content p {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.forum-topic-post-content b, .forum-topic-post-content strong {
+  font-weight: bold;
+}
+
+.forum-topic-post-content i, .forum-topic-post-content em {
+  font-style: italic;
+}
+
 .forum-topic-post-footer {
   clear: both;
   padding-top: 13px;
