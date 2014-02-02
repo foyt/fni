@@ -99,6 +99,25 @@ h3 {
   color: $default-color;
   font-family: $default-font;
   width: 800px;
+  font-size: 13px;
+  line-height: 1.6em;
+}
+
+.forum-topic-post-content p {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.forum-topic-post-content p:first-child {
+  margin-top: 0;
+}
+
+.forum-topic-post-content b, .forum-topic-post-content strong {
+  font-weight: bold;
+}
+
+.forum-topic-post-content i, .forum-topic-post-content em {
+  font-style: italic;
 }
 
 .forum-topic-post-footer {
