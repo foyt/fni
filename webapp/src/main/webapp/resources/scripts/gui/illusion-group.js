@@ -282,7 +282,7 @@
   
   $(document).on("illusion.chat.command.roll", function (event, data) {
 	var room = data.room;
-	room.message(chatBotNick, '/roll ' + data.args, null, 'chat');
+	room.groupchat('/roll ' + data.args, null);
   });
   
   $(document).on("illusion.chat.command.invite", function (event, data) {
