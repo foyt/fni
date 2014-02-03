@@ -9,6 +9,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -56,7 +58,7 @@ public class IllusionGroupBackingBean {
     urlName = illusionGroup.getUrlName();
     xmppRoom = illusionGroup.getXmppRoom();
 
-    userNickname = loggedUser.getId().toString(); //URLEncoder.encode((StringUtils.isNotBlank(loggedUser.getNickname()) ? loggedUser.getNickname() : loggedUser.getFullName()), "UTF-8");
+    userNickname = StringUtils.isNotBlank(loggedUser.getNickname()) ? loggedUser.getNickname() : loggedUser.getFullName();
     xmppUserJid = chatCredentialsController.getUserJidByUser(loggedUser);
     xmppPassword = chatCredentialsController.getPasswordByUser(loggedUser);
     xmppBoshService = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOSH_SERVICE);

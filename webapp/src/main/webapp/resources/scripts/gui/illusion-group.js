@@ -252,15 +252,15 @@
       )
       .append($('<div>')
         .addClass('illusion-group-chat-message-from')
-        .text(data.nick)
+        .text(Strophe.unescapeNode(data.nick))
       )
       .append($('<div>')
         .addClass('illusion-group-chat-message-body')
         .html((data.body||'')
         		.replace(/\n/g, '<br/>')
-        		.replace(/\[\ \+\ \]/g, '<span class="illusion-group-chat-fudge-plus"/>')
-        		.replace(/\[\ \ \ \]/g, '<span class="illusion-group-chat-fudge-empty"/>')
-        		.replace(/\[\ \-\ \]/g, '<span class="illusion-group-chat-fudge-minus"/>'))
+        		.replace(/\[\+\]/g, '<span class="illusion-group-chat-fudge-plus"/>')
+        		.replace(/\[\ \]/g, '<span class="illusion-group-chat-fudge-empty"/>')
+        		.replace(/\[\-\]/g, '<span class="illusion-group-chat-fudge-minus"/>'))
       );
     
     var messages = $('.illusion-group-chat-messages');
@@ -287,6 +287,7 @@
   
   $(document).on("illusion.chat.command.invite", function (event, data) {
 	if (data.args) {
+	  var room = data.room;
 	  // TODO: Only game master should be able to do this...
 	  room.invite(data.args);
 	}
