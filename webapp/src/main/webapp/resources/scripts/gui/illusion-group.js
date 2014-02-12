@@ -14,19 +14,7 @@
       $(html).appendTo('.illusion-group-participants');
     });
   };
-  
-  function showSlash(message) {
-    $('.illusion-group-chat-splash-container').append(
-      $('<div>')
-        .hide()
-        .addClass('illusion-group-chat-splash-text')
-        .html(message)
-        .show("fade")
-        .delay(10000)
-        .hide("puff")
-    );  
-  };
-  
+
   var boshService = null;
   var userJid = null;
   var password = null;
@@ -195,9 +183,7 @@
   $(document).on('strophe.muc.message', function (event, data) {
     var time = new Date();
 
-    if (!data.delay) {
-      showSlash(data.nick + ' said: ' + data.body);
-    } else {
+    if (data.delay) {
       time.setTime(Date.parse(data.delay));
     }
     
