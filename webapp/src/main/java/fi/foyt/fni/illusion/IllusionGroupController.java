@@ -29,7 +29,7 @@ public class IllusionGroupController {
     return illusionGroupDAO.create(urlName, name, description, xmppRoom);
   }
 
-  public IllusionGroup findIllusionSpaceById(Long id) {
+  public IllusionGroup findIllusionGroupById(Long id) {
     return illusionGroupDAO.findById(id);
   }
 
@@ -41,6 +41,10 @@ public class IllusionGroupController {
   
   public IllusionGroupUser createIllusionGroupUser(User user, IllusionGroup group, String nickname, IllusionGroupUserRole role) {
     return illusionGroupUserDAO.create(user, group, nickname, role);
+  }
+  
+  public IllusionGroupUser findIllusionGroupUserByUserAndGroup(IllusionGroup group, User user) {
+    return illusionGroupUserDAO.findByGroupAndUser(group, user);
   }
   
   public List<IllusionGroupUser> listIllusionGroupUsersByGroup(IllusionGroup group) {

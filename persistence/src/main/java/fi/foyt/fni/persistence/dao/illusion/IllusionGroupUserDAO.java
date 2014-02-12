@@ -31,6 +31,23 @@ public class IllusionGroupUserDAO extends GenericDAO<IllusionGroupUser> {
 		return persist(illusionSpaceUser);
 	}
 
+  public IllusionGroupUser findByGroupAndUser(IllusionGroup group, User user) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<IllusionGroupUser> criteria = criteriaBuilder.createQuery(IllusionGroupUser.class);
+    Root<IllusionGroupUser> root = criteria.from(IllusionGroupUser.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.and(
+        criteriaBuilder.equal(root.get(IllusionGroupUser_.group), group),
+        criteriaBuilder.equal(root.get(IllusionGroupUser_.user), user)
+      )
+    );
+
+    return getSingleResult(entityManager.createQuery(criteria));
+  }
+  
 	public List<IllusionGroupUser> listByGroup(IllusionGroup group) {
 		EntityManager entityManager = getEntityManager();
 
@@ -54,5 +71,5 @@ public class IllusionGroupUserDAO extends GenericDAO<IllusionGroupUser> {
     illusionGroupUser.setNickname(nickname);
     return persist(illusionGroupUser);
   }
-	
+
 }
