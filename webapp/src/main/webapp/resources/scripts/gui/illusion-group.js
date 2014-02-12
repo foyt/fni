@@ -249,4 +249,12 @@
 	  }
   });
   
+  $(document).on("illusion.chat.command.changeBotNick", function (event, data) {
+    if (data.args) {
+      var room = data.room;
+      // TODO: Only game master should be able to do this...
+      room.message(chatBotNick, '/roomSetting nick ' + data.args, null, 'chat');
+    }
+  });
+  
 }).call(this);
