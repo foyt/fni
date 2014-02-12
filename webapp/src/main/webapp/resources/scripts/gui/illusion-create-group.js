@@ -119,7 +119,7 @@
   });
   
   $(document).on('strophe.muc.presense', function (event, data) {
-    if (data.jid == chatBotJid) {
+    if (Strophe.getBareJidFromJid(data.jid) == chatBotJid) {
       var room = data.room;
       var prefix = $('.illusion-create-group-panel form').attr('name');
       room.message(data.nick, '/roomSetting locale ' + LOCALE, null, 'chat');
