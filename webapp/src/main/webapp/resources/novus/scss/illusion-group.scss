@@ -182,25 +182,33 @@ h3 {
   background: url('#' + '{resource["novus:gfx/icons/12x12/illusion/fudge-die-plus.png"]}') no-repeat center center;
 }
 
-/* Slash */
-
-.illusion-group-chat-splash-container {
-  position: absolute;
-  width: 920px;
-  text-align: center;
-  margin-top: 40px;
-}
-
-.illusion-group-chat-splash-text {
-  font-family: $default-font;
-  font-size: 38px;
-  color: #e0e;
-  text-shadow: -1px 0 rgba(0, 0, 200, 0.4), 0 1px rgba(0, 0, 200, 0.4), 1px 0 rgba(0, 0, 200, 0.4), 0 -1px rgba(0, 0, 200, 0.4);
-}
-
 .illusion-group-chat-input {
   margin: 8px;
   width: 902px;
   height: 120px;
   border: 1px solid #aaa;
+}
+
+/* Admin */
+
+.illusion-group-admin {
+  position: absolute;
+  left: 0px;
+  margin-top: 100px;
+  margin-left: -16px;
+}
+
+.illusion-group-admin-image {
+  background: url('https://cdn3.iconfinder.com/data/icons/eightyshades/512/54_Settings-64.png');
+  width: 64px;
+  height: 64px;
+}
+
+.illusion-group-admin-menu a {
+  white-space: nowrap;	
+}
+
+.illusion-group-admin-menu {
+  margin-top: -32px;
+  margin-left: 24px;
 }

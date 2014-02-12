@@ -20,12 +20,14 @@
   var password = null;
   var chatBotJid = null;
   var chatBotNick = null;
+  var userRole = null;
   
   $(document).ready(function() {
     boshService = $('#xmpp-bosh-service').val();
     userJid = $('#xmpp-user-jid').val();
     password = $('#xmpp-password').val();
     chatBotJid = $('#chat-bot-jid').val();
+    userRole = $('#user-role').val();
     
     $('.illusion-group-chat-input').attr('disabled', 'disabled');
     $('.illusion-group-user-menu')
@@ -38,6 +40,17 @@
           $(document).trigger('illusion.user.' + action, { });
         }
       });
+    
+    $('.illusion-group-admin-menu')
+    .hide()
+    .menu({
+      select: function( event, ui ) {
+        event.preventDefault();
+        $(this).hide();
+        var action = ui.item.find('a').data('action');
+        $(document).trigger('illusion.admin.' + action, { });
+      }
+    });
     
     var stropheConnection = new Strophe.Connection(boshService);
     stropheConnection.connect(userJid, password, function (status) {
@@ -59,6 +72,10 @@
 
     if ($(event.target).closest('.illusion-group-user').length == 0) {
       $('.illusion-group-user-menu').hide();
+    }
+
+    if ($(event.target).closest('.illusion-group-admin').length == 0) {
+      $('.illusion-group-admin-menu').hide();
     }
   });
   
@@ -229,6 +246,10 @@
   $(document).on("click", '.illusion-group-participant .illusion-group-participant-image', function (event) {
 	  $(this).closest('.illusion-group-participant').find('.illusion-group-participant-menu').show();
   });
+
+  $(document).on("click", '.illusion-group-admin-image', function (event) {
+    $(this).closest('.illusion-group-admin').find('.illusion-group-admin-menu').show();
+  });
   
   $(document).on('illusion.participant.showCharacterSheet', function (event, data) {
 	  alert('TODO: Show Character Sheet!');
@@ -255,6 +276,12 @@
       // TODO: Only game master should be able to do this...
       room.message(chatBotNick, '/roomSetting nick ' + data.args, null, 'chat');
     }
+  });
+  
+  /* Admin commands */
+  
+  $(document).on("illusion.admin.changeBotNickname", function (event, data) {
+    alert('change nick name');
   });
   
 }).call(this);
