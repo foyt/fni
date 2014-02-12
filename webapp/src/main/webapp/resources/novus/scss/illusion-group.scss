@@ -2,6 +2,9 @@
 @import "compass";
 @import "styles";
 
+$user-image-size: 90px;
+$user-lens-color-start: rgba(255, 255, 255, 0);
+$user-lens-color-end: rgba(255, 255, 255, 0.5);
 $participant-image-size: 90px;
 $participant-lens-color-start: rgba(255, 255, 255, 0);
 $participant-lens-color-end: rgba(255, 255, 255, 0.5);
@@ -18,6 +21,52 @@ $participant-lens-color-end: rgba(255, 255, 255, 0.5);
 h3 {
   @include header-2;
   margin-bottom: 10px;
+}
+
+/* User */
+
+.illusion-group-user-container { 
+  position: absolute;
+  left: -$user-image-size / 2;
+}
+
+.illusion-group-user {
+  width: 90px;
+  margin-bottom: 8px;
+  z-index: 99;
+  position: relative;
+}
+
+.illusion-group-user .ui-menu {
+  margin-top: -40px;
+  margin-left: 60px;
+  position: absolute;
+}
+
+.illusion-group-user .ui-menu li a {
+  white-space: nowrap;
+}
+
+.illusion-group-user:hover .illusion-group-user-image-cover {
+  display: none;
+}
+
+.illusion-group-user-image-container {
+  position: relative;
+  width: 90px;
+}
+
+.illusion-group-user-image {
+  border-radius: $user-image-size / 2;
+}
+
+.illusion-group-user-image-cover {
+  @include background-image(radial-gradient(center, ellipse cover, $participant-lens-color-start, $participant-lens-color-end));
+  width: $user-image-size;
+  height: $user-image-size;
+  position: absolute;
+  top: 0px;
+  border-radius: $user-image-size / 2;
 }
 
 /* Participants */

@@ -73,6 +73,17 @@
       <input type="hidden" value="#{illusionGroupBackingBean.chatBotJid}" id="chat-bot-jid"/>
       
       <h:panelGroup layout="block" styleClass="illusion-group-panel">
+        <h:panelGroup layout="block" styleClass="illusion-group-user-container">
+          <h:panelGroup layout="block" styleClass="illusion-group-user">
+	        <h:panelGroup layout="block" styleClass="illusion-group-user-image-container">
+	          <h:graphicImage styleClass="illusion-group-user-image" value="/illusion/groupAvatar/#{illusionGroupBackingBean.urlName}/#{illusionGroupBackingBean.xmppUserJid}?size=90" />          
+	          <h:panelGroup layout="block" styleClass="illusion-group-user-image-cover"/>
+	          <ul class="illusion-group-user-menu">
+              </ul>
+	        </h:panelGroup>
+          </h:panelGroup>
+        </h:panelGroup>
+
         <h:panelGroup layout="block" styleClass="illusion-group-participants"></h:panelGroup>
         <h:panelGroup layout="block" styleClass="illusion-group-chat-messages"></h:panelGroup>
         <textarea class="illusion-group-chat-input"></textarea>

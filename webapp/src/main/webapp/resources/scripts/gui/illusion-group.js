@@ -2,65 +2,17 @@
   'use strict';
   
   function getAvatarUrl(userJid, size) {
-	var groupJid = $('#xmpp-room').val();
+	  var groupJid = $('#xmpp-room').val();
     var groupUrlName = Strophe.getNodeFromJid(groupJid);
     return CONTEXTPATH + '/illusion/groupAvatar/' + groupUrlName + '/' + userJid + '?size=' + size;
   };
   
   function addParticipant(userJid) {
-	  
-	$('<div>')
-	  .addClass('illusion-group-participant')
-	  .append($('<div>')
-	    .addClass("illusion-group-participant-image-container")
-	    .append($('<img>')
-	      .addClass('illusion-group-participant-image')
-	      .attr('src', getAvatarUrl(userJid, 90))
-	    )
-	    .append($('<div>').addClass('illusion-group-participant-image-cover'))
-	    .append($('<ul>')
-	      .addClass('illusion-group-participant-menu')
-	      .append($('<li>')
-	        .append(
-	    	  $('<a>')
-	    	    .attr('href', '#')
-                .data('action', 'showCharacterSheet')
-                .text('Näytä hahmolomake')
-            )
-          )
-          .append($('<li>')
-            .append($('<a>')
-  	    	  .attr('href', '#')
-  	    	  .text('Hallinnoi')
-	    	)
-    	    .append($('<ul>')
-    	      .append($('<li>')
-    	        .append($('<a>')
-  	    	      .attr('href', '#')
-  	    	      .data('action', 'makeGameMaster')
-                  .text('Nosta pelinjohtajaksi') 
-                )
-    	      )
-    	      .append($('<li>')
-    	        .append($('<a>')
-    	  	      .attr('href', '#')
-    	  	      .data('action', 'kick')
-    	          .text('Heitä Ulos') 
-    	        )
-    	      )
-  	    	)
-          )
-          .hide()
-          .menu({
-            select: function( event, ui ) {
-              event.preventDefault();
-        	  $(this).hide();
-        	  var action = ui.item.find('a').data('action');
-        	  $(document).trigger('illusion.menu.' + action, { });
-        	}
-          })
-	    )
-	  ).appendTo('.illusion-group-participants');
+    dust.render("illusion-group-participant", {
+      jid: userJid
+    }, function(err, html) {
+      $(html).appendTo('.illusion-group-participants');
+    });
   };
   
   function showSlash(message) {
@@ -88,6 +40,16 @@
     chatBotJid = $('#chat-bot-jid').val();
     
     $('.illusion-group-chat-input').attr('disabled', 'disabled');
+    $('.illusion-group-user-menu')
+      .hide()
+      .menu({
+        select: function( event, ui ) {
+          event.preventDefault();
+          $(this).hide();
+          var action = ui.item.find('a').data('action');
+          $(document).trigger('illusion.user.' + action, { });
+        }
+      });
     
     var stropheConnection = new Strophe.Connection(boshService);
     stropheConnection.connect(userJid, password, function (status) {
@@ -103,8 +65,12 @@
   });
   
   $(window).click(function (event) {
-	if ($(event.target).closest('.illusion-group-participant').length == 0) {
+	  if ($(event.target).closest('.illusion-group-participant').length == 0) {
       $('.illusion-group-participant-menu').hide();
+    }
+
+    if ($(event.target).closest('.illusion-group-user').length == 0) {
+      $('.illusion-group-user-menu').hide();
     }
   });
   
@@ -219,11 +185,11 @@
   });
   
   $(document).on('strophe.muc.presense', function (event, data) {
-    if (data.jid == chatBotJid) {
-	  chatBotNick = data.nick;
-	} else {
-      addParticipant(data.jid);
-	}
+    if (Strophe.getBareJidFromJid(data.jid) == chatBotJid) {
+	    chatBotNick = data.nick;
+	  } else {
+      addParticipant(Strophe.getBareJidFromJid(data.jid));
+	  }
   });
   
   $(document).on('strophe.muc.message', function (event, data) {
@@ -269,28 +235,32 @@
       .append(message)
       .scrollTo(message);
   });
-  
-  $(document).on("click", '.illusion-group-participant .illusion-group-participant-image', function (event) {
-	$(this).closest('.illusion-group-participant').find('.illusion-group-participant-menu').show();
+
+  $(document).on("click", '.illusion-group-user .illusion-group-user-image', function (event) {
+    $(this).closest('.illusion-group-user').find('.illusion-group-user-menu').show();
   });
   
-  $(document).on('illusion.menu.showCharacterSheet', function (event, data) {
-	 alert('TODO: Show Character Sheet!');
+  $(document).on("click", '.illusion-group-participant .illusion-group-participant-image', function (event) {
+	  $(this).closest('.illusion-group-participant').find('.illusion-group-participant-menu').show();
+  });
+  
+  $(document).on('illusion.participant.showCharacterSheet', function (event, data) {
+	  alert('TODO: Show Character Sheet!');
   });
   
   /* Chat commands */
   
   $(document).on("illusion.chat.command.roll", function (event, data) {
-	var room = data.room;
-	room.groupchat('/roll ' + data.args, null);
+	  var room = data.room;
+	  room.groupchat('/roll ' + data.args, null);
   });
   
   $(document).on("illusion.chat.command.invite", function (event, data) {
-	if (data.args) {
-	  var room = data.room;
-	  // TODO: Only game master should be able to do this...
-	  room.invite(data.args);
-	}
+	  if (data.args) {
+	    var room = data.room;
+	    // TODO: Only game master should be able to do this...
+	    room.invite(data.args);
+	  }
   });
   
 }).call(this);

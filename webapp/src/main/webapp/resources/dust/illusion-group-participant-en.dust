@@ -1,0 +1,7 @@
+<div class="illusion-group-participant">
+  <div class="illusion-group-participant-image-container">
+    <img class="illusion-group-participant-image" src="/fni/illusion/groupAvatar/qwex/{jid}?size=90"/>
+    <div class="illusion-group-participant-image-cover"/>
+    <ul class="illusion-group-participant-menu"></ul>
+  </div>
+</div>
