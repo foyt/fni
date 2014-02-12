@@ -68,7 +68,7 @@
           <h:form>
             <h:panelGroup layout="block" styleClass="illusion-create-group-field">
               <h:outputLabel value="#{locales['illusion.createGroup.nameLabel']}" />
-              <h:inputText id="name" value="#{illusionCreateGroupBackingBean.name}" required="true" requiredMessage="#{locales['illusion.createGroup.nameRequired']}">
+              <h:inputText autocomplete="false" id="name" value="#{illusionCreateGroupBackingBean.name}" required="true" requiredMessage="#{locales['illusion.createGroup.nameRequired']}">
                 <f:ajax execute="@form" render="@form"/>
               </h:inputText>
             </h:panelGroup>

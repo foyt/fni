@@ -19,6 +19,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import fi.foyt.fni.chat.ChatCredentialsController;
 import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
@@ -146,13 +147,17 @@ public class IllusionCreateGroupBackingBean {
   @LoggedIn
 // TODO: Security
   public void save() throws IOException {
-    IllusionGroup illusionGroup = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getDescription(), getXmppRoom());
+    IllusionGroup group = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getDescription(), getXmppRoom());
+    User loggedUser = sessionController.getLoggedUser();
+    String nickname = StringUtils.isNotBlank(loggedUser.getNickname()) ? loggedUser.getNickname() : loggedUser.getFullName();
+    illusionGroupController.createIllusionGroupUser(loggedUser, group, nickname, IllusionGroupUserRole.GAMEMASTER);
+    
     String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
     
     FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
       .append(contextPath)
       .append("/illusion/group/")
-      .append(illusionGroup.getUrlName())
+      .append(group.getUrlName())
       .toString());
   }
 	
