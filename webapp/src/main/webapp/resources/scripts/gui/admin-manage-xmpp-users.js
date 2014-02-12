@@ -28,6 +28,10 @@
               .text($('#js-locales').data('create-link'))
           );
       break;
+      case 'AUTHFAIL':
+        userRow.find('.manage-xmpp-user-status')
+          .addClass('manage-xmpp-user-status-error');
+      break;
       case 'ERROR':
         userRow.find('.manage-xmpp-user-status')
           .addClass('manage-xmpp-user-status-error');
@@ -73,12 +77,19 @@
       var userPassword = userRow.data('user-password');
       
       stropheConnection.connect(userJid, userPassword, function (status) {
-        if (status == Strophe.Status.CONNFAIL) {
-          changeStatus(userRow, 'ERROR');
-          stropheConnection.disconnect();
-        } else if (status == Strophe.Status.CONNECTED) {
-          changeStatus(userRow, 'OK');
-          stropheConnection.disconnect();
+        switch (status) {
+          case Strophe.Status.CONNFAIL:
+            changeStatus(userRow, 'ERROR');
+            stropheConnection.disconnect();
+          break;
+          case Strophe.Status.AUTHFAIL:
+            changeStatus(userRow, 'AUTHFAIL');
+            stropheConnection.disconnect();
+          break;
+          case Strophe.Status.CONNECTED:
+            changeStatus(userRow, 'OK');
+            stropheConnection.disconnect();
+          break;
         }
       });
     });
