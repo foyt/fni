@@ -18,8 +18,11 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import fi.foyt.fni.chat.ChatCredentialsController;
 import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupUser;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
@@ -27,7 +30,7 @@ import fi.foyt.fni.system.SystemSettingsController;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { @URLMapping(id = "illusion-space", pattern = "/illusion/group/#{illusionGroupBackingBean.urlName}", viewId = "/illusion/group.jsf") })
+@URLMappings(mappings = { @URLMapping(id = "illusion-group", pattern = "/illusion/group/#{illusionGroupBackingBean.urlName}", viewId = "/illusion/group.jsf") })
 public class IllusionGroupBackingBean {
 
   @Inject
@@ -51,12 +54,17 @@ public class IllusionGroupBackingBean {
     }
 
     User loggedUser = sessionController.getLoggedUser();
-
+    IllusionGroupUser illusionGroupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(illusionGroup, loggedUser);
+    if (illusionGroupUser == null) {
+      throw new ForbiddenException();
+    }
+    
     id = illusionGroup.getId();
     name = illusionGroup.getName();
     description = illusionGroup.getDescription();
     urlName = illusionGroup.getUrlName();
     xmppRoom = illusionGroup.getXmppRoom();
+    userRole = illusionGroupUser.getRole();
 
     userNickname = StringUtils.isNotBlank(loggedUser.getNickname()) ? loggedUser.getNickname() : loggedUser.getFullName();
     xmppUserJid = chatCredentialsController.getUserJidByUser(loggedUser);
@@ -75,6 +83,10 @@ public class IllusionGroupBackingBean {
 
   public Long getId() {
     return id;
+  }
+  
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getName() {
@@ -132,6 +144,10 @@ public class IllusionGroupBackingBean {
   public String getChatBotJid() {
     return chatBotJid;
   }
+  
+  public IllusionGroupUserRole getUserRole() {
+    return userRole;
+  }
 
   private Long id;
   private String urlName;
@@ -143,4 +159,5 @@ public class IllusionGroupBackingBean {
   private String xmppRoom;
   private String userNickname;
   private String chatBotJid;
+  private IllusionGroupUserRole userRole;
 }
