@@ -42,9 +42,9 @@ public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
     return getSingleResult(entityManager.createQuery(criteria));
 	}
 
-	public IllusionGroup updateName(IllusionGroup illusionSpace, String name) {
-		illusionSpace.setName(name);
-		return persist(illusionSpace);
+	public IllusionGroup updateName(IllusionGroup illusionGroup, String name) {
+		illusionGroup.setName(name);
+		return persist(illusionGroup);
 	}
 	
 }
