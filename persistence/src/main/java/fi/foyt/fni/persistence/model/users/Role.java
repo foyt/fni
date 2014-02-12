@@ -15,6 +15,10 @@ public enum Role {
 	/* Forge */
 	
 	MATERIAL_USER (Permission.MATERIAL_ACCESS, Permission.MATERIAL_MODIFY, Permission.MATERIAL_DELETE),
+	
+	/* Illusion */
+	
+	ILLUSION_USER (Permission.ILLUSION_GROUP_ACCESS),
 
 	/* Forum */
 	

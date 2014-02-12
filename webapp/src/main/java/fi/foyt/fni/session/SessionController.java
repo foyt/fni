@@ -20,7 +20,6 @@ import fi.foyt.fni.persistence.model.users.Role;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.persistence.model.users.UserToken;
-import fi.foyt.fni.system.SystemSettingsController;
 
 @SessionScoped
 @Stateful
@@ -45,9 +44,6 @@ public class SessionController implements Serializable {
   @Inject
   private UserTokenDAO userTokenDAO;
 
-  @Inject  
-  private SystemSettingsController systemSettingsController;
-  
   public boolean isLoggedIn() {
     return loggedUserId != null;
   }
@@ -93,6 +89,7 @@ public class SessionController implements Serializable {
   		case ADMINISTRATOR:
   			return new Role[] {
   				Role.USER,
+          Role.ILLUSION_USER,
           Role.MATERIAL_USER,
   				Role.FORUM_ADMIN,
   				Role.GAME_LIBRARY_MANAGER,
@@ -101,6 +98,7 @@ public class SessionController implements Serializable {
   		case LIBRARIAN:
   		  return new Role[] {
           Role.USER,
+          Role.ILLUSION_USER,
           Role.MATERIAL_USER,
           Role.FORUM_USER,
           Role.GAME_LIBRARY_MANAGER
@@ -108,6 +106,7 @@ public class SessionController implements Serializable {
   		case USER:
   			return new Role[] {
           Role.USER,
+          Role.ILLUSION_USER,
           Role.MATERIAL_USER,
           Role.FORUM_USER,
           Role.GAME_LIBRARY_USER
