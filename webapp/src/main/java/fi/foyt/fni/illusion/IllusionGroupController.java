@@ -50,5 +50,9 @@ public class IllusionGroupController {
   public List<IllusionGroupUser> listIllusionGroupUsersByGroup(IllusionGroup group) {
     return illusionGroupUserDAO.listByGroup(group);
   }
+
+  public IllusionGroupUser updateIllusionGroupUserNickname(IllusionGroupUser illusionGroupUser, String nickname) {
+    return illusionGroupUserDAO.updateNickname(illusionGroupUser, nickname);
+  }
   
 }
