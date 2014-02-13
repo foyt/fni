@@ -1,0 +1,11 @@
+<div title="Change chatbot name" data-rename-button="Change" data-cancel-button="Cancel">
+  <div class="illusion-group-rename-chatbot-dialog">
+    <p>
+      Type new name of the chatbot into the field below.
+    </p>
+    <div>
+      <label>Name</label>
+      <input name="name" type="text" value="{name}"/>
+    </div>
+  </div>
+</div>

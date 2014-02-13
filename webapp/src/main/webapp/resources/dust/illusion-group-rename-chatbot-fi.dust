@@ -1,0 +1,11 @@
+<div title="Muuta chatbotin nimeä" data-rename-button="Muuta" data-cancel-button="Peruuta">
+  <div class="illusion-group-rename-chatbot-dialog">
+    <p>
+      Kirjoita alla olevaan kenttään chatbotin uusi nimi.
+    </p>
+    <div>
+      <label>Nimi</label>
+      <input name="name" type="text" value="{name}"/>
+    </div>
+  </div>
+</div>

@@ -21,6 +21,7 @@
   var chatBotJid = null;
   var chatBotNick = null;
   var userRole = null;
+  var mucRoom = null;
   
   $(document).ready(function() {
     boshService = $('#xmpp-bosh-service').val();
@@ -151,7 +152,7 @@
   });
   
   $(document).on('strophe.muc.join', function (event, data) {
-    var room = data.room;
+    var room = mucRoom = data.room;
     var stropheConnection = data.stropheConnection;
     
     $('.illusion-group-chat-input').removeAttr('disabled');
@@ -281,7 +282,39 @@
   /* Admin commands */
   
   $(document).on("illusion.admin.changeBotNickname", function (event, data) {
-    alert('change nick name');
+    dust.render("illusion-group-rename-chatbot", {
+      name: chatBotNick
+    }, function(err, html) {
+      if (!err) {
+        var dialog = $(html);
+        dialog.dialog({
+          modal: true,
+          width: 400,
+          buttons: [{
+            'text': dialog.data('rename-button'),
+            'click': function(event) { 
+              var nickname = $(this).find('input[name="name"]').val();
+              if (nickname) {
+                $(document).trigger("illusion.chat.command.changeBotNick", {
+                  args: nickname,
+                  room: mucRoom
+                });
+              }
+              
+              $(this).dialog("close");
+            }
+          }, {
+            'text': dialog.data('cancel-button'),
+            'click': function(event) { 
+              $(this).dialog("close");
+            }
+          }]
+        });
+      } else {
+        // TODO: Proper error handling...
+        alert(err);
+      }
+    }); 
   });
   
 }).call(this);
