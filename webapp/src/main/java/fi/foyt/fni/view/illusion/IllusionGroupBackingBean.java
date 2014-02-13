@@ -9,8 +9,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.ocpsoft.pretty.faces.annotation.URLAction;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -45,9 +43,9 @@ public class IllusionGroupBackingBean {
   @Inject
   private ChatCredentialsController chatCredentialsController;
 
-  @URLAction
+  @URLAction (onPostback = false)
   @LoggedIn
-  public void load() throws GeneralSecurityException, IOException {
+  public void init() throws GeneralSecurityException, IOException {
     IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
     if (illusionGroup == null) {
       throw new FileNotFoundException();
@@ -66,7 +64,7 @@ public class IllusionGroupBackingBean {
     xmppRoom = illusionGroup.getXmppRoom();
     userRole = illusionGroupUser.getRole();
 
-    userNickname = StringUtils.isNotBlank(loggedUser.getNickname()) ? loggedUser.getNickname() : loggedUser.getFullName();
+    userNickname = illusionGroupUser.getNickname();
     xmppUserJid = chatCredentialsController.getUserJidByUser(loggedUser);
     xmppPassword = chatCredentialsController.getPasswordByUser(loggedUser);
     xmppBoshService = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOSH_SERVICE);
@@ -147,6 +145,23 @@ public class IllusionGroupBackingBean {
   
   public IllusionGroupUserRole getUserRole() {
     return userRole;
+  }
+  
+  @LoggedIn
+  public String updateUserNickname() throws FileNotFoundException {
+    IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
+    if (illusionGroup == null) {
+      throw new FileNotFoundException();
+    }
+
+    User loggedUser = sessionController.getLoggedUser();
+    IllusionGroupUser illusionGroupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(illusionGroup, loggedUser);
+    if (illusionGroupUser == null) {
+      throw new ForbiddenException();
+    }
+    
+    illusionGroupController.updateIllusionGroupUserNickname(illusionGroupUser, getUserNickname());
+    return "pretty:illusion-group";
   }
   
   private Long id;

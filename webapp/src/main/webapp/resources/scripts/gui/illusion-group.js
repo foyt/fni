@@ -273,12 +273,8 @@
   $(document).on("illusion.chat.command.changeNick", function (event, data) {
     if (data.args) {
       $('.illusion-group-chat-input').attr('disabled', 'disabled');
-
-      var room = data.room;
-      var roomName = room.name;
-      
-      room.leave();
-      joinRoom(roomName, data.args);
+      $('input[name="command-form:userNickname"]').val(data.args);
+      $('input[name="command-form:updateUserNickname"]').click();
     }
   });
   

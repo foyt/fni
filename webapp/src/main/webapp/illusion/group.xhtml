@@ -97,6 +97,13 @@
         <h:panelGroup layout="block" styleClass="illusion-group-chat-messages"></h:panelGroup>
         <textarea class="illusion-group-chat-input"></textarea>
       </h:panelGroup>
+      
+      <h:form id="command-form" style="display: none">
+        <h:inputHidden value="#{illusionGroupBackingBean.id}" />
+        <h:inputHidden id="userNickname" value="#{illusionGroupBackingBean.userNickname}" />
+        <h:commandButton id="updateUserNickname" action="#{illusionGroupBackingBean.updateUserNickname}"/>
+      </h:form>
+      
     </h:panelGroup>
 
   </ui:define>
