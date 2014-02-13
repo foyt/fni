@@ -1,5 +1,15 @@
 (function() {
   'use strict';
+
+  var boshService = null;
+  var userJid = null;
+  var password = null;
+  var chatBotJid = null;
+  var chatBotNick = null;
+  var userRole = null;
+  var mucRoom = null;
+  var userNickname = null;
+  var stropheConnection = null;
   
   function getAvatarUrl(userJid, size) {
 	  var groupJid = $('#xmpp-room').val();
@@ -14,78 +24,9 @@
       $(html).appendTo('.illusion-group-participants');
     });
   };
-
-  var boshService = null;
-  var userJid = null;
-  var password = null;
-  var chatBotJid = null;
-  var chatBotNick = null;
-  var userRole = null;
-  var mucRoom = null;
   
-  $(document).ready(function() {
-    boshService = $('#xmpp-bosh-service').val();
-    userJid = $('#xmpp-user-jid').val();
-    password = $('#xmpp-password').val();
-    chatBotJid = $('#chat-bot-jid').val();
-    userRole = $('#user-role').val();
-    
-    $('.illusion-group-chat-input').attr('disabled', 'disabled');
-    $('.illusion-group-user-menu')
-      .hide()
-      .menu({
-        select: function( event, ui ) {
-          event.preventDefault();
-          $(this).hide();
-          var action = ui.item.find('a').data('action');
-          $(document).trigger('illusion.user.' + action, { });
-        }
-      });
-    
-    $('.illusion-group-admin-menu')
-    .hide()
-    .menu({
-      select: function( event, ui ) {
-        event.preventDefault();
-        $(this).hide();
-        var action = ui.item.find('a').data('action');
-        $(document).trigger('illusion.admin.' + action, { });
-      }
-    });
-    
-    var stropheConnection = new Strophe.Connection(boshService);
-    stropheConnection.connect(userJid, password, function (status) {
-      if (status == Strophe.Status.CONNFAIL) {
-        // TODO: Proper error handling...
-        alert('Xmpp Connection Failed');
-      } else if (status == Strophe.Status.CONNECTED) {
-        $(document).trigger('strophe.connect', {
-          stropheConnection: stropheConnection
-        });
-      };
-    }); 
-  });
-  
-  $(window).click(function (event) {
-	  if ($(event.target).closest('.illusion-group-participant').length == 0) {
-      $('.illusion-group-participant-menu').hide();
-    }
-
-    if ($(event.target).closest('.illusion-group-user').length == 0) {
-      $('.illusion-group-user-menu').hide();
-    }
-
-    if ($(event.target).closest('.illusion-group-admin').length == 0) {
-      $('.illusion-group-admin-menu').hide();
-    }
-  });
-  
-  $(document).on('strophe.connect', function (event, data) {
-    var stropheConnection = data.stropheConnection;
-    var roomName = $('#xmpp-room').val();
-    var nickname = Strophe.escapeNode($('#user-nickname').val());
-
-    stropheConnection.muc.join(roomName, nickname, function msg_handler_cb(messageXml, room) {
+  function joinRoom(roomName, nickname) {
+    stropheConnection.muc.join(roomName, Strophe.escapeNode(nickname), function msg_handler_cb(messageXml, room) {
       var from = messageXml.getAttribute('from');
       var to = messageXml.getAttribute('to');
       var bodyElement = messageXml.getElementsByTagName('body')[0];
@@ -123,7 +64,6 @@
         var statusElement = xElement.getElementsByTagName('status')[0];
         if (statusElement && ("110" == statusElement.getAttribute("code"))) {
           $(document).trigger('strophe.muc.join', {
-            stropheConnection: stropheConnection,
             room: room
           });
           
@@ -133,7 +73,6 @@
         var item = xElement.getElementsByTagName('item')[0];
         if (item) {
           $(document).trigger('strophe.muc.presense', {
-            stropheConnection: stropheConnection,
             room: room,
             affiliation: item.getAttribute('affiliation'),
             jid: item.getAttribute('jid'),
@@ -149,11 +88,72 @@
     }, function roster_cb(rosterXml, room) {
       return true;
     });
+  }
+  
+  $(document).ready(function() {
+    boshService = $('#xmpp-bosh-service').val();
+    userJid = $('#xmpp-user-jid').val();
+    password = $('#xmpp-password').val();
+    chatBotJid = $('#chat-bot-jid').val();
+    userRole = $('#user-role').val();
+    userNickname = $('#user-nickname').val();
+    
+    $('.illusion-group-chat-input').attr('disabled', 'disabled');
+    $('.illusion-group-user-menu')
+      .hide()
+      .menu({
+        select: function( event, ui ) {
+          event.preventDefault();
+          $(this).hide();
+          var action = ui.item.find('a').data('action');
+          $(document).trigger('illusion.user.' + action, { });
+        }
+      });
+    
+    $('.illusion-group-admin-menu')
+    .hide()
+    .menu({
+      select: function( event, ui ) {
+        event.preventDefault();
+        $(this).hide();
+        var action = ui.item.find('a').data('action');
+        $(document).trigger('illusion.admin.' + action, { });
+      }
+    });
+    
+    stropheConnection = new Strophe.Connection(boshService);
+    stropheConnection.connect(userJid, password, function (status) {
+      if (status == Strophe.Status.CONNFAIL) {
+        // TODO: Proper error handling...
+        alert('Xmpp Connection Failed');
+      } else if (status == Strophe.Status.CONNECTED) {
+        $(document).trigger('strophe.connect', {
+        });
+      };
+    }); 
+  });
+  
+  $(window).click(function (event) {
+	  if ($(event.target).closest('.illusion-group-participant').length == 0) {
+      $('.illusion-group-participant-menu').hide();
+    }
+
+    if ($(event.target).closest('.illusion-group-user').length == 0) {
+      $('.illusion-group-user-menu').hide();
+    }
+
+    if ($(event.target).closest('.illusion-group-admin').length == 0) {
+      $('.illusion-group-admin-menu').hide();
+    }
+  });
+  
+  $(document).on('strophe.connect', function (event, data) {
+    var roomName = $('#xmpp-room').val();
+    joinRoom(roomName, userNickname);
   });
   
   $(document).on('strophe.muc.join', function (event, data) {
     var room = mucRoom = data.room;
-    var stropheConnection = data.stropheConnection;
     
     $('.illusion-group-chat-input').removeAttr('disabled');
     $('.illusion-group-chat-input').keydown(function (event){
@@ -174,7 +174,6 @@
               
               $(document).trigger('illusion.chat.command.' + command, {
                 args: commandArgs,
-                stropheConnection: stropheConnection,
                 room: room
               });
             } else {
@@ -271,12 +270,62 @@
 	  }
   });
   
+  $(document).on("illusion.chat.command.changeNick", function (event, data) {
+    if (data.args) {
+      $('.illusion-group-chat-input').attr('disabled', 'disabled');
+
+      var room = data.room;
+      var roomName = room.name;
+      
+      room.leave();
+      joinRoom(roomName, data.args);
+    }
+  });
+  
   $(document).on("illusion.chat.command.changeBotNick", function (event, data) {
     if (data.args) {
       var room = data.room;
       // TODO: Only game master should be able to do this...
       room.message(chatBotNick, '/roomSetting nick ' + data.args, null, 'chat');
     }
+  });
+  
+  /* User commands */
+  
+  $(document).on("illusion.user.changeNickname", function (event, data) {
+    dust.render("illusion-group-change-nick", {
+      name: userNickname
+    }, function(err, html) {
+      if (!err) {
+        var dialog = $(html);
+        dialog.dialog({
+          modal: true,
+          width: 400,
+          buttons: [{
+            'text': dialog.data('rename-button'),
+            'click': function(event) { 
+              var name = $(this).find('input[name="name"]').val();
+              if (name) {
+                $(document).trigger("illusion.chat.command.changeNick", {
+                  args: name,
+                  room: mucRoom
+                });
+              }
+              
+              $(this).dialog("close");
+            }
+          }, {
+            'text': dialog.data('cancel-button'),
+            'click': function(event) { 
+              $(this).dialog("close");
+            }
+          }]
+        });
+      } else {
+        // TODO: Proper error handling...
+        alert(err);
+      }
+    }); 
   });
   
   /* Admin commands */
