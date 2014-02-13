@@ -83,7 +83,7 @@
   $(document).on('strophe.connect', function (event, data) {
     var stropheConnection = data.stropheConnection;
     var roomName = $('#xmpp-room').val();
-    var nickname = $('#user-nickname').val();
+    var nickname = Strophe.escapeNode($('#user-nickname').val());
 
     stropheConnection.muc.join(roomName, nickname, function msg_handler_cb(messageXml, room) {
       var from = messageXml.getAttribute('from');
