@@ -85,10 +85,10 @@
           </h:panelGroup>
         </h:panelGroup>
         
-        <h:panelGroup layout="block" styleClass="illusion-group-admin">
+        <h:panelGroup layout="block" styleClass="illusion-group-admin" rendered="#{illusionGroupBackingBean.userRole eq 'GAMEMASTER'}">
           <h:panelGroup layout="block" styleClass="illusion-group-admin-image"/>
           <ul class="illusion-group-admin-menu">
-            <li><a href="#" data-action="changeBotNickname">Change Bot Nickname</a></li>
+            <li><a href="#" data-action="changeBotNickname">#{locales['illusion.group.changeChatbotName']}</a></li>
           </ul>
         </h:panelGroup>
 
