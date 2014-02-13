@@ -3,6 +3,7 @@ package fi.foyt.fni.view.illusion;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.UUID;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -66,7 +67,7 @@ public class IllusionGroupBackingBean {
     xmppRoom = illusionGroup.getXmppRoom();
     userRole = illusionGroupUser.getRole();
 
-    userNickname = StringUtils.isNotBlank(loggedUser.getNickname()) ? loggedUser.getNickname() : loggedUser.getFullName();
+    userNickname = createJidResource(StringUtils.isNotBlank(loggedUser.getNickname()) ? loggedUser.getNickname() : loggedUser.getFullName(), 20);
     xmppUserJid = chatCredentialsController.getUserJidByUser(loggedUser);
     xmppPassword = chatCredentialsController.getPasswordByUser(loggedUser);
     xmppBoshService = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOSH_SERVICE);
@@ -147,6 +148,19 @@ public class IllusionGroupBackingBean {
   
   public IllusionGroupUserRole getUserRole() {
     return userRole;
+  }
+  
+  private String createJidResource(String text, int maxLength) {
+    String urlName = StringUtils.normalizeSpace(text);
+    if (StringUtils.isBlank(urlName))
+      return null;
+    
+    urlName = StringUtils.lowerCase(StringUtils.substring(StringUtils.stripAccents(urlName.replaceAll(" ", "-")).replaceAll("[^a-zA-Z0-9\\-\\.\\_]", ""), 0, maxLength));
+    if (StringUtils.isBlank(urlName)) {
+      urlName = UUID.randomUUID().toString();
+    }
+    
+    return urlName;
   }
 
   private Long id;
