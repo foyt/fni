@@ -55,6 +55,12 @@
           'text': this.options.okButtonText,
           'click': function(event) {
             $(this).dialog("close");
+            var contentType = 'image/png';
+            var imageData = $(this).find('.image-dialog-preview').get(0).toDataURL(contentType);
+            $(this).trigger(jQuery.Event("imageDialog.okClick"), {
+              contentType: contentType,
+              imageData: imageData
+            });
           }
         }, {
           'text': this.options.cancelButtonText,

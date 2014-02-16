@@ -1,5 +1,6 @@
 package fi.foyt.fni.illusion;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -8,8 +9,10 @@ import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.dao.illusion.IllusionGroupDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionGroupUserDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionGroupUserImageDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUser;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserImage;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
 import fi.foyt.fni.persistence.model.users.User;
 
@@ -22,6 +25,9 @@ public class IllusionGroupController {
 
   @Inject
   private IllusionGroupUserDAO illusionGroupUserDAO;
+
+  @Inject
+  private IllusionGroupUserImageDAO illusionGroupUserImageDAO;
   
   /* IllusionGroup */
 
@@ -53,6 +59,20 @@ public class IllusionGroupController {
 
   public IllusionGroupUser updateIllusionGroupUserNickname(IllusionGroupUser illusionGroupUser, String nickname) {
     return illusionGroupUserDAO.updateNickname(illusionGroupUser, nickname);
+  }
+  
+  /* IllusionGroupUserImage */
+
+  public IllusionGroupUserImage createIllusionGroupUserImage(IllusionGroupUser user, String contentType, byte[] data, Date modified) {
+    return illusionGroupUserImageDAO.create(user, contentType, data, modified);
+  }
+
+  public IllusionGroupUserImage findIllusionGroupUserImageByUser(IllusionGroupUser user) {
+    return illusionGroupUserImageDAO.findByUser(user);
+  }
+  
+  public IllusionGroupUserImage updateIllusionGroupUserImage(IllusionGroupUserImage image, String contentType, byte[] data, Date modified) {
+    return illusionGroupUserImageDAO.updateModified(illusionGroupUserImageDAO.updateContentType(illusionGroupUserImageDAO.updateData(image, data), contentType), modified);
   }
   
 }

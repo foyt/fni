@@ -43,4 +43,19 @@ public class IllusionGroupUserImageDAO extends GenericDAO<IllusionGroupUserImage
     return getSingleResult(entityManager.createQuery(criteria));
   }
 
+  public IllusionGroupUserImage updateData(IllusionGroupUserImage image, byte[] data) {
+    image.setData(data);
+    return persist(image);
+  }
+
+  public IllusionGroupUserImage updateContentType(IllusionGroupUserImage image, String contentType) {
+    image.setContentType(contentType);
+    return persist(image);
+  }
+
+  public IllusionGroupUserImage updateModified(IllusionGroupUserImage image, Date modified) {
+    image.setModified(modified);
+    return persist(image);
+  }
+
 }

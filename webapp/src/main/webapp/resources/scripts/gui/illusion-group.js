@@ -337,6 +337,21 @@
           uploadHintText: dialog.data('upload-hint')
         });
         
+        dialog.on('imageDialog.okClick', function (event, data) {
+          var groupJid = $('#xmpp-room').val();
+          var groupUrlName = Strophe.getNodeFromJid(groupJid);
+          
+          $.ajax(CONTEXTPATH + '/illusion/groupAvatar/' + groupUrlName + '/' + userJid, {
+            type: 'POST',
+            data: {
+              'data': data.imageData
+            },
+            success: function (event) {
+              window.location.reload(true);
+            }
+          });
+        });
+        
       } else {
         // TODO: Proper error handling...
         alert(err);
