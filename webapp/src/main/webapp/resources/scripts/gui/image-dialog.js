@@ -1,5 +1,51 @@
 (function() {
   'use strict';
+  
+  function flipAndRotateImage(data, degrees, flip, callback) {
+    $('<img>')  
+      .css('visibility', 'hidden')
+      .attr('src', data)
+      .load(function () {
+        try {
+          var tmpCanvas = $('<canvas>')
+            .attr({
+              'width': $(this).width(),
+              'height': $(this).height()
+            }).get(0);
+          
+          var image = $(this).get(0);
+          var tmpContext = tmpCanvas.getContext('2d');
+          tmpContext.drawImage(image, 0, 0);
+          
+          if (degrees != 0) {
+            tmpContext.save();
+            tmpContext.translate(tmpCanvas.width >> 1, tmpCanvas.height >> 1);
+            tmpContext.rotate(degrees * Math.PI / 180);
+            tmpContext.drawImage(tmpCanvas, -image.width >> 1,-image.width >> 1);
+            tmpContext.restore();
+          }
+          
+          if (flip) {
+            tmpContext.save();
+            if (flip == 'VERTICAL') {
+              tmpContext.translate(0, tmpCanvas.height);
+              tmpContext.scale(1, -1);
+            } else if (flip == 'HORIZONTAL') {
+              tmpContext.translate(tmpCanvas.width, 0);
+              tmpContext.scale(-1, 1);
+            }
+            tmpContext.drawImage(tmpCanvas, 0, 0);
+            tmpContext.restore();
+          };
+  
+          callback(tmpCanvas.toDataURL('image/png'));
+        } catch (e) {
+          callback(data);
+        } finally {
+          $(this).remove();
+        }
+      }).appendTo($(document.body));
+  };
 
   $.widget("custom.imageDialog", {
     options : {
@@ -73,6 +119,7 @@
     
     _onImageLoad: function (event) {
       var imageElement = $(event.target);
+      
       var originalWidth = $(imageElement).width();
       var originalHeight = $(imageElement).height();
       var xRatio = originalWidth / this.element.find('.image-dialog-image-container').width();
@@ -124,10 +171,58 @@
     
     _onFileReaderLoad: function (event) {
       var fileReader = event.target;
+      var src = fileReader.result;
+      var rotate = 0;
+      var data = null;
+      var flip = null;
+
+      if (window.EXIF && window.atob) {
+        try {
+          var dataIndex = src.indexOf('base64,');
+          var dataStr = src.substring(dataIndex + 7);
+          data = atob(dataStr);        
+          var exifdata = EXIF.readFromBinaryFile(new BinaryFile(data));
+          switch (EXIF.getTag({exifdata: exifdata}, "Orientation")) {
+            case 2:
+              flip = 'HORIZONTAL'; 
+            break;
+            case 3:
+              rotate = 180;
+            break;
+            case 4:
+              flip = 'VERTICAL';
+            break;
+            case 5:
+              rotate = 90;
+              flip = 'HORIZONTAL';
+            break;
+            case 6:
+              rotate = 90;
+            break;
+            case 7:
+              rotate = -90;
+              flip = 'HORIZONTAL';
+            break;
+            case 8:
+              rotate = -90;
+            break;
+          }
+          
+        } catch (e) {
+        }
+      }
+      
       this.element.find('.image-dialog-image')
         .removeAttr('width')
-        .removeAttr('height')
-        .attr('src', fileReader.result);
+        .removeAttr('height');    
+      
+      if (data && ((rotate != 0) || flip)) {
+        flipAndRotateImage(src, rotate, flip, $.proxy(function (dataUrl) {
+          this.element.find('.image-dialog-image').attr('src', dataUrl);
+        }, this)); 
+      } else {
+        this.element.find('.image-dialog-image').attr('src', src);
+      }
     },
     
     _onCropChange: function(coords) {
