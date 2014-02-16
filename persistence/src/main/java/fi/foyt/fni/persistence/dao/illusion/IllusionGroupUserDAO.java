@@ -21,14 +21,14 @@ public class IllusionGroupUserDAO extends GenericDAO<IllusionGroupUser> {
 	private static final long serialVersionUID = 1L;
 
 	public IllusionGroupUser create(User user, IllusionGroup group, String nickname, IllusionGroupUserRole role) {
-		IllusionGroupUser illusionSpaceUser = new IllusionGroupUser();
+		IllusionGroupUser illusionGroupUser = new IllusionGroupUser();
 
-    illusionSpaceUser.setGroup(group);
-    illusionSpaceUser.setNickname(nickname);
-    illusionSpaceUser.setRole(role);
-    illusionSpaceUser.setUser(user);
+    illusionGroupUser.setGroup(group);
+    illusionGroupUser.setNickname(nickname);
+    illusionGroupUser.setRole(role);
+    illusionGroupUser.setUser(user);
 
-		return persist(illusionSpaceUser);
+		return persist(illusionGroupUser);
 	}
 
   public IllusionGroupUser findByGroupAndUser(IllusionGroup group, User user) {
