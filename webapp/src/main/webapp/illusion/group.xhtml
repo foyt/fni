@@ -11,6 +11,7 @@
   <ui:define name="view-scripts">
     <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-scrollTo/1.4.9/jquery.scrollTo.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.Jcrop.min.js"></script>
     
     <!-- Strophe -->
     
@@ -19,11 +20,13 @@
     
     <!-- View Scripts -->
     
+    <h:outputScript name="scripts/gui/image-dialog.js"/>
     <h:outputScript name="scripts/gui/illusion-group.js"/>
   </ui:define>
   
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/css/jquery.Jcrop.min.css"/>
 
     <h:outputStylesheet library="novus" name="css/illusion-group.css"/>
   </ui:define>  
@@ -81,6 +84,7 @@
 	          <h:panelGroup layout="block" styleClass="illusion-group-user-image-cover"/>
 	          <ul class="illusion-group-user-menu">
                 <li><a href="#" data-action="changeNickname">#{locales['illusion.group.changeName']}</a></li>
+                <li><a href="#" data-action="changeAvatar">#{locales['illusion.group.changeAvatar']}</a></li>
               </ul>
 	        </h:panelGroup>
           </h:panelGroup>

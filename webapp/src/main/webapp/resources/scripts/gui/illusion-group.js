@@ -324,6 +324,26 @@
     }); 
   });
   
+  $(document).on("illusion.user.changeAvatar", function (event, data) {
+    dust.render("illusion-group-change-avatar", {
+      name: userNickname
+    }, function(err, html) {
+      if (!err) {
+        var dialog = $(html);
+        
+        dialog.imageDialog({
+          okButtonText: dialog.data('change-button'),
+          cancelButtonText: dialog.data('cancel-button'),
+          uploadHintText: dialog.data('upload-hint')
+        });
+        
+      } else {
+        // TODO: Proper error handling...
+        alert(err);
+      }
+    }); 
+  });
+  
   /* Admin commands */
   
   $(document).on("illusion.admin.changeBotNickname", function (event, data) {
