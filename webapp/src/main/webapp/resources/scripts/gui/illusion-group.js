@@ -262,14 +262,6 @@
 	  room.groupchat('/roll ' + data.args, null);
   });
   
-  $(document).on("illusion.chat.command.invite", function (event, data) {
-	  if (data.args) {
-	    var room = data.room;
-	    // TODO: Only game master should be able to do this...
-	    room.invite(data.args);
-	  }
-  });
-  
   $(document).on("illusion.chat.command.changeNick", function (event, data) {
     if (data.args) {
       $('.illusion-group-chat-input').attr('disabled', 'disabled');
@@ -278,11 +270,29 @@
     }
   });
   
+  /* Gamemaster Chat commands */
+  
+  $(document).on("illusion.chat.command.invite", function (event, data) {
+    // TODO: Better error handling
+    if (userRole != 'GAMEMASTER') {
+      alert('Only Gamemaster can do this');
+    } else {    
+      if (data.args) {
+        var room = data.room;
+        room.invite(data.args);
+      }
+    }
+  });
+  
   $(document).on("illusion.chat.command.changeBotNick", function (event, data) {
-    if (data.args) {
-      var room = data.room;
-      // TODO: Only game master should be able to do this...
-      room.message(chatBotNick, '/roomSetting nick ' + data.args, null, 'chat');
+    // TODO: Better error handling
+    if (userRole != 'GAMEMASTER') {
+      alert('Only Gamemaster can do this');
+    } else {    
+      if (data.args) {
+        var room = data.room;
+        room.message(chatBotNick, '/roomSetting nick ' + data.args, null, 'chat');
+      }
     }
   });
   
@@ -394,7 +404,7 @@
         // TODO: Proper error handling...
         alert(err);
       }
-    }); 
+    });
   });
   
 }).call(this);
