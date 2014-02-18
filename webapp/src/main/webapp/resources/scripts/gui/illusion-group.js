@@ -372,9 +372,7 @@
   /* Admin commands */
   
   $(document).on("illusion.admin.changeBotNickname", function (event, data) {
-    dust.render("illusion-group-rename-chatbot", {
-      name: chatBotNick
-    }, function(err, html) {
+    dust.render("illusion-group-rename-chatbot", { }, function(err, html) {
       if (!err) {
         var dialog = $(html);
         dialog.dialog({
@@ -405,6 +403,39 @@
         alert(err);
       }
     });
+  });
+  
+  $(document).on("illusion.admin.changeBotAvatar", function (event, data) {
+    dust.render("illusion-group-change-avatar", { }, function(err, html) {
+      if (!err) {
+        var dialog = $(html);
+        
+        dialog.imageDialog({
+          okButtonText: dialog.data('change-button'),
+          cancelButtonText: dialog.data('cancel-button'),
+          uploadHintText: dialog.data('upload-hint')
+        });
+        
+        dialog.on('imageDialog.okClick', function (event, data) {
+          var groupJid = $('#xmpp-room').val();
+          var groupUrlName = Strophe.getNodeFromJid(groupJid);
+          
+          $.ajax(CONTEXTPATH + '/illusion/groupAvatar/' + groupUrlName + '/' + chatBotJid, {
+            type: 'POST',
+            data: {
+              'data': data.imageData
+            },
+            success: function (event) {
+              window.location.reload(true);
+            }
+          });
+        });
+        
+      } else {
+        // TODO: Proper error handling...
+        alert(err);
+      }
+    }); 
   });
   
 }).call(this);
