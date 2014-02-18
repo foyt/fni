@@ -22,6 +22,7 @@ import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUser;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserImage;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
@@ -198,6 +199,11 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
     }
     
+    if (!sessionController.isLoggedIn()) {
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+
     IllusionGroup group = illusionGroupController.findIllusionGroupByUrlName(groupUrlName);
     if (group == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -229,9 +235,22 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
 	  
 	  IllusionGroupUser groupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(group, userChatCredentials.getUser());
 	  if (groupUser == null) {
-	    response.sendError(HttpServletResponse.SC_FORBIDDEN);
+	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
+    
+    if (!groupUser.getUser().getId().equals(sessionController.getLoggedUserId())) {
+      IllusionGroupUser loggedGroupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(group, sessionController.getLoggedUser());
+      if (loggedGroupUser == null) {
+        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        return;
+      }
+      
+      if (loggedGroupUser.getRole() != IllusionGroupUserRole.GAMEMASTER) {
+        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        return;
+      }
+    }
     
     String contentType = dataParts[0];
     byte[] data = Base64.decodeBase64(dataParts[1]);
