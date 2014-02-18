@@ -18,6 +18,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.chat.ChatCredentialsController;
 import fi.foyt.fni.illusion.IllusionGroupController;
+import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
@@ -57,7 +58,7 @@ public class IllusionCreateGroupBackingBean {
 	public void load() throws IOException, GeneralSecurityException {
 	  User user = sessionController.getLoggedUser();
 
-	  userNickname = StringUtils.isNotBlank(user.getNickname()) ? user.getNickname() : user.getFullName();
+	  userNickname = getUserNickname(user);
 	  
 	  xmppUserJid = chatCredentialsController.getUserJidByUser(user);
     xmppPassword = chatCredentialsController.getPasswordByUser(user);
@@ -146,11 +147,22 @@ public class IllusionCreateGroupBackingBean {
 	
   @LoggedIn
 // TODO: Security
-  public void save() throws IOException {
+  public void save() throws Exception {
     IllusionGroup group = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getDescription(), getXmppRoom());
+    
+    // Add gamemaster
     User loggedUser = sessionController.getLoggedUser();
-    String nickname = StringUtils.isNotBlank(loggedUser.getNickname()) ? loggedUser.getNickname() : loggedUser.getFullName();
-    illusionGroupController.createIllusionGroupUser(loggedUser, group, nickname, IllusionGroupUserRole.GAMEMASTER);
+    illusionGroupController.createIllusionGroupUser(loggedUser, group, getUserNickname(loggedUser), IllusionGroupUserRole.GAMEMASTER);
+    
+    // Add bot 
+    String botJid = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOT_JID);
+    UserChatCredentials botChatCredentials = chatCredentialsController.findUserChatCredentialsByUserJid(botJid);
+    if (botChatCredentials == null) {
+      // TODO: Better error handling
+      throw new Exception("Configuration error, could not find chatbot user");
+    }
+    
+    illusionGroupController.createIllusionGroupUser(botChatCredentials.getUser(), group, getUserNickname(botChatCredentials.getUser()), IllusionGroupUserRole.BOT);
     
     String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
     
@@ -159,6 +171,10 @@ public class IllusionCreateGroupBackingBean {
       .append("/illusion/group/")
       .append(group.getUrlName())
       .toString());
+  }
+
+  public String getUserNickname(User user) {
+    return StringUtils.isNotBlank(user.getNickname()) ? user.getNickname() : user.getFullName();
   }
 	
 	private String name;
