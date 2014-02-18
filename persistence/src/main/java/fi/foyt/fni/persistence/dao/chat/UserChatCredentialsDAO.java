@@ -17,15 +17,12 @@ public class UserChatCredentialsDAO extends GenericDAO<UserChatCredentials> {
 	private static final long serialVersionUID = 1L;
 
 	public UserChatCredentials create(User user, String userJid, String password) {
-    EntityManager entityManager = getEntityManager();
+    UserChatCredentials userChatCredentials = new UserChatCredentials();
+    userChatCredentials.setUserJid(userJid);
+    userChatCredentials.setPassword(password);
+    userChatCredentials.setUser(user);
 
-    UserChatCredentials userChatToken = new UserChatCredentials();
-    userChatToken.setUserJid(userJid);
-    userChatToken.setPassword(password);
-    userChatToken.setUser(user);
-    entityManager.persist(userChatToken);
-    
-    return userChatToken;
+    return persist(userChatCredentials);
   }
 
   public UserChatCredentials findByUser(User user) {
@@ -52,20 +49,14 @@ public class UserChatCredentialsDAO extends GenericDAO<UserChatCredentials> {
     return getSingleResult(entityManager.createQuery(criteria));
   }
 
-  public UserChatCredentials updateUserJid(UserChatCredentials userChatToken, String userJid) {
-    userChatToken.setUserJid(userJid);
-    
-    getEntityManager().persist(userChatToken);
-    
-    return userChatToken;
+  public UserChatCredentials updateUserJid(UserChatCredentials userChatCredentials, String userJid) {
+    userChatCredentials.setUserJid(userJid);
+    return persist(userChatCredentials);
   }
 
-  public UserChatCredentials updatePassword(UserChatCredentials userChatToken, String password) {
-    userChatToken.setPassword(password);
-    
-    getEntityManager().persist(userChatToken);
-    
-    return userChatToken;
+  public UserChatCredentials updatePassword(UserChatCredentials userChatCredentials, String password) {
+    userChatCredentials.setPassword(password);
+    return persist(userChatCredentials);
   }
 
 }
