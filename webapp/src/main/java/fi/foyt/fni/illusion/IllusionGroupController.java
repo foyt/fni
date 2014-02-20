@@ -31,8 +31,8 @@ public class IllusionGroupController {
   
   /* IllusionGroup */
 
-  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String xmppRoom) {
-    return illusionGroupDAO.create(urlName, name, description, xmppRoom);
+  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String xmppRoom, Date created) {
+    return illusionGroupDAO.create(urlName, name, description, xmppRoom, created);
   }
 
   public IllusionGroup findIllusionGroupById(Long id) {
@@ -41,6 +41,10 @@ public class IllusionGroupController {
 
   public IllusionGroup findIllusionGroupByUrlName(String urlName) {
     return illusionGroupDAO.findByUrlName(urlName);
+  }
+
+  public List<IllusionGroup> listIllusionGroupsByUserAndRole(User user, IllusionGroupUserRole role) {
+    return illusionGroupUserDAO.listIllusionGroupsByUserAndRole(user, role);
   }
 
   /* IllusionGroupUser */
@@ -57,6 +61,10 @@ public class IllusionGroupController {
     return illusionGroupUserDAO.listByGroup(group);
   }
 
+  public Long countIllusionGroupUsersByGroupAndRole(IllusionGroup group, IllusionGroupUserRole role) {
+    return illusionGroupUserDAO.countByGroupAndRole(group, role);
+  }
+  
   public IllusionGroupUser updateIllusionGroupUserNickname(IllusionGroupUser illusionGroupUser, String nickname) {
     return illusionGroupUserDAO.updateNickname(illusionGroupUser, nickname);
   }
