@@ -12,7 +12,8 @@ $menu-logo-shadow-color: rgba(255, 255, 255, 0.7);
 $menu-logo-font: "Bebas Neue",sans-serif;
 $search-box-width: 67px;
 $search-box-width-focus: 175px; 
-$nav-item-width: 115px;
+$nav-item-count: 5;
+$nav-item-width: (460px - ($grid-margin * 2)) / $nav-item-count;
 $menu-z-index: 9999;
 
 .index-menu {
