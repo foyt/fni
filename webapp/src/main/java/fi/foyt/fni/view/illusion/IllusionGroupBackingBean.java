@@ -28,7 +28,7 @@ import fi.foyt.fni.system.SystemSettingsController;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { @URLMapping(id = "illusion-group", pattern = "/illusion/group/#{illusionGroupBackingBean.urlName}", viewId = "/illusion/group.jsf") })
+@URLMappings(mappings = { @URLMapping(id = "illusion-group", pattern = "/illusion/group/#{urlName : illusionGroupBackingBean.urlName}", viewId = "/illusion/group.jsf") })
 public class IllusionGroupBackingBean {
 
   @Inject
