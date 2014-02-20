@@ -1,185 +1,57 @@
-.illusion-item {
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
-  cursor: move;
-  background-size: 90% 90%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: #fff;
-  z-index: 99;
-  vertical-align: top;
-  display: block;
-}
+@import "vars";
+@import "compass";
+@import "styles";
 
-.illusion-item-die {
-  background-image: url("http://openclipart.org/image/256px/svg_to_png/21223/ClayDowling_D20.png");
-}
+$group-border-color: rgb(71, 176, 176);
 
-.illusion-item-audio {
-  background-image: url("https://cdn1.iconfinder.com/data/icons/crystalproject/crystal_project_256x256/apps/lsongs.png");
-}
+/* Panel */ 
 
-.illusion-item-link {
-  background-image: url("https://cdn1.iconfinder.com/data/icons/crystalproject/crystal_project_256x256/filesystems/Globe.png");
-}
-
-.illusion-item-pdf {
-  background-image: url("https://cdn1.iconfinder.com/data/icons/nuvola2/128x128/mimetypes/pdf.png");
-}
-
-/* Tables */
-.illusion-tables-container {
+.illusion-index-panel {
+  @include generic-panel;
   position: relative;
 }
 
-.illusion-tables {
-  height: 500px;
-  background-color: rgba(255, 255, 255, 0.2);
+/* Generic */
+
+h3 {
+  @include header-2;
+  margin-bottom: 10px;
 }
 
-.illusion-table {
-  height: inherit;
+.illusion-index-group-list {
+  padding-bottom: 20px;
 }
 
-/* Participants */
-.illusion-participants {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
-  background: rgba(255, 0, 0, 0.2);
-  overflow-x: auto;
+.illusion-index-group {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid $group-border-color;
 }
 
-.illusion-participant {
-  width: 64px;
-  height: 64px;
-  text-align: center;
-  display: table-cell;
-  vertical-align: middle;
-  cursor: pointer;
-}
-
-.illusion-participant img {
-  border-radius: 20px;
-  max-width: 58px;
-  max-height: 58px;
-}
-
-/* Map */
-.map {
-  margin-top: 20px;
-  position: relative;
-}
-
-.map-canvas {
-  border: 1px solid black;
-}
-
-.map-tools {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  width: 86px;
-  background: #fff;
-  border: 1px solid #000;
-}
-
-.map-button-tool {
-  width: 32px;
-  height: 32px;
-  background: #fff;
-  display: inline-block;
-  background-repeat: no-repeat;
-  background-position: center;
-  border: 1px solid #aaa;
-  margin: 4px;
-  cursor: pointer;
-  vertical-align: top;
-}
-
-.map-button-tool-selected {
-  border: 2px solid #000;
-  margin: 3px;
-}
-
-.map-tool-area {
-  background-image: url("https://cdn1.iconfinder.com/data/icons/crystalproject/Open-Office-Icons/stock_node-close-path.png");
-}
-
-.map-tool-brush {
-  background-image: url("https://cdn1.iconfinder.com/data/icons/gnomeicontheme/24x24/stock/image/stock_draw-freeform-line.png");
-}
-
-.map-tool-path {
-  background-image: url("https://cdn1.iconfinder.com/data/icons/crystalproject/Open-Office-Icons/stock_draw-line-connector-ends-with-circle.png");
-}
-
-.map-tool-paints {
-  display: block;
-  position: relative;
-  clear: both;
-  padding-left: 10px;
-  padding-bottom: 10px;
-  margin-top: 10px;
-}
-
-.map-fill-paint, .map-stroke-paint {
-  width: 48px;
-  height: 32px;
-  padding: 1px;
-  border: 1px solid #000;
-  cursor: pointer;
-}
-
-.map-fill-paint {
-  position: relative;
-  z-index: 1;
-}
-
-.map-stroke-paint {
-  margin-left: 15px;
-  margin-top: -25px;
-  position: relative;
-  z-index: 0;
-}
-
-.map-paint-color-preview {
-  /* TODO Image is from Spectrum, check licnse */
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==");
-  float: right;
-  height: 32px;
-  width: 32px;
-}
-
-.map-paint-color-preview>span{
-  width: inherit;
-  height: inherit;
-  display: block;
-}
-
-.map-paint-fav-patterns {
-  background-color: #ECECEC;
-  border: 1px solid #F0C49B;
-  width: 172px;
-  padding: 10px;  
-}
-
-
-.map-paint-fav-pattern {
-  cursor: pointer;
-}
-
-.map-paint-fav-pattern img {
-  max-width: 32px;
-  max-height: 32px;
-}
-
-.map-paint-fav-pattern label {
-  margin-left: 8px;
-  vertical-align: top;  
+.illusion-index-group-name {
+  font-size: 16px;
+  font-family: $default-font;
+  margin-bottom: 5px;
   font-weight: bold;
-  display: inline-block;
-  margin-top: 8px;
-  cursor: pointer;
+  text-decoration: none;
+  color: $default-color;
+  display: block;
+}
+
+.illusion-index-group-info {
+  float: right;
+  text-align: right;
+}
+
+.illusion-index-group-players, .illusion-index-group-created {
+  font-size: 13px;
+  font-family: $default-font;
+  color: $default-color;
+  font-weight: bold;
+}
+
+.illusion-index-group-description {
+  font-family: $default-font;
+  font-size: 13px;
+  width: 700px;
 }

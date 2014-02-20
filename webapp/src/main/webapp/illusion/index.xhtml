@@ -2,21 +2,14 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
 
-  <ui:define name="page-title">...</ui:define>
+  <ui:define name="page-title">#{locales['illusion.index.pageTitle']}</ui:define>
   <ui:define name="view-stylesheets">
     <h:outputStylesheet library="novus" name="css/fonts.css"/>
     <h:outputStylesheet library="novus" name="css/menu.css"/>
     <h:outputStylesheet library="novus" name="css/illusion.css"/>
-    
-    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    <link rel="StyleSheet" href="https://rawgithub.com/bgrins/spectrum/master/spectrum.css"/>
   </ui:define>
   
   <ui:define name="view-scripts">
-    <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    <script type="text/javascript" src="https://raw.github.com/bgrins/spectrum/master/spectrum.js"></script>
-    <h:outputScript name="scripts/simplify/simplify.js"/>
-    <h:outputScript name="scripts/gui/illusion-map.js"/>
   </ui:define>
 
   <ui:define name="grid-content">
@@ -24,10 +17,52 @@
     <!-- Menu -->
 
     <ui:include src="/facelets/menu.xhtml" />
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/index.jsf">#{locales['illusion.index.navigationIndex']}</h:link>
+        </h:panelGroup>
+      </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{locales['illusion.index.descriptionTitle']}</p>
+        <p class="view-header-description-text">#{locales['illusion.index.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+
+    <!-- Content -->
 
     <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="map-container">
-      </h:panelGroup>
+      <h:panelGroup layout="block" styleClass="illusion-index-panel">
+      
+        <h:panelGroup layout="block" styleClass="illusion-index-group-list">
+          <h3>#{locales['illusion.index.gameMasterGroupsTitle']}</h3>
+          
+          <ui:repeat var="group" value="#{illusionIndexBackingBean.gameMasterGroups}">
+            <ui:include src="/facelets/illusionindexgroup.xhtml">
+              <ui:param name="group" value="#{group}" />
+            </ui:include>
+          </ui:repeat>
+          
+        </h:panelGroup>    
+        
+        <h:panelGroup layout="block" styleClass="illusion-index-group-list">
+          <h3>#{locales['illusion.index.playerGroupsTitle']}</h3>
+    
+          <ui:repeat var="group" value="#{illusionIndexBackingBean.playerGroups}">
+            <ui:include src="/facelets/illusionindexgroup.xhtml">
+              <ui:param name="group" value="#{group}" />
+            </ui:include>
+          </ui:repeat>
+          
+        </h:panelGroup>  
+      
+      </h:panelGroup>    
     </h:panelGroup>
     
   </ui:define>

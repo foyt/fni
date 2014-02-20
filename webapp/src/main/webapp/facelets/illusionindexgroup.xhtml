@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html">
+  
+  <h:panelGroup layout="block" styleClass="illusion-index-group">
+    <h:panelGroup layout="block" styleClass="illusion-index-group-info">
+      <h:panelGroup layout="block" styleClass="illusion-index-group-players">
+        <h:outputFormat value="#{locales['illusion.index.groupPlayerCount']}">
+          <f:param value="#{illusionIndexBackingBean.getGroupPlayerCount(group)}"/>
+        </h:outputFormat>
+      </h:panelGroup>
+      <h:panelGroup layout="block" styleClass="illusion-index-group-created">
+        <h:outputFormat value="#{locales['illusion.index.groupCreated']}">
+          <f:param value="#{group.created}"/>
+        </h:outputFormat>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <h:link outcome="/illusion/group.jsf" styleClass="illusion-index-group-name" value="#{group.name}">
+       <f:param name="urlName" value="#{group.urlName}"/>
+    </h:link>
+    <h:panelGroup layout="block" styleClass="illusion-index-group-description">#{group.description}</h:panelGroup>
+  </h:panelGroup>
+  
+</ui:composition>
