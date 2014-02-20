@@ -101,6 +101,8 @@
         <h:panelGroup layout="block" styleClass="illusion-group-admin" rendered="#{illusionGroupBackingBean.userRole eq 'GAMEMASTER'}">
           <h:panelGroup layout="block" styleClass="illusion-group-admin-image"/>
           <ul class="illusion-group-admin-menu">
+            <li><a href="#" data-action="invitePlayers"><span class="ui-icon ui-icon-illusion-invite-players"></span>#{locales['illusion.group.invitePlayers']}</a></li>
+            <li>-</li>
             <li><a href="#" data-action="changeBotNickname">#{locales['illusion.group.changeChatbotName']}</a></li>
             <li><a href="#" data-action="changeBotAvatar">#{locales['illusion.group.changeChatbotAvatar']}</a></li>
           </ul>
