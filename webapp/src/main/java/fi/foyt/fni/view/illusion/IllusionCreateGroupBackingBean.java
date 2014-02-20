@@ -2,6 +2,7 @@ package fi.foyt.fni.view.illusion;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Date;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -148,9 +149,11 @@ public class IllusionCreateGroupBackingBean {
   @LoggedIn
 // TODO: Security
   public void save() throws Exception {
-    IllusionGroup group = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getDescription(), getXmppRoom());
+    Date now = new Date();
     
-    // Add gamemaster
+    IllusionGroup group = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getDescription(), getXmppRoom(), now);
+    
+    // Add game master
     User loggedUser = sessionController.getLoggedUser();
     illusionGroupController.createIllusionGroupUser(loggedUser, group, getUserNickname(loggedUser), IllusionGroupUserRole.GAMEMASTER);
     
