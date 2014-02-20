@@ -53,6 +53,10 @@
             </ui:include>
           </ui:repeat>
           
+          <h:panelGroup layout="block" styleClass="illusion-index-group-list-empty" rendered="#{illusionIndexBackingBean.gameMasterGroups.isEmpty()}">
+            #{locales['illusion.index.gameMasterGroupsEmptyMessage']}  
+          </h:panelGroup>       
+          
         </h:panelGroup>    
         
         <h:panelGroup layout="block" styleClass="illusion-index-group-list">
@@ -63,6 +67,10 @@
               <ui:param name="group" value="#{group}" />
             </ui:include>
           </ui:repeat>
+  
+          <h:panelGroup layout="block" styleClass="illusion-index-group-list-empty" rendered="#{illusionIndexBackingBean.playerGroups.isEmpty()}">
+            #{locales['illusion.index.playerGroupsEmptyMessage']}  
+          </h:panelGroup>       
           
         </h:panelGroup>  
       

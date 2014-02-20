@@ -15,7 +15,6 @@ $group-border-color: rgb(71, 176, 176);
 
 h3 {
   @include header-2;
-  margin-bottom: 10px;
 }
 
 .illusion-index-group-list {
@@ -26,6 +25,10 @@ h3 {
   padding-top: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid $group-border-color;
+}
+
+.illusion-index-group-list-empty {
+  margin-top: 20px;
 }
 
 .illusion-index-group-name {
