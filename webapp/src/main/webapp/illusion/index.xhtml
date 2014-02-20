@@ -46,7 +46,7 @@
       
         <h:panelGroup layout="block" styleClass="illusion-index-group-list">
           <h3>#{locales['illusion.index.gameMasterGroupsTitle']}</h3>
-          
+          <h:link styleClass="illusion-index-create-group-link" outcome="/illusion/creategroup.jsf" value="#{locales['illusion.index.createNewGroup']}"/>
           <ui:repeat var="group" value="#{illusionIndexBackingBean.gameMasterGroups}">
             <ui:include src="/facelets/illusionindexgroup.xhtml">
               <ui:param name="group" value="#{group}" />
@@ -55,8 +55,7 @@
           
           <h:panelGroup layout="block" styleClass="illusion-index-group-list-empty" rendered="#{illusionIndexBackingBean.gameMasterGroups.isEmpty()}">
             #{locales['illusion.index.gameMasterGroupsEmptyMessage']}  
-          </h:panelGroup>       
-          
+          </h:panelGroup>   
         </h:panelGroup>    
         
         <h:panelGroup layout="block" styleClass="illusion-index-group-list">

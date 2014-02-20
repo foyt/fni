@@ -17,6 +17,14 @@ h3 {
   @include header-2;
 }
 
+.illusion-index-create-group-link {
+  @include header-3;
+  text-decoration: none;
+  color: $title-color;
+  display: block;
+  margin-top: 20px;
+}
+
 .illusion-index-group-list {
   padding-bottom: 20px;
 }
