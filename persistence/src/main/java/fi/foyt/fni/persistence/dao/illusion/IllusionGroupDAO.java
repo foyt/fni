@@ -1,5 +1,7 @@
 package fi.foyt.fni.persistence.dao.illusion;
 
+import java.util.Date;
+
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,17 +17,16 @@ public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionGroup create(String urlName, String name, String description, String xmppRoom) {
-		IllusionGroup illusionSpace = new IllusionGroup();
+	public IllusionGroup create(String urlName, String name, String description, String xmppRoom, Date created) {
+		IllusionGroup illusionGroup = new IllusionGroup();
 		
-		illusionSpace.setName(name);
-		illusionSpace.setDescription(description);
-		illusionSpace.setUrlName(urlName);
-		illusionSpace.setXmppRoom(xmppRoom);
-		
-		getEntityManager().persist(illusionSpace);
-		
-		return illusionSpace;
+		illusionGroup.setName(name);
+		illusionGroup.setDescription(description);
+		illusionGroup.setUrlName(urlName);
+		illusionGroup.setXmppRoom(xmppRoom);
+		illusionGroup.setCreated(created);
+
+		return persist(illusionGroup);
 	}
 
 	public IllusionGroup findByUrlName(String urlName) {

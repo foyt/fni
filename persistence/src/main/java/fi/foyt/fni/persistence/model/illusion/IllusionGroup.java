@@ -1,5 +1,7 @@
 package fi.foyt.fni.persistence.model.illusion;
 
+import java.util.Date;
+
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,6 +56,14 @@ public class IllusionGroup {
     this.description = description;
   }
   
+  public Date getCreated() {
+    return created;
+  }
+  
+  public void setCreated(Date created) {
+    this.created = created;
+  }
+  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
@@ -65,6 +75,10 @@ public class IllusionGroup {
   
   @Lob
   private String description;
+
+  @NotNull
+  @Column (nullable = false)
+  private Date created;
   
   @NotNull
   @NotEmpty
