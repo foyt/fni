@@ -220,6 +220,38 @@ h3 {
   background-position: center;
 }
 
+/* Invite players dialog */
+
+.illusion-group-invite-players-dialog p {
+  font-style: italic;
+  font-size: 13px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.illusion-group-invite-players-dialog label {
+  display: block;
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.illusion-group-invite-players-dialog input[type="text"] {
+  width: 100%;
+  @include box-sizing(border-box); 
+}
+
+.illusion-group-invite-players-dialog textarea[name="message"] {
+  height: 120px;
+  width: 100%;
+  @include box-sizing(border-box); 
+}
+
+div.token-input-dropdown {
+  z-index: 999;	
+}
+
 /* Bot rename dialog */
 
 .illusion-group-rename-chatbot-dialog p {

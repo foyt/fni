@@ -1,0 +1,17 @@
+<div title="Invite Players" data-invite-button="Invite" data-cancel-button="Cancel">
+  <div class="illusion-group-invite-players-dialog">
+    <p>
+      Type the names of the players you wish to invite into the field below. 
+    </p>
+    <div>
+      <label>Invite Players:</label>
+      <input name="invite" type="text" data-hint="Type the players name" data-no-results="No Results" data-searching="Searching..."/>
+    </div>
+    <p>
+      You can type a invitation message into the field below.
+    </p>
+    <div>
+      <textarea name="message"></textarea>    
+    </div>
+  </div>
+</div>
