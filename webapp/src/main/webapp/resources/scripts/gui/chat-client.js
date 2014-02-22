@@ -70,7 +70,7 @@
     },
     
     leaveRoom: function (roomJid, nickname, exit_msg) {
-      this._connection.muc.join(roomJid, nickname, null, history); 
+      this._connection.muc.leave(roomJid, nickname, null, exit_msg); 
     },
 
     inviteUser: function (roomJid, userJid, reason) {
