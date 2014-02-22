@@ -176,7 +176,7 @@ public class IllusionCreateGroupBackingBean {
       .toString());
   }
 
-  public String getUserNickname(User user) {
+  private String getUserNickname(User user) {
     return StringUtils.isNotBlank(user.getNickname()) ? user.getNickname() : user.getFullName();
   }
 	

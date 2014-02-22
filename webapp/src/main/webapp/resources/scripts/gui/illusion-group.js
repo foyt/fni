@@ -383,7 +383,24 @@
             'click': function(event) { 
               var userIds = $.map($(this).find('input[name="invite"]').tokenInput('get'), function(o) { return o["id"]; });
               var message = $(this).find('textarea[name="message"]');
+              var groupJid = $('#xmpp-room').val();
+              var groupUrlName = Strophe.getNodeFromJid(groupJid);
 
+              $.ajax(CONTEXTPATH + '/illusion/groupInvite/' + groupUrlName, {
+                type: 'POST',
+                traditional: true,
+                data: {
+                  'userId': userIds,
+                  'message': message
+                },
+                success: function (data) {
+                  for (var i = 0, l = data.inviteJids.length; i < l; i++) {
+                    var inviteJid = data.inviteJids[i];
+                    mucRoom.invite(inviteJid);
+                  }
+                }
+              });
+              
               $(this).dialog("close");
             }
           }, {
