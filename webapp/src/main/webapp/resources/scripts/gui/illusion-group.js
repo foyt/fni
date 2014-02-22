@@ -4,6 +4,7 @@
   $.widget("custom.illusionChat", {
     options : {
       userJid: null,
+      userRole: null,
       password: null,
       boshService: null,
       roomJid: null,
@@ -43,6 +44,14 @@
       $(this.element).on('chat.muc.participant-exit', $.proxy(this._onChatMucParticipantExit, this));
       $(this.element).on('chat.muc.join', $.proxy(this._onChatMucJoin, this));
       $(this.element).on('chat.muc.exit', $.proxy(this._onChatMucExit, this));
+      $(this.element).on('chat.command.roll', $.proxy(this._onChatCommandRoll, this));
+      $(this.element).on('chat.command.changeBotNick', $.proxy(this._onChatChangeBotNick, this));
+    },
+    
+    changeNick: function (nickname) {
+      $('.illusion-group-chat-input').attr('disabled', 'disabled');
+      $('input[name="command-form:userNickname"]').val(nickname);
+      $('input[name="command-form:updateUserNickname"]').click();
     },
     
     inviteParticipants: function (userJids) {
@@ -54,6 +63,31 @@
     
     leaveRoom: function () {
       $(this.element).chatClient('leaveRoom', this.options.roomJid, this.options.nickname);
+    },
+    
+    sendGroupchat: function (message) {
+      $(this.element).chatClient('sendGroupchat', this.options.roomJid, message);
+    },
+    
+    sendPrivateMessage: function (nick, message) {
+      $(this.element).chatClient('sendPrivateMessage', this.options.roomJid, nick, message);
+    },
+    
+    changeChatBotNick: function (nick) {
+      // TODO: Better error handling
+      if (this.options.userRole != 'GAMEMASTER') {
+        alert('Only Gamemaster can do this');
+      } else {    
+        if (nick) {
+          if (this._chatBotPresent) {
+            this.sendPrivateMessage(this._chatBotNick, '/roomSetting nick ' + nick);
+          } else {
+            alert('Chatbot is not present'); 
+          }
+        } else {
+          alert('Cannot change chatbot nick to empty');
+        }
+      }
     },
     
     disconnect: function (reason) {
@@ -176,20 +210,27 @@
               command = commandText.substring(0, argIndex);
               commandArgs = commandText.substring(argIndex + 1);
               
-              $(this.element).trigger('illusion.chat.command.' + command, {
-                args: commandArgs,
-                room: room
+              $(this.element).trigger('chat.command.' + command, {
+                args: commandArgs
               });
             } else {
               command = commandText;
             }
           } else {
-            $(this.element).chatClient('sendGroupchat', this.options.roomJid, $(event.target).val());
+            this.sendGroupchat($(event.target).val());
           }
         }
 
         $(event.target).val(null);
       }
+    },
+      
+    _onChatCommandRoll: function (event, data) {
+      this.sendGroupchat('/roll ' + data.args);
+    },
+    
+    _onChatChangeBotNick: function (event, data) {
+      this.changeChatBotNick(data.args);
     },
     
     _addGroupChatMessage: function (time, fromJid, fromNick, body) {
@@ -259,14 +300,13 @@
   $(document).ready(function() {
     $('.illusion-group-chat-container').illusionChat({
       userJid: $('#xmpp-user-jid').val(),
+      userRole: $('#user-role').val(),
       password: $('#xmpp-password').val(),
       boshService: $('#xmpp-bosh-service').val(),
       roomJid: $('#xmpp-room').val(),
       nickname: $('#user-nickname').val(),
       chatBotJid: $('#chat-bot-jid').val()
     });
-    
-    var userRole = $('#user-role').val();
     
     $('.illusion-group-user-menu')
       .hide()
@@ -325,7 +365,7 @@
   
   $(document).on("illusion.user.changeNickname", function (event, data) {
     dust.render("illusion-group-change-nick", {
-      name: userNickname
+      name: $('#user-nickname').val()
     }, function(err, html) {
       if (!err) {
         var dialog = $(html);
@@ -337,10 +377,7 @@
             'click': function(event) { 
               var name = $(this).find('input[name="name"]').val();
               if (name) {
-                $(document).trigger("illusion.chat.command.changeNick", {
-                  args: name,
-                  room: mucRoom
-                });
+                $('.illusion-group-chat-container').illusionChat('changeNick', name);
               }
               
               $(this).dialog("close");
@@ -361,7 +398,7 @@
   
   $(document).on("illusion.user.changeAvatar", function (event, data) {
     dust.render("illusion-group-change-avatar", {
-      name: userNickname
+      name: $('#user-nickname').val()
     }, function(err, html) {
       if (!err) {
         var dialog = $(html);
@@ -375,6 +412,7 @@
         dialog.on('imageDialog.okClick', function (event, data) {
           var groupJid = $('#xmpp-room').val();
           var groupUrlName = Strophe.getNodeFromJid(groupJid);
+          var userJid = $('#xmpp-user-jid').val();
           
           $.ajax(CONTEXTPATH + '/illusion/groupAvatar/' + groupUrlName + '/' + userJid, {
             type: 'POST',
@@ -462,10 +500,7 @@
             'click': function(event) { 
               var nickname = $(this).find('input[name="name"]').val();
               if (nickname) {
-                $(document).trigger("illusion.chat.command.changeBotNick", {
-                  args: nickname,
-                  room: mucRoom
-                });
+                $('.illusion-group-chat-container').illusionChat('changeChatBotNick', nickname);
               }
               
               $(this).dialog("close");
@@ -498,6 +533,7 @@
         dialog.on('imageDialog.okClick', function (event, data) {
           var groupJid = $('#xmpp-room').val();
           var groupUrlName = Strophe.getNodeFromJid(groupJid);
+          var chatBotJid = $('#chat-bot-jid').val();
           
           $.ajax(CONTEXTPATH + '/illusion/groupAvatar/' + groupUrlName + '/' + chatBotJid, {
             type: 'POST',
@@ -515,47 +551,6 @@
         alert(err);
       }
     }); 
-  });
-
-  /* Chat commands */
-  
-  $(document).on("illusion.chat.command.roll", function (event, data) {
-    var room = data.room;
-    room.groupchat('/roll ' + data.args, null);
-  });
-  
-  $(document).on("illusion.chat.command.changeNick", function (event, data) {
-    if (data.args) {
-      $('.illusion-group-chat-input').attr('disabled', 'disabled');
-      $('input[name="command-form:userNickname"]').val(data.args);
-      $('input[name="command-form:updateUserNickname"]').click();
-    }
-  });
-  
-  /* Gamemaster Chat commands */
-  
-  $(document).on("illusion.chat.command.invite", function (event, data) {
-    // TODO: Better error handling
-    if (userRole != 'GAMEMASTER') {
-      alert('Only Gamemaster can do this');
-    } else {    
-      if (data.args) {
-        var room = data.room;
-        room.invite(data.args);
-      }
-    }
-  });
-  
-  $(document).on("illusion.chat.command.changeBotNick", function (event, data) {
-    // TODO: Better error handling
-    if (userRole != 'GAMEMASTER') {
-      alert('Only Gamemaster can do this');
-    } else {    
-      if (data.args) {
-        var room = data.room;
-        room.message(chatBotNick, '/roomSetting nick ' + data.args, null, 'chat');
-      }
-    }
   });
   
 }).call(this);
