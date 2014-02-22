@@ -81,6 +81,10 @@
       this._connection.muc.groupchat(roomJid, message, html_message);
     },
     
+    sendPrivateMessage: function (roomJid, nick, message, html_message) {
+      this._connection.muc.message(roomJid, nick, message, html_message, 'chat');
+    },
+    
     disconnect: function (reason) {
       this._connection.disconnect(reason);
     },
