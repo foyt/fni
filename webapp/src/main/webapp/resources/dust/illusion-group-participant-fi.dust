@@ -1,4 +1,4 @@
-<div class="illusion-group-participant" jid="{jid}">
+<div class="illusion-group-participant" data-jid="{jid}">
   <div class="illusion-group-participant-image-container">
     <img class="illusion-group-participant-image" src="/fni/illusion/groupAvatar/{groupUrlName}/{jid}?size=90"/>
     <div class="illusion-group-participant-image-cover"/>
