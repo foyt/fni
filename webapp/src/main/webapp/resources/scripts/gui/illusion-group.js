@@ -46,6 +46,7 @@
       $(this.element).on('chat.muc.exit', $.proxy(this._onChatMucExit, this));
       $(this.element).on('chat.command.roll', $.proxy(this._onChatCommandRoll, this));
       $(this.element).on('chat.command.changeBotNick', $.proxy(this._onChatChangeBotNick, this));
+      $(this.element).on('chat.command.leaveRoom', $.proxy(this._onChatCommandLeaveRoom, this));
     },
     
     changeNick: function (nickname) {
@@ -209,13 +210,13 @@
             if (argIndex > -1) {
               command = commandText.substring(0, argIndex);
               commandArgs = commandText.substring(argIndex + 1);
-              
-              $(this.element).trigger('chat.command.' + command, {
-                args: commandArgs
-              });
             } else {
               command = commandText;
             }
+            
+            $(this.element).trigger('chat.command.' + command, {
+              args: commandArgs
+            });
           } else {
             this.sendGroupchat($(event.target).val());
           }
@@ -231,6 +232,10 @@
     
     _onChatChangeBotNick: function (event, data) {
       this.changeChatBotNick(data.args);
+    },
+    
+    _onChatCommandLeaveRoom: function (event, data) {
+      this.leaveRoom();
     },
     
     _addGroupChatMessage: function (time, fromJid, fromNick, body) {
