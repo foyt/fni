@@ -276,13 +276,14 @@
     
     _addParticipant: function (userJid) {
       var jid = Strophe.getBareJidFromJid(userJid);
-      
-      dust.render("illusion-group-participant", {
-        groupUrlName: this._groupUrlName,
-        jid: jid
-      }, function(err, html) {
-        $(html).appendTo('.illusion-group-participants');
-      });
+      if (!this._hasParticipant(jid)) {
+        dust.render("illusion-group-participant", {
+          groupUrlName: this._groupUrlName,
+          jid: jid
+        }, function(err, html) {
+          $(html).appendTo('.illusion-group-participants');
+        });
+      }
     },
     
     _removeParticipant: function (userJid) {
@@ -292,6 +293,18 @@
           $(participant).remove();
         }
       });
+    },
+    
+    _hasParticipant: function (userJid) {
+      var jid = Strophe.getBareJidFromJid(userJid);
+      var elements = $('.illusion-group-participants .illusion-group-participant');
+      for (var i = 0, l = elements.length; i < l; i++) {
+        if ($(elements[i]).data('jid') == jid) {
+          return true;
+        };
+      }
+      
+      return false;
     },
     
     _getAvatarUrl: function (userJid, size) {
