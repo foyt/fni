@@ -97,8 +97,10 @@
     
     _getChild: function (parent, name) {
       for (var i = 0, l = parent.childNodes.length; i < l; i++) {
-        if (name == parent.childNodes[i].tagName.toLowerCase()) {
-          return parent.childNodes[i];
+        if (parent.childNodes[i].nodeType == Node.ELEMENT_NODE) {
+          if (name == parent.childNodes[i].tagName.toLowerCase()) {
+            return parent.childNodes[i];
+          }
         }
       }
       
@@ -132,9 +134,15 @@
           fromUser = room.roster[nick] ? room.roster[nick].jid : null;
         }
         
+        var bodyAttrs = {};
+        for (var i = 0, l = bodyElement.attributes.length; i < l; i++) {
+          bodyAttrs[bodyElement.attributes[i].nodeName] = bodyElement.attributes[i].nodeValue;
+        }
+        
         var eventData = {
           room: room,
           body: body,
+          bodyAttrs: bodyAttrs,
           from: from,
           fromUser: fromUser,
           stanza: messageXml
