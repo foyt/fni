@@ -3,6 +3,7 @@ package fi.foyt.fni.view.illusion;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -69,6 +70,8 @@ public class IllusionGroupBackingBean {
     xmppPassword = chatCredentialsController.getPasswordByUser(loggedUser);
     xmppBoshService = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOSH_SERVICE);
     chatBotJid = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOT_JID);
+    
+    rolls = illusionGroupController.getIllusionGroupDiceSetting(illusionGroupUser);
   }
 
   public String getUrlName() {
@@ -146,6 +149,14 @@ public class IllusionGroupBackingBean {
   public IllusionGroupUserRole getUserRole() {
     return userRole;
   }
+
+  public List<String> getRolls() {
+    return rolls;
+  }
+  
+  public void setRolls(List<String> rolls) {
+    this.rolls = rolls;
+  }
   
   @LoggedIn
   public String updateUserNickname() throws FileNotFoundException {
@@ -175,4 +186,5 @@ public class IllusionGroupBackingBean {
   private String userNickname;
   private String chatBotJid;
   private IllusionGroupUserRole userRole;
+  private List<String> rolls;
 }

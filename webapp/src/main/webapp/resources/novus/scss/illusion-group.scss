@@ -163,6 +163,15 @@ h3 {
   width: 848px;
 }
 
+.illusion-group-roll-chat-message {
+  display: block;
+  color: $default-color;
+  text-decoration: none;
+  font-weight: bold;
+  font-style: italic;
+  margin-top: 8px;
+}
+
 .illusion-group-chat-fudge-minus,
 .illusion-group-chat-fudge-empty,
 .illusion-group-chat-fudge-plus {
@@ -188,6 +197,54 @@ h3 {
   width: 902px;
   height: 120px;
   border: 1px solid #aaa;
+}
+
+/* Dice */
+
+.illusion-dice {
+  position: absolute;
+  left: 0px;
+  bottom: 180px;
+  margin-left: -16px;
+  z-index: 99;
+}
+
+.illusion-dice-icon {
+  background-image: url('https://cdn1.iconfinder.com/data/icons/nuvola2/128x128/apps/package_games_board.png');
+  background-size: cover;
+  width: 64px;
+  height: 64px;
+}
+
+.illusion-dice-rolls-container {
+  display: table-cell;
+  background: rgba(0,0,0,0.1);
+  border-radius: 8px;
+  height: 64px;
+}
+
+.illusion-dice-rolls {
+  margin-top: -32px;
+  margin-left: 64px;
+  display: none;
+}
+
+.illusion-dice-roll {
+  background: #000px;
+  float: left;
+  margin-right: 8px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding: 4px;
+  background: #666;
+  border: 1px solid #000;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase;
+  
 }
 
 /* Admin */

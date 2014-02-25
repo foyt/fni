@@ -113,6 +113,17 @@
             <li><a href="#" data-action="changeBotAvatar">#{locales['illusion.group.changeChatbotAvatar']}</a></li>
           </ul>
         </h:panelGroup>
+        
+        <h:panelGroup layout="block" styleClass="illusion-dice">
+          <h:panelGroup layout="block" styleClass="illusion-dice-rolls-container">
+            <h:panelGroup layout="block" styleClass="illusion-dice-icon"/>
+            <h:panelGroup layout="block" styleClass="illusion-dice-rolls">
+              <ui:repeat var="roll" value="#{illusionGroupBackingBean.rolls}">
+                <div class="illusion-dice-roll" data-roll="#{roll}">#{roll}</div>
+              </ui:repeat>       
+            </h:panelGroup>
+          </h:panelGroup>
+        </h:panelGroup>
 
         <h:panelGroup layout="block" styleClass="illusion-group-participants"></h:panelGroup>
         
@@ -120,7 +131,6 @@
           <h:panelGroup layout="block" styleClass="illusion-group-chat-messages"></h:panelGroup>
           <textarea class="illusion-group-chat-input"></textarea>
         </h:panelGroup>
-        
       </h:panelGroup>
       
       <h:form id="command-form" style="display: none">
