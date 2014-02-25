@@ -50,7 +50,7 @@ public class IllusionGroupUserSetting {
 
   @Enumerated (EnumType.STRING)
   @NotNull
-  @Column (nullable = false, columnDefinition = "settingKey")
+  @Column (nullable = false, name="settingKey")
   private IllusionGroupSettingKey key;
   
   private String value;
