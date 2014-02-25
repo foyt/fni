@@ -1,0 +1,9 @@
+<div class="illusion-group-chat-message">
+  <img class="illusion-group-chat-message-avatar" src="{@contextPath/}/illusion/groupAvatar/{groupUrlName}/{jid}?size=32"/>
+  <div class="illusion-group-chat-message-sent">{sent}</div>
+  <div class="illusion-group-chat-message-from">{from}</div>
+  <div class="illusion-group-chat-message-body">{body}</div>
+  {@if cond="{'{command}' == 'roll'}"}
+    <a class="illusion-group-roll-chat-message" data-roll="{roll}" href="javascript:void(null)">Tallenna tämä heitto</a>
+  {/if}
+</div>

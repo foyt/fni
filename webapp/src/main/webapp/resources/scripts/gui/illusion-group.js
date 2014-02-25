@@ -239,57 +239,20 @@
     },
     
     _addGroupChatMessage: function (time, fromJid, fromNick, bodyText, bodyAttrs) {
-      var message = $('<div>');
-      
-      if (fromJid) {
-        message.append($('<img>')
-          .addClass('illusion-group-chat-message-avatar')
-          .attr("src", this._getAvatarUrl(fromJid, this.options.messageAvatarSize))
-        );
-      }; 
-      
-      // TODO: Localize time
-      
-      var body = $('<div>')
-        .addClass('illusion-group-chat-message-body')
-        .html((bodyText||'')
-          .replace(/\n/g, '<br/>')
-          .replace(/\[\+\]/g, '<span class="illusion-group-chat-fudge-plus"/>')
-          .replace(/\[\ \]/g, '<span class="illusion-group-chat-fudge-empty"/>')
-          .replace(/\[\-\]/g, '<span class="illusion-group-chat-fudge-minus"/>'));
-
-      if (bodyAttrs['fcb-command'] == 'roll') {
-        if ($('.illusion-dice-roll[data-roll="' + bodyAttrs['fcb-roll'] + '"]').length == 0) {
-          body.append($('<a>')
-            .addClass('illusion-group-roll-chat-message')
-            .attr('data-roll', bodyAttrs['fcb-roll'])
-            .attr('href', '#')
-            .text('Save this roll')
-            .click(function (event) {
-              var roll = $(this).attr('data-roll');
-              if ($('.illusion-dice-roll[data-roll="' + roll + '"]').length == 0) {
-                $('.illusion-dice-rolls').append($('<div>').addClass('illusion-dice-roll').attr('data-roll', roll).text(roll));
-              }
-            })
-          );  
-        }
-      }
-      
-      message
-        .addClass('illusion-group-chat-message')
-        .append($('<div>')
-          .addClass('illusion-group-chat-message-sent')
-          .text(time.toUTCString())
-        )
-        .append($('<div>')
-          .addClass('illusion-group-chat-message-from')
-          .text(Strophe.unescapeNode(fromNick))
-        )
-        .append(body);
-      
-      $('.illusion-group-chat-messages')
-        .append(message)
-        .scrollTo(message);
+      dust.render("illusion-group-chat-message", {
+        groupUrlName: this._groupUrlName,
+        jid: Strophe.getBareJidFromJid(fromJid),
+        sent: time.toUTCString(),
+        from: Strophe.unescapeNode(fromNick),
+        body: bodyText,
+        command: bodyAttrs['fcb-command'],
+        roll: bodyAttrs['fcb-roll'],
+      }, function(err, html) {
+        var message = $(html);
+        $('.illusion-group-chat-messages')
+          .append(message)
+          .scrollTo(message);
+      });
     },
     
     _addParticipant: function (userJid) {
@@ -602,5 +565,13 @@
   $(document).on('click', '.illusion-dice-roll', function (event) {
     $('.illusion-group-chat-container').illusionChat("sendGroupchat", "/roll " + $(event.target).data('roll'));
   });
+  
+  $(document).on('click', '.illusion-group-roll-chat-message', function (event) {
+    var roll = $(this).attr('data-roll');
+    if ($('.illusion-dice-roll[data-roll="' + roll + '"]').length == 0) {
+      $('.illusion-dice-rolls').append($('<div>').addClass('illusion-dice-roll').attr('data-roll', roll).text(roll));
+    }
+  });
+  
   
 }).call(this);
