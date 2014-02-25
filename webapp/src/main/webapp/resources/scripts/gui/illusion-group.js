@@ -239,13 +239,16 @@
     },
     
     _addGroupChatMessage: function (time, fromJid, fromNick, bodyText, bodyAttrs) {
+      var saveRollLink = bodyAttrs['fcb-command'] == 'roll' &&
+        $('.illusion-dice-roll[data-roll="' + bodyAttrs['fcb-roll'] + '"]').length == 0;
+      
       dust.render("illusion-group-chat-message", {
         groupUrlName: this._groupUrlName,
         jid: Strophe.getBareJidFromJid(fromJid),
         sent: time.toUTCString(),
         from: Strophe.unescapeNode(fromNick),
         body: bodyText,
-        command: bodyAttrs['fcb-command'],
+        saveRollLink: saveRollLink,
         roll: bodyAttrs['fcb-roll'],
       }, function(err, html) {
         var message = $(html);

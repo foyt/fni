@@ -3,7 +3,7 @@
   <div class="illusion-group-chat-message-sent">{sent}</div>
   <div class="illusion-group-chat-message-from">{from}</div>
   <div class="illusion-group-chat-message-body">{body}</div>
-  {@if cond="{'{command}' == 'roll'}"}
+  {@if cond="{saveRollLink}"}
     <a class="illusion-group-roll-chat-message" data-roll="{roll}" href="javascript:void(null)">Save this roll</a>
   {/if}
 </div>
