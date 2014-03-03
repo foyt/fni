@@ -1,6 +1,87 @@
 (function() {
   'use strict';
   
+  $.widget("custom.illusionDice", {
+    options: {
+      disabled: false
+    },
+    _create : function() {
+      this._disabled = this.options.disabled;
+      
+      $('<div>')
+        .addClass('illusion-dice-rolls-container')
+        .append($('<div>').addClass('illusion-dice-icon'))
+        .append($('<div>').addClass('illusion-dice-rolls'))
+        .appendTo($(this.element));
+
+      $(this.element).find('.illusion-dice-rolls-container').on("mouseover", $.proxy(this._onRollsMouseOver, this));
+      $(this.element).find('.illusion-dice-rolls-container').on("mouseout", $.proxy(this._onRollsMouseOut, this));
+    },
+    
+    rolls: function (value) {
+      if (value) {
+        $(this.element).find('.illusion-dice-roll').remove();
+        for (var i = 0, l = value.length; i < l; i++) {
+          $('<div>')
+            .addClass('illusion-dice-roll') 
+            .attr('data-roll', value[i])
+            .text(value[i])
+            .click($.proxy(this._onRollClick, this))
+            .appendTo($(this.element).find('.illusion-dice-rolls'));
+        }
+      } else {
+        var result = [];        
+        $(this.element).find('.illusion-dice-roll').each(function (index, element) {
+          result.push($(element).data('roll'));
+        });
+        return result;
+      }
+    },
+    
+    disable: function () {
+      this._disabled = true;
+      this.hideRolls();
+    },
+    
+    enable: function () {
+      this._disabled = false;
+    },
+    
+    showRolls: function () {
+      $(this.element)
+        .closest('.illusion-dice')
+        .find('.illusion-dice-rolls')
+        .show();
+    },
+    
+    hideRolls: function () {
+      $(this.element)
+        .closest('.illusion-dice')
+        .find('.illusion-dice-rolls')
+        .hide();
+    },
+    
+    _onRollsMouseOver: function (event) {
+      if (this._disabled == false) {
+        this.showRolls();
+      }
+    },
+    
+    _onRollsMouseOut: function (event) {
+      this.hideRolls();
+    },
+    
+    _onRollClick: function (event, data) {
+      $('.illusion-group-chat-container')
+        .illusionChat("sendGroupchat", "/roll " + $(event.target).data('roll'));
+    },
+    
+    _destroy : function() {
+    }
+  });
+  
+  // Chat component
+  
   $.widget("custom.illusionChat", {
     options : {
       userJid: null,
@@ -343,6 +424,40 @@
     $(document).on("click", '.illusion-group-admin-image', function (event) {
       $(this).closest('.illusion-group-admin').find('.illusion-group-admin-menu').show();
     });
+    
+    $('.illusion-dice').illusionDice({
+      disabled : true
+    });
+    
+    var groupJid = $('#xmpp-room').val();
+    var groupUrlName = Strophe.getNodeFromJid(groupJid);
+
+    $.ajax(CONTEXTPATH + '/rest/illusion/group/' + groupUrlName + '/settings/DICE', {
+      success: function (data) {
+        $('.illusion-dice').illusionDice('rolls', data);
+        $('.illusion-dice').illusionDice('enable');
+      }
+    });
+  });
+  
+  $(document).on('click', '.illusion-group-roll-chat-message', function (event) {
+    var roll = $(this).attr('data-roll');
+    if ($('.illusion-dice-roll[data-roll="' + roll + '"]').length == 0) {
+      var rolls = $('.illusion-dice').illusionDice('rolls');
+      rolls.push(roll);
+      $('.illusion-dice').illusionDice('disable');
+      var groupJid = $('#xmpp-room').val();
+      var groupUrlName = Strophe.getNodeFromJid(groupJid);
+
+      $.ajax(CONTEXTPATH + '/rest/illusion/group/' + groupUrlName + '/settings/DICE', {
+        type: 'PUT',
+        data: JSON.stringify(rolls),
+        success: function (data) {
+          $('.illusion-dice').illusionDice('rolls', rolls);
+          $('.illusion-dice').illusionDice('enable');
+        }
+      });
+    }
   });
   
   $(window).unload(function () {
@@ -553,27 +668,6 @@
         alert(err);
       }
     }); 
-  });
-  
-  $(document).on('mouseover', ".illusion-dice-rolls-container", function () {
-    $( this ).closest('.illusion-dice').find('.illusion-dice-rolls')
-      .show();
-  });
-  
-  $(document).on('mouseout', ".illusion-dice-rolls-container", function () {
-    $( this ).closest('.illusion-dice').find('.illusion-dice-rolls')
-      .hide();
-  });
-  
-  $(document).on('click', '.illusion-dice-roll', function (event) {
-    $('.illusion-group-chat-container').illusionChat("sendGroupchat", "/roll " + $(event.target).data('roll'));
-  });
-  
-  $(document).on('click', '.illusion-group-roll-chat-message', function (event) {
-    var roll = $(this).attr('data-roll');
-    if ($('.illusion-dice-roll[data-roll="' + roll + '"]').length == 0) {
-      $('.illusion-dice-rolls').append($('<div>').addClass('illusion-dice-roll').attr('data-roll', roll).text(roll));
-    }
   });
   
   
