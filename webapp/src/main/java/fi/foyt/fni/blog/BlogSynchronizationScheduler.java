@@ -8,7 +8,6 @@ import javax.ejb.Singleton;
 import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.model.blog.BlogCategory;
-import fi.foyt.fni.system.SystemSettingsController;
 
 @Singleton
 public class BlogSynchronizationScheduler {
@@ -18,9 +17,6 @@ public class BlogSynchronizationScheduler {
 
   @Inject
   private BlogController blogController;
-
-  @Inject
-  private SystemSettingsController systemSettingsController;
 
   @Schedule(dayOfWeek = "*", hour = "*", minute = "0", second = "0", year = "*", persistent = false)
   public synchronized void synchronizeFeeds() {

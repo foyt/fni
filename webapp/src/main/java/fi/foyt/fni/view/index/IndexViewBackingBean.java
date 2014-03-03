@@ -2,7 +2,6 @@ package fi.foyt.fni.view.index;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -20,7 +19,6 @@ import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
-import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
 @Named
@@ -34,12 +32,6 @@ public class IndexViewBackingBean {
 	private static final int MAX_FORUM_TOPICS = 6;
 	
 	private static final int DEFAULT_FEED_ENTRIES = 3;
-	
-	@Inject
-	private Logger logger;
-
-	@Inject
-	private SessionController sessionController;
 
 	@Inject
 	private BlogController blogController;

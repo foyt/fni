@@ -30,7 +30,6 @@ import fi.foyt.fni.persistence.dao.users.UserFriendDAO;
 import fi.foyt.fni.persistence.dao.users.UserImageDAO;
 import fi.foyt.fni.persistence.dao.users.UserSettingDAO;
 import fi.foyt.fni.persistence.dao.users.UserSettingKeyDAO;
-import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.auth.UserIdentifier;
 import fi.foyt.fni.persistence.model.common.Country;
@@ -62,9 +61,6 @@ public class UserController {
 	
 	@Inject
 	private UserIdentifierDAO userIdentifierDAO;
-	
-	@Inject
-	private UserTokenDAO userTokenDAO;
 	
 	@Inject
 	private UserFriendDAO userFriendDAO; 

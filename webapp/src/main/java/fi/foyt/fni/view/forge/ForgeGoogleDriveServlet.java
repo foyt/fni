@@ -20,7 +20,6 @@ import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.GoogleDocument;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
@@ -33,9 +32,6 @@ public class ForgeGoogleDriveServlet extends AbstractTransactionedServlet {
 
 	@Inject
 	private GoogleDriveMaterialController googleDriveMaterialController;
-	
-	@Inject
-	private UserController userController;
 	
 	@Inject
 	private SessionController sessionController;

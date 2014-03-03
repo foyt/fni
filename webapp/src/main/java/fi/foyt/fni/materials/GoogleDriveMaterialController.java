@@ -3,7 +3,6 @@ package fi.foyt.fni.materials;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
-import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
@@ -25,9 +24,6 @@ import fi.foyt.fni.utils.data.TypedData;
 @Stateful
 public class GoogleDriveMaterialController {
 	
-	@Inject
-	private Logger logger;
-
   @Inject
 	private DriveManager driveManager;
 

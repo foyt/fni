@@ -1,7 +1,6 @@
 package fi.foyt.fni.materials;
 
 import java.util.Date;
-import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
@@ -16,9 +15,6 @@ import fi.foyt.fni.persistence.model.users.User;
 @Stateful
 public class FolderController {
 	
-	@Inject
-	private Logger logger;
-
   @Inject
   private FolderDAO folderDAO;
 

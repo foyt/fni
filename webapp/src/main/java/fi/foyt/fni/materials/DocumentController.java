@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
@@ -64,9 +63,6 @@ import fi.foyt.fni.utils.servlet.RequestUtils;
 @Stateful
 public class DocumentController {
 	
-	@Inject
-	private Logger logger;
-
 	@Inject
 	private MaterialController materialController;
 

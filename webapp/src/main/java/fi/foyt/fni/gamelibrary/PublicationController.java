@@ -20,7 +20,6 @@ import org.apache.lucene.util.Version;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 
-import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.dao.gamelibrary.BookPublicationDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationFileDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationAuthorDAO;
@@ -37,7 +36,6 @@ import fi.foyt.fni.persistence.model.gamelibrary.PublicationFile;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
@@ -66,12 +64,6 @@ public class PublicationController {
 	@Inject
 	private PublicationAuthorDAO publicationAuthorDAO;
 
-	@Inject
-	private ForumController forumController;
-
-	@Inject
-	private SystemSettingsController systemSettingsController;
-	
 	@Inject
 	private FullTextEntityManager fullTextEntityManager;
 	

@@ -25,7 +25,6 @@ import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.materials.DropboxFileDAO;
 import fi.foyt.fni.persistence.dao.materials.DropboxFolderDAO;
 import fi.foyt.fni.persistence.dao.materials.DropboxRootFolderDAO;
-import fi.foyt.fni.persistence.dao.materials.FolderDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
 import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
@@ -71,9 +70,6 @@ public class DropboxManager implements Serializable {
 
   @Inject
   private DropboxFileDAO dropboxFileDAO;
-
-  @Inject
-  private FolderDAO folderDAO;
 
   @Inject
   private MaterialDAO materialDAO;

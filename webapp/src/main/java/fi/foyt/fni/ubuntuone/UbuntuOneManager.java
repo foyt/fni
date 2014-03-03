@@ -23,7 +23,6 @@ import org.scribe.oauth.OAuthService;
 import fi.foyt.fni.auth.UbuntuOneAuthenticationStrategy;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
-import fi.foyt.fni.persistence.dao.materials.FolderDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
 import fi.foyt.fni.persistence.dao.materials.UbuntuOneFileDAO;
 import fi.foyt.fni.persistence.dao.materials.UbuntuOneFolderDAO;
@@ -59,9 +58,6 @@ public class UbuntuOneManager implements Serializable {
 
   @Inject
   private UserIdentifierDAO userIdentifierDAO;
-
-  @Inject
-  private FolderDAO folderDAO;
 
   @Inject
   private MaterialDAO materialDAO;

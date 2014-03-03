@@ -1,7 +1,5 @@
 package fi.foyt.fni.materials;
 
-import java.util.logging.Logger;
-
 import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -23,9 +21,6 @@ import fi.foyt.fni.persistence.model.users.User;
 @Stateful
 public class VectorImageController {
 
-  @Inject
-	private Logger logger;
-  
   @Inject
   private MaterialController materialController;
 

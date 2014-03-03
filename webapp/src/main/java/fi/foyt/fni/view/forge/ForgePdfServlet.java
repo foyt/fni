@@ -21,7 +21,6 @@ import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 
@@ -32,9 +31,6 @@ public class ForgePdfServlet extends AbstractTransactionedServlet {
 	
 	@Inject
 	private DocumentController documentController;
-	
-	@Inject
-	private UserController userController;
 	
 	@Inject
 	private SessionController sessionController;

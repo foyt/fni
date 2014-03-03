@@ -41,7 +41,6 @@ import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.auth.AuthUtils;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
@@ -76,9 +75,6 @@ public class ForgeImportGoogleDriveBackingBean {
   @Inject
   private MaterialPermissionController materialPermissionController;
   
-  @Inject
-  private SystemSettingsController systemSettingsController;
-
   @Inject
   private FolderController folderController;
 

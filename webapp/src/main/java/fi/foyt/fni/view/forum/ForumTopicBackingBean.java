@@ -30,7 +30,6 @@ import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityController;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
 @RequestScoped
@@ -46,9 +45,6 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 public class ForumTopicBackingBean {
 	
 	public static final int POST_PER_PAGE = 3;
-	
-	@Inject
-	private UserController userController;
 	
 	@Inject
 	private ForumController forumController;

@@ -7,15 +7,12 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
-
-import fi.foyt.fni.users.UserController;
 
 @RequestScoped
 @Named
@@ -33,9 +30,6 @@ public class AboutBackingBean {
   public void init() {
     this.pattern = Pattern.compile("\\[(.*?)\\]");
   }
-  
-  @Inject
-  private UserController userController;
 	
   public String getParsedText(String text) {
     String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();

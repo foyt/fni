@@ -28,7 +28,6 @@ import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
 @SuppressWarnings("el-syntax")
@@ -44,9 +43,6 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 })
 public class ForgeVectorImagesBackingBean {
 	
-	@Inject
-	private UserController userController;
-
 	@Inject
 	private MaterialController materialController;
 

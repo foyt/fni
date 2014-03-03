@@ -3,7 +3,6 @@ package fi.foyt.fni.view.illusion;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
@@ -19,20 +18,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import fi.foyt.fni.gamelibrary.PublicationController;
-import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.view.AbstractFileServlet;
 
 @WebServlet(urlPatterns = "/illusion/mapImage", name = "illusion-mapimage")
 public class MapImageServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = 8109481247044843102L;
-
-	@Inject
-	private PublicationController publicationController;
-
-	@Inject
-	private SessionController sessionController;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

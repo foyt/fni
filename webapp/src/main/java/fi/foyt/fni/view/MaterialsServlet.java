@@ -19,7 +19,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.scribe.model.Response;
 
-import fi.foyt.fni.drive.DriveManager;
 import fi.foyt.fni.dropbox.DropboxManager;
 import fi.foyt.fni.materials.GoogleDriveMaterialController;
 import fi.foyt.fni.materials.MaterialController;
@@ -69,9 +68,6 @@ public class MaterialsServlet extends AbstractTransactionedServlet {
 	@Inject
 	private UbuntuOneManager ubuntuOneManager;
 
-	@Inject
-	private DriveManager driveManager;
-	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Material material = materialController.findMaterialByCompletePath(RequestUtils.stripCtxPath(request.getContextPath(), request.getRequestURI()));

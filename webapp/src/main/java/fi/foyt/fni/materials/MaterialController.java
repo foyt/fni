@@ -39,7 +39,6 @@ import fi.foyt.fni.persistence.dao.common.LanguageDAO;
 import fi.foyt.fni.persistence.dao.materials.BinaryDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentRevisionDAO;
-import fi.foyt.fni.persistence.dao.materials.DropboxFileDAO;
 import fi.foyt.fni.persistence.dao.materials.FileDAO;
 import fi.foyt.fni.persistence.dao.materials.FolderDAO;
 import fi.foyt.fni.persistence.dao.materials.GoogleDocumentDAO;
@@ -50,7 +49,6 @@ import fi.foyt.fni.persistence.dao.materials.MaterialViewDAO;
 import fi.foyt.fni.persistence.dao.materials.PdfDAO;
 import fi.foyt.fni.persistence.dao.materials.PermaLinkDAO;
 import fi.foyt.fni.persistence.dao.materials.StarredMaterialDAO;
-import fi.foyt.fni.persistence.dao.materials.UbuntuOneFileDAO;
 import fi.foyt.fni.persistence.dao.materials.UserMaterialRoleDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageRevisionDAO;
@@ -120,12 +118,6 @@ public class MaterialController {
   private BinaryDAO binaryDAO;
 
   @Inject
-  private DropboxFileDAO dropboxFileDAO;
-
-  @Inject
-  private UbuntuOneFileDAO ubuntuOneFileDAO;
-
-  @Inject
   private GoogleDocumentDAO googleDocumentDAO;
 
   @Inject
@@ -167,9 +159,6 @@ public class MaterialController {
   @Inject
   private MaterialPermissionController materialPermissionController;
 
-  @Inject
-  private GoogleDriveMaterialController googleDriveMaterialController;
-  
   @Inject
   private ImageController imageController;
 

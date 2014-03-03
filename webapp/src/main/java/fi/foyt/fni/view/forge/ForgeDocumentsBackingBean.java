@@ -22,7 +22,6 @@ import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.users.UserController;
 
 @SuppressWarnings("el-syntax")
 @RequestScoped
@@ -36,9 +35,6 @@ import fi.foyt.fni.users.UserController;
   ) 
 })
 public class ForgeDocumentsBackingBean {
-	
-	@Inject
-	private UserController userController;
 	
 	@Inject
 	private SessionController sessionController;

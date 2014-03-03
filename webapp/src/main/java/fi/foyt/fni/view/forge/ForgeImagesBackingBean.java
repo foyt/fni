@@ -20,7 +20,6 @@ import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.users.UserController;
 
 @SuppressWarnings("el-syntax")
 @RequestScoped
@@ -34,9 +33,6 @@ import fi.foyt.fni.users.UserController;
   ) 
 })
 public class ForgeImagesBackingBean {
-	
-	@Inject
-	private UserController userController;
 	
 	@Inject
 	private MaterialController materialController;

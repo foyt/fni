@@ -31,16 +31,12 @@ import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 
 @WebServlet(urlPatterns = "/forge/ckbrowserconnector/", name = "forge-ckbrowser")
 public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
 
   private static final long serialVersionUID = -1L;
-
-  @Inject
-  private SystemSettingsController systemSettingsController;
 
   @Inject
   private MaterialController materialController;

@@ -18,7 +18,6 @@ import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.system.SystemSetting;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
-import fi.foyt.fni.users.UserController;
 
 @RequestScoped
 @Stateful
@@ -37,9 +36,6 @@ public class SystemSettingsController {
 	@Inject
 	private CountryDAO countryDAO;
 
-	@Inject
-	private UserController userController;
-	
 	public String getSetting(SystemSettingKey key) {
 		SystemSetting systemSetting = systemSettingDAO.findByKey(key);
 		if (systemSetting != null)

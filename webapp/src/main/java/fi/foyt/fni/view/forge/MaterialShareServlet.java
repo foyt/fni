@@ -24,7 +24,6 @@ import fi.foyt.fni.persistence.model.materials.MaterialRole;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 import fi.foyt.fni.view.AbstractTransactionedServlet;
 
@@ -45,9 +44,6 @@ public class MaterialShareServlet extends AbstractTransactionedServlet {
   @Inject
   private SessionController sessionController;
   
-	@Inject
-	private UserController userController;
-
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (!sessionController.isLoggedIn()) {
