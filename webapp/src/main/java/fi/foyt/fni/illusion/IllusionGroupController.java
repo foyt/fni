@@ -3,7 +3,9 @@ package fi.foyt.fni.illusion;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -120,7 +122,16 @@ public class IllusionGroupController {
     return null;
   }
   
-  public <T> T getIllusionGroupSetting(IllusionGroupUser user, IllusionGroupSettingKey key, Class<T> clazz) {
+  public Object getIllusionGroupUserSetting(IllusionGroupUser groupUser, IllusionGroupSettingKey key) {
+    switch (key) {
+      case DICE:
+        return getIllusionGroupDiceSetting(groupUser);
+    }
+    
+    return null;
+  }
+  
+  private <T> T getIllusionGroupSetting(IllusionGroupUser user, IllusionGroupSettingKey key, Class<T> clazz) {
     String value = getIllusionGroupSettingValue(user, key);
     if (StringUtils.isNotBlank(value)) {
       ObjectMapper objectMapper = new ObjectMapper();
@@ -139,6 +150,29 @@ public class IllusionGroupController {
     List<String> result = getIllusionGroupSetting(user, IllusionGroupSettingKey.DICE, List.class);
     if (result == null) {
       result = Collections.emptyList();
+    }
+    
+    return result;
+  }
+
+  public IllusionGroupUserSetting setIllusionGroupSettingValue(IllusionGroupUser groupUser, IllusionGroupSettingKey key, String value) {
+    IllusionGroupUserSetting setting = illusionGroupUserSettingDAO.findByUserAndKey(groupUser, key);
+    if (setting == null) {
+      return illusionGroupUserSettingDAO.create(groupUser, key, value);
+    } else {
+      return illusionGroupUserSettingDAO.updateValue(setting, value);
+    }
+  }
+
+  public Map<IllusionGroupSettingKey, Object> getIllusionGroupUserSettings(IllusionGroupUser groupUser) {
+    Map<IllusionGroupSettingKey, Object> result = new HashMap<>();
+    
+    for (IllusionGroupSettingKey key : IllusionGroupSettingKey.values()) {
+      switch (key) {
+        case DICE:
+          result.put(key, getIllusionGroupUserSetting(groupUser, key));
+        break;
+      }
     }
     
     return result;
