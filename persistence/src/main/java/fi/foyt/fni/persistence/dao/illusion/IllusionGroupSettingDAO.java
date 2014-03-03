@@ -46,7 +46,7 @@ public class IllusionGroupSettingDAO extends GenericDAO<IllusionGroupSetting> {
     return getSingleResult(entityManager.createQuery(criteria));
   }
 
-  public List<IllusionGroupSetting> listByUser(IllusionGroup group) {
+  public List<IllusionGroupSetting> listByGroup(IllusionGroup group) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
