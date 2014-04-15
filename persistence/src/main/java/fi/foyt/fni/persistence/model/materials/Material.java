@@ -17,8 +17,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 
@@ -27,7 +25,6 @@ import fi.foyt.fni.persistence.model.users.User;
 
 @Entity
 @Cacheable (true)
-@Cache (usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @Inheritance (strategy=InheritanceType.JOINED)
 public class Material {
 

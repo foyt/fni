@@ -10,12 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 @Entity
 @Cacheable (true)
-@Cache (usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Language {
 
   public Long getId() {

@@ -14,15 +14,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import fi.foyt.fni.persistence.model.users.User;
 
 @Entity
 @Cacheable (true)
-@Cache (usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class BlogEntry {
 
   public Long getId() {

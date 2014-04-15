@@ -8,12 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 @Entity
 @Cacheable (true)
-@Cache (usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class MaterialRevisionSetting {
 
   public Long getId() {
