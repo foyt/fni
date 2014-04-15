@@ -7,81 +7,87 @@
   <parent>
     <groupId>fi.foyt.fni</groupId>
     <artifactId>parent</artifactId>
-    <version>3.0.24-SNAPSHOT</version>
+    <version>3.0.25-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  
+
   <dependencies>
-  
-    <!-- JBoss -->
-  
+
+    <!-- Servlet -->
+
     <dependency>
-      <groupId>org.jboss.spec</groupId>
-      <artifactId>jboss-javaee-6.0</artifactId>
-      <type>pom</type>
+      <groupId>org.jboss.spec.javax.servlet</groupId>
+      <artifactId>jboss-servlet-api_3.1_spec</artifactId>
       <scope>provided</scope>
     </dependency>
-    
+
+    <!-- Mail -->
+
+    <dependency>
+      <groupId>com.sun.mail</groupId>
+      <artifactId>javax.mail</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- CDI -->
-    
+
     <dependency>
       <groupId>javax.enterprise</groupId>
       <artifactId>cdi-api</artifactId>
       <scope>provided</scope>
     </dependency>
-    
-    <!-- EJB -->
-    
+
     <dependency>
-      <groupId>org.jboss.spec.javax.ejb</groupId>
-      <artifactId>jboss-ejb-api_3.1_spec</artifactId>
+      <groupId>org.jboss.spec.javax.interceptor</groupId>
+      <artifactId>jboss-interceptors-api_1.2_spec</artifactId>
       <scope>provided</scope>
     </dependency>
-    
+
+    <!-- EJB -->
+
+    <dependency>
+      <groupId>org.jboss.spec.javax.ejb</groupId>
+      <artifactId>jboss-ejb-api_3.2_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- EL -->
+
+    <dependency>
+      <groupId>org.jboss.spec.javax.el</groupId>
+      <artifactId>jboss-el-api_3.0_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Faces -->
+
+    <dependency>
+      <groupId>org.jboss.spec.javax.faces</groupId>
+      <artifactId>jboss-jsf-api_2.2_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- RESTEasy -->
+
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>jaxrs-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- Xalan -->
-    
+
     <dependency>
       <groupId>org.apache.xalan</groupId>
       <artifactId>xalan</artifactId>
       <scope>provided</scope>
     </dependency>
-    
+
     <!-- PrettyFaces -->
-    
+
     <dependency>
       <groupId>com.ocpsoft</groupId>
       <artifactId>prettyfaces-jsf2</artifactId>
-    </dependency>
-    
-    <!-- Hibernate -->
-    
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <type>jar</type>
-      <scope>provided</scope>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-entitymanager</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-validator</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-search</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-infinispan</artifactId>
-      <scope>provided</scope>
     </dependency>
 
     <!-- NGram -->
@@ -90,7 +96,7 @@
       <groupId>de.spieleck.app.ngramj</groupId>
       <artifactId>cngram</artifactId>
     </dependency>
-    
+
     <!-- Apache Commons -->
 
     <dependency>
@@ -106,28 +112,28 @@
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
-    
+
     <!-- FnI -->
 
     <dependency>
-  	  <groupId>fi.foyt.fni</groupId>
-  	  <artifactId>persistence</artifactId>
+      <groupId>fi.foyt.fni</groupId>
+      <artifactId>persistence</artifactId>
     </dependency>
 
     <!-- Paytrail -->
-      
+
     <dependency>
       <groupId>fi.foyt.paytrail</groupId>
       <artifactId>sdk</artifactId>
     </dependency>
-      
+
     <!-- Scribe -->
 
     <dependency>
@@ -145,9 +151,9 @@
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
-  
+
     <!-- CSS Parser -->
-       
+
     <dependency>
       <groupId>net.sourceforge.cssparser</groupId>
       <artifactId>cssparser</artifactId>
@@ -181,22 +187,46 @@
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>com.google.http-client</groupId>
       <artifactId>google-http-client-jackson</artifactId>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
-    
+
     <!-- Rome -->
 
     <dependency>
       <groupId>net.java.dev.rome</groupId>
       <artifactId>rome</artifactId>
     </dependency>
+
+    <!-- Jackson -->
+
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-core-asl</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Hibernate Search -->
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-search-orm</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <!-- Lucene Highlighter -->
+    
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-highlighter</artifactId>
+    </dependency>
+    
   </dependencies>
-  
+
   <build>
     <pluginManagement>
       <plugins>
@@ -247,21 +277,33 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Dependencies>org.hibernate.search.orm services</Dependencies>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
-  
+
   <repositories>
-  
+
     <!-- JBoss -->
-  
+
     <repository>
       <id>repository.jboss.org-public</id>
       <name>JBoss repository</name>
       <url>https://repository.jboss.org/nexus/content/groups/public</url>
     </repository>
-   
+
     <!-- Diff-patch-match -->
-  
+
     <repository>
       <id>google-diff-patch-match</id>
       <name>google-diff-patch-match</name>
