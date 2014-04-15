@@ -60,7 +60,12 @@
 
     <lucene-highlighter.version>3.6.2</lucene-highlighter.version>
 
-    <prettyfaces-jsf2.version>3.3.3</prettyfaces-jsf2.version>
+    <!-- PrettyFaces -->
+
+    <prettyfaces.version>2.0.11.Final</prettyfaces.version>
+
+    <!-- Scribe -->
+
     <scribe.version>1.3.5</scribe.version>
     <flying-saucer-pdf-itext5.version>9.0.2</flying-saucer-pdf-itext5.version>
     <diff_match_patch.version>current</diff_match_patch.version>
@@ -156,9 +161,15 @@
       <!-- PrettyFaces -->
 
       <dependency>
-        <groupId>com.ocpsoft</groupId>
-        <artifactId>prettyfaces-jsf2</artifactId>
-        <version>${prettyfaces-jsf2.version}</version>
+        <groupId>org.ocpsoft.rewrite</groupId>
+        <artifactId>rewrite-servlet</artifactId>
+        <version>${prettyfaces.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.ocpsoft.rewrite</groupId>
+        <artifactId>rewrite-config-prettyfaces</artifactId>
+        <version>${prettyfaces.version}</version>
       </dependency>
 
       <!-- Scribe -->
