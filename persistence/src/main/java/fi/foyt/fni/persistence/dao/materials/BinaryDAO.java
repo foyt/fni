@@ -3,12 +3,10 @@ package fi.foyt.fni.persistence.dao.materials;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.users.User;
 
-@DAO
 public class BinaryDAO extends GenericDAO<Image> {
 
   private static final long serialVersionUID = 1L;

@@ -10,11 +10,9 @@ import javax.persistence.criteria.Root;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.auth.UserIdentifier;
 import fi.foyt.fni.persistence.model.auth.UserIdentifier_;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.users.User;
 
-@DAO
 public class UserIdentifierDAO extends GenericDAO<UserIdentifier> {
 
 	private static final long serialVersionUID = 1L;

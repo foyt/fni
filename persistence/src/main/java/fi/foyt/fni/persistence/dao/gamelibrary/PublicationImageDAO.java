@@ -8,14 +8,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@DAO
 public class PublicationImageDAO extends GenericDAO<PublicationImage> {
   
 	private static final long serialVersionUID = 1L;

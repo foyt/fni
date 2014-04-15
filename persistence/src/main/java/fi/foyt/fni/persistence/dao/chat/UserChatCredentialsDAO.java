@@ -6,12 +6,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials_;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.users.User;
 
-@DAO
 public class UserChatCredentialsDAO extends GenericDAO<UserChatCredentials> {
 
 	private static final long serialVersionUID = 1L;

@@ -5,13 +5,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.system.SystemSetting;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.system.SystemSetting_;
 
-@DAO
 public class SystemSettingDAO extends GenericDAO<SystemSetting> {
 	
 	private static final long serialVersionUID = 1L;

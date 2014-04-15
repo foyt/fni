@@ -7,7 +7,6 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.DropboxRootFolderDAO;
 import fi.foyt.fni.persistence.model.materials.DropboxRootFolder;
 
@@ -21,7 +20,6 @@ public class DropboxSynchronizationScheduler {
   private DropboxManager dropboxManager;
 
   @Inject
-  @DAO
   private DropboxRootFolderDAO dropboxRootFolderDAO;
 
   @Schedule(dayOfWeek = "*", hour = "*", minute = "15,45", second = "0", year = "*", persistent = false)

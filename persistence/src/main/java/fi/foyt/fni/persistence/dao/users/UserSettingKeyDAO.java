@@ -6,11 +6,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.model.users.UserSettingKey_;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.users.UserSettingKey;
 
-@DAO
 public class UserSettingKeyDAO extends GenericDAO<UserSettingKey> {
 
 	private static final long serialVersionUID = 1L;

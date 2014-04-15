@@ -11,7 +11,6 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.model.forum.ForumPost_;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
@@ -19,7 +18,6 @@ import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.forum.ForumTopic_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@DAO
 public class ForumPostDAO extends GenericDAO<ForumPost> {
 
 	private static final long serialVersionUID = 1L;

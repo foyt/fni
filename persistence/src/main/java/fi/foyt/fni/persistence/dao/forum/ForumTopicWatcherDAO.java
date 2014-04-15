@@ -7,14 +7,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.forum.ForumTopicWatcher;
 import fi.foyt.fni.persistence.model.forum.ForumTopicWatcher_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@DAO
 public class ForumTopicWatcherDAO extends GenericDAO<ForumTopicWatcher> {
 
 	private static final long serialVersionUID = 1L;

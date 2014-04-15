@@ -7,14 +7,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUser;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserSetting_;
 
-@DAO
 public class IllusionGroupUserSettingDAO extends GenericDAO<IllusionGroupUserSetting> {
 
 	private static final long serialVersionUID = 1L;

@@ -8,7 +8,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
@@ -16,7 +15,6 @@ import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag_;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication_;
 
-@DAO
 public class PublicationTagDAO extends GenericDAO<PublicationTag> {
   
 	private static final long serialVersionUID = 1L;

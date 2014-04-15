@@ -7,9 +7,7 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.materials.UbuntuOneRootFolderDAO;
-import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.model.materials.UbuntuOneRootFolder;
 
 @Singleton
@@ -22,11 +20,6 @@ public class UbuntuOneSynchronizationScheduler {
   private UbuntuOneManager ubuntuOneManager;
   
   @Inject
-  @DAO
-  private UserDAO userDAO;
-  
-  @Inject
-  @DAO
   private UbuntuOneRootFolderDAO ubuntuOneRootFolderDAO;
 
   @Schedule(dayOfWeek = "*", hour = "*", minute = "0,30", second = "0", year = "*", persistent = false)

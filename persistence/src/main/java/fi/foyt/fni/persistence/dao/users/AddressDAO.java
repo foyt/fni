@@ -5,7 +5,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.users.Address;
@@ -13,7 +12,6 @@ import fi.foyt.fni.persistence.model.users.AddressType;
 import fi.foyt.fni.persistence.model.users.Address_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@DAO
 public class AddressDAO extends GenericDAO<Address> {
 
 	private static final long serialVersionUID = 1L;

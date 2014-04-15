@@ -7,14 +7,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogEntryTag;
 import fi.foyt.fni.persistence.model.blog.BlogEntryTag_;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
 
-@DAO
 public class BlogEntryTagDAO extends GenericDAO<BlogEntryTag> {
 
 	private static final long serialVersionUID = 1L;

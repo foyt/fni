@@ -7,13 +7,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.messages.MessageFolder;
 import fi.foyt.fni.persistence.model.messages.MessageFolder_;
 import fi.foyt.fni.persistence.model.users.User;
 
-@DAO
 public class MessageFolderDAO extends GenericDAO<MessageFolder> {
 
 	private static final long serialVersionUID = 1L;

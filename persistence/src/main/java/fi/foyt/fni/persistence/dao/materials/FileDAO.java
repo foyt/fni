@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.persistence.EntityManager;
 
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Folder;
@@ -12,7 +11,6 @@ import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.materials.File;
 import fi.foyt.fni.persistence.model.users.User;
 
-@DAO
 public class FileDAO extends GenericDAO<File> {
 
 	private static final long serialVersionUID = 1L;

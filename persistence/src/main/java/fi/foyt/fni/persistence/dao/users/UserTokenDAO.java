@@ -10,11 +10,9 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.model.auth.UserIdentifier;
 import fi.foyt.fni.persistence.model.users.UserToken_;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.users.UserToken;
 
-@DAO
 public class UserTokenDAO extends GenericDAO<UserToken> {
 
 	private static final long serialVersionUID = 1L;

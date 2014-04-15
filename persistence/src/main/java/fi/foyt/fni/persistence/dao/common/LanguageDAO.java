@@ -8,11 +8,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.model.common.Language_;
-import fi.foyt.fni.persistence.dao.DAO;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 
-@DAO
 public class LanguageDAO extends GenericDAO<Language> {
 
 	private static final long serialVersionUID = 1L;
