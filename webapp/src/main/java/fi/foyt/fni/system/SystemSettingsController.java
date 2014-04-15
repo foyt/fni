@@ -8,7 +8,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.LocaleUtils;
+import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import fi.foyt.fni.persistence.dao.common.CountryDAO;
