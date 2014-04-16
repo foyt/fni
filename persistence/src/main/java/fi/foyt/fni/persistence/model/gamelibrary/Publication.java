@@ -2,6 +2,7 @@ package fi.foyt.fni.persistence.model.gamelibrary;
 
 import java.util.Date;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +19,8 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -28,6 +31,8 @@ import fi.foyt.fni.persistence.model.users.User;
 
 @Entity
 @Inheritance (strategy=InheritanceType.JOINED)
+@Cacheable (true)
+@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class Publication {
 
   public Long getId() {

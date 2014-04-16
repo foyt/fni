@@ -14,8 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.DocumentId;
 
 import fi.foyt.fni.persistence.model.users.User;
@@ -23,7 +21,6 @@ import fi.foyt.fni.persistence.model.users.User;
 @Entity
 @Inheritance (strategy=InheritanceType.JOINED)
 @Cacheable (true)
-@Cache (usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class ForumMessage {
 
   public Long getId() {

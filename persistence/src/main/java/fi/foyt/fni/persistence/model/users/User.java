@@ -23,7 +23,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Cacheable (true)
-@Cache (usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @Indexed
 public class User {
   

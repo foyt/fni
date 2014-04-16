@@ -1,5 +1,6 @@
 package fi.foyt.fni.persistence.model.forum;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -12,6 +13,7 @@ import org.hibernate.search.annotations.Indexed;
 @Entity
 @PrimaryKeyJoinColumn (name="id")
 @Indexed
+@Cacheable (true)
 public class ForumTopic extends ForumMessage {
 
   public String getSubject() {

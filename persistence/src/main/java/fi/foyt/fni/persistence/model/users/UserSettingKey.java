@@ -14,7 +14,7 @@ import org.hibernate.annotations.Immutable;
 @Entity
 @Immutable
 @Cacheable (true)
-@Cache (usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class UserSettingKey {
 
   public Long getId() {

@@ -7,10 +7,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import fi.foyt.fni.persistence.model.users.User;
 
 @Entity
 @Cacheable (true)
+@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public class ForumTopicWatcher {
 
   public Long getId() {

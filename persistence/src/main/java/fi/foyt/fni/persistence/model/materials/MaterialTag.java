@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
@@ -15,6 +17,7 @@ import fi.foyt.fni.persistence.model.common.Tag;
 
 @Entity
 @Cacheable (true)
+@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @Indexed
 public class MaterialTag {
 
