@@ -21,9 +21,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
 
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.auth.AuthenticationStrategy;
@@ -53,13 +51,7 @@ import fi.foyt.fni.utils.mail.MailUtils;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "users-login", 
-		pattern = "/login/", 
-		viewId = "/users/login.jsf"
-  )
-})
+@Join (path = "/login/", to = "/users/login.jsf")
 public class LoginBackingBean {
 
 	@Inject
