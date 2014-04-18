@@ -9,6 +9,9 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.ocpsoft.pretty.faces.annotation.URLMapping;
+import com.ocpsoft.pretty.faces.annotation.URLMappings;
+
 import fi.foyt.fni.blog.BlogController;
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
@@ -23,6 +26,13 @@ import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 @RequestScoped
 @Named
 @Stateful
+@URLMappings(mappings = { 
+  @URLMapping(
+    id = "index", 
+    pattern = "/", 
+    viewId = "/index.jsf"
+  ) 
+})
 public class IndexViewBackingBean {
 	
 	private static final int MAX_GAME_LIBRARY_PUBLICATIONS = 2;
