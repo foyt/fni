@@ -10,20 +10,12 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
-
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
 
 @RequestScoped
 @Named
 @Stateful
-@URLMappings (
-  mappings = @URLMapping (
-    id = "about",
-    pattern = "/about",
-    viewId = "/about.jsf"
-  )    
-)
+@Join(path = "/about", to="/about.jsf")
 public class AboutBackingBean {
   
   @PostConstruct
