@@ -22,7 +22,7 @@
             <h:outputLink value="#{request.contextPath}/gamelibrary/tags/#{tag.text}" styleClass="gamelibrary-publication-tag">#{tag.text}</h:outputLink>
           </ui:repeat>
         </h:panelGroup>
-  
+
         <h:panelGroup layout="block" styleClass="gamelibrary-publication-info">
           <h:panelGroup layout="block" styleClass="gamelibrary-publication-description">
             <h:outputText value="#{gameLibraryPublicationsBackingBean.replaceDescriptionLineBreaks(publication.description)}" escape="false"/>
@@ -41,9 +41,9 @@
               <h:outputText value="#{gameLibraryPublicationsBackingBean.getPublicationNumberOfPages(publication)}" />
             </h:panelGroup>
             
-            <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail" rendered="#{gameLibraryPublicationsBackingBean.getAuthors(publication).size() > 0}">
-              <h:outputLabel value="#{locales['gamelibrary.publications.detailsAuthor']}" rendered="#{gameLibraryPublicationsBackingBean.getAuthors(publication).size() eq 1}"/>
-              <h:outputLabel value="#{locales['gamelibrary.publications.detailsAuthors']}" rendered="#{gameLibraryPublicationsBackingBean.getAuthors(publication).size() gt 1}"/>
+            <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail" rendered="#{gameLibraryPublicationsBackingBean.hasAuthors(publication)}">
+              <h:outputLabel value="#{locales['gamelibrary.publications.detailsAuthor']}" rendered="#{gameLibraryPublicationsBackingBean.hasSingleAuthor(publication)}"/>
+              <h:outputLabel value="#{locales['gamelibrary.publications.detailsAuthors']}" rendered="#{!gameLibraryPublicationsBackingBean.hasSingleAuthor(publication)}"/>
             
               <ui:repeat var="author" value="#{gameLibraryPublicationsBackingBean.getAuthors(publication)}">
                 <h:outputLink value="#{request.contextPath}/profile/#{author.id}" styleClass="gamelibrary-publication-author">#{author.fullName}</h:outputLink>
@@ -81,7 +81,7 @@
             <h:commandLink styleClass="gamelibrary-publication-action" value="#{locales['gamelibrary.publications.addToShoppingCart']}" rendered="#{gameLibraryPublicationsBackingBean.isPublicationPurchasable(publication)}" action="#{gameLibraryPublicationsBackingBean.addPublicationToShoppingCart(publication)}" />
           </h:panelGroup>
         </h:panelGroup>
-        
+
       </h:panelGroup>
     </h:panelGroup>
   </h:form>

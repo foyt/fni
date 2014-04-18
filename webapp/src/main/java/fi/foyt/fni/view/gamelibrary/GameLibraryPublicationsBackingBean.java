@@ -1,8 +1,11 @@
 package fi.foyt.fni.view.gamelibrary;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -39,9 +42,19 @@ public class GameLibraryPublicationsBackingBean {
 
 	@Inject
 	private SessionShoppingCartController sessionShoppingCartController;
+	
+	@PostConstruct
+	public void init() {
+	  publicationAuthors = new HashMap<Long, List<User>>();
+	  hasPublicationImages = new HashMap<Long, Boolean>();
+	}
 
-	public boolean hasImages(Publication publication) {
-		return publicationController.listPublicationImagesByPublication(publication).size() > 0;
+	public synchronized boolean hasImages(Publication publication) {
+	  if (!hasPublicationImages.containsKey(publication.getId())) {
+	    hasPublicationImages.put(publication.getId(), publicationController.listPublicationImagesByPublication(publication).size() > 0);
+	  }
+	  
+		return hasPublicationImages.get(publication.getId());
 	}
 
 	public List<GameLibraryTag> getTags(Publication publication) {
@@ -55,15 +68,32 @@ public class GameLibraryPublicationsBackingBean {
 		return result;
 	}
 	
+	public boolean hasAuthors(Publication publication) {
+	  return getPublicationAuthors(publication).size() > 0;
+	}
+	
+	public boolean hasSingleAuthor(Publication publication) {
+    return getPublicationAuthors(publication).size() == 1;
+	}
+	
 	public List<User> getAuthors(Publication publication) {
-		List<User> result = new ArrayList<>(); 
-
-		List<PublicationAuthor> publicationAuthors = publicationController.listPublicationAuthors(publication);
-		for (PublicationAuthor publicationAuthor : publicationAuthors) {
-			result.add(publicationAuthor.getAuthor());
-		}
-		
-		return result;
+		return getPublicationAuthors(publication);
+	}
+	
+	private synchronized List<User> getPublicationAuthors(Publication publication) {
+	  if (!publicationAuthors.containsKey(publication.getId())) {
+	    List<PublicationAuthor> authors = publicationController.listPublicationAuthors(publication);
+      List<User> users = new ArrayList<User>(authors.size());
+	    for (PublicationAuthor publicationAuthor : authors) {
+	      users.add(publicationAuthor.getAuthor());
+	    }
+	    
+	    publicationAuthors.put(publication.getId(), users);
+	    
+	    return users;
+	  }
+	  
+    return publicationAuthors.get(publication.getId());
 	}
 	
 	public Long getPublicationCommentCount(Publication publication) {
@@ -113,4 +143,7 @@ public class GameLibraryPublicationsBackingBean {
 	  
 	  return null;
 	}
+	
+	private Map<Long, List<User>> publicationAuthors;
+	private Map<Long, Boolean> hasPublicationImages;
 }
