@@ -55,7 +55,7 @@ import fi.foyt.fni.utils.faces.FacesUtils;
   ),
   @URLMapping(
 	  id = "forge-import-google-drive-folder", 
-		pattern = "/forge/import-google-drive/#{forgeImportGoogleDriveBackingBean.folderId}", 
+		pattern = "/forge/import-google-drive/#{parentFolderId : forgeImportGoogleDriveBackingBean.folderId}", 
 		viewId = "/forge/import-google-drive.jsf"
   )
 })
