@@ -172,6 +172,24 @@
         <version>${prettyfaces.version}</version>
       </dependency>
 
+      <dependency>
+        <groupId>org.ocpsoft.rewrite</groupId>
+        <artifactId>rewrite-config-annotations</artifactId>
+        <version>${prettyfaces.version}</version>
+      </dependency>
+    
+      <dependency>
+         <groupId>org.ocpsoft.rewrite</groupId>
+         <artifactId>rewrite-integration-faces</artifactId>
+         <version>${prettyfaces.version}</version>
+      </dependency>
+      
+      <dependency>
+         <groupId>org.ocpsoft.rewrite</groupId>
+         <artifactId>rewrite-integration-cdi</artifactId>
+         <version>${prettyfaces.version}</version>
+      </dependency>
+
       <!-- Scribe -->
 
       <dependency>
