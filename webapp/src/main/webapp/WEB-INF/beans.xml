@@ -4,5 +4,6 @@
  <interceptors>
   <class>fi.foyt.fni.security.LoggedInInterceptor</class>
   <class>fi.foyt.fni.security.SecureInterceptor</class>
+  <class>fi.foyt.fni.debug.TimedInterceptor</class>
  </interceptors>
 </beans>

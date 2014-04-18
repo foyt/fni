@@ -1,0 +1,45 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+/* Panel */ 
+
+.admin-debug-timer-results-panel {
+  @include generic-panel;
+}
+
+/* Generic */
+
+h2 {
+  @include header-2;
+  margin-bottom: 10px;
+}
+
+h3 {
+  @include header-3;
+  margin-bottom: 10px;
+}
+
+.admin-debug-timer-results-panel table {
+  width: 100%;
+  font-family: courier;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.admin-debug-timer-results-panel table th {
+  font-weight: bold;
+  padding-bottom: 8px;
+}
+
+.admin-debug-timer-result-low {
+  color: #00aa00;
+}
+
+.admin-debug-timer-result-med {
+  color: #ff5500;
+}
+
+.admin-debug-timer-result-high {
+  color: #ff0000;
+}

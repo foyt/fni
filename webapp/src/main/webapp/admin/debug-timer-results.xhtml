@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  template="/WEB-INF/templates/gridbase.xhtml">
+  
+  <ui:define name="view-scripts">
+  </ui:define>
+
+  <ui:define name="view-stylesheets">
+    <!-- View styles -->
+    
+    <h:outputStylesheet library="novus" name="css/admin-debug-timer-results.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="grid_16 alpha slim-right">
+        <h:panelGroup layout="block" styleClass="admin-debug-timer-results-panel">
+          <h2>Timer results</h2>
+          <ui:repeat var="requestStats" value="#{debugTimerResultsBackingBean.requestStats}">
+            <h3>#{requestStats.view}</h3>
+            <table>
+              <tr>
+                <th>Method</th>
+                <th>Count</th>
+                <th>Min</th>
+                <th>Max</th>
+                <th>Average</th>
+                <th>Total</th>
+              </tr>
+              <ui:repeat var="methodStats" value="#{requestStats.methodStats}">
+                <tr class="#{methodStats.total >= 200 ? (methodStats.total >= 500 ? 'admin-debug-timer-result-high' : 'admin-debug-timer-result-med') : 'admin-debug-timer-result-low'}">
+                  <td><span title="#{methodStats.methodDetails}">#{methodStats.methodName}</span></td>
+                  <td>#{methodStats.count}</td>
+                  <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.min)}</td>
+                  <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.max)}</td>
+                  <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.avg)}</td>
+                  <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.total)}</td>
+                </tr>
+              </ui:repeat>
+            </table>
+          </ui:repeat>
+        </h:panelGroup>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+  </ui:define>
+
+</ui:composition>
