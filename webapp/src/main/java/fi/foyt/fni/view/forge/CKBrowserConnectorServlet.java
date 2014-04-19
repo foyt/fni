@@ -115,8 +115,7 @@ public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
       break;
     }
 
-    Collections.sort(materials, ComparatorUtils.chainedComparator(Arrays.asList(new MaterialTypeComparator(MaterialType.UBUNTU_ONE_ROOT_FOLDER),
-        new MaterialTypeComparator(MaterialType.DROPBOX_ROOT_FOLDER), new MaterialTypeComparator(MaterialType.FOLDER))));
+    Collections.sort(materials, ComparatorUtils.chainedComparator(Arrays.asList(new MaterialTypeComparator(MaterialType.DROPBOX_ROOT_FOLDER), new MaterialTypeComparator(MaterialType.FOLDER))));
 
     for (Material material : materials) {
       boolean folder = material instanceof Folder;
@@ -158,10 +157,7 @@ public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
   private String getIcon(Material material) {
     if (material.getType() == MaterialType.DROPBOX_ROOT_FOLDER)
       return "dropbox-folder";
-
-    if (material.getType() == MaterialType.UBUNTU_ONE_ROOT_FOLDER)
-      return "ubuntu-one-folder";
-
+    
     if (material instanceof Folder) {
       return "folder";
     }
@@ -255,8 +251,7 @@ public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
   private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
   private List<MaterialType> allowedMaterialTypes = Arrays
-      .asList(MaterialType.IMAGE, MaterialType.FOLDER, MaterialType.DROPBOX_ROOT_FOLDER, MaterialType.DROPBOX_FILE, MaterialType.DROPBOX_FOLDER,
-          MaterialType.UBUNTU_ONE_ROOT_FOLDER, MaterialType.UBUNTU_ONE_FOLDER, MaterialType.UBUNTU_ONE_FILE);
+      .asList(MaterialType.IMAGE, MaterialType.FOLDER, MaterialType.DROPBOX_ROOT_FOLDER, MaterialType.DROPBOX_FILE, MaterialType.DROPBOX_FOLDER);
 
   private enum Action {
     LIST_MATERIALS
