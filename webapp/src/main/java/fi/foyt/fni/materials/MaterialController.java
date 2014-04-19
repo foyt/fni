@@ -181,11 +181,8 @@ public class MaterialController {
   public boolean isMovableType(MaterialType type) {
     switch (type) {
     case DROPBOX_ROOT_FOLDER:
-    case UBUNTU_ONE_ROOT_FOLDER:
     case DROPBOX_FILE:
     case DROPBOX_FOLDER:
-    case UBUNTU_ONE_FILE:
-    case UBUNTU_ONE_FOLDER:
       return false;
     default:
       break;
@@ -197,11 +194,8 @@ public class MaterialController {
   public boolean isShareableType(MaterialType type) {
     switch (type) {
     case DROPBOX_ROOT_FOLDER:
-    case UBUNTU_ONE_ROOT_FOLDER:
     case DROPBOX_FILE:
     case DROPBOX_FOLDER:
-    case UBUNTU_ONE_FILE:
-    case UBUNTU_ONE_FOLDER:
       return false;
     default:
       break;
@@ -225,8 +219,6 @@ public class MaterialController {
     switch (type) {
     case DROPBOX_FILE:
     case DROPBOX_FOLDER:
-    case UBUNTU_ONE_FILE:
-    case UBUNTU_ONE_FOLDER:
       return false;
     default:
       break;
@@ -516,12 +508,9 @@ public class MaterialController {
     
     switch (type) {
       case DROPBOX_FILE:
-      case UBUNTU_ONE_FILE:
         return "binary";
       case DROPBOX_FOLDER:
       case DROPBOX_ROOT_FOLDER:
-      case UBUNTU_ONE_FOLDER:
-      case UBUNTU_ONE_ROOT_FOLDER:
         return "folders";
       case GOOGLE_DOCUMENT:
         GoogleDocument googleDocument = (GoogleDocument) material;
@@ -590,10 +579,8 @@ public class MaterialController {
     case FOLDER:
     case DROPBOX_ROOT_FOLDER:
     case DROPBOX_FOLDER:
-    case UBUNTU_ONE_ROOT_FOLDER:
-    case UBUNTU_ONE_FOLDER:
       /**
-       * When removing Ubuntu One or Dropbox folder, all child resources have to be removed also
+       * When removing a Dropbox folder, all child resources have to be removed also
        */
       recursiveDelete(folderDAO.findById(material.getId()), deletingUser);
       break;
