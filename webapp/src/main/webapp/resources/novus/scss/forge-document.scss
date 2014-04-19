@@ -117,10 +117,6 @@ h2 input:focus {
   @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-pdf.png"]}'));
 }
 
-.fniDynListRow .fniDynListCell .fnigenericbrowser-icon-ubuntu-one-folder {
-  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-ubuntu-one.png"]}'));
-}
-
 .fniDynListRow .fniDynListCell .fnigenericbrowser-icon-vector-image {
   @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-vector-image.png"]}'));
 }
