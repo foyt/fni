@@ -31,11 +31,9 @@ import fi.foyt.fni.persistence.model.materials.GoogleDocument;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.Pdf;
-import fi.foyt.fni.persistence.model.materials.UbuntuOneFile;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.ubuntuone.UbuntuOneManager;
 import fi.foyt.fni.utils.data.FileData;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.servlet.RequestUtils;
@@ -64,9 +62,6 @@ public class MaterialsServlet extends AbstractTransactionedServlet {
 
 	@Inject
 	private DropboxManager dropboxManager;
-
-	@Inject
-	private UbuntuOneManager ubuntuOneManager;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -113,16 +108,11 @@ public class MaterialsServlet extends AbstractTransactionedServlet {
 			case DROPBOX_FILE:
 				data = getDropboxMaterialData((DropboxFile) material);
 			break;
-			case UBUNTU_ONE_FILE:
-				data = getUbuntuOneMaterialData((UbuntuOneFile) material);
-			break;
 			case BINARY:
 				data = getBinaryMaterialData((Binary) material);
 			case DROPBOX_FOLDER:
 			case DROPBOX_ROOT_FOLDER:
 			case FOLDER:
-			case UBUNTU_ONE_FOLDER:
-			case UBUNTU_ONE_ROOT_FOLDER:
 				data = null;
   		break;
 		}
@@ -176,28 +166,6 @@ public class MaterialsServlet extends AbstractTransactionedServlet {
 				}
 				
 				return new FileData(null, fileName, data, dropboxFile.getMimeType(), dropboxFile.getModified());
-			} finally {
-			  inputStream.close();
-			}
-		}
-		
-		return null;
-	}
-	
-	private FileData getUbuntuOneMaterialData(UbuntuOneFile ubuntuOneFile) throws IOException {
-		Response response = ubuntuOneManager.getFileContent(sessionController.getLoggedUser(), ubuntuOneFile);
-		if (response.getCode() == 200) {
-			byte[] data = null;
-			
-			InputStream inputStream = response.getStream();
-			try {
-				data = IOUtils.toByteArray(inputStream);
-				String fileName = null;
-				if (!ubuntuOneFile.getMimeType().startsWith("image/")&&!ubuntuOneFile.getMimeType().equals("text/html")) {
-					fileName = ubuntuOneFile.getUrlName();
-				}
-				
-				return new FileData(null, fileName, data, ubuntuOneFile.getMimeType(), ubuntuOneFile.getModified());
 			} finally {
 			  inputStream.close();
 			}
