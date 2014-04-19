@@ -23,9 +23,6 @@ public class AuthenticationStrategyManager implements Serializable {
 
   @Inject
   private DropboxAuthenticationStrategy dropboxAuthenticationStrategy;
-
-  @Inject
-  private UbuntuOneAuthenticationStrategy ubuntuOneAuthenticationStrategy;
   
   @Inject
   private InternalAuthenticationStrategy internalAuthenticationStrategy;
@@ -43,8 +40,6 @@ public class AuthenticationStrategyManager implements Serializable {
         return facebookAuthenticationStrategy;
       case DROPBOX:
         return dropboxAuthenticationStrategy;
-      case UBUNTU_ONE:
-        return ubuntuOneAuthenticationStrategy;
       case INTERNAL:
         return internalAuthenticationStrategy;
       case GUEST:

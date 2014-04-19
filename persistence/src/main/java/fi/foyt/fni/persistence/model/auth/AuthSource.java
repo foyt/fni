@@ -5,7 +5,6 @@ public enum AuthSource {
 	GOOGLE,
 	FACEBOOK,
 	DROPBOX,
-	UBUNTU_ONE,
 	YAHOO, 
 	GUEST
 }

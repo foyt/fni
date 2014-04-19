@@ -177,9 +177,7 @@ public class EditProfileBackingBean {
 				return FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceGoogle");
 			case INTERNAL:
 				return FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceForgeAndIllusion");
-			case UBUNTU_ONE:
-				return FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceUbuntuOne");
-						case YAHOO:
+			case YAHOO:
 				return FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceYahoo");
 			default:
 			break;
