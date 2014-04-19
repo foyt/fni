@@ -2,11 +2,13 @@
 @import "compass";
 @import "styles";
 
+$panel-height: 372px;
+
 /* Panel */ 
 
 .user-login-login-panel, .user-login-register-panel {
   @include generic-panel;
-  height: 432px;
+  height: $panel-height;
   margin-bottom: 40px;
 }
 
