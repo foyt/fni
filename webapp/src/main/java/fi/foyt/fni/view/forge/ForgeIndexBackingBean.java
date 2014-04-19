@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -103,6 +105,7 @@ public class ForgeIndexBackingBean {
 		starredOpen = true;
 		lastEditedOpen = true;
 		folders = new ArrayList<>();
+		materialStarred = new HashMap<Long, Boolean>();
 		
 		if (ownerId != null && StringUtils.isNotBlank(urlName)) {
 			User owner = userController.findUserById(getOwnerId());
@@ -164,13 +167,20 @@ public class ForgeIndexBackingBean {
 		return materialController.listStarredMaterialsByUser(sessionController.getLoggedUser());
 	}
 
-	public boolean isStarred(Long materialId) {
-		Material material = materialController.findMaterialById(materialId);
-		if (material != null) {
-			return materialController.isStarred(sessionController.getLoggedUser(), material);
-		}
+	public synchronized boolean isStarred(Long materialId) {
+	  if (!materialStarred.containsKey(materialId)) {
+	    Boolean starred = false;
+	    
+	    Material material = materialController.findMaterialById(materialId);
+  		if (material != null) {
+  		  starred = materialController.isStarred(sessionController.getLoggedUser(), material);
+  		}
 
-		return false;
+  		materialStarred.put(materialId, starred);
+  		return starred;
+	  } else {
+	    return materialStarred.get(materialId);
+	  }
 	}
 
 	public void starMaterial(Long materialId) {
@@ -410,4 +420,5 @@ public class ForgeIndexBackingBean {
 	private String urlName;
 	private List<Folder> folders;
 	private List<Material> materials;
+	private Map<Long, Boolean> materialStarred;
 }
