@@ -30,10 +30,11 @@ public class LoginRedirectRewriteConfigurationProvider extends HttpConfiguration
 
     try {
       addLoginRequiredPath(context, configuration, "/forge/", "/forge/index.jsf");
+      addLoginRequiredPath(context, configuration, "/admin/debug-timer-results", "/admin/debug-timer-results.jsf");
     } catch (UnsupportedEncodingException e) {
       logger.log(Level.SEVERE, "Failed to initialize login redirects", e);
     }
-
+    
     return configuration;
   }
 
