@@ -42,12 +42,6 @@ public enum SystemSettingKey {
 	DROPBOX_APISECRET,
 	DROPBOX_CALLBACKURL,
 	DROPBOX_ROOT,
-	
-	/* Ubuntu One */
-	
-	UBUNTUONE_APIKEY,
-	UBUNTUONE_APISECRET,
-	UBUNTUONE_CALLBACKURL,
 
 	/* Game Library specific */
 	
