@@ -10,10 +10,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
-
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
@@ -31,19 +31,16 @@ import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.licenses.CreativeCommonsLicense;
 import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 
-@SuppressWarnings("el-syntax")
 @RequestScoped
 @Stateful
 @Named
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "users-profile", 
-		pattern = "/profile/#{ /[0-9]*/ usersProfileBackingBean.userId}", 
-		viewId = "/users/profile.jsf"
-  )
-})
+@Join (path = "/profile/{userId}", to = "/users/profile.jsf" )
 public class UsersProfileBackingBean {
-	
+  
+  @Parameter
+  @Matches ("[0-9]{1,}")
+  private Long userId;
+  
 	@Inject
 	private UserController userController;
 
@@ -59,15 +56,15 @@ public class UsersProfileBackingBean {
 	@Inject
 	private SessionShoppingCartController sessionShoppingCartController;
 
-	@URLAction
-	public void init() throws FileNotFoundException {
+	@RequestAction 
+	public String init() throws FileNotFoundException {
 		User user = userController.findUserById(getUserId());
 		if (user == null) {
-			throw new FileNotFoundException();
+		  return "/error/not-found.jsf";
 		}
 		
 		if (user.getArchived()) {
-		  throw new FileNotFoundException();
+      return "/error/not-found.jsf";
 		}
 		
 		StringBuilder fullNameBuilder = new StringBuilder();
@@ -120,6 +117,8 @@ public class UsersProfileBackingBean {
 				StringUtils.isNotBlank(contactFieldTwitter)||
 				StringUtils.isNotBlank(contactFieldLinkedIn)||
 				StringUtils.isNotBlank(contactFieldGooglePlus);
+		
+		return null;
 	}
 	
 	private String getContactField(User user, UserContactFieldType contactFieldType) {
@@ -252,7 +251,6 @@ public class UsersProfileBackingBean {
 		return forumMostActiveInTopicUrl;
 	}
 	
-	private Long userId;
 	private String fullName;
 	private String about;
 	private Long forumTotalPosts;
