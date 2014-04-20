@@ -35,6 +35,10 @@ public class SecureInterceptor implements Serializable {
 	@AroundInvoke
 	public Object aroundInvoke(InvocationContext ic) throws Exception {
 		Secure secure = ic.getMethod().getAnnotation(Secure.class);
+		if (secure == null) {
+		  secure = ic.getMethod().getDeclaringClass().getAnnotation(Secure.class);
+		}
+		
 		Permission permission = secure.value();
 		if (sessionController.hasLoggedUserPermission(permission)) {
 			if (invokePermissionChecks(permission, ic.getMethod(), ic.getParameters())) {
