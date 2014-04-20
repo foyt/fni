@@ -6,6 +6,10 @@
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['error.notFound.title']}</ui:define>
+    
+  <ui:define name="metadata">
+    <f:event type="preRenderView" listener="#{errorNotFoundBackingBean.preRenderListener}"/>
+  </ui:define>
   
   <ui:define name="view-stylesheets">
     <h:outputStylesheet library="novus" name="css/error.css"/>
