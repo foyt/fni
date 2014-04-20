@@ -18,20 +18,18 @@ import fi.foyt.fni.security.Secure;
 @RequestScoped
 @Named
 @Join (path = "/admin/debug-timer-results", to = "/admin/debug-timer-results.jsf")
+@LoggedIn
+@Secure (Permission.SYSTEM_ADMINISTRATION)
 public class DebugTimerResultsBackingBean {
   
   @Inject
   private DebugTimerResults debugTimerResults;
 
-  @LoggedIn
-  @Secure (Permission.SYSTEM_ADMINISTRATION)
-	public List<RequestStats> getRequestStats() {
+  public List<RequestStats> getRequestStats() {
     return debugTimerResults.getRequestStats();
   }
 
-  @LoggedIn
-  @Secure (Permission.SYSTEM_ADMINISTRATION)
-	public String getHumanReadableDuration(long mills) {
+  public String getHumanReadableDuration(long mills) {
 	  return DurationFormatUtils.formatDuration(mills, "s's' S'ms'", false);
 	}
   
