@@ -10,11 +10,9 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.scribe.model.Token;
-
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
 
 import fi.foyt.fni.dropbox.DropboxController;
 import fi.foyt.fni.dropbox.DropboxManager;
@@ -27,13 +25,8 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { 
-  @URLMapping(
-	  id = "forge-connect-dropbox", 
-		pattern = "/forge/connect-dropbox", 
-		viewId = "/forge/connect-dropbox.jsf"
-  )
-})
+@Join (path = "/forge/connect-dropbox", to = "/forge/connect-dropbox.jsf")
+@LoggedIn
 public class ForgeConnectDropboxBackingBean {
 
   @Inject
@@ -45,8 +38,7 @@ public class ForgeConnectDropboxBackingBean {
   @Inject
   private DropboxController dropboxController;
 
-	@URLAction
-	@LoggedIn
+  @RequestAction
 	public String load() throws IOException {
 		// TODO: Proper error handling
 		
