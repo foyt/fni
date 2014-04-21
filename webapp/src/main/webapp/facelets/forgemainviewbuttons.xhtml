@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:panelGroup layout="block" styleClass="grid_16 tight">
+    <h:form>
+      <!-- Buttons -->
+
+      <h:panelGroup layout="block" styleClass="grid_8 alpha slim-right">
+        <h:panelGroup layout="block" styleClass="forge-button-panel">
+          <h:panelGroup layout="block" styleClass="forge-menu forge-new-material-menu">
+            <a href="javascript:void(null)">#{locales['forge.index.newMaterialMenu']}</a>
+            <h:panelGroup layout="block" styleClass="forge-menu-help">#{locales['forge.index.newMaterialMenuHelp']}</h:panelGroup>
+            <h:panelGroup layout="block" styleClass="forge-menu-items">
+              <h:commandLink action="#{forgeMaterialsBackingBean.createNewDocument(folderId)}">#{locales['forge.index.newMaterialDocumentMenu']}</h:commandLink>
+              <h:commandLink action="#{forgeMaterialsBackingBean.createNewVectorImage(folderId)}">#{locales['forge.index.newMaterialVectorImageMenu']}</h:commandLink>
+              <a class="forge-new-material-folder" href="javascript:void(null)" data-parent-folder-id="#{folderId}">#{locales['forge.index.newMaterialCreateFolderMenu']}</a>
+            </h:panelGroup>
+          </h:panelGroup>
+        </h:panelGroup>
+      </h:panelGroup>
+
+      <h:panelGroup layout="block" styleClass="grid_8 omega slim-left">
+        <h:panelGroup layout="block" styleClass="forge-button-panel">
+          <h:panelGroup layout="block" styleClass="forge-menu forge-import-material-menu">
+            <a href="javascript:void(null)">#{locales['forge.index.importMaterialMenu']}</a>
+            <h:panelGroup layout="block" styleClass="forge-menu-help">#{locales['forge.index.importMaterialMenuHelp']}</h:panelGroup>
+            <h:panelGroup layout="block" styleClass="forge-menu-items">
+              <h:link outcome="/forge/upload.jsf" rendered="#{folderId ne null}">
+                  #{locales['forge.index.importMaterialUploadMenu']}
+                  <f:param name="parentFolderId" value="#{folderId}" />
+              </h:link>
+
+              <h:link outcome="/forge/upload.jsf" rendered="#{folderId eq null}">
+                  #{locales['forge.index.importMaterialUploadMenu']}
+                </h:link>
+
+              <h:link outcome="/forge/import-google-drive.jsf" rendered="#{folderId ne null}">
+                <f:param name="parentFolderId" value="#{folderId}" />
+                  #{locales['forge.index.importMaterialGoogleDocumentsMenu']}
+                </h:link>
+
+              <h:link outcome="/forge/import-google-drive.jsf" rendered="#{folderId eq null}">
+                  #{locales['forge.index.importMaterialGoogleDocumentsMenu']}
+                </h:link>
+
+              <h:link rendered="#{!dropboxLinked}" outcome="/forge/connect-dropbox.jsf">#{locales['forge.index.importMaterialConnectDropboxMenu']}</h:link>
+            </h:panelGroup>
+          </h:panelGroup>
+        </h:panelGroup>
+      </h:panelGroup>
+    </h:form>
+  </h:panelGroup>
+
+</ui:composition>

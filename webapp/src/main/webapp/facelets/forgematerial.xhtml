@@ -5,17 +5,17 @@
   
   <h:panelGroup layout="block" styleClass="forge-material"> 
     <h:panelGroup layout="block" styleClass="forge-material-icon"> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeIndexBackingBean.getMaterialIcon(material.type)}.png"/> 
+      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
     </h:panelGroup>
 
     <h:panelGroup layout="block" styleClass="forge-material-info">
       <h:panelGroup layout="block" styleClass="forge-material-title-container">
-        <h:outputLink styleClass="forge-material-title" value="#{request.contextPath}/forge/#{forgeIndexBackingBean.getMaterialViewer(material)}/#{material.path}" title="#{material.title}">
+        <h:outputLink styleClass="forge-material-title" value="#{request.contextPath}/forge/#{forgeMaterialsBackingBean.getMaterialViewer(material)}/#{material.path}" title="#{material.title}">
           #{material.title.length() gt 30 ? material.title.substring(0, 27).concat('...') : material.title}
         </h:outputLink>
         
-        <h:commandLink action="#{forgeIndexBackingBean.starMaterial(material.id)}" styleClass="forge-material-star" style="#{!forgeIndexBackingBean.isStarred(material.id) ? '' : 'display: none'}"/>
-        <h:commandLink action="#{forgeIndexBackingBean.unstarMaterial(material.id)}" styleClass="forge-material-star forge-material-starred" rendered="#{forgeIndexBackingBean.isStarred(material.id)}" style="#{forgeIndexBackingBean.isStarred(material.id) ? '' : 'display: none'}"/>
+        <h:commandLink action="#{forgeMaterialsBackingBean.starMaterial(material.id)}" styleClass="forge-material-star" style="#{!forgeMaterialsBackingBean.isStarred(material.id) ? '' : 'display: none'}"/>
+        <h:commandLink action="#{forgeMaterialsBackingBean.unstarMaterial(material.id)}" styleClass="forge-material-star forge-material-starred" rendered="#{forgeMaterialsBackingBean.isStarred(material.id)}" style="#{forgeMaterialsBackingBean.isStarred(material.id) ? '' : 'display: none'}"/>
       </h:panelGroup>
       
       <h:panelGroup layout="block" styleClass="forge-material-date-container">
@@ -34,42 +34,42 @@
     </h:panelGroup>
     
     <h:panelGroup layout="block" styleClass="forge-material-actions">
-      <h:panelGroup layout="block" styleClass="forge-material-action-edit" rendered="#{forgeIndexBackingBean.getMaterialEditable(material)}">
-        <h:outputLink value="#{request.contextPath}/forge/#{forgeIndexBackingBean.getMaterialViewer(material)}/#{material.path}">
+      <h:panelGroup layout="block" styleClass="forge-material-action-edit" rendered="#{forgeMaterialsBackingBean.getMaterialEditable(material)}">
+        <h:outputLink value="#{request.contextPath}/forge/#{forgeMaterialsBackingBean.getMaterialViewer(material)}/#{material.path}">
           <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-edit.png"/> 
           <h:outputLabel value="#{locales['forge.index.materialEditLink']}" />
         </h:outputLink>
       </h:panelGroup>
       
-      <h:panelGroup layout="block" styleClass="forge-material-action-view" rendered="#{!forgeIndexBackingBean.getMaterialEditable(material)}">
-        <h:outputLink value="#{request.contextPath}/forge/#{forgeIndexBackingBean.getMaterialViewer(material)}/#{material.path}">
+      <h:panelGroup layout="block" styleClass="forge-material-action-view" rendered="#{!forgeMaterialsBackingBean.getMaterialEditable(material)}">
+        <h:outputLink value="#{request.contextPath}/forge/#{forgeMaterialsBackingBean.getMaterialViewer(material)}/#{material.path}">
           <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-view.png"/> 
           <h:outputLabel value="#{locales['forge.index.materialViewLink']}" />
         </h:outputLink>
       </h:panelGroup>
 
-      <h:panelGroup layout="block" styleClass="forge-material-action-delete" rendered="#{forgeIndexBackingBean.getMaterialDeletable(material)}">
+      <h:panelGroup layout="block" styleClass="forge-material-action-delete" rendered="#{forgeMaterialsBackingBean.getMaterialDeletable(material)}">
         <a href="javascript:void(null)" data-material-id="#{material.id}">
           <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-delete.png"/>
           <h:outputLabel value="#{locales['forge.index.materialDeleteLink']}" />
         </a>
       </h:panelGroup>
 
-      <h:panelGroup layout="block" styleClass="forge-material-action-print-pdf" rendered="#{forgeIndexBackingBean.getMaterialPrintableAsPdf(material)}">
+      <h:panelGroup layout="block" styleClass="forge-material-action-print-pdf" rendered="#{forgeMaterialsBackingBean.getMaterialPrintableAsPdf(material)}">
         <a href="javascript:void(null)" data-material-id="#{material.id}">
           <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-print-pdf.png"/>
           <h:outputLabel value="#{locales['forge.index.materialPrintPdfLink']}" />
         </a>
       </h:panelGroup>
 
-      <h:panelGroup layout="block" styleClass="forge-material-action-move" rendered="#{forgeIndexBackingBean.getMaterialMovable(material)}">
+      <h:panelGroup layout="block" styleClass="forge-material-action-move" rendered="#{forgeMaterialsBackingBean.getMaterialMovable(material)}">
         <a href="javascript:void(null)" data-material-id="#{material.id}">
           <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-move.png"/>
           <h:outputLabel value="#{locales['forge.index.materialMoveLink']}" />
         </a>
       </h:panelGroup>
 
-      <h:panelGroup layout="block" styleClass="forge-material-action-share" rendered="#{forgeIndexBackingBean.getMaterialShareable(material)}">
+      <h:panelGroup layout="block" styleClass="forge-material-action-share" rendered="#{forgeMaterialsBackingBean.getMaterialShareable(material)}">
         <a href="javascript:void(null)" data-material-id="#{material.id}">
           <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-share.png"/>
           <h:outputLabel value="#{locales['forge.index.materialShareLink']}" />

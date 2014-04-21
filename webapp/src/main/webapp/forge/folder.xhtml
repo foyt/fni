@@ -31,7 +31,9 @@
     <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
       <!-- Navigation -->
 
-      <ui:include src="/facelets/forgenavigation.xhtml"></ui:include>
+      <ui:include src="/facelets/forgenavigation.xhtml">    
+        <ui:param name="folders" value="#{forgeFolderBackingBean.folders}"/>
+      </ui:include>
       
       <!-- Description -->
   
@@ -52,16 +54,17 @@
     <!-- Content -->
     
     <ui:include src="/facelets/forgemainviewbuttons.xhtml">
-      <ui:param name="folderId" value="#{forgeIndexBackingBean.folderId}"/>
-      <ui:param name="dropboxLinked" value="#{forgeIndexBackingBean.dropboxLinked}"/>
+      <ui:param name="folderId" value="#{forgeFolderBackingBean.folderId}"/>
+      <ui:param name="dropboxLinked" value="#{forgeFolderBackingBean.dropboxLinked}"/>
     </ui:include>
     
     <ui:include src="/facelets/forgemainviewmaterials.xhtml">
-      <ui:param name="materials" value="#{forgeIndexBackingBean.materials}"/>
-      <ui:param name="lastEditedMaterials" value="#{forgeIndexBackingBean.lastEditedMaterials}"/>
-      <ui:param name="lastViewedMaterials" value="#{forgeIndexBackingBean.lastViewedMaterials}"/>
-      <ui:param name="starredMaterials" value="#{forgeIndexBackingBean.starredMaterials}"/>
+      <ui:param name="materials" value="#{forgeFolderBackingBean.materials}"/>
+      <ui:param name="lastEditedMaterials" value="#{forgeFolderBackingBean.lastEditedMaterials}"/>
+      <ui:param name="lastViewedMaterials" value="#{forgeFolderBackingBean.lastViewedMaterials}"/>
+      <ui:param name="starredMaterials" value="#{forgeFolderBackingBean.starredMaterials}"/>
     </ui:include>
+    
   </ui:define>
 
 </ui:composition>
