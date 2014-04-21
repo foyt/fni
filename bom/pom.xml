@@ -93,6 +93,7 @@
     <commons-compress.version>1.5</commons-compress.version>
     <commons-io.version>2.2</commons-io.version>
     <commons-collections.version>3.2.1</commons-collections.version>
+    <httpcomponents.version>4.1.2</httpcomponents.version>
     
     <!-- Jackson -->
     
@@ -302,7 +303,21 @@
         <groupId>org.codehaus.jackson</groupId>
         <artifactId>jackson-core-asl</artifactId>
         <version>${jackson.version}</version>
-      </dependency>      
+      </dependency>  
+
+      <!-- Http components -->
+ 
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpcore</artifactId>
+        <version>${httpcomponents.version}</version>
+      </dependency>
+  
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>${httpcomponents.version}</version>
+      </dependency>    
 
     </dependencies>
   </dependencyManagement>
