@@ -7,9 +7,10 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
@@ -20,34 +21,32 @@ import fi.foyt.fni.users.UserController;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { 
-  @URLMapping(
-	  id = "admin-archive-user", 
-		pattern = "/admin/archive-user/#{adminArchiveUserBackingBean.userId}", 
-		viewId = "/admin/archive-user.jsf"
-  )
-})
+@Join (path = "/admin/archive-user/{userId}", to = "/admin/archive-user.jsf")
+@LoggedIn
+@Secure (Permission.SYSTEM_ADMINISTRATION)
 public class AdminArchiveUserBackingBean {
+  
+  @Parameter
+  @Matches ("[0-9]{1,}")
+  private Long userId;
   
   @Inject
   private UserController userController;
   
-	@URLAction
-	@LoggedIn
-	@Secure (Permission.SYSTEM_ADMINISTRATION)
+	@RequestAction
 	public String load() throws FileNotFoundException {
 	  if (getUserId() == null) {
-	    throw new FileNotFoundException();
+      return "/error/not-found.jsf";
 	  }
 	  
 	  User user = userController.findUserById(getUserId());
 	  if (user == null) {
-      throw new FileNotFoundException();
+      return "/error/not-found.jsf";
 	  }
 	  
 	  userController.archiveUser(user);
 	  
-	  return "/index.jsf";
+	  return "/index.jsf?faces-redirect=true";
 	}
 	
 	public Long getUserId() {
@@ -57,6 +56,4 @@ public class AdminArchiveUserBackingBean {
 	public void setUserId(Long userId) {
     this.userId = userId;
   }
-	
-  private Long userId;
 }
