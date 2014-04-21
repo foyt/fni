@@ -7,7 +7,7 @@
   <name>Forge &amp; Illusion - Parent</name>
   <description>Forge &amp; Illusion - parent pom.xml</description>
   <url>https://github.com/foyt/fni</url>
-  
+
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
@@ -18,18 +18,18 @@
     <name>Foyt</name>
     <url>www.foyt.fi</url>
   </organization>
-  
+
   <scm>
     <developerConnection>scm:git:git@github.com:foyt/fni.git</developerConnection>
     <url>git@github.com:foyt/fni.git</url>
     <connection>scm:git:git@github.com:foyt/fni.git</connection>
   </scm>
-  
+
   <issueManagement>
     <system>GitHub</system>
     <url>https://github.com/foyt/fni/issues</url>
   </issueManagement>
-  
+
   <licenses>
     <license>
       <name>GNU General Public License, Version 3</name>
@@ -37,7 +37,7 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  
+
   <developers>
     <developer>
       <id>anttileppa</id>
@@ -53,26 +53,20 @@
 
   <properties>
     <!-- Project -->
-    
+
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    
+
     <!-- Maven -->
-    
+
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
-    
-    <!-- JBoss -->
-    
-    <jboss.home>${env.JBOSS_HOME}</jboss.home>
-    <jboss.domain>default</jboss.domain>
-    <jboss.version>7.1.1.Final</jboss.version>
-    
+
     <!-- Hibernate -->
-    
+
     <hibernate-jpamodelgen.version>1.2.0.Final</hibernate-jpamodelgen.version>
     <hibernate-instrumentation.version>4.0.1.Final</hibernate-instrumentation.version>
   </properties>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -82,15 +76,6 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-      
-      <dependency>
-        <groupId>org.jboss.as</groupId>
-        <artifactId>jboss-as-parent</artifactId>
-        <version>${jboss.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      
     </dependencies>
   </dependencyManagement>
 
@@ -144,24 +129,24 @@
     </repository>
 
     <!-- CNGram -->
-    
+
     <repository>
       <id>ObjectWEB</id>
       <name>ObjectWEB</name>
       <url>http://maven.ow2.org/maven2/</url>
     </repository>
-    
+
     <repository>
       <id>sonatype-nexus-snapshots</id>
       <name>Sonatype Nexus Snapshots</name>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
   </repositories>
-  
+
   <modules>
     <module>webapp</module>
     <module>bom</module>
     <module>persistence</module>
   </modules>
-  
+
 </project>
