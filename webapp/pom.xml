@@ -89,15 +89,15 @@
       <groupId>org.ocpsoft.rewrite</groupId>
       <artifactId>rewrite-servlet</artifactId>
     </dependency>
-    
+
     <dependency>
-       <groupId>org.ocpsoft.rewrite</groupId>
-       <artifactId>rewrite-integration-faces</artifactId>
+      <groupId>org.ocpsoft.rewrite</groupId>
+      <artifactId>rewrite-integration-faces</artifactId>
     </dependency>
-    
+
     <dependency>
-       <groupId>org.ocpsoft.rewrite</groupId>
-       <artifactId>rewrite-integration-cdi</artifactId>
+      <groupId>org.ocpsoft.rewrite</groupId>
+      <artifactId>rewrite-integration-cdi</artifactId>
     </dependency>
 
     <dependency>
@@ -134,10 +134,16 @@
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
-      
+
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
       <scope>provided</scope>
     </dependency>
 
@@ -178,8 +184,6 @@
     <dependency>
       <groupId>net.sourceforge.cssparser</groupId>
       <artifactId>cssparser</artifactId>
-      <type>jar</type>
-      <scope>compile</scope>
     </dependency>
 
     <!-- Diff patch match -->
@@ -238,12 +242,26 @@
       <artifactId>hibernate-search-orm</artifactId>
       <scope>provided</scope>
     </dependency>
-    
+
     <!-- Lucene Highlighter -->
-    
+
     <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-highlighter</artifactId>
+    </dependency>
+
+    <!-- Jackson -->
+
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-core-asl</artifactId>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -304,7 +322,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Dependencies>org.hibernate.search.orm services,org.apache.commons.io</Dependencies>
+              <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.codehaus.jackson.jackson-core-asl</Dependencies>
             </manifestEntries>
           </archive>
         </configuration>

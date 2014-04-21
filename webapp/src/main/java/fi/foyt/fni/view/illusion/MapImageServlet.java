@@ -16,7 +16,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 
 import fi.foyt.fni.view.AbstractFileServlet;
 
@@ -59,7 +58,7 @@ public class MapImageServlet extends AbstractFileServlet {
 	          inputStream.close();
 	        }
 	      } finally {
-	        EntityUtils.consume(entity);
+	        entity.consumeContent();
 	      }
 	    break;
 	    case 404:
