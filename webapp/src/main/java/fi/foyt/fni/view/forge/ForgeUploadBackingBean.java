@@ -7,10 +7,9 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
-import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialPermissionController;
@@ -22,15 +21,13 @@ import fi.foyt.fni.session.SessionController;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { 
-  @URLMapping(
-	  id = "forge-upload", 
-		pattern = "/forge/upload", 
-		viewId = "/forge/upload.jsf"
-  )
-})
+@Join (path = "/forge/upload", to = "/forge/upload.jsf")
+@LoggedIn
 public class ForgeUploadBackingBean {
 
+  @Parameter
+  private Long parentFolderId;
+  
   @Inject
   private FolderController folderController;
 
@@ -40,8 +37,7 @@ public class ForgeUploadBackingBean {
   @Inject
   private MaterialPermissionController materialPermissionController;
 
-	@URLAction
-	@LoggedIn
+	@RequestAction
 	public void load() throws FileNotFoundException {
     if (parentFolderId != null) {
       Folder parentFolder = parentFolderId != null ? folderController.findFolderById(parentFolderId) : null;
@@ -62,7 +58,4 @@ public class ForgeUploadBackingBean {
 	public void setParentFolderId(Long parentFolderId) {
     this.parentFolderId = parentFolderId;
   }
-
-  @URLQueryParameter ("parentFolderId")
-  private Long parentFolderId;
 }
