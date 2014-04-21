@@ -134,6 +134,12 @@
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
+      
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
     <!-- FnI -->
 
@@ -298,7 +304,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Dependencies>org.hibernate.search.orm services</Dependencies>
+              <Dependencies>org.hibernate.search.orm services,org.apache.commons.io</Dependencies>
             </manifestEntries>
           </archive>
         </configuration>
