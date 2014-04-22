@@ -449,6 +449,7 @@
               <autocommit>true</autocommit>
               <srcFiles>
                 <srcFile>src/test/resources/create.sql</srcFile>
+                <srcFile>src/test/resources/data.sql</srcFile>
               </srcFiles>
             </configuration>
           </execution>
