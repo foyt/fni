@@ -34,4 +34,9 @@ public abstract class AbstractUITest extends AbstractTest {
       .click();
   }
   
+  protected void testAccessDenied(RemoteWebDriver driver, String view) {
+    driver.get(getAppUrl() + view);
+    assertEquals("Access Denied!", driver.getTitle());
+  }
+  
 }

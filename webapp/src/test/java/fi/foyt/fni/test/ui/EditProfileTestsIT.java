@@ -25,8 +25,7 @@ public class EditProfileTestsIT extends AbstractUITest {
     ChromeDriver driver = new ChromeDriver();
     try {
       loginInternal(driver, "guest@foyt.fi", "pass");
-      driver.get(getAppUrl() + "/editprofile");
-      assertEquals("Access Denied!", driver.getTitle());
+      testAccessDenied(driver, "/editprofile");
     } finally {
       driver.close();
     }
