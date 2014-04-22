@@ -22,3 +22,29 @@ values
   (3, '1a1dc91c907325c69271ddf0c944bc72', true, 3),
   (4, '1a1dc91c907325c69271ddf0c944bc72', true, 4);
   
+insert into   
+  Material (id, created, modified, publicity, title, type, urlName, creator_id, modifier_id, parentFolder_id)
+values 
+  (1, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Folder', 'FOLDER', 'folder', 2, 2, null);
+insert into Folder (id) values (1);
+  
+insert into   
+  Material (id, created, modified, publicity, title, type, urlName, creator_id, modifier_id, parentFolder_id)
+values   
+  (2, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Subfolder', 'FOLDER', 'subfolder', 2, 2, 1);
+  
+insert into Folder (id) values (2);
+  
+insert into   
+  Material (id, created, modified, publicity, title, type, urlName, creator_id, modifier_id, parentFolder_id)
+values 
+  (3, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Document', 'DOCUMENT', 'document', 2, 2, null),
+  (4, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Document in Folder', 'DOCUMENT', 'document_in_folder', 2, 2, 1),
+  (5, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Document in Subfolder', 'DOCUMENT', 'document_in_subfolder', 2, 2, 2);
+  
+insert into 
+  Document (id, data)
+values 
+  (3, '<p>Document in root</p>'), 
+  (4, '<p>Document in folder</p>'), 
+  (5, '<p>Document in subfolder</p>');
