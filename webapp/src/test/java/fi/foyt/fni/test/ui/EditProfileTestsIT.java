@@ -1,19 +1,35 @@
 package fi.foyt.fni.test.ui;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class EditProfileTestsIT extends AbstractUITest {
   
   public EditProfileTestsIT() {
-    driver = new ChromeDriver();
   }
 
   @Test
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(driver, "/editprofile");
+    ChromeDriver driver = new ChromeDriver();
+    try {
+      testLoginRequired(driver, "/editprofile");
+    } finally {
+      driver.close();
+    }
   }
   
-  private RemoteWebDriver driver; 
+  @Test
+  public void testGuest() throws Exception {
+    ChromeDriver driver = new ChromeDriver();
+    try {
+      loginInternal(driver, "guest@foyt.fi", "pass");
+      driver.get(getAppUrl() + "/editprofile");
+      assertEquals("Access Denied!", driver.getTitle());
+    } finally {
+      driver.close();
+    }
+  }
+  
 }
