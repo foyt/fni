@@ -16,10 +16,8 @@ import javax.inject.Named;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
@@ -38,13 +36,9 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @RequestScoped
 @Stateful
 @Named
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "users-edit-profile", 
-		pattern = "/editprofile", 
-		viewId = "/users/editprofile.jsf"
-  )
-})
+@Join (path = "/editprofile", to = "/users/editprofile.jsf")
+@LoggedIn
+@Secure (Permission.PROFILE_UPDATE)
 public class EditProfileBackingBean {
 
 	@Inject
@@ -56,9 +50,7 @@ public class EditProfileBackingBean {
 	@Inject
 	private AuthenticationController authenticationController;
 	
-	@LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
-	@URLAction
+	@RequestAction
 	public void load() throws IOException {
 		User loggedUser = sessionController.getLoggedUser();
 		firstName = loggedUser.getFirstName();
@@ -265,26 +257,18 @@ public class EditProfileBackingBean {
 		this.contactInfoFieldGooglePlus = contactInfoFieldGooglePlus;
 	}
 	
-	@LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public List<SelectItem> getAddAuthenticationSourcesSelectItems() {
 		return addAuthenticationSourcesSelectItems;
 	}
 	
-	@LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public void enableFacebookAuthSource() throws IOException {
 		enableAuthSource(AuthSource.FACEBOOK);
 	}
 	
-	@LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public void enableGoogleAuthSource() throws IOException {
 		enableAuthSource(AuthSource.GOOGLE);
 	}
 	
-	@LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public void enableYahooAuthSource() throws IOException {
 		enableAuthSource(AuthSource.YAHOO);
 	}
@@ -320,8 +304,6 @@ public class EditProfileBackingBean {
 		}
 	}
 	
-	@LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public String addNewInternalAuthencationSource() {
 		if (StringUtils.isBlank(getNewInternalAuthencationSourcePassword1())||DigestUtils.md5Hex("").equals(getNewInternalAuthencationSourcePassword1())) {
 			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.editProfile.addInternalAuthenticationSourcePasswordRequired"));
@@ -337,8 +319,6 @@ public class EditProfileBackingBean {
 		return "pretty:";
 	}
 	
-	@LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public void removeAuthenticationSource(Long userIdentifierId) {
 		UserIdentifier userIdentifier = authenticationController.findUserIdentifierById(userIdentifierId);
 		if (userIdentifier != null) {
@@ -346,8 +326,6 @@ public class EditProfileBackingBean {
 		}
 	}
 
-	@LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public void save() {
 		User loggedUser = sessionController.getLoggedUser();
 		
@@ -366,8 +344,6 @@ public class EditProfileBackingBean {
     FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.savedMessage"));
 	}
 	
-	@LoggedIn
-	@Secure (Permission.PROFILE_UPDATE)
 	public void changePassword() {
 		if (StringUtils.isBlank(getChangePassword1()) || DigestUtils.md5Hex("").equals(getChangePassword1())) {
       FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.editProfile.changePasswordPasswordRequired"));
