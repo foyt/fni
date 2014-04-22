@@ -48,3 +48,11 @@ values
   (3, '<p>Document in root</p>'), 
   (4, '<p>Document in folder</p>'), 
   (5, '<p>Document in subfolder</p>');
+
+insert into 
+  UserMaterialRole (role, material_id, user_id)
+values 
+  ('MAY_VIEW', 3, 3),
+  ('MAY_EDIT', 3, 4),	
+  ('MAY_VIEW', 1, 3),
+  ('MAY_EDIT', 1, 4);
