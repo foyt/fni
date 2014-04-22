@@ -17,6 +17,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -65,16 +66,19 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
           // but was not logged in.
           // Redirecting user into login form
           try {
-            String redirectUrl = null;
-
-            PrettyContext prettyContext = PrettyContext.getCurrentInstance();
-            if (prettyContext != null) {
-              redirectUrl = new StringBuilder(externalContext.getRequestContextPath()).append(prettyContext.getRequestURL().toString())
-                  .append(prettyContext.getRequestQueryString().toQueryString()).toString();
-            }
-
+            HttpServletRequest httpServletRequest = (HttpServletRequest) externalContext.getRequest();
+            String redirectUrl = (String) httpServletRequest.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
             StringBuilder redirectBuilder = new StringBuilder().append(externalContext.getRequestContextPath()).append("/login/");
 
+            if (StringUtils.isBlank(redirectUrl)) {
+              PrettyContext prettyContext = PrettyContext.getCurrentInstance();
+              if (prettyContext != null) {
+                redirectUrl = new StringBuilder(externalContext.getRequestContextPath())
+                  .append(prettyContext.getRequestURL().toString())
+                  .append(prettyContext.getRequestQueryString().toQueryString()).toString();
+              }
+            }
+            
             if (StringUtils.isNotBlank(redirectUrl)) {
               redirectBuilder.append("?redirectUrl=" + URLEncoder.encode(redirectUrl, "UTF-8"));
             }
