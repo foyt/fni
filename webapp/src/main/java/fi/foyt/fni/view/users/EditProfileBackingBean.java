@@ -18,6 +18,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.RequestAction;
+import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
@@ -50,7 +51,8 @@ public class EditProfileBackingBean {
 	@Inject
 	private AuthenticationController authenticationController;
 	
-	@RequestAction
+	@RequestAction 
+	@Deferred
 	public void load() throws IOException {
 		User loggedUser = sessionController.getLoggedUser();
 		firstName = loggedUser.getFirstName();
