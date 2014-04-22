@@ -68,7 +68,7 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
           try {
             HttpServletRequest httpServletRequest = (HttpServletRequest) externalContext.getRequest();
             String redirectUrl = (String) httpServletRequest.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
-            StringBuilder redirectBuilder = new StringBuilder().append(externalContext.getRequestContextPath()).append("/login/");
+            StringBuilder redirectBuilder = new StringBuilder().append(externalContext.getRequestContextPath()).append("/login");
 
             if (StringUtils.isBlank(redirectUrl)) {
               PrettyContext prettyContext = PrettyContext.getCurrentInstance();
