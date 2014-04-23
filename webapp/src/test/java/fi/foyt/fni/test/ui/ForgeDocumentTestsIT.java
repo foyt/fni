@@ -43,6 +43,22 @@ public class ForgeDocumentTestsIT extends AbstractUITest {
   }
   
   @Test
+  public void testNotFound() throws Exception {
+    ChromeDriver driver = new ChromeDriver();
+    try {
+      loginInternal(driver, "user@foyt.fi", "pass");
+      testNotFound(driver, "/forge/documents/2/folder/subfolder");
+      testNotFound(driver, "/forge/documents//document");
+      testNotFound(driver, "/forge/documents/a/document");
+      testNotFound(driver, "/forge/documents/2");
+      testNotFound(driver, "/forge/documents/2/");
+      testNotFound(driver, "/forge/documents/2/*");
+    } finally {
+      driver.close();
+    }
+  }
+  
+  @Test
   public void testMayView() {
     ChromeDriver driver = new ChromeDriver();
     try {
