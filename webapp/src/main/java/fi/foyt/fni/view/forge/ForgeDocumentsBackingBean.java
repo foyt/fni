@@ -9,9 +9,11 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
+import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
@@ -19,23 +21,24 @@ import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 
-@SuppressWarnings("el-syntax")
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { 
-	@URLMapping(
-	  id = "forge-documents", 
-		pattern = "/forge/documents/#{forgeDocumentsBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\\\-\\:\\,]*/ forgeDocumentsBackingBean.urlPath }", 
-		viewId = "/forge/documents.jsf"
-  ) 
-})
+@Join (path = "/forge/documents/{ownerId}/{urlPath}", to = "/forge/documents.jsf")
+@LoggedIn
 public class ForgeDocumentsBackingBean {
-	
+  
+  @Parameter
+  @Matches ("[0-9]{1,}")
+  private Long ownerId;
+
+  @Parameter
+  @Matches ("[a-zA-Z0-9_\\/.-\\:,]{1,}")
+  private String urlPath;
+  
 	@Inject
 	private SessionController sessionController;
 	
@@ -45,11 +48,11 @@ public class ForgeDocumentsBackingBean {
   @Inject
 	private MaterialPermissionController materialPermissionController;
 	
-	@URLAction
-	@LoggedIn
-	public void load() throws FileNotFoundException {
+	@RequestAction
+	@Deferred
+	public String load() throws FileNotFoundException {
 		if ((getOwnerId() == null)||(getUrlPath() == null)) {
-			throw new FileNotFoundException();
+			return "/error/not-found.jsf";
 		}
 		
 		String completePath = "/materials/" + getOwnerId() + "/" + getUrlPath();
@@ -57,11 +60,11 @@ public class ForgeDocumentsBackingBean {
 		User loggedUser = sessionController.getLoggedUser();
 		
 		if (!(material instanceof Document)) {
-			throw new FileNotFoundException();
+      return "/error/not-found.jsf";
 		}
 		
 		if (!materialPermissionController.hasAccessPermission(loggedUser, material)) {
-		  throw new ForbiddenException();
+      return "/error/access-denied.jsf";
 		}
 		
 		readOnly = !materialPermissionController.hasModifyPermission(loggedUser, material);
@@ -69,6 +72,8 @@ public class ForgeDocumentsBackingBean {
 		documentTitle = material.getTitle();
 		folders = ForgeViewUtils.getParentList(material);
 		documentReadOnlyLink = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + completePath;
+		
+		return null;
 	}
 	
 	public Long getOwnerId() {
@@ -107,8 +112,6 @@ public class ForgeDocumentsBackingBean {
     return documentReadOnlyLink;
   }
 	
-	private Long ownerId;
-	private String urlPath;
 	private Long materialId;
 	private String documentTitle;
 	private List<Folder> folders;
