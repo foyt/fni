@@ -14,7 +14,11 @@ import fi.foyt.fni.test.AbstractTest;
 public abstract class AbstractUITest extends AbstractTest {
   
   protected void testLoginRequired(RemoteWebDriver driver, String path) throws UnsupportedEncodingException {
-    String appUrl = getAppUrl();
+    testLoginRequired(driver, path, false);  
+  }
+  
+  protected void testLoginRequired(RemoteWebDriver driver, String path, boolean secure) throws UnsupportedEncodingException {
+    String appUrl = getAppUrl(secure);
     String ctxPath = getCtxPath();
     driver.get(appUrl + path);
     assertEquals(appUrl + "/login?redirectUrl=" + URLEncoder.encode("/" + ctxPath + path, "UTF-8"), driver.getCurrentUrl());
@@ -33,14 +37,22 @@ public abstract class AbstractUITest extends AbstractTest {
     driver.findElement(By.cssSelector(".user-login-login-panel input[type='submit']"))
       .click();
   }
-  
+
   protected void testAccessDenied(RemoteWebDriver driver, String view) {
-    driver.get(getAppUrl() + view);
+    testAccessDenied(driver, view, false);
+  }
+  
+  protected void testAccessDenied(RemoteWebDriver driver, String view, boolean secure) {
+    driver.get(getAppUrl(secure) + view);
     assertEquals("Access Denied!", driver.getTitle());
   }
   
   protected void testNotFound(RemoteWebDriver driver, String view) {
-    driver.get(getAppUrl() + view);
+    testNotFound(driver, view, false); 
+  }
+  
+  protected void testNotFound(RemoteWebDriver driver, String view, boolean secure) {
+    driver.get(getAppUrl(secure) + view);
     assertEquals("Page Not Found!", driver.getTitle());
   }
   

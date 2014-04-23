@@ -7,15 +7,23 @@ import java.sql.PreparedStatement;
 public abstract class AbstractTest {
   
   protected String getAppUrl() {
-    return "http://" + getHost() + ':' + getPort() + '/' + getCtxPath();
+    return getAppUrl(false); 
+  }
+  
+  protected String getAppUrl(boolean secure) {
+    return (secure ? "https://" : "http://") + getHost() + ':' + (secure ? getPortHttps() : getPortHttp()) + '/' + getCtxPath();
   }
 
   protected String getHost() {
     return System.getProperty("it.host");
   }
 
-  protected int getPort() {
-    return Integer.parseInt(System.getProperty("it.port"));
+  protected int getPortHttp() {
+    return Integer.parseInt(System.getProperty("it.port.http"));
+  }
+
+  protected int getPortHttps() {
+    return Integer.parseInt(System.getProperty("it.port.https"));
   }
 
   protected String getCtxPath() {

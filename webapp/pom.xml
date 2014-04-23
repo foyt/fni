@@ -17,7 +17,8 @@
     <wildfly.home>${project.basedir}/.cargo/extracts/wildfly-8.1.0.CR1/wildfly-8.1.0.CR1</wildfly.home>
     <wildfly.version>8.1.0.CR1</wildfly.version>
     <h2.version>1.4.177</h2.version>
-    <it.port>8080</it.port>
+    <it.port.http>8080</it.port.http>
+    <it.port.https>8443</it.port.https>
     <it.host>dev.forgeandillusion.net</it.host>
     <it.ctx>fnici</it.ctx>
     <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
@@ -315,7 +316,7 @@
     </dependency>
 
   </dependencies>
-  
+   
   <build>
     <pluginManagement>
       <plugins>
@@ -333,6 +334,22 @@
                     <versionRange>[1.1.1,)</versionRange>
                     <goals>
                       <goal>update-stylesheets</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+                
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>keytool-maven-plugin</artifactId>
+                    <version>[1.1.1,)</version>
+                    <goals>
+                      <goal>clean</goal>
+                      <goal>generateKeyPair</goal>
+                      <goal>exportCertificate</goal>
                     </goals>
                   </pluginExecutionFilter>
                   <action>
@@ -400,7 +417,8 @@
             <jboss.home>${wildfly.home}</jboss.home>
             <module.path>${wildfly.home}/modules</module.path>
             <it.host>${it.host}</it.host>
-            <it.port>${it.port}</it.port>
+            <it.port.http>${it.port.http}</it.port.http>
+            <it.port.https>${it.port.https}</it.port.https>
             <it.ctx>${it.ctx}</it.ctx>
             <it.jdbc.driver>${it.jdbc.driver}</it.jdbc.driver>
             <it.jdbc.url>${it.jdbc.url}</it.jdbc.url>
@@ -474,6 +492,67 @@
           </execution>
         </executions>
       </plugin>
+      
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>keytool-maven-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <id>keyclean</id>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <configuration>
+              <keystore>${project.build.directory}/fnici.keystore</keystore>
+            </configuration>
+          </execution>
+          <execution> 
+            <phase>generate-resources</phase>
+            <id>genkey</id>
+            <goals>
+              <goal>generateKeyPair</goal>
+            </goals>
+            <configuration>
+              <keystore>${project.build.directory}/fnici.keystore</keystore>
+              <dname>cn=${it.host}, ou=None, L=Test, ST=Test, o=Test, c=TE</dname>
+              <storepass>storepass</storepass>
+              <alias>fnici</alias>
+              <keyalg>RSA</keyalg>
+              <keysize>2048</keysize>
+            </configuration>
+          </execution>
+          <execution>
+            <phase>generate-resources</phase>
+            <id>exportkey</id>
+            <goals>
+              <goal>exportCertificate</goal>
+            </goals>
+            <configuration>
+              <keystore>${project.build.directory}/fnici.keystore</keystore>
+              <alias>fnici</alias>
+              <file>${project.build.directory}/fnici.crt</file>
+              <storepass>storepass</storepass>
+            </configuration>
+          </execution>
+          <execution>
+            <phase>generate-resources</phase>
+            <id>importkey</id>
+            <goals>
+              <goal>importCertificate</goal>
+            </goals>
+            <configuration>
+              <keystore>${project.build.directory}/fnici.keystore</keystore>
+              <alias>root</alias>
+              <file>${project.build.directory}/fnici.crt</file>
+              <storepass>storepass</storepass>
+              <noprompt>true</noprompt>
+              <trustcacerts>true</trustcacerts>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
       <plugin>
         <groupId>org.codehaus.cargo</groupId>
@@ -498,7 +577,7 @@
           </container>
           <configuration>
             <properties>
-              <cargo.servlet.port>${it.port}</cargo.servlet.port>
+              <cargo.servlet.port>${it.port.http}</cargo.servlet.port>
               <cargo.jboss.configuration>standalone</cargo.jboss.configuration>
               <cargo.jvmargs>-Xms64m -Xmx1152m -XX:MaxPermSize=512m -XX:-UseSplitVerifier</cargo.jvmargs>
               <cargo.datasource.datasource.fnici>
@@ -509,14 +588,14 @@
                 cargo.datasource.password=${it.jdbc.password}|
                 cargo.datasource.transactionsupport=LOCAL_TRANSACTION
               </cargo.datasource.datasource.fnici>
-            </properties>
+            </properties>    
           </configuration>
           <deployables>
             <deployable>
               <properties>
                 <context>${it.ctx}</context>
               </properties>
-              <pingURL>http://${it.host}:${it.port}/${it.ctx}</pingURL>
+              <pingURL>http://${it.host}:${it.port.http}/${it.ctx}</pingURL>
               <pingTimeout>600000</pingTimeout>
             </deployable>
           </deployables>
@@ -536,6 +615,31 @@
             <goals>
               <goal>stop</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.wildfly.plugins</groupId>
+        <artifactId>wildfly-maven-plugin</artifactId>
+        <version>1.0.1.Final</version>
+        <executions>
+          <execution>
+            <id>add-https</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>execute-commands</goal>
+            </goals>
+            <configuration>
+              <execute-commands>
+                <batch>true</batch>
+                <commands>
+                  <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
+                  <command>/core-service=management/security-realm=ssl-realm:add()</command>
+                  <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${project.build.directory}/fnici.keystore",keystore-password="storepass",alias="fnici")</command>
+                </commands>
+              </execute-commands>
+            </configuration>
           </execution>
         </executions>
       </plugin>
