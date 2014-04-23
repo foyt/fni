@@ -8,32 +8,34 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.Material;
-import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 
-@SuppressWarnings("el-syntax")
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { 
-	@URLMapping(
-	  id = "forge-images", 
-   	pattern = "/forge/images/#{forgeImagesBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\\\-\\:\\,]*/ forgeImagesBackingBean.urlPath }", 
-		viewId = "/forge/images.jsf"
-  ) 
-})
+@Join ( path = "/forge/images/{ownerId}/{urlPath}", to = "/forge/images.jsf")
+@LoggedIn
 public class ForgeImagesBackingBean {
-	
+
+  @Parameter
+  @Matches ("[0-9]{1,}")
+  private Long ownerId;
+
+  @Parameter
+  @Matches ("[a-zA-Z0-9_\\/.-\\:,]{1,}")
+  private String urlPath;
+  
 	@Inject
 	private MaterialController materialController;
 
@@ -43,28 +45,29 @@ public class ForgeImagesBackingBean {
   @Inject
   private SessionController sessionController;
 	
-	@URLAction
-	@LoggedIn
-	public void load() throws FileNotFoundException {
+	@RequestAction
+	public String load() throws FileNotFoundException {
 		if ((getOwnerId() == null)||(getUrlPath() == null)) {
-			throw new FileNotFoundException();
+			return "/error/not-found.jsf";
 		}
 		
     String completePath = "/materials/" + getOwnerId() + "/" + getUrlPath();
     Material material = materialController.findMaterialByCompletePath(completePath);
 
 		if (!(material instanceof Image)) {
-			throw new FileNotFoundException();
+      return "/error/not-found.jsf";
 		}
 
     if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
-      throw new ForbiddenException();
+      return "/error/access-denied.jsf";
     }
 		
 		materialPath = material.getPath();
 		materialId = material.getId();
 		imageTitle = material.getTitle();
 		folders = ForgeViewUtils.getParentList(material);
+		
+		return null;
 	}
 	
 	public Long getOwnerId() {
@@ -99,8 +102,6 @@ public class ForgeImagesBackingBean {
 		return materialPath;
 	}
 	
-	private Long ownerId;
-	private String urlPath;
 	private Long materialId;
 	private String imageTitle;
 	private List<Folder> folders;
