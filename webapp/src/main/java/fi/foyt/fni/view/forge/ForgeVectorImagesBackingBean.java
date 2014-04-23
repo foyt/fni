@@ -11,9 +11,10 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
@@ -30,18 +31,20 @@ import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
-@SuppressWarnings("el-syntax")
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { 
-	@URLMapping(
-	  id = "forge-vectorimages", 
-   	pattern = "/forge/vectorimages/#{forgeVectorImagesBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\\\-\\:\\,]*/ forgeVectorImagesBackingBean.urlPath }", 
-		viewId = "/forge/vectorimages.jsf"
-  ) 
-})
+@Join (path = "/forge/vectorimages/{ownerId}/{urlPath}", to = "/forge/vectorimages.jsf")
+@LoggedIn
 public class ForgeVectorImagesBackingBean {
+  
+  @Parameter
+  @Matches ("[0-9]{1,}")
+  private Long ownerId;
+
+  @Parameter
+  @Matches ("[a-zA-Z0-9_\\/.-\\:,]{1,}")
+  private String urlPath;
 	
 	@Inject
 	private MaterialController materialController;
@@ -55,8 +58,7 @@ public class ForgeVectorImagesBackingBean {
   @Inject
   private SessionController sessionController;
 	
-	@URLAction
-	@LoggedIn
+	@RequestAction
 	public void load() throws FileNotFoundException {
 		if ((getOwnerId() == null)||(getUrlPath() == null)) {
 			throw new FileNotFoundException();
@@ -157,8 +159,6 @@ public class ForgeVectorImagesBackingBean {
 		}
 	}
 	
-	private Long ownerId;
-	private String urlPath;
 	private Long materialId;
 	private Long materialModified;
 	private String vectorImageTitle;
