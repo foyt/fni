@@ -7,9 +7,17 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class EditProfileTestsIT extends AbstractUITest {
   
-  public EditProfileTestsIT() {
+  @Test
+  public void testTitle() {
+    ChromeDriver driver = new ChromeDriver();
+    try {
+      loginInternal(driver, "user@foyt.fi", "pass");
+      testTitle(driver, "/editprofile", "Edit Profile");
+    } finally {
+      driver.close();
+    }
   }
-
+  
   @Test
   public void testLoginRedirect() throws Exception {
     ChromeDriver driver = new ChromeDriver();
