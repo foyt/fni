@@ -4,9 +4,19 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class GameLibraryManageTestsIT extends AbstractUITest {
+  
+  @Test
+  public void testTitle() {
+    ChromeDriver driver = new ChromeDriver();
+    try {
+      loginInternal(driver, "librarian@foyt.fi", "pass");
+      testTitle(driver, "/gamelibrary/manage/", "Game Library - Management");
+    } finally {
+      driver.close();
+    }
+  }
   
   @Test
   public void testLoginRedirect() throws Exception {
