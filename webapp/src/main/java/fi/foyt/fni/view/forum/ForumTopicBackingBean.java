@@ -14,11 +14,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
-
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
-import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.model.forum.Forum;
@@ -35,17 +34,22 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @RequestScoped
 @Stateful
 @Named
-@URLMappings(mappings = {
-	  @URLMapping(
-			id = "forum-topic", 
-			pattern = "/forum/#{forumTopicBackingBean.forumUrlName}/#{forumTopicBackingBean.topicUrlName}", 
-			viewId = "/forum/topic.jsf"
-	  )
-	})
+@Join (path = "/forum/{forumUrlName}/{topicUrlName}", to = "/forum/topic.jsf")
 public class ForumTopicBackingBean {
-	
-	public static final int POST_PER_PAGE = 3;
-	
+
+  public static final int POST_PER_PAGE = 3;
+
+  @Parameter
+  @Matches ("[a-z0-9_]{1,}")
+  private String forumUrlName;
+  
+  @Parameter
+  @Matches ("[a-z0-9_]{1,}")
+  private String topicUrlName;
+  
+  @Parameter
+  private Integer page;
+
 	@Inject
 	private ForumController forumController;
 
@@ -55,8 +59,8 @@ public class ForumTopicBackingBean {
 	@Inject
 	private SecurityController securityController;
 	
-	@URLAction
-	public void load() throws FileNotFoundException {
+	@RequestAction
+	public String load() throws FileNotFoundException {
 		if (page == null) {
 			page = 0;
 		}
@@ -68,7 +72,7 @@ public class ForumTopicBackingBean {
 		
 		ForumTopic topic = forumController.findForumTopicByForumAndUrlName(forum, topicUrlName);
     if (topic == null) {
-      throw new FileNotFoundException();
+      return "/error/not-found.jsf";
     }
     
     topicId = topic.getId();
@@ -90,6 +94,8 @@ public class ForumTopicBackingBean {
 		for (ForumPost post : posts) {
 		  forumController.updatePostViews(post, post.getViews() + 1);
 		}
+		
+		return null;
 	}
 	
 	public Integer getPage() {
@@ -221,8 +227,6 @@ public class ForumTopicBackingBean {
 		return Math.round(Math.ceil(new Double(forumController.countPostsByTopic(topic)) / POST_PER_PAGE));
 	}
 	
-	@URLQueryParameter("page")
-	private Integer page;
 	private List<Integer> pages;
 	private Forum forum;
 	private Long topicId;
@@ -230,8 +234,6 @@ public class ForumTopicBackingBean {
 	private String topicAuthorName;
 	private Long topicAuthorId;
 	private Date topicCreated;
-	private String forumUrlName;
-	private String topicUrlName;
 	private List<ForumPost> posts;
 	private String reply;
 }

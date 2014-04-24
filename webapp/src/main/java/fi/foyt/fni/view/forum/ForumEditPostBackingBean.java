@@ -9,9 +9,9 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.model.forum.Forum;
@@ -25,43 +25,46 @@ import fi.foyt.fni.security.SecurityContext;
 @RequestScoped
 @Stateful
 @Named
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "forum-modify-post", 
-		pattern = "/forum/#{forumEditPostBackingBean.forumUrlName}/#{forumEditPostBackingBean.topicUrlName}/edit/#{forumEditPostBackingBean.postId}", 
-		viewId = "/forum/editpost.jsf"
-  )
-})
+@Join (path = "/forum/{forumUrlName}/edit/{postId}", to = "/forum/editpost.jsf")
+@LoggedIn
 public class ForumEditPostBackingBean {
+  
+  @Parameter
+  private String forumUrlName;
+
+  @Parameter
+  private Long postId;
 
   @Inject
   private ForumController forumController;
   
-  @URLAction
+  @RequestAction
   @Secure (Permission.FORUM_POST_MODIFY)
   @SecurityContext (context = "#{forumEditPostBackingBean.postId}")
-  public void init() throws FileNotFoundException {
+  public String init() throws FileNotFoundException {
     forum = forumController.findForumByUrlName(getForumUrlName());
     if (forum == null) {
-      throw new FileNotFoundException();
+      return "/error/not-found.jsf";
     }
     
     topic = forumController.findForumTopicByForumAndUrlName(forum, topicUrlName);
     if (topic == null) {
-      throw new FileNotFoundException();
+      return "/error/not-found.jsf";
     }
     
     ForumPost forumPost = forumController.findForumPostById(postId);
     
     if (!forumPost.getTopic().getId().equals(topic.getId())) {
-      throw new FileNotFoundException();
+      return "/error/not-found.jsf";
     }
     
     if (!forumPost.getTopic().getForum().getId().equals(forum.getId())) {
-      throw new FileNotFoundException();
+      return "/error/not-found.jsf";
     }
     
     postContent = forumPost.getContent();
+    
+    return null;
   }
   
   public String getForumUrlName() {
@@ -104,7 +107,6 @@ public class ForumEditPostBackingBean {
     this.postContent = postContent;
   }
   
-  @LoggedIn
   @Secure (Permission.FORUM_POST_MODIFY)
   @SecurityContext (context = "#{forumEditPostBackingBean.postId}")
   public void save() throws IOException {
@@ -125,9 +127,7 @@ public class ForumEditPostBackingBean {
       .toString());
   }
   
-  private String forumUrlName;
   private String topicUrlName;
-  private Long postId;
   private Forum forum;
   private ForumTopic topic;
   private String postContent;

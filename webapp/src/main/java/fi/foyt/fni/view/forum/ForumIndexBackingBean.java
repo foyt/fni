@@ -9,8 +9,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.model.forum.Forum;
@@ -21,13 +20,7 @@ import fi.foyt.fni.persistence.model.forum.ForumTopic;
 @RequestScoped
 @Stateful
 @Named
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "forum-index", 
-		pattern = "/forum/", 
-		viewId = "/forum/index.jsf"
-  )
-})
+@Join (path = "/forum/", to = "/forum/index.jsf")
 public class ForumIndexBackingBean {
 	
 	private final static int MAX_TOPICS = 3;

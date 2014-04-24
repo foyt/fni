@@ -13,9 +13,10 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.model.forum.Forum;
@@ -28,30 +29,27 @@ import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
 
-@SuppressWarnings("el-syntax")
 @RequestScoped
 @Stateful
 @Named
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "forum", 
-		pattern = "/forum/#{ /[a-z_][a-z_]*/ forumBackingBean.forumUrlName}", 
-		viewId = "/forum/forum.jsf"
-  )
-})
+@Join (path = "/forum/{forumUrlName}", to = "/forum/forum.jsf")
 public class ForumBackingBean {
-	
+
+  @Parameter
+  @Matches ("[a-z0-9_]{1,}")
+  private String forumUrlName;
+
 	@Inject
 	private ForumController forumController;
 
 	@Inject
 	private SessionController sessionController;
 
-	@URLAction
-	public void load() throws FileNotFoundException {
+	@RequestAction
+	public String load() throws FileNotFoundException {
 		forum = forumController.findForumByUrlName(getForumUrlName());
 		if (forum == null) {
-		  throw new FileNotFoundException();
+		  return "/error/not-found.jsf";
 		}
 		
 		topics = forumController.listTopicsByForum(forum);
@@ -61,6 +59,8 @@ public class ForumBackingBean {
 				return o2.getCreated().compareTo(o1.getCreated());
 			}
 		});
+		
+		return null;
 	}
 	
 	public List<ForumTopic> getTopics() {
@@ -145,7 +145,6 @@ public class ForumBackingBean {
 	}
 	
 	private Forum forum;
-	private String forumUrlName;
 	private String newTopicSubject;
 	private String newTopicContents;
 	private List<ForumTopic> topics;
