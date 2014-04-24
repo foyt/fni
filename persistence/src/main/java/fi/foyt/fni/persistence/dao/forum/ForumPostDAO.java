@@ -141,7 +141,6 @@ public class ForumPostDAO extends GenericDAO<ForumPost> {
     return query.getResultList();
 	}
 
-  
   public List<ForumTopic> listTopicsByForumSortByCreated(Forum forum, Integer firstResult, Integer maxResults) {
     EntityManager entityManager = getEntityManager();
 
@@ -149,8 +148,9 @@ public class ForumPostDAO extends GenericDAO<ForumPost> {
     CriteriaQuery<ForumTopic> criteria = criteriaBuilder.createQuery(ForumTopic.class);
     Root<ForumPost> root = criteria.from(ForumPost.class);
     Join<ForumPost, ForumTopic> topicJoin = root.join(ForumPost_.topic);
-    criteria.select(root.get(ForumPost_.topic)).distinct(true);
-    criteria.orderBy(criteriaBuilder.desc(root.get(ForumPost_.created)));
+    criteria.select(root.get(ForumPost_.topic));
+    criteria.groupBy(root.get(ForumPost_.topic));
+    criteria.orderBy(criteriaBuilder.desc(criteriaBuilder.greatest(root.get(ForumPost_.created))));
     criteria.where(
   		criteriaBuilder.equal(topicJoin.get(ForumTopic_.forum), forum)
     );
