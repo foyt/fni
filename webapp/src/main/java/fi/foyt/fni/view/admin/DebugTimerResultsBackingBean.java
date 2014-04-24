@@ -8,6 +8,7 @@ import javax.inject.Named;
 
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.debug.DebugTimerResults;
 import fi.foyt.fni.debug.DebugTimerResults.RequestStats;
@@ -24,6 +25,11 @@ public class DebugTimerResultsBackingBean {
   
   @Inject
   private DebugTimerResults debugTimerResults;
+  
+  @RequestAction
+  public void load() {
+    
+  }
 
   public List<RequestStats> getRequestStats() {
     return debugTimerResults.getRequestStats();
