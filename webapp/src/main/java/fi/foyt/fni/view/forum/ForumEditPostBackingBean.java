@@ -10,8 +10,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
+import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.model.forum.Forum;
@@ -25,14 +27,20 @@ import fi.foyt.fni.security.SecurityContext;
 @RequestScoped
 @Stateful
 @Named
-@Join (path = "/forum/{forumUrlName}/edit/{postId}", to = "/forum/editpost.jsf")
+@Join (path = "/forum/{forumUrlName}/{topicUrlName}/edit/{postId}", to = "/forum/editpost.jsf")
 @LoggedIn
 public class ForumEditPostBackingBean {
   
   @Parameter
+  @Matches ("[a-z0-9_]{1,}")
   private String forumUrlName;
+  
+  @Parameter
+  @Matches ("[a-z0-9_]{1,}")
+  private String topicUrlName;
 
   @Parameter
+  @Matches ("[0-9]{1,}")
   private Long postId;
 
   @Inject
@@ -41,6 +49,7 @@ public class ForumEditPostBackingBean {
   @RequestAction
   @Secure (Permission.FORUM_POST_MODIFY)
   @SecurityContext (context = "#{forumEditPostBackingBean.postId}")
+  @Deferred
   public String init() throws FileNotFoundException {
     forum = forumController.findForumByUrlName(getForumUrlName());
     if (forum == null) {
@@ -107,8 +116,6 @@ public class ForumEditPostBackingBean {
     this.postContent = postContent;
   }
   
-  @Secure (Permission.FORUM_POST_MODIFY)
-  @SecurityContext (context = "#{forumEditPostBackingBean.postId}")
   public void save() throws IOException {
     ForumPost forumPost = forumController.findForumPostById(postId);
     forumController.updateForumPostContent(forumPost, getPostContent());
@@ -127,7 +134,6 @@ public class ForumEditPostBackingBean {
       .toString());
   }
   
-  private String topicUrlName;
   private Forum forum;
   private ForumTopic topic;
   private String postContent;
