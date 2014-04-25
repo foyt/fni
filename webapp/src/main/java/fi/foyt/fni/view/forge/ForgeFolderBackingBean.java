@@ -65,21 +65,20 @@ public class ForgeFolderBackingBean extends AbstractForgeMaterialViewBackingBean
 
   @SuppressWarnings("unchecked")
   @RequestAction
-  @LoggedIn
   public String load() {
     if (ownerId != null && StringUtils.isNotBlank(urlName)) {
       User owner = userController.findUserById(getOwnerId());
       if (owner == null) {
-        return "/errors/not-found.jsf";
+        return "/error/not-found.jsf";
       }
 
       Material material = materialController.findByOwnerAndPath(owner, getUrlName());
       if (material == null) {
-        return "/errors/not-found.jsf";
+        return "/error/not-found.jsf";
       }
 
       if (!(material instanceof Folder)) {
-        return "/errors/not-found.jsf";
+        return "/error/not-found.jsf";
       }
 
       Folder folder = (Folder) material;
@@ -109,7 +108,7 @@ public class ForgeFolderBackingBean extends AbstractForgeMaterialViewBackingBean
 
       return null;
     } else {
-      return "/errors/not-found.jsf";
+      return "/error/not-found.jsf";
     }
   }
 
