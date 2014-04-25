@@ -34,4 +34,16 @@ public class ForumTopicTestsIT extends AbstractUITest {
     }
   }
   
+  public void testLoggedIn() {
+    ChromeDriver driver = new ChromeDriver();
+    try {
+      loginInternal(driver, "user@foyt.fi", "pass");
+      assertTrue(driver.findElement(By.cssSelector("forum-topic-panel form")).isDisplayed());
+    } finally {
+      driver.close();
+    }
+      
+    
+  }
+  
 }
