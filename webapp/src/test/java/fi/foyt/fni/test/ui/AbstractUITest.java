@@ -45,8 +45,17 @@ public abstract class AbstractUITest extends AbstractTest {
       .sendKeys(password);
     driver.findElement(By.cssSelector(".user-login-login-panel input[type='submit']"))
       .click();
+
+    assertEquals(1, driver.findElements(By.cssSelector(".menu-tools-account")).size());
+    assertEquals(0, driver.findElements(By.cssSelector(".menu-tools-login")).size());
   }
-    
+  
+  protected void logout(RemoteWebDriver driver) {
+    driver.get(getAppUrl() + "/logout");
+    assertEquals(0, driver.findElements(By.cssSelector(".menu-tools-account")).size());
+    assertEquals(1, driver.findElements(By.cssSelector(".menu-tools-login")).size());
+  }
+  
   protected void testTitle(ChromeDriver driver, String view, String expectedTitle) {
     testTitle(driver, view, expectedTitle, false);
   }
