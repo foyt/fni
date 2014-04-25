@@ -24,26 +24,42 @@ public class ForumTopicTestsIT extends AbstractUITest {
     }
   }
   
+  @Test
   public void testAnonymous() {
     ChromeDriver driver = new ChromeDriver();
     try {
-      assertTrue(driver.findElement(By.cssSelector("forum-topic-reply-login-container .forum-topic-reply-login-link")).isDisplayed());
-      assertEquals("Login to Post a Reply", driver.findElement(By.cssSelector("forum-topic-reply-login-container .forum-topic-reply-login-link")).getText());
+      driver.get(getAppUrl() + "/forum/5_topic_forum/topic5of5");
+      assertTrue(driver.findElement(By.cssSelector(".forum-topic-reply-login-container .forum-topic-reply-login-link")).isDisplayed());
+      assertEquals("LOGIN TO POST A REPLY", driver.findElement(By.cssSelector(".forum-topic-reply-login-container .forum-topic-reply-login-link")).getText());
     } finally {
       driver.close();
     }
   }
   
+  @Test 
   public void testLoggedIn() {
     ChromeDriver driver = new ChromeDriver();
     try {
       loginInternal(driver, "user@foyt.fi", "pass");
-      assertTrue(driver.findElement(By.cssSelector("forum-topic-panel form")).isDisplayed());
+      driver.get(getAppUrl() + "/forum/5_topic_forum/topic5of5");
+      assertTrue(driver.findElement(By.cssSelector(".forum-topic-panel form")).isDisplayed());
     } finally {
       driver.close();
     }
-      
-    
+  }
+  
+  @Test
+  public void testNotFound() throws Exception {
+    ChromeDriver driver = new ChromeDriver();
+    try {
+      testNotFound(driver, "/forum/5_topic_forum/invalid");
+      testNotFound(driver, "/forum/5_topic_forum/1234");
+      testNotFound(driver, "/forum/5_topic_forum/~");
+      testNotFound(driver, "/forum///asd");
+      testNotFound(driver, "/forum/*/*");
+    } finally {
+      driver.close();
+    }
   }
   
 }
