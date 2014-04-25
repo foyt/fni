@@ -13,6 +13,14 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import fi.foyt.fni.test.AbstractTest;
 
 public abstract class AbstractUITest extends AbstractTest {
+
+  protected String stripLinkJSessionId(String link) {
+    if (StringUtils.isNotBlank(link)) {
+      link = link.replaceFirst(";jsessionid=[a-zA-Z0-9\\.\\-]*", "");
+    }
+    
+    return link;
+  }
   
   protected void testLoginRequired(RemoteWebDriver driver, String path) throws UnsupportedEncodingException {
     testLoginRequired(driver, path, false);  
