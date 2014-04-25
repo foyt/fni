@@ -1,4 +1,4 @@
-package fi.foyt.fni.view;
+package fi.foyt.fni.view.admin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +15,8 @@ import org.hibernate.search.MassIndexer;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
-
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
@@ -27,21 +25,15 @@ import fi.foyt.fni.security.Secure;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { 
-  @URLMapping(
-	  id = "reindex-hibernate-search", 
-		pattern = "/reindex-hibernate-search", 
-		viewId = "/reindex-hibernate-search.jsf"
-  )
-})
+@Join (path = "/admin/reindex-hibernate-search", to = "/admin/reindex-hibernate-search.jsf")
+@LoggedIn
+@Secure (Permission.SYSTEM_ADMINISTRATION)
 public class ReindexHibernateSearchBackingBean {
   
   @javax.persistence.PersistenceContext
   private EntityManager entityManager;
 
-	@URLAction
-	@LoggedIn
-	@Secure (Permission.SYSTEM_ADMINISTRATION)
+	@RequestAction
 	public String load() throws InterruptedException {
 	  List<Class<?>> indexedEntityClasses = listIndexedEntityClasses();
 	  for (Class<?> indexedEntityClass : indexedEntityClasses) {
