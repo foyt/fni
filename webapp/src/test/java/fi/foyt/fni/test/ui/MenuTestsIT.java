@@ -28,9 +28,9 @@ public class MenuTestsIT extends AbstractUITest {
       assertEquals("Forum", forumMenuLink.getText());
 
       assertEquals(getAppUrl() + "/", stripLinkJSessionId(logoLink.getAttribute("href")));
-      assertEquals(getAppUrl() + "/forge/", stripLinkJSessionId(forgeMenuLink.getAttribute("href")));
+      assertEquals(getAppUrl() + "/forge", stripLinkJSessionId(forgeMenuLink.getAttribute("href")));
       assertEquals(getAppUrl() + "/illusion/", stripLinkJSessionId(illusionMenuLink.getAttribute("href")));
-      assertEquals(getAppUrl() + "/gamelibrary/", stripLinkJSessionId(gameLibraryMenuLink.getAttribute("href")));
+      assertEquals(getAppUrl() + "/gamelibrary", stripLinkJSessionId(gameLibraryMenuLink.getAttribute("href")));
       assertEquals(getAppUrl() + "/forum/", stripLinkJSessionId(forumMenuLink.getAttribute("href")));
     } finally {
       driver.close();
