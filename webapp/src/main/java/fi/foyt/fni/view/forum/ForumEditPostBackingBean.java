@@ -62,8 +62,7 @@ public class ForumEditPostBackingBean {
     }
     
     ForumPost forumPost = forumController.findForumPostById(postId);
-    
-    if (!forumPost.getTopic().getId().equals(topic.getId())) {
+    if ((forumPost == null) || !forumPost.getTopic().getId().equals(topic.getId())) {
       return "/error/not-found.jsf";
     }
     
