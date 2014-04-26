@@ -1,0 +1,14 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+/* Panel */ 
+
+.user-verify-panel {
+  @include generic-panel;
+  padding: 80px;
+  text-align: center;
+  font-size: 16px;
+  font-family: $title-font;
+  font-weight: bold;
+}

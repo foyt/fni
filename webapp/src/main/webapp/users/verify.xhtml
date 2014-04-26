@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    template="/WEB-INF/templates/users.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['users.verification.pageTitle']}</ui:define>
  
-    <ui:define name="pageTitle">
-      #{locales['users.verification.pageTitle']}
-    </ui:define>
+  <ui:define name="view-stylesheets">
+  
+    <!-- View styles -->
     
-    <ui:define name="head">
+    <h:outputStylesheet library="novus" name="css/users-verify.css"/>
     
-      <!-- View Specific -->
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
     
-      <link rel="StyleSheet" type="text/css" href="#{request.contextPath}/themes/novus/css/login.css"/>
-    </ui:define>
-    
-    <ui:define name="content">
-      <div class="registration-verification-container">
-        <div>#{locales['users.verification.message']}</div>
-      </div>
-    </ui:define>
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="user-verify-panel">
+        #{locales['users.verification.verificationMessage']}
+      </h:panelGroup>
+    </h:panelGroup>
+  </ui:define>
 
 </ui:composition>
