@@ -19,7 +19,9 @@
         
         <h:panelGroup layout="block" styleClass="gamelibrary-publication-tags">
           <ui:repeat var="tag" value="#{gameLibraryPublicationsBackingBean.getTags(publication)}">
-            <h:outputLink value="#{request.contextPath}/gamelibrary/tags/#{tag.text}" styleClass="gamelibrary-publication-tag">#{tag.text}</h:outputLink>
+            <h:link outcome="/gamelibrary/taglist.jsf" value="#{tag.text}" styleClass="gamelibrary-publication-tag">
+              <f:param name="tag" value="#{tag.text}"/>
+            </h:link>
           </ui:repeat>
         </h:panelGroup>
 
