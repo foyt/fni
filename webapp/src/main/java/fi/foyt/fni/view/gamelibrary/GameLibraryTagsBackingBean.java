@@ -7,8 +7,9 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
+import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
@@ -16,14 +17,12 @@ import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "gamelibrary-tagslist", 
-		pattern = "/gamelibrary/tags/#{gameLibraryTagsBackingBean.tag}", 
-		viewId = "/gamelibrary/taglist.jsf"
-  )
-})
+@Join (path = "/gamelibrary/tags/{tag}", to = "/gamelibrary/taglist.jsf")
 public class GameLibraryTagsBackingBean {
+  
+  @Parameter
+  @Matches ("[a-zA-Z0-9_\\/.-\\:,\\ ]{1,}")
+  private String tag;
   
 	@Inject
 	private PublicationController publicationController;
@@ -39,6 +38,4 @@ public class GameLibraryTagsBackingBean {
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
-	
-	private String tag;
 }
