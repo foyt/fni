@@ -7,9 +7,9 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
@@ -21,14 +21,11 @@ import fi.foyt.fni.session.SessionController;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "gamelibrary-publication", 
-		pattern = "/gamelibrary/#{gameLibraryPublicationBackingBean.urlName}", 
-		viewId = "/gamelibrary/publication.jsf"
-  )
-})
+@Join (path = "/gamelibrary/{urlName}", to = "/gamelibrary/publication.jsf")
 public class GameLibraryPublicationBackingBean {
+  
+  @Parameter
+  private String urlName;
   
   @Inject
   private SessionController sessionController;
@@ -36,11 +33,11 @@ public class GameLibraryPublicationBackingBean {
   @Inject
   private PublicationController publicationController;
   
-  @URLAction
-  public void init() throws FileNotFoundException {
+  @RequestAction
+  public String init() throws FileNotFoundException {
     publication = publicationController.findPublicationByUrlName(getUrlName());
     if (publication == null) {
-      throw new FileNotFoundException();
+      return "/error/not-found.jsf";
     }
     
     if (!publication.getPublished()) {
@@ -52,6 +49,8 @@ public class GameLibraryPublicationBackingBean {
         throw new ForbiddenException();
       }
     }
+    
+    return null;
   }
   
 	public Publication getPublication() {
@@ -66,6 +65,5 @@ public class GameLibraryPublicationBackingBean {
 		this.urlName = urlName;
 	}
 	
-	private String urlName;
 	private Publication publication;
 }
