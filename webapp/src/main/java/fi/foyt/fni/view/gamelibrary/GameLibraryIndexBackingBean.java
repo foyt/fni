@@ -7,8 +7,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
 
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
@@ -16,13 +15,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "gamelibrary-index", 
-		pattern = "/gamelibrary/", 
-		viewId = "/gamelibrary/index.jsf"
-  )
-})
+@Join (path = "/gamelibrary/", to = "/gamelibrary/index.jsf")
 public class GameLibraryIndexBackingBean {
   
 	private static final int MAX_RECENT_PUBLICATIONS = 15;
