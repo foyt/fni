@@ -12,8 +12,15 @@ insert into
   SystemSetting (id, settingKey, value) 
 values 
   (1, 'DEFAULT_LOCALE', 'en_US'),
-  (2, 'DEFAULT_LANGUAGE', 'fi');
-
+  (2, 'DEFAULT_LANGUAGE', 'fi'), 
+  (3, 'PAYTRAIL_MERCHANT_ID', 13466),
+  (4, 'PAYTRAIL_MERCHANT_SECRET', '6pKF4jkv97zmqBJ3ZL8gUw5DfT2NMQ'),
+  (5, 'GAMELIBRARY_PUBLICATION_FORUM_ID', '5'),
+  (6, 'GAMELIBRARY_ORDERMAILER_NAME', 'Bogus Order'),
+  (7, 'GAMELIBRARY_ORDERMAILER_MAIL', 'bogus.order@foyt.fi'),
+  (8, 'GAMELIBRARY_SHOP_OWNER_NAME', 'Bogus Shop Owner'),
+  (9, 'GAMELIBRARY_SHOP_OWNER_MAIL', 'bogus.shop-owner@foyt.fi');
+  
 insert into 
   User (id, archived, firstName, lastName, locale, profileImageSource, registrationDate, role) 
 values 
