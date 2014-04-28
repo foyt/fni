@@ -9,10 +9,11 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
-import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
+import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
 import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
@@ -27,25 +28,27 @@ import fi.foyt.fni.security.SecurityParams;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
-@SuppressWarnings("el-syntax")
 @Stateful
 @RequestScoped
 @Named
-@URLMappings(mappings = { 
-		@URLMapping(id = "gamelibrary-order", 
-				pattern = "/gamelibrary/orders/#{ /[0-9]*/ orderBackingBean.orderId}", 
-				viewId = "/gamelibrary/order.jsf"
-		) 
-})
+@Join (path = "/gamelibrary/orders/{orderId}", to = "/gamelibrary/order.jsf")
 public class OrderBackingBean {
+  
+  @Parameter
+  @Matches ("[0-9]{1,}")
+  private Long orderId;
 
+  @Parameter ("key")
+  private String accessKey;
+  
   @Inject
 	private OrderController orderController;
 
   @Inject
 	private SystemSettingsController systemSettingsController;
 
-	@URLAction
+	@RequestAction
+	@Deferred
 	@Secure (Permission.GAMELIBRARY_VIEW_ORDER)
 	@SecurityContext (context = "#{orderBackingBean.orderId}")
 	@SecurityParams (
@@ -197,7 +200,6 @@ public class OrderBackingBean {
     return systemSettingsController.isVatRegistered();
   }
   
-  private Long orderId;
 	private OrderStatus orderStatus;
 	private String customerCompany;
 	private String customerFirstName;
@@ -213,7 +215,4 @@ public class OrderBackingBean {
   private Date shipped;
   private Date delivered;
   private Date canceled; 
-  
-  @URLQueryParameter ("key") 
-  private String accessKey;
 }
