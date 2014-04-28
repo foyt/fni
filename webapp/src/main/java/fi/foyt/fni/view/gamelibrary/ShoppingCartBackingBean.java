@@ -19,11 +19,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
-
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLAction.PhaseId;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
+import org.ocpsoft.rewrite.faces.annotation.Deferred;
+import org.ocpsoft.rewrite.faces.annotation.Phase;
 
 import fi.foyt.fni.delivery.DeliveryMehtodsController;
 import fi.foyt.fni.delivery.DeliveryMethod;
@@ -55,7 +54,7 @@ import fi.foyt.paytrail.rest.UrlSet;
 @Stateful
 @RequestScoped
 @Named
-@URLMappings(mappings = { @URLMapping(id = "gamelibrary-cart", pattern = "/gamelibrary/cart/", viewId = "/gamelibrary/cart.jsf") })
+@Join ( path = "/gamelibrary/cart/", to = "/gamelibrary/cart.jsf")
 public class ShoppingCartBackingBean implements Serializable {
 
 	private static final long serialVersionUID = -5130175554468783304L;
@@ -127,7 +126,8 @@ public class ShoppingCartBackingBean implements Serializable {
 		}
 	}
 	
-	@URLAction (phaseId = PhaseId.INVOKE_APPLICATION)
+	@RequestAction
+	@Deferred (after = Phase.UPDATE_MODEL_VALUES)
 	public void applyValues() {
 		List<ShoppingCartItem> cartItems = sessionShoppingCartController.getShoppingCartItems();
 		Map<Long, ShoppingCartItem> itemMap = new HashMap<>();
