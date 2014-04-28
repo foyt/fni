@@ -32,7 +32,7 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @RequestScoped
 @Named
 @Join (path = "/gamelibrary/orders/{orderId}", to = "/gamelibrary/order.jsf")
-public class OrderBackingBean {
+public class GameLibraryOrderBackingBean {
   
   @Parameter
   @Matches ("[0-9]{1,}")
@@ -50,9 +50,9 @@ public class OrderBackingBean {
 	@RequestAction
 	@Deferred
 	@Secure (Permission.GAMELIBRARY_VIEW_ORDER)
-	@SecurityContext (context = "#{orderBackingBean.orderId}")
+	@SecurityContext (context = "#{gameLibraryOrderBackingBean.orderId}")
 	@SecurityParams (
-    @SecurityParam (name="accessKey", value="#{orderBackingBean.accessKey}")
+    @SecurityParam (name="accessKey", value="#{gameLibraryOrderBackingBean.accessKey}")
 	)
 	public void init() throws FileNotFoundException {
 		Order order = orderController.findOrderById(getOrderId());

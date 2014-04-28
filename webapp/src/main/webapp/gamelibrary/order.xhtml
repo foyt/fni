@@ -33,7 +33,7 @@
         </h:panelGroup>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
         <h:panelGroup styleClass="view-header-navigation-item">
-          <h:outputLink value="#{request.contextPath}/gamelibrary/order/#{orderBackingBean.orderId}">#{locales['gamelibrary.order.navigationOrder']}</h:outputLink>
+          <h:outputLink value="#{request.contextPath}/gamelibrary/order/#{gameLibraryOrderBackingBean.orderId}">#{locales['gamelibrary.order.navigationOrder']}</h:outputLink>
         </h:panelGroup>
       </h:panelGroup>
   
@@ -50,36 +50,36 @@
       
         <h:panelGroup layout="block" styleClass="gamelibrary-order-id">
           <h:outputFormat value="#{locales['gamelibrary.order.orderIdLabel']}">
-            <f:param value="#{orderBackingBean.orderId}"/>
+            <f:param value="#{gameLibraryOrderBackingBean.orderId}"/>
           </h:outputFormat>
         </h:panelGroup>
  
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-status gamelibrary-order-status-#{orderBackingBean.orderStatus}">
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-status gamelibrary-order-status-#{gameLibraryOrderBackingBean.orderStatus}">
           <h:outputFormat value="#{locales['gamelibrary.order.statusLabel']}">
-            <f:param value="#{orderBackingBean.orderStatusText}"/>
+            <f:param value="#{gameLibraryOrderBackingBean.orderStatusText}"/>
           </h:outputFormat>
         </h:panelGroup>
  
         <h:panelGroup layout="block" styleClass="gamelibrary-order-customer">
           <h3>#{locales['gamelibrary.order.customerTitle']}</h3>
           <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field" rendered="#{!empty(orderBackingBean.customerCompany)}">
-            #{orderBackingBean.customerCompany}
+            #{gameLibraryOrderBackingBean.customerCompany}
           </h:panelGroup>  
           
           <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field">
-            #{orderBackingBean.customerFirstName} #{orderBackingBean.customerLastName}
+            #{gameLibraryOrderBackingBean.customerFirstName} #{gameLibraryOrderBackingBean.customerLastName}
           </h:panelGroup>  
           
           <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field">
-            #{orderBackingBean.customerEmail}
+            #{gameLibraryOrderBackingBean.customerEmail}
           </h:panelGroup>  
           
           <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field" rendered="#{!empty(orderBackingBean.customerMobile)}">
-            #{orderBackingBean.customerMobile}
+            #{gameLibraryOrderBackingBean.customerMobile}
           </h:panelGroup> 
           
           <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field" rendered="#{!empty(orderBackingBean.customerPhone)}">
-            #{orderBackingBean.customerPhone}
+            #{gameLibraryOrderBackingBean.customerPhone}
           </h:panelGroup> 
         </h:panelGroup>
        
@@ -87,22 +87,22 @@
           <h3>#{locales['gamelibrary.order.deliveryAddressTitle']}</h3>
           
           <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field">
-            #{orderBackingBean.deliveryAddress.street1} #{orderBackingBean.deliveryAddress.street2}
+            #{gameLibraryOrderBackingBean.deliveryAddress.street1} #{gameLibraryOrderBackingBean.deliveryAddress.street2}
           </h:panelGroup>
           
           <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field">
-            #{orderBackingBean.deliveryAddress.postalCode} #{orderBackingBean.deliveryAddress.city}
+            #{gameLibraryOrderBackingBean.deliveryAddress.postalCode} #{gameLibraryOrderBackingBean.deliveryAddress.city}
           </h:panelGroup> 
           
           <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field">
-            #{orderBackingBean.deliveryAddress.country.name}
+            #{gameLibraryOrderBackingBean.deliveryAddress.country.name}
           </h:panelGroup>       
         </h:panelGroup>
                
         <h:panelGroup layout="block" styleClass="gamelibrary-order-items">
           <h3>#{locales['gamelibrary.order.itemsTitle']}</h3>
           
-          <h:dataTable value="#{orderBackingBean.orderItems}" var="orderItem">
+          <h:dataTable value="#{gameLibraryOrderBackingBean.orderItems}" var="orderItem">
             <h:column>
               <f:facet name="header">#{locales['gamelibrary.order.itemNameLabel']}</f:facet>
               #{orderItem.count} x #{orderItem.name}
@@ -126,21 +126,21 @@
           <h:panelGroup layout="block" styleClass="gamelibrary-order-total-container">
             <h:outputLabel value="#{locales['gamelibrary.order.totalLabel']}" />
             <h:panelGroup layout="block" styleClass="gamelibrary-order-total">
-              <h:outputText value="#{orderBackingBean.orderTotal}">
+              <h:outputText value="#{gameLibraryOrderBackingBean.orderTotal}">
                 <f:convertNumber currencyCode="EUR" type="currency" />
               </h:outputText>
             </h:panelGroup>          
           </h:panelGroup>    
           
           <h:panelGroup layout="block" styleClass="gamelibrary-order-tax-container">
-            <h:outputLabel rendered="#{orderBackingBean.vatRegistered}">
+            <h:outputLabel rendered="#{gameLibraryOrderBackingBean.vatRegistered}">
               <h:outputFormat value="#{locales['gamelibrary.order.taxLabel']}">
-                <f:param value="#{orderBackingBean.vatPercent}"/>
+                <f:param value="#{gameLibraryOrderBackingBean.vatPercent}"/>
               </h:outputFormat>
             </h:outputLabel>
             <h:outputLabel rendered="#{!orderBackingBean.vatRegistered}">#{locales['gamelibrary.cart.summaryNotVatRegistered']}</h:outputLabel>
             <h:panelGroup layout="block" styleClass="gamelibrary-order-tax">
-              <h:outputText value="#{orderBackingBean.taxAmount}">
+              <h:outputText value="#{gameLibraryOrderBackingBean.taxAmount}">
                 <f:convertNumber currencyCode="EUR" type="currency" />
               </h:outputText>
             </h:panelGroup>          
@@ -150,7 +150,7 @@
        
         <h:panelGroup layout="block" styleClass="gamelibrary-order-notes" rendered="#{!empty(orderBackingBean.notes)}">
           <h3>#{locales['gamelibrary.order.notesTitle']}</h3>
-          <p>#{orderBackingBean.notes}</p>
+          <p>#{gameLibraryOrderBackingBean.notes}</p>
         </h:panelGroup>
        
         <h:panelGroup layout="block" styleClass="gamelibrary-order-history">
@@ -159,7 +159,7 @@
           <h:panelGroup layout="block" styleClass="gamelibrary-order-history-events">
             <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event">
               <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
-                <h:outputText value="#{orderBackingBean.created}">
+                <h:outputText value="#{gameLibraryOrderBackingBean.created}">
                   <f:convertDateTime type="both"/>
                 </h:outputText>
               </h:panelGroup>          
@@ -169,9 +169,9 @@
               </h:panelGroup>
             </h:panelGroup>
             
-            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{orderBackingBean.canceled ne null}">
+            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{gameLibraryOrderBackingBean.canceled ne null}">
               <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
-                <h:outputText value="#{orderBackingBean.canceled}">
+                <h:outputText value="#{gameLibraryOrderBackingBean.canceled}">
                   <f:convertDateTime type="both"/>
                 </h:outputText>
               </h:panelGroup>          
@@ -181,9 +181,9 @@
               </h:panelGroup>
             </h:panelGroup>
             
-            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{orderBackingBean.paid ne null}">
+            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{gameLibraryOrderBackingBean.paid ne null}">
               <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
-                <h:outputText value="#{orderBackingBean.paid}">
+                <h:outputText value="#{gameLibraryOrderBackingBean.paid}">
                   <f:convertDateTime type="both"/>
                 </h:outputText>
               </h:panelGroup>          
@@ -193,9 +193,9 @@
               </h:panelGroup>
             </h:panelGroup>
             
-            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{orderBackingBean.shipped ne null}">
+            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{gameLibraryOrderBackingBean.shipped ne null}">
               <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
-                <h:outputText value="#{orderBackingBean.shipped}">
+                <h:outputText value="#{gameLibraryOrderBackingBean.shipped}">
                   <f:convertDateTime type="both"/>
                 </h:outputText>
               </h:panelGroup>          
@@ -205,9 +205,9 @@
               </h:panelGroup>
             </h:panelGroup>       
             
-            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{orderBackingBean.delivered ne null}">
+            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{gameLibraryOrderBackingBean.delivered ne null}">
               <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
-                <h:outputText value="#{orderBackingBean.delivered}">
+                <h:outputText value="#{gameLibraryOrderBackingBean.delivered}">
                   <f:convertDateTime type="both"/>
                 </h:outputText>
               </h:panelGroup>          
