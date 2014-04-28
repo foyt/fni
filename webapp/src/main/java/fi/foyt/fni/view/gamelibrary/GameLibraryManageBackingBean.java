@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.OrderController;
@@ -39,13 +38,9 @@ import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "gamelibrary-manage", 
-		pattern = "/gamelibrary/manage/", 
-		viewId = "/gamelibrary/manage.jsf"
-  )
-})
+@Join (path = "/gamelibrary/manage/", to = "/gamelibrary/manage.jsf")
+@LoggedIn
+@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
 public class GameLibraryManageBackingBean {
 	
 	private static final String DEFAULT_LICENSE = "https://creativecommons.org/licenses/by-sa/3.0/";
@@ -71,26 +66,18 @@ public class GameLibraryManageBackingBean {
   @Inject
   private SystemSettingsController systemSettingsController;
 
-  @URLAction
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
+  @PostConstruct
   public void init() {
   }
   
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public List<Publication> getUnpublishedPublications() {
   	return publicationController.listUnpublishedPublications();
   }
 	
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public List<Publication> getPublishedPublications() {
   	return publicationController.listPublishedPublications();
   }
   
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public BookPublication getBookPublication(Publication publication) {
   	if (publication instanceof BookPublication) {
   		return (BookPublication) publication;
@@ -99,14 +86,10 @@ public class GameLibraryManageBackingBean {
   	return null;
   }
   
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public CreativeCommonsLicense getCreativeCommonsLicense(Publication publication) {
 		return CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
 	}
   
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public void createBookPublication() throws IOException {
     Language defaultLanguage = systemSettingsController.getDefaultLanguage();
     
@@ -133,8 +116,6 @@ public class GameLibraryManageBackingBean {
   	  .toString());
   }
   
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public String publish(Long publicationId) {
   	Publication publication = publicationController.findPublicationById(publicationId);
   	
@@ -159,19 +140,15 @@ public class GameLibraryManageBackingBean {
   	}
   	
   	publicationController.publishPublication(publication);
-    return "pretty:gamelibrary-manage";
+    return "/gamelibrary/manage.jsf?faces-redirect=true";
 	}
   
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public String unpublish(Long publicationId) {
   	Publication publication = publicationController.findPublicationById(publicationId);
   	publicationController.unpublishPublication(publication);
-  	return "pretty:gamelibrary-manage";
+  	return "/gamelibrary/manage.jsf?faces-redirect=true";
 	}
 	
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
 	public boolean isRemovable(Long publicationId) {
 		Publication publication = publicationController.findPublicationById(publicationId);
 
@@ -186,12 +163,10 @@ public class GameLibraryManageBackingBean {
 		return true;
 	}
   
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public String remove(Long publicationId) {
   	Publication publication = publicationController.findPublicationById(publicationId);
   	publicationController.deletePublication(publication);
-    return "pretty:gamelibrary-manage";
+    return "/gamelibrary/manage.jsf?faces-redirect=true";
 	}
 
 }
