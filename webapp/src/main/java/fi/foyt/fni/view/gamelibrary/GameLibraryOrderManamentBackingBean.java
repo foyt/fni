@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
@@ -38,6 +39,11 @@ public class GameLibraryOrderManamentBackingBean {
     ordersWaitingForDelivery = orderController.listOrdersByStatus(OrderStatus.WAITING_FOR_DELIVERY);
     ordersShipped = orderController.listOrdersByStatus(OrderStatus.SHIPPED);
     ordersDelivered = orderController.listOrdersByStatus(OrderStatus.DELIVERED);
+  }
+  
+  @RequestAction
+  public void load() {
+    
   }
 
   public List<Order> getOrdersNew() {
