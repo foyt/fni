@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -12,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.OrderController;
@@ -66,7 +66,7 @@ public class GameLibraryManageBackingBean {
   @Inject
   private SystemSettingsController systemSettingsController;
 
-  @PostConstruct
+  @RequestAction
   public void init() {
   }
   
