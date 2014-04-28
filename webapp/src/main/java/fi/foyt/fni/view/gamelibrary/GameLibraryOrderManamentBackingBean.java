@@ -3,14 +3,13 @@ package fi.foyt.fni.view.gamelibrary;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
 
 import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
@@ -23,22 +22,16 @@ import fi.foyt.fni.security.Secure;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { 
-    @URLMapping(
-        id = "gamelibrary-ordermanagement", 
-        pattern = "/gamelibrary/ordermanagement/", 
-        viewId = "/gamelibrary/ordermanagement.jsf"
-    ) 
-})
+@Join (path = "/gamelibrary/ordermanagement/", to = "/gamelibrary/ordermanagement.jsf")
+@LoggedIn
+@Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
 public class GameLibraryOrderManamentBackingBean {
 
   @Inject
   private OrderController orderController;
   
-  @URLAction
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
-  public void load() {
+  @PostConstruct
+  public void init() {
     ordersNew = orderController.listOrdersByStatus(OrderStatus.NEW);
     ordersCanceled = orderController.listOrdersByStatus(OrderStatus.CANCELED);
     ordersPaid = orderController.listOrdersByStatus(OrderStatus.PAID);
@@ -47,44 +40,30 @@ public class GameLibraryOrderManamentBackingBean {
     ordersDelivered = orderController.listOrdersByStatus(OrderStatus.DELIVERED);
   }
 
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public List<Order> getOrdersNew() {
     return ordersNew;
   }
   
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public List<Order> getOrdersCanceled() {
     return ordersCanceled;
   }
 
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public List<Order> getOrdersPaid() {
     return ordersPaid;
   }
 
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public List<Order> getOrdersWaitingForDelivery() {
     return ordersWaitingForDelivery;
   }
   
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public List<Order> getOrdersShipped() {
     return ordersShipped;
   }
 
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public List<Order> getOrdersDelivered() {
     return ordersDelivered;
   }
   
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public Double getOrderTotalPrice(Long orderId) {
     Double result = 0d;
     
@@ -103,8 +82,6 @@ public class GameLibraryOrderManamentBackingBean {
     return result;
   }
 
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public String moveToCanceled(Long orderId) throws FileNotFoundException {
     Order order = orderController.findOrderById(orderId);
     if (order != null) {
@@ -113,11 +90,9 @@ public class GameLibraryOrderManamentBackingBean {
       throw new FileNotFoundException();
     }
     
-    return "pretty:gamelibrary-ordermanagement";
+    return "/gamelibrary/ordermanagement.jsf?faces-redirect=true";
   }
 
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public String moveToPaid(Long orderId) throws FileNotFoundException {
     Order order = orderController.findOrderById(orderId);
     if (order != null) {
@@ -130,11 +105,9 @@ public class GameLibraryOrderManamentBackingBean {
       throw new FileNotFoundException();
     }
     
-    return "pretty:gamelibrary-ordermanagement";
+    return "/gamelibrary/ordermanagement.jsf?faces-redirect=true";
   }
 
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public String moveToShipped(Long orderId) throws FileNotFoundException {
     Order order = orderController.findOrderById(orderId);
     if (order != null) {
@@ -143,11 +116,9 @@ public class GameLibraryOrderManamentBackingBean {
       throw new FileNotFoundException();
     }
 
-    return "pretty:gamelibrary-ordermanagement";
+    return "/gamelibrary/ordermanagement.jsf?faces-redirect=true";
   }
 
-  @LoggedIn
-  @Secure (Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
   public String moveToDelivered(Long orderId) throws FileNotFoundException {
     Order order = orderController.findOrderById(orderId);
     if (order != null) {
@@ -156,7 +127,7 @@ public class GameLibraryOrderManamentBackingBean {
       throw new FileNotFoundException();
     }
 
-    return "pretty:gamelibrary-ordermanagement";
+    return "/gamelibrary/ordermanagement.jsf?faces-redirect=true";
   }
   
   private List<Order> ordersNew;
