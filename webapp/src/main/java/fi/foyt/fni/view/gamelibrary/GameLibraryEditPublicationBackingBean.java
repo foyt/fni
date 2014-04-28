@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.model.SelectItem;
@@ -16,10 +15,12 @@ import javax.inject.Named;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
+import org.ocpsoft.rewrite.faces.annotation.Deferred;
+import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
@@ -45,14 +46,14 @@ import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { 
-  @URLMapping(
-	  id = "gamelibrary-edit", 
-		pattern = "/gamelibrary/manage/#{gameLibraryEditPublicationBackingBean.publicationId}/edit", 
-		viewId = "/gamelibrary/editpublication.jsf"
-	) 
-})
+@Join (path = "/gamelibrary/manage/{publicationId}/edit", to = "/gamelibrary/editpublication.jsf")
+@LoggedIn
+@Secure(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
 public class GameLibraryEditPublicationBackingBean {
+
+  @Parameter
+  @Matches ("[0-9]{1,}")
+  private Long publicationId;
 
 	@Inject
 	private GameLibraryTagController gameLibraryTagController;
@@ -69,37 +70,24 @@ public class GameLibraryEditPublicationBackingBean {
   @Inject
 	private SystemSettingsController systemSettingsController;
 	
-	@PostConstruct
+  @RequestAction
+	@Deferred
 	public void load() {
-		if (sessionController.isLoggedIn()) {
-  		licenseSelectItems = createLicenseSelectItems();
-  		tagSelectItems = createTagSelectItems();
-  		authorSelectItems = createAuthorSelectItems();
-  		creativeCommonsDerivativesSelectItems = createCreativeCommonsDerivativesSelectItems();
-  		creativeCommonsCommercialSelectItems = createCreativeCommsonCommercialSelectItems();
-  		languageSelectItems = createLanguageSelectItems();
-  		
-  		if (tagSelectItems.size() > 0 && tagSelectItems.get(1).getSelectItems().length > 0) {
-        addExistingTag = (String) tagSelectItems.get(1).getSelectItems()[0].getValue();
-      }
-		}
+		licenseSelectItems = createLicenseSelectItems();
+		tagSelectItems = createTagSelectItems();
+		authorSelectItems = createAuthorSelectItems();
+		creativeCommonsDerivativesSelectItems = createCreativeCommonsDerivativesSelectItems();
+		creativeCommonsCommercialSelectItems = createCreativeCommsonCommercialSelectItems();
+		languageSelectItems = createLanguageSelectItems();
+		
+		if (tagSelectItems.size() > 0 && tagSelectItems.get(1).getSelectItems().length > 0) {
+      addExistingTag = (String) tagSelectItems.get(1).getSelectItems()[0].getValue();
+    }
 	}
-	
-	private List<SelectItem> createLanguageSelectItems() {
-	  List<SelectItem> result = new ArrayList<>();
-	  
-	  List<Language> languages = systemSettingsController.listLanguages();
-	  for (Language language : languages) {
-	    String name = FacesUtils.getLocalizedValue("generic.languages." + language.getISO3());
-	    result.add(new SelectItem(language.getId(), name));
-	  }
-	  
-    return result;
-  }
 
-  @URLAction (onPostback = false)
-	@LoggedIn
-	@Secure(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
+  @RequestAction
+  @Deferred
+  @IgnorePostback
 	public void init() {
 		Publication publication = publicationController.findPublicationById(publicationId);
 		
@@ -149,6 +137,18 @@ public class GameLibraryEditPublicationBackingBean {
 			break;
 		}
 	}
+  
+  private List<SelectItem> createLanguageSelectItems() {
+    List<SelectItem> result = new ArrayList<>();
+    
+    List<Language> languages = systemSettingsController.listLanguages();
+    for (Language language : languages) {
+      String name = FacesUtils.getLocalizedValue("generic.languages." + language.getISO3());
+      result.add(new SelectItem(language.getId(), name));
+    }
+    
+    return result;
+  }
 	
 	public Long getPublicationId() {
 		return publicationId;
@@ -494,7 +494,6 @@ public class GameLibraryEditPublicationBackingBean {
 		return result;
 	}
 	
-	private Long publicationId;
 	private Long languageId;
 	private String name;
 	private String description;
