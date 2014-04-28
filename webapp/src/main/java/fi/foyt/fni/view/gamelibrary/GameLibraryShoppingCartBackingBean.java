@@ -55,7 +55,7 @@ import fi.foyt.paytrail.rest.UrlSet;
 @RequestScoped
 @Named
 @Join ( path = "/gamelibrary/cart/", to = "/gamelibrary/cart.jsf")
-public class ShoppingCartBackingBean implements Serializable {
+public class GameLibraryShoppingCartBackingBean implements Serializable {
 
 	private static final long serialVersionUID = -5130175554468783304L;
 	
