@@ -214,3 +214,21 @@ values
   (1, 1, 1),
   (2, 2, 1),
   (3, 2, 2);
+  
+insert into 
+  Address (id, addressType, city, postalCode, street1, street2, country_id, user_id)
+values
+  (1, 1, 'Bogus City', '12345', '12 Bogus Street', null, 255l, 2l);
+  
+insert into
+  Order_ (id, accessKey, canceled, created, customerCompany, customerEmail, customerFirstName, 
+    customerLastName,  customerMobile, customerPhone, delivered, notes, orderStatus, paid, 
+    shipped, shippingCosts, customer_id, deliveryAddress_id)
+values
+ (1l, 'bogus-access-key', null, null, 'Bogus Company', 'bogus.order@foyt.fi', 'Bogus', 'Person', '+123-456-789-0123', '+098-765-432-1098', null, 'This is a test order', 'WAITING_FOR_DELIVERY', null, null, 10, 2, 1);
+ 
+insert into 
+  OrderItem (id, count, name, unitPrice, order_id, publication_id) 
+values
+  (1, 10, 'Test Book #1', 10, 1, 1);
+ 
