@@ -2,8 +2,6 @@ package fi.foyt.fni.test.ui;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Date;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,16 +13,12 @@ public class AdminArchiveUserTestsIT extends AbstractUITest {
   
   @Before
   public void addTestData() throws Exception {
-    executeSql(
-      "insert into " +
-      "  User (id, archived, firstName, lastName, locale, profileImageSource, registrationDate, role) " +
-      "values " +
-      "  (?, ?, ?, ?, ?, ?, ?, ?)", USER_ID, false, "Test", "Archiving", "en_US", "GRAVATAR", new Date(), "USER");
+    createUser(USER_ID, "Test", "Archiving", "test.archiving@foyt.fi", "pass", "en_US", "GRAVATAR", "USER");
   }
   
   @After
   public void cleanTestData() throws Exception {
-    executeSql("delete from User where id = ?", USER_ID);
+    deleteUser(USER_ID);
   }
   
   @Test
