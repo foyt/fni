@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class GameLibraryOrderTestsIT extends AbstractUITest {
+public class GameLibraryCartTestsIT extends AbstractUITest {
   
   @Test
   public void testEmptyCart() throws Exception {
