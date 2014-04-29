@@ -81,6 +81,14 @@ public class SessionShoppingCartController {
 		return shoppingCartItemDAO.listByCart(getShoppingCart());
 	}
 
+  public ShoppingCartItem findShoppingCartItemById(Long id) {
+    return shoppingCartItemDAO.findById(id);
+  }
+
+  public void deleteShoppingCartItem(ShoppingCartItem cartItem) {
+    shoppingCartItemDAO.delete(cartItem);
+  }
+
 	public void addPublication(Publication publication) {
 		List<ShoppingCartItem> items = getShoppingCartItems();
 		for (ShoppingCartItem item : items) {

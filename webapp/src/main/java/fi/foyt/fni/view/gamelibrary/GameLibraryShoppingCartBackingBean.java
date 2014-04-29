@@ -3,9 +3,7 @@ package fi.foyt.fni.view.gamelibrary;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,9 +18,6 @@ import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
-import org.ocpsoft.rewrite.annotation.RequestAction;
-import org.ocpsoft.rewrite.faces.annotation.Deferred;
-import org.ocpsoft.rewrite.faces.annotation.Phase;
 
 import fi.foyt.fni.delivery.DeliveryMehtodsController;
 import fi.foyt.fni.delivery.DeliveryMethod;
@@ -125,24 +120,28 @@ public class GameLibraryShoppingCartBackingBean implements Serializable {
 			}
 		}
 	}
-	
-	@RequestAction
-	@Deferred (after = Phase.UPDATE_MODEL_VALUES)
-	public void applyValues() {
-		List<ShoppingCartItem> cartItems = sessionShoppingCartController.getShoppingCartItems();
-		Map<Long, ShoppingCartItem> itemMap = new HashMap<>();
-		for (ShoppingCartItem cartItem : cartItems) {
-			itemMap.put(cartItem.getId(), cartItem);
-		}
 
-		for (ShoppingCartItemBean itemBean : getShoppingCartItems()) {
-			ShoppingCartItem shoppingCartItem = itemMap.get(itemBean.getId());
-			if (!shoppingCartItem.getCount().equals(itemBean.getCount())) {
-				sessionShoppingCartController.setItemCount(shoppingCartItem, itemBean.getCount());
-			}
-		}
+	public String incItemCount(ShoppingCartItemBean item) {
+	  ShoppingCartItem cartItem = sessionShoppingCartController.findShoppingCartItemById(item.getId());
+	  sessionShoppingCartController.setItemCount(cartItem, item.getCount() + 1);
+	  return "/gamelibrary/cart.jsf?faces-redirect=true";
 	}
 
+  public String decItemCount(ShoppingCartItemBean item) {
+    ShoppingCartItem cartItem = sessionShoppingCartController.findShoppingCartItemById(item.getId());
+    if (item.getCount() > 1) {
+      sessionShoppingCartController.setItemCount(cartItem, item.getCount() - 1);
+    }
+    
+    return "/gamelibrary/cart.jsf?faces-redirect=true";
+  }
+
+  public String removeItem(ShoppingCartItemBean item) {
+    ShoppingCartItem cartItem = sessionShoppingCartController.findShoppingCartItemById(item.getId());
+    sessionShoppingCartController.deleteShoppingCartItem(cartItem);
+    return "/gamelibrary/cart.jsf?faces-redirect=true";
+  }
+  
 	public List<SelectItem> getCountrySelectItems() {
 		return countrySelectItems;
 	}

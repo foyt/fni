@@ -74,9 +74,7 @@
               <h:dataTable var="cartItem" value="#{gameLibraryShoppingCartBackingBean.shoppingCartItems}">
                 <h:column headerClass="gamelibrary-cart-item-count">
                   <f:facet name="header">#{locales['gamelibrary.cart.itemsCountLabel']}</f:facet>
-                  <h:inputText value="#{cartItem.count}">
-                    <f:ajax execute="@form" render="@form"/>
-                  </h:inputText>
+                  <h:outputText value="#{cartItem.count}" />
                 </h:column>
                 <h:column headerClass="gamelibrary-cart-item-name">
                   <f:facet name="header">#{locales['gamelibrary.cart.itemsNameLabel']}</f:facet>
@@ -89,6 +87,11 @@
                 <h:column headerClass="gamelibrary-cart-item-total-price">
                   <f:facet name="header">#{locales['gamelibrary.cart.itemsTotalPriceLabel']}</f:facet>
                   <h:outputText value="#{cartItem.totalPrice}"/>
+                </h:column>
+                <h:column headerClass="gamelibrary-cart-actions">
+                  <h:commandLink styleClass="gamelibrary-cart-action gamelibrary-cart-action-inc-count" action="#{gameLibraryShoppingCartBackingBean.incItemCount(cartItem)}" immediate="true"/>
+                  <h:commandLink styleClass="gamelibrary-cart-action gamelibrary-cart-action-dec-count" action="#{gameLibraryShoppingCartBackingBean.decItemCount(cartItem)}" immediate="true" disabled="#{cartItem.count eq 1}"/>
+                  <h:commandLink styleClass="gamelibrary-cart-action gamelibrary-cart-action-remove" action="#{gameLibraryShoppingCartBackingBean.removeItem(cartItem)}" immediate="true"/>
                 </h:column>
               </h:dataTable>
             </h:panelGroup>

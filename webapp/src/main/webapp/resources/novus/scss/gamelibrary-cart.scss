@@ -20,6 +20,52 @@ $header-text-color: #fff;
   @include generic-panel;
 }
 
+/* Actions */
+
+.gamelibrary-cart-actions {
+  width: 62px;
+}
+
+.gamelibrary-cart-action {
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 4px;
+  background: #eee;
+  border-radius: 2px;
+  border: 1px solid #999;
+}
+
+span.gamelibrary-cart-action {
+  color: #bbb;
+  border: 1px solid #bbb;
+  cursor: default;
+}
+
+.gamelibrary-cart-action-dec-count, .gamelibrary-cart-action-inc-count {
+  color: #000;
+  text-decoration: none;
+  font-size: 10px;
+  font-family: courier;
+  padding: 3px 4px;
+}
+
+.gamelibrary-cart-action-dec-count:before {
+  content: '-';
+}
+
+.gamelibrary-cart-action-inc-count:before {
+  content: '+';
+}
+
+.gamelibrary-cart-action-remove {
+  width: 16px;
+  height: 16px;
+  background-image: url("/fni/javax.faces.resource/gfx/icons/16x16/gamelibrary/cart-item-delete.png.jsf?ln=novus");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 12px;
+}
+
 /* Header */
 
 .gamelibrary-cart-back-link {
@@ -64,6 +110,10 @@ $header-text-color: #fff;
   margin-top: 20px;
 }
 
+.gamelibrary-cart-items-inner-container table {
+  width: 100%;
+}
+
 .gamelibrary-cart-items-inner-container th, .gamelibrary-cart-items-inner-container td {
   font-family: $default-font;
   font-size: 10px;
@@ -82,7 +132,7 @@ $header-text-color: #fff;
 }
 
 .gamelibrary-cart-item-name {
-  width: 250px;
+  min-width: 250px;
 }
 
 .gamelibrary-cart-item-price {
