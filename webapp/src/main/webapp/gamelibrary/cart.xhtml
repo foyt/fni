@@ -50,7 +50,7 @@
     
     <!-- Content -->
 
-    <h:form>
+    <h:form id="cart-form">
       <h:panelGroup layout="block" styleClass="grid_16 tight">
         
         <h:panelGroup layout="block" styleClass="gamelibrary-cart-panel">
@@ -102,48 +102,48 @@
             
             <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-fields">
               <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
-                <h:outputLabel value="#{locales['gamelibrary.cart.payerFirstName']}" />
-                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerFirstName}" required="true" requiredMessage="#{locales['gamelibrary.cart.payerFirstNameRequired']}"/>
+                <h:outputLabel value="#{locales['gamelibrary.cart.payerFirstName']}"/>
+                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerFirstName}" id="payerFirstName" required="true" requiredMessage="#{locales['gamelibrary.cart.payerFirstNameRequired']}"/>
               </h:panelGroup>
               
               <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
-                <h:outputLabel value="#{locales['gamelibrary.cart.payerLastName']}" />
-                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerLastName}" required="true" requiredMessage="#{locales['gamelibrary.cart.payerLastNameRequired']}"/>
+                <h:outputLabel value="#{locales['gamelibrary.cart.payerLastName']}"/>
+                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerLastName}" id="payerLastName" required="true" requiredMessage="#{locales['gamelibrary.cart.payerLastNameRequired']}"/>
               </h:panelGroup>
   
               <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
-                <h:outputLabel value="#{locales['gamelibrary.cart.payerEmail']}" />
-                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerEmail}" required="true" requiredMessage="#{locales['gamelibrary.cart.payerEmailRequired']}"/>
+                <h:outputLabel value="#{locales['gamelibrary.cart.payerEmail']}"/>
+                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerEmail}" id="payerEmail" required="true" requiredMessage="#{locales['gamelibrary.cart.payerEmailRequired']}"/>
               </h:panelGroup>
   
               <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
                 <h:outputLabel value="#{locales['gamelibrary.cart.payerMobile']}" />
-                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerMobile}" />
+                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerMobile}" id="payerMobile"/>
               </h:panelGroup>
               
               <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
                 <h:outputLabel value="#{locales['gamelibrary.cart.payerTelephone']}" />
-                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerTelephone}"/>
+                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerTelephone}" id="payerTelephone"/>
               </h:panelGroup>
               
               <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
                 <h:outputLabel value="#{locales['gamelibrary.cart.payerStreetAddress']}" />
-                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerStreetAddress}" required="true" requiredMessage="#{locales['gamelibrary.cart.payerStreetAddressRequired']}"/>
+                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerStreetAddress}" id="payerStreetAddress" required="true" requiredMessage="#{locales['gamelibrary.cart.payerStreetAddressRequired']}"/>
               </h:panelGroup>
               
               <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
                 <h:outputLabel value="#{locales['gamelibrary.cart.payerPostalCode']}" />
-                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerPostalCode}" required="true" requiredMessage="#{locales['gamelibrary.cart.payerPostalCodeRequired']}"/>
+                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerPostalCode}" id="payerPostalCode" required="true" requiredMessage="#{locales['gamelibrary.cart.payerPostalCodeRequired']}"/>
               </h:panelGroup>
               
               <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
                 <h:outputLabel value="#{locales['gamelibrary.cart.payerPostalOffice']}" />
-                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerPostalOffice}" required="true" requiredMessage="#{locales['gamelibrary.cart.payerPostalOfficeRequired']}"/>
+                <h:inputText value="#{gameLibraryShoppingCartBackingBean.payerPostalOffice}" id="payerPostalOffice" required="true" requiredMessage="#{locales['gamelibrary.cart.payerPostalOfficeRequired']}"/>
               </h:panelGroup>
               
               <h:panelGroup layout="block" styleClass="gamelibrary-cart-payer-field">
                 <h:outputLabel value="#{locales['gamelibrary.cart.payerCountry']}" />
-                <h:selectOneMenu value="#{gameLibraryShoppingCartBackingBean.payerCountryId}">
+                <h:selectOneMenu value="#{gameLibraryShoppingCartBackingBean.payerCountryId}" id="payerCountryId">
                   <f:selectItems value="#{gameLibraryShoppingCartBackingBean.countrySelectItems}"/>
                     <f:ajax execute="@form" render="@form"/>
                   </h:selectOneMenu>
@@ -155,7 +155,7 @@
             <h:panelGroup layout="block" styleClass="gamelibrary-cart-delivery">
               <h4>#{locales['gamelibrary.cart.deliveryTitle']}</h4>
             
-              <h:selectOneRadio  styleClass="gamelibrary-cart-delivery-method" value="#{gameLibraryShoppingCartBackingBean.deliveryMethodId}">
+              <h:selectOneRadio id="deliveryMethodId" styleClass="gamelibrary-cart-delivery-method" value="#{gameLibraryShoppingCartBackingBean.deliveryMethodId}">
                 <f:selectItems value="#{gameLibraryShoppingCartBackingBean.deliveryMethods}" var="deliveryMethod" itemLabel="#{deliveryMethod.name} (#{deliveryMethod.info})" itemValue="#{deliveryMethod.id}"/>
                 <f:ajax execute="@form" render="@form"/>
               </h:selectOneRadio>  
@@ -166,7 +166,7 @@
             
             <h:panelGroup layout="block" styleClass="gamelibrary-cart-notes">
               <h4>#{locales['gamelibrary.cart.notesTitle']}</h4>
-              <h:inputTextarea value="#{gameLibraryShoppingCartBackingBean.notes}" />
+              <h:inputTextarea value="#{gameLibraryShoppingCartBackingBean.notes}" id="notes"/>
             </h:panelGroup>   
             
           </h:panelGroup>
