@@ -66,9 +66,7 @@
           <h:panelGroup layout="block" styleClass="gamelibrary-cart-items">
             <h3>#{locales['gamelibrary.cart.itemsTitle']}</h3>
             
-            <h:panelGroup layout="block" styleClass="gamelibrary-cart-empty-message" rendered="#{!gameLibraryShoppingCartBackingBean.hasItems}">
-              #{locales['gamelibrary.cart.cartEmpty']}
-            </h:panelGroup>
+            <h:panelGroup layout="block" styleClass="gamelibrary-cart-empty-message" rendered="#{!gameLibraryShoppingCartBackingBean.hasItems}">#{locales['gamelibrary.cart.cartEmpty']}</h:panelGroup>
             
             <h:panelGroup layout="block" styleClass="gamelibrary-cart-items-inner-container" rendered="#{gameLibraryShoppingCartBackingBean.hasItems}"> 
               <h:dataTable var="cartItem" value="#{gameLibraryShoppingCartBackingBean.shoppingCartItems}">
