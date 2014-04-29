@@ -33,7 +33,7 @@ public class GameLibraryViewOrderPermissionCheck implements PermissionCheckImple
 		
 		Order order = orderController.findOrderById(orderId);
 		if (order == null) {
-			throw new SecurityException("Could not resolve order while checking permission for GAMELIBRARY_VIEW_ORDER");
+		  return false;
 		}
 
 		if (!sessionController.isLoggedIn()) {
