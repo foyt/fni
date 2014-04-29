@@ -3,6 +3,9 @@ package fi.foyt.fni.test;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.util.Date;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 public abstract class AbstractTest {
   
@@ -57,5 +60,38 @@ public abstract class AbstractTest {
       connection.close();
     }
   }
-
+  
+  protected void createUser(Long userId, String firstName, String lastName, String email, String password, String locale, String profileImageSource, String role) throws Exception {
+    createUser(userId, firstName, lastName, email, password, locale, profileImageSource, role, true);
+  }  
+  
+  protected void createUser(Long userId, String firstName, String lastName, String email, String password, String locale, String profileImageSource, String role, boolean verified) throws Exception {
+    executeSql(
+      "insert into " +
+      "  User (id, archived, firstName, lastName, locale, profileImageSource, registrationDate, role) " +
+      "values " +
+      "  (?, ?, ?, ?, ?, ?, ?, ?)", userId, false, firstName, lastName, locale, profileImageSource, new Date(), role);
+    
+    executeSql(
+      "insert into " +
+      "  UserEmail (id, email, primaryEmail, user_id) " +
+      "values " +
+      "  (?, ?, ?, ?)", userId, email, true, userId);
+    
+    executeSql(
+      "insert into " +
+      "  InternalAuth (id, password, verified, user_id) " +
+      "values " +
+      "  (?, ?, ?, ?)", userId, DigestUtils.md5Hex(password), verified, userId);
+  }
+  
+  protected void deleteUser(Long userId) throws Exception {
+    executeSql("delete from Address where user_id = ?", userId);
+    executeSql("delete from UserToken where userIdentifier_id in (select id from UserIdentifier where user_id = ?)", userId);
+    executeSql("delete from UserIdentifier where user_id = ?", userId);
+    executeSql("delete from InternalAuth where user_id = ?", userId);
+    executeSql("delete from UserEmail where user_id = ?", userId);
+    executeSql("delete from User where id = ?", userId);
+  }
+  
 }
