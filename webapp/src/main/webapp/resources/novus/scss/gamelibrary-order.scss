@@ -47,7 +47,7 @@ $entry-color: #313133;
 
 /* Sections */
 
-.gamelibrary-order-customer, .gamelibrary-order-delivery-address , .gamelibrary-order-notes {
+.gamelibrary-order-customer, .gamelibrary-order-delivery-address , .gamelibrary-order-items, .gamelibrary-order-notes {
   margin-bottom: 30px;
 }
 
@@ -97,10 +97,6 @@ $entry-color: #313133;
 }
 
 /* History */
-
-.gamelibrary-order-history {
-  margin-top: 30px;
-}
 
 .gamelibrary-order-history-events {
   display: table;
