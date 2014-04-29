@@ -62,41 +62,18 @@
  
         <h:panelGroup layout="block" styleClass="gamelibrary-order-customer">
           <h3>#{locales['gamelibrary.order.customerTitle']}</h3>
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field" rendered="#{!empty(orderBackingBean.customerCompany)}">
-            #{gameLibraryOrderBackingBean.customerCompany}
-          </h:panelGroup>  
-          
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field">
-            #{gameLibraryOrderBackingBean.customerFirstName} #{gameLibraryOrderBackingBean.customerLastName}
-          </h:panelGroup>  
-          
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field">
-            #{gameLibraryOrderBackingBean.customerEmail}
-          </h:panelGroup>  
-          
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field" rendered="#{!empty(orderBackingBean.customerMobile)}">
-            #{gameLibraryOrderBackingBean.customerMobile}
-          </h:panelGroup> 
-          
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field" rendered="#{!empty(orderBackingBean.customerPhone)}">
-            #{gameLibraryOrderBackingBean.customerPhone}
-          </h:panelGroup> 
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field gamelibrary-order-customer-company" rendered="#{!empty(gameLibraryOrderBackingBean.customerCompany)}">#{gameLibraryOrderBackingBean.customerCompany}</h:panelGroup>  
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field gamelibrary-order-customer-name">#{gameLibraryOrderBackingBean.customerFirstName} #{gameLibraryOrderBackingBean.customerLastName}</h:panelGroup>  
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field gamelibrary-order-customer-email">#{gameLibraryOrderBackingBean.customerEmail}</h:panelGroup>  
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field gamelibrary-order-customer-mobile" rendered="#{!empty(gameLibraryOrderBackingBean.customerMobile)}">#{gameLibraryOrderBackingBean.customerMobile}</h:panelGroup> 
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field gamelibrary-order-customer-phone" rendered="#{!empty(gameLibraryOrderBackingBean.customerPhone)}">#{gameLibraryOrderBackingBean.customerPhone}</h:panelGroup> 
         </h:panelGroup>
        
         <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address">
           <h3>#{locales['gamelibrary.order.deliveryAddressTitle']}</h3>
-          
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field">
-            #{gameLibraryOrderBackingBean.deliveryAddress.street1} #{gameLibraryOrderBackingBean.deliveryAddress.street2}
-          </h:panelGroup>
-          
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field">
-            #{gameLibraryOrderBackingBean.deliveryAddress.postalCode} #{gameLibraryOrderBackingBean.deliveryAddress.city}
-          </h:panelGroup> 
-          
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field">
-            #{gameLibraryOrderBackingBean.deliveryAddress.country.name}
-          </h:panelGroup>       
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field gamelibrary-order-delivery-address-street">#{gameLibraryOrderBackingBean.deliveryAddress.street1} #{gameLibraryOrderBackingBean.deliveryAddress.street2}</h:panelGroup>
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field gamelibrary-order-delivery-address-postal-code">#{gameLibraryOrderBackingBean.deliveryAddress.postalCode} #{gameLibraryOrderBackingBean.deliveryAddress.city}</h:panelGroup> 
+          <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field gamelibrary-order-delivery-address-country">#{gameLibraryOrderBackingBean.deliveryAddress.country.name}</h:panelGroup>       
         </h:panelGroup>
                
         <h:panelGroup layout="block" styleClass="gamelibrary-order-items">
@@ -105,7 +82,7 @@
           <h:dataTable value="#{gameLibraryOrderBackingBean.orderItems}" var="orderItem">
             <h:column>
               <f:facet name="header">#{locales['gamelibrary.order.itemNameLabel']}</f:facet>
-              #{orderItem.count} x #{orderItem.name}
+              <h:outputText value="#{orderItem.count} x #{orderItem.name}"/>
             </h:column>
             
             <h:column>
@@ -148,7 +125,7 @@
           
         </h:panelGroup>
        
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-notes" rendered="#{!empty(orderBackingBean.notes)}">
+        <h:panelGroup layout="block" styleClass="gamelibrary-order-notes" rendered="#{!empty(gameLibraryOrderBackingBean.notes)}">
           <h3>#{locales['gamelibrary.order.notesTitle']}</h3>
           <p>#{gameLibraryOrderBackingBean.notes}</p>
         </h:panelGroup>
