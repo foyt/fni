@@ -47,7 +47,7 @@ public class GameLibraryEditPublicationTestsIT extends AbstractUITest {
     ChromeDriver driver = new ChromeDriver();
     try {
       loginInternal(driver, "librarian@foyt.fi", "pass");
-      testTitle(driver, TEST_URL, "Edit Publication: Test Book #1");
+      testTitle(driver, TEST_URL, "Edit Publication: Fat hag dwarves quickly zap jinx mob");
     } finally {
       driver.close();
     }
@@ -58,7 +58,7 @@ public class GameLibraryEditPublicationTestsIT extends AbstractUITest {
     ChromeDriver driver = new ChromeDriver();
     try {
       loginInternal(driver, "admin@foyt.fi", "pass");
-      testTitle(driver, TEST_URL, "Edit Publication: Test Book #1");
+      testTitle(driver, TEST_URL, "Edit Publication: Fat hag dwarves quickly zap jinx mob");
     } finally {
       driver.close();
     }

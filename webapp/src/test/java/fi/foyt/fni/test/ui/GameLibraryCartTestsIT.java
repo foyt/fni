@@ -70,7 +70,7 @@ public class GameLibraryCartTestsIT extends AbstractUITest {
 
       assertEquals(notes, driver.findElement(By.cssSelector(".gamelibrary-order-notes p")).getText());
       
-      assertEquals("1 X TEST BOOK #1", driver.findElement(By.cssSelector(".gamelibrary-order-items tbody tr td:nth-child(1)")).getText());
+      assertEquals("1 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", driver.findElement(By.cssSelector(".gamelibrary-order-items tbody tr td:nth-child(1)")).getText());
       assertEquals("EUR10.00", driver.findElement(By.cssSelector(".gamelibrary-order-items tbody tr td:nth-child(2)")).getText());
       assertEquals("EUR10.00", driver.findElement(By.cssSelector(".gamelibrary-order-items tbody tr td:nth-child(3)")).getText());
       assertEquals("EUR10.00", driver.findElement(By.cssSelector(".gamelibrary-order-total")).getText());
@@ -129,7 +129,7 @@ public class GameLibraryCartTestsIT extends AbstractUITest {
   
       assertEquals(notes, driver.findElement(By.cssSelector(".gamelibrary-order-notes p")).getText());
       
-      assertEquals("2 X TEST BOOK #1", driver.findElement(By.cssSelector(".gamelibrary-order-items tbody tr:nth-child(1) td:nth-child(1)")).getText());
+      assertEquals("2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", driver.findElement(By.cssSelector(".gamelibrary-order-items tbody tr:nth-child(1) td:nth-child(1)")).getText());
       assertEquals("EUR10.00", driver.findElement(By.cssSelector(".gamelibrary-order-items tbody tr:nth-child(1) td:nth-child(2)")).getText());
       assertEquals("EUR20.00", driver.findElement(By.cssSelector(".gamelibrary-order-items tbody tr:nth-child(1) td:nth-child(3)")).getText());
 
