@@ -31,16 +31,20 @@
           </h:panelGroup>
           
           <h:panelGroup layout="block" styleClass="gamelibrary-publication-details">
-            <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail" rendered="#{gameLibraryPublicationsBackingBean.isPublicationPurchasable(publication)}">
+            <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail gamelibrary-publication-detail-price" rendered="#{gameLibraryPublicationsBackingBean.isPublicationPurchasable(publication)}">
               <h:outputLabel value="#{locales['gamelibrary.publications.detailsPrice']}" />
-              <h:outputFormat value="#{publication.price}">
-                <f:convertNumber currencyCode="EUR" type="currency" />
-              </h:outputFormat>
+              <h:panelGroup styleClass="gamelibrary-publication-detail-value"> 
+                <h:outputFormat value="#{publication.price}">
+                  <f:convertNumber currencyCode="EUR" type="currency" />
+                </h:outputFormat>
+              </h:panelGroup>
             </h:panelGroup>
             
-            <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail">
+            <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail gamelibrary-publication-detail-number-of-pages">
               <h:outputLabel value="#{locales['gamelibrary.publications.detailsNumberOfPages']}" />
-              <h:outputText value="#{gameLibraryPublicationsBackingBean.getPublicationNumberOfPages(publication)}" />
+              <h:panelGroup styleClass="gamelibrary-publication-detail-value"> 
+                <h:outputText value="#{gameLibraryPublicationsBackingBean.getPublicationNumberOfPages(publication)}" />
+              </h:panelGroup>
             </h:panelGroup>
             
             <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail" rendered="#{gameLibraryPublicationsBackingBean.hasAuthors(publication)}">
@@ -60,7 +64,7 @@
             </h:panelGroup>
             
             <ui:fragment rendered="#{(gameLibraryPublicationsBackingBean.getCreativeCommonsLicense(publication) eq null)and(!empty(publication.license))}">
-              <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail">
+              <h:panelGroup layout="block" styleClass="gamelibrary-publication-detail gamelibrary-publication-detail-license">
                 <h:outputLabel value="#{locales['gamelibrary.publications.licenseOther']}"/>
                 <h:outputLink value="#{publication.license}" target="_blank">#{publication.license}</h:outputLink>
               </h:panelGroup>
