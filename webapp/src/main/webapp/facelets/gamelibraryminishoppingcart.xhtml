@@ -12,7 +12,7 @@
     <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-contents">
       <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-items">
         <h:panelGroup layout="block" styleClass="gamelibrary-mini-shopping-cart-empty" rendered="#{gameLibraryMiniShoppingCartBackingBean.shoppingCartEmpty}">
-          #{locales['gamelibrary.miniShoppingCart.empty']}
+          <h:outputText value="#{locales['gamelibrary.miniShoppingCart.empty']}" /> 
         </h:panelGroup>
         
         <ui:repeat var="cartItem" value="#{gameLibraryMiniShoppingCartBackingBean.shoppingCartItems}">   
