@@ -8,7 +8,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class ForumPostEditTestsIT extends AbstractUITest {
   
-  private static final String TEST_POST = "/forum/1_topic_forum/single_topic/edit/8";
+  private static final String TEST_POST = "/forum/1_topic_forum/single_topic/edit/11";
   
   @Test
   public void testLoginRedirect() throws Exception {

@@ -118,7 +118,7 @@ values
   (2, true, 'Single topic Forum', 'Single topic forum', '1_topic_forum', 1),
   (3, true, 'Five topic Forum', 'Five topic forum', '5_topic_forum', 1),
   (4, false, 'Immutable Forum', 'No topic creation allowed Forum', 'immutable', 1);
- 
+  
 insert into 
   ForumMessage (id, created, modified, views, author_id)
 values 
@@ -128,8 +128,11 @@ values
   (4, PARSEDATETIME('1 1 2010 15:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 15:30', 'd M yyyy HH:mm'), 0, 1),
   (5, PARSEDATETIME('1 1 2010 16:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 16:30', 'd M yyyy HH:mm'), 0, 1),
   (6, PARSEDATETIME('1 1 2010 17:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 17:30', 'd M yyyy HH:mm'), 0, 1),
-  (7, PARSEDATETIME('1 1 2010 18:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 17:30', 'd M yyyy HH:mm'), 0, 1);
-  
+  (7, PARSEDATETIME('1 1 2010 18:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 17:30', 'd M yyyy HH:mm'), 0, 1),
+  (8, PARSEDATETIME('1 1 2011 16:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2011 16:30', 'd M yyyy HH:mm'), 0, 1),
+  (9, PARSEDATETIME('1 1 2012 17:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2012 17:30', 'd M yyyy HH:mm'), 0, 1),
+  (10, PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), 0, 1);
+
 insert into 
   ForumTopic (id, forum_id, urlName, subject) 
 values 
@@ -139,48 +142,57 @@ values
   (4, 3, 'topic3of5', 'Topic 3 of 5 topic forum'),
   (5, 3, 'topic4of5', 'Topic 4 of 5 topic forum'),
   (6, 3, 'topic5of5', 'Topic 5 of 5 topic forum'),
-  (7, 4, 'immutable_topic', 'Topic of immutable Forum topic');
+  (7, 4, 'immutable_topic', 'Topic of immutable Forum topic'),
+  (8, 4, 'testbook_1', 'Fat hag dwarves quickly zap jinx mob'),
+  (9, 4, 'testbook_2', 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг'),
+  (10, 4, 'pangram_fi', 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.');
  
 insert into 
   ForumMessage (id, created, modified, views, author_id)
 values 
-  ( 8, PARSEDATETIME('1 1 2010 13:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 13:00', 'd M yyyy HH:mm'), 0, 1),
-  ( 9, PARSEDATETIME('1 1 2010 14:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 14:00', 'd M yyyy HH:mm'), 0, 1),
-  (10, PARSEDATETIME('1 1 2010 15:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 15:00', 'd M yyyy HH:mm'), 0, 1),
-  (11, PARSEDATETIME('1 1 2010 16:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 16:00', 'd M yyyy HH:mm'), 0, 1),
-  (12, PARSEDATETIME('1 1 2010 17:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 17:00', 'd M yyyy HH:mm'), 0, 1),
-  (13, PARSEDATETIME('1 1 2010 18:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 18:00', 'd M yyyy HH:mm'), 0, 1),
-  (14, PARSEDATETIME('1 1 2010 19:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 19:00', 'd M yyyy HH:mm'), 0, 1),
-  (15, PARSEDATETIME('1 1 2010 20:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 20:00', 'd M yyyy HH:mm'), 0, 1),
-  (16, PARSEDATETIME('1 1 2010 21:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 21:00', 'd M yyyy HH:mm'), 0, 1),
-  (17, PARSEDATETIME('1 1 2010 22:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 22:00', 'd M yyyy HH:mm'), 0, 1),
-  (18, PARSEDATETIME('1 1 2010 23:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 23:00', 'd M yyyy HH:mm'), 0, 1),
-  (19, PARSEDATETIME('1 1 2011 01:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2011 01:00', 'd M yyyy HH:mm'), 0, 1),
-  (20, PARSEDATETIME('1 1 2011 02:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2011 02:00', 'd M yyyy HH:mm'), 0, 1);
+  (11, PARSEDATETIME('1 1 2010 13:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 13:00', 'd M yyyy HH:mm'), 0, 1),
+  (12, PARSEDATETIME('1 1 2010 14:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 14:00', 'd M yyyy HH:mm'), 0, 1),
+  (13, PARSEDATETIME('1 1 2010 15:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 15:00', 'd M yyyy HH:mm'), 0, 1),
+  (14, PARSEDATETIME('1 1 2010 16:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 16:00', 'd M yyyy HH:mm'), 0, 1),
+  (15, PARSEDATETIME('1 1 2010 17:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 17:00', 'd M yyyy HH:mm'), 0, 1),
+  (16, PARSEDATETIME('1 1 2010 18:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 18:00', 'd M yyyy HH:mm'), 0, 1),
+  (17, PARSEDATETIME('1 1 2010 19:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 19:00', 'd M yyyy HH:mm'), 0, 1),
+  (18, PARSEDATETIME('1 1 2010 20:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 20:00', 'd M yyyy HH:mm'), 0, 1),
+  (19, PARSEDATETIME('1 1 2010 21:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 21:00', 'd M yyyy HH:mm'), 0, 1),
+  (20, PARSEDATETIME('1 1 2010 22:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 22:00', 'd M yyyy HH:mm'), 0, 1),
+  (21, PARSEDATETIME('1 1 2010 23:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 23:00', 'd M yyyy HH:mm'), 0, 1),
+  (22, PARSEDATETIME('1 1 2011 01:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2011 01:00', 'd M yyyy HH:mm'), 0, 1),
+  (23, PARSEDATETIME('1 1 2011 02:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2011 02:00', 'd M yyyy HH:mm'), 0, 1),
+  (24, PARSEDATETIME('1 1 2012 02:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2012 02:00', 'd M yyyy HH:mm'), 0, 1),
+  (25, PARSEDATETIME('1 1 2013 02:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2013 02:00', 'd M yyyy HH:mm'), 0, 1),
+  (26, PARSEDATETIME('1 1 2014 02:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2014 02:00', 'd M yyyy HH:mm'), 0, 1);
   
 insert into 
   ForumPost (id, topic_id, content)
 values 
-  ( 8, 1, '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eu iaculis mi, et fringilla nulla. Integer ut imperdiet lacus. In in massa eget lacus tincidunt aliquet auctor ut enim. Praesent rutrum leo eu sem feugiat, non dignissim lorem vulputate. Nam fermentum euismod sapien, et cursus mi pretium quis.</p>'),
-  ( 9, 3, '<p>Replyless</p>'),
-  (10, 4, '<p>With one reply</p>'),
-  (11, 4, '<p>Re: With one reply</p>'),
-  (12, 5, '<p>With two replies</p>'),
-  (13, 5, '<p>Re: With two replies</p>'),
-  (14, 5, '<p>Re: With two replies</p>'),
-  (15, 6, '<p>With three replies</p>'),
-  (16, 6, '<p>Re: With three replies</p>'),
-  (17, 6, '<p>Re: With three replies</p>'),
-  (18, 6, '<p>Re: With three replies</p>'),
-  (19, 7, '<p>Immutable</p>'),
-  (20, 7, '<p>Re: Immutable</p>');
+  (11, 1, '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eu iaculis mi, et fringilla nulla. Integer ut imperdiet lacus. In in massa eget lacus tincidunt aliquet auctor ut enim. Praesent rutrum leo eu sem feugiat, non dignissim lorem vulputate. Nam fermentum euismod sapien, et cursus mi pretium quis.</p>'),
+  (12, 3, '<p>Replyless</p>'),
+  (13, 4, '<p>With one reply</p>'),
+  (14, 4, '<p>Re: With one reply</p>'),
+  (15, 5, '<p>With two replies</p>'),
+  (16, 5, '<p>Re: With two replies</p>'),
+  (17, 5, '<p>Re: With two replies</p>'),
+  (18, 6, '<p>With three replies</p>'),
+  (19, 6, '<p>Re: With three replies</p>'),
+  (20, 6, '<p>Re: With three replies</p>'),
+  (21, 6, '<p>Re: With three replies</p>'),
+  (22, 7, '<p>Immutable</p>'),
+  (23, 7, '<p>Re: Immutable</p>'),
+  (24, 8, '<p>Re: Fat hag dwarves</p>'),
+  (25, 8, '<p>Re: Fat hag dwarves quickly zap jinx mob</p>'),
+  (26, 9, '<p>Re: Эх, чужак</p>');
   
 insert into 
   Publication (id, license, name, published, urlName, creator_id, defaultImage_id, forumTopic_id, modifier_id, language_id, price, weight, depth, height, width, created, modified, description)
 values 
-  (1, 'http://creativecommons.org/licenses/by-sa/3.0', 'Fat hag dwarves quickly zap jinx mob', true, 'testbook_1', 2, null, 7, 2, (select id from Language where iso2 = 'en'), 10, 1,2,3,4, PARSEDATETIME('1 1 2012', 'd M yyyy'), PARSEDATETIME('1 1 2012', 'd M yyyy'), 'Fat hag dwarves quickly zap jinx mob'),  
-  (2, 'http://www.example.com/custom/license', 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг', true, 'testbook_2', 2, null, 7, 2, (select id from Language where iso2 = 'en'), 10, 1,2,3,4, PARSEDATETIME('1 1 2013', 'd M yyyy'), PARSEDATETIME('1 1 2013', 'd M yyyy'), 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг'),
-  (3, 'http://creativecommons.org/licenses/by-nc/3.0', 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.', true, 'pangram_fi', 2, null, 7, 2, (select id from Language where iso2 = 'fi'), 7.5, 10, 10, 10, 10, PARSEDATETIME('1 1 2014', 'd M yyyy'), PARSEDATETIME('1 1 2014', 'd M yyyy'), 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.');
+  (1, 'http://creativecommons.org/licenses/by-sa/3.0', 'Fat hag dwarves quickly zap jinx mob', true, 'testbook_1', 2, null, 8, 2, (select id from Language where iso2 = 'en'), 10, 1,2,3,4, PARSEDATETIME('1 1 2012', 'd M yyyy'), PARSEDATETIME('1 1 2012', 'd M yyyy'), 'Fat hag dwarves quickly zap jinx mob'),  
+  (2, 'http://www.example.com/custom/license', 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг', true, 'testbook_2', 2, null, 9, 2, (select id from Language where iso2 = 'en'), 10, 1,2,3,4, PARSEDATETIME('1 1 2013', 'd M yyyy'), PARSEDATETIME('1 1 2013', 'd M yyyy'), 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг'),
+  (3, 'http://creativecommons.org/licenses/by-nc/3.0', 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.', true, 'pangram_fi', 2, null, 10, 2, (select id from Language where iso2 = 'fi'), 7.5, 10, 10, 10, 10, PARSEDATETIME('1 1 2014', 'd M yyyy'), PARSEDATETIME('1 1 2014', 'd M yyyy'), 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.');
 
 insert into 
   PublicationImage (id, created, modified, creator_id, modifier_id, publication_id, contentType, content)
@@ -221,6 +233,13 @@ values
   (2, 2, 1),
   (3, 2, 2),
   (4, 3, 3);
+  
+insert into 
+  PublicationAuthor (id, author_id, publication_id)
+values 
+  (1, 1, 2),
+  (2, 2, 2),
+  (3, 3, 3);
   
 insert into 
   Address (id, addressType, city, postalCode, street1, street2, country_id, user_id)
