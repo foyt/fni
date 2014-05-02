@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.UserToken;
@@ -23,7 +22,7 @@ public class GuestAuthenticationStrategy extends AbstractInternalAuthenticationS
 	}
 	
 	@Override
-	public UserToken accessToken(HttpSession session, Locale locale, Map<String, String[]> parameters) throws MultipleEmailAccountsException,
+	public UserToken accessToken(Locale locale, Map<String, String[]> parameters) throws MultipleEmailAccountsException,
 			EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException, InvalidCredentialsException, UserNotConfirmedException {
 		return handleLogin(locale, systemSettingsController.getSetting(SystemSettingKey.GUEST_USERNAME), systemSettingsController.getSetting(SystemSettingKey.GUEST_PASSWORD));
   }

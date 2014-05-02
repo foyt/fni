@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -55,7 +54,7 @@ public abstract class AuthenticationStrategy {
 	 */
 	public abstract boolean getSupportLogin();
 	
-  public abstract UserToken accessToken(HttpSession session, Locale locale, Map<String, String[]> parameters) throws MultipleEmailAccountsException, EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException, ExternalLoginFailedException, InvalidCredentialsException, UserNotConfirmedException ;
+  public abstract UserToken accessToken(Locale locale, Map<String, String[]> parameters) throws MultipleEmailAccountsException, EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException, ExternalLoginFailedException, InvalidCredentialsException, UserNotConfirmedException ;
   
   protected UserToken loginUser(AuthSource authSource, String sourceId, String token, String tokenSecret, Date tokenExpires, String identifier, List<String> emails, String firstName, String lastName, String nickname, Locale locale, String[] grantedScopes) throws MultipleEmailAccountsException, EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException {
     if (locale == null) {

@@ -5,7 +5,7 @@ import java.net.URLEncoder;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
+import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.scribe.builder.ServiceBuilder;
@@ -16,13 +16,14 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
 import fi.foyt.fni.persistence.model.users.UserToken;
+import fi.foyt.fni.session.SessionController;
 
 public abstract class OAuthAuthenticationStrategy extends AuthenticationStrategy {
   
-  private static final String REQUEST_TOKEN_SESSION_PARAMETER = "_OAUTH_REQUEST_TOKEN_";
-  private static final String SCOPES_SESSION_PARAMETER = "_OAUTH_REQUEST_SCOPES_";
+  @Inject
+  private SessionController sessionController;
   
-  public String authorize(HttpSession session, String... extraScopes) throws ConfigurationErrorException {
+  public String authorize(String... extraScopes) throws ConfigurationErrorException {
     String[] scopes = null;
     String[] requiredScopes = getRequiredScopes();
 
@@ -59,18 +60,18 @@ public abstract class OAuthAuthenticationStrategy extends AuthenticationStrategy
       }
     }
     
-    session.setAttribute(REQUEST_TOKEN_SESSION_PARAMETER, requestToken);
-    session.setAttribute(SCOPES_SESSION_PARAMETER, scopes);
+    sessionController.setLoginRequestToken(requestToken);
+    sessionController.setLoginScopes(scopes);
    
     return authUrl;
   }
   
 	@Override
-  public UserToken accessToken(HttpSession session, Locale locale, Map<String, String[]> parameters) throws MultipleEmailAccountsException, EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException, ExternalLoginFailedException {
-    Token requestToken = (Token) session.getAttribute(REQUEST_TOKEN_SESSION_PARAMETER);
-    String[] scopes = (String[]) session.getAttribute(SCOPES_SESSION_PARAMETER);
-    session.removeAttribute(REQUEST_TOKEN_SESSION_PARAMETER);
-    session.removeAttribute(SCOPES_SESSION_PARAMETER);
+  public UserToken accessToken(Locale locale, Map<String, String[]> parameters) throws MultipleEmailAccountsException, EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException, ExternalLoginFailedException {
+    Token requestToken = sessionController.getLoginRequestToken();
+    String[] scopes = sessionController.getLoginScopes();
+    sessionController.setLoginRequestToken(null);
+    sessionController.setLoginScopes(null);
     
     OAuthService service = getOAuthService(scopes);
     Verifier verifier = new Verifier(getVerifier(parameters));

@@ -17,7 +17,6 @@ import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.mail.MessagingException;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -115,14 +114,13 @@ public class LoginBackingBean {
 					FacesContext facesContext = FacesContext.getCurrentInstance();
 					ExternalContext externalContext = facesContext.getExternalContext();
 
-					HttpSession session = (HttpSession) externalContext.getSession(true);
 					Locale locale = sessionController.getLocale();
 
 					Map<String, String[]> parameters = new HashMap<String, String[]>();
 					parameters.put("username", new String[] { getLoginEmail() });
 					parameters.put("password", new String[] { getLoginPassword() });
 
-					UserToken userToken = authenticationStrategy.accessToken(session, locale, parameters);
+					UserToken userToken = authenticationStrategy.accessToken(locale, parameters);
 					if (userToken != null) {
 						sessionController.login(userToken);
 						String redirectUrl = sessionController.getRedirectUrl();
@@ -292,7 +290,6 @@ public class LoginBackingBean {
 
 	private void handleExternalLogin(FacesContext facesContext, ExternalContext externalContext, AuthSource authSource) {
 		Map<String, String[]> parameters = externalContext.getRequestParameterValuesMap();
-		HttpSession session = (HttpSession) externalContext.getSession(true);
 
 		AuthenticationStrategy authenticationStrategy = authenticationStrategyManager.getStrategy(authSource);
 		if (authenticationStrategy != null) {
@@ -306,7 +303,7 @@ public class LoginBackingBean {
 						if ("1".equals(externalContext.getRequestParameterMap().get("return"))) {
 							Locale locale = externalContext.getRequestLocale();
 							
-							UserToken userToken = oAuthStrategy.accessToken(session, locale, parameters);
+							UserToken userToken = oAuthStrategy.accessToken(locale, parameters);
 							if (userToken != null) {
 								sessionController.login(userToken);
 								String redirectUrl = sessionController.getRedirectUrl();
@@ -322,7 +319,7 @@ public class LoginBackingBean {
 							}
 						} else {
 							String[] extraScopes = parameters.get("extraScopes");
-							String redirectUrl = oAuthStrategy.authorize(session, extraScopes);
+							String redirectUrl = oAuthStrategy.authorize(extraScopes);
 							externalContext.redirect(redirectUrl);
 						}
 					}

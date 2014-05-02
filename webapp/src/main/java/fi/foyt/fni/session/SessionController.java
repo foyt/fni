@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.scribe.model.Token;
 
 import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
@@ -196,8 +197,26 @@ public class SessionController implements Serializable {
     return redirectUrl;
   }
   
+  public Token getLoginRequestToken() {
+    return loginRequestToken;
+  }
+  
+  public void setLoginRequestToken(Token loginRequestToken) {
+    this.loginRequestToken = loginRequestToken;
+  }
+  
+  public String[] getLoginScopes() {
+    return loginScopes;
+  }
+  
+  public void setLoginScopes(String[] loginScopes) {
+    this.loginScopes = loginScopes;
+  }
+  
   private Long loggedUserId = null;
   private Locale locale = null;
   private Long loggedUserTokenId;
   private String redirectUrl;
+  private Token loginRequestToken;
+  private String[] loginScopes;
 }
