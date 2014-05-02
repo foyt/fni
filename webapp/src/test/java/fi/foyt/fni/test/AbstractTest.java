@@ -3,7 +3,10 @@ package fi.foyt.fni.test;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -124,6 +127,45 @@ public abstract class AbstractTest {
     executeSql("delete from InternalAuth where user_id = ?", userId);
     executeSql("delete from UserEmail where user_id = ?", userId);
     executeSql("delete from User where id = ?", userId);
+  }
+
+  protected void createOAuthSettings() throws Exception {
+    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "FACEBOOK_APIKEY", getFacebookApiKey());
+    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "FACEBOOK_APISECRET", getFacebookApiSecret());
+    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "FACEBOOK_CALLBACKURL", getAppUrl() + "/login?return=1&loginMethod=FACEBOOK");
+    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_APIKEY", getGoogleApiKey());
+    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_APISECRET", getGoogleApiSecret());
+    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_CALLBACKURL", getAppUrl() + "/login?return=1&loginMethod=GOOGLE");
+  }
+
+  protected void purgeOAuthSettings() throws Exception {
+    executeSql("delete from SystemSetting where settingKey in ('FACEBOOK_APIKEY', 'FACEBOOK_APISECRET', 'FACEBOOK_CALLBACKURL', 'GOOGLE_APIKEY', 'GOOGLE_APISECRET', 'GOOGLE_CALLBACKURL')");
+    deleteOAuthUsers();
+  }
+  
+  protected void deleteOAuthUsers() throws Exception {
+    List<Long> userIds = new ArrayList<>();
+    
+    Connection connection = getConnection();
+    try {
+      connection.setAutoCommit(true);
+      PreparedStatement statement = connection.prepareStatement("select user_id from UserIdentifier where authSource in ('GOOGLE', 'FACEBOOK')");
+      try {
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+          Long userId = resultSet.getLong(1);
+          userIds.add(userId);
+        }
+      } finally {
+        statement.close();
+      }
+    } finally {
+      connection.close();
+    }
+    
+    for (Long userId : userIds) {
+      deleteUser(userId);
+    }
   }
   
 }
