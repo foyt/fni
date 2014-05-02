@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -90,6 +91,10 @@ public class FacebookAuthenticationStrategy extends OAuthAuthenticationStrategy 
       String email = meObject.getEmail();
       String username = meObject.getUsername();
       Locale userLocale = meObject.getLocale();
+      
+      if (StringUtils.isBlank(username)) {
+        username = email;
+      }
       
       return loginUser(AuthSource.FACEBOOK, username, accessToken.getToken(), accessToken.getSecret(), expires, id, Arrays.asList(email), firstName, lastName, null, userLocale, grantedScopes);
     } catch (IOException e) {
