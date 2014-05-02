@@ -33,6 +33,38 @@ public abstract class AbstractTest {
     return System.getProperty("it.ctx");
   }
   
+  protected String getGoogleApiKey() {
+    return System.getProperty("it.google.apiKey");
+  }
+  
+  protected String getGoogleApiSecret() {
+    return System.getProperty("it.google.apiSecret");
+  }
+  
+  protected String getGoogleUsername() {
+    return System.getProperty("it.google.username");
+  }
+  
+  protected String getGooglePassword() {
+    return System.getProperty("it.google.password");
+  }
+  
+  protected String getFacebookApiKey() {
+    return System.getProperty("it.facebook.apiKey");
+  }
+  
+  protected String getFacebookApiSecret() {
+    return System.getProperty("it.facebook.apiSecret");
+  }
+  
+  protected String getFacebookUsername() {
+    return System.getProperty("it.facebook.username");
+  }
+  
+  protected String getFacebookPassword() {
+    return System.getProperty("it.facebook.password");
+  }
+  
   protected Connection getConnection() throws Exception {
     String username = System.getProperty("it.jdbc.username");
     String password = System.getProperty("it.jdbc.password");
