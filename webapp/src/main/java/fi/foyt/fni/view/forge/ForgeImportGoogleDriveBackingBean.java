@@ -102,6 +102,10 @@ public class ForgeImportGoogleDriveBackingBean {
       // We need authorization from Google
       
       String redirectUrl = contextPath + "/forge/import-google-drive";
+      if (parentFolderId != null) {
+        redirectUrl += "?parentFolderId=" + parentFolderId;
+      }
+      
       FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
         .append(contextPath)
         .append("/login?loginMethod=GOOGLE&redirectUrl=")
