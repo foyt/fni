@@ -11,7 +11,7 @@
     <h:panelGroup layout="block" styleClass="forge-material-info">
       <h:panelGroup layout="block" styleClass="forge-material-title-container">
         <h:outputLink styleClass="forge-material-title" value="#{request.contextPath}/forge/#{forgeMaterialsBackingBean.getMaterialViewer(material)}/#{material.path}" title="#{material.title}">
-          #{material.title.length() gt 30 ? material.title.substring(0, 27).concat('...') : material.title}
+          <h:outputText value="#{material.title.length() gt 30 ? material.title.substring(0, 27).concat('...') : material.title}"/>
         </h:outputLink>
         
         <h:commandLink action="#{forgeMaterialsBackingBean.starMaterial(material.id)}" styleClass="forge-material-star" style="#{!forgeMaterialsBackingBean.isStarred(material.id) ? '' : 'display: none'}"/>
