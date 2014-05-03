@@ -19,15 +19,16 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.collections.ComparatorUtils;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
+import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
-import com.ocpsoft.pretty.faces.annotation.URLQueryParameter;
 
 import fi.foyt.fni.drive.DriveManager;
 import fi.foyt.fni.materials.FolderController;
@@ -47,21 +48,18 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { 
-  @URLMapping(
-    id = "forge-import-google-drive", 
-    pattern = "/forge/import-google-drive", 
-    viewId = "/forge/import-google-drive.jsf"
-  ),
-  @URLMapping(
-	  id = "forge-import-google-drive-folder", 
-		pattern = "/forge/import-google-drive/#{parentFolderId : forgeImportGoogleDriveBackingBean.folderId}", 
-		viewId = "/forge/import-google-drive.jsf"
-  )
-})
+@Join (path = "/forge/import-google-drive", to = "/forge/import-google-drive.jsf")
+@LoggedIn
 public class ForgeImportGoogleDriveBackingBean {
 
   private final static String REQUIRED_SCOPE = "https://www.googleapis.com/auth/drive";
+  
+  @Parameter
+  private String folderId;
+
+  @Parameter
+  @Matches ("[0-9]{1,}")
+  private Long parentFolderId;
   
   @Inject
   private Logger logger;
@@ -81,9 +79,9 @@ public class ForgeImportGoogleDriveBackingBean {
   @Inject
   private DriveManager driveManager;
   
-	@SuppressWarnings("unchecked")
-  @URLAction
-	@LoggedIn
+  @SuppressWarnings("unchecked")
+  @RequestAction
+  @Deferred
 	public void load() throws IOException {
     UserToken userToken = sessionController.getLoggedUserToken();
     User loggedUser = userToken.getUserIdentifier().getUser();
@@ -164,7 +162,6 @@ public class ForgeImportGoogleDriveBackingBean {
     this.importEntryIds = importEntryIds;
   }
 
-	@LoggedIn
 	public void importFiles() throws IOException {
     Folder parentFolder = parentFolderId != null ? folderController.findFolderById(parentFolderId) : null;
     if (parentFolder != null) {
@@ -172,7 +169,7 @@ public class ForgeImportGoogleDriveBackingBean {
         throw new ForbiddenException();
       }
     }
-
+    
 	  String accountUser = System.getProperty("fni-google-drive.accountUser");
     UserToken userToken = sessionController.getLoggedUserToken();
     Drive drive = driveManager.getUserDrive(userToken.getToken());
@@ -237,14 +234,10 @@ public class ForgeImportGoogleDriveBackingBean {
 	  
 	  return "file";
 	}
-	
+
 	private boolean root;
-	private String folderId;
   private List<File> files;
   private List<String> importEntryIds;
-  
-  @URLQueryParameter ("parentFolderId")
-  private Long parentFolderId;
   
   private class MimeTypeComparator implements Comparator<File> {
     
