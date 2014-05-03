@@ -1,5 +1,8 @@
 package fi.foyt.fni.test.ui;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,8 +10,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import static org.junit.Assert.assertEquals;
 
 public class ForgeImportGoogleDriveTestsIT extends AbstractUITest {
   
@@ -70,6 +71,31 @@ public class ForgeImportGoogleDriveTestsIT extends AbstractUITest {
       driver.findElement(By.cssSelector(".forge-import-google-drive-button")).click();
       new WebDriverWait(driver, 60).until(ExpectedConditions.titleIs("Forge"));
       assertEquals("Forge", driver.getTitle());
+      assertEquals(1, driver.findElements(By.cssSelector(".forge-materials-list a[title=\"How to get started with Drive\"]")).size());
+    } finally {
+      driver.close();
+    }
+  }
+  
+  @Test
+  public void testImportMaterialIntoFolder() throws Exception {
+    ChromeDriver driver = new ChromeDriver();
+    try {
+      loginGoogle(driver);
+      driver.get(getAppUrl() + "/forge/");
+      driver.findElement(By.cssSelector(".forge-new-material-menu")).click();
+      driver.findElement(By.cssSelector(".forge-new-material-menu .forge-new-material-folder")).click();
+      new WebDriverWait(driver, 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".forge-create-folder-dialog")));
+      driver.findElement(By.cssSelector(".forge-create-folder-dialog .forge-create-folder-name")).sendKeys("test folder");
+      driver.findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
+      waitForUrlMatches(driver, ".*/forge/folders/[0-9]{1,}/test_folder");
+      driver.findElement(By.cssSelector(".forge-import-material-menu")).click();
+      driver.findElement(By.cssSelector(".forge-import-material-menu .forge-import-google-drive")).click();
+      assertTrue(driver.getCurrentUrl(), driver.getCurrentUrl().matches(".*\\/import-google-drive\\?parentFolderId=[0-9]{1,}\\b"));
+      driver.findElement(By.cssSelector(".forge-import-google-drive-check-container input[type=\"checkbox\"]")).click();
+      driver.findElement(By.cssSelector(".forge-import-google-drive-button")).click();
+      new WebDriverWait(driver, 60).until(ExpectedConditions.titleIs("Forge"));
+      assertTrue(driver.getTitle().matches(".*/forge/folders/[0-9]{1,}/test_folder"));
       assertEquals(1, driver.findElements(By.cssSelector(".forge-materials-list a[title=\"How to get started with Drive\"]")).size());
     } finally {
       driver.close();
