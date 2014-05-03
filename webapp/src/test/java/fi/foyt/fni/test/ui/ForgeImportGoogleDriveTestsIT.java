@@ -34,6 +34,17 @@ public class ForgeImportGoogleDriveTestsIT extends AbstractUITest {
   }
   
   @Test
+  public void testNotFound() throws Exception {
+    ChromeDriver driver = new ChromeDriver();
+    try {
+      loginGoogle(driver);
+      testNotFound(driver, "/forge/import-google-drive?parentFolderId=12345");
+    } finally {
+      driver.close();
+    }
+  }
+  
+  @Test
   public void testLoggedInWithGoogle() throws Exception {
     ChromeDriver driver = new ChromeDriver();
     try {
