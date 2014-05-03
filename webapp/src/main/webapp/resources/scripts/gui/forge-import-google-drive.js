@@ -9,20 +9,20 @@
     }
   });
   
-  $(document).ready(function () {
-    $('.forge-import-google-drive-button').click(function () {
-      var selected = new Array();
-      
-      $('.forge-import-google-drive-check-container input:checked').each(function (index, input) {
-        selected.push($(input).val());
-      });
-      
-      var form = $(this).closest('form');
-      var prefix = form.attr('name');
-
-      $('input[name="' + prefix + ':import-entry-ids' + '"]').val(selected.join('&'));
-      $('input[name="' + prefix + ':import-button' + '"]').click();
+  $(document).on('click','.forge-import-google-drive-button', function (event) {
+    event.preventDefault();
+    
+    var selected = new Array();
+    
+    $('.forge-import-google-drive-check-container input:checked').each(function (index, input) {
+      selected.push($(input).val());
     });
+    
+    var form = $(this).closest('form');
+    var prefix = form.attr('name');
+
+    $('input[name="' + prefix + ':import-entry-ids' + '"]').val(selected.join('&'));
+    $('input[name="' + prefix + ':import-button' + '"]').click();
   });
 
 }).call(this);
