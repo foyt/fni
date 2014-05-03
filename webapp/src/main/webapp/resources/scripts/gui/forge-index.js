@@ -317,6 +317,7 @@
           modal: true,
           width: 400,
           buttons: [{
+            'class': 'ok-button',
             'text': dialog.data('create-button'),
             'click': function(event) {
               var title = $(dialog).find('.forge-create-folder-name').val();
@@ -325,6 +326,7 @@
               $('input[name="' + prefix + ':new-folder' + '"]').click();
             }
           }, {
+            'class': 'cancel-button',
             'text': dialog.data('cancel-button'),
             'click': function(event) { 
               $(this).dialog("close");
