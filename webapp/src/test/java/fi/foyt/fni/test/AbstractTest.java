@@ -121,8 +121,10 @@ public abstract class AbstractTest {
   }
   
   protected void deleteUser(Long userId) throws Exception {
-    executeSql("delete from Folder where id in (select id from Material where creator_id = ?)", userId);
     executeSql("delete from GoogleDocument where id in (select id from Material where creator_id = ?)", userId);
+    executeSql("delete from Material where creator_id = ? and type = 'GOOGLE_DOCUMENT'", userId);
+    executeSql("delete from Folder where id in (select id from Material where creator_id = ?)", userId);
+    executeSql("delete from Material where creator_id = ? and type = 'FOLDER'", userId);
     executeSql("delete from Material where creator_id = ?", userId);
     executeSql("delete from Address where user_id = ?", userId);
     executeSql("delete from UserToken where userIdentifier_id in (select id from UserIdentifier where user_id = ?)", userId);
