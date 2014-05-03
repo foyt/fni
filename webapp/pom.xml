@@ -677,6 +677,9 @@
               <execute-commands>
                 <batch>true</batch>
                 <commands>
+                  <command>/system-property=fni-google-drive.keyFile:add(value="${it.googleDrive.keyFile}")</command>
+                  <command>/system-property=fni-google-drive.accountId:add(value="${it.googleDrive.accountId}")</command>
+                  <command>/system-property=fni-google-drive.accountUser:add(value="${it.googleDrive.accountUser}")</command>
                   <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
                   <command>/core-service=management/security-realm=ssl-realm:add()</command>
                   <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${project.build.directory}/fnici.keystore",keystore-password="storepass",alias="fnici")</command>
