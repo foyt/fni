@@ -6,9 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -248,11 +246,7 @@ public class GameLibraryCartTestsIT extends AbstractUITest {
   private void acceptPaytrailPayment(ChromeDriver driver) {
     driver.findElement(By.cssSelector("form[action=\"https://kultaraha.op.fi/cgi-bin/krcgi\"] input[type=\"submit\"]")).click();
  
-    new WebDriverWait(driver, 60).until(new ExpectedCondition<Boolean>() {
-      public Boolean apply(WebDriver driver) {
-        return "https://kultaraha.op.fi/cgi-bin/krcgi".equals(driver.getCurrentUrl());
-      }
-    });
+    waitForUrl(driver, "https://kultaraha.op.fi/cgi-bin/krcgi");
   
     driver.findElement(By.name("id")).sendKeys("123456");
     driver.findElement(By.name("pw")).sendKeys("7890");

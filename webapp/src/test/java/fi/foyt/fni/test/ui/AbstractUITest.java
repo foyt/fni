@@ -7,8 +7,11 @@ import java.net.URLEncoder;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import fi.foyt.fni.test.AbstractTest;
 
@@ -101,6 +104,22 @@ public abstract class AbstractUITest extends AbstractTest {
   protected void testNotFound(RemoteWebDriver driver, String view, boolean secure) {
     driver.get(getAppUrl(secure) + view);
     assertEquals("Page Not Found!", driver.getTitle());
+  }
+
+  protected void waitForUrl(ChromeDriver driver, final String url) {
+    new WebDriverWait(driver, 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        return url.equals(driver.getCurrentUrl());
+      }
+    });
+  }
+
+  protected void waitForUrlMatches(ChromeDriver driver, final String regex) {
+    new WebDriverWait(driver, 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        return driver.getCurrentUrl().matches(regex);
+      }
+    });
   }
   
 }
