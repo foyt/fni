@@ -24,9 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.exception.RewriteException;
 
-import com.ocpsoft.pretty.PrettyContext;
-import com.ocpsoft.pretty.PrettyException;
-
 import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.UnauthorizedException;
 import fi.foyt.fni.system.ErrorUtils;
@@ -70,15 +67,6 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
             String redirectUrl = (String) httpServletRequest.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
             StringBuilder redirectBuilder = new StringBuilder().append(externalContext.getRequestContextPath()).append("/login");
 
-            if (StringUtils.isBlank(redirectUrl)) {
-              PrettyContext prettyContext = PrettyContext.getCurrentInstance();
-              if (prettyContext != null) {
-                redirectUrl = new StringBuilder(externalContext.getRequestContextPath())
-                  .append(prettyContext.getRequestURL().toString())
-                  .append(prettyContext.getRequestQueryString().toQueryString()).toString();
-              }
-            }
-            
             if (StringUtils.isNotBlank(redirectUrl)) {
               redirectBuilder.append("?redirectUrl=" + URLEncoder.encode(redirectUrl, "UTF-8"));
             }
@@ -120,7 +108,6 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
        exception instanceof FacesException || 
        exception instanceof EJBException || 
        exception instanceof ELException || 
-       exception instanceof PrettyException || 
        exception instanceof CreationException || 
        exception instanceof IllegalStateException ||
        exception instanceof RewriteException;

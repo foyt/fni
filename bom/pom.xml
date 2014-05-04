@@ -62,7 +62,7 @@
 
     <!-- PrettyFaces -->
 
-    <prettyfaces.version>2.0.11.Final</prettyfaces.version>
+    <rewrite.version>2.0.11.Final</rewrite.version>
 
     <!-- Scribe -->
 
@@ -186,31 +186,25 @@
       <dependency>
         <groupId>org.ocpsoft.rewrite</groupId>
         <artifactId>rewrite-servlet</artifactId>
-        <version>${prettyfaces.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.ocpsoft.rewrite</groupId>
-        <artifactId>rewrite-config-prettyfaces</artifactId>
-        <version>${prettyfaces.version}</version>
+        <version>${rewrite.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.ocpsoft.rewrite</groupId>
         <artifactId>rewrite-config-annotations</artifactId>
-        <version>${prettyfaces.version}</version>
+        <version>${rewrite.version}</version>
       </dependency>
     
       <dependency>
          <groupId>org.ocpsoft.rewrite</groupId>
          <artifactId>rewrite-integration-faces</artifactId>
-         <version>${prettyfaces.version}</version>
+         <version>${rewrite.version}</version>
       </dependency>
       
       <dependency>
          <groupId>org.ocpsoft.rewrite</groupId>
          <artifactId>rewrite-integration-cdi</artifactId>
-         <version>${prettyfaces.version}</version>
+         <version>${rewrite.version}</version>
       </dependency>
 
       <!-- Scribe -->

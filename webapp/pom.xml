@@ -100,7 +100,7 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- PrettyFaces -->
+    <!-- Rewrite -->
 
     <dependency>
       <groupId>org.ocpsoft.rewrite</groupId>
@@ -115,11 +115,6 @@
     <dependency>
       <groupId>org.ocpsoft.rewrite</groupId>
       <artifactId>rewrite-integration-cdi</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.ocpsoft.rewrite</groupId>
-      <artifactId>rewrite-config-prettyfaces</artifactId>
     </dependency>
 
     <!-- NGram -->
