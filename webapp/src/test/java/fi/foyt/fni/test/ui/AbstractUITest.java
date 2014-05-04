@@ -69,6 +69,7 @@ public abstract class AbstractUITest extends AbstractTest {
     driver.findElement(By.name("Email")).sendKeys(getGoogleUsername());
     driver.findElement(By.name("Passwd")).sendKeys(getGooglePassword());
     driver.findElement(By.name("signIn")).click();
+    waitForUrlMatches(driver, "^" + getAppUrl() + ".*");
     assertEquals(1, driver.findElements(By.cssSelector(".menu-tools-account")).size());
     assertEquals(0, driver.findElements(By.cssSelector(".menu-tools-login")).size());
   }
