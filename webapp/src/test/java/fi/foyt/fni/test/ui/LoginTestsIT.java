@@ -31,7 +31,7 @@ public class LoginTestsIT extends AbstractUITest {
   public void testInternal() {
     ChromeDriver driver = new ChromeDriver();
     try {
-      loginInternal(driver, "user", "pass");
+      loginInternal(driver, "user@foyt.fi", "pass");
     } finally {
       driver.close();
     }
