@@ -11,23 +11,6 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <properties>
-    <!-- Test -->
-
-    <wildfly.home>${project.basedir}/.cargo/extracts/wildfly-8.1.0.CR1/wildfly-8.1.0.CR1</wildfly.home>
-    <wildfly.version>8.1.0.CR1</wildfly.version>
-    <h2.version>1.4.177</h2.version>
-    <it.port.http>8080</it.port.http>
-    <it.port.https>8443</it.port.https>
-    <it.host>dev.forgeandillusion.net</it.host>
-    <it.ctx>fnici</it.ctx>
-    <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
-    <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE</it.jdbc.url>
-    <it.jdbc.jndi>java:/jboss/datasources/MysqlDS</it.jdbc.jndi>
-    <it.jdbc.username>sa</it.jdbc.username>
-    <it.jdbc.password>sa</it.jdbc.password>
-  </properties>
-
   <dependencies>
 
     <!-- Servlet -->
@@ -288,28 +271,6 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- Test -->
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-java</artifactId>
-      <scope>test</scope>
-      <version>2.41.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>${h2.version}</version>
-      <scope>test</scope>
-    </dependency>
-
   </dependencies>
    
   <build>
@@ -406,290 +367,345 @@
           </archive>
         </configuration>
       </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.14.1</version>
-        <configuration>
-          <systemPropertyVariables>
-            <jboss.home>${wildfly.home}</jboss.home>
-            <module.path>${wildfly.home}/modules</module.path>
-          </systemPropertyVariables>
-        </configuration>
-      </plugin>
+    </plugins>
+  </build>
+  
+  <profiles>
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+    </profile>
+    <profile>
+      <id>it</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
       
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>properties-maven-plugin</artifactId>
-        <version>1.0-alpha-2</version>
-        <executions>
-          <execution>
-            <phase>initialize</phase>
-            <goals>
-              <goal>read-project-properties</goal>
-            </goals>
+      <properties>
+        <wildfly.home>${project.basedir}/.cargo/extracts/wildfly-8.1.0.CR1/wildfly-8.1.0.CR1</wildfly.home>
+        <wildfly.version>8.1.0.CR1</wildfly.version>
+        <h2.version>1.4.177</h2.version>
+        <it.port.http>8080</it.port.http>
+        <it.port.https>8443</it.port.https>
+        <it.host>dev.forgeandillusion.net</it.host>
+        <it.ctx>fnici</it.ctx>
+        <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
+        <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE</it.jdbc.url>
+        <it.jdbc.jndi>java:/jboss/datasources/MysqlDS</it.jdbc.jndi>
+        <it.jdbc.username>sa</it.jdbc.username>
+        <it.jdbc.password>sa</it.jdbc.password>
+      </properties>
+      
+      <dependencies>
+        <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <scope>test</scope>
+        </dependency>
+    
+        <dependency>
+          <groupId>org.seleniumhq.selenium</groupId>
+          <artifactId>selenium-java</artifactId>
+          <scope>test</scope>
+        </dependency>
+    
+        <dependency>
+          <groupId>com.h2database</groupId>
+          <artifactId>h2</artifactId>
+          <version>${h2.version}</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.14.1</version>
             <configuration>
-              <files>
-                <file>src/test/resources/it.properties</file>
-              </files>
+              <systemPropertyVariables>
+                <jboss.home>${wildfly.home}</jboss.home>
+                <module.path>${wildfly.home}/modules</module.path>
+              </systemPropertyVariables>
             </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <version>2.16</version>
-        <configuration>
-          <systemPropertyVariables>
-            <jboss.home>${wildfly.home}</jboss.home>
-            <module.path>${wildfly.home}/modules</module.path>
-            <it.host>${it.host}</it.host>
-            <it.port.http>${it.port.http}</it.port.http>
-            <it.port.https>${it.port.https}</it.port.https>
-            <it.ctx>${it.ctx}</it.ctx>
-            <it.jdbc.driver>${it.jdbc.driver}</it.jdbc.driver>
-            <it.jdbc.url>${it.jdbc.url}</it.jdbc.url>
-            <it.jdbc.jndi>${it.jdbc.jndi}</it.jdbc.jndi>
-            <it.jdbc.username>${it.jdbc.username}</it.jdbc.username>
-            <it.jdbc.password>${it.jdbc.password}</it.jdbc.password>
-            <it.google.apiKey>${it.google.apiKey}</it.google.apiKey>
-            <it.google.apiSecret>${it.google.apiSecret}</it.google.apiSecret>
-            <it.google.username>${it.google.username}</it.google.username>
-            <it.google.password>${it.google.password}</it.google.password>
-            <it.facebook.apiKey>${it.facebook.apiKey}</it.facebook.apiKey>
-            <it.facebook.apiSecret>${it.facebook.apiSecret}</it.facebook.apiSecret>
-            <it.facebook.username>${it.facebook.username}</it.facebook.username>
-            <it.facebook.password>${it.facebook.password}</it.facebook.password>
-            <it.dropbox.apiKey>${it.dropbox.apiKey}</it.dropbox.apiKey>
-            <it.dropbox.apiSecret>${it.dropbox.apiSecret}</it.dropbox.apiSecret>
-            <it.dropbox.username>${it.dropbox.username}</it.dropbox.username>
-            <it.dropbox.password>${it.dropbox.password}</it.dropbox.password>
-          </systemPropertyVariables>
-        </configuration>
-        <executions>
-          <execution>
-            <id>integration-test</id>
-            <goals>
-              <goal>integration-test</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>verify</id>
-            <goals>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>sql-maven-plugin</artifactId>
-        <version>1.5</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
-          </dependency>
-        </dependencies>
-
-        <configuration>      
-          <driver>${it.jdbc.driver}</driver>
-          <url>${it.jdbc.url}</url>
-          <username>${it.jdbc.username}</username>
-          <password>${it.jdbc.password}</password>
-        </configuration>
-        <executions>
-          <execution>
-            <id>create-schema</id>
-            <phase>pre-integration-test</phase>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-            <configuration>
-              <autocommit>true</autocommit>
-              <srcFiles>
-                <srcFile>src/test/resources/create.sql</srcFile>
-                <srcFile>src/test/resources/data.sql</srcFile>
-              </srcFiles>
-            </configuration>
-          </execution>
+          </plugin>
           
-          <execution>
-            <id>drop-db-after-test</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>execute</goal>
-            </goals>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>properties-maven-plugin</artifactId>
+            <version>1.0-alpha-2</version>
+            <executions>
+              <execution>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>read-project-properties</goal>
+                </goals>
+                <configuration>
+                  
+                  <files>
+                    <file>src/test/resources/it.properties</file>
+                  </files>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+    
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <version>2.16</version>
             <configuration>
-              <autocommit>true</autocommit>
-              <srcFiles>
-                <srcFile>src/test/resources/drop.sql</srcFile>
-              </srcFiles>
+              <systemPropertyVariables>
+                <jboss.home>${wildfly.home}</jboss.home>
+                <module.path>${wildfly.home}/modules</module.path>
+                <it.host>${it.host}</it.host>
+                <it.port.http>${it.port.http}</it.port.http>
+                <it.port.https>${it.port.https}</it.port.https>
+                <it.ctx>${it.ctx}</it.ctx>
+                <it.jdbc.driver>${it.jdbc.driver}</it.jdbc.driver>
+                <it.jdbc.url>${it.jdbc.url}</it.jdbc.url>
+                <it.jdbc.jndi>${it.jdbc.jndi}</it.jdbc.jndi>
+                <it.jdbc.username>${it.jdbc.username}</it.jdbc.username>
+                <it.jdbc.password>${it.jdbc.password}</it.jdbc.password>
+                <it.google.apiKey>${it.google.apiKey}</it.google.apiKey>
+                <it.google.apiSecret>${it.google.apiSecret}</it.google.apiSecret>
+                <it.google.username>${it.google.username}</it.google.username>
+                <it.google.password>${it.google.password}</it.google.password>
+                <it.facebook.apiKey>${it.facebook.apiKey}</it.facebook.apiKey>
+                <it.facebook.apiSecret>${it.facebook.apiSecret}</it.facebook.apiSecret>
+                <it.facebook.username>${it.facebook.username}</it.facebook.username>
+                <it.facebook.password>${it.facebook.password}</it.facebook.password>
+                <it.dropbox.apiKey>${it.dropbox.apiKey}</it.dropbox.apiKey>
+                <it.dropbox.apiSecret>${it.dropbox.apiSecret}</it.dropbox.apiSecret>
+                <it.dropbox.username>${it.dropbox.username}</it.dropbox.username>
+                <it.dropbox.password>${it.dropbox.password}</it.dropbox.password>
+              </systemPropertyVariables>
             </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>keytool-maven-plugin</artifactId>
-        <version>1.4</version>
-        <executions>
-          <execution>
-            <phase>generate-resources</phase>
-            <id>keyclean</id>
-            <goals>
-              <goal>clean</goal>
-            </goals>
-            <configuration>
-              <keystore>${project.build.directory}/fnici.keystore</keystore>
-            </configuration>
-          </execution>
-          <execution> 
-            <phase>generate-resources</phase>
-            <id>genkey</id>
-            <goals>
-              <goal>generateKeyPair</goal>
-            </goals>
-            <configuration>
-              <keystore>${project.build.directory}/fnici.keystore</keystore>
-              <dname>cn=${it.host}, ou=None, L=Test, ST=Test, o=Test, c=TE</dname>
-              <storepass>storepass</storepass>
-              <alias>fnici</alias>
-              <keyalg>RSA</keyalg>
-              <keysize>2048</keysize>
-            </configuration>
-          </execution>
-          <execution>
-            <phase>generate-resources</phase>
-            <id>exportkey</id>
-            <goals>
-              <goal>exportCertificate</goal>
-            </goals>
-            <configuration>
-              <keystore>${project.build.directory}/fnici.keystore</keystore>
-              <alias>fnici</alias>
-              <file>${project.build.directory}/fnici.crt</file>
-              <storepass>storepass</storepass>
-            </configuration>
-          </execution>
-          <execution>
-            <phase>generate-resources</phase>
-            <id>importkey</id>
-            <goals>
-              <goal>importCertificate</goal>
-            </goals>
-            <configuration>
-              <keystore>${project.build.directory}/fnici.keystore</keystore>
-              <alias>root</alias>
-              <file>${project.build.directory}/fnici.crt</file>
-              <storepass>storepass</storepass>
-              <noprompt>true</noprompt>
-              <trustcacerts>true</trustcacerts>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.cargo</groupId>
-        <artifactId>cargo-maven2-plugin</artifactId>
-        <version>1.4.8</version>
-        <configuration>
-          <container>
-            <containerId>wildfly8x</containerId>
-            <log>${project.basedir}/target/cargo.log</log>
-            <output>${project.basedir}/target/wildfly.log</output>
-            <zipUrlInstaller>
-              <url>http://download.jboss.org/wildfly/8.1.0.CR1/wildfly-8.1.0.CR1.zip</url>
-              <downloadDir>${project.basedir}/.cargo/downloads</downloadDir>
-              <extractDir>${project.basedir}/.cargo/extracts</extractDir>
-            </zipUrlInstaller>
+            <executions>
+              <execution>
+                <id>integration-test</id>
+                <goals>
+                  <goal>integration-test</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>verify</id>
+                <goals>
+                  <goal>verify</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+    
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>sql-maven-plugin</artifactId>
+            <version>1.5</version>
             <dependencies>
               <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
               </dependency>
             </dependencies>
-          </container>
-          <configuration>
-            <properties>
-              <cargo.servlet.port>${it.port.http}</cargo.servlet.port>
-              <cargo.jboss.configuration>standalone</cargo.jboss.configuration>
-              <cargo.jvmargs>-Xms64m -Xmx1152m -XX:MaxPermSize=512m -XX:-UseSplitVerifier</cargo.jvmargs>
-              <cargo.datasource.datasource.fnici>
-                cargo.datasource.driver=${it.jdbc.driver}|
-                cargo.datasource.url=${it.jdbc.url}|
-                cargo.datasource.jndi=${it.jdbc.jndi}|
-                cargo.datasource.username=${it.jdbc.username}|
-                cargo.datasource.password=${it.jdbc.password}|
-                cargo.datasource.transactionsupport=LOCAL_TRANSACTION
-              </cargo.datasource.datasource.fnici>
-            </properties>    
-          </configuration>
-          <deployables>
-            <deployable>
-              <properties>
-                <context>${it.ctx}</context>
-              </properties>
-              <pingURL>http://${it.host}:${it.port.http}/${it.ctx}</pingURL>
-              <pingTimeout>600000</pingTimeout>
-            </deployable>
-          </deployables>
-
-        </configuration>
-        <executions>
-          <execution>
-            <id>start-cargo</id>
-            <phase>pre-integration-test</phase>
-            <goals>
-              <goal>start</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>stop-cargo</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>stop</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      
-      <plugin>
-        <groupId>org.wildfly.plugins</groupId>
-        <artifactId>wildfly-maven-plugin</artifactId>
-        <version>1.0.1.Final</version>
-        <executions>
-          <execution>
-            <id>add-https</id>
-            <phase>pre-integration-test</phase>
-            <goals>
-              <goal>execute-commands</goal>
-            </goals>
-            <configuration>
-              <execute-commands>
-                <batch>true</batch>
-                <commands>
-                  <command>/system-property=fni-google-drive.keyFile:add(value="${it.googleDrive.keyFile}")</command>
-                  <command>/system-property=fni-google-drive.accountId:add(value="${it.googleDrive.accountId}")</command>
-                  <command>/system-property=fni-google-drive.accountUser:add(value="${it.googleDrive.accountUser}")</command>
-                  <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
-                  <command>/core-service=management/security-realm=ssl-realm:add()</command>
-                  <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${project.build.directory}/fnici.keystore",keystore-password="storepass",alias="fnici")</command>
-                </commands>
-              </execute-commands>
+    
+            <configuration>      
+              <driver>${it.jdbc.driver}</driver>
+              <url>${it.jdbc.url}</url>
+              <username>${it.jdbc.username}</username>
+              <password>${it.jdbc.password}</password>
             </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+            <executions>
+              <execution>
+                <id>create-schema</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>execute</goal>
+                </goals>
+                <configuration>
+                  <autocommit>true</autocommit>
+                  <srcFiles>
+                    <srcFile>src/test/resources/create.sql</srcFile>
+                    <srcFile>src/test/resources/data.sql</srcFile>
+                  </srcFiles>
+                </configuration>
+              </execution>
+              
+              <execution>
+                <id>drop-db-after-test</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>execute</goal>
+                </goals>
+                <configuration>
+                  <autocommit>true</autocommit>
+                  <srcFiles>
+                    <srcFile>src/test/resources/drop.sql</srcFile>
+                  </srcFiles>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>keytool-maven-plugin</artifactId>
+            <version>1.4</version>
+            <executions>
+              <execution>
+                <phase>generate-resources</phase>
+                <id>keyclean</id>
+                <goals>
+                  <goal>clean</goal>
+                </goals>
+                <configuration>
+                  <keystore>${project.build.directory}/fnici.keystore</keystore>
+                </configuration>
+              </execution>
+              <execution> 
+                <phase>generate-resources</phase>
+                <id>genkey</id>
+                <goals>
+                  <goal>generateKeyPair</goal>
+                </goals>
+                <configuration>
+                  <keystore>${project.build.directory}/fnici.keystore</keystore>
+                  <dname>cn=${it.host}, ou=None, L=Test, ST=Test, o=Test, c=TE</dname>
+                  <storepass>storepass</storepass>
+                  <alias>fnici</alias>
+                  <keyalg>RSA</keyalg>
+                  <keysize>2048</keysize>
+                </configuration>
+              </execution>
+              <execution>
+                <phase>generate-resources</phase>
+                <id>exportkey</id>
+                <goals>
+                  <goal>exportCertificate</goal>
+                </goals>
+                <configuration>
+                  <keystore>${project.build.directory}/fnici.keystore</keystore>
+                  <alias>fnici</alias>
+                  <file>${project.build.directory}/fnici.crt</file>
+                  <storepass>storepass</storepass>
+                </configuration>
+              </execution>
+              <execution>
+                <phase>generate-resources</phase>
+                <id>importkey</id>
+                <goals>
+                  <goal>importCertificate</goal>
+                </goals>
+                <configuration>
+                  <keystore>${project.build.directory}/fnici.keystore</keystore>
+                  <alias>root</alias>
+                  <file>${project.build.directory}/fnici.crt</file>
+                  <storepass>storepass</storepass>
+                  <noprompt>true</noprompt>
+                  <trustcacerts>true</trustcacerts>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+    
+          <plugin>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-maven2-plugin</artifactId>
+            <version>1.4.8</version>
+            <configuration>
+              <container>
+                <containerId>wildfly8x</containerId>
+                <log>${project.basedir}/target/cargo.log</log>
+                <output>${project.basedir}/target/wildfly.log</output>
+                <zipUrlInstaller>
+                  <url>http://download.jboss.org/wildfly/8.1.0.CR1/wildfly-8.1.0.CR1.zip</url>
+                  <downloadDir>${project.basedir}/.cargo/downloads</downloadDir>
+                  <extractDir>${project.basedir}/.cargo/extracts</extractDir>
+                </zipUrlInstaller>
+                <dependencies>
+                  <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                  </dependency>
+                </dependencies>
+              </container>
+              <configuration>
+                <properties>
+                  <cargo.servlet.port>${it.port.http}</cargo.servlet.port>
+                  <cargo.jboss.configuration>standalone</cargo.jboss.configuration>
+                  <cargo.jvmargs>-Xms64m -Xmx1152m -XX:MaxPermSize=512m -XX:-UseSplitVerifier</cargo.jvmargs>
+                  <cargo.datasource.datasource.fnici>
+                    cargo.datasource.driver=${it.jdbc.driver}|
+                    cargo.datasource.url=${it.jdbc.url}|
+                    cargo.datasource.jndi=${it.jdbc.jndi}|
+                    cargo.datasource.username=${it.jdbc.username}|
+                    cargo.datasource.password=${it.jdbc.password}|
+                    cargo.datasource.transactionsupport=LOCAL_TRANSACTION
+                  </cargo.datasource.datasource.fnici>
+                </properties>    
+              </configuration>
+              <deployables>
+                <deployable>
+                  <properties>
+                    <context>${it.ctx}</context>
+                  </properties>
+                  <pingURL>http://${it.host}:${it.port.http}/${it.ctx}</pingURL>
+                  <pingTimeout>600000</pingTimeout>
+                </deployable>
+              </deployables>
+    
+            </configuration>
+            <executions>
+              <execution>
+                <id>start-cargo</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>start</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>stop-cargo</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>stop</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          
+          <plugin>
+            <groupId>org.wildfly.plugins</groupId>
+            <artifactId>wildfly-maven-plugin</artifactId>
+            <version>1.0.1.Final</version>
+            <executions>
+              <execution>
+                <id>add-https</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>execute-commands</goal>
+                </goals>
+                <configuration>
+                  <execute-commands>
+                    <batch>true</batch>
+                    <commands>
+                      <command>/system-property=fni-google-drive.keyFile:add(value="${it.googleDrive.keyFile}")</command>
+                      <command>/system-property=fni-google-drive.accountId:add(value="${it.googleDrive.accountId}")</command>
+                      <command>/system-property=fni-google-drive.accountUser:add(value="${it.googleDrive.accountUser}")</command>
+                      <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
+                      <command>/core-service=management/security-realm=ssl-realm:add()</command>
+                      <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${project.build.directory}/fnici.keystore",keystore-password="storepass",alias="fnici")</command>
+                    </commands>
+                  </execute-commands>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
   <repositories>
 
