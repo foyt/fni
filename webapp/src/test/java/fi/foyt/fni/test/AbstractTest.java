@@ -68,6 +68,22 @@ public abstract class AbstractTest {
     return System.getProperty("it.facebook.password");
   }
   
+  protected String getDropboxApiKey() {
+    return System.getProperty("it.dropbox.apiKey");
+  }
+  
+  protected String getDropboxApiSecret() {
+    return System.getProperty("it.dropbox.apiSecret");
+  }
+  
+  protected String getDropboxUsername() {
+    return System.getProperty("it.dropbox.username");
+  }
+  
+  protected String getDropboxPassword() {
+    return System.getProperty("it.dropbox.password");
+  }
+  
   protected Connection getConnection() throws Exception {
     String username = System.getProperty("it.jdbc.username");
     String password = System.getProperty("it.jdbc.password");
@@ -121,8 +137,12 @@ public abstract class AbstractTest {
   }
   
   protected void deleteUser(Long userId) throws Exception {
+    executeSql("delete from DropboxFile where id in (select id from Material where creator_id = ?)", userId);
+    executeSql("delete from Material where creator_id = ? and type = 'DROPBOX_FILE'", userId);
     executeSql("delete from GoogleDocument where id in (select id from Material where creator_id = ?)", userId);
     executeSql("delete from Material where creator_id = ? and type = 'GOOGLE_DOCUMENT'", userId);
+    executeSql("delete from DropboxFolder where id in (select id from Material where creator_id = ?)", userId);
+    executeSql("delete from DropboxRootFolder where id in (select id from Material where creator_id = ?)", userId);
     executeSql("delete from Folder where id in (select id from Material where creator_id = ?)", userId);
     executeSql("delete from Material where creator_id = ? and type = 'FOLDER'", userId);
     executeSql("delete from Material where creator_id = ?", userId);
@@ -141,10 +161,14 @@ public abstract class AbstractTest {
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_APIKEY", getGoogleApiKey());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_APISECRET", getGoogleApiSecret());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_CALLBACKURL", getAppUrl() + "/login?return=1&loginMethod=GOOGLE");
+    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_ROOT", "sandbox");
+    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_APIKEY", getDropboxApiKey());
+    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_APISECRET", getDropboxApiSecret());
+    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_CALLBACKURL", getAppUrl() + "/login?return=1&loginMethod=DROPBOX");
   }
-
+  
   protected void purgeOAuthSettings() throws Exception {
-    executeSql("delete from SystemSetting where settingKey in ('FACEBOOK_APIKEY', 'FACEBOOK_APISECRET', 'FACEBOOK_CALLBACKURL', 'GOOGLE_APIKEY', 'GOOGLE_APISECRET', 'GOOGLE_CALLBACKURL')");
+    executeSql("delete from SystemSetting where settingKey in ('FACEBOOK_APIKEY', 'FACEBOOK_APISECRET', 'FACEBOOK_CALLBACKURL', 'GOOGLE_APIKEY', 'GOOGLE_APISECRET', 'GOOGLE_CALLBACKURL', 'DROPBOX_ROOT', 'DROPBOX_APIKEY', 'DROPBOX_APISECRET', 'DROPBOX_CALLBACKURL')");
     deleteOAuthUsers();
   }
   
