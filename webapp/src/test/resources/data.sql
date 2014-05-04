@@ -100,10 +100,10 @@ values
 insert into 
   GoogleDocument (id, documentId, mimeType) 
 values
-  (12, '0B11AEMlNrF0cc3RhcnRlcl9maWxl', 'application/pdf'),
-  (13, '0B11AEMlNrF0cc3RhcnRlcl9maWxl', 'application/pdf'),
-  (14, '0B11AEMlNrF0cc3RhcnRlcl9maWxl', 'application/pdf');
-  
+  (12, '1ZTrze-3nBd_HWlxsdyX7dndLqlMUOU5Lid2XaJVrDuE', 'application/vnd.google-apps.document'),
+  (13, '1ZTrze-3nBd_HWlxsdyX7dndLqlMUOU5Lid2XaJVrDuE', 'application/vnd.google-apps.document'),
+  (14, '1ZTrze-3nBd_HWlxsdyX7dndLqlMUOU5Lid2XaJVrDuE', 'application/vnd.google-apps.document');
+  	
 insert into 
   UserMaterialRole (role, material_id, user_id)
 values 	
