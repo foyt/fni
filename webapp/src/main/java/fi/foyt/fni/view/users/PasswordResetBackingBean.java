@@ -11,9 +11,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.codec.digest.DigestUtils;
-
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.persistence.model.users.PasswordResetKey;
@@ -22,14 +21,11 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Named
 @RequestScoped
 @Stateful
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "users-password-reset", 
-		pattern = "/users/resetpassword/#{passwordResetBackingBean.key}", 
-		viewId = "/users/resetpassword.jsf"
-  )
-})
+@Join (path = "/users/resetpassword/{key}", to = "/users/resetpassword.jsf")
 public class PasswordResetBackingBean {
+  
+  @Parameter
+  private String key;
 
 	@Inject
 	private AuthenticationController authenticationController;
@@ -81,7 +77,6 @@ public class PasswordResetBackingBean {
 		}
 	}
 	
-	private String key;
 	private String password1;
 	private String password2;
 }
