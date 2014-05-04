@@ -9,28 +9,23 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
+import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
 import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "users-logout", 
-		pattern = "/logout", 
-		viewId = "/users/logout.jsf"
-  )
-})
+@Join ( path = "/logout", to = "/users/logout.jsf")
 public class LogoutBackingBean {
 	
 	@Inject
   private SessionController sessionController;
 	
-	@URLAction
+	@RequestAction
+	@Deferred
 	public void load() throws IOException {
 		sessionController.logout();
     
