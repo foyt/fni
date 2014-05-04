@@ -10,9 +10,10 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
+import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.persistence.model.auth.InternalAuth;
@@ -22,19 +23,17 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Named
 @RequestScoped
 @Stateful
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "users-verification", 
-		pattern = "/users/verify/#{verifyBackingBean.key}", 
-		viewId = "/users/verify.jsf"
-  )
-})
+@Join (path = "/users/verify/{key}", to = "/users/verify.jsf")
 public class VerifyBackingBean {
-
+  
+  @Parameter
+  private String key;
+  
 	@Inject
 	private AuthenticationController authenticationController;
 	
-	@URLAction
+	@RequestAction
+	@Deferred
 	public void load() throws IOException {
 		UserVerificationKey verificationKey = authenticationController.findVerificationKey(getKey());
 		if (verificationKey == null) {
@@ -63,6 +62,4 @@ public class VerifyBackingBean {
 	public void setKey(String key) {
 		this.key = key;
 	}
-	
-	private String key;
 }
