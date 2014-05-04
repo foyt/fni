@@ -1,6 +1,5 @@
 package fi.foyt.fni.view.forge;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
@@ -10,9 +9,10 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.materials.GoogleDriveMaterialController;
 import fi.foyt.fni.materials.MaterialController;
@@ -24,19 +24,21 @@ import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 
-@SuppressWarnings("el-syntax")
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { 
-	@URLMapping(
-	  id = "forge-google-drive", 
-   	pattern = "/forge/google-drive/#{forgeGoogleDriveBackingBean.ownerId}/#{ /[a-zA-Z0-9_\\/\\.\\\\-\\:]*/ forgeGoogleDriveBackingBean.urlPath }", 
-		viewId = "/forge/googledrive.jsf"
-  ) 
-})
+@Join (path = "/forge/google-drive/{ownerId}/{urlPath}", to = "/forge/googledrive.jsf")
+@LoggedIn
 public class ForgeGoogleDriveBackingBean {
-	
+
+  @Parameter
+  @Matches ("[0-9]{1,}")
+  private Long ownerId;
+
+  @Parameter
+  @Matches ("[a-zA-Z0-9_\\/.-\\:,]{1,}")
+  private String urlPath;
+  
 	@Inject
 	private MaterialController materialController;
 
@@ -49,18 +51,17 @@ public class ForgeGoogleDriveBackingBean {
   @Inject
   private MaterialPermissionController materialPermissionController;
 	
-	@URLAction
-	@LoggedIn
-	public void load() throws IOException, GeneralSecurityException {
+	@RequestAction
+	public String load() throws IOException, GeneralSecurityException {
 		if ((getOwnerId() == null)||(getUrlPath() == null)) {
-			throw new FileNotFoundException();
+			return "/error/not-found.jsf";
 		}
 		
     String completePath = "/materials/" + getOwnerId() + "/" + getUrlPath();
     Material material = materialController.findMaterialByCompletePath(completePath);
 
 		if (!(material instanceof GoogleDocument)) {
-			throw new FileNotFoundException();
+		  return "/error/not-found.jsf";
 		}
 
 		if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
@@ -75,6 +76,8 @@ public class ForgeGoogleDriveBackingBean {
 		folders = ForgeViewUtils.getParentList(googleDocument);
 		
 	  googleDriveEditLink = googleDriveMaterialController.getGoogleDocumentEditLink(googleDocument);
+	  
+	  return null;
 	}
 	
 	public Long getOwnerId() {
@@ -121,8 +124,6 @@ public class ForgeGoogleDriveBackingBean {
 		return googleDriveEditLink;
 	}
 	
-	private Long ownerId;
-	private String urlPath;
 	private Long materialId;
 	private String materialTitle;
 	private String materialPath;
