@@ -468,6 +468,10 @@
             <it.facebook.apiSecret>${it.facebook.apiSecret}</it.facebook.apiSecret>
             <it.facebook.username>${it.facebook.username}</it.facebook.username>
             <it.facebook.password>${it.facebook.password}</it.facebook.password>
+            <it.dropbox.apiKey>${it.dropbox.apiKey}</it.dropbox.apiKey>
+            <it.dropbox.apiSecret>${it.dropbox.apiSecret}</it.dropbox.apiSecret>
+            <it.dropbox.username>${it.dropbox.username}</it.dropbox.username>
+            <it.dropbox.password>${it.dropbox.password}</it.dropbox.password>
           </systemPropertyVariables>
         </configuration>
         <executions>
