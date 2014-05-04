@@ -12,6 +12,7 @@ import javax.inject.Named;
 
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.RequestAction;
+import org.ocpsoft.rewrite.faces.annotation.Deferred;
 import org.scribe.model.Token;
 
 import fi.foyt.fni.dropbox.DropboxController;
@@ -39,6 +40,7 @@ public class ForgeConnectDropboxBackingBean {
   private DropboxController dropboxController;
 
   @RequestAction
+  @Deferred
 	public String load() throws IOException {
 		// TODO: Proper error handling
 		
@@ -49,12 +51,7 @@ public class ForgeConnectDropboxBackingBean {
     if (dropboxToken == null) {
     	// We are not authenticated with Dropbox, redirecting to authentication
     	String redirectUrl = contextPath + "/forge/connect-dropbox";
-    	
-    	FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
-    	  .append(contextPath)
-  	    .append("/login?loginMethod=DROPBOX&redirectUrl=")
-  	    .append(URLEncoder.encode(redirectUrl, "UTF-8"))
-  	    .toString());
+    	return "/users/login.jsf?faces-redirect=true&loginMethod=DROPBOX&redirectUrl=" + URLEncoder.encode(redirectUrl, "UTF-8");
     } else {
       DropboxRootFolder dropboxRootFolder = dropboxController.findDropboxRootFolderByUser(loggedUser);
       if (dropboxRootFolder == null) {
@@ -63,10 +60,8 @@ public class ForgeConnectDropboxBackingBean {
         FacesUtils.addPostRedirectMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("forge.dropboxConnect.connectedMessage"));
       }
       
-      return "pretty:forge-index";
+      return "/forge/index.jsf?faces-redirect=true";
     }
-    
-    return null;
 	}
 
 }
