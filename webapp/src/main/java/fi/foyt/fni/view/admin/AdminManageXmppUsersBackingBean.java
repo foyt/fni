@@ -14,10 +14,8 @@ import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.chat.ChatCredentialsController;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
@@ -32,13 +30,9 @@ import fi.foyt.fni.users.UserController;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { 
-  @URLMapping(
-	  id = "admin-create-xmpp-users", 
-		pattern = "/admin/manage-xmpp-users/", 
-		viewId = "/admin/manage-xmpp-users.jsf"
-  )
-})
+@Join (path = "/admin/manage-xmpp-users/", to = "/admin/manage-xmpp-users.jsf")
+@LoggedIn
+@Secure (Permission.SYSTEM_ADMINISTRATION)
 public class AdminManageXmppUsersBackingBean {
   
   @Inject
@@ -50,9 +44,7 @@ public class AdminManageXmppUsersBackingBean {
   @Inject
   private SystemSettingsController systemSettingsController;
   
-	@URLAction
-	@LoggedIn
-	@Secure (Permission.SYSTEM_ADMINISTRATION)
+	@RequestAction
 	public void load() throws GeneralSecurityException, IOException {
 	  users = userController.listUsers();
 	  xmppBoshService = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOSH_SERVICE);

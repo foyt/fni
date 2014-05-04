@@ -11,11 +11,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
-
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLAction.PhaseId;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
+import org.ocpsoft.rewrite.faces.annotation.Deferred;
+import org.ocpsoft.rewrite.faces.annotation.Phase;
 
 import fi.foyt.fni.chat.ChatCredentialsController;
 import fi.foyt.fni.illusion.IllusionGroupController;
@@ -32,13 +31,9 @@ import fi.foyt.fni.utils.servlet.RequestUtils;
 @RequestScoped
 @Stateful
 @Named
-@URLMappings(mappings = {
-  @URLMapping(
-		id = "illusion-create-group", 
-		pattern = "/illusion/creategroup", 
-		viewId = "/illusion/creategroup.jsf"
-  )
-})
+@Join (path = "/illusion/creategroup", to = "/illusion/creategroup.jsf")
+@LoggedIn
+//TODO: Security
 public class IllusionCreateGroupBackingBean {
 
   @Inject
@@ -53,9 +48,7 @@ public class IllusionCreateGroupBackingBean {
   @Inject
   private IllusionGroupController illusionGroupController;
 
-  @LoggedIn
-// TODO: Security
-	@URLAction
+	@RequestAction
 	public void load() throws IOException, GeneralSecurityException {
 	  User user = sessionController.getLoggedUser();
 
@@ -70,7 +63,8 @@ public class IllusionCreateGroupBackingBean {
     resolveNames();
 	}
 	
-	@URLAction (phaseId = PhaseId.INVOKE_APPLICATION)
+	@RequestAction
+	@Deferred (after = Phase.UPDATE_MODEL_VALUES)
   public void applyValues() {
     resolveNames();
 	}

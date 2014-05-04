@@ -7,9 +7,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
@@ -21,7 +20,8 @@ import fi.foyt.fni.session.SessionController;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { @URLMapping(id = "illusion-index", pattern = "/illusion/", viewId = "/illusion/index.jsf") })
+@Join (path = "/illusion/", to = "/illusion/index.jsf")
+@LoggedIn
 public class IllusionIndexBackingBean {
 
   @Inject
@@ -30,8 +30,7 @@ public class IllusionIndexBackingBean {
   @Inject
   private IllusionGroupController illusionGroupController;
 
-  @URLAction
-  @LoggedIn
+  @RequestAction
   public void init() {
     User loggedUser = sessionController.getLoggedUser();
     

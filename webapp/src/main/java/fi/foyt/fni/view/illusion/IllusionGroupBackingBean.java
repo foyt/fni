@@ -9,9 +9,10 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.ocpsoft.pretty.faces.annotation.URLAction;
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
+import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
 import fi.foyt.fni.chat.ChatCredentialsController;
 import fi.foyt.fni.illusion.IllusionGroupController;
@@ -28,9 +29,13 @@ import fi.foyt.fni.system.SystemSettingsController;
 @RequestScoped
 @Named
 @Stateful
-@URLMappings(mappings = { @URLMapping(id = "illusion-group", pattern = "/illusion/group/#{urlName : illusionGroupBackingBean.urlName}", viewId = "/illusion/group.jsf") })
+@Join (path = "/illusion/group/{urlName}", to = "/illusion/group.jsf")
+@LoggedIn
 public class IllusionGroupBackingBean {
 
+  @Parameter
+  private String urlName;
+  
   @Inject
   private SessionController sessionController;
 
@@ -43,8 +48,8 @@ public class IllusionGroupBackingBean {
   @Inject
   private ChatCredentialsController chatCredentialsController;
 
-  @URLAction (onPostback = false)
-  @LoggedIn
+  @RequestAction
+  @IgnorePostback
   public void init() throws GeneralSecurityException, IOException {
     IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
     if (illusionGroup == null) {
@@ -165,7 +170,6 @@ public class IllusionGroupBackingBean {
   }
   
   private Long id;
-  private String urlName;
   private String name;
   private String description;
   private String xmppBoshService;
