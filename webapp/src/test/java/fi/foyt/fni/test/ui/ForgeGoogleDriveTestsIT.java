@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class ForgeGoogleDriveTestsIT extends AbstractUITest {
   
@@ -66,6 +68,7 @@ public class ForgeGoogleDriveTestsIT extends AbstractUITest {
 
   private void testMayView(RemoteWebDriver driver, String path) {
     driver.get(getAppUrl() + path);
+    new WebDriverWait(driver, 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".forge-google-drive-container iframe")));
     assertEquals(1, driver.findElements(By.cssSelector(".forge-google-drive-container iframe")).size());
   }
 }
