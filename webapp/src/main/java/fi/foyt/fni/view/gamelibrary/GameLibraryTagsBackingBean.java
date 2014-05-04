@@ -9,7 +9,6 @@ import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
-import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
@@ -25,7 +24,6 @@ import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 public class GameLibraryTagsBackingBean {
   
   @Parameter
-  @Matches ("[a-zA-Z0-9_\\/.-\\:,\\ ]{1,}")
   private String tag;
   
 	@Inject
