@@ -25,4 +25,15 @@ public class ForgeUploadTestsIT extends AbstractUITest {
       driver.close();
     }
   }
+  
+  @Test
+  public void testNotFound() throws Exception {
+    ChromeDriver driver = new ChromeDriver();
+    try {
+      loginInternal(driver, "user@foyt.fi", "pass");
+      testNotFound(driver, "/forge/upload?parentFolderId=12345");
+    } finally {
+      driver.close();
+    }
+  }
 }
