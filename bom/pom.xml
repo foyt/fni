@@ -71,7 +71,7 @@
     <diff_match_patch.version>current</diff_match_patch.version>
     <cngram.version>1.0-0.060327</cngram.version>
     <jtidy.version>r938</jtidy.version>
-    <google-api-services-drive.version>v2-rev121-1.18.0-rc</google-api-services-drive.version>
+    <google-api-services-drive.version>v2-rev123-1.18.0-rc</google-api-services-drive.version>
     <google-http-client-jackson.version>1.18.0-rc</google-http-client-jackson.version>
 
     <!-- Xalan -->
