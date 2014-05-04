@@ -69,7 +69,10 @@ values
   (8, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Image in Subfolder', 'IMAGE', 'image_in_subfolder', 2, 2, 2),
   (9, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Vector Image', 'VECTOR_IMAGE', 'vectorimage', 2, 2, null),
   (10, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Vector Image in Folder', 'VECTOR_IMAGE', 'vectorimage_in_folder', 2, 2, 1),
-  (11, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Vector Image in Subfolder', 'VECTOR_IMAGE', 'vectorimage_in_subfolder', 2, 2, 2);
+  (11, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Vector Image in Subfolder', 'VECTOR_IMAGE', 'vectorimage_in_subfolder', 2, 2, 2),
+  (12, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc', 'GOOGLE_DOCUMENT', 'googledoc', 2, 2, null),
+  (13, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc in Folder', 'GOOGLE_DOCUMENT', 'googledoc_in_folder', 2, 2, 1),
+  (14, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc in Subfolder', 'GOOGLE_DOCUMENT', 'googledoc_in_subfolder', 2, 2, 2);
   
 insert into 
   Document (id, data)
@@ -95,6 +98,13 @@ values
   (11, '<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg width="100" height="100"><circle r="45" cy="50" cx="50" style="fill:yellow;stroke: #000"/></svg>');
 
 insert into 
+  GoogleDocument (id, documentId, mimeType) 
+values
+  (12, '0B11AEMlNrF0cc3RhcnRlcl9maWxl', 'application/pdf'),
+  (13, '0B11AEMlNrF0cc3RhcnRlcl9maWxl', 'application/pdf'),
+  (14, '0B11AEMlNrF0cc3RhcnRlcl9maWxl', 'application/pdf');
+  
+insert into 
   UserMaterialRole (role, material_id, user_id)
 values 	
   ('MAY_VIEW', 1, 3),
@@ -104,7 +114,9 @@ values
   ('MAY_VIEW', 6, 3),
   ('MAY_EDIT', 6, 4),
   ('MAY_VIEW', 9, 3),
-  ('MAY_EDIT', 9, 4);
+  ('MAY_EDIT', 9, 4),
+  ('MAY_VIEW', 12, 3),
+  ('MAY_EDIT', 12, 4);
   
 insert into 
   ForumCategory (id, name)
