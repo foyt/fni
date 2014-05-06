@@ -12,6 +12,7 @@ import javax.inject.Named;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
+import org.ocpsoft.rewrite.faces.annotation.Deferred;
 import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
 import fi.foyt.fni.chat.ChatCredentialsController;
@@ -50,6 +51,7 @@ public class IllusionGroupBackingBean {
 
   @RequestAction
   @IgnorePostback
+  @Deferred
   public void init() throws GeneralSecurityException, IOException {
     IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
     if (illusionGroup == null) {
@@ -152,7 +154,6 @@ public class IllusionGroupBackingBean {
     return userRole;
   }
 
-  @LoggedIn
   public String updateUserNickname() throws FileNotFoundException {
     IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
     if (illusionGroup == null) {
