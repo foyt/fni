@@ -2,15 +2,19 @@ package fi.foyt.fni.test.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import fi.foyt.fni.utils.licenses.CreativeCommonsLicense;
 import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
@@ -116,6 +120,7 @@ public class GameLibraryListTestsIT extends AbstractUITest {
   public void testMostRecentList() {
     ChromeDriver driver = new ChromeDriver();
     try {
+      acceptCookieDirective(driver);
       driver.get(getAppUrl(true) + "/gamelibrary/"); 
 
       testPublicationDetails(driver, ".gamelibrary-publications form:nth-child(1) .gamelibrary-publication", UML_ID, UML_PATH, UML_TITLE, UML_TAGS, 
@@ -135,6 +140,7 @@ public class GameLibraryListTestsIT extends AbstractUITest {
   public void testTagList() {
     ChromeDriver driver = new ChromeDriver();
     try {
+      acceptCookieDirective(driver);
       driver.get(getAppUrl(true) + "/gamelibrary/tags/test");
       
       testPublicationDetails(driver, ".gamelibrary-publications form:nth-child(1) .gamelibrary-publication", SIMPLE_ID, SIMPLE_PATH, SIMPLE_TITLE, SIMPLE_TAGS, 
@@ -147,11 +153,11 @@ public class GameLibraryListTestsIT extends AbstractUITest {
     } 
   }
   
-  
   @Test
   public void testPublicationDetailsSimple() {
     ChromeDriver driver = new ChromeDriver();
     try {
+      acceptCookieDirective(driver);
       driver.get(getAppUrl(true) + SIMPLE_PATH);
       testPublicationDetails(driver, ".gamelibrary-publication", SIMPLE_ID, SIMPLE_PATH, SIMPLE_TITLE, SIMPLE_TAGS, 
           SIMPLE_DESC, SIMPLE_PRICE, SIMPLE_PAGES, SIMPLE_AUTHOR_NAMES, SIMPLE_AUTHOR_IDS, SIMPLE_LICENSE, SIMPLE_PURCHASABLE, SIMPLE_COMMENT_URL, SIMPLE_COMMENTS);
@@ -164,6 +170,7 @@ public class GameLibraryListTestsIT extends AbstractUITest {
   public void testPublicationDetailsBySaAndRus() {
     ChromeDriver driver = new ChromeDriver();
     try {
+      acceptCookieDirective(driver);
       driver.get(getAppUrl(true) + BYSARUS_PATH);
       testPublicationDetails(driver, ".gamelibrary-publication", BYSARUS_ID, BYSARUS_PATH,  BYSARUS_TITLE, BYSARUS_TAGS, 
           BYSARUS_DESC, BYSARUS_PRICE, BYSARUS_PAGES, BYSARUS_AUTHOR_NAMES, BYSARUS_AUTHOR_IDS, BYSARUS_LICENSE, BYSARUS_PURCHASABLE, BYSARUS_COMMENT_URL, BYSARUS_COMMENTS);
@@ -176,6 +183,7 @@ public class GameLibraryListTestsIT extends AbstractUITest {
   public void testPublicationDetailsUmlaut() {
     ChromeDriver driver = new ChromeDriver();
     try {
+      acceptCookieDirective(driver);
       driver.get(getAppUrl(true) + UML_PATH);
       testPublicationDetails(driver, ".gamelibrary-publication", UML_ID, UML_PATH,  UML_TITLE, UML_TAGS, 
           UML_DESC, UML_PRICE, UML_PAGES, UML_AUTHOR_NAMES, UML_AUTHOR_IDS, UML_LICENSE, UML_PURCHASABLE, UML_COMMENT_URL, UML_COMMENTS);
@@ -233,6 +241,35 @@ public class GameLibraryListTestsIT extends AbstractUITest {
     
     assertEquals("COMMENTS (" + comments + ")", driver.findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-comments")).getText());
     assertEquals(getAppUrl(true) + "/forum/" + commentUrl, driver.findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-comments")).getAttribute("href"));
+
+    assertShareButtonsHidden(driver, publicationSelector);
+    driver.findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button")).click();
+    assertShareButtonsVisible(driver, publicationSelector);
+    driver.findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button")).click();
+    assertShareButtonsHidden(driver, publicationSelector);
+    driver.findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button")).click();
+    assertShareButtonsVisible(driver, publicationSelector);
+    driver.findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-description")).click();
+    assertShareButtonsHidden(driver, publicationSelector);
+  }
+
+  private void acceptCookieDirective(ChromeDriver driver) {
+    driver.get(getAppUrl(true) + "/gamelibrary/"); 
+    driver.manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
+  }
+
+  private void assertShareButtonsHidden(RemoteWebDriver driver, String publicationSelector) {
+   new WebDriverWait(driver, 10).until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-twitter")));
+    assertFalse(driver.findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-twitter")).isDisplayed());
+    assertFalse(driver.findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-facebook")).isDisplayed());
+    assertFalse(driver.findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-gplus")).isDisplayed());
+  }
+
+  private void assertShareButtonsVisible(RemoteWebDriver driver, String publicationSelector) {
+    new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-twitter")));
+    assertTrue(driver.findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-twitter")).isDisplayed());
+    assertTrue(driver.findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-facebook")).isDisplayed());
+    assertTrue(driver.findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-gplus")).isDisplayed());
   }
   
 }
