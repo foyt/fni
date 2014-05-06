@@ -54,6 +54,41 @@
     $('.gamelibrary-publication-image-link').magnificPopup({ 
       type: 'image'
     });
+    
+    var baseUrl = window.location.protocol + '//' + window.location.hostname;
+    if (window.location.port !== 443) {
+      baseUrl += ':' + window.location.port;
+    }
+    baseUrl += CONTEXTPATH + '/gamelibrary/'; 
+    
+    $(".gamelibrary-publication-share-button").each(function (index, element) {
+      var share = new Share('#' + $(element).attr('id'), {
+        url: baseUrl + $(element).data('url-name'),
+        ui: {
+          button_font: false,
+          button_text: $(element).data('button-text')
+        },
+        networks: {
+          google_plus: {
+            enabled: true
+          },
+          twitter: {
+            enabled: true
+          },
+          facebook: {
+            enabled: true,
+            load_sdk: false
+          }
+        }
+      });
+      
+      $(window).click($.proxy(function (event) {
+        if ($(event.target).closest('.gamelibrary-publication-share-button').length == 0) {
+          this.close();
+        }
+      }, share));
+    });
+    
   });
 
 }).call(this);

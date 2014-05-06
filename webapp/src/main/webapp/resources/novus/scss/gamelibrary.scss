@@ -7,6 +7,8 @@ $header-background-color: #000;
 $header-text-color: #fff;
 $header-background-color-hover: #fff;
 $header-text-color-hover: #000;
+$share-button-width: 66px;
+$share-button-padding: 5px;
 
 /* Panels */
 
@@ -14,6 +16,36 @@ $header-text-color-hover: #000;
 .gamelibrary-cart-panel,
 .gamelibrary-categories-panel {
   @include generic-panel;
+}
+
+/* Share */
+
+.gamelibrary-publication .gamelibrary-publication-share-container {
+  margin-top: 15px;
+  width: 100%;
+  text-align: right;
+}
+
+.gamelibrary-publication .gamelibrary-publication-share-button {
+  float: right;
+  width: ($share-button-width + ($share-button-padding * 2)) !important;
+}
+
+.gamelibrary-publication .gamelibrary-publication-share-button .entypo-export {
+  background: #333;
+  color: #fff;
+  padding: 5px;
+  font-family: $title-font;
+  font-size: 12px; 
+  margin: 0px;
+  width: $share-button-width !important;
+  display: block;
+}
+
+.gamelibrary-publication .gamelibrary-publication-share-button .entypo-export span {
+  display: inline-block;
+  width: 42px;
+  text-align: center;
 }
 
 /* Header */

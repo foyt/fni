@@ -87,7 +87,10 @@
             <h:commandLink styleClass="gamelibrary-publication-action gamelibrary-publication-action-add-to-cart" value="#{locales['gamelibrary.publications.addToShoppingCart']}" rendered="#{gameLibraryPublicationsBackingBean.isPublicationPurchasable(publication)}" action="#{gameLibraryPublicationsBackingBean.addPublicationToShoppingCart(publication)}" />
           </h:panelGroup>
         </h:panelGroup>
-
+        
+        <h:panelGroup layout="block" styleClass="gamelibrary-publication-share-container"> 
+          <div id="gamelibrary-publication-share-button-${publication.id}" class="gamelibrary-publication-share-button" data-url-name="${publication.urlName}" data-button-text="#{locales['gamelibrary.publications.shareButtonText']}"></div>
+        </h:panelGroup>
       </h:panelGroup>
     </h:panelGroup>
   </h:form>
