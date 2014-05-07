@@ -1,5 +1,8 @@
 package fi.foyt.fni.view.admin;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
@@ -32,7 +35,16 @@ public class DebugTimerResultsBackingBean {
   }
 
   public List<RequestStats> getRequestStats() {
-    return debugTimerResults.getRequestStats();
+    List<RequestStats> result = new ArrayList<>(debugTimerResults.getRequestStats());
+    
+    Collections.sort(result, new Comparator<RequestStats>() {
+      @Override
+      public int compare(RequestStats o1, RequestStats o2) {
+        return (int) (o2.getRequestMills() - o1.getRequestMills());
+      }
+    });
+    
+    return result;
   }
 
   public String getHumanReadableDuration(long mills) {
