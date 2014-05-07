@@ -27,27 +27,34 @@
         <h:panelGroup layout="block" styleClass="admin-debug-timer-results-panel">
           <h2>Timer results</h2>
           <ui:repeat var="requestStats" value="#{debugTimerResultsBackingBean.requestStats}">
-            <h3>#{requestStats.view}</h3>
-            <table>
-              <tr>
-                <th>Method</th>
-                <th>Count</th>
-                <th>Min</th>
-                <th>Max</th>
-                <th>Average</th>
-                <th>Total</th>
-              </tr>
-              <ui:repeat var="methodStats" value="#{requestStats.methodStats}">
-                <tr class="#{methodStats.total >= 200 ? (methodStats.total >= 500 ? 'admin-debug-timer-result-high' : 'admin-debug-timer-result-med') : 'admin-debug-timer-result-low'}">
-                  <td><span title="#{methodStats.methodDetails}">#{methodStats.methodName}</span></td>
-                  <td>#{methodStats.count}</td>
-                  <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.min)}</td>
-                  <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.max)}</td>
-                  <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.avg)}</td>
-                  <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.total)}</td>
+            <div class="#{requestStats.requestMills >= 500 || requestStats.methodStats.size() gt 0 ? 'significant' : 'insignificant'}">
+              <h3>#{requestStats.view}</h3>
+              
+              <div class="#{requestStats.requestMills >= 750 ? (requestStats.requestMills >= 1000 ? 'admin-debug-timer-result-high' : 'admin-debug-timer-result-med') : 'admin-debug-timer-result-low'}">
+                #{debugTimerResultsBackingBean.getHumanReadableDuration(requestStats.requestMills)}
+              </div>
+              
+              <table>
+                <tr>
+                  <th>Method</th>
+                  <th>Count</th>
+                  <th>Min</th>
+                  <th>Max</th>
+                  <th>Average</th>
+                  <th>Total</th>
                 </tr>
-              </ui:repeat>
-            </table>
+                <ui:repeat var="methodStats" value="#{requestStats.methodStats}">
+                  <tr class="#{methodStats.total >= 200 ? (methodStats.total >= 500 ? 'admin-debug-timer-result-high' : 'admin-debug-timer-result-med') : 'admin-debug-timer-result-low'}">
+                    <td><span title="#{methodStats.methodDetails}">#{methodStats.methodName}</span></td>
+                    <td>#{methodStats.count}</td>
+                    <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.min)}</td>
+                    <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.max)}</td>
+                    <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.avg)}</td>
+                    <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.total)}</td>
+                  </tr>
+                </ui:repeat>
+              </table>
+            </div>
           </ui:repeat>
         </h:panelGroup>
       </h:panelGroup>

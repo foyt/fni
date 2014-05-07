@@ -8,6 +8,22 @@
   @include generic-panel;
 }
 
+table {
+  margin-top: 12px;
+}
+
+.insignificant {
+  opacity: 0.5;
+}
+
+.insignificant h3 {
+  font-size: 14px;
+}
+
+.insignificant div {
+  font-size: 10px;
+}
+
 /* Generic */
 
 h2 {
