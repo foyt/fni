@@ -53,6 +53,11 @@ public class ForgeMaterialsBackingBean {
   @PostConstruct
   public void init() {
     materialStarred = new HashMap<>();
+    materialEditable = new HashMap<>();
+    materialMovable = new HashMap<>();
+    materialShareable = new HashMap<>();
+    materialDeletable = new HashMap<>();
+    materialPrintableAsPdf = new HashMap<>();
   }
 
   public String getMaterialViewer(Material material) {
@@ -104,63 +109,99 @@ public class ForgeMaterialsBackingBean {
     }
   }
   
-  public void starMaterial(Long materialId) {
+  public synchronized void starMaterial(Long materialId) {
     Material material = materialController.findMaterialById(materialId);
     if (material != null) {
       User loggedUser = sessionController.getLoggedUser();
       materialController.starMaterial(material, loggedUser);
+      materialStarred.remove(materialId);
     }
   }
 
-  public void unstarMaterial(Long materialId) {
+  public synchronized void unstarMaterial(Long materialId) {
     Material material = materialController.findMaterialById(materialId);
     if (material != null) {
       User loggedUser = sessionController.getLoggedUser();
       materialController.unstarMaterial(material, loggedUser);
+      materialStarred.remove(materialId);
     }
   }
 
-  public boolean getMaterialEditable(Material material) {
-    if (materialController.isEditableType(material.getType())) {
-      return materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
+  public synchronized boolean getMaterialEditable(Material material) {
+    if (!materialEditable.containsKey(material.getId())) {
+      Boolean editable = false;
+      
+      if (materialController.isEditableType(material.getType())) {
+        editable = materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
+      } 
+      
+      materialEditable.put(material.getId(), editable);
+      return editable;
+    }  else {
+      return materialEditable.get(material.getId());
     }
-
-    return false;
   }
 
   public boolean getMaterialDeletable(Material material) {
-    if (materialController.isDeletableType(material.getType())) {
-      return materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
+    if (!materialDeletable.containsKey(material.getId())) {
+      Boolean deletable = false;
+      
+      if (materialController.isDeletableType(material.getType())) {
+        deletable = materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
+      }
+      
+      materialDeletable.put(material.getId(), deletable);
+      return deletable;
+    } else {
+      return materialDeletable.get(material.getId());
     }
-
-    return false;
   }
 
   public boolean getMaterialMovable(Material material) {
-    if (materialController.isMovableType(material.getType())) {
-      return materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
+    if (!materialMovable.containsKey(material.getId())) {
+      Boolean moveable = false;
+      
+      if (materialController.isMovableType(material.getType())) {
+        moveable = materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
+      }
+      
+      materialMovable.put(material.getId(), moveable);
+      return moveable;
+    } else {
+      return materialMovable.get(material.getId());
     }
-
-    return false;
   }
 
   public boolean getMaterialShareable(Material material) {
-    if (materialController.isShareableType(material.getType())) {
-      return materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
+    if (!materialShareable.containsKey(material.getId())) {
+      Boolean shareable = false;
+      
+      if (materialController.isShareableType(material.getType())) {
+        shareable = materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
+      }
+  
+      materialShareable.put(material.getId(), shareable);
+      return shareable;
+    } else {
+      return materialShareable.get(material.getId());
     }
-
-    return false;
   }
 
   public boolean getMaterialPrintableAsPdf(Material material) {
-    if (materialController.isPrintableAsPdfType(material.getType())) {
-      return materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material);
+    if (!materialPrintableAsPdf.containsKey(material.getId())) {
+      Boolean printableAsPdf = false;
+      
+      if (materialController.isPrintableAsPdfType(material.getType())) {
+        printableAsPdf = materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material);
+      }
+      
+      materialPrintableAsPdf.put(material.getId(), printableAsPdf);
+      return printableAsPdf;
+    } else {
+      return materialPrintableAsPdf.get(material.getId());
     }
-
-    return false;
   }
 
-  @LoggedIn
   public void createNewDocument(Long folderId) throws IOException {
     User loggedUser = sessionController.getLoggedUser();
     Folder parentFolder = folderId != null ? folderController.findFolderById(folderId) : null;
@@ -172,7 +213,6 @@ public class ForgeMaterialsBackingBean {
       .append("/forge/documents/" + document.getPath()).toString());
   }
 
-  @LoggedIn
   public void createNewVectorImage(Long folderId) throws IOException {
     User loggedUser = sessionController.getLoggedUser();
     Folder parentFolder = folderId != null ? folderController.findFolderById(folderId) : null;
@@ -185,4 +225,9 @@ public class ForgeMaterialsBackingBean {
   }
 
   private Map<Long, Boolean> materialStarred;
+  private Map<Long, Boolean> materialEditable;
+  private Map<Long, Boolean> materialMovable;
+  private Map<Long, Boolean> materialShareable;
+  private Map<Long, Boolean> materialDeletable;
+  private Map<Long, Boolean> materialPrintableAsPdf;
 }
