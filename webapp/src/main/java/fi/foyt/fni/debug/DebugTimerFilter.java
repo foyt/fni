@@ -28,13 +28,15 @@ public class DebugTimerFilter implements Filter {
   }
 
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    long startTime = System.currentTimeMillis();
+    
     chain.doFilter(request, response);
+    
     if (request instanceof HttpServletRequest) {
+      String view = ((HttpServletRequest) request).getRequestURI().toString();
       Map<Method, List<Long>> calls = debugTimerCollector.getCalls();
-      if (!calls.isEmpty()) {
-        String view = ((HttpServletRequest) request).getRequestURI().toString();
-        debugTimerResults.addRequestStats(view, calls);
-      }
+      long endTime = System.currentTimeMillis();
+      debugTimerResults.addRequestStats(view, calls, endTime - startTime);
     }
   }
 

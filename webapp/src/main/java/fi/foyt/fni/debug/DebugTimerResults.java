@@ -28,7 +28,7 @@ public class DebugTimerResults {
     this.requestStats = requestStats;
   }
   
-  public void addRequestStats(String view, Map<Method, List<Long>> calls) {
+  public void addRequestStats(String view, Map<Method, List<Long>> calls, long requestMills) {
     List<MethodStats> methodStats = new ArrayList<>();
 
     for (Method method : calls.keySet()) {
@@ -57,17 +57,18 @@ public class DebugTimerResults {
       }
     });
 
-    requestStats.add(new RequestStats(view, methodStats));
+    requestStats.add(new RequestStats(view, methodStats, requestMills));
   }
 
   private List<RequestStats> requestStats;
 
   public class RequestStats {
 
-    public RequestStats(String view, List<MethodStats> methodStats) {
+    public RequestStats(String view, List<MethodStats> methodStats, long requestMills) {
       super();
       this.view = view;
       this.methodStats = methodStats;
+      this.requestMills = requestMills;
     }
 
     public String getView() {
@@ -85,9 +86,14 @@ public class DebugTimerResults {
     public void setMethodStats(List<MethodStats> methodStats) {
       this.methodStats = methodStats;
     }
+    
+    public long getRequestMills() {
+      return requestMills;
+    }
 
     private String view;
     private List<MethodStats> methodStats;
+    private long requestMills;
   }
 
   public class MethodStats {
