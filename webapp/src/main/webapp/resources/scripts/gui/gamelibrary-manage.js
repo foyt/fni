@@ -107,7 +107,7 @@
     var form = $(this).closest('form');
     
     dust.render("gamelibrary-publish", {
-      publicationName: $.trim($(this).closest('.gamelibrary-manage-publicationlist-name-actions').find('.gamelibrary-manage-publicationlist-name').html())
+      publicationName: $.trim($(this).closest('.gamelibrary-manage-publicationlist-name-actions').find('.gamelibrary-manage-publicationlist-name').text())
     }, function(err, html) {
       if (!err) {
         var dialog = $(html);
@@ -137,7 +137,7 @@
     var form = $(this).closest('form');
     
     dust.render("gamelibrary-unpublish", {
-      publicationName: $.trim($(this).closest('.gamelibrary-manage-publicationlist-name-actions').find('.gamelibrary-manage-publicationlist-name').html())
+      publicationName: $.trim($(this).closest('.gamelibrary-manage-publicationlist-name-actions').find('.gamelibrary-manage-publicationlist-name').text())
     }, function(err, html) {
       if (!err) {
         var dialog = $(html);
@@ -167,7 +167,7 @@
     var form = $(this).closest('form');
     
     dust.render("gamelibrary-remove", {
-      publicationName: $.trim($(this).closest('.gamelibrary-manage-publicationlist-name-actions').find('.gamelibrary-manage-publicationlist-name').html())
+      publicationName: $.trim($(this).closest('.gamelibrary-manage-publicationlist-name-actions').find('.gamelibrary-manage-publicationlist-name').text())
     }, function(err, html) {
       if (!err) {
         var dialog = $(html);
