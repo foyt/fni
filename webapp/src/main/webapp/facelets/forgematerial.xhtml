@@ -3,7 +3,7 @@
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html">
   
-  <h:panelGroup layout="block" styleClass="forge-material"> 
+  <div class="forge-material" data-material-id="#{material.id}"> 
     <h:panelGroup layout="block" styleClass="forge-material-icon"> 
       <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
     </h:panelGroup>
@@ -77,6 +77,6 @@
       </h:panelGroup>
     </h:panelGroup>
     
-  </h:panelGroup>
+  </div>
   
 </ui:composition>
