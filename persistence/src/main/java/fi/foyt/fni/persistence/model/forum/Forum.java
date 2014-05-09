@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.Cache;
@@ -75,8 +76,9 @@ public class Forum {
   @Column (nullable=false)
   private String name;
   
-  @Column (length=1073741824)
+  @Column
   @Field
+  @Lob
   private String description;
   
   @ManyToOne
