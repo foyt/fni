@@ -72,14 +72,16 @@ values
   (11, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Vector Image in Subfolder', 'VECTOR_IMAGE', 'vectorimage_in_subfolder', 2, 2, 2),
   (12, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc', 'GOOGLE_DOCUMENT', 'googledoc', 2, 2, null),
   (13, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc in Folder', 'GOOGLE_DOCUMENT', 'googledoc_in_folder', 2, 2, 1),
-  (14, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc in Subfolder', 'GOOGLE_DOCUMENT', 'googledoc_in_subfolder', 2, 2, 2);
-  
+  (14, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc in Subfolder', 'GOOGLE_DOCUMENT', 'googledoc_in_subfolder', 2, 2, 2),
+  (15, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.', 'DOCUMENT', 'beowulf_pohti_zuluja_ja_angstrom-yksikkoa_katsellessaan_q-stone-_ja_cmx-yhtyeita_videolta', 2, 2, null);
+ 
 insert into 
   Document (id, data)
 values 
   (3, '<p>Document in root</p>'), 
   (4, '<p>Document in folder</p>'), 
-  (5, '<p>Document in subfolder</p>');
+  (5, '<p>Document in subfolder</p>'),
+  (15, '<p>Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.</p>');
 
 insert into 
   Binary_ (id, contentType, data)
