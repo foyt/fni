@@ -1,13 +1,18 @@
 package fi.foyt.fni.persistence.model.materials;
 
 import javax.persistence.Basic;
-import javax.persistence.Column;
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.Lob;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 @Entity 
+@Cacheable (true)
+@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @Table (name = "Binary_")
 @PrimaryKeyJoinColumn (name="id")
 public class Binary extends Material {
@@ -32,8 +37,8 @@ public class Binary extends Material {
     this.contentType = contentType;
   } 
   
-  @Basic (fetch = FetchType.LAZY)
-  @Column (length=1073741824)
+  @Basic
+  @Lob
   private byte[] data;
   
   private String contentType; 

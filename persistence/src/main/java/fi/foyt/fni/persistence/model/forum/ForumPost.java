@@ -2,6 +2,7 @@ package fi.foyt.fni.persistence.model.forum;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Transient;
@@ -46,6 +47,7 @@ public class ForumPost extends ForumMessage {
   @ManyToOne
   private ForumTopic topic;
   
-  @Column (nullable=false, length=1073741824)
+  @Column (nullable=false)
+  @Lob
   private String content;  
 }

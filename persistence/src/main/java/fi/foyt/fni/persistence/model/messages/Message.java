@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -73,8 +74,9 @@ public class Message {
 	@Column(nullable = false)
 	private String subject;
 
-	@Column(nullable = false, length = 1073741824)
+	@Column(nullable = false)
 	@Field
+	@Lob
 	private String content;
 
 	@Column(nullable = false)
