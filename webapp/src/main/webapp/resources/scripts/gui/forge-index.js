@@ -64,7 +64,8 @@
     var prefix = actionForm.attr('name');
 
     dust.render("forge-remove-material", {
-      materialName: $.trim($(this).closest('.forge-material').find('.forge-material-title').html())
+      materialName: $(this).closest('.forge-material').find('.forge-material-title').attr('title'),
+      materialNameShort: $.trim($(this).closest('.forge-material').find('.forge-material-title').text())
     }, function(err, html) {
       if (!err) {
         var dialog = $(html);
