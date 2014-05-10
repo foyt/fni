@@ -84,6 +84,14 @@ public abstract class AbstractTest {
     return System.getProperty("it.dropbox.password");
   }
   
+  protected String getSauceUsername() {
+    return System.getProperty("it.sauce.username");
+  }
+  
+  protected String getSauceAccessKey() {
+    return System.getProperty("it.sauce.accessKey");
+  }
+  
   protected Connection getConnection() throws Exception {
     String username = System.getProperty("it.jdbc.username");
     String password = System.getProperty("it.jdbc.password");
