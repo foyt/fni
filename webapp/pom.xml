@@ -813,6 +813,8 @@
                 <it.dropbox.password>${it.dropbox.password}</it.dropbox.password>
                 <it.sauce.username>${it.sauce.username}</it.sauce.username>
                 <it.sauce.accessKey>${it.sauce.accessKey}</it.sauce.accessKey>
+                <it.sauce.host>${it.sauce.host}</it.sauce.host>
+                <it.sauce.port>${it.sauce.port}</it.sauce.port>
               </systemPropertyVariables>
             </configuration>
             <executions>
