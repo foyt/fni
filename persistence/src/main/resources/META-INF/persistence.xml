@@ -9,7 +9,6 @@
     
       <!-- Connection -->
 
-      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
       <property name="hibernate.connection.useUnicode" value="true" />
       <property name="hibernate.connection.characterEncoding" value="UTF-8" />
 
