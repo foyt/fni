@@ -7,12 +7,12 @@ import org.junit.Test;
 public class LoginTestsBase extends AbstractUITest {
 
   @Before
-  public void setup() throws Exception {
+  public void baseSetUp() throws Exception {
     createOAuthSettings();
   }
 
   @After
-  public void tearDown() throws Exception {
+  public void baseTearDown() throws Exception {
     purgeOAuthSettings();
   }
 
