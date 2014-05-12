@@ -1,6 +1,8 @@
 package fi.foyt.fni.view.forge;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -39,12 +41,19 @@ public class ForgeUploadBackingBean {
 
 	@RequestAction
 	public void load() throws FileNotFoundException {
+    folders = new ArrayList<>();
     if (parentFolderId != null) {
       Folder parentFolder = parentFolderId != null ? folderController.findFolderById(parentFolderId) : null;
       if (parentFolder != null) {
         if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
           throw new ForbiddenException();
         }
+        
+        Folder folder = parentFolder;
+        while (folder != null) {
+          folders.add(0, folder);
+          folder = folder.getParentFolder();
+        };
       } else {
         throw new FileNotFoundException();
       }
@@ -58,4 +67,10 @@ public class ForgeUploadBackingBean {
 	public void setParentFolderId(Long parentFolderId) {
     this.parentFolderId = parentFolderId;
   }
+
+  public List<Folder> getFolders() {
+    return folders;
+  }
+
+  private List<Folder> folders;
 }
