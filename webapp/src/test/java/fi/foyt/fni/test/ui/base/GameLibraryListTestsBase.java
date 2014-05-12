@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -97,7 +96,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
 
   @Test
   public void testMostRecentList() {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective(getWebDriver(), true);
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
 
     testPublicationDetails(getWebDriver(), ".gamelibrary-publications form:nth-child(1) .gamelibrary-publication", UML_ID, UML_PATH, UML_TITLE, UML_TAGS, UML_DESC, UML_PRICE, UML_PAGES,
@@ -112,7 +111,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
 
   @Test
   public void testTagList() {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective(getWebDriver(), true);
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/tags/test");
 
     testPublicationDetails(getWebDriver(), ".gamelibrary-publications form:nth-child(1) .gamelibrary-publication", SIMPLE_ID, SIMPLE_PATH, SIMPLE_TITLE, SIMPLE_TAGS, SIMPLE_DESC, SIMPLE_PRICE,
@@ -124,7 +123,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
 
   @Test
   public void testPublicationDetailsSimple() {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective(getWebDriver(), true);
     getWebDriver().get(getAppUrl(true) + SIMPLE_PATH);
     testPublicationDetails(getWebDriver(), ".gamelibrary-publication", SIMPLE_ID, SIMPLE_PATH, SIMPLE_TITLE, SIMPLE_TAGS, SIMPLE_DESC, SIMPLE_PRICE, SIMPLE_PAGES, SIMPLE_AUTHOR_NAMES,
         SIMPLE_AUTHOR_IDS, SIMPLE_LICENSE, SIMPLE_PURCHASABLE, SIMPLE_COMMENT_URL, SIMPLE_COMMENTS);
@@ -132,7 +131,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
 
   @Test
   public void testPublicationDetailsBySaAndRus() {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective(getWebDriver(), true);
     getWebDriver().get(getAppUrl(true) + BYSARUS_PATH);
     testPublicationDetails(getWebDriver(), ".gamelibrary-publication", BYSARUS_ID, BYSARUS_PATH, BYSARUS_TITLE, BYSARUS_TAGS, BYSARUS_DESC, BYSARUS_PRICE, BYSARUS_PAGES, BYSARUS_AUTHOR_NAMES,
         BYSARUS_AUTHOR_IDS, BYSARUS_LICENSE, BYSARUS_PURCHASABLE, BYSARUS_COMMENT_URL, BYSARUS_COMMENTS);
@@ -140,7 +139,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
 
   @Test
   public void testPublicationDetailsUmlaut() {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective(getWebDriver(), true);
     getWebDriver().get(getAppUrl(true) + UML_PATH);
     testPublicationDetails(getWebDriver(), ".gamelibrary-publication", UML_ID, UML_PATH, UML_TITLE, UML_TAGS, UML_DESC, UML_PRICE, UML_PAGES, UML_AUTHOR_NAMES, UML_AUTHOR_IDS, UML_LICENSE,
         UML_PURCHASABLE, UML_COMMENT_URL, UML_COMMENTS);
@@ -209,11 +208,6 @@ public class GameLibraryListTestsBase extends AbstractUITest {
     assertShareButtonsVisible(getWebDriver(), publicationSelector);
     getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-description")).click();
     assertShareButtonsHidden(getWebDriver(), publicationSelector);
-  }
-
-  private void acceptCookieDirective(RemoteWebDriver driver) {
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
-    getWebDriver().manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
   }
 
   private void assertShareButtonsHidden(RemoteWebDriver driver, String publicationSelector) {

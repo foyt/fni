@@ -7,6 +7,7 @@ import java.net.URLEncoder;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -50,7 +51,7 @@ public abstract class AbstractUITest extends AbstractTest {
       .click();
 
     new WebDriverWait(driver, 60)
-      .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".menu-tools-account")));
+      .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".menu-tools-account")));
     
     assertEquals(1, driver.findElements(By.cssSelector(".menu-tools-account")).size());
     assertEquals(0, driver.findElements(By.cssSelector(".menu-tools-login")).size());
@@ -81,6 +82,15 @@ public abstract class AbstractUITest extends AbstractTest {
     driver.get(getAppUrl() + "/logout");
     assertEquals(0, driver.findElements(By.cssSelector(".menu-tools-account")).size());
     assertEquals(1, driver.findElements(By.cssSelector(".menu-tools-login")).size());
+  }
+
+  protected void acceptCookieDirective(RemoteWebDriver driver) {
+    acceptCookieDirective(driver, false);
+  }
+  
+  protected void acceptCookieDirective(RemoteWebDriver driver, boolean secure) {
+    driver.get(getAppUrl(secure) + "/");
+    driver.manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
   }
   
   protected void testTitle(RemoteWebDriver driver, String view, String expectedTitle) {
