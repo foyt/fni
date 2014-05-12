@@ -30,6 +30,8 @@ public class ForgeConnectDropboxTestsBase extends AbstractUITest {
   
   @Test
   public void testConnect() {
+    acceptCookieDirective(getWebDriver());
+
     loginGoogle(getWebDriver());
     getWebDriver().get(getAppUrl() + "/forge/");
     getWebDriver().findElement(By.cssSelector(".forge-import-material-menu")).click();
