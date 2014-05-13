@@ -23,7 +23,7 @@ public class DefaultsRewriteConfigurationProvider extends HttpConfigurationProvi
 
   @Override
   public int priority() {
-    return 0;
+    return 1000;
   }
   
 }
