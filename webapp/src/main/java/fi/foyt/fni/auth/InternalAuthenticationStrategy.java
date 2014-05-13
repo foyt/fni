@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.enterprise.context.RequestScoped;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import fi.foyt.fni.persistence.model.users.UserToken;
 
 @RequestScoped
@@ -20,7 +22,7 @@ public class InternalAuthenticationStrategy extends AbstractInternalAuthenticati
   		EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException, InvalidCredentialsException, UserNotConfirmedException {
 
   	String username = getParameter(parameters, "username");
-    String password = getParameter(parameters, "password");
+    String password = DigestUtils.md5Hex(getParameter(parameters, "password"));
     
     return handleLogin(locale, username, password);
   }

@@ -7,10 +7,6 @@
 
   <ui:define name="page-title">#{locales['users.login.pageTitle']}</ui:define>
  
-  <ui:define name="metadata">
-    <f:event type="preRenderView" listener="#{loginBackingBean.preRenderViewListener}"/>
-  </ui:define>
- 
   <ui:define name="view-scripts">
     <!-- md5 -->
     
@@ -77,8 +73,7 @@
               
               <h:panelGroup layout="block" styleClass="user-login-field">
                 <h:outputLabel value="#{locales['users.login.loginPasswordTitle']}" />
-                <h:inputSecret id="password"/>
-                <h:inputHidden value="#{loginBackingBean.loginPassword}" id="password-encoded"/>
+                <h:inputSecret value="#{loginBackingBean.loginPassword}" id="password"/>
               </h:panelGroup>
         
               <h:panelGroup layout="block" styleClass="user-login-field">
@@ -97,21 +92,17 @@
 
           <h:panelGroup layout="block" styleClass="user-login-external">
             <h4>#{locales['users.login.externalLoginTitle']}</h4>
-          
-            <h:outputLink value="?loginMethod=FACEBOOK">
+            <h:link outcome="/users/login.jsf">
+              <f:param name="loginMethod" value="FACEBOOK"/>
               <h:graphicImage library="novus" name="/gfx/icons/48x48/users/login-facebook.png"/>
               <h:panelGroup styleClass="user-login-external-label">#{locales['users.login.loginWithFacebook']}</h:panelGroup>
-            </h:outputLink>
+            </h:link>
             
-            <h:outputLink value="?loginMethod=GOOGLE">
+            <h:link outcome="/users/login.jsf">
+              <f:param name="loginMethod" value="GOOGLE"/>
               <h:graphicImage library="novus" name="/gfx/icons/48x48/users/login-google.png"/>
               <h:panelGroup styleClass="user-login-external-label">#{locales['users.login.loginWithGoogle']}</h:panelGroup>
-            </h:outputLink>
-            
-            <h:outputLink value="?loginMethod=YAHOO" rendered="false">
-              <h:graphicImage library="novus" name="/gfx/icons/48x48/users/login-yahoo.png"/>
-              <h:panelGroup styleClass="user-login-external-label">#{locales['users.login.loginWithYahoo']}</h:panelGroup>
-            </h:outputLink>
+            </h:link>
           </h:panelGroup>
           
         </h:panelGroup>

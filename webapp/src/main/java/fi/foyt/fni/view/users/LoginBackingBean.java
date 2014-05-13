@@ -13,7 +13,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ComponentSystemEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.mail.MessagingException;
@@ -21,6 +20,9 @@ import javax.mail.MessagingException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Parameter;
+import org.ocpsoft.rewrite.annotation.RequestAction;
+import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.auth.AuthenticationStrategy;
@@ -52,6 +54,15 @@ import fi.foyt.fni.utils.mail.MailUtils;
 @Stateful
 @Join (path = "/login/", to = "/users/login.jsf")
 public class LoginBackingBean {
+  
+  @Parameter (value = "return")
+  private String returnParam;
+  
+  @Parameter
+  private String loginMethod;
+  
+  @Parameter
+  private String redirectUrl;
 
 	@Inject
 	private Logger logger;
@@ -71,23 +82,15 @@ public class LoginBackingBean {
 	@Inject
 	private SystemSettingsController systemSettingsController;
 	
-	public void preRenderViewListener(ComponentSystemEvent event) {
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		ExternalContext externalContext = facesContext.getExternalContext();
-
-		String loginMethod = externalContext.getRequestParameterMap().get("loginMethod");
-
-		String redirectUrl = externalContext.getRequestParameterMap().get("redirectUrl");
-		if (StringUtils.isNotBlank(redirectUrl)) {
-		  sessionController.setRedirectUrl(redirectUrl);
-		}
-
-		if (StringUtils.isNotBlank(loginMethod)) {
-			AuthSource authSource = AuthSource.valueOf(loginMethod);
-			if (authSource != null) {
-			  handleExternalLogin(facesContext, externalContext, authSource);
-			}
-		}
+	@RequestAction
+	@Deferred
+	public void init() {
+	  if (StringUtils.isNotBlank(loginMethod)) {
+	    AuthSource authSource = AuthSource.valueOf(loginMethod);
+	    if (authSource != null) {
+	      handleExternalLogin(authSource);
+	    }
+	  }
 	}
 
 	public String getLoginEmail() {
@@ -288,7 +291,9 @@ public class LoginBackingBean {
 		}
 	}
 
-	private void handleExternalLogin(FacesContext facesContext, ExternalContext externalContext, AuthSource authSource) {
+	private void handleExternalLogin(AuthSource authSource) {
+	  FacesContext facesContext = FacesContext.getCurrentInstance();
+	  ExternalContext externalContext = facesContext.getExternalContext();
 		Map<String, String[]> parameters = externalContext.getRequestParameterValuesMap();
 
 		AuthenticationStrategy authenticationStrategy = authenticationStrategyManager.getStrategy(authSource);
@@ -299,10 +304,8 @@ public class LoginBackingBean {
 					if (!authenticationStrategy.getSupportLogin() && !sessionController.isLoggedIn()) {
 						FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("users.login.authenticationStrategyDoesNotSupportLogginIn"));
 					} else {
-						// If return=1 we are returning from external authentication source
-						if ("1".equals(externalContext.getRequestParameterMap().get("return"))) {
+					  if ("1".equals(returnParam)) {
 							Locale locale = externalContext.getRequestLocale();
-							
 							UserToken userToken = oAuthStrategy.accessToken(locale, parameters);
 							if (userToken != null) {
 								sessionController.login(userToken);
@@ -344,6 +347,30 @@ public class LoginBackingBean {
 			FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.invalidAuthenticationStrategy"));
 		}
 	}
+  
+  public String getReturnParam() {
+    return returnParam;
+  }
+  
+  public void setReturnParam(String returnParam) {
+    this.returnParam = returnParam;
+  }
+  
+  public String getRedirectUrl() {
+    return redirectUrl;
+  }
+  
+  public void setRedirectUrl(String redirectUrl) {
+    this.redirectUrl = redirectUrl;
+  }
+  
+  public String getLoginMethod() {
+    return loginMethod;
+  }
+  
+  public void setLoginMethod(String loginMethod) {
+    this.loginMethod = loginMethod;
+  }
 
 	private String loginEmail;
 	private String loginPassword;

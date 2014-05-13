@@ -33,14 +33,6 @@
         }
       });
     });
-    
-    $('.user-login-login-panel form').submit(function (event) {
-      var prefix = $(this).attr('name');
-      var passwordInput = $(this).find('input[name="' + prefix + ':password"]');
-      var passwordEncodedInput = $(this).find('input[name="' + prefix + ':password-encoded"]');
-      passwordEncodedInput.val(hex_md5(passwordInput.val())); 
-      passwordInput.val('');
-    });
 
     $('.user-login-register-panel form').submit(function (event) {
       var prefix = $(this).attr('name');
