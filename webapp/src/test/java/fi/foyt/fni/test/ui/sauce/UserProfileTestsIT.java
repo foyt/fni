@@ -10,11 +10,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import com.saucelabs.common.SauceOnDemandAuthentication;
+import com.saucelabs.junit.Parallelized;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
 import fi.foyt.fni.test.ui.base.UserProfileTestsBase;
 
-@RunWith (Parameterized.class)
+@RunWith (Parallelized.class)
 public class UserProfileTestsIT extends UserProfileTestsBase {
 
   public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(getSauceUsername(), getSauceAccessKey());
