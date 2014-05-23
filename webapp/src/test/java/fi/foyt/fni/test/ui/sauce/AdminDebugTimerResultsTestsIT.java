@@ -10,13 +10,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import com.saucelabs.common.SauceOnDemandAuthentication;
-import com.saucelabs.junit.Parallelized;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
-import fi.foyt.fni.test.ui.base.AdminArchiveUserTestsBase;
+import fi.foyt.fni.test.ui.base.AdminDebugTimerResultsTestsBase;
 
-@RunWith (Parallelized.class)
-public class AdminDebugTimerResultsTestsBase extends AdminArchiveUserTestsBase {
+@RunWith (Parameterized.class)
+public class AdminDebugTimerResultsTestsIT extends AdminDebugTimerResultsTestsBase {
 
   public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(getSauceUsername(), getSauceAccessKey());
 
@@ -28,7 +27,7 @@ public class AdminDebugTimerResultsTestsBase extends AdminArchiveUserTestsBase {
     return SauceLabsUtils.getDefaultSauceBrowsers();
   }
 
-  public AdminDebugTimerResultsTestsBase(String browser, String version, String platform) {
+  public AdminDebugTimerResultsTestsIT(String browser, String version, String platform) {
     this.browser = browser;
     this.version = version;
     this.platform = platform;

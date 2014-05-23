@@ -4,9 +4,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import fi.foyt.fni.test.ui.base.AdminArchiveUserTestsBase;
+import fi.foyt.fni.test.ui.base.AdminDebugTimerResultsTestsBase;
 
-public class AdminDebugTimerResultsTestsBase extends AdminArchiveUserTestsBase {
+public class AdminDebugTimerResultsTestsIT extends AdminDebugTimerResultsTestsBase {
 
   @Before
   public void setUp() {
