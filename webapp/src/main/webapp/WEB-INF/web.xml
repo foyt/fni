@@ -63,10 +63,6 @@
   </mime-mapping>
 
   <error-page>
-    <location>/error/internal-error.jsf</location>
-  </error-page>
-  
-  <error-page>
     <error-code>404</error-code>
     <location>/error/not-found.jsf</location>
   </error-page>
@@ -80,19 +76,8 @@
     <error-code>500</error-code>
     <location>/error/internal-error.jsf</location>
   </error-page>
-  
+
   <error-page>
-    <exception-type>java.io.FileNotFoundException</exception-type>
-    <location>/error/not-found.jsf</location>
-  </error-page>
-  
-  <error-page>
-    <exception-type>fi.foyt.fni.security.ForbiddenException</exception-type>
-    <location>/error/access-denied.jsf</location>
-  </error-page>
-  
-  <error-page>
-    <exception-type>fi.foyt.fni.security.UnauthorizedException</exception-type>
-    <location>/error/unauthorized.jsf</location>
+    <location>/errorHandler</location>
   </error-page>
 </web-app>
