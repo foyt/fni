@@ -35,7 +35,7 @@
     </user-data-constraint>
   </security-constraint>
   
-  <!-- Login https -->
+  <!-- Login https 
   
   <security-constraint>
     <web-resource-collection>
@@ -46,7 +46,7 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-  
+  -->
   <mime-mapping>
     <extension>eot</extension>
     <mime-type>application/vnd.ms-fontobject</mime-type>
