@@ -1,7 +1,6 @@
 package fi.foyt.fni.view.forge;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -51,7 +50,7 @@ public class ForgeConnectDropboxBackingBean {
     if (dropboxToken == null) {
     	// We are not authenticated with Dropbox, redirecting to authentication
     	String redirectUrl = contextPath + "/forge/connect-dropbox";
-    	return "/users/login.jsf?faces-redirect=true&loginMethod=DROPBOX&redirectUrl=" + URLEncoder.encode(redirectUrl, "UTF-8");
+    	return "/users/login.jsf?faces-redirect=true&loginMethod=DROPBOX&redirectUrl=" + redirectUrl;
     } else {
       DropboxRootFolder dropboxRootFolder = dropboxController.findDropboxRootFolderByUser(loggedUser);
       if (dropboxRootFolder == null) {
