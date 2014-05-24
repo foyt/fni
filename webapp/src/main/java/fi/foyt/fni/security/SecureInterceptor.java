@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
+import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -44,9 +45,17 @@ public class SecureInterceptor implements Serializable {
 			if (invokePermissionChecks(permission, ic.getMethod(), ic.getParameters())) {
   			return ic.proceed();
 			}
-		} 
-
-		throw new ForbiddenException();
+		}
+		
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		if (facesContext != null) {
+      NavigationHandler navigationHandler = facesContext.getApplication().getNavigationHandler();
+      navigationHandler.handleNavigation(facesContext, null, "/error/access-denied.jsf");
+      facesContext.renderResponse();
+      return null;
+		} else {
+  		throw new ForbiddenException();
+		}
 	}
 
 	private boolean invokePermissionChecks(final Permission permission, Method method, Object[] methodParameters) {
