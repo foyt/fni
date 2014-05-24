@@ -35,20 +35,20 @@ public class ForgeUploadTestsBase extends AbstractUITest {
     List<WebElement> breadcrumps = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item a"));
     assertEquals(2, breadcrumps.size());
     assertEquals(getAppUrl() + "/", breadcrumps.get(0).getAttribute("href"));
-    assertEquals(getAppUrl() + "/forge", breadcrumps.get(1).getAttribute("href"));
+    assertEquals(getAppUrl() + "/forge/", breadcrumps.get(1).getAttribute("href"));
     
     getWebDriver().get(getAppUrl() + "/forge/upload?parentFolderId=1");
     breadcrumps = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item a"));
     assertEquals(3, breadcrumps.size());
     assertEquals(getAppUrl() + "/", breadcrumps.get(0).getAttribute("href"));
-    assertEquals(getAppUrl() + "/forge", breadcrumps.get(1).getAttribute("href"));
+    assertEquals(getAppUrl() + "/forge/", breadcrumps.get(1).getAttribute("href"));
     assertEquals(getAppUrl() + "/forge/folders/2/folder", breadcrumps.get(2).getAttribute("href"));
     
     getWebDriver().get(getAppUrl() + "/forge/upload?parentFolderId=2");
     breadcrumps = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item a"));
     assertEquals(4, breadcrumps.size());
     assertEquals(getAppUrl() + "/", breadcrumps.get(0).getAttribute("href"));
-    assertEquals(getAppUrl() + "/forge", breadcrumps.get(1).getAttribute("href"));
+    assertEquals(getAppUrl() + "/forge/", breadcrumps.get(1).getAttribute("href"));
     assertEquals(getAppUrl() + "/forge/folders/2/folder", breadcrumps.get(2).getAttribute("href"));
     assertEquals(getAppUrl() + "/forge/folders/2/folder/subfolder", breadcrumps.get(3).getAttribute("href"));
   }
