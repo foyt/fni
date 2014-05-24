@@ -1,6 +1,7 @@
 package fi.foyt.fni.view.forge;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -104,7 +105,7 @@ public class ForgeImportGoogleDriveBackingBean {
         redirectUrl += "?parentFolderId=" + parentFolderId;
       }
       
-      return "/users/login.jsf?faces-redirect=true&loginMethod=GOOGLE&redirectUrl=" + redirectUrl + "&extraScopes=" +  REQUIRED_SCOPE;
+      return "/users/login.jsf?faces-redirect=true&loginMethod=GOOGLE&redirectUrl=" + URLEncoder.encode(redirectUrl, "UTF-8") + "&extraScopes=" +  REQUIRED_SCOPE;
     } else {
       Drive drive = driveManager.getDrive(driveManager.getAccessTokenCredential(userToken.getToken()));
       FileList fileList = null;
