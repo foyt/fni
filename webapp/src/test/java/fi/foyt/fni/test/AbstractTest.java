@@ -12,6 +12,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 public abstract class AbstractTest {
   
+  private static final long TEST_START_TIME = System.currentTimeMillis();
+  
   protected String getAppUrl() {
     return getAppUrl(false); 
   }
@@ -31,7 +33,15 @@ public abstract class AbstractTest {
   protected int getPortHttps() {
     return Integer.parseInt(System.getProperty("it.port.https"));
   }
-
+  
+  public String getProjectVersion() {
+    return System.getProperty("it.project.version");
+  }
+  
+  public static long getTestStartTime() {
+    return TEST_START_TIME;
+  }
+  
   protected String getCtxPath() {
     return System.getProperty("it.ctx");
   }
@@ -173,14 +183,14 @@ public abstract class AbstractTest {
   protected void createOAuthSettings() throws Exception {
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "FACEBOOK_APIKEY", getFacebookApiKey());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "FACEBOOK_APISECRET", getFacebookApiSecret());
-    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "FACEBOOK_CALLBACKURL", getAppUrl() + "/login?return=1&loginMethod=FACEBOOK");
+    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "FACEBOOK_CALLBACKURL", getAppUrl(true) + "/login/?return=1&loginMethod=FACEBOOK");
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_APIKEY", getGoogleApiKey());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_APISECRET", getGoogleApiSecret());
-    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_CALLBACKURL", getAppUrl() + "/login?return=1&loginMethod=GOOGLE");
+    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_CALLBACKURL", getAppUrl(true) + "/login/?return=1&loginMethod=GOOGLE");
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_ROOT", "sandbox");
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_APIKEY", getDropboxApiKey());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_APISECRET", getDropboxApiSecret());
-    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_CALLBACKURL", getAppUrl() + "/login?return=1&loginMethod=DROPBOX");
+    executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_CALLBACKURL", getAppUrl(true) + "/login/?return=1&loginMethod=DROPBOX");
   }
   
   protected void purgeOAuthSettings() throws Exception {

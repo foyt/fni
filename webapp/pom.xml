@@ -471,6 +471,7 @@
               <systemPropertyVariables>
                 <jboss.home>${wildfly.home}</jboss.home>
                 <module.path>${wildfly.home}/modules</module.path>
+                <it.project.version>${project.version}</it.project.version>
                 <it.host>${it.host}</it.host>
                 <it.port.http>${it.port.http}</it.port.http>
                 <it.port.https>${it.port.https}</it.port.https>
@@ -790,6 +791,7 @@
               <systemPropertyVariables>
                 <jboss.home>${wildfly.home}</jboss.home>
                 <module.path>${wildfly.home}/modules</module.path>
+                <it.project.version>${project.version}</it.project.version>
                 <it.host>${it.host}</it.host>
                 <it.port.http>${it.port.http}</it.port.http>
                 <it.port.https>${it.port.https}</it.port.https>
