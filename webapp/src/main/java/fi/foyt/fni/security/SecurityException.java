@@ -1,6 +1,6 @@
 package fi.foyt.fni.security;
 
-public class SecurityException extends RuntimeException {
+public class SecurityException extends java.lang.SecurityException {
 	
 	public SecurityException() {
 		super();
