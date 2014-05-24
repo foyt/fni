@@ -2,6 +2,7 @@ package fi.foyt.fni.test.ui.base;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 
 import org.junit.Rule;
 import org.junit.rules.TestName;
@@ -32,11 +33,19 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   
   protected RemoteWebDriver createSauceWebDriver(String browser, String version, String platform) throws MalformedURLException {
     DesiredCapabilities capabilities = new DesiredCapabilities();
+    
     capabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
     capabilities.setCapability(CapabilityType.VERSION, version);
     capabilities.setCapability(CapabilityType.PLATFORM, platform);
     capabilities.setCapability("name", getClass().getSimpleName() + ':' + testName.getMethodName());
+    capabilities.setCapability("tags", Arrays.asList( String.valueOf( getTestStartTime() ) ) );
+    capabilities.setCapability("build", getProjectVersion());
+    capabilities.setCapability("video-upload-on-pass", false);
+    capabilities.setCapability("capture-html", true);
     capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+    capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"));
+    capabilities.setCapability("selenium-version", "2.42.0");
+
     return new RemoteWebDriver(new URL(String.format("http://%s:%s@%s:%s/wd/hub", getSauceUsername(), getSauceAccessKey(), getSauceHost(), getSaucePort())), capabilities);
   }
   
