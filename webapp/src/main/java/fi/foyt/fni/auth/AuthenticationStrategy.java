@@ -56,7 +56,7 @@ public abstract class AuthenticationStrategy {
 	
   public abstract UserToken accessToken(Locale locale, Map<String, String[]> parameters) throws MultipleEmailAccountsException, EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException, ExternalLoginFailedException, InvalidCredentialsException, UserNotConfirmedException ;
   
-  protected UserToken loginUser(AuthSource authSource, String sourceId, String token, String tokenSecret, Date tokenExpires, String identifier, List<String> emails, String firstName, String lastName, String nickname, Locale locale, String[] grantedScopes) throws MultipleEmailAccountsException, EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException {
+  protected synchronized UserToken loginUser(AuthSource authSource, String sourceId, String token, String tokenSecret, Date tokenExpires, String identifier, List<String> emails, String firstName, String lastName, String nickname, Locale locale, String[] grantedScopes) throws MultipleEmailAccountsException, EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException {
     if (locale == null) {
       locale = systemSettingsController.getDefaultLocale();
     }
