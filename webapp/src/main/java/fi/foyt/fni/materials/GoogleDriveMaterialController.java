@@ -12,6 +12,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 
 import fi.foyt.fni.drive.DriveManager;
+import fi.foyt.fni.drive.SystemGoogleDriveCredentials;
 import fi.foyt.fni.persistence.dao.materials.GoogleDocumentDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Folder;
@@ -26,6 +27,9 @@ public class GoogleDriveMaterialController {
 	
   @Inject
 	private DriveManager driveManager;
+  
+  @Inject
+  private SystemGoogleDriveCredentials systemGoogleDriveCredentials;
 
   @Inject
 	private MaterialController materialController;
@@ -49,13 +53,13 @@ public class GoogleDriveMaterialController {
   }
   
 	public String getGoogleDocumentEditLink(GoogleDocument googleDocument) throws IOException, GeneralSecurityException {
-		Drive systemDrive = driveManager.getSystemDrive();
+		Drive systemDrive = driveManager.getDrive(systemGoogleDriveCredentials.getSystemCredential());
 		File file = driveManager.getFile(systemDrive, googleDocument.getDocumentId());
 		return file.getAlternateLink();
 	}
   
 	public TypedData getGoogleDocumentData(GoogleDocument googleDocument) throws MalformedURLException, IOException, GeneralSecurityException {
-		Drive systemDrive = driveManager.getSystemDrive();
+		Drive systemDrive = driveManager.getDrive(systemGoogleDriveCredentials.getSystemCredential());
 		File file = driveManager.getFile(systemDrive, googleDocument.getDocumentId());
 		TypedData typedData = null;
 		String mimeType = googleDocument.getMimeType();

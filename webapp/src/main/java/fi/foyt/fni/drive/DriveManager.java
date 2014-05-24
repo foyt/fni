@@ -5,13 +5,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
+import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +26,6 @@ import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.Drive.Files;
 import com.google.api.services.drive.Drive.Files.Insert;
-import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentReference;
@@ -36,70 +34,35 @@ import com.google.api.services.drive.model.PermissionList;
 
 import fi.foyt.fni.utils.data.TypedData;
 
-@RequestScoped
-@Stateful
+@Dependent
+@Stateless
 public class DriveManager {
 
 	private static final String APPLICATION_NAME = "Forge & Illusion";
   private static final HttpTransport TRANSPORT = new NetHttpTransport();
   private static final JsonFactory JSON_FACTORY = new JacksonFactory();
 
-	public Drive getSystemDrive() throws IOException, GeneralSecurityException {
-		if (systemCredential == null) {
-			String accountId = System.getProperty("fni-google-drive.accountId");
-			String accountUser = System.getProperty("fni-google-drive.accountUser");
-			java.io.File keyFile = new java.io.File(System.getProperty("fni-google-drive.keyFile"));
-			
-			systemCredential = new GoogleCredential.Builder()
-  			.setTransport(TRANSPORT)
-        .setJsonFactory(JSON_FACTORY)
-        .setServiceAccountId(accountId)
-        .setServiceAccountScopes(Arrays.asList(DriveScopes.DRIVE))
-        .setServiceAccountPrivateKeyFromP12File(keyFile)
-        .setServiceAccountUser(accountUser)
-        .build();
-
-  		long expiresIn = systemCredential.getExpirationTimeMilliseconds() != null ? systemCredential.getExpirationTimeMilliseconds() : 0;
-  		systemCredentialExpires = System.currentTimeMillis() + expiresIn;
-		} else {
-  		if (systemCredentialExpires <= System.currentTimeMillis()) {
-  			if (!systemCredential.refreshToken()) {
-  				systemCredential = null;
-  				return getSystemDrive();
-  			}
-  		}
-		}
-		
-		return new Drive.Builder(TRANSPORT, JSON_FACTORY, null)
-  	  .setApplicationName(APPLICATION_NAME)
-      .setHttpRequestInitializer(systemCredential)
-      .build();
-	}
-
-	public Drive getUserDrive(String accessToken) {
-		Details webDetails = new Details();
-		
-		String apiKey = "bogus";
-		String apiSecret = "bogus";
-		
-		webDetails.setClientId(apiKey);
-	  webDetails.setClientSecret(apiSecret);
-	  /**
-	  webDetails.setRedirectUris(Arrays.asList(getOAuthCallbackURL(requestContext)));
-	  webDetails.setAuthUri(GoogleApi20.AUTHORIZATION_URL);
-	  webDetails.setTokenUri(GoogleApi20.TOKEN_URI);
-		**/
-		
-		GoogleClientSecrets secrets = new GoogleClientSecrets();
-	  secrets.setWeb(webDetails);
-	   
-		GoogleCredential credential = new GoogleCredential.Builder()
+  public GoogleCredential getAccessTokenCredential(String accessToken) {
+    Details webDetails = new Details();
+    
+    String apiKey = "bogus";
+    String apiSecret = "bogus";
+    
+    webDetails.setClientId(apiKey);
+    webDetails.setClientSecret(apiSecret);
+    
+    GoogleClientSecrets secrets = new GoogleClientSecrets();
+    secrets.setWeb(webDetails);
+     
+    return new GoogleCredential.Builder()
       .setClientSecrets(secrets)
       .setTransport(TRANSPORT)
       .setJsonFactory(JSON_FACTORY)
-      .build();
-		credential.setAccessToken(accessToken);
-		
+      .build()
+      .setAccessToken(accessToken);
+  }
+  
+	public Drive getDrive(GoogleCredential credential) {
 		return new Drive.Builder(TRANSPORT, JSON_FACTORY, credential)
   	  .setApplicationName(APPLICATION_NAME)
       .build();
@@ -211,7 +174,4 @@ public class DriveManager {
 			inputStream.close();
 		}
 	}
-	
-	private GoogleCredential systemCredential;
-	private Long systemCredentialExpires;
 }

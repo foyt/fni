@@ -35,6 +35,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 
 import fi.foyt.fni.drive.DriveManager;
+import fi.foyt.fni.drive.SystemGoogleDriveCredentials;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
 import fi.foyt.fni.persistence.dao.materials.BinaryDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
@@ -155,6 +156,9 @@ public class MaterialController {
 
   @Inject
   private DriveManager driveManager;
+  
+  @Inject
+  private SystemGoogleDriveCredentials systemGoogleDriveCredentials;
 
   @Inject
   private MaterialPermissionController materialPermissionController;
@@ -828,7 +832,7 @@ public class MaterialController {
   }
 
   private Material uploadDocument(Folder parentFolder, User loggedUser, FileData fileData) throws IOException, GeneralSecurityException {
-    Drive drive = driveManager.getSystemDrive();
+    Drive drive = driveManager.getDrive(systemGoogleDriveCredentials.getSystemCredential());
 
     File file = driveManager.insertFile(drive, fileData.getFileName(), null, fileData.getContentType(), null, true, fileData.getData());
     try {
