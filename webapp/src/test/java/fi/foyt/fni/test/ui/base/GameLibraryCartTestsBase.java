@@ -35,7 +35,8 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/testbook_1");
 
     getWebDriver().findElement(By.cssSelector(".gamelibrary-publication-action-add-to-cart")).click();
-    getWebDriver().findElement(By.cssSelector("a.gamelibrary-mini-shopping-cart-view")).click();
+    getWebDriver().get(getAppUrl(true) + "/gamelibrary/cart/");
+    
     getWebDriver().findElement(By.id("cart-form:payerFirstName")).sendKeys(firstName);
     getWebDriver().findElement(By.id("cart-form:payerLastName")).sendKeys(lastName);
     getWebDriver().findElement(By.id("cart-form:payerEmail")).sendKeys(email);
@@ -87,9 +88,12 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.cssSelector(".gamelibrary-publication-action-add-to-cart")).click();
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/pangram_fi");
     getWebDriver().findElement(By.cssSelector(".gamelibrary-publication-action-add-to-cart")).click();
-    getWebDriver().findElement(By.cssSelector("a.gamelibrary-mini-shopping-cart-view")).click();
+    getWebDriver().get(getAppUrl(true) + "/gamelibrary/cart/");
     getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-items-inner-container tr:first-child .gamelibrary-cart-action-inc-count")).click();
-
+    
+    new WebDriverWait(getWebDriver(), 60)
+      .until(ExpectedConditions.textToBePresentInElement(By.cssSelector(".gamelibrary-cart-items-inner-container table tr:first-child td:first-child"), "2"));
+    
     getWebDriver().findElement(By.id("cart-form:payerFirstName")).sendKeys(firstName);
     getWebDriver().findElement(By.id("cart-form:payerLastName")).sendKeys(lastName);
     getWebDriver().findElement(By.id("cart-form:payerEmail")).sendKeys(email);
@@ -137,7 +141,8 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.cssSelector(".gamelibrary-publication-action-add-to-cart")).click();
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/pangram_fi");
     getWebDriver().findElement(By.cssSelector(".gamelibrary-publication-action-add-to-cart")).click();
-    getWebDriver().findElement(By.cssSelector("a.gamelibrary-mini-shopping-cart-view")).click();
+    getWebDriver().get(getAppUrl(true) + "/gamelibrary/cart/");
+    
     assertEquals("EUR17.50", getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-summary-total-field .gamelibrary-cart-summary-value")).getText());
     assertNotEquals("true", getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).getAttribute("disabled"));
     getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-items table tr:nth-child(1) .gamelibrary-cart-action-remove")).click();
