@@ -8,10 +8,6 @@
   <ui:define name="page-title">#{locales['users.login.pageTitle']}</ui:define>
  
   <ui:define name="view-scripts">
-    <!-- md5 -->
-    
-    <script type="text/javascript" charset="utf8" src="//cdn.jsdelivr.net/jshash/2.2/md5-min.js"></script>
-    
     <!-- JQuery UI -->
     
     <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -64,20 +60,20 @@
         <h:panelGroup layout="block" styleClass="user-login-login-panel">
           <h3>#{locales['users.login.loginTitle']}</h3>
         
-          <h:form>
+          <h:form styleClass="user-login-form">
             <h:panelGroup layout="block">
               <h:panelGroup layout="block" styleClass="user-login-field">
                 <h:outputLabel value="#{locales['users.login.loginEmailTitle']}" />
-                <h:inputText value="#{loginBackingBean.loginEmail}" id="email" required="true" requiredMessage="#{locales['users.login.loginEmailRequired']}"/>
+                <h:inputText styleClass="user-login-email" value="#{loginBackingBean.loginEmail}" id="email" required="true" requiredMessage="#{locales['users.login.loginEmailRequired']}"/>
               </h:panelGroup>  
               
               <h:panelGroup layout="block" styleClass="user-login-field">
                 <h:outputLabel value="#{locales['users.login.loginPasswordTitle']}" />
-                <h:inputSecret value="#{loginBackingBean.loginPassword}" id="password"/>
+                <h:inputSecret styleClass="user-login-password" value="#{loginBackingBean.loginPassword}" id="password"/>
               </h:panelGroup>
         
               <h:panelGroup layout="block" styleClass="user-login-field">
-                <h:commandButton action="#{loginBackingBean.login}" value="#{locales['users.login.loginButton']}" />
+                <h:commandButton styleClass="user-login-button" action="#{loginBackingBean.login}" value="#{locales['users.login.loginButton']}" />
               </h:panelGroup>
             </h:panelGroup>
           </h:form>
@@ -92,13 +88,13 @@
 
           <h:panelGroup layout="block" styleClass="user-login-external">
             <h4>#{locales['users.login.externalLoginTitle']}</h4>
-            <h:link outcome="/users/login.jsf">
+            <h:link outcome="/users/login.jsf" styleClass="user-login-external-facebook">
               <f:param name="loginMethod" value="FACEBOOK"/>
               <h:graphicImage library="novus" name="/gfx/icons/48x48/users/login-facebook.png"/>
               <h:panelGroup styleClass="user-login-external-label">#{locales['users.login.loginWithFacebook']}</h:panelGroup>
             </h:link>
             
-            <h:link outcome="/users/login.jsf">
+            <h:link outcome="/users/login.jsf" styleClass="user-login-external-google">
               <f:param name="loginMethod" value="GOOGLE"/>
               <h:graphicImage library="novus" name="/gfx/icons/48x48/users/login-google.png"/>
               <h:panelGroup styleClass="user-login-external-label">#{locales['users.login.loginWithGoogle']}</h:panelGroup>
@@ -129,14 +125,12 @@
 
             <h:panelGroup layout="block" styleClass="user-login-field">
               <h:outputLabel value="#{locales['users.login.registerPasswordTitle']}"/>
-              <h:inputSecret id="password1"/>
-              <h:inputHidden value="#{loginBackingBean.registerPassword1}" id="password1-encoded"/>
+              <h:inputSecret id="password1" value="#{loginBackingBean.registerPassword1}" />
             </h:panelGroup>
 
             <h:panelGroup layout="block" styleClass="user-login-field">
               <h:outputLabel value="#{locales['users.login.registerPassword2Title']}"/>
-              <h:inputSecret id="password2"/>
-              <h:inputHidden value="#{loginBackingBean.registerPassword2}" id="password2-encoded"/>
+              <h:inputSecret id="password2" value="#{loginBackingBean.registerPassword2}" />
             </h:panelGroup>
 
             <h:panelGroup layout="block" styleClass="user-login-field">

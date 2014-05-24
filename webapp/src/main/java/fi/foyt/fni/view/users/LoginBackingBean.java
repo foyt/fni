@@ -1,6 +1,7 @@
 package fi.foyt.fni.view.users;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -84,7 +85,11 @@ public class LoginBackingBean {
 	
 	@RequestAction
 	@Deferred
-	public void init() {
+	public void init() throws UnsupportedEncodingException {
+	  if (StringUtils.isNotBlank(redirectUrl)) {
+	    sessionController.setRedirectUrl(redirectUrl);
+	  }
+	  
 	  if (StringUtils.isNotBlank(loginMethod)) {
 	    AuthSource authSource = AuthSource.valueOf(loginMethod);
 	    if (authSource != null) {
@@ -116,13 +121,10 @@ public class LoginBackingBean {
 				if (authenticationStrategy instanceof InternalAuthenticationStrategy) {
 					FacesContext facesContext = FacesContext.getCurrentInstance();
 					ExternalContext externalContext = facesContext.getExternalContext();
-
 					Locale locale = sessionController.getLocale();
-
 					Map<String, String[]> parameters = new HashMap<String, String[]>();
 					parameters.put("username", new String[] { getLoginEmail() });
 					parameters.put("password", new String[] { getLoginPassword() });
-
 					UserToken userToken = authenticationStrategy.accessToken(locale, parameters);
 					if (userToken != null) {
 						sessionController.login(userToken);
@@ -136,7 +138,6 @@ public class LoginBackingBean {
 						FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.invalidCredentials"));
 					}
 				}
-
 			} catch (UserNotConfirmedException e) {
 				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.userNotVerified"));
 			} catch (MultipleEmailAccountsException e) {
@@ -213,13 +214,6 @@ public class LoginBackingBean {
 		}
 
 		if (valid) {
-		  if (DigestUtils.md5Hex("").equals(getRegisterPassword1())) {
-			  FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.registerPasswordRequired"));
-			  valid = false;
-	  	}
-		}
-
-		if (valid) {
 			User existingUser = userController.findUserByEmail(getRegisterEmail());
 			if (existingUser != null) {
 				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.registrationUserWithSpecifiedEmailAlreadyExists"));
@@ -227,9 +221,10 @@ public class LoginBackingBean {
 				Locale locale = sessionController.getLocale();
 				User user = userController.createUser(getRegisterFirstName(), getRegisterLastName(), null, locale, new Date(), UserProfileImageSource.GRAVATAR);
 				userController.createUserEmail(user, getRegisterEmail(), Boolean.TRUE);
+				String password = DigestUtils.md5Hex(getRegisterPassword1());
 				
 				UserVerificationKey verificationKey = authenticationController.createVerificationKey(user, getRegisterEmail());
-				authenticationController.createInternalAuth(user, getRegisterPassword1());
+				authenticationController.createInternalAuth(user, password);
 
 				ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 				String verifyUrl = new StringBuilder().append(externalContext.getRequestScheme()).append("://").append(externalContext.getRequestServerName())
