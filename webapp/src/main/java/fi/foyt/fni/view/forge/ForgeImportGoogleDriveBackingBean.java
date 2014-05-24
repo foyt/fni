@@ -1,8 +1,6 @@
 package fi.foyt.fni.view.forge;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -82,7 +80,7 @@ public class ForgeImportGoogleDriveBackingBean {
   @SuppressWarnings("unchecked")
   @RequestAction
   @Deferred
-	public void load() throws IOException {
+	public String load() throws IOException {
     UserToken userToken = sessionController.getLoggedUserToken();
     User loggedUser = userToken.getUserIdentifier().getUser();
     String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
@@ -91,10 +89,10 @@ public class ForgeImportGoogleDriveBackingBean {
       Folder parentFolder = parentFolderId != null ? folderController.findFolderById(parentFolderId) : null;
       if (parentFolder != null) {
         if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
-          throw new ForbiddenException();
+          return "/error/access-denied.jsf";
         }
       } else {
-        throw new FileNotFoundException();
+        return "/error/not-found.jsf";
       }
     }
 
@@ -106,15 +104,9 @@ public class ForgeImportGoogleDriveBackingBean {
         redirectUrl += "?parentFolderId=" + parentFolderId;
       }
       
-      FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
-        .append(contextPath)
-        .append("/login?loginMethod=GOOGLE&redirectUrl=")
-        .append(URLEncoder.encode(redirectUrl, "UTF-8"))
-        .append("&extraScopes=")
-        .append(REQUIRED_SCOPE)
-        .toString());
+      return "/users/login.jsf?faces-redirect=true&loginMethod=GOOGLE&redirectUrl=" + redirectUrl + "&extraScopes=" +  REQUIRED_SCOPE;
     } else {
-      Drive drive = driveManager.getUserDrive(userToken.getToken());
+      Drive drive = driveManager.getDrive(driveManager.getAccessTokenCredential(userToken.getToken()));
       FileList fileList = null;
       root = folderId == null;
       files = new ArrayList<File>();
@@ -140,6 +132,8 @@ public class ForgeImportGoogleDriveBackingBean {
         )
       ));
     }
+    
+    return null;
 	}
 
 	public boolean isRoot() {
@@ -176,7 +170,7 @@ public class ForgeImportGoogleDriveBackingBean {
     
 	  String accountUser = System.getProperty("fni-google-drive.accountUser");
     UserToken userToken = sessionController.getLoggedUserToken();
-    Drive drive = driveManager.getUserDrive(userToken.getToken());
+    Drive drive = driveManager.getDrive(driveManager.getAccessTokenCredential(userToken.getToken()));
     User loggedUser = userToken.getUserIdentifier().getUser();
     
     for (String entryId : importEntryIds) {
