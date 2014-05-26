@@ -10,6 +10,9 @@ import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import com.icegreen.greenmail.util.GreenMail;
+import com.icegreen.greenmail.util.ServerSetup;
+
 public abstract class AbstractTest {
   
   private static final long TEST_START_TIME = System.currentTimeMillis();
@@ -32,6 +35,10 @@ public abstract class AbstractTest {
 
   protected int getPortHttps() {
     return Integer.parseInt(System.getProperty("it.port.https"));
+  }
+
+  protected int getSmtpPort() {
+    return Integer.parseInt(System.getProperty("it.smtp.port"));
   }
   
   public String getProjectVersion() {
@@ -222,5 +229,10 @@ public abstract class AbstractTest {
       deleteUser(userId);
     }
   }
-  
+
+  protected GreenMail startSmtpServer() {
+    GreenMail greenMail = new GreenMail(new ServerSetup(getSmtpPort(), "localhost", ServerSetup.PROTOCOL_SMTP));
+    greenMail.start();
+    return greenMail;
+  }
 }
