@@ -43,7 +43,7 @@ public class MaterialPermissionController {
 			if (user == null)
 				return false;
 			
-			if (user.getId() == material.getCreator().getId())
+			if (user.getId().equals(material.getCreator().getId()))
 				return true;
 			
 			if (userController.areFriends(user, material.getCreator()))
@@ -51,7 +51,7 @@ public class MaterialPermissionController {
 			
 			List<UserMaterialRole> materialEditors = userMaterialRoleDAO.listByMaterialAndRole(material, MaterialRole.MAY_EDIT);
 			for (UserMaterialRole userMaterialRole : materialEditors) {
-				if (user.getId() == userMaterialRole.getUser().getId())
+				if (user.getId().equals(userMaterialRole.getUser().getId()))
 				  return true;
 				
 				if (userController.areFriends(user, userMaterialRole.getUser()))
