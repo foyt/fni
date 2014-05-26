@@ -37,6 +37,7 @@ import fi.foyt.fni.auth.InvalidCredentialsException;
 import fi.foyt.fni.auth.MultipleEmailAccountsException;
 import fi.foyt.fni.auth.OAuthAuthenticationStrategy;
 import fi.foyt.fni.auth.UserNotConfirmedException;
+import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.PasswordResetKey;
@@ -48,7 +49,6 @@ import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.faces.FacesUtils;
-import fi.foyt.fni.utils.mail.MailUtils;
 
 @RequestScoped
 @Named
@@ -82,6 +82,9 @@ public class LoginBackingBean {
 
 	@Inject
 	private SystemSettingsController systemSettingsController;
+	
+	@Inject
+	private Mailer mailer;
 	
 	@RequestAction
 	@Deferred
@@ -237,10 +240,17 @@ public class LoginBackingBean {
 				try {
 					String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
 					String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
-					MailUtils.sendMail(fromMail, fromName, getRegisterEmail(), user.getFullName(), mailTitle, mailContent, "text/plain");
-					FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.login.verificationEmailSent"));
+					
+					if (StringUtils.isNotBlank(fromMail) && StringUtils.isNotBlank(fromMail)) {
+		        mailer.sendMail(fromMail, fromName, getRegisterEmail(), user.getFullName(), mailTitle, mailContent, "text/plain");
+  					FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.login.verificationEmailSent"));
+					} else {
+	          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.verificationSendingFailed"));
+	          logger.log(Level.SEVERE, "Could not send verification mail because system mailer settings were missing");
+					}
 				} catch (MessagingException e) {
 					FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.verificationSendingFailed"));
+					logger.log(Level.SEVERE, "Could not send verification mail", e);
 				}
 
 			}
@@ -274,7 +284,7 @@ public class LoginBackingBean {
 				try {
 					String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
 					String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
-					MailUtils.sendMail(fromMail, fromName, getForgotPasswordEmail(), user.getFullName(), mailTitle, mailContent, "text/html");
+					mailer.sendMail(fromMail, fromName, getForgotPasswordEmail(), user.getFullName(), mailTitle, mailContent, "text/html");
 					FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.login.resetPasswordEmailSent", getForgotPasswordEmail()));
 				} catch (MessagingException e) {
 					FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.resetPasswordSendingFailed"));
