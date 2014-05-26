@@ -7,9 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
-
-import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.persistence.model.common.Country;
 
@@ -74,25 +71,6 @@ public class Address {
   
   public void setPostalCode(String postalCode) {
     this.postalCode = postalCode;
-  }
-  
-  @Transient
-  public boolean match(Object obj) {
-    if (obj instanceof Address) {
-      Address other = (Address) obj;
-      
-      Long countryId = this.getCountry() != null ? this.getCountry().getId() : null;
-      Long otherCountryId = other.getCountry() != null ? other.getCountry().getId() : null;
-      
-      return getAddressType().equals(other.getAddressType()) &&
-        StringUtils.equals(getStreet1(), other.getStreet1()) &&
-        StringUtils.equals(getStreet2(), other.getStreet2()) && 
-        StringUtils.equals(getPostalCode(), other.getPostalCode()) &&
-        StringUtils.equals(getCity(), other.getCity()) &&
-        countryId == otherCountryId;      
-    } else {
-      return false;
-    }    
   }
 
   @Id
