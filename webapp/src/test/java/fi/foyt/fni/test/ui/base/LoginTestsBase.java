@@ -100,5 +100,72 @@ public class LoginTestsBase extends AbstractUITest {
       greenMail.stop();
     } 
   }
+  
+  @Test
+  public void testResetPasswordIncorrectEmail() {
+    getWebDriver().get(getAppUrl(true) + "/login/");
+    
+    getWebDriver().findElement(By.cssSelector(".users-login-forgot-password-link")).click();
+
+    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".ui-dialog")));
+
+    assertEquals("Forgot password", getWebDriver().findElement(By.cssSelector(".ui-dialog-title")).getText());
+    assertEquals("Enter your email address to the field below and we will send you a password reset link", getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog p")).getText());
+    
+    getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog input[name=\"email\"]")).sendKeys("nonexisting@foyt.fi");
+    getWebDriver().findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
+    
+    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".jsf-messages-container li:nth-child(1).warning span")));
+    String notification = getWebDriver().findElement(By.cssSelector(".jsf-messages-container li:nth-child(1).warning span")).getText();
+    assertEquals("User Could Not Be Found By Given E-mail", notification);
+  }
+  
+  @Test
+  public void testResetPasswordInvalidEmail() {
+    getWebDriver().get(getAppUrl(true) + "/login/");
+    
+    getWebDriver().findElement(By.cssSelector(".users-login-forgot-password-link")).click();
+
+    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".ui-dialog")));
+
+    assertEquals("Forgot password", getWebDriver().findElement(By.cssSelector(".ui-dialog-title")).getText());
+    assertEquals("Enter your email address to the field below and we will send you a password reset link", getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog p")).getText());
+    
+    getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog input[name=\"email\"]")).sendKeys("invalidaddress");
+    getWebDriver().findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
+    
+    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".jsf-messages-container li:nth-child(1).warning span")));
+    String notification = getWebDriver().findElement(By.cssSelector(".jsf-messages-container li:nth-child(1).warning span")).getText();
+    assertEquals("User Could Not Be Found By Given E-mail", notification);
+  }
+  
+  @Test
+  public void testResetPassword() throws MessagingException {
+    GreenMail greenMail = startSmtpServer();
+    try {
+      getWebDriver().get(getAppUrl(true) + "/login/");
+      
+      getWebDriver().findElement(By.cssSelector(".users-login-forgot-password-link")).click();
+
+      new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".ui-dialog")));
+
+      assertEquals("Forgot password", getWebDriver().findElement(By.cssSelector(".ui-dialog-title")).getText());
+      assertEquals("Enter your email address to the field below and we will send you a password reset link", getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog p")).getText());
+      
+      getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog input[name=\"email\"]")).sendKeys("user@foyt.fi");
+      getWebDriver().findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
+      
+      new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".jsf-messages-container li:nth-child(1).info span")));
+      String notification = getWebDriver().findElement(By.cssSelector(".jsf-messages-container li:nth-child(1).info span")).getText();
+      assertTrue(notification, StringUtils.startsWithIgnoreCase(notification, "Password reset e-mail has been sent into user@foyt.fi. Click link on the e-mail to reset your password."));
+
+      assertEquals(1, greenMail.getReceivedMessages().length);
+      String mailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
+      assertEquals("Forge & Illusion password reset", greenMail.getReceivedMessages()[0].getSubject());
+      assertTrue(mailBody, StringUtils.startsWithIgnoreCase(mailBody, "<p>You have requested for password reset"));
+    } finally {
+      greenMail.stop();
+    } 
+  }
 
 }
