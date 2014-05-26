@@ -110,6 +110,7 @@ public class MaterialsServlet extends AbstractTransactionedServlet {
 			break;
 			case BINARY:
 				data = getBinaryMaterialData((Binary) material);
+		  break;
 			case DROPBOX_FOLDER:
 			case DROPBOX_ROOT_FOLDER:
 			case FOLDER:
