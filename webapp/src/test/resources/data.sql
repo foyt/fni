@@ -19,7 +19,9 @@ values
   (6, 'GAMELIBRARY_ORDERMAILER_NAME', 'Bogus Order'),
   (7, 'GAMELIBRARY_ORDERMAILER_MAIL', 'bogus.order@foyt.fi'),
   (8, 'GAMELIBRARY_SHOP_OWNER_NAME', 'Bogus Shop Owner'),
-  (9, 'GAMELIBRARY_SHOP_OWNER_MAIL', 'bogus.shop-owner@foyt.fi');
+  (9, 'GAMELIBRARY_SHOP_OWNER_MAIL', 'bogus.shop-owner@foyt.fi'),
+  (10, 'SYSTEM_MAILER_NAME', 'Bogus System Mailer'),
+  (12, 'SYSTEM_MAILER_MAIL', 'bogus.system-mailer@foyt.fi');
   
 insert into 
   User (id, archived, firstName, lastName, locale, profileImageSource, registrationDate, role) 
