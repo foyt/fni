@@ -69,10 +69,6 @@ public class ProfileImageServlet extends AbstractFileServlet {
 		switch (profileImageSource) {
 			case FNI:
 				profileImage = userController.getProfileImage(user);
-				if (profileImage == null) {
-					response.sendError(HttpServletResponse.SC_NOT_FOUND);
-					return;
-				}
 			break;
 			case GRAVATAR:
 				String protocol = "http";
@@ -85,6 +81,11 @@ public class ProfileImageServlet extends AbstractFileServlet {
 			  return;
 		}
 		
+    if (profileImage == null) {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      return;
+    }
+
 		String eTag = createETag(profileImage.getModified(), width, height);
 		long lastModified = profileImage.getModified().getTime();
 

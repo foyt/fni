@@ -119,10 +119,6 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
         switch (user.getProfileImageSource()) {
           case FNI:
             profileImage = userController.getProfileImage(user);
-            if (profileImage == null) {
-              response.sendError(HttpServletResponse.SC_NOT_FOUND);
-              return;
-            }
           break;
           case GRAVATAR:
             String protocol = "http";
@@ -135,6 +131,11 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
             return;
         }
       }      
+    }
+    
+    if (profileImage == null) {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      return;
     }
     
 	  String eTag = createETag(profileImage.getModified(), size);
