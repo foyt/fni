@@ -291,6 +291,23 @@
       <version>[1.0.0,)</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>com.icegreen</groupId>
+      <artifactId>greenmail</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.mail</groupId>
+          <artifactId>mail</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    
   </dependencies>
    
   <build>
@@ -409,6 +426,7 @@
         <h2.version>1.4.177</h2.version>
         <it.port.http>8080</it.port.http>
         <it.port.https>8443</it.port.https>
+        <it.smtp.port>3025</it.smtp.port>
         <it.host>dev.forgeandillusion.net</it.host>
         <it.ctx>fnici</it.ctx>
         <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
@@ -475,6 +493,7 @@
                 <it.host>${it.host}</it.host>
                 <it.port.http>${it.port.http}</it.port.http>
                 <it.port.https>${it.port.https}</it.port.https>
+                <it.smtp.port>${it.smtp.port}</it.smtp.port>
                 <it.ctx>${it.ctx}</it.ctx>
                 <it.jdbc.driver>${it.jdbc.driver}</it.jdbc.driver>
                 <it.jdbc.url>${it.jdbc.url}</it.jdbc.url>
@@ -621,7 +640,7 @@
               </execution>
             </executions>
           </plugin>
-    
+
           <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
@@ -658,6 +677,7 @@
                   </cargo.datasource.datasource.fnici>
                 </properties>    
               </configuration>
+
               <deployables>
                 <deployable>
                   <properties>
@@ -667,7 +687,7 @@
                   <pingTimeout>600000</pingTimeout>
                 </deployable>
               </deployables>
-    
+
             </configuration>
             <executions>
               <execution>
@@ -686,14 +706,14 @@
               </execution>
             </executions>
           </plugin>
-          
+
           <plugin>
             <groupId>org.wildfly.plugins</groupId>
             <artifactId>wildfly-maven-plugin</artifactId>
             <version>1.0.1.Final</version>
             <executions>
               <execution>
-                <id>add-https</id>
+                <id>configure-wildfly</id>
                 <phase>pre-integration-test</phase>
                 <goals>
                   <goal>execute-commands</goal>
@@ -705,11 +725,36 @@
                       <command>/system-property=fni-google-drive.keyFile:add(value="${it.googleDrive.keyFile}")</command>
                       <command>/system-property=fni-google-drive.accountId:add(value="${it.googleDrive.accountId}")</command>
                       <command>/system-property=fni-google-drive.accountUser:add(value="${it.googleDrive.accountUser}")</command>
-                      <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${project.build.directory}/fnici.keystore",keystore-password="storepass",alias="fnici")</command>
+                      <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
+                      <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
+                      <command>:reload</command>
                     </commands>
                   </execute-commands>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+                    
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>wait-maven-plugin</artifactId>
+            <version>1.0</version>
+            <executions>
+              <execution>
+                <id>wait</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>wait</goal>
+                </goals>      
+                <configuration>
+                  <protocol>http</protocol>
+                  <host>${it.host}</host>
+                  <port>${it.port.http}</port>
+                  <file>/${it.ctx}</file>
+                  <maxcount>20</maxcount>
+                  <timeout>10000</timeout>
                 </configuration>
               </execution>
             </executions>
@@ -717,6 +762,7 @@
         </plugins>
       </build>
     </profile>
+
     <profile>
       <id>sauce</id>
       <activation>
@@ -731,6 +777,7 @@
         <it.port.https>8443</it.port.https>
         <it.host>dev.forgeandillusion.net</it.host>
         <it.ctx>fnici</it.ctx>
+        <it.smtp.port>${it.smtp.port}</it.smtp.port>
         <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
         <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE</it.jdbc.url>
         <it.jdbc.jndi>java:/jboss/datasources/MysqlDS</it.jdbc.jndi>
@@ -796,6 +843,7 @@
                 <it.port.http>${it.port.http}</it.port.http>
                 <it.port.https>${it.port.https}</it.port.https>
                 <it.ctx>${it.ctx}</it.ctx>
+                <it.smtp.port>${it.smtp.port}</it.smtp.port>
                 <it.jdbc.driver>${it.jdbc.driver}</it.jdbc.driver>
                 <it.jdbc.url>${it.jdbc.url}</it.jdbc.url>
                 <it.jdbc.jndi>${it.jdbc.jndi}</it.jdbc.jndi>
@@ -971,7 +1019,7 @@
               </execution>
             </executions>
           </plugin>
-    
+          
           <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
@@ -1017,7 +1065,6 @@
                   <pingTimeout>600000</pingTimeout>
                 </deployable>
               </deployables>
-    
             </configuration>
             <executions>
               <execution>
@@ -1055,11 +1102,36 @@
                       <command>/system-property=fni-google-drive.keyFile:add(value="${it.googleDrive.keyFile}")</command>
                       <command>/system-property=fni-google-drive.accountId:add(value="${it.googleDrive.accountId}")</command>
                       <command>/system-property=fni-google-drive.accountUser:add(value="${it.googleDrive.accountUser}")</command>
-                      <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${project.build.directory}/fnici.keystore",keystore-password="storepass",alias="fnici")</command>
+                      <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
+                      <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
+                      <command>:reload</command>
                     </commands>
                   </execute-commands>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+                    
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>wait-maven-plugin</artifactId>
+            <version>1.0</version>
+            <executions>
+              <execution>
+                <id>wait</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>wait</goal>
+                </goals>      
+                <configuration>
+                  <protocol>http</protocol>
+                  <host>${it.host}</host>
+                  <port>${it.port.http}</port>
+                  <file>/${it.ctx}</file>
+                  <maxcount>20</maxcount>
+                  <timeout>10000</timeout>
                 </configuration>
               </execution>
             </executions>
