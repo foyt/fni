@@ -110,31 +110,31 @@
           <h:form>
             <h:panelGroup layout="block" styleClass="user-login-field">
               <h:outputLabel value="#{locales['users.login.registerFirstNameTitle']}"/>
-              <h:inputText value="#{loginBackingBean.registerFirstName}" required="true" requiredMessage="#{locales['users.login.registerFirstNameRequired']}"/>
+              <h:inputText styleClass="user-register-first-name" value="#{loginBackingBean.registerFirstName}" required="true" requiredMessage="#{locales['users.login.registerFirstNameRequired']}"/>
             </h:panelGroup>
           
             <h:panelGroup layout="block" styleClass="user-login-field">
               <h:outputLabel value="#{locales['users.login.registerLastNameTitle']}"/>
-              <h:inputText value="#{loginBackingBean.registerLastName}" required="true" requiredMessage="#{locales['users.login.registerLastNameRequired']}"/>
+              <h:inputText styleClass="user-register-last-name" value="#{loginBackingBean.registerLastName}" required="true" requiredMessage="#{locales['users.login.registerLastNameRequired']}"/>
             </h:panelGroup>
 
             <h:panelGroup layout="block" styleClass="user-login-field">
               <h:outputLabel value="#{locales['users.login.registerEmailTitle']}"/>
-              <h:inputText value="#{loginBackingBean.registerEmail}" required="true" requiredMessage="#{locales['users.login.registerEmailRequired']}"/>
+              <h:inputText styleClass="user-register-email" value="#{loginBackingBean.registerEmail}" required="true" requiredMessage="#{locales['users.login.registerEmailRequired']}"/>
             </h:panelGroup>
 
             <h:panelGroup layout="block" styleClass="user-login-field">
               <h:outputLabel value="#{locales['users.login.registerPasswordTitle']}"/>
-              <h:inputSecret id="password1" value="#{loginBackingBean.registerPassword1}" />
+              <h:inputSecret styleClass="user-register-password1" id="password1" value="#{loginBackingBean.registerPassword1}" />
             </h:panelGroup>
 
             <h:panelGroup layout="block" styleClass="user-login-field">
               <h:outputLabel value="#{locales['users.login.registerPassword2Title']}"/>
-              <h:inputSecret id="password2" value="#{loginBackingBean.registerPassword2}" />
+              <h:inputSecret styleClass="user-register-password2" id="password2" value="#{loginBackingBean.registerPassword2}" />
             </h:panelGroup>
 
             <h:panelGroup layout="block" styleClass="user-login-field">
-              <h:commandButton action="#{loginBackingBean.register}" value="#{locales['users.login.registerButton']}" />
+              <h:commandButton styleClass="user-register-button" action="#{loginBackingBean.register}" value="#{locales['users.login.registerButton']}" />
             </h:panelGroup>
             </h:form>  
         </h:panelGroup>
