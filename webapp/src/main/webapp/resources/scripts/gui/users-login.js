@@ -11,6 +11,7 @@
             modal: true,
             width: 400,
             buttons: [{
+              'class': 'ok-button',
               'text': dialog.data('send-button'),
               'click': function(event) {
                 var email = dialog.find('input[name="email"]').val();
@@ -21,6 +22,7 @@
                 $(this).dialog("close");
               }
             }, {
+              'class': 'cancel-button',
               'text': dialog.data('cancel-button'),
               'click': function(event) { 
                 $(this).dialog("close");
