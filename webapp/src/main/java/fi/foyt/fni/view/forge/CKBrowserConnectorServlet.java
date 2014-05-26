@@ -2,7 +2,6 @@ package fi.foyt.fni.view.forge;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -107,38 +106,40 @@ public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
     List<Material> materials = null;
 
     switch (dialog) {
-    case LINK:
-      materials = materialController.listMaterialsByFolder(loggedUser, parentFolder);
+      case LINK:
+        materials = materialController.listMaterialsByFolder(loggedUser, parentFolder);
       break;
-    case IMAGE:
-      materials = materialController.listMaterialsByFolderAndTypes(loggedUser, parentFolder, allowedMaterialTypes);
+      case IMAGE:
+        materials = materialController.listMaterialsByFolderAndTypes(loggedUser, parentFolder, allowedMaterialTypes);
       break;
     }
 
-    Collections.sort(materials, ComparatorUtils.chainedComparator(Arrays.asList(new MaterialTypeComparator(MaterialType.DROPBOX_ROOT_FOLDER), new MaterialTypeComparator(MaterialType.FOLDER))));
-
-    for (Material material : materials) {
-      boolean folder = material instanceof Folder;
-
-      switch (dialog) {
-      case LINK:
-        if (folder) {
-          materialBeans.add(createMaterialBean(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Folder",
-              getIcon(material), material.getModified(), 0, material.getCreator()));
-        } else {
-          materialBeans.add(createMaterialBean(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Normal",
-              getIcon(material), material.getModified(), 0, material.getCreator()));
+    if (materials != null) {
+      Collections.sort(materials, ComparatorUtils.chainedComparator(Arrays.asList(new MaterialTypeComparator(MaterialType.DROPBOX_ROOT_FOLDER), new MaterialTypeComparator(MaterialType.FOLDER))));
+  
+      for (Material material : materials) {
+        boolean folder = material instanceof Folder;
+  
+        switch (dialog) {
+        case LINK:
+          if (folder) {
+            materialBeans.add(createMaterialBean(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Folder",
+                getIcon(material), material.getModified(), 0, material.getCreator()));
+          } else {
+            materialBeans.add(createMaterialBean(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Normal",
+                getIcon(material), material.getModified(), 0, material.getCreator()));
+          }
+          break;
+        case IMAGE:
+          if (folder) {
+            materialBeans.add(createMaterialBean(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Folder",
+                getIcon(material), material.getModified(), 0, material.getCreator()));
+          } else {
+            materialBeans.add(createMaterialBean(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Normal",
+                getIcon(material), material.getModified(), 0, material.getCreator()));
+          }
+          break;
         }
-        break;
-      case IMAGE:
-        if (folder) {
-          materialBeans.add(createMaterialBean(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Folder",
-              getIcon(material), material.getModified(), 0, material.getCreator()));
-        } else {
-          materialBeans.add(createMaterialBean(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Normal",
-              getIcon(material), material.getModified(), 0, material.getCreator()));
-        }
-        break;
       }
     }
     
@@ -179,7 +180,7 @@ public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
   }
 
   private MaterialBean createMaterialBean(Long id, String name, String path, String type, String icon, Date date, long size, User creator) {
-    return new MaterialBean(id, name, path, type, icon, DATE_FORMAT.format(date), creator.getFullName(), getSize(size));
+    return new MaterialBean(id, name, path, type, icon, new SimpleDateFormat("dd.MM.yyyy HH:mm").format(date), creator.getFullName());
   }
 
   public class MaterialBean {
@@ -187,7 +188,7 @@ public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
     public MaterialBean() {
     }
     
-    public MaterialBean(Long id, String name, String path, String type, String icon, String date, String creator, String size) {
+    public MaterialBean(Long id, String name, String path, String type, String icon, String date, String creator) {
       this.id = id;
       this.name = name;
       this.path = path;
@@ -195,7 +196,6 @@ public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
       this.icon = icon;
       this.date = date;
       this.creator = creator;
-      this.size = size;
     }
 
     public Long getId() {
@@ -225,11 +225,7 @@ public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
     public String getCreator() {
       return creator;
     }
-
-    public String getSize() {
-      return size;
-    }
-
+    
     private Long id;
     private String name;
     private String path;
@@ -237,18 +233,7 @@ public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
     private String icon;
     private String date;
     private String creator;
-    private String size;
   }
-
-  private String getSize(long size) {
-    if (size > 0 && size < 1024) {
-      return "1";
-    } else {
-      return String.valueOf(Math.round(size / 1024));
-    }
-  }
-
-  private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
   private List<MaterialType> allowedMaterialTypes = Arrays
       .asList(MaterialType.IMAGE, MaterialType.FOLDER, MaterialType.DROPBOX_ROOT_FOLDER, MaterialType.DROPBOX_FILE, MaterialType.DROPBOX_FOLDER);
