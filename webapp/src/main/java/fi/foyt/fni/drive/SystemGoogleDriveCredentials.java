@@ -1,6 +1,7 @@
 package fi.foyt.fni.drive;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 
@@ -15,8 +16,10 @@ import com.google.api.services.drive.DriveScopes;
 
 @ApplicationScoped
 @Stateful
-public class SystemGoogleDriveCredentials {
+public class SystemGoogleDriveCredentials implements Serializable {
   
+  private static final long serialVersionUID = -7571174639569905090L;
+
   @PostConstruct
   public void init() throws GeneralSecurityException, IOException {
     String accountId = System.getProperty("fni-google-drive.accountId");
