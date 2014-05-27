@@ -34,9 +34,9 @@ public class ForgeDocumentsBackingBean {
   @Parameter
   @Matches ("[0-9]{1,}")
   private Long ownerId;
-
+  
   @Parameter
-  @Matches ("[a-zA-Z0-9_\\/.-\\:,]{1,}")
+  @Matches ("[a-zA-Z0-9_/.\\-:,]{1,}")
   private String urlPath;
   
 	@Inject
