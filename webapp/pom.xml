@@ -1083,14 +1083,14 @@
               </execution>
             </executions>
           </plugin>
-          
+
           <plugin>
             <groupId>org.wildfly.plugins</groupId>
             <artifactId>wildfly-maven-plugin</artifactId>
             <version>1.0.1.Final</version>
             <executions>
               <execution>
-                <id>add-https</id>
+                <id>configure-wildfly</id>
                 <phase>pre-integration-test</phase>
                 <goals>
                   <goal>execute-commands</goal>
