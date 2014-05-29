@@ -729,6 +729,20 @@
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${project.build.directory}/fnici.keystore",keystore-password="storepass",alias="fnici")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
                       <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
+                    </commands>
+                  </execute-commands>
+                </configuration>
+              </execution>
+              
+              <execution>
+                <id>reload-wildfly</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>execute-commands</goal>
+                </goals>
+                <configuration>
+                  <execute-commands>
+                    <commands>
                       <command>:reload</command>
                     </commands>
                   </execute-commands>
@@ -1106,6 +1120,20 @@
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${project.build.directory}/fnici.keystore",keystore-password="storepass",alias="fnici")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
                       <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
+                    </commands>
+                  </execute-commands>
+                </configuration>
+              </execution>
+              
+              <execution>
+                <id>reload-wildfly</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>execute-commands</goal>
+                </goals>
+                <configuration>
+                  <execute-commands>
+                    <commands>
                       <command>:reload</command>
                     </commands>
                   </execute-commands>
