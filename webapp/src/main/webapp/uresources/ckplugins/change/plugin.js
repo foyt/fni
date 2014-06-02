@@ -10,7 +10,13 @@
  * Fires a contentChange event when editor content changes. 
  */
 (function() {
-
+  
+  /* global CKEDITOR, ActiveXObject, ChangeObserver:true, PropertyHandler: true  */
+  /* global  MutationChangeObserver: true, DOMSubtreeModifiedChangeObserver: true, PollingChangeObserver:true */
+  /* global TitlePropertyHandler:true , LangDirPropertyHandler:true, LangCodePropertyHandler:true, CharsetPropertyHandler:true */
+  /* global DocTypePropertyHandler:true, TextColorPropertyHandler:true, BackgroundColorPropertyHandler:true */
+  /* global BackgroundImagePropertyHandler:true, BackgroundAttachmentPropertyHandler:true, PageMarginPropertyHandler:true, MetaPropertyHandler:true */
+  
   /**
    * Base class for change obserers.
    * 
@@ -47,10 +53,10 @@
        * Event contains oldContent and currentContent properties that contain content before and after the change.
        */
       checkChange : function() {
-        if ((this._paused == false) && (this.getEditor().readOnly == false)) {
+        if ((!this._paused) && (!this.getEditor().readOnly)) {
 
           var currentContent = this._getEditorContent();
-          var changedProperties = new Array();
+          var changedProperties = [];
           
           for (var i = 0, l = this._propertyHandlers.length; i < l; i++) {
             var propertyName = this._propertyHandlers[i].getName();
@@ -73,13 +79,12 @@
             });
           }
 
-          if (this._oldContent != currentContent) {
+          if (this._oldContent !== currentContent) {
+            this._oldContent = currentContent;
             this._editor.fire("contentChange", {
               oldContent : this._oldContent,
               currentContent : currentContent,
             });
-
-            this._oldContent = currentContent;
           }
         }
       },
@@ -301,7 +306,7 @@
        * @returns property value
        */
       getValue : function(editor) {
-        alert('not implemented');
+        throw new Error('not implemented');
       },
       /**
        * Sets new property value
@@ -312,7 +317,7 @@
        *          new value
        */
       setValue : function(editor, value) {
-        alert('not implemented');
+        throw new Error('not implemented');
       },
       /**
        * Returns name of the property handler. This name should be unique because it's used to identify property handler.
@@ -320,7 +325,7 @@
        * @returns name of the property handler.
        */
       getName : function() {
-        alert('not implemented');
+        throw new Error('not implemented');
       }
     }
   });
@@ -352,11 +357,11 @@
       },
       setValue : function(editor, value) {
         var body = editor.document.getBody();
-        if (value)
+        if (value) {
           body.setAttribute('dir', value);
-        else
+        } else {
           body.removeAttribute('dir');
-
+        }
         body.removeStyle('direction');
       },
       getName : function() {
@@ -373,25 +378,28 @@
       getValue : function(editor) {
         var documentElement = editor.document.getDocumentElement();
         var lang = documentElement.getAttribute('xml:lang');
-        if (lang)
+        if (lang) {
           return lang;
+        }
         lang = documentElement.getAttribute('lang');
-        if (lang)
+        if (lang) {
           return lang;
+        }
         return null;
       },
       setValue : function(editor, value) {
         var documentElement = editor.document.getDocumentElement();
-        if (value)
+        if (value) {
           documentElement.setAttributes({
             'xml:lang' : value,
             lang : value
           });
-        else
+        } else {
           documentElement.removeAttributes({
             'xml:lang' : 1,
             lang : 1
           });
+        }
       },
       getName : function() {
         return 'langCode';
@@ -408,7 +416,7 @@
         var metas = editor.document.getHead().getElementsByTag('meta');
         for ( var i = 0, l = metas.count(); i < l; i++) {
           var meta = metas.getItem(i);
-          if (meta.getAttribute('http-equiv') == "content-type") {
+          if (meta.getAttribute('http-equiv') === "content-type") {
             var content = meta.getAttribute("content");
             if (content.match(/charset=[^=]+$/)) {
               return content.substring(content.indexOf('=') + 1);
@@ -419,11 +427,12 @@
       },
       setValue : function(editor, value) {
         var content = value ? "text/html; charset=" + value : null;
-
+        var meta;
+        
         var metas = editor.document.getHead().getElementsByTag('meta');
         for ( var i = 0, l = metas.count(); i < l; i++) {
-          var meta = metas.getItem(i);
-          if (meta.getAttribute('http-equiv') == "content-type") {
+          meta = metas.getItem(i);
+          if (meta.getAttribute('http-equiv') === "content-type") {
             if (content) {
               meta.setAttribute("content", content);
             } else {
@@ -435,7 +444,7 @@
         }
 
         if (content) {
-          var meta = new CKEDITOR.dom.element('meta', editor.document);
+          meta = new CKEDITOR.dom.element('meta', editor.document);
           meta.setAttribute('http-equiv', 'content-type');
           meta.setAttribute('content', content);
           editor.document.getHead().append(meta);
@@ -475,10 +484,11 @@
       setValue : function(editor, value) {
         var body = editor.document.getBody();
         body.removeAttribute('text');
-        if (value)
+        if (value) {
           body.setStyle('color', value);
-        else
+        } else {
           body.removeStyle('color');
+        }
       },
       getName : function() {
         return 'textColor';
@@ -591,23 +601,25 @@
         var metas = editor.document.getHead().getElementsByTag('meta');
         for ( var i = 0, l = metas.count(); i < l; i++) {
           var meta = metas.getItem(i);
-          if (meta.getAttribute('name') == this._property) {
+          if (meta.getAttribute('name') === this._property) {
             return meta.getAttribute("content");
           }
         }
       },
       setValue : function(editor, value) {
         var metas = editor.document.getHead().getElementsByTag('meta');
+        var meta;
+        
         for ( var i = 0, l = metas.count(); i < l; i++) {
-          var meta = metas.getItem(i);
-          if (meta.getAttribute('name') == this._property) {
+          meta = metas.getItem(i);
+          if (meta.getAttribute('name') === this._property) {
             meta.setAttribute("content", value);
             return;
           }
         }
 
         if (value) {
-          var meta = new CKEDITOR.dom.element('meta', editor.document);
+          meta = new CKEDITOR.dom.element('meta', editor.document);
           meta.setAttribute('name', this._property);
           meta.setAttribute('content', value);
           editor.document.getHead().append(meta);
@@ -629,40 +641,40 @@
          * @returns {ChangeObserver} change observer
          */
         getChangeObserver : function() {
-          return editor._changeObserver;
+          return this._changeObserver;
         }
       });
       
       // TODO: This should be configurable
       
       var propertyHandlers = editor.config.fullPage ? [
-        new TitlePropertyHandler(), 
-        new LangDirPropertyHandler(), 
-        new LangCodePropertyHandler(), 
-        new CharsetPropertyHandler(), 
-        new DocTypePropertyHandler(), 
-        new TextColorPropertyHandler(), 
-        new BackgroundColorPropertyHandler(), 
-        new BackgroundImagePropertyHandler(), 
-        new BackgroundAttachmentPropertyHandler(), 
-        new PageMarginPropertyHandler('pageMarginLeft', 'left'), 
-        new PageMarginPropertyHandler('pageMarginTop', 'top'), 
-        new PageMarginPropertyHandler('pageMarginRight', 'right'), 
-        new PageMarginPropertyHandler('pageMarginBottom', 'bottom'), 
-        new MetaPropertyHandler("metaKeywords", "keywords"), 
-        new MetaPropertyHandler("metaDescription", "description"), 
-        new MetaPropertyHandler("metaAuthor", "author"), 
-        new MetaPropertyHandler("metaCopyright", "copyright")      
+        new TitlePropertyHandler(),
+        new LangDirPropertyHandler(),
+        new LangCodePropertyHandler(),
+        new CharsetPropertyHandler(),
+        new DocTypePropertyHandler(),
+        new TextColorPropertyHandler(),
+        new BackgroundColorPropertyHandler(),
+        new BackgroundImagePropertyHandler(),
+        new BackgroundAttachmentPropertyHandler(),
+        new PageMarginPropertyHandler('pageMarginLeft', 'left'),
+        new PageMarginPropertyHandler('pageMarginTop', 'top'),
+        new PageMarginPropertyHandler('pageMarginRight', 'right'),
+        new PageMarginPropertyHandler('pageMarginBottom', 'bottom'),
+        new MetaPropertyHandler("metaKeywords", "keywords"),
+        new MetaPropertyHandler("metaDescription", "description"),
+        new MetaPropertyHandler("metaAuthor", "author"),
+        new MetaPropertyHandler("metaCopyright", "copyright")
       ] : [];
 
       var changeObserver = null;
-      if ((typeof (window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver) == 'function')) {
+      if ((typeof (window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver) === 'function')) {
         // Modern browsers support mutation observer
         changeObserver = new MutationChangeObserver(editor, propertyHandlers);
       }
 
-      if (changeObserver == null) {
-        if ((CKEDITOR.env.ie && CKEDITOR.env.version == 9)) {
+      if (!changeObserver) {
+        if ((CKEDITOR.env.ie && CKEDITOR.env.version === 9)) {
           // IE 9 support DOMSubtreeModified
           changeObserver = new DOMSubtreeModifiedChangeObserver(editor, propertyHandlers);
         } else {
