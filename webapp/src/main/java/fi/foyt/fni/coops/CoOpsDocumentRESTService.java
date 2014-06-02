@@ -1,4 +1,4 @@
-package fi.foyt.fni.rest;
+package fi.foyt.fni.coops;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import fi.foyt.coops.CoOpsNotImplementedException;
 import fi.foyt.coops.CoOpsUsageException;
 import fi.foyt.coops.model.File;
 import fi.foyt.coops.model.Patch;
-import fi.foyt.fni.coops.CoOpsApiDocument;
+import fi.foyt.fni.rest.PATCH;
 
 @Path ("/coops/document/{FILEID}")
 @RequestScoped
