@@ -12,16 +12,28 @@
   <ui:define name="view-scripts">
     <!-- CKEditor -->
   
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/ckeditor.js"/>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.3.2/ckeditor.js"/>
     
     <!-- JSON Polyfill -->
     
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/json3/3.2.5/json3.min.js"/>
-  
+    
+    <!-- Diff Match Patch -->
+    
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/diff_match_patch/20121119/diff_match_patch.js"/>
+
+    <!-- md5 -->
+
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jshash/2.2/md5-min.js"/>
+    
+    <!-- DiffXmlJs -->
+    
+    <h:outputScript name="scripts/diffxml-js/diffxml-js.js"/>
+    
     <!-- View scripts -->
     
     <script type="text/javascript">
-      var COOPS_SERVER_URL = CONTEXTPATH + '/forge/coops/#{forgeDocumentsBackingBean.materialId}';
+      var COOPS_SERVER_URL = CONTEXTPATH + '/rest/coops/document/#{forgeDocumentsBackingBean.materialId}';
       var COOPS_READONLY = #{forgeDocumentsBackingBean.readOnly};
     </script>
     <h:outputScript name="scripts/gui/forge-documents.js"/>

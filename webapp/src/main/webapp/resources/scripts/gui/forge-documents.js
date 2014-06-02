@@ -6,23 +6,24 @@
 
     CKEDITOR.plugins.addExternal('ajax', PLUGIN_DIR + '/ajax/');
     CKEDITOR.plugins.addExternal('xml', PLUGIN_DIR + '/xml/');
-    CKEDITOR.plugins.addExternal('change', PLUGIN_DIR + '/change/');
     CKEDITOR.plugins.addExternal('autogrow', PLUGIN_DIR + '/autogrow/');
+    CKEDITOR.plugins.addExternal('change', PLUGIN_DIR + '/change/');
     CKEDITOR.plugins.addExternal('coops', PLUGIN_DIR + '/coops/');
-    CKEDITOR.plugins.addExternal('coops-rest', PLUGIN_DIR + '/coops-rest/');
+    CKEDITOR.plugins.addExternal('coops-connector', PLUGIN_DIR + '/coops-connector/');
     CKEDITOR.plugins.addExternal('coops-dmp', PLUGIN_DIR + '/coops-dmp/');
-    CKEDITOR.plugins.addExternal('coops-ws', PLUGIN_DIR + '/coops-ws/');
+    CKEDITOR.plugins.addExternal('coops-cursors', PLUGIN_DIR + '/coops-cursors/');
+    CKEDITOR.plugins.addExternal('coops-sessionevents', PLUGIN_DIR + '/coops-sessionevents/');
     CKEDITOR.plugins.addExternal('fnidynlist', PLUGIN_DIR + '/fnidynlist/');
     CKEDITOR.plugins.addExternal('fnigenericbrowser', PLUGIN_DIR + '/fnigenericbrowser/');
     
     var editor = CKEDITOR.replace($('.forge-ckdocument-editor').attr('name'), { 
       skin: 'moono',
       language: LOCALE,
-      extraPlugins: 'coops,coops-rest,coops-ws,coops-dmp,fnigenericbrowser,autogrow',
+      extraPlugins: 'coops,coops-connector,coops-dmp,autogrow,fnigenericbrowser',
       autoGrow_onStartup: true,
       readOnly: true,
       height: 500,
-      contentsCss: ['//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/contents.css', CONTEXTPATH + '/uresources/forge-ckeditor-embedded.css' ],
+      contentsCss: ['//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.3.2/contents.css', CONTEXTPATH + '/uresources/forge-ckeditor-embedded.css' ],
       coops: {
         serverUrl: COOPS_SERVER_URL,
         readOnly: COOPS_READONLY,
