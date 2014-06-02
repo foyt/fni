@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -68,7 +69,10 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
 
   @Inject
   private MaterialPermissionController materialPermissionController;
-  
+
+  @Inject
+  private Event<CoOpsPatchEvent> messageEvent;
+
   @PostConstruct
   public void init() {
     Map<String, CoOpsAlgorithm> algorithms = new HashMap<>();
@@ -229,6 +233,8 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
         documentController.createDocumentRevisionSetting(documentRevision, "document." + key, value);
       }
     }
+    
+    messageEvent.fire(new CoOpsPatchEvent(fileId, new Patch(sessionId, patchRevisionNumber, checksum, patch, properties, extensions)));
   }
 
   @Override
@@ -264,6 +270,11 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
 
     // TODO: Implement extensions
     Map<String, Map<String, String>> extensions = new HashMap<String, Map<String,String>>();
+    Map<String, String> webSocketExtension = new HashMap<String, String>();
+    
+    webSocketExtension.put("ws", "ws://dev.forgeandillusion.net:8080/fni/ws/coops/document/" + document.getId());
+    
+    extensions.put("webSocket", webSocketExtension);
     
     CoOpsSession coOpsSession = coOpsSessionController.createSession(document, loggedUser, chosenAlgorithm, currentRevision);
     
