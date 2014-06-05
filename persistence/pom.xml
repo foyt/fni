@@ -21,37 +21,42 @@
     </dependency>
 
     <!-- Hibernate -->
-
-    <dependency>
-      <groupId>org.hibernate.javax.persistence</groupId>
-      <artifactId>hibernate-jpa-2.1-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-validator-annotation-processor</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    
-    <!-- Hibernate Search -->
     
     <dependency>
       <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-search-orm</artifactId>
+      <artifactId>hibernate-core</artifactId>
     </dependency>
+    
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-infinispan</artifactId>
+    </dependency>
+
+    <dependency>
+       <groupId>org.hibernate</groupId>
+       <artifactId>hibernate-search-orm</artifactId>
+    </dependency>
+  
+    <dependency>
+       <groupId>org.hibernate</groupId>
+       <artifactId>hibernate-entitymanager</artifactId>
+    </dependency>
+  
+    <dependency>
+       <groupId>org.hibernate</groupId>
+       <artifactId>hibernate-search-analyzers</artifactId>
+    </dependency>
+  
+    <dependency>
+       <groupId>org.hibernate</groupId>
+       <artifactId>hibernate-search-infinispan</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
+    </dependency>
+
   </dependencies>
 
   <build>

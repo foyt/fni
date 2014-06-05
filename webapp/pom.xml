@@ -20,6 +20,14 @@
       <artifactId>jboss-servlet-api_3.1_spec</artifactId>
       <scope>provided</scope>
     </dependency>
+    
+    <!-- Transactions -->
+    
+    <dependency>
+      <groupId>org.jboss.spec.javax.transaction</groupId>
+      <artifactId>jboss-transaction-api_1.2_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
     <!-- Mail -->
 
@@ -74,6 +82,62 @@
       <artifactId>jaxrs-api</artifactId>
       <scope>provided</scope>
     </dependency>
+    
+    <!-- Hibernate -->
+    
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-infinispan</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-search-orm</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-search-analyzers</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-search-infinispan</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-memory</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
     <!-- Xalan -->
 
@@ -112,8 +176,6 @@
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
-      <type>jar</type>
-      <scope>compile</scope>
     </dependency>
 
     <dependency>
@@ -142,6 +204,12 @@
       <scope>provided</scope>
     </dependency> 
 
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <scope>provided</scope>
+    </dependency> 
+
     <!-- Http components -->
 
     <dependency>
@@ -152,8 +220,8 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
-    </dependency>   
-
+    </dependency>
+    
     <!-- FnI -->
 
     <dependency>
@@ -165,7 +233,7 @@
 
     <dependency>
       <groupId>fi.foyt.paytrail</groupId>
-      <artifactId>sdk</artifactId>
+      <artifactId>paytrail-sdk</artifactId>
     </dependency>
 
     <!-- Scribe -->
@@ -234,14 +302,6 @@
       <artifactId>rome</artifactId>
     </dependency>
 
-    <!-- Jackson -->
-
-    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-core-asl</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
     <!-- Hibernate Search -->
 
     <dependency>
@@ -261,13 +321,13 @@
 
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-asl</artifactId>
+      <artifactId>jackson-core-asl</artifactId>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-core-asl</artifactId>
+      <artifactId>jackson-mapper-asl</artifactId>
       <scope>provided</scope>
     </dependency>
 
@@ -399,7 +459,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.codehaus.jackson.jackson-core-asl</Dependencies>
+              <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.codehaus.jackson.jackson-core-asl, org.codehaus.jackson.jackson-mapper-asl</Dependencies>
             </manifestEntries>
           </archive>
         </configuration>
@@ -421,8 +481,8 @@
       </activation>
       
       <properties>
-        <wildfly.home>${project.basedir}/.cargo/extracts/wildfly-8.1.0.CR1/wildfly-8.1.0.CR1</wildfly.home>
-        <wildfly.version>8.1.0.CR1</wildfly.version>
+        <wildfly.home>${project.basedir}/.cargo/extracts/wildfly-8.1.0.Final/wildfly-8.1.0.Final</wildfly.home>
+        <wildfly.version>8.1.0.Final</wildfly.version>
         <h2.version>1.4.177</h2.version>
         <it.port.http>8080</it.port.http>
         <it.port.https>8443</it.port.https>
@@ -431,7 +491,7 @@
         <it.ctx>fnici</it.ctx>
         <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
         <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE</it.jdbc.url>
-        <it.jdbc.jndi>java:/jboss/datasources/MysqlDS</it.jdbc.jndi>
+        <it.jdbc.jndi>java:/jboss/datasources/fni</it.jdbc.jndi>
         <it.jdbc.username>sa</it.jdbc.username>
         <it.jdbc.password>sa</it.jdbc.password>
       </properties>
@@ -442,7 +502,7 @@
           <artifactId>h2</artifactId>
           <version>${h2.version}</version>
           <scope>test</scope>
-        </dependency>
+        </dependency>   
       </dependencies>
       <build>
         <plugins>
@@ -651,7 +711,7 @@
                 <log>${project.basedir}/target/cargo.log</log>
                 <output>${project.basedir}/target/wildfly.log</output>
                 <zipUrlInstaller>
-                  <url>http://download.jboss.org/wildfly/8.1.0.CR1/wildfly-8.1.0.CR1.zip</url>
+                  <url>http://download.jboss.org/wildfly/8.1.0.Final/wildfly-8.1.0.Final.zip</url>
                   <downloadDir>${project.basedir}/.cargo/downloads</downloadDir>
                   <extractDir>${project.basedir}/.cargo/extracts</extractDir>
                 </zipUrlInstaller>
@@ -784,8 +844,8 @@
       </activation>
       
       <properties>
-        <wildfly.home>${project.basedir}/.cargo/extracts/wildfly-8.1.0.CR1/wildfly-8.1.0.CR1</wildfly.home>
-        <wildfly.version>8.1.0.CR1</wildfly.version>
+        <wildfly.home>${project.basedir}/.cargo/extracts/wildfly-8.1.0.Final/wildfly-8.1.0.Final</wildfly.home>
+        <wildfly.version>8.1.0.Final</wildfly.version>
         <h2.version>1.4.177</h2.version>
         <it.port.http>8080</it.port.http>
         <it.port.https>8443</it.port.https>
@@ -794,7 +854,7 @@
         <it.smtp.port>3025</it.smtp.port>
         <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
         <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE</it.jdbc.url>
-        <it.jdbc.jndi>java:/jboss/datasources/MysqlDS</it.jdbc.jndi>
+        <it.jdbc.jndi>java:/jboss/datasources/fni</it.jdbc.jndi>
         <it.jdbc.username>sa</it.jdbc.username>
         <it.jdbc.password>sa</it.jdbc.password>
       </properties>
@@ -1044,7 +1104,7 @@
                 <log>${project.basedir}/target/cargo.log</log>
                 <output>${project.basedir}/target/wildfly.log</output>
                 <zipUrlInstaller>
-                  <url>http://download.jboss.org/wildfly/8.1.0.CR1/wildfly-8.1.0.CR1.zip</url>
+                  <url>http://download.jboss.org/wildfly/8.1.0.Final/wildfly-8.1.0.Final.zip</url>
                   <downloadDir>${project.basedir}/.cargo/downloads</downloadDir>
                   <extractDir>${project.basedir}/.cargo/extracts</extractDir>
                 </zipUrlInstaller>
