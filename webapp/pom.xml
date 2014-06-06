@@ -215,11 +215,13 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
+      <scope>provided</scope>
     </dependency>
     
     <!-- FnI -->
@@ -459,7 +461,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.codehaus.jackson.jackson-core-asl, org.codehaus.jackson.jackson-mapper-asl</Dependencies>
+              <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.codehaus.jackson.jackson-core-asl, org.codehaus.jackson.jackson-mapper-asl, org.apache.httpcomponents</Dependencies>
             </manifestEntries>
           </archive>
         </configuration>
@@ -503,9 +505,21 @@
           <version>${h2.version}</version>
           <scope>test</scope>
         </dependency>   
+
+        <dependency>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpcore</artifactId>
+        </dependency>
+    
+        <dependency>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpclient</artifactId>
+        </dependency>
+        
       </dependencies>
       <build>
         <plugins>
+      
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
@@ -865,6 +879,16 @@
           <artifactId>h2</artifactId>
           <version>${h2.version}</version>
           <scope>test</scope>
+        </dependency>
+
+        <dependency>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpcore</artifactId>
+        </dependency>
+    
+        <dependency>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpclient</artifactId>
         </dependency>
       </dependencies>
       <build>
