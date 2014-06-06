@@ -4,7 +4,7 @@
 
   <persistence-unit name="fniPersistence" transaction-type="JTA">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <jta-data-source>java:jboss/datasources/MysqlDS</jta-data-source>
+    <jta-data-source>java:jboss/datasources/fni</jta-data-source>
     <properties>
     
       <!-- Connection -->
