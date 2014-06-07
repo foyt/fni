@@ -174,6 +174,10 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
       throw new CoOpsUsageException("Invalid session id"); 
     }
     
+    if (!"dmp".equals(session.getAlgorithm())) {
+      throw new CoOpsUsageException("Algorithm is not supported by this server");
+    }
+    
     Document document = findDocument(fileId);
     
     if (!materialPermissionController.hasModifyPermission(session.getUser(), document)) {
@@ -256,6 +260,10 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
     
     if (!COOPS_PROTOCOL_VERSION.equals(protocolVersion)) {
       throw new CoOpsNotImplementedException("Protocol version mismatch. Client is using " + protocolVersion + " and server " + COOPS_PROTOCOL_VERSION);
+    }
+    
+    if (algorithms == null || algorithms.isEmpty()) {
+      throw new CoOpsInternalErrorException("Invalid request");
     }
     
     String chosenAlgorithm = chooseAlgorithm(algorithms);
