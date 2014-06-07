@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import fi.foyt.fni.persistence.model.users.User;
@@ -23,6 +22,14 @@ public class CoOpsSession {
 
   public Long getId() {
     return id;
+  }
+  
+  public String getSessionId() {
+    return sessionId;
+  }
+  
+  public void setSessionId(String sessionId) {
+    this.sessionId = sessionId;
   }
   
   public User getUser() {
@@ -58,9 +65,13 @@ public class CoOpsSession {
   }
 
   @Id
-  @DocumentId
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
+  
+  @Column (nullable = false, unique = true)
+  @NotEmpty
+  @NotNull
+  private String sessionId;
 
   @ManyToOne
   private User user;
