@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
@@ -19,7 +18,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import fi.foyt.coops.CoOpsAlgorithm;
 import fi.foyt.coops.CoOpsConflictException;
 import fi.foyt.coops.CoOpsForbiddenException;
 import fi.foyt.coops.CoOpsInternalErrorException;
@@ -72,13 +70,6 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
   
   @Inject
   private Event<CoOpsPatchEvent> messageEvent;
-
-  @PostConstruct
-  public void init() {
-    Map<String, CoOpsAlgorithm> algorithms = new HashMap<>();
-    algorithms.put("dmp", new CoOpsDmpAlgorithm());
-    setAlgorithms(algorithms);
-  }
 
   @Override
   public File fileGet(String fileId, Long revisionNumber) throws CoOpsNotImplementedException, CoOpsNotFoundException, CoOpsUsageException, CoOpsInternalErrorException, CoOpsForbiddenException {
@@ -266,11 +257,10 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
       throw new CoOpsInternalErrorException("Invalid request");
     }
     
-    String chosenAlgorithm = chooseAlgorithm(algorithms);
-    if (StringUtils.isBlank(chosenAlgorithm)) {
+    if (!algorithms.contains("dmp")) {
       throw new CoOpsNotImplementedException(
           "Server and client do not have a commonly supported algorithm. " + 
-          "Server supported: " + StringUtils.join(getSupportedAlgorithmNames(), ',') + ", " + 
+          "Server supported: dmp" + 
           "Client supported: " + StringUtils.join(algorithms, ','));
     }
     
@@ -297,7 +287,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
     
     extensions.put("webSocket", webSocketExtension);
     
-    CoOpsSession coOpsSession = coOpsSessionController.createSession(document, loggedUser, chosenAlgorithm, currentRevision);
+    CoOpsSession coOpsSession = coOpsSessionController.createSession(document, loggedUser, "dmp", currentRevision);
     
     return new Join(coOpsSession.getSessionId(), coOpsSession.getAlgorithm(), coOpsSession.getJoinRevision(), data, COOPS_DOCUMENT_CONTENTTYPE, properties, extensions);
   }
