@@ -109,6 +109,10 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
       throw new CoOpsUsageException("Invalid session id"); 
     }
     
+    if (revisionNumber == null) {
+      throw new CoOpsUsageException("revisionNumber parameter is missing");
+    }
+    
     Document document = findDocument(fileId);
     
     if (!materialPermissionController.hasAccessPermission(session.getUser(), document)) {
