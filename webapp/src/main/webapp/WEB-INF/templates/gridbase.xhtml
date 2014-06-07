@@ -22,7 +22,6 @@
       <!-- Generic Styles -->
       
       <h:outputStylesheet library="novus" name="css/common.css"/>
-      <h:outputStylesheet library="novus" name="css/messages.css"/>
       <h:outputStylesheet library="novus" name="css/menu.css"/>
       <h:outputStylesheet library="novus" name="css/fonts.css"/>
       <h:outputStylesheet library="novus" name="css/grid.css"/>
@@ -36,7 +35,11 @@
       
       <!-- jQuery -->
  
-      <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+      <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+      
+      <!-- jQuery UI -->
+ 
+      <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
       
       <!-- Dust -->
       
@@ -58,6 +61,7 @@
         </script>
       </ui:fragment>
 
+      <h:outputScript name="/scripts/gui/notifications.js"></h:outputScript>
       <h:outputScript name="/scripts/gui/messages.js"></h:outputScript>
 
       <ui:insert name="view-stylesheets"/>
@@ -65,46 +69,15 @@
       <ui:insert name="view-custom-head"/>
     </h:head>      
     <h:body>
-      <h:panelGroup layout="block" styleClass="jsf-messages-container">
-        <ui:insert name="messages">
-          <ul>
-            <ui:repeat var="message" value="#{facesContext.messageList}">
-              <ui:fragment rendered="#{message.severity.ordinal eq 0}">
-                <li class="info">
-                  <span>#{message.summary}</span>
-                  <a href="javascript:void(null)"></a>
-                </li>
-              </ui:fragment>
-              <ui:fragment rendered="#{message.severity.ordinal eq 1}">
-                <li class="warning">
-                  <span>#{message.summary}</span>
-                  <a href="javascript:void(null)"></a>
-                </li>
-              </ui:fragment>
-              <ui:fragment rendered="#{message.severity.ordinal eq 2}">
-                <li class="error">
-                  <span>#{message.summary}</span>
-                  <a href="javascript:void(null)"></a>
-                </li>
-              </ui:fragment>
-              <ui:fragment rendered="#{message.severity.ordinal eq 3}">
-                <li class="error">
-                  <span>#{message.summary}</span>
-                  <a href="javascript:void(null)"></a>
-                </li>
-              </ui:fragment>
-              <ui:fragment rendered="#{message.severity.ordinal gt 3}">
-                <li>
-                  <span>#{message.summary}</span>
-                  <a href="javascript:void(null)"></a>
-                </li>
-              </ui:fragment>
-            </ui:repeat>
-          </ul>
-          <h:messages globalOnly="false" style="display: none"/>
-        </ui:insert>
-      </h:panelGroup>
+      <div class="notifications"></div>
       
+      <div class="faces-messages">
+        <ui:repeat var="message" value="#{facesContext.messageList}">
+          <input type="hidden" value="#{message.summary}" name="jsf-message" data-severity="#{message.severity.ordinal eq 0 ? 'info' : message.severity.ordinal eq 1 ? 'warning' : message.severity.ordinal eq 2 ? 'error' : 'unknown'}"/>
+        </ui:repeat>
+        <h:messages globalOnly="false" style="display: none"/>
+      </div>
+
       <ui:insert name="body-content">
         <h:panelGroup layout="block" styleClass="container_16">
           <ui:insert name="grid-content"/>

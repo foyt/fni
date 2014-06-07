@@ -1,0 +1,67 @@
+$background-color: #babdb6;
+$text-color: #fff;
+$default-background: #babdb6;
+$success-background: #73d216;
+$warning-background: #f57900;
+$error-background: #cc0000;
+$info-background: #729fcf;
+$load-background: #553752 url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyNicgaGVpZ2h0PScyNic+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTMsMTMpIj48cGF0aCBkPSJNIDEuNDA3OTEwMTg1MzYyMDc4IDguODg5MTk1MDY1MzU2MjQgTCAwIDEyIEwgLTIuODAxMzQ0MzY2MjcwODY0NiAxMS42Njg0MzkwNDQ3NzIxMTggTCAtMy40NDQxNTA4OTEyODU4MDggOC4zMTQ5MTU3OTI2MDE1OCBMIC01LjI5MDA2NzI3MDYzMjI1ODUgNy4yODExNTI5NDkzNzQ1MjcgTCAtOC40ODUyODEzNzQyMzg1NyA4LjQ4NTI4MTM3NDIzODU3MSBMIC0xMC4yMzE2ODE5NzIyNDkxMDYgNi4yNjk5ODI3NzY1OTEzODcgTCAtOC4zMTQ5MTU3OTI2MDE1OCAzLjQ0NDE1MDg5MTI4NTgwODMgTCAtOC44ODkxOTUwNjUzNTYyNCAxLjQwNzkxMDE4NTM2MjA3ODMgTCAtMTIgNy4zNDc4ODA3OTQ4ODQxMTllLTE2IEwgLTExLjY2ODQzOTA0NDc3MjEyIC0yLjgwMTM0NDM2NjI3MDg2MiBMIC04LjMxNDkxNTc5MjYwMTU4IC0zLjQ0NDE1MDg5MTI4NTgwNzQgTCAtNy4yODExNTI5NDkzNzQ1MjcgLTUuMjkwMDY3MjcwNjMyMjU4IEwgLTguNDg1MjgxMzc0MjM4NTcxIC04LjQ4NTI4MTM3NDIzODU3IEwgLTYuMjY5OTgyNzc2NTkxMzg3IC0xMC4yMzE2ODE5NzIyNDkxMDYgTCAtMy40NDQxNTA4OTEyODU4MDgzIC04LjMxNDkxNTc5MjYwMTU4IEwgLTEuNDA3OTEwMTg1MzYyMDc4OCAtOC44ODkxOTUwNjUzNTYyMzkgTCAtMS40Njk1NzYxNTg5NzY4MjM4ZS0xNSAtMTIgTCAyLjgwMTM0NDM2NjI3MDg2MzcgLTExLjY2ODQzOTA0NDc3MjEyIEwgMy40NDQxNTA4OTEyODU4MDcgLTguMzE0OTE1NzkyNjAxNTggTCA1LjI5MDA2NzI3MDYzMjI1OCAtNy4yODExNTI5NDkzNzQ1MjcgTCA4LjQ4NTI4MTM3NDIzODU3IC04LjQ4NTI4MTM3NDIzODU3MSBMIDEwLjIzMTY4MTk3MjI0OTEwMyAtNi4yNjk5ODI3NzY1OTEzOTQgTCA4LjMxNDkxNTc5MjYwMTU3OCAtMy40NDQxNTA4OTEyODU4MTMgTCA4Ljg4OTE5NTA2NTM1NjIzOSAtMS40MDc5MTAxODUzNjIwNzk3IEwgMTIgLTIuMjA0MzY0MjM4NDY1MjM2ZS0xNSBMIDExLjY2ODQzOTA0NDc3MjEyMSAyLjgwMTM0NDM2NjI3MDg1NzUgTCA4LjMxNDkxNTc5MjYwMTU4IDMuNDQ0MTUwODkxMjg1ODEgTCA3LjI4MTE1Mjk0OTM3NDUyOCA1LjI5MDA2NzI3MDYzMjI1NyBMIDguNDg1MjgxMzc0MjM4NTcxIDguNDg1MjgxMzc0MjM4NTcgTCA2LjI2OTk4Mjc3NjU5MTM5NCAxMC4yMzE2ODE5NzIyNDkxMDMgTCAzLjQ0NDE1MDg5MTI4NTgxMzYgOC4zMTQ5MTU3OTI2MDE1NzggWiIgc3R5bGU9ImZpbGw6I2FkN2ZhODsgc3Ryb2tlOiAjNWUzYzVhIj48YW5pbWF0ZVRyYW5zZm9ybSBhdHRyaWJ1dGVUeXBlPSJ4bWwiIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiBmcm9tPSIwIiB0bz0iMzYwIiBkdXI9IjNzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIvPjwvcGF0aD48L2c+PC9zdmc+) no-repeat calc(100% - 10px);
+
+.notifications {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 0px;
+  z-index: 99;
+}
+
+.notifications-container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 600px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background: $background-color;
+  z-index: 9999;
+}
+
+.notification {
+  text-transform:capitalize;
+  color: $text-color;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  padding-left: 16px;
+  padding-right: 42px;
+  word-wrap: break-word;
+  cursor: pointer;
+  background: $default-background;
+  font-size: 16px;
+  font-family: $default-font;
+}
+
+.notification:last-child {
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  margin-bottom: 0px;
+}
+
+.notification-success {
+  background: $success-background;
+}
+
+.notification-warning {
+  background: $warning-background;
+}
+
+.notification-error {
+  background: $error-background;
+}
+
+.notification-info {
+  background: $info-background;
+}
+
+.notification-load {
+  background: $load-background;
+}

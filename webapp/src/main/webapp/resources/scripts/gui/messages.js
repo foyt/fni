@@ -1,8 +1,12 @@
 (function() {
   'use strict';
   
-  $(document).on('click', '.jsf-messages-container ul li a', function (e) {
-    $(this).closest('li').slideUp();
+  $(document).ready(function() {
+    $('input[name="jsf-message"]').each(function (index, input) {
+      $('.notifications').notifications('notification', $(input).data('severity'), $(input).val());
+    });
+    
+    $('.faces-messages').remove();
   });
   
 }).call(this);
