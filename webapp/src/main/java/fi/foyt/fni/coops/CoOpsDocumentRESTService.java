@@ -21,7 +21,10 @@ import fi.foyt.coops.CoOpsNotImplementedException;
 import fi.foyt.coops.CoOpsUsageException;
 import fi.foyt.coops.model.File;
 import fi.foyt.coops.model.Patch;
+import fi.foyt.fni.materials.CoOpsSessionController;
+import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.rest.PATCH;
+import fi.foyt.fni.session.SessionController;
 
 @Path ("/coops/document/{FILEID}")
 @RequestScoped
@@ -30,6 +33,12 @@ public class CoOpsDocumentRESTService {
 
   @Inject
   private CoOpsApiDocument coOpsApiDocument;
+
+  @Inject
+  private CoOpsSessionController coOpsSessionController;
+
+  @Inject
+  private SessionController sessionController;
   
   @GET
   @Path ("/")
@@ -54,6 +63,15 @@ public class CoOpsDocumentRESTService {
   @Path ("/")
   public Response patch(@PathParam ("FILEID") String fileId, Patch patch) {
     try {
+      CoOpsSession coOpsSession = coOpsSessionController.findSessionBySessionId(patch.getSessionId());
+      if (coOpsSession == null) {
+        return Response.status(Status.NOT_FOUND).build();
+      }
+      
+      if (!coOpsSession.getUser().getId().equals(sessionController.getLoggedUserId())) {
+        return Response.status(Status.FORBIDDEN).build();
+      }
+      
       coOpsApiDocument.filePatch(fileId, patch.getSessionId(), patch.getRevisionNumber(), patch.getPatch(), patch.getProperties(), patch.getExtensions());
       return Response.noContent().build();
     } catch (CoOpsNotFoundException e) {
@@ -72,6 +90,15 @@ public class CoOpsDocumentRESTService {
   @GET
   @Path ("/update")
   public Response update(@PathParam ("FILEID") String fileId, @QueryParam ("sessionId") String sessionId, @QueryParam ("revisionNumber") Long revisionNumber) {
+    CoOpsSession coOpsSession = coOpsSessionController.findSessionBySessionId(sessionId);
+    if (coOpsSession == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!coOpsSession.getUser().getId().equals(sessionController.getLoggedUserId())) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
     try {
       List<Patch> patches = coOpsApiDocument.fileUpdate(fileId, sessionId, revisionNumber);
       if (patches.isEmpty()) {
