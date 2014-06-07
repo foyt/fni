@@ -70,6 +70,9 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
   
   @Inject
   private Event<CoOpsPatchEvent> messageEvent;
+  
+  @Inject
+  private Event<CoOpsSessionJoinEvent> sessionJoinEvent;
 
   @Override
   public File fileGet(String fileId, Long revisionNumber) throws CoOpsNotImplementedException, CoOpsNotFoundException, CoOpsUsageException, CoOpsInternalErrorException, CoOpsForbiddenException {
@@ -288,6 +291,8 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
     extensions.put("webSocket", webSocketExtension);
     
     CoOpsSession coOpsSession = coOpsSessionController.createSession(document, loggedUser, "dmp", currentRevision);
+    
+    sessionJoinEvent.fire(new CoOpsSessionJoinEvent(coOpsSession.getSessionId()));
     
     return new Join(coOpsSession.getSessionId(), coOpsSession.getAlgorithm(), coOpsSession.getJoinRevision(), data, COOPS_DOCUMENT_CONTENTTYPE, properties, extensions);
   }
