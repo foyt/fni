@@ -104,11 +104,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
 
   @Override
   public List<Patch> fileUpdate(String fileId, String sessionId, Long revisionNumber) throws CoOpsNotFoundException, CoOpsInternalErrorException, CoOpsUsageException, CoOpsForbiddenException {
-    if (!StringUtils.isNumeric(sessionId)) {
-      throw new CoOpsUsageException("Invalid session id"); 
-    }
-    
-    CoOpsSession session = coOpsSessionController.findSessionById(NumberUtils.createLong(sessionId));
+    CoOpsSession session = coOpsSessionController.findSessionBySessionId(sessionId);
     if (session == null) {
       throw new CoOpsUsageException("Invalid session id"); 
     }
@@ -169,11 +165,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
 
   @Override
   public void filePatch(String fileId, String sessionId, Long revisionNumber, String patch, Map<String, String> properties, Map<String, Object> extensions) throws CoOpsInternalErrorException, CoOpsUsageException, CoOpsNotFoundException, CoOpsConflictException, CoOpsForbiddenException {
-    if (!StringUtils.isNumeric(sessionId)) {
-      throw new CoOpsUsageException("Invalid session id"); 
-    }
-    
-    CoOpsSession session = coOpsSessionController.findSessionById(NumberUtils.createLong(sessionId));
+    CoOpsSession session = coOpsSessionController.findSessionBySessionId(sessionId);
     if (session == null) {
       throw new CoOpsUsageException("Invalid session id"); 
     }
@@ -295,7 +287,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
     
     CoOpsSession coOpsSession = coOpsSessionController.createSession(document, loggedUser, chosenAlgorithm, currentRevision);
     
-    return new Join(coOpsSession.getId().toString(), coOpsSession.getAlgorithm(), coOpsSession.getJoinRevision(), data, COOPS_DOCUMENT_CONTENTTYPE, properties, extensions);
+    return new Join(coOpsSession.getSessionId(), coOpsSession.getAlgorithm(), coOpsSession.getJoinRevision(), data, COOPS_DOCUMENT_CONTENTTYPE, properties, extensions);
   }
 
   protected Document findDocument(String fileId) throws CoOpsUsageException, CoOpsNotFoundException {

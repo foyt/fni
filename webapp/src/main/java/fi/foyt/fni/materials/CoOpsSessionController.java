@@ -1,5 +1,7 @@
 package fi.foyt.fni.materials;
 
+import java.util.UUID;
+
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -17,12 +19,13 @@ public class CoOpsSessionController {
   private CoOpsSessionDAO coOpsSessionDAO;
   
   public CoOpsSession createSession(Material material, User user, String algorithm, Long joinRevision) {
-    CoOpsSession session = coOpsSessionDAO.create(material, user, algorithm, joinRevision);
+    String sessionId = UUID.randomUUID().toString();
+    CoOpsSession session = coOpsSessionDAO.create(material, user, sessionId, algorithm, joinRevision);
     return session;
   }
   
-  public CoOpsSession findSessionById(Long id) {
-    return coOpsSessionDAO.findById(id); 
+  public CoOpsSession findSessionBySessionId(String sessionId) {
+    return coOpsSessionDAO.findBySessionId(sessionId);
   }
 
 }
