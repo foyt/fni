@@ -95,9 +95,11 @@ public class CoOpsDocumentWebSocket {
   
   public void onCoOpsPatch(@Observes CoOpsPatchEvent event) throws JsonGenerationException, JsonMappingException, IOException {
     synchronized (this) {
-      String patch = (new ObjectMapper()).writeValueAsString(event.getPatch());
+      UpdateMessage updateMessage = new UpdateMessage(event.getPatch());
+      
+      String message = (new ObjectMapper()).writeValueAsString(updateMessage);
       for (Session session : fileSessions.get(event.getFileId())) {
-        session.getAsyncRemote().sendText(patch);
+        session.getAsyncRemote().sendText(message);
       }
     }
   }
