@@ -380,7 +380,7 @@
 
     <dependency>
       <groupId>fi.foyt.coops</groupId>
-      <artifactId>coops</artifactId>
+      <artifactId>coops-spec</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
