@@ -51,15 +51,15 @@ import fi.foyt.fni.utils.diff.PatchResult;
 public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
 
   private final static String COOPS_DOCUMENT_CONTENTTYPE = "text/html;editor=CKEditor";
-  
+
   @Inject
   private CoOpsSessionController coOpsSessionController;
 
   @Inject
-  private DocumentController documentController;
-
-  @Inject
   private SessionController sessionController;
+  
+  @Inject
+  private DocumentController documentController;
 
   @Inject
   private TagController tagController;
@@ -69,7 +69,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
 
   @Inject
   private MaterialPermissionController materialPermissionController;
-
+  
   @Inject
   private Event<CoOpsPatchEvent> messageEvent;
 
@@ -104,9 +104,18 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
 
   @Override
   public List<Patch> fileUpdate(String fileId, String sessionId, Long revisionNumber) throws CoOpsNotFoundException, CoOpsInternalErrorException, CoOpsUsageException, CoOpsForbiddenException {
+    if (!StringUtils.isNumeric(sessionId)) {
+      throw new CoOpsUsageException("Invalid session id"); 
+    }
+    
+    CoOpsSession session = coOpsSessionController.findSessionById(NumberUtils.createLong(sessionId));
+    if (session == null) {
+      throw new CoOpsUsageException("Invalid session id"); 
+    }
+    
     Document document = findDocument(fileId);
     
-    if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), document)) {
+    if (!materialPermissionController.hasAccessPermission(session.getUser(), document)) {
       throw new CoOpsForbiddenException();
     }
     
@@ -160,9 +169,18 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
 
   @Override
   public void filePatch(String fileId, String sessionId, Long revisionNumber, String patch, Map<String, String> properties, Map<String, Object> extensions) throws CoOpsInternalErrorException, CoOpsUsageException, CoOpsNotFoundException, CoOpsConflictException, CoOpsForbiddenException {
+    if (!StringUtils.isNumeric(sessionId)) {
+      throw new CoOpsUsageException("Invalid session id"); 
+    }
+    
+    CoOpsSession session = coOpsSessionController.findSessionById(NumberUtils.createLong(sessionId));
+    if (session == null) {
+      throw new CoOpsUsageException("Invalid session id"); 
+    }
+    
     Document document = findDocument(fileId);
     
-    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), document)) {
+    if (!materialPermissionController.hasModifyPermission(session.getUser(), document)) {
       throw new CoOpsForbiddenException();
     }
 
@@ -173,7 +191,6 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
     
     byte[] patchData = null;
     String checksum = null;
-    User loggedUser = sessionController.getLoggedUser();
     
     if (StringUtils.isNotBlank(patch)) {
       String oldData = document.getData();
@@ -183,7 +200,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
       }
       
       String data = patchResult.getPatchedText();
-      documentController.updateDocumentData(document, data, loggedUser);
+      documentController.updateDocumentData(document, data, session.getUser());
       checksum = DigestUtils.md5Hex(data);
       try {
         patchData = patch.getBytes("UTF-8");
@@ -202,11 +219,11 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
         String value = properties.get(key);
         if ("title".equals(key)) {
           // title is saved as a document title
-          documentController.updateDocumentTitle(document, value, loggedUser);
+          documentController.updateDocumentTitle(document, value, session.getUser());
         } else if ("langCode".equals(key)) {
           // language is saved as document language property
           Language language = systemSettingsController.findLocaleByIso2(value);
-          documentController.updateDocumentLanguage(document, language, loggedUser);
+          documentController.updateDocumentLanguage(document, language, session.getUser());
         } else if ("metaKeywords".equals(key)) {
           // keywords are saved as tags
           List<Tag> tags = new ArrayList<>();
