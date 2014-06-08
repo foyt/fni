@@ -33,6 +33,7 @@ import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.common.Tag;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
+import fi.foyt.fni.persistence.model.materials.CoOpsSessionType;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
 import fi.foyt.fni.persistence.model.materials.MaterialRevisionSetting;
@@ -285,7 +286,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
     // TODO: Implement extensions
     Map<String, Map<String, String>> extensions = new HashMap<String, Map<String,String>>();
     Map<String, String> webSocketExtension = new HashMap<String, String>();
-    CoOpsSession coOpsSession = coOpsSessionController.createSession(document, loggedUser, "dmp", currentRevision);
+    CoOpsSession coOpsSession = coOpsSessionController.createSession(document, loggedUser, CoOpsSessionType.REST, "dmp", currentRevision, new Date(), Boolean.FALSE);
     
     webSocketExtension.put("ws", "ws://dev.forgeandillusion.net:8080/fni/ws/coops/document/" + document.getId() + "/" + coOpsSession.getSessionId());
     

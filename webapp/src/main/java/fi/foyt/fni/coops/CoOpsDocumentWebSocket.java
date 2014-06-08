@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.websocket.CloseReason;
@@ -44,9 +43,6 @@ public class CoOpsDocumentWebSocket {
   @Inject
   private CoOpsSessionController coOpsSessionController;
   
-  @Inject
-  private Event<CoOpsSessionCloseEvent> sessionCloseEvent;
-  
   @OnOpen
   public void onOpen(final Session client, EndpointConfig endpointConfig, @PathParam("FILEID") String fileId, @PathParam("SESSIONID") String sessionId) throws IOException {
     synchronized (this) {
@@ -74,7 +70,11 @@ public class CoOpsDocumentWebSocket {
   public void onClose(final Session session, CloseReason closeReason, @PathParam("FILEID") String fileId, @PathParam("SESSIONID") String sessionId) {
     synchronized (this) {
       fileSessions.get(fileId).remove(session);
-      sessionCloseEvent.fire(new CoOpsSessionCloseEvent(sessionId));
+      
+      CoOpsSession coOpsSession = coOpsSessionController.findSessionBySessionId(sessionId);
+      if (coOpsSession != null) {
+        coOpsSessionController.closeSession(coOpsSession);
+      }
     }
   }
 

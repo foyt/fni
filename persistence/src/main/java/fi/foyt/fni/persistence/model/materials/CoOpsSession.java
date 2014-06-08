@@ -1,8 +1,12 @@
 package fi.foyt.fni.persistence.model.materials;
 
+import java.util.Date;
+
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,6 +34,22 @@ public class CoOpsSession {
   
   public void setSessionId(String sessionId) {
     this.sessionId = sessionId;
+  }
+  
+  public CoOpsSessionType getType() {
+    return type;
+  }
+  
+  public void setType(CoOpsSessionType type) {
+    this.type = type;
+  }
+  
+  public Boolean getClosed() {
+    return closed;
+  }
+  
+  public void setClosed(Boolean closed) {
+    this.closed = closed;
   }
   
   public User getUser() {
@@ -63,6 +83,14 @@ public class CoOpsSession {
   public void setJoinRevision(Long joinRevision) {
     this.joinRevision = joinRevision;
   }
+  
+  public Date getAccessed() {
+    return accessed;
+  }
+  
+  public void setAccessed(Date accessed) {
+    this.accessed = accessed;
+  }
 
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
@@ -72,6 +100,15 @@ public class CoOpsSession {
   @NotEmpty
   @NotNull
   private String sessionId;
+  
+  @Column (nullable = false)
+  @NotNull
+  @Enumerated (EnumType.STRING)
+  private CoOpsSessionType type;
+  
+  @Column (nullable = false)
+  @NotNull
+  private Boolean closed;
 
   @ManyToOne
   private User user;
@@ -87,4 +124,8 @@ public class CoOpsSession {
   @Column (updatable = false, nullable = false)
   @NotNull
   private Long joinRevision;
+  
+  @Column (nullable = false)
+  @NotNull
+  private Date accessed;
 }
