@@ -285,12 +285,11 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
     // TODO: Implement extensions
     Map<String, Map<String, String>> extensions = new HashMap<String, Map<String,String>>();
     Map<String, String> webSocketExtension = new HashMap<String, String>();
+    CoOpsSession coOpsSession = coOpsSessionController.createSession(document, loggedUser, "dmp", currentRevision);
     
-    webSocketExtension.put("ws", "ws://dev.forgeandillusion.net:8080/fni/ws/coops/document/" + document.getId());
+    webSocketExtension.put("ws", "ws://dev.forgeandillusion.net:8080/fni/ws/coops/document/" + document.getId() + "/" + coOpsSession.getSessionId());
     
     extensions.put("webSocket", webSocketExtension);
-    
-    CoOpsSession coOpsSession = coOpsSessionController.createSession(document, loggedUser, "dmp", currentRevision);
     
     sessionJoinEvent.fire(new CoOpsSessionJoinEvent(coOpsSession.getSessionId()));
     
