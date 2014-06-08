@@ -131,8 +131,11 @@ public class CoOpsDocumentWebSocket {
       UpdateMessage updateMessage = new UpdateMessage(event.getPatch());
       
       String message = (new ObjectMapper()).writeValueAsString(updateMessage);
-      for (Session session : fileSessions.get(event.getFileId())) {
-        session.getAsyncRemote().sendText(message);
+      List<Session> sessions = fileSessions.get(event.getFileId());
+      if (sessions != null) {
+        for (Session session : sessions) {
+          session.getAsyncRemote().sendText(message);
+        }
       }
     }
   }
