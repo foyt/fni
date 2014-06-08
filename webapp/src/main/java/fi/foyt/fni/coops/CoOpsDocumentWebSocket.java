@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.websocket.CloseReason;
@@ -18,6 +19,7 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -28,36 +30,67 @@ import fi.foyt.coops.CoOpsInternalErrorException;
 import fi.foyt.coops.CoOpsNotFoundException;
 import fi.foyt.coops.CoOpsUsageException;
 import fi.foyt.coops.model.Patch;
+import fi.foyt.fni.materials.CoOpsSessionController;
+import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 
-@ServerEndpoint ("/ws/coops/document/{FILEID}")
+@ServerEndpoint ("/ws/coops/document/{FILEID}/{SESSIONID}")
 public class CoOpsDocumentWebSocket {
   
   private static final Map<String, List<Session>> fileSessions = new HashMap<String, List<Session>>();
 
   @Inject
   private CoOpsApiDocument coOpsApiDocument;
+
+  @Inject
+  private CoOpsSessionController coOpsSessionController;
+  
+  @Inject
+  private Event<CoOpsSessionCloseEvent> sessionCloseEvent;
   
   @OnOpen
-  public void onOpen(final Session session, EndpointConfig endpointConfig, @PathParam("FILEID") String fileId) {
+  public void onOpen(final Session client, EndpointConfig endpointConfig, @PathParam("FILEID") String fileId, @PathParam("SESSIONID") String sessionId) throws IOException {
     synchronized (this) {
+      CoOpsSession coOpsSession = coOpsSessionController.findSessionBySessionId(sessionId);
+      if (coOpsSession == null) {
+        client.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "Not Found"));
+        return;
+      }
+      
+      if (!coOpsSession.getMaterial().getId().equals(NumberUtils.createLong(fileId))) {
+        client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Session is associated with another fileId"));
+        return;
+      }
+      
       List<Session> sessions = fileSessions.get(fileId);
       if (sessions == null) {
         fileSessions.put(fileId, new ArrayList<Session>());
       }
       
-      fileSessions.get(fileId).add(session);
+      fileSessions.get(fileId).add(client);
     }
   }
   
   @OnClose
-  public void onClose(final Session session, CloseReason closeReason, @PathParam("FILEID") String fileId) {
+  public void onClose(final Session session, CloseReason closeReason, @PathParam("FILEID") String fileId, @PathParam("SESSIONID") String sessionId) {
     synchronized (this) {
       fileSessions.get(fileId).remove(session);
+      sessionCloseEvent.fire(new CoOpsSessionCloseEvent(sessionId));
     }
   }
 
   @OnMessage
-  public void onMessage(Reader messageReader, Session client, @PathParam("FILEID") String fileId) throws IOException {
+  public void onMessage(Reader messageReader, Session client, @PathParam("FILEID") String fileId, @PathParam("SESSIONID") String sessionId) throws IOException {
+    CoOpsSession coOpsSession = coOpsSessionController.findSessionBySessionId(sessionId);
+    if (coOpsSession == null) {
+      client.close(new CloseReason(CloseReason.CloseCodes.NORMAL_CLOSURE, "Not Found"));
+      return;
+    }
+    
+    if (!coOpsSession.getMaterial().getId().equals(NumberUtils.createLong(fileId))) {
+      client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Session is associated with another fileId"));
+      return;
+    }
+    
     ObjectMapper objectMapper = new ObjectMapper();
     
     try {
