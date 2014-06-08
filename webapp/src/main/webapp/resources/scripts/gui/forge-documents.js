@@ -25,14 +25,7 @@
       height: 500,
       contentsCss: ['//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.3.2/contents.css', CONTEXTPATH + '/uresources/forge-ckeditor-embedded.css' ],
       coops: {
-        serverUrl: COOPS_SERVER_URL,
-        readOnly: COOPS_READONLY,
-        websocket: {
-          cursorsVisible: true,
-          cursorAlpha: 0.9,
-          cursorBlinks: true,
-          cursorBlinkInterval: 1.2
-        }
+        serverUrl: COOPS_SERVER_URL
       },
       fniGenericBrowser:{
         enabledInDialogs: ['image', 'link'],
@@ -64,7 +57,7 @@
       $('.forge-ckdocument-editor-status-unsaved').css('display', 'block');
     });
     
-    editor.on("CoOPS:ContentPatch", function (event) {
+    editor.on("CoOPS:PatchSent", function (event) {
       $('.forge-ckdocument-editor-status>span').css('display', 'none');
       $('.forge-ckdocument-editor-status-saving').css('display', 'block');
     });
@@ -73,6 +66,35 @@
       $('.forge-ckdocument-editor-status>span').css('display', 'none');
       $('.forge-ckdocument-editor-status-saved').css('display', 'block');
     });
+
+    editor.on("CoOPS:ConnectionLost", function (event) {
+      $('.notifications').notifications('notification', 'load', event.data.message).addClass('connection-lost-notification');
+    });
+
+    editor.on("CoOPS:Reconnect", function (event) {
+      $('.notifications').find('.connection-lost-notification').notification("hide");
+    });
+
+    // CoOPS Errors
+    
+    editor.on("CoOPS:Error", function (event) {
+      $('.notifications').find('.connection-lost-notification').notification("hide");
+      
+      switch (event.data.severity) {
+        case 'CRITICAL':
+        case 'SEVERE':
+          $('.notifications').notifications('notification', 'error', event.data.message);
+        break;
+        case 'WARNING':
+          $('.notifications').notifications('notification', 'warning', event.data.message);
+        break;
+        default:
+          $('.notifications').notifications('notification', 'info', event.data.message);
+        break;
+      }
+    });
+    
+    /* CoOps title */
     
     $('.forge-ckdocument-title').change(function (event) {
       var oldValue = $(this).parent().data('old-value');
@@ -92,7 +114,7 @@
       var properties = event.data.properties;
       if (properties) {
         $.each(properties, function (key, value) {
-          if (key == 'title') {
+          if (key === 'title') {
             $('.forge-ckdocument-title').val(value);
           }
         });
