@@ -15,8 +15,9 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import fi.foyt.coops.CoOpsConflictException;
 import fi.foyt.coops.CoOpsForbiddenException;
@@ -114,6 +115,8 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
       throw new CoOpsForbiddenException();
     }
     
+    ObjectMapper objectMapper = new ObjectMapper();
+    
     List<DocumentRevision> documentRevisions = documentController.listDocumentRevisionsAfter(document, revisionNumber);
     List<Patch> updateResults = new ArrayList<>();
 
@@ -138,18 +141,32 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
         }
         
         Map<String, String> properties = null;
+        Map<String, Object> extensions = null;
         
         List<MaterialRevisionSetting> revisionSettings = documentController.listDocumentRevisionSettings(documentRevision);
         if (revisionSettings.size() > 0) {
           properties = new HashMap<>();
           for (MaterialRevisionSetting revisionSetting : revisionSettings) {
-            String key = StringUtils.removeStart(revisionSetting.getKey().getName(), "document.");
-            properties.put(key, revisionSetting.getValue());
+            String settingKey = revisionSetting.getKey().getName();
+            
+            if (StringUtils.startsWith(settingKey, "extension.")) {
+              String key = StringUtils.removeStart(settingKey, "extension.");
+              if (extensions == null) {
+                extensions = new HashMap<String, Object>();
+              }
+              
+              try {
+                Object object = objectMapper.readValue(revisionSetting.getValue(), Object.class);
+                extensions.put(key, object);
+              } catch (IOException e) {
+                throw new CoOpsInternalErrorException(e);
+              }
+            } else {
+              String key = StringUtils.removeStart(settingKey, "document.");
+              properties.put(key, revisionSetting.getValue());
+            }
           }
         }
-        
-        // TODO: Implement extensions
-        Map<String, Object> extensions = new HashMap<String, Object>();
         
         if (patch != null) {
           updateResults.add(new Patch(documentRevision.getSessionId(), documentRevision.getRevision(), documentRevision.getChecksum(), patch, properties, extensions));
@@ -182,7 +199,9 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
     Long currentRevision = documentController.getDocumentRevision(document);
     if (!currentRevision.equals(revisionNumber)) {
       throw new CoOpsConflictException();
-    } 
+    }
+    
+    ObjectMapper objectMapper = new ObjectMapper();
     
     byte[] patchData = null;
     String checksum = null;
@@ -243,6 +262,17 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
         
         // Everything is saved as revision setting
         documentController.createDocumentRevisionSetting(documentRevision, "document." + key, value);
+      }
+    }
+    
+    if (extensions != null) {
+      for (String extension : extensions.keySet()) {
+        try {
+          String value = objectMapper.writeValueAsString(extensions.get(extension));
+          documentController.createDocumentRevisionSetting(documentRevision, "extension." + extension, value);
+        } catch (IOException e) {
+          throw new CoOpsInternalErrorException(extension);
+        }
       }
     }
     
