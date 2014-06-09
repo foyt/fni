@@ -30,7 +30,10 @@ import fi.foyt.coops.CoOpsNotFoundException;
 import fi.foyt.coops.CoOpsUsageException;
 import fi.foyt.coops.model.Patch;
 import fi.foyt.fni.materials.CoOpsSessionController;
+import fi.foyt.fni.materials.DocumentController;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
+import fi.foyt.fni.persistence.model.materials.Document;
+import fi.foyt.fni.persistence.model.materials.Material;
 
 @ServerEndpoint ("/ws/coops/document/{FILEID}/{SESSIONID}")
 public class CoOpsDocumentWebSocket {
@@ -40,6 +43,9 @@ public class CoOpsDocumentWebSocket {
   @Inject
   private CoOpsApiDocument coOpsApiDocument;
 
+  @Inject
+  private DocumentController documentController;
+  
   @Inject
   private CoOpsSessionController coOpsSessionController;
   
@@ -63,6 +69,33 @@ public class CoOpsDocumentWebSocket {
       }
       
       fileSessions.get(fileId).add(client);
+      
+      Material material = coOpsSession.getMaterial();
+      if (material instanceof Document) {
+        Document document = (Document) material;
+        Long currentRevisionNumber = documentController.getDocumentRevision(document);
+        
+        if (coOpsSession.getJoinRevision() < currentRevisionNumber) {
+          ObjectMapper objectMapper = new ObjectMapper();
+          List<Patch> patches;
+          try {
+            patches = coOpsApiDocument.fileUpdate(coOpsSession.getMaterial().getId().toString(), coOpsSession.getSessionId(), coOpsSession.getJoinRevision());
+            for (Patch patch : patches) {
+              sendPatch(client, patch);
+            }
+          } catch (CoOpsInternalErrorException e) {
+            client.close(new CloseReason(CloseReason.CloseCodes.UNEXPECTED_CONDITION, "Internal Error"));
+          } catch (CoOpsUsageException e) {
+            client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new ErrorMessage("patchError", 400, e.getMessage())));
+          } catch (CoOpsNotFoundException e) {
+            client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new ErrorMessage("patchError", 404, e.getMessage())));
+          } catch (CoOpsForbiddenException e) {
+            client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new ErrorMessage("patchError", 500, e.getMessage())));
+          }
+        }      
+      } else {
+        client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Session is associated with non document material"));
+      }
     }
   }
   
@@ -128,16 +161,19 @@ public class CoOpsDocumentWebSocket {
   
   public void onCoOpsPatch(@Observes CoOpsPatchEvent event) throws JsonGenerationException, JsonMappingException, IOException {
     synchronized (this) {
-      UpdateMessage updateMessage = new UpdateMessage(event.getPatch());
-      
-      String message = (new ObjectMapper()).writeValueAsString(updateMessage);
-      List<Session> sessions = fileSessions.get(event.getFileId());
-      if (sessions != null) {
-        for (Session session : sessions) {
-          session.getAsyncRemote().sendText(message);
+      List<Session> clients = fileSessions.get(event.getFileId());
+      if (clients != null) {
+        for (Session client : clients) {
+          sendPatch(client, event.getPatch());
         }
       }
     }
+  }
+  
+  private void sendPatch(Session client, Patch patch) throws JsonGenerationException, JsonMappingException, IOException {
+    UpdateMessage updateMessage = new UpdateMessage(patch);
+    String message = (new ObjectMapper()).writeValueAsString(updateMessage);
+    client.getAsyncRemote().sendText(message);
   }
   
 }
