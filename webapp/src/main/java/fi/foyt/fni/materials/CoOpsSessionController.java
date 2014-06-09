@@ -42,6 +42,10 @@ public class CoOpsSessionController {
     Date accessedBefore = new Date(System.currentTimeMillis() - SESSION_TIMEOUT);
     return coOpsSessionDAO.listByAccessedBeforeAndTypeAndClosed(accessedBefore, CoOpsSessionType.REST, Boolean.FALSE);
   }
+  
+  public CoOpsSession updateSessionType(CoOpsSession coOpsSession, CoOpsSessionType type) {
+    return coOpsSessionDAO.updateType(coOpsSession, type);
+  }
 
   public void closeSession(CoOpsSession session) {
     closeSession(session, false);

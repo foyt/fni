@@ -70,5 +70,10 @@ public class CoOpsSessionDAO extends GenericDAO<CoOpsSession> {
     coOpsSession.setClosed(closed);
     return persist(coOpsSession);
   }
+
+  public CoOpsSession updateType(CoOpsSession coOpsSession, CoOpsSessionType type) {
+    coOpsSession.setType(type);
+    return persist(coOpsSession);
+  }
   
 }
