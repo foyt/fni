@@ -28,9 +28,9 @@ public class CoOpsSessionController {
   @Inject
   private CoOpsSessionDAO coOpsSessionDAO;
   
-  public CoOpsSession createSession(Material material, User user, CoOpsSessionType type, String algorithm, Long joinRevision, Date accessed, Boolean closed) {
+  public CoOpsSession createSession(Material material, User user, CoOpsSessionType type, String algorithm, Long joinRevision) {
     String sessionId = UUID.randomUUID().toString();
-    CoOpsSession session = coOpsSessionDAO.create(material, user, sessionId, type, closed, algorithm, joinRevision, accessed);
+    CoOpsSession session = coOpsSessionDAO.create(material, user, sessionId, type, Boolean.FALSE, algorithm, joinRevision, new Date());
     return session;
   }
   
@@ -44,8 +44,14 @@ public class CoOpsSessionController {
   }
 
   public void closeSession(CoOpsSession session) {
+    closeSession(session, false);
+  }
+  
+  public void closeSession(CoOpsSession session, boolean quiet) {
     coOpsSessionDAO.updateClosed(session, Boolean.TRUE);
-    sessionCloseEvent.fire(new CoOpsSessionCloseEvent(session.getSessionId()));
+    if (!quiet) {
+      sessionCloseEvent.fire(new CoOpsSessionCloseEvent(session.getSessionId()));
+    }
   }
 
 }
