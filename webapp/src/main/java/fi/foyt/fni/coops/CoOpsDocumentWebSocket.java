@@ -2,13 +2,13 @@ package fi.foyt.fni.coops;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.websocket.CloseReason;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
@@ -32,13 +32,14 @@ import fi.foyt.coops.model.Patch;
 import fi.foyt.fni.materials.CoOpsSessionController;
 import fi.foyt.fni.materials.DocumentController;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
+import fi.foyt.fni.persistence.model.materials.CoOpsSessionType;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Material;
 
 @ServerEndpoint ("/ws/coops/document/{FILEID}/{SESSIONID}")
 public class CoOpsDocumentWebSocket {
   
-  private static final Map<String, List<Session>> fileSessions = new HashMap<String, List<Session>>();
+  private static final Map<String, Map<String, Session>> fileClients = new HashMap<String, Map<String, Session>>();
 
   @Inject
   private CoOpsApiDocument coOpsApiDocument;
@@ -50,6 +51,7 @@ public class CoOpsDocumentWebSocket {
   private CoOpsSessionController coOpsSessionController;
   
   @OnOpen
+  @Transactional
   public void onOpen(final Session client, EndpointConfig endpointConfig, @PathParam("FILEID") String fileId, @PathParam("SESSIONID") String sessionId) throws IOException {
     synchronized (this) {
       CoOpsSession coOpsSession = coOpsSessionController.findSessionBySessionId(sessionId);
@@ -63,12 +65,14 @@ public class CoOpsDocumentWebSocket {
         return;
       }
       
-      List<Session> sessions = fileSessions.get(fileId);
+      Map<String, Session> sessions = fileClients.get(fileId);
       if (sessions == null) {
-        fileSessions.put(fileId, new ArrayList<Session>());
+        fileClients.put(fileId, new HashMap<String, Session>());
       }
       
-      fileSessions.get(fileId).add(client);
+      fileClients.get(fileId).put(client.getId(), client);
+      
+      coOpsSessionController.updateSessionType(coOpsSession, CoOpsSessionType.WS);
       
       Material material = coOpsSession.getMaterial();
       if (material instanceof Document) {
@@ -100,9 +104,10 @@ public class CoOpsDocumentWebSocket {
   }
   
   @OnClose
+  @Transactional
   public void onClose(final Session session, CloseReason closeReason, @PathParam("FILEID") String fileId, @PathParam("SESSIONID") String sessionId) {
     synchronized (this) {
-      fileSessions.get(fileId).remove(session);
+      fileClients.get(fileId).remove(session.getId());
       
       CoOpsSession coOpsSession = coOpsSessionController.findSessionBySessionId(sessionId);
       if (coOpsSession != null) {
@@ -112,6 +117,7 @@ public class CoOpsDocumentWebSocket {
   }
 
   @OnMessage
+  @Transactional
   public void onMessage(Reader messageReader, Session client, @PathParam("FILEID") String fileId, @PathParam("SESSIONID") String sessionId) throws IOException {
     CoOpsSession coOpsSession = coOpsSessionController.findSessionBySessionId(sessionId);
     if (coOpsSession == null) {
@@ -161,9 +167,9 @@ public class CoOpsDocumentWebSocket {
   
   public void onCoOpsPatch(@Observes CoOpsPatchEvent event) throws JsonGenerationException, JsonMappingException, IOException {
     synchronized (this) {
-      List<Session> clients = fileSessions.get(event.getFileId());
+      Map<String, Session> clients = fileClients.get(event.getFileId());
       if (clients != null) {
-        for (Session client : clients) {
+        for (Session client : clients.values()) {
           sendPatch(client, event.getPatch());
         }
       }
