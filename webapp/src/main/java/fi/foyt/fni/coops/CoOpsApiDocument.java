@@ -73,7 +73,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
   private Event<CoOpsPatchEvent> messageEvent;
   
   @Inject
-  private Event<CoOpsSessionJoinEvent> sessionJoinEvent;
+  private Event<CoOpsSessionOpenEvent> sessionOpenEvent;
 
   @Override
   public File fileGet(String fileId, Long revisionNumber) throws CoOpsNotImplementedException, CoOpsNotFoundException, CoOpsUsageException, CoOpsInternalErrorException, CoOpsForbiddenException {
@@ -286,13 +286,13 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
     // TODO: Implement extensions
     Map<String, Map<String, String>> extensions = new HashMap<String, Map<String,String>>();
     Map<String, String> webSocketExtension = new HashMap<String, String>();
-    CoOpsSession coOpsSession = coOpsSessionController.createSession(document, loggedUser, CoOpsSessionType.REST, "dmp", currentRevision, new Date(), Boolean.FALSE);
+    CoOpsSession coOpsSession = coOpsSessionController.createSession(document, loggedUser, CoOpsSessionType.REST, "dmp", currentRevision);
     
     webSocketExtension.put("ws", "ws://dev.forgeandillusion.net:8080/fni/ws/coops/document/" + document.getId() + "/" + coOpsSession.getSessionId());
     
     extensions.put("webSocket", webSocketExtension);
     
-    sessionJoinEvent.fire(new CoOpsSessionJoinEvent(coOpsSession.getSessionId()));
+    sessionOpenEvent.fire(new CoOpsSessionOpenEvent(coOpsSession.getSessionId()));
     
     return new Join(coOpsSession.getSessionId(), coOpsSession.getAlgorithm(), coOpsSession.getJoinRevision(), data, COOPS_DOCUMENT_CONTENTTYPE, properties, extensions);
   }

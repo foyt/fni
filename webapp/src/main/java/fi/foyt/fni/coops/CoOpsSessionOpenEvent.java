@@ -1,8 +1,8 @@
 package fi.foyt.fni.coops;
 
-public class CoOpsSessionJoinEvent {
+public class CoOpsSessionOpenEvent {
 
-  public CoOpsSessionJoinEvent(String sessionId) {
+  public CoOpsSessionOpenEvent(String sessionId) {
     super();
     this.sessionId = sessionId;
   }
