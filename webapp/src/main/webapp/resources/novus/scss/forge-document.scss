@@ -11,8 +11,9 @@ $hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
 h2 {
   @include header-2;
   padding-top: 20px;
-  padding-bottom: 20px;
   margin-right: 120px;
+  margin-left: -6px;
+  padding-bottom: 10px;
 }
 
 h2 input {
@@ -36,8 +37,7 @@ h2 input:focus {
 }
 
 .forge-document-readonly-link-container {
-  position: absolute;
-  right: 20px;
+  padding-bottom: 10px;
 }
 
 .forge-document-readonly-link-container>a{
@@ -50,12 +50,31 @@ h2 input:focus {
   position: relative;
 }
 
-.forge-ckdocument-editor-status { @include header-5;
+.forge-ckdocument-editor-status { 
+  @include header-5;
   color: $title-color;
   position: absolute;
-  margin-top: -42px;
+  right: 20px;
+  margin-top: -40px;
+}
+
+.collaborators {
   position: absolute;
   right: 20px;
+  margin-top: -42px;
+  width: 500px;
+  overflow-y: scroll;
+}
+
+.collaborator {
+  float: right;
+  margin-left: 4px;
+}
+
+.collaborators img {
+  width: 32px;
+  border-radius: 8px;
+  vertical-align: top;
 }
 
 /* CKBrowser plugin */

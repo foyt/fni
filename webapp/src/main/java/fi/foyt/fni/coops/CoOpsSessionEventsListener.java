@@ -64,7 +64,7 @@ public class CoOpsSessionEventsListener {
         extensions.put("sessionEvents", new Object[] { new SessionEvent(sessionId, sessionUser.getFullName(), email, status) } );
         
         try {
-          coOpsApiDocument.filePatch(session.getMaterial().getId().toString(), sessionId, currentRevisionNumber, null, null, extensions);
+          coOpsApiDocument.filePatch(session.getMaterial().getId().toString(), serverSession.getSessionId(), currentRevisionNumber, null, null, extensions);
         } catch (CoOpsInternalErrorException | CoOpsUsageException | CoOpsNotFoundException | CoOpsConflictException | CoOpsForbiddenException e) {
           logger.log(Level.WARNING, "Could not send a sessionEvent patch", e);
         }

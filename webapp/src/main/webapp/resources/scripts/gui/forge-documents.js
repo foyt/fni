@@ -19,7 +19,7 @@
     var editor = CKEDITOR.replace($('.forge-ckdocument-editor').attr('name'), { 
       skin: 'moono',
       language: LOCALE,
-      extraPlugins: 'coops,coops-connector,coops-dmp,autogrow,fnigenericbrowser',
+      extraPlugins: 'coops,coops-connector,coops-dmp,coops-sessionevents,autogrow,fnigenericbrowser',
       autoGrow_onStartup: true,
       readOnly: true,
       height: 500,
@@ -75,6 +75,14 @@
       $('.notifications').find('.connection-lost-notification').notification("hide");
     });
 
+    editor.on("CoOPS:CollaboratorJoined", function (event) {
+      $('.collaborators').collaborators("addCollaborator", event.data.sessionId, event.data.displayName||'Anonymous', event.data.email||(event.data.sessionId + '@no.invalid'));
+    });
+
+    editor.on("CoOPS:CollaboratorLeft", function (event) {
+      $('.collaborators').collaborators("removeCollaborator", event.data.sessionId);
+    });
+
     // CoOPS Errors
     
     editor.on("CoOPS:Error", function (event) {
@@ -120,6 +128,8 @@
         });
       }
     });
+
+    $('.collaborators').collaborators();
   });
   
 }).call(this);
