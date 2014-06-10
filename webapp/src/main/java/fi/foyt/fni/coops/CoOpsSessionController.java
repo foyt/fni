@@ -1,4 +1,4 @@
-package fi.foyt.fni.materials;
+package fi.foyt.fni.coops;
 
 import java.util.Date;
 import java.util.List;
@@ -9,7 +9,6 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
-import fi.foyt.fni.coops.CoOpsSessionCloseEvent;
 import fi.foyt.fni.persistence.dao.materials.CoOpsSessionDAO;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.persistence.model.materials.CoOpsSessionType;
@@ -21,7 +20,7 @@ import fi.foyt.fni.persistence.model.users.User;
 public class CoOpsSessionController {
   
   private static final long SESSION_TIMEOUT = 10 * 1000;
-
+  
   @Inject
   private Event<CoOpsSessionCloseEvent> sessionCloseEvent;
   
@@ -42,6 +41,15 @@ public class CoOpsSessionController {
     Date accessedBefore = new Date(System.currentTimeMillis() - SESSION_TIMEOUT);
     return coOpsSessionDAO.listByAccessedBeforeAndTypeAndClosed(accessedBefore, CoOpsSessionType.REST, Boolean.FALSE);
   }
+
+  public List<CoOpsSession> listSessionsByClosed(Boolean closed) {
+    return coOpsSessionDAO.listByClosed(closed);
+  }
+
+  
+  public List<CoOpsSession> listSessionsByMaterialAndClosed(Material material, Boolean closed) {
+    return coOpsSessionDAO.listByMaterialAndClosed(material, closed);
+  }
   
   public CoOpsSession updateSessionType(CoOpsSession coOpsSession, CoOpsSessionType type) {
     return coOpsSessionDAO.updateType(coOpsSession, type);
@@ -57,5 +65,4 @@ public class CoOpsSessionController {
       sessionCloseEvent.fire(new CoOpsSessionCloseEvent(session.getSessionId()));
     }
   }
-
 }
