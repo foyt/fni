@@ -48,6 +48,37 @@ public class CoOpsSessionDAO extends GenericDAO<CoOpsSession> {
     return getSingleResult(entityManager.createQuery(criteria));
   }
 
+  public List<CoOpsSession> listByClosed(Boolean closed) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<CoOpsSession> criteria = criteriaBuilder.createQuery(CoOpsSession.class);
+    Root<CoOpsSession> root = criteria.from(CoOpsSession.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(CoOpsSession_.closed), closed)
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+  }
+
+  public List<CoOpsSession> listByMaterialAndClosed(Material material, Boolean closed) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<CoOpsSession> criteria = criteriaBuilder.createQuery(CoOpsSession.class);
+    Root<CoOpsSession> root = criteria.from(CoOpsSession.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.and(
+        criteriaBuilder.equal(root.get(CoOpsSession_.closed), closed),
+        criteriaBuilder.equal(root.get(CoOpsSession_.material), material)
+      )
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+  }
+
   public List<CoOpsSession> listByAccessedBeforeAndTypeAndClosed(Date accessed, CoOpsSessionType type, Boolean closed) {
     EntityManager entityManager = getEntityManager();
 
