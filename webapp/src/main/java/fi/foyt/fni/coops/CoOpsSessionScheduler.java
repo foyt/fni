@@ -6,7 +6,6 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 
-import fi.foyt.fni.materials.CoOpsSessionController;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 
 @Singleton

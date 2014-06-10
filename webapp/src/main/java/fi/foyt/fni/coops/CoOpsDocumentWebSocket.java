@@ -29,7 +29,6 @@ import fi.foyt.coops.CoOpsInternalErrorException;
 import fi.foyt.coops.CoOpsNotFoundException;
 import fi.foyt.coops.CoOpsUsageException;
 import fi.foyt.coops.model.Patch;
-import fi.foyt.fni.materials.CoOpsSessionController;
 import fi.foyt.fni.materials.DocumentController;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.persistence.model.materials.CoOpsSessionType;
