@@ -28,7 +28,6 @@ import fi.foyt.coops.CoOpsUsageException;
 import fi.foyt.coops.model.File;
 import fi.foyt.coops.model.Join;
 import fi.foyt.coops.model.Patch;
-import fi.foyt.fni.materials.CoOpsSessionController;
 import fi.foyt.fni.materials.DocumentController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.common.Language;
@@ -69,6 +68,9 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
 
   @Inject
   private MaterialPermissionController materialPermissionController;
+
+  @Inject
+  private CoOpsSessionEventsController coOpsSessionEventsController;
   
   @Inject
   private Event<CoOpsPatchEvent> messageEvent;
@@ -309,17 +311,19 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
     if (data == null) {
       data = "";
     }
-    
+
+    List<CoOpsSession> openSessions = coOpsSessionController.listSessionsByMaterialAndClosed(document, Boolean.FALSE);
+
     Map<String, String> properties = settingToProperties("document.", documentController.listDocumentSettings(document));
     properties.put("title", document.getTitle());
 
-    // TODO: Implement extensions
-    Map<String, Map<String, String>> extensions = new HashMap<String, Map<String,String>>();
-    Map<String, String> webSocketExtension = new HashMap<String, String>();
+    Map<String, Object> extensions = new HashMap<>();
+
     CoOpsSession coOpsSession = coOpsSessionController.createSession(document, loggedUser, CoOpsSessionType.REST, "dmp", currentRevision);
+    extensions.put("sessionEvents", coOpsSessionEventsController.createSessionEvents(openSessions, "OPEN"));
     
+    Map<String, Object> webSocketExtension = new HashMap<>();
     webSocketExtension.put("ws", "ws://dev.forgeandillusion.net:8080/fni/ws/coops/document/" + document.getId() + "/" + coOpsSession.getSessionId());
-    
     extensions.put("webSocket", webSocketExtension);
     
     sessionOpenEvent.fire(new CoOpsSessionOpenEvent(coOpsSession.getSessionId()));
