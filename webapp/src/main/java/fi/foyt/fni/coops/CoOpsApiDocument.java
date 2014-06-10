@@ -13,6 +13,7 @@ import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -77,6 +78,10 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
   
   @Inject
   private Event<CoOpsSessionOpenEvent> sessionOpenEvent;
+
+  @SuppressWarnings("cdi-ambiguous-dependency")
+  @Inject
+  private HttpServletRequest httpRequest;
 
   @Override
   public File fileGet(String fileId, Long revisionNumber) throws CoOpsNotImplementedException, CoOpsNotFoundException, CoOpsUsageException, CoOpsInternalErrorException, CoOpsForbiddenException {
@@ -322,8 +327,15 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
     CoOpsSession coOpsSession = coOpsSessionController.createSession(document, loggedUser, CoOpsSessionType.REST, "dmp", currentRevision);
     extensions.put("sessionEvents", coOpsSessionEventsController.createSessionEvents(openSessions, "OPEN"));
     
+    String wsUrl = String.format("ws://%s:%s%s/ws/coops/document/%d/%s", 
+        httpRequest.getServerName(), 
+        httpRequest.getServerPort(), 
+        httpRequest.getContextPath(), 
+        document.getId(), 
+        coOpsSession.getSessionId());
+    
     Map<String, Object> webSocketExtension = new HashMap<>();
-    webSocketExtension.put("ws", "ws://dev.forgeandillusion.net:8080/fni/ws/coops/document/" + document.getId() + "/" + coOpsSession.getSessionId());
+    webSocketExtension.put("ws", wsUrl);
     extensions.put("webSocket", webSocketExtension);
     
     sessionOpenEvent.fire(new CoOpsSessionOpenEvent(coOpsSession.getSessionId()));
