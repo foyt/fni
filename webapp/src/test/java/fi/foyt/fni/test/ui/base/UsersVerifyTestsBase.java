@@ -1,14 +1,10 @@
 package fi.foyt.fni.test.ui.base;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Date;
 import java.util.UUID;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class UsersVerifyTestsBase extends AbstractUITest {
 
@@ -18,7 +14,8 @@ public class UsersVerifyTestsBase extends AbstractUITest {
   @Test
   public void testInvalidKeyTest() {
     getWebDriver().get(getAppUrl() + "/users/verify/bogus");
-    assertEquals("Invalid Verification Key. Perhaps You Have Already Clicked This Link Before", getWebDriver().findElement(By.cssSelector(".jsf-messages-container li.error span")).getText());
+    waitForNotification(getWebDriver());
+    assertNotification(getWebDriver(), "error", "Invalid Verification Key. Perhaps You Have Already Clicked This Link Before");
   }
 
   @Test
@@ -31,9 +28,8 @@ public class UsersVerifyTestsBase extends AbstractUITest {
       getWebDriver().findElement(By.cssSelector(".user-login-login-panel input[type='password']")).sendKeys("pass");
       getWebDriver().findElement(By.cssSelector(".user-login-login-panel input[type='submit']")).click();
 
-      new WebDriverWait(getWebDriver(), 10).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".jsf-messages-container li.warning span")));
-
-      assertEquals("You Have Not Confirmed Your E-email Address", getWebDriver().findElement(By.cssSelector(".jsf-messages-container li.warning span")).getText());
+      waitForNotification(getWebDriver());
+      assertNotification(getWebDriver(), "warning", "You Have Not Confirmed Your E-email Address");
 
       String key = UUID.randomUUID().toString();
       executeSql("insert into UserVerificationKey (id, created, value, user_id) values (?, ?, ?, ?)", USER_ID, new Date(), key, USER_ID);

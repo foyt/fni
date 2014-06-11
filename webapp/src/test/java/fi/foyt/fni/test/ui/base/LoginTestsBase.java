@@ -52,10 +52,10 @@ public class LoginTestsBase extends AbstractUITest {
   public void testRegisterMandatories() {
     getWebDriver().get(getAppUrl(true) + "/login/");
     getWebDriver().findElement(By.cssSelector(".user-register-button")).submit();
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".jsf-messages-container li:nth-child(1).error span")));
-    assertEquals("First Name Is Required", getWebDriver().findElement(By.cssSelector(".jsf-messages-container li:nth-child(1).error span")).getText());
-    assertEquals("Last Name Is Required", getWebDriver().findElement(By.cssSelector(".jsf-messages-container li:nth-child(2).error span")).getText());
-    assertEquals("Email Is Required", getWebDriver().findElement(By.cssSelector(".jsf-messages-container li:nth-child(3).error span")).getText());
+    waitForNotification(getWebDriver());
+    assertEquals("First Name Is Required", getWebDriver().findElement(By.cssSelector(".notifications-container .notification-error:nth-child(1)")).getText());
+    assertEquals("Last Name Is Required", getWebDriver().findElement(By.cssSelector(".notifications-container .notification-error:nth-child(2)")).getText());
+    assertEquals("Email Is Required", getWebDriver().findElement(By.cssSelector(".notifications-container .notification-error:nth-child(3)")).getText());
   }
 
   @Test
@@ -69,8 +69,8 @@ public class LoginTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.cssSelector(".user-register-password2")).sendKeys("asd");
     getWebDriver().findElement(By.cssSelector(".user-register-button")).click();
     
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".jsf-messages-container li span")));
-    assertEquals("Passwords Do Not Match", getWebDriver().findElement(By.cssSelector(".jsf-messages-container li span")).getText());
+    waitForNotification(getWebDriver());
+    assertNotification(getWebDriver(), "warning", "Passwords Do Not Match");
   }
 
   @Test
@@ -88,9 +88,9 @@ public class LoginTestsBase extends AbstractUITest {
       getWebDriver().findElement(By.cssSelector(".user-register-password2")).sendKeys("qwe");
       getWebDriver().findElement(By.cssSelector(".user-register-button")).click();
       
-      new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".jsf-messages-container li:nth-child(1).info span")));
-      String notification = getWebDriver().findElement(By.cssSelector(".jsf-messages-container li:nth-child(1).info span")).getText();
-      assertTrue(notification, StringUtils.startsWithIgnoreCase(notification, "Verification Email Has Been Sent"));
+      waitForNotification(getWebDriver());
+      assertNotificationStartsWith(getWebDriver(), "info", "Verification Email Has Been Sent");
+
       assertEquals(1, greenMail.getReceivedMessages().length);
 
       String mailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
@@ -114,10 +114,9 @@ public class LoginTestsBase extends AbstractUITest {
     
     getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog input[name=\"email\"]")).sendKeys("nonexisting@foyt.fi");
     getWebDriver().findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
-    
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".jsf-messages-container li:nth-child(1).warning span")));
-    String notification = getWebDriver().findElement(By.cssSelector(".jsf-messages-container li:nth-child(1).warning span")).getText();
-    assertEquals("User Could Not Be Found By Given E-mail", notification);
+
+    waitForNotification(getWebDriver());
+    assertNotification(getWebDriver(), "warning", "User Could Not Be Found By Given E-mail");
   }
   
   @Test
@@ -134,9 +133,8 @@ public class LoginTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog input[name=\"email\"]")).sendKeys("invalidaddress");
     getWebDriver().findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
     
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".jsf-messages-container li:nth-child(1).warning span")));
-    String notification = getWebDriver().findElement(By.cssSelector(".jsf-messages-container li:nth-child(1).warning span")).getText();
-    assertEquals("User Could Not Be Found By Given E-mail", notification);
+    waitForNotification(getWebDriver());
+    assertNotification(getWebDriver(), "warning", "User Could Not Be Found By Given E-mail");
   }
   
   @Test
@@ -155,10 +153,9 @@ public class LoginTestsBase extends AbstractUITest {
       getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog input[name=\"email\"]")).sendKeys("user@foyt.fi");
       getWebDriver().findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
       
-      new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".jsf-messages-container li:nth-child(1).info span")));
-      String notification = getWebDriver().findElement(By.cssSelector(".jsf-messages-container li:nth-child(1).info span")).getText();
-      assertTrue(notification, StringUtils.startsWithIgnoreCase(notification, "Password reset e-mail has been sent into user@foyt.fi. Click link on the e-mail to reset your password."));
-
+      waitForNotification(getWebDriver());
+      assertNotificationStartsWith(getWebDriver(), "info", "Password reset e-mail has been sent into user@foyt.fi. Click link on the e-mail to reset your password.");
+      
       assertEquals(1, greenMail.getReceivedMessages().length);
       String mailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
       assertEquals("Forge & Illusion password reset", greenMail.getReceivedMessages()[0].getSubject());

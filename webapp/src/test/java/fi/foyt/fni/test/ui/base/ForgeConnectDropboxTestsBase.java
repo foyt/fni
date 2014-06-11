@@ -1,9 +1,7 @@
 package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,8 +46,8 @@ public class ForgeConnectDropboxTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.name("allow_access")).click();
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.titleIs("Forge"));
     assertEquals("Forge", getWebDriver().getTitle());
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".jsf-messages-container li.info span")));
-    assertTrue(StringUtils.startsWithIgnoreCase(getWebDriver().findElement(By.cssSelector(".jsf-messages-container li.info span")).getText(), "Dropbox folder is connected"));
+    waitForNotification(getWebDriver());
+    assertNotificationStartsWith(getWebDriver(), "info", "Dropbox folder is connected");
     assertEquals(1, getWebDriver().findElements(By.cssSelector(".forge-materials-list a[title=\"Dropbox\"]")).size());
   }
   

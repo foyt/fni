@@ -1,7 +1,5 @@
 package fi.foyt.fni.test.ui.base;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Date;
 import java.util.UUID;
 
@@ -24,7 +22,8 @@ public class UsersResetPasswordTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.name(formId + ":password2")).sendKeys("qwe");
     getWebDriver().findElement(By.cssSelector("input[type='submit']")).click();
 
-    assertEquals("Invalid Password Reset Key. Perhaps You Have Already Used This Reset Link.", getWebDriver().findElement(By.cssSelector(".jsf-messages-container li.error span")).getText());
+    waitForNotification(getWebDriver());
+    assertNotification(getWebDriver(), "error", "Invalid Password Reset Key. Perhaps You Have Already Used This Reset Link.");
   }
 
   @Test
