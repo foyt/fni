@@ -9,11 +9,14 @@
       this._savedContent = null;
       this._rnrTimeout = null;
       
-      this._editor.on('contentChange', this._onContentChange, this);
+      if (this._editor.config.coops.readOnly !== true) {
+        this._editor.on('contentChange', this._onContentChange, this);
+        this._editor.on('propertiesChange', this._onPropertiesChange, this);
+      }
+      
       this._editor.on('CoOPS:SessionStart', this._onSessionStart, this);
       this._editor.on('CoOPS:ContentPatch', this._onContentPatch, this);
       this._editor.on('CoOPS:ContentRevert', this._onContentRevert, this);
-      this._editor.on('propertiesChange', this._onPropertiesChange, this);
       this._editor.on('CoOPS:PatchSent', this._onPatchSent, this);
       this._editor.on('CoOPS:PatchAccepted', this._onPatchAccepted, this);
       this._editor.on('CoOPS:PatchMerged', this._onPatchMerged, this);
@@ -154,8 +157,9 @@
               this.getChangeObserver().reset(content);
               this.getChangeObserver().resume();
               this.setReadOnly(false);
-              this.fire("CoOPS:SessionStart");
             }
+              
+            this.fire("CoOPS:SessionStart");
           });
         } else {
           this._editor.fire("CoOPS:Error", {
@@ -170,7 +174,9 @@
       },
       
       _onReconnect: function (event) {
-        this._editor.setReadOnly(false);
+        if (this._editor.config.coops.readOnly !== true) {
+          this._editor.setReadOnly(false);
+        }
       }
     }
   });

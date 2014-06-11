@@ -16,6 +16,7 @@ import fi.foyt.coops.CoOpsInternalErrorException;
 import fi.foyt.coops.CoOpsNotFoundException;
 import fi.foyt.coops.CoOpsUsageException;
 import fi.foyt.fni.materials.DocumentController;
+import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.persistence.model.materials.CoOpsSessionType;
 import fi.foyt.fni.persistence.model.materials.Document;
@@ -37,6 +38,9 @@ public class CoOpsSessionEventsListener {
 
   @Inject
   private CoOpsSessionEventsController coOpsSessionEventsController;
+
+  @Inject
+  private MaterialPermissionController materialPermissionController;
  
   public void onSessionOpen(@Observes CoOpsSessionOpenEvent event) {
     String sessionId = event.getSessionId();
@@ -52,20 +56,22 @@ public class CoOpsSessionEventsListener {
     CoOpsSession session = coOpsSessionController.findSessionBySessionId(sessionId);
     if (session != null) {
       Document document = (Document) session.getMaterial();
-      Long currentRevisionNumber = documentController.getDocumentRevision(document);
-      
-      CoOpsSession serverSession = coOpsSessionController.createSession(session.getMaterial(), session.getUser(), CoOpsSessionType.SERVER, session.getAlgorithm(), currentRevisionNumber);
-      try {
-        Map<String, Object> extensions = new HashMap<>();
-        extensions.put("sessionEvents", coOpsSessionEventsController.createSessionEvents(Arrays.asList(session), status));
+      if (materialPermissionController.hasModifyPermission(session.getUser(), document)) {
+        Long currentRevisionNumber = documentController.getDocumentRevision(document);
         
+        CoOpsSession serverSession = coOpsSessionController.createSession(session.getMaterial(), session.getUser(), CoOpsSessionType.SERVER, session.getAlgorithm(), currentRevisionNumber);
         try {
-          coOpsApiDocument.filePatch(session.getMaterial().getId().toString(), serverSession.getSessionId(), currentRevisionNumber, null, null, extensions);
-        } catch (CoOpsInternalErrorException | CoOpsUsageException | CoOpsNotFoundException | CoOpsConflictException | CoOpsForbiddenException e) {
-          logger.log(Level.WARNING, "Could not send a sessionEvent patch", e);
+          Map<String, Object> extensions = new HashMap<>();
+          extensions.put("sessionEvents", coOpsSessionEventsController.createSessionEvents(Arrays.asList(session), status));
+          
+          try {
+            coOpsApiDocument.filePatch(session.getMaterial().getId().toString(), serverSession.getSessionId(), currentRevisionNumber, null, null, extensions);
+          } catch (CoOpsInternalErrorException | CoOpsUsageException | CoOpsNotFoundException | CoOpsConflictException | CoOpsForbiddenException e) {
+            logger.log(Level.WARNING, "Could not send a sessionEvent patch", e);
+          }
+        } finally {
+          coOpsSessionController.closeSession(serverSession, true); 
         }
-      } finally {
-        coOpsSessionController.closeSession(serverSession, true); 
       }
     }
   }

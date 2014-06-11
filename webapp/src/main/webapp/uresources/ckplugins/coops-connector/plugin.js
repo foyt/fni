@@ -220,6 +220,10 @@
       },
       
       _onContentPatch : function(event) {
+        if (this._editor.config.coops.readOnly === true) {
+          return;
+        }
+        
         if (this._patchData[this._revisionNumber + 1]) {
           this._editor.fire("CoOPS:PatchRejected", {
             reason: "already sending a patch"
@@ -235,6 +239,10 @@
       },
       
       _onPropertiesChange: function (event) {
+        if (this._editor.config.coops.readOnly === true) {
+          return;
+        }
+        
         if (this._patchData[this._revisionNumber + 1]) {
           this._editor.fire("CoOPS:PatchRejected", {
             reason: "already sending a patch"
@@ -256,6 +264,10 @@
       },
       
       _onExtensionPatch: function (event) {
+        if (this._editor.config.coops.readOnly === true) {
+          return;
+        }
+        
         if (this._patchData[this._revisionNumber + 1]) {
           this._editor.fire("CoOPS:PatchRejected", {
             reason: "already sending a patch"

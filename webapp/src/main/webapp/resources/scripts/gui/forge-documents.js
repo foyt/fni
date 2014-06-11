@@ -25,7 +25,8 @@
       height: 500,
       contentsCss: ['//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.3.2/contents.css', CONTEXTPATH + '/uresources/forge-ckeditor-embedded.css' ],
       coops: {
-        serverUrl: COOPS_SERVER_URL
+        serverUrl: COOPS_SERVER_URL,
+        readOnly: COOPS_READONLY
       },
       fniGenericBrowser:{
         enabledInDialogs: ['image', 'link'],
