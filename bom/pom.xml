@@ -127,7 +127,7 @@
     
     <!-- CoOps -->
               
-    <coops-spec.version>1.0.0-SNAPSHOT</coops-spec.version> 
+    <coops-spec.version>1.0.0</coops-spec.version> 
   </properties>
 
   <dependencyManagement>
