@@ -49,7 +49,6 @@ public class ReindexHibernateSearchBackingBean {
     MassIndexer massIndexer = fullTextEntityManager.createIndexer(entity);
     
     massIndexer.batchSizeToLoadObjects(10);
-    massIndexer.threadsForSubsequentFetching(1);
     massIndexer.threadsToLoadObjects(1);
 
     massIndexer.startAndWait();

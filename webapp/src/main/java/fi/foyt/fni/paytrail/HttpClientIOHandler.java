@@ -10,6 +10,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import fi.foyt.paytrail.io.IOHandler;
 import fi.foyt.paytrail.io.IOHandlerResult;
@@ -42,7 +43,7 @@ public class HttpClientIOHandler implements IOHandler {
 
       return new IOHandlerResult(status, IOUtils.toString(entity.getContent()));
     } finally {
-      entity.consumeContent();
+      EntityUtils.consume(entity);
     }
 	}
 

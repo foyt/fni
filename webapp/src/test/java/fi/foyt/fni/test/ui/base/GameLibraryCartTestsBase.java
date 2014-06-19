@@ -92,7 +92,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-items-inner-container tr:first-child .gamelibrary-cart-action-inc-count")).click();
     
     new WebDriverWait(getWebDriver(), 60)
-      .until(ExpectedConditions.textToBePresentInElement(By.cssSelector(".gamelibrary-cart-items-inner-container table tr:first-child td:first-child"), "2"));
+      .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector(".gamelibrary-cart-items-inner-container table tr:first-child td:first-child"), "2"));
     
     getWebDriver().findElement(By.id("cart-form:payerFirstName")).sendKeys(firstName);
     getWebDriver().findElement(By.id("cart-form:payerLastName")).sendKeys(lastName);
