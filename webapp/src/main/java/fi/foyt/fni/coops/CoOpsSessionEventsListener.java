@@ -2,6 +2,7 @@ package fi.foyt.fni.coops;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,13 +21,20 @@ import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.persistence.model.materials.CoOpsSessionType;
 import fi.foyt.fni.persistence.model.materials.Document;
+import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.session.Logout;
+import fi.foyt.fni.session.UserSessionEvent;
+import fi.foyt.fni.users.UserController;
 
 @Stateless
 public class CoOpsSessionEventsListener {
   
   @Inject
   private Logger logger;
-
+  
+  @Inject
+  private UserController userController;
+  
   @Inject
   private CoOpsApiDocument coOpsApiDocument;
 
@@ -50,6 +58,15 @@ public class CoOpsSessionEventsListener {
   public void onSessionClose(@Observes CoOpsSessionCloseEvent event) {
     String sessionId = event.getSessionId();
     sendSessionEventPatch(sessionId, "CLOSE");
+  }
+  
+  public void onUserLogout(@Observes @Logout UserSessionEvent event) {
+    User user = userController.findUserById(event.getUserId());
+    
+    List<CoOpsSession> openSessions = coOpsSessionController.listSessionsByUserAndClosed(user, Boolean.FALSE);
+    for (CoOpsSession openSession : openSessions) {
+      coOpsSessionController.closeSession(openSession, true);
+    }
   }
   
   private void sendSessionEventPatch(String sessionId, String status) {

@@ -62,6 +62,23 @@ public class CoOpsSessionDAO extends GenericDAO<CoOpsSession> {
     return entityManager.createQuery(criteria).getResultList();
   }
 
+  public List<CoOpsSession> listByUserAndClosed(User user, Boolean closed) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<CoOpsSession> criteria = criteriaBuilder.createQuery(CoOpsSession.class);
+    Root<CoOpsSession> root = criteria.from(CoOpsSession.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.and(
+        criteriaBuilder.equal(root.get(CoOpsSession_.closed), closed),
+        criteriaBuilder.equal(root.get(CoOpsSession_.user), user)
+      )
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+  }
+
   public List<CoOpsSession> listByMaterialAndClosed(Material material, Boolean closed) {
     EntityManager entityManager = getEntityManager();
 

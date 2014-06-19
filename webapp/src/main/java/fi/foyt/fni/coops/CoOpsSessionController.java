@@ -46,6 +46,9 @@ public class CoOpsSessionController {
     return coOpsSessionDAO.listByClosed(closed);
   }
 
+  public List<CoOpsSession> listSessionsByUserAndClosed(User user, Boolean closed) {
+    return coOpsSessionDAO.listByUserAndClosed(user, closed);
+  }
   
   public List<CoOpsSession> listSessionsByMaterialAndClosed(Material material, Boolean closed) {
     return coOpsSessionDAO.listByMaterialAndClosed(material, closed);
