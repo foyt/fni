@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.PreDestroy;
 import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Event;
@@ -38,6 +39,13 @@ public class SessionController implements Serializable {
 	@Inject
 	@Logout
 	private Event<UserSessionEvent> logoutEvent;
+	
+	@PreDestroy
+	public void preDestroy() {
+	  if (isLoggedIn()) {
+	    logout();
+	  }
+	}
 
 	@Inject
   private UserDAO userDAO;
