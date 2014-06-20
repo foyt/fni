@@ -76,6 +76,8 @@ public class ForgeUploadServlet extends AbstractFileServlet {
 		  }
 		}
 		
+		boolean convert = !"false".equals(request.getParameter("convert"));
+		
 		User loggedUser = sessionController.getLoggedUser();
 		List<UploadResultItem> resultItems = new ArrayList<>();
 
@@ -90,7 +92,14 @@ public class ForgeUploadServlet extends AbstractFileServlet {
 			}
 			
 			for (FileData file : files) {
-				Material material = materialController.createMaterial(parentFolder, loggedUser, file);
+			  Material material = null;
+			  
+			  if (convert) {
+	        material = materialController.createMaterial(parentFolder, loggedUser, file);
+			  } else {
+			    material = materialController.createFile(parentFolder, loggedUser, file.getData(), file.getContentType(), file.getFileName());
+			  }
+			  
 				resultItems.add(new UploadResultItem(material.getId().toString(), file.getData().length, "N/A", "N/A", "N/A", "DELETE"));
 			}
 

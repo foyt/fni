@@ -46,6 +46,21 @@ h3 {
   font-size: 13px;
 }
 
+.forge-upload-options {
+  margin-bottom: 10px;
+}
+
+.forge-upload-options h3 {
+  margin-bottom: 10px;
+}
+
+.forge-upload-option label {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 13px;
+  font-weight: bold;    
+}
+
 .forge-upload-no-files {
   font-family: $default-font;
   color: $default-color;

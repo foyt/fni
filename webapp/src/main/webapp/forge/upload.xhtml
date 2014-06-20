@@ -64,6 +64,15 @@
           <h:panelGroup layout="block" styleClass="forge-upload-field-info">#{locales['forge.upload.uploadInfo']}</h:panelGroup>
         </h:panelGroup>
         
+        <h:panelGroup layout="block" styleClass="forge-upload-options">
+          <h3>#{locales['forge.upload.optionsTitle']}</h3>
+        
+          <h:panelGroup layout="block" styleClass="forge-upload-option">
+            <input type="checkbox" name="convert" checked="checked"/> 
+            <label>#{locales['forge.upload.convertLabel']}</label>
+          </h:panelGroup>
+        </h:panelGroup>
+        
         <h3>#{locales['forge.upload.filesTitle']}</h3>
         
         <h:panelGroup layout="block" styleClass="forge-upload-files">

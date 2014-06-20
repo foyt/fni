@@ -26,14 +26,7 @@
   };
   
   $(document).ready(function() {
-    var parentFolderId = $('input[name="parentFolderId"]').val();
-    var uploadUrl = CONTEXTPATH + '/forge/upload/';
-    if (parentFolderId) {
-      uploadUrl += '?parentFolderId=' + parentFolderId;
-    }
-    
     $('#forge-upload-field-button').fileupload({
-      url: uploadUrl,
       autoUpload: false,
       dataType : 'json',
       maxFileSize: 5000000, 
@@ -103,6 +96,18 @@
     }
     
     $('.forge-upload-upload-button').click(function (e) {
+      var parentFolderId = $('input[name="parentFolderId"]').val();
+      var convert = $('input[name="convert"]').prop("checked");
+      
+      var uploadUrl = CONTEXTPATH + '/forge/upload/';
+      if (parentFolderId) {
+        uploadUrl += '?parentFolderId=' + parentFolderId + '&convert=' + (convert ? 'true' : 'false');
+      } else {
+        uploadUrl += '?convert=' + (convert ? 'true' : 'false');
+      }
+      
+      $('#forge-upload-field-button').fileupload('option', 'url', uploadUrl);
+      
       submitNextFile();
     });
     
