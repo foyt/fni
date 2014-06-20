@@ -795,7 +795,7 @@ public class MaterialController {
     return createFile(parentFolder, user, fileData.getData(), fileData.getContentType(), fileData.getFileName());
   }
 
-  private Material createFile(Folder parentFolder, User loggedUser, byte[] data, String contentType, String title) {
+  public Material createFile(Folder parentFolder, User loggedUser, byte[] data, String contentType, String title) {
     String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
     Date now = new Date();
 
@@ -817,7 +817,7 @@ public class MaterialController {
   }
 
   private Material uploadHtml(Folder parentFolder, User loggedUser, FileData fileData) throws UnsupportedEncodingException {
-    String data = new String(fileData.getData(), "UTF");
+    String data = new String(fileData.getData(), "UTF-8");
     return createDocument(parentFolder, loggedUser, data, fileData.getFileName());
   }
 
