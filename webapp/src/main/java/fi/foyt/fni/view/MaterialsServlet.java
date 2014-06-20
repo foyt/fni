@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.scribe.model.Response;
 
 import fi.foyt.fni.dropbox.DropboxManager;
@@ -123,9 +122,9 @@ public class MaterialsServlet extends AbstractTransactionedServlet {
   		return;
     }
     
-    if (StringUtils.isNotBlank(data.getFileName())) {
-			response.setHeader("content-disposition", "attachment; filename=" + data.getFileName());
-		}
+    if ("true".equals(request.getParameter("download"))) {
+		  response.setHeader("content-disposition", "attachment; filename=" + data.getFileName());
+    }
 		
 		response.setContentType(data.getContentType());
 
@@ -142,11 +141,11 @@ public class MaterialsServlet extends AbstractTransactionedServlet {
 	  String title = document.getTitle();
 	  String styleSheet = contextPath + "/uresources/material-document-style.css";
 	  String htmlContent = MessageFormat.format(DOCUMENT_TEMPLATE, title, styleSheet, bodyContent);
-		return new FileData(null, null, htmlContent.getBytes("UTF-8"), "text/html", document.getModified());
+		return new FileData(null, document.getUrlName(), htmlContent.getBytes("UTF-8"), "text/html", document.getModified());
 	}
 
 	private FileData getVectorImageData(VectorImage vectorImage) throws UnsupportedEncodingException {
-		return new FileData(null, null, vectorImage.getData().getBytes("UTF-8"), "image/svg+xml", vectorImage.getModified());
+		return new FileData(null, vectorImage.getUrlName(), vectorImage.getData().getBytes("UTF-8"), "image/svg+xml", vectorImage.getModified());
 	}
 
 	private FileData getBinaryMaterialData(Binary binary) {
@@ -161,12 +160,7 @@ public class MaterialsServlet extends AbstractTransactionedServlet {
 			InputStream inputStream = response.getStream();
 			try {
 				data = IOUtils.toByteArray(inputStream);
-				String fileName = null;
-				if (!dropboxFile.getMimeType().startsWith("image/")&&!dropboxFile.getMimeType().equals("text/html")) {
-					fileName = dropboxFile.getUrlName();
-				}
-				
-				return new FileData(null, fileName, data, dropboxFile.getMimeType(), dropboxFile.getModified());
+				return new FileData(null, dropboxFile.getUrlName(), data, dropboxFile.getMimeType(), dropboxFile.getModified());
 			} finally {
 			  inputStream.close();
 			}
