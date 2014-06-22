@@ -13,13 +13,9 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.exception.RewriteException;
-
-import fi.foyt.fni.system.ErrorUtils;
 
 public class ExceptionHandler extends ExceptionHandlerWrapper {
 
@@ -55,16 +51,7 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
         } else {
           externalContext.setResponseStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
           renderView("/error/internal-error.jsf");
-          String recipient = System.getProperty("fni-error-email");
-          if (ErrorUtils.isReportableException(exception)) {
-            if (StringUtils.isNotBlank(recipient) && (externalContext.getRequest() instanceof HttpServletRequest)
-                && (externalContext.getResponse() instanceof HttpServletResponse)) {
-              ErrorUtils.mailError(recipient, (HttpServletRequest) externalContext.getRequest(), (HttpServletResponse) externalContext.getResponse(),
-                  exception, null);
-            } else {
-              exception.printStackTrace();
-            }
-          }
+          exception.printStackTrace();
         }
       } finally {
         queuedEventIterator.remove();
