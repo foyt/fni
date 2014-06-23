@@ -5,19 +5,21 @@ import java.io.IOException;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
-import fi.foyt.fni.view.AbstractTransactionedServlet;
 import fi.foyt.paytrail.PaytrailService;
 
 @WebServlet(urlPatterns = "/gamelibrary/paytrail/*", name = "gamelibrary-paytrail")
-public class PaytrailServlet extends AbstractTransactionedServlet {
+@Transactional
+public class PaytrailServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 

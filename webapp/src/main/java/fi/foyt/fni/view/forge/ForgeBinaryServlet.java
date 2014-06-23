@@ -4,16 +4,17 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import fi.foyt.fni.view.AbstractTransactionedServlet;
-
 @WebServlet(urlPatterns = "/forge/binary/*", name = "forge-binary")
-public class ForgeBinaryServlet extends AbstractTransactionedServlet {
+@Transactional
+public class ForgeBinaryServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -1L;
 	

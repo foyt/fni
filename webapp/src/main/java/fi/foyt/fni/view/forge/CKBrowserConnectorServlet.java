@@ -13,8 +13,10 @@ import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -30,10 +32,10 @@ import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.view.AbstractTransactionedServlet;
 
 @WebServlet(urlPatterns = "/forge/ckbrowserconnector/", name = "forge-ckbrowser")
-public class CKBrowserConnectorServlet extends AbstractTransactionedServlet {
+@Transactional
+public class CKBrowserConnectorServlet extends HttpServlet {
 
   private static final long serialVersionUID = -1L;
 

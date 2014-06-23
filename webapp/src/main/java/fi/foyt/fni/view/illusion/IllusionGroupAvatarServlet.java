@@ -10,6 +10,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -31,6 +32,7 @@ import fi.foyt.fni.utils.images.ImageUtils;
 import fi.foyt.fni.view.AbstractFileServlet;
 
 @WebServlet(urlPatterns = "/illusion/groupAvatar/*", name = "illusion-groupavatar")
+@Transactional
 public class IllusionGroupAvatarServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = 8109481247044843102L;

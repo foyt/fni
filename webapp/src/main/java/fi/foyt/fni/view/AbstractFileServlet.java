@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
@@ -17,7 +18,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
-public abstract class AbstractFileServlet extends AbstractTransactionedServlet {
+public abstract class AbstractFileServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 2682138379342291553L;
 

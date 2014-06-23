@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -32,6 +33,7 @@ import fi.foyt.fni.utils.data.FileData;
 import fi.foyt.fni.view.AbstractFileServlet;
 
 @WebServlet(urlPatterns = "/forge/upload/", name = "forge-upload" )
+@Transactional
 public class ForgeUploadServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = -4376406243780463521L;

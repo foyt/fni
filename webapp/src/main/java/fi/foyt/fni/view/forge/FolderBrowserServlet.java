@@ -13,8 +13,10 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -29,10 +31,10 @@ import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.view.AbstractTransactionedServlet;
 
 @WebServlet(urlPatterns = "/forge/folderbrowser/", name = "forge-folderbrowser")
-public class FolderBrowserServlet extends AbstractTransactionedServlet {
+@Transactional
+public class FolderBrowserServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -1L;
 	

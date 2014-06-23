@@ -10,6 +10,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -24,6 +25,7 @@ import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.view.AbstractFileServlet;
 
 @WebServlet(urlPatterns = "/gamelibrary/publicationFiles/*", name = "gamelibrary-publicationfile")
+@Transactional
 public class PublicationFileServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = -5117742561225873455L;

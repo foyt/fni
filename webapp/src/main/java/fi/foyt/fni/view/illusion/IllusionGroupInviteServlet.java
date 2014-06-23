@@ -10,6 +10,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +28,7 @@ import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.view.AbstractFileServlet;
 
 @WebServlet(urlPatterns = "/illusion/groupInvite/*", name = "illusion-groupinvite")
+@Transactional
 public class IllusionGroupInviteServlet extends AbstractFileServlet {
 
   private static final long serialVersionUID = 8840385463120576014L;

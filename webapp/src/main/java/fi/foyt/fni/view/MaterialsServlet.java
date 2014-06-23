@@ -12,8 +12,10 @@ import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.apache.commons.io.IOUtils;
 import org.scribe.model.Response;
@@ -38,7 +40,8 @@ import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @WebServlet ( urlPatterns = "/materials/*", name = "materials")
-public class MaterialsServlet extends AbstractTransactionedServlet {
+@Transactional
+public class MaterialsServlet extends HttpServlet {
   
   private static final String DOCUMENT_TEMPLATE = "<!DOCTYPE HTML><html><head><meta charset=\"UTF-8\"><title>{0}</title><link rel=\"StyleSheet\" href=\"{1}\"/></head><body>{2}</body></html>";
 	
