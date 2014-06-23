@@ -1,7 +1,9 @@
 package fi.foyt.fni.coops;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import javax.ejb.AccessTimeout;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
@@ -9,6 +11,7 @@ import javax.inject.Inject;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 
 @Singleton
+@AccessTimeout (unit = TimeUnit.MINUTES, value = 10)
 public class CoOpsSessionScheduler {
 
   @Inject
