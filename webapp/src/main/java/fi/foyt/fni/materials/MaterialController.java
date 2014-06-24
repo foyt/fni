@@ -171,6 +171,17 @@ public class MaterialController {
     return type;
   }
 
+  public boolean isDownloadableType(MaterialType materialType) {
+    switch (materialType) {
+      case DROPBOX_FOLDER:
+      case DROPBOX_ROOT_FOLDER:
+      case FOLDER:
+        return false;
+      default:
+        return true;
+    }
+  }
+
   public boolean isEditableType(MaterialType materialType) {
     switch (materialType) {
     case DOCUMENT:
