@@ -130,12 +130,13 @@ public class MaterialsServlet extends HttpServlet {
     }
 		
 		response.setContentType(data.getContentType());
-
-		ServletOutputStream outputStream = response.getOutputStream();
-		try {
-			outputStream.write(data.getData());
-		} finally {
-			outputStream.flush();
+		if (data.getData() != null) {
+  		ServletOutputStream outputStream = response.getOutputStream();
+  		try {
+  			outputStream.write(data.getData());
+  		} finally {
+  			outputStream.flush();
+  		}
 		}
 	}
 
@@ -148,7 +149,8 @@ public class MaterialsServlet extends HttpServlet {
 	}
 
 	private FileData getVectorImageData(VectorImage vectorImage) throws UnsupportedEncodingException {
-		return new FileData(null, vectorImage.getUrlName(), vectorImage.getData().getBytes("UTF-8"), "image/svg+xml", vectorImage.getModified());
+	  String data = vectorImage.getData();
+	  return new FileData(null, vectorImage.getUrlName(), data != null ? data.getBytes("UTF-8") : null, "image/svg+xml", vectorImage.getModified());
 	}
 
 	private FileData getBinaryMaterialData(Binary binary) {
