@@ -43,7 +43,10 @@ public class SessionController implements Serializable {
 	@PreDestroy
 	public void preDestroy() {
 	  if (isLoggedIn()) {
-	    logout();
+      logger.info("User #" + getLoggedUserId() + " session ended");
+	    logout(); 
+	  } else {
+      logger.info("Anonymous user session ended");
 	  }
 	}
 
