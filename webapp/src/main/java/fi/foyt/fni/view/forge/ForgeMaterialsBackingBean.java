@@ -53,6 +53,7 @@ public class ForgeMaterialsBackingBean {
   @PostConstruct
   public void init() {
     materialStarred = new HashMap<>();
+    materialDownlodable = new HashMap<>();
     materialEditable = new HashMap<>();
     materialMovable = new HashMap<>();
     materialShareable = new HashMap<>();
@@ -124,6 +125,21 @@ public class ForgeMaterialsBackingBean {
       User loggedUser = sessionController.getLoggedUser();
       materialController.unstarMaterial(material, loggedUser);
       materialStarred.remove(materialId);
+    }
+  }
+
+  public synchronized boolean getMaterialDownloadable(Material material) {
+    if (!materialDownlodable.containsKey(material.getId())) {
+      Boolean downlodable = false;
+      
+      if (materialController.isDownloadableType(material.getType())) {
+        downlodable = materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material);
+      } 
+      
+      materialDownlodable.put(material.getId(), downlodable);
+      return downlodable;
+    }  else {
+      return materialDownlodable.get(material.getId());
     }
   }
 
@@ -225,6 +241,7 @@ public class ForgeMaterialsBackingBean {
   }
 
   private Map<Long, Boolean> materialStarred;
+  private Map<Long, Boolean> materialDownlodable;
   private Map<Long, Boolean> materialEditable;
   private Map<Long, Boolean> materialMovable;
   private Map<Long, Boolean> materialShareable;

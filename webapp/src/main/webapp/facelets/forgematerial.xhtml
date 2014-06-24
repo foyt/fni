@@ -47,6 +47,13 @@
           <h:outputLabel value="#{locales['forge.index.materialViewLink']}" />
         </h:outputLink>
       </h:panelGroup>
+      
+      <h:panelGroup layout="block" styleClass="forge-material-action-download" rendered="#{forgeMaterialsBackingBean.getMaterialDownloadable(material)}">
+        <h:outputLink value="#{request.contextPath}/materials/#{material.path}?download=true">
+          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-download.png"/> 
+          <h:outputLabel value="#{locales['forge.index.materialDownloadLink']}" />
+        </h:outputLink>
+      </h:panelGroup>
 
       <h:panelGroup layout="block" styleClass="forge-material-action-delete" rendered="#{forgeMaterialsBackingBean.getMaterialDeletable(material)}">
         <a href="javascript:void(null)" data-material-id="#{material.id}">
