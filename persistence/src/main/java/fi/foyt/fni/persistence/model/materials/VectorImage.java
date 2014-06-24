@@ -1,9 +1,7 @@
 package fi.foyt.fni.persistence.model.materials;
 
-import javax.persistence.Basic;
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.PrimaryKeyJoinColumn;
 
@@ -30,7 +28,6 @@ public class VectorImage extends Material {
 	  this.data = data;
   }
   
-  @Basic (fetch=FetchType.LAZY)
   @Lob
   private String data;
 }
