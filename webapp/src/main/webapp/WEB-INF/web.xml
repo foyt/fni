@@ -5,7 +5,6 @@
     <session-timeout>5</session-timeout>
     <cookie-config>
       <path>/</path>
-      <http-only>true</http-only>
     </cookie-config>
     <tracking-mode>COOKIE</tracking-mode>
   </session-config>
