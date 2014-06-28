@@ -9,13 +9,14 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup_;;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroup_;
+import fi.foyt.fni.persistence.model.materials.Document;
 
 public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionGroup create(String urlName, String name, String description, String xmppRoom, Date created) {
+	public IllusionGroup create(String urlName, String name, String description, String xmppRoom, Document indexDocument, Date created) {
 		IllusionGroup illusionGroup = new IllusionGroup();
 		
 		illusionGroup.setName(name);
@@ -23,6 +24,7 @@ public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
 		illusionGroup.setUrlName(urlName);
 		illusionGroup.setXmppRoom(xmppRoom);
 		illusionGroup.setCreated(created);
+		illusionGroup.setIndexDocument(indexDocument);
 
 		return persist(illusionGroup);
 	}
@@ -41,9 +43,14 @@ public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
     return getSingleResult(entityManager.createQuery(criteria));
 	}
 
-	public IllusionGroup updateName(IllusionGroup illusionGroup, String name) {
-		illusionGroup.setName(name);
-		return persist(illusionGroup);
-	}
+  public IllusionGroup updateName(IllusionGroup illusionGroup, String name) {
+    illusionGroup.setName(name);
+    return persist(illusionGroup);
+  }
+  
+  public IllusionGroup updateIndexDocument(IllusionGroup illusionGroup, Document indexDocument) {
+    illusionGroup.setIndexDocument(indexDocument);
+    return persist(illusionGroup);
+  }
 	
 }
