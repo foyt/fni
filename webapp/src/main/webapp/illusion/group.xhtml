@@ -9,45 +9,14 @@
   </ui:define>
   
   <ui:define name="view-scripts">
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-scrollTo/1.4.9/jquery.scrollTo.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.Jcrop.min.js"></script>
-
-    <!-- Token Input -->
-    
-    <h:outputScript name="scripts/jquery.tokeninput/jquery.tokeninput.js"/>
-   
-    <!-- BinaryAjax -->
-    
-    <h:outputScript name="scripts/binaryajax/binaryajax.js"/>
-    
-    <!-- Exif -->
-    
-    <h:outputScript name="scripts/exif/exif.js"/>
-    
-    <!-- Strophe -->
-    
-    <h:outputScript name="scripts/strophe/strophe.js"/>
-    <h:outputScript name="scripts/strophe/plugins/strophe.muc.js"/>
-    
-    <!-- View Scripts -->
-  
-    <h:outputScript name="scripts/gui/chat-client.js"/>
-    <h:outputScript name="scripts/gui/image-dialog.js"/>
-    <h:outputScript name="scripts/gui/illusion-group.js"/>
   </ui:define>
   
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/css/jquery.Jcrop.min.css"/>
-
-    <h:outputStylesheet library="novus" name="css/token-input.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-group.css"/>
   </ui:define>  
 
   <ui:define name="grid-content">
-
-    <div class="illusion-group-chat-splash-container"></div>
-
     <!-- Menu -->
 
     <ui:include src="/facelets/menu.xhtml" />
@@ -80,55 +49,11 @@
     <!-- Content -->
 
     <h:panelGroup layout="block" styleClass="grid_16 tight">
-      
-      <input type="hidden" value="#{illusionGroupBackingBean.xmppBoshService}" id="xmpp-bosh-service"/>
-      <input type="hidden" value="#{illusionGroupBackingBean.xmppUserJid}" id="xmpp-user-jid"/>
-      <input type="hidden" value="#{illusionGroupBackingBean.xmppPassword}" id="xmpp-password"/>
-      <input type="hidden" value="#{illusionGroupBackingBean.xmppRoom}" id="xmpp-room"/>
-      <input type="hidden" value="#{illusionGroupBackingBean.userNickname}" id="user-nickname"/>
-      <input type="hidden" value="#{illusionGroupBackingBean.chatBotJid}" id="chat-bot-jid"/>
-      <input type="hidden" value="#{illusionGroupBackingBean.userRole}" id="user-role"/>
-      
       <h:panelGroup layout="block" styleClass="illusion-group-panel">
-        <h:panelGroup layout="block" styleClass="illusion-group-user-container">
-          <h:panelGroup layout="block" styleClass="illusion-group-user">
-	        <h:panelGroup layout="block" styleClass="illusion-group-user-image-container">
-	          <h:graphicImage styleClass="illusion-group-user-image" value="/illusion/groupAvatar/#{illusionGroupBackingBean.urlName}/#{illusionGroupBackingBean.xmppUserJid}?size=90" />          
-	          <h:panelGroup layout="block" styleClass="illusion-group-user-image-cover"/>
-	          <ul class="illusion-group-user-menu">
-                <li><a href="#" data-action="changeNickname">#{locales['illusion.group.changeName']}</a></li>
-                <li><a href="#" data-action="changeAvatar">#{locales['illusion.group.changeAvatar']}</a></li>
-              </ul>
-	        </h:panelGroup>
-          </h:panelGroup>
-        </h:panelGroup>
-        
-        <h:panelGroup layout="block" styleClass="illusion-group-admin" rendered="#{illusionGroupBackingBean.userRole eq 'GAMEMASTER'}">
-          <h:panelGroup layout="block" styleClass="illusion-group-admin-image"/>
-          <ul class="illusion-group-admin-menu">
-            <li><a href="#" data-action="invitePlayers"><span class="ui-icon ui-icon-illusion-invite-players"></span>#{locales['illusion.group.invitePlayers']}</a></li>
-            <li>-</li>
-            <li><a href="#" data-action="changeBotNickname">#{locales['illusion.group.changeChatbotName']}</a></li>
-            <li><a href="#" data-action="changeBotAvatar">#{locales['illusion.group.changeChatbotAvatar']}</a></li>
-          </ul>
-        </h:panelGroup>
-        
-        <h:panelGroup layout="block" styleClass="illusion-dice"/>
-
-        <h:panelGroup layout="block" styleClass="illusion-group-participants"></h:panelGroup>
-        
-        <h:panelGroup layout="block" styleClass="illusion-group-chat-container">
-          <h:panelGroup layout="block" styleClass="illusion-group-chat-messages"></h:panelGroup>
-          <textarea class="illusion-group-chat-input"></textarea>
-        </h:panelGroup>
-      </h:panelGroup>
-      
-      <h:form id="command-form" style="display: none">
-        <h:inputHidden value="#{illusionGroupBackingBean.id}" />
-        <h:inputHidden id="userNickname" value="#{illusionGroupBackingBean.userNickname}" />
-        <h:commandButton id="updateUserNickname" action="#{illusionGroupBackingBean.updateUserNickname}"/>
-      </h:form>
-      
+        <h:panelGroup layout="block" styleClass="illusion-group-welcome-content">
+          <h:outputText value="#{illusionGroupBackingBean.welcomeContent}" escape="false"/>
+        </h:panelGroup>  
+      </h:panelGroup>      
     </h:panelGroup>
 
   </ui:define>
