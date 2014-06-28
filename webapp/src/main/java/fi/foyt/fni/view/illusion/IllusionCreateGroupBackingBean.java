@@ -33,7 +33,6 @@ import fi.foyt.fni.utils.servlet.RequestUtils;
 @Named
 @Join (path = "/illusion/creategroup", to = "/illusion/creategroup.jsf")
 @LoggedIn
-//TODO: Security
 public class IllusionCreateGroupBackingBean {
 
   @Inject
@@ -50,16 +49,6 @@ public class IllusionCreateGroupBackingBean {
 
 	@RequestAction
 	public void load() throws IOException, GeneralSecurityException {
-	  User user = sessionController.getLoggedUser();
-
-	  userNickname = getUserNickname(user);
-	  
-	  xmppUserJid = chatCredentialsController.getUserJidByUser(user);
-    xmppPassword = chatCredentialsController.getPasswordByUser(user);
-    xmppBoshService = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOSH_SERVICE);
-    xmppMucHost = systemSettingsController.getSetting(SystemSettingKey.CHAT_MUC_HOST);
-    chatBotJid = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOT_JID);
-
     resolveNames();
 	}
 	
@@ -84,30 +73,6 @@ public class IllusionCreateGroupBackingBean {
 	public void setDescription(String description) {
     this.description = description;
   }
-
-	public String getXmppUserJid() {
-    return xmppUserJid;
-  }
-	
-	public String getXmppPassword() {
-    return xmppPassword;
-  }
-	
-	public String getXmppBoshService() {
-    return xmppBoshService;
-  }
-  
-  public String getXmppRoom() {
-    return xmppRoom;
-  }
-  
-  public String getChatBotJid() {
-    return chatBotJid;
-  }
-  
-	public String getUserNickname() {
-    return userNickname;
-  }
 	
 	public String getUrlName() {
     return urlName;
@@ -115,7 +80,6 @@ public class IllusionCreateGroupBackingBean {
 	
 	private void resolveNames() {
 	  this.urlName = createUrlName(getName());
-	  this.xmppRoom = urlName + '@' + xmppMucHost;
 	}
 	
 	private String createUrlName(String name) {
@@ -140,12 +104,11 @@ public class IllusionCreateGroupBackingBean {
     } while (true);
   }
 	
-  @LoggedIn
-// TODO: Security
   public void save() throws Exception {
     Date now = new Date();
+    String xmppRoom = urlName + '@' + systemSettingsController.getSetting(SystemSettingKey.CHAT_MUC_HOST);
     
-    IllusionGroup group = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getDescription(), getXmppRoom(), now);
+    IllusionGroup group = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getDescription(), xmppRoom, null, now);
     
     // Add game master
     User loggedUser = sessionController.getLoggedUser();
@@ -176,12 +139,5 @@ public class IllusionCreateGroupBackingBean {
 	
 	private String name;
 	private String description;
-	private String xmppBoshService;
-	private String xmppUserJid;
-	private String xmppPassword;
-	private String xmppMucHost;
-  private String xmppRoom;
-  private String chatBotJid;
-	private String userNickname;
 	private String urlName;
 }

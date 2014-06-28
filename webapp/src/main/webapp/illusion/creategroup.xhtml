@@ -8,12 +8,6 @@
   <ui:define name="page-title">#{locales['illusion.createGroup.pageTitle']}</ui:define>
  
   <ui:define name="view-scripts">
-    <!-- Strophe -->
-    
-    <h:outputScript name="scripts/strophe/strophe.js"/>
-    <h:outputScript name="scripts/strophe/plugins/strophe.muc.js"/>
-    <h:outputScript name="scripts/strophe/plugins/strophe.x.js"/>
-    
     <!-- View scripts -->
     
     <h:outputScript name="scripts/gui/illusion-create-group.js"></h:outputScript>
@@ -60,13 +54,6 @@
       <h:panelGroup layout="block" styleClass="grid_16 alpha slim-right">
         <h:panelGroup layout="block" styleClass="illusion-create-group-panel">
           <h3>#{locales['illusion.createGroup.createGroupTitle']}</h3>
-          
-          <input type="hidden" value="#{illusionCreateGroupBackingBean.xmppBoshService}" id="xmpp-bosh-service"/>
-          <input type="hidden" value="#{illusionCreateGroupBackingBean.xmppUserJid}" id="xmpp-user-jid"/>
-          <input type="hidden" value="#{illusionCreateGroupBackingBean.xmppPassword}" id="xmpp-password"/>
-          <input type="hidden" value="#{illusionCreateGroupBackingBean.chatBotJid}" id="chat-bot-jid"/>
-          <input type="hidden" value="#{illusionCreateGroupBackingBean.userNickname}" id="user-nickname"/>
-
           <h:form>
             <h:panelGroup layout="block" styleClass="illusion-create-group-field">
               <h:outputLabel value="#{locales['illusion.createGroup.nameLabel']}" />
@@ -84,15 +71,9 @@
               <h:outputLabel value="#{locales['illusion.createGroup.urlNameLabel']}" />
               <h:inputText id="urlName" value="#{illusionCreateGroupBackingBean.urlName}" disabled="true" readonly="true"/>
             </h:panelGroup>
-            
-            <h:panelGroup layout="block" styleClass="illusion-create-group-field">
-              <h:outputLabel value="#{locales['illusion.createGroup.chatRoomLabel']}" />
-              <h:inputText id="xmpp-room" value="#{illusionCreateGroupBackingBean.xmppRoom}" disabled="true" readonly="true"/>
-            </h:panelGroup>  
 
             <h:panelGroup layout="block" styleClass="illusion-create-group-field">
-              <input class="illusion-create-group-save" type="submit" value="#{locales['illusion.createGroup.saveButton']}"/>
-              <h:commandButton id="save" style="display:none" action="#{illusionCreateGroupBackingBean.save}"/>
+              <h:commandButton id="save" styleClass="illusion-create-group-save" value="#{locales['illusion.createGroup.saveButton']}" action="#{illusionCreateGroupBackingBean.save}"/>
             </h:panelGroup>
           </h:form>
         </h:panelGroup>
