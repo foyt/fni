@@ -9,14 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import fi.foyt.fni.persistence.model.materials.Document;
 
 @Entity
 @Cacheable (true)
@@ -67,14 +64,6 @@ public class IllusionGroup {
     this.created = created;
   }
   
-  public Document getIndexDocument() {
-    return indexDocument;
-  }
-  
-  public void setIndexDocument(Document indexDocument) {
-    this.indexDocument = indexDocument;
-  }
-  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
@@ -100,7 +89,4 @@ public class IllusionGroup {
   @NotEmpty
   @Column (nullable = false, unique = true)
   private String xmppRoom;
-
-  @ManyToOne
-  private Document indexDocument;
 }

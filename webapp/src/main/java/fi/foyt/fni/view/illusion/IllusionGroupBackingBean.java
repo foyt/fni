@@ -11,11 +11,13 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.security.LoggedIn;
 
 @RequestScoped
 @Named
 @Stateful
 @Join (path = "/illusion/group/{urlName}", to = "/illusion/group.jsf")
+@LoggedIn
 public class IllusionGroupBackingBean {
 
   @Parameter
@@ -35,10 +37,6 @@ public class IllusionGroupBackingBean {
     name = illusionGroup.getName();
     description = illusionGroup.getDescription();
   
-    if (illusionGroup.getIndexDocument() != null) {
-      welcomeContent = illusionGroup.getIndexDocument().getData();
-    } 
-    
     return null;
   }
 
@@ -70,12 +68,7 @@ public class IllusionGroupBackingBean {
     this.description = description;
   }
   
-  public String getWelcomeContent() {
-    return welcomeContent;
-  }
-  
   private Long id;
   private String name;
   private String description;
-  private String welcomeContent;
 }

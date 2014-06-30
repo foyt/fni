@@ -108,7 +108,7 @@ public class IllusionCreateGroupBackingBean {
     Date now = new Date();
     String xmppRoom = urlName + '@' + systemSettingsController.getSetting(SystemSettingKey.CHAT_MUC_HOST);
     
-    IllusionGroup group = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getDescription(), xmppRoom, null, now);
+    IllusionGroup group = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getDescription(), xmppRoom, now);
     
     // Add game master
     User loggedUser = sessionController.getLoggedUser();

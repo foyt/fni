@@ -3,12 +3,6 @@
 @import "styles";
 @import "blueprint/reset/utilities";
 
-$user-image-size: 90px;
-$user-lens-color-start: rgba(255, 255, 255, 0);
-$user-lens-color-end: rgba(255, 255, 255, 0.5);
-$participant-image-size: 90px;
-$participant-lens-color-start: rgba(255, 255, 255, 0);
-$participant-lens-color-end: rgba(255, 255, 255, 0.5);
 $menu-button-color: #fff;
 $menu-button-background: rgb(71,176, 167);
 $menu-button-border-size: 4px;
@@ -36,24 +30,6 @@ h3 {
   margin-bottom: 10px;
 }
 
-.illusion-group-welcome-content {
-  width: 159.2mm;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 1in;
-  box-shadow: 0 0 10px 1px rgb(200, 200, 200);
-  margin-left: auto;
-  margin-right: auto;
-  background: #fff;
-}
-
-.illusion-group-welcome-content *:first-child {
-  margin-top: 0px;
-}
-
-.illusion-group-welcome-content {
-  @include html-default-styles;
-}
 
 /* Menu */
 

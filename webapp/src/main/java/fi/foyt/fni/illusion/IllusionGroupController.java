@@ -28,7 +28,6 @@ import fi.foyt.fni.persistence.model.illusion.IllusionGroupUser;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserImage;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserSetting;
-import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.users.User;
 
 @Dependent
@@ -55,8 +54,8 @@ public class IllusionGroupController {
   
   /* IllusionGroup */
 
-  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String xmppRoom, Document indexDocument, Date created) {
-    return illusionGroupDAO.create(urlName, name, description, xmppRoom, indexDocument, created);
+  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String xmppRoom, Date created) {
+    return illusionGroupDAO.create(urlName, name, description, xmppRoom, created);
   }
 
   public IllusionGroup findIllusionGroupById(Long id) {
