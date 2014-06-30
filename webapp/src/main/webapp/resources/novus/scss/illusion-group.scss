@@ -9,12 +9,24 @@ $user-lens-color-end: rgba(255, 255, 255, 0.5);
 $participant-image-size: 90px;
 $participant-lens-color-start: rgba(255, 255, 255, 0);
 $participant-lens-color-end: rgba(255, 255, 255, 0.5);
+$menu-button-color: #fff;
+$menu-button-background: rgb(71,176, 167);
+$menu-button-border-size: 4px;
+$menu-button-border-color: darken($menu-button-background, 10%);
+$menu-button-background-hover: darken($menu-button-background, 10%);
+$menu-button-width: 240px;
+$menu-button-padding: 25px;
 
-/* Panel */ 
+/* Panels */ 
 
 .illusion-group-panel {
   @include generic-panel;
   position: relative;
+}
+
+.illusion-button-panel {
+  @include generic-panel;
+  padding: 20px;
 }
 
 /* Generic */
@@ -41,4 +53,81 @@ h3 {
 
 .illusion-group-welcome-content {
   @include html-default-styles;
+}
+
+/* Menu */
+
+.illusion-menu {
+}
+
+.illusion-menu-items {
+  display: none;
+}
+
+.illusion-menu>a{
+  @include header-2;
+  color: $menu-button-color;
+  background: $menu-button-background;
+  border: $menu-button-border-size solid $menu-button-border-color;
+  border-radius: 12px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  width: $menu-button-width - $menu-button-padding;
+  display: inline-block;
+  vertical-align: top;
+  padding-left: $menu-button-padding;
+}
+
+.illusion-menu>.illusion-menu-help{
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 13px;
+  display: inline-block;
+  width: 407px - $menu-button-width;
+  margin-left: 20px;
+  padding-top: 6px;
+}
+
+.illusion-menu>a:before {
+  content: '+';
+  padding-right: 8px; 
+}
+
+.illusion-menu:hover>a {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-bottom-width: 0px;
+  padding-bottom: 7px;
+}
+
+.illusion-menu:hover .illusion-menu-items {
+  display: block;
+  position: absolute;
+  border-left: $menu-button-border-size solid $menu-button-border-color;
+  border-right: $menu-button-border-size solid $menu-button-border-color;
+  border-bottom: $menu-button-border-size solid $menu-button-border-color;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  background: $menu-button-background;
+  z-index: 9999;
+}
+
+.illusion-menu:hover .illusion-menu-items a:before {
+}
+
+.illusion-menu:hover .illusion-menu-items a {
+  color: $menu-button-color;
+  padding-left: $menu-button-padding + 18px;
+  padding-right: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  width: $menu-button-width - ($menu-button-padding + 18px + 8px);
+  display: block;
+  font-family: $default-font;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.illusion-menu:hover .illusion-menu-items a:hover {
+  background: $menu-button-background-hover;
 }

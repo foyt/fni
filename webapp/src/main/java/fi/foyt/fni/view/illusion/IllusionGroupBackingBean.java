@@ -11,13 +11,11 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.security.LoggedIn;
 
 @RequestScoped
 @Named
 @Stateful
 @Join (path = "/illusion/group/{urlName}", to = "/illusion/group.jsf")
-@LoggedIn
 public class IllusionGroupBackingBean {
 
   @Parameter
