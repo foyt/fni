@@ -15,7 +15,7 @@ public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionGroup create(String urlName, String name, String description, String xmppRoom, Date created) {
+	public IllusionGroup create(String urlName, String name, String description, String indexText, String xmppRoom, Date created) {
 		IllusionGroup illusionGroup = new IllusionGroup();
 		
 		illusionGroup.setName(name);
@@ -23,6 +23,7 @@ public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
 		illusionGroup.setUrlName(urlName);
 		illusionGroup.setXmppRoom(xmppRoom);
 		illusionGroup.setCreated(created);
+		illusionGroup.setIndexText(indexText);
 
 		return persist(illusionGroup);
 	}
@@ -43,6 +44,11 @@ public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
 
   public IllusionGroup updateName(IllusionGroup illusionGroup, String name) {
     illusionGroup.setName(name);
+    return persist(illusionGroup);
+  }
+
+  public IllusionGroup updateIndexText(IllusionGroup illusionGroup, String indexText) {
+    illusionGroup.setIndexText(indexText);
     return persist(illusionGroup);
   }
 	

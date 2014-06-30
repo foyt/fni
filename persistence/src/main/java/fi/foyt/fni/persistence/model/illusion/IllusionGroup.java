@@ -64,6 +64,14 @@ public class IllusionGroup {
     this.created = created;
   }
   
+  public String getIndexText() {
+    return indexText;
+  }
+  
+  public void setIndexText(String indexText) {
+    this.indexText = indexText;
+  }
+  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
@@ -76,6 +84,9 @@ public class IllusionGroup {
   @Lob
   private String description;
 
+  @Lob
+  private String indexText;
+  
   @NotNull
   @Column (nullable = false)
   private Date created;

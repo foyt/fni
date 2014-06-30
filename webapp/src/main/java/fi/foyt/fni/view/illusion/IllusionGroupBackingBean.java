@@ -36,6 +36,7 @@ public class IllusionGroupBackingBean {
     id = illusionGroup.getId();
     name = illusionGroup.getName();
     description = illusionGroup.getDescription();
+    indexText = illusionGroup.getIndexText();
   
     return null;
   }
@@ -68,7 +69,12 @@ public class IllusionGroupBackingBean {
     this.description = description;
   }
   
+  public String getIndexText() {
+    return indexText;
+  }
+  
   private Long id;
   private String name;
   private String description;
+  private String indexText;
 }
