@@ -1,8 +1,11 @@
 package fi.foyt.fni.materials;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,6 +22,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -30,12 +34,14 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
+import org.scribe.model.Response;
 
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 
 import fi.foyt.fni.drive.DriveManager;
 import fi.foyt.fni.drive.SystemGoogleDriveCredentials;
+import fi.foyt.fni.dropbox.DropboxManager;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
 import fi.foyt.fni.persistence.dao.materials.BinaryDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
@@ -55,8 +61,10 @@ import fi.foyt.fni.persistence.dao.materials.VectorImageDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageRevisionDAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.model.common.Language;
+import fi.foyt.fni.persistence.model.materials.Binary;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
+import fi.foyt.fni.persistence.model.materials.DropboxFile;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.GoogleDocument;
 import fi.foyt.fni.persistence.model.materials.Image;
@@ -93,6 +101,7 @@ public class MaterialController {
   private static final String MATERIALS_PATH = "materials";
   private static final long DEFAULT_MATERIAL_SIZE = 2048;
   private static final long DEFAULT_QUOTA = 1024 * 1024 * 10;
+  private static final String DOCUMENT_TEMPLATE = "<!DOCTYPE HTML><html><head><meta charset=\"UTF-8\"><title>{0}</title><link rel=\"StyleSheet\" href=\"{1}\"/></head><body>{2}</body></html>";
 
   @Inject
   private Logger logger;
@@ -165,6 +174,12 @@ public class MaterialController {
 
   @Inject
   private ImageController imageController;
+  
+  @Inject
+  private GoogleDriveMaterialController googleDriveMaterialController;
+
+  @Inject
+  private DropboxManager dropboxManager;
 
   public MimeType parseMimeType(String mimeType) throws MimeTypeParseException {
     MimeType type = new MimeType(mimeType);
@@ -895,4 +910,66 @@ public class MaterialController {
     return googleDocumentDAO.findById(id);
   }
 
+  public FileData getMaterialData(String contextPath, User user, Material material) throws UnsupportedEncodingException,
+      MalformedURLException, IOException, GeneralSecurityException {
+    switch (material.getType()) {
+      case IMAGE:
+        return getBinaryMaterialData((Image) material);
+      case DOCUMENT:
+        return getDocumentData(contextPath, (Document) material);
+      case VECTOR_IMAGE:
+        return getVectorImageData((VectorImage) material);
+      case PDF:
+        return getBinaryMaterialData((Pdf) material);
+      case FILE:
+        return getBinaryMaterialData((fi.foyt.fni.persistence.model.materials.File) material);
+      case GOOGLE_DOCUMENT:
+        TypedData typedData = googleDriveMaterialController.getGoogleDocumentData((GoogleDocument) material);
+        return new FileData(null, material.getUrlName(), typedData.getData(), typedData.getContentType(), typedData.getModified());
+      case DROPBOX_FILE:
+        return getDropboxMaterialData(user, (DropboxFile) material);
+      case BINARY:
+        return getBinaryMaterialData((Binary) material);
+      case DROPBOX_FOLDER:
+      case DROPBOX_ROOT_FOLDER:
+      case FOLDER:
+      break;
+    }
+    
+    return null;
+  }
+
+  private FileData getDocumentData(String contextPath, Document document) throws UnsupportedEncodingException {
+    String bodyContent = document.getData();
+    String title = document.getTitle();
+    String styleSheet = contextPath + "/uresources/material-document-style.css";
+    String htmlContent = MessageFormat.format(DOCUMENT_TEMPLATE, title, styleSheet, bodyContent);
+    return new FileData(null, document.getUrlName(), htmlContent.getBytes("UTF-8"), "text/html", document.getModified());
+  }
+
+  private FileData getVectorImageData(VectorImage vectorImage) throws UnsupportedEncodingException {
+    String data = vectorImage.getData();
+    return new FileData(null, vectorImage.getUrlName(), data != null ? data.getBytes("UTF-8") : null, "image/svg+xml", vectorImage.getModified());
+  }
+
+  private FileData getBinaryMaterialData(Binary binary) {
+    return new FileData(null, binary.getUrlName(), binary.getData(), binary.getContentType(), binary.getModified());
+  }
+  
+  private FileData getDropboxMaterialData(User user, DropboxFile dropboxFile) throws IOException {
+    Response response = dropboxManager.getFileContent(user, dropboxFile);
+    if (response.getCode() == 200) {
+      byte[] data = null;
+      
+      InputStream inputStream = response.getStream();
+      try {
+        data = IOUtils.toByteArray(inputStream);
+        return new FileData(null, dropboxFile.getUrlName(), data, dropboxFile.getMimeType(), dropboxFile.getModified());
+      } finally {
+        inputStream.close();
+      }
+    }
+    
+    return null;
+  }
 }
