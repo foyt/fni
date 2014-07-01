@@ -73,10 +73,11 @@
               </h:panelGroup>
                     
               <h4>
-                <h:link outcome="/illusion/material.jsf" title="#{material.title}">
+                <h:outputLink value="#{request.contextPath}/materials/#{material.path}" target="_blank">
                   <h:outputText value="#{material.title}"/>
-                </h:link>
+                </h:outputLink>
               </h4>
+              
             </h:panelGroup>
           </ui:repeat>
         </h:panelGroup>
