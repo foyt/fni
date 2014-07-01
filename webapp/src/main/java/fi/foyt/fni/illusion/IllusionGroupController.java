@@ -54,8 +54,8 @@ public class IllusionGroupController {
   
   /* IllusionGroup */
 
-  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String indexText, String xmppRoom, Date created) {
-    return illusionGroupDAO.create(urlName, name, description, indexText, xmppRoom, created);
+  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String xmppRoom, Date created) {
+    return illusionGroupDAO.create(urlName, name, description, xmppRoom, created);
   }
 
   public IllusionGroup findIllusionGroupById(Long id) {

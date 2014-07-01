@@ -191,6 +191,7 @@ public class MaterialController {
       case DROPBOX_FOLDER:
       case DROPBOX_ROOT_FOLDER:
       case FOLDER:
+      case ILLUSION_GROUP_FOLDER:
         return false;
       default:
         return true;
@@ -213,6 +214,8 @@ public class MaterialController {
     case DROPBOX_ROOT_FOLDER:
     case DROPBOX_FILE:
     case DROPBOX_FOLDER:
+    case ILLUSION_GROUP_FOLDER:
+    case ILLUSION_GROUP_DOCUMENT:
       return false;
     default:
       break;
@@ -249,6 +252,8 @@ public class MaterialController {
     switch (type) {
     case DROPBOX_FILE:
     case DROPBOX_FOLDER:
+    case ILLUSION_GROUP_FOLDER:
+    case ILLUSION_GROUP_DOCUMENT:
       return false;
     default:
       break;
@@ -569,6 +574,10 @@ public class MaterialController {
         return "images";
       case VECTOR_IMAGE:
         return "vectorimages";
+      case ILLUSION_GROUP_FOLDER:
+        return "folders";
+      case ILLUSION_GROUP_DOCUMENT: 
+        return "documents";
     }
   
     return "todo";
@@ -916,6 +925,7 @@ public class MaterialController {
       case IMAGE:
         return getBinaryMaterialData((Image) material);
       case DOCUMENT:
+      case ILLUSION_GROUP_DOCUMENT:
         return getDocumentData(contextPath, (Document) material);
       case VECTOR_IMAGE:
         return getVectorImageData((VectorImage) material);
@@ -933,6 +943,7 @@ public class MaterialController {
       case DROPBOX_FOLDER:
       case DROPBOX_ROOT_FOLDER:
       case FOLDER:
+      case ILLUSION_GROUP_FOLDER:
       break;
     }
     

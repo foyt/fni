@@ -9,11 +9,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 
 @Entity
 @Cacheable (true)
@@ -64,12 +67,12 @@ public class IllusionGroup {
     this.created = created;
   }
   
-  public String getIndexText() {
-    return indexText;
+  public IllusionGroupFolder getFolder() {
+    return folder;
   }
   
-  public void setIndexText(String indexText) {
-    this.indexText = indexText;
+  public void setFolder(IllusionGroupFolder folder) {
+    this.folder = folder;
   }
   
   @Id
@@ -83,9 +86,6 @@ public class IllusionGroup {
   
   @Lob
   private String description;
-
-  @Lob
-  private String indexText;
   
   @NotNull
   @Column (nullable = false)
@@ -100,4 +100,7 @@ public class IllusionGroup {
   @NotEmpty
   @Column (nullable = false, unique = true)
   private String xmppRoom;
+  
+  @OneToOne
+  private IllusionGroupFolder folder;
 }
