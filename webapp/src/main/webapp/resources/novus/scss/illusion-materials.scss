@@ -1,0 +1,43 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+$selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
+
+/* Panels */ 
+
+.illusion-materials-panel {
+  @include generic-panel;
+  position: relative;
+  background: #fff;
+}
+
+/* Materials */
+
+.illusion-materials {
+  margin-top: 10px;
+}
+
+.illusion-material {
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.illusion-material:hover {
+  background: $selected-background-color;
+}
+
+.illusion-material-icon {
+  width: 48px;
+  line-height: 0px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.illusion-material h4 {
+  margin-left: 10px;  
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 4px;
+}
+
