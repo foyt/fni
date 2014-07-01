@@ -13,6 +13,7 @@
   
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <h:outputStylesheet library="novus" name="css/illusion-group-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-group.css"/>
   </ui:define>  
 
@@ -48,35 +49,7 @@
 
     <!-- Content -->
 
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      
-      <h:panelGroup layout="block" styleClass="grid_8 alpha slim-right">
-        <h:panelGroup layout="block" styleClass="illusion-button-panel">
-          <h:panelGroup layout="block" styleClass="illusion-menu">
-            <a href="javascript:void(null)">Menu 1</a>
-            <h:panelGroup layout="block" styleClass="illusion-menu-help">Description for menu 1</h:panelGroup>
-            <h:panelGroup layout="block" styleClass="illusion-menu-items">
-              <a href="javascript:void(null)">Menu item #1</a>
-              <a href="javascript:void(null)">Menu item #2</a>
-              <a href="javascript:void(null)">Menu item #3</a>
-            </h:panelGroup>
-          </h:panelGroup>
-        </h:panelGroup>
-      </h:panelGroup>
-        
-      <h:panelGroup layout="block" styleClass="grid_8 omega slim-left">
-        <h:panelGroup layout="block" styleClass="illusion-button-panel">
-          <h:panelGroup layout="block" styleClass="illusion-menu">
-            <a href="javascript:void(null)">Menu 2</a>
-            <h:panelGroup layout="block" styleClass="illusion-menu-help">Description for menu 2</h:panelGroup>
-            <h:panelGroup layout="block" styleClass="illusion-menu-items">
-              <a href="javascript:void(null)">Menu item #1</a>
-              <a href="javascript:void(null)">Menu item #2</a>
-            </h:panelGroup>
-          </h:panelGroup>
-        </h:panelGroup>
-      </h:panelGroup>
-    </h:panelGroup>
+    <ui:include src="/facelets/illusionmenu.xhtml" />
     
     <h:panelGroup layout="block" styleClass="grid_16 tight">
       <h:panelGroup layout="block" styleClass="illusion-group-panel">
