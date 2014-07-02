@@ -73,6 +73,7 @@ public class IllusionGroupBackingBean {
     id = illusionGroup.getId();
     name = illusionGroup.getName();
     description = illusionGroup.getDescription();
+    illusionFolderPath = folder.getPath();
   
     return null;
   }
@@ -109,8 +110,13 @@ public class IllusionGroupBackingBean {
     return indexText;
   }
   
+  public String getIllusionFolderPath() {
+    return illusionFolderPath;
+  }
+  
   private Long id;
   private String name;
   private String description;
   private String indexText;
+  private String illusionFolderPath;
 }

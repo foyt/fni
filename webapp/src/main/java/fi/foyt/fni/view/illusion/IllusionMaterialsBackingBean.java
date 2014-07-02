@@ -65,7 +65,8 @@ public class IllusionMaterialsBackingBean {
     id = illusionGroup.getId();
     name = illusionGroup.getName();
     description = illusionGroup.getDescription();
-  
+    illusionFolderPath = folder.getPath();
+    
     return null;
   }
 
@@ -93,8 +94,13 @@ public class IllusionMaterialsBackingBean {
     return materials;
   }
   
+  public String getIllusionFolderPath() {
+    return illusionFolderPath;
+  }
+  
   private Long id;
   private String name;
   private String description;
   private List<Material> materials;
+  private String illusionFolderPath;
 }

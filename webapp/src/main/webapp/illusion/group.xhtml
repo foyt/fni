@@ -20,7 +20,7 @@
   <ui:define name="grid-content">
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/menu.xhtml"/>
     
     <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
       <!-- Navigation -->
@@ -49,7 +49,10 @@
 
     <!-- Content -->
 
-    <ui:include src="/facelets/illusionmenu.xhtml" />
+    <ui:include src="/facelets/illusionmenu.xhtml">
+      <ui:param name="groupUrlName" value="#{illusionGroupBackingBean.urlName}" />
+      <ui:param name="illusionFolderPath" value="#{illusionGroupBackingBean.illusionFolderPath}" />
+    </ui:include>
     
     <h:panelGroup layout="block" styleClass="grid_16 tight">
       <h:panelGroup layout="block" styleClass="illusion-group-panel">
