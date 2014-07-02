@@ -50,6 +50,7 @@
     <!-- Content -->
 
     <ui:include src="/facelets/illusionmenu.xhtml">
+      <ui:param name="mayEditMaterials" value="#{illusionGroupBackingBean.mayEditMaterials}" />
       <ui:param name="groupUrlName" value="#{illusionGroupBackingBean.urlName}" />
       <ui:param name="illusionFolderPath" value="#{illusionGroupBackingBean.illusionFolderPath}" />
     </ui:include>

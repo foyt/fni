@@ -14,7 +14,7 @@
             <h:link outcome="/illusion/materials.jsf" value="#{locales['illusion.group.materialShowMaterials']}">
               <f:param name="urlName" value="#{groupUrlName}"/>
             </h:link>
-            <h:outputLink value="#{request.contextPath}/forge/folders/#{illusionFolderPath}">
+            <h:outputLink value="#{request.contextPath}/forge/folders/#{illusionFolderPath}" rendered="#{mayEditMaterials}">
               <h:outputText value="#{locales['illusion.group.materialEditMaterials']}"/>
             </h:outputLink>
           </h:panelGroup>

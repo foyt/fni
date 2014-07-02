@@ -15,6 +15,8 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupUser;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
@@ -49,6 +51,11 @@ public class IllusionMaterialsBackingBean {
     }
     
     User loggedUser = sessionController.getLoggedUser();
+    IllusionGroupUser groupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(illusionGroup, loggedUser);
+    if (groupUser == null) {
+      return "/error/access-denied.jsf";
+    }
+    
     IllusionGroupFolder folder = illusionGroup.getFolder();
     
     materials = materialController.listMaterialsByFolderAndTypes(loggedUser, folder, Arrays.asList(
@@ -66,6 +73,7 @@ public class IllusionMaterialsBackingBean {
     name = illusionGroup.getName();
     description = illusionGroup.getDescription();
     illusionFolderPath = folder.getPath();
+    mayEditMaterials = groupUser.getRole() == IllusionGroupUserRole.GAMEMASTER;
     
     return null;
   }
@@ -98,9 +106,14 @@ public class IllusionMaterialsBackingBean {
     return illusionFolderPath;
   }
   
+  public boolean getMayEditMaterials() {
+    return mayEditMaterials;
+  }
+  
   private Long id;
   private String name;
   private String description;
   private List<Material> materials;
   private String illusionFolderPath;
+  private boolean mayEditMaterials;
 }

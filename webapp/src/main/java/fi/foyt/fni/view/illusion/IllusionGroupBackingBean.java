@@ -18,9 +18,12 @@ import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupUser;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
+import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.FileData;
@@ -57,11 +60,18 @@ public class IllusionGroupBackingBean {
       return "/error/not-found.jsf";
     }
     
+    User loggedUser = sessionController.getLoggedUser();
+
+    IllusionGroupUser groupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(illusionGroup, loggedUser);
+    if (groupUser == null) {
+      return "/error/access-denied.jsf";
+    }
+
     IllusionGroupFolder folder = illusionGroup.getFolder();
     IllusionGroupDocument indexDocument = illusionGroupDocumentController.findByFolderAndDocumentType(folder, IllusionGroupDocumentType.INDEX);
     if (indexDocument != null) {
       try {
-        FileData indexData = materialController.getMaterialData(null, sessionController.getLoggedUser(), indexDocument);
+        FileData indexData = materialController.getMaterialData(null, loggedUser, indexDocument);
         if (indexData != null) {
           indexText = new String(indexData.getData(), "UTF-8");
         }
@@ -74,6 +84,7 @@ public class IllusionGroupBackingBean {
     name = illusionGroup.getName();
     description = illusionGroup.getDescription();
     illusionFolderPath = folder.getPath();
+    mayEditMaterials = groupUser.getRole() == IllusionGroupUserRole.GAMEMASTER;
   
     return null;
   }
@@ -114,9 +125,14 @@ public class IllusionGroupBackingBean {
     return illusionFolderPath;
   }
   
+  public boolean getMayEditMaterials() {
+    return mayEditMaterials;
+  }
+  
   private Long id;
   private String name;
   private String description;
   private String indexText;
   private String illusionFolderPath;
+  private boolean mayEditMaterials;
 }
