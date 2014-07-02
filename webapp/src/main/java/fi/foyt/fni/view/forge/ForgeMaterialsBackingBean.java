@@ -91,6 +91,8 @@ public class ForgeMaterialsBackingBean {
         return "vector-image";
       case ILLUSION_GROUP_FOLDER:
         return "illusion-group-folder";
+      case ILLUSION_FOLDER:
+        return "illusion-group-folder";
       case ILLUSION_GROUP_DOCUMENT:
         return "document";
     }

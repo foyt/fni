@@ -41,6 +41,7 @@ public class ForgeIndexBackingBean extends AbstractForgeMaterialViewBackingBean 
 
     Collections.sort(materials, ComparatorUtils.chainedComparator(
       Arrays.asList(
+        new MaterialTypeComparator(MaterialType.ILLUSION_FOLDER),
         new MaterialTypeComparator(MaterialType.DROPBOX_ROOT_FOLDER),
         new MaterialTypeComparator(MaterialType.FOLDER), 
         new TitleComparator())
