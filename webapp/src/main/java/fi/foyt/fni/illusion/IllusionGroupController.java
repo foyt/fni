@@ -16,11 +16,14 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.dao.illusion.IllusionGroupDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionGroupSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionGroupUserDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionGroupUserImageDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionGroupUserSettingDAO;
+import fi.foyt.fni.persistence.dao.materials.IllusionFolderDAO;
+import fi.foyt.fni.persistence.dao.materials.IllusionGroupFolderDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupSettingKey;
@@ -28,11 +31,16 @@ import fi.foyt.fni.persistence.model.illusion.IllusionGroupUser;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserImage;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserSetting;
+import fi.foyt.fni.persistence.model.materials.IllusionFolder;
+import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
+import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.users.User;
 
 @Dependent
 @Stateless
 public class IllusionGroupController {
+  
+  private static final String ILLUSION_FOLDER_TITLE = "Illusion";
   
   @Inject
   private Logger logger;
@@ -48,14 +56,23 @@ public class IllusionGroupController {
   
   @Inject
   private IllusionGroupSettingDAO illusionGroupSettingDAO;
-  
+
   @Inject
   private IllusionGroupUserSettingDAO illusionGroupUserSettingDAO;
+
+  @Inject
+  private IllusionFolderDAO illusionFolderDAO;
+
+  @Inject
+  private IllusionGroupFolderDAO illusionGroupFolderDAO;
+  
+  @Inject
+  private MaterialController materialController;
   
   /* IllusionGroup */
 
-  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String xmppRoom, Date created) {
-    return illusionGroupDAO.create(urlName, name, description, xmppRoom, created);
+  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String xmppRoom, IllusionGroupFolder folder, Date created) {
+    return illusionGroupDAO.create(urlName, name, description, xmppRoom, folder, created);
   }
 
   public IllusionGroup findIllusionGroupById(Long id) {
@@ -177,5 +194,23 @@ public class IllusionGroupController {
     
     return result;
   }
+
+  /* IllusionFolder */
   
+  public IllusionFolder findUserIllusionFolder(User user, boolean createMissing) {
+    IllusionFolder illusionFolder = illusionFolderDAO.findByCreator(user);
+    if (illusionFolder == null && createMissing) {
+      String illusionUrlName = materialController.getUniqueMaterialUrlName(user, null, null,  ILLUSION_FOLDER_TITLE);
+      illusionFolder = illusionFolderDAO.create(user, illusionUrlName, ILLUSION_FOLDER_TITLE, MaterialPublicity.PRIVATE);
+    }
+    
+    return illusionFolder;
+  }
+  
+  /* IllusionGroupFolder */
+  
+  public IllusionGroupFolder createIllusionGroupFolder(User creator, IllusionFolder illusionFolder, String urlName, String title) {
+    return illusionGroupFolderDAO.create(creator, illusionFolder, urlName, title, MaterialPublicity.PRIVATE);
+  }
+
 }

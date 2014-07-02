@@ -18,14 +18,21 @@ import org.ocpsoft.rewrite.faces.annotation.Phase;
 
 import fi.foyt.fni.chat.ChatCredentialsController;
 import fi.foyt.fni.illusion.IllusionGroupController;
+import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
+import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
+import fi.foyt.fni.persistence.model.materials.IllusionFolder;
+import fi.foyt.fni.persistence.model.materials.IllusionGroupDocumentType;
+import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
+import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.utils.faces.FacesUtils;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @RequestScoped
@@ -47,6 +54,9 @@ public class IllusionCreateGroupBackingBean {
   @Inject
   private IllusionGroupController illusionGroupController;
 
+  @Inject
+  private IllusionGroupDocumentController illusionGroupDocumentController;
+  
 	@RequestAction
 	public void load() throws IOException, GeneralSecurityException {
     resolveNames();
@@ -107,11 +117,22 @@ public class IllusionCreateGroupBackingBean {
   public void save() throws Exception {
     Date now = new Date();
     String xmppRoom = urlName + '@' + systemSettingsController.getSetting(SystemSettingKey.CHAT_MUC_HOST);
+    User loggedUser = sessionController.getLoggedUser();
+    Language language = systemSettingsController.findLocaleByIso2(sessionController.getLocale().getLanguage());
+
+    IllusionFolder illusionFolder = illusionGroupController.findUserIllusionFolder(loggedUser, true);
+    IllusionGroupFolder illusionGroupFolder = illusionGroupController.createIllusionGroupFolder(loggedUser, illusionFolder, getUrlName(), getName());
+    IllusionGroup group = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getDescription(), xmppRoom, illusionGroupFolder, now);
     
-    IllusionGroup group = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getDescription(), xmppRoom, now);
+    String indexDocumentTitle = FacesUtils.getLocalizedValue("illusion.createGroup.indexDocumentTitle");
+    String indexDocumentContent = FacesUtils.getLocalizedValue("illusion.createGroup.indexDocumentContent");
+    String previewDocumentTitle = FacesUtils.getLocalizedValue("illusion.createGroup.previewDocumentTitle");
+    String previewDocumentContent = FacesUtils.getLocalizedValue("illusion.createGroup.previewDocumentContent");
+    
+    illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionGroupDocumentType.INDEX, language, illusionGroupFolder, "index", indexDocumentTitle, indexDocumentContent, MaterialPublicity.PRIVATE);
+    illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionGroupDocumentType.PREVIEW, language, illusionGroupFolder, "preview", previewDocumentTitle, previewDocumentContent, MaterialPublicity.PRIVATE);
     
     // Add game master
-    User loggedUser = sessionController.getLoggedUser();
     illusionGroupController.createIllusionGroupUser(loggedUser, group, getUserNickname(loggedUser), IllusionGroupUserRole.GAMEMASTER);
     
     // Add bot 
