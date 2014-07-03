@@ -25,6 +25,7 @@ import fi.foyt.fni.persistence.dao.illusion.IllusionGroupMemberSettingDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionFolderDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionGroupFolderDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
@@ -71,8 +72,8 @@ public class IllusionGroupController {
   
   /* IllusionGroup */
 
-  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String xmppRoom, IllusionGroupFolder folder, Date created) {
-    return illusionGroupDAO.create(urlName, name, description, xmppRoom, folder, created);
+  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String xmppRoom, IllusionGroupFolder folder, IllusionGroupJoinMode joinMode, Date created) {
+    return illusionGroupDAO.create(urlName, name, description, xmppRoom, folder, joinMode, created);
   }
 
   public IllusionGroup findIllusionGroupById(Long id) {

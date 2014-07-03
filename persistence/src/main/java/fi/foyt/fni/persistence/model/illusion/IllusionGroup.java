@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -75,6 +77,14 @@ public class IllusionGroup {
     this.folder = folder;
   }
   
+  public IllusionGroupJoinMode getJoinMode() {
+    return joinMode;
+  }
+  
+  public void setJoinMode(IllusionGroupJoinMode joinMode) {
+    this.joinMode = joinMode;
+  }
+  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
@@ -103,4 +113,8 @@ public class IllusionGroup {
   
   @OneToOne
   private IllusionGroupFolder folder;
+  
+  @Enumerated (EnumType.STRING)
+  @Column (nullable = false)
+  private IllusionGroupJoinMode joinMode;
 }
