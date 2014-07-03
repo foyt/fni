@@ -14,6 +14,7 @@ import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 
@@ -31,11 +32,16 @@ public class IllusionIndexBackingBean {
   private IllusionGroupController illusionGroupController;
 
   @RequestAction
-  public void init() {
+  public String init() {
     User loggedUser = sessionController.getLoggedUser();
+    if (loggedUser.getRole() != UserRole.ADMINISTRATOR) {
+      return "/index.jsf?faces-redirect=true";
+    }
     
     gameMasterGroups = illusionGroupController.listIllusionGroupsByUserAndRole(loggedUser, IllusionGroupMemberRole.GAMEMASTER);
     playerGroups = illusionGroupController.listIllusionGroupsByUserAndRole(loggedUser, IllusionGroupMemberRole.PLAYER);
+    
+    return null;
   }
   
   public List<IllusionGroup> getGameMasterGroups() {
