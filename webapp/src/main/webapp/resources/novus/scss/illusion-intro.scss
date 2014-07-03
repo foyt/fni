@@ -1,0 +1,25 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+/* Panels */ 
+
+.illusion-intro-panel {
+  @include generic-panel;
+  position: relative;
+  background: #fff;
+}
+
+/* Intro */
+
+.illusion-intro-text {
+  padding: 1in;
+}
+
+.illusion-intro-text *:first-child {
+  margin-top: 0px;
+}
+
+.illusion-intro-text {
+  @include html-default-styles;
+}
