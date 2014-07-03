@@ -9,10 +9,16 @@
   </ui:define>
   
   <ui:define name="view-scripts">
+    <!-- Token Input -->
+    
+    <h:outputScript name="scripts/jquery.tokeninput/jquery.tokeninput.js"/>
+   
+    <h:outputScript name="scripts/gui/illusion-members.js"/>
   </ui:define>
   
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <h:outputStylesheet library="novus" name="css/token-input.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-group-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-members.css"/>
   </ui:define>  
@@ -72,6 +78,8 @@
           
           <h:panelGroup layout="block" styleClass="illusion-members">
             <h:form>
+              <a href="javascript:void(null)" class="illusion-invite-members">#{locales['illusion.members.invitePlayers']}</a>
+              
               <h3>#{locales['illusion.members.playerListTitle']}</h3>
             
               <ui:repeat var="member" value="#{illusionMembersBackingBean.players}">
@@ -137,6 +145,8 @@
         </h:panelGroup>
       </h:panelGroup>   
     </h:panelGroup>
+    
+    <input type="hidden" name="groupUrlName" value="#{illusionMembersBackingBean.urlName}"/>
       
   </ui:define>
 

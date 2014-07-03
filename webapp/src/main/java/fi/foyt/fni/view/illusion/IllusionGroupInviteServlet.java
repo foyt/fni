@@ -1,24 +1,18 @@
 package fi.foyt.fni.view.illusion;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.apache.commons.lang3.math.NumberUtils;
 
-import fi.foyt.fni.chat.ChatCredentialsController;
 import fi.foyt.fni.illusion.IllusionGroupController;
-import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
@@ -38,9 +32,6 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
 
   @Inject
 	private SessionController sessionController;
-
-  @Inject
-	private ChatCredentialsController chatCredentialsController;
 
   @Inject
   private IllusionGroupController illusionGroupController;
@@ -82,8 +73,6 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
       return;
     }
-    
-    List<String> inviteJids = new ArrayList<>();
 
     String[] userIds = request.getParameterValues("userId");
     for (String userId : userIds) {
@@ -94,9 +83,6 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
           return;
         }
         
-        UserChatCredentials userChatCredentials = chatCredentialsController.findUserChatCredentialsByUser(user);
-        inviteJids.add(userChatCredentials.getUserJid());
-        
         IllusionGroupMember illusionGroupUser = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, user);
         if (illusionGroupUser == null) {
           illusionGroupController.createIllusionGroupMember(user, group, getUserNickname(user), IllusionGroupMemberRole.PLAYER);
@@ -106,35 +92,12 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
         return;
       }
     }
-    
-    response.setContentType("application/json");
-    ObjectMapper objectMapper = new ObjectMapper();
-    ServletOutputStream outputStream = response.getOutputStream();
-    try {
-      objectMapper.writeValue(outputStream, new ResponseJson(inviteJids));
-    } finally {
-      outputStream.flush();
-    }
-    
-	  response.setStatus(HttpServletResponse.SC_OK);
+
+	  response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 	}
 
   private String getUserNickname(User user) {
     return StringUtils.isNotBlank(user.getNickname()) ? user.getNickname() : user.getFullName();
   }
 
-  private static class ResponseJson {
-    
-    public ResponseJson(List<String> inviteJids) {
-      this.inviteJids = inviteJids;
-    }
-    
-    @SuppressWarnings("unused")
-    public List<String> getInviteJids() {
-      return inviteJids;
-    }
-    
-    private List<String> inviteJids;
-  }
-  
 }
