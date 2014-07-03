@@ -8,28 +8,29 @@
     <h:panelGroup layout="block" styleClass="grid_8 alpha slim-right">
       <h:panelGroup layout="block" styleClass="illusion-button-panel">
         <h:panelGroup layout="block" styleClass="illusion-menu">
-          <a href="javascript:void(null)">#{locales['illusion.group.materialMenu']}</a>
-          <h:panelGroup layout="block" styleClass="illusion-menu-help">#{locales['illusion.group.materialMenuHelp']}</h:panelGroup>
+          <a href="javascript:void(null)">#{locales['illusion.menu.materialMenu']}</a>
+          <h:panelGroup layout="block" styleClass="illusion-menu-help">#{locales['illusion.menu.materialMenuHelp']}</h:panelGroup>
           <h:panelGroup layout="block" styleClass="illusion-menu-items">
-            <h:link outcome="/illusion/materials.jsf" value="#{locales['illusion.group.materialShowMaterials']}">
+            <h:link outcome="/illusion/materials.jsf" value="#{locales['illusion.menu.materialShowMaterials']}">
               <f:param name="urlName" value="#{groupUrlName}"/>
             </h:link>
-            <h:outputLink value="#{request.contextPath}/forge/folders/#{illusionFolderPath}" rendered="#{mayEditMaterials}">
-              <h:outputText value="#{locales['illusion.group.materialEditMaterials']}"/>
+            <h:outputLink value="#{request.contextPath}/forge/folders/#{illusionFolderPath}" rendered="#{mayManageGroup}">
+              <h:outputText value="#{locales['illusion.menu.materialEditMaterials']}"/>
             </h:outputLink>
           </h:panelGroup>
         </h:panelGroup>
       </h:panelGroup>
     </h:panelGroup>
-      
+    
     <h:panelGroup layout="block" styleClass="grid_8 omega slim-left">
       <h:panelGroup layout="block" styleClass="illusion-button-panel">
         <h:panelGroup layout="block" styleClass="illusion-menu">
-          <a href="javascript:void(null)">Menu 2</a>
-          <h:panelGroup layout="block" styleClass="illusion-menu-help">Description for menu 2</h:panelGroup>
+          <a href="javascript:void(null)">#{locales['illusion.menu.settingsMenu']}</a>
+          <h:panelGroup layout="block" styleClass="illusion-menu-help">#{locales['illusion.menu.settingsMenuHelp']}</h:panelGroup>
           <h:panelGroup layout="block" styleClass="illusion-menu-items">
-            <a href="javascript:void(null)">Menu item #1</a>
-            <a href="javascript:void(null)">Menu item #2</a>
+            <h:link outcome="/illusion/members.jsf" value="#{locales['illusion.menu.settingsManageMembers']}" rendered="#{mayManageGroup}">
+              <f:param name="urlName" value="#{groupUrlName}"/>
+            </h:link>
           </h:panelGroup>
         </h:panelGroup>
       </h:panelGroup>

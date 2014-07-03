@@ -40,7 +40,7 @@ public abstract class AbstractIllusionGroupBackingBean {
     name = illusionGroup.getName();
     description = illusionGroup.getDescription();
     illusionFolderPath = folder.getPath();
-    mayEditMaterials = groupUser.getRole() == IllusionGroupMemberRole.GAMEMASTER;
+    mayManageGroup = groupUser.getRole() == IllusionGroupMemberRole.GAMEMASTER;
   
     return init(illusionGroup, groupUser);
   }
@@ -68,13 +68,13 @@ public abstract class AbstractIllusionGroupBackingBean {
     return illusionFolderPath;
   }
   
-  public boolean getMayEditMaterials() {
-    return mayEditMaterials;
+  public boolean getMayManageGroup() {
+    return mayManageGroup;
   }
   
   private Long id;
   private String name;
   private String description;
   private String illusionFolderPath;
-  private boolean mayEditMaterials;
+  private boolean mayManageGroup;
 }
