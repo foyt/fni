@@ -126,11 +126,11 @@ public class IllusionCreateGroupBackingBean {
     
     String indexDocumentTitle = FacesUtils.getLocalizedValue("illusion.createGroup.indexDocumentTitle");
     String indexDocumentContent = FacesUtils.getLocalizedValue("illusion.createGroup.indexDocumentContent");
-    String previewDocumentTitle = FacesUtils.getLocalizedValue("illusion.createGroup.previewDocumentTitle");
-    String previewDocumentContent = FacesUtils.getLocalizedValue("illusion.createGroup.previewDocumentContent");
+    String introDocumentTitle = FacesUtils.getLocalizedValue("illusion.createGroup.introDocumentTitle");
+    String introDocumentContent = FacesUtils.getLocalizedValue("illusion.createGroup.introDocumentContent");
     
     illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionGroupDocumentType.INDEX, language, illusionGroupFolder, "index", indexDocumentTitle, indexDocumentContent, MaterialPublicity.PRIVATE);
-    illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionGroupDocumentType.PREVIEW, language, illusionGroupFolder, "preview", previewDocumentTitle, previewDocumentContent, MaterialPublicity.PRIVATE);
+    illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionGroupDocumentType.INTRO, language, illusionGroupFolder, "intro", introDocumentTitle, introDocumentContent, MaterialPublicity.PRIVATE);
     
     // Add game master
     illusionGroupController.createIllusionGroupMember(loggedUser, group, getUserNickname(loggedUser), IllusionGroupMemberRole.GAMEMASTER);
