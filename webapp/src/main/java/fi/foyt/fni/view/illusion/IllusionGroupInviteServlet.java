@@ -20,8 +20,8 @@ import fi.foyt.fni.chat.ChatCredentialsController;
 import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupUser;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
@@ -77,8 +77,8 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
       return;
     }
     
-    IllusionGroupUser loggedGroupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(group, loggedUser);
-    if ((loggedGroupUser == null)||(loggedGroupUser.getRole() != IllusionGroupUserRole.GAMEMASTER)) {
+    IllusionGroupMember loggedGroupUser = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, loggedUser);
+    if ((loggedGroupUser == null)||(loggedGroupUser.getRole() != IllusionGroupMemberRole.GAMEMASTER)) {
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
       return;
     }
@@ -97,9 +97,9 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
         UserChatCredentials userChatCredentials = chatCredentialsController.findUserChatCredentialsByUser(user);
         inviteJids.add(userChatCredentials.getUserJid());
         
-        IllusionGroupUser illusionGroupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(group, user);
+        IllusionGroupMember illusionGroupUser = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, user);
         if (illusionGroupUser == null) {
-          illusionGroupController.createIllusionGroupUser(user, group, getUserNickname(user), IllusionGroupUserRole.PLAYER);
+          illusionGroupController.createIllusionGroupMember(user, group, getUserNickname(user), IllusionGroupMemberRole.PLAYER);
         }
       } else {
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);

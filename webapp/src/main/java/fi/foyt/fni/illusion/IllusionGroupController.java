@@ -19,18 +19,18 @@ import org.codehaus.jackson.map.ObjectMapper;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.dao.illusion.IllusionGroupDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionGroupSettingDAO;
-import fi.foyt.fni.persistence.dao.illusion.IllusionGroupUserDAO;
-import fi.foyt.fni.persistence.dao.illusion.IllusionGroupUserImageDAO;
-import fi.foyt.fni.persistence.dao.illusion.IllusionGroupUserSettingDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionGroupMemberDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionGroupMemberImageDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionGroupMemberSettingDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionFolderDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionGroupFolderDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupSettingKey;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupUser;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserImage;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserSetting;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberImage;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberSetting;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
@@ -49,16 +49,16 @@ public class IllusionGroupController {
   private IllusionGroupDAO illusionGroupDAO;
 
   @Inject
-  private IllusionGroupUserDAO illusionGroupUserDAO;
+  private IllusionGroupMemberDAO illusionGroupMemberDAO;
 
   @Inject
-  private IllusionGroupUserImageDAO illusionGroupUserImageDAO;
+  private IllusionGroupMemberImageDAO illusionGroupMemberImageDAO;
   
   @Inject
   private IllusionGroupSettingDAO illusionGroupSettingDAO;
 
   @Inject
-  private IllusionGroupUserSettingDAO illusionGroupUserSettingDAO;
+  private IllusionGroupMemberSettingDAO illusionGroupMemberSettingDAO;
 
   @Inject
   private IllusionFolderDAO illusionFolderDAO;
@@ -83,55 +83,67 @@ public class IllusionGroupController {
     return illusionGroupDAO.findByUrlName(urlName);
   }
 
-  public List<IllusionGroup> listIllusionGroupsByUserAndRole(User user, IllusionGroupUserRole role) {
-    return illusionGroupUserDAO.listIllusionGroupsByUserAndRole(user, role);
+  public List<IllusionGroup> listIllusionGroupsByUserAndRole(User user, IllusionGroupMemberRole role) {
+    return illusionGroupMemberDAO.listIllusionGroupsByUserAndRole(user, role);
   }
 
-  /* IllusionGroupUser */
+  /* IllusionGroupMember */
   
-  public IllusionGroupUser createIllusionGroupUser(User user, IllusionGroup group, String nickname, IllusionGroupUserRole role) {
-    return illusionGroupUserDAO.create(user, group, nickname, role);
-  }
-  
-  public IllusionGroupUser findIllusionGroupUserByUserAndGroup(IllusionGroup group, User user) {
-    return illusionGroupUserDAO.findByGroupAndUser(group, user);
-  }
-  
-  public List<IllusionGroupUser> listIllusionGroupUsersByGroup(IllusionGroup group) {
-    return illusionGroupUserDAO.listByGroup(group);
+  public IllusionGroupMember createIllusionGroupMember(User user, IllusionGroup group, String nickname, IllusionGroupMemberRole role) {
+    return illusionGroupMemberDAO.create(user, group, nickname, role);
   }
 
-  public Long countIllusionGroupUsersByGroupAndRole(IllusionGroup group, IllusionGroupUserRole role) {
-    return illusionGroupUserDAO.countByGroupAndRole(group, role);
+  public IllusionGroupMember findIllusionGroupMemberById(Long memberId) {
+    return illusionGroupMemberDAO.findById(memberId);
   }
   
-  public IllusionGroupUser updateIllusionGroupUserNickname(IllusionGroupUser illusionGroupUser, String nickname) {
-    return illusionGroupUserDAO.updateNickname(illusionGroupUser, nickname);
+  public IllusionGroupMember findIllusionGroupMemberByUserAndGroup(IllusionGroup group, User user) {
+    return illusionGroupMemberDAO.findByGroupAndUser(group, user);
   }
   
-  /* IllusionGroupUserImage */
+  public List<IllusionGroupMember> listIllusionGroupMembersByGroup(IllusionGroup group) {
+    return illusionGroupMemberDAO.listByGroup(group);
+  }
+  
+  public List<IllusionGroupMember> listIllusionGroupMembersByGroupAndRole(IllusionGroup group, IllusionGroupMemberRole role) {
+    return illusionGroupMemberDAO.listByGroupAndRole(group, role);
+  }
 
-  public IllusionGroupUserImage createIllusionGroupUserImage(IllusionGroupUser user, String contentType, byte[] data, Date modified) {
-    return illusionGroupUserImageDAO.create(user, contentType, data, modified);
-  }
-
-  public IllusionGroupUserImage findIllusionGroupUserImageByUser(IllusionGroupUser user) {
-    return illusionGroupUserImageDAO.findByUser(user);
+  public Long countIllusionGroupMembersByGroupAndRole(IllusionGroup group, IllusionGroupMemberRole role) {
+    return illusionGroupMemberDAO.countByGroupAndRole(group, role);
   }
   
-  public IllusionGroupUserImage updateIllusionGroupUserImage(IllusionGroupUserImage image, String contentType, byte[] data, Date modified) {
-    return illusionGroupUserImageDAO.updateModified(illusionGroupUserImageDAO.updateContentType(illusionGroupUserImageDAO.updateData(image, data), contentType), modified);
+  public IllusionGroupMember updateIllusionGroupMemberCharacterName(IllusionGroupMember member, String characterName) {
+    return illusionGroupMemberDAO.updateCharacterName(member, characterName);
+  }
+
+  public IllusionGroupMember updateIllusionGroupMemberRole(IllusionGroupMember member, IllusionGroupMemberRole role) {
+    return illusionGroupMemberDAO.updateRole(member, role);
+  }
+
+  /* IllusionGroupMemberImage */
+
+  public IllusionGroupMemberImage createIllusionGroupMemberImage(IllusionGroupMember member, String contentType, byte[] data, Date modified) {
+    return illusionGroupMemberImageDAO.create(member, contentType, data, modified);
+  }
+
+  public IllusionGroupMemberImage findIllusionGroupMemberImageByMember(IllusionGroupMember member) {
+    return illusionGroupMemberImageDAO.findByMember(member);
+  }
+  
+  public IllusionGroupMemberImage updateIllusionGroupMemberImage(IllusionGroupMemberImage image, String contentType, byte[] data, Date modified) {
+    return illusionGroupMemberImageDAO.updateModified(illusionGroupMemberImageDAO.updateContentType(illusionGroupMemberImageDAO.updateData(image, data), contentType), modified);
   }
   
   /* Settings */
   
-  public String getIllusionGroupSettingValue(IllusionGroupUser user, IllusionGroupSettingKey key) {
-    IllusionGroupUserSetting userSetting = illusionGroupUserSettingDAO.findByUserAndKey(user, key);
+  public String getIllusionGroupSettingValue(IllusionGroupMember member, IllusionGroupSettingKey key) {
+    IllusionGroupMemberSetting userSetting = illusionGroupMemberSettingDAO.findByMemberAndKey(member, key);
     if ((userSetting != null) && StringUtils.isNotBlank(userSetting.getValue())) {
       return userSetting.getValue();
     }
     
-    IllusionGroupSetting groupSetting = illusionGroupSettingDAO.findByUserAndKey(user.getGroup(), key);
+    IllusionGroupSetting groupSetting = illusionGroupSettingDAO.findByUserAndKey(member.getGroup(), key);
     if (groupSetting != null) {
       return groupSetting.getValue();
     }
@@ -139,7 +151,7 @@ public class IllusionGroupController {
     return null;
   }
   
-  public Object getIllusionGroupUserSetting(IllusionGroupUser groupUser, IllusionGroupSettingKey key) {
+  public Object getIllusionGroupUserSetting(IllusionGroupMember groupUser, IllusionGroupSettingKey key) {
     switch (key) {
       case DICE:
         return getIllusionGroupDiceSetting(groupUser);
@@ -148,7 +160,7 @@ public class IllusionGroupController {
     return null;
   }
   
-  private <T> T getIllusionGroupSetting(IllusionGroupUser user, IllusionGroupSettingKey key, Class<T> clazz) {
+  private <T> T getIllusionGroupSetting(IllusionGroupMember user, IllusionGroupSettingKey key, Class<T> clazz) {
     String value = getIllusionGroupSettingValue(user, key);
     if (StringUtils.isNotBlank(value)) {
       ObjectMapper objectMapper = new ObjectMapper();
@@ -162,7 +174,7 @@ public class IllusionGroupController {
     return null;
   }
   
-  public List<String> getIllusionGroupDiceSetting(IllusionGroupUser user) {
+  public List<String> getIllusionGroupDiceSetting(IllusionGroupMember user) {
     @SuppressWarnings("unchecked")
     List<String> result = getIllusionGroupSetting(user, IllusionGroupSettingKey.DICE, List.class);
     if (result == null) {
@@ -172,16 +184,16 @@ public class IllusionGroupController {
     return result;
   }
 
-  public IllusionGroupUserSetting setIllusionGroupSettingValue(IllusionGroupUser groupUser, IllusionGroupSettingKey key, String value) {
-    IllusionGroupUserSetting setting = illusionGroupUserSettingDAO.findByUserAndKey(groupUser, key);
+  public IllusionGroupMemberSetting setIllusionGroupSettingValue(IllusionGroupMember member, IllusionGroupSettingKey key, String value) {
+    IllusionGroupMemberSetting setting = illusionGroupMemberSettingDAO.findByMemberAndKey(member, key);
     if (setting == null) {
-      return illusionGroupUserSettingDAO.create(groupUser, key, value);
+      return illusionGroupMemberSettingDAO.create(member, key, value);
     } else {
-      return illusionGroupUserSettingDAO.updateValue(setting, value);
+      return illusionGroupMemberSettingDAO.updateValue(setting, value);
     }
   }
 
-  public Map<IllusionGroupSettingKey, Object> getIllusionGroupUserSettings(IllusionGroupUser groupUser) {
+  public Map<IllusionGroupSettingKey, Object> getIllusionGroupUserSettings(IllusionGroupMember groupUser) {
     Map<IllusionGroupSettingKey, Object> result = new HashMap<>();
     
     for (IllusionGroupSettingKey key : IllusionGroupSettingKey.values()) {

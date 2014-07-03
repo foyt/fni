@@ -22,7 +22,7 @@ import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
@@ -133,7 +133,7 @@ public class IllusionCreateGroupBackingBean {
     illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionGroupDocumentType.PREVIEW, language, illusionGroupFolder, "preview", previewDocumentTitle, previewDocumentContent, MaterialPublicity.PRIVATE);
     
     // Add game master
-    illusionGroupController.createIllusionGroupUser(loggedUser, group, getUserNickname(loggedUser), IllusionGroupUserRole.GAMEMASTER);
+    illusionGroupController.createIllusionGroupMember(loggedUser, group, getUserNickname(loggedUser), IllusionGroupMemberRole.GAMEMASTER);
     
     // Add bot 
     String botJid = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOT_JID);
@@ -143,7 +143,7 @@ public class IllusionCreateGroupBackingBean {
       throw new Exception("Configuration error, could not find chatbot user");
     }
     
-    illusionGroupController.createIllusionGroupUser(botChatCredentials.getUser(), group, getUserNickname(botChatCredentials.getUser()), IllusionGroupUserRole.BOT);
+    illusionGroupController.createIllusionGroupMember(botChatCredentials.getUser(), group, getUserNickname(botChatCredentials.getUser()), IllusionGroupMemberRole.BOT);
     
     String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
     

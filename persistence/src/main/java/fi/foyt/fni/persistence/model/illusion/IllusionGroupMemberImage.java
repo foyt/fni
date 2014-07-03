@@ -16,18 +16,18 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-public class IllusionGroupUserImage {
+public class IllusionGroupMemberImage {
 	
 	public Long getId() {
 		return id;
 	}
 	
-	public IllusionGroupUser getUser() {
-    return user;
+	public IllusionGroupMember getMember() {
+    return member;
   }
 	
-	public void setUser(IllusionGroupUser user) {
-    this.user = user;
+	public void setMember(IllusionGroupMember member) {
+    this.member = member;
   }
   
   public byte[] getData() {
@@ -59,7 +59,7 @@ public class IllusionGroupUserImage {
   private Long id;
  
   @ManyToOne
-  private IllusionGroupUser user;
+  private IllusionGroupMember member;
   
   @Lob
   private byte[] data;

@@ -17,13 +17,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import fi.foyt.fni.chat.ChatCredentialsController;
 import fi.foyt.fni.illusion.IllusionGroupController;
-import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupUser;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserImage;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberImage;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
@@ -46,9 +44,6 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
 	private SessionController sessionController;
 
   @Inject
-	private ChatCredentialsController chatCredentialsController;
-
-  @Inject
   private IllusionGroupController illusionGroupController;
 
 	@Override
@@ -65,13 +60,13 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
 	  }
 	  
-	  String groupUrlName = pathItems[0];
-	  String userJid = pathItems[1];
-	  
-	  if (StringUtils.isBlank(groupUrlName) || StringUtils.isBlank(userJid)) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+	  if (StringUtils.isBlank(pathItems[0]) || !StringUtils.isNumeric(pathItems[1])) {
+	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
+	  
+	  String groupUrlName = pathItems[0];
+	  Long memberId = NumberUtils.createLong(pathItems[1]);
 	  
 	  Integer size = NumberUtils.createInteger(request.getParameter("size"));
     if (size == null) {
@@ -90,33 +85,30 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
 	  }
 	  
-	  // TODO: Check whether user is a participant or not...
-  	  
-	  UserChatCredentials userChatCredentials = chatCredentialsController.findUserChatCredentialsByUserJid(userJid);
-	  if (userChatCredentials == null) {
-	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
-	    return;
-	  }
-    
+	  IllusionGroupMember member = illusionGroupController.findIllusionGroupMemberById(memberId);
+	  if (member == null) {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      return;
+    }
+	  
     IllusionGroup group = illusionGroupController.findIllusionGroupByUrlName(groupUrlName);
     if (group == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
-    IllusionGroupUser groupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(group, userChatCredentials.getUser());
-    if (groupUser == null) {
+    if (!group.getId().equals(member.getGroup().getId())) {
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
       return;
     }
     
     TypedData profileImage = null;
     
-    IllusionGroupUserImage image = illusionGroupController.findIllusionGroupUserImageByUser(groupUser);
+    IllusionGroupMemberImage image = illusionGroupController.findIllusionGroupMemberImageByMember(member);
     if (image != null) {
       profileImage = new TypedData(image.getData(), image.getContentType(), image.getModified());
     } else {
-      User user = userChatCredentials.getUser();
+      User user = member.getUser();
       if (user != null) {
         switch (user.getProfileImageSource()) {
           case FNI:
@@ -146,7 +138,7 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
     TypedData imageData = null;
 	  if (!isModifiedSince(request, lastModified, eTag)) {
 	    response.setHeader("ETag", eTag); // Required in 304.
-	    response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
+	    response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 	    return;
 	  }
 	  
@@ -194,13 +186,13 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
     }
     
-    String groupUrlName = pathItems[0];
-    String userJid = pathItems[1];
-    
-    if (StringUtils.isBlank(groupUrlName) || StringUtils.isBlank(userJid)) {
+    if (StringUtils.isBlank(pathItems[0]) || !StringUtils.isNumeric(pathItems[1])) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
+    
+    String groupUrlName = pathItems[0];
+    Long memberId = NumberUtils.createLong(pathItems[1]);
     
     if (!sessionController.isLoggedIn()) {
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
@@ -230,26 +222,20 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return; 
 	  }
 	  
-	  UserChatCredentials userChatCredentials = chatCredentialsController.findUserChatCredentialsByUserJid(userJid);
-	  if (userChatCredentials == null) {
-	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
-      return;
-	  }
-	  
-	  IllusionGroupUser groupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(group, userChatCredentials.getUser());
-	  if (groupUser == null) {
+	  IllusionGroupMember member = illusionGroupController.findIllusionGroupMemberById(memberId);
+	  if (member == null) {
 	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
     
-    if (!groupUser.getUser().getId().equals(sessionController.getLoggedUserId())) {
-      IllusionGroupUser loggedGroupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(group, sessionController.getLoggedUser());
+    if (!member.getUser().getId().equals(sessionController.getLoggedUserId())) {
+      IllusionGroupMember loggedGroupUser = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, sessionController.getLoggedUser());
       if (loggedGroupUser == null) {
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
         return;
       }
       
-      if (loggedGroupUser.getRole() != IllusionGroupUserRole.GAMEMASTER) {
+      if (loggedGroupUser.getRole() != IllusionGroupMemberRole.GAMEMASTER) {
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
         return;
       }
@@ -259,11 +245,11 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
     byte[] data = Base64.decodeBase64(dataParts[1]);
     Date now = new Date();
 	  
-	  IllusionGroupUserImage image = illusionGroupController.findIllusionGroupUserImageByUser(groupUser);
+	  IllusionGroupMemberImage image = illusionGroupController.findIllusionGroupMemberImageByMember(member);
 	  if (image != null) {
-	    illusionGroupController.updateIllusionGroupUserImage(image, contentType, data, now);
+	    illusionGroupController.updateIllusionGroupMemberImage(image, contentType, data, now);
 	  } else {
-	    illusionGroupController.createIllusionGroupUserImage(groupUser, contentType, data, now);
+	    illusionGroupController.createIllusionGroupMemberImage(member, contentType, data, now);
 	  }
 	  
 	  response.setStatus(HttpServletResponse.SC_NO_CONTENT);

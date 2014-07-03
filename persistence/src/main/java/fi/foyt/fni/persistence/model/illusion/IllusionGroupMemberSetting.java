@@ -11,18 +11,18 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class IllusionGroupUserSetting {
+public class IllusionGroupMemberSetting {
 	
 	public Long getId() {
 		return id;
 	}
 	
-	public IllusionGroupUser getUser() {
-    return user;
+	public IllusionGroupMember getMember() {
+    return member;
   }
 	
-	public void setUser(IllusionGroupUser user) {
-    this.user = user;
+	public void setMember(IllusionGroupMember member) {
+    this.member = member;
   }
 	
 	public IllusionGroupSettingKey getKey() {
@@ -46,7 +46,7 @@ public class IllusionGroupUserSetting {
   private Long id;
  
   @ManyToOne
-  private IllusionGroupUser user;
+  private IllusionGroupMember member;
 
   @Enumerated (EnumType.STRING)
   @NotNull

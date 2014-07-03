@@ -15,25 +15,25 @@ import org.hibernate.validator.constraints.NotEmpty;
 import fi.foyt.fni.persistence.model.users.User;
 
 @Entity
-public class IllusionGroupUser {
+public class IllusionGroupMember {
 
   public Long getId() {
     return id;
   }
   
-  public String getNickname() {
-    return nickname;
+  public String getCharacterName() {
+    return characterName;
   }
   
-  public void setNickname(String nickname) {
-    this.nickname = nickname;
+  public void setCharacterName(String characterName) {
+    this.characterName = characterName;
   }
   
-  public IllusionGroupUserRole getRole() {
+  public IllusionGroupMemberRole getRole() {
     return role;
   }
   
-  public void setRole(IllusionGroupUserRole role) {
+  public void setRole(IllusionGroupMemberRole role) {
     this.role = role;
   }
   
@@ -60,7 +60,7 @@ public class IllusionGroupUser {
   @Column (nullable = false)
   @NotNull
   @NotEmpty
-  private String nickname;
+  private String characterName;
 
   @ManyToOne
   private User user;
@@ -70,5 +70,5 @@ public class IllusionGroupUser {
   
   @NotNull
   @Enumerated (EnumType.STRING)
-  private IllusionGroupUserRole role;
+  private IllusionGroupMemberRole role;
 }

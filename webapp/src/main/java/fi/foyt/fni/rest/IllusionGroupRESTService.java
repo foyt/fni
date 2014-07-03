@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupSettingKey;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupUser;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 
@@ -50,12 +50,12 @@ public class IllusionGroupRESTService {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    IllusionGroupUser groupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(group, loggedUser);
-    if (groupUser == null) {
+    IllusionGroupMember groupMember = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, loggedUser);
+    if (groupMember == null) {
       return Response.status(Status.FORBIDDEN).build();
     }
     
-    Map<IllusionGroupSettingKey, Object> settings = illusionGroupController.getIllusionGroupUserSettings(groupUser);
+    Map<IllusionGroupSettingKey, Object> settings = illusionGroupController.getIllusionGroupUserSettings(groupMember);
     
     return Response.ok(settings).build();
   }
@@ -77,12 +77,12 @@ public class IllusionGroupRESTService {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    IllusionGroupUser groupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(group, loggedUser);
-    if (groupUser == null) {
+    IllusionGroupMember groupMember = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, loggedUser);
+    if (groupMember == null) {
       return Response.status(Status.FORBIDDEN).build();
     }
     
-    return Response.ok(illusionGroupController.getIllusionGroupUserSetting(groupUser, key)).build();
+    return Response.ok(illusionGroupController.getIllusionGroupUserSetting(groupMember, key)).build();
   }
 
   @PUT
@@ -102,7 +102,7 @@ public class IllusionGroupRESTService {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    IllusionGroupUser groupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(group, loggedUser);
+    IllusionGroupMember groupUser = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, loggedUser);
     if (groupUser == null) {
       return Response.status(Status.FORBIDDEN).build();
     }

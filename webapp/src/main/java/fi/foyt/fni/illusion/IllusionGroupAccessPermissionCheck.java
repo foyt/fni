@@ -6,7 +6,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupUser;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.PermissionCheck;
 import fi.foyt.fni.security.PermissionCheckImplementation;
@@ -31,7 +31,7 @@ public class IllusionGroupAccessPermissionCheck implements PermissionCheckImplem
         throw new SecurityException("Could not resolve Illusion group while checking permission for ILLUSION_GROUP_ACCESS");
       }
       
-      IllusionGroupUser illusionGroupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(illusionGroup, sessionController.getLoggedUser());
+      IllusionGroupMember illusionGroupUser = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionGroup, sessionController.getLoggedUser());
       return illusionGroupUser != null;
     }
     
