@@ -48,7 +48,11 @@ public class IllusionGroupBackingBean extends AbstractIllusionGroupBackingBean {
   private MaterialController materialController;
   
   @Override
-  public String init(IllusionGroup illusionGroup, IllusionGroupMember groupUser) {
+  public String init(IllusionGroup illusionGroup, IllusionGroupMember member) {
+    if (member == null) {
+      return "/error/access-denied.jsf";
+    }
+    
     IllusionGroupFolder folder = illusionGroup.getFolder();
     User loggedUser = sessionController.getLoggedUser();
     

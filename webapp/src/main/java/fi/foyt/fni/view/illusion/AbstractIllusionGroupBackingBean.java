@@ -27,22 +27,23 @@ public abstract class AbstractIllusionGroupBackingBean {
       return "/error/not-found.jsf";
     }
     
-    User loggedUser = sessionController.getLoggedUser();
-
-    IllusionGroupMember groupUser = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionGroup, loggedUser);
-    if (groupUser == null) {
-      return "/error/access-denied.jsf";
+    IllusionGroupMember member = null;
+    
+    if (sessionController.isLoggedIn()) {
+      User loggedUser = sessionController.getLoggedUser();
+  
+      member = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionGroup, loggedUser);
     }
-
+    
     IllusionGroupFolder folder = illusionGroup.getFolder();
     
     id = illusionGroup.getId();
     name = illusionGroup.getName();
     description = illusionGroup.getDescription();
     illusionFolderPath = folder.getPath();
-    mayManageGroup = groupUser.getRole() == IllusionGroupMemberRole.GAMEMASTER;
+    mayManageGroup = member != null ? member.getRole() == IllusionGroupMemberRole.GAMEMASTER : false;
   
-    return init(illusionGroup, groupUser);
+    return init(illusionGroup, member);
   }
 
   public abstract String init(IllusionGroup illusionGroup, IllusionGroupMember groupUser);

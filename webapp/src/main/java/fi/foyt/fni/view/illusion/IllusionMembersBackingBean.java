@@ -35,8 +35,8 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   private IllusionGroupController illusionGroupController;
   
   @Override
-  public String init(IllusionGroup illusionGroup, IllusionGroupMember groupUser) {
-    if (groupUser.getRole() != IllusionGroupMemberRole.GAMEMASTER) {
+  public String init(IllusionGroup illusionGroup, IllusionGroupMember member) {
+    if ((member == null) || (member.getRole() != IllusionGroupMemberRole.GAMEMASTER)) {
       return "/error/access-denied.jsf";
     }
 
