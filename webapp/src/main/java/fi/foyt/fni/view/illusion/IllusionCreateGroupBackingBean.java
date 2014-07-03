@@ -1,7 +1,5 @@
 package fi.foyt.fni.view.illusion;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.Date;
 
 import javax.ejb.Stateful;
@@ -12,9 +10,6 @@ import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
-import org.ocpsoft.rewrite.annotation.RequestAction;
-import org.ocpsoft.rewrite.faces.annotation.Deferred;
-import org.ocpsoft.rewrite.faces.annotation.Phase;
 
 import fi.foyt.fni.chat.ChatCredentialsController;
 import fi.foyt.fni.illusion.IllusionGroupController;
@@ -22,6 +17,7 @@ import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocumentType;
@@ -57,17 +53,6 @@ public class IllusionCreateGroupBackingBean {
   @Inject
   private IllusionGroupDocumentController illusionGroupDocumentController;
   
-	@RequestAction
-	public void load() throws IOException, GeneralSecurityException {
-    resolveNames();
-	}
-	
-	@RequestAction
-	@Deferred (after = Phase.UPDATE_MODEL_VALUES)
-  public void applyValues() {
-    resolveNames();
-	}
-	
 	public String getName() {
     return name;
   }
@@ -84,13 +69,13 @@ public class IllusionCreateGroupBackingBean {
     this.description = description;
   }
 	
-	public String getUrlName() {
-    return urlName;
+	public IllusionGroupJoinMode getJoinMode() {
+    return joinMode;
   }
 	
-	private void resolveNames() {
-	  this.urlName = createUrlName(getName());
-	}
+	public void setJoinMode(IllusionGroupJoinMode joinMode) {
+    this.joinMode = joinMode;
+  }
 	
 	private String createUrlName(String name) {
     int maxLength = 20;
@@ -116,13 +101,15 @@ public class IllusionCreateGroupBackingBean {
 	
   public void save() throws Exception {
     Date now = new Date();
+    
+    String urlName = createUrlName(getName());
     String xmppRoom = urlName + '@' + systemSettingsController.getSetting(SystemSettingKey.CHAT_MUC_HOST);
     User loggedUser = sessionController.getLoggedUser();
     Language language = systemSettingsController.findLocaleByIso2(sessionController.getLocale().getLanguage());
 
     IllusionFolder illusionFolder = illusionGroupController.findUserIllusionFolder(loggedUser, true);
-    IllusionGroupFolder illusionGroupFolder = illusionGroupController.createIllusionGroupFolder(loggedUser, illusionFolder, getUrlName(), getName());
-    IllusionGroup group = illusionGroupController.createIllusionGroup(getUrlName(), getName(), getDescription(), xmppRoom, illusionGroupFolder, now);
+    IllusionGroupFolder illusionGroupFolder = illusionGroupController.createIllusionGroupFolder(loggedUser, illusionFolder, urlName, getName());
+    IllusionGroup group = illusionGroupController.createIllusionGroup(urlName, getName(), getDescription(), xmppRoom, illusionGroupFolder, getJoinMode(), now);
     
     String indexDocumentTitle = FacesUtils.getLocalizedValue("illusion.createGroup.indexDocumentTitle");
     String indexDocumentContent = FacesUtils.getLocalizedValue("illusion.createGroup.indexDocumentContent");
@@ -160,5 +147,5 @@ public class IllusionCreateGroupBackingBean {
 	
 	private String name;
 	private String description;
-	private String urlName;
+	private IllusionGroupJoinMode joinMode;
 }
