@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">
+    <h:outputFormat value="#{locales['illusion.materials.pageTitle']}">
+      <f:param value="#{illusionMembersBackingBean.name}"/>
+    </h:outputFormat>
+  </ui:define>
+  
+  <ui:define name="view-scripts">
+  </ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <h:outputStylesheet library="novus" name="css/illusion-group-common.css"/>
+    <h:outputStylesheet library="novus" name="css/illusion-members.css"/>
+  </ui:define>  
+
+  <ui:define name="grid-content">
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/index.jsf">#{locales['illusion.members.navigationIndex']}</h:link>
+        </h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/illusion/index.jsf">#{locales['illusion.members.navigationIllusion']}</h:link>
+        </h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/illusion/group.jsf">
+            <f:param name="urlName" value="#{illusionMembersBackingBean.urlName}"/>
+            <h:outputText value="#{illusionMembersBackingBean.name}" />
+          </h:link>
+        </h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/illusion/members.jsf">
+            <f:param name="urlName" value="#{illusionMembersBackingBean.urlName}"/>
+            <h:outputText value="#{locales['illusion.members.navigationMembers']}" />
+          </h:link>
+        </h:panelGroup>
+      </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{illusionMembersBackingBean.name}</p>
+        <p class="view-header-description-text">#{illusionMembersBackingBean.description}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <!-- Content -->
+
+    <ui:include src="/facelets/illusionmenu.xhtml">
+      <ui:param name="mayEditMaterials" value="#{illusionMembersBackingBean.mayEditMaterials}" />
+      <ui:param name="groupUrlName" value="#{illusionMembersBackingBean.urlName}" />
+      <ui:param name="illusionFolderPath" value="#{illusionMembersBackingBean.illusionFolderPath}" />
+    </ui:include>
+
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="grid_8 alpha slim-right">
+        <h:panelGroup layout="block" styleClass="illusion-members-panel">
+          <h2>#{locales['illusion.members.membersListTitle']}</h2>
+          
+          <h:panelGroup layout="block" styleClass="illusion-members">
+            <h:form>
+              <h3>#{locales['illusion.members.playerListTitle']}</h3>
+            
+              <ui:repeat var="member" value="#{illusionMembersBackingBean.players}">
+                <h:commandLink action="#{illusionMembersBackingBean.selectMember(member)}" styleClass="illusion-member illusion-player">
+                  <h:panelGroup layout="block" styleClass="illusion-member-avatar"> 
+                    <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionMembersBackingBean.urlName}/#{member.id}?size=48"/> 
+                  </h:panelGroup>
+                  <h4>
+                    <h:outputFormat value="#{locales['illusion.members.playerListMember']}">
+                      <f:param value="#{member.user.fullName}"/>
+                      <f:param value="#{member.characterName}"/>
+                    </h:outputFormat>
+                  </h4>
+                </h:commandLink>      
+              </ui:repeat>
+              
+              <h3>#{locales['illusion.members.gameMasterListTitle']}</h3>
+            
+              <ui:repeat var="member" value="#{illusionMembersBackingBean.gameMasters}">
+                <h:commandLink action="#{illusionMembersBackingBean.selectMember(member)}" styleClass="illusion-member illusion-gamemaster">
+                  <h:panelGroup layout="block" styleClass="illusion-member-avatar"> 
+                    <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionMembersBackingBean.urlName}/#{member.id}?size=48"/> 
+                  </h:panelGroup>
+                  <h4>
+                    <h:outputFormat value="#{locales['illusion.members.gameMasterListMember']}">
+                      <f:param value="#{member.user.fullName}"/>
+                    </h:outputFormat>
+                  </h4>
+                </h:commandLink>      
+              </ui:repeat>
+            </h:form>            
+          </h:panelGroup>
+        </h:panelGroup>
+      </h:panelGroup>    
+      
+      <h:panelGroup layout="block" styleClass="grid_8 omega slim-left">
+        <h:panelGroup layout="block" styleClass="illusion-edit-member-panel">
+          <h:form>
+            <h:panelGroup layout="block" styleClass="illusion-edit-member-avatar"> 
+              <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionMembersBackingBean.urlName}/#{illusionMembersBackingBean.selectedMemberId}?size=128"/> 
+            </h:panelGroup>
+            
+            <h2>#{illusionMembersBackingBean.selectedMemberName}</h2>
+            
+            <h:panelGroup layout="block" styleClass="illusion-edit-member-field">
+              <h:outputLabel value="#{locales['illusion.members.editMemberCharacterNameLabel']}" />
+              <h:inputText value="#{illusionMembersBackingBean.selectedMemberCharacterName}"/>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="illusion-edit-member-field">
+              <h:outputLabel value="#{locales['illusion.members.editMemberRoleLabel']}" />
+              <h:selectOneMenu value="#{illusionMembersBackingBean.selectedMemberRole}">
+                <f:selectItem itemLabel="#{locales['illusion.members.editMemberRolePlayer']}" itemValue="PLAYER"/>
+                <f:selectItem itemLabel="#{locales['illusion.members.editMemberRoleGameMaster']}" itemValue="GAMEMASTER"/>
+              </h:selectOneMenu>
+            </h:panelGroup>
+            
+            <h:inputHidden value="#{illusionMembersBackingBean.selectedMemberId}" />
+            <h:inputHidden value="#{illusionMembersBackingBean.selectedMemberName}" />
+
+            <h:commandButton action="#{illusionMembersBackingBean.saveSelectedMember}" styleClass="illusion-edit-member-save" value="Save" />
+          </h:form>
+        </h:panelGroup>
+      </h:panelGroup>   
+    </h:panelGroup>
+      
+  </ui:define>
+
+</ui:composition>

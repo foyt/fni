@@ -25,6 +25,11 @@ h2 {
   color: $title-color;
 }
 
+h3 {
+  @include header-3;
+  color: $default-color;
+}
+
 h4 {
   @include header-4;
   color: $default-color;

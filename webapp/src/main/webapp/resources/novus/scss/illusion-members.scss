@@ -1,0 +1,96 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+$selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
+
+/* Panels */ 
+
+.illusion-members-panel, .illusion-edit-member-panel {
+  @include generic-panel;
+  position: relative;
+}
+
+/* Materials */
+
+.illusion-members {
+  margin-top: 10px;
+}
+
+.illusion-members h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.illusion-member {
+  width: 100%;
+  padding: 8px;
+  margin-left: -8px;
+  cursor: pointer;
+  display: block;
+}
+
+.illusion-member:hover {
+  background: $selected-background-color;
+}
+
+.illusion-member-avatar {
+  width: 48px;
+  line-height: 0px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.illusion-member h4 {
+  margin-left: 10px;  
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 4px;
+}
+
+.illusion-edit-member-avatar {
+  float: right;
+}
+
+.illusion-edit-member-field {
+  width: 288px;
+  margin-top: 8px;
+}
+
+.illusion-edit-member-panel label {
+  display: block;
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.illusion-edit-member-panel input[type="text"], .illusion-edit-member-panel select {
+  width: 100%;
+  font-size: 14px;
+  font-family: $default-font;
+  @include box-sizing(border-box);
+}
+
+/* Submit */
+
+.illusion-edit-member-save {
+  @include header-3;
+  padding-left: 23px;
+  padding-right: 23px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 15px;
+  margin-top: 35px;
+  cursor: pointer;
+}
+
+
+.illusion-edit-member-save:disabled {
+  color: #eee;
+  background: #aaa;
+  cursor: default;
+}
