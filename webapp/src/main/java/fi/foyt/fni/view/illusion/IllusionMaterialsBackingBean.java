@@ -10,13 +10,10 @@ import javax.inject.Named;
 
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
-import org.ocpsoft.rewrite.annotation.RequestAction;
 
-import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupUser;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupUserRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
@@ -29,13 +26,10 @@ import fi.foyt.fni.session.SessionController;
 @Stateful
 @Join (path = "/illusion/group/{urlName}/materials", to = "/illusion/materials.jsf")
 @LoggedIn
-public class IllusionMaterialsBackingBean {
+public class IllusionMaterialsBackingBean extends AbstractIllusionGroupBackingBean {
 
   @Parameter
   private String urlName;
-
-  @Inject
-  private IllusionGroupController illusionGroupController;
 
   @Inject
   private MaterialController materialController;
@@ -43,19 +37,9 @@ public class IllusionMaterialsBackingBean {
   @Inject
   private SessionController sessionController;
   
-  @RequestAction
-  public String init() {
-    IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
-    if (illusionGroup == null) {
-      return "/error/not-found.jsf";
-    }
-    
+  @Override
+  public String init(IllusionGroup illusionGroup, IllusionGroupMember groupUser) {
     User loggedUser = sessionController.getLoggedUser();
-    IllusionGroupUser groupUser = illusionGroupController.findIllusionGroupUserByUserAndGroup(illusionGroup, loggedUser);
-    if (groupUser == null) {
-      return "/error/access-denied.jsf";
-    }
-    
     IllusionGroupFolder folder = illusionGroup.getFolder();
     
     materials = materialController.listMaterialsByFolderAndTypes(loggedUser, folder, Arrays.asList(
@@ -69,15 +53,10 @@ public class IllusionMaterialsBackingBean {
       MaterialType.DROPBOX_FILE   
     ));
     
-    id = illusionGroup.getId();
-    name = illusionGroup.getName();
-    description = illusionGroup.getDescription();
-    illusionFolderPath = folder.getPath();
-    mayEditMaterials = groupUser.getRole() == IllusionGroupUserRole.GAMEMASTER;
-    
     return null;
   }
 
+  @Override
   public String getUrlName() {
     return urlName;
   }
@@ -86,34 +65,9 @@ public class IllusionMaterialsBackingBean {
     this.urlName = urlName;
   }
 
-  public Long getId() {
-    return id;
-  }
-  
-  public String getName() {
-    return name;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
   public List<Material> getMaterials() {
     return materials;
   }
   
-  public String getIllusionFolderPath() {
-    return illusionFolderPath;
-  }
-  
-  public boolean getMayEditMaterials() {
-    return mayEditMaterials;
-  }
-  
-  private Long id;
-  private String name;
-  private String description;
   private List<Material> materials;
-  private String illusionFolderPath;
-  private boolean mayEditMaterials;
 }
