@@ -6,8 +6,11 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.PrimaryKeyJoinColumn;
 
+import org.hibernate.search.annotations.Indexed;
+
 @Entity
 @PrimaryKeyJoinColumn (name="id")
+@Indexed
 public class IllusionGroupDocument extends Document {
   
   public IllusionGroupDocument() {
