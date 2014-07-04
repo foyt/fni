@@ -90,8 +90,8 @@ public class IllusionGroupController {
 
   /* IllusionGroupMember */
   
-  public IllusionGroupMember createIllusionGroupMember(User user, IllusionGroup group, String nickname, IllusionGroupMemberRole role) {
-    return illusionGroupMemberDAO.create(user, group, nickname, role);
+  public IllusionGroupMember createIllusionGroupMember(User user, IllusionGroup group, String characterName, IllusionGroupMemberRole role) {
+    return illusionGroupMemberDAO.create(user, group, characterName, role);
   }
 
   public IllusionGroupMember findIllusionGroupMemberById(Long memberId) {
