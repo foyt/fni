@@ -62,6 +62,10 @@ public class SecureInterceptor implements Serializable {
 		Object contextParameter = null;
 		
 		SecurityContext securityContext = method.getAnnotation(SecurityContext.class);
+		if (securityContext == null) {
+		  securityContext = method.getDeclaringClass().getAnnotation(SecurityContext.class);
+		}
+		
 		if (securityContext != null) {
 			if (StringUtils.isNotBlank(securityContext.context())) {
 				contextParameter = evaluateExpression(securityContext.context());
