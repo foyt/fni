@@ -57,7 +57,7 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   @Deferred
   @IgnorePostback
   public void setDefaults() {
-    selectMember(players.size() > 0 ? players.get(0) : gameMasters.get(0));
+    selectMember(approvalPending.size() > 0 ? approvalPending.get(0) : players.size() > 0 ? players.get(0) : gameMasters.get(0));
   }
   
   @Override
