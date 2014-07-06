@@ -17,8 +17,11 @@ import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
+import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.security.Secure;
+import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
@@ -26,6 +29,8 @@ import fi.foyt.fni.session.SessionController;
 @Stateful
 @Join (path = "/illusion/group/{urlName}/materials", to = "/illusion/materials.jsf")
 @LoggedIn
+@Secure (value = Permission.ILLUSION_GROUP_ACCESS, deferred = true)
+@SecurityContext (context = "@urlName")
 public class IllusionMaterialsBackingBean extends AbstractIllusionGroupBackingBean {
 
   @Parameter
@@ -65,7 +70,7 @@ public class IllusionMaterialsBackingBean extends AbstractIllusionGroupBackingBe
     return urlName;
   }
 
-  public void setUrlName(String urlName) {
+  public void setUrlName(@SecurityContext String urlName) {
     this.urlName = urlName;
   }
 

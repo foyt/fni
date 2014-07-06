@@ -19,15 +19,23 @@ import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
+import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.security.Secure;
+import fi.foyt.fni.security.SecurityContext;
+import fi.foyt.fni.security.SecurityParam;
+import fi.foyt.fni.security.SecurityParams;
 
 @RequestScoped
 @Named
 @Stateful
 @Join (path = "/illusion/group/{urlName}/members", to = "/illusion/members.jsf")
 @LoggedIn
-
-// TODO: Security
+@Secure (value = Permission.ILLUSION_GROUP_ACCESS, deferred = true)
+@SecurityContext (context = "@urlName")
+@SecurityParams ({
+  @SecurityParam (name = "roles", value = "GAMEMASTER")
+})
 public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean {
 
   @Parameter
@@ -57,7 +65,7 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   @Deferred
   @IgnorePostback
   public void setDefaults() {
-    selectMember(approvalPending.size() > 0 ? approvalPending.get(0) : players.size() > 0 ? players.get(0) : gameMasters.get(0));
+    selectMember(approvalPending != null && approvalPending.size() > 0 ? approvalPending.get(0) : players.size() > 0 ? players.get(0) : gameMasters.get(0));
   }
   
   @Override
@@ -65,7 +73,7 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
     return urlName;
   }
 
-  public void setUrlName(String urlName) {
+  public void setUrlName(@SecurityContext String urlName) {
     this.urlName = urlName;
   }
   
