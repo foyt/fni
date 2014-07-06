@@ -1,10 +1,17 @@
 package fi.foyt.fni.security;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -28,6 +35,9 @@ public class SecureInterceptor implements Serializable {
 	private static final long serialVersionUID = 1717214145781666931L;
 	
 	@Inject
+	private Logger logger;
+	
+	@Inject
 	private SecurityController securityController;
 
 	@Inject
@@ -35,19 +45,25 @@ public class SecureInterceptor implements Serializable {
 	
 	@AroundInvoke
 	public Object aroundInvoke(InvocationContext ic) throws Exception {
-		Secure secure = ic.getMethod().getAnnotation(Secure.class);
+	  Secure secure = getAnnotation(ic.getMethod(), ic.getTarget(), Secure.class);
+		
 		if (secure == null) {
-		  secure = ic.getMethod().getDeclaringClass().getAnnotation(Secure.class);
+		  throw new SecurityException("Could not find Secure annotation");
+		}
+		
+    FacesContext facesContext = FacesContext.getCurrentInstance();
+
+		if (secure.deferred() && facesContext == null) {
+		  return ic.proceed();
 		}
 		
 		Permission permission = secure.value();
 		if (sessionController.hasLoggedUserPermission(permission)) {
-			if (invokePermissionChecks(permission, ic.getMethod(), ic.getParameters())) {
+			if (invokePermissionChecks(permission, ic.getTarget(), ic.getMethod(), ic.getParameters())) {
   			return ic.proceed();
 			}
 		}
 		
-		FacesContext facesContext = FacesContext.getCurrentInstance();
 		if (facesContext != null) {
       NavigationHandler navigationHandler = facesContext.getApplication().getNavigationHandler();
       navigationHandler.handleNavigation(facesContext, null, "/error/access-denied.jsf");
@@ -58,17 +74,13 @@ public class SecureInterceptor implements Serializable {
 		}
 	}
 
-	private boolean invokePermissionChecks(final Permission permission, Method method, Object[] methodParameters) {
+	private boolean invokePermissionChecks(final Permission permission, Object object, Method method, Object[] methodParameters) {
 		Object contextParameter = null;
-		
-		SecurityContext securityContext = method.getAnnotation(SecurityContext.class);
-		if (securityContext == null) {
-		  securityContext = method.getDeclaringClass().getAnnotation(SecurityContext.class);
-		}
+		SecurityContext securityContext = getAnnotation(method, object, SecurityContext.class);
 		
 		if (securityContext != null) {
 			if (StringUtils.isNotBlank(securityContext.context())) {
-				contextParameter = evaluateExpression(securityContext.context());
+				contextParameter = resolveParameter(object, securityContext.context());
 			} else {
 				throw new SecurityException("SecurityContext requires a context when used in method body");
 			}
@@ -89,11 +101,11 @@ public class SecureInterceptor implements Serializable {
   		};
 		}
 		
-		Map<String, Object> parameters = new HashMap<>();
-		SecurityParams params = method.getAnnotation(SecurityParams.class);
+		Map<String, String> parameters = new HashMap<>();
+		SecurityParams params = getAnnotation(method, object, SecurityParams.class); // method.getAnnotation(SecurityParams.class);
 		if (params != null) {
   		for (SecurityParam param : params.value()) {
-  		  Object value = evaluateExpression(param.value());
+  		  String value = (String) resolveParameter(object, param.value());
   		  parameters.put(param.name(), value);
   		}
 		}
@@ -101,12 +113,54 @@ public class SecureInterceptor implements Serializable {
 		return securityController.checkPermission(permission, contextParameter, parameters);
 	}
 	
-	private Object evaluateExpression(String expression) {
+	private <T extends Annotation> T getAnnotation(Method method, Object object, Class<T> annotationClass) {
+	  T annotation = method.getAnnotation(annotationClass);
+    if (annotation == null) {
+      annotation = method.getDeclaringClass().getAnnotation(annotationClass);
+    }
+    
+    if (annotation == null) {
+      annotation = object.getClass().getAnnotation(annotationClass);
+    }
+    
+    return annotation;
+	}
+	
+  private Object resolveParameter(Object object, String expression) {
+    if (StringUtils.startsWith(expression, "@")) {
+      return resolveBeanProperty(object, expression);
+    }
+    
+    return evaluateELExpression(object, expression);
+  }
+  
+	private Object resolveBeanProperty(Object object, String expression) {
+	  try {
+	    String property = StringUtils.stripStart(expression, "@");
+	    
+      BeanInfo beanInfo = Introspector.getBeanInfo(object.getClass());
+      for (PropertyDescriptor propertyDescriptor : beanInfo.getPropertyDescriptors()) {
+        if (property.equals(propertyDescriptor.getName())) {
+          try {
+            return propertyDescriptor.getReadMethod().invoke(object);
+          } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            logger.log(Level.SEVERE, "Could not resolve bean property", e);
+            return null;
+          }
+        }
+      }
+    } catch (IntrospectionException e) {
+      logger.log(Level.SEVERE, "Could not resolve bean info", e);
+    }
+	  
+	  return null;
+  }
+	
+	private Object evaluateELExpression(Object object, String expression) {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		ExpressionFactory expressionFactory = facesContext.getApplication().getExpressionFactory();
 		ELContext elContext = facesContext.getELContext();
     ValueExpression valueExpression = expressionFactory.createValueExpression(elContext, expression, Object.class);
     return valueExpression.getValue(elContext);
 	}
-	
 }

@@ -22,5 +22,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Secure {
 
 	@Nonbinding Permission value() default Permission.NONE;
+	@Nonbinding boolean deferred() default false;
 	
 }
