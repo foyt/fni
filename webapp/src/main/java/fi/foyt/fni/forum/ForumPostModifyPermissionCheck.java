@@ -23,7 +23,7 @@ public class ForumPostModifyPermissionCheck implements PermissionCheckImplementa
   private ForumController forumController;
   
 	@Override
-	public boolean checkPermission(Long postId, Map<String, Object> parameters) {
+	public boolean checkPermission(Long postId, Map<String, String> parameters) {
 	  if (sessionController.isLoggedIn()) {
       if (sessionController.hasLoggedUserPermission(Permission.FORUM_POST_MODERATE)) {
         return true;

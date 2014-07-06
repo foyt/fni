@@ -15,7 +15,7 @@ import fi.foyt.fni.security.SecurityException;
 public class ForumTopicCreatePermissionCheck implements PermissionCheckImplementation<Forum> {
 
 	@Override
-	public boolean checkPermission(Forum forum, Map<String, Object> parameters) {
+	public boolean checkPermission(Forum forum, Map<String, String> parameters) {
 		if (forum == null) {
 			throw new SecurityException("Could not resolve forum while checking permission for FORUM_TOPIC_CREATE");
 		}

@@ -45,10 +45,10 @@ public class SecurityController {
   }
 
   public boolean checkPermission(Permission permission, Object contextParameter) {
-    return checkPermission(permission, contextParameter, new HashMap<String, Object>());
+    return checkPermission(permission, contextParameter, new HashMap<String, String>());
   }
   
-  public boolean checkPermission(Permission permission, Object contextParameter, Map<String, Object> parameters) {
+  public boolean checkPermission(Permission permission, Object contextParameter, Map<String, String> parameters) {
     List<PermissionCheckImplementation<Object>> permissionChecks = getSecurityChecksByPermission(permission);
     for (PermissionCheckImplementation<Object> permissionCheck : permissionChecks) {
       if (!permissionCheck.checkPermission(contextParameter, parameters)) {
