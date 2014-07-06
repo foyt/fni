@@ -76,29 +76,32 @@ public class SecureInterceptor implements Serializable {
 
 	private boolean invokePermissionChecks(final Permission permission, Object object, Method method, Object[] methodParameters) {
 		Object contextParameter = null;
-		SecurityContext securityContext = getAnnotation(method, object, SecurityContext.class);
 		
-		if (securityContext != null) {
-			if (StringUtils.isNotBlank(securityContext.context())) {
-				contextParameter = resolveParameter(object, securityContext.context());
-			} else {
-				throw new SecurityException("SecurityContext requires a context when used in method body");
-			}
-		} else {
-  		Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-  		for (int i = 0, l = parameterAnnotations.length; i < l; i++) {
-  			Annotation[] annotations = parameterAnnotations[i];
-  			for (Annotation annotation : annotations) {
-  				if (annotation instanceof SecurityContext) {
-  					contextParameter = methodParameters[i];
-  					break;
-  				}
-  				
-  				if (contextParameter != null) {
-  					break;
-  				}
+		Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+    for (int i = 0, l = parameterAnnotations.length; i < l; i++) {
+      Annotation[] annotations = parameterAnnotations[i];
+      for (Annotation annotation : annotations) {
+        if (annotation instanceof SecurityContext) {
+          contextParameter = methodParameters[i];
+          break;
+        }
+        
+        if (contextParameter != null) {
+          break;
+        }
+      }
+    };
+		
+    if (contextParameter == null) {
+  		SecurityContext securityContext = getAnnotation(method, object, SecurityContext.class);
+  		
+  		if (securityContext != null) {
+  			if (StringUtils.isNotBlank(securityContext.context())) {
+  				contextParameter = resolveParameter(object, securityContext.context());
+  			} else {
+  				throw new SecurityException("SecurityContext requires a context when used in method body");
   			}
-  		};
+  		}
 		}
 		
 		Map<String, String> parameters = new HashMap<>();
