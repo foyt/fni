@@ -7,6 +7,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
@@ -50,6 +52,12 @@ public class GameLibraryPublicationBackingBean {
       }
     }
     
+    if (StringUtils.isNotBlank(publication.getDescriptionPlain())) {
+      metaDescription = StringEscapeUtils.escapeHtml4(publication.getDescriptionPlain());
+    } else {
+      metaDescription = "";
+    }
+    
     return null;
   }
   
@@ -65,5 +73,10 @@ public class GameLibraryPublicationBackingBean {
 		this.urlName = urlName;
 	}
 	
+	public String getMetaDescription() {
+    return metaDescription;
+  }
+	
 	private Publication publication;
+	private String metaDescription;
 }

@@ -30,7 +30,11 @@
     <h:outputStylesheet library="novus" name="css/magnific-popup.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary.css"/>
   </ui:define>
-
+  
+  <ui:define name="view-custom-head">
+    <meta property="og:description" content="#{gameLibraryPublicationBackingBean.metaDescription}" />
+  </ui:define>
+  
   <ui:define name="grid-content">
     <!-- Menu -->
 
