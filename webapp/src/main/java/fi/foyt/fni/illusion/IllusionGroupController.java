@@ -71,7 +71,10 @@ public class IllusionGroupController {
   
   @Inject
   private MaterialController materialController;
-  
+
+  @Inject
+  private Event<MemberAddedEvent> memberAddedEvent;
+
   @Inject
   private Event<MemberRoleChangeEvent> roleChangeEvent;
   
@@ -96,7 +99,16 @@ public class IllusionGroupController {
   /* IllusionGroupMember */
   
   public IllusionGroupMember createIllusionGroupMember(User user, IllusionGroup group, String characterName, IllusionGroupMemberRole role) {
-    return illusionGroupMemberDAO.create(user, group, characterName, role);
+    IllusionGroupMember member = illusionGroupMemberDAO.create(user, group, characterName, role);
+    
+    String groupUrl = FacesUtils.getLocalAddress(true);
+    if (StringUtils.isNotBlank(groupUrl)) {
+      groupUrl += "/illusion/group/" + member.getGroup().getUrlName();
+    }
+    
+    memberAddedEvent.fire(new MemberAddedEvent(member.getId(), groupUrl));
+    
+    return member;
   }
 
   public IllusionGroupMember findIllusionGroupMemberById(Long memberId) {

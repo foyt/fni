@@ -1,5 +1,6 @@
 package fi.foyt.fni.illusion;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +37,16 @@ public class IllusionGroupRoleChangeListener {
   @Inject
   private Mailer mailer;
   
+  public void onMemberAddedEvent(@Observes MemberAddedEvent event) {
+    IllusionGroupMember groupMember = illusionGroupController.findIllusionGroupMemberById(event.getMemberId());
+    if (groupMember.getRole() == IllusionGroupMemberRole.PENDING_APPROVAL) {
+      List<IllusionGroupMember> gamemasters = illusionGroupController.listIllusionGroupMembersByGroupAndRole(groupMember.getGroup(), IllusionGroupMemberRole.GAMEMASTER);
+      for (IllusionGroupMember gamemaster : gamemasters) {
+        sendGroupJoinRequestMail(event.getGroupUrl(), groupMember, gamemaster);
+      }
+    }
+  }
+
   public void onMemberRoleChangeEvent(@Observes MemberRoleChangeEvent event) {
     if (event.getOldRole().equals(IllusionGroupMemberRole.PENDING_APPROVAL)) {
       IllusionGroupMember groupMember = illusionGroupController.findIllusionGroupMemberById(event.getMemberId());
@@ -51,6 +62,31 @@ public class IllusionGroupRoleChangeListener {
         default:
         break;
       }
+    }
+  }
+  
+  private void sendGroupJoinRequestMail(String groupUrl, IllusionGroupMember groupMember, IllusionGroupMember gamemaster) {
+    String groupName = groupMember.getGroup().getName();
+
+    User master = gamemaster.getUser();
+    Locale masterLocale = LocaleUtils.toLocale(master.getLocale());
+    String masterMail = userController.getUserPrimaryEmail(master);
+    String masterName = master.getFullName();
+    String membersUrl = groupUrl + "/members";
+
+    User user = groupMember.getUser();
+    String userName = user.getFullName();
+    
+    String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
+    String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
+ 
+    String subject = ExternalLocales.getText(masterLocale, "illusion.mail.joinRequest.subject");
+    String content = ExternalLocales.getText(masterLocale, "illusion.mail.joinRequest.content", masterName, userName, groupName, membersUrl);  
+
+    try {
+      mailer.sendMail(fromMail, fromName, masterMail, masterName, subject, content, "text/plain");
+    } catch (MessagingException e) {
+      logger.log(Level.SEVERE, "Could not send a group accept notification mail", e);
     }
   }
   
