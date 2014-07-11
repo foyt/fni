@@ -3,7 +3,6 @@ package fi.foyt.fni.view.illusion;
 import javax.inject.Inject;
 
 import org.ocpsoft.rewrite.annotation.RequestAction;
-import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
 import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
@@ -22,7 +21,6 @@ public abstract class AbstractIllusionGroupBackingBean {
   private SessionController sessionController;
   
   @RequestAction
-  @Deferred
   public String basicInit() {
     IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
     if (illusionGroup == null) {
