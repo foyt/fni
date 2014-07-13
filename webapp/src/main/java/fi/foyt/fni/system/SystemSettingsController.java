@@ -77,7 +77,7 @@ public class SystemSettingsController {
 		return request.getContextPath() + "/themes/" + getTheme();
 	}
 
-  public Language findLocaleById(Long languageId) {
+  public Language findLanguageById(Long languageId) {
     return languageDAO.findById(languageId);
   }
 	

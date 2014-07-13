@@ -414,7 +414,7 @@ public class GameLibraryEditPublicationBackingBean {
 		  	authors.add(author);
 		  }
 		  
-		  Language language = systemSettingsController.findLocaleById(languageId);
+		  Language language = systemSettingsController.findLanguageById(languageId);
 		  
 			publicationController.updateName(bookPublication, getName());
 			publicationController.updateDescription(bookPublication, getDescription());
