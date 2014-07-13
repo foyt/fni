@@ -39,7 +39,8 @@
       'autocomplete': {
         source: existingTags
       },
-      'defaultText': $('.gamelibrary-propose-game-form-tags').data('help-text')
+      'defaultText': $('.gamelibrary-propose-game-form-tags').data('help-text'),
+      width: '290px'
     });
     
     $('input[type="file"]').each(function (index, fileInput) {

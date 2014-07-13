@@ -16,147 +16,6 @@
   @include generic-panel;
 }
 
-/**
-.gamelibrary-edit-publication-back-link {
-  color: $title-color;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-family: $default-font;
-  margin-right: 8px;
-  margin-bottom: 8px;
-  text-decoration: none;
-  display: block;
-}
-
-.gamelibrary-edit-publication-back-link:before {
-  content: '<<';
-  margin-right: 4px;
-}
-
-/* Form *
-
-.gamelibrary-edit-publication-form-section {
-  color: $default-color;
-  font-family: $default-font;
-  font-size: 12px;
-}
-
-.gamelibrary-edit-publication-form-section>label {
-  color: $default-color;
-  font-family: $default-font;
-  font-size: 14px;
-  text-transform: uppercase;
-  margin-top: 8px;
-  margin-bottom: 4px;
-  display: block;
-}
-
-.gamelibrary-edit-publication-form-section input[type="text"], .gamelibrary-edit-publication-form-section textarea {
-  width: 300px;
-  @include box-sizing(border-box);
-}
-
-.gamelibrary-edit-publication-details-table input[type="text"] {
-  width: 60px;
-  margin-left: 20px;
-}
-
-.gamelibrary-edit-publication-new-tag-container>label,
-.gamelibrary-edit-publication-license-other>label,
-.gamelibrary-edit-publication-license-cc-container>label {
-  color: $default-color;
-  font-family: $default-font;
-  font-size: 12px;
-  text-transform: uppercase;
-  margin-top: 8px;
-  margin-bottom: 4px;
-  display: block;
-}
-
-.gamelibrary-edit-publication-license-cc-container table label {
-  margin-left: 8px;
-  margin-right: 8px;
-  display: inline-block;
-}
-
-.gamelibrary-edit-publication-license-cc-container {
-  margin-top: 8px;
-}
-
-.gamelibrary-edit-publication-details-table span {
-  margin-left: 4px;
-}
-
-.gamelibrary-edit-publication-tags-container {
-  margin-top: 8px;
-  margin-bottom: 8px;
-}
-
-.gamelibrary-edit-publication-tag {
-  background: #000;
-  color: #fff;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  border-radius: 8px;
-  font-size: 12px;
-  margin-right: 4px;
-}
-
-.gamelibrary-edit-publication-new-tag-link, .gamelibrary-edit-publication-add-author-link {
-  color: $default-color;
-  font-family: $title-font;
-  font-size: 14px;
-  text-transform: uppercase;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 8px;
-  padding-right: 8px;
-  background: #000;
-  color: #fff;
-  border: 0px;
-  border-radius: 5px;
-  cursor: pointer;
-  text-decoration: none;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  display: inline-block;
-}
-
-.gamelibrary-edit-publication-authors-container {
-  margin-top: 8px;
-  margin-bottom: 8px;
-}
-
-.gamelibrary-edit-publication-author {
-  background: #000;
-  color: #fff;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  border-radius: 8px;
-  font-size: 12px;
-  margin-right: 4px;
-}
-
-.gamelibrary-edit-publication-author a, .gamelibrary-edit-publication-tag a {
-  color: #fff;
-  font-size: 12px;
-  margin-left: 8px;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.gamelibrary-edit-publication-author a:after, .gamelibrary-edit-publication-tag a:after {
-  content: 'X';
-}
-
-.gamelibrary-edit-publication-author a:hover:after, .gamelibrary-edit-publication-tag a:hover:after {
-  color: #f00; 
-}
-
 /* Fields */
 
 .gamelibrary-propose-game-form-section {
@@ -176,7 +35,9 @@
   display: block;
 }
 
-.gamelibrary-propose-game-form-section input[type="text"], .gamelibrary-propose-game-form-section select {
+.gamelibrary-propose-game-form-section input[type="text"], 
+.gamelibrary-propose-game-form-section input[type="number"],
+.gamelibrary-propose-game-form-section select {
   width: 300px;
   font-family: $default-font;
   @include box-sizing(border-box);
