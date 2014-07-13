@@ -35,16 +35,17 @@ public class LoggedInInterceptor implements Serializable {
 		  FacesContext facesContext = FacesContext.getCurrentInstance();
 		  if (facesContext != null) {
 		    ExternalContext externalContext = facesContext.getExternalContext();
-		    
-		    HttpServletRequest httpServletRequest = (HttpServletRequest) externalContext.getRequest();
-        String redirectUrl = (String) httpServletRequest.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
-        StringBuilder redirectBuilder = new StringBuilder().append(externalContext.getRequestContextPath()).append("/login/");
-
-        if (StringUtils.isNotBlank(redirectUrl)) {
-          redirectBuilder.append("?redirectUrl=" + URLEncoder.encode(redirectUrl, "UTF-8"));
-        }
-
-        externalContext.redirect(redirectBuilder.toString());
+		    if (!externalContext.isResponseCommitted()) {
+  		    HttpServletRequest httpServletRequest = (HttpServletRequest) externalContext.getRequest();
+          String redirectUrl = (String) httpServletRequest.getAttribute(RequestDispatcher.FORWARD_REQUEST_URI);
+          StringBuilder redirectBuilder = new StringBuilder().append(externalContext.getRequestContextPath()).append("/login/");
+  
+          if (StringUtils.isNotBlank(redirectUrl)) {
+            redirectBuilder.append("?redirectUrl=" + URLEncoder.encode(redirectUrl, "UTF-8"));
+          }
+  
+          externalContext.redirect(redirectBuilder.toString());
+		    }
 		    
 		    return null;
 		  } else {
