@@ -55,7 +55,7 @@ public class IllusionGroupBackingBean extends AbstractIllusionGroupBackingBean {
       return "/illusion/intro.jsf?faces-redirect=true&urlName=" + getUrlName();
     }
     
-    if (member.getRole() != IllusionGroupMemberRole.GAMEMASTER || member.getRole() != IllusionGroupMemberRole.PLAYER) {
+    if (member.getRole() != IllusionGroupMemberRole.GAMEMASTER && member.getRole() != IllusionGroupMemberRole.PLAYER) {
       return "/error/access-denied.jsf";
     }
     
