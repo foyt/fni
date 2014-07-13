@@ -20,8 +20,8 @@ import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.Role;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.persistence.model.users.UserToken;
+import fi.foyt.fni.security.PermissionController;
 
 @SessionScoped
 @Stateful
@@ -31,6 +31,9 @@ public class SessionController implements Serializable {
 	
 	@Inject
 	private Logger logger;
+	
+	@Inject
+	private PermissionController permissionController;
 
 	@Inject
 	@Login
@@ -63,7 +66,7 @@ public class SessionController implements Serializable {
   public Role[] getLoggedUserRoles() {
     User loggedUser = getLoggedUser();
     if (loggedUser != null) {
-    	return convertUserRole(loggedUser.getRole());
+    	return permissionController.listUserRoles(loggedUser).toArray(new Role[0]);
     } else {
       return new Role[] {
         Role.ANONYMOUS
@@ -95,43 +98,7 @@ public class SessionController implements Serializable {
 		
 		return false;
 	}
-  
-  private Role[] convertUserRole(UserRole role) {
-  	switch (role) {
-  		case ADMINISTRATOR:
-  			return new Role[] {
-  				Role.USER,
-          Role.ILLUSION_USER,
-          Role.MATERIAL_USER,
-  				Role.FORUM_ADMIN,
-  				Role.GAME_LIBRARY_MANAGER,
-  				Role.SYSTEM_ADMINISTRATOR
-  			};
-  		case LIBRARIAN:
-  		  return new Role[] {
-          Role.USER,
-          Role.ILLUSION_USER,
-          Role.MATERIAL_USER,
-          Role.FORUM_USER,
-          Role.GAME_LIBRARY_MANAGER
-        };
-  		case USER:
-  			return new Role[] {
-          Role.USER,
-          Role.ILLUSION_USER,
-          Role.MATERIAL_USER,
-          Role.FORUM_USER,
-          Role.GAME_LIBRARY_USER
-        };
-  		case GUEST:
-  			return new Role[] {
-          Role.GUEST
-        };
-  	}
-  	
-  	return null;
-  }
-  
+	
   public User getLoggedUser() {
     if (loggedUserId != null)
       return userDAO.findById(loggedUserId);

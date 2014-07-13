@@ -38,8 +38,8 @@ public class UserDAO extends GenericDAO<User> {
     return user;
   }
   
-	public List<User> listByArchived(Boolean archived) {
-		EntityManager entityManager = getEntityManager();
+  public List<User> listByArchived(Boolean archived) {
+    EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<User> criteria = criteriaBuilder.createQuery(User.class);
@@ -48,7 +48,24 @@ public class UserDAO extends GenericDAO<User> {
     criteria.where(criteriaBuilder.equal(root.get(User_.archived), archived));
 
     return entityManager.createQuery(criteria).getResultList();
-	}
+  }
+  
+  public List<User> listByArchivedAndRoleIn(Boolean archived, List<UserRole> roles) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<User> criteria = criteriaBuilder.createQuery(User.class);
+    Root<User> root = criteria.from(User.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.and(
+        root.get(User_.role).in(roles),
+        criteriaBuilder.equal(root.get(User_.archived), archived)
+      )
+    );
+
+    return entityManager.createQuery(criteria).getResultList();
+  }
 
   public User updateFirstName(User user, String firstName) {
     EntityManager entityManager = getEntityManager();
