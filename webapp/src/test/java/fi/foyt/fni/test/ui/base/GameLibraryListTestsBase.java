@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -107,6 +109,22 @@ public class GameLibraryListTestsBase extends AbstractUITest {
 
     testPublicationDetails(getWebDriver(), ".gamelibrary-publications form:nth-child(3) .gamelibrary-publication", SIMPLE_ID, SIMPLE_PATH, SIMPLE_TITLE, SIMPLE_TAGS, SIMPLE_DESC, SIMPLE_PRICE,
         SIMPLE_PAGES, SIMPLE_AUTHOR_NAMES, SIMPLE_AUTHOR_IDS, SIMPLE_LICENSE, SIMPLE_PURCHASABLE, SIMPLE_COMMENT_URL, SIMPLE_COMMENTS);
+  }
+  
+  @Test
+  public void testProposeLinkNotLogged() throws UnsupportedEncodingException {
+    getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
+    assertEquals("Login to propose a game to the Library", getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getText());
+    String redirectUrl = URLEncoder.encode('/' + getCtxPath() + "/gamelibrary/proposegame/", "UTF-8");
+    assertEquals(getAppUrl(true) + "/login/?redirectUrl=" + redirectUrl, getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getAttribute("href"));
+  }
+  
+  @Test
+  public void testProposeLinkLogged() {
+    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
+    assertEquals("Propose a game to the Library", getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getText());
+    assertEquals(getAppUrl(true) + "/gamelibrary/proposegame/", getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getAttribute("href"));
   }
 
   @Test
