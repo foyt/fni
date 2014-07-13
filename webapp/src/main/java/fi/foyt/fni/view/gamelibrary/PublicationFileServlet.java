@@ -58,9 +58,11 @@ public class PublicationFileServlet extends AbstractFileServlet {
 				return;
 			}
 			
-			if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
-				response.sendError(HttpServletResponse.SC_FORBIDDEN);
-				return;
+			if (!bookPublication.getCreator().getId().equals(sessionController.getLoggedUserId())) {
+  			if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
+	  			response.sendError(HttpServletResponse.SC_FORBIDDEN);
+		  		return;
+			  }
 			}
 		}
 		
@@ -84,7 +86,7 @@ public class PublicationFileServlet extends AbstractFileServlet {
 
 		if (!isModifiedSince(request, lastModified, eTag)) {
 			response.setHeader("ETag", eTag); // Required in 304.
-			response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
+			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 			return;
 		}
 		

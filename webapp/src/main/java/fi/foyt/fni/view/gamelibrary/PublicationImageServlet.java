@@ -65,11 +65,13 @@ public class PublicationImageServlet extends AbstractFileServlet {
 				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 				return;
 			}
-			
-			if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
-				response.sendError(HttpServletResponse.SC_FORBIDDEN);
-				return;
-			}
+
+      if (!publicationImage.getCreator().getId().equals(sessionController.getLoggedUserId())) {
+  			if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
+  				response.sendError(HttpServletResponse.SC_FORBIDDEN);
+  				return;
+  			}
+      }
 		}
 
 		Integer width = NumberUtils.createInteger(request.getParameter("width"));

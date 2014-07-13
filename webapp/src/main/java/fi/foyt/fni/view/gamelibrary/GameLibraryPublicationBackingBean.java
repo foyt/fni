@@ -10,13 +10,13 @@ import javax.inject.Named;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.users.Role;
-import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.UnauthorizedException;
 import fi.foyt.fni.session.SessionController;
 
@@ -27,6 +27,7 @@ import fi.foyt.fni.session.SessionController;
 public class GameLibraryPublicationBackingBean {
   
   @Parameter
+  @Matches ("[a-zA-Z0-9_]{1,}")
   private String urlName;
   
   @Inject
@@ -46,9 +47,11 @@ public class GameLibraryPublicationBackingBean {
       if (!sessionController.isLoggedIn()) {
         throw new UnauthorizedException();
       }
-      
-      if (!sessionController.hasLoggedUserRole(Role.GAME_LIBRARY_MANAGER)) {
-        throw new ForbiddenException();
+
+      if (!publication.getCreator().getId().equals(sessionController.getLoggedUserId())) {
+        if (!sessionController.hasLoggedUserRole(Role.GAME_LIBRARY_MANAGER)) {
+          return "/error/access-denied.jsf";
+        }
       }
     }
     
