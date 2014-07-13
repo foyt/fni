@@ -4,13 +4,18 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.mail.MessagingException;
 
+import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.RequestAction;
@@ -19,14 +24,21 @@ import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
+import fi.foyt.fni.i18n.ExternalLocales;
+import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
+import fi.foyt.fni.persistence.model.users.Permission;
+import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.security.PermissionController;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.temp.SessionTempController;
+import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.faces.FacesUtils;
 import fi.foyt.fni.utils.images.ImageUtils;
@@ -38,6 +50,9 @@ import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 @Join (path = "/gamelibrary/proposegame/", to = "/gamelibrary/proposegame.jsf")
 @LoggedIn
 public class GameLibraryProposeGameBackingBean {
+  
+  @Inject
+  private Logger logger;
 
 	@Inject
 	private GameLibraryTagController gameLibraryTagController;
@@ -53,6 +68,15 @@ public class GameLibraryProposeGameBackingBean {
 
   @Inject
   private SessionTempController sessionTempController;
+
+  @Inject
+  private UserController userController;
+
+  @Inject
+  private PermissionController permissionController;
+  
+  @Inject
+  private Mailer mailer;
   
   @RequestAction
   @IgnorePostback
@@ -230,7 +254,7 @@ public class GameLibraryProposeGameBackingBean {
     return existingTags;
   }
 
-  public synchronized String send() throws IOException {
+  public synchronized String send() throws IOException, MessagingException {
     TypedData imageData = null;
 
     if (StringUtils.isNotBlank(getImageFileId())) {
@@ -325,7 +349,51 @@ public class GameLibraryProposeGameBackingBean {
     PublicationImage publicationImage = publicationController.createPublicationImage(publication, imageData.getData(), imageData.getContentType(), sessionController.getLoggedUser());
     publicationController.updatePublicationDefaultImage(publication, publicationImage);
 
+    sendNotifications(publication);
+    
     return "/gamelibrary/publication.jsf?faces-redirect=true&urlName=" + publication.getUrlName();
+  }
+  
+  private void sendNotifications(BookPublication publication) throws MessagingException {
+    boolean success = false;
+    
+    List<User> librarians = permissionController.listUsersByPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS);
+    for (User librarian : librarians) {
+      if (sendNotificationEmail(librarian, publication)) {
+        success = true;
+      }
+    }
+    
+    if (!success) {
+      throw new MessagingException("Could not send notification mail");
+    }
+  }
+  
+  private boolean sendNotificationEmail(User librarian, BookPublication publication) {
+    String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
+    String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
+
+    Locale locale = LocaleUtils.toLocale(librarian.getLocale());
+    String librarianMail = userController.getUserPrimaryEmail(librarian);
+    String librarianName = librarian.getFullName();
+    User publisher = publication.getCreator();
+    String publisherName = publisher.getFullName();
+    String publisherEmail = userController.getUserPrimaryEmail(publisher);
+    String publicationName = publication.getName();
+    String publicationUrl = FacesUtils.getLocalAddress(true) + "/gamelibrary/" + publication.getUrlName();
+    String libraryManagementUrl = FacesUtils.getLocalAddress(true) + "/gamelibrary/manage/";
+    
+    try {
+      String subject = ExternalLocales.getText(locale, "gamelibrary.mail.newProposal.subject");
+      String content = ExternalLocales.getText(locale, "gamelibrary.mail.newProposal.content", librarianName, publisherName, publisherEmail, publicationName, publicationUrl, libraryManagementUrl);
+      
+      mailer.sendMail(fromMail, fromName, librarianMail, librarianName, subject, content, "text/plain");
+    } catch (MessagingException e) {
+      logger.log(Level.WARNING, "Could not send an notification email", e);
+      return false;
+    }
+    
+    return true;
   }
   
 	private String name;
