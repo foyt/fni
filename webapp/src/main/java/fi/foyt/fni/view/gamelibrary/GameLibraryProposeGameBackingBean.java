@@ -61,6 +61,7 @@ public class GameLibraryProposeGameBackingBean {
     languageId = systemSettingsController.getDefaultLanguage().getId();
     creativeCommonsCommercial = CreativeCommonsCommercial.YES;
     creativeCommonsDerivatives = CreativeCommonsDerivatives.SHARE_ALIKE;
+    authorsShare = 0d;
   }
   
   @RequestAction
@@ -213,6 +214,14 @@ public class GameLibraryProposeGameBackingBean {
     this.imageContentType = imageContentType;
   }
   
+  public Double getAuthorsShare() {
+    return authorsShare;
+  }
+  
+  public void setAuthorsShare(Double authorsShare) {
+    this.authorsShare = authorsShare;
+  }
+  
   public List<Language> getLanguages() {
     return languages;
   }
@@ -253,7 +262,6 @@ public class GameLibraryProposeGameBackingBean {
         } else {
           imageData = ImageUtils.writeBufferedImage(bufferedImage);
         }
-        
       }
     } else {
       FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("gamelibrary.proposegame.imageRequiredMessage"));
@@ -302,7 +310,7 @@ public class GameLibraryProposeGameBackingBean {
       gameLibraryTags.add(gameLibraryTag);
     }
     
-    BookPublication publication = publicationController.createBookPublication(sessionController.getLoggedUser(), getName(), getDescription(), 0d, null, null, null, null, null, null, license, gameLibraryTags, language);
+    BookPublication publication = publicationController.createBookPublication(sessionController.getLoggedUser(), getName(), getDescription(), 0d, getAuthorsShare(), null, null, null, null, null, null, license, gameLibraryTags, language);
     
     if (StringUtils.isNotBlank(getDownloadableFileId())) {
       byte[] fileData = sessionTempController.getTempFileData(getDownloadableFileId());
@@ -339,6 +347,7 @@ public class GameLibraryProposeGameBackingBean {
 	private String imageFileId;
 	private String imageFileName;
 	private String imageContentType;
+	private Double authorsShare;
   
  	public enum LicenseType {
 		CREATIVE_COMMONS,

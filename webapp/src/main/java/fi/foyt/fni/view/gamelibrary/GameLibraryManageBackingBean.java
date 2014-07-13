@@ -98,6 +98,7 @@ public class GameLibraryManageBackingBean {
   	    FacesUtils.getLocalizedValue("gamelibrary.manage.untitledBookName"), 
   	    null,
   	    0d,
+  	    0d,
   	    null,
   	    null,
   	    null,

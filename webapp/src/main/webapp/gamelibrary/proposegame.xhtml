@@ -93,6 +93,11 @@
           </h:panelGroup>
           
           <h:panelGroup layout="block" styleClass="gamelibrary-propose-game-form-section">
+            <h:outputLabel value="#{locales['gamelibrary.proposegame.authorsShareLabel']}" />
+            <input type="number" step="0.01" jsf:value="#{gameLibraryProposeGameBackingBean.authorsShare}"/>
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-propose-game-form-section">
             <h:outputLabel value="#{locales['gamelibrary.proposegame.licenseLabel']}" />
             <h:selectOneMenu value="#{gameLibraryProposeGameBackingBean.licenseType}" styleClass="gamelibrary-propose-game-license-select" p:required="required">
               <f:selectItem itemValue="CREATIVE_COMMONS" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommons']}"/>
