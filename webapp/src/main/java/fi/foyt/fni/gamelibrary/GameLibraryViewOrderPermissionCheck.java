@@ -26,7 +26,7 @@ public class GameLibraryViewOrderPermissionCheck implements PermissionCheckImple
 	private OrderController orderController;
 
 	@Override
-	public boolean checkPermission(Long orderId, Map<String, Object> parameters) {
+	public boolean checkPermission(Long orderId, Map<String, String> parameters) {
 		if (orderId == null) {
 			throw new SecurityException("Could not resolve orderId while checking permission for GAMELIBRARY_VIEW_ORDER");
 		}

@@ -7,20 +7,27 @@ import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
+import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
+import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.FileData;
+import fi.foyt.fni.utils.faces.FacesUtils;
 
 @RequestScoped
 @Named
@@ -39,6 +46,12 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
 
   @Inject
   private MaterialController materialController;
+
+  @Inject
+  private IllusionGroupController illusionGroupController;
+
+  @Inject
+  private SessionController sessionController;
   
   @Override
   public String init(IllusionGroup illusionGroup, IllusionGroupMember groupUser) {
@@ -70,6 +83,33 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
   
   public String getText() {
     return text;
+  }
+  
+  @LoggedIn
+  public String join() {
+    IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
+    if (illusionGroup == null) {
+      return "/error/not-found.jsf";
+    }
+    
+    User loggedUser = sessionController.getLoggedUser();
+    IllusionGroupMember groupMember = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionGroup, loggedUser);
+    if (groupMember == null) {
+      switch (illusionGroup.getJoinMode()) {
+        case APPROVE:
+          illusionGroupController.createIllusionGroupMember(loggedUser, illusionGroup, null, IllusionGroupMemberRole.PENDING_APPROVAL);
+          FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("illusion.intro.approvalPendingMessage"));
+        break;
+        case OPEN:
+          illusionGroupController.createIllusionGroupMember(loggedUser, illusionGroup, null, IllusionGroupMemberRole.PLAYER);
+          return "/illusion/group.jsf?faces-redirect=true&urlName=" + getUrlName();
+        default:
+          return "/error/access-denied.jsf";
+      }      
+    }
+    
+    
+    return null;
   }
   
   private String text;

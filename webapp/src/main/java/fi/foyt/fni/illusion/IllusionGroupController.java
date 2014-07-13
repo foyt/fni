@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,23 +19,25 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.dao.illusion.IllusionGroupDAO;
-import fi.foyt.fni.persistence.dao.illusion.IllusionGroupSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionGroupMemberDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionGroupMemberImageDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionGroupMemberSettingDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionGroupSettingDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionFolderDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionGroupFolderDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupSetting;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupSettingKey;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberImage;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberSetting;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupSetting;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupSettingKey;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.utils.faces.FacesUtils;
 
 @Dependent
 @Stateless
@@ -68,11 +71,17 @@ public class IllusionGroupController {
   
   @Inject
   private MaterialController materialController;
+
+  @Inject
+  private Event<MemberAddedEvent> memberAddedEvent;
+
+  @Inject
+  private Event<MemberRoleChangeEvent> roleChangeEvent;
   
   /* IllusionGroup */
 
-  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String xmppRoom, IllusionGroupFolder folder, Date created) {
-    return illusionGroupDAO.create(urlName, name, description, xmppRoom, folder, created);
+  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String xmppRoom, IllusionGroupFolder folder, IllusionGroupJoinMode joinMode, Date created) {
+    return illusionGroupDAO.create(urlName, name, description, xmppRoom, folder, joinMode, created);
   }
 
   public IllusionGroup findIllusionGroupById(Long id) {
@@ -89,8 +98,17 @@ public class IllusionGroupController {
 
   /* IllusionGroupMember */
   
-  public IllusionGroupMember createIllusionGroupMember(User user, IllusionGroup group, String nickname, IllusionGroupMemberRole role) {
-    return illusionGroupMemberDAO.create(user, group, nickname, role);
+  public IllusionGroupMember createIllusionGroupMember(User user, IllusionGroup group, String characterName, IllusionGroupMemberRole role) {
+    IllusionGroupMember member = illusionGroupMemberDAO.create(user, group, characterName, role);
+    
+    String groupUrl = FacesUtils.getLocalAddress(true);
+    if (StringUtils.isNotBlank(groupUrl)) {
+      groupUrl += "/illusion/group/" + member.getGroup().getUrlName();
+    }
+    
+    memberAddedEvent.fire(new MemberAddedEvent(member.getId(), groupUrl));
+    
+    return member;
   }
 
   public IllusionGroupMember findIllusionGroupMemberById(Long memberId) {
@@ -118,7 +136,18 @@ public class IllusionGroupController {
   }
 
   public IllusionGroupMember updateIllusionGroupMemberRole(IllusionGroupMember member, IllusionGroupMemberRole role) {
-    return illusionGroupMemberDAO.updateRole(member, role);
+    IllusionGroupMemberRole oldRole = member.getRole();
+    IllusionGroupMember groupMember = illusionGroupMemberDAO.updateRole(member, role);
+    if (oldRole != role) {
+      String groupUrl = FacesUtils.getLocalAddress(true);
+      if (StringUtils.isNotBlank(groupUrl)) {
+        groupUrl += "/illusion/group/" + member.getGroup().getUrlName();
+      }
+      
+      roleChangeEvent.fire(new MemberRoleChangeEvent(member.getId(), oldRole, role, groupUrl));
+    }
+    
+    return groupMember;
   }
 
   /* IllusionGroupMemberImage */

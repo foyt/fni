@@ -27,7 +27,7 @@ public class MaterialModifyPermissionCheck implements PermissionCheckImplementat
   private SessionController sessionController;
 
 	@Override
-	public boolean checkPermission(Long materialId, Map<String, Object> parameters) {
+	public boolean checkPermission(Long materialId, Map<String, String> parameters) {
 	  Material material = null;
 	  if (materialId != null) {
 	    material = materialController.findMaterialById(materialId);

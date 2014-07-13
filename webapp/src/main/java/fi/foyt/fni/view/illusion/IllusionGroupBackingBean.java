@@ -17,11 +17,13 @@ import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.FileData;
 
@@ -50,6 +52,10 @@ public class IllusionGroupBackingBean extends AbstractIllusionGroupBackingBean {
   @Override
   public String init(IllusionGroup illusionGroup, IllusionGroupMember member) {
     if (member == null) {
+      return "/illusion/intro.jsf?faces-redirect=true&urlName=" + getUrlName();
+    }
+    
+    if (member.getRole() != IllusionGroupMemberRole.GAMEMASTER || member.getRole() != IllusionGroupMemberRole.PLAYER) {
       return "/error/access-denied.jsf";
     }
     
@@ -76,7 +82,7 @@ public class IllusionGroupBackingBean extends AbstractIllusionGroupBackingBean {
     return urlName;
   }
 
-  public void setUrlName(String urlName) {
+  public void setUrlName(@SecurityContext String urlName) {
     this.urlName = urlName;
   }
   

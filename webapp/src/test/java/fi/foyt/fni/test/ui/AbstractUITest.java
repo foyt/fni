@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
@@ -34,7 +35,9 @@ public abstract class AbstractUITest extends AbstractTest {
     String appUrl = getAppUrl(secure);
     String ctxPath = getCtxPath();
     driver.get(appUrl + path);
-    assertEquals(getAppUrl(true) + "/login/?redirectUrl=" + "/" + ctxPath + path, driver.getCurrentUrl());
+    String expectedUrl = getAppUrl(true) + "/login/?redirectUrl=" + URLEncoder.encode("/" + ctxPath + path, "UTF-8");
+    waitForUrlMatches(driver, "https://.*");
+    assertEquals(expectedUrl, driver.getCurrentUrl());
   }
   
   protected void loginInternal(RemoteWebDriver driver, String email, String password) {

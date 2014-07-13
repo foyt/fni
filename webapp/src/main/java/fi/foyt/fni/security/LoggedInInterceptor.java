@@ -1,6 +1,7 @@
 package fi.foyt.fni.security;
 
 import java.io.Serializable;
+import java.net.URLEncoder;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -24,6 +25,10 @@ public class LoggedInInterceptor implements Serializable {
 	@Inject
 	private SessionController sessionController;
 
+  @SuppressWarnings("cdi-ambiguous-dependency")
+  @Inject
+	private HttpServletRequest httpServletRequest;
+	
 	@AroundInvoke
 	public Object aroundInvoke(InvocationContext ic) throws Exception {
 		if (!sessionController.isLoggedIn()) {
@@ -36,14 +41,22 @@ public class LoggedInInterceptor implements Serializable {
         StringBuilder redirectBuilder = new StringBuilder().append(externalContext.getRequestContextPath()).append("/login/");
 
         if (StringUtils.isNotBlank(redirectUrl)) {
-          redirectBuilder.append("?redirectUrl=" + redirectUrl);
+          redirectBuilder.append("?redirectUrl=" + URLEncoder.encode(redirectUrl, "UTF-8"));
         }
 
         externalContext.redirect(redirectBuilder.toString());
 		    
 		    return null;
 		  } else {
-  			throw new UnauthorizedException();
+		    StringBuilder redirectUrlBuilder = new StringBuilder(httpServletRequest.getRequestURI());
+	      String queryString = httpServletRequest.getQueryString();
+	      if (StringUtils.isNotBlank(queryString)) {
+	        redirectUrlBuilder  
+	          .append('?')
+	          .append(queryString);
+	      }
+	      
+	      return "/users/login.jsf?faces-redirect=true&redirectUrl=" + URLEncoder.encode(redirectUrlBuilder.toString(), "UTF-8");
 		  }
 		} else {
 			return ic.proceed();

@@ -9,6 +9,7 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup_;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 
@@ -16,7 +17,7 @@ public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionGroup create(String urlName, String name, String description, String xmppRoom, IllusionGroupFolder folder, Date created) {
+	public IllusionGroup create(String urlName, String name, String description, String xmppRoom, IllusionGroupFolder folder, IllusionGroupJoinMode joinMode, Date created) {
 		IllusionGroup illusionGroup = new IllusionGroup();
 		
 		illusionGroup.setName(name);
@@ -25,7 +26,8 @@ public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
 		illusionGroup.setXmppRoom(xmppRoom);
 		illusionGroup.setCreated(created);
 		illusionGroup.setFolder(folder);
-
+		illusionGroup.setJoinMode(joinMode);
+		
 		return persist(illusionGroup);
 	}
 
@@ -45,6 +47,11 @@ public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
 
   public IllusionGroup updateName(IllusionGroup illusionGroup, String name) {
     illusionGroup.setName(name);
+    return persist(illusionGroup);
+  }
+
+  public IllusionGroup updateJoinMode(IllusionGroup illusionGroup, IllusionGroupJoinMode joinMode) {
+    illusionGroup.setJoinMode(joinMode);
     return persist(illusionGroup);
   }
 	

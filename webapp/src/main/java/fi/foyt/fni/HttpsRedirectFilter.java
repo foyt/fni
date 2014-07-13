@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
-@WebFilter (urlPatterns = { "/login/", "/gamelibrary/*" })
+@WebFilter (urlPatterns = { "/login/*", "/gamelibrary/*" })
 public class HttpsRedirectFilter implements Filter {
 
   @Override
