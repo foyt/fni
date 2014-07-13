@@ -79,6 +79,14 @@ public class Publication {
 		this.price = price;
 	}
   
+  public Double getAuthorsShare() {
+    return authorsShare;
+  }
+  
+  public void setAuthorsShare(Double authorsShare) {
+    this.authorsShare = authorsShare;
+  }
+  
   public PublicationImage getDefaultImage() {
 		return defaultImage;
 	}
@@ -221,6 +229,10 @@ public class Publication {
   @NotNull
   @Column(nullable = false)
   private Double price;
+
+  @NotNull
+  @Column(nullable = false)
+  private Double authorsShare;
   
   @ManyToOne
   private PublicationImage defaultImage;

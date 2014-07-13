@@ -348,12 +348,12 @@ public class PublicationController {
 	
 	/* BookPublications */
 
-	public BookPublication createBookPublication(User creator, String name, String description, Double price, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, List<GameLibraryTag> tags, Language language) {
+	public BookPublication createBookPublication(User creator, String name, String description, Double price, Double authorsShare, PublicationImage defaultImage, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, List<GameLibraryTag> tags, Language language) {
 		
 		Date now = new Date();
 		String urlName = createUrlName(name);
 
-		BookPublication bookPublication = bookPublicationDAO.create(name, urlName, description, price, defaultImage, 
+		BookPublication bookPublication = bookPublicationDAO.create(name, urlName, description, price, authorsShare, defaultImage, 
 				now, creator, now, creator, Boolean.FALSE, height, width, depth, weight, numberOfPages, license, null, language, 0l, 0l);
 
 		if (tags != null) {

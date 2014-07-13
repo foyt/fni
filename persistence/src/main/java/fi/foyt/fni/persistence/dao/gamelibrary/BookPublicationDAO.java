@@ -14,7 +14,7 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
   
 	private static final long serialVersionUID = 1L;
 
-	public BookPublication create(String name, String urlName, String description, Double price, PublicationImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, ForumTopic forumTopic, Language language, Long downloadCount, Long printCount) {
+	public BookPublication create(String name, String urlName, String description, Double price, Double authorsShare, PublicationImage defaultImage, Date created, User creator, Date modified, User modifier, Boolean published, Integer height, Integer width, Integer depth, Double weight, Integer numberOfPages, String license, ForumTopic forumTopic, Language language, Long downloadCount, Long printCount) {
     
 		BookPublication bookPublication = new BookPublication();
     bookPublication.setCreated(created);
@@ -26,6 +26,7 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
     bookPublication.setName(name);
     bookPublication.setUrlName(urlName);
     bookPublication.setPrice(price);
+    bookPublication.setAuthorsShare(authorsShare);
     bookPublication.setPublished(published);
     bookPublication.setHeight(height);
     bookPublication.setWidth(width);
@@ -66,6 +67,11 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
 
   public BookPublication updatePrintCount(BookPublication bookPublication, Long printCount) {
     bookPublication.setPrintCount(printCount);
+    return persist(bookPublication);
+  }
+
+  public BookPublication updateAuthorsShare(BookPublication bookPublication, Double authorsShare) {
+    bookPublication.setAuthorsShare(authorsShare);
     return persist(bookPublication);
   }
 
