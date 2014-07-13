@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['gamelibrary.proposegame.pageTitle']}</ui:define>
+  
+  <ui:define name="view-scripts">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.3/jquery.tagsinput.min.js"/>
+  
+    <h:outputScript name="scripts/jquery.fileupload/jquery.iframe-transport.js" />
+    <h:outputScript name="scripts/jquery.fileupload/jquery.fileupload.js" />
+    <h:outputScript name="scripts/uploadfield/uploadfield.js"/>
+
+    <!-- View scripts -->
+    
+    <h:outputScript name="scripts/gui/gamelibrary-propose-game.js"/>
+  </ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.3/jquery.tagsinput.css"/>
+    <h:outputStylesheet library="novus" name="css/gamelibrary-propose-game.css"/>
+    <h:outputStylesheet library="novus" name="css/gamelibrary-common.css"/>
+    <h:outputStylesheet library="novus" name="css/gamelibrary.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/index.jsf">#{locales['gamelibrary.proposegame.navigationIndex']}</h:link>
+        </h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.proposegame.navigationGameLibrary']}</h:link>
+        </h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.proposegame.navigationProposeGame']}</h:link>
+        </h:panelGroup>
+      </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{locales['gamelibrary.proposegame.descriptionTitle']}</p>
+        <p class="view-header-description-text">#{locales['gamelibrary.proposegame.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <!-- View Content -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="gamelibrary-propose-game-panel">
+        <h3>#{locales['gamelibrary.proposegame.proposeGameTitle']}</h3>
+        <h:form>
+          <h:panelGroup layout="block" styleClass="gamelibrary-propose-game-form-section">
+            <h:outputLabel value="#{locales['gamelibrary.proposegame.nameLabel']}" />
+            <input type="text" jsf:value="#{gameLibraryProposeGameBackingBean.name}" required="required"/>
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-propose-game-form-section">
+            <h:outputLabel value="#{locales['gamelibrary.proposegame.descriptionLabel']}" />
+            <textarea jsf:value="#{gameLibraryProposeGameBackingBean.description}" required="required"></textarea>
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-propose-game-form-section">
+            <h:outputLabel value="#{locales['gamelibrary.proposegame.languageLabel']}" />
+            <h:selectOneMenu value="#{gameLibraryProposeGameBackingBean.languageId}">
+              <f:selectItems 
+                var="language" 
+                value="#{gameLibraryProposeGameBackingBean.languages}"
+                itemValue="#{language.id}" 
+                itemLabel="#{locales['generic.languages.'.concat(language.ISO3)]}"/>
+            </h:selectOneMenu>
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-propose-game-form-section">
+            <h:outputLabel value="#{locales['gamelibrary.proposegame.tagsLabel']}" />
+            <input type="text" jsf:value="#{gameLibraryProposeGameBackingBean.tags}" class="gamelibrary-propose-game-form-tags" data-existing-tags="#{gameLibraryProposeGameBackingBean.existingTags}" data-help-text="#{locales['gamelibrary.proposegame.tagsHelpText']}"/>
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-propose-game-form-section">
+            <h:outputLabel value="#{locales['gamelibrary.proposegame.licenseLabel']}" />
+            <h:selectOneMenu value="#{gameLibraryProposeGameBackingBean.licenseType}" styleClass="gamelibrary-propose-game-license-select" p:required="required">
+              <f:selectItem itemValue="CREATIVE_COMMONS" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommons']}"/>
+              <f:selectItem itemValue="OTHER" itemLabel="#{locales['gamelibrary.proposegame.licenseOther']}"/>
+            </h:selectOneMenu>
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-propose-game-form-section gamelibrary-propose-game-form-section-cc">
+            <h:outputLabel value="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowModifications']}" />
+
+            <h:selectOneRadio value="#{gameLibraryProposeGameBackingBean.creativeCommonsDerivatives}" p:required="required">
+              <f:selectItem itemValue="YES" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowModificationsYes']}"/>
+              <f:selectItem itemValue="NO" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowModificationsNo']}"/>
+              <f:selectItem itemValue="SHARE_ALIKE" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowModificationsShare']}"/>
+            </h:selectOneRadio>
+            
+            <h:outputLabel value="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowCommercial']}" />
+            <h:selectOneRadio value="#{gameLibraryProposeGameBackingBean.creativeCommonsCommercial}" p:required="required">
+              <f:selectItem itemValue="YES" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowCommercialYes']}"/>
+              <f:selectItem itemValue="NO" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowCommercialNo']}"/>
+            </h:selectOneRadio>
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-propose-game-form-section gamelibrary-propose-game-form-section-otherlicense">
+            <h:outputLabel value="#{locales['gamelibrary.proposegame.linkToLicense']}" />
+            <input type="text" jsf:value="#{gameLibraryProposeGameBackingBean.licenseOther}" required="required"/>
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-propose-game-form-section">
+            <h:outputLabel value="#{locales['gamelibrary.proposegame.imageFileLabel']}" />
+            <input type="file" name="image" required="required"/>
+            <input type="hidden" name="image-file-id" jsf:value="#{gameLibraryProposeGameBackingBean.imageFileId}"/>
+            <input type="hidden" name="image-filename" jsf:value="#{gameLibraryProposeGameBackingBean.imageFileName}"/>
+            <input type="hidden" name="image-content-type" jsf:value="#{gameLibraryProposeGameBackingBean.imageContentType}"/>
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-propose-game-form-section">
+            <h:outputLabel value="#{locales['gamelibrary.proposegame.downloadableFileLabel']}" />
+            <input type="file" name="downloadable"/>
+            <input type="hidden" name="downloadable-file-id" jsf:value="#{gameLibraryProposeGameBackingBean.downloadableFileId}"/>
+            <input type="hidden" name="downloadable-filename" jsf:value="#{gameLibraryProposeGameBackingBean.downloadableFileName}"/>
+            <input type="hidden" name="downloadable-content-type" jsf:value="#{gameLibraryProposeGameBackingBean.downloadableContentType}"/>
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="gamelibrary-propose-game-form-section">
+            <h:outputLabel value="#{locales['gamelibrary.proposegame.printableFileLabel']}" />
+            <input type="file" name="printable"/>
+            <input type="hidden" name="printable-file-id" jsf:value="#{gameLibraryProposeGameBackingBean.printableFileId}"/>
+            <input type="hidden" name="printable-filename" jsf:value="#{gameLibraryProposeGameBackingBean.printableFileName}"/>
+            <input type="hidden" name="printable-content-type" jsf:value="#{gameLibraryProposeGameBackingBean.printableContentType}"/>
+          </h:panelGroup>
+          
+          <h:commandButton styleClass="gamelibrary-propose-game-send" action="#{gameLibraryProposeGameBackingBean.send}" value="#{locales['gamelibrary.proposegame.sendButton']}"/>
+        </h:form>
+        
+      </h:panelGroup>
+    </h:panelGroup>   
+  </ui:define>
+
+</ui:composition>

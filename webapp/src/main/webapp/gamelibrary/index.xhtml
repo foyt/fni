@@ -53,6 +53,10 @@
       <!-- Description -->
   
       <h:panelGroup layout="block" styleClass="view-header-description">
+        <h:link rendered="#{sessionBackingBean.loggedIn}" styleClass="gamelibrary-propose-game-link" outcome="/gamelibrary/proposegame.jsf" value="#{locales['gamelibrary.index.proposeGameLink']}"/>
+        <h:link rendered="#{!sessionBackingBean.loggedIn}" styleClass="gamelibrary-propose-game-link" outcome="/users/login.jsf" value="#{locales['gamelibrary.index.loginToProposeGameLink']}">
+          <f:param name="redirectUrl" value="#{request.contextPath}/gamelibrary/proposegame/"/>
+        </h:link>
         <p class="view-header-description-title">#{locales['gamelibrary.index.descriptionTitle']}</p>
         <p class="view-header-description-text">#{locales['gamelibrary.index.descriptionText']}</p>
       </h:panelGroup>

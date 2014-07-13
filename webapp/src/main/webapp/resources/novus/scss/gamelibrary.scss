@@ -50,6 +50,15 @@ $share-button-padding: 5px;
 
 /* Header */
 
+.gamelibrary-propose-game-link {
+  float: right;
+  font-family: $title-font;
+  font-size: 22px; 
+  color: $title-color;
+  text-decoration: none;
+  margin-top: 4px;
+}
+
 .gamelibrary-search-container {
   position: relative;  
 }
