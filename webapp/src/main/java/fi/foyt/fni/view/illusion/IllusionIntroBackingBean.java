@@ -18,6 +18,7 @@ import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocument;
@@ -69,6 +70,8 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
       }
     }
     
+    canBeJoined = illusionGroup.getJoinMode() == IllusionGroupJoinMode.OPEN || illusionGroup.getJoinMode() == IllusionGroupJoinMode.APPROVE;
+    
     return null;
   }
   
@@ -83,6 +86,10 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
   
   public String getText() {
     return text;
+  }
+  
+  public boolean getCanBeJoined() {
+    return canBeJoined;
   }
   
   @LoggedIn
@@ -113,4 +120,5 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
   }
   
   private String text;
+  private boolean canBeJoined;
 }

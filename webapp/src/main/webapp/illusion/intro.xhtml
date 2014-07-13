@@ -54,11 +54,11 @@
           <h:outputText value="#{illusionIntroBackingBean.text}" escape="false"/>
         </h:panelGroup>
         
-        <h:link outcome="/users/login.jsf" styleClass="illusion-intro-login-link" rendered="#{!sessionBackingBean.loggedIn}" value="#{locales['illusion.intro.loginRequiredForJoin']}">
+        <h:link outcome="/users/login.jsf" styleClass="illusion-intro-login-link" rendered="#{!sessionBackingBean.loggedIn and illusionIntroBackingBean.canBeJoined}" value="#{locales['illusion.intro.loginRequiredForJoin']}">
           <f:param name="redirectUrl" value="#{request.contextPath}/illusion/group/#{illusionIntroBackingBean.urlName}/intro"/>
         </h:link>
 
-        <h:form rendered="#{sessionBackingBean.loggedIn}">
+        <h:form rendered="#{sessionBackingBean.loggedIn and illusionIntroBackingBean.canBeJoined}">
           <h:commandButton action="#{illusionIntroBackingBean.join}" value="#{locales['illusion.intro.joinButton']}" styleClass="illusion-intro-join" />
         </h:form>
       </h:panelGroup>      
