@@ -1,5 +1,6 @@
 package fi.foyt.fni.system;
 
+import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,6 +27,7 @@ public class SystemSettingsController {
 	private static final String DEFAULT_COUNTRY_CODE = "FI";
   private final static double VAT_PERCENT = 0;
   private final static boolean VAT_REGISTERED = false;
+  private static final String DEFAULT_CURRENCY = "EUR";
 
 	@Inject
 	private SystemSettingDAO systemSettingDAO;
@@ -119,6 +121,10 @@ public class SystemSettingsController {
 	
 	public boolean isVatRegistered() {
     return VAT_REGISTERED;
+  }
+
+  public Currency getDefaultCurrency() {
+    return Currency.getInstance(DEFAULT_CURRENCY);
   }
 	
 }
