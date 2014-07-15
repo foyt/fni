@@ -47,6 +47,7 @@ h3 {
 }
 
 .illusion-create-group-field input[type="text"], 
+.illusion-create-group-field input[type="number"], 
 .illusion-create-group-field select {
   width: 300px;
   font-size: 14px;
@@ -62,6 +63,15 @@ h3 {
   font-family: $default-font;
   @include box-sizing(border-box);
   margin-bottom: 8px;
+}
+
+.illusion-create-group-sign-up-fee-field  input[type="number"] {
+  width: 232px;
+}
+
+.illusion-create-group-sign-up-fee-field select {
+  width: 60px;
+  margin-left: 8px;
 }
 
 .illusion-create-group-save {

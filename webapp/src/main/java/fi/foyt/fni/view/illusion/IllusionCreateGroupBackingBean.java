@@ -1,7 +1,9 @@
 package fi.foyt.fni.view.illusion;
 
+import java.util.Currency;
 import java.util.Date;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -53,6 +55,12 @@ public class IllusionCreateGroupBackingBean {
   @Inject
   private IllusionGroupDocumentController illusionGroupDocumentController;
   
+  @PostConstruct
+  public void init() {
+    signUpFee = null;
+    signUpFeeCurrency = systemSettingsController.getDefaultCurrency().getCurrencyCode();
+  }
+  
 	public String getName() {
     return name;
   }
@@ -75,6 +83,22 @@ public class IllusionCreateGroupBackingBean {
 	
 	public void setJoinMode(IllusionGroupJoinMode joinMode) {
     this.joinMode = joinMode;
+  }
+	
+	public Double getSignUpFee() {
+    return signUpFee;
+  }
+	
+	public void setSignUpFee(Double signUpFee) {
+    this.signUpFee = signUpFee;
+  }
+	
+	public String getSignUpFeeCurrency() {
+    return signUpFeeCurrency;
+  }
+	
+	public void setSignUpFeeCurrency(String signUpFeeCurrency) {
+    this.signUpFeeCurrency = signUpFeeCurrency;
   }
 	
 	private String createUrlName(String name) {
@@ -106,10 +130,20 @@ public class IllusionCreateGroupBackingBean {
     String xmppRoom = urlName + '@' + systemSettingsController.getSetting(SystemSettingKey.CHAT_MUC_HOST);
     User loggedUser = sessionController.getLoggedUser();
     Language language = systemSettingsController.findLocaleByIso2(sessionController.getLocale().getLanguage());
+    Double signUpFee = getSignUpFee();
+    Currency signUpFeeCurrency = null;
+    
+    if (signUpFee != null && signUpFee <= 0) {
+      signUpFee = null;
+    }
+    
+    if (signUpFee != null) {
+      signUpFeeCurrency = Currency.getInstance(getSignUpFeeCurrency());
+    }
 
     IllusionFolder illusionFolder = illusionGroupController.findUserIllusionFolder(loggedUser, true);
     IllusionGroupFolder illusionGroupFolder = illusionGroupController.createIllusionGroupFolder(loggedUser, illusionFolder, urlName, getName());
-    IllusionGroup group = illusionGroupController.createIllusionGroup(urlName, getName(), getDescription(), xmppRoom, illusionGroupFolder, getJoinMode(), now);
+    IllusionGroup group = illusionGroupController.createIllusionGroup(urlName, getName(), getDescription(), xmppRoom, illusionGroupFolder, getJoinMode(), now, signUpFee, signUpFeeCurrency);
     
     String indexDocumentTitle = FacesUtils.getLocalizedValue("illusion.createGroup.indexDocumentTitle");
     String indexDocumentContent = FacesUtils.getLocalizedValue("illusion.createGroup.indexDocumentContent");
@@ -148,4 +182,6 @@ public class IllusionCreateGroupBackingBean {
 	private String name;
 	private String description;
 	private IllusionGroupJoinMode joinMode;
+	private Double signUpFee;
+	private String signUpFeeCurrency;
 }

@@ -2,7 +2,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" 
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:h="http://java.sun.com/jsf/html"  
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['illusion.createGroup.pageTitle']}</ui:define>
@@ -68,6 +69,14 @@
                 <f:selectItem itemValue="OPEN" itemLabel="#{locales['illusion.createGroup.joiningPublic']}"/>
                 <f:selectItem itemValue="APPROVE" itemLabel="#{locales['illusion.createGroup.joiningApprove']}"/>
                 <f:selectItem itemValue="INVITE_ONLY" itemLabel="#{locales['illusion.createGroup.joiningInviteOnly']}"/>
+              </h:selectOneMenu>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="illusion-create-group-field illusion-create-group-sign-up-fee-field">
+              <h:outputLabel value="#{locales['illusion.createGroup.signUpFeeLabel']}" />
+              <input type="number" min="0" step="0.01" jsf:value="#{illusionCreateGroupBackingBean.signUpFee}"/>
+              <h:selectOneMenu value="#{illusionCreateGroupBackingBean.signUpFeeCurrency}">
+                <f:selectItem itemValue="EUR" itemLabel="EUR"/>
               </h:selectOneMenu>
             </h:panelGroup>
              
