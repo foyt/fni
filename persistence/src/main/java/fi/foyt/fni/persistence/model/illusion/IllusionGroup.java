@@ -1,5 +1,6 @@
 package fi.foyt.fni.persistence.model.illusion;
 
+import java.util.Currency;
 import java.util.Date;
 
 import javax.persistence.Cacheable;
@@ -85,6 +86,22 @@ public class IllusionGroup {
     this.joinMode = joinMode;
   }
   
+  public Double getSignUpFee() {
+    return signUpFee;
+  }
+  
+  public void setSignUpFee(Double signUpFee) {
+    this.signUpFee = signUpFee;
+  }
+  
+  public Currency getSignUpFeeCurrency() {
+    return signUpFeeCurrency;
+  }
+  
+  public void setSignUpFeeCurrency(Currency signUpFeeCurrency) {
+    this.signUpFeeCurrency = signUpFeeCurrency;
+  }
+  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
@@ -117,4 +134,9 @@ public class IllusionGroup {
   @Enumerated (EnumType.STRING)
   @Column (nullable = false)
   private IllusionGroupJoinMode joinMode;
+  
+  private Double signUpFee;
+  
+  private Currency signUpFeeCurrency; 
+  
 }

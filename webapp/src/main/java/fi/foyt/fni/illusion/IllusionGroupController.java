@@ -2,6 +2,7 @@ package fi.foyt.fni.illusion;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -80,8 +81,8 @@ public class IllusionGroupController {
   
   /* IllusionGroup */
 
-  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String xmppRoom, IllusionGroupFolder folder, IllusionGroupJoinMode joinMode, Date created) {
-    return illusionGroupDAO.create(urlName, name, description, xmppRoom, folder, joinMode, created);
+  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String xmppRoom, IllusionGroupFolder folder, IllusionGroupJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency) {
+    return illusionGroupDAO.create(urlName, name, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency);
   }
 
   public IllusionGroup findIllusionGroupById(Long id) {

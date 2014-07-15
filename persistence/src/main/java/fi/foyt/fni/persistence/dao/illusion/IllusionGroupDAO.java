@@ -1,5 +1,6 @@
 package fi.foyt.fni.persistence.dao.illusion;
 
+import java.util.Currency;
 import java.util.Date;
 
 import javax.persistence.EntityManager;
@@ -17,7 +18,7 @@ public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionGroup create(String urlName, String name, String description, String xmppRoom, IllusionGroupFolder folder, IllusionGroupJoinMode joinMode, Date created) {
+	public IllusionGroup create(String urlName, String name, String description, String xmppRoom, IllusionGroupFolder folder, IllusionGroupJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency) {
 		IllusionGroup illusionGroup = new IllusionGroup();
 		
 		illusionGroup.setName(name);
@@ -27,6 +28,8 @@ public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
 		illusionGroup.setCreated(created);
 		illusionGroup.setFolder(folder);
 		illusionGroup.setJoinMode(joinMode);
+		illusionGroup.setSignUpFee(signUpFee);
+		illusionGroup.setSignUpFeeCurrency(signUpFeeCurrency);
 		
 		return persist(illusionGroup);
 	}
@@ -54,5 +57,16 @@ public class IllusionGroupDAO extends GenericDAO<IllusionGroup> {
     illusionGroup.setJoinMode(joinMode);
     return persist(illusionGroup);
   }
+  
+  public IllusionGroup updateSignUpFee(IllusionGroup illusionGroup, Double signUpFee) {
+    illusionGroup.setSignUpFee(signUpFee);
+    return persist(illusionGroup);
+  }
+  
+  public IllusionGroup updateSignUpFeeCurrency(IllusionGroup illusionGroup, Currency signUpFeeCurrency) {
+    illusionGroup.setSignUpFeeCurrency(signUpFeeCurrency);
+    return persist(illusionGroup);
+  }
 	
+  
 }
