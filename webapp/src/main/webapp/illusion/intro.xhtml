@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">
     <h:outputFormat value="#{locales['illusion.group.pageTitle']}">
@@ -54,13 +59,28 @@
           <h:outputText value="#{illusionIntroBackingBean.text}" escape="false"/>
         </h:panelGroup>
         
-        <h:link outcome="/users/login.jsf" styleClass="illusion-intro-login-link" rendered="#{!sessionBackingBean.loggedIn and illusionIntroBackingBean.canBeJoined}" value="#{locales['illusion.intro.loginRequiredForJoin']}">
-          <f:param name="redirectUrl" value="#{request.contextPath}/illusion/group/#{illusionIntroBackingBean.urlName}/intro"/>
-        </h:link>
+        <h:panelGroup layout="block" styleClass="illusion-group-intro-join" rendered="#{illusionIntroBackingBean.joinMode eq 'OPEN' or illusionIntroBackingBean.joinMode eq 'APPROVE'}">
+          <h:panelGroup layout="block" styleClass="illusion-group-intro-join-info" rendered="#{!illusionIntroBackingBean.hasSignUpFee}">
+            <h:outputText value="#{locales['illusion.intro.joinInfoFree']}"/>
+          </h:panelGroup>
+          
+          <h:panelGroup layout="block" styleClass="illusion-group-intro-join-info" rendered="#{illusionIntroBackingBean.hasSignUpFee}">
+            <h:outputFormat value="#{locales['illusion.intro.joinInfoPrice']}">
+              <f:param value="#{illusionIntroBackingBean.signUpFee}"/>
+            </h:outputFormat>
+          </h:panelGroup>
+          
+          <h:form>
+            <h:link outcome="/illusion/dojoin.jsf" styleClass="illusion-group-intro-join-button"  rendered="#{illusionIntroBackingBean.joinMode eq 'OPEN'}">
+              <h:outputText value="#{locales['illusion.intro.joinButton']}"/>
+              <f:param name="urlName" value="#{illusionIntroBackingBean.urlName}"/>
+            </h:link>
+            <h:link outcome="/illusion/dojoin.jsf" value="#{locales['illusion.intro.requestToJoinButton']}" styleClass="illusion-group-intro-join-button" rendered="#{illusionIntroBackingBean.joinMode eq 'APPROVE'}">              
+              <f:param name="urlName" value="#{illusionIntroBackingBean.urlName}"/>
+            </h:link>
+          </h:form>
+        </h:panelGroup>
 
-        <h:form rendered="#{sessionBackingBean.loggedIn and illusionIntroBackingBean.canBeJoined}">
-          <h:commandButton action="#{illusionIntroBackingBean.join}" value="#{locales['illusion.intro.joinButton']}" styleClass="illusion-intro-join" />
-        </h:form>
       </h:panelGroup>      
     </h:panelGroup>
 

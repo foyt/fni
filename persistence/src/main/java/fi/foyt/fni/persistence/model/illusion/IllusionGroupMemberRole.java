@@ -5,5 +5,6 @@ public enum IllusionGroupMemberRole {
   PLAYER,
   BOT,
   BANNED,
-  PENDING_APPROVAL
+  PENDING_APPROVAL,
+  WAITING_PAYMENT
 }
