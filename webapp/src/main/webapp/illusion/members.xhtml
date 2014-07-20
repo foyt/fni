@@ -80,21 +80,23 @@
             <h:form>
               <a href="javascript:void(null)" class="illusion-invite-members">#{locales['illusion.members.invitePlayers']}</a>
               
-              <h3>#{locales['illusion.members.playerListTitle']}</h3>
+              <ui:fragment rendered="#{not empty illusionMembersBackingBean.players}">
+                <h3>#{locales['illusion.members.playerListTitle']}</h3>
             
-              <ui:repeat var="member" value="#{illusionMembersBackingBean.players}">
-                <h:commandLink action="#{illusionMembersBackingBean.selectMember(member)}" styleClass="illusion-member illusion-player">
-                  <h:panelGroup layout="block" styleClass="illusion-member-avatar"> 
-                    <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionMembersBackingBean.urlName}/#{member.id}?size=48"/> 
-                  </h:panelGroup>
-                  <h4>
-                    <h:outputFormat value="#{locales['illusion.members.playerListMember']}">
-                      <f:param value="#{member.user.fullName}"/>
-                      <f:param value="#{member.characterName}"/>
-                    </h:outputFormat>
-                  </h4>
-                </h:commandLink>      
-              </ui:repeat>
+                <ui:repeat var="member" value="#{illusionMembersBackingBean.players}">
+                  <h:commandLink action="#{illusionMembersBackingBean.selectMember(member)}" styleClass="illusion-member illusion-player">
+                    <h:panelGroup layout="block" styleClass="illusion-member-avatar"> 
+                      <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionMembersBackingBean.urlName}/#{member.id}?size=48"/> 
+                    </h:panelGroup>
+                    <h4>
+                      <h:outputFormat value="#{locales['illusion.members.playerListMember']}">
+                        <f:param value="#{member.user.fullName}"/>
+                        <f:param value="#{member.characterName}"/>
+                      </h:outputFormat>
+                    </h4>
+                  </h:commandLink>      
+                </ui:repeat>
+              </ui:fragment>
               
               <h3>#{locales['illusion.members.gameMasterListTitle']}</h3>
             
@@ -111,7 +113,7 @@
                 </h:commandLink>      
               </ui:repeat>
               
-              <ui:fragment rendered="#{illusionMembersBackingBean.groupJoinMode eq 'APPROVE'}">
+              <ui:fragment rendered="#{not empty illusionMembersBackingBean.approvalPending}">
                 <h3>#{locales['illusion.members.approvalPendingListTitle']}</h3>
               
                 <ui:repeat var="member" value="#{illusionMembersBackingBean.approvalPending}">
@@ -127,21 +129,41 @@
                   </h:commandLink>      
                 </ui:repeat>
               </ui:fragment>
+
+              <ui:fragment rendered="#{not empty illusionMembersBackingBean.waitingPayment}">
+                <h3>#{locales['illusion.members.waitingPaymentListTitle']}</h3>
               
-              <h3>#{locales['illusion.members.bannedListTitle']}</h3>
-            
-              <ui:repeat var="member" value="#{illusionMembersBackingBean.banned}">
-                <h:commandLink action="#{illusionMembersBackingBean.selectMember(member)}" styleClass="illusion-member illusion-banned">
-                  <h:panelGroup layout="block" styleClass="illusion-member-avatar"> 
-                    <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionMembersBackingBean.urlName}/#{member.id}?size=48"/> 
-                  </h:panelGroup>
-                  <h4>
-                    <h:outputFormat value="#{locales['illusion.members.bannedListMember']}">
-                      <f:param value="#{member.user.fullName}"/>
-                    </h:outputFormat>
-                  </h4>
-                </h:commandLink>      
-              </ui:repeat>
+                <ui:repeat var="member" value="#{illusionMembersBackingBean.waitingPayment}">
+                  <h:commandLink action="#{illusionMembersBackingBean.selectMember(member)}" styleClass="illusion-member illusion-waiting-payment">
+                    <h:panelGroup layout="block" styleClass="illusion-member-avatar"> 
+                      <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionMembersBackingBean.urlName}/#{member.id}?size=48"/> 
+                    </h:panelGroup>
+                    <h4>
+                      <h:outputFormat value="#{locales['illusion.members.approvalPendingListMember']}">
+                        <f:param value="#{member.user.fullName}"/>
+                      </h:outputFormat>
+                    </h4>
+                  </h:commandLink>      
+                </ui:repeat>
+              </ui:fragment>
+
+              <ui:fragment rendered="#{not empty illusionMembersBackingBean.banned}">
+                <h3>#{locales['illusion.members.bannedListTitle']}</h3>
+              
+                <ui:repeat var="member" value="#{illusionMembersBackingBean.banned}">
+                  <h:commandLink action="#{illusionMembersBackingBean.selectMember(member)}" styleClass="illusion-member illusion-banned">
+                    <h:panelGroup layout="block" styleClass="illusion-member-avatar"> 
+                      <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionMembersBackingBean.urlName}/#{member.id}?size=48"/> 
+                    </h:panelGroup>
+                    <h4>
+                      <h:outputFormat value="#{locales['illusion.members.bannedListMember']}">
+                        <f:param value="#{member.user.fullName}"/>
+                      </h:outputFormat>
+                    </h4>
+                  </h:commandLink>      
+                </ui:repeat>
+              </ui:fragment>
+              
             </h:form>            
           </h:panelGroup>
         </h:panelGroup>
@@ -165,6 +187,7 @@
               <h:outputLabel value="#{locales['illusion.members.editMemberRoleLabel']}" />
               <h:selectOneMenu value="#{illusionMembersBackingBean.selectedMemberRole}">
                 <f:selectItem itemLabel="#{locales['illusion.members.editMemberRolePlayer']}" itemValue="PLAYER" itemDisabled="#{illusionMembersBackingBean.selectedMemberRole eq 'GAMEMASTER' and sessionBackingBean.loggedUser.id eq illusionMembersBackingBean.selectedMemberUserId}"/>
+                <f:selectItem itemLabel="#{locales['illusion.members.editMemberRoleWaitingPayment']}" itemValue="WAITING_PAYMENT" itemDisabled="#{(illusionMembersBackingBean.selectedMemberRole eq 'GAMEMASTER' and sessionBackingBean.loggedUser.id eq illusionMembersBackingBean.selectedMemberUserId)}"/>
                 <f:selectItem itemLabel="#{locales['illusion.members.editMemberRoleApprovalPending']}" itemValue="PENDING_APPROVAL" itemDisabled="#{(illusionMembersBackingBean.groupJoinMode ne 'APPROVE') or (illusionMembersBackingBean.selectedMemberRole eq 'GAMEMASTER' and sessionBackingBean.loggedUser.id eq illusionMembersBackingBean.selectedMemberUserId)}"/>
                 <f:selectItem itemLabel="#{locales['illusion.members.editMemberRoleBanned']}" itemValue="BANNED" itemDisabled="#{illusionMembersBackingBean.selectedMemberRole eq 'GAMEMASTER' and sessionBackingBean.loggedUser.id eq illusionMembersBackingBean.selectedMemberUserId}"/>
                 <f:selectItem itemLabel="#{locales['illusion.members.editMemberRoleGameMaster']}" itemValue="GAMEMASTER"/>

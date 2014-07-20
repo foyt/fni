@@ -58,6 +58,8 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
       approvalPending = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.PENDING_APPROVAL);
     }
     
+    waitingPayment = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.WAITING_PAYMENT);
+    
     return null;
   }
   
@@ -91,6 +93,10 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   
   public List<IllusionGroupMember> getBanned() {
     return banned;
+  }
+  
+  public List<IllusionGroupMember> getWaitingPayment() {
+    return waitingPayment;
   }
   
   public IllusionGroupJoinMode getGroupJoinMode() {
@@ -162,6 +168,7 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   private List<IllusionGroupMember> players;
   private List<IllusionGroupMember> banned;
   private List<IllusionGroupMember> approvalPending;
+  private List<IllusionGroupMember> waitingPayment;
   private IllusionGroupJoinMode groupJoinMode;
   private Long selectedMemberId;
   private Long selectedMemberUserId;
