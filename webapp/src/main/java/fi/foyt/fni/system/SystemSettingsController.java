@@ -126,5 +126,13 @@ public class SystemSettingsController {
   public Currency getDefaultCurrency() {
     return Currency.getInstance(DEFAULT_CURRENCY);
   }
+
+  public Double getDoubleSetting(SystemSettingKey key) {
+    return NumberUtils.createDouble(getSetting(key));
+  }
+
+  public Currency getCurrencySetting(SystemSettingKey key) {
+    return Currency.getInstance(getSetting(key));
+  }
 	
 }
