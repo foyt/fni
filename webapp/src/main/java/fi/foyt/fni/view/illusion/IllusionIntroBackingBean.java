@@ -19,17 +19,16 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
-import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 import fi.foyt.fni.security.UnauthorizedException;
-import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.FileData;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
@@ -50,19 +49,14 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
 
   @Inject
   private MaterialController materialController;
-
-  @Inject
-  private IllusionGroupController illusionGroupController;
-
-  @Inject
-  private SessionController sessionController;
   
   @Override
   public String init(IllusionGroup illusionGroup, IllusionGroupMember groupUser) {
     IllusionGroupFolder folder = illusionGroup.getFolder();
     
     if (groupUser != null) {
-      switch (groupUser.getRole()) {
+      memberRole = groupUser.getRole();
+      switch (memberRole) {
         case GAMEMASTER:
         case PLAYER:
           return "/illusion/group.jsf?faces-redirect=true&urlName=" + illusionGroup.getUrlName();
@@ -101,23 +95,19 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
   @Deferred
   @IgnorePostback
   public void checkRole() {
-    if (sessionController.isLoggedIn()) {
-      IllusionGroup group = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
-      IllusionGroupMember member = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, sessionController.getLoggedUser());
-      if (member != null) {
-        switch (member.getRole()) {
-          case BANNED:
-            FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.intro.bannedMessage"));
-          break;
-          case PENDING_APPROVAL:
-            FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.intro.pendingApprovalMessage"));
-          break;
-          case WAITING_PAYMENT:
-            FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.intro.waitingPaymentMessage"));
-          break;
-          default:
-          break;
-        }
+    if (memberRole != null) {
+      switch (memberRole) {
+        case BANNED:
+          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.intro.bannedMessage"));
+        break;
+        case PENDING_APPROVAL:
+          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.intro.pendingApprovalMessage"));
+        break;
+        case WAITING_PAYMENT:
+          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.intro.waitingPaymentMessage"));
+        break;
+        default:
+        break;
       }
     }
   }
@@ -139,6 +129,10 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
     return joinMode;
   }
   
+  public IllusionGroupMemberRole getMemberRole() {
+    return memberRole;
+  }
+  
   public boolean getHasSignUpFee() {
     return hasSignUpFee;
   }
@@ -149,6 +143,7 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
   
   private String text;
   private IllusionGroupJoinMode joinMode;
+  private IllusionGroupMemberRole memberRole;
   private boolean hasSignUpFee;
   private String signUpFee;
 }

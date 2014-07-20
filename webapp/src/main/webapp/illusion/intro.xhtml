@@ -59,7 +59,7 @@
           <h:outputText value="#{illusionIntroBackingBean.text}" escape="false"/>
         </h:panelGroup>
         
-        <h:panelGroup layout="block" styleClass="illusion-group-intro-join" rendered="#{illusionIntroBackingBean.joinMode eq 'OPEN' or illusionIntroBackingBean.joinMode eq 'APPROVE'}">
+        <h:panelGroup layout="block" styleClass="illusion-group-intro-join" rendered="#{(illusionIntroBackingBean.memberRole == null) and (illusionIntroBackingBean.joinMode eq 'OPEN' or illusionIntroBackingBean.joinMode eq 'APPROVE')}">
           <h:panelGroup layout="block" styleClass="illusion-group-intro-join-info" rendered="#{!illusionIntroBackingBean.hasSignUpFee}">
             <h:outputText value="#{locales['illusion.intro.joinInfoFree']}"/>
           </h:panelGroup>
