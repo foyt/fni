@@ -1,6 +1,7 @@
 package fi.foyt.fni.view.illusion;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.ejb.Stateful;
@@ -8,10 +9,13 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.collections.ComparatorUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.materials.MaterialController;
+import fi.foyt.fni.materials.MaterialTypeComparator;
+import fi.foyt.fni.materials.TitleComparator;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
@@ -42,6 +46,7 @@ public class IllusionMaterialsBackingBean extends AbstractIllusionGroupBackingBe
   @Inject
   private SessionController sessionController;
   
+  @SuppressWarnings("unchecked")
   @Override
   public String init(IllusionGroup illusionGroup, IllusionGroupMember member) {
     if (member == null) {
@@ -61,6 +66,15 @@ public class IllusionMaterialsBackingBean extends AbstractIllusionGroupBackingBe
       MaterialType.GOOGLE_DOCUMENT,
       MaterialType.DROPBOX_FILE   
     ));
+    
+    Collections.sort(materials, ComparatorUtils.chainedComparator(
+      Arrays.asList(
+        new MaterialTypeComparator(MaterialType.ILLUSION_FOLDER),
+        new MaterialTypeComparator(MaterialType.DROPBOX_ROOT_FOLDER),
+        new MaterialTypeComparator(MaterialType.FOLDER), 
+        new TitleComparator())
+      )
+    );
     
     return null;
   }
