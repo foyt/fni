@@ -1,0 +1,116 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+$info-text-color: rgb(255, 255, 255);
+$info-background-color: darken($panel-background-color, 80%);
+
+/* Panels */ 
+
+.illusion-group-payment-panel {
+  @include generic-panel;
+  position: relative;
+  background: #fff;
+}
+
+/* Generic */
+
+.illusion-group-payment-panel h3 {
+  @include header-3;
+  color: $title-color;
+}
+
+/* Info */
+
+.illusion-group-payment-info {
+  color: $info-text-color;
+  background-color: $info-background-color;
+  text-align: center;
+  font-size: 12px;
+  font-family: $default-font;
+  font-weight: bold;
+  font-style: italic;
+  padding: 5px;
+  margin-bottom: 40px;
+}
+
+/* Form */
+
+.illusion-group-payment-fields {
+  margin-top: 20px;
+}
+
+.illusion-group-payment-fields {
+  margin-bottom: 40px;
+}
+
+.illusion-group-payment-field {
+  margin-bottom: 9px;
+}
+
+.illusion-group-payment-field label {
+  width: 130px;
+  display: inline-block;
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+  vertical-align: top;
+}
+
+.illusion-group-payment-field input[type="text"], 
+.illusion-group-payment-field select {
+  width: 260px;
+  font-size: 14px;
+  font-family: $default-font;
+  @include box-sizing(border-box);
+}
+
+.illusion-group-payment-field textarea {
+  width: 260px;
+  height: 96px;
+  font-size: 14px;
+  @include box-sizing(border-box);
+}
+
+/* Summary */
+
+.illusion-group-payment-summary {
+  margin-top: 20px;
+}
+
+.illusion-group-payment-summary-row {
+  width: 100%;
+  @include box-sizing(border-box);
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 13px;
+  border-bottom: 1px solid #000;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.illusion-group-payment-summary-row label {
+  width: 300px;
+  display: inline-block;
+}
+
+.illusion-group-payment-summary-row span {
+  display: inline-block;
+}
+
+/* Submit */
+
+.illusion-group-payment-button {  
+  @include header-3;
+  padding-left: 23px;
+  padding-right: 23px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 15px;
+  margin-top: 35px;
+  cursor: pointer;
+}
