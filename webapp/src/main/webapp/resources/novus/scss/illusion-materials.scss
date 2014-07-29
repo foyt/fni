@@ -34,10 +34,18 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   vertical-align: top;
 }
 
-.illusion-material h4 {
+.illusion-material .illusion-material-title {
   margin-left: 10px;  
   display: inline-block;
   vertical-align: top;
   margin-top: 4px;
+  padding-top: 9px;
+}
+
+.illusion-material .illusion-material-title>a {
+  color: $default-color;
+  font-family: $default-font;
+  text-decoration: none;
+  font-weight: bold;
 }
 

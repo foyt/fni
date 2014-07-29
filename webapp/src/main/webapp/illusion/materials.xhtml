@@ -76,11 +76,11 @@
                 <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
               </h:panelGroup>
                     
-              <h4>
+              <div class="illusion-material-title">
                 <h:outputLink value="#{request.contextPath}/materials/#{material.path}" target="_blank">
                   <h:outputText value="#{material.title}"/>
                 </h:outputLink>
-              </h4>
+              </div>
               
             </h:panelGroup>
           </ui:repeat>
