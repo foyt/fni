@@ -29,6 +29,7 @@ import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
+import fi.foyt.fni.persistence.model.gamelibrary.OrderType;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
@@ -328,22 +329,16 @@ public class IllusionGroupPaymentBackingBean {
     Address orderAddress = userController.createAddress(address.getUser(), AddressType.DELIVERY_ARCHIVED, address.getStreet1(), address.getStreet2(),
         address.getPostalCode(), address.getCity(), address.getCountry());
 
-    Order order = orderController.createOrder(loggedUser, null, company, email, firstName, lastName, mobile, phone, OrderStatus.NEW, null, notes, orderAddress);
+    Order order = orderController.createOrder(loggedUser, null, company, email, firstName, lastName, mobile, phone, OrderStatus.NEW, OrderType.ILLUSION_GROUP, null, notes, orderAddress);
 
     OrderDetails orderDetails = new OrderDetails(1, contact);
     String orderNumber = order.getId().toString();
     Payment payment = new Payment(orderNumber, orderDetails, urlSet, null, null, getCurrency().getCurrencyCode(), paymentLocale.toString(), null, null, null);
     payment.setDescription(notes);
     
-    double vatPercent = systemSettingsController.getVatPercent();
-    
     try {
-      paytrailService.addProduct(payment, ExternalLocales.getText(paymentLocale, "illusion.group.payment.handlingFeeItem"), "", 1d, handlingFee, vatPercent, 0d, Product.TYPE_HANDLING);
-      paytrailService.addProduct(payment, ExternalLocales.getText(paymentLocale, "illusion.group.payment.signUpFeeItem", illusionGroup.getName()), "", 1d, signUpFee, vatPercent, 0d, Product.TYPE_NORMAL);
-    
-      for (Product product : payment.getOrderDetails().getProducts()) {
-        orderController.createOrderItem(order, null, product.getTitle(), product.getPrice(), product.getAmount().intValue());
-      }
+      addProduct(payment, order, null, ExternalLocales.getText(paymentLocale, "illusion.group.payment.handlingFeeItem"), handlingFee, Product.TYPE_HANDLING);
+      addProduct(payment, order, illusionGroup, ExternalLocales.getText(paymentLocale, "illusion.group.payment.signUpFeeItem", illusionGroup.getName()), signUpFee, Product.TYPE_NORMAL);
       
       Result result = paytrailService.processPayment(payment);
       if (result != null) {
@@ -360,6 +355,11 @@ public class IllusionGroupPaymentBackingBean {
       logger.log(Level.SEVERE, "Error occurred while communicating with Paytrail", e);
       FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_FATAL, e.getMessage());
     }
+  }
+  
+  private void addProduct(Payment payment, Order order, IllusionGroup illusionGroup, String title, Double price, Integer productType) throws PaytrailException {
+    paytrailService.addProduct(payment, title, "", 1d, price, vatPercent, 0d, productType);
+    orderController.createOrderItem(order, null, illusionGroup, title, price,1);
   }
   
   private Locale getPaymentLocale() {

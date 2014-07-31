@@ -28,6 +28,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
+import fi.foyt.fni.persistence.model.gamelibrary.OrderType;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCartItem;
 import fi.foyt.fni.persistence.model.users.Address;
@@ -461,7 +462,7 @@ public class GameLibraryShoppingCartBackingBean implements Serializable {
 		Address orderAddress = userController.createAddress(address.getUser(), AddressType.DELIVERY_ARCHIVED, address.getStreet1(), address.getStreet2(),
 				address.getPostalCode(), address.getCity(), address.getCountry());
 
-		Order order = orderController.createOrder(loggedUser, accessKey, company, email, firstName, lastName, mobile, phone, OrderStatus.NEW, 
+		Order order = orderController.createOrder(loggedUser, accessKey, company, email, firstName, lastName, mobile, phone, OrderStatus.NEW, OrderType.GAMELIBRARY_BOOK,
 				getDeliveryCosts(), notes, orderAddress);
 
 		OrderDetails orderDetails = new OrderDetails(1, contact);
@@ -476,7 +477,7 @@ public class GameLibraryShoppingCartBackingBean implements Serializable {
 			for (ShoppingCartItem shoppingCartItem : shoppingCartItems) {
 				if (shoppingCartItem.getCount() > 0) {
   				Publication publication = shoppingCartItem.getPublication();
-  				OrderItem orderItem = orderController.createOrderItem(order, publication, publication.getName(), publication.getPrice(), shoppingCartItem.getCount());
+  				OrderItem orderItem = orderController.createOrderItem(order, publication, null, publication.getName(), publication.getPrice(), shoppingCartItem.getCount());
   
   				paytrailService.addProduct(payment, orderItem.getName(), "#" + orderItem.getId().toString(), 
   						orderItem.getCount().doubleValue(), orderItem.getUnitPrice(), vatPercent, 0d, Product.TYPE_NORMAL);

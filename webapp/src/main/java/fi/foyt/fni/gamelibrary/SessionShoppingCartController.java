@@ -16,6 +16,7 @@ import fi.foyt.fni.persistence.dao.gamelibrary.ShoppingCartDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.ShoppingCartItemDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
+import fi.foyt.fni.persistence.model.gamelibrary.OrderType;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCart;
 import fi.foyt.fni.persistence.model.gamelibrary.ShoppingCartItem;
@@ -169,12 +170,12 @@ public class SessionShoppingCartController {
 		}
 		
 		Order order = orderDAO.create(shoppingCart.getCustomer(), null, customerCompany, customerEmail, customerFirstName, customerLastName, customerMobile, customerPhone, 
-				OrderStatus.CANCELED, null, null, shoppingCart.getDeliveryAddress(), now, now, null, null, null);
+				OrderStatus.CANCELED, OrderType.GAMELIBRARY_BOOK, null, null, shoppingCart.getDeliveryAddress(), now, now, null, null, null);
 		
 		List<ShoppingCartItem> shoppingCartItems = shoppingCartItemDAO.listByCart(shoppingCart);
 		
 		for (ShoppingCartItem shoppingCartItem : shoppingCartItems) {
-			orderItemDAO.create(order, shoppingCartItem.getPublication(), shoppingCartItem.getPublication().getName(), shoppingCartItem.getPublication().getPrice(), shoppingCartItem.getCount());
+			orderItemDAO.create(order, shoppingCartItem.getPublication(), null, shoppingCartItem.getPublication().getName(), shoppingCartItem.getPublication().getPrice(), shoppingCartItem.getCount());
 		}
 		
 		deleteShoppingCart(shoppingCart);

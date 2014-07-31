@@ -15,7 +15,9 @@ import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
+import fi.foyt.fni.persistence.model.gamelibrary.OrderType;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.users.Address;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
@@ -64,9 +66,9 @@ public class OrderController implements Serializable {
 
 	/* Order */
 	
-	public Order createOrder(User customer, String accessKey, String customerCompany, String customerEmail, String customerFirstName, String customerLastName, String customerMobile, String customerPhone, OrderStatus orderStatus, Double shippingCosts, String notes, Address deliveryAddress) {
+	public Order createOrder(User customer, String accessKey, String customerCompany, String customerEmail, String customerFirstName, String customerLastName, String customerMobile, String customerPhone, OrderStatus orderStatus, OrderType type, Double shippingCosts, String notes, Address deliveryAddress) {
 		Date now = new Date();
-		Order order = orderDAO.create(customer, accessKey, customerCompany, customerEmail, customerFirstName, customerLastName, customerMobile, customerPhone, orderStatus, shippingCosts, notes, deliveryAddress, now, null, null, null, null);
+		Order order = orderDAO.create(customer, accessKey, customerCompany, customerEmail, customerFirstName, customerLastName, customerMobile, customerPhone, orderStatus, type, shippingCosts, notes, deliveryAddress, now, null, null, null, null);
 		orderCreatedEvent.fire(new OrderEvent(sessionController.getLocale(), order.getId()));
 		return order;
 	}
@@ -129,8 +131,8 @@ public class OrderController implements Serializable {
 	
 	/* OrderItem */
 	
-	public OrderItem createOrderItem(Order order, Publication publication, String name, Double unitPrice, Integer count) {
-		return orderItemDAO.create(order, publication, name, unitPrice, count);
+	public OrderItem createOrderItem(Order order, Publication publication, IllusionGroup illusionGroup, String name, Double unitPrice, Integer count) {
+		return orderItemDAO.create(order, publication, illusionGroup, name, unitPrice, count);
 	}
 
 	public List<OrderItem> listOrderItems(Order order) {
