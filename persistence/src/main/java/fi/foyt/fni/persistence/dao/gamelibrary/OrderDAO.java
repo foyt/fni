@@ -10,6 +10,7 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
+import fi.foyt.fni.persistence.model.gamelibrary.OrderType;
 import fi.foyt.fni.persistence.model.gamelibrary.Order_;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
 import fi.foyt.fni.persistence.model.users.Address;
@@ -20,7 +21,7 @@ public class OrderDAO extends GenericDAO<Order> {
 	private static final long serialVersionUID = 1L;
 
 	public Order create(User customer, String accessKey, String customerCompany, String customerEmail, String customerFirstName, String customerLastName, String customerMobile,
-			String customerPhone, OrderStatus orderStatus, Double shippingCosts, String notes, Address deliveryAddress, Date created, Date canceled, Date paid,
+			String customerPhone, OrderStatus orderStatus, OrderType type, Double shippingCosts, String notes, Address deliveryAddress, Date created, Date canceled, Date paid,
 			Date shipped, Date delivered) {
 		
 	  Order order = new Order();
@@ -40,6 +41,7 @@ public class OrderDAO extends GenericDAO<Order> {
 		order.setDeliveryAddress(deliveryAddress);
 		order.setNotes(notes);
 		order.setOrderStatus(orderStatus);
+		order.setType(type);
 		order.setPaid(paid);
 		order.setShippingCosts(shippingCosts);
 

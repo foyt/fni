@@ -92,6 +92,14 @@ public class Order {
     this.orderStatus = orderStatus;
   }
   
+  public OrderType getType() {
+    return type;
+  }
+  
+  public void setType(OrderType type) {
+    this.type = type;
+  }
+  
   public Double getShippingCosts() {
     return shippingCosts;
   }
@@ -194,6 +202,9 @@ public class Order {
   
   @Enumerated (EnumType.STRING)
   private OrderStatus orderStatus;
+  
+  @Enumerated (EnumType.STRING)
+  private OrderType type;
   
   @ManyToOne
   private Address deliveryAddress; 
