@@ -288,10 +288,10 @@ public class IllusionGroupPaymentBackingBean {
     User loggedUser = sessionController.getLoggedUser();
 
     UrlSet urlSet = new UrlSet(
-      localAddress + "/gamelibrary/paytrail/success", 
-      localAddress + "/gamelibrary/paytrail/failure", 
-      localAddress + "/gamelibrary/paytrail/notify", 
-      localAddress + "/gamelibrary/paytrail/pending"
+      localAddress + "/paytrail/success", 
+      localAddress + "/paytrail/failure", 
+      localAddress + "/paytrail/notify", 
+      localAddress + "/paytrail/pending"
     );
 
     Address address = userController.findAddressByUserAndType(loggedUser, AddressType.DELIVERY);

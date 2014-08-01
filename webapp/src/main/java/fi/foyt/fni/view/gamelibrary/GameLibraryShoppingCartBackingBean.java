@@ -412,10 +412,10 @@ public class GameLibraryShoppingCartBackingBean implements Serializable {
 		String localAddress = FacesUtils.getLocalAddress(true);
 
 		UrlSet urlSet = new UrlSet(
-			localAddress + "/gamelibrary/paytrail/success", 
-			localAddress + "/gamelibrary/paytrail/failure", 
-			localAddress + "/gamelibrary/paytrail/notify", 
-			localAddress + "/gamelibrary/paytrail/pending"
+			localAddress + "/paytrail/success", 
+			localAddress + "/paytrail/failure", 
+			localAddress + "/paytrail/notify", 
+			localAddress + "/paytrail/pending"
 		);
 
 		Country deliveryAddressCountry = systemSettingsController.findCountryById(getPayerCountryId());

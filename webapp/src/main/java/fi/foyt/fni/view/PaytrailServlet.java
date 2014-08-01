@@ -17,7 +17,7 @@ import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.paytrail.PaytrailService;
 
-@WebServlet(urlPatterns = "/gamelibrary/paytrail/*", name = "gamelibrary-paytrail")
+@WebServlet(urlPatterns = "/paytrail/*", name = "gamelibrary-paytrail")
 @Transactional
 public class PaytrailServlet extends HttpServlet {
 
