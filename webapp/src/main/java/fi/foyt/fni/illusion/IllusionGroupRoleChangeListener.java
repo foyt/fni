@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.mail.MessagingException;
 
 import org.apache.commons.lang3.LocaleUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.mail.Mailer;
@@ -57,7 +58,7 @@ public class IllusionGroupRoleChangeListener {
         break;
         case GAMEMASTER:
         case PLAYER:
-          sendAcceptMail(event.getGroupUrl(), groupMember);
+          sendAcceptMail(groupMember);
         break;
         default:
         break;
@@ -90,13 +91,19 @@ public class IllusionGroupRoleChangeListener {
     }
   }
   
-  private void sendAcceptMail(String groupUrl, IllusionGroupMember groupMember) {
+  private void sendAcceptMail(IllusionGroupMember groupMember) {
     User user = groupMember.getUser();
     Locale userLocale = LocaleUtils.toLocale(user.getLocale());
     String userMail = userController.getUserPrimaryEmail(user);
     String userName = groupMember.getUser().getFullName();
     String groupName = groupMember.getGroup().getName();
+    String groupUrlName = groupMember.getGroup().getUrlName();
     
+    String groupUrl = systemSettingsController.getSiteUrl(false, true);
+    if (StringUtils.isNotBlank(groupUrl)) {
+      groupUrl += "/illusion/group/" + groupUrlName;
+    }
+
     String subject = ExternalLocales.getText(userLocale, "illusion.mail.joinRequestAccepted.subject");
     String content = ExternalLocales.getText(userLocale, "illusion.mail.joinRequestAccepted.content", userName, groupName, groupUrl);
 

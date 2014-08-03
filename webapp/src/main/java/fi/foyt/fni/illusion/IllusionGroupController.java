@@ -140,12 +140,7 @@ public class IllusionGroupController {
     IllusionGroupMemberRole oldRole = member.getRole();
     IllusionGroupMember groupMember = illusionGroupMemberDAO.updateRole(member, role);
     if (oldRole != role) {
-      String groupUrl = FacesUtils.getLocalAddress(true);
-      if (StringUtils.isNotBlank(groupUrl)) {
-        groupUrl += "/illusion/group/" + member.getGroup().getUrlName();
-      }
-      
-      roleChangeEvent.fire(new MemberRoleChangeEvent(member.getId(), oldRole, role, groupUrl));
+      roleChangeEvent.fire(new MemberRoleChangeEvent(member.getId(), oldRole, role));
     }
     
     return groupMember;

@@ -4,12 +4,11 @@ import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 
 public class MemberRoleChangeEvent {
 
-  public MemberRoleChangeEvent(Long memberId, IllusionGroupMemberRole oldRole, IllusionGroupMemberRole newRole, String groupUrl) {
+  public MemberRoleChangeEvent(Long memberId, IllusionGroupMemberRole oldRole, IllusionGroupMemberRole newRole) {
     super();
     this.memberId = memberId;
     this.oldRole = oldRole;
     this.newRole = newRole;
-    this.groupUrl = groupUrl;
   }
   
   public Long getMemberId() {
@@ -23,13 +22,8 @@ public class MemberRoleChangeEvent {
   public IllusionGroupMemberRole getOldRole() {
     return oldRole;
   }
-  
-  public String getGroupUrl() {
-    return groupUrl;
-  }
 
   private Long memberId;
   private IllusionGroupMemberRole oldRole;
   private IllusionGroupMemberRole newRole;
-  private String groupUrl;
 }
