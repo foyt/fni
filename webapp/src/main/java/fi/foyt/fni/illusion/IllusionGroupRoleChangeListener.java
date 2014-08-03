@@ -42,8 +42,13 @@ public class IllusionGroupRoleChangeListener {
     IllusionGroupMember groupMember = illusionGroupController.findIllusionGroupMemberById(event.getMemberId());
     if (groupMember.getRole() == IllusionGroupMemberRole.PENDING_APPROVAL) {
       List<IllusionGroupMember> gamemasters = illusionGroupController.listIllusionGroupMembersByGroupAndRole(groupMember.getGroup(), IllusionGroupMemberRole.GAMEMASTER);
+      String groupUrl = systemSettingsController.getSiteUrl(false, true);
+      if (StringUtils.isNotBlank(groupUrl)) {
+        groupUrl += "/illusion/group/" + groupMember.getGroup().getUrlName();
+      }
+      
       for (IllusionGroupMember gamemaster : gamemasters) {
-        sendGroupJoinRequestMail(event.getGroupUrl(), groupMember, gamemaster);
+        sendGroupJoinRequestMail(groupUrl, groupMember, gamemaster);
       }
     }
   }

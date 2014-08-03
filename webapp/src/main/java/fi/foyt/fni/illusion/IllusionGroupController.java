@@ -38,7 +38,6 @@ import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.utils.faces.FacesUtils;
 
 @Dependent
 @Stateless
@@ -101,13 +100,7 @@ public class IllusionGroupController {
   
   public IllusionGroupMember createIllusionGroupMember(User user, IllusionGroup group, String characterName, IllusionGroupMemberRole role) {
     IllusionGroupMember member = illusionGroupMemberDAO.create(user, group, characterName, role);
-    
-    String groupUrl = FacesUtils.getLocalAddress(true);
-    if (StringUtils.isNotBlank(groupUrl)) {
-      groupUrl += "/illusion/group/" + member.getGroup().getUrlName();
-    }
-    
-    memberAddedEvent.fire(new MemberAddedEvent(member.getId(), groupUrl));
+    memberAddedEvent.fire(new MemberAddedEvent(member.getId()));
     
     return member;
   }
