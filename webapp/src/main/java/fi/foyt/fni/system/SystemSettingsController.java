@@ -4,8 +4,7 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,8 +19,7 @@ import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.system.SystemSetting;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 
-@RequestScoped
-@Stateful
+@Dependent
 public class SystemSettingsController {
 	
 	private static final String DEFAULT_COUNTRY_CODE = "FI";
@@ -134,5 +132,44 @@ public class SystemSettingsController {
   public Currency getCurrencySetting(SystemSettingKey key) {
     return Currency.getInstance(getSetting(key));
   }
-	
+  
+  public String getSiteHost() {
+    return System.getProperty("fni-host");
+  }
+
+  public Integer getSiteHttpPort() {
+    return NumberUtils.createInteger(System.getProperty("fni-http-port"));
+  }
+  
+  public Integer getSiteHttpsPort() {
+    return NumberUtils.createInteger(System.getProperty("fni-https-port"));
+  }
+  
+  public String getSiteContextPath() {
+    return System.getProperty("fni-context-path");
+  }
+  
+  public String getSiteUrl(boolean secure, boolean includeContextPath) {
+    String host = getSiteHost();
+    int port = secure ? getSiteHttpsPort() : getSiteHttpPort();
+    String scheme = secure ? "https" : "http";
+    boolean dropPort = secure ? port == 80 : port == 443;
+    
+    StringBuilder resultBuilder = new StringBuilder();
+    
+    resultBuilder.append(scheme);
+    resultBuilder.append("://");
+    resultBuilder.append(host);
+    
+    if (!dropPort) {
+      resultBuilder.append(':');
+      resultBuilder.append(port);
+    }
+    
+    if (includeContextPath) {
+      resultBuilder.append(getSiteContextPath());
+    }
+    
+    return resultBuilder.toString();
+  }
 }
