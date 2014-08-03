@@ -138,5 +138,24 @@ public class OrderController implements Serializable {
 	public List<OrderItem> listOrderItems(Order order) {
 		return orderItemDAO.listByOrder(order);
 	}
+
+  public OrderItem findOrderItemByIllusionGroupNotNull(Order order) {
+    for (OrderItem item : listOrderItems(order)) {
+      if (item.getIllusionGroup() != null) {
+        return item;
+      }
+    }
+    
+    return null;
+  }
+  
+  public IllusionGroup findOrderIllusionGroup(Order order) {
+    OrderItem orderItem = findOrderItemByIllusionGroupNotNull(order);
+    if (orderItem != null) {
+      return orderItem.getIllusionGroup();
+    }
+    
+    return null;
+  }
 	
 }

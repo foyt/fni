@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
+import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.paytrail.PaytrailService;
 
 @WebServlet(urlPatterns = "/paytrail/*", name = "gamelibrary-paytrail")
@@ -51,7 +52,7 @@ public class PaytrailServlet extends HttpServlet {
 		Order order = orderController.findOrderById(orderId);
 		if (order != null) {
 			orderController.updateOrderAsCanceled(order);
-			response.sendRedirect(request.getContextPath() + getOrderUrl(order));
+			response.sendRedirect(request.getContextPath() + getOrderRedirectUrl(order));
 		} else {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
@@ -64,13 +65,22 @@ public class PaytrailServlet extends HttpServlet {
 			Long orderId = NumberUtils.createLong(orderNumber);
 			Order order = orderController.findOrderById(orderId);
 			if (order != null) {
-				if (order.getDeliveryAddress() == null) {
-					orderController.updateOrderAsPaid(order);
-				} else {
-					orderController.updateOrderAsWaitingForDelivery(order);
-				}
+			  switch (order.getType()) {
+			    case GAMELIBRARY_BOOK:
+		        if (order.getDeliveryAddress() == null) {
+		          orderController.updateOrderAsPaid(order);
+		        } else {
+		          orderController.updateOrderAsWaitingForDelivery(order);
+		        }
+		        
+            response.sendRedirect(request.getContextPath() + getOrderRedirectUrl(order));
+			    break;
+			    case ILLUSION_GROUP:
+            orderController.updateOrderAsPaid(order);
+            response.sendRedirect(request.getContextPath() + getIllusionRedirectUrl(order));
+			    break;
+			  }
 
-				response.sendRedirect(request.getContextPath() + getOrderUrl(order));
 			} else {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 				return;
@@ -91,16 +101,25 @@ public class PaytrailServlet extends HttpServlet {
 		return paytrailService.confirmPayment(orderNumber, timestamp, paid, method, authCode);
 	}
 	
-	private String getOrderUrl(Order order) {
-	  StringBuilder resultBuilder = new StringBuilder()
-	    .append("/gamelibrary/orders/")
-	    .append(order.getId());
-	  
-	  if (StringUtils.isNotBlank(order.getAccessKey())) {
-	    resultBuilder.append("?key=").append(order.getAccessKey());
-	  }
-	  
-	  return resultBuilder.toString();
+  private String getOrderRedirectUrl(Order order) {
+    StringBuilder resultBuilder = new StringBuilder()
+      .append("/gamelibrary/orders/")
+      .append(order.getId());
+    
+    if (StringUtils.isNotBlank(order.getAccessKey())) {
+      resultBuilder.append("?key=").append(order.getAccessKey());
+    }
+    
+    return resultBuilder.toString();
+  }
+	 
+	private String getIllusionRedirectUrl(Order order) {
+    IllusionGroup illusionGroup = orderController.findOrderIllusionGroup(order);
+
+    return new StringBuilder()
+      .append("/illusion/group/")
+      .append(illusionGroup.getUrlName())
+      .toString();
 	}
 
 	private String getPathAction(HttpServletRequest req) {
