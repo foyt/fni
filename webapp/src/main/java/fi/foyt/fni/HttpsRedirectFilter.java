@@ -2,6 +2,7 @@
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -14,8 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
+import fi.foyt.fni.system.SystemSettingsController;
+
 @WebFilter (urlPatterns = { "/login/*", "/gamelibrary/*" })
 public class HttpsRedirectFilter implements Filter {
+  
+  @Inject
+  private SystemSettingsController systemSettingsController;
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
@@ -34,8 +40,9 @@ public class HttpsRedirectFilter implements Filter {
           .append("https://")
           .append(request.getServerName());
         
-        if (request.getServerPort() == 8080) {
-          redirectUrlBuilder.append(":8443");
+        Integer httpsPort = systemSettingsController.getSiteHttpsPort();
+        if (httpsPort != 443) {
+          redirectUrlBuilder.append(":").append(httpsPort);
         }
         
         redirectUrlBuilder.append(request.getRequestURI());

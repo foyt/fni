@@ -2,6 +2,7 @@ package fi.foyt.fni;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -14,8 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
+import fi.foyt.fni.system.SystemSettingsController;
+
 @WebFilter (urlPatterns = { "/", "/about", "/forum/*", "/forge/*", "/illusion/*" })
 public class HttpRedirectFilter implements Filter {
+
+  @Inject
+  private SystemSettingsController systemSettingsController;
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
@@ -34,8 +40,9 @@ public class HttpRedirectFilter implements Filter {
           .append("http://")
           .append(request.getServerName());
         
-        if (request.getServerPort() == 8443) {
-          redirectUrlBuilder.append(":8080");
+        Integer httpPort = systemSettingsController.getSiteHttpPort();
+        if (httpPort != 80) {
+          redirectUrlBuilder.append(":").append(httpPort);
         }
         
         redirectUrlBuilder.append(request.getRequestURI());
