@@ -65,12 +65,40 @@ public class IllusionGroupRoleChangeListener {
         case PLAYER:
           sendAcceptMail(groupMember);
         break;
+        case WAITING_PAYMENT:
+          sendPaidGroupAcceptMail(groupMember);
         default:
         break;
       }
     }
   }
   
+  private void sendPaidGroupAcceptMail(IllusionGroupMember groupMember) {
+    User user = groupMember.getUser();
+    Locale userLocale = LocaleUtils.toLocale(user.getLocale());
+    String userMail = userController.getUserPrimaryEmail(user);
+    String userName = groupMember.getUser().getFullName();
+    String groupName = groupMember.getGroup().getName();
+    String groupUrlName = groupMember.getGroup().getUrlName();
+    
+    String paymentUrl = systemSettingsController.getSiteUrl(false, true);
+    if (StringUtils.isNotBlank(paymentUrl)) {
+      paymentUrl += "/illusion/group/" + groupUrlName + "/payment";
+    }
+
+    String subject = ExternalLocales.getText(userLocale, "illusion.mail.paidGroupJoinRequestAccepted.subject");
+    String content = ExternalLocales.getText(userLocale, "illusion.mail.paidGroupJoinRequestAccepted.content", userName, groupName, paymentUrl);
+
+    String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
+    String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
+    
+    try {
+      mailer.sendMail(fromMail, fromName, userMail, userName, subject, content, "text/plain");
+    } catch (MessagingException e) {
+      logger.log(Level.SEVERE, "Could not send a group accept notification mail", e);
+    }
+  }
+
   private void sendGroupJoinRequestMail(String groupUrl, IllusionGroupMember groupMember, IllusionGroupMember gamemaster) {
     String groupName = groupMember.getGroup().getName();
 
