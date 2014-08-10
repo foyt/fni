@@ -185,6 +185,9 @@ alter table MessageFolder
     drop constraint FK_o3f1777quj13cge2kd7llwoar if exists;
 
 alter table OrderItem 
+    drop constraint FK_fkri6q4oaft141fa93qhilx9w if exists;
+
+alter table OrderItem 
     drop constraint FK_6cxptya5vldowhtfdxs70ytw1 if exists;
 
 alter table OrderItem 
