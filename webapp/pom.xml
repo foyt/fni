@@ -555,7 +555,6 @@
                   <goal>read-project-properties</goal>
                 </goals>
                 <configuration>
-                  
                   <files>
                     <file>src/test/resources/it.properties</file>
                   </files>
@@ -769,8 +768,6 @@
                   <properties>
                     <context>${it.ctx}</context>
                   </properties>
-                  <pingURL>http://${it.host}:${it.port.http}/${it.ctx}</pingURL>
-                  <pingTimeout>600000</pingTimeout>
                 </deployable>
               </deployables>
 
@@ -811,6 +808,9 @@
                       <command>/system-property=fni-google-drive.keyFile:add(value="${it.googleDrive.keyFile}")</command>
                       <command>/system-property=fni-google-drive.accountId:add(value="${it.googleDrive.accountId}")</command>
                       <command>/system-property=fni-google-drive.accountUser:add(value="${it.googleDrive.accountUser}")</command>
+                      <command>/system-property=fni-host:add(value="${it.host}")</command>
+                      <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
+                      <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${project.build.directory}/fnici.keystore",keystore-password="storepass",alias="fnici")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
@@ -1171,8 +1171,6 @@
                   <properties>
                     <context>${it.ctx}</context>
                   </properties>
-                  <pingURL>http://${it.host}:${it.port.http}/${it.ctx}</pingURL>
-                  <pingTimeout>600000</pingTimeout>
                 </deployable>
               </deployables>
             </configuration>
@@ -1212,6 +1210,9 @@
                       <command>/system-property=fni-google-drive.keyFile:add(value="${it.googleDrive.keyFile}")</command>
                       <command>/system-property=fni-google-drive.accountId:add(value="${it.googleDrive.accountId}")</command>
                       <command>/system-property=fni-google-drive.accountUser:add(value="${it.googleDrive.accountUser}")</command>
+                      <command>/system-property=fni-host:add(value="${it.host}")</command>
+                      <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
+                      <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${project.build.directory}/fnici.keystore",keystore-password="storepass",alias="fnici")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
