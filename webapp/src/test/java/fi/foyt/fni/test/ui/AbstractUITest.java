@@ -70,12 +70,21 @@ public abstract class AbstractUITest extends AbstractTest {
     acceptCookieDirective(driver);
     driver.get(getAppUrl(true) + "/login/");
     driver.findElement(By.cssSelector(".user-login-external-google")).click();
+    sleep(500);
     driver.findElement(By.name("Email")).sendKeys(getGoogleUsername());
     driver.findElement(By.name("Passwd")).sendKeys(getGooglePassword());
     driver.findElement(By.name("signIn")).click();
+    
     waitForUrlMatches(driver, "^" + getAppUrl() + ".*");
     assertEquals(1, driver.findElements(By.cssSelector(".menu-tools-account")).size());
     assertEquals(0, driver.findElements(By.cssSelector(".menu-tools-login")).size());
+  }
+  
+  protected void sleep(long millis) {
+    try {
+      Thread.sleep(millis);
+    } catch (InterruptedException e) {
+    }
   }
   
   protected void logout(RemoteWebDriver driver) {

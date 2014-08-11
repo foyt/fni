@@ -44,6 +44,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     loginFacebook(getWebDriver());
     getWebDriver().get(getAppUrl() + "/forge/import-google-drive");
     assertEquals("Sign in - Google Accounts", getWebDriver().getTitle());
+    sleep(500);
     getWebDriver().findElement(By.name("Email")).sendKeys(getGoogleUsername());
     getWebDriver().findElement(By.name("Passwd")).sendKeys(getGooglePassword());
     getWebDriver().findElement(By.name("signIn")).click();
