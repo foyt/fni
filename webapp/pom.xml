@@ -186,13 +186,6 @@
     </dependency>
 
     <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-      <type>jar</type>
-      <scope>compile</scope>
-    </dependency>
-
-    <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <scope>provided</scope>
