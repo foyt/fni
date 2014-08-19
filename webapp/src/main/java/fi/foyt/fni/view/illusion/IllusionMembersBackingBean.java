@@ -8,6 +8,7 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
@@ -20,11 +21,13 @@ import fi.foyt.fni.persistence.model.illusion.IllusionGroupJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.users.Permission;
+import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.security.SecurityParam;
 import fi.foyt.fni.security.SecurityParams;
+import fi.foyt.fni.users.UserController;
 
 @RequestScoped
 @Named
@@ -40,9 +43,12 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
 
   @Parameter
   private String urlName;
-  
+
   @Inject
   private IllusionGroupController illusionGroupController;
+  
+  @Inject
+  private UserController userController;
   
   @Override
   public String init(IllusionGroup illusionGroup, IllusionGroupMember member) {
@@ -59,6 +65,7 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
     }
     
     waitingPayment = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.WAITING_PAYMENT);
+    invited = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.INVITED);
     
     return null;
   }
@@ -97,6 +104,10 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   
   public List<IllusionGroupMember> getWaitingPayment() {
     return waitingPayment;
+  }
+  
+  public List<IllusionGroupMember> getInvited() {
+    return invited;
   }
   
   public IllusionGroupJoinMode getGroupJoinMode() {
@@ -164,11 +175,22 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
     return "/illusion/members.jsf?faces-redirect=true&urlName=" + getUrlName();
   }
   
+  public String getMemberDisplayName(IllusionGroupMember member) {
+    User user = member.getUser();
+    String result = user.getFullName();
+    if (StringUtils.isNotBlank(result)) {
+      return result;
+    }
+    
+    return "<" + userController.getUserPrimaryEmail(user) + ">";
+  }
+  
   private List<IllusionGroupMember> gameMasters;
   private List<IllusionGroupMember> players;
   private List<IllusionGroupMember> banned;
   private List<IllusionGroupMember> approvalPending;
   private List<IllusionGroupMember> waitingPayment;
+  private List<IllusionGroupMember> invited;
   private IllusionGroupJoinMode groupJoinMode;
   private Long selectedMemberId;
   private Long selectedMemberUserId;

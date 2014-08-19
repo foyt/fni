@@ -12,14 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
-import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Cacheable (true)
@@ -149,15 +147,11 @@ public class User {
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
   
-  @Column (nullable=false)
-  @NotNull
-  @NotEmpty
+  @Column
   @Field
   private String firstName;
   
-  @Column (nullable=false)
-  @NotNull
-  @NotEmpty
+  @Column
   @Field
   private String lastName;  
   

@@ -9,16 +9,13 @@
   </ui:define>
   
   <ui:define name="view-scripts">
-    <!-- Token Input -->
-    
-    <h:outputScript name="scripts/jquery.tokeninput/jquery.tokeninput.js"/>
-   
+    <h:outputScript name="scripts/jquery.tagsinput/jquery.tagsinput.js"/>
     <h:outputScript name="scripts/gui/illusion-members.js"/>
   </ui:define>
   
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    <h:outputStylesheet library="novus" name="css/token-input.css"/>
+    <h:outputStylesheet library="scripts" name="jquery.tagsinput/jquery.tagsinput.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-group-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-members.css"/>
   </ui:define>  
@@ -160,6 +157,19 @@
                         <f:param value="#{member.user.fullName}"/>
                       </h:outputFormat>
                     </h4>
+                  </h:commandLink>      
+                </ui:repeat>
+              </ui:fragment>
+
+              <ui:fragment rendered="#{not empty illusionMembersBackingBean.invited}">
+                <h3>#{locales['illusion.members.invitedListTitle']}</h3>
+              
+                <ui:repeat var="member" value="#{illusionMembersBackingBean.invited}">
+                  <h:commandLink action="#{illusionMembersBackingBean.selectMember(member)}" styleClass="illusion-member illusion-invited">
+                    <h:panelGroup layout="block" styleClass="illusion-member-avatar"> 
+                      <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionMembersBackingBean.urlName}/#{member.id}?size=48"/> 
+                    </h:panelGroup>
+                    <h4>#{illusionMembersBackingBean.getMemberDisplayName(member)}</h4>
                   </h:commandLink>      
                 </ui:repeat>
               </ui:fragment>

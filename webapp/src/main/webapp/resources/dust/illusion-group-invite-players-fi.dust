@@ -1,11 +1,11 @@
 <div title="Kutsu pelaajia" data-invite-button="Kutsu" data-cancel-button="Peruuta">
   <div class="illusion-group-invite-players-dialog">
     <p>
-      Kirjoita alla olevaan kenttään kutsuttavien pelaajien nimet..
+      Kirjoita kutsuttavien henkilöiden sähköpostiosoitteet alla olevaan kenttään
     </p>
     <div>
       <label>Kutsu pelaajat:</label>
-      <input name="invite" type="text" data-hint="Kirjoita pelaajan nimi" data-no-results="Ei tuloksia" data-searching="Etsitään..."/>
+      <input name="invite" type="text" data-hint="Kirjoita sähköpostiosoite" data-no-results="Ei tuloksia" data-searching="Etsitään..."/>
     </div>
     <p>
       Voit halutessasi myös kirjoittaa viestin kutsutuille pelaajille alla olevaan kenttään.
