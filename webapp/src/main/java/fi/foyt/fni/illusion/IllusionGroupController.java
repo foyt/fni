@@ -32,8 +32,8 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantImage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantSetting;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupSetting;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupSettingKey;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventSetting;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventSettingKey;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
@@ -155,13 +155,13 @@ public class IllusionGroupController {
   
   /* Settings */
   
-  public String getIllusionGroupSettingValue(IllusionEventParticipant member, IllusionGroupSettingKey key) {
+  public String getIllusionGroupSettingValue(IllusionEventParticipant member, IllusionEventSettingKey key) {
     IllusionEventParticipantSetting userSetting = illusionEventParticipantSettingDAO.findByMemberAndKey(member, key);
     if ((userSetting != null) && StringUtils.isNotBlank(userSetting.getValue())) {
       return userSetting.getValue();
     }
     
-    IllusionGroupSetting groupSetting = illusionGroupSettingDAO.findByUserAndKey(member.getGroup(), key);
+    IllusionEventSetting groupSetting = illusionGroupSettingDAO.findByUserAndKey(member.getGroup(), key);
     if (groupSetting != null) {
       return groupSetting.getValue();
     }
@@ -169,7 +169,7 @@ public class IllusionGroupController {
     return null;
   }
   
-  public Object getIllusionGroupUserSetting(IllusionEventParticipant participant, IllusionGroupSettingKey key) {
+  public Object getIllusionGroupUserSetting(IllusionEventParticipant participant, IllusionEventSettingKey key) {
     switch (key) {
       case DICE:
         return getIllusionGroupDiceSetting(participant);
@@ -178,14 +178,14 @@ public class IllusionGroupController {
     return null;
   }
   
-  private <T> T getIllusionGroupSetting(IllusionEventParticipant user, IllusionGroupSettingKey key, Class<T> clazz) {
+  private <T> T getIllusionGroupSetting(IllusionEventParticipant user, IllusionEventSettingKey key, Class<T> clazz) {
     String value = getIllusionGroupSettingValue(user, key);
     if (StringUtils.isNotBlank(value)) {
       ObjectMapper objectMapper = new ObjectMapper();
       try {
         return objectMapper.readValue(value, clazz);
       } catch (IOException e) {
-        logger.log(Level.SEVERE, "Could not parse IllusionGroupSetting " + key + " from user: " + user.getId());
+        logger.log(Level.SEVERE, "Could not parse IllusionEventSetting " + key + " from user: " + user.getId());
       }
     }
     
@@ -194,7 +194,7 @@ public class IllusionGroupController {
   
   public List<String> getIllusionGroupDiceSetting(IllusionEventParticipant user) {
     @SuppressWarnings("unchecked")
-    List<String> result = getIllusionGroupSetting(user, IllusionGroupSettingKey.DICE, List.class);
+    List<String> result = getIllusionGroupSetting(user, IllusionEventSettingKey.DICE, List.class);
     if (result == null) {
       result = Collections.emptyList();
     }
@@ -202,7 +202,7 @@ public class IllusionGroupController {
     return result;
   }
 
-  public IllusionEventParticipantSetting setIllusionGroupSettingValue(IllusionEventParticipant member, IllusionGroupSettingKey key, String value) {
+  public IllusionEventParticipantSetting setIllusionGroupSettingValue(IllusionEventParticipant member, IllusionEventSettingKey key, String value) {
     IllusionEventParticipantSetting setting = illusionEventParticipantSettingDAO.findByMemberAndKey(member, key);
     if (setting == null) {
       return illusionEventParticipantSettingDAO.create(member, key, value);
@@ -211,10 +211,10 @@ public class IllusionGroupController {
     }
   }
 
-  public Map<IllusionGroupSettingKey, Object> getIllusionGroupUserSettings(IllusionEventParticipant participant) {
-    Map<IllusionGroupSettingKey, Object> result = new HashMap<>();
+  public Map<IllusionEventSettingKey, Object> getIllusionGroupUserSettings(IllusionEventParticipant participant) {
+    Map<IllusionEventSettingKey, Object> result = new HashMap<>();
     
-    for (IllusionGroupSettingKey key : IllusionGroupSettingKey.values()) {
+    for (IllusionEventSettingKey key : IllusionEventSettingKey.values()) {
       switch (key) {
         case DICE:
           result.put(key, getIllusionGroupUserSetting(participant, key));

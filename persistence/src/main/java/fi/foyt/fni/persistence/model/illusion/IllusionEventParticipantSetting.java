@@ -25,11 +25,11 @@ public class IllusionEventParticipantSetting {
     this.member = member;
   }
 	
-	public IllusionGroupSettingKey getKey() {
+	public IllusionEventSettingKey getKey() {
     return key;
   }
 	
-	public void setKey(IllusionGroupSettingKey key) {
+	public void setKey(IllusionEventSettingKey key) {
     this.key = key;
   }
 	
@@ -51,7 +51,7 @@ public class IllusionEventParticipantSetting {
   @Enumerated (EnumType.STRING)
   @NotNull
   @Column (nullable = false, name="settingKey")
-  private IllusionGroupSettingKey key;
+  private IllusionEventSettingKey key;
   
   private String value;
 }

@@ -9,16 +9,16 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupSetting;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupSettingKey;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventSetting;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupSetting_;
 
-public class IllusionGroupSettingDAO extends GenericDAO<IllusionGroupSetting> {
+public class IllusionGroupSettingDAO extends GenericDAO<IllusionEventSetting> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionGroupSetting create(IllusionGroup group, IllusionGroupSettingKey key, String value) {
-	  IllusionGroupSetting illusionGroupUserSetting = new IllusionGroupSetting();
+	public IllusionEventSetting create(IllusionGroup group, IllusionEventSettingKey key, String value) {
+	  IllusionEventSetting illusionGroupUserSetting = new IllusionEventSetting();
 
     illusionGroupUserSetting.setKey(key);
     illusionGroupUserSetting.setGroup(group);
@@ -27,12 +27,12 @@ public class IllusionGroupSettingDAO extends GenericDAO<IllusionGroupSetting> {
 		return persist(illusionGroupUserSetting);
 	}
 
-  public IllusionGroupSetting findByUserAndKey(IllusionGroup group, IllusionGroupSettingKey key) {
+  public IllusionEventSetting findByUserAndKey(IllusionGroup group, IllusionEventSettingKey key) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<IllusionGroupSetting> criteria = criteriaBuilder.createQuery(IllusionGroupSetting.class);
-    Root<IllusionGroupSetting> root = criteria.from(IllusionGroupSetting.class);
+    CriteriaQuery<IllusionEventSetting> criteria = criteriaBuilder.createQuery(IllusionEventSetting.class);
+    Root<IllusionEventSetting> root = criteria.from(IllusionEventSetting.class);
     criteria.select(root);
     criteria.where(
       criteriaBuilder.and(
@@ -44,12 +44,12 @@ public class IllusionGroupSettingDAO extends GenericDAO<IllusionGroupSetting> {
     return getSingleResult(entityManager.createQuery(criteria));
   }
 
-  public List<IllusionGroupSetting> listByGroup(IllusionGroup group) {
+  public List<IllusionEventSetting> listByGroup(IllusionGroup group) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<IllusionGroupSetting> criteria = criteriaBuilder.createQuery(IllusionGroupSetting.class);
-    Root<IllusionGroupSetting> root = criteria.from(IllusionGroupSetting.class);
+    CriteriaQuery<IllusionEventSetting> criteria = criteriaBuilder.createQuery(IllusionEventSetting.class);
+    Root<IllusionEventSetting> root = criteria.from(IllusionEventSetting.class);
     criteria.select(root);
     criteria.where(
       criteriaBuilder.equal(root.get(IllusionGroupSetting_.group), group)
@@ -58,7 +58,7 @@ public class IllusionGroupSettingDAO extends GenericDAO<IllusionGroupSetting> {
     return entityManager.createQuery(criteria).getResultList();
   }
 
-	public IllusionGroupSetting updateValue(IllusionGroupSetting setting, String value) {
+	public IllusionEventSetting updateValue(IllusionEventSetting setting, String value) {
 	  setting.setValue(value);
 		return persist(setting);
 	}
