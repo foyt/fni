@@ -2,21 +2,30 @@ package fi.foyt.fni.view.illusion;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
+import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import fi.foyt.fni.auth.AuthenticationController;
+import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionGroupController;
+import fi.foyt.fni.mail.Mailer;
+import fi.foyt.fni.persistence.model.auth.InternalAuth;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
 import fi.foyt.fni.session.SessionController;
@@ -38,10 +47,19 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
 
   @Inject
   private IllusionGroupController illusionGroupController;
+  
+  @Inject
+  private AuthenticationController authenticationController;
 
   @Inject
   private SystemSettingsController systemSettingsController;
+  
+  @Inject
+  private Logger logger;
 
+  @Inject
+  private Mailer mailer;
+  
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	  String pathInfo = request.getPathInfo();
@@ -80,28 +98,47 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
       return;
     }
 
-    Locale defaultLocale = systemSettingsController.getDefaultLocale();
-    Date now = new Date();
+    String mailSubject = request.getParameter("mailSubject");
+    String mailContent = request.getParameter("mailContent");
     
     String[] emails = request.getParameterValues("email");
     for (String email : emails) {
-      User user = userController.findUserByEmail(email);
-      if (user == null) {
-        user = userController.createUser(null, null, null, defaultLocale, now, UserProfileImageSource.GRAVATAR);
-        userController.createUserEmail(user, email, Boolean.TRUE);
-      }
-      
-      IllusionGroupMember illusionGroupUser = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, user);
-      if (illusionGroupUser == null) {
-        illusionGroupController.createIllusionGroupMember(user, group, getUserNickname(user), IllusionGroupMemberRole.INVITED);
-      }
+      inviteUser(group, email, mailSubject, mailContent);
     }
 
 	  response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 	}
 
-  private String getUserNickname(User user) {
-    return StringUtils.isNotBlank(user.getNickname()) ? user.getNickname() : user.getFullName();
+  private void inviteUser(IllusionGroup group, String email, String emailSubject, String templateContent) {  
+    Date now = new Date();
+    String temporaryAccount = "";
+    
+    User user = userController.findUserByEmail(email);
+    if (user == null) {
+      user = userController.createUser(null, null, null, sessionController.getLocale(), now, UserProfileImageSource.GRAVATAR);
+      userController.createUserEmail(user, email, Boolean.TRUE);
+      String password = RandomStringUtils.randomAlphabetic(5);
+      String passwordEncoded = DigestUtils.md5Hex(password);
+      InternalAuth internalAuth = authenticationController.createInternalAuth(user, passwordEncoded);
+      // TODO: verification
+      authenticationController.verifyInternalAuth(internalAuth);
+      temporaryAccount = ExternalLocales.getText(sessionController.getLocale(), "illusion.mail.temporaryAccount", password);
+    }
+    
+    IllusionGroupMember illusionGroupUser = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, user);
+    if (illusionGroupUser == null) {
+      illusionGroupController.createIllusionGroupMember(user, group, null, IllusionGroupMemberRole.INVITED);
+      String emailContent = templateContent.replace("[[LOGIN_INFO]]", temporaryAccount);
+      String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
+      String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
+      
+      try {
+        mailer.sendMail(fromMail, fromName, email, user.getFullName(), emailSubject, emailContent, "text/plain");
+      } catch (MessagingException e) {
+        logger.log(Level.SEVERE, "Could not send a group accept notification mail", e);
+      }    
+    }
+
   }
 
 }

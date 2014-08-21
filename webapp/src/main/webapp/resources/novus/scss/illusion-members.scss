@@ -127,8 +127,14 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   @include box-sizing(border-box);
 }
 
-.illusion-group-invite-players-dialog textarea[name="message"] {
-  height: 120px;
+.illusion-group-invite-players-dialog input[name="mail-subject"] {
+  width: 100%;
+  margin-bottom: 8px;
+  @include box-sizing(border-box);
+}
+
+.illusion-group-invite-players-dialog textarea[name="mail-content"] {
+  height: 210px;
   width: 100%;
   @include box-sizing(border-box);
 }

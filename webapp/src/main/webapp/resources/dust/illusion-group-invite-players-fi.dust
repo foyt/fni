@@ -4,14 +4,32 @@
       Kirjoita kutsuttavien henkilöiden sähköpostiosoitteet alla olevaan kenttään
     </p>
     <div>
-      <label>Kutsu pelaajat:</label>
+      <label>Kutsuttavat pelaajat</label>
       <input name="invite" type="text" data-hint="Kirjoita sähköpostiosoite" data-no-results="Ei tuloksia" data-searching="Etsitään..."/>
     </div>
-    <p>
-      Voit halutessasi myös kirjoittaa viestin kutsutuille pelaajille alla olevaan kenttään.
-    </p>
+    <p>Kirjoita alla olevaan kenttiin kutsuviesti. Huomaathan, että [[LOGIN_INFO]] -teksti korvataan kirjautumisohjeilla sellaisille henkilöille, jotka eivät ole vielä rekisteröityneet Forge & Illusioniin.</p>
     <div>
-      <textarea name="message"></textarea>    
+      <label>Kutsuviesti</label>
+    </div>
+    <div>
+      <input type="text" required="required" name="mail-subject" value="Sinut on kutsuttu Illusion ryhmään {NAME}"/>
+    </div>
+    <div>
+      <textarea required="required" name="mail-content">
+        Hei,{~n}
+        {~n}
+        Sinut on kutsuttu liittymään Illusion ryhmään {NAME}.{~n}
+        {~n}
+        Voit liittyä suoraan klikkaamalla linkkiä:{~n}
+        {JOIN}{~n}
+        {~n}
+        tai tarkistaa tarkemmat tiedot osoitteesta:{~n}
+        {DETAILS}{~n}
+        [[LOGIN_INFO]]{~n}
+        -----------------------------------------------------------------------------{~n}
+        Tämä on automaattinen viesti, älä vastaa viestiin.{~n}
+        -----------------------------------------------------------------------------
+      </textarea>    
     </div>
   </div>
 </div>

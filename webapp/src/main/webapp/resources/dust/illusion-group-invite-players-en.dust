@@ -4,14 +4,32 @@
       Type the emails of people you wish to invite into the field below. 
     </p>
     <div>
-      <label>Invite Players:</label>
+      <label>Invite Players</label>
       <input name="invite" type="text" data-hint="Type the email address" data-no-results="No Results" data-searching="Searching..."/>
     </div>
-    <p>
-      You can type a invitation message into the field below.
-    </p>
+    <p>Type the invitation message into the fields below. Notice that [[LOGIN_INFO]] text will be replaced by login instructions for those who are not already registered into Forge & Illusion.</p>
     <div>
-      <textarea name="message"></textarea>    
+      <label>Invitation</label>
+    </div>
+    <div>
+      <input type="text" required="required" name="mail-subject" value="You have been invited into Illusion Group {NAME}"/>
+    </div>
+    <div>
+      <textarea required="required" name="mail-content">
+        Hi,{~n}
+        {~n}
+        You have been invited to join Illusion group {NAME}.{~n}
+        {~n}
+        You can join by clicking following link:{~n}
+        {JOIN}{~n}
+        {~n}
+        or check out the group details by clicking following link:{~n}
+        {DETAILS}{~n}
+        [[LOGIN_INFO]]{~n}
+        -----------------------------------------------------------------------------{~n}
+        This is an automated message, do not reply.{~n}
+        -----------------------------------------------------------------------------
+      </textarea>    
     </div>
   </div>
 </div>

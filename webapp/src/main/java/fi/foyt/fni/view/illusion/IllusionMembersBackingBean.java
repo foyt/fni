@@ -27,6 +27,7 @@ import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.security.SecurityParam;
 import fi.foyt.fni.security.SecurityParams;
+import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
 
 @RequestScoped
@@ -43,6 +44,9 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
 
   @Parameter
   private String urlName;
+
+  @Inject
+  private SystemSettingsController systemSettingsController;
 
   @Inject
   private IllusionGroupController illusionGroupController;
@@ -66,6 +70,14 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
     
     waitingPayment = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.WAITING_PAYMENT);
     invited = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.INVITED);
+    
+    String groupUrl = systemSettingsController.getSiteUrl(false, true);
+    if (StringUtils.isNotBlank(groupUrl)) {
+      groupUrl += "/illusion/group/" + illusionGroup.getUrlName();
+    }
+    
+    joinUrl = groupUrl + "/dojoin";
+    introUrl = groupUrl + "/intro";
     
     return null;
   }
@@ -112,6 +124,14 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   
   public IllusionGroupJoinMode getGroupJoinMode() {
     return groupJoinMode;
+  }
+  
+  public String getJoinUrl() {
+    return joinUrl;
+  }
+  
+  public String getIntroUrl() {
+    return introUrl;
   }
   
   public void selectMember(IllusionGroupMember member) {
@@ -192,6 +212,8 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   private List<IllusionGroupMember> waitingPayment;
   private List<IllusionGroupMember> invited;
   private IllusionGroupJoinMode groupJoinMode;
+  private String joinUrl;
+  private String introUrl;
   private Long selectedMemberId;
   private Long selectedMemberUserId;
   private String selectedMemberName;

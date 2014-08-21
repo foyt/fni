@@ -4,7 +4,11 @@
   $(document).ready(function() { 
     
     $('.illusion-invite-members').click(function (event) {
-      dust.render("illusion-group-invite-players", { }, function(err, html) {
+      dust.render("illusion-group-invite-players", { 
+        'NAME': $('input[name="groupName"]').val(),
+        'JOIN': $('input[name="joinUrl"]').val(),
+        'DETAILS': $('input[name="introUrl"]').val(),
+      }, function(err, html) {
         if (!err) {
           var dialog = $(html);
           dialog.dialog({
@@ -14,7 +18,8 @@
               'text': dialog.data('invite-button'),
               'click': function(event) {
                 var emails = $(this).find('input[name="invite"]').val().split(',');
-                var message = $(this).find('textarea[name="message"]').val();
+                var mailSubject = $(this).find('input[name="mail-subject"]').val();
+                var mailContent = $(this).find('textarea[name="mail-content"]').val();
                 var groupUrlName = $('input[name="groupUrlName"]').val();
 
                 $.ajax(CONTEXTPATH + '/illusion/groupInvite/' + groupUrlName, {
@@ -22,7 +27,8 @@
                   traditional: true,
                   data: {
                     'email': emails,
-                    'message': message
+                    'mailSubject': mailSubject,
+                    'mailContent': mailContent
                   },
                   complete: function (jqXHR, textStatus) {
                     window.location.reload(true);
