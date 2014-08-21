@@ -17,7 +17,6 @@ import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
@@ -55,8 +54,17 @@ public class IllusionGroupBackingBean extends AbstractIllusionGroupBackingBean {
       return "/illusion/intro.jsf?faces-redirect=true&urlName=" + getUrlName();
     }
     
-    if (member.getRole() != IllusionGroupMemberRole.GAMEMASTER && member.getRole() != IllusionGroupMemberRole.PLAYER) {
-      return "/error/access-denied.jsf";
+    switch (member.getRole()) {
+      case BANNED:
+      case BOT:
+        return "/error/access-denied.jsf";
+      case PENDING_APPROVAL:
+      case WAITING_PAYMENT:
+      case INVITED:
+        return "/illusion/intro.jsf?faces-redirect=true&urlName=" + getUrlName();
+      case GAMEMASTER:
+      case PLAYER:
+      break;
     }
     
     IllusionGroupFolder folder = illusionGroup.getFolder();
