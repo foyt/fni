@@ -17,7 +17,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderType;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.users.Address;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
@@ -131,8 +131,8 @@ public class OrderController implements Serializable {
 	
 	/* OrderItem */
 	
-	public OrderItem createOrderItem(Order order, Publication publication, IllusionGroup illusionGroup, String name, Double unitPrice, Integer count) {
-		return orderItemDAO.create(order, publication, illusionGroup, name, unitPrice, count);
+	public OrderItem createOrderItem(Order order, Publication publication, IllusionEvent illusionEvent, String name, Double unitPrice, Integer count) {
+		return orderItemDAO.create(order, publication, illusionEvent, name, unitPrice, count);
 	}
 
 	public List<OrderItem> listOrderItems(Order order) {
@@ -149,7 +149,7 @@ public class OrderController implements Serializable {
     return null;
   }
   
-  public IllusionGroup findOrderIllusionGroup(Order order) {
+  public IllusionEvent findOrderIllusionGroup(Order order) {
     OrderItem orderItem = findOrderItemByIllusionGroupNotNull(order);
     if (orderItem != null) {
       return orderItem.getIllusionGroup();

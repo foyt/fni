@@ -16,7 +16,7 @@ import org.ocpsoft.rewrite.faces.annotation.Deferred;
 import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
 import fi.foyt.fni.illusion.IllusionGroupController;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
@@ -55,25 +55,25 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   private UserController userController;
   
   @Override
-  public String init(IllusionGroup illusionGroup, IllusionEventParticipant member) {
+  public String init(IllusionEvent illusionEvent, IllusionEventParticipant member) {
     if ((member == null) || (member.getRole() != IllusionEventParticipantRole.GAMEMASTER)) {
       return "/error/access-denied.jsf";
     }
 
-    gameMasters = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionEventParticipantRole.GAMEMASTER);
-    players = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionEventParticipantRole.PLAYER);
-    banned = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionEventParticipantRole.BANNED);
-    eventJoinMode = illusionGroup.getJoinMode();
+    gameMasters = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.GAMEMASTER);
+    players = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.PLAYER);
+    banned = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.BANNED);
+    eventJoinMode = illusionEvent.getJoinMode();
     if (eventJoinMode == IllusionEventJoinMode.APPROVE) {
-      approvalPending = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionEventParticipantRole.PENDING_APPROVAL);
+      approvalPending = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.PENDING_APPROVAL);
     }
     
-    waitingPayment = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionEventParticipantRole.WAITING_PAYMENT);
-    invited = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionEventParticipantRole.INVITED);
+    waitingPayment = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.WAITING_PAYMENT);
+    invited = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.INVITED);
     
     String groupUrl = systemSettingsController.getSiteUrl(false, true);
     if (StringUtils.isNotBlank(groupUrl)) {
-      groupUrl += "/illusion/group/" + illusionGroup.getUrlName();
+      groupUrl += "/illusion/group/" + illusionEvent.getUrlName();
     }
     
     joinUrl = groupUrl + "/dojoin?ref=inv";

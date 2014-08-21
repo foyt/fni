@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import fi.foyt.fni.illusion.IllusionGroupController;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantImage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
@@ -79,8 +79,8 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
 	  }
 	  
-	  IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(groupUrlName);
-	  if (illusionGroup == null) {
+	  IllusionEvent illusionEvent = illusionGroupController.findIllusionGroupByUrlName(groupUrlName);
+	  if (illusionEvent == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
@@ -91,7 +91,7 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
     }
 	  
-    IllusionGroup group = illusionGroupController.findIllusionGroupByUrlName(groupUrlName);
+    IllusionEvent group = illusionGroupController.findIllusionGroupByUrlName(groupUrlName);
     if (group == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
@@ -199,7 +199,7 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
     }
 
-    IllusionGroup group = illusionGroupController.findIllusionGroupByUrlName(groupUrlName);
+    IllusionEvent group = illusionGroupController.findIllusionGroupByUrlName(groupUrlName);
     if (group == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;

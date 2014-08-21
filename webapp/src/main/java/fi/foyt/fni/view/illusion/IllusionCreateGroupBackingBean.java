@@ -18,7 +18,7 @@ import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.common.Language;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
@@ -110,8 +110,8 @@ public class IllusionCreateGroupBackingBean {
         urlName = urlName.concat(StringUtils.repeat('_', padding));
       }
       
-      IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(urlName);
-      if (illusionGroup == null) {
+      IllusionEvent illusionEvent = illusionGroupController.findIllusionGroupByUrlName(urlName);
+      if (illusionEvent == null) {
         return urlName;
       }
       
@@ -143,7 +143,7 @@ public class IllusionCreateGroupBackingBean {
 
     IllusionFolder illusionFolder = illusionGroupController.findUserIllusionFolder(loggedUser, true);
     IllusionGroupFolder illusionGroupFolder = illusionGroupController.createIllusionGroupFolder(loggedUser, illusionFolder, urlName, getName());
-    IllusionGroup group = illusionGroupController.createIllusionGroup(urlName, getName(), getDescription(), xmppRoom, illusionGroupFolder, getJoinMode(), now, signUpFee, signUpFeeCurrency);
+    IllusionEvent group = illusionGroupController.createIllusionGroup(urlName, getName(), getDescription(), xmppRoom, illusionGroupFolder, getJoinMode(), now, signUpFee, signUpFeeCurrency);
     
     String indexDocumentTitle = FacesUtils.getLocalizedValue("illusion.createGroup.indexDocumentTitle");
     String indexDocumentContent = FacesUtils.getLocalizedValue("illusion.createGroup.indexDocumentContent");

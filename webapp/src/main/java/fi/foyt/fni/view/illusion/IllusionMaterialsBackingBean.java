@@ -16,7 +16,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialTypeComparator;
 import fi.foyt.fni.materials.TitleComparator;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
@@ -48,13 +48,13 @@ public class IllusionMaterialsBackingBean extends AbstractIllusionGroupBackingBe
   
   @SuppressWarnings("unchecked")
   @Override
-  public String init(IllusionGroup illusionGroup, IllusionEventParticipant member) {
+  public String init(IllusionEvent illusionEvent, IllusionEventParticipant member) {
     if (member == null) {
       return "/error/access-denied.jsf";
     }
 
     User loggedUser = sessionController.getLoggedUser();
-    IllusionGroupFolder folder = illusionGroup.getFolder();
+    IllusionGroupFolder folder = illusionEvent.getFolder();
     
     materials = materialController.listMaterialsByFolderAndTypes(loggedUser, folder, Arrays.asList(
       MaterialType.DOCUMENT,

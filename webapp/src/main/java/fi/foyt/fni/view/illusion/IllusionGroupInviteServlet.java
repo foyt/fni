@@ -22,7 +22,7 @@ import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.auth.InternalAuth;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
@@ -86,7 +86,7 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
     }
 
     User loggedUser = sessionController.getLoggedUser();
-    IllusionGroup group = illusionGroupController.findIllusionGroupByUrlName(groupUrlName);
+    IllusionEvent group = illusionGroupController.findIllusionGroupByUrlName(groupUrlName);
     if (group == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
@@ -109,7 +109,7 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
 	  response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 	}
 
-  private void inviteUser(IllusionGroup group, String email, String emailSubject, String templateContent) {  
+  private void inviteUser(IllusionEvent group, String email, String emailSubject, String templateContent) {  
     Date now = new Date();
     String temporaryAccount = "";
     

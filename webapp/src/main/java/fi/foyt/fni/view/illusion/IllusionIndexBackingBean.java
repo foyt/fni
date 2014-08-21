@@ -11,7 +11,7 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.illusion.IllusionGroupController;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserRole;
@@ -44,18 +44,18 @@ public class IllusionIndexBackingBean {
     return null;
   }
   
-  public List<IllusionGroup> getGameMasterGroups() {
+  public List<IllusionEvent> getGameMasterGroups() {
     return gameMasterGroups;
   }
   
-  public List<IllusionGroup> getPlayerGroups() {
+  public List<IllusionEvent> getPlayerGroups() {
     return playerGroups;
   }
   
-  public Long getGroupPlayerCount(IllusionGroup group) {
+  public Long getGroupPlayerCount(IllusionEvent group) {
     return illusionGroupController.countIllusionGroupMembersByGroupAndRole(group, IllusionEventParticipantRole.PLAYER);
   }
   
-  private List<IllusionGroup> gameMasterGroups;
-  private List<IllusionGroup> playerGroups;
+  private List<IllusionEvent> gameMasterGroups;
+  private List<IllusionEvent> playerGroups;
 }

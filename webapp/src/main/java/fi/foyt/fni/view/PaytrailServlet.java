@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.paytrail.PaytrailService;
 
 @WebServlet(urlPatterns = "/paytrail/*", name = "gamelibrary-paytrail")
@@ -114,11 +114,11 @@ public class PaytrailServlet extends HttpServlet {
   }
 	 
 	private String getIllusionRedirectUrl(Order order) {
-    IllusionGroup illusionGroup = orderController.findOrderIllusionGroup(order);
+    IllusionEvent illusionEvent = orderController.findOrderIllusionGroup(order);
 
     return new StringBuilder()
       .append("/illusion/group/")
-      .append(illusionGroup.getUrlName())
+      .append(illusionEvent.getUrlName())
       .toString();
 	}
 

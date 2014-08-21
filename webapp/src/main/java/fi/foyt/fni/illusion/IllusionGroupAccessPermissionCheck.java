@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.users.Permission;
@@ -34,12 +34,12 @@ public class IllusionGroupAccessPermissionCheck implements PermissionCheckImplem
 	@Override
 	public boolean checkPermission(String illusionGroupUrlName, Map<String, String> parameters) {
 	  if (sessionController.isLoggedIn()) {
-      IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(illusionGroupUrlName);
-      if (illusionGroup == null) {
+      IllusionEvent illusionEvent = illusionGroupController.findIllusionGroupByUrlName(illusionGroupUrlName);
+      if (illusionEvent == null) {
         throw new SecurityException("Could not resolve Illusion group while checking permission for ILLUSION_GROUP_ACCESS");
       }
       
-      IllusionEventParticipant participant = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionGroup, sessionController.getLoggedUser());
+      IllusionEventParticipant participant = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionEvent, sessionController.getLoggedUser());
       if (participant == null) { 
         return false;
       }

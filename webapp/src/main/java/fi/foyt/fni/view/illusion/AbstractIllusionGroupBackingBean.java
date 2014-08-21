@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.illusion.IllusionGroupController;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
@@ -22,8 +22,8 @@ public abstract class AbstractIllusionGroupBackingBean {
   
   @RequestAction
   public String basicInit() {
-    IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
-    if (illusionGroup == null) {
+    IllusionEvent illusionEvent = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
+    if (illusionEvent == null) {
       return "/error/not-found.jsf";
     }
     
@@ -32,21 +32,21 @@ public abstract class AbstractIllusionGroupBackingBean {
     if (sessionController.isLoggedIn()) {
       User loggedUser = sessionController.getLoggedUser();
   
-      member = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionGroup, loggedUser);
+      member = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionEvent, loggedUser);
     }
     
-    IllusionGroupFolder folder = illusionGroup.getFolder();
+    IllusionGroupFolder folder = illusionEvent.getFolder();
     
-    id = illusionGroup.getId();
-    name = illusionGroup.getName();
-    description = illusionGroup.getDescription();
+    id = illusionEvent.getId();
+    name = illusionEvent.getName();
+    description = illusionEvent.getDescription();
     illusionFolderPath = folder.getPath();
     mayManageGroup = member != null ? member.getRole() == IllusionEventParticipantRole.GAMEMASTER : false;
   
-    return init(illusionGroup, member);
+    return init(illusionEvent, member);
   }
 
-  public abstract String init(IllusionGroup illusionGroup, IllusionEventParticipant participant);
+  public abstract String init(IllusionEvent illusionEvent, IllusionEventParticipant participant);
   public abstract String getUrlName();
   
   public Long getId() {

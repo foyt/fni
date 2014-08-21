@@ -19,14 +19,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import fi.foyt.fni.materials.MaterialController;
-import fi.foyt.fni.persistence.dao.illusion.IllusionGroupDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantImageDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantSettingDAO;
-import fi.foyt.fni.persistence.dao.illusion.IllusionGroupSettingDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventSettingDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionFolderDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionGroupFolderDAO;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantImage;
@@ -49,7 +49,7 @@ public class IllusionGroupController {
   private Logger logger;
 
   @Inject
-  private IllusionGroupDAO illusionGroupDAO;
+  private IllusionEventDAO illusionEventDAO;
 
   @Inject
   private IllusionEventParticipantDAO illusionEventParticipantDAO;
@@ -58,7 +58,7 @@ public class IllusionGroupController {
   private IllusionEventParticipantImageDAO illusionEventParticipantImageDAO;
   
   @Inject
-  private IllusionGroupSettingDAO illusionGroupSettingDAO;
+  private IllusionEventSettingDAO illusionEventSettingDAO;
 
   @Inject
   private IllusionEventParticipantSettingDAO illusionEventParticipantSettingDAO;
@@ -78,27 +78,27 @@ public class IllusionGroupController {
   @Inject
   private Event<MemberRoleChangeEvent> roleChangeEvent;
   
-  /* IllusionGroup */
+  /* IllusionEvent */
 
-  public IllusionGroup createIllusionGroup(String urlName, String name, String description, String xmppRoom, IllusionGroupFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency) {
-    return illusionGroupDAO.create(urlName, name, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency);
+  public IllusionEvent createIllusionGroup(String urlName, String name, String description, String xmppRoom, IllusionGroupFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency) {
+    return illusionEventDAO.create(urlName, name, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency);
   }
 
-  public IllusionGroup findIllusionGroupById(Long id) {
-    return illusionGroupDAO.findById(id);
+  public IllusionEvent findIllusionGroupById(Long id) {
+    return illusionEventDAO.findById(id);
   }
 
-  public IllusionGroup findIllusionGroupByUrlName(String urlName) {
-    return illusionGroupDAO.findByUrlName(urlName);
+  public IllusionEvent findIllusionGroupByUrlName(String urlName) {
+    return illusionEventDAO.findByUrlName(urlName);
   }
 
-  public List<IllusionGroup> listIllusionGroupsByUserAndRole(User user, IllusionEventParticipantRole role) {
+  public List<IllusionEvent> listIllusionGroupsByUserAndRole(User user, IllusionEventParticipantRole role) {
     return illusionEventParticipantDAO.listIllusionGroupsByUserAndRole(user, role);
   }
 
   /* IllusionEventParticipant */
   
-  public IllusionEventParticipant createIllusionGroupMember(User user, IllusionGroup group, String characterName, IllusionEventParticipantRole role) {
+  public IllusionEventParticipant createIllusionGroupMember(User user, IllusionEvent group, String characterName, IllusionEventParticipantRole role) {
     IllusionEventParticipant member = illusionEventParticipantDAO.create(user, group, characterName, role);
     memberAddedEvent.fire(new MemberAddedEvent(member.getId()));
     
@@ -109,19 +109,19 @@ public class IllusionGroupController {
     return illusionEventParticipantDAO.findById(memberId);
   }
   
-  public IllusionEventParticipant findIllusionGroupMemberByUserAndGroup(IllusionGroup group, User user) {
+  public IllusionEventParticipant findIllusionGroupMemberByUserAndGroup(IllusionEvent group, User user) {
     return illusionEventParticipantDAO.findByGroupAndUser(group, user);
   }
   
-  public List<IllusionEventParticipant> listIllusionGroupMembersByGroup(IllusionGroup group) {
+  public List<IllusionEventParticipant> listIllusionGroupMembersByGroup(IllusionEvent group) {
     return illusionEventParticipantDAO.listByGroup(group);
   }
   
-  public List<IllusionEventParticipant> listIllusionGroupMembersByGroupAndRole(IllusionGroup group, IllusionEventParticipantRole role) {
+  public List<IllusionEventParticipant> listIllusionGroupMembersByGroupAndRole(IllusionEvent group, IllusionEventParticipantRole role) {
     return illusionEventParticipantDAO.listByGroupAndRole(group, role);
   }
 
-  public Long countIllusionGroupMembersByGroupAndRole(IllusionGroup group, IllusionEventParticipantRole role) {
+  public Long countIllusionGroupMembersByGroupAndRole(IllusionEvent group, IllusionEventParticipantRole role) {
     return illusionEventParticipantDAO.countByGroupAndRole(group, role);
   }
   
@@ -161,7 +161,7 @@ public class IllusionGroupController {
       return userSetting.getValue();
     }
     
-    IllusionEventSetting groupSetting = illusionGroupSettingDAO.findByUserAndKey(member.getGroup(), key);
+    IllusionEventSetting groupSetting = illusionEventSettingDAO.findByUserAndKey(member.getGroup(), key);
     if (groupSetting != null) {
       return groupSetting.getValue();
     }

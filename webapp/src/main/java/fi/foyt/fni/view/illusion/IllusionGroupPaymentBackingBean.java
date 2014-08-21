@@ -30,7 +30,7 @@ import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderType;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.Address;
@@ -97,24 +97,24 @@ public class IllusionGroupPaymentBackingBean {
   @Deferred
   @LoggedIn
   public String init() {
-    IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
-    if (illusionGroup == null) {
+    IllusionEvent illusionEvent = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
+    if (illusionEvent == null) {
       return "/error/not-found.jsf";
     }
 
-    if (illusionGroup.getSignUpFee() == null) {
+    if (illusionEvent.getSignUpFee() == null) {
       return "/error/internal-error.jsf";
     }
 
     User loggedUser = sessionController.getLoggedUser();
-    IllusionEventParticipant groupMember = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionGroup, loggedUser);
+    IllusionEventParticipant groupMember = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionEvent, loggedUser);
     if (groupMember == null) {
       return "/error/access-denied.jsf";
     }
 
     handlingFee = systemSettingsController.getDoubleSetting(SystemSettingKey.ILLUSION_GROUP_HANDLING_FEE);
     currency = systemSettingsController.getCurrencySetting(SystemSettingKey.ILLUSION_GROUP_HANDLING_FEE_CURRENCY);
-    signUpFee = illusionGroup.getSignUpFee();
+    signUpFee = illusionEvent.getSignUpFee();
     vatPercent = systemSettingsController.getVatPercent();
     totalAmount = handlingFee + signUpFee; 
     taxAmount = totalAmount - (totalAmount / (1 + (vatPercent / 100)));
@@ -284,7 +284,7 @@ public class IllusionGroupPaymentBackingBean {
   }
   
   public void proceedToPayment() {
-    IllusionGroup illusionGroup = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
+    IllusionEvent illusionEvent = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
     String localAddress = FacesUtils.getLocalAddress(true);
     User loggedUser = sessionController.getLoggedUser();
 
@@ -339,7 +339,7 @@ public class IllusionGroupPaymentBackingBean {
     
     try {
       addProduct(payment, order, null, ExternalLocales.getText(paymentLocale, "illusion.group.payment.handlingFeeItem"), handlingFee, Product.TYPE_HANDLING);
-      addProduct(payment, order, illusionGroup, ExternalLocales.getText(paymentLocale, "illusion.group.payment.signUpFeeItem", illusionGroup.getName()), signUpFee, Product.TYPE_NORMAL);
+      addProduct(payment, order, illusionEvent, ExternalLocales.getText(paymentLocale, "illusion.group.payment.signUpFeeItem", illusionEvent.getName()), signUpFee, Product.TYPE_NORMAL);
       
       Result result = paytrailService.processPayment(payment);
       if (result != null) {
@@ -358,9 +358,9 @@ public class IllusionGroupPaymentBackingBean {
     }
   }
   
-  private void addProduct(Payment payment, Order order, IllusionGroup illusionGroup, String title, Double price, Integer productType) throws PaytrailException {
+  private void addProduct(Payment payment, Order order, IllusionEvent illusionEvent, String title, Double price, Integer productType) throws PaytrailException {
     paytrailService.addProduct(payment, title, "", 1d, price, vatPercent, 0d, productType);
-    orderController.createOrderItem(order, null, illusionGroup, title, price,1);
+    orderController.createOrderItem(order, null, illusionEvent, title, price,1);
   }
   
   private Locale getPaymentLocale() {

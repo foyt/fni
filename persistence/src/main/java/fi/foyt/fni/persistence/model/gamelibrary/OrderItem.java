@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 
 @Entity
 public class OrderItem {
@@ -51,12 +51,12 @@ public class OrderItem {
 		this.publication = publication;
 	}
   
-  public IllusionGroup getIllusionGroup() {
-    return illusionGroup;
+  public IllusionEvent getIllusionGroup() {
+    return illusionEvent;
   }
   
-  public void setIllusionGroup(IllusionGroup illusionGroup) {
-    this.illusionGroup = illusionGroup;
+  public void setIllusionGroup(IllusionEvent illusionEvent) {
+    this.illusionEvent = illusionEvent;
   }
   
   public Double getUnitPrice() {
@@ -83,7 +83,7 @@ public class OrderItem {
   private Publication publication;
 
   @ManyToOne 
-  private IllusionGroup illusionGroup;
+  private IllusionEvent illusionEvent;
     
   private Double unitPrice;
   

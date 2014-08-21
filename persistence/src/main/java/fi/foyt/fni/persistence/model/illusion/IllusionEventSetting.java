@@ -17,11 +17,11 @@ public class IllusionEventSetting {
     return id;
   }
   
-  public IllusionGroup getGroup() {
+  public IllusionEvent getGroup() {
     return group;
   }
   
-  public void setGroup(IllusionGroup group) {
+  public void setGroup(IllusionEvent group) {
     this.group = group;
   }
   
@@ -46,7 +46,7 @@ public class IllusionEventSetting {
   private Long id;
 
   @ManyToOne
-  private IllusionGroup group;
+  private IllusionEvent group;
   
   @Enumerated (EnumType.STRING)
   @NotNull

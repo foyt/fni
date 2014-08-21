@@ -21,7 +21,7 @@ import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
 import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.materials.MaterialController;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
@@ -54,15 +54,15 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
   private MaterialController materialController;
   
   @Override
-  public String init(IllusionGroup illusionGroup, IllusionEventParticipant participant) {
-    IllusionGroupFolder folder = illusionGroup.getFolder();
+  public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
+    IllusionGroupFolder folder = illusionEvent.getFolder();
     
     if (participant != null) {
       memberRole = participant.getRole();
       switch (memberRole) {
         case GAMEMASTER:
         case PLAYER:
-          return "/illusion/group.jsf?faces-redirect=true&urlName=" + illusionGroup.getUrlName();
+          return "/illusion/group.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
         case BOT:
           throw new UnauthorizedException();
         default:
@@ -82,13 +82,13 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
       }
     }
     
-    joinMode = illusionGroup.getJoinMode();
-    hasSignUpFee = illusionGroup.getSignUpFee() != null;
+    joinMode = illusionEvent.getJoinMode();
+    hasSignUpFee = illusionEvent.getSignUpFee() != null;
     if (hasSignUpFee) {
-      Currency currency = illusionGroup.getSignUpFeeCurrency();
+      Currency currency = illusionEvent.getSignUpFeeCurrency();
       NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
       currencyFormatter.setCurrency(currency);
-      signUpFee = currencyFormatter.format(illusionGroup.getSignUpFee());
+      signUpFee = currencyFormatter.format(illusionEvent.getSignUpFee());
     }
     
     return null;

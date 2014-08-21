@@ -17,7 +17,7 @@ import fi.foyt.fni.gamelibrary.OrderPaid;
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
@@ -51,7 +51,7 @@ public class OrderStatusChangeListener {
   		if (order != null) {
   		  switch (order.getType()) {
   		    case ILLUSION_GROUP:
-  		      IllusionGroup group = orderController.findOrderIllusionGroup(order);
+  		      IllusionEvent group = orderController.findOrderIllusionGroup(order);
   		      if (group != null) {
   		        IllusionEventParticipant member = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, order.getCustomer());
     		      illusionGroupController.updateIllusionGroupMemberRole(member, IllusionEventParticipantRole.PLAYER);

@@ -24,7 +24,7 @@ import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 @Entity
 @Cacheable (true)
 @Cache (usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public class IllusionGroup {
+public class IllusionEvent {
 
   public Long getId() {
     return id;
