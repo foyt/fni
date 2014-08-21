@@ -129,6 +129,7 @@ public class IllusionGroupPaymentBackingBean {
       case PLAYER:
         return "/illusion/group.jsf?faces-redirect=true&urlName=" + getUrlName();
       case WAITING_PAYMENT:
+      case INVITED:
         return null;
     }
     
