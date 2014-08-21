@@ -19,7 +19,7 @@ import fi.foyt.fni.session.SessionController;
 
 @Stateless
 @PermissionCheck (Permission.ILLUSION_GROUP_ACCESS)
-public class IllusionGroupAccessPermissionCheck implements PermissionCheckImplementation<String> {
+public class IllusionEventAccessPermissionCheck implements PermissionCheckImplementation<String> {
   
   private static final IllusionEventParticipantRole[] DEFAULT_ROLES = {
     IllusionEventParticipantRole.GAMEMASTER, IllusionEventParticipantRole.PLAYER
