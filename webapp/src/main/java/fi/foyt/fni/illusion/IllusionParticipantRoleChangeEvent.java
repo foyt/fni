@@ -2,9 +2,9 @@ package fi.foyt.fni.illusion;
 
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 
-public class MemberRoleChangeEvent {
+public class IllusionParticipantRoleChangeEvent {
 
-  public MemberRoleChangeEvent(Long memberId, IllusionEventParticipantRole oldRole, IllusionEventParticipantRole newRole) {
+  public IllusionParticipantRoleChangeEvent(Long memberId, IllusionEventParticipantRole oldRole, IllusionEventParticipantRole newRole) {
     super();
     this.memberId = memberId;
     this.oldRole = oldRole;

@@ -73,10 +73,10 @@ public class IllusionGroupController {
   private MaterialController materialController;
 
   @Inject
-  private Event<MemberAddedEvent> memberAddedEvent;
+  private Event<IllusionParticipantAddedEvent> illusionParticipantAddedEvent;
 
   @Inject
-  private Event<MemberRoleChangeEvent> roleChangeEvent;
+  private Event<IllusionParticipantRoleChangeEvent> roleChangeEvent;
   
   /* IllusionEvent */
 
@@ -100,7 +100,7 @@ public class IllusionGroupController {
   
   public IllusionEventParticipant createIllusionGroupMember(User user, IllusionEvent group, String characterName, IllusionEventParticipantRole role) {
     IllusionEventParticipant member = illusionEventParticipantDAO.create(user, group, characterName, role);
-    memberAddedEvent.fire(new MemberAddedEvent(member.getId()));
+    illusionParticipantAddedEvent.fire(new IllusionParticipantAddedEvent(member.getId()));
     
     return member;
   }
@@ -133,7 +133,7 @@ public class IllusionGroupController {
     IllusionEventParticipantRole oldRole = member.getRole();
     IllusionEventParticipant groupMember = illusionEventParticipantDAO.updateRole(member, role);
     if (oldRole != role) {
-      roleChangeEvent.fire(new MemberRoleChangeEvent(member.getId(), oldRole, role));
+      roleChangeEvent.fire(new IllusionParticipantRoleChangeEvent(member.getId(), oldRole, role));
     }
     
     return groupMember;

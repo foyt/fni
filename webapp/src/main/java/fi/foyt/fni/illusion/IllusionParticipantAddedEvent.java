@@ -1,8 +1,8 @@
 package fi.foyt.fni.illusion;
 
-public class MemberAddedEvent {
+public class IllusionParticipantAddedEvent {
 
-  public MemberAddedEvent(Long memberId) {
+  public IllusionParticipantAddedEvent(Long memberId) {
     super();
     this.memberId = memberId;
   }
