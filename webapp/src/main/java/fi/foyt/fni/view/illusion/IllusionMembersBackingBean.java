@@ -18,8 +18,8 @@ import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
@@ -55,21 +55,21 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   private UserController userController;
   
   @Override
-  public String init(IllusionGroup illusionGroup, IllusionGroupMember member) {
-    if ((member == null) || (member.getRole() != IllusionGroupMemberRole.GAMEMASTER)) {
+  public String init(IllusionGroup illusionGroup, IllusionEventParticipant member) {
+    if ((member == null) || (member.getRole() != IllusionEventParticipantRole.GAMEMASTER)) {
       return "/error/access-denied.jsf";
     }
 
-    gameMasters = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.GAMEMASTER);
-    players = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.PLAYER);
-    banned = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.BANNED);
+    gameMasters = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionEventParticipantRole.GAMEMASTER);
+    players = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionEventParticipantRole.PLAYER);
+    banned = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionEventParticipantRole.BANNED);
     eventJoinMode = illusionGroup.getJoinMode();
     if (eventJoinMode == IllusionEventJoinMode.APPROVE) {
-      approvalPending = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.PENDING_APPROVAL);
+      approvalPending = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionEventParticipantRole.PENDING_APPROVAL);
     }
     
-    waitingPayment = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.WAITING_PAYMENT);
-    invited = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.INVITED);
+    waitingPayment = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionEventParticipantRole.WAITING_PAYMENT);
+    invited = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionEventParticipantRole.INVITED);
     
     String groupUrl = systemSettingsController.getSiteUrl(false, true);
     if (StringUtils.isNotBlank(groupUrl)) {
@@ -98,27 +98,27 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
     this.urlName = urlName;
   }
   
-  public List<IllusionGroupMember> getGameMasters() {
+  public List<IllusionEventParticipant> getGameMasters() {
     return gameMasters;
   }
   
-  public List<IllusionGroupMember> getPlayers() {
+  public List<IllusionEventParticipant> getPlayers() {
     return players;
   }
 
-  public List<IllusionGroupMember> getApprovalPending() {
+  public List<IllusionEventParticipant> getApprovalPending() {
     return approvalPending;
   }
   
-  public List<IllusionGroupMember> getBanned() {
+  public List<IllusionEventParticipant> getBanned() {
     return banned;
   }
   
-  public List<IllusionGroupMember> getWaitingPayment() {
+  public List<IllusionEventParticipant> getWaitingPayment() {
     return waitingPayment;
   }
   
-  public List<IllusionGroupMember> getInvited() {
+  public List<IllusionEventParticipant> getInvited() {
     return invited;
   }
   
@@ -134,7 +134,7 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
     return introUrl;
   }
   
-  public void selectMember(IllusionGroupMember member) {
+  public void selectMember(IllusionEventParticipant member) {
     selectedMemberId = member.getId();
     selectedMemberUserId = member.getUser().getId();
     selectedMemberName = member.getUser().getFullName();
@@ -166,11 +166,11 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
     this.selectedMemberCharacterName = selectedMemberCharacterName;
   }
 
-  public IllusionGroupMemberRole getSelectedMemberRole() {
+  public IllusionEventParticipantRole getSelectedMemberRole() {
     return selectedMemberRole;
   }
   
-  public void setSelectedMemberRole(IllusionGroupMemberRole selectedMemberRole) {
+  public void setSelectedMemberRole(IllusionEventParticipantRole selectedMemberRole) {
     this.selectedMemberRole = selectedMemberRole;
   }
   
@@ -187,7 +187,7 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   }
   
   public String saveSelectedMember() {
-    IllusionGroupMember member = illusionGroupController.findIllusionGroupMemberById(selectedMemberId);
+    IllusionEventParticipant member = illusionGroupController.findIllusionGroupMemberById(selectedMemberId);
     
     illusionGroupController.updateIllusionGroupMemberCharacterName(member, selectedMemberCharacterName);
     illusionGroupController.updateIllusionGroupMemberRole(member, selectedMemberRole);
@@ -195,7 +195,7 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
     return "/illusion/members.jsf?faces-redirect=true&urlName=" + getUrlName();
   }
   
-  public String getMemberDisplayName(IllusionGroupMember member) {
+  public String getMemberDisplayName(IllusionEventParticipant member) {
     User user = member.getUser();
     String result = user.getFullName();
     if (StringUtils.isNotBlank(result)) {
@@ -205,12 +205,12 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
     return "<" + userController.getUserPrimaryEmail(user) + ">";
   }
   
-  private List<IllusionGroupMember> gameMasters;
-  private List<IllusionGroupMember> players;
-  private List<IllusionGroupMember> banned;
-  private List<IllusionGroupMember> approvalPending;
-  private List<IllusionGroupMember> waitingPayment;
-  private List<IllusionGroupMember> invited;
+  private List<IllusionEventParticipant> gameMasters;
+  private List<IllusionEventParticipant> players;
+  private List<IllusionEventParticipant> banned;
+  private List<IllusionEventParticipant> approvalPending;
+  private List<IllusionEventParticipant> waitingPayment;
+  private List<IllusionEventParticipant> invited;
   private IllusionEventJoinMode eventJoinMode;
   private String joinUrl;
   private String introUrl;
@@ -218,6 +218,6 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   private Long selectedMemberUserId;
   private String selectedMemberName;
   private String selectedMemberCharacterName;
-  private IllusionGroupMemberRole selectedMemberRole;
+  private IllusionEventParticipantRole selectedMemberRole;
   private List<SelectItem> roleSelectItems;
 }

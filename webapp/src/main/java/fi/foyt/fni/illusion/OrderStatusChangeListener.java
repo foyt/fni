@@ -18,8 +18,8 @@ import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
@@ -53,8 +53,8 @@ public class OrderStatusChangeListener {
   		    case ILLUSION_GROUP:
   		      IllusionGroup group = orderController.findOrderIllusionGroup(order);
   		      if (group != null) {
-  		        IllusionGroupMember member = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, order.getCustomer());
-    		      illusionGroupController.updateIllusionGroupMemberRole(member, IllusionGroupMemberRole.PLAYER);
+  		        IllusionEventParticipant member = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, order.getCustomer());
+    		      illusionGroupController.updateIllusionGroupMemberRole(member, IllusionEventParticipantRole.PLAYER);
     		      sendPaymentAcceptedMail(member);
   		      } else {
   		        logger.severe("Tried to lift illusion group member role to player for non-existing group");
@@ -71,7 +71,7 @@ public class OrderStatusChangeListener {
 		}
 	}
 	
-  private void sendPaymentAcceptedMail(IllusionGroupMember groupMember) {
+  private void sendPaymentAcceptedMail(IllusionEventParticipant groupMember) {
     User user = groupMember.getUser();
     Locale userLocale = LocaleUtils.toLocale(user.getLocale());
     String userMail = userController.getUserPrimaryEmail(user);

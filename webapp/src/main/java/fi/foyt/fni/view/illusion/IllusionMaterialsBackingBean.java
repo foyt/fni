@@ -17,7 +17,7 @@ import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialTypeComparator;
 import fi.foyt.fni.materials.TitleComparator;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
@@ -48,7 +48,7 @@ public class IllusionMaterialsBackingBean extends AbstractIllusionGroupBackingBe
   
   @SuppressWarnings("unchecked")
   @Override
-  public String init(IllusionGroup illusionGroup, IllusionGroupMember member) {
+  public String init(IllusionGroup illusionGroup, IllusionEventParticipant member) {
     if (member == null) {
       return "/error/access-denied.jsf";
     }

@@ -9,8 +9,8 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.PermissionCheck;
 import fi.foyt.fni.security.PermissionCheckImplementation;
@@ -21,8 +21,8 @@ import fi.foyt.fni.session.SessionController;
 @PermissionCheck (Permission.ILLUSION_GROUP_ACCESS)
 public class IllusionGroupAccessPermissionCheck implements PermissionCheckImplementation<String> {
   
-  private static final IllusionGroupMemberRole[] DEFAULT_ROLES = {
-    IllusionGroupMemberRole.GAMEMASTER, IllusionGroupMemberRole.PLAYER
+  private static final IllusionEventParticipantRole[] DEFAULT_ROLES = {
+    IllusionEventParticipantRole.GAMEMASTER, IllusionEventParticipantRole.PLAYER
   };
 
   @Inject
@@ -39,23 +39,23 @@ public class IllusionGroupAccessPermissionCheck implements PermissionCheckImplem
         throw new SecurityException("Could not resolve Illusion group while checking permission for ILLUSION_GROUP_ACCESS");
       }
       
-      IllusionGroupMember illusionGroupUser = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionGroup, sessionController.getLoggedUser());
-      if (illusionGroupUser == null) { 
+      IllusionEventParticipant participant = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionGroup, sessionController.getLoggedUser());
+      if (participant == null) { 
         return false;
       }
       
 
-      List<IllusionGroupMemberRole> roles = new ArrayList<>();
+      List<IllusionEventParticipantRole> roles = new ArrayList<>();
       if (parameters.containsKey("roles")) {
         for (String roleString : parameters.get("roles").split(",")) {
-          roles.add(IllusionGroupMemberRole.valueOf(roleString));
+          roles.add(IllusionEventParticipantRole.valueOf(roleString));
         }
       } else {
         roles.addAll(Arrays.asList(DEFAULT_ROLES));
       }
       
-      for (IllusionGroupMemberRole role : roles) {
-        if (role == illusionGroupUser.getRole()) {
+      for (IllusionEventParticipantRole role : roles) {
+        if (role == participant.getRole()) {
           return true;
         }
       }

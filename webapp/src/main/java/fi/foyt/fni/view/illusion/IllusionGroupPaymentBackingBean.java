@@ -31,7 +31,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderType;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.Address;
 import fi.foyt.fni.persistence.model.users.AddressType;
@@ -107,7 +107,7 @@ public class IllusionGroupPaymentBackingBean {
     }
 
     User loggedUser = sessionController.getLoggedUser();
-    IllusionGroupMember groupMember = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionGroup, loggedUser);
+    IllusionEventParticipant groupMember = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionGroup, loggedUser);
     if (groupMember == null) {
       return "/error/access-denied.jsf";
     }

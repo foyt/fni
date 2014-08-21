@@ -1,6 +1,6 @@
 package fi.foyt.fni.persistence.model.illusion;
 
-public enum IllusionGroupMemberRole {
+public enum IllusionEventParticipantRole {
   INVITED,
   GAMEMASTER,
   PLAYER,

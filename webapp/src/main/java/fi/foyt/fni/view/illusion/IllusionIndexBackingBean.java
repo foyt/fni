@@ -12,7 +12,7 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.security.LoggedIn;
@@ -38,8 +38,8 @@ public class IllusionIndexBackingBean {
       return "/index.jsf?faces-redirect=true";
     }
     
-    gameMasterGroups = illusionGroupController.listIllusionGroupsByUserAndRole(loggedUser, IllusionGroupMemberRole.GAMEMASTER);
-    playerGroups = illusionGroupController.listIllusionGroupsByUserAndRole(loggedUser, IllusionGroupMemberRole.PLAYER);
+    gameMasterGroups = illusionGroupController.listIllusionGroupsByUserAndRole(loggedUser, IllusionEventParticipantRole.GAMEMASTER);
+    playerGroups = illusionGroupController.listIllusionGroupsByUserAndRole(loggedUser, IllusionEventParticipantRole.PLAYER);
     
     return null;
   }
@@ -53,7 +53,7 @@ public class IllusionIndexBackingBean {
   }
   
   public Long getGroupPlayerCount(IllusionGroup group) {
-    return illusionGroupController.countIllusionGroupMembersByGroupAndRole(group, IllusionGroupMemberRole.PLAYER);
+    return illusionGroupController.countIllusionGroupMembersByGroupAndRole(group, IllusionEventParticipantRole.PLAYER);
   }
   
   private List<IllusionGroup> gameMasterGroups;

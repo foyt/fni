@@ -23,8 +23,8 @@ import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
@@ -54,11 +54,11 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
   private MaterialController materialController;
   
   @Override
-  public String init(IllusionGroup illusionGroup, IllusionGroupMember groupUser) {
+  public String init(IllusionGroup illusionGroup, IllusionEventParticipant participant) {
     IllusionGroupFolder folder = illusionGroup.getFolder();
     
-    if (groupUser != null) {
-      memberRole = groupUser.getRole();
+    if (participant != null) {
+      memberRole = participant.getRole();
       switch (memberRole) {
         case GAMEMASTER:
         case PLAYER:
@@ -140,7 +140,7 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
     return joinMode;
   }
   
-  public IllusionGroupMemberRole getMemberRole() {
+  public IllusionEventParticipantRole getMemberRole() {
     return memberRole;
   }
   
@@ -154,7 +154,7 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
   
   private String text;
   private IllusionEventJoinMode joinMode;
-  private IllusionGroupMemberRole memberRole;
+  private IllusionEventParticipantRole memberRole;
   private boolean hasSignUpFee;
   private String signUpFee;
 }

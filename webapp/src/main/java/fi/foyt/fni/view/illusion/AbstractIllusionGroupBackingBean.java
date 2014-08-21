@@ -6,8 +6,8 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
@@ -27,7 +27,7 @@ public abstract class AbstractIllusionGroupBackingBean {
       return "/error/not-found.jsf";
     }
     
-    IllusionGroupMember member = null;
+    IllusionEventParticipant member = null;
     
     if (sessionController.isLoggedIn()) {
       User loggedUser = sessionController.getLoggedUser();
@@ -41,12 +41,12 @@ public abstract class AbstractIllusionGroupBackingBean {
     name = illusionGroup.getName();
     description = illusionGroup.getDescription();
     illusionFolderPath = folder.getPath();
-    mayManageGroup = member != null ? member.getRole() == IllusionGroupMemberRole.GAMEMASTER : false;
+    mayManageGroup = member != null ? member.getRole() == IllusionEventParticipantRole.GAMEMASTER : false;
   
     return init(illusionGroup, member);
   }
 
-  public abstract String init(IllusionGroup illusionGroup, IllusionGroupMember groupUser);
+  public abstract String init(IllusionGroup illusionGroup, IllusionEventParticipant participant);
   public abstract String getUrlName();
   
   public Long getId() {

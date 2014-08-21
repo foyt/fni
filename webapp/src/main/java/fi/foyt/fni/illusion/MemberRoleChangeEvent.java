@@ -1,10 +1,10 @@
 package fi.foyt.fni.illusion;
 
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 
 public class MemberRoleChangeEvent {
 
-  public MemberRoleChangeEvent(Long memberId, IllusionGroupMemberRole oldRole, IllusionGroupMemberRole newRole) {
+  public MemberRoleChangeEvent(Long memberId, IllusionEventParticipantRole oldRole, IllusionEventParticipantRole newRole) {
     super();
     this.memberId = memberId;
     this.oldRole = oldRole;
@@ -15,15 +15,15 @@ public class MemberRoleChangeEvent {
     return memberId;
   }
   
-  public IllusionGroupMemberRole getNewRole() {
+  public IllusionEventParticipantRole getNewRole() {
     return newRole;
   }
   
-  public IllusionGroupMemberRole getOldRole() {
+  public IllusionEventParticipantRole getOldRole() {
     return oldRole;
   }
 
   private Long memberId;
-  private IllusionGroupMemberRole oldRole;
-  private IllusionGroupMemberRole newRole;
+  private IllusionEventParticipantRole oldRole;
+  private IllusionEventParticipantRole newRole;
 }

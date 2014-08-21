@@ -14,8 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.mail.Mailer;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
@@ -39,23 +39,23 @@ public class IllusionGroupRoleChangeListener {
   private Mailer mailer;
   
   public void onMemberAddedEvent(@Observes MemberAddedEvent event) {
-    IllusionGroupMember groupMember = illusionGroupController.findIllusionGroupMemberById(event.getMemberId());
-    if (groupMember.getRole() == IllusionGroupMemberRole.PENDING_APPROVAL) {
-      List<IllusionGroupMember> gamemasters = illusionGroupController.listIllusionGroupMembersByGroupAndRole(groupMember.getGroup(), IllusionGroupMemberRole.GAMEMASTER);
+    IllusionEventParticipant groupMember = illusionGroupController.findIllusionGroupMemberById(event.getMemberId());
+    if (groupMember.getRole() == IllusionEventParticipantRole.PENDING_APPROVAL) {
+      List<IllusionEventParticipant> gamemasters = illusionGroupController.listIllusionGroupMembersByGroupAndRole(groupMember.getGroup(), IllusionEventParticipantRole.GAMEMASTER);
       String groupUrl = systemSettingsController.getSiteUrl(false, true);
       if (StringUtils.isNotBlank(groupUrl)) {
         groupUrl += "/illusion/group/" + groupMember.getGroup().getUrlName();
       }
       
-      for (IllusionGroupMember gamemaster : gamemasters) {
+      for (IllusionEventParticipant gamemaster : gamemasters) {
         sendGroupJoinRequestMail(groupUrl, groupMember, gamemaster);
       }
     }
   }
 
   public void onMemberRoleChangeEvent(@Observes MemberRoleChangeEvent event) {
-    if (event.getOldRole().equals(IllusionGroupMemberRole.PENDING_APPROVAL)) {
-      IllusionGroupMember groupMember = illusionGroupController.findIllusionGroupMemberById(event.getMemberId());
+    if (event.getOldRole().equals(IllusionEventParticipantRole.PENDING_APPROVAL)) {
+      IllusionEventParticipant groupMember = illusionGroupController.findIllusionGroupMemberById(event.getMemberId());
       
       switch (event.getNewRole()) {
         case BANNED:
@@ -73,7 +73,7 @@ public class IllusionGroupRoleChangeListener {
     }
   }
   
-  private void sendPaidGroupAcceptMail(IllusionGroupMember groupMember) {
+  private void sendPaidGroupAcceptMail(IllusionEventParticipant groupMember) {
     User user = groupMember.getUser();
     Locale userLocale = LocaleUtils.toLocale(user.getLocale());
     String userMail = userController.getUserPrimaryEmail(user);
@@ -99,7 +99,7 @@ public class IllusionGroupRoleChangeListener {
     }
   }
 
-  private void sendGroupJoinRequestMail(String groupUrl, IllusionGroupMember groupMember, IllusionGroupMember gamemaster) {
+  private void sendGroupJoinRequestMail(String groupUrl, IllusionEventParticipant groupMember, IllusionEventParticipant gamemaster) {
     String groupName = groupMember.getGroup().getName();
 
     User master = gamemaster.getUser();
@@ -124,7 +124,7 @@ public class IllusionGroupRoleChangeListener {
     }
   }
   
-  private void sendAcceptMail(IllusionGroupMember groupMember) {
+  private void sendAcceptMail(IllusionEventParticipant groupMember) {
     User user = groupMember.getUser();
     Locale userLocale = LocaleUtils.toLocale(user.getLocale());
     String userMail = userController.getUserPrimaryEmail(user);
@@ -150,7 +150,7 @@ public class IllusionGroupRoleChangeListener {
     }
   }
   
-  private void sendDeclineMail(IllusionGroupMember groupMember) {
+  private void sendDeclineMail(IllusionEventParticipant groupMember) {
     User user = groupMember.getUser();
     Locale userLocale = LocaleUtils.toLocale(user.getLocale());
     String userMail = userController.getUserPrimaryEmail(user);

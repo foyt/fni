@@ -23,8 +23,8 @@ import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.auth.InternalAuth;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
@@ -92,8 +92,8 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
       return;
     }
     
-    IllusionGroupMember loggedGroupUser = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, loggedUser);
-    if ((loggedGroupUser == null)||(loggedGroupUser.getRole() != IllusionGroupMemberRole.GAMEMASTER)) {
+    IllusionEventParticipant loggedParticipant = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, loggedUser);
+    if ((loggedParticipant == null)||(loggedParticipant.getRole() != IllusionEventParticipantRole.GAMEMASTER)) {
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
       return;
     }
@@ -125,9 +125,9 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
       temporaryAccount = ExternalLocales.getText(sessionController.getLocale(), "illusion.mail.temporaryAccount", password);
     }
     
-    IllusionGroupMember illusionGroupUser = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, user);
+    IllusionEventParticipant illusionGroupUser = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, user);
     if (illusionGroupUser == null) {
-      illusionGroupController.createIllusionGroupMember(user, group, null, IllusionGroupMemberRole.INVITED);
+      illusionGroupController.createIllusionGroupMember(user, group, null, IllusionEventParticipantRole.INVITED);
       String emailContent = templateContent.replace("[[LOGIN_INFO]]", temporaryAccount);
       String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
       String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);

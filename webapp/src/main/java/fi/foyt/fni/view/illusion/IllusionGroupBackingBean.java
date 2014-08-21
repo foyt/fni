@@ -16,7 +16,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
@@ -49,7 +49,7 @@ public class IllusionGroupBackingBean extends AbstractIllusionGroupBackingBean {
   private MaterialController materialController;
   
   @Override
-  public String init(IllusionGroup illusionGroup, IllusionGroupMember member) {
+  public String init(IllusionGroup illusionGroup, IllusionEventParticipant member) {
     if (member == null) {
       return "/illusion/intro.jsf?faces-redirect=true&urlName=" + getUrlName();
     }

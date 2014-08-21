@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import fi.foyt.fni.persistence.model.users.User;
 
 @Entity
-public class IllusionGroupMember {
+public class IllusionEventParticipant {
 
   public Long getId() {
     return id;
@@ -26,11 +26,11 @@ public class IllusionGroupMember {
     this.characterName = characterName;
   }
   
-  public IllusionGroupMemberRole getRole() {
+  public IllusionEventParticipantRole getRole() {
     return role;
   }
   
-  public void setRole(IllusionGroupMemberRole role) {
+  public void setRole(IllusionEventParticipantRole role) {
     this.role = role;
   }
   
@@ -64,5 +64,5 @@ public class IllusionGroupMember {
   
   @NotNull
   @Enumerated (EnumType.STRING)
-  private IllusionGroupMemberRole role;
+  private IllusionEventParticipantRole role;
 }
