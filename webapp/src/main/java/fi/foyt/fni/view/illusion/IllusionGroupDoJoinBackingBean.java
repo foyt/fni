@@ -64,6 +64,12 @@ public class IllusionGroupDoJoinBackingBean {
         case BANNED:
         case BOT:
           return "/error/access-denied.jsf";
+        case INVITED:
+          if (illusionGroup.getSignUpFee() == null) {
+            illusionGroupController.updateIllusionGroupMemberRole(groupMember, IllusionGroupMemberRole.PLAYER);
+          } else {
+            return "/illusion/group-payment.jsf?faces-redirect=true&urlName=" + getUrlName();
+          }
         case PENDING_APPROVAL:
         case WAITING_PAYMENT:
           return "/illusion/intro.jsf?faces-redirect=true&urlName=" + getUrlName();
