@@ -71,11 +71,11 @@
           </h:panelGroup>
           
           <h:form>
-            <h:link outcome="/illusion/dojoin.jsf" styleClass="illusion-group-intro-join-button"  rendered="#{illusionIntroBackingBean.joinMode eq 'OPEN'}">
+            <h:link outcome="/illusion/dojoin.jsf" styleClass="illusion-group-intro-join-button"  rendered="#{illusionIntroBackingBean.joinMode eq 'OPEN' or illusionIntroBackingBean.ref eq 'inv'}">
               <h:outputText value="#{locales['illusion.intro.joinButton']}"/>
               <f:param name="urlName" value="#{illusionIntroBackingBean.urlName}"/>
             </h:link>
-            <h:link outcome="/illusion/dojoin.jsf" value="#{locales['illusion.intro.requestToJoinButton']}" styleClass="illusion-group-intro-join-button" rendered="#{illusionIntroBackingBean.joinMode eq 'APPROVE'}">              
+            <h:link outcome="/illusion/dojoin.jsf" value="#{locales['illusion.intro.requestToJoinButton']}" styleClass="illusion-group-intro-join-button" rendered="#{illusionIntroBackingBean.joinMode eq 'APPROVE' and illusionIntroBackingBean.ref ne 'inv'}">              
               <f:param name="urlName" value="#{illusionIntroBackingBean.urlName}"/>
             </h:link>
           </h:form>

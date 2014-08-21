@@ -76,8 +76,8 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
       groupUrl += "/illusion/group/" + illusionGroup.getUrlName();
     }
     
-    joinUrl = groupUrl + "/dojoin";
-    introUrl = groupUrl + "/intro";
+    joinUrl = groupUrl + "/dojoin?ref=inv";
+    introUrl = groupUrl + "/intro?ref=inv";
     
     return null;
   }

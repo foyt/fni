@@ -40,6 +40,9 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
 
   @Parameter
   private String urlName;
+  
+  @Parameter
+  private String ref;
 
   @Inject
   private Logger logger;
@@ -119,6 +122,14 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
 
   public void setUrlName(String urlName) {
     this.urlName = urlName;
+  }
+  
+  public String getRef() {
+    return ref;
+  }
+  
+  public void setRef(String ref) {
+    this.ref = ref;
   }
   
   public String getText() {
