@@ -19,7 +19,7 @@ import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupJoinMode;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocumentType;
@@ -77,11 +77,11 @@ public class IllusionCreateGroupBackingBean {
     this.description = description;
   }
 	
-	public IllusionGroupJoinMode getJoinMode() {
+	public IllusionEventJoinMode getJoinMode() {
     return joinMode;
   }
 	
-	public void setJoinMode(IllusionGroupJoinMode joinMode) {
+	public void setJoinMode(IllusionEventJoinMode joinMode) {
     this.joinMode = joinMode;
   }
 	
@@ -181,7 +181,7 @@ public class IllusionCreateGroupBackingBean {
 	
 	private String name;
 	private String description;
-	private IllusionGroupJoinMode joinMode;
+	private IllusionEventJoinMode joinMode;
 	private Double signUpFee;
 	private String signUpFeeCurrency;
 }

@@ -78,11 +78,11 @@ public class IllusionGroup {
     this.folder = folder;
   }
   
-  public IllusionGroupJoinMode getJoinMode() {
+  public IllusionEventJoinMode getJoinMode() {
     return joinMode;
   }
   
-  public void setJoinMode(IllusionGroupJoinMode joinMode) {
+  public void setJoinMode(IllusionEventJoinMode joinMode) {
     this.joinMode = joinMode;
   }
   
@@ -133,7 +133,7 @@ public class IllusionGroup {
   
   @Enumerated (EnumType.STRING)
   @Column (nullable = false)
-  private IllusionGroupJoinMode joinMode;
+  private IllusionEventJoinMode joinMode;
   
   private Double signUpFee;
   

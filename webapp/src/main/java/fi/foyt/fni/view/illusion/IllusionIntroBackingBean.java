@@ -22,7 +22,7 @@ import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupJoinMode;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocument;
@@ -136,7 +136,7 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
     return text;
   }
   
-  public IllusionGroupJoinMode getJoinMode() {
+  public IllusionEventJoinMode getJoinMode() {
     return joinMode;
   }
   
@@ -153,7 +153,7 @@ public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
   }
   
   private String text;
-  private IllusionGroupJoinMode joinMode;
+  private IllusionEventJoinMode joinMode;
   private IllusionGroupMemberRole memberRole;
   private boolean hasSignUpFee;
   private String signUpFee;

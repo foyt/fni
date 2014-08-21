@@ -1,6 +1,6 @@
 package fi.foyt.fni.persistence.model.illusion;
 
-public enum IllusionGroupJoinMode {
+public enum IllusionEventJoinMode {
 
   OPEN,
   

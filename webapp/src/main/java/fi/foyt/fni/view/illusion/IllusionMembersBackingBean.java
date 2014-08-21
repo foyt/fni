@@ -17,7 +17,7 @@ import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
 import fi.foyt.fni.illusion.IllusionGroupController;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupJoinMode;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember;
 import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberRole;
 import fi.foyt.fni.persistence.model.users.Permission;
@@ -63,8 +63,8 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
     gameMasters = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.GAMEMASTER);
     players = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.PLAYER);
     banned = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.BANNED);
-    groupJoinMode = illusionGroup.getJoinMode();
-    if (groupJoinMode == IllusionGroupJoinMode.APPROVE) {
+    eventJoinMode = illusionGroup.getJoinMode();
+    if (eventJoinMode == IllusionEventJoinMode.APPROVE) {
       approvalPending = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionGroup, IllusionGroupMemberRole.PENDING_APPROVAL);
     }
     
@@ -122,8 +122,8 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
     return invited;
   }
   
-  public IllusionGroupJoinMode getGroupJoinMode() {
-    return groupJoinMode;
+  public IllusionEventJoinMode getEventJoinMode() {
+    return eventJoinMode;
   }
   
   public String getJoinUrl() {
@@ -211,7 +211,7 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   private List<IllusionGroupMember> approvalPending;
   private List<IllusionGroupMember> waitingPayment;
   private List<IllusionGroupMember> invited;
-  private IllusionGroupJoinMode groupJoinMode;
+  private IllusionEventJoinMode eventJoinMode;
   private String joinUrl;
   private String introUrl;
   private Long selectedMemberId;
