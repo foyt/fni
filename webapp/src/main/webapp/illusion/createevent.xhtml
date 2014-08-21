@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"  
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['illusion.createEvent.pageTitle']}</ui:define>
+ 
+  <ui:define name="view-scripts">
+    <!-- View scripts -->
+    
+    <h:outputScript name="scripts/gui/illusion-create-event.js"></h:outputScript>
+  </ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <!-- View styles -->
+    
+    <h:outputStylesheet library="novus" name="css/illusion-create-event.css"/>
+    
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+
+    <!-- Header -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['illusion.createEvent.navigationIndex']}</h:link>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:link styleClass="view-header-navigation-item" outcome="/illusion/index.jsf">#{locales['illusion.createEvent.navigationIllusion']}</h:link>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:link styleClass="view-header-navigation-item" outcome="/illusion/createevent.jsf">#{locales['illusion.createEvent.navigationCreateEvent']}</h:link>
+      </h:panelGroup>
+        
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">
+          <span>#{locales['illusion.createEvent.descriptionTitle']}</span>
+        </p>
+        <p class="view-header-description-text">#{locales['illusion.createEvent.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="grid_16 alpha slim-right">
+        <h:panelGroup layout="block" styleClass="illusion-create-event-panel">
+          <h3>#{locales['illusion.createEvent.createEventTitle']}</h3>
+          <h:form>
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+              <h:outputLabel value="#{locales['illusion.createEvent.nameLabel']}" />
+              <h:inputText autocomplete="false" id="name" value="#{illusionCreateEventBackingBean.name}" required="true" requiredMessage="#{locales['illusion.createEvent.nameRequired']}">
+                <f:ajax execute="@form" render="@form"/>
+              </h:inputText>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+              <h:outputLabel value="#{locales['illusion.createEvent.joining']}" />
+              <h:selectOneMenu value="#{illusionCreateEventBackingBean.joinMode}">
+                <f:selectItem itemValue="OPEN" itemLabel="#{locales['illusion.createEvent.joiningPublic']}"/>
+                <f:selectItem itemValue="APPROVE" itemLabel="#{locales['illusion.createEvent.joiningApprove']}"/>
+                <f:selectItem itemValue="INVITE_ONLY" itemLabel="#{locales['illusion.createEvent.joiningInviteOnly']}"/>
+              </h:selectOneMenu>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field illusion-create-event-sign-up-fee-field">
+              <h:outputLabel value="#{locales['illusion.createEvent.signUpFeeLabel']}" />
+              <input type="number" min="0" step="0.01" jsf:value="#{illusionCreateEventBackingBean.signUpFee}"/>
+              <h:selectOneMenu value="#{illusionCreateEventBackingBean.signUpFeeCurrency}">
+                <f:selectItem itemValue="EUR" itemLabel="EUR"/>
+              </h:selectOneMenu>
+            </h:panelGroup>
+             
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+              <h:outputLabel value="#{locales['illusion.createEvent.descriptionLabel']}" />
+              <h:inputTextarea id="description" value="#{illusionCreateEventBackingBean.description}"/>
+            </h:panelGroup>  
+
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+              <h:commandButton id="save" styleClass="illusion-create-event-save" value="#{locales['illusion.createEvent.saveButton']}" action="#{illusionCreateEventBackingBean.save}"/>
+            </h:panelGroup>
+          </h:form>
+        </h:panelGroup>
+      </h:panelGroup>
+    </h:panelGroup>
+  </ui:define>
+
+</ui:composition>

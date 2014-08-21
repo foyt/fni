@@ -6,7 +6,6 @@ import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -36,9 +35,9 @@ import fi.foyt.fni.utils.servlet.RequestUtils;
 @RequestScoped
 @Stateful
 @Named
-@Join (path = "/illusion/creategroup", to = "/illusion/creategroup.jsf")
+@Join (path = "/illusion/createevent", to = "/illusion/createevent.jsf")
 @LoggedIn
-public class IllusionCreateGroupBackingBean {
+public class IllusionCreateEventBackingBean {
 
   @Inject
   private SessionController sessionController;
@@ -123,7 +122,7 @@ public class IllusionCreateGroupBackingBean {
     } while (true);
   }
 	
-  public void save() throws Exception {
+  public String save() throws Exception {
     Date now = new Date();
     
     String urlName = createUrlName(getName());
@@ -143,18 +142,18 @@ public class IllusionCreateGroupBackingBean {
 
     IllusionFolder illusionFolder = illusionEventController.findUserIllusionFolder(loggedUser, true);
     IllusionGroupFolder illusionGroupFolder = illusionEventController.createIllusionGroupFolder(loggedUser, illusionFolder, urlName, getName());
-    IllusionEvent group = illusionEventController.createIllusionGroup(urlName, getName(), getDescription(), xmppRoom, illusionGroupFolder, getJoinMode(), now, signUpFee, signUpFeeCurrency);
+    IllusionEvent event = illusionEventController.createIllusionGroup(urlName, getName(), getDescription(), xmppRoom, illusionGroupFolder, getJoinMode(), now, signUpFee, signUpFeeCurrency);
     
-    String indexDocumentTitle = FacesUtils.getLocalizedValue("illusion.createGroup.indexDocumentTitle");
-    String indexDocumentContent = FacesUtils.getLocalizedValue("illusion.createGroup.indexDocumentContent");
-    String introDocumentTitle = FacesUtils.getLocalizedValue("illusion.createGroup.introDocumentTitle");
-    String introDocumentContent = FacesUtils.getLocalizedValue("illusion.createGroup.introDocumentContent");
+    String indexDocumentTitle = FacesUtils.getLocalizedValue("illusion.createEvent.indexDocumentTitle");
+    String indexDocumentContent = FacesUtils.getLocalizedValue("illusion.createEvent.indexDocumentContent");
+    String introDocumentTitle = FacesUtils.getLocalizedValue("illusion.createEvent.introDocumentTitle");
+    String introDocumentContent = FacesUtils.getLocalizedValue("illusion.createEvent.introDocumentContent");
     
     illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionGroupDocumentType.INDEX, language, illusionGroupFolder, "index", indexDocumentTitle, indexDocumentContent, MaterialPublicity.PRIVATE);
     illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionGroupDocumentType.INTRO, language, illusionGroupFolder, "intro", introDocumentTitle, introDocumentContent, MaterialPublicity.PRIVATE);
     
     // Add game master
-    illusionEventController.createIllusionGroupMember(loggedUser, group, getUserNickname(loggedUser), IllusionEventParticipantRole.GAMEMASTER);
+    illusionEventController.createIllusionGroupMember(loggedUser, event, getUserNickname(loggedUser), IllusionEventParticipantRole.GAMEMASTER);
     
     // Add bot 
     String botJid = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOT_JID);
@@ -164,15 +163,9 @@ public class IllusionCreateGroupBackingBean {
       throw new Exception("Configuration error, could not find chatbot user");
     }
     
-    illusionEventController.createIllusionGroupMember(botChatCredentials.getUser(), group, getUserNickname(botChatCredentials.getUser()), IllusionEventParticipantRole.BOT);
+    illusionEventController.createIllusionGroupMember(botChatCredentials.getUser(), event, getUserNickname(botChatCredentials.getUser()), IllusionEventParticipantRole.BOT);
     
-    String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-    
-    FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
-      .append(contextPath)
-      .append("/illusion/group/")
-      .append(group.getUrlName())
-      .toString());
+    return "/illusion/event.jsf?faces-redirect=true&urlName=" + event.getUrlName();
   }
 
   private String getUserNickname(User user) {
