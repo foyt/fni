@@ -36,7 +36,7 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Named
 @Stateful
 @Join (path = "/illusion/group/{urlName}/intro", to = "/illusion/intro.jsf")
-public class IllusionIntroBackingBean extends AbstractIllusionGroupBackingBean {
+public class IllusionIntroBackingBean extends AbstractIllusionEventBackingBean {
 
   @Parameter
   private String urlName;

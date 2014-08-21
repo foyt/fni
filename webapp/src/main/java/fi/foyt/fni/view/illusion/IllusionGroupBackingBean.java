@@ -31,7 +31,7 @@ import fi.foyt.fni.utils.data.FileData;
 @Stateful
 @Join (path = "/illusion/group/{urlName}", to = "/illusion/group.jsf")
 @LoggedIn
-public class IllusionGroupBackingBean extends AbstractIllusionGroupBackingBean {
+public class IllusionGroupBackingBean extends AbstractIllusionEventBackingBean {
 
   @Parameter
   private String urlName;

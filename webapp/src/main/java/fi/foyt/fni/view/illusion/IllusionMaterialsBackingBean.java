@@ -35,7 +35,7 @@ import fi.foyt.fni.session.SessionController;
 @LoggedIn
 @Secure (value = Permission.ILLUSION_GROUP_ACCESS, deferred = true)
 @SecurityContext (context = "@urlName")
-public class IllusionMaterialsBackingBean extends AbstractIllusionGroupBackingBean {
+public class IllusionMaterialsBackingBean extends AbstractIllusionEventBackingBean {
 
   @Parameter
   private String urlName;

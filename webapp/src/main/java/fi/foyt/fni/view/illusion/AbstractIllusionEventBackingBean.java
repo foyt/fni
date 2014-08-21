@@ -12,7 +12,7 @@ import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 
-public abstract class AbstractIllusionGroupBackingBean {
+public abstract class AbstractIllusionEventBackingBean {
 
   @Inject
   private IllusionEventController illusionEventController;

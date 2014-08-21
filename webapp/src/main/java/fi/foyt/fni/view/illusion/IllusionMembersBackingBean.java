@@ -40,7 +40,7 @@ import fi.foyt.fni.users.UserController;
 @SecurityParams ({
   @SecurityParam (name = "roles", value = "GAMEMASTER")
 })
-public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean {
+public class IllusionMembersBackingBean extends AbstractIllusionEventBackingBean {
 
   @Parameter
   private String urlName;
