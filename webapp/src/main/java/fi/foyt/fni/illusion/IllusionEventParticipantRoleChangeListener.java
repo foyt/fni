@@ -38,7 +38,7 @@ public class IllusionEventParticipantRoleChangeListener {
   @Inject
   private Mailer mailer;
   
-  public void onMemberAddedEvent(@Observes IllusionParticipantAddedEvent event) {
+  public void onParticipantAddedEvent(@Observes IllusionParticipantAddedEvent event) {
     IllusionEventParticipant groupMember = illusionGroupController.findIllusionGroupMemberById(event.getMemberId());
     if (groupMember.getRole() == IllusionEventParticipantRole.PENDING_APPROVAL) {
       List<IllusionEventParticipant> gamemasters = illusionGroupController.listIllusionGroupMembersByGroupAndRole(groupMember.getGroup(), IllusionEventParticipantRole.GAMEMASTER);
@@ -53,7 +53,7 @@ public class IllusionEventParticipantRoleChangeListener {
     }
   }
 
-  public void onMemberRoleChangeEvent(@Observes IllusionParticipantRoleChangeEvent event) {
+  public void onParticipantRoleChangeEvent(@Observes IllusionParticipantRoleChangeEvent event) {
     if (event.getOldRole().equals(IllusionEventParticipantRole.PENDING_APPROVAL)) {
       IllusionEventParticipant groupMember = illusionGroupController.findIllusionGroupMemberById(event.getMemberId());
       
