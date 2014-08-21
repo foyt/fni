@@ -11,7 +11,7 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMember_;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant_;
 import fi.foyt.fni.persistence.model.users.User;
 
 public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventParticipant> {
@@ -38,8 +38,8 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
     criteria.select(root);
     criteria.where(
       criteriaBuilder.and(
-        criteriaBuilder.equal(root.get(IllusionGroupMember_.group), group),
-        criteriaBuilder.equal(root.get(IllusionGroupMember_.user), user)
+        criteriaBuilder.equal(root.get(IllusionEventParticipant_.group), group),
+        criteriaBuilder.equal(root.get(IllusionEventParticipant_.user), user)
       )
     );
 
@@ -54,7 +54,7 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
     Root<IllusionEventParticipant> root = criteria.from(IllusionEventParticipant.class);
     criteria.select(root);
     criteria.where(
-  		criteriaBuilder.equal(root.get(IllusionGroupMember_.group), group)
+  		criteriaBuilder.equal(root.get(IllusionEventParticipant_.group), group)
     );
 
     return entityManager.createQuery(criteria).getResultList();
@@ -69,8 +69,8 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
     criteria.select(root);
     criteria.where(
       criteriaBuilder.and(
-          criteriaBuilder.equal(root.get(IllusionGroupMember_.group), group),
-          criteriaBuilder.equal(root.get(IllusionGroupMember_.role), role)
+          criteriaBuilder.equal(root.get(IllusionEventParticipant_.group), group),
+          criteriaBuilder.equal(root.get(IllusionEventParticipant_.role), role)
       )
     );
 
@@ -86,8 +86,8 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
     criteria.select(root);
     criteria.where(
       criteriaBuilder.and(
-        criteriaBuilder.equal(root.get(IllusionGroupMember_.user), user),
-        criteriaBuilder.equal(root.get(IllusionGroupMember_.role), role)
+        criteriaBuilder.equal(root.get(IllusionEventParticipant_.user), user),
+        criteriaBuilder.equal(root.get(IllusionEventParticipant_.role), role)
       )
     );
 
@@ -100,11 +100,11 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<IllusionEvent> criteria = criteriaBuilder.createQuery(IllusionEvent.class);
     Root<IllusionEventParticipant> root = criteria.from(IllusionEventParticipant.class);
-    criteria.select(root.get(IllusionGroupMember_.group));
+    criteria.select(root.get(IllusionEventParticipant_.group));
     criteria.where(
       criteriaBuilder.and(
-        criteriaBuilder.equal(root.get(IllusionGroupMember_.user), user),
-        criteriaBuilder.equal(root.get(IllusionGroupMember_.role), role)
+        criteriaBuilder.equal(root.get(IllusionEventParticipant_.user), user),
+        criteriaBuilder.equal(root.get(IllusionEventParticipant_.role), role)
       )
     );
 
@@ -120,8 +120,8 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
     criteria.select(criteriaBuilder.count(root));
     criteria.where(
       criteriaBuilder.and(
-        criteriaBuilder.equal(root.get(IllusionGroupMember_.group), group),
-        criteriaBuilder.equal(root.get(IllusionGroupMember_.role), role)
+        criteriaBuilder.equal(root.get(IllusionEventParticipant_.group), group),
+        criteriaBuilder.equal(root.get(IllusionEventParticipant_.role), role)
       )
     );
 

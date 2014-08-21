@@ -11,7 +11,7 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventSettingKey;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupSetting_;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventSetting_;
 
 public class IllusionEventSettingDAO extends GenericDAO<IllusionEventSetting> {
 
@@ -36,8 +36,8 @@ public class IllusionEventSettingDAO extends GenericDAO<IllusionEventSetting> {
     criteria.select(root);
     criteria.where(
       criteriaBuilder.and(
-        criteriaBuilder.equal(root.get(IllusionGroupSetting_.group), group),
-        criteriaBuilder.equal(root.get(IllusionGroupSetting_.key), key)
+        criteriaBuilder.equal(root.get(IllusionEventSetting_.group), group),
+        criteriaBuilder.equal(root.get(IllusionEventSetting_.key), key)
       )
     );
 
@@ -52,7 +52,7 @@ public class IllusionEventSettingDAO extends GenericDAO<IllusionEventSetting> {
     Root<IllusionEventSetting> root = criteria.from(IllusionEventSetting.class);
     criteria.select(root);
     criteria.where(
-      criteriaBuilder.equal(root.get(IllusionGroupSetting_.group), group)
+      criteriaBuilder.equal(root.get(IllusionEventSetting_.group), group)
     );
 
     return entityManager.createQuery(criteria).getResultList();

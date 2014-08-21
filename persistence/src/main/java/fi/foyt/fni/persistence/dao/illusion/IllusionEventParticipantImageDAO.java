@@ -10,7 +10,7 @@ import javax.persistence.criteria.Root;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantImage;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroupMemberImage_;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantImage_;
 
 public class IllusionEventParticipantImageDAO extends GenericDAO<IllusionEventParticipantImage> {
 
@@ -35,7 +35,7 @@ public class IllusionEventParticipantImageDAO extends GenericDAO<IllusionEventPa
     Root<IllusionEventParticipantImage> root = criteria.from(IllusionEventParticipantImage.class);
     criteria.select(root);
     criteria.where(
-      criteriaBuilder.equal(root.get(IllusionGroupMemberImage_.member), member)
+      criteriaBuilder.equal(root.get(IllusionEventParticipantImage_.member), member)
     );
 
     return getSingleResult(entityManager.createQuery(criteria));

@@ -11,7 +11,7 @@ import javax.persistence.criteria.Root;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
-import fi.foyt.fni.persistence.model.illusion.IllusionGroup_;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent_;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
 
 public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
@@ -42,7 +42,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     Root<IllusionEvent> root = criteria.from(IllusionEvent.class);
     criteria.select(root);
     criteria.where(
-  		criteriaBuilder.equal(root.get(IllusionGroup_.urlName), urlName)
+  		criteriaBuilder.equal(root.get(IllusionEvent_.urlName), urlName)
     );
 
     return getSingleResult(entityManager.createQuery(criteria));
