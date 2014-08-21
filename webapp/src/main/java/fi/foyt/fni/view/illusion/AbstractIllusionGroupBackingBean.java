@@ -4,7 +4,7 @@ import javax.inject.Inject;
 
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
-import fi.foyt.fni.illusion.IllusionGroupController;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
@@ -15,14 +15,14 @@ import fi.foyt.fni.session.SessionController;
 public abstract class AbstractIllusionGroupBackingBean {
 
   @Inject
-  private IllusionGroupController illusionGroupController;
+  private IllusionEventController illusionEventController;
 
   @Inject
   private SessionController sessionController;
   
   @RequestAction
   public String basicInit() {
-    IllusionEvent illusionEvent = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
+    IllusionEvent illusionEvent = illusionEventController.findIllusionGroupByUrlName(getUrlName());
     if (illusionEvent == null) {
       return "/error/not-found.jsf";
     }
@@ -32,7 +32,7 @@ public abstract class AbstractIllusionGroupBackingBean {
     if (sessionController.isLoggedIn()) {
       User loggedUser = sessionController.getLoggedUser();
   
-      member = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionEvent, loggedUser);
+      member = illusionEventController.findIllusionGroupMemberByUserAndGroup(illusionEvent, loggedUser);
     }
     
     IllusionGroupFolder folder = illusionEvent.getFolder();

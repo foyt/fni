@@ -15,7 +15,7 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
-import fi.foyt.fni.illusion.IllusionGroupController;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
@@ -49,7 +49,7 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   private SystemSettingsController systemSettingsController;
 
   @Inject
-  private IllusionGroupController illusionGroupController;
+  private IllusionEventController illusionEventController;
   
   @Inject
   private UserController userController;
@@ -60,16 +60,16 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
       return "/error/access-denied.jsf";
     }
 
-    gameMasters = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.GAMEMASTER);
-    players = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.PLAYER);
-    banned = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.BANNED);
+    gameMasters = illusionEventController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.GAMEMASTER);
+    players = illusionEventController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.PLAYER);
+    banned = illusionEventController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.BANNED);
     eventJoinMode = illusionEvent.getJoinMode();
     if (eventJoinMode == IllusionEventJoinMode.APPROVE) {
-      approvalPending = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.PENDING_APPROVAL);
+      approvalPending = illusionEventController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.PENDING_APPROVAL);
     }
     
-    waitingPayment = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.WAITING_PAYMENT);
-    invited = illusionGroupController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.INVITED);
+    waitingPayment = illusionEventController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.WAITING_PAYMENT);
+    invited = illusionEventController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.INVITED);
     
     String groupUrl = systemSettingsController.getSiteUrl(false, true);
     if (StringUtils.isNotBlank(groupUrl)) {
@@ -187,10 +187,10 @@ public class IllusionMembersBackingBean extends AbstractIllusionGroupBackingBean
   }
   
   public String saveSelectedMember() {
-    IllusionEventParticipant member = illusionGroupController.findIllusionGroupMemberById(selectedMemberId);
+    IllusionEventParticipant member = illusionEventController.findIllusionGroupMemberById(selectedMemberId);
     
-    illusionGroupController.updateIllusionGroupMemberCharacterName(member, selectedMemberCharacterName);
-    illusionGroupController.updateIllusionGroupMemberRole(member, selectedMemberRole);
+    illusionEventController.updateIllusionGroupMemberCharacterName(member, selectedMemberCharacterName);
+    illusionEventController.updateIllusionGroupMemberRole(member, selectedMemberRole);
     
     return "/illusion/members.jsf?faces-redirect=true&urlName=" + getUrlName();
   }

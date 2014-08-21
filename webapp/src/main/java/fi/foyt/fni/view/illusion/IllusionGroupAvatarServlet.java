@@ -17,7 +17,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import fi.foyt.fni.illusion.IllusionGroupController;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantImage;
@@ -44,7 +44,7 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
 	private SessionController sessionController;
 
   @Inject
-  private IllusionGroupController illusionGroupController;
+  private IllusionEventController illusionEventController;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -79,19 +79,19 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
 	  }
 	  
-	  IllusionEvent illusionEvent = illusionGroupController.findIllusionGroupByUrlName(groupUrlName);
+	  IllusionEvent illusionEvent = illusionEventController.findIllusionGroupByUrlName(groupUrlName);
 	  if (illusionEvent == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
 	  
-	  IllusionEventParticipant member = illusionGroupController.findIllusionGroupMemberById(memberId);
+	  IllusionEventParticipant member = illusionEventController.findIllusionGroupMemberById(memberId);
 	  if (member == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
 	  
-    IllusionEvent group = illusionGroupController.findIllusionGroupByUrlName(groupUrlName);
+    IllusionEvent group = illusionEventController.findIllusionGroupByUrlName(groupUrlName);
     if (group == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
@@ -104,7 +104,7 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
     
     TypedData profileImage = null;
     
-    IllusionEventParticipantImage image = illusionGroupController.findIllusionGroupMemberImageByMember(member);
+    IllusionEventParticipantImage image = illusionEventController.findIllusionGroupMemberImageByMember(member);
     if (image != null) {
       profileImage = new TypedData(image.getData(), image.getContentType(), image.getModified());
     } else {
@@ -199,7 +199,7 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
     }
 
-    IllusionEvent group = illusionGroupController.findIllusionGroupByUrlName(groupUrlName);
+    IllusionEvent group = illusionEventController.findIllusionGroupByUrlName(groupUrlName);
     if (group == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
@@ -222,14 +222,14 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return; 
 	  }
 	  
-	  IllusionEventParticipant member = illusionGroupController.findIllusionGroupMemberById(memberId);
+	  IllusionEventParticipant member = illusionEventController.findIllusionGroupMemberById(memberId);
 	  if (member == null) {
 	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
     
     if (!member.getUser().getId().equals(sessionController.getLoggedUserId())) {
-      IllusionEventParticipant loggedParticipant = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, sessionController.getLoggedUser());
+      IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionGroupMemberByUserAndGroup(group, sessionController.getLoggedUser());
       if (loggedParticipant == null) {
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
         return;
@@ -245,11 +245,11 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
     byte[] data = Base64.decodeBase64(dataParts[1]);
     Date now = new Date();
 	  
-	  IllusionEventParticipantImage image = illusionGroupController.findIllusionGroupMemberImageByMember(member);
+	  IllusionEventParticipantImage image = illusionEventController.findIllusionGroupMemberImageByMember(member);
 	  if (image != null) {
-	    illusionGroupController.updateIllusionGroupMemberImage(image, contentType, data, now);
+	    illusionEventController.updateIllusionGroupMemberImage(image, contentType, data, now);
 	  } else {
-	    illusionGroupController.createIllusionGroupMemberImage(member, contentType, data, now);
+	    illusionEventController.createIllusionGroupMemberImage(member, contentType, data, now);
 	  }
 	  
 	  response.setStatus(HttpServletResponse.SC_NO_CONTENT);

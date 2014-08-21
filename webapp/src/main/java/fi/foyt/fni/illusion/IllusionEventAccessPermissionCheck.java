@@ -29,17 +29,17 @@ public class IllusionEventAccessPermissionCheck implements PermissionCheckImplem
   private SessionController sessionController;
 
   @Inject
-  private IllusionGroupController illusionGroupController;
+  private IllusionEventController illusionEventController;
   
 	@Override
 	public boolean checkPermission(String illusionGroupUrlName, Map<String, String> parameters) {
 	  if (sessionController.isLoggedIn()) {
-      IllusionEvent illusionEvent = illusionGroupController.findIllusionGroupByUrlName(illusionGroupUrlName);
+      IllusionEvent illusionEvent = illusionEventController.findIllusionGroupByUrlName(illusionGroupUrlName);
       if (illusionEvent == null) {
         throw new SecurityException("Could not resolve Illusion group while checking permission for ILLUSION_GROUP_ACCESS");
       }
       
-      IllusionEventParticipant participant = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionEvent, sessionController.getLoggedUser());
+      IllusionEventParticipant participant = illusionEventController.findIllusionGroupMemberByUserAndGroup(illusionEvent, sessionController.getLoggedUser());
       if (participant == null) { 
         return false;
       }

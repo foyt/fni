@@ -41,7 +41,7 @@ import fi.foyt.fni.persistence.model.users.User;
 
 @Dependent
 @Stateless
-public class IllusionGroupController {
+public class IllusionEventController {
   
   private static final String ILLUSION_FOLDER_TITLE = "Illusion";
   

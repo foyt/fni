@@ -40,7 +40,7 @@ public class OrderStatusChangeListener {
   private Mailer mailer;
   
 	@Inject
-	private IllusionGroupController illusionGroupController;
+	private IllusionEventController illusionEventController;
 
   @Inject
 	private SystemSettingsController systemSettingsController;
@@ -53,8 +53,8 @@ public class OrderStatusChangeListener {
   		    case ILLUSION_GROUP:
   		      IllusionEvent group = orderController.findOrderIllusionGroup(order);
   		      if (group != null) {
-  		        IllusionEventParticipant member = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, order.getCustomer());
-    		      illusionGroupController.updateIllusionGroupMemberRole(member, IllusionEventParticipantRole.PLAYER);
+  		        IllusionEventParticipant member = illusionEventController.findIllusionGroupMemberByUserAndGroup(group, order.getCustomer());
+    		      illusionEventController.updateIllusionGroupMemberRole(member, IllusionEventParticipantRole.PLAYER);
     		      sendPaymentAcceptedMail(member);
   		      } else {
   		        logger.severe("Tried to lift illusion group member role to player for non-existing group");

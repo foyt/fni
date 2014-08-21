@@ -10,7 +10,7 @@ import javax.inject.Named;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
-import fi.foyt.fni.illusion.IllusionGroupController;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.users.User;
@@ -29,7 +29,7 @@ public class IllusionIndexBackingBean {
   private SessionController sessionController;
 
   @Inject
-  private IllusionGroupController illusionGroupController;
+  private IllusionEventController illusionEventController;
 
   @RequestAction
   public String init() {
@@ -38,8 +38,8 @@ public class IllusionIndexBackingBean {
       return "/index.jsf?faces-redirect=true";
     }
     
-    gameMasterGroups = illusionGroupController.listIllusionGroupsByUserAndRole(loggedUser, IllusionEventParticipantRole.GAMEMASTER);
-    playerGroups = illusionGroupController.listIllusionGroupsByUserAndRole(loggedUser, IllusionEventParticipantRole.PLAYER);
+    gameMasterGroups = illusionEventController.listIllusionGroupsByUserAndRole(loggedUser, IllusionEventParticipantRole.GAMEMASTER);
+    playerGroups = illusionEventController.listIllusionGroupsByUserAndRole(loggedUser, IllusionEventParticipantRole.PLAYER);
     
     return null;
   }
@@ -53,7 +53,7 @@ public class IllusionIndexBackingBean {
   }
   
   public Long getGroupPlayerCount(IllusionEvent group) {
-    return illusionGroupController.countIllusionGroupMembersByGroupAndRole(group, IllusionEventParticipantRole.PLAYER);
+    return illusionEventController.countIllusionGroupMembersByGroupAndRole(group, IllusionEventParticipantRole.PLAYER);
   }
   
   private List<IllusionEvent> gameMasterGroups;

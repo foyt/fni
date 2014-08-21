@@ -11,7 +11,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
-import fi.foyt.fni.illusion.IllusionGroupController;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
@@ -31,7 +31,7 @@ public class IllusionGroupDoJoinBackingBean {
   private String urlName;
 
   @Inject
-  private IllusionGroupController illusionGroupController;
+  private IllusionEventController illusionEventController;
 
   @Inject
   private SessionController sessionController;
@@ -40,21 +40,21 @@ public class IllusionGroupDoJoinBackingBean {
   @Deferred
   @LoggedIn
   public String init() {
-    IllusionEvent illusionEvent = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
+    IllusionEvent illusionEvent = illusionEventController.findIllusionGroupByUrlName(getUrlName());
     if (illusionEvent == null) {
       return "/error/not-found.jsf";
     }
     
     User loggedUser = sessionController.getLoggedUser();
-    IllusionEventParticipant groupMember = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionEvent, loggedUser);
+    IllusionEventParticipant groupMember = illusionEventController.findIllusionGroupMemberByUserAndGroup(illusionEvent, loggedUser);
     if (groupMember == null) {
       switch (illusionEvent.getJoinMode()) {
         case APPROVE:
-          illusionGroupController.createIllusionGroupMember(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PENDING_APPROVAL);
+          illusionEventController.createIllusionGroupMember(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PENDING_APPROVAL);
           FacesUtils.addPostRedirectMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("illusion.intro.approvalPendingMessage"));
           return "/illusion/intro.jsf?faces-redirect=true&urlName=" + getUrlName();
         case OPEN:
-          illusionGroupController.createIllusionGroupMember(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PLAYER);
+          illusionEventController.createIllusionGroupMember(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PLAYER);
           return "/illusion/group.jsf?faces-redirect=true&urlName=" + getUrlName();
         default:
           return "/error/access-denied.jsf";
@@ -66,7 +66,7 @@ public class IllusionGroupDoJoinBackingBean {
           return "/error/access-denied.jsf";
         case INVITED:
           if (illusionEvent.getSignUpFee() == null) {
-            illusionGroupController.updateIllusionGroupMemberRole(groupMember, IllusionEventParticipantRole.PLAYER);
+            illusionEventController.updateIllusionGroupMemberRole(groupMember, IllusionEventParticipantRole.PLAYER);
           } else {
             return "/illusion/group-payment.jsf?faces-redirect=true&urlName=" + getUrlName();
           }

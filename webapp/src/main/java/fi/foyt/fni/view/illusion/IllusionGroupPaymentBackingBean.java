@@ -25,7 +25,7 @@ import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
 import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.i18n.ExternalLocales;
-import fi.foyt.fni.illusion.IllusionGroupController;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
@@ -64,7 +64,7 @@ public class IllusionGroupPaymentBackingBean {
   private Logger logger;
 
   @Inject
-  private IllusionGroupController illusionGroupController;
+  private IllusionEventController illusionEventController;
 
   @Inject
   private SessionController sessionController;
@@ -97,7 +97,7 @@ public class IllusionGroupPaymentBackingBean {
   @Deferred
   @LoggedIn
   public String init() {
-    IllusionEvent illusionEvent = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
+    IllusionEvent illusionEvent = illusionEventController.findIllusionGroupByUrlName(getUrlName());
     if (illusionEvent == null) {
       return "/error/not-found.jsf";
     }
@@ -107,7 +107,7 @@ public class IllusionGroupPaymentBackingBean {
     }
 
     User loggedUser = sessionController.getLoggedUser();
-    IllusionEventParticipant groupMember = illusionGroupController.findIllusionGroupMemberByUserAndGroup(illusionEvent, loggedUser);
+    IllusionEventParticipant groupMember = illusionEventController.findIllusionGroupMemberByUserAndGroup(illusionEvent, loggedUser);
     if (groupMember == null) {
       return "/error/access-denied.jsf";
     }
@@ -284,7 +284,7 @@ public class IllusionGroupPaymentBackingBean {
   }
   
   public void proceedToPayment() {
-    IllusionEvent illusionEvent = illusionGroupController.findIllusionGroupByUrlName(getUrlName());
+    IllusionEvent illusionEvent = illusionEventController.findIllusionGroupByUrlName(getUrlName());
     String localAddress = FacesUtils.getLocalAddress(true);
     User loggedUser = sessionController.getLoggedUser();
 

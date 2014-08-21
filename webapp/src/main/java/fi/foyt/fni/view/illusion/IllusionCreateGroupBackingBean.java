@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 
 import fi.foyt.fni.chat.ChatCredentialsController;
-import fi.foyt.fni.illusion.IllusionGroupController;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.materials.IllusionGroupDocumentController;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.common.Language;
@@ -50,7 +50,7 @@ public class IllusionCreateGroupBackingBean {
   private ChatCredentialsController chatCredentialsController;
 
   @Inject
-  private IllusionGroupController illusionGroupController;
+  private IllusionEventController illusionEventController;
 
   @Inject
   private IllusionGroupDocumentController illusionGroupDocumentController;
@@ -110,7 +110,7 @@ public class IllusionCreateGroupBackingBean {
         urlName = urlName.concat(StringUtils.repeat('_', padding));
       }
       
-      IllusionEvent illusionEvent = illusionGroupController.findIllusionGroupByUrlName(urlName);
+      IllusionEvent illusionEvent = illusionEventController.findIllusionGroupByUrlName(urlName);
       if (illusionEvent == null) {
         return urlName;
       }
@@ -141,9 +141,9 @@ public class IllusionCreateGroupBackingBean {
       signUpFeeCurrency = Currency.getInstance(getSignUpFeeCurrency());
     }
 
-    IllusionFolder illusionFolder = illusionGroupController.findUserIllusionFolder(loggedUser, true);
-    IllusionGroupFolder illusionGroupFolder = illusionGroupController.createIllusionGroupFolder(loggedUser, illusionFolder, urlName, getName());
-    IllusionEvent group = illusionGroupController.createIllusionGroup(urlName, getName(), getDescription(), xmppRoom, illusionGroupFolder, getJoinMode(), now, signUpFee, signUpFeeCurrency);
+    IllusionFolder illusionFolder = illusionEventController.findUserIllusionFolder(loggedUser, true);
+    IllusionGroupFolder illusionGroupFolder = illusionEventController.createIllusionGroupFolder(loggedUser, illusionFolder, urlName, getName());
+    IllusionEvent group = illusionEventController.createIllusionGroup(urlName, getName(), getDescription(), xmppRoom, illusionGroupFolder, getJoinMode(), now, signUpFee, signUpFeeCurrency);
     
     String indexDocumentTitle = FacesUtils.getLocalizedValue("illusion.createGroup.indexDocumentTitle");
     String indexDocumentContent = FacesUtils.getLocalizedValue("illusion.createGroup.indexDocumentContent");
@@ -154,7 +154,7 @@ public class IllusionCreateGroupBackingBean {
     illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionGroupDocumentType.INTRO, language, illusionGroupFolder, "intro", introDocumentTitle, introDocumentContent, MaterialPublicity.PRIVATE);
     
     // Add game master
-    illusionGroupController.createIllusionGroupMember(loggedUser, group, getUserNickname(loggedUser), IllusionEventParticipantRole.GAMEMASTER);
+    illusionEventController.createIllusionGroupMember(loggedUser, group, getUserNickname(loggedUser), IllusionEventParticipantRole.GAMEMASTER);
     
     // Add bot 
     String botJid = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOT_JID);
@@ -164,7 +164,7 @@ public class IllusionCreateGroupBackingBean {
       throw new Exception("Configuration error, could not find chatbot user");
     }
     
-    illusionGroupController.createIllusionGroupMember(botChatCredentials.getUser(), group, getUserNickname(botChatCredentials.getUser()), IllusionEventParticipantRole.BOT);
+    illusionEventController.createIllusionGroupMember(botChatCredentials.getUser(), group, getUserNickname(botChatCredentials.getUser()), IllusionEventParticipantRole.BOT);
     
     String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
     

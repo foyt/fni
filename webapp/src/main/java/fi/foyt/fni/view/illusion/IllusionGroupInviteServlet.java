@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.i18n.ExternalLocales;
-import fi.foyt.fni.illusion.IllusionGroupController;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.auth.InternalAuth;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -46,7 +46,7 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
 	private SessionController sessionController;
 
   @Inject
-  private IllusionGroupController illusionGroupController;
+  private IllusionEventController illusionEventController;
   
   @Inject
   private AuthenticationController authenticationController;
@@ -86,13 +86,13 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
     }
 
     User loggedUser = sessionController.getLoggedUser();
-    IllusionEvent group = illusionGroupController.findIllusionGroupByUrlName(groupUrlName);
+    IllusionEvent group = illusionEventController.findIllusionGroupByUrlName(groupUrlName);
     if (group == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
-    IllusionEventParticipant loggedParticipant = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, loggedUser);
+    IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionGroupMemberByUserAndGroup(group, loggedUser);
     if ((loggedParticipant == null)||(loggedParticipant.getRole() != IllusionEventParticipantRole.GAMEMASTER)) {
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
       return;
@@ -125,9 +125,9 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
       temporaryAccount = ExternalLocales.getText(sessionController.getLocale(), "illusion.mail.temporaryAccount", password);
     }
     
-    IllusionEventParticipant illusionGroupUser = illusionGroupController.findIllusionGroupMemberByUserAndGroup(group, user);
+    IllusionEventParticipant illusionGroupUser = illusionEventController.findIllusionGroupMemberByUserAndGroup(group, user);
     if (illusionGroupUser == null) {
-      illusionGroupController.createIllusionGroupMember(user, group, null, IllusionEventParticipantRole.INVITED);
+      illusionEventController.createIllusionGroupMember(user, group, null, IllusionEventParticipantRole.INVITED);
       String emailContent = templateContent.replace("[[LOGIN_INFO]]", temporaryAccount);
       String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
       String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
