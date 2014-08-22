@@ -54,8 +54,8 @@ import fi.foyt.paytrail.rest.UrlSet;
 @RequestScoped
 @Named
 @Stateful
-@Join(path = "/illusion/group/{urlName}/payment", to = "/illusion/group-payment.jsf")
-public class IllusionGroupPaymentBackingBean {
+@Join(path = "/illusion/event/{urlName}/payment", to = "/illusion/event-payment.jsf")
+public class IllusionEventPaymentBackingBean {
 
   @Parameter
   private String urlName;
@@ -107,8 +107,8 @@ public class IllusionGroupPaymentBackingBean {
     }
 
     User loggedUser = sessionController.getLoggedUser();
-    IllusionEventParticipant groupMember = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
-    if (groupMember == null) {
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
+    if (participant == null) {
       return "/error/access-denied.jsf";
     }
 
@@ -120,7 +120,7 @@ public class IllusionGroupPaymentBackingBean {
     taxAmount = totalAmount - (totalAmount / (1 + (vatPercent / 100)));
     vatRegistered = systemSettingsController.isVatRegistered();
 
-    switch (groupMember.getRole()) {
+    switch (participant.getRole()) {
       case BANNED:
       case BOT:
       case PENDING_APPROVAL:

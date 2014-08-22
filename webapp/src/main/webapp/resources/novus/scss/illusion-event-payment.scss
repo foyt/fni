@@ -7,7 +7,7 @@ $info-background-color: darken($panel-background-color, 80%);
 
 /* Panels */ 
 
-.illusion-group-payment-panel {
+.illusion-event-payment-panel {
   @include generic-panel;
   position: relative;
   background: #fff;
@@ -15,14 +15,14 @@ $info-background-color: darken($panel-background-color, 80%);
 
 /* Generic */
 
-.illusion-group-payment-panel h3 {
+.illusion-event-payment-panel h3 {
   @include header-3;
   color: $title-color;
 }
 
 /* Info */
 
-.illusion-group-payment-info {
+.illusion-event-payment-info {
   color: $info-text-color;
   background-color: $info-background-color;
   text-align: center;
@@ -36,19 +36,19 @@ $info-background-color: darken($panel-background-color, 80%);
 
 /* Form */
 
-.illusion-group-payment-fields {
+.illusion-event-payment-fields {
   margin-top: 20px;
 }
 
-.illusion-group-payment-fields {
+.illusion-event-payment-fields {
   margin-bottom: 40px;
 }
 
-.illusion-group-payment-field {
+.illusion-event-payment-field {
   margin-bottom: 9px;
 }
 
-.illusion-group-payment-field label {
+.illusion-event-payment-field label {
   width: 130px;
   display: inline-block;
   font-size: 13px;
@@ -57,15 +57,15 @@ $info-background-color: darken($panel-background-color, 80%);
   vertical-align: top;
 }
 
-.illusion-group-payment-field input[type="text"], 
-.illusion-group-payment-field select {
+.illusion-event-payment-field input[type="text"], 
+.illusion-event-payment-field select {
   width: 260px;
   font-size: 14px;
   font-family: $default-font;
   @include box-sizing(border-box);
 }
 
-.illusion-group-payment-field textarea {
+.illusion-event-payment-field textarea {
   width: 260px;
   height: 96px;
   font-size: 14px;
@@ -74,11 +74,11 @@ $info-background-color: darken($panel-background-color, 80%);
 
 /* Summary */
 
-.illusion-group-payment-summary {
+.illusion-event-payment-summary {
   margin-top: 20px;
 }
 
-.illusion-group-payment-summary-row {
+.illusion-event-payment-summary-row {
   width: 100%;
   @include box-sizing(border-box);
   font-family: $default-font;
@@ -90,18 +90,18 @@ $info-background-color: darken($panel-background-color, 80%);
   text-transform: uppercase;
 }
 
-.illusion-group-payment-summary-row label {
+.illusion-event-payment-summary-row label {
   width: 300px;
   display: inline-block;
 }
 
-.illusion-group-payment-summary-row span {
+.illusion-event-payment-summary-row span {
   display: inline-block;
 }
 
 /* Submit */
 
-.illusion-group-payment-button {  
+.illusion-event-payment-button {  
   @include header-3;
   padding-left: 23px;
   padding-right: 23px;
