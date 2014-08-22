@@ -93,7 +93,7 @@ public class IllusionEventController {
   }
 
   public List<IllusionEvent> listIllusionEventsByUserAndRole(User user, IllusionEventParticipantRole role) {
-    return illusionEventParticipantDAO.listIllusionGroupsByUserAndRole(user, role);
+    return illusionEventParticipantDAO.listIllusionEventsByUserAndRole(user, role);
   }
 
   /* IllusionEventParticipant */
@@ -110,19 +110,19 @@ public class IllusionEventController {
   }
   
   public IllusionEventParticipant findIllusionEventParticipantByEventAndUser(IllusionEvent event, User user) {
-    return illusionEventParticipantDAO.findByGroupAndUser(event, user);
+    return illusionEventParticipantDAO.findByEventAndUser(event, user);
   }
   
   public List<IllusionEventParticipant> listIllusionEventParticipantsByEvent(IllusionEvent event) {
-    return illusionEventParticipantDAO.listByGroup(event);
+    return illusionEventParticipantDAO.listByEvent(event);
   }
   
   public List<IllusionEventParticipant> listIllusionEventParticipantsByEventAndRole(IllusionEvent event, IllusionEventParticipantRole role) {
-    return illusionEventParticipantDAO.listByGroupAndRole(event, role);
+    return illusionEventParticipantDAO.listByEventAndRole(event, role);
   }
 
   public Long countIllusionEventParticipantsByEventAndRole(IllusionEvent event, IllusionEventParticipantRole role) {
-    return illusionEventParticipantDAO.countByGroupAndRole(event, role);
+    return illusionEventParticipantDAO.countByEventAndRole(event, role);
   }
   
   public IllusionEventParticipant updateIllusionEventParticipantCharacterName(IllusionEventParticipant participant, String characterName) {
@@ -162,7 +162,7 @@ public class IllusionEventController {
       return userSetting.getValue();
     }
     
-    IllusionEventSetting eventSetting = illusionEventSettingDAO.findByUserAndKey(participant.getGroup(), key);
+    IllusionEventSetting eventSetting = illusionEventSettingDAO.findByUserAndKey(participant.getEvent(), key);
     if (eventSetting != null) {
       return eventSetting.getValue();
     }

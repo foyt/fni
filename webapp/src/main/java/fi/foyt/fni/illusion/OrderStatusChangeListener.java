@@ -71,13 +71,13 @@ public class OrderStatusChangeListener {
 		}
 	}
 	
-  private void sendPaymentAcceptedMail(IllusionEventParticipant groupMember) {
-    User user = groupMember.getUser();
+  private void sendPaymentAcceptedMail(IllusionEventParticipant participant) {
+    User user = participant.getUser();
     Locale userLocale = LocaleUtils.toLocale(user.getLocale());
     String userMail = userController.getUserPrimaryEmail(user);
-    String userName = groupMember.getUser().getFullName();
-    String groupName = groupMember.getGroup().getName();
-    String groupUrlName = groupMember.getGroup().getUrlName();
+    String userName = participant.getUser().getFullName();
+    String groupName = participant.getEvent().getName();
+    String groupUrlName = participant.getEvent().getUrlName();
     
     String groupUrl = systemSettingsController.getSiteUrl(false, true);
     if (StringUtils.isNotBlank(groupUrl)) {

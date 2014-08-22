@@ -41,10 +41,10 @@ public class IllusionEventParticipantRoleChangeListener {
   public void onParticipantAddedEvent(@Observes IllusionParticipantAddedEvent event) {
     IllusionEventParticipant groupMember = illusionEventController.findIllusionEventParticipantById(event.getMemberId());
     if (groupMember.getRole() == IllusionEventParticipantRole.PENDING_APPROVAL) {
-      List<IllusionEventParticipant> gamemasters = illusionEventController.listIllusionEventParticipantsByEventAndRole(groupMember.getGroup(), IllusionEventParticipantRole.GAMEMASTER);
+      List<IllusionEventParticipant> gamemasters = illusionEventController.listIllusionEventParticipantsByEventAndRole(groupMember.getEvent(), IllusionEventParticipantRole.GAMEMASTER);
       String groupUrl = systemSettingsController.getSiteUrl(false, true);
       if (StringUtils.isNotBlank(groupUrl)) {
-        groupUrl += "/illusion/group/" + groupMember.getGroup().getUrlName();
+        groupUrl += "/illusion/group/" + groupMember.getEvent().getUrlName();
       }
       
       for (IllusionEventParticipant gamemaster : gamemasters) {
@@ -78,8 +78,8 @@ public class IllusionEventParticipantRoleChangeListener {
     Locale userLocale = LocaleUtils.toLocale(user.getLocale());
     String userMail = userController.getUserPrimaryEmail(user);
     String userName = groupMember.getUser().getFullName();
-    String groupName = groupMember.getGroup().getName();
-    String groupUrlName = groupMember.getGroup().getUrlName();
+    String groupName = groupMember.getEvent().getName();
+    String groupUrlName = groupMember.getEvent().getUrlName();
     
     String paymentUrl = systemSettingsController.getSiteUrl(false, true);
     if (StringUtils.isNotBlank(paymentUrl)) {
@@ -100,7 +100,7 @@ public class IllusionEventParticipantRoleChangeListener {
   }
 
   private void sendGroupJoinRequestMail(String groupUrl, IllusionEventParticipant groupMember, IllusionEventParticipant gamemaster) {
-    String groupName = groupMember.getGroup().getName();
+    String groupName = groupMember.getEvent().getName();
 
     User master = gamemaster.getUser();
     Locale masterLocale = LocaleUtils.toLocale(master.getLocale());
@@ -129,8 +129,8 @@ public class IllusionEventParticipantRoleChangeListener {
     Locale userLocale = LocaleUtils.toLocale(user.getLocale());
     String userMail = userController.getUserPrimaryEmail(user);
     String userName = groupMember.getUser().getFullName();
-    String groupName = groupMember.getGroup().getName();
-    String groupUrlName = groupMember.getGroup().getUrlName();
+    String groupName = groupMember.getEvent().getName();
+    String groupUrlName = groupMember.getEvent().getUrlName();
     
     String groupUrl = systemSettingsController.getSiteUrl(false, true);
     if (StringUtils.isNotBlank(groupUrl)) {
@@ -155,7 +155,7 @@ public class IllusionEventParticipantRoleChangeListener {
     Locale userLocale = LocaleUtils.toLocale(user.getLocale());
     String userMail = userController.getUserPrimaryEmail(user);
     String userName = groupMember.getUser().getFullName();
-    String groupName = groupMember.getGroup().getName();
+    String groupName = groupMember.getEvent().getName();
     
     String subject = ExternalLocales.getText(userLocale, "illusion.mail.joinRequestDeclined.subject");
     String content = ExternalLocales.getText(userLocale, "illusion.mail.joinRequestDeclined.content", userName, groupName);

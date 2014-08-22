@@ -97,7 +97,7 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
     }
     
-    if (!group.getId().equals(member.getGroup().getId())) {
+    if (!group.getId().equals(member.getEvent().getId())) {
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
       return;
     }

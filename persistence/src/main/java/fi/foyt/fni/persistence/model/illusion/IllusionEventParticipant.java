@@ -42,12 +42,12 @@ public class IllusionEventParticipant {
     this.user = user;
   }
   
-  public IllusionEvent getGroup() {
-    return group;
+  public IllusionEvent getEvent() {
+    return event;
   }
   
-  public void setGroup(IllusionEvent group) {
-    this.group = group;
+  public void setEvent(IllusionEvent event) {
+    this.event = event;
   }
   
   @Id
@@ -60,7 +60,7 @@ public class IllusionEventParticipant {
   private User user;
   
   @ManyToOne
-  private IllusionEvent group;
+  private IllusionEvent event;
   
   @NotNull
   @Enumerated (EnumType.STRING)
