@@ -157,7 +157,7 @@ public class IllusionEventController {
   /* Settings */
   
   public String getIllusionEventSettingValue(IllusionEventParticipant participant, IllusionEventSettingKey key) {
-    IllusionEventParticipantSetting userSetting = illusionEventParticipantSettingDAO.findByMemberAndKey(participant, key);
+    IllusionEventParticipantSetting userSetting = illusionEventParticipantSettingDAO.findByParticipantAndKey(participant, key);
     if ((userSetting != null) && StringUtils.isNotBlank(userSetting.getValue())) {
       return userSetting.getValue();
     }
@@ -204,7 +204,7 @@ public class IllusionEventController {
   }
 
   public IllusionEventParticipantSetting setIllusionEventSettingValue(IllusionEventParticipant participant, IllusionEventSettingKey key, String value) {
-    IllusionEventParticipantSetting setting = illusionEventParticipantSettingDAO.findByMemberAndKey(participant, key);
+    IllusionEventParticipantSetting setting = illusionEventParticipantSettingDAO.findByParticipantAndKey(participant, key);
     if (setting == null) {
       return illusionEventParticipantSettingDAO.create(participant, key, value);
     } else {

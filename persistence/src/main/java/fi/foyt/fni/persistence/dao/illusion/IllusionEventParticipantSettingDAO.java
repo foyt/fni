@@ -17,17 +17,17 @@ public class IllusionEventParticipantSettingDAO extends GenericDAO<IllusionEvent
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionEventParticipantSetting create(IllusionEventParticipant member, IllusionEventSettingKey key, String value) {
+	public IllusionEventParticipantSetting create(IllusionEventParticipant participant, IllusionEventSettingKey key, String value) {
 	  IllusionEventParticipantSetting illusionGroupUserSetting = new IllusionEventParticipantSetting();
 
     illusionGroupUserSetting.setKey(key);
-    illusionGroupUserSetting.setMember(member);
+    illusionGroupUserSetting.setParticipant(participant);
     illusionGroupUserSetting.setValue(value);
 
 		return persist(illusionGroupUserSetting);
 	}
 
-  public IllusionEventParticipantSetting findByMemberAndKey(IllusionEventParticipant member, IllusionEventSettingKey key) {
+  public IllusionEventParticipantSetting findByParticipantAndKey(IllusionEventParticipant participant, IllusionEventSettingKey key) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -36,7 +36,7 @@ public class IllusionEventParticipantSettingDAO extends GenericDAO<IllusionEvent
     criteria.select(root);
     criteria.where(
       criteriaBuilder.and(
-        criteriaBuilder.equal(root.get(IllusionEventParticipantSetting_.member), member),
+        criteriaBuilder.equal(root.get(IllusionEventParticipantSetting_.participant), participant),
         criteriaBuilder.equal(root.get(IllusionEventParticipantSetting_.key), key)
       )
     );
@@ -44,7 +44,7 @@ public class IllusionEventParticipantSettingDAO extends GenericDAO<IllusionEvent
     return getSingleResult(entityManager.createQuery(criteria));
   }
 
-  public List<IllusionEventParticipantSetting> listByMember(IllusionEventParticipant member) {
+  public List<IllusionEventParticipantSetting> listByParticipant(IllusionEventParticipant participant) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -52,7 +52,7 @@ public class IllusionEventParticipantSettingDAO extends GenericDAO<IllusionEvent
     Root<IllusionEventParticipantSetting> root = criteria.from(IllusionEventParticipantSetting.class);
     criteria.select(root);
     criteria.where(
-      criteriaBuilder.equal(root.get(IllusionEventParticipantSetting_.member), member)
+      criteriaBuilder.equal(root.get(IllusionEventParticipantSetting_.participant), participant)
     );
 
     return entityManager.createQuery(criteria).getResultList();

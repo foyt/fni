@@ -17,12 +17,12 @@ public class IllusionEventParticipantSetting {
 		return id;
 	}
 	
-	public IllusionEventParticipant getMember() {
-    return member;
+	public IllusionEventParticipant getParticipant() {
+    return participant;
   }
 	
-	public void setMember(IllusionEventParticipant member) {
-    this.member = member;
+	public void setParticipant(IllusionEventParticipant participant) {
+    this.participant = participant;
   }
 	
 	public IllusionEventSettingKey getKey() {
@@ -46,7 +46,7 @@ public class IllusionEventParticipantSetting {
   private Long id;
  
   @ManyToOne
-  private IllusionEventParticipant member;
+  private IllusionEventParticipant participant;
 
   @Enumerated (EnumType.STRING)
   @NotNull
