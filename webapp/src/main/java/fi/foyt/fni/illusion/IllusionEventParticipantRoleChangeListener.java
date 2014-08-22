@@ -39,9 +39,9 @@ public class IllusionEventParticipantRoleChangeListener {
   private Mailer mailer;
   
   public void onParticipantAddedEvent(@Observes IllusionParticipantAddedEvent event) {
-    IllusionEventParticipant groupMember = illusionEventController.findIllusionGroupMemberById(event.getMemberId());
+    IllusionEventParticipant groupMember = illusionEventController.findIllusionEventParticipantById(event.getMemberId());
     if (groupMember.getRole() == IllusionEventParticipantRole.PENDING_APPROVAL) {
-      List<IllusionEventParticipant> gamemasters = illusionEventController.listIllusionGroupMembersByGroupAndRole(groupMember.getGroup(), IllusionEventParticipantRole.GAMEMASTER);
+      List<IllusionEventParticipant> gamemasters = illusionEventController.listIllusionEventParticipantsByEventAndRole(groupMember.getGroup(), IllusionEventParticipantRole.GAMEMASTER);
       String groupUrl = systemSettingsController.getSiteUrl(false, true);
       if (StringUtils.isNotBlank(groupUrl)) {
         groupUrl += "/illusion/group/" + groupMember.getGroup().getUrlName();
@@ -55,7 +55,7 @@ public class IllusionEventParticipantRoleChangeListener {
 
   public void onParticipantRoleChangeEvent(@Observes IllusionParticipantRoleChangeEvent event) {
     if (event.getOldRole().equals(IllusionEventParticipantRole.PENDING_APPROVAL)) {
-      IllusionEventParticipant groupMember = illusionEventController.findIllusionGroupMemberById(event.getMemberId());
+      IllusionEventParticipant groupMember = illusionEventController.findIllusionEventParticipantById(event.getMemberId());
       
       switch (event.getNewRole()) {
         case BANNED:

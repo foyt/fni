@@ -40,21 +40,21 @@ public class IllusionGroupDoJoinBackingBean {
   @Deferred
   @LoggedIn
   public String init() {
-    IllusionEvent illusionEvent = illusionEventController.findIllusionGroupByUrlName(getUrlName());
+    IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
     if (illusionEvent == null) {
       return "/error/not-found.jsf";
     }
     
     User loggedUser = sessionController.getLoggedUser();
-    IllusionEventParticipant groupMember = illusionEventController.findIllusionGroupMemberByUserAndGroup(illusionEvent, loggedUser);
+    IllusionEventParticipant groupMember = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
     if (groupMember == null) {
       switch (illusionEvent.getJoinMode()) {
         case APPROVE:
-          illusionEventController.createIllusionGroupMember(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PENDING_APPROVAL);
+          illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PENDING_APPROVAL);
           FacesUtils.addPostRedirectMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("illusion.intro.approvalPendingMessage"));
           return "/illusion/intro.jsf?faces-redirect=true&urlName=" + getUrlName();
         case OPEN:
-          illusionEventController.createIllusionGroupMember(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PLAYER);
+          illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PLAYER);
           return "/illusion/group.jsf?faces-redirect=true&urlName=" + getUrlName();
         default:
           return "/error/access-denied.jsf";
@@ -66,7 +66,7 @@ public class IllusionGroupDoJoinBackingBean {
           return "/error/access-denied.jsf";
         case INVITED:
           if (illusionEvent.getSignUpFee() == null) {
-            illusionEventController.updateIllusionGroupMemberRole(groupMember, IllusionEventParticipantRole.PLAYER);
+            illusionEventController.updateIllusionEventParticipantRole(groupMember, IllusionEventParticipantRole.PLAYER);
           } else {
             return "/illusion/group-payment.jsf?faces-redirect=true&urlName=" + getUrlName();
           }

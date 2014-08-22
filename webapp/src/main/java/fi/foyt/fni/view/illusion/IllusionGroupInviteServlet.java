@@ -86,13 +86,13 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
     }
 
     User loggedUser = sessionController.getLoggedUser();
-    IllusionEvent group = illusionEventController.findIllusionGroupByUrlName(groupUrlName);
+    IllusionEvent group = illusionEventController.findIllusionEventByUrlName(groupUrlName);
     if (group == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
-    IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionGroupMemberByUserAndGroup(group, loggedUser);
+    IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(group, loggedUser);
     if ((loggedParticipant == null)||(loggedParticipant.getRole() != IllusionEventParticipantRole.GAMEMASTER)) {
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
       return;
@@ -125,9 +125,9 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
       temporaryAccount = ExternalLocales.getText(sessionController.getLocale(), "illusion.mail.temporaryAccount", password);
     }
     
-    IllusionEventParticipant illusionGroupUser = illusionEventController.findIllusionGroupMemberByUserAndGroup(group, user);
+    IllusionEventParticipant illusionGroupUser = illusionEventController.findIllusionEventParticipantByEventAndUser(group, user);
     if (illusionGroupUser == null) {
-      illusionEventController.createIllusionGroupMember(user, group, null, IllusionEventParticipantRole.INVITED);
+      illusionEventController.createIllusionEventParticipant(user, group, null, IllusionEventParticipantRole.INVITED);
       String emailContent = templateContent.replace("[[LOGIN_INFO]]", temporaryAccount);
       String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
       String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);

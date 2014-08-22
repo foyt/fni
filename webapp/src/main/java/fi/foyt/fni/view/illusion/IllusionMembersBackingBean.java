@@ -60,16 +60,16 @@ public class IllusionMembersBackingBean extends AbstractIllusionEventBackingBean
       return "/error/access-denied.jsf";
     }
 
-    gameMasters = illusionEventController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.GAMEMASTER);
-    players = illusionEventController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.PLAYER);
-    banned = illusionEventController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.BANNED);
+    gameMasters = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.GAMEMASTER);
+    players = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.PLAYER);
+    banned = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.BANNED);
     eventJoinMode = illusionEvent.getJoinMode();
     if (eventJoinMode == IllusionEventJoinMode.APPROVE) {
-      approvalPending = illusionEventController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.PENDING_APPROVAL);
+      approvalPending = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.PENDING_APPROVAL);
     }
     
-    waitingPayment = illusionEventController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.WAITING_PAYMENT);
-    invited = illusionEventController.listIllusionGroupMembersByGroupAndRole(illusionEvent, IllusionEventParticipantRole.INVITED);
+    waitingPayment = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.WAITING_PAYMENT);
+    invited = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.INVITED);
     
     String groupUrl = systemSettingsController.getSiteUrl(false, true);
     if (StringUtils.isNotBlank(groupUrl)) {
@@ -187,10 +187,10 @@ public class IllusionMembersBackingBean extends AbstractIllusionEventBackingBean
   }
   
   public String saveSelectedMember() {
-    IllusionEventParticipant member = illusionEventController.findIllusionGroupMemberById(selectedMemberId);
+    IllusionEventParticipant member = illusionEventController.findIllusionEventParticipantById(selectedMemberId);
     
-    illusionEventController.updateIllusionGroupMemberCharacterName(member, selectedMemberCharacterName);
-    illusionEventController.updateIllusionGroupMemberRole(member, selectedMemberRole);
+    illusionEventController.updateIllusionEventParticipantCharacterName(member, selectedMemberCharacterName);
+    illusionEventController.updateIllusionEventParticipantRole(member, selectedMemberRole);
     
     return "/illusion/members.jsf?faces-redirect=true&urlName=" + getUrlName();
   }

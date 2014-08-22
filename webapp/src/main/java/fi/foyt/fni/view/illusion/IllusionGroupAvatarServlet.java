@@ -79,19 +79,19 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
 	  }
 	  
-	  IllusionEvent illusionEvent = illusionEventController.findIllusionGroupByUrlName(groupUrlName);
+	  IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(groupUrlName);
 	  if (illusionEvent == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
 	  
-	  IllusionEventParticipant member = illusionEventController.findIllusionGroupMemberById(memberId);
+	  IllusionEventParticipant member = illusionEventController.findIllusionEventParticipantById(memberId);
 	  if (member == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
 	  
-    IllusionEvent group = illusionEventController.findIllusionGroupByUrlName(groupUrlName);
+    IllusionEvent group = illusionEventController.findIllusionEventByUrlName(groupUrlName);
     if (group == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
@@ -104,7 +104,7 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
     
     TypedData profileImage = null;
     
-    IllusionEventParticipantImage image = illusionEventController.findIllusionGroupMemberImageByMember(member);
+    IllusionEventParticipantImage image = illusionEventController.findIllusionEventParticipantImageByParticipant(member);
     if (image != null) {
       profileImage = new TypedData(image.getData(), image.getContentType(), image.getModified());
     } else {
@@ -199,8 +199,8 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
     }
 
-    IllusionEvent group = illusionEventController.findIllusionGroupByUrlName(groupUrlName);
-    if (group == null) {
+    IllusionEvent event = illusionEventController.findIllusionEventByUrlName(groupUrlName);
+    if (event == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
@@ -222,14 +222,14 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return; 
 	  }
 	  
-	  IllusionEventParticipant member = illusionEventController.findIllusionGroupMemberById(memberId);
-	  if (member == null) {
+	  IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(memberId);
+	  if (participant == null) {
 	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
     
-    if (!member.getUser().getId().equals(sessionController.getLoggedUserId())) {
-      IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionGroupMemberByUserAndGroup(group, sessionController.getLoggedUser());
+    if (!participant.getUser().getId().equals(sessionController.getLoggedUserId())) {
+      IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
       if (loggedParticipant == null) {
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
         return;
@@ -245,11 +245,11 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
     byte[] data = Base64.decodeBase64(dataParts[1]);
     Date now = new Date();
 	  
-	  IllusionEventParticipantImage image = illusionEventController.findIllusionGroupMemberImageByMember(member);
+	  IllusionEventParticipantImage image = illusionEventController.findIllusionEventParticipantImageByParticipant(participant);
 	  if (image != null) {
-	    illusionEventController.updateIllusionGroupMemberImage(image, contentType, data, now);
+	    illusionEventController.updateIllusionEventParticipantImage(image, contentType, data, now);
 	  } else {
-	    illusionEventController.createIllusionGroupMemberImage(member, contentType, data, now);
+	    illusionEventController.createIllusionEeventParticipantImage(participant, contentType, data, now);
 	  }
 	  
 	  response.setStatus(HttpServletResponse.SC_NO_CONTENT);

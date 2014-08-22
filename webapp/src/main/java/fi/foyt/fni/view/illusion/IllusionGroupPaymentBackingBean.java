@@ -97,7 +97,7 @@ public class IllusionGroupPaymentBackingBean {
   @Deferred
   @LoggedIn
   public String init() {
-    IllusionEvent illusionEvent = illusionEventController.findIllusionGroupByUrlName(getUrlName());
+    IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
     if (illusionEvent == null) {
       return "/error/not-found.jsf";
     }
@@ -107,7 +107,7 @@ public class IllusionGroupPaymentBackingBean {
     }
 
     User loggedUser = sessionController.getLoggedUser();
-    IllusionEventParticipant groupMember = illusionEventController.findIllusionGroupMemberByUserAndGroup(illusionEvent, loggedUser);
+    IllusionEventParticipant groupMember = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
     if (groupMember == null) {
       return "/error/access-denied.jsf";
     }
@@ -284,7 +284,7 @@ public class IllusionGroupPaymentBackingBean {
   }
   
   public void proceedToPayment() {
-    IllusionEvent illusionEvent = illusionEventController.findIllusionGroupByUrlName(getUrlName());
+    IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
     String localAddress = FacesUtils.getLocalAddress(true);
     User loggedUser = sessionController.getLoggedUser();
 

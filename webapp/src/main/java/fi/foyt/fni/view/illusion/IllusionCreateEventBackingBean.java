@@ -109,7 +109,7 @@ public class IllusionCreateEventBackingBean {
         urlName = urlName.concat(StringUtils.repeat('_', padding));
       }
       
-      IllusionEvent illusionEvent = illusionEventController.findIllusionGroupByUrlName(urlName);
+      IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(urlName);
       if (illusionEvent == null) {
         return urlName;
       }
@@ -141,8 +141,8 @@ public class IllusionCreateEventBackingBean {
     }
 
     IllusionFolder illusionFolder = illusionEventController.findUserIllusionFolder(loggedUser, true);
-    IllusionEventFolder illusionEventFolder = illusionEventController.createIllusionGroupFolder(loggedUser, illusionFolder, urlName, getName());
-    IllusionEvent event = illusionEventController.createIllusionGroup(urlName, getName(), getDescription(), xmppRoom, illusionEventFolder, getJoinMode(), now, signUpFee, signUpFeeCurrency);
+    IllusionEventFolder illusionEventFolder = illusionEventController.createIllusionEventFolder(loggedUser, illusionFolder, urlName, getName());
+    IllusionEvent event = illusionEventController.createIllusionEvent(urlName, getName(), getDescription(), xmppRoom, illusionEventFolder, getJoinMode(), now, signUpFee, signUpFeeCurrency);
     
     String indexDocumentTitle = FacesUtils.getLocalizedValue("illusion.createEvent.indexDocumentTitle");
     String indexDocumentContent = FacesUtils.getLocalizedValue("illusion.createEvent.indexDocumentContent");
@@ -153,7 +153,7 @@ public class IllusionCreateEventBackingBean {
     illusionEventDocumentController.createIllusionGroupDocument(loggedUser, IllusionEventDocumentType.INTRO, language, illusionEventFolder, "intro", introDocumentTitle, introDocumentContent, MaterialPublicity.PRIVATE);
     
     // Add game master
-    illusionEventController.createIllusionGroupMember(loggedUser, event, getUserNickname(loggedUser), IllusionEventParticipantRole.GAMEMASTER);
+    illusionEventController.createIllusionEventParticipant(loggedUser, event, getUserNickname(loggedUser), IllusionEventParticipantRole.GAMEMASTER);
     
     // Add bot 
     String botJid = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOT_JID);
@@ -163,7 +163,7 @@ public class IllusionCreateEventBackingBean {
       throw new Exception("Configuration error, could not find chatbot user");
     }
     
-    illusionEventController.createIllusionGroupMember(botChatCredentials.getUser(), event, getUserNickname(botChatCredentials.getUser()), IllusionEventParticipantRole.BOT);
+    illusionEventController.createIllusionEventParticipant(botChatCredentials.getUser(), event, getUserNickname(botChatCredentials.getUser()), IllusionEventParticipantRole.BOT);
     
     return "/illusion/event.jsf?faces-redirect=true&urlName=" + event.getUrlName();
   }

@@ -22,7 +22,7 @@ public abstract class AbstractIllusionEventBackingBean {
   
   @RequestAction
   public String basicInit() {
-    IllusionEvent illusionEvent = illusionEventController.findIllusionGroupByUrlName(getUrlName());
+    IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
     if (illusionEvent == null) {
       return "/error/not-found.jsf";
     }
@@ -32,7 +32,7 @@ public abstract class AbstractIllusionEventBackingBean {
     if (sessionController.isLoggedIn()) {
       User loggedUser = sessionController.getLoggedUser();
   
-      member = illusionEventController.findIllusionGroupMemberByUserAndGroup(illusionEvent, loggedUser);
+      member = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
     }
     
     IllusionEventFolder folder = illusionEvent.getFolder();
