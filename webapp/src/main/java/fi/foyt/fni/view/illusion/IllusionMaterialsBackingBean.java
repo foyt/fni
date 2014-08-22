@@ -33,7 +33,7 @@ import fi.foyt.fni.session.SessionController;
 @Stateful
 @Join (path = "/illusion/group/{urlName}/materials", to = "/illusion/materials.jsf")
 @LoggedIn
-@Secure (value = Permission.ILLUSION_GROUP_ACCESS, deferred = true)
+@Secure (value = Permission.ILLUSION_EVENT_ACCESS, deferred = true)
 @SecurityContext (context = "@urlName")
 public class IllusionMaterialsBackingBean extends AbstractIllusionEventBackingBean {
 

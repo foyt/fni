@@ -18,7 +18,7 @@ public enum Role {
 	
 	/* Illusion */
 	
-	ILLUSION_USER (Permission.ILLUSION_GROUP_ACCESS),
+	ILLUSION_USER (Permission.ILLUSION_EVENT_ACCESS),
 
 	/* Forum */
 	

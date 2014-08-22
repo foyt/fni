@@ -35,7 +35,7 @@ import fi.foyt.fni.users.UserController;
 @Stateful
 @Join (path = "/illusion/group/{urlName}/members", to = "/illusion/members.jsf")
 @LoggedIn
-@Secure (value = Permission.ILLUSION_GROUP_ACCESS, deferred = true)
+@Secure (value = Permission.ILLUSION_EVENT_ACCESS, deferred = true)
 @SecurityContext (context = "@urlName")
 @SecurityParams ({
   @SecurityParam (name = "roles", value = "GAMEMASTER")
