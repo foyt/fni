@@ -1,10 +1,10 @@
-<div title="Invite Players" data-invite-button="Invite" data-cancel-button="Cancel">
-  <div class="illusion-group-invite-players-dialog">
+<div title="Invite" data-invite-button="Invite" data-cancel-button="Cancel">
+  <div class="illusion-event-invite-participants-dialog">
     <p>
       Type the emails of people you wish to invite into the field below. 
     </p>
     <div>
-      <label>Invite Players</label>
+      <label>Invite</label>
       <input name="invite" type="text" data-hint="Type the email address" data-no-results="No Results" data-searching="Searching..."/>
     </div>
     <p>Type the invitation message into the fields below. Notice that [[LOGIN_INFO]] text will be replaced by login instructions for those who are not already registered into Forge & Illusion.</p>
@@ -12,18 +12,18 @@
       <label>Invitation</label>
     </div>
     <div>
-      <input type="text" required="required" name="mail-subject" value="You have been invited into Illusion Group {NAME}"/>
+      <input type="text" required="required" name="mail-subject" value="You have been invited into event {NAME}"/>
     </div>
     <div>
       <textarea required="required" name="mail-content">
         Hi,{~n}
         {~n}
-        You have been invited to join Illusion group {NAME}.{~n}
+        You have been invited to join {NAME} in Forge & Illusion.{~n}
         {~n}
         You can join by clicking following link:{~n}
         {JOIN}{~n}
         {~n}
-        or check out the group details by clicking following link:{~n}
+        or check out the event details by clicking following link:{~n}
         {DETAILS}{~n}
         [[LOGIN_INFO]]{~n}
         -----------------------------------------------------------------------------{~n}

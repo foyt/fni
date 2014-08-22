@@ -1,24 +1,24 @@
-<div title="Kutsu pelaajia" data-invite-button="Kutsu" data-cancel-button="Peruuta">
-  <div class="illusion-group-invite-players-dialog">
+<div title="Kutsu" data-invite-button="Kutsu" data-cancel-button="Peruuta">
+  <div class="illusion-event-invite-participants-dialog">
     <p>
       Kirjoita kutsuttavien henkilöiden sähköpostiosoitteet alla olevaan kenttään
     </p>
     <div>
-      <label>Kutsuttavat pelaajat</label>
+      <label>Kutsuttavat henkilöt</label>
       <input name="invite" type="text" data-hint="Kirjoita sähköpostiosoite" data-no-results="Ei tuloksia" data-searching="Etsitään..."/>
     </div>
-    <p>Kirjoita alla olevaan kenttiin kutsuviesti. Huomaathan, että [[LOGIN_INFO]] -teksti korvataan kirjautumisohjeilla sellaisille henkilöille, jotka eivät ole vielä rekisteröityneet Forge & Illusioniin.</p>
+    <p>Kirjoita alla oleviin kenttiin kutsuviesti. Huomaathan, että [[LOGIN_INFO]] -teksti korvataan kirjautumisohjeilla sellaisille henkilöille, jotka eivät ole vielä rekisteröityneet Forge & Illusioniin.</p>
     <div>
       <label>Kutsuviesti</label>
     </div>
     <div>
-      <input type="text" required="required" name="mail-subject" value="Sinut on kutsuttu Illusion ryhmään {NAME}"/>
+      <input type="text" required="required" name="mail-subject" value="Sinut on kutsuttu tapahtumaan {NAME}"/>
     </div>
     <div>
       <textarea required="required" name="mail-content">
         Hei,{~n}
         {~n}
-        Sinut on kutsuttu liittymään Illusion ryhmään {NAME}.{~n}
+        Sinut on kutsuttu liittymään tapahtumaan {NAME} Forge & Illusionissa.{~n}
         {~n}
         Voit liittyä suoraan klikkaamalla linkkiä:{~n}
         {JOIN}{~n}

@@ -33,9 +33,9 @@ import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.view.AbstractFileServlet;
 
-@WebServlet(urlPatterns = "/illusion/groupInvite/*", name = "illusion-groupinvite")
+@WebServlet(urlPatterns = "/illusion/eventInvite/*", name = "illusion-eventinvite")
 @Transactional
-public class IllusionGroupInviteServlet extends AbstractFileServlet {
+public class IllusionEventInviteServlet extends AbstractFileServlet {
 
   private static final long serialVersionUID = 8840385463120576014L;
 
@@ -74,8 +74,8 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
       return;
     }
     
-    String groupUrlName = pathItems[0];
-    if (StringUtils.isBlank(groupUrlName)) {
+    String eventUrlName = pathItems[0];
+    if (StringUtils.isBlank(eventUrlName)) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
@@ -86,13 +86,13 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
     }
 
     User loggedUser = sessionController.getLoggedUser();
-    IllusionEvent group = illusionEventController.findIllusionEventByUrlName(groupUrlName);
-    if (group == null) {
+    IllusionEvent event = illusionEventController.findIllusionEventByUrlName(eventUrlName);
+    if (event == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
-    IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(group, loggedUser);
+    IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, loggedUser);
     if ((loggedParticipant == null)||(loggedParticipant.getRole() != IllusionEventParticipantRole.GAMEMASTER)) {
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
       return;
@@ -103,13 +103,13 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
     
     String[] emails = request.getParameterValues("email");
     for (String email : emails) {
-      inviteUser(group, email, mailSubject, mailContent);
+      inviteUser(event, email, mailSubject, mailContent);
     }
 
 	  response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 	}
 
-  private void inviteUser(IllusionEvent group, String email, String emailSubject, String templateContent) {  
+  private void inviteUser(IllusionEvent event, String email, String emailSubject, String templateContent) {  
     Date now = new Date();
     String temporaryAccount = "";
     
@@ -125,9 +125,9 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
       temporaryAccount = ExternalLocales.getText(sessionController.getLocale(), "illusion.mail.temporaryAccount", password);
     }
     
-    IllusionEventParticipant illusionGroupUser = illusionEventController.findIllusionEventParticipantByEventAndUser(group, user);
-    if (illusionGroupUser == null) {
-      illusionEventController.createIllusionEventParticipant(user, group, null, IllusionEventParticipantRole.INVITED);
+    IllusionEventParticipant illusionEventParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
+    if (illusionEventParticipant == null) {
+      illusionEventController.createIllusionEventParticipant(user, event, null, IllusionEventParticipantRole.INVITED);
       String emailContent = templateContent.replace("[[LOGIN_INFO]]", temporaryAccount);
       String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
       String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
@@ -135,7 +135,7 @@ public class IllusionGroupInviteServlet extends AbstractFileServlet {
       try {
         mailer.sendMail(fromMail, fromName, email, user.getFullName(), emailSubject, emailContent, "text/plain");
       } catch (MessagingException e) {
-        logger.log(Level.SEVERE, "Could not send a group accept notification mail", e);
+        logger.log(Level.SEVERE, "Could not send a event invite mail", e);
       }    
     }
 

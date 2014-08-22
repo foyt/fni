@@ -33,14 +33,14 @@ import fi.foyt.fni.users.UserController;
 @RequestScoped
 @Named
 @Stateful
-@Join (path = "/illusion/group/{urlName}/members", to = "/illusion/members.jsf")
+@Join (path = "/illusion/event/{urlName}/participants", to = "/illusion/event-participants.jsf")
 @LoggedIn
 @Secure (value = Permission.ILLUSION_EVENT_ACCESS, deferred = true)
 @SecurityContext (context = "@urlName")
 @SecurityParams ({
   @SecurityParam (name = "roles", value = "GAMEMASTER")
 })
-public class IllusionMembersBackingBean extends AbstractIllusionEventBackingBean {
+public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventBackingBean {
 
   @Parameter
   private String urlName;
@@ -55,8 +55,8 @@ public class IllusionMembersBackingBean extends AbstractIllusionEventBackingBean
   private UserController userController;
   
   @Override
-  public String init(IllusionEvent illusionEvent, IllusionEventParticipant member) {
-    if ((member == null) || (member.getRole() != IllusionEventParticipantRole.GAMEMASTER)) {
+  public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
+    if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.GAMEMASTER)) {
       return "/error/access-denied.jsf";
     }
 
@@ -86,7 +86,7 @@ public class IllusionMembersBackingBean extends AbstractIllusionEventBackingBean
   @Deferred
   @IgnorePostback
   public void setDefaults() {
-    selectMember(approvalPending != null && approvalPending.size() > 0 ? approvalPending.get(0) : players.size() > 0 ? players.get(0) : gameMasters.get(0));
+    selectParticipant(approvalPending != null && approvalPending.size() > 0 ? approvalPending.get(0) : players.size() > 0 ? players.get(0) : gameMasters.get(0));
   }
   
   @Override
@@ -134,69 +134,69 @@ public class IllusionMembersBackingBean extends AbstractIllusionEventBackingBean
     return introUrl;
   }
   
-  public void selectMember(IllusionEventParticipant member) {
-    selectedMemberId = member.getId();
-    selectedMemberUserId = member.getUser().getId();
-    selectedMemberName = member.getUser().getFullName();
-    selectedMemberCharacterName = member.getCharacterName();
-    selectedMemberRole = member.getRole();
+  public void selectParticipant(IllusionEventParticipant participant) {
+    selectedParticipantId = participant.getId();
+    selectedParticipantUserId = participant.getUser().getId();
+    selectedParticipantName = participant.getUser().getFullName();
+    selectedParticipantCharacterName = participant.getCharacterName();
+    selectedParticipantRole = participant.getRole();
   }
 
-  public Long getSelectedMemberId() {
-    return selectedMemberId;
+  public Long getSelectedParticipantId() {
+    return selectedParticipantId;
   }
   
-  public void setSelectedMemberId(Long selectedMemberId) {
-    this.selectedMemberId = selectedMemberId;
+  public void setSelectedParticipantId(Long selectedParticipantId) {
+    this.selectedParticipantId = selectedParticipantId;
   }
   
-  public String getSelectedMemberName() {
-    return selectedMemberName;
+  public String getSelectedParticipantName() {
+    return selectedParticipantName;
   }
   
-  public void setSelectedMemberName(String selectedMemberName) {
-    this.selectedMemberName = selectedMemberName;
+  public void setSelectedParticipantName(String selectedParticipantName) {
+    this.selectedParticipantName = selectedParticipantName;
   }
   
-  public String getSelectedMemberCharacterName() {
-    return selectedMemberCharacterName;
+  public String getSelectedParticipantCharacterName() {
+    return selectedParticipantCharacterName;
   }
   
-  public void setSelectedMemberCharacterName(String selectedMemberCharacterName) {
-    this.selectedMemberCharacterName = selectedMemberCharacterName;
+  public void setSelectedParticipantCharacterName(String selectedParticipantCharacterName) {
+    this.selectedParticipantCharacterName = selectedParticipantCharacterName;
   }
 
-  public IllusionEventParticipantRole getSelectedMemberRole() {
-    return selectedMemberRole;
+  public IllusionEventParticipantRole getSelectedParticipantRole() {
+    return selectedParticipantRole;
   }
   
-  public void setSelectedMemberRole(IllusionEventParticipantRole selectedMemberRole) {
-    this.selectedMemberRole = selectedMemberRole;
+  public void setSelectedParticipantRole(IllusionEventParticipantRole selectedParticipantRole) {
+    this.selectedParticipantRole = selectedParticipantRole;
   }
   
-  public Long getSelectedMemberUserId() {
-    return selectedMemberUserId;
+  public Long getSelectedParticipantUserId() {
+    return selectedParticipantUserId;
   }
   
-  public void setSelectedMemberUserId(Long selectedMemberUserId) {
-    this.selectedMemberUserId = selectedMemberUserId;
+  public void setSelectedParticipantUserId(Long selectedParticipantUserId) {
+    this.selectedParticipantUserId = selectedParticipantUserId;
   }
   
   public List<SelectItem> getRoleSelectItems() {
     return roleSelectItems;
   }
   
-  public String saveSelectedMember() {
-    IllusionEventParticipant member = illusionEventController.findIllusionEventParticipantById(selectedMemberId);
+  public String saveSelectedParticipant() {
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(selectedParticipantId);
     
-    illusionEventController.updateIllusionEventParticipantCharacterName(member, selectedMemberCharacterName);
-    illusionEventController.updateIllusionEventParticipantRole(member, selectedMemberRole);
+    illusionEventController.updateIllusionEventParticipantCharacterName(participant, selectedParticipantCharacterName);
+    illusionEventController.updateIllusionEventParticipantRole(participant, selectedParticipantRole);
     
-    return "/illusion/members.jsf?faces-redirect=true&urlName=" + getUrlName();
+    return "/illusion/event-participants.jsf?faces-redirect=true&urlName=" + getUrlName();
   }
   
-  public String getMemberDisplayName(IllusionEventParticipant member) {
-    User user = member.getUser();
+  public String getParticipantDisplayName(IllusionEventParticipant participant) {
+    User user = participant.getUser();
     String result = user.getFullName();
     if (StringUtils.isNotBlank(result)) {
       return result;
@@ -214,10 +214,10 @@ public class IllusionMembersBackingBean extends AbstractIllusionEventBackingBean
   private IllusionEventJoinMode eventJoinMode;
   private String joinUrl;
   private String introUrl;
-  private Long selectedMemberId;
-  private Long selectedMemberUserId;
-  private String selectedMemberName;
-  private String selectedMemberCharacterName;
-  private IllusionEventParticipantRole selectedMemberRole;
+  private Long selectedParticipantId;
+  private Long selectedParticipantUserId;
+  private String selectedParticipantName;
+  private String selectedParticipantCharacterName;
+  private IllusionEventParticipantRole selectedParticipantRole;
   private List<SelectItem> roleSelectItems;
 }

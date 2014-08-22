@@ -6,23 +6,23 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 
 /* Panels */ 
 
-.illusion-members-panel, .illusion-edit-member-panel {
+.illusion-event-participants-panel, .illusion-edit-participant-panel {
   @include generic-panel;
   position: relative;
 }
 
 /* Materials */
 
-.illusion-members {
+.illusion-event-participants {
   margin-top: 10px;
 }
 
-.illusion-members h3 {
+.illusion-event-participants h3 {
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-.illusion-member {
+.illusion-event-participant {
   width: 100%;
   padding: 8px;
   margin-left: -8px;
@@ -31,11 +31,11 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   text-decoration: none;
 }
 
-.illusion-member:hover {
+.illusion-event-participant:hover {
   background: $selected-background-color;
 }
 
-.illusion-invite-members {
+.illusion-invite-participants {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -46,30 +46,30 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   text-transform: uppercase;
 }
 
-.illusion-member-avatar {
+.illusion-event-participant-avatar {
   width: 48px;
   line-height: 0px;
   display: inline-block;
   vertical-align: top;
 }
 
-.illusion-member h4 {
+.illusion-event-participant h4 {
   margin-left: 10px;  
   display: inline-block;
   vertical-align: top;
   margin-top: 4px;
 }
 
-.illusion-edit-member-avatar {
+.illusion-edit-participant-avatar {
   float: right;
 }
 
-.illusion-edit-member-field {
+.illusion-edit-participant-field {
   width: 288px;
   margin-top: 8px;
 }
 
-.illusion-edit-member-panel label {
+.illusion-edit-participant-panel label {
   display: block;
   font-size: 13px;
   font-family: $default-font;
@@ -77,7 +77,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   margin-bottom: 2px;
 }
 
-.illusion-edit-member-panel input[type="text"], .illusion-edit-member-panel select {
+.illusion-edit-participant-panel input[type="text"], .illusion-edit-participant-panel select {
   width: 100%;
   font-size: 14px;
   font-family: $default-font;
@@ -86,7 +86,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 
 /* Submit */
 
-.illusion-edit-member-save {
+.illusion-edit-participant-save {
   @include header-3;
   padding-left: 23px;
   padding-right: 23px;
@@ -100,7 +100,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   cursor: pointer;
 }
 
-.illusion-edit-member-save:disabled {
+.illusion-edit-participant-save:disabled {
   color: #eee;
   background: #aaa;
   cursor: default;
@@ -108,14 +108,14 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 
 /* Invite players dialog */
 
-.illusion-group-invite-players-dialog p {
+.illusion-event-invite-participants-dialog p {
   font-style: italic;
   font-size: 13px;
   margin-top: 16px;
   margin-bottom: 8px;
 }
 
-.illusion-group-invite-players-dialog label {
+.illusion-event-invite-participants-dialog label {
   display: block;
   font-size: 13px;
   font-family: $default-font;
@@ -123,17 +123,17 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   margin-bottom: 8px;
 }
 
-.illusion-group-invite-players-dialog .tagsinput {
+.illusion-event-invite-participants-dialog .tagsinput {
   @include box-sizing(border-box);
 }
 
-.illusion-group-invite-players-dialog input[name="mail-subject"] {
+.illusion-event-invite-participants-dialog input[name="mail-subject"] {
   width: 100%;
   margin-bottom: 8px;
   @include box-sizing(border-box);
 }
 
-.illusion-group-invite-players-dialog textarea[name="mail-content"] {
+.illusion-event-invite-participants-dialog textarea[name="mail-content"] {
   height: 210px;
   width: 100%;
   @include box-sizing(border-box);
