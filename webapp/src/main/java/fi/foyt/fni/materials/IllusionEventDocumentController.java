@@ -23,7 +23,7 @@ public class IllusionEventDocumentController {
     return illusionEventDocumentDAO.findByParentFolderAndDocumentType(folder, documentType);
   }
 
-  public IllusionEventDocument createIllusionGroupDocument(User creator, IllusionEventDocumentType documentType, Language language, IllusionEventFolder parentFolder, String urlName, String title, String data, MaterialPublicity publicity) {
+  public IllusionEventDocument createIllusionEventDocument(User creator, IllusionEventDocumentType documentType, Language language, IllusionEventFolder parentFolder, String urlName, String title, String data, MaterialPublicity publicity) {
     return illusionEventDocumentDAO.create(creator, documentType, language, parentFolder, urlName, title, data, publicity);
   }
 

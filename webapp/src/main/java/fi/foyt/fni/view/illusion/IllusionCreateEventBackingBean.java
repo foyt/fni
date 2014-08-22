@@ -149,8 +149,8 @@ public class IllusionCreateEventBackingBean {
     String introDocumentTitle = FacesUtils.getLocalizedValue("illusion.createEvent.introDocumentTitle");
     String introDocumentContent = FacesUtils.getLocalizedValue("illusion.createEvent.introDocumentContent");
     
-    illusionEventDocumentController.createIllusionGroupDocument(loggedUser, IllusionEventDocumentType.INDEX, language, illusionEventFolder, "index", indexDocumentTitle, indexDocumentContent, MaterialPublicity.PRIVATE);
-    illusionEventDocumentController.createIllusionGroupDocument(loggedUser, IllusionEventDocumentType.INTRO, language, illusionEventFolder, "intro", introDocumentTitle, introDocumentContent, MaterialPublicity.PRIVATE);
+    illusionEventDocumentController.createIllusionEventDocument(loggedUser, IllusionEventDocumentType.INDEX, language, illusionEventFolder, "index", indexDocumentTitle, indexDocumentContent, MaterialPublicity.PRIVATE);
+    illusionEventDocumentController.createIllusionEventDocument(loggedUser, IllusionEventDocumentType.INTRO, language, illusionEventFolder, "intro", introDocumentTitle, introDocumentContent, MaterialPublicity.PRIVATE);
     
     // Add game master
     illusionEventController.createIllusionEventParticipant(loggedUser, event, getUserNickname(loggedUser), IllusionEventParticipantRole.GAMEMASTER);
