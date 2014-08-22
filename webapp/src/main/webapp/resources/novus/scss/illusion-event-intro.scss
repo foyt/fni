@@ -4,7 +4,7 @@
 
 /* Panels */ 
 
-.illusion-intro-panel {
+.illusion-event-intro-panel {
   @include generic-panel;
   position: relative;
   background: #fff;
@@ -12,26 +12,26 @@
 
 /* Intro */
 
-.illusion-intro-text {
+.illusion-event-intro-text {
   padding: 1in;
 }
 
-.illusion-intro-text *:first-child {
+.illusion-event-intro-text *:first-child {
   margin-top: 0px;
 }
 
-.illusion-intro-text {
+.illusion-event-intro-text {
   @include html-default-styles;
 }
 
-.illusion-group-intro-join {
+.illusion-event-intro-join {
   position: absolute;
   top: 40px;
   right: 40px;
   text-align: right;
 }
 
-.illusion-group-intro-join-info {
+.illusion-event-intro-join-info {
   color: $default-color;
   font-family: $default-font;
   font-weight: bold;
@@ -40,7 +40,7 @@
   margin-bottom: 20px;
 }
 
-.illusion-group-intro-join-button {
+.illusion-event-intro-join-button {
   @include header-3;
   padding-left: 23px;
   padding-right: 23px;

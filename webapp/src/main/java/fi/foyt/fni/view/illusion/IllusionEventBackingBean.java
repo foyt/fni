@@ -51,7 +51,7 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant member) {
     if (member == null) {
-      return "/illusion/intro.jsf?faces-redirect=true&urlName=" + getUrlName();
+      return "/illusion/event-intro.jsf?faces-redirect=true&urlName=" + getUrlName();
     }
     
     switch (member.getRole()) {
@@ -61,7 +61,7 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
       case PENDING_APPROVAL:
       case WAITING_PAYMENT:
       case INVITED:
-        return "/illusion/intro.jsf?faces-redirect=true&urlName=" + getUrlName();
+        return "/illusion/event-intro.jsf?faces-redirect=true&urlName=" + getUrlName();
       case GAMEMASTER:
       case PLAYER:
       break;

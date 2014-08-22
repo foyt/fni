@@ -35,8 +35,8 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @RequestScoped
 @Named
 @Stateful
-@Join (path = "/illusion/group/{urlName}/intro", to = "/illusion/intro.jsf")
-public class IllusionIntroBackingBean extends AbstractIllusionEventBackingBean {
+@Join (path = "/illusion/event/{urlName}/intro", to = "/illusion/event-intro.jsf")
+public class IllusionEventIntroBackingBean extends AbstractIllusionEventBackingBean {
 
   @Parameter
   private String urlName;
@@ -78,7 +78,7 @@ public class IllusionIntroBackingBean extends AbstractIllusionEventBackingBean {
           text = new String(introData.getData(), "UTF-8");
         }
       } catch (IOException | GeneralSecurityException e) {
-        logger.log(Level.WARNING, "Could not retreive group index text", e);
+        logger.log(Level.WARNING, "Could not retreive event index text", e);
       }
     }
     
@@ -101,13 +101,13 @@ public class IllusionIntroBackingBean extends AbstractIllusionEventBackingBean {
     if (memberRole != null) {
       switch (memberRole) {
         case BANNED:
-          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.intro.bannedMessage"));
+          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventIntro.bannedMessage"));
         break;
         case PENDING_APPROVAL:
-          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.intro.pendingApprovalMessage"));
+          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventIntro.pendingApprovalMessage"));
         break;
         case WAITING_PAYMENT:
-          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.intro.waitingPaymentMessage"));
+          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventIntro.waitingPaymentMessage"));
         break;
         default:
         break;
