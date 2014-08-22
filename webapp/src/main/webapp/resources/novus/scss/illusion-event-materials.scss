@@ -6,7 +6,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 
 /* Panels */ 
 
-.illusion-materials-panel {
+.illusion-event-materials-panel {
   @include generic-panel;
   position: relative;
   background: #fff;
@@ -14,27 +14,27 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 
 /* Materials */
 
-.illusion-materials {
+.illusion-event-materials {
   margin-top: 10px;
 }
 
-.illusion-material {
+.illusion-event-material {
   margin-bottom: 8px;
   width: 100%;
 }
 
-.illusion-material:hover {
+.illusion-event-material:hover {
   background: $selected-background-color;
 }
 
-.illusion-material-icon {
+.illusion-event-material-icon {
   width: 48px;
   line-height: 0px;
   display: inline-block;
   vertical-align: top;
 }
 
-.illusion-material .illusion-material-title {
+.illusion-event-material .illusion-event-material-title {
   margin-left: 10px;  
   display: inline-block;
   vertical-align: top;
@@ -42,7 +42,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   padding-top: 9px;
 }
 
-.illusion-material .illusion-material-title>a {
+.illusion-event-material .illusion-event-material-title>a {
   color: $default-color;
   font-family: $default-font;
   text-decoration: none;

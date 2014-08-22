@@ -11,7 +11,7 @@
           <a href="javascript:void(null)">#{locales['illusion.menu.materialMenu']}</a>
           <h:panelGroup layout="block" styleClass="illusion-menu-help">#{locales['illusion.menu.materialMenuHelp']}</h:panelGroup>
           <h:panelGroup layout="block" styleClass="illusion-menu-items">
-            <h:link outcome="/illusion/materials.jsf" value="#{locales['illusion.menu.materialShowMaterials']}">
+            <h:link outcome="/illusion/event-materials.jsf" value="#{locales['illusion.menu.materialShowMaterials']}">
               <f:param name="urlName" value="#{eventUrlName}"/>
             </h:link>
             <h:outputLink value="#{request.contextPath}/forge/folders/#{illusionFolderPath}" rendered="#{mayManageEvent}">

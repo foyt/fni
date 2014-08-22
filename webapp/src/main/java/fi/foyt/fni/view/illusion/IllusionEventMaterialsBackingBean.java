@@ -31,11 +31,11 @@ import fi.foyt.fni.session.SessionController;
 @RequestScoped
 @Named
 @Stateful
-@Join (path = "/illusion/group/{urlName}/materials", to = "/illusion/materials.jsf")
+@Join (path = "/illusion/event/{urlName}/materials", to = "/illusion/event-materials.jsf")
 @LoggedIn
 @Secure (value = Permission.ILLUSION_EVENT_ACCESS, deferred = true)
 @SecurityContext (context = "@urlName")
-public class IllusionMaterialsBackingBean extends AbstractIllusionEventBackingBean {
+public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBackingBean {
 
   @Parameter
   private String urlName;
