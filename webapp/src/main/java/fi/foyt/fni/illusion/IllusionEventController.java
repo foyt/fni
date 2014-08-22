@@ -147,7 +147,7 @@ public class IllusionEventController {
   }
 
   public IllusionEventParticipantImage findIllusionEventParticipantImageByParticipant(IllusionEventParticipant participant) {
-    return illusionEventParticipantImageDAO.findByMember(participant);
+    return illusionEventParticipantImageDAO.findByParticipant(participant);
   }
   
   public IllusionEventParticipantImage updateIllusionEventParticipantImage(IllusionEventParticipantImage image, String contentType, byte[] data, Date modified) {

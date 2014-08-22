@@ -22,14 +22,14 @@ public class IllusionEventParticipantImage {
 		return id;
 	}
 	
-	public IllusionEventParticipant getMember() {
-    return member;
+	public IllusionEventParticipant getParticipant() {
+    return participant;
   }
 	
-	public void setMember(IllusionEventParticipant member) {
-    this.member = member;
+	public void setParticipant(IllusionEventParticipant participant) {
+    this.participant = participant;
   }
-  
+	
   public byte[] getData() {
     return data;
   }
@@ -59,7 +59,7 @@ public class IllusionEventParticipantImage {
   private Long id;
  
   @ManyToOne
-  private IllusionEventParticipant member;
+  private IllusionEventParticipant participant;
   
   @Lob
   private byte[] data;
