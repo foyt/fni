@@ -14,7 +14,7 @@
             <h:link outcome="/illusion/materials.jsf" value="#{locales['illusion.menu.materialShowMaterials']}">
               <f:param name="urlName" value="#{groupUrlName}"/>
             </h:link>
-            <h:outputLink value="#{request.contextPath}/forge/folders/#{illusionFolderPath}" rendered="#{mayManageGroup}">
+            <h:outputLink value="#{request.contextPath}/forge/folders/#{illusionFolderPath}" rendered="#{mayManageEvent}">
               <h:outputText value="#{locales['illusion.menu.materialEditMaterials']}"/>
             </h:outputLink>
           </h:panelGroup>
@@ -28,7 +28,7 @@
           <a href="javascript:void(null)">#{locales['illusion.menu.settingsMenu']}</a>
           <h:panelGroup layout="block" styleClass="illusion-menu-help">#{locales['illusion.menu.settingsMenuHelp']}</h:panelGroup>
           <h:panelGroup layout="block" styleClass="illusion-menu-items">
-            <h:link outcome="/illusion/members.jsf" value="#{locales['illusion.menu.settingsManageMembers']}" rendered="#{mayManageGroup}">
+            <h:link outcome="/illusion/members.jsf" value="#{locales['illusion.menu.settingsManageMembers']}" rendered="#{mayManageEvent}">
               <f:param name="urlName" value="#{groupUrlName}"/>
             </h:link>
           </h:panelGroup>

@@ -27,12 +27,12 @@ public abstract class AbstractIllusionEventBackingBean {
       return "/error/not-found.jsf";
     }
     
-    IllusionEventParticipant member = null;
+    IllusionEventParticipant participant = null;
     
     if (sessionController.isLoggedIn()) {
       User loggedUser = sessionController.getLoggedUser();
   
-      member = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
+      participant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
     }
     
     IllusionEventFolder folder = illusionEvent.getFolder();
@@ -41,9 +41,9 @@ public abstract class AbstractIllusionEventBackingBean {
     name = illusionEvent.getName();
     description = illusionEvent.getDescription();
     illusionFolderPath = folder.getPath();
-    mayManageGroup = member != null ? member.getRole() == IllusionEventParticipantRole.GAMEMASTER : false;
+    mayManageEvent = participant != null ? participant.getRole() == IllusionEventParticipantRole.GAMEMASTER : false;
   
-    return init(illusionEvent, member);
+    return init(illusionEvent, participant);
   }
 
   public abstract String init(IllusionEvent illusionEvent, IllusionEventParticipant participant);
@@ -68,14 +68,14 @@ public abstract class AbstractIllusionEventBackingBean {
   public String getIllusionFolderPath() {
     return illusionFolderPath;
   }
-  
-  public boolean getMayManageGroup() {
-    return mayManageGroup;
+
+  public boolean getMayManageEvent() {
+    return mayManageEvent;
   }
   
   private Long id;
   private String name;
   private String description;
   private String illusionFolderPath;
-  private boolean mayManageGroup;
+  private boolean mayManageEvent;
 }
