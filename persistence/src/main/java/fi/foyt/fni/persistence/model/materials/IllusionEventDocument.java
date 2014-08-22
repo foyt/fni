@@ -11,9 +11,9 @@ import org.hibernate.search.annotations.Indexed;
 @Entity
 @PrimaryKeyJoinColumn (name="id")
 @Indexed
-public class IllusionGroupDocument extends Document {
+public class IllusionEventDocument extends Document {
   
-  public IllusionGroupDocument() {
+  public IllusionEventDocument() {
     setType(MaterialType.ILLUSION_GROUP_DOCUMENT);
   }
   

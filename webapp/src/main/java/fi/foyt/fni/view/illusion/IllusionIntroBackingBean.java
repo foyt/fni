@@ -25,7 +25,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
-import fi.foyt.fni.persistence.model.materials.IllusionGroupDocument;
+import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.security.UnauthorizedException;
@@ -70,7 +70,7 @@ public class IllusionIntroBackingBean extends AbstractIllusionEventBackingBean {
       }
     }
     
-    IllusionGroupDocument introDocument = illusionGroupDocumentController.findByFolderAndDocumentType(folder, IllusionEventDocumentType.INTRO);
+    IllusionEventDocument introDocument = illusionGroupDocumentController.findByFolderAndDocumentType(folder, IllusionEventDocumentType.INTRO);
     if (introDocument != null) {
       try {
         FileData introData = materialController.getMaterialData(null, null, introDocument);
