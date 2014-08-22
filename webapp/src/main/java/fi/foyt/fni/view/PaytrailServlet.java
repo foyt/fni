@@ -114,7 +114,7 @@ public class PaytrailServlet extends HttpServlet {
   }
 	 
 	private String getIllusionRedirectUrl(Order order) {
-    IllusionEvent illusionEvent = orderController.findOrderIllusionGroup(order);
+    IllusionEvent illusionEvent = orderController.findOrderIllusionEvent(order);
 
     return new StringBuilder()
       .append("/illusion/group/")

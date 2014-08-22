@@ -25,7 +25,7 @@ public class OrderItemDAO extends GenericDAO<OrderItem> {
 		orderItem.setName(name);
 		orderItem.setOrder(order);
 		orderItem.setPublication(publication);
-		orderItem.setIllusionGroup(illusionEvent);
+		orderItem.setIllusionEvent(illusionEvent);
 		orderItem.setUnitPrice(unitPrice);
 
 		getEntityManager().persist(orderItem);

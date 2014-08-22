@@ -139,9 +139,9 @@ public class OrderController implements Serializable {
 		return orderItemDAO.listByOrder(order);
 	}
 
-  public OrderItem findOrderItemByIllusionGroupNotNull(Order order) {
+  public OrderItem findOrderItemByIllusionEventNotNull(Order order) {
     for (OrderItem item : listOrderItems(order)) {
-      if (item.getIllusionGroup() != null) {
+      if (item.getIllusionEvent() != null) {
         return item;
       }
     }
@@ -149,10 +149,10 @@ public class OrderController implements Serializable {
     return null;
   }
   
-  public IllusionEvent findOrderIllusionGroup(Order order) {
-    OrderItem orderItem = findOrderItemByIllusionGroupNotNull(order);
+  public IllusionEvent findOrderIllusionEvent(Order order) {
+    OrderItem orderItem = findOrderItemByIllusionEventNotNull(order);
     if (orderItem != null) {
-      return orderItem.getIllusionGroup();
+      return orderItem.getIllusionEvent();
     }
     
     return null;

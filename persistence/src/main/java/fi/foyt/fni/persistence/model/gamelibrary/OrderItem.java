@@ -51,11 +51,11 @@ public class OrderItem {
 		this.publication = publication;
 	}
   
-  public IllusionEvent getIllusionGroup() {
+  public IllusionEvent getIllusionEvent() {
     return illusionEvent;
   }
   
-  public void setIllusionGroup(IllusionEvent illusionEvent) {
+  public void setIllusionEvent(IllusionEvent illusionEvent) {
     this.illusionEvent = illusionEvent;
   }
   

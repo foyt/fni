@@ -51,7 +51,7 @@ public class OrderStatusChangeListener {
   		if (order != null) {
   		  switch (order.getType()) {
   		    case ILLUSION_GROUP:
-  		      IllusionEvent group = orderController.findOrderIllusionGroup(order);
+  		      IllusionEvent group = orderController.findOrderIllusionEvent(order);
   		      if (group != null) {
   		        IllusionEventParticipant member = illusionEventController.findIllusionEventParticipantByEventAndUser(group, order.getCustomer());
     		      illusionEventController.updateIllusionEventParticipantRole(member, IllusionEventParticipantRole.PLAYER);
