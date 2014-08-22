@@ -14,7 +14,7 @@ import org.ocpsoft.rewrite.annotation.Join;
 
 import fi.foyt.fni.chat.ChatCredentialsController;
 import fi.foyt.fni.illusion.IllusionEventController;
-import fi.foyt.fni.materials.IllusionGroupDocumentController;
+import fi.foyt.fni.materials.IllusionEventDocumentController;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -52,7 +52,7 @@ public class IllusionCreateEventBackingBean {
   private IllusionEventController illusionEventController;
 
   @Inject
-  private IllusionGroupDocumentController illusionGroupDocumentController;
+  private IllusionEventDocumentController illusionEventDocumentController;
   
   @PostConstruct
   public void init() {
@@ -149,8 +149,8 @@ public class IllusionCreateEventBackingBean {
     String introDocumentTitle = FacesUtils.getLocalizedValue("illusion.createEvent.introDocumentTitle");
     String introDocumentContent = FacesUtils.getLocalizedValue("illusion.createEvent.introDocumentContent");
     
-    illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionEventDocumentType.INDEX, language, illusionEventFolder, "index", indexDocumentTitle, indexDocumentContent, MaterialPublicity.PRIVATE);
-    illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionEventDocumentType.INTRO, language, illusionEventFolder, "intro", introDocumentTitle, introDocumentContent, MaterialPublicity.PRIVATE);
+    illusionEventDocumentController.createIllusionGroupDocument(loggedUser, IllusionEventDocumentType.INDEX, language, illusionEventFolder, "index", indexDocumentTitle, indexDocumentContent, MaterialPublicity.PRIVATE);
+    illusionEventDocumentController.createIllusionGroupDocument(loggedUser, IllusionEventDocumentType.INTRO, language, illusionEventFolder, "intro", introDocumentTitle, introDocumentContent, MaterialPublicity.PRIVATE);
     
     // Add game master
     illusionEventController.createIllusionGroupMember(loggedUser, event, getUserNickname(loggedUser), IllusionEventParticipantRole.GAMEMASTER);

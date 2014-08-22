@@ -14,7 +14,7 @@ import fi.foyt.fni.persistence.model.users.User;
 
 @Dependent
 @Stateless
-public class IllusionGroupDocumentController {
+public class IllusionEventDocumentController {
   
   @Inject
   private IllusionEventDocumentDAO illusionEventDocumentDAO;

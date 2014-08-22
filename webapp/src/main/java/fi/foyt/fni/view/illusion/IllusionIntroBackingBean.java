@@ -19,7 +19,7 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
-import fi.foyt.fni.materials.IllusionGroupDocumentController;
+import fi.foyt.fni.materials.IllusionEventDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
@@ -48,7 +48,7 @@ public class IllusionIntroBackingBean extends AbstractIllusionEventBackingBean {
   private Logger logger;
 
   @Inject
-  private IllusionGroupDocumentController illusionGroupDocumentController;
+  private IllusionEventDocumentController illusionEventDocumentController;
 
   @Inject
   private MaterialController materialController;
@@ -70,7 +70,7 @@ public class IllusionIntroBackingBean extends AbstractIllusionEventBackingBean {
       }
     }
     
-    IllusionEventDocument introDocument = illusionGroupDocumentController.findByFolderAndDocumentType(folder, IllusionEventDocumentType.INTRO);
+    IllusionEventDocument introDocument = illusionEventDocumentController.findByFolderAndDocumentType(folder, IllusionEventDocumentType.INTRO);
     if (introDocument != null) {
       try {
         FileData introData = materialController.getMaterialData(null, null, introDocument);

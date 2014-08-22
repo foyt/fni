@@ -13,7 +13,7 @@ import javax.inject.Named;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
-import fi.foyt.fni.materials.IllusionGroupDocumentController;
+import fi.foyt.fni.materials.IllusionEventDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
@@ -43,7 +43,7 @@ public class IllusionGroupBackingBean extends AbstractIllusionEventBackingBean {
   private SessionController sessionController;
 
   @Inject
-  private IllusionGroupDocumentController illusionGroupDocumentController;
+  private IllusionEventDocumentController illusionEventDocumentController;
 
   @Inject
   private MaterialController materialController;
@@ -70,7 +70,7 @@ public class IllusionGroupBackingBean extends AbstractIllusionEventBackingBean {
     IllusionEventFolder folder = illusionEvent.getFolder();
     User loggedUser = sessionController.getLoggedUser();
     
-    IllusionEventDocument indexDocument = illusionGroupDocumentController.findByFolderAndDocumentType(folder, IllusionEventDocumentType.INDEX);
+    IllusionEventDocument indexDocument = illusionEventDocumentController.findByFolderAndDocumentType(folder, IllusionEventDocumentType.INDEX);
     if (indexDocument != null) {
       try {
         FileData indexData = materialController.getMaterialData(null, loggedUser, indexDocument);
