@@ -17,15 +17,15 @@ public class IllusionGroupDocument extends Document {
     setType(MaterialType.ILLUSION_GROUP_DOCUMENT);
   }
   
-  public IllusionGroupDocumentType getDocumentType() {
+  public IllusionEventDocumentType getDocumentType() {
     return documentType;
   }
   
-  public void setDocumentType(IllusionGroupDocumentType documentType) {
+  public void setDocumentType(IllusionEventDocumentType documentType) {
     this.documentType = documentType;
   }
   
   @Enumerated (EnumType.STRING)
   @Column (nullable = false)
-  private IllusionGroupDocumentType documentType;
+  private IllusionEventDocumentType documentType;
 }

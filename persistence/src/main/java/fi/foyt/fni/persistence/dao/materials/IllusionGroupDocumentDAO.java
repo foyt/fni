@@ -11,7 +11,7 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocument;
-import fi.foyt.fni.persistence.model.materials.IllusionGroupDocumentType;
+import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocument_;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.users.User;
@@ -20,7 +20,7 @@ public class IllusionGroupDocumentDAO extends GenericDAO<IllusionGroupDocument> 
 
   private static final long serialVersionUID = -4644199519384824575L;
 
-  public IllusionGroupDocument create(User creator, IllusionGroupDocumentType documentType, Language language, Folder parentFolder, String urlName, String title, String data, MaterialPublicity publicity) {
+  public IllusionGroupDocument create(User creator, IllusionEventDocumentType documentType, Language language, Folder parentFolder, String urlName, String title, String data, MaterialPublicity publicity) {
     Date now = new Date();
 
     IllusionGroupDocument illusionGroupDocument = new IllusionGroupDocument();
@@ -39,7 +39,7 @@ public class IllusionGroupDocumentDAO extends GenericDAO<IllusionGroupDocument> 
     return persist(illusionGroupDocument);
   }
 
-  public IllusionGroupDocument findByParentFolderAndDocumentType(Folder parentFolder, IllusionGroupDocumentType documentType) {
+  public IllusionGroupDocument findByParentFolderAndDocumentType(Folder parentFolder, IllusionEventDocumentType documentType) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

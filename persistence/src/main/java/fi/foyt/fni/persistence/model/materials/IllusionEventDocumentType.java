@@ -1,6 +1,6 @@
 package fi.foyt.fni.persistence.model.materials;
 
-public enum IllusionGroupDocumentType {
+public enum IllusionEventDocumentType {
   
   INTRO,
   INDEX,
