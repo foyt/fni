@@ -62,8 +62,8 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
       case WAITING_PAYMENT:
       case INVITED:
         return "/illusion/event-intro.jsf?faces-redirect=true&urlName=" + getUrlName();
-      case GAMEMASTER:
-      case PLAYER:
+      case ORGANIZER:
+      case PARTICIPANT:
       break;
     }
     

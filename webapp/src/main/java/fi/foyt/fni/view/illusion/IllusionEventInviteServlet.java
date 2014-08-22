@@ -93,7 +93,7 @@ public class IllusionEventInviteServlet extends AbstractFileServlet {
     }
     
     IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, loggedUser);
-    if ((loggedParticipant == null)||(loggedParticipant.getRole() != IllusionEventParticipantRole.GAMEMASTER)) {
+    if ((loggedParticipant == null)||(loggedParticipant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
       return;
     }

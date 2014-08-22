@@ -54,7 +54,7 @@ public class IllusionEventDoJoinBackingBean {
           FacesUtils.addPostRedirectMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("illusion.eventIntro.approvalPendingMessage"));
           return "/illusion/event-intro.jsf?faces-redirect=true&urlName=" + getUrlName();
         case OPEN:
-          illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PLAYER);
+          illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PARTICIPANT);
           return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
         default:
           return "/error/access-denied.jsf";
@@ -66,15 +66,15 @@ public class IllusionEventDoJoinBackingBean {
           return "/error/access-denied.jsf";
         case INVITED:
           if (illusionEvent.getSignUpFee() == null) {
-            illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PLAYER);
+            illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
           } else {
             return "/illusion/group-payment.jsf?faces-redirect=true&urlName=" + getUrlName();
           }
         case PENDING_APPROVAL:
         case WAITING_PAYMENT:
           return "/illusion/event-intro.jsf?faces-redirect=true&urlName=" + getUrlName();
-        case GAMEMASTER:
-        case PLAYER:
+        case ORGANIZER:
+        case PARTICIPANT:
           return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
       }
     }

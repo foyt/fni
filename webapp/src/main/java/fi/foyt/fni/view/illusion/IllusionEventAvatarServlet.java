@@ -235,7 +235,7 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
         return;
       }
       
-      if (loggedParticipant.getRole() != IllusionEventParticipantRole.GAMEMASTER) {
+      if (loggedParticipant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
         return;
       }

@@ -41,7 +41,7 @@ public class IllusionEventParticipantRoleChangeListener {
   public void onParticipantAddedEvent(@Observes IllusionParticipantAddedEvent event) {
     IllusionEventParticipant groupMember = illusionEventController.findIllusionEventParticipantById(event.getMemberId());
     if (groupMember.getRole() == IllusionEventParticipantRole.PENDING_APPROVAL) {
-      List<IllusionEventParticipant> gamemasters = illusionEventController.listIllusionEventParticipantsByEventAndRole(groupMember.getEvent(), IllusionEventParticipantRole.GAMEMASTER);
+      List<IllusionEventParticipant> gamemasters = illusionEventController.listIllusionEventParticipantsByEventAndRole(groupMember.getEvent(), IllusionEventParticipantRole.ORGANIZER);
       String groupUrl = systemSettingsController.getSiteUrl(false, true);
       if (StringUtils.isNotBlank(groupUrl)) {
         groupUrl += "/illusion/group/" + groupMember.getEvent().getUrlName();
@@ -61,8 +61,8 @@ public class IllusionEventParticipantRoleChangeListener {
         case BANNED:
           sendDeclineMail(groupMember);
         break;
-        case GAMEMASTER:
-        case PLAYER:
+        case ORGANIZER:
+        case PARTICIPANT:
           sendAcceptMail(groupMember);
         break;
         case WAITING_PAYMENT:

@@ -56,12 +56,12 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
   
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
-    if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.GAMEMASTER)) {
+    if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
       return "/error/access-denied.jsf";
     }
 
-    gameMasters = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.GAMEMASTER);
-    players = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.PLAYER);
+    gameMasters = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.ORGANIZER);
+    players = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.PARTICIPANT);
     banned = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.BANNED);
     eventJoinMode = illusionEvent.getJoinMode();
     if (eventJoinMode == IllusionEventJoinMode.APPROVE) {

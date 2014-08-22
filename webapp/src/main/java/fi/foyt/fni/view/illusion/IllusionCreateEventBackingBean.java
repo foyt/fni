@@ -152,8 +152,8 @@ public class IllusionCreateEventBackingBean {
     illusionEventDocumentController.createIllusionEventDocument(loggedUser, IllusionEventDocumentType.INDEX, language, illusionEventFolder, "index", indexDocumentTitle, indexDocumentContent, MaterialPublicity.PRIVATE);
     illusionEventDocumentController.createIllusionEventDocument(loggedUser, IllusionEventDocumentType.INTRO, language, illusionEventFolder, "intro", introDocumentTitle, introDocumentContent, MaterialPublicity.PRIVATE);
     
-    // Add game master
-    illusionEventController.createIllusionEventParticipant(loggedUser, event, getUserNickname(loggedUser), IllusionEventParticipantRole.GAMEMASTER);
+    // Add organizer
+    illusionEventController.createIllusionEventParticipant(loggedUser, event, getUserNickname(loggedUser), IllusionEventParticipantRole.ORGANIZER);
     
     // Add bot 
     String botJid = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOT_JID);

@@ -60,8 +60,8 @@ public class IllusionEventIntroBackingBean extends AbstractIllusionEventBackingB
     if (participant != null) {
       memberRole = participant.getRole();
       switch (memberRole) {
-        case GAMEMASTER:
-        case PLAYER:
+        case ORGANIZER:
+        case PARTICIPANT:
           return "/illusion/event.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
         case BOT:
           throw new UnauthorizedException();

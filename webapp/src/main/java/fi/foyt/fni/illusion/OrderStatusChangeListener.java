@@ -54,7 +54,7 @@ public class OrderStatusChangeListener {
   		      IllusionEvent group = orderController.findOrderIllusionEvent(order);
   		      if (group != null) {
   		        IllusionEventParticipant member = illusionEventController.findIllusionEventParticipantByEventAndUser(group, order.getCustomer());
-    		      illusionEventController.updateIllusionEventParticipantRole(member, IllusionEventParticipantRole.PLAYER);
+    		      illusionEventController.updateIllusionEventParticipantRole(member, IllusionEventParticipantRole.PARTICIPANT);
     		      sendPaymentAcceptedMail(member);
   		      } else {
   		        logger.severe("Tried to lift illusion group member role to player for non-existing group");

@@ -22,7 +22,7 @@ import fi.foyt.fni.session.SessionController;
 public class IllusionEventAccessPermissionCheck implements PermissionCheckImplementation<String> {
   
   private static final IllusionEventParticipantRole[] DEFAULT_ROLES = {
-    IllusionEventParticipantRole.GAMEMASTER, IllusionEventParticipantRole.PLAYER
+    IllusionEventParticipantRole.ORGANIZER, IllusionEventParticipantRole.PARTICIPANT
   };
 
   @Inject

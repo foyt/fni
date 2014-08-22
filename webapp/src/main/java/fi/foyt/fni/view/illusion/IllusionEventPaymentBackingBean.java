@@ -125,8 +125,8 @@ public class IllusionEventPaymentBackingBean {
       case BOT:
       case PENDING_APPROVAL:
         return "/error/access-denied.jsf";
-      case GAMEMASTER:
-      case PLAYER:
+      case ORGANIZER:
+      case PARTICIPANT:
         return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
       case WAITING_PAYMENT:
       case INVITED:

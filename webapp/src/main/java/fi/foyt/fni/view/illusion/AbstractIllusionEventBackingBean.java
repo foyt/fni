@@ -41,7 +41,7 @@ public abstract class AbstractIllusionEventBackingBean {
     name = illusionEvent.getName();
     description = illusionEvent.getDescription();
     illusionFolderPath = folder.getPath();
-    mayManageEvent = participant != null ? participant.getRole() == IllusionEventParticipantRole.GAMEMASTER : false;
+    mayManageEvent = participant != null ? participant.getRole() == IllusionEventParticipantRole.ORGANIZER : false;
   
     return init(illusionEvent, participant);
   }
