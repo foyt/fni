@@ -12,7 +12,7 @@
           <h:panelGroup layout="block" styleClass="illusion-menu-help">#{locales['illusion.menu.materialMenuHelp']}</h:panelGroup>
           <h:panelGroup layout="block" styleClass="illusion-menu-items">
             <h:link outcome="/illusion/materials.jsf" value="#{locales['illusion.menu.materialShowMaterials']}">
-              <f:param name="urlName" value="#{groupUrlName}"/>
+              <f:param name="urlName" value="#{eventUrlName}"/>
             </h:link>
             <h:outputLink value="#{request.contextPath}/forge/folders/#{illusionFolderPath}" rendered="#{mayManageEvent}">
               <h:outputText value="#{locales['illusion.menu.materialEditMaterials']}"/>
@@ -29,7 +29,7 @@
           <h:panelGroup layout="block" styleClass="illusion-menu-help">#{locales['illusion.menu.settingsMenuHelp']}</h:panelGroup>
           <h:panelGroup layout="block" styleClass="illusion-menu-items">
             <h:link outcome="/illusion/members.jsf" value="#{locales['illusion.menu.settingsManageMembers']}" rendered="#{mayManageEvent}">
-              <f:param name="urlName" value="#{groupUrlName}"/>
+              <f:param name="urlName" value="#{eventUrlName}"/>
             </h:link>
           </h:panelGroup>
         </h:panelGroup>
