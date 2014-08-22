@@ -29,9 +29,9 @@ import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.images.ImageUtils;
 import fi.foyt.fni.view.AbstractFileServlet;
 
-@WebServlet(urlPatterns = "/illusion/groupAvatar/*", name = "illusion-groupavatar")
+@WebServlet(urlPatterns = "/illusion/eventAvatar/*", name = "illusion-eventavatar")
 @Transactional
-public class IllusionGroupAvatarServlet extends AbstractFileServlet {
+public class IllusionEventAvatarServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = 8109481247044843102L;
 	
@@ -65,8 +65,8 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
 	  }
 	  
-	  String groupUrlName = pathItems[0];
-	  Long memberId = NumberUtils.createLong(pathItems[1]);
+	  String eventUrlName = pathItems[0];
+	  Long participantId = NumberUtils.createLong(pathItems[1]);
 	  
 	  Integer size = NumberUtils.createInteger(request.getParameter("size"));
     if (size == null) {
@@ -79,36 +79,36 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
 	  }
 	  
-	  IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(groupUrlName);
+	  IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(eventUrlName);
 	  if (illusionEvent == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
 	  
-	  IllusionEventParticipant member = illusionEventController.findIllusionEventParticipantById(memberId);
-	  if (member == null) {
+	  IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
+	  if (participant == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
 	  
-    IllusionEvent group = illusionEventController.findIllusionEventByUrlName(groupUrlName);
-    if (group == null) {
+    IllusionEvent event = illusionEventController.findIllusionEventByUrlName(eventUrlName);
+    if (event == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
-    if (!group.getId().equals(member.getEvent().getId())) {
+    if (!event.getId().equals(participant.getEvent().getId())) {
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
       return;
     }
     
     TypedData profileImage = null;
     
-    IllusionEventParticipantImage image = illusionEventController.findIllusionEventParticipantImageByParticipant(member);
+    IllusionEventParticipantImage image = illusionEventController.findIllusionEventParticipantImageByParticipant(participant);
     if (image != null) {
       profileImage = new TypedData(image.getData(), image.getContentType(), image.getModified());
     } else {
-      User user = member.getUser();
+      User user = participant.getUser();
       if (user != null) {
         switch (user.getProfileImageSource()) {
           case FNI:
@@ -191,15 +191,15 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return;
     }
     
-    String groupUrlName = pathItems[0];
-    Long memberId = NumberUtils.createLong(pathItems[1]);
+    String eventUrlName = pathItems[0];
+    Long participantId = NumberUtils.createLong(pathItems[1]);
     
     if (!sessionController.isLoggedIn()) {
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
 
-    IllusionEvent event = illusionEventController.findIllusionEventByUrlName(groupUrlName);
+    IllusionEvent event = illusionEventController.findIllusionEventByUrlName(eventUrlName);
     if (event == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
@@ -222,7 +222,7 @@ public class IllusionGroupAvatarServlet extends AbstractFileServlet {
       return; 
 	  }
 	  
-	  IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(memberId);
+	  IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
 	  if (participant == null) {
 	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;

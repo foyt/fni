@@ -83,7 +83,7 @@
                 <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.players}">
                   <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-player">
                     <h:panelGroup layout="block" styleClass="illusion-event-participant-avatar"> 
-                      <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
+                      <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
                     </h:panelGroup>
                     <h4>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</h4>
                   </h:commandLink>      
@@ -95,7 +95,7 @@
               <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.gameMasters}">
                 <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-gamemaster">
                   <h:panelGroup layout="block" styleClass="illusion-event-participant-avatar"> 
-                    <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
+                    <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
                   </h:panelGroup>
                   <h4>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</h4>
                 </h:commandLink>      
@@ -107,7 +107,7 @@
                 <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.approvalPending}">
                   <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-approval-pending">
                     <h:panelGroup layout="block" styleClass="illusion-event-participant-avatar"> 
-                      <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
+                      <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
                     </h:panelGroup>
                     <h4>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</h4>
                   </h:commandLink>      
@@ -120,7 +120,7 @@
                 <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.waitingPayment}">
                   <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-waiting-payment">
                     <h:panelGroup layout="block" styleClass="illusion-event-participant-avatar"> 
-                      <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
+                      <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
                     </h:panelGroup>
                     <h4>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</h4>
                   </h:commandLink>      
@@ -133,7 +133,7 @@
                 <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.banned}">
                   <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-banned">
                     <h:panelGroup layout="block" styleClass="illusion-event-participant-avatar"> 
-                      <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
+                      <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
                     </h:panelGroup>
                     <h4>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</h4>
                   </h:commandLink>      
@@ -146,7 +146,7 @@
                 <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.invited}">
                   <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-invited">
                     <h:panelGroup layout="block" styleClass="illusion-event-participant-avatar"> 
-                      <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
+                      <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
                     </h:panelGroup>
                     <h4>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</h4>
                   </h:commandLink>      
@@ -162,7 +162,7 @@
         <h:panelGroup layout="block" styleClass="illusion-edit-participant-panel">
           <h:form>
             <h:panelGroup layout="block" styleClass="illusion-edit-participant-avatar"> 
-              <img src="#{request.contextPath}/illusion/groupAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{illusionEventParticipantsBackingBean.selectedParticipantId}?size=128"/> 
+              <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{illusionEventParticipantsBackingBean.selectedParticipantId}?size=128"/> 
             </h:panelGroup>
             
             <h2>#{illusionEventParticipantsBackingBean.selectedParticipantName}</h2>
