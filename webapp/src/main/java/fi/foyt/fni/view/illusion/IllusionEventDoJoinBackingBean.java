@@ -24,8 +24,8 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @RequestScoped
 @Named
 @Stateful
-@Join (path = "/illusion/group/{urlName}/dojoin", to = "/illusion/dojoin.jsf")
-public class IllusionGroupDoJoinBackingBean {
+@Join (path = "/illusion/event/{urlName}/dojoin", to = "/illusion/dojoin.jsf")
+public class IllusionEventDoJoinBackingBean {
 
   @Parameter
   private String urlName;
@@ -46,8 +46,8 @@ public class IllusionGroupDoJoinBackingBean {
     }
     
     User loggedUser = sessionController.getLoggedUser();
-    IllusionEventParticipant groupMember = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
-    if (groupMember == null) {
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
+    if (participant == null) {
       switch (illusionEvent.getJoinMode()) {
         case APPROVE:
           illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PENDING_APPROVAL);
@@ -60,13 +60,13 @@ public class IllusionGroupDoJoinBackingBean {
           return "/error/access-denied.jsf";
       }      
     } else {
-      switch (groupMember.getRole()) {
+      switch (participant.getRole()) {
         case BANNED:
         case BOT:
           return "/error/access-denied.jsf";
         case INVITED:
           if (illusionEvent.getSignUpFee() == null) {
-            illusionEventController.updateIllusionEventParticipantRole(groupMember, IllusionEventParticipantRole.PLAYER);
+            illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PLAYER);
           } else {
             return "/illusion/group-payment.jsf?faces-redirect=true&urlName=" + getUrlName();
           }

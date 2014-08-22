@@ -71,13 +71,13 @@ public class IllusionMembersBackingBean extends AbstractIllusionEventBackingBean
     waitingPayment = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.WAITING_PAYMENT);
     invited = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.INVITED);
     
-    String groupUrl = systemSettingsController.getSiteUrl(false, true);
-    if (StringUtils.isNotBlank(groupUrl)) {
-      groupUrl += "/illusion/group/" + illusionEvent.getUrlName();
+    String eventUrl = systemSettingsController.getSiteUrl(false, true);
+    if (StringUtils.isNotBlank(eventUrl)) {
+      eventUrl += "/illusion/event/" + illusionEvent.getUrlName();
     }
     
-    joinUrl = groupUrl + "/dojoin?ref=inv";
-    introUrl = groupUrl + "/intro?ref=inv";
+    joinUrl = eventUrl + "/dojoin?ref=inv";
+    introUrl = eventUrl + "/intro?ref=inv";
     
     return null;
   }
