@@ -62,7 +62,7 @@ public class IllusionIntroBackingBean extends AbstractIllusionEventBackingBean {
       switch (memberRole) {
         case GAMEMASTER:
         case PLAYER:
-          return "/illusion/group.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
+          return "/illusion/event.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
         case BOT:
           throw new UnauthorizedException();
         default:

@@ -29,9 +29,9 @@ import fi.foyt.fni.utils.data.FileData;
 @RequestScoped
 @Named
 @Stateful
-@Join (path = "/illusion/group/{urlName}", to = "/illusion/group.jsf")
+@Join (path = "/illusion/event/{urlName}", to = "/illusion/event.jsf")
 @LoggedIn
-public class IllusionGroupBackingBean extends AbstractIllusionEventBackingBean {
+public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
 
   @Parameter
   private String urlName;
@@ -78,7 +78,7 @@ public class IllusionGroupBackingBean extends AbstractIllusionEventBackingBean {
           indexText = new String(indexData.getData(), "UTF-8");
         }
       } catch (IOException | GeneralSecurityException e) {
-        logger.log(Level.WARNING, "Could not retreive group index text", e);
+        logger.log(Level.WARNING, "Could not retreive event index text", e);
       }
     }
     

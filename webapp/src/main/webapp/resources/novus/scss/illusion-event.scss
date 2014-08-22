@@ -4,7 +4,7 @@
 
 /* Panels */ 
 
-.illusion-group-panel {
+.illusion-event-panel {
   @include generic-panel;
   position: relative;
   background: #fff;
@@ -12,14 +12,14 @@
 
 /* Index */
 
-.illusion-group-index-text {
+.illusion-event-index-text {
   padding: 1in;
 }
 
-.illusion-group-index-text *:first-child {
+.illusion-event-index-text *:first-child {
   margin-top: 0px;
 }
 
-.illusion-group-index-text {
+.illusion-event-index-text {
   @include html-default-styles;
 }

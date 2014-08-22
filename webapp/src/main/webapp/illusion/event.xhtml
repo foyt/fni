@@ -3,8 +3,8 @@
   xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">
-    <h:outputFormat value="#{locales['illusion.group.pageTitle']}">
-      <f:param value="#{illusionGroupBackingBean.name}"/>
+    <h:outputFormat value="#{locales['illusion.event.pageTitle']}">
+      <f:param value="#{illusionEventBackingBean.name}"/>
     </h:outputFormat>
   </ui:define>
   
@@ -13,8 +13,8 @@
   
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    <h:outputStylesheet library="novus" name="css/illusion-group-common.css"/>
-    <h:outputStylesheet library="novus" name="css/illusion-group.css"/>
+    <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
+    <h:outputStylesheet library="novus" name="css/illusion-event.css"/>
   </ui:define>  
 
   <ui:define name="grid-content">
@@ -27,38 +27,38 @@
       
       <h:panelGroup layout="block" styleClass="view-header-navigation">
         <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/index.jsf">#{locales['illusion.group.navigationIndex']}</h:link>
+          <h:link outcome="/index.jsf">#{locales['illusion.event.navigationIndex']}</h:link>
         </h:panelGroup>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
         <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/index.jsf">#{locales['illusion.group.navigationIllusion']}</h:link>
+          <h:link outcome="/illusion/index.jsf">#{locales['illusion.event.navigationIllusion']}</h:link>
         </h:panelGroup>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
         <h:panelGroup styleClass="view-header-navigation-item">
-          <h:outputLink value="#{request.contextPath}/illusion/group/#{illusionGroupBackingBean.urlName}">#{illusionGroupBackingBean.name}</h:outputLink>
+          <h:outputLink value="#{request.contextPath}/illusion/event/#{illusionEventBackingBean.urlName}">#{illusionEventBackingBean.name}</h:outputLink>
         </h:panelGroup>
       </h:panelGroup>
   
       <!-- Description -->
   
       <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{illusionGroupBackingBean.name}</p>
-        <p class="view-header-description-text">#{illusionGroupBackingBean.description}</p>
+        <p class="view-header-description-title">#{illusionEventBackingBean.name}</p>
+        <p class="view-header-description-text">#{illusionEventBackingBean.description}</p>
       </h:panelGroup>
     </h:panelGroup>
 
     <!-- Content -->
 
     <ui:include src="/facelets/illusionmenu.xhtml">
-      <ui:param name="mayManageGroup" value="#{illusionGroupBackingBean.mayManageGroup}" />
-      <ui:param name="groupUrlName" value="#{illusionGroupBackingBean.urlName}" />
-      <ui:param name="illusionFolderPath" value="#{illusionGroupBackingBean.illusionFolderPath}" />
+      <ui:param name="mayManageGroup" value="#{illusionEventBackingBean.mayManageGroup}" />
+      <ui:param name="groupUrlName" value="#{illusionEventBackingBean.urlName}" />
+      <ui:param name="illusionFolderPath" value="#{illusionEventBackingBean.illusionFolderPath}" />
     </ui:include>
     
     <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="illusion-group-panel">
-        <h:panelGroup layout="block" styleClass="illusion-group-index-text">
-          <h:outputText value="#{illusionGroupBackingBean.indexText}" escape="false"/>
+      <h:panelGroup layout="block" styleClass="illusion-event-panel">
+        <h:panelGroup layout="block" styleClass="illusion-event-index-text">
+          <h:outputText value="#{illusionEventBackingBean.indexText}" escape="false"/>
         </h:panelGroup>
       </h:panelGroup>      
     </h:panelGroup>

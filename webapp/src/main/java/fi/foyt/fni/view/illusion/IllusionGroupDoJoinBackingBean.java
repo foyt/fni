@@ -55,7 +55,7 @@ public class IllusionGroupDoJoinBackingBean {
           return "/illusion/intro.jsf?faces-redirect=true&urlName=" + getUrlName();
         case OPEN:
           illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PLAYER);
-          return "/illusion/group.jsf?faces-redirect=true&urlName=" + getUrlName();
+          return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
         default:
           return "/error/access-denied.jsf";
       }      
@@ -75,7 +75,7 @@ public class IllusionGroupDoJoinBackingBean {
           return "/illusion/intro.jsf?faces-redirect=true&urlName=" + getUrlName();
         case GAMEMASTER:
         case PLAYER:
-          return "/illusion/group.jsf?faces-redirect=true&urlName=" + getUrlName();
+          return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
       }
     }
     

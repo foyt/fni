@@ -13,7 +13,7 @@
   
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    <h:outputStylesheet library="novus" name="css/illusion-group-common.css"/>
+    <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-materials.css"/>
   </ui:define>  
 
@@ -35,7 +35,7 @@
         </h:panelGroup>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
         <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/group.jsf">
+          <h:link outcome="/illusion/event.jsf">
             <f:param name="urlName" value="#{illusionMaterialsBackingBean.urlName}"/>
             <h:outputText value="#{illusionMaterialsBackingBean.name}" />
           </h:link>

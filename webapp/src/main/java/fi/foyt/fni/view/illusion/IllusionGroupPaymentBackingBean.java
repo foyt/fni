@@ -127,7 +127,7 @@ public class IllusionGroupPaymentBackingBean {
         return "/error/access-denied.jsf";
       case GAMEMASTER:
       case PLAYER:
-        return "/illusion/group.jsf?faces-redirect=true&urlName=" + getUrlName();
+        return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
       case WAITING_PAYMENT:
       case INVITED:
         return null;
