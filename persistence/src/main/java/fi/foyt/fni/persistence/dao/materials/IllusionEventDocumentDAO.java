@@ -12,7 +12,7 @@ import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
-import fi.foyt.fni.persistence.model.materials.IllusionGroupDocument_;
+import fi.foyt.fni.persistence.model.materials.IllusionEventDocument_;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.users.User;
 
@@ -48,8 +48,8 @@ public class IllusionEventDocumentDAO extends GenericDAO<IllusionEventDocument> 
     criteria.select(root);
     criteria.where(
       criteriaBuilder.and(
-        criteriaBuilder.equal(root.get(IllusionGroupDocument_.parentFolder), parentFolder),
-        criteriaBuilder.equal(root.get(IllusionGroupDocument_.documentType), documentType)
+        criteriaBuilder.equal(root.get(IllusionEventDocument_.parentFolder), parentFolder),
+        criteriaBuilder.equal(root.get(IllusionEventDocument_.documentType), documentType)
       )
     );
     

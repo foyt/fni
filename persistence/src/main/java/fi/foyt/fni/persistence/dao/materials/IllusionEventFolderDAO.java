@@ -10,7 +10,7 @@ import javax.persistence.criteria.Root;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
-import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder_;
+import fi.foyt.fni.persistence.model.materials.IllusionEventFolder_;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.users.User;
 
@@ -44,8 +44,8 @@ public class IllusionEventFolderDAO extends GenericDAO<IllusionEventFolder> {
     criteria.select(root);
     criteria.where(
       criteriaBuilder.and(
-        criteriaBuilder.equal(root.get(IllusionGroupFolder_.parentFolder), parentFolder),
-        criteriaBuilder.equal(root.get(IllusionGroupFolder_.urlName), urlName)
+        criteriaBuilder.equal(root.get(IllusionEventFolder_.parentFolder), parentFolder),
+        criteriaBuilder.equal(root.get(IllusionEventFolder_.urlName), urlName)
       )
     );
     
