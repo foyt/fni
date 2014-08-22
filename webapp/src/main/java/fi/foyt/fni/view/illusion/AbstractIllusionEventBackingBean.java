@@ -8,7 +8,7 @@ import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
-import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
+import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 
@@ -35,7 +35,7 @@ public abstract class AbstractIllusionEventBackingBean {
       member = illusionEventController.findIllusionGroupMemberByUserAndGroup(illusionEvent, loggedUser);
     }
     
-    IllusionGroupFolder folder = illusionEvent.getFolder();
+    IllusionEventFolder folder = illusionEvent.getFolder();
     
     id = illusionEvent.getId();
     name = illusionEvent.getName();

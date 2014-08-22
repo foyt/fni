@@ -25,7 +25,7 @@ import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantImageDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventSettingDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionFolderDAO;
-import fi.foyt.fni.persistence.dao.materials.IllusionGroupFolderDAO;
+import fi.foyt.fni.persistence.dao.materials.IllusionEventFolderDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
@@ -35,7 +35,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventSettingKey;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
-import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
+import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.users.User;
 
@@ -67,7 +67,7 @@ public class IllusionEventController {
   private IllusionFolderDAO illusionFolderDAO;
 
   @Inject
-  private IllusionGroupFolderDAO illusionGroupFolderDAO;
+  private IllusionEventFolderDAO illusionEventFolderDAO;
   
   @Inject
   private MaterialController materialController;
@@ -80,7 +80,7 @@ public class IllusionEventController {
   
   /* IllusionEvent */
 
-  public IllusionEvent createIllusionGroup(String urlName, String name, String description, String xmppRoom, IllusionGroupFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency) {
+  public IllusionEvent createIllusionGroup(String urlName, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency) {
     return illusionEventDAO.create(urlName, name, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency);
   }
 
@@ -237,10 +237,10 @@ public class IllusionEventController {
     return illusionFolder;
   }
   
-  /* IllusionGroupFolder */
+  /* IllusionEventFolder */
   
-  public IllusionGroupFolder createIllusionGroupFolder(User creator, IllusionFolder illusionFolder, String urlName, String title) {
-    return illusionGroupFolderDAO.create(creator, illusionFolder, urlName, title, MaterialPublicity.PRIVATE);
+  public IllusionEventFolder createIllusionGroupFolder(User creator, IllusionFolder illusionFolder, String urlName, String title) {
+    return illusionEventFolderDAO.create(creator, illusionFolder, urlName, title, MaterialPublicity.PRIVATE);
   }
 
 }

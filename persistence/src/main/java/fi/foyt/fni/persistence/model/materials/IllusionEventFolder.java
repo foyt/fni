@@ -8,9 +8,9 @@ import org.hibernate.search.annotations.Indexed;
 @Entity
 @PrimaryKeyJoinColumn (name="id")
 @Indexed
-public class IllusionGroupFolder extends Folder {
+public class IllusionEventFolder extends Folder {
   
-  public IllusionGroupFolder() {
+  public IllusionEventFolder() {
     setType(MaterialType.ILLUSION_GROUP_FOLDER);
   }
   

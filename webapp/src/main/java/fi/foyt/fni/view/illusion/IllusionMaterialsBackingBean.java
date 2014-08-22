@@ -18,7 +18,7 @@ import fi.foyt.fni.materials.MaterialTypeComparator;
 import fi.foyt.fni.materials.TitleComparator;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
-import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
+import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.Permission;
@@ -54,7 +54,7 @@ public class IllusionMaterialsBackingBean extends AbstractIllusionEventBackingBe
     }
 
     User loggedUser = sessionController.getLoggedUser();
-    IllusionGroupFolder folder = illusionEvent.getFolder();
+    IllusionEventFolder folder = illusionEvent.getFolder();
     
     materials = materialController.listMaterialsByFolderAndTypes(loggedUser, folder, Arrays.asList(
       MaterialType.DOCUMENT,

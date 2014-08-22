@@ -9,38 +9,38 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
-import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
+import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder_;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.users.User;
 
-public class IllusionGroupFolderDAO extends GenericDAO<IllusionGroupFolder> {
+public class IllusionEventFolderDAO extends GenericDAO<IllusionEventFolder> {
 
   private static final long serialVersionUID = -4644199519384824575L;
 
-  public IllusionGroupFolder create(User creator, IllusionFolder parentFolder, String urlName, String title, MaterialPublicity publicity) {
+  public IllusionEventFolder create(User creator, IllusionFolder parentFolder, String urlName, String title, MaterialPublicity publicity) {
     Date now = new Date();
 
-    IllusionGroupFolder illusionGroupFolder = new IllusionGroupFolder();
-    illusionGroupFolder.setCreated(now);
-    illusionGroupFolder.setCreator(creator);
-    illusionGroupFolder.setLanguage(null);
-    illusionGroupFolder.setModified(now);
-    illusionGroupFolder.setModifier(creator);
-    illusionGroupFolder.setParentFolder(parentFolder);
-    illusionGroupFolder.setPublicity(publicity);
-    illusionGroupFolder.setTitle(title);
-    illusionGroupFolder.setUrlName(urlName);
+    IllusionEventFolder illusionEventFolder = new IllusionEventFolder();
+    illusionEventFolder.setCreated(now);
+    illusionEventFolder.setCreator(creator);
+    illusionEventFolder.setLanguage(null);
+    illusionEventFolder.setModified(now);
+    illusionEventFolder.setModifier(creator);
+    illusionEventFolder.setParentFolder(parentFolder);
+    illusionEventFolder.setPublicity(publicity);
+    illusionEventFolder.setTitle(title);
+    illusionEventFolder.setUrlName(urlName);
     
-    return persist(illusionGroupFolder);
+    return persist(illusionEventFolder);
   }
 
-  public IllusionGroupFolder findByParentFolderAndUrlName(IllusionFolder parentFolder, String urlName) {
+  public IllusionEventFolder findByParentFolderAndUrlName(IllusionFolder parentFolder, String urlName) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<IllusionGroupFolder> criteria = criteriaBuilder.createQuery(IllusionGroupFolder.class);
-    Root<IllusionGroupFolder> root = criteria.from(IllusionGroupFolder.class);
+    CriteriaQuery<IllusionEventFolder> criteria = criteriaBuilder.createQuery(IllusionEventFolder.class);
+    Root<IllusionEventFolder> root = criteria.from(IllusionEventFolder.class);
     criteria.select(root);
     criteria.where(
       criteriaBuilder.and(

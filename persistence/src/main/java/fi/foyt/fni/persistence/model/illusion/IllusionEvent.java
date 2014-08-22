@@ -19,7 +19,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
+import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 
 @Entity
 @Cacheable (true)
@@ -70,11 +70,11 @@ public class IllusionEvent {
     this.created = created;
   }
   
-  public IllusionGroupFolder getFolder() {
+  public IllusionEventFolder getFolder() {
     return folder;
   }
   
-  public void setFolder(IllusionGroupFolder folder) {
+  public void setFolder(IllusionEventFolder folder) {
     this.folder = folder;
   }
   
@@ -129,7 +129,7 @@ public class IllusionEvent {
   private String xmppRoom;
   
   @OneToOne
-  private IllusionGroupFolder folder;
+  private IllusionEventFolder folder;
   
   @Enumerated (EnumType.STRING)
   @Column (nullable = false)

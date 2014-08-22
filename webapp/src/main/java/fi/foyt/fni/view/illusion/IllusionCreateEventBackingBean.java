@@ -22,7 +22,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocumentType;
-import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
+import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
@@ -141,16 +141,16 @@ public class IllusionCreateEventBackingBean {
     }
 
     IllusionFolder illusionFolder = illusionEventController.findUserIllusionFolder(loggedUser, true);
-    IllusionGroupFolder illusionGroupFolder = illusionEventController.createIllusionGroupFolder(loggedUser, illusionFolder, urlName, getName());
-    IllusionEvent event = illusionEventController.createIllusionGroup(urlName, getName(), getDescription(), xmppRoom, illusionGroupFolder, getJoinMode(), now, signUpFee, signUpFeeCurrency);
+    IllusionEventFolder illusionEventFolder = illusionEventController.createIllusionGroupFolder(loggedUser, illusionFolder, urlName, getName());
+    IllusionEvent event = illusionEventController.createIllusionGroup(urlName, getName(), getDescription(), xmppRoom, illusionEventFolder, getJoinMode(), now, signUpFee, signUpFeeCurrency);
     
     String indexDocumentTitle = FacesUtils.getLocalizedValue("illusion.createEvent.indexDocumentTitle");
     String indexDocumentContent = FacesUtils.getLocalizedValue("illusion.createEvent.indexDocumentContent");
     String introDocumentTitle = FacesUtils.getLocalizedValue("illusion.createEvent.introDocumentTitle");
     String introDocumentContent = FacesUtils.getLocalizedValue("illusion.createEvent.introDocumentContent");
     
-    illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionGroupDocumentType.INDEX, language, illusionGroupFolder, "index", indexDocumentTitle, indexDocumentContent, MaterialPublicity.PRIVATE);
-    illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionGroupDocumentType.INTRO, language, illusionGroupFolder, "intro", introDocumentTitle, introDocumentContent, MaterialPublicity.PRIVATE);
+    illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionGroupDocumentType.INDEX, language, illusionEventFolder, "index", indexDocumentTitle, indexDocumentContent, MaterialPublicity.PRIVATE);
+    illusionGroupDocumentController.createIllusionGroupDocument(loggedUser, IllusionGroupDocumentType.INTRO, language, illusionEventFolder, "intro", introDocumentTitle, introDocumentContent, MaterialPublicity.PRIVATE);
     
     // Add game master
     illusionEventController.createIllusionGroupMember(loggedUser, event, getUserNickname(loggedUser), IllusionEventParticipantRole.GAMEMASTER);

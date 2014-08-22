@@ -19,7 +19,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionGroupDocumentType;
-import fi.foyt.fni.persistence.model.materials.IllusionGroupFolder;
+import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.SecurityContext;
@@ -67,7 +67,7 @@ public class IllusionGroupBackingBean extends AbstractIllusionEventBackingBean {
       break;
     }
     
-    IllusionGroupFolder folder = illusionEvent.getFolder();
+    IllusionEventFolder folder = illusionEvent.getFolder();
     User loggedUser = sessionController.getLoggedUser();
     
     IllusionGroupDocument indexDocument = illusionGroupDocumentController.findByFolderAndDocumentType(folder, IllusionGroupDocumentType.INDEX);
