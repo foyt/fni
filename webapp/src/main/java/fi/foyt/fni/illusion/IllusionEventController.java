@@ -162,7 +162,7 @@ public class IllusionEventController {
       return userSetting.getValue();
     }
     
-    IllusionEventSetting eventSetting = illusionEventSettingDAO.findByUserAndKey(participant.getEvent(), key);
+    IllusionEventSetting eventSetting = illusionEventSettingDAO.findByEventAndKey(participant.getEvent(), key);
     if (eventSetting != null) {
       return eventSetting.getValue();
     }

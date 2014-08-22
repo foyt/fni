@@ -17,12 +17,12 @@ public class IllusionEventSetting {
     return id;
   }
   
-  public IllusionEvent getGroup() {
-    return group;
+  public IllusionEvent getEvent() {
+    return event;
   }
   
-  public void setGroup(IllusionEvent group) {
-    this.group = group;
+  public void setEvent(IllusionEvent event) {
+    this.event = event;
   }
   
   public IllusionEventSettingKey getKey() {
@@ -46,7 +46,7 @@ public class IllusionEventSetting {
   private Long id;
 
   @ManyToOne
-  private IllusionEvent group;
+  private IllusionEvent event;
   
   @Enumerated (EnumType.STRING)
   @NotNull

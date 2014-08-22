@@ -17,17 +17,17 @@ public class IllusionEventSettingDAO extends GenericDAO<IllusionEventSetting> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionEventSetting create(IllusionEvent group, IllusionEventSettingKey key, String value) {
-	  IllusionEventSetting illusionGroupUserSetting = new IllusionEventSetting();
+	public IllusionEventSetting create(IllusionEvent event, IllusionEventSettingKey key, String value) {
+	  IllusionEventSetting illusionEventSetting = new IllusionEventSetting();
 
-    illusionGroupUserSetting.setKey(key);
-    illusionGroupUserSetting.setGroup(group);
-    illusionGroupUserSetting.setValue(value);
+    illusionEventSetting.setKey(key);
+    illusionEventSetting.setEvent(event);
+    illusionEventSetting.setValue(value);
 
-		return persist(illusionGroupUserSetting);
+		return persist(illusionEventSetting);
 	}
 
-  public IllusionEventSetting findByUserAndKey(IllusionEvent group, IllusionEventSettingKey key) {
+  public IllusionEventSetting findByEventAndKey(IllusionEvent event, IllusionEventSettingKey key) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -36,7 +36,7 @@ public class IllusionEventSettingDAO extends GenericDAO<IllusionEventSetting> {
     criteria.select(root);
     criteria.where(
       criteriaBuilder.and(
-        criteriaBuilder.equal(root.get(IllusionEventSetting_.group), group),
+        criteriaBuilder.equal(root.get(IllusionEventSetting_.event), event),
         criteriaBuilder.equal(root.get(IllusionEventSetting_.key), key)
       )
     );
@@ -44,7 +44,7 @@ public class IllusionEventSettingDAO extends GenericDAO<IllusionEventSetting> {
     return getSingleResult(entityManager.createQuery(criteria));
   }
 
-  public List<IllusionEventSetting> listByGroup(IllusionEvent group) {
+  public List<IllusionEventSetting> listByEvent(IllusionEvent event) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -52,7 +52,7 @@ public class IllusionEventSettingDAO extends GenericDAO<IllusionEventSetting> {
     Root<IllusionEventSetting> root = criteria.from(IllusionEventSetting.class);
     criteria.select(root);
     criteria.where(
-      criteriaBuilder.equal(root.get(IllusionEventSetting_.group), group)
+      criteriaBuilder.equal(root.get(IllusionEventSetting_.event), event)
     );
 
     return entityManager.createQuery(criteria).getResultList();
