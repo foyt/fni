@@ -57,17 +57,17 @@ public class OrderStatusChangeListener {
     		      illusionEventController.updateIllusionEventParticipantRole(member, IllusionEventParticipantRole.PARTICIPANT);
     		      sendPaymentAcceptedMail(member);
   		      } else {
-  		        logger.severe("Tried to lift illusion group member role to player for non-existing group");
+  		        logger.severe("Tried to lift illusion group member role to participant for non-existing group");
   		      }
   		    break;
   		    case GAMELIBRARY_BOOK:
   		    break;
   		  }
   		} else {
-  			logger.severe("Tried to lift illusion group member role to player for non-existing order");
+  			logger.severe("Tried to lift illusion group member role to participant for non-existing order");
   		}
 		} else {
-      logger.severe("Tried to lift illusion group member role to player for non-existing order");
+      logger.severe("Tried to lift illusion group member role to participant for non-existing order");
 		}
 	}
 	
