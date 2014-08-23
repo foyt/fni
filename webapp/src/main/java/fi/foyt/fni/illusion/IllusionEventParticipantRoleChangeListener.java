@@ -39,16 +39,16 @@ public class IllusionEventParticipantRoleChangeListener {
   private Mailer mailer;
   
   public void onParticipantAddedEvent(@Observes IllusionParticipantAddedEvent event) {
-    IllusionEventParticipant groupMember = illusionEventController.findIllusionEventParticipantById(event.getMemberId());
-    if (groupMember.getRole() == IllusionEventParticipantRole.PENDING_APPROVAL) {
-      List<IllusionEventParticipant> gamemasters = illusionEventController.listIllusionEventParticipantsByEventAndRole(groupMember.getEvent(), IllusionEventParticipantRole.ORGANIZER);
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(event.getMemberId());
+    if (participant.getRole() == IllusionEventParticipantRole.PENDING_APPROVAL) {
+      List<IllusionEventParticipant> organizers = illusionEventController.listIllusionEventParticipantsByEventAndRole(participant.getEvent(), IllusionEventParticipantRole.ORGANIZER);
       String groupUrl = systemSettingsController.getSiteUrl(false, true);
       if (StringUtils.isNotBlank(groupUrl)) {
-        groupUrl += "/illusion/group/" + groupMember.getEvent().getUrlName();
+        groupUrl += "/illusion/group/" + participant.getEvent().getUrlName();
       }
       
-      for (IllusionEventParticipant gamemaster : gamemasters) {
-        sendGroupJoinRequestMail(groupUrl, groupMember, gamemaster);
+      for (IllusionEventParticipant organizer : organizers) {
+        sendGroupJoinRequestMail(groupUrl, participant, organizer);
       }
     }
   }
@@ -99,10 +99,10 @@ public class IllusionEventParticipantRoleChangeListener {
     }
   }
 
-  private void sendGroupJoinRequestMail(String groupUrl, IllusionEventParticipant groupMember, IllusionEventParticipant gamemaster) {
+  private void sendGroupJoinRequestMail(String groupUrl, IllusionEventParticipant groupMember, IllusionEventParticipant organizers) {
     String groupName = groupMember.getEvent().getName();
 
-    User master = gamemaster.getUser();
+    User master = organizers.getUser();
     Locale masterLocale = LocaleUtils.toLocale(master.getLocale());
     String masterMail = userController.getUserPrimaryEmail(master);
     String masterName = master.getFullName();

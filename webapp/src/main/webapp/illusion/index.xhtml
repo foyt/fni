@@ -43,34 +43,33 @@
 
     <h:panelGroup layout="block" styleClass="grid_16 tight">
       <h:panelGroup layout="block" styleClass="illusion-index-panel">
+
+        <h:link styleClass="illusion-index-create-event-link" outcome="/illusion/createevent.jsf" value="#{locales['illusion.index.createEvent']}"/>
       
-        <h:panelGroup layout="block" styleClass="illusion-index-group-list">
-          <h3>#{locales['illusion.index.gameMasterGroupsTitle']}</h3>
-          <h:link styleClass="illusion-index-create-group-link" outcome="/illusion/createevent.jsf" value="#{locales['illusion.index.createEvent']}"/>
-          <ui:repeat var="group" value="#{illusionIndexBackingBean.gameMasterGroups}">
-            <ui:include src="/facelets/illusionindexgroup.xhtml">
-              <ui:param name="group" value="#{group}" />
-            </ui:include>
-          </ui:repeat>
-          
-          <h:panelGroup layout="block" styleClass="illusion-index-group-list-empty" rendered="#{illusionIndexBackingBean.gameMasterGroups.isEmpty()}">
-            #{locales['illusion.index.gameMasterGroupsEmptyMessage']}  
-          </h:panelGroup>   
+        <h:panelGroup layout="block" styleClass="illusion-index-event-list">
+          <ui:fragment rendered="#{not empty illusionIndexBackingBean.organizingEvents}">
+            <h3>#{locales['illusion.index.organizerEventsTitle']}</h3>
+            <ui:repeat var="event" value="#{illusionIndexBackingBean.organizingEvents}">
+              <ui:include src="/facelets/illusionindexevent.xhtml">
+                <ui:param name="event" value="#{event}" />
+              </ui:include>
+            </ui:repeat>
+          </ui:fragment>
         </h:panelGroup>    
         
-        <h:panelGroup layout="block" styleClass="illusion-index-group-list">
-          <h3>#{locales['illusion.index.playerGroupsTitle']}</h3>
+        <h:panelGroup layout="block" styleClass="illusion-index-event-list">
+          <h3>#{locales['illusion.index.eventsTitle']}</h3>
     
-          <ui:repeat var="group" value="#{illusionIndexBackingBean.playerGroups}">
-            <ui:include src="/facelets/illusionindexgroup.xhtml">
-              <ui:param name="group" value="#{group}" />
+          <ui:repeat var="event" value="#{illusionIndexBackingBean.events}">
+            <ui:include src="/facelets/illusionindexevent.xhtml">
+              <ui:param name="event" value="#{event}" />
             </ui:include>
           </ui:repeat>
   
-          <h:panelGroup layout="block" styleClass="illusion-index-group-list-empty" rendered="#{illusionIndexBackingBean.playerGroups.isEmpty()}">
-            #{locales['illusion.index.playerGroupsEmptyMessage']}  
+          <h:panelGroup layout="block" styleClass="illusion-index-event-list-empty" rendered="#{empty illusionIndexBackingBean.events}">
+            #{locales['illusion.index.eventsEmptyMessage']}  
           </h:panelGroup>       
-          
+
         </h:panelGroup>  
       
       </h:panelGroup>    

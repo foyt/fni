@@ -2,7 +2,7 @@
 @import "compass";
 @import "styles";
 
-$group-border-color: rgb(71, 176, 176);
+$event-border-color: rgb(71, 176, 176);
 
 /* Panel */ 
 
@@ -17,29 +17,29 @@ h3 {
   @include header-2;
 }
 
-.illusion-index-create-group-link {
+.illusion-index-create-event-link {
   @include header-3;
   text-decoration: none;
   color: $title-color;
   display: block;
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-.illusion-index-group-list {
+.illusion-index-event-list {
   padding-bottom: 20px;
 }
 
-.illusion-index-group {
+.illusion-index-event {
   padding-top: 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid $group-border-color;
+  border-bottom: 1px solid $event-border-color;
 }
 
-.illusion-index-group-list-empty {
+.illusion-index-event-list-empty {
   margin-top: 20px;
 }
 
-.illusion-index-group-name {
+.illusion-index-event-name {
   font-size: 16px;
   font-family: $default-font;
   margin-bottom: 5px;
@@ -49,19 +49,19 @@ h3 {
   display: block;
 }
 
-.illusion-index-group-info {
+.illusion-index-event-info {
   float: right;
   text-align: right;
 }
 
-.illusion-index-group-players, .illusion-index-group-created {
+.illusion-index-event-participants, .illusion-index-event-created {
   font-size: 13px;
   font-family: $default-font;
   color: $default-color;
   font-weight: bold;
 }
 
-.illusion-index-group-description {
+.illusion-index-event-description {
   font-family: $default-font;
   font-size: 13px;
   width: 700px;

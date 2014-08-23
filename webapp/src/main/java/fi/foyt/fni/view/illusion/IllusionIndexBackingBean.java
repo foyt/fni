@@ -38,24 +38,24 @@ public class IllusionIndexBackingBean {
       return "/index.jsf?faces-redirect=true";
     }
     
-    gameMasterGroups = illusionEventController.listIllusionEventsByUserAndRole(loggedUser, IllusionEventParticipantRole.ORGANIZER);
-    playerGroups = illusionEventController.listIllusionEventsByUserAndRole(loggedUser, IllusionEventParticipantRole.PARTICIPANT);
+    organizingEvents = illusionEventController.listIllusionEventsByUserAndRole(loggedUser, IllusionEventParticipantRole.ORGANIZER);
+    events = illusionEventController.listIllusionEventsByUserAndRole(loggedUser, IllusionEventParticipantRole.PARTICIPANT);
     
     return null;
   }
   
-  public List<IllusionEvent> getGameMasterGroups() {
-    return gameMasterGroups;
+  public List<IllusionEvent> getOrganizingEvents() {
+    return organizingEvents;
   }
   
-  public List<IllusionEvent> getPlayerGroups() {
-    return playerGroups;
+  public List<IllusionEvent> getEvents() {
+    return events;
   }
   
-  public Long getGroupPlayerCount(IllusionEvent group) {
+  public Long getEventParticipantCount(IllusionEvent group) {
     return illusionEventController.countIllusionEventParticipantsByEventAndRole(group, IllusionEventParticipantRole.PARTICIPANT);
   }
   
-  private List<IllusionEvent> gameMasterGroups;
-  private List<IllusionEvent> playerGroups;
+  private List<IllusionEvent> organizingEvents;
+  private List<IllusionEvent> events;
 }
