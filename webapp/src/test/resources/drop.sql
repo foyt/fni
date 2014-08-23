@@ -94,32 +94,32 @@ alter table FriendConfirmKey
 alter table GoogleDocument 
     drop constraint FK_rohgbl8frsua16jnumxo9y7gq if exists;
 
+alter table IllusionEvent 
+    drop constraint FK_pnx62d5p6cd30kcm5h7juxedh if exists;
+
+alter table IllusionEventDocument 
+    drop constraint FK_fve30yc3ynmjb6vv16bbwl9fg if exists;
+
+alter table IllusionEventFolder 
+    drop constraint FK_7oupprekwkv2de8e800s3uvhd if exists;
+
+alter table IllusionEventParticipant 
+    drop constraint FK_rx0fsg3gh29ufysfcy17179va if exists;
+
+alter table IllusionEventParticipant 
+    drop constraint FK_1mvh1yu0u4nygql9wvjoqlotw if exists;
+
+alter table IllusionEventParticipantImage 
+    drop constraint FK_ejrnsfjokg9qttd3mkr7w9gr6 if exists;
+
+alter table IllusionEventParticipantSetting 
+    drop constraint FK_khs05wuhk2wd1fen2l3ckhxpc if exists;
+
+alter table IllusionEventSetting 
+    drop constraint FK_c0yxx6dlxdp2v1x378onaowyg if exists;
+
 alter table IllusionFolder 
     drop constraint FK_qieidhiuhk09j5m6l6pqkt0a5 if exists;
-
-alter table IllusionGroup 
-    drop constraint FK_1ccfwpe2ygxulx35ykxspqsmq if exists;
-
-alter table IllusionGroupDocument 
-    drop constraint FK_i1ctgxnegc2wvdcdfwm9oruo6 if exists;
-
-alter table IllusionGroupFolder 
-    drop constraint FK_qye4g9cukldbot5k5u0w6k8en if exists;
-
-alter table IllusionGroupMember 
-    drop constraint FK_4ney1jxmm0a7qsavn23n11pbc if exists;
-
-alter table IllusionGroupMember 
-    drop constraint FK_9ok316p3y0mvfqf167cudt5xu if exists;
-
-alter table IllusionGroupMemberImage 
-    drop constraint FK_lk3e3jpg8ky1bl1kxb1ce3oat if exists;
-
-alter table IllusionGroupMemberSetting 
-    drop constraint FK_af78vixxjq03nocl2xt85ym3w if exists;
-
-alter table IllusionGroupSetting 
-    drop constraint FK_hdqeshicq23nolw9j160rpl0a if exists;
 
 alter table Image 
     drop constraint FK_9xcia6idnwqdi9xx8ytea40h3 if exists;
@@ -185,7 +185,7 @@ alter table MessageFolder
     drop constraint FK_o3f1777quj13cge2kd7llwoar if exists;
 
 alter table OrderItem 
-    drop constraint FK_fkri6q4oaft141fa93qhilx9w if exists;
+    drop constraint FK_lofm76ekoru7fjp5xtnm2lhb6 if exists;
 
 alter table OrderItem 
     drop constraint FK_6cxptya5vldowhtfdxs70ytw1 if exists;
@@ -369,21 +369,21 @@ drop table GameLibraryTag if exists;
 
 drop table GoogleDocument if exists;
 
+drop table IllusionEvent if exists;
+
+drop table IllusionEventDocument if exists;
+
+drop table IllusionEventFolder if exists;
+
+drop table IllusionEventParticipant if exists;
+
+drop table IllusionEventParticipantImage if exists;
+
+drop table IllusionEventParticipantSetting if exists;
+
+drop table IllusionEventSetting if exists;
+
 drop table IllusionFolder if exists;
-
-drop table IllusionGroup if exists;
-
-drop table IllusionGroupDocument if exists;
-
-drop table IllusionGroupFolder if exists;
-
-drop table IllusionGroupMember if exists;
-
-drop table IllusionGroupMemberImage if exists;
-
-drop table IllusionGroupMemberSetting if exists;
-
-drop table IllusionGroupSetting if exists;
 
 drop table Image if exists;
 
