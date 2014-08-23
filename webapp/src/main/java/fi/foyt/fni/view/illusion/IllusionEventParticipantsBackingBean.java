@@ -38,7 +38,7 @@ import fi.foyt.fni.users.UserController;
 @Secure (value = Permission.ILLUSION_EVENT_ACCESS, deferred = true)
 @SecurityContext (context = "@urlName")
 @SecurityParams ({
-  @SecurityParam (name = "roles", value = "GAMEMASTER")
+  @SecurityParam (name = "roles", value = "ORGANIZER")
 })
 public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventBackingBean {
 
@@ -60,8 +60,8 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
       return "/error/access-denied.jsf";
     }
 
-    gameMasters = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.ORGANIZER);
-    players = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.PARTICIPANT);
+    organizers = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.ORGANIZER);
+    participants = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.PARTICIPANT);
     banned = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.BANNED);
     eventJoinMode = illusionEvent.getJoinMode();
     if (eventJoinMode == IllusionEventJoinMode.APPROVE) {
@@ -86,7 +86,7 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
   @Deferred
   @IgnorePostback
   public void setDefaults() {
-    selectParticipant(approvalPending != null && approvalPending.size() > 0 ? approvalPending.get(0) : players.size() > 0 ? players.get(0) : gameMasters.get(0));
+    selectParticipant(approvalPending != null && approvalPending.size() > 0 ? approvalPending.get(0) : participants.size() > 0 ? participants.get(0) : organizers.get(0));
   }
   
   @Override
@@ -98,12 +98,12 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
     this.urlName = urlName;
   }
   
-  public List<IllusionEventParticipant> getGameMasters() {
-    return gameMasters;
+  public List<IllusionEventParticipant> getOrganizers() {
+    return organizers;
   }
   
-  public List<IllusionEventParticipant> getPlayers() {
-    return players;
+  public List<IllusionEventParticipant> getParticipants() {
+    return participants;
   }
 
   public List<IllusionEventParticipant> getApprovalPending() {
@@ -205,8 +205,8 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
     return "<" + userController.getUserPrimaryEmail(user) + ">";
   }
   
-  private List<IllusionEventParticipant> gameMasters;
-  private List<IllusionEventParticipant> players;
+  private List<IllusionEventParticipant> organizers;
+  private List<IllusionEventParticipant> participants;
   private List<IllusionEventParticipant> banned;
   private List<IllusionEventParticipant> approvalPending;
   private List<IllusionEventParticipant> waitingPayment;
