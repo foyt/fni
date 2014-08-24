@@ -1,5 +1,6 @@
 package fi.foyt.fni.view;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import javax.ejb.Stateful;
@@ -24,6 +25,10 @@ public class SessionBackingBean {
 	@Inject
 	private UserController userController;
 	
+	public void init() {
+	  newLocale = sessionController.getLocale().toString();
+	}
+	
 	public boolean isLoggedIn() {
 		return sessionController.isLoggedIn();
 	}
@@ -45,8 +50,17 @@ public class SessionBackingBean {
 		return sessionController.getLocale();
 	}
 	
-	public void changeLanguage(String language) {
-		sessionController.setLocale(LocaleUtils.toLocale(language));
+	public String getNewLocale() {
+    return newLocale;
+  }
+	
+	public void setNewLocale(String newLocale) {
+    this.newLocale = newLocale;
+  }
+	
+	public void changeLocale() throws IOException {
+		sessionController.setLocale(LocaleUtils.toLocale(getNewLocale()));
 	}
 	
+	private String newLocale;
 }
