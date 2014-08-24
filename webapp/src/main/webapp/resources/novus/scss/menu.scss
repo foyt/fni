@@ -179,7 +179,7 @@ $menu-z-index: 9999;
   z-index: $menu-z-index;
 }
 
-.menu-tools-locale-list ul a, .menu-tools-account-list ul a, .menu-about-list a {
+.menu-tools-locale-list li a, .menu-tools-account-list li a, .menu-about-list a {
   color: $menu-text-color;
   padding: 8px;
   font-size: 13px;
@@ -187,7 +187,7 @@ $menu-z-index: 9999;
   @include box-sizing(border-box);
 }
 
-.menu-tools-locale-list ul a:hover, .menu-tools-account-list ul a:hover, .menu-about-list a:hover {
+.menu-tools-locale-list li a:hover, .menu-tools-account-list li a:hover, .menu-about-list a:hover {
   color:$menu-text-color-hover;
   background: $menu-background-color-hover;
 }

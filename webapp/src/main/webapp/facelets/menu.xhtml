@@ -28,18 +28,18 @@
       
       <h:panelGroup layout="block" styleClass="menu-about-container">
         <h:outputLink value="javascript:void(null)" styleClass="menu-about">#{locales['menu.menuAbout']}</h:outputLink>
-        <li class="menu-about-list" style="display: none">
-          <ul><h:outputLink value="#{request.contextPath}/about#vision">#{locales['menu.menuAboutVision']}</h:outputLink></ul>
-          <ul><h:outputLink value="#{request.contextPath}/about#information">#{locales['menu.menuAboutInformation']}</h:outputLink></ul>
-          <ul><h:outputLink value="#{request.contextPath}/about#forum">#{locales['menu.menuAboutForum']}</h:outputLink></ul>
-          <ul><h:outputLink value="#{request.contextPath}/about#distribution">#{locales['menu.menuAboutDistribution']}</h:outputLink></ul>
-          <ul><h:outputLink value="#{request.contextPath}/about#gameplay">#{locales['menu.menuAboutGameplay']}</h:outputLink></ul>
-          <ul><h:outputLink value="#{request.contextPath}/about#history">#{locales['menu.menuAboutHistory']}</h:outputLink></ul>
-          <ul><h:outputLink value="#{request.contextPath}/about#cookies">#{locales['menu.menuAboutCookies']}</h:outputLink></ul>
-          <ul><h:outputLink value="#{request.contextPath}/about#opensource">#{locales['menu.menuAboutOpenSource']}</h:outputLink></ul>
-          <ul><h:outputLink value="#{request.contextPath}/about#contact">#{locales['menu.menuAboutContact']}</h:outputLink></ul>
-          <ul><h:outputLink value="#{request.contextPath}/about#acknowledgements">#{locales['menu.menuAboutAcknowledgements']}</h:outputLink></ul>
-        </li>
+        <ul class="menu-about-list" style="display: none">
+          <li><h:outputLink value="#{request.contextPath}/about#vision">#{locales['menu.menuAboutVision']}</h:outputLink></li>
+          <li><h:outputLink value="#{request.contextPath}/about#information">#{locales['menu.menuAboutInformation']}</h:outputLink></li>
+          <li><h:outputLink value="#{request.contextPath}/about#forum">#{locales['menu.menuAboutForum']}</h:outputLink></li>
+          <li><h:outputLink value="#{request.contextPath}/about#distribution">#{locales['menu.menuAboutDistribution']}</h:outputLink></li>
+          <li><h:outputLink value="#{request.contextPath}/about#gameplay">#{locales['menu.menuAboutGameplay']}</h:outputLink></li>
+          <li><h:outputLink value="#{request.contextPath}/about#history">#{locales['menu.menuAboutHistory']}</h:outputLink></li>
+          <li><h:outputLink value="#{request.contextPath}/about#cookies">#{locales['menu.menuAboutCookies']}</h:outputLink></li>
+          <li><h:outputLink value="#{request.contextPath}/about#opensource">#{locales['menu.menuAboutOpenSource']}</h:outputLink></li>
+          <li><h:outputLink value="#{request.contextPath}/about#contact">#{locales['menu.menuAboutContact']}</h:outputLink></li>
+          <li><h:outputLink value="#{request.contextPath}/about#acknowledgements">#{locales['menu.menuAboutAcknowledgements']}</h:outputLink></li>
+        </ul>
       </h:panelGroup>
     </h:panelGroup>
     
@@ -52,19 +52,19 @@
         </h:outputLink>
         
         <h:form>
-          <li class="menu-tools-locale-list" style="display: none">
-            <ul>
+          <ul class="menu-tools-locale-list" style="display: none">
+            <li>
               <h:commandLink action="#{sessionBackingBean.changeLocale('fi')}" value="#{locales['menu.toolLocaleFinnish']}">
                 <f:ajax onevent="onChangeLocale" execute="@form"/>
               </h:commandLink>
-            </ul>
+            </li>
             
-            <ul>
+            <li>
               <h:commandLink action="#{sessionBackingBean.changeLocale('en')}" value="#{locales['menu.toolLocaleEnglish']}">
                 <f:ajax onevent="onChangeLocale" execute="@form"/>
               </h:commandLink>
-            </ul>
-          </li>
+            </li>
+          </ul>
         </h:form>
       </h:panelGroup>
       
@@ -75,11 +75,11 @@
           <h:outputFormat value="#{locales['menu.toolAccount']}"/>
         </h:outputLink>
         
-        <li class="menu-tools-account-list" style="display: none">
-          <ul class="menu-tools-account-edit-profile"><h:link value="#{locales['menu.toolAccountEditProfile']}" outcome="/users/editprofile.jsf" /></ul>
-          <ul class="menu-tools-account-view-profile"><h:outputLink value="#{request.contextPath}/profile/#{sessionBackingBean.loggedUser.id}">#{locales['menu.toolAccountViewProfile']}</h:outputLink></ul>
-          <ul class="menu-tools-account-logout"><h:link value="#{locales['menu.toolAccountLogout']}" outcome="/users/logout.jsf" /></ul>
-        </li>
+        <ul class="menu-tools-account-list" style="display: none">
+          <li class="menu-tools-account-edit-profile"><h:link value="#{locales['menu.toolAccountEditProfile']}" outcome="/users/editprofile.jsf" /></li>
+          <li class="menu-tools-account-view-profile"><h:outputLink value="#{request.contextPath}/profile/#{sessionBackingBean.loggedUser.id}">#{locales['menu.toolAccountViewProfile']}</h:outputLink></li>
+          <li class="menu-tools-account-logout"><h:link value="#{locales['menu.toolAccountLogout']}" outcome="/users/logout.jsf" /></li>
+        </ul>
       </h:panelGroup>
       
       <h:panelGroup layout="block" styleClass="menu-tools-search-container">
