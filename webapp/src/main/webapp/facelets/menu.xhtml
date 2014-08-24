@@ -53,12 +53,17 @@
         
         <h:form>
           <li class="menu-tools-locale-list" style="display: none">
-            <ul><a href="javascript:void(null)" data-locale="fi">#{locales['menu.toolLocaleFinnish']}</a></ul>
-            <ul><a href="javascript:void(null)" data-locale="en">#{locales['menu.toolLocaleEnglish']}</a></ul>
-            <h:inputHidden id="new-locale" value="#{sessionBackingBean.newLocale}"/>
-            <h:commandButton id="change-locale" style="display:none" action="#{sessionBackingBean.changeLocale}">
-              <f:ajax onevent="onChangeLocale" execute="@form"/>
-            </h:commandButton>
+            <ul>
+              <h:commandLink action="#{sessionBackingBean.changeLocale('fi')}" value="#{locales['menu.toolLocaleFinnish']}">
+                <f:ajax onevent="onChangeLocale" execute="@form"/>
+              </h:commandLink>
+            </ul>
+            
+            <ul>
+              <h:commandLink action="#{sessionBackingBean.changeLocale('en')}" value="#{locales['menu.toolLocaleEnglish']}">
+                <f:ajax onevent="onChangeLocale" execute="@form"/>
+              </h:commandLink>
+            </ul>
           </li>
         </h:form>
       </h:panelGroup>

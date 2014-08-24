@@ -91,15 +91,6 @@
     attachListener();
   });
   
-  $(document).on('click', '.menu-tools-locale-list a', function (e) {
-    e.preventDefault();
-    var locale = $(this).data('locale');
-    var prefix = $(this).closest('form').attr('name');
-
-    $('input[name="' + prefix + ':new-locale' + '"]').val(locale);
-    $('input[name="' + prefix + ':change-locale' + '"]').click();
-  });
-  
   $(document).on('keyup', '.menu-tools-search-text', function (event) {
     search();
   });

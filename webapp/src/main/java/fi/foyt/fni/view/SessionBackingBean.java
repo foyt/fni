@@ -25,10 +25,6 @@ public class SessionBackingBean {
 	@Inject
 	private UserController userController;
 	
-	public void init() {
-	  newLocale = sessionController.getLocale().toString();
-	}
-	
 	public boolean isLoggedIn() {
 		return sessionController.isLoggedIn();
 	}
@@ -50,17 +46,7 @@ public class SessionBackingBean {
 		return sessionController.getLocale();
 	}
 	
-	public String getNewLocale() {
-    return newLocale;
-  }
-	
-	public void setNewLocale(String newLocale) {
-    this.newLocale = newLocale;
-  }
-	
-	public void changeLocale() throws IOException {
-		sessionController.setLocale(LocaleUtils.toLocale(getNewLocale()));
+	public void changeLocale(String locale) throws IOException {
+		sessionController.setLocale(LocaleUtils.toLocale(locale));
 	}
-	
-	private String newLocale;
 }
