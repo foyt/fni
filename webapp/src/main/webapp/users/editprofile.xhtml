@@ -2,7 +2,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" 
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:h="http://java.sun.com/jsf/html"  
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['users.editProfile.pageTitle']}</ui:define>
@@ -75,12 +76,12 @@
             
             <h:panelGroup layout="block" styleClass="users-editprofile-field">
               <h:outputLabel value="#{locales['users.editProfile.firstNameLabel']}" />
-              <h:inputText value="#{editProfileBackingBean.firstName}" required="true" requiredMessage="#{locales['users.editProfile.firstNameRequired']}"/>
+              <input type="text" required="required" jsf:value="#{editProfileBackingBean.firstName}" jsf:required="true" jsf:requiredMessage="#{locales['users.editProfile.firstNameRequired']}" data-requiredmessage="#{locales['users.editProfile.firstNameRequired']}"/>
             </h:panelGroup>  
             
             <h:panelGroup layout="block" styleClass="users-editprofile-field">
               <h:outputLabel value="#{locales['users.editProfile.lastNameLabel']}" />
-              <h:inputText value="#{editProfileBackingBean.lastName}" required="true" requiredMessage="#{locales['users.editProfile.lastNameRequired']}"/>
+              <input type="text" required="required" jsf:value="#{editProfileBackingBean.lastName}" jsf:required="true" jsf:requiredMessage="#{locales['users.editProfile.lastNameRequired']}" data-requiredmessage="#{locales['users.editProfile.lastNameRequired']}"/>
             </h:panelGroup>  
             
             <h:panelGroup layout="block" styleClass="users-editprofile-field">

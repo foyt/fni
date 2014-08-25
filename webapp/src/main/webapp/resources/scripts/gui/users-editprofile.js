@@ -100,6 +100,20 @@
       password1Input.val('');
       password2Input.val('');
     });
+    
+    $('input[required="required"]').each(function (index, input) {
+      if (!$(input).val()) {
+        input.setCustomValidity($(input).data('requiredmessage'));
+      }
+      
+      $(input).on('invalid', function (e) {
+        this.setCustomValidity($(this).data('requiredmessage'));
+      });
+      
+      $(input).on('input', function (e) {
+        this.setCustomValidity('');
+      });
+    });
   });
   
 }).call(this);
