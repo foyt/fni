@@ -47,16 +47,16 @@ public class MenuTestsBase extends AbstractUITest {
 
     assertEquals(true, aboutMenuList.isDisplayed());
 
-    WebElement aboutMenuVision = getWebDriver().findElement(By.cssSelector(".menu-about-list>ul:nth-child(1)>a"));
-    WebElement aboutMenuInformation = getWebDriver().findElement(By.cssSelector(".menu-about-list>ul:nth-child(2)>a"));
-    WebElement aboutMenuForum = getWebDriver().findElement(By.cssSelector(".menu-about-list>ul:nth-child(3)>a"));
-    WebElement aboutMenuDistribution = getWebDriver().findElement(By.cssSelector(".menu-about-list>ul:nth-child(4)>a"));
-    WebElement aboutMenuGameplay = getWebDriver().findElement(By.cssSelector(".menu-about-list>ul:nth-child(5)>a"));
-    WebElement aboutMenuHistory = getWebDriver().findElement(By.cssSelector(".menu-about-list>ul:nth-child(6)>a"));
-    WebElement aboutMenuCookies = getWebDriver().findElement(By.cssSelector(".menu-about-list>ul:nth-child(7)>a"));
-    WebElement aboutMenuOpenSource = getWebDriver().findElement(By.cssSelector(".menu-about-list>ul:nth-child(8)>a"));
-    WebElement aboutMenuContact = getWebDriver().findElement(By.cssSelector(".menu-about-list>ul:nth-child(9)>a"));
-    WebElement aboutMenuAcknowledgements = getWebDriver().findElement(By.cssSelector(".menu-about-list>ul:nth-child(10)>a"));
+    WebElement aboutMenuVision = getWebDriver().findElement(By.cssSelector(".menu-about-list>li:nth-child(1)>a"));
+    WebElement aboutMenuInformation = getWebDriver().findElement(By.cssSelector(".menu-about-list>li:nth-child(2)>a"));
+    WebElement aboutMenuForum = getWebDriver().findElement(By.cssSelector(".menu-about-list>li:nth-child(3)>a"));
+    WebElement aboutMenuDistribution = getWebDriver().findElement(By.cssSelector(".menu-about-list>li:nth-child(4)>a"));
+    WebElement aboutMenuGameplay = getWebDriver().findElement(By.cssSelector(".menu-about-list>li:nth-child(5)>a"));
+    WebElement aboutMenuHistory = getWebDriver().findElement(By.cssSelector(".menu-about-list>li:nth-child(6)>a"));
+    WebElement aboutMenuCookies = getWebDriver().findElement(By.cssSelector(".menu-about-list>li:nth-child(7)>a"));
+    WebElement aboutMenuOpenSource = getWebDriver().findElement(By.cssSelector(".menu-about-list>li:nth-child(8)>a"));
+    WebElement aboutMenuContact = getWebDriver().findElement(By.cssSelector(".menu-about-list>li:nth-child(9)>a"));
+    WebElement aboutMenuAcknowledgements = getWebDriver().findElement(By.cssSelector(".menu-about-list>li:nth-child(10)>a"));
 
     assertEquals("Our Vision", aboutMenuVision.getText());
     assertEquals(getAppUrl() + "/about#vision", stripLinkJSessionId(aboutMenuVision.getAttribute("href")));
@@ -117,8 +117,8 @@ public class MenuTestsBase extends AbstractUITest {
     localeMenuLink.click();
     assertEquals(true, localeMenuList.isDisplayed());
 
-    WebElement fiItem = getWebDriver().findElement(By.cssSelector(".menu-tools-locale-list>ul:nth-child(1)>a"));
-    WebElement enItem = getWebDriver().findElement(By.cssSelector(".menu-tools-locale-list>ul:nth-child(2)>a"));
+    WebElement fiItem = getWebDriver().findElement(By.cssSelector(".menu-tools-locale-list>li:nth-child(1)>a"));
+    WebElement enItem = getWebDriver().findElement(By.cssSelector(".menu-tools-locale-list>li:nth-child(2)>a"));
 
     assertEquals("Suomi", fiItem.getText());
     assertEquals("English", enItem.getText());
