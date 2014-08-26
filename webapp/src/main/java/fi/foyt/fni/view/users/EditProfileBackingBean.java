@@ -17,8 +17,10 @@ import javax.inject.Named;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
+import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
@@ -41,6 +43,9 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @LoggedIn
 @Secure (Permission.PROFILE_UPDATE)
 public class EditProfileBackingBean {
+  
+  @Parameter
+  private String redirectUrl;
 
 	@Inject
 	private UserController userController;
@@ -112,6 +117,25 @@ public class EditProfileBackingBean {
 			addAuthenticationSourcesSelectItems.add(new SelectItem(AuthSource.INTERNAL, FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceForgeAndIllusion")));
 		}
 	}
+	
+	@RequestAction 
+	@IgnorePostback
+  @Deferred
+  public void checkMissing() {
+	  User loggedUser = sessionController.getLoggedUser();
+	  
+    if (StringUtils.isBlank(loggedUser.getFirstName()) || StringUtils.isBlank(loggedUser.getLastName())) {
+      FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.requiredFieldsMissing"));
+    }
+	}
+	
+	public String getRedirectUrl() {
+    return redirectUrl;
+  }
+	
+	public void setRedirectUrl(String redirectUrl) {
+    this.redirectUrl = redirectUrl;
+  }
 
 	public String getFirstName() {
 		return firstName;
@@ -328,7 +352,7 @@ public class EditProfileBackingBean {
 		}
 	}
 
-	public void save() {
+	public void save() throws IOException {
 		User loggedUser = sessionController.getLoggedUser();
 		
 		userController.updateFirstName(loggedUser, getFirstName());
@@ -344,6 +368,12 @@ public class EditProfileBackingBean {
   	userController.setContactFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS, getContactInfoFieldGooglePlus());
   	
     FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.savedMessage"));
+    
+    if (StringUtils.isNotBlank(getRedirectUrl())) {
+      FacesContext facesContext = FacesContext.getCurrentInstance();
+      ExternalContext externalContext = facesContext.getExternalContext();
+      externalContext.redirect(getRedirectUrl());
+    }
 	}
 	
 	public void changePassword() {

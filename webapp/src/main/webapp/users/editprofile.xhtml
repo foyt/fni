@@ -205,6 +205,8 @@
             <h:panelGroup layout="block" styleClass="users-editprofile-field">
               <h:commandButton action="#{editProfileBackingBean.save}" value="#{locales['users.editProfile.saveButton']}" />
             </h:panelGroup>
+            
+            <input type="hidden" jsf:value="#{editProfileBackingBean.redirectUrl}"/>
           </h:form>
         </h:panelGroup>
       </h:panelGroup>
