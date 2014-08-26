@@ -164,5 +164,15 @@ public class LoginTestsBase extends AbstractUITest {
       greenMail.stop();
     } 
   }
+  
+  @Test
+  public void testMissingInformation() {
+    loginInternal(getWebDriver(), "missinginfo@foyt.fi", "pass");
+    waitForUrlMatches(getWebDriver(), ".*/editprofile.*");
+    assertEquals("Edit Profile", getWebDriver().getTitle());
+    waitForNotification(getWebDriver());
+    assertNotificationStartsWith(getWebDriver(), "info", "Your profile is missing some required information, please fill the missing fields before continuing");
+    
+  }
 
 }
