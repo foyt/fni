@@ -2,6 +2,7 @@ package fi.foyt.fni.view.users;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -122,21 +123,13 @@ public class LoginBackingBean {
 		if (authenticationStrategy != null) {
 			try {
 				if (authenticationStrategy instanceof InternalAuthenticationStrategy) {
-					FacesContext facesContext = FacesContext.getCurrentInstance();
-					ExternalContext externalContext = facesContext.getExternalContext();
 					Locale locale = sessionController.getLocale();
 					Map<String, String[]> parameters = new HashMap<String, String[]>();
 					parameters.put("username", new String[] { getLoginEmail() });
 					parameters.put("password", new String[] { getLoginPassword() });
 					UserToken userToken = authenticationStrategy.accessToken(locale, parameters);
 					if (userToken != null) {
-						sessionController.login(userToken);
-						String redirectUrl = sessionController.getRedirectUrl();
-						if (StringUtils.isBlank(redirectUrl)) {
-							externalContext.redirect(new StringBuilder().append(externalContext.getRequestContextPath()).append("/").toString());
-						} else {
-							externalContext.redirect(redirectUrl);
-						}
+						login(userToken);
 					} else {
 						FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.invalidCredentials"));
 					}
@@ -313,15 +306,7 @@ public class LoginBackingBean {
 							Locale locale = externalContext.getRequestLocale();
 							UserToken userToken = oAuthStrategy.accessToken(locale, parameters);
 							if (userToken != null) {
-								sessionController.login(userToken);
-								String redirectUrl = sessionController.getRedirectUrl();
-								if (StringUtils.isBlank(redirectUrl)) {
-									redirectUrl = new StringBuilder()
-									  .append(externalContext.getRequestContextPath())
-									  .append("/").toString();
-								}
-								
-								externalContext.redirect(redirectUrl);
+								login(userToken);
 							} else {
 								FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.externalLoginFailed"));
 							}
@@ -377,6 +362,31 @@ public class LoginBackingBean {
     this.loginMethod = loginMethod;
   }
 
+  private void login(UserToken userToken) throws IOException {
+    sessionController.login(userToken);
+    
+    FacesContext facesContext = FacesContext.getCurrentInstance();
+    ExternalContext externalContext = facesContext.getExternalContext();
+    String contextPath = externalContext.getRequestContextPath();
+    
+    String redirectUrl = sessionController.getRedirectUrl();
+    if (StringUtils.isBlank(redirectUrl)) {
+      redirectUrl = new StringBuilder().append(contextPath).append("/").toString();
+    } 
+    
+    User user = userToken.getUserIdentifier().getUser();
+    if (StringUtils.isBlank(user.getFirstName()) || StringUtils.isBlank(user.getLastName())) {
+      redirectUrl = new StringBuilder()
+        .append(contextPath)
+        .append("/editprofile")
+        .append("?redirectUrl=")
+        .append(URLEncoder.encode(redirectUrl, "UTF-8"))
+        .toString();
+    }
+    
+    externalContext.redirect(redirectUrl);
+  }
+  
 	private String loginEmail;
 	private String loginPassword;
 	private String registerFirstName;
