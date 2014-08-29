@@ -34,4 +34,10 @@ public class ForumTestsBase extends AbstractUITest {
     testNotFound(getWebDriver(), "/forum/*");
   }
 
+  @Test
+  public void testWithHyphen() throws Exception {
+    getWebDriver().get(getAppUrl(false) + "/forum/with-hyphen");
+    assertEquals("Forum", getWebDriver().getTitle());
+  }
+
 }
