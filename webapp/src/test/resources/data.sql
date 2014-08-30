@@ -30,7 +30,8 @@ values
   (2, false, 'Test', 'User', 'en_US', 'GRAVATAR', PARSEDATETIME('2 2 2011', 'd M yyyy'), 'USER'), 
   (3, false, 'Test', 'Librarian', 'en_US', 'GRAVATAR', PARSEDATETIME('3 3 2012', 'd M yyyy'), 'LIBRARIAN'), 
   (4, false, 'Test', 'Admin', 'en_US', 'GRAVATAR', PARSEDATETIME('4 4 2013', 'd M yyyy'), 'ADMINISTRATOR'),
-  (5, false, null, null, 'en_US', 'GRAVATAR', PARSEDATETIME('4 4 2013', 'd M yyyy'), 'USER');
+  (5, false, null, null, 'en_US', 'GRAVATAR', PARSEDATETIME('4 4 2013', 'd M yyyy'), 'USER'),
+  (6, false, 'No', 'Shares', 'en_US', 'GRAVATAR', PARSEDATETIME('2 2 2014', 'd M yyyy'), 'USER');
 
 insert into 
   UserEmail (id, email, primaryEmail, user_id)
@@ -39,7 +40,8 @@ values
   (2, 'user@foyt.fi', true, 2),
   (3, 'librarian@foyt.fi', true, 3),
   (4, 'admin@foyt.fi', true, 4),
-  (5, 'missinginfo@foyt.fi', true, 5);
+  (5, 'missinginfo@foyt.fi', true, 5),
+  (6, 'noshares@foyt.fi', true, 6);
   
 insert into 
   InternalAuth (id, password, verified, user_id)
@@ -48,7 +50,8 @@ values
   (2, '1a1dc91c907325c69271ddf0c944bc72', true, 2),
   (3, '1a1dc91c907325c69271ddf0c944bc72', true, 3),
   (4, '1a1dc91c907325c69271ddf0c944bc72', true, 4),
-  (5, '1a1dc91c907325c69271ddf0c944bc72', true, 5);
+  (5, '1a1dc91c907325c69271ddf0c944bc72', true, 5),
+  (6, '1a1dc91c907325c69271ddf0c944bc72', true, 6);
   
 insert into   
   Material (id, created, modified, publicity, title, type, urlName, creator_id, modifier_id, parentFolder_id)
@@ -60,9 +63,26 @@ insert into
   Material (id, created, modified, publicity, title, type, urlName, creator_id, modifier_id, parentFolder_id)
 values   
   (2, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Subfolder', 'FOLDER', 'subfolder', 2, 2, 1);
-  
 insert into Folder (id) values (2);
   
+insert into   
+  Material (id, created, modified, publicity, title, type, urlName, creator_id, modifier_id, parentFolder_id)
+values   
+  (16, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'private folder', 'FOLDER', 'prifol', 2, 2, null);
+insert into Folder (id) values (16);
+  
+insert into   
+  Material (id, created, modified, publicity, title, type, urlName, creator_id, modifier_id, parentFolder_id)
+values   
+  (17, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'private subfolder', 'FOLDER', 'prisubfol', 2, 2, 16);
+insert into Folder (id) values (17);
+  
+insert into   
+  Material (id, created, modified, publicity, title, type, urlName, creator_id, modifier_id, parentFolder_id)
+values   
+  (18, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'private subsubfolder', 'FOLDER', 'prisubsubfol', 2, 2, 17);
+insert into Folder (id) values (18);
+
 insert into   
   Material (id, created, modified, publicity, title, type, urlName, creator_id, modifier_id, parentFolder_id)
 values 
@@ -110,10 +130,10 @@ values
   (12, '1ZTrze-3nBd_HWlxsdyX7dndLqlMUOU5Lid2XaJVrDuE', 'application/vnd.google-apps.document'),
   (13, '1ZTrze-3nBd_HWlxsdyX7dndLqlMUOU5Lid2XaJVrDuE', 'application/vnd.google-apps.document'),
   (14, '1ZTrze-3nBd_HWlxsdyX7dndLqlMUOU5Lid2XaJVrDuE', 'application/vnd.google-apps.document');
-  	
+    
 insert into 
   UserMaterialRole (role, material_id, user_id)
-values 	
+values  
   ('MAY_VIEW', 1, 3),
   ('MAY_EDIT', 1, 4),
   ('MAY_VIEW', 3, 3),
