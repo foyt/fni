@@ -36,7 +36,7 @@ import fi.foyt.fni.session.SessionController;
 public class ForumBackingBean {
 
   @Parameter
-  @Matches ("[a-z0-9_]{1,}")
+  @Matches ("[a-z0-9_-]{1,}")
   private String forumUrlName;
 
 	@Inject
