@@ -1,0 +1,11 @@
+<div title="Create New Group" data-create-button="Create" data-cancel-button="Cancel">
+  <div class="illusion-event-new-group-dialog">
+    <p>
+      Type new name of the group into the field below.
+    </p>
+    <div>
+      <label>Name</label>
+      <input name="name" type="text" value="{name}" required="required"/>
+    </div>
+  </div>
+</div>

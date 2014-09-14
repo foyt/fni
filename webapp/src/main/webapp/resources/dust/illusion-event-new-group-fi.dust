@@ -1,0 +1,11 @@
+<div title="Luo uusi ryhmä" data-create-button="Luo" data-cancel-button="Peruuta">
+  <div class="illusion-event-new-group-dialog">
+    <p>
+      Kirjoita alla olevaan kenttään luotavan ryhmän nimi.
+    </p>
+    <div>
+      <label>Nimi</label>
+      <input name="name" type="text" value="{name}" required="required"/>
+    </div>
+  </div>
+</div>

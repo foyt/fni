@@ -1,0 +1,202 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+$selected-background-color: rgba(71, 176, 176, 1);
+
+/* Panels */ 
+
+.illusion-event-groups-panel, .illusion-event-edit-group-panel {
+  @include generic-panel;
+  position: relative;
+  height: 569px;
+}
+
+/* Groups */
+
+.illusion-event-groups {
+  margin-top: 20px;
+  height: 520px;
+  overflow: auto;
+  margin-left: -8px;
+  margin-right: -8px;
+}
+
+.illusion-event-group {
+  width: 100%;
+  padding: 8px;
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: $default-color;
+  font-family: $default-font;
+}
+
+.illusion-event-group:hover {
+  background: $selected-background-color;
+  color: #fff;
+}
+
+.illusion-new-group {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.illusion-event-event-group h4 {
+  margin-left: 10px;  
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 4px;
+}
+
+.illusion-event-edit-group-field {
+  width: 100%;
+  @include box-sizing(border-box);
+  margin-top: 8px;
+}
+
+.illusion-event-edit-group-panel input[type="text"] {
+  width: 100%;
+  font-size: 14px;
+  font-family: $default-font;
+  @include box-sizing(border-box);
+}
+
+.illusion-event-edit-group-panel label {
+  display: block;
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.illusion-event-group-members-list {
+  width: 100%;
+  display: table;
+  @include box-sizing(border-box);
+  margin-top: 10px;
+}
+
+.illusion-event-group-members-list-column {
+  width: 47%;
+  display: table-cell;
+  border: 1px solid #000;
+  @include box-sizing(border-box);
+  padding: 4px;
+  vertical-align: top;
+}
+
+.illusion-event-group-members-list-column-contents {
+  overflow: auto;
+  height: 400px;
+}
+
+.illusion-event-group-members-list-actions {
+  width: 6%;
+  display: table-cell;
+  @include box-sizing(border-box); 
+  text-align: center;
+  vertical-align: middle;
+}
+
+.illusion-event-group-members-list-action {
+  border: 2px solid #aaa;
+  background: #fff;
+  border-radius: 16px;
+  height: 32px;
+  width: 32px;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  font-family: arial;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 20px;
+  font-weight: bold;
+  color: #999;
+}
+
+.illusion-event-group-members-list-action:hover {
+  color: #666;
+  cursor: pointer;
+}
+
+.illusion-event-group-members-list-action-add:before {
+  content: '>';
+}
+
+.illusion-event-group-members-list-action-remove:before {
+  content: '<';
+}
+
+.illusion-event-group-members-list-item {
+  font-size: 14px;
+  font-family: $default-font; 
+  cursor: pointer;
+  padding: 4px;
+}
+
+.illusion-event-group-members-list-item:hover, .illusion-event-group-members-list-item-selected {
+  background-color: $selected-background-color;
+  color: #fff;
+}
+
+.illusion-event-group-members-list-action[disabled="disabled"] {
+  cursor: default;
+  background-color: rgba(255, 255, 255, 0.75);
+  color: rgba(200, 200, 200, 0.75);
+}
+
+  
+/* Submit */
+
+.illusion-event-edit-group-save {
+  @include header-3;
+  padding-left: 23px;
+  padding-right: 23px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 15px;
+  margin-top: 35px;
+  cursor: pointer;
+}
+
+.illusion-event-edit-group-save:disabled {
+  color: #eee;
+  background: #aaa;
+  cursor: default;
+}
+
+/* Create group dialog */
+
+.illusion-event-new-group-dialog p {
+  font-style: italic;
+  font-size: 13px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.illusion-event-new-group-dialog label {
+  display: block;
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.illusion-event-new-group-dialog input {
+  width: 100%;
+  margin-bottom: 8px;
+  @include box-sizing(border-box);
+}
