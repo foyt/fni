@@ -63,7 +63,7 @@
 
     <!-- Hibernate -->
 
-    <hibernate-jpamodelgen.version>4.3.5.Final</hibernate-jpamodelgen.version>
+    <hibernate-jpamodelgen.version>4.3.6.Final</hibernate-jpamodelgen.version>
   </properties>
 
   <dependencyManagement>
