@@ -103,6 +103,15 @@ alter table IllusionEventDocument
 alter table IllusionEventFolder 
     drop constraint FK_7oupprekwkv2de8e800s3uvhd if exists;
 
+alter table IllusionEventGroup 
+    drop constraint FK_hvj6d2eq0goiekm7g8vobtpw if exists;
+
+alter table IllusionEventGroupMember 
+    drop constraint FK_7rqot7m90nutqrb0uyqauitck if exists;
+
+alter table IllusionEventGroupMember 
+    drop constraint FK_f05t51bu9usvp19xuxfocngc if exists;
+
 alter table IllusionEventParticipant 
     drop constraint FK_rx0fsg3gh29ufysfcy17179va if exists;
 
@@ -374,6 +383,10 @@ drop table IllusionEvent if exists;
 drop table IllusionEventDocument if exists;
 
 drop table IllusionEventFolder if exists;
+
+drop table IllusionEventGroup if exists;
+
+drop table IllusionEventGroupMember if exists;
 
 drop table IllusionEventParticipant if exists;
 
