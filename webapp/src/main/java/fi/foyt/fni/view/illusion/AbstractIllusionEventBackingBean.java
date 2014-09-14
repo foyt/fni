@@ -2,6 +2,7 @@ package fi.foyt.fni.view.illusion;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.illusion.IllusionEventController;
@@ -11,6 +12,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.users.UserController;
 
 public abstract class AbstractIllusionEventBackingBean {
 
@@ -19,6 +21,9 @@ public abstract class AbstractIllusionEventBackingBean {
 
   @Inject
   private SessionController sessionController;
+
+  @Inject
+  private UserController userController;
   
   @RequestAction
   public String basicInit() {
@@ -71,6 +76,16 @@ public abstract class AbstractIllusionEventBackingBean {
 
   public boolean getMayManageEvent() {
     return mayManageEvent;
+  }
+  
+  public String getParticipantDisplayName(IllusionEventParticipant participant) {
+    User user = participant.getUser();
+    String result = user.getFullName();
+    if (StringUtils.isNotBlank(result)) {
+      return result;
+    }
+    
+    return "<" + userController.getUserPrimaryEmail(user) + ">";
   }
   
   private Long id;

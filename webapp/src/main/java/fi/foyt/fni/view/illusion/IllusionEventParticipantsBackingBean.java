@@ -21,14 +21,12 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.users.Permission;
-import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.security.SecurityParam;
 import fi.foyt.fni.security.SecurityParams;
 import fi.foyt.fni.system.SystemSettingsController;
-import fi.foyt.fni.users.UserController;
 
 @RequestScoped
 @Named
@@ -50,9 +48,6 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
 
   @Inject
   private IllusionEventController illusionEventController;
-  
-  @Inject
-  private UserController userController;
   
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
@@ -137,7 +132,7 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
   public void selectParticipant(IllusionEventParticipant participant) {
     selectedParticipantId = participant.getId();
     selectedParticipantUserId = participant.getUser().getId();
-    selectedParticipantName = participant.getUser().getFullName();
+    selectedParticipantName = getParticipantDisplayName(participant);
     selectedParticipantCharacterName = participant.getCharacterName();
     selectedParticipantRole = participant.getRole();
   }
@@ -193,16 +188,6 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
     illusionEventController.updateIllusionEventParticipantRole(participant, selectedParticipantRole);
     
     return "/illusion/event-participants.jsf?faces-redirect=true&urlName=" + getUrlName();
-  }
-  
-  public String getParticipantDisplayName(IllusionEventParticipant participant) {
-    User user = participant.getUser();
-    String result = user.getFullName();
-    if (StringUtils.isNotBlank(result)) {
-      return result;
-    }
-    
-    return "<" + userController.getUserPrimaryEmail(user) + ">";
   }
   
   private List<IllusionEventParticipant> organizers;

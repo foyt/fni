@@ -10,25 +10,22 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventGroupController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventGroupMember;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
-import fi.foyt.fni.persistence.model.illusion.IllusionEventGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.users.Permission;
-import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.security.SecurityParam;
 import fi.foyt.fni.security.SecurityParams;
-import fi.foyt.fni.users.UserController;
 
 @RequestScoped
 @Named
@@ -44,9 +41,6 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
 
   @Parameter
   private String urlName;
-
-  @Inject
-  private UserController userController;
 
   @Inject
   private IllusionEventController illusionEventController;
@@ -107,16 +101,6 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     this.selectedGroupMemberParticipantIds = selectedGroupMemberParticipantIds;
   }
   
-  public String getParticipantDisplayName(IllusionEventParticipant participant) {
-    User user = participant.getUser();
-    String result = user.getFullName();
-    if (StringUtils.isNotBlank(result)) {
-      return result;
-    }
-    
-    return "<" + userController.getUserPrimaryEmail(user) + ">";
-  }
-  
   public void selectGroup(IllusionEventGroup group) {
     selectedGroupId = group.getId();
     selectedGroupName = group.getName();
@@ -162,8 +146,7 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     illusionEventGroupController.updateGroupName(group, getSelectedGroupName());
     groups = illusionEventGroupController.listGroups(group.getEvent());
   }
-  
-  private List<IllusionEventGroup> groups;
+private List<IllusionEventGroup> groups;
   private List<IllusionEventParticipant> participants;
   private Long selectedGroupId;
   private List<IllusionEventGroupMember> members;
