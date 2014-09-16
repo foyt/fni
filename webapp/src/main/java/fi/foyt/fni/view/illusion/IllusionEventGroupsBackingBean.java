@@ -61,7 +61,7 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     return urlName;
   }
   
-  public void setUrlName(String urlName) {
+  public void setUrlName(@SecurityContext String urlName) {
     this.urlName = urlName;
   }
   
