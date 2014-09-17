@@ -93,7 +93,7 @@ public class ProfileImageServlet extends AbstractFileServlet {
 
 		if (!isModifiedSince(request, lastModified, eTag)) {
 			response.setHeader("ETag", eTag); // Required in 304.
-			response.sendError(HttpServletResponse.SC_NOT_MODIFIED);
+			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 			return;
 		}
 
