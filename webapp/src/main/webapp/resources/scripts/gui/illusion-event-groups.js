@@ -8,7 +8,6 @@
       var selectedMembers = ($(this.element).find('.illusion-event-group-members-list-ids').val()||'').split('&');
       for (var i = 0, l = selectedMembers.length; i < l; i++) {
         var selectedMember = selectedMembers[i];
-        
         $(this.element)
           .find('.illusion-event-group-members-list-item[data-participant-id="' + selectedMember + '"]')
           .appendTo($(this.element).find('.illusion-event-group-members-list-column-members .illusion-event-group-members-list-column-contents'));
@@ -32,7 +31,7 @@
       
       $(this.element).on('click', '.illusion-event-group-members-list-action-remove', $.proxy(function (event) {
         event.preventDefault();
-        $(this.element).find('.illusion-event-group-members-list-column-participants').append($(this.element).find('.illusion-event-group-members-list-item-selected'));
+        $(this.element).find('.illusion-event-group-members-list-column-participants .illusion-event-group-members-list-column-contents').append($(this.element).find('.illusion-event-group-members-list-item-selected'));
         this._updateList();
       }, this));
     },
