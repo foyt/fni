@@ -29,6 +29,7 @@
     <ui:include src="/facelets/menu.xhtml" />
     
     <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      
       <!-- Navigation -->
       
       <h:panelGroup layout="block" styleClass="view-header-navigation">
@@ -64,79 +65,77 @@
     </h:panelGroup>
     
     <!-- Content -->
+  
+    <div class="grid_16 tight">
+      <ui:include src="/facelets/illusionnavigation.xhtml"/>
+    </div>
 
-    <ui:include src="/facelets/illusionmenu.xhtml">
-      <ui:param name="mayManageEvent" value="#{illusionEventGroupsBackingBean.mayManageEvent}" />
-      <ui:param name="eventUrlName" value="#{illusionEventGroupsBackingBean.urlName}" />
-      <ui:param name="illusionFolderPath" value="#{illusionEventGroupsBackingBean.illusionFolderPath}" />
-    </ui:include>
-
-    <h:form>
-      <div class="grid_16 tight">
-        <div class="grid_4 alpha slim-right">
-          <div class="illusion-event-groups-panel">
-            <h2>#{locales['illusion.eventGroups.groupsListTitle']}</h2>
-            <a href="javascript:void(null)" class="illusion-new-group">#{locales['illusion.eventGroups.createGroup']}</a>
-            <div class="illusion-event-groups">
-              <ui:repeat var="group" value="#{illusionEventGroupsBackingBean.groups}">
-                <h:commandLink action="#{illusionEventGroupsBackingBean.selectGroup(group)}" styleClass="illusion-event-group" value="#{group.name}"/>     
-              </ui:repeat>
-            </div>
-          </div>
-        </div>    
-        
-        <div class="grid_12 omega slim-left">
-          <div class="illusion-event-edit-group-panel">
-            <div style="#{illusionEventGroupsBackingBean.selectedGroupId eq null ? 'display: none' : ''}">
-              <h2>#{locales['illusion.eventGroups.editGroupTitle']}</h2>
-              
-              <div class="illusion-event-edit-group-field">
-                <label>#{locales['illusion.eventGroups.groupNameLabel']}</label>
-                <input type="text" required="required" jsf:value="#{illusionEventGroupsBackingBean.selectedGroupName}"/>
+    <div class="grid_16 tight">
+      <div class="illusion-content-panel grid_16 tight">
+        <h:form>
+          <div class="grid_4 slim-right">
+            <div class="illusion-event-sub-panel">
+              <a href="javascript:void(null)" class="illusion-new-group">#{locales['illusion.eventGroups.createGroup']}</a>
+              <h3>#{locales['illusion.eventGroups.groupsListTitle']}</h3>
+              <div class="illusion-event-groups illusion-list">
+                <ui:repeat var="group" value="#{illusionEventGroupsBackingBean.groups}">
+                  <h:commandLink action="#{illusionEventGroupsBackingBean.selectGroup(group)}" styleClass="illusion-event-group illusion-list-item" value="#{group.name}"/>     
+                </ui:repeat>
               </div>
-              
-              <div class="illusion-event-group-members-list">
-    
-                <div class="illusion-event-group-members-list-column illusion-event-group-members-list-column-participants">
-                  <div class="illusion-event-group-members-list-column-contents">
-                    <ui:repeat var="participant" value="#{illusionEventGroupsBackingBean.participants}">
-                      <div class="illusion-event-group-members-list-item" data-participant-id="#{participant.id}">
-                        <h:outputText value="#{illusionEventGroupsBackingBean.getParticipantDisplayName(participant)}" />
-                      </div>             
-                    </ui:repeat>
-                  </div>
-                </div>
-                
-                <div class="illusion-event-group-members-list-actions">
-                  <button class="illusion-event-group-members-list-action illusion-event-group-members-list-action-add" disabled="disabled"></button>
-                  <button class="illusion-event-group-members-list-action illusion-event-group-members-list-action-remove" disabled="disabled"></button>
-                </div>
-                
-                <div class="illusion-event-group-members-list-column illusion-event-group-members-list-column-members">
-                  <div class="illusion-event-group-members-list-column-contents">
-                    <ui:repeat var="member" value="#{illusionEventGroupBackingBean.members}">
-                      <div class="illusion-event-group-members-list-item">
-                         <h:outputText value="#{member.participant.user.fullName}" />
-                      </div>
-                    </ui:repeat>
-                  </div>
-                </div>
-                
-                <input type="hidden" class="illusion-event-group-members-list-ids" 
-                  jsf:value="#{illusionEventGroupsBackingBean.selectedGroupMemberParticipantIds}"
-                  jsf:converter="fi.foyt.fni.jsf.LongListConverter"/>
-              </div>
-              
-              <h:commandButton action="#{illusionEventGroupsBackingBean.saveGroup}" value="#{locales['illusion.eventGroups.saveGroup']}" styleClass="illusion-event-edit-group-save"/>
             </div>
-          </div>
-        </div>   
-      </div>
-        
-      <input type="hidden" name="eventUrlName" value="#{illusionEventGroupsBackingBean.urlName}"/>
-      <input type="hidden" name="selectGroupId" jsf:value="#{illusionEventGroupsBackingBean.selectedGroupId}"/>
+          </div>    
+          
+          <div class="grid_12 slim-left">
+            <div class="illusion-event-sub-panel">
+              <div style="#{illusionEventGroupsBackingBean.selectedGroupId eq null ? 'display: none' : ''}" class="illusion-event-group-editor">
+                <h3>#{locales['illusion.eventGroups.editGroupTitle']}</h3>
+                
+                <div class="illusion-event-edit-group-field">
+                  <label>#{locales['illusion.eventGroups.groupNameLabel']}</label>
+                  <input type="text" required="required" jsf:value="#{illusionEventGroupsBackingBean.selectedGroupName}"/>
+                </div>
+                
+                <div class="illusion-event-group-members-list">
       
-    </h:form>
+                  <div class="illusion-event-group-members-list-column illusion-event-group-members-list-column-participants">
+                    <div class="illusion-event-group-members-list-column-contents">
+                      <ui:repeat var="participant" value="#{illusionEventGroupsBackingBean.participants}">
+                        <div class="illusion-event-group-members-list-item" data-participant-id="#{participant.id}">
+                          <h:outputText value="#{illusionEventGroupsBackingBean.getParticipantDisplayName(participant)}" />
+                        </div>             
+                      </ui:repeat>
+                    </div>
+                  </div>
+                  
+                  <div class="illusion-event-group-members-list-actions">
+                    <button class="illusion-event-group-members-list-action illusion-event-group-members-list-action-add" disabled="disabled"></button>
+                    <button class="illusion-event-group-members-list-action illusion-event-group-members-list-action-remove" disabled="disabled"></button>
+                  </div>
+                  
+                  <div class="illusion-event-group-members-list-column illusion-event-group-members-list-column-members">
+                    <div class="illusion-event-group-members-list-column-contents"/>
+                  </div>
+                  
+                  <input type="hidden" class="illusion-event-group-members-list-ids" 
+                    jsf:value="#{illusionEventGroupsBackingBean.selectedGroupMemberParticipantIds}"
+                    jsf:converter="fi.foyt.fni.jsf.LongListConverter"/>
+                </div>
+                
+                <h:commandButton action="#{illusionEventGroupsBackingBean.saveGroup}" value="#{locales['illusion.eventGroups.saveGroup']}" styleClass="illusion-event-edit-group-save"/>
+              </div>
+              
+              <div style="#{illusionEventGroupsBackingBean.selectedGroupId ne null ? 'display: none' : ''}" class="illusion-event-group-editor">
+                <p>#{locales['illusion.eventGroups.noGroupSelected']}</p>
+              </div>
+            </div>
+          </div> 
+            
+          <input type="hidden" name="eventUrlName" value="#{illusionEventGroupsBackingBean.urlName}"/>
+          <input type="hidden" name="selectGroupId" jsf:value="#{illusionEventGroupsBackingBean.selectedGroupId}"/>
+          
+        </h:form>
+      </div>
+    </div>
         
   </ui:define>
 

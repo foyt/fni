@@ -2,14 +2,6 @@
 @import "compass";
 @import "styles";
 
-/* Panels */ 
-
-.illusion-event-intro-panel {
-  @include generic-panel;
-  position: relative;
-  background: #fff;
-}
-
 /* Intro */
 
 .illusion-event-intro-text {

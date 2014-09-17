@@ -27,6 +27,7 @@ import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.security.SecurityParam;
 import fi.foyt.fni.security.SecurityParams;
 import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedPage;
 
 @RequestScoped
 @Named
@@ -48,12 +49,18 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
 
   @Inject
   private IllusionEventController illusionEventController;
+
+  @Inject
+  private IllusionEventNavigationController illusionEventNavigationController;
   
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
       return "/error/access-denied.jsf";
     }
+
+    illusionEventNavigationController.setSelectedPage(SelectedPage.PARTICIPANTS);
+    illusionEventNavigationController.setEventUrlName(getUrlName());
 
     organizers = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.ORGANIZER);
     participants = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.PARTICIPANT);

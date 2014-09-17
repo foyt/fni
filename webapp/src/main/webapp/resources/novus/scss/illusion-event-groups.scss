@@ -6,56 +6,30 @@ $selected-background-color: rgba(71, 176, 176, 1);
 
 /* Panels */ 
 
-.illusion-event-groups-panel, .illusion-event-edit-group-panel {
-  @include generic-panel;
-  position: relative;
-  height: 569px;
-}
-
-/* Groups */
-
 .illusion-event-groups {
   margin-top: 20px;
   height: 520px;
-  overflow: auto;
-  margin-left: -8px;
-  margin-right: -8px;
 }
 
-.illusion-event-group {
-  width: 100%;
-  padding: 8px;
-  cursor: pointer;
-  display: block;
-  text-decoration: none;
-  font-size: 14px;
-  text-decoration: none;
-  text-transform: uppercase;
+.illusion-event-group-editor {
+  height: 564px;
+}
+
+.illusion-event-group-editor p {
   color: $default-color;
   font-family: $default-font;
-}
-
-.illusion-event-group:hover {
-  background: $selected-background-color;
-  color: #fff;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .illusion-new-group {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  float: right;
   color: $default-color;
   font-family: $default-font;
   font-size: 14px;
   text-decoration: none;
   text-transform: uppercase;
-}
-
-.illusion-event-event-group h4 {
-  margin-left: 10px;  
-  display: inline-block;
-  vertical-align: top;
-  margin-top: 4px;
 }
 
 .illusion-event-edit-group-field {
@@ -64,14 +38,14 @@ $selected-background-color: rgba(71, 176, 176, 1);
   margin-top: 8px;
 }
 
-.illusion-event-edit-group-panel input[type="text"] {
+.illusion-event-edit-group-field input[type="text"] {
   width: 100%;
   font-size: 14px;
   font-family: $default-font;
   @include box-sizing(border-box);
 }
 
-.illusion-event-edit-group-panel label {
+.illusion-event-edit-group-field label {
   display: block;
   font-size: 13px;
   font-family: $default-font;
@@ -154,7 +128,6 @@ $selected-background-color: rgba(71, 176, 176, 1);
   background-color: rgba(255, 255, 255, 0.75);
   color: rgba(200, 200, 200, 0.75);
 }
-
   
 /* Submit */
 

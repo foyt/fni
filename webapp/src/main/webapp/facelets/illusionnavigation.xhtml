@@ -1,0 +1,14 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  xmlns:h="http://java.sun.com/jsf/html">
+
+  <div class="illusion-event-navigation">
+    <h:link rendered="#{illusionEventNavigationBackingBean.indexVisible}" styleClass="illusion-event-navigation-item #{illusionEventNavigationBackingBean.selectedPage eq 'INDEX' ? 'illusion-event-navigation-item-active' : ''}" outcome="/illusion/event.jsf?urlName=#{illusionEventNavigationBackingBean.eventUrlName}" value="#{locales['illusion.eventNavigation.index']}"/>
+    <h:link rendered="#{illusionEventNavigationBackingBean.materialsVisible}" styleClass="illusion-event-navigation-item #{illusionEventNavigationBackingBean.selectedPage eq 'MATERIALS' ? 'illusion-event-navigation-item-active' : ''}" outcome="/illusion/event-materials.jsf?urlName=#{illusionEventNavigationBackingBean.eventUrlName}" value="#{locales['illusion.eventNavigation.materials']}"/>
+    <h:link rendered="#{illusionEventNavigationBackingBean.participantsVisible}" styleClass="illusion-event-navigation-item #{illusionEventNavigationBackingBean.selectedPage eq 'PARTICIPANTS' ? 'illusion-event-navigation-item-active' : ''}" outcome="/illusion/event-participants.jsf?urlName=#{illusionEventNavigationBackingBean.eventUrlName}" value="#{locales['illusion.eventNavigation.participants']}"/>
+    <h:link rendered="#{illusionEventNavigationBackingBean.groupsVisible}" styleClass="illusion-event-navigation-item #{illusionEventNavigationBackingBean.selectedPage eq 'GROUPS' ? 'illusion-event-navigation-item-active' : ''}" outcome="/illusion/event-groups.jsf?urlName=#{illusionEventNavigationBackingBean.eventUrlName}" value="#{locales['illusion.eventNavigation.groups']}"/>
+  </div>
+
+</ui:composition>

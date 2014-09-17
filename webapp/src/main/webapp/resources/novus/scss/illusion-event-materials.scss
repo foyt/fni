@@ -12,40 +12,6 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   background: #fff;
 }
 
-/* Materials */
-
 .illusion-event-materials {
-  margin-top: 10px;
+  margin-top: 20px;
 }
-
-.illusion-event-material {
-  margin-bottom: 8px;
-  width: 100%;
-}
-
-.illusion-event-material:hover {
-  background: $selected-background-color;
-}
-
-.illusion-event-material-icon {
-  width: 48px;
-  line-height: 0px;
-  display: inline-block;
-  vertical-align: top;
-}
-
-.illusion-event-material .illusion-event-material-title {
-  margin-left: 10px;  
-  display: inline-block;
-  vertical-align: top;
-  margin-top: 4px;
-  padding-top: 9px;
-}
-
-.illusion-event-material .illusion-event-material-title>a {
-  color: $default-color;
-  font-family: $default-font;
-  text-decoration: none;
-  font-weight: bold;
-}
-

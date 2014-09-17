@@ -56,36 +56,43 @@
         <p class="view-header-description-text">#{illusionEventMaterialsBackingBean.description}</p>
       </h:panelGroup>
     </h:panelGroup>
-    
-    <!-- Content -->
-
-    <ui:include src="/facelets/illusionmenu.xhtml">
-      <ui:param name="mayManageEvent" value="#{illusionEventMaterialsBackingBean.mayManageEvent}" />
-      <ui:param name="eventUrlName" value="#{illusionEventMaterialsBackingBean.urlName}" />
-      <ui:param name="illusionFolderPath" value="#{illusionEventMaterialsBackingBean.illusionFolderPath}" />
-    </ui:include>
+  
+    <div class="grid_16 tight">
+      <ui:include src="/facelets/illusionnavigation.xhtml"/>
+    </div>
 
     <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="illusion-event-materials-panel">
-        <h2>#{locales['illusion.eventMaterials.materialsListTitle']}</h2>
-
-        <h:panelGroup layout="block" styleClass="illusion-event-materials">
-          <ui:repeat var="material" value="#{illusionEventMaterialsBackingBean.materials}">
-            <h:panelGroup layout="block" styleClass="illusion-event-material">
-              <h:panelGroup layout="block" styleClass="illusion-event-material-icon"> 
-                <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
-              </h:panelGroup>
-                    
-              <div class="illusion-event-material-title">
-                <h:outputLink value="#{request.contextPath}/materials/#{material.path}" target="_blank">
-                  <h:outputText value="#{material.title}"/>
+      <div class="illusion-content-panel grid_16 tight">
+        <div class="grid_8 slim-right">
+          <div class="illusion-event-sub-panel">
+            <h3>#{locales['illusion.eventMaterials.materialsListTitle']}</h3>
+    
+            <div class="illusion-list illusion-event-materials">
+              <ui:repeat var="material" offset="0" step="2" value="#{illusionEventMaterialsBackingBean.materials}">
+                <h:outputLink value="#{request.contextPath}/materials/#{material.path}" target="_blank" styleClass="illusion-event-material illusion-list-item">
+                  <span>#{material.title}</span>
+                  <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
                 </h:outputLink>
-              </div>
-              
-            </h:panelGroup>
-          </ui:repeat>
-        </h:panelGroup>
-      </h:panelGroup>      
+              </ui:repeat>
+            </div>
+          </div>
+        </div>
+        
+        <div class="grid_8 slim-left">
+          <div class="illusion-event-sub-panel">
+            <h3>#{locales['illusion.eventMaterials.materialsListTitle']}</h3>
+    
+            <div class="illusion-list illusion-event-materials">
+              <ui:repeat var="material" offset="1" step="2" value="#{illusionEventMaterialsBackingBean.materials}">
+                <h:outputLink value="#{request.contextPath}/materials/#{material.path}" target="_blank" styleClass="illusion-event-material illusion-list-item">
+                  <span>#{material.title}</span>
+                  <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
+                </h:outputLink>
+              </ui:repeat>
+            </div>
+          </div>
+        </div>
+      </div>      
     </h:panelGroup>
 
   </ui:define>

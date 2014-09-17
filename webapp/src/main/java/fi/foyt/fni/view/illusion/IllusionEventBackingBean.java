@@ -25,6 +25,7 @@ import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.FileData;
+import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedPage;
 
 @RequestScoped
 @Named
@@ -47,13 +48,19 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
 
   @Inject
   private MaterialController materialController;
-  
+
+  @Inject
+  private IllusionEventNavigationController illusionEventNavigationController;
+
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant member) {
     if (member == null) {
       return "/illusion/event-intro.jsf?faces-redirect=true&urlName=" + getUrlName();
     }
-    
+
+    illusionEventNavigationController.setSelectedPage(SelectedPage.INDEX);
+    illusionEventNavigationController.setEventUrlName(getUrlName());
+
     switch (member.getRole()) {
       case BANNED:
       case BOT:
@@ -70,7 +77,7 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
     IllusionEventFolder folder = illusionEvent.getFolder();
     User loggedUser = sessionController.getLoggedUser();
     
-    IllusionEventDocument indexDocument = illusionEventDocumentController.findByFolderAndDocumentType(folder, IllusionEventDocumentType.INDEX);
+    IllusionEventDocument indexDocument = illusionEventDocumentController.findByFolderAndDocumentType(folder, IllusionEventDocumentType.INTRO);
     if (indexDocument != null) {
       try {
         FileData indexData = materialController.getMaterialData(null, loggedUser, indexDocument);

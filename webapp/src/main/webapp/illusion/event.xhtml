@@ -46,22 +46,22 @@
         <p class="view-header-description-text">#{illusionEventBackingBean.description}</p>
       </h:panelGroup>
     </h:panelGroup>
-
-    <!-- Content -->
-
-    <ui:include src="/facelets/illusionmenu.xhtml">
-      <ui:param name="mayManageEvent" value="#{illusionEventBackingBean.mayManageEvent}" />
-      <ui:param name="eventUrlName" value="#{illusionEventBackingBean.urlName}" />
-      <ui:param name="illusionFolderPath" value="#{illusionEventBackingBean.illusionFolderPath}" />
-    </ui:include>
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="illusion-event-panel">
-        <h:panelGroup layout="block" styleClass="illusion-event-index-text">
-          <h:outputText value="#{illusionEventBackingBean.indexText}" escape="false"/>
-        </h:panelGroup>
-      </h:panelGroup>      
-    </h:panelGroup>
+    <div class="grid_16 tight">
+      <ui:include src="/facelets/illusionnavigation.xhtml"/>
+    </div>
+    
+    <div class="grid_16 tight">
+      <div class="illusion-content-panel grid_16 tight">
+        <div class="grid_16">
+          <div class="illusion-event-sub-panel">
+            <h:panelGroup layout="block" styleClass="illusion-event-index-text">
+              <h:outputText value="#{illusionEventBackingBean.indexText}" escape="false"/>
+            </h:panelGroup>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </ui:define>
 

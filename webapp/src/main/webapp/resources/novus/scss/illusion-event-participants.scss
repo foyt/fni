@@ -22,23 +22,10 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   margin-bottom: 10px;
 }
 
-.illusion-event-participant {
-  width: 100%;
-  padding: 8px;
-  margin-left: -8px;
-  cursor: pointer;
-  display: block;
-  text-decoration: none;
-}
-
-.illusion-event-participant:hover {
-  background: $selected-background-color;
-}
+/* Invite link */
 
 .illusion-invite-participants {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  float: right;
   color: $default-color;
   font-family: $default-font;
   font-size: 14px;
@@ -46,30 +33,9 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   text-transform: uppercase;
 }
 
-.illusion-event-participant-avatar {
-  width: 48px;
-  line-height: 0px;
-  display: inline-block;
-  vertical-align: top;
-}
+/* Form */
 
-.illusion-event-participant h4 {
-  margin-left: 10px;  
-  display: inline-block;
-  vertical-align: top;
-  margin-top: 4px;
-}
-
-.illusion-edit-participant-avatar {
-  float: right;
-}
-
-.illusion-edit-participant-field {
-  width: 288px;
-  margin-top: 8px;
-}
-
-.illusion-edit-participant-panel label {
+form label {
   display: block;
   font-size: 13px;
   font-family: $default-font;
@@ -77,14 +43,21 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   margin-bottom: 2px;
 }
 
-.illusion-edit-participant-panel input[type="text"], .illusion-edit-participant-panel select {
+form input[type="text"], form select {
   width: 100%;
   font-size: 14px;
   font-family: $default-font;
   @include box-sizing(border-box);
 }
 
-/* Submit */
+.illusion-edit-participant-field {
+  width: 288px;
+  margin-top: 8px;
+}
+
+.illusion-edit-participant-avatar {
+  float: right;
+}
 
 .illusion-edit-participant-save {
   @include header-3;

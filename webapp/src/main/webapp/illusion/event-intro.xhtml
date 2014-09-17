@@ -18,6 +18,7 @@
   
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-intro.css"/>
   </ui:define>  
 
@@ -50,39 +51,42 @@
         <p class="view-header-description-text">#{illusionEventIntroBackingBean.description}</p>
       </h:panelGroup>
     </h:panelGroup>
-
-    <!-- Content -->
-
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="illusion-event-intro-panel">
-        <h:panelGroup layout="block" styleClass="illusion-event-intro-text">
-          <h:outputText value="#{illusionEventIntroBackingBean.text}" escape="false"/>
-        </h:panelGroup>
-        
-        <h:panelGroup layout="block" styleClass="illusion-event-intro-join" rendered="#{(illusionEventIntroBackingBean.memberRole == null) and (illusionEventIntroBackingBean.joinMode eq 'OPEN' or illusionEventIntroBackingBean.joinMode eq 'APPROVE')}">
-          <h:panelGroup layout="block" styleClass="illusion-event-intro-join-info" rendered="#{!illusionEventIntroBackingBean.hasSignUpFee}">
-            <h:outputText value="#{locales['illusion.eventIntro.joinInfoFree']}"/>
+  
+    <div class="grid_16 tight">
+      <ui:include src="/facelets/illusionnavigation.xhtml"/>
+    </div>
+    
+    <div class="grid_16 tight">
+        <div class="illusion-content-panel grid_16 tight">
+          <div class="illusion-event-sub-panel">
+          <h:panelGroup layout="block" styleClass="illusion-event-intro-text">
+            <h:outputText value="#{illusionEventIntroBackingBean.text}" escape="false"/>
           </h:panelGroup>
           
-          <h:panelGroup layout="block" styleClass="illusion-event-intro-join-info" rendered="#{illusionEventIntroBackingBean.hasSignUpFee}">
-            <h:outputFormat value="#{locales['illusion.eventIntro.joinInfoPrice']}">
-              <f:param value="#{illusionEventIntroBackingBean.signUpFee}"/>
-            </h:outputFormat>
+          <h:panelGroup layout="block" styleClass="illusion-event-intro-join" rendered="#{(illusionEventIntroBackingBean.memberRole == null) and (illusionEventIntroBackingBean.joinMode eq 'OPEN' or illusionEventIntroBackingBean.joinMode eq 'APPROVE')}">
+            <h:panelGroup layout="block" styleClass="illusion-event-intro-join-info" rendered="#{!illusionEventIntroBackingBean.hasSignUpFee}">
+              <h:outputText value="#{locales['illusion.eventIntro.joinInfoFree']}"/>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="illusion-event-intro-join-info" rendered="#{illusionEventIntroBackingBean.hasSignUpFee}">
+              <h:outputFormat value="#{locales['illusion.eventIntro.joinInfoPrice']}">
+                <f:param value="#{illusionEventIntroBackingBean.signUpFee}"/>
+              </h:outputFormat>
+            </h:panelGroup>
+            
+            <h:form>
+              <h:link outcome="/illusion/dojoin.jsf" styleClass="illusion-event-intro-join-button"  rendered="#{illusionEventIntroBackingBean.joinMode eq 'OPEN' or illusionEventIntroBackingBean.ref eq 'inv'}">
+                <h:outputText value="#{locales['illusion.eventIntro.joinButton']}"/>
+                <f:param name="urlName" value="#{illusionEventIntroBackingBean.urlName}"/>
+              </h:link>
+              <h:link outcome="/illusion/dojoin.jsf" value="#{locales['illusion.eventIntro.requestToJoinButton']}" styleClass="illusion-event-intro-join-button" rendered="#{illusionEventIntroBackingBean.joinMode eq 'APPROVE' and illusionEventIntroBackingBean.ref ne 'inv'}">              
+                <f:param name="urlName" value="#{illusionEventIntroBackingBean.urlName}"/>
+              </h:link>
+            </h:form>
           </h:panelGroup>
-          
-          <h:form>
-            <h:link outcome="/illusion/dojoin.jsf" styleClass="illusion-event-intro-join-button"  rendered="#{illusionEventIntroBackingBean.joinMode eq 'OPEN' or illusionEventIntroBackingBean.ref eq 'inv'}">
-              <h:outputText value="#{locales['illusion.eventIntro.joinButton']}"/>
-              <f:param name="urlName" value="#{illusionEventIntroBackingBean.urlName}"/>
-            </h:link>
-            <h:link outcome="/illusion/dojoin.jsf" value="#{locales['illusion.eventIntro.requestToJoinButton']}" styleClass="illusion-event-intro-join-button" rendered="#{illusionEventIntroBackingBean.joinMode eq 'APPROVE' and illusionEventIntroBackingBean.ref ne 'inv'}">              
-              <f:param name="urlName" value="#{illusionEventIntroBackingBean.urlName}"/>
-            </h:link>
-          </h:form>
-        </h:panelGroup>
-
-      </h:panelGroup>      
-    </h:panelGroup>
+        </div>
+      </div>
+    </div>
 
   </ui:define>
 

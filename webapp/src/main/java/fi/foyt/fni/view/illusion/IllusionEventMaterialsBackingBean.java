@@ -27,6 +27,7 @@ import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedPage;
 
 @RequestScoped
 @Named
@@ -46,12 +47,18 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
   @Inject
   private SessionController sessionController;
   
+  @Inject
+  private IllusionEventNavigationController illusionEventNavigationController;
+  
   @SuppressWarnings("unchecked")
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant member) {
     if (member == null) {
       return "/error/access-denied.jsf";
     }
+    
+    illusionEventNavigationController.setSelectedPage(SelectedPage.MATERIALS);
+    illusionEventNavigationController.setEventUrlName(getUrlName());
 
     User loggedUser = sessionController.getLoggedUser();
     IllusionEventFolder folder = illusionEvent.getFolder();

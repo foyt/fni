@@ -26,6 +26,7 @@ import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.security.SecurityParam;
 import fi.foyt.fni.security.SecurityParams;
+import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedPage;
 
 @RequestScoped
 @Named
@@ -48,8 +49,14 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
   @Inject
   private IllusionEventGroupController illusionEventGroupController;
   
+  @Inject
+  private IllusionEventNavigationController illusionEventNavigationController;
+
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
+    illusionEventNavigationController.setSelectedPage(SelectedPage.GROUPS);
+    illusionEventNavigationController.setEventUrlName(getUrlName());
+    
     groups = illusionEventGroupController.listGroups(illusionEvent);
     participants = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.PARTICIPANT);
 
@@ -108,7 +115,9 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     selectedGroupMemberParticipantIds = new ArrayList<>();
     
     for (IllusionEventGroupMember member : members) {
-      selectedGroupMemberParticipantIds.add(member.getParticipant().getId());
+      if (member.getParticipant().getRole() == IllusionEventParticipantRole.PARTICIPANT) {
+        selectedGroupMemberParticipantIds.add(member.getParticipant().getId());
+      }
     }
   }
   

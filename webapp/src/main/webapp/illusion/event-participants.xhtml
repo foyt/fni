@@ -60,137 +60,130 @@
       </h:panelGroup>
     </h:panelGroup>
     
-    <!-- Content -->
-
-    <ui:include src="/facelets/illusionmenu.xhtml">
-      <ui:param name="mayManageEvent" value="#{illusionEventParticipantsBackingBean.mayManageEvent}" />
-      <ui:param name="eventUrlName" value="#{illusionEventParticipantsBackingBean.urlName}" />
-      <ui:param name="illusionFolderPath" value="#{illusionEventParticipantsBackingBean.illusionFolderPath}" />
-    </ui:include>
+    <div class="grid_16 tight">
+      <ui:include src="/facelets/illusionnavigation.xhtml"/>
+    </div>
 
     <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="grid_8 alpha slim-right">
-        <h:panelGroup layout="block" styleClass="illusion-event-participants-panel">
-          <h2>#{locales['illusion.eventParticipants.participantsListTitle']}</h2>
-          
-          <h:panelGroup layout="block" styleClass="illusion-event-participants">
-            <h:form>
-              <a href="javascript:void(null)" class="illusion-invite-participants">#{locales['illusion.eventParticipants.inviteParticipants']}</a>
-
-              <ui:fragment rendered="#{not empty illusionEventParticipantsBackingBean.participants}">
-                <h3>#{locales['illusion.eventParticipants.participantsListTitle']}</h3>
-            
-                <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.participants}">
-                  <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-participant">
-                    <h:panelGroup layout="block" styleClass="illusion-event-participant-avatar"> 
-                      <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
-                    </h:panelGroup>
-                    <h4>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</h4>
-                  </h:commandLink>      
-                </ui:repeat>
-              </ui:fragment>
-              
-              <h3>#{locales['illusion.eventParticipants.organizersListTitle']}</h3>
-            
-              <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.organizers}">
-                <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-organizer">
-                  <h:panelGroup layout="block" styleClass="illusion-event-participant-avatar"> 
-                    <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
-                  </h:panelGroup>
-                  <h4>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</h4>
-                </h:commandLink>      
-              </ui:repeat>
-              
-              <ui:fragment rendered="#{not empty illusionEventParticipantsBackingBean.approvalPending}">
-                <h3>#{locales['illusion.eventParticipants.approvalPendingListTitle']}</h3>
-              
-                <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.approvalPending}">
-                  <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-approval-pending">
-                    <h:panelGroup layout="block" styleClass="illusion-event-participant-avatar"> 
-                      <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
-                    </h:panelGroup>
-                    <h4>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</h4>
-                  </h:commandLink>      
-                </ui:repeat>
-              </ui:fragment>
-
-              <ui:fragment rendered="#{not empty illusionEventParticipantsBackingBean.waitingPayment}">
-                <h3>#{locales['illusion.eventParticipants.waitingPaymentListTitle']}</h3>
-              
-                <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.waitingPayment}">
-                  <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-waiting-payment">
-                    <h:panelGroup layout="block" styleClass="illusion-event-participant-avatar"> 
-                      <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
-                    </h:panelGroup>
-                    <h4>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</h4>
-                  </h:commandLink>      
-                </ui:repeat>
-              </ui:fragment>
-
-              <ui:fragment rendered="#{not empty illusionEventParticipantsBackingBean.banned}">
-                <h3>#{locales['illusion.eventParticipants.bannedListTitle']}</h3>
-              
-                <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.banned}">
-                  <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-banned">
-                    <h:panelGroup layout="block" styleClass="illusion-event-participant-avatar"> 
-                      <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
-                    </h:panelGroup>
-                    <h4>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</h4>
-                  </h:commandLink>      
-                </ui:repeat>
-              </ui:fragment>
-
-              <ui:fragment rendered="#{not empty illusionEventParticipantsBackingBean.invited}">
-                <h3>#{locales['illusion.eventParticipants.invitedListTitle']}</h3>
-              
-                <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.invited}">
-                  <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-invited">
-                    <h:panelGroup layout="block" styleClass="illusion-event-participant-avatar"> 
-                      <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=48"/> 
-                    </h:panelGroup>
-                    <h4>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</h4>
-                  </h:commandLink>      
-                </ui:repeat>
-              </ui:fragment>
-              
-            </h:form>            
+      <div class="illusion-content-panel grid_16 tight">
+        <h:panelGroup layout="block" styleClass="grid_8 slim-right">
+          <h:panelGroup layout="block" styleClass="illusion-event-sub-panel">
+            <h:panelGroup layout="block" styleClass="illusion-event-participants">
+              <h:form>
+                <a href="javascript:void(null)" class="illusion-invite-participants">#{locales['illusion.eventParticipants.inviteParticipants']}</a>
+  
+                <ui:fragment rendered="#{not empty illusionEventParticipantsBackingBean.participants}">
+                  <h3>#{locales['illusion.eventParticipants.participantsListTitle']}</h3>
+                  <div class="illusion-list">
+                    <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.participants}">
+                      <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
+                        <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
+                        <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
+                      </h:commandLink>
+                    </ui:repeat>
+                  </div>
+                </ui:fragment>
+                
+                <ui:fragment rendered="#{not empty illusionEventParticipantsBackingBean.organizers}">
+                  <h3>#{locales['illusion.eventParticipants.organizersListTitle']}</h3>
+                  <div class="illusion-list">
+                    <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.organizers}">
+                      <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
+                        <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
+                        <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
+                      </h:commandLink>
+                    </ui:repeat>
+                  </div>
+                </ui:fragment>
+                
+                <ui:fragment rendered="#{not empty illusionEventParticipantsBackingBean.approvalPending}">
+                  <h3>#{locales['illusion.eventParticipants.approvalPendingListTitle']}</h3>
+                  <div class="illusion-list">
+                    <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.approvalPending}">
+                      <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
+                        <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
+                        <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
+                      </h:commandLink>
+                    </ui:repeat>
+                  </div>
+                </ui:fragment>
+                
+                <ui:fragment rendered="#{not empty illusionEventParticipantsBackingBean.waitingPayment}">
+                  <h3>#{locales['illusion.eventParticipants.waitingPaymentListTitle']}</h3>
+                  <div class="illusion-list">
+                    <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.waitingPayment}">
+                      <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
+                        <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
+                        <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
+                      </h:commandLink>
+                    </ui:repeat>
+                  </div>
+                </ui:fragment>
+                
+                <ui:fragment rendered="#{not empty illusionEventParticipantsBackingBean.banned}">
+                  <h3>#{locales['illusion.eventParticipants.bannedListTitle']}</h3>
+                  <div class="illusion-list">
+                    <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.banned}">
+                      <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
+                        <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
+                        <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
+                      </h:commandLink>
+                    </ui:repeat>
+                  </div>
+                </ui:fragment>
+                
+                <ui:fragment rendered="#{not empty illusionEventParticipantsBackingBean.invited}">
+                  <h3>#{locales['illusion.eventParticipants.invitedListTitle']}</h3>
+                  <div class="illusion-list">
+                    <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.invited}">
+                      <h:commandLink action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
+                        <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
+                        <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
+                      </h:commandLink>
+                    </ui:repeat>
+                  </div>
+                </ui:fragment>
+                
+              </h:form>            
+            </h:panelGroup>
           </h:panelGroup>
-        </h:panelGroup>
-      </h:panelGroup>    
+        </h:panelGroup>    
       
-      <h:panelGroup layout="block" styleClass="grid_8 omega slim-left">
-        <h:panelGroup layout="block" styleClass="illusion-edit-participant-panel">
-          <h:form>
-            <h:panelGroup layout="block" styleClass="illusion-edit-participant-avatar"> 
-              <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{illusionEventParticipantsBackingBean.selectedParticipantId}?size=128"/> 
-            </h:panelGroup>
-            
-            <h2>#{illusionEventParticipantsBackingBean.selectedParticipantName}</h2>
-            
-            <h:panelGroup layout="block" styleClass="illusion-edit-participant-field">
-              <h:outputLabel value="#{locales['illusion.eventParticipants.editParticipantCharacterNameLabel']}" />
-              <h:inputText value="#{illusionEventParticipantsBackingBean.selectedParticipantCharacterName}"/>
-            </h:panelGroup>
-            
-            <h:panelGroup layout="block" styleClass="illusion-edit-participant-field">
-              <h:outputLabel value="#{locales['illusion.eventParticipants.editParticipantRoleLabel']}" />
-              <h:selectOneMenu value="#{illusionEventParticipantsBackingBean.selectedParticipantRole}">
-                <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleParticipant']}" itemValue="PARTICIPANT" itemDisabled="#{illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId}"/>
-                <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleWaitingPayment']}" itemValue="WAITING_PAYMENT" itemDisabled="#{(illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId)}"/>
-                <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleApprovalPending']}" itemValue="PENDING_APPROVAL" itemDisabled="#{(illusionEventParticipantsBackingBean.eventJoinMode ne 'APPROVE') or (illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId)}"/>
-                <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleBanned']}" itemValue="BANNED" itemDisabled="#{illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId}"/>
-                <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleOrganizer']}" itemValue="ORGANIZER"/>
-              </h:selectOneMenu>
-            </h:panelGroup>
-
-            <h:inputHidden value="#{illusionEventParticipantsBackingBean.selectedParticipantUserId}" />
-            <h:inputHidden value="#{illusionEventParticipantsBackingBean.selectedParticipantId}" />
-            <h:inputHidden value="#{illusionEventParticipantsBackingBean.selectedParticipantName}" />
-
-            <h:commandButton action="#{illusionEventParticipantsBackingBean.saveSelectedParticipant}" styleClass="illusion-edit-participant-save" value="Save" />
-          </h:form>
-        </h:panelGroup>
-      </h:panelGroup>   
+        <h:panelGroup layout="block" styleClass="grid_8 slim-left">
+          <h:panelGroup layout="block" styleClass="illusion-event-sub-panel">
+            <h:form>
+              <h:panelGroup layout="block" styleClass="illusion-edit-participant-avatar"> 
+                <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{illusionEventParticipantsBackingBean.selectedParticipantId}?size=128"/> 
+              </h:panelGroup>
+              
+              <h3>#{illusionEventParticipantsBackingBean.selectedParticipantName}</h3>
+              
+              <h:panelGroup layout="block" styleClass="illusion-edit-participant-field">
+                <h:outputLabel value="#{locales['illusion.eventParticipants.editParticipantCharacterNameLabel']}" />
+                <h:inputText value="#{illusionEventParticipantsBackingBean.selectedParticipantCharacterName}"/>
+              </h:panelGroup>
+              
+              <h:panelGroup layout="block" styleClass="illusion-edit-participant-field">
+                <h:outputLabel value="#{locales['illusion.eventParticipants.editParticipantRoleLabel']}" />
+                <h:selectOneMenu value="#{illusionEventParticipantsBackingBean.selectedParticipantRole}">
+                  <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleParticipant']}" itemValue="PARTICIPANT" itemDisabled="#{illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId}"/>
+                  <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleWaitingPayment']}" itemValue="WAITING_PAYMENT" itemDisabled="#{(illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId)}"/>
+                  <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleApprovalPending']}" itemValue="PENDING_APPROVAL" itemDisabled="#{(illusionEventParticipantsBackingBean.eventJoinMode ne 'APPROVE') or (illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId)}"/>
+                  <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleBanned']}" itemValue="BANNED" itemDisabled="#{illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId}"/>
+                  <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleOrganizer']}" itemValue="ORGANIZER"/>
+                </h:selectOneMenu>
+              </h:panelGroup>
+  
+              <h:inputHidden value="#{illusionEventParticipantsBackingBean.selectedParticipantUserId}" />
+              <h:inputHidden value="#{illusionEventParticipantsBackingBean.selectedParticipantId}" />
+              <h:inputHidden value="#{illusionEventParticipantsBackingBean.selectedParticipantName}" />
+  
+              <h:commandButton action="#{illusionEventParticipantsBackingBean.saveSelectedParticipant}" styleClass="illusion-edit-participant-save" value="Save" />
+            </h:form>
+          </h:panelGroup>
+        </h:panelGroup>      
+      </div>
+           
     </h:panelGroup>
     
     <input type="hidden" name="eventUrlName" value="#{illusionEventParticipantsBackingBean.urlName}"/>

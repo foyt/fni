@@ -31,6 +31,7 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.security.UnauthorizedException;
 import fi.foyt.fni.utils.data.FileData;
 import fi.foyt.fni.utils.faces.FacesUtils;
+import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedPage;
 
 @RequestScoped
 @Named
@@ -52,6 +53,9 @@ public class IllusionEventIntroBackingBean extends AbstractIllusionEventBackingB
 
   @Inject
   private MaterialController materialController;
+
+  @Inject
+  private IllusionEventNavigationController illusionEventNavigationController;
   
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
@@ -69,6 +73,9 @@ public class IllusionEventIntroBackingBean extends AbstractIllusionEventBackingB
         break;
       }
     }
+    
+    illusionEventNavigationController.setSelectedPage(SelectedPage.INDEX);
+    illusionEventNavigationController.setEventUrlName(getUrlName());
     
     IllusionEventDocument introDocument = illusionEventDocumentController.findByFolderAndDocumentType(folder, IllusionEventDocumentType.INTRO);
     if (introDocument != null) {
