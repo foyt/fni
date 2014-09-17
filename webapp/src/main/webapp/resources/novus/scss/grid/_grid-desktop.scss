@@ -49,11 +49,11 @@ body {
   margin-right: 0;
 }
 
-.slim-left {
+.slim-left, .narrow-left {
   margin-left: $grid-margin / 2;
 }
 
-.slim-right {
+.slim-right, .narrow-right {
   margin-right: $grid-margin / 2;
 }
 
@@ -72,7 +72,7 @@ body {
   .container_#{$grid-columns} .grid_#{$i}.alpha, .container_#{$grid-columns} .grid_#{$i}.omega {
     width: ($grid-cell-width * $i) - $grid-margin;
   }
-  
+
   .container_#{$grid-columns} .grid_#{$i}.slim-left, .container_#{$grid-columns} .grid_#{$i}.slim-right {
     width: ($grid-cell-width * $i) - ($grid-margin) + ($grid-margin / 2);
   }
@@ -80,6 +80,15 @@ body {
   .container_#{$grid-columns} .grid_#{$i}.alpha.slim-left, .container_#{$grid-columns} .grid_#{$i}.alpha.slim-right,
   .container_#{$grid-columns} .grid_#{$i}.omega.slim-left, .container_#{$grid-columns} .grid_#{$i}.omega.slim-right {
     width: ($grid-cell-width * $i) - ($grid-margin) + ($grid-margin / 2);
+  }
+  
+  .container_#{$grid-columns} .grid_#{$i}.narrow-left, .container_#{$grid-columns} .grid_#{$i}.narrow-right {
+    width: ($grid-cell-width * $i) - (($grid-margin) + ($grid-margin / 2));
+  }
+  
+  .container_#{$grid-columns} .grid_#{$i}.alpha.narrow-left, .container_#{$grid-columns} .grid_#{$i}.alpha.narrow-right,
+  .container_#{$grid-columns} .grid_#{$i}.omega.narrow-left, .container_#{$grid-columns} .grid_#{$i}.omega.narrow-right {
+    width: ($grid-cell-width * $i) - (($grid-margin) + ($grid-margin / 2));
   }
 }
 
