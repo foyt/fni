@@ -7,7 +7,7 @@
       dust.render("illusion-event-invite-participants", { 
         'NAME': $('input[name="eventName"]').val(),
         'JOIN': $('input[name="joinUrl"]').val(),
-        'DETAILS': $('input[name="introUrl"]').val(),
+        'DETAILS': $('input[name="eventUrl"]').val(),
       }, function(err, html) {
         if (!err) {
           var dialog = $(html);

@@ -51,8 +51,8 @@ public class IllusionEventDoJoinBackingBean {
       switch (illusionEvent.getJoinMode()) {
         case APPROVE:
           illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PENDING_APPROVAL);
-          FacesUtils.addPostRedirectMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("illusion.eventIntro.approvalPendingMessage"));
-          return "/illusion/event-intro.jsf?faces-redirect=true&urlName=" + getUrlName();
+          FacesUtils.addPostRedirectMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("illusion.event.approvalPendingMessage"));
+          return "/illusion/event.jsf?faces-redirect=true&ignoreMessages=true&urlName=" + getUrlName();
         case OPEN:
           illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PARTICIPANT);
           return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
@@ -68,11 +68,11 @@ public class IllusionEventDoJoinBackingBean {
           if (illusionEvent.getSignUpFee() == null) {
             illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
           } else {
-            return "/illusion/group-payment.jsf?faces-redirect=true&urlName=" + getUrlName();
+            return "/illusion/event-payment.jsf?faces-redirect=true&urlName=" + getUrlName();
           }
         case PENDING_APPROVAL:
         case WAITING_PAYMENT:
-          return "/illusion/event-intro.jsf?faces-redirect=true&urlName=" + getUrlName();
+          return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
         case ORGANIZER:
         case PARTICIPANT:
           return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();

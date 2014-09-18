@@ -146,11 +146,8 @@ public class IllusionCreateEventBackingBean {
     
     String indexDocumentTitle = FacesUtils.getLocalizedValue("illusion.createEvent.indexDocumentTitle");
     String indexDocumentContent = FacesUtils.getLocalizedValue("illusion.createEvent.indexDocumentContent");
-    String introDocumentTitle = FacesUtils.getLocalizedValue("illusion.createEvent.introDocumentTitle");
-    String introDocumentContent = FacesUtils.getLocalizedValue("illusion.createEvent.introDocumentContent");
     
     illusionEventDocumentController.createIllusionEventDocument(loggedUser, IllusionEventDocumentType.INDEX, language, illusionEventFolder, "index", indexDocumentTitle, indexDocumentContent, MaterialPublicity.PRIVATE);
-    illusionEventDocumentController.createIllusionEventDocument(loggedUser, IllusionEventDocumentType.INTRO, language, illusionEventFolder, "intro", introDocumentTitle, introDocumentContent, MaterialPublicity.PRIVATE);
     
     // Add organizer
     illusionEventController.createIllusionEventParticipant(loggedUser, event, getUserNickname(loggedUser), IllusionEventParticipantRole.ORGANIZER);

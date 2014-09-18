@@ -50,6 +50,28 @@
     <div class="grid_16 tight">
       <ui:include src="/facelets/illusionnavigation.xhtml"/>
     </div>
+          
+    <h:panelGroup layout="block" styleClass="illusion-event-join" rendered="#{(illusionEventBackingBean.memberRole == null) and (illusionEventBackingBean.joinMode eq 'OPEN' or illusionEventBackingBean.joinMode eq 'APPROVE')}">
+      <h:panelGroup layout="block" styleClass="illusion-event-join-info" rendered="#{!illusionEventBackingBean.hasSignUpFee}">
+        <h:outputText value="#{locales['illusion.event.joinInfoFree']}"/>
+      </h:panelGroup>
+      
+      <h:panelGroup layout="block" styleClass="illusion-event-join-info" rendered="#{illusionEventBackingBean.hasSignUpFee}">
+        <h:outputFormat value="#{locales['illusion.event.joinInfoPrice']}">
+          <f:param value="#{illusionEventBackingBean.signUpFee}"/>
+        </h:outputFormat>
+      </h:panelGroup>
+      
+      <h:form>
+        <h:link outcome="/illusion/dojoin.jsf" styleClass="illusion-event-join-button" rendered="#{illusionEventBackingBean.joinMode eq 'OPEN' or illusionEventBackingBean.ref eq 'inv'}">
+          <h:outputText value="#{locales['illusion.event.joinButton']}"/>
+          <f:param name="urlName" value="#{illusionEventBackingBean.urlName}"/>
+        </h:link>
+        <h:link outcome="/illusion/dojoin.jsf" value="#{locales['illusion.event.requestToJoinButton']}" styleClass="illusion-event-join-button" rendered="#{illusionEventBackingBean.joinMode eq 'APPROVE' and illusionEventBackingBean.ref ne 'inv'}">              
+          <f:param name="urlName" value="#{illusionEventBackingBean.urlName}"/>
+        </h:link>
+      </h:form>
+    </h:panelGroup>
     
     <div class="grid_16 tight">
       <div class="illusion-content-panel grid_16 tight">

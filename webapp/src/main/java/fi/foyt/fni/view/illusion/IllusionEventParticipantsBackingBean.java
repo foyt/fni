@@ -79,7 +79,7 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
     }
     
     joinUrl = eventUrl + "/dojoin?ref=inv";
-    introUrl = eventUrl + "/intro?ref=inv";
+    eventUrl = eventUrl + "?ref=inv";
     
     return null;
   }
@@ -132,8 +132,8 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
     return joinUrl;
   }
   
-  public String getIntroUrl() {
-    return introUrl;
+  public String getEventUrl() {
+    return eventUrl;
   }
   
   public void selectParticipant(IllusionEventParticipant participant) {
@@ -205,7 +205,7 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
   private List<IllusionEventParticipant> invited;
   private IllusionEventJoinMode eventJoinMode;
   private String joinUrl;
-  private String introUrl;
+  private String eventUrl;
   private Long selectedParticipantId;
   private Long selectedParticipantUserId;
   private String selectedParticipantName;

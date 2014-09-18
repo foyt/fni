@@ -98,8 +98,8 @@ public class IllusionEventController {
 
   /* IllusionEventParticipant */
   
-  public IllusionEventParticipant createIllusionEventParticipant(User user, IllusionEvent group, String characterName, IllusionEventParticipantRole role) {
-    IllusionEventParticipant member = illusionEventParticipantDAO.create(user, group, characterName, role);
+  public IllusionEventParticipant createIllusionEventParticipant(User user, IllusionEvent event, String characterName, IllusionEventParticipantRole role) {
+    IllusionEventParticipant member = illusionEventParticipantDAO.create(user, event, characterName, role);
     illusionParticipantAddedEvent.fire(new IllusionParticipantAddedEvent(member.getId()));
     
     return member;

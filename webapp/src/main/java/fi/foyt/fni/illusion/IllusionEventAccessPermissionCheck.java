@@ -36,7 +36,7 @@ public class IllusionEventAccessPermissionCheck implements PermissionCheckImplem
 	  if (sessionController.isLoggedIn()) {
       IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(illusionEventUrlName);
       if (illusionEvent == null) {
-        throw new SecurityException("Could not resolve Illusion event while checking permission for ILLUSION_GROUP_ACCESS");
+        throw new SecurityException("Could not resolve Illusion event while checking permission for ILLUSION_EVENT_ACCESS");
       }
       
       IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, sessionController.getLoggedUser());

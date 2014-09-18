@@ -23,3 +23,36 @@
 .illusion-event-index-text {
   @include html-default-styles;
 }
+
+/* Buttons */
+
+.illusion-event-join {
+  /**
+  top: 40px;
+  right: 40px;**/
+  float: right;
+  text-align: right;
+}
+
+.illusion-event-join-info {
+  color: $default-color;
+  font-family: $default-font;
+  font-weight: bold;
+  font-size: 16px;
+  text-transform: uppercase;   
+  margin-bottom: 12px;
+  margin-top: -70px;
+}
+
+.illusion-event-join-button {
+  @include header-3;
+  padding-left: 23px;
+  padding-right: 23px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 15px;
+  cursor: pointer;
+}
