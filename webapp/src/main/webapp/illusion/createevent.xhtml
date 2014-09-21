@@ -72,7 +72,7 @@
               </h:selectOneMenu>
             </h:panelGroup>
             
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field illusion-create-event-sign-up-fee-field">
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field illusion-create-event-sign-up-fee-field" style="display: none">
               <h:outputLabel value="#{locales['illusion.createEvent.signUpFeeLabel']}" />
               <input type="number" min="0" step="0.01" jsf:value="#{illusionCreateEventBackingBean.signUpFee}"/>
               <h:selectOneMenu value="#{illusionCreateEventBackingBean.signUpFeeCurrency}">
