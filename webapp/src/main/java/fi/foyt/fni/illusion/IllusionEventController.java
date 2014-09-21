@@ -96,6 +96,22 @@ public class IllusionEventController {
     return illusionEventParticipantDAO.listIllusionEventsByUserAndRole(user, role);
   }
 
+  public IllusionEvent updateIllusionEventName(IllusionEvent illusionEvent, String name) {
+    return illusionEventDAO.updateName(illusionEvent, name);
+  }
+
+  public IllusionEvent updateIllusionEventUrlName(IllusionEvent illusionEvent, String urlName) {
+    return illusionEventDAO.updateUrlName(illusionEvent, urlName);
+  }
+
+  public IllusionEvent updateIllusionEventDescription(IllusionEvent illusionEvent, String description) {
+    return illusionEventDAO.updateDescription(illusionEvent, description);
+  }
+
+  public IllusionEvent updateIllusionEventJoinMode(IllusionEvent illusionEvent, IllusionEventJoinMode joinMode) {
+    return illusionEventDAO.updateJoinMode(illusionEvent, joinMode);
+  }
+
   /* IllusionEventParticipant */
   
   public IllusionEventParticipant createIllusionEventParticipant(User user, IllusionEvent event, String characterName, IllusionEventParticipantRole role) {

@@ -67,6 +67,15 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     illusionEvent.setSignUpFeeCurrency(signUpFeeCurrency);
     return persist(illusionEvent);
   }
+
+  public IllusionEvent updateUrlName(IllusionEvent illusionEvent, String urlName) {
+    illusionEvent.setUrlName(urlName);
+    return persist(illusionEvent);
+  }
+
+  public IllusionEvent updateDescription(IllusionEvent illusionEvent, String description) {
+    illusionEvent.setDescription(description);
+    return persist(illusionEvent);
+  }
 	
-  
 }
