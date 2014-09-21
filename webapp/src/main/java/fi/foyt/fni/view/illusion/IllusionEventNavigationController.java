@@ -30,6 +30,7 @@ public class IllusionEventNavigationController {
     INDEX,
     MATERIALS,
     PARTICIPANTS,
-    GROUPS
+    GROUPS,
+    SETTINGS
   }
 }

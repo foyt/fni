@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"  
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['illusion.eventSettings.pageTitle']}</ui:define>
+ 
+  <ui:define name="view-scripts">
+    <!-- View scripts -->
+    
+    <h:outputScript name="scripts/gui/illusion-event-settings.js"></h:outputScript>
+  </ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <!-- View styles -->
+    
+    <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
+    <h:outputStylesheet library="novus" name="css/illusion-event-settings.css"/>
+    
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+
+    <!-- Header -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['illusion.eventSettings.navigationIndex']}</h:link>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:link styleClass="view-header-navigation-item" outcome="/illusion/index.jsf">#{locales['illusion.eventSettings.navigationIllusion']}</h:link>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:link styleClass="view-header-navigation-item" outcome="/illusion/event-settings.jsf?urlName=#{illusionEventSettingsBackingBean.urlName}">#{locales['illusion.eventSettings.navigationEventSettings']}</h:link>
+      </h:panelGroup>
+        
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">
+          <span>#{locales['illusion.eventSettings.descriptionTitle']}</span>
+        </p>
+        <p class="view-header-description-text">#{locales['illusion.eventSettings.descriptionText']}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+    
+    <div class="grid_16 tight">
+      <ui:include src="/facelets/illusionnavigation.xhtml"/>
+    </div>
+
+    <div class="grid_16 tight">
+      <div class="illusion-content-panel grid_16 tight">
+        <div class="grid_16">
+          <div class="illusion-event-sub-panel">
+            <h3>#{locales['illusion.eventSettings.eventSettingsTitle']}</h3>
+            <h:form>
+              <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
+                <h:outputLabel value="#{locales['illusion.eventSettings.nameLabel']}" />
+                <h:inputText autocomplete="false" id="name" value="#{illusionEventSettingsBackingBean.name}" required="true" requiredMessage="#{locales['illusion.eventSettings.nameRequired']}">
+                  <f:ajax execute="@form" render="@form"/>
+                </h:inputText>
+              </h:panelGroup>
+              
+              <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
+                <h:outputLabel value="#{locales['illusion.eventSettings.joining']}" />
+                <h:selectOneMenu value="#{illusionEventSettingsBackingBean.joinMode}">
+                  <f:selectItem itemValue="OPEN" itemLabel="#{locales['illusion.eventSettings.joiningPublic']}"/>
+                  <f:selectItem itemValue="APPROVE" itemLabel="#{locales['illusion.eventSettings.joiningApprove']}"/>
+                  <f:selectItem itemValue="INVITE_ONLY" itemLabel="#{locales['illusion.eventSettings.joiningInviteOnly']}"/>
+                </h:selectOneMenu>
+              </h:panelGroup>
+               
+              <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
+                <h:outputLabel value="#{locales['illusion.eventSettings.descriptionLabel']}" />
+                <h:inputTextarea id="description" value="#{illusionEventSettingsBackingBean.description}"/>
+              </h:panelGroup>  
+  
+              <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
+                <h:commandButton id="save" styleClass="illusion-event-settings-save" value="#{locales['illusion.eventSettings.saveButton']}" action="#{illusionEventSettingsBackingBean.save}"/>
+              </h:panelGroup>
+            </h:form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ui:define>
+
+</ui:composition>

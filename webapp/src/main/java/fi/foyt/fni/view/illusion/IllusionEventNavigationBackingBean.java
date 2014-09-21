@@ -34,6 +34,7 @@ public class IllusionEventNavigationBackingBean {
     materialsVisible = false;
     participantsVisible = false;
     groupsVisible = false;
+    settingsVisible = false;
     
     if (sessionController.isLoggedIn()) {
       User loggedUser = sessionController.getLoggedUser();
@@ -45,7 +46,8 @@ public class IllusionEventNavigationBackingBean {
           boolean organizer = eventParticipant.getRole() == IllusionEventParticipantRole.ORGANIZER;
           materialsVisible = participant || organizer;
           participantsVisible = organizer;
-          groupsVisible = organizer;        
+          groupsVisible = organizer;   
+          settingsVisible = organizer;
         }
       }
     }
@@ -67,6 +69,10 @@ public class IllusionEventNavigationBackingBean {
     return groupsVisible;
   }
   
+  public boolean getSettingsVisible() {
+    return settingsVisible;
+  }
+  
   public SelectedPage getSelectedPage() {
     return illusionEventNavigationController.getSelectedPage();
   }
@@ -79,4 +85,5 @@ public class IllusionEventNavigationBackingBean {
   private boolean materialsVisible;
   private boolean participantsVisible;
   private boolean groupsVisible;
+  private boolean settingsVisible;
 }
