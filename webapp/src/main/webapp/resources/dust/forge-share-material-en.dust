@@ -42,12 +42,12 @@
             {@if cond="'{role}' == 'MAY_EDIT'"}
               <option value="MAY_EDIT" selected="selected">May Edit</option>
             {:else}  
-              <option>May Edit</option>
+              <option value="MAY_EDIT">May Edit</option>
             {/if}
             {@if cond="'{role}' == 'MAY_VIEW'"}
               <option value="MAY_VIEW" selected="selected">May View</option>
             {:else}  
-              <option>May View</option>
+              <option value="MAY_VIEW">May View</option>
             {/if}
             <option value="NONE" >None</option>
           </select>

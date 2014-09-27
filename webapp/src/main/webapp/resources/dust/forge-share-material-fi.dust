@@ -42,12 +42,12 @@
             {@if cond="'{role}' == 'MAY_EDIT'"}
               <option value="MAY_EDIT" selected="selected">Saa Muokata</option>
             {:else}  
-              <option>Saa Muokata</option>
+              <option value="MAY_EDIT">Saa Muokata</option>
             {/if}
             {@if cond="'{role}' == 'MAY_VIEW'"}
               <option value="MAY_VIEW" selected="selected">Saa Katsella</option>
             {:else}  
-              <option>Saa Katsella</option>
+              <option value="MAY_VIEW">Saa Katsella</option>
             {/if}
             <option value="NONE" >Ei oikeutta</option>
           </select>
