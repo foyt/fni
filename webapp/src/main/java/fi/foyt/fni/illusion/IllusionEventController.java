@@ -121,8 +121,8 @@ public class IllusionEventController {
     return member;
   }
 
-  public IllusionEventParticipant findIllusionEventParticipantById(Long memberId) {
-    return illusionEventParticipantDAO.findById(memberId);
+  public IllusionEventParticipant findIllusionEventParticipantById(Long id) {
+    return illusionEventParticipantDAO.findById(id);
   }
   
   public IllusionEventParticipant findIllusionEventParticipantByEventAndUser(IllusionEvent event, User user) {
@@ -258,6 +258,10 @@ public class IllusionEventController {
   
   public IllusionEventFolder createIllusionEventFolder(User creator, IllusionFolder illusionFolder, String urlName, String title) {
     return illusionEventFolderDAO.create(creator, illusionFolder, urlName, title, MaterialPublicity.PRIVATE);
+  }
+
+  public IllusionEvent findIllusionEventByFolder(IllusionEventFolder folder) {
+    return illusionEventDAO.findByFolder(folder);
   }
 
 }

@@ -48,6 +48,20 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     return getSingleResult(entityManager.createQuery(criteria));
 	}
 
+  public IllusionEvent findByFolder(IllusionEventFolder folder) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<IllusionEvent> criteria = criteriaBuilder.createQuery(IllusionEvent.class);
+    Root<IllusionEvent> root = criteria.from(IllusionEvent.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(IllusionEvent_.folder), folder)
+    );
+
+    return getSingleResult(entityManager.createQuery(criteria));
+  }
+
   public IllusionEvent updateName(IllusionEvent illusionEvent, String name) {
     illusionEvent.setName(name);
     return persist(illusionEvent);
