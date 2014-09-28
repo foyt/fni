@@ -101,12 +101,12 @@ public class ForgeMaterialActionBackingBean {
     this.materialSharePublicity = materialSharePublicity;
   }
   
-  public Map<String, String> getMaterialShareUsers() {
-    return materialShareUsers;
+  public Map<String, String> getMaterialShareCollaborators() {
+    return materialShareCollaborators;
   }
   
-  public void setMaterialShareUsers(Map<String, String> materialShareUsers) {
-    this.materialShareUsers = materialShareUsers;
+  public void setMaterialShareCollaborators(Map<String, String> materialShareCollaborators) {
+    this.materialShareCollaborators = materialShareCollaborators;
   }
 
   public String getNewFolderName() {
@@ -211,13 +211,22 @@ public class ForgeMaterialActionBackingBean {
 	  
 	  Material material = materialController.findMaterialById(getMaterialId());
 	  
-	  Map<String, String> users = getMaterialShareUsers();
-	  for (String userStr : users.keySet()) {
-	    User user = userController.findUserById(NumberUtils.createLong(userStr));
-	    String roleStr = users.get(userStr);
-	    MaterialRole role = StringUtils.isBlank(roleStr) || "NONE".equals(roleStr) ? null : MaterialRole.valueOf(roleStr);
-	    // TODO: Modifier
-	    materialUserController.setMaterialUserRole(user, material, role);
+	  Map<String, String> collaborators = getMaterialShareCollaborators();
+	  for (String collaboratorStr : collaborators.keySet()) {
+	    if (StringUtils.isNotBlank(collaboratorStr)) {
+	      Long id = NumberUtils.createLong(StringUtils.substring(collaboratorStr, 1));
+        String roleStr = collaborators.get(collaboratorStr);
+        MaterialRole role = StringUtils.isBlank(roleStr) || "NONE".equals(roleStr) ? null : MaterialRole.valueOf(roleStr);
+	          
+	      switch (collaboratorStr.charAt(0)) {
+  	      case 'U':
+  	        User user = userController.findUserById(id);
+  	        // TODO: Modifier
+  	        materialUserController.setMaterialUserRole(user, material, role);
+  	      break;
+  	    }
+  	    
+	    }
 	  }
 	  
 	  MaterialPublicity publicity = MaterialPublicity.valueOf(getMaterialSharePublicity());
@@ -253,6 +262,6 @@ public class ForgeMaterialActionBackingBean {
 	private Long parentFolderId;
 	private Long moveTargetFolderId;
 	private String materialSharePublicity;
-	private Map<String, String> materialShareUsers;
+	private Map<String, String> materialShareCollaborators;
 	private String newFolderName;
 }

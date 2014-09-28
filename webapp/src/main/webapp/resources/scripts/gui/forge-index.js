@@ -237,15 +237,15 @@
   		          'text': dialog.data('save-button'),
   		          'click': function(event) { 
   		            var publicity = $(this).find('input[name="publicity"]:checked').val();
-  		            var users = new Object();
+  		            var collaborators = new Object();
   		            
-  		            $(this).find('.forge-share-material-user').each(function(index, element) {
-  		              users[$(element).find('input[name="user"]').val()] = $(element).find('select[name="role"]').val();
+  		            $(this).find('.forge-share-material-collaborator').each(function(index, element) {
+  		              collaborators[$(element).find('input[name="collaborator"]').val()] = $(element).find('select[name="role"]').val();
   		            });
 
                   $('input[name="' + prefix + ':material-id' + '"]').val(materialId);
                   $('input[name="' + prefix + ':material-share-publicity' + '"]').val(publicity);
-                  $('input[name="' + prefix + ':material-share-users' + '"]').val(JSON.stringify(users));
+                  $('input[name="' + prefix + ':material-share-collaborators' + '"]').val(JSON.stringify(collaborators));
   	              $('input[name="' + prefix + ':material-share-save' + '"]').click();
   		          }
   		        }, {
@@ -265,29 +265,14 @@
     		    });
     		    
     		    dialog.find('.forge-share-material-invite input').autocomplete({
-    		      source: function( request, response ) {
-    		        $.getJSON(CONTEXTPATH + "/search/", {
-    		          q: this.term,
-    	            source: 'USERS',
-    	            maxHits: 7
-    		        }, function (data, status, xhr) {
-    		          var users = data['USERS'];
-    		          
-    		          response( $.map( users, function( user ) {
-    		            return {
-    		              label: user.name,
-    		              value: user.id
-    		            };
-    		          }));
-    		        });
-  		        },
+    		      source: data.invitables,
   		        select: function( event, ui ) {
-                var users = $(dialog).find('.forge-share-material-users');
-                var userId = ui.item.value;
-                if (users.find('input[value="' + userId + '"]').length == 0) {
-                  users.append(
-                    $('<div class="forge-share-material-user">')
-                      .append($('<input name="user" type="hidden">').val(userId))
+                var collaborators = $(dialog).find('.forge-share-material-collaborators');
+                var id = ui.item.value;
+                if (collaborators.find('input[value="' + id + '"]').length == 0) {
+                  collaborators.append(
+                    $('<div class="forge-share-material-collaborator">')
+                      .append($('<input name="collaborator" type="hidden">').val(id))
                       .append($('<label>').text(ui.item.label))
                       .append(createRoleSelect())); 
                 }

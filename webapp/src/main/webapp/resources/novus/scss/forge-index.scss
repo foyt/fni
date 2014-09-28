@@ -296,7 +296,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 }
   
 .forge-material:hover .forge-material-actions {
-  height: 100px;
+  height: 120px;
   @include transition-property(height);
   @include transition-duration(1s);
   @include transition-delay(0.25s);
@@ -455,19 +455,19 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   width: 100%;
 }
 
-.forge-share-material-user {
+.forge-share-material-collaborator {
   height: 20px;
   clear: both;
   margin-top: 4px;
   margin-bottom: 4px;
 }
 
-.forge-share-material-user label {
+.forge-share-material-collaborator label {
   font-family: $default-font;
   font-size: 12px;
 }
 
-.forge-share-material-user select {
+.forge-share-material-collaborator select {
   float: right;
 }
 

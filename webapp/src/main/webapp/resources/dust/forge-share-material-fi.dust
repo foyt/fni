@@ -32,12 +32,12 @@
     </div>
     
     <h4>Muokkaajat</h4>
-    <div class="forge-share-material-users">
+    <div class="forge-share-material-collaborators">
     
-      {#users}
-        <div class="forge-share-material-user">
+      {#collaborators}
+        <div class="forge-share-material-collaborator">
           <label>{name}</label>
-          <input type="hidden" value="{id}" name="user"/>
+          <input type="hidden" value="{id}" name="collaborator"/>
           <select name="role">
             {@if cond="'{role}' == 'MAY_EDIT'"}
               <option value="MAY_EDIT" selected="selected">Saa Muokata</option>
@@ -52,7 +52,7 @@
             <option value="NONE" >Ei oikeutta</option>
           </select>
         </div>
-      {/users}
+      {/collaborators}
     </div>
     
     <h4>Lisää muokkaajia</h4>
