@@ -1,0 +1,16 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+/* Panels */ 
+
+iframe.illusion-event-material {
+  width: 100%;
+  @include box-sizing(border-box);
+  border: 0px;
+}
+
+img.illusion-event-material {
+  max-width: 100%;
+  @include box-sizing(border-box);
+}
