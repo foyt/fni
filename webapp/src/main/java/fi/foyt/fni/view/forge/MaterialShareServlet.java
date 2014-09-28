@@ -88,7 +88,7 @@ public class MaterialShareServlet extends HttpServlet {
     List<MaterialCollaborator> collaborators = new ArrayList<>();
     
     for (UserMaterialRole materialUser : materialUserController.listMaterialUsers(material)) {
-      collaborators.add(new MaterialCollaborator("U" +   materialUser.getUser().getId(), materialUser.getUser().getFullName(), materialUser.getRole()));
+      collaborators.add(new MaterialCollaborator("U" +   materialUser.getUser().getId(), userController.getUserDisplayName(materialUser.getUser()), materialUser.getRole()));
     }
     
     String contextPath = request.getContextPath();
