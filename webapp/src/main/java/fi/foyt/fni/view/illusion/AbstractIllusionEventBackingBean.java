@@ -2,7 +2,6 @@ package fi.foyt.fni.view.illusion;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.illusion.IllusionEventController;
@@ -79,13 +78,7 @@ public abstract class AbstractIllusionEventBackingBean {
   }
   
   public String getParticipantDisplayName(IllusionEventParticipant participant) {
-    User user = participant.getUser();
-    String result = user.getFullName();
-    if (StringUtils.isNotBlank(result)) {
-      return result;
-    }
-    
-    return "<" + userController.getUserPrimaryEmail(user) + ">";
+    return userController.getUserDisplayName(participant.getUser());
   }
   
   private Long id;
