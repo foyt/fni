@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.collections.ComparatorUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
@@ -119,6 +120,27 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
 
   public List<Material> getMaterials() {
     return materials;
+  }
+  
+  public String getRelativePath(Material material) {
+    List<String> path = new ArrayList<>();
+    
+    Material current = material;
+    do {
+      path.add(0, current.getUrlName());
+    } while ((current == null)||(current.getType() == MaterialType.ILLUSION_FOLDER));
+    
+    return StringUtils.join(path, "/");
+  }
+  
+  public boolean isViewable(Material material) {
+    switch (material.getType()) {
+      case FILE:
+      case PDF:
+        return false;
+      default:
+        return true;
+    }
   }
   
   private List<Material> materials;

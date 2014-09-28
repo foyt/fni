@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">
     <h:outputFormat value="#{locales['illusion.eventMaterials.pageTitle']}">
@@ -69,7 +73,14 @@
     
             <div class="illusion-list illusion-event-materials">
               <ui:repeat var="material" offset="0" step="2" value="#{illusionEventMaterialsBackingBean.materials}">
-                <h:outputLink value="#{request.contextPath}/materials/#{material.path}" target="_blank" styleClass="illusion-event-material illusion-list-item">
+                <h:link outcome="/illusion/event-material.jsf" styleClass="illusion-event-material illusion-list-item" rendered="#{illusionEventMaterialsBackingBean.isViewable(material)}">
+                  <f:param name="urlName" value="#{illusionEventNavigationBackingBean.eventUrlName}"/>
+                  <f:param name="materialPath" value="#{illusionEventMaterialsBackingBean.getRelativePath(material)}"/>
+                  <span>#{material.title}</span>
+                  <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
+                </h:link>
+                
+                <h:outputLink styleClass="illusion-event-material illusion-list-item" value="#{request.contextPath}/materials/#{material.path}?download=true" rendered="#{not illusionEventMaterialsBackingBean.isViewable(material)}">
                   <span>#{material.title}</span>
                   <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
                 </h:outputLink>
@@ -84,7 +95,14 @@
     
             <div class="illusion-list illusion-event-materials">
               <ui:repeat var="material" offset="1" step="2" value="#{illusionEventMaterialsBackingBean.materials}">
-                <h:outputLink value="#{request.contextPath}/materials/#{material.path}" target="_blank" styleClass="illusion-event-material illusion-list-item">
+                <h:link outcome="/illusion/event-material.jsf" styleClass="illusion-event-material illusion-list-item" rendered="#{illusionEventMaterialsBackingBean.isViewable(material)}">
+                  <f:param name="urlName" value="#{illusionEventNavigationBackingBean.eventUrlName}"/>
+                  <f:param name="materialPath" value="#{illusionEventMaterialsBackingBean.getRelativePath(material)}"/>
+                  <span>#{material.title}</span>
+                  <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
+                </h:link>
+                
+                <h:outputLink styleClass="illusion-event-material illusion-list-item" value="#{request.contextPath}/materials/#{material.path}?download=true" rendered="#{not illusionEventMaterialsBackingBean.isViewable(material)}">
                   <span>#{material.title}</span>
                   <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
                 </h:outputLink>
