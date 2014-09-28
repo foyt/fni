@@ -1,5 +1,6 @@
 package fi.foyt.fni.view.illusion;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -14,10 +15,12 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.materials.MaterialController;
+import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.MaterialTypeComparator;
 import fi.foyt.fni.materials.TitleComparator;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
@@ -45,6 +48,9 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
   private MaterialController materialController;
 
   @Inject
+  private MaterialPermissionController materialPermissionController;
+
+  @Inject
   private SessionController sessionController;
   
   @Inject
@@ -63,7 +69,9 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
     User loggedUser = sessionController.getLoggedUser();
     IllusionEventFolder folder = illusionEvent.getFolder();
     
-    materials = materialController.listMaterialsByFolderAndTypes(loggedUser, folder, Arrays.asList(
+    materials = new ArrayList<>();
+    
+    List<Material> allMaterials = materialController.listMaterialsByFolderAndTypes(loggedUser, folder, Arrays.asList(
       MaterialType.DOCUMENT,
       MaterialType.IMAGE,
       MaterialType.PDF,
@@ -73,6 +81,20 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
       MaterialType.GOOGLE_DOCUMENT,
       MaterialType.DROPBOX_FILE   
     ));
+    
+    if (member.getRole() == IllusionEventParticipantRole.ORGANIZER) {
+      materials = allMaterials;
+    } else {
+      for (Material material : allMaterials) {
+        if (materialPermissionController.isPublic(loggedUser, material)) {
+          materials.add(material);
+        } else {
+          if (materialPermissionController.hasAccessPermission(loggedUser, material)) {
+            materials.add(material);
+          }
+        }
+      }
+    }
     
     Collections.sort(materials, ComparatorUtils.chainedComparator(
       Arrays.asList(
