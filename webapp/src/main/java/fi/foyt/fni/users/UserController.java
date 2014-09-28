@@ -282,6 +282,15 @@ public class UserController {
     userDAO.updateArchived(user, Boolean.TRUE);
   }
 	
+  public String getUserDisplayName(User user) {
+    String result = user.getFullName();
+    if (StringUtils.isNotBlank(result)) {
+      return result;
+    }
+    
+    return "<" + getUserPrimaryEmail(user) + ">";
+  }
+  
 	/* Email */
 	
 	public UserEmail createUserEmail(User user, String email, Boolean primary) {
