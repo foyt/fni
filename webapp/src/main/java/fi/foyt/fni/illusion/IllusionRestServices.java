@@ -88,7 +88,7 @@ public class IllusionRestServices {
       return Response.status(Status.BAD_REQUEST).build();
     }
     
-    if (sessionController.isLoggedIn()) {
+    if (!sessionController.isLoggedIn()) {
       return Response.status(Status.UNAUTHORIZED).build();
     }
     
