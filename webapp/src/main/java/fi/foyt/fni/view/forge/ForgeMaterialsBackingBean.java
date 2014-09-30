@@ -95,6 +95,8 @@ public class ForgeMaterialsBackingBean {
         return "illusion-group-folder";
       case ILLUSION_GROUP_DOCUMENT:
         return "document";
+      case CHARACTER_SHEET:
+        return "character-sheet";
     }
 
     return null;
