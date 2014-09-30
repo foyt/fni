@@ -62,6 +62,7 @@ import fi.foyt.fni.persistence.dao.materials.VectorImageRevisionDAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Binary;
+import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
 import fi.foyt.fni.persistence.model.materials.DropboxFile;
@@ -582,6 +583,8 @@ public class MaterialController {
         return "folders";
       case ILLUSION_GROUP_DOCUMENT: 
         return "documents";
+      case CHARACTER_SHEET:
+        return "character-sheet";
     }
   
     return "todo";
@@ -944,6 +947,8 @@ public class MaterialController {
         return getDropboxMaterialData(user, (DropboxFile) material);
       case BINARY:
         return getBinaryMaterialData((Binary) material);
+      case CHARACTER_SHEET:
+        return getCharacterSheetMaterialData(contextPath, (CharacterSheet) material);
       case DROPBOX_FOLDER:
       case DROPBOX_ROOT_FOLDER:
       case FOLDER:
@@ -953,6 +958,46 @@ public class MaterialController {
     }
     
     return null;
+  }
+
+  private FileData getCharacterSheetMaterialData(String contextPath, CharacterSheet characterSheet) throws UnsupportedEncodingException {
+    StringBuilder htmlBuilder = new StringBuilder();
+    htmlBuilder.append("<!DOCTYPE html>");
+    htmlBuilder.append("<html>");
+    htmlBuilder.append("<head>");
+    htmlBuilder.append("<meta charset=\"UTF-8\">");
+    
+    htmlBuilder.append("<script type=\"text/javascript\" charset=\"utf8\" src=\"//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js\"></script>");
+    htmlBuilder.append("<script type=\"text/javascript\" charset=\"utf8\" src=\"//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js\"></script>");
+    htmlBuilder.append("<script type=\"text/javascript\" charset=\"utf8\" src=\"//cdnjs.cloudflare.com/ajax/libs/Base64/0.3.0/base64.min.js\"></script>");
+    htmlBuilder.append("<link rel=\"StyleSheet\" href=\"//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/css/jquery-ui.min.css\"></link>");
+    htmlBuilder.append("<script type=\"text/javascript\" charset=\"utf8\" src=\"" + contextPath + "/uresources/illusion-character-sheet.js\"></script>");
+    
+    if (StringUtils.isNotBlank(characterSheet.getTitle())) {
+      htmlBuilder.append("<title>");
+      htmlBuilder.append(StringEscapeUtils.escapeHtml4(characterSheet.getTitle()));
+      htmlBuilder.append("</title>");
+    }
+    
+    if (StringUtils.isNoneBlank(characterSheet.getStyles())) {
+      htmlBuilder.append("<style type=\"text/css\">");
+      htmlBuilder.append(characterSheet.getStyles());
+      htmlBuilder.append("</style>");
+    }
+    
+    if (StringUtils.isNoneBlank(characterSheet.getScripts())) {
+      htmlBuilder.append("<script type=\"text/javascript\">");
+      htmlBuilder.append(characterSheet.getScripts());
+      htmlBuilder.append("</script>");
+    }
+    
+    htmlBuilder.append("</head>");
+    htmlBuilder.append("<body>");
+    htmlBuilder.append(characterSheet.getContent());
+    htmlBuilder.append("</body>");
+    htmlBuilder.append("</html>");
+    
+    return new FileData(null, characterSheet.getUrlName(), htmlBuilder.toString().getBytes("UTF-8"), "text/html", characterSheet.getModified());
   }
 
   private FileData getDocumentData(String contextPath, Document document) throws UnsupportedEncodingException {
