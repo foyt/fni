@@ -80,8 +80,8 @@
       <div class="illusion-content-panel grid_16 tight">
         <div class="grid_16 tight">
           <div class="illusion-event-sub-panel">
-            <iframe class="illusion-event-material" src="#{illusionEventMaterialBackingBean.materialAbsolutePath}" seamless="seamless" jsf:rendered="#{illusionEventMaterialBackingBean.materialEmbedType eq 'IFRAME'}"></iframe>
-            <img class="illusion-event-material" src="#{illusionEventMaterialBackingBean.materialAbsolutePath}" jsf:rendered="#{illusionEventMaterialBackingBean.materialEmbedType eq 'IMG' or illusionEventMaterialBackingBean.materialEmbedType eq 'SVG'}"/>
+            <iframe class="illusion-event-material" src="#{illusionEventMaterialBackingBean.materialUrl}" seamless="seamless" jsf:rendered="#{illusionEventMaterialBackingBean.materialEmbedType eq 'IFRAME'}"></iframe>
+            <img class="illusion-event-material" src="#{illusionEventMaterialBackingBean.materialUrl}" jsf:rendered="#{illusionEventMaterialBackingBean.materialEmbedType eq 'IMG' or illusionEventMaterialBackingBean.materialEmbedType eq 'SVG'}"/>
           </div>
         </div>
       </div>      

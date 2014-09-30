@@ -80,7 +80,8 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
       MaterialType.BINARY,
       MaterialType.VECTOR_IMAGE,
       MaterialType.GOOGLE_DOCUMENT,
-      MaterialType.DROPBOX_FILE   
+      MaterialType.DROPBOX_FILE,
+      MaterialType.CHARACTER_SHEET
     ));
     
     if (member.getRole() == IllusionEventParticipantRole.ORGANIZER) {

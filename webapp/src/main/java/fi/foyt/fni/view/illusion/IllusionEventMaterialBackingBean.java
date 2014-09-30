@@ -15,6 +15,7 @@ import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
@@ -55,8 +56,8 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
   private HttpServletRequest httpServletRequest;
   
   @Override
-  public String init(IllusionEvent illusionEvent, IllusionEventParticipant member) {
-    if (member == null) {
+  public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
+    if (participant == null) {
       return "/error/access-denied.jsf";
     }
     
@@ -74,7 +75,13 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
       return "/error/access-denied.jsf";
     }
     
-    materialAbsolutePath = httpServletRequest.getContextPath() + "/materials/" + material.getPath();
+    String contextPath =  httpServletRequest.getContextPath();
+    
+    materialUrl = contextPath + "/materials/" + material.getPath();
+    if (material.getType() == MaterialType.CHARACTER_SHEET) {
+      String dataUrl = contextPath + "/rest/illusion/events/" + illusionEvent.getId() + "/materials/" + material.getId() + "/participantSettings/" + participant.getId();
+      materialUrl += "?dataUrl=" + dataUrl;
+    }
     
     switch (material.getType()) {
       case IMAGE:
@@ -110,8 +117,8 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
     this.materialPath = materialPath;
   }
   
-  public String getMaterialAbsolutePath() {
-    return materialAbsolutePath;
+  public String getMaterialUrl() {
+    return materialUrl;
   }
   
   public EmbedType getMaterialEmbedType() {
@@ -122,7 +129,7 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
     return materialTitle;
   }
   
-  private String materialAbsolutePath;
+  private String materialUrl;
   private EmbedType materialEmbedType;
   private String materialTitle;
   
