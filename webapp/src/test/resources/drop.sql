@@ -31,6 +31,9 @@ alter table BookPublication
 alter table BookPublication 
     drop constraint FK_truqclteayq1fpva8iubn43t5 if exists;
 
+alter table CharacterSheet 
+    drop constraint FK_lpi2b27avc79sx937mubrud30 if exists;
+
 alter table CoOpsSession 
     drop constraint FK_wob1x94bufe9nqq8bclvnhy7 if exists;
 
@@ -111,6 +114,12 @@ alter table IllusionEventGroupMember
 
 alter table IllusionEventGroupMember 
     drop constraint FK_f05t51bu9usvp19xuxfocngc if exists;
+
+alter table IllusionEventMaterialParticipantSetting 
+    drop constraint FK_nc6hjnc90f1lqap86tc9a11hi if exists;
+
+alter table IllusionEventMaterialParticipantSetting 
+    drop constraint FK_d3bdnu688r7k3dmh8nkcagd4s if exists;
 
 alter table IllusionEventParticipant 
     drop constraint FK_rx0fsg3gh29ufysfcy17179va if exists;
@@ -342,6 +351,8 @@ drop table BlogTag if exists;
 
 drop table BookPublication if exists;
 
+drop table CharacterSheet if exists;
+
 drop table CoOpsSession if exists;
 
 drop table Country if exists;
@@ -387,6 +398,8 @@ drop table IllusionEventFolder if exists;
 drop table IllusionEventGroup if exists;
 
 drop table IllusionEventGroupMember if exists;
+
+drop table IllusionEventMaterialParticipantSetting if exists;
 
 drop table IllusionEventParticipant if exists;
 
