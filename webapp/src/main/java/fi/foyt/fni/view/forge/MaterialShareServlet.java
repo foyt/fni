@@ -19,16 +19,15 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import fi.foyt.fni.illusion.IllusionEventController;
+import fi.foyt.fni.illusion.IllusionEventMaterialController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.MaterialUserController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
-import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialRole;
-import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
@@ -53,6 +52,9 @@ public class MaterialShareServlet extends HttpServlet {
   @Inject
   private IllusionEventController illusionEventController;
 
+  @Inject
+  private IllusionEventMaterialController illusionEventMaterialController;
+  
   @Inject
   private UserController userController;
 
@@ -95,7 +97,7 @@ public class MaterialShareServlet extends HttpServlet {
     
     List<Collaborator> invitables = new ArrayList<>();
     
-    IllusionEventFolder illusionEventFolder = getIllusionEventFolder(material);
+    IllusionEventFolder illusionEventFolder = illusionEventMaterialController.getIllusionEventFolder(material);
     if (illusionEventFolder != null) {
       IllusionEvent event = illusionEventController.findIllusionEventByFolder(illusionEventFolder);
       List<IllusionEventParticipant> participants = illusionEventController.listIllusionEventParticipantsByEvent(event);
@@ -128,19 +130,6 @@ public class MaterialShareServlet extends HttpServlet {
     } finally {
       printWriter.flush();
     }
-  }
-
-  private IllusionEventFolder getIllusionEventFolder(Material material) {
-    Folder parent = material.getParentFolder();
-    while (parent != null) {
-      if (parent.getType() == MaterialType.ILLUSION_GROUP_FOLDER) {
-        return (IllusionEventFolder) parent;
-      }
-
-      parent = material.getParentFolder();
-    }
-
-    return null;
   }
 
   public class MaterialCollaborator {
