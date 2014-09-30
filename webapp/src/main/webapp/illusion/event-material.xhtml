@@ -80,6 +80,11 @@
       <div class="illusion-content-panel grid_16 tight">
         <div class="grid_16 tight">
           <div class="illusion-event-sub-panel">
+            <h:link styleClass="illusion-event-material-back-link" outcome="/illusion/event-materials.jsf" value="#{locales['illusion.eventMaterial.backLink']}">
+              <f:param name="urlName" value="#{illusionEventMaterialBackingBean.urlName}"/>
+            </h:link>
+            
+            <a class="illusion-event-material-new-window-link" href="#{illusionEventMaterialBackingBean.materialUrl}" target="_blank">#{locales['illusion.eventMaterial.openInNewWindowLink']}</a>
             <iframe class="illusion-event-material" src="#{illusionEventMaterialBackingBean.materialUrl}" seamless="seamless" jsf:rendered="#{illusionEventMaterialBackingBean.materialEmbedType eq 'IFRAME'}"></iframe>
             <img class="illusion-event-material" src="#{illusionEventMaterialBackingBean.materialUrl}" jsf:rendered="#{illusionEventMaterialBackingBean.materialEmbedType eq 'IMG' or illusionEventMaterialBackingBean.materialEmbedType eq 'SVG'}"/>
           </div>

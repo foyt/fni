@@ -14,3 +14,21 @@ img.illusion-event-material {
   max-width: 100%;
   @include box-sizing(border-box);
 }
+
+.illusion-event-material-back-link {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.illusion-event-material-new-window-link {
+  float: right;
+  margin-bottom: 20px;
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
