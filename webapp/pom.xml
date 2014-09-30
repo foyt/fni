@@ -297,14 +297,6 @@
       <artifactId>rome</artifactId>
     </dependency>
 
-    <!-- Hibernate Search -->
-
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-search-orm</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
     <!-- Lucene Highlighter -->
 
     <dependency>
