@@ -584,7 +584,7 @@ public class MaterialController {
       case ILLUSION_GROUP_DOCUMENT: 
         return "documents";
       case CHARACTER_SHEET:
-        return "character-sheet";
+        return "character-sheets";
     }
   
     return "todo";
@@ -993,7 +993,7 @@ public class MaterialController {
     
     htmlBuilder.append("</head>");
     htmlBuilder.append("<body>");
-    htmlBuilder.append(characterSheet.getContent());
+    htmlBuilder.append(characterSheet.getContents());
     htmlBuilder.append("</body>");
     htmlBuilder.append("</html>");
     
