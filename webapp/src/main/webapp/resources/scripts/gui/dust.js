@@ -13,4 +13,17 @@
     return chunk.write(CONTEXTPATH);
   };
   
+  dust.helpers.baseUrl = function(chunk, context, bodies) {
+    var port = window.location.port;
+    var protocol = window.location.protocol;
+    
+    var baseUrl = protocol + '//' + window.location.hostname;
+    var nativePort = (protocol === 'https' && port === 443) || (protocol === 'http' && port === 80);
+    if (!nativePort) {
+      baseUrl += ':' + window.location.port;
+    }
+
+    return chunk.write(baseUrl + CONTEXTPATH);
+  };
+  
 }).call(this);
