@@ -135,6 +135,10 @@ $notifications-load-background: #553752 url(data:image/svg+xml;base64,PHN2ZyB4bW
   color: $header-text-color;
 }
 
+.view-header-description-text a {
+  color: $header-text-color;
+}
+
 /* Footer */
 
 .footer {
