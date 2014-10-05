@@ -15,12 +15,12 @@ public class CharacterSheet extends Material {
     setType(MaterialType.CHARACTER_SHEET);
   }
   
-  public String getContent() {
-    return content;
+  public String getContents() {
+    return contents;
   }
   
-  public void setContent(String content) {
-    this.content = content;
+  public void setContents(String contents) {
+    this.contents = contents;
   }
   
   public String getStyles() {
@@ -40,7 +40,7 @@ public class CharacterSheet extends Material {
   }
   
   @Lob
-  private String content;
+  private String contents;
 
   @Lob
   private String styles;
