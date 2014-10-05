@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" charset="utf8" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js" charset="utf8" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Base64/0.3.0/base64.min.js" charset="utf8" type="text/javascript"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/css/jquery-ui.min.css" rel="StyleSheet">
+    <script src="{@baseUrl/}/uresources/illusion-character-sheet.js" charset="utf8" type="text/javascript"></script>
+    <title>{title}</title>
+    <style type="text/css">{styles|s}</style>
+    <script type="text/javascript">{scripts|s}</script>
+  </head>
+  <body>
+    {contents|s}
+  </body>
+</html>
