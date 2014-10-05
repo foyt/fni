@@ -250,10 +250,7 @@
     }
     
     DATAURL = params['dataUrl'];
-    if (!DATAURL) {
-      alert('dataUrl parameter is missing');
-    }
-    
+
     loadSheetData(function (sheetData) {
       // Initialize data links
       
