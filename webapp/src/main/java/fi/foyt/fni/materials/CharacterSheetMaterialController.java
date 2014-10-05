@@ -6,6 +6,8 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
+
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDAO;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.Folder;
@@ -33,7 +35,12 @@ public class CharacterSheetMaterialController {
 	}
 	
 	public CharacterSheet updateCharacterSheet(CharacterSheet characterSheet, String title, String contents, String styles, String scripts, User modifier) {
-	  characterSheetDAO.updateTitle(characterSheet, title);
+	  if (!StringUtils.equals(characterSheet.getTitle(), title)) {
+	    characterSheetDAO.updateTitle(characterSheet, title);
+	    String urlName = materialController.getUniqueMaterialUrlName(characterSheet.getCreator(), characterSheet.getParentFolder(), characterSheet, title);
+	    characterSheetDAO.updateUrlName(characterSheet, urlName);
+	  }
+	  
 	  characterSheetDAO.updateContents(characterSheet, contents);
     characterSheetDAO.updateStyles(characterSheet, styles);
     characterSheetDAO.updateScripts(characterSheet, scripts);

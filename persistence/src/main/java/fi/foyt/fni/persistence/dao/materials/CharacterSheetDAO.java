@@ -61,4 +61,9 @@ public class CharacterSheetDAO extends GenericDAO<CharacterSheet> {
     return persist(characterSheet);
   }
 
+  public CharacterSheet updateUrlName(CharacterSheet characterSheet, String urlName) {
+    characterSheet.setUrlName(urlName);
+    return persist(characterSheet);
+  }
+
 }
