@@ -67,7 +67,7 @@ create table BookPublication (
 );
 
 create table CharacterSheet (
-    content clob,
+    contents clob,
     scripts clob,
     styles clob,
     id bigint not null,
