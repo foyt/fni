@@ -47,7 +47,7 @@ public class IllusionEventMaterialController {
         return (IllusionEventFolder) parent;
       }
 
-      parent = material.getParentFolder();
+      parent = parent.getParentFolder();
     }
 
     return null;
