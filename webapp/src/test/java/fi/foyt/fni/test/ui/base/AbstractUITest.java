@@ -6,9 +6,12 @@ import java.util.Arrays;
 
 import org.junit.Rule;
 import org.junit.rules.TestName;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 
@@ -48,6 +51,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
 
     return new RemoteWebDriver(new URL(String.format("http://%s:%s@%s:%s/wd/hub", getSauceUsername(), getSauceAccessKey(), getSauceHost(), getSaucePort())), capabilities);
   }
+  
+  protected void waitForElementVisible(WebElement element) {
+    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.visibilityOf(element));
+  }
+
   
   private String sessionId;
   

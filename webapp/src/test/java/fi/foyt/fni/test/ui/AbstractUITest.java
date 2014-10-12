@@ -128,7 +128,7 @@ public abstract class AbstractUITest extends AbstractTest {
     driver.get(getAppUrl(secure) + view);
     assertEquals("Page Not Found!", driver.getTitle());
   }
-
+  
   protected void waitForUrl(RemoteWebDriver driver, final String url) {
     new WebDriverWait(driver, 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
@@ -159,7 +159,7 @@ public abstract class AbstractUITest extends AbstractTest {
   }
 
   protected void assertNotification(RemoteWebDriver driver, String serverity, String text) {
-    assertEquals(text, driver.findElement(By.cssSelector(".notification-" + serverity)).getText());
+    assertEquals(StringUtils.lowerCase(text), StringUtils.lowerCase(driver.findElement(By.cssSelector(".notification-" + serverity)).getText()));
   }
 
   protected void assertNotificationStartsWith(RemoteWebDriver driver, String serverity, String text) {

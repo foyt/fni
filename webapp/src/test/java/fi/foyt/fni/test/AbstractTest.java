@@ -149,6 +149,10 @@ public abstract class AbstractTest {
     createUser(userId, firstName, lastName, email, password, locale, profileImageSource, role, true);
   }  
   
+  protected void createUser(Long userId, String firstName, String lastName, String email, String password, String role) throws Exception {
+    createUser(userId, firstName, lastName, email, password, "en", "GRAVATAR", role, true);
+  }  
+  
   protected void createUser(Long userId, String firstName, String lastName, String email, String password, String locale, String profileImageSource, String role, boolean verified) throws Exception {
     executeSql(
       "insert into " +
