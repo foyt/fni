@@ -155,12 +155,9 @@ public class IllusionCreateEventBackingBean {
     // Add bot 
     String botJid = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOT_JID);
     UserChatCredentials botChatCredentials = chatCredentialsController.findUserChatCredentialsByUserJid(botJid);
-    if (botChatCredentials == null) {
-      // TODO: Better error handling
-      throw new Exception("Configuration error, could not find chatbot user");
+    if (botChatCredentials != null) {
+      illusionEventController.createIllusionEventParticipant(botChatCredentials.getUser(), event, getUserNickname(botChatCredentials.getUser()), IllusionEventParticipantRole.BOT);
     }
-    
-    illusionEventController.createIllusionEventParticipant(botChatCredentials.getUser(), event, getUserNickname(botChatCredentials.getUser()), IllusionEventParticipantRole.BOT);
     
     return "/illusion/event.jsf?faces-redirect=true&urlName=" + event.getUrlName();
   }

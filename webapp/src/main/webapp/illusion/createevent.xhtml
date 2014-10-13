@@ -58,9 +58,7 @@
           <h:form>
             <h:panelGroup layout="block" styleClass="illusion-create-event-field">
               <h:outputLabel value="#{locales['illusion.createEvent.nameLabel']}" />
-              <h:inputText autocomplete="false" id="name" value="#{illusionCreateEventBackingBean.name}" required="true" requiredMessage="#{locales['illusion.createEvent.nameRequired']}">
-                <f:ajax execute="@form" render="@form"/>
-              </h:inputText>
+              <h:inputText styleClass="illusion-create-event-name" autocomplete="false" id="name" value="#{illusionCreateEventBackingBean.name}" required="true" requiredMessage="#{locales['illusion.createEvent.nameRequired']}"/>
             </h:panelGroup>
             
             <h:panelGroup layout="block" styleClass="illusion-create-event-field">
@@ -82,7 +80,7 @@
              
             <h:panelGroup layout="block" styleClass="illusion-create-event-field">
               <h:outputLabel value="#{locales['illusion.createEvent.descriptionLabel']}" />
-              <h:inputTextarea id="description" value="#{illusionCreateEventBackingBean.description}"/>
+              <h:inputTextarea styleClass="illusion-create-event-description" id="description" value="#{illusionCreateEventBackingBean.description}"/>
             </h:panelGroup>  
 
             <h:panelGroup layout="block" styleClass="illusion-create-event-field">
