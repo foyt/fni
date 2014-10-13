@@ -1,9 +1,13 @@
 package fi.foyt.fni.test.ui.base;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Rule;
 import org.junit.rules.TestName;
 import org.openqa.selenium.WebElement;
@@ -52,10 +56,53 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     return new RemoteWebDriver(new URL(String.format("http://%s:%s@%s:%s/wd/hub", getSauceUsername(), getSauceAccessKey(), getSauceHost(), getSaucePort())), capabilities);
   }
   
+  protected void loginInternal(String email, String password) {
+    loginInternal(getWebDriver(), email, password);
+  }
+  
+  protected void waitSelectorToBeClickable(String selector) {
+    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.elementToBeClickable(findElementBySelector(selector)));
+  }
+  
   protected void waitForElementVisible(WebElement element) {
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.visibilityOf(element));
   }
+  
+  protected WebElement findElementBySelector(String selector) {
+    return getWebDriver().findElementByCssSelector(selector);
+  }
 
+  protected void assertSelectorTextIgnoreCase(String selector, String text) {
+    assertEquals(StringUtils.lowerCase(text), StringUtils.lowerCase((findElementBySelector(selector)).getText()));
+  }
+
+  protected void waitForUrlNotMatches(String regex) {
+    waitForUrlNotMatches(getWebDriver(), regex);
+  }
+
+  protected void waitForNotification() {
+    waitForNotification(getWebDriver());
+  }
+
+  protected void assertNotification(String serverity, String text) {
+    assertNotification(getWebDriver(), serverity, text);
+  }
+  
+  protected void getPath(String path) {
+    getPath(path, false);
+  }
+  
+  protected void getPath(String path, Boolean secure) {
+    getWebDriver().get(getAppUrl(secure) + path);
+  }
+  
+  protected void testLoginRequired(String path) throws UnsupportedEncodingException {
+    testLoginRequired(getWebDriver(), path);
+  }
+  
+  protected void testTitle(String view, String expectedTitle) {
+    testTitle(getWebDriver(), view, expectedTitle);
+  }
   
   private String sessionId;
   
