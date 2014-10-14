@@ -8,8 +8,6 @@ import java.net.URL;
 import java.util.Arrays;
 
 import org.apache.commons.lang.StringUtils;
-import org.junit.Rule;
-import org.junit.rules.TestName;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -20,9 +18,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 
 public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implements SauceOnDemandSessionIdProvider {
-
-  @Rule 
-  public TestName testName = new TestName();
 
   @Override
   public String getSessionId() {
