@@ -1,6 +1,7 @@
 package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -95,8 +96,28 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     testLoginRequired(getWebDriver(), path);
   }
   
+  protected void testAccessDenied(String path) throws UnsupportedEncodingException {
+    testAccessDenied(getWebDriver(), path);
+  }
+  
   protected void testTitle(String view, String expectedTitle) {
     testTitle(getWebDriver(), view, expectedTitle);
+  }
+  
+  protected void assertSelectorPresent(String selector) {
+    assertTrue("Element not present '" + selector + "'", getWebDriver().findElementsByCssSelector(selector).size() == 1);
+  }
+
+  protected void assertSelectorNotPresent(String selector) {
+    assertTrue("Element present '" + selector + "'", getWebDriver().findElementsByCssSelector(selector).size() == 0);
+  }
+  
+  protected void assertSelectorCount(String selector, int expected) {
+    assertEquals(expected, getWebDriver().findElementsByCssSelector(selector).size());
+  }
+
+  protected void testNotFound(String path) {
+    testNotFound(getWebDriver(), path);
   }
   
   private String sessionId;
