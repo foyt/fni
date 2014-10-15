@@ -26,20 +26,21 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
   @Test
   public void testNameRequired() {
     loginInternal("admin@foyt.fi", "pass");
-    getPath("/illusion/createevent");
+    navigate("/illusion/createevent");
     findElementBySelector(".illusion-create-event-save").click();
     waitForNotification();
     assertNotification("error", "Name is required");
   }
   
   @Test
-  public void testCreateEvent() {
+  public void testCreateEvent() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
 
     String name = "name";
+    String urlName = "name";
     String description = "description";
 
-    getPath("/illusion/createevent");
+    navigate("/illusion/createevent");
     
     findElementBySelector(".illusion-create-event-name").sendKeys(name);
     findElementBySelector(".illusion-create-event-description").sendKeys(description);
@@ -47,10 +48,14 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     waitSelectorToBeClickable(".illusion-create-event-save");
     findElementBySelector(".illusion-create-event-save").click();
 
-    waitForUrlNotMatches(".*/illusion/createevent");
+    waitForUrlMatches(".*/illusion/event/" + urlName);
+    testTitle("Illusion - name");
     
     assertSelectorTextIgnoreCase(".view-header-description-title", name);
     assertSelectorTextIgnoreCase(".view-header-description-text", description);
+    
+    executeSql("delete from IllusionEventParticipant where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
+    executeSql("delete from IllusionEvent where urlName = ?", urlName);
   }
 
 }

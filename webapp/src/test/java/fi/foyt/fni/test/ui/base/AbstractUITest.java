@@ -72,6 +72,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     assertEquals(StringUtils.lowerCase(text), StringUtils.lowerCase((findElementBySelector(selector)).getText()));
   }
 
+  protected void waitForUrlMatches(String regex) {
+    waitForUrlMatches(getWebDriver(), regex);
+  }
+
   protected void waitForUrlNotMatches(String regex) {
     waitForUrlNotMatches(getWebDriver(), regex);
   }
@@ -84,11 +88,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     assertNotification(getWebDriver(), serverity, text);
   }
   
-  protected void getPath(String path) {
-    getPath(path, false);
+  protected void navigate(String path) {
+    navigate(path, false);
   }
   
-  protected void getPath(String path, Boolean secure) {
+  protected void navigate(String path, Boolean secure) {
     getWebDriver().get(getAppUrl(secure) + path);
   }
   
@@ -102,6 +106,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   
   protected void testTitle(String view, String expectedTitle) {
     testTitle(getWebDriver(), view, expectedTitle);
+  }
+
+  protected void testTitle(String expected) {
+    assertEquals(expected, getWebDriver().getTitle());
   }
   
   protected void assertSelectorPresent(String selector) {
