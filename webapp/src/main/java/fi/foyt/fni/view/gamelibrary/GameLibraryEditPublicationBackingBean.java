@@ -72,7 +72,7 @@ public class GameLibraryEditPublicationBackingBean {
 	
   @RequestAction
 	@Deferred
-	public void load() {
+	public String load() {
 		licenseSelectItems = createLicenseSelectItems();
 		tagSelectItems = createTagSelectItems();
 		authorSelectItems = createAuthorSelectItems();
@@ -83,6 +83,8 @@ public class GameLibraryEditPublicationBackingBean {
 		if (tagSelectItems.size() > 0 && tagSelectItems.get(1).getSelectItems().length > 0) {
       addExistingTag = (String) tagSelectItems.get(1).getSelectItems()[0].getValue();
     }
+		
+		return null;
 	}
 
   @RequestAction

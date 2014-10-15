@@ -42,8 +42,8 @@ public class GameLibraryOrderManamentBackingBean {
   }
   
   @RequestAction
-  public void load() {
-    
+  public String load() {
+    return null;
   }
 
   public List<Order> getOrdersNew() {

@@ -29,9 +29,9 @@ public class PermissionController {
   @PostConstruct
   public void init() {
     userRoleMap = new HashMap<>();
-    userRoleMap.put(UserRole.ADMINISTRATOR, new Role[] { Role.USER, Role.ILLUSION_USER, Role.MATERIAL_USER, Role.FORUM_ADMIN, Role.GAME_LIBRARY_MANAGER, Role.SYSTEM_ADMINISTRATOR });
-    userRoleMap.put(UserRole.LIBRARIAN, new Role[] { Role.USER, Role.ILLUSION_USER, Role.MATERIAL_USER, Role.FORUM_USER, Role.GAME_LIBRARY_MANAGER });
-    userRoleMap.put(UserRole.USER, new Role[] { Role.USER, Role.ILLUSION_USER, Role.MATERIAL_USER, Role.FORUM_USER, Role.GAME_LIBRARY_USER });
+    userRoleMap.put(UserRole.ADMINISTRATOR, new Role[] { Role.USER, Role.ILLUSION_USER, Role.ILLUSION_MANAGER, Role.MATERIAL_USER, Role.FORUM_ADMIN, Role.GAME_LIBRARY_MANAGER, Role.SYSTEM_ADMINISTRATOR });
+    userRoleMap.put(UserRole.LIBRARIAN, new Role[] { Role.USER, Role.ILLUSION_USER, Role.ILLUSION_MANAGER, Role.MATERIAL_USER, Role.FORUM_USER, Role.GAME_LIBRARY_MANAGER });
+    userRoleMap.put(UserRole.USER, new Role[] { Role.USER, Role.ILLUSION_USER, Role.ILLUSION_MANAGER, Role.MATERIAL_USER, Role.FORUM_USER, Role.GAME_LIBRARY_USER });
     userRoleMap.put(UserRole.GUEST, new Role[] { Role.GUEST });
   }
   

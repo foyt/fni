@@ -67,7 +67,8 @@ public class GameLibraryManageBackingBean {
   private SystemSettingsController systemSettingsController;
 
   @RequestAction
-  public void init() {
+  public String init() {
+    return null;
   }
   
   public List<Publication> getUnpublishedPublications() {

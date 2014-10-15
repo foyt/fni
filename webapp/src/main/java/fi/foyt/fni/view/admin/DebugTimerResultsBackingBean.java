@@ -30,8 +30,8 @@ public class DebugTimerResultsBackingBean {
   private DebugTimerResults debugTimerResults;
   
   @RequestAction
-  public void load() {
-    
+  public String load() {
+    return null;
   }
 
   public List<RequestStats> getRequestStats() {

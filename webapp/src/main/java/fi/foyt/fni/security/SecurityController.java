@@ -1,5 +1,6 @@
 package fi.foyt.fni.security;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,11 +45,11 @@ public class SecurityController {
     return result;
   }
 
-  public boolean checkPermission(Permission permission, Object contextParameter) {
+  public boolean checkPermission(Permission permission, Object contextParameter) throws FileNotFoundException {
     return checkPermission(permission, contextParameter, new HashMap<String, String>());
   }
   
-  public boolean checkPermission(Permission permission, Object contextParameter, Map<String, String> parameters) {
+  public boolean checkPermission(Permission permission, Object contextParameter, Map<String, String> parameters) throws FileNotFoundException {
     List<PermissionCheckImplementation<Object>> permissionChecks = getSecurityChecksByPermission(permission);
     for (PermissionCheckImplementation<Object> permissionCheck : permissionChecks) {
       if (!permissionCheck.checkPermission(contextParameter, parameters)) {

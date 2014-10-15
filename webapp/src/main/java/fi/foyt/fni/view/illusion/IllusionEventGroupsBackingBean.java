@@ -24,8 +24,6 @@ import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
-import fi.foyt.fni.security.SecurityParam;
-import fi.foyt.fni.security.SecurityParams;
 import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedPage;
 
 @RequestScoped
@@ -33,11 +31,8 @@ import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedPage;
 @Stateful
 @Join (path = "/illusion/event/{urlName}/groups", to = "/illusion/event-groups.jsf")
 @LoggedIn
-@Secure (value = Permission.ILLUSION_EVENT_ACCESS, deferred = true)
+@Secure (value = Permission.ILLUSION_EVENT_MANAGE)
 @SecurityContext (context = "@urlName")
-@SecurityParams ({
-  @SecurityParam (name = "roles", value = "ORGANIZER")
-})
 public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBackingBean {
 
   @Parameter

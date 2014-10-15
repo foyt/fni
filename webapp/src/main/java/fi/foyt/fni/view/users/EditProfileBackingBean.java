@@ -58,7 +58,7 @@ public class EditProfileBackingBean {
 	
 	@RequestAction 
 	@Deferred
-	public void load() throws IOException {
+	public String load() throws IOException {
 		User loggedUser = sessionController.getLoggedUser();
 		firstName = loggedUser.getFirstName();
 		lastName = loggedUser.getLastName();
@@ -116,6 +116,8 @@ public class EditProfileBackingBean {
 		if (!hasInternalAuthSource) {
 			addAuthenticationSourcesSelectItems.add(new SelectItem(AuthSource.INTERNAL, FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceForgeAndIllusion")));
 		}
+		
+		return null;
 	}
 	
 	@RequestAction 

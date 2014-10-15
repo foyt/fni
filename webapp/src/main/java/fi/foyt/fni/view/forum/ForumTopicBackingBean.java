@@ -170,7 +170,7 @@ public class ForumTopicBackingBean {
     return topicCreated;
   }
 	
-	public boolean getMayModifyPost(ForumPost forumPost) {
+	public boolean getMayModifyPost(ForumPost forumPost) throws FileNotFoundException {
 	  return securityController.checkPermission(Permission.FORUM_POST_MODIFY, forumPost.getId());
 	}
 	

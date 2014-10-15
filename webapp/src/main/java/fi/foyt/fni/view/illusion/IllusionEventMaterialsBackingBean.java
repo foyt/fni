@@ -38,7 +38,7 @@ import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedPage;
 @Stateful
 @Join (path = "/illusion/event/{urlName}/materials", to = "/illusion/event-materials.jsf")
 @LoggedIn
-@Secure (value = Permission.ILLUSION_EVENT_ACCESS, deferred = true)
+@Secure (value = Permission.ILLUSION_EVENT_ACCESS)
 @SecurityContext (context = "@urlName")
 public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBackingBean {
 

@@ -14,6 +14,7 @@ import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.Permission;
@@ -29,7 +30,7 @@ import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedPage;
 @Stateful
 @Join (path = "/illusion/event/{urlName}/materials/{materialPath}", to = "/illusion/event-material.jsf")
 @LoggedIn
-@Secure (value = Permission.ILLUSION_EVENT_ACCESS, deferred = true)
+@Secure (value = Permission.ILLUSION_EVENT_ACCESS)
 @SecurityContext (context = "@urlName")
 public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBackingBean {
 
@@ -69,10 +70,11 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
       return "/error/not-found.jsf";
     }
     
-    User loggedUser = sessionController.getLoggedUser();
-    
-    if (!materialPermissionController.isPublic(loggedUser, material) && !materialPermissionController.hasAccessPermission(loggedUser, material)) {
-      return "/error/access-denied.jsf";
+    if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
+      User loggedUser = sessionController.getLoggedUser();
+      if (!materialPermissionController.isPublic(loggedUser, material) && !materialPermissionController.hasAccessPermission(loggedUser, material)) {
+        return "/error/access-denied.jsf";
+      }
     }
     
     String contextPath =  httpServletRequest.getContextPath();

@@ -4,6 +4,7 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -16,7 +17,6 @@ import java.util.logging.Logger;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
-import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -43,38 +43,39 @@ public class SecureInterceptor implements Serializable {
 	@Inject
 	private SessionController sessionController;
 	
+	private String errorPage = null;
+	
 	@AroundInvoke
-	public Object aroundInvoke(InvocationContext ic) throws Exception {
-	  Secure secure = getAnnotation(ic.getMethod(), ic.getTarget(), Secure.class);
-		
-		if (secure == null) {
-		  throw new SecurityException("Could not find Secure annotation");
-		}
-		
-    FacesContext facesContext = FacesContext.getCurrentInstance();
+	public Object aroundInvoke(InvocationContext ic) {
+	  if (errorPage == null) {
+  	  Secure secure = getAnnotation(ic.getMethod(), ic.getTarget(), Secure.class);
+  		
+  		if (secure == null) {
+  		  throw new SecurityException("Could not find Secure annotation");
+  		}
+  
+  		Permission permission = secure.value();
+  		if (sessionController.hasLoggedUserPermission(permission)) {
+  			try {
+          if (invokePermissionChecks(permission, ic.getTarget(), ic.getMethod(), ic.getParameters())) {
+          	return ic.proceed();
+          }
 
-		if (secure.deferred() && facesContext == null) {
-		  return ic.proceed();
-		}
-		
-		Permission permission = secure.value();
-		if (sessionController.hasLoggedUserPermission(permission)) {
-			if (invokePermissionChecks(permission, ic.getTarget(), ic.getMethod(), ic.getParameters())) {
-  			return ic.proceed();
-			}
-		}
-		
-		if (facesContext != null) {
-      NavigationHandler navigationHandler = facesContext.getApplication().getNavigationHandler();
-      navigationHandler.handleNavigation(facesContext, null, "/error/access-denied.jsf");
-      facesContext.renderResponse();
-      return null;
-		} else {
-  		throw new ForbiddenException();
-		}
+          errorPage = "/error/access-denied.jsf";
+        } catch (FileNotFoundException e) {
+          errorPage = "/error/not-found.jsf";
+        } catch (Exception e) {
+          errorPage = "/error/internal-error.jsf";
+        }
+  		} else {
+        errorPage = "/error/access-denied.jsf";
+  		}
+    }
+	  
+    return errorPage;
 	}
 
-	private boolean invokePermissionChecks(final Permission permission, Object object, Method method, Object[] methodParameters) {
+	private boolean invokePermissionChecks(final Permission permission, Object object, Method method, Object[] methodParameters) throws FileNotFoundException {
 		Object contextParameter = null;
 		
 		Annotation[][] parameterAnnotations = method.getParameterAnnotations();
@@ -103,7 +104,11 @@ public class SecureInterceptor implements Serializable {
   			}
   		}
 		}
-		
+
+    if (contextParameter == null) {
+      logger.warning("Could not resolve @SecurityContext value in method " + method.toGenericString());
+    }
+    
 		Map<String, String> parameters = new HashMap<>();
 		SecurityParams params = getAnnotation(method, object, SecurityParams.class); // method.getAnnotation(SecurityParams.class);
 		if (params != null) {
@@ -113,7 +118,7 @@ public class SecureInterceptor implements Serializable {
   		}
 		}
 		
-		return securityController.checkPermission(permission, contextParameter, parameters);
+	  return securityController.checkPermission(permission, contextParameter, parameters);
 	}
 	
 	private <T extends Annotation> T getAnnotation(Method method, Object object, Class<T> annotationClass) {

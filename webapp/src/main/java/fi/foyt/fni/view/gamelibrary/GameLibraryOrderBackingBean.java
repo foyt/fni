@@ -54,7 +54,7 @@ public class GameLibraryOrderBackingBean {
 	@SecurityParams (
     @SecurityParam (name="accessKey", value="#{gameLibraryOrderBackingBean.accessKey}")
 	)
-	public void init() throws FileNotFoundException {
+	public String init() throws FileNotFoundException {
 		Order order = orderController.findOrderById(getOrderId());
 		if (order == null) {
 		  throw new FileNotFoundException();
@@ -75,6 +75,8 @@ public class GameLibraryOrderBackingBean {
 	  shipped = order.getShipped();
 	  delivered = order.getDelivered();
 	  canceled = order.getCanceled(); 
+	  
+	  return null;
 	}
 
 	public Long getOrderId() {

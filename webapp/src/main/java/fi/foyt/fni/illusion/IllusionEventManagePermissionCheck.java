@@ -16,8 +16,8 @@ import fi.foyt.fni.security.SecurityException;
 import fi.foyt.fni.session.SessionController;
 
 @Stateless
-@PermissionCheck (Permission.ILLUSION_EVENT_ACCESS)
-public class IllusionEventAccessPermissionCheck implements PermissionCheckImplementation<String> {
+@PermissionCheck (Permission.ILLUSION_EVENT_MANAGE)
+public class IllusionEventManagePermissionCheck implements PermissionCheckImplementation<String> {
   
   @Inject
   private SessionController sessionController;
@@ -28,11 +28,11 @@ public class IllusionEventAccessPermissionCheck implements PermissionCheckImplem
 	@Override
 	public boolean checkPermission(String illusionEventUrlName, Map<String, String> parameters) throws FileNotFoundException {
 	  if (sessionController.isLoggedIn()) {
-	    if (illusionEventUrlName == null) {
-        throw new SecurityException("Could not resolve Illusion event while checking permission for ILLUSION_EVENT_ACCESS");
-	    }
+      if (illusionEventUrlName == null) {
+        throw new SecurityException("Could not resolve Illusion event while checking permission for ILLUSION_EVENT_MANAGE");
+      }
 	    
-      IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(illusionEventUrlName);
+	    IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(illusionEventUrlName);
       if (illusionEvent == null) {
         throw new FileNotFoundException();
       }
@@ -41,16 +41,8 @@ public class IllusionEventAccessPermissionCheck implements PermissionCheckImplem
       if (participant == null) { 
         return false;
       }
-
-      if (participant.getRole() == IllusionEventParticipantRole.PARTICIPANT) {
-        return true;
-      }
       
-      if (participant.getRole() == IllusionEventParticipantRole.ORGANIZER) {
-        return true;
-      }
-      
-      return false;
+      return participant.getRole() == IllusionEventParticipantRole.ORGANIZER;
     }
     
     return false;
