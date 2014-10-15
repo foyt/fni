@@ -14,6 +14,7 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
     testTitle("/illusion/event/openevent", "Illusion - Open Event");
     assertSelectorCount(".illusion-event-navigation a", 1);
     assertSelectorPresent(".illusion-event-join-button");
+    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "event index");
   }
   
   @Test
@@ -38,6 +39,7 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
     testTitle("/illusion/event/openevent", "Illusion - Open Event");
     assertSelectorCount(".illusion-event-navigation a", 1);
     assertSelectorPresent(".illusion-event-join-button");
+    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "event index");
   }
   
   @Test
@@ -48,6 +50,7 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
     testTitle("/illusion/event/openevent", "Illusion - Open Event");
     assertSelectorCount(".illusion-event-navigation a", 2);
     assertSelectorNotPresent(".illusion-event-join-button");
+    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "event index");
   }
   
   @Test
@@ -58,6 +61,7 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
     testTitle("/illusion/event/openevent", "Illusion - Open Event");
     assertSelectorCount(".illusion-event-navigation a", 5);
     assertSelectorNotPresent(".illusion-event-join-button");
+    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "event index");
   }
   
 
