@@ -24,6 +24,7 @@ import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantImageDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventSettingDAO;
+import fi.foyt.fni.persistence.dao.materials.IllusionEventDocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionFolderDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionEventFolderDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -34,6 +35,8 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventSettingKey;
+import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
+import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
@@ -71,6 +74,9 @@ public class IllusionEventController {
   
   @Inject
   private MaterialController materialController;
+  
+  @Inject
+  private IllusionEventDocumentDAO illusionEventDocumentDAO;
 
   @Inject
   private Event<IllusionParticipantAddedEvent> illusionParticipantAddedEvent;
@@ -264,4 +270,9 @@ public class IllusionEventController {
     return illusionEventDAO.findByFolder(folder);
   }
 
+  /* Pages*/
+
+  public List<IllusionEventDocument> listPages() {
+    return illusionEventDocumentDAO.listByDocumentType(IllusionEventDocumentType.PAGE);
+  }
 }

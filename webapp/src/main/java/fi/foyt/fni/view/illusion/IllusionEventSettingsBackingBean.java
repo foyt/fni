@@ -19,7 +19,7 @@ import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.utils.servlet.RequestUtils;
-import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedPage;
+import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedItem;
 
 @RequestScoped
 @Named
@@ -45,7 +45,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
       return "/error/access-denied.jsf";
     }
 
-    illusionEventNavigationController.setSelectedPage(SelectedPage.SETTINGS);
+    illusionEventNavigationController.setSelectedItem(SelectedItem.SETTINGS);
     illusionEventNavigationController.setEventUrlName(getUrlName());
 
     name = illusionEvent.getName();

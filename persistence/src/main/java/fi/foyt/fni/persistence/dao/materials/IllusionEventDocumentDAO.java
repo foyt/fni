@@ -1,6 +1,7 @@
 package fi.foyt.fni.persistence.dao.materials;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -54,5 +55,19 @@ public class IllusionEventDocumentDAO extends GenericDAO<IllusionEventDocument> 
     );
     
     return getSingleResult(entityManager.createQuery(criteria));
+  }
+
+  public List<IllusionEventDocument> listByDocumentType(IllusionEventDocumentType documentType) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<IllusionEventDocument> criteria = criteriaBuilder.createQuery(IllusionEventDocument.class);
+    Root<IllusionEventDocument> root = criteria.from(IllusionEventDocument.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(IllusionEventDocument_.documentType), documentType)
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
   }
 }

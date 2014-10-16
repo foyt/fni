@@ -1,5 +1,7 @@
 package fi.foyt.fni.view.illusion;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -10,9 +12,9 @@ import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedPage;
 
 @Named
 @RequestScoped
@@ -26,7 +28,7 @@ public class IllusionEventNavigationBackingBean {
   private IllusionEventController illusionEventController;
 
   @Inject
-  private IllusionEventNavigationController illusionEventNavigationController; 
+  private IllusionEventNavigationController illusionEventNavigationController;
   
   @PostConstruct
   public void init() {
@@ -51,6 +53,8 @@ public class IllusionEventNavigationBackingBean {
         }
       }
     }
+    
+    pages = illusionEventController.listPages();
   }
   
   public boolean getIndexVisible() {
@@ -73,8 +77,8 @@ public class IllusionEventNavigationBackingBean {
     return settingsVisible;
   }
   
-  public SelectedPage getSelectedPage() {
-    return illusionEventNavigationController.getSelectedPage();
+  public String getSelectedItem() {
+    return illusionEventNavigationController.getSelectedItem();
   }
   
   public String getEventUrlName() {
@@ -82,14 +86,22 @@ public class IllusionEventNavigationBackingBean {
   }
   
   public boolean getAdministrationSelected() {
-    switch (getSelectedPage()) {
-      case GROUPS:
-      case PARTICIPANTS:
-      case SETTINGS:
+    switch (getSelectedItem()) {
+      case "GROUPS":
+      case "PARTICIPANTS":
+      case "SETTINGS":
         return true;
       default:
         return false;
     }
+  }
+  
+  public List<IllusionEventDocument> getPages() {
+    return pages;
+  }
+  
+  public boolean isPageSelected(IllusionEventDocument page) {
+    return getSelectedItem().equals("PAGE-" + page.getId().toString());
   }
   
   private boolean indexVisible;
@@ -97,4 +109,5 @@ public class IllusionEventNavigationBackingBean {
   private boolean participantsVisible;
   private boolean groupsVisible;
   private boolean settingsVisible;
+  private List<IllusionEventDocument> pages; 
 }

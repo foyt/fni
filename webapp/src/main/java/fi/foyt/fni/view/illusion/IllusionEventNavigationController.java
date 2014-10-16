@@ -15,18 +15,22 @@ public class IllusionEventNavigationController {
     this.eventUrlName = eventUrlName;
   }
   
-  public SelectedPage getSelectedPage() {
-    return selectedPage;
+  public String getSelectedItem() {
+    return selectedItem;
   }
   
-  public void setSelectedPage(SelectedPage selectedPage) {
-    this.selectedPage = selectedPage;
+  public void setSelectedItem(SelectedItem selectedItem) {
+    this.selectedItem = selectedItem.name();
+  }
+  
+  public void setSelectedPage(Long id) {
+    this.selectedItem = "PAGE-" + id;
   }
 
   private String eventUrlName;
-  private SelectedPage selectedPage;
+  private String selectedItem;
   
-  public static enum SelectedPage {
+  public static enum SelectedItem {
     INDEX,
     MATERIALS,
     PARTICIPANTS,

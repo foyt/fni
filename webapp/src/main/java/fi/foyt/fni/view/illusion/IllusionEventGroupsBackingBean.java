@@ -24,7 +24,7 @@ import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
-import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedPage;
+import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedItem;
 
 @RequestScoped
 @Named
@@ -49,7 +49,7 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
 
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
-    illusionEventNavigationController.setSelectedPage(SelectedPage.GROUPS);
+    illusionEventNavigationController.setSelectedItem(SelectedItem.GROUPS);
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
     groups = illusionEventGroupController.listGroups(illusionEvent);

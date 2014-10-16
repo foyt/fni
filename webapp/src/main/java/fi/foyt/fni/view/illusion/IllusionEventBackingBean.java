@@ -30,7 +30,7 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.utils.data.FileData;
 import fi.foyt.fni.utils.faces.FacesUtils;
-import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedPage;
+import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedItem;
 
 @RequestScoped
 @Named
@@ -61,7 +61,7 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
 
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant member) {
-    illusionEventNavigationController.setSelectedPage(SelectedPage.INDEX);
+    illusionEventNavigationController.setSelectedItem(SelectedItem.INDEX);
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
     if (member != null) {
