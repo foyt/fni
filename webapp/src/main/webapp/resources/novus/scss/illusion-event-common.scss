@@ -1,9 +1,12 @@
+@charset "utf-8";
 @import "vars";
 @import "compass";
 @import "styles";
 
 $list-selected-background: rgba(71, 176, 176, 1);
 $list-selected-color: #fff;
+$menu-background: #eee;
+$menu-active-background: rgba(250, 250, 250, 1);
 
 /* Menu */
 
@@ -12,6 +15,10 @@ $list-selected-color: #fff;
 }
 
 .illusion-event-navigation-item {
+  
+}
+
+.illusion-event-navigation-item, .illusion-event-navigation-menu {
   display: inline-block;
   padding: 20px;
   border-top-left-radius: 8px;
@@ -19,14 +26,59 @@ $list-selected-color: #fff;
   font-family: $title-font;
   font-size: 16px;
   text-transform: uppercase;  
-  background: #eee;
+  background: $menu-background;
   color: darken($title-color, 10%);
   text-decoration: none;
   margin-right: 2px;
+  position: relative;
+  cursor: pointer;
+}
+
+.illusion-event-navigation-menu .illusion-event-navigation-menu-items {
+  margin-top: 20px;
+  display: none;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  background: $menu-background;
+}
+
+.illusion-event-navigation-menu:hover {
+  background-color: $menu-active-background;
+}
+
+.illusion-event-navigation-menu:hover .illusion-event-navigation-menu-items {
+  display: block;
+  background-color: $menu-active-background;
+}
+
+.illusion-event-navigation-menu .illusion-event-navigation-menu-label:after {
+  content: '▼';
+  margin-left: 8px;
+}
+
+.illusion-event-navigation-menu:hover .illusion-event-navigation-menu-label {
+  color: $title-color;
+}
+
+.illusion-event-navigation-menu .illusion-event-navigation-item {
+  display: block;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 30px;
+  border-radius: 0px;
+  font-size: 14px;
+  background: transparent;
+}
+
+.illusion-event-navigation-menu .illusion-event-navigation-item:hover {
+  color: $title-color;
 }
 
 .illusion-event-navigation-item-active {
-  background-color: $panel-background-color;
+  background-color: $menu-active-background;
   color: $title-color;
 }
 

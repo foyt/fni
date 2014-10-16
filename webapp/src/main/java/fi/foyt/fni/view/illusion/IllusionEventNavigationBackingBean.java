@@ -81,6 +81,17 @@ public class IllusionEventNavigationBackingBean {
     return illusionEventNavigationController.getEventUrlName();
   }
   
+  public boolean getAdministrationSelected() {
+    switch (getSelectedPage()) {
+      case GROUPS:
+      case PARTICIPANTS:
+      case SETTINGS:
+        return true;
+      default:
+        return false;
+    }
+  }
+  
   private boolean indexVisible;
   private boolean materialsVisible;
   private boolean participantsVisible;
