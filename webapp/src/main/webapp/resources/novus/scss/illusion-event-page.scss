@@ -1,0 +1,15 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+.illusion-event-page-content {
+  padding: 1in;
+}
+
+.illusion-event-page-content *:first-child {
+  margin-top: 0px;
+}
+
+.illusion-event-page-content {
+  @include html-default-styles;
+}
