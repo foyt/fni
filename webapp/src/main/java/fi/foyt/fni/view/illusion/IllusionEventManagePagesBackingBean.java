@@ -14,6 +14,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.materials.IllusionEventDocumentController;
+import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
@@ -57,6 +58,9 @@ public class IllusionEventManagePagesBackingBean extends AbstractIllusionEventBa
 
   @Inject
   private SystemSettingsController systemSettingsController;
+
+  @Inject
+  private MaterialController materialController;
   
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant member) {
@@ -93,9 +97,10 @@ public class IllusionEventManagePagesBackingBean extends AbstractIllusionEventBa
   public String newPage() {
     IllusionEvent event = illusionEventController.findIllusionEventByUrlName(getUrlName());
     String title = FacesUtils.getLocalizedValue("illusion.managePages.untitledPage");
+    String pageUrlName = materialController.getUniqueMaterialUrlName(sessionController.getLoggedUser(), event.getFolder(), null, title);
     Language language = systemSettingsController.findLocaleByIso2(sessionController.getLocale().getLanguage());
-    IllusionEventDocument page = illusionEventDocumentController.createIllusionEventDocument(sessionController.getLoggedUser(), IllusionEventDocumentType.PAGE, language, event.getFolder(), "index", title, "", MaterialPublicity.PRIVATE);
-    return "/illusion/event-edit-page.jsf?urlName=" + getUrlName() + "&id=" + page.getId();
+    IllusionEventDocument page = illusionEventDocumentController.createIllusionEventDocument(sessionController.getLoggedUser(), IllusionEventDocumentType.PAGE, language, event.getFolder(), pageUrlName, title, "", MaterialPublicity.PRIVATE);
+    return "/illusion/event-edit-page.jsf?faces-redirect=true&urlName=" + event.getUrlName() + "&id=" + page.getId();
   }
   
   private List<IllusionEventDocument> pages;
