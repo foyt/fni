@@ -1,0 +1,165 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+$hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
+
+.illusion-event-sub-panel {
+  margin-left: 10px;
+  margin-right: 10px;
+  position: relative;
+}
+
+.illusion-event-page-content {
+  @include html-default-styles; 
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 1in;
+  padding-right: 1in; 
+}
+
+h2 {
+  @include header-2;
+  padding-top: 20px;
+  margin-right: 120px;
+  margin-left: -6px;
+  padding-bottom: 10px;
+}
+
+h2 input {
+  color: $title-color;
+  background: none;
+  border: 1px solid transparent;
+  width: 100%;
+  @include box-sizing(border-box);
+  padding-left: 4px;
+  font-family: $default-font;
+}
+
+h2 input:hover {
+  background: #fff;
+  border: 1px dotted #eee;
+}
+
+h2 input:focus {
+  background: #fff;
+  border: 1px inset #eee;
+}
+
+.illusion-edit-page-editor-status { 
+  @include header-5;
+  color: $title-color;
+  position: absolute;
+  right: 20px;
+  margin-top: -30px;
+}
+
+.collaborators {
+  position: absolute;
+  right: 20px;
+  margin-top: -72px;
+  width: 500px;
+  overflow-y: scroll;
+}
+
+.collaborator {
+  float: right;
+  margin-left: 4px;
+}
+
+.collaborators img {
+  width: 32px;
+  border-radius: 8px;
+  vertical-align: top;
+}
+
+/* CKBrowser plugin */
+
+.fniDynListContent {
+  overflow: auto;
+  overflow-y: scroll
+}
+
+.fniDynListContent .fniDynListRow {
+  display: block;
+  height: 48px;
+  clear: both;
+  margin-bottom: 8px;
+  padding: 8px;
+}
+
+.fniDynListRow:hover {
+  background-color: $hover-background;   
+}
+
+.fniDynListRow .fniDynListCell {
+  cursor: pointer;
+}
+
+.fniDynListHeaderRow {
+  display: none;
+}
+
+.fniDynListRow .fniDynListCell .fnigenericbrowser-icon {
+  width: 48px;
+  height: 48px;
+  display: block;
+  float: left;
+  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-file.png"]}'));
+}
+
+.fniDynListRow .fniDynListCell .fnigenericbrowser-icon-up {
+  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/folder-go-up.png"]}'));
+}
+
+.fniDynListRow .fniDynListCell .fnigenericbrowser-icon-document {
+  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-document.png"]}'));
+}
+
+.fniDynListRow .fniDynListCell .fnigenericbrowser-icon-dropbox-folder {
+  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-dropbox.png"]}'));
+}
+
+.fniDynListRow .fniDynListCell .fnigenericbrowser-icon-folder {
+  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-folder.png"]}'));
+}
+
+.fniDynListRow .fniDynListCell .fnigenericbrowser-icon-image {
+  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-image.png"]}'));
+}
+
+.fniDynListRow .fniDynListCell .fnigenericbrowser-icon-pdf {
+  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-pdf.png"]}'));
+}
+
+.fniDynListRow .fniDynListCell .fnigenericbrowser-icon-vector-image {
+  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-vector-image.png"]}'));
+}
+
+.fniDynListRow .fniDynListCell .fnigenericbrowser-info {
+  float: left;
+  padding-left: 8px;
+}
+
+.fniDynListRow .fniDynListCell .fnigenericbrowser-name,
+.fniDynListRow .fniDynListCell .fnigenericbrowser-modified,
+.fniDynListRow .fniDynListCell .fnigenericbrowser-creator {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 12px;
+  display: block;
+  background-image: none;
+  display: block;
+}
+
+.fniDynListRow .fniDynListCell .fnigenericbrowser-name {
+  font-weight: bold;
+}
+
+.fniDynListRow .fniDynListCell .fnigenericbrowser-modified {
+  font-size: 10px;
+}
+
+.fniDynListRow .fniDynListCell * {
+  cursor: pointer;
+}

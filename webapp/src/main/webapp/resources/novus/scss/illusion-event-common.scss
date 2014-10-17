@@ -52,6 +52,7 @@ $menu-active-background: rgba(250, 250, 250, 1);
 .illusion-event-navigation-menu:hover .illusion-event-navigation-menu-items {
   display: block;
   background-color: $menu-active-background;
+  z-index: 9999;
 }
 
 .illusion-event-navigation-menu .illusion-event-navigation-menu-label:after {
@@ -132,13 +133,30 @@ h4>a{
   padding: 8px;
   cursor: pointer;
   display: block;
-  text-decoration: none;
   font-size: 14px;
   text-decoration: none;
   text-transform: uppercase;
   color: $default-color;
   font-family: $default-font;
   @include box-sizing(border-box);
+}
+
+.illusion-list-item>a{
+  text-decoration: none;
+  color: $default-color;
+}
+
+.illusion-list-item-actions {
+  display: block;
+}
+
+.illusion-list-item-actions>a {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin-right: 8px;
+  color: $default-color;
+  font-family: $default-font;
 }
 
 .illusion-list-item img {
@@ -150,5 +168,9 @@ h4>a{
 
 .illusion-list-item:hover {
   background: $list-selected-background;
+  color: $list-selected-color;
+}
+
+.illusion-list-item:hover a{
   color: $list-selected-color;
 }

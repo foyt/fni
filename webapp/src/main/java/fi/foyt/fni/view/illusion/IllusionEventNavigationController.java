@@ -35,6 +35,7 @@ public class IllusionEventNavigationController {
     MATERIALS,
     PARTICIPANTS,
     GROUPS,
-    SETTINGS
+    SETTINGS,
+    MANAGE_PAGES
   }
 }

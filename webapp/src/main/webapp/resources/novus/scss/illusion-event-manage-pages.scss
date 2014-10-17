@@ -1,0 +1,27 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+.illusion-event-manage-pages {
+  margin-top: 20px;
+}
+
+.illusion-event-manage-pages-new-page {  
+  color: $default-color;
+  font-family: $title-font;
+  font-size: 16px;
+  text-transform: uppercase;
+  padding: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+  float: right;
+}
+
+.illusion-event-manage-pages-new-page:disabled {
+  color: #eee;
+  background: #aaa;
+  cursor: default;
+}

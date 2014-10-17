@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">
+    <h:outputFormat value="#{locales['illusion.editPage.pageTitle']}">
+      <f:param value="#{illusionEventEditPageBackingBean.name}"/>
+      <f:param value="#{illusionEventEditPageBackingBean.pageTitle}"/>
+    </h:outputFormat>
+  </ui:define>
+  
+  <ui:define name="view-scripts">
+    <!-- CKEditor -->
+  
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.3.2/ckeditor.js"/>
+    
+    <!-- JSON Polyfill -->
+    
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/json3/3.2.5/json3.min.js"/>
+    
+    <!-- Diff Match Patch -->
+    
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/diff_match_patch/20121119/diff_match_patch.js"/>
+
+    <!-- md5 -->
+
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jshash/2.2/md5-min.js"/>
+    
+    <!-- DiffXmlJs -->
+    
+    <h:outputScript name="scripts/diffxml-js/diffxml-js.js"/>
+    
+    <!-- Collaborators -->
+    
+    <h:outputScript name="scripts/gui/collaborators.js"/>
+
+    <!-- CoCK -->
+
+    <h:outputScript name="scripts/gui/coopsck.js"/>
+    
+    <!-- View scripts -->
+    
+    <script type="text/javascript">
+      var COOPS_SERVER_URL = CONTEXTPATH + '/rest/coops/document/#{illusionEventEditPageBackingBean.id}';
+    </script>
+    <h:outputScript name="scripts/gui/illusion-edit-page.js"/>
+  </ui:define>
+   
+  <ui:define name="view-stylesheets">
+    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
+    <h:outputStylesheet library="novus" name="css/illusion-event-edit-page.css"/>
+  </ui:define>  
+
+  <ui:define name="grid-content">
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/index.jsf">#{locales['illusion.editPage.navigationIndex']}</h:link>
+        </h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/illusion/index.jsf">#{locales['illusion.editPage.navigationIllusion']}</h:link>
+        </h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/illusion/event.jsf">
+            <f:param name="urlName" value="#{illusionEventEditPageBackingBean.urlName}"/>
+            <h:outputText value="#{illusionEventEditPageBackingBean.name}" />
+          </h:link>
+        </h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/illusion/event-manage-pages.jsf">
+            <f:param name="urlName" value="#{illusionEventManagePagesBackingBean.urlName}"/>
+            <h:outputText value="#{locales['illusion.editPage.navigationManagePages']}" />
+          </h:link>
+        </h:panelGroup>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:panelGroup styleClass="view-header-navigation-item">
+          <h:link outcome="/illusion/event-edit-page.jsf">
+            <f:param name="urlName" value="#{illusionEventEditPageBackingBean.urlName}"/>
+            <f:param name="id" value="#{illusionEventEditPageBackingBean.id}"/>
+            <h:outputFormat value="#{locales['illusion.editPage.navigationEditPage']}"/>
+          </h:link>
+        </h:panelGroup>
+      </h:panelGroup>
+  
+      <!-- Description -->
+  
+      <h:panelGroup layout="block" styleClass="view-header-description">
+        <p class="view-header-description-title">#{illusionEventEditPageBackingBean.name}</p>
+        <p class="view-header-description-text">#{illusionEventEditPageBackingBean.description}</p>
+      </h:panelGroup>
+    </h:panelGroup>
+  
+    <div class="grid_16 tight">
+      <ui:include src="/facelets/illusionnavigation.xhtml"/>
+    </div>
+
+    <div class="grid_16 tight">
+      <div class="illusion-content-panel grid_16 tight">
+        <div class="grid_16 tight">
+          <div class="illusion-event-sub-panel">
+            
+		        <h2 data-old-value="#{illusionEventEditPageBackingBean.pageTitle}">
+		          <input type="text" class="illusion-edit-page-title" value="#{illusionEventEditPageBackingBean.pageTitle}"/>
+		        </h2>
+		        
+		        <div class="illusion-edit-page-editor-status" 
+		          data-loading="#{locales['illusion.editPage.statusLoading']}"
+		          data-loaded="#{locales['illusion.editPage.statusLoaded']}"
+		          data-unsaved="#{locales['illusion.editPage.statusUnsaved']}"
+		          data-saving="#{locales['illusion.editPage.statusSaving']}"
+		          data-saved="#{locales['illusion.editPage.statusSaved']}"/>
+		        
+		        <div class="collaborators"></div>
+		        
+		        <h:panelGroup layout="block" styleClass="illusion-page-editor-container">
+		          <textarea class="illusion-page-editor" name="cke">#{locales['forge.documents.contentLoading']}</textarea>
+		        </h:panelGroup>
+			      
+          </div>
+        </div>
+      </div>      
+    </div>
+
+  </ui:define>
+
+</ui:composition>

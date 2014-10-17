@@ -90,6 +90,7 @@ public class IllusionEventNavigationBackingBean {
       case "GROUPS":
       case "PARTICIPANTS":
       case "SETTINGS":
+      case "MANAGE_PAGES":
         return true;
       default:
         return false;
