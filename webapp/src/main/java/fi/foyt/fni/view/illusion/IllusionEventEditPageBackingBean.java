@@ -13,6 +13,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
+import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
@@ -45,7 +46,12 @@ public class IllusionEventEditPageBackingBean extends AbstractIllusionEventBacki
     illusionEventNavigationController.setSelectedItem(SelectedItem.MANAGE_PAGES);
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
-    IllusionEventDocument page = (IllusionEventDocument) materialController.findMaterialById(getId());
+    Material material = materialController.findMaterialById(getId());
+    if (!(material instanceof IllusionEventDocument)) {
+      return "/error/not-found.jsf";
+    }
+    
+    IllusionEventDocument page = (IllusionEventDocument) material;
     if (page.getDocumentType() != IllusionEventDocumentType.PAGE) {
       return "/error/not-found.jsf";
     }
