@@ -68,4 +68,8 @@ public class CoOpsSessionController {
       sessionCloseEvent.fire(new CoOpsSessionCloseEvent(session.getSessionId()));
     }
   }
+
+  public void deleteSession(CoOpsSession session) {
+    coOpsSessionDAO.delete(session);
+  }
 }

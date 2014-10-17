@@ -1,0 +1,7 @@
+<div title="Poista '{pageTitle}'?" data-remove-button="Poista" data-cancel-button="Peruuta">
+  <div class="illusion-remove-page-dialog">
+    <p>
+      Halutko varmasti poistaa sivun '{pageTitle}'?
+    </p>
+  </div>
+</div>

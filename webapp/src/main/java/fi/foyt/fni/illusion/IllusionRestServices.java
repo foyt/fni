@@ -9,6 +9,7 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -25,12 +26,16 @@ import org.apache.commons.lang3.StringUtils;
 import fi.foyt.fni.illusion.rest.IllusionEventGroup;
 import fi.foyt.fni.illusion.rest.IllusionEventMaterialParticipantSetting;
 import fi.foyt.fni.materials.MaterialController;
+import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
+import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 
 @Path("/illusion")
@@ -54,6 +59,9 @@ public class IllusionRestServices {
 
   @Inject
   private IllusionEventMaterialController illusionEventMaterialController;
+
+  @Inject
+  private MaterialPermissionController materialPermissionController;
   
   @Path("/events/{EVENTURLNAME}/groups/")
   @POST
@@ -274,6 +282,49 @@ public class IllusionRestServices {
     }
 
     return Response.ok(createRestModel(illusionEventMaterialController.updateParticipantSettingValue(participantSetting, entity.getValue()))).build();
+  }
+  
+  @Path("/events/{EVENTID}/pages/{PAGEID}")
+  @DELETE
+  public Response deletePage(@PathParam ("EVENTID") Long eventId, @PathParam ("PAGEID") Long pageId) {
+    if (!sessionController.isLoggedIn()) {
+      return Response.status(Status.UNAUTHORIZED).build();
+    }
+    
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+    
+    Material material = materialController.findMaterialById(pageId);
+    if (!(material instanceof IllusionEventDocument)) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+    
+    IllusionEventDocument page = (IllusionEventDocument) material;
+    if (page.getDocumentType() != IllusionEventDocumentType.PAGE) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+    
+    IllusionEventFolder illusionEventFolder = illusionEventMaterialController.getIllusionEventFolder(page);
+    if (illusionEventFolder != null) {
+      IllusionEvent materialEvent = illusionEventController.findIllusionEventByFolder(illusionEventFolder);
+      if (materialEvent == null || (!materialEvent.getId().equals(event.getId()))) {
+        return Response.status(Status.BAD_REQUEST).build();
+      }
+    } else {
+      return Response.status(Status.BAD_REQUEST).build();
+    }
+    
+    User loggedUser = sessionController.getLoggedUser();
+    
+    if (!materialPermissionController.hasModifyPermission(loggedUser, page)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    materialController.deleteMaterial(page, loggedUser);
+    
+    return Response.status(Status.NO_CONTENT).build();
   }
   
   private List<IllusionEventMaterialParticipantSetting> createRestModel(fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting... participantSettings) {

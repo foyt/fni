@@ -13,6 +13,7 @@
   </ui:define>
   
   <ui:define name="view-scripts">
+    <h:outputScript name="scripts/gui/illusion-manage-pages.js"/>
   </ui:define>
   
   <ui:define name="view-stylesheets">
@@ -71,8 +72,8 @@
           <div class="illusion-event-sub-panel">
             <h:form>
               <h:commandButton styleClass="illusion-event-manage-pages-new-page" value="#{locales['illusion.managePages.newPage']}" action="#{illusionEventManagePagesBackingBean.newPage}" />
-            </h:form>
-
+	          </h:form>
+            
             <h3>#{locales['illusion.managePages.pagesListTitle']}</h3>
 
             <div class="illusion-list illusion-event-manage-pages">
@@ -87,11 +88,11 @@
 					            <f:param name="urlName" value="#{illusionEventNavigationBackingBean.eventUrlName}"/>
 					            <f:param name="id" value="#{page.id}"/>
 					          </h:link>
-                    <a href="#">#{locales['illusion.managePages.deletePage']}</a>
+                    <a class="illusion-remove-page" href="javascript:void(null)" data-event-id="#{illusionEventManagePagesBackingBean.id}" data-page-id="#{page.id}" data-page-title="#{page.title}">#{locales['illusion.managePages.deletePage']}</a>
                   </span>
                 </div>
               </ui:repeat>
-            </div>
+            </div>      
           </div>
         </div>
 

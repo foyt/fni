@@ -39,6 +39,7 @@ import org.scribe.model.Response;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 
+import fi.foyt.fni.coops.CoOpsSessionController;
 import fi.foyt.fni.drive.DriveManager;
 import fi.foyt.fni.drive.SystemGoogleDriveCredentials;
 import fi.foyt.fni.dropbox.DropboxManager;
@@ -63,6 +64,7 @@ import fi.foyt.fni.persistence.dao.users.UserDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Binary;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
+import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
 import fi.foyt.fni.persistence.model.materials.DropboxFile;
@@ -179,6 +181,9 @@ public class MaterialController {
   @Inject
   private GoogleDriveMaterialController googleDriveMaterialController;
 
+  @Inject
+  private CoOpsSessionController coOpsSessionController;
+  
   @Inject
   private DropboxManager dropboxManager;
 
@@ -630,12 +635,24 @@ public class MaterialController {
        */
       recursiveDelete(folderDAO.findById(material.getId()), deletingUser);
       break;
+    case ILLUSION_GROUP_DOCUMENT:
     case DOCUMENT:
       Document document = (Document) material;
       List<DocumentRevision> documentRevisions = documentRevisionDAO.listByDocument(document);
       for (DocumentRevision documentRevision : documentRevisions) {
         documentRevisionDAO.delete(documentRevision);
       }
+      
+      List<CoOpsSession> openSessions = coOpsSessionController.listSessionsByClosed(Boolean.FALSE);
+      for (CoOpsSession openSession : openSessions) {
+        coOpsSessionController.closeSession(openSession, true);        
+      }
+      
+      List<CoOpsSession> sessions = coOpsSessionController.listSessionsByClosed(Boolean.TRUE);
+      for (CoOpsSession session : sessions) {
+        coOpsSessionController.deleteSession(session);
+      }
+      
       break;
     case VECTOR_IMAGE:
       VectorImage vectorImage = (VectorImage) material;
