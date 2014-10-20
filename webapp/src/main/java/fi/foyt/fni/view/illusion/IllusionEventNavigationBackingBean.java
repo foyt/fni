@@ -34,9 +34,7 @@ public class IllusionEventNavigationBackingBean {
   public void init() {
     indexVisible = true;
     materialsVisible = false;
-    participantsVisible = false;
-    groupsVisible = false;
-    settingsVisible = false;
+    administrationVisible = false;
     
     if (sessionController.isLoggedIn()) {
       User loggedUser = sessionController.getLoggedUser();
@@ -47,14 +45,15 @@ public class IllusionEventNavigationBackingBean {
           boolean participant = eventParticipant.getRole() == IllusionEventParticipantRole.PARTICIPANT;
           boolean organizer = eventParticipant.getRole() == IllusionEventParticipantRole.ORGANIZER;
           materialsVisible = participant || organizer;
-          participantsVisible = organizer;
-          groupsVisible = organizer;   
-          settingsVisible = organizer;
+          administrationVisible = organizer;
+          
+          if (participant || organizer) {
+            pages = illusionEventController.listPages();
+          }
         }
       }
     }
     
-    pages = illusionEventController.listPages();
   }
   
   public boolean getIndexVisible() {
@@ -65,16 +64,8 @@ public class IllusionEventNavigationBackingBean {
     return materialsVisible;
   }
 
-  public boolean getParticipantsVisible() {
-    return participantsVisible;
-  }
-
-  public boolean getGroupsVisible() {
-    return groupsVisible;
-  }
-  
-  public boolean getSettingsVisible() {
-    return settingsVisible;
+  public boolean getAdministrationVisible() {
+    return administrationVisible;
   }
   
   public String getSelectedItem() {
@@ -107,8 +98,6 @@ public class IllusionEventNavigationBackingBean {
   
   private boolean indexVisible;
   private boolean materialsVisible;
-  private boolean participantsVisible;
-  private boolean groupsVisible;
-  private boolean settingsVisible;
+  private boolean administrationVisible;
   private List<IllusionEventDocument> pages; 
 }
