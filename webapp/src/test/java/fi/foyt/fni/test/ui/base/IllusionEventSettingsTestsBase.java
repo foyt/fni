@@ -51,9 +51,11 @@ public class IllusionEventSettingsTestsBase extends AbstractUITest {
   public void testLoggedInOrganizer() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
     testTitle("/illusion/event/openevent/settings", "Illusion - Open Event");
-    assertSelectorCount(".illusion-event-navigation a", 5);
-    assertSelectorCount(".illusion-event-navigation-item-active", 1);
-    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "settings");
+    assertSelectorCount(".illusion-event-navigation-admin-menu.illusion-event-navigation-item-active", 1);
+    clickSelector(".illusion-event-navigation-admin-menu");
+    assertSelectorCount(".illusion-event-navigation-admin-menu .illusion-event-navigation-item.illusion-event-navigation-item-active", 1);
+    assertSelectorPresent(".illusion-event-navigation-admin-menu");
+    assertSelectorTextIgnoreCase(".illusion-event-navigation-admin-menu .illusion-event-navigation-item.illusion-event-navigation-item-active", "settings");
   }
   
 }

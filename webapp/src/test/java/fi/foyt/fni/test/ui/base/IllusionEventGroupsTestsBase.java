@@ -17,6 +17,21 @@ public class IllusionEventGroupsTestsBase extends AbstractUITest {
   @Test
   @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql"})
   @SqlAfter ({"illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  public void testNotFound() throws Exception {
+    loginInternal("user@foyt.fi", "pass");
+    testNotFound("/illusion/event/openevent/groups/");
+    testNotFound("/illusion/event/noevent/groups");
+    testNotFound("/illusion/event/noevent//groups");
+    testNotFound("/illusion/event/noevent/*/groups");
+    testNotFound("/illusion/event/1/groups");
+    testNotFound("/illusion/event///groups");
+    testNotFound("/illusion/event//*/groups");
+    testNotFound("/illusion/event/~/groups");
+  }
+  
+  @Test
+  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql"})
+  @SqlAfter ({"illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
   public void testLoggedIn() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     testAccessDenied("/illusion/event/openevent/groups");
@@ -36,8 +51,9 @@ public class IllusionEventGroupsTestsBase extends AbstractUITest {
   public void testLoggedInOrganizer() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
     testTitle("/illusion/event/openevent", "Illusion - Open Event");
-    assertSelectorCount(".illusion-event-navigation a", 5);
+    assertSelectorCount(".illusion-event-navigation>a", 2);
     assertSelectorNotPresent(".illusion-event-join-button");
+    assertSelectorPresent(".illusion-event-navigation-admin-menu");
   }
   
 

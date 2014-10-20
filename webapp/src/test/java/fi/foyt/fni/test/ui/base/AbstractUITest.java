@@ -123,6 +123,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void assertSelectorCount(String selector, int expected) {
     assertEquals(expected, getWebDriver().findElementsByCssSelector(selector).size());
   }
+  
+  protected void clickSelector(String selector) {
+    getWebDriver().findElementByCssSelector(selector).click();
+  }
 
   protected void testNotFound(String path) {
     testNotFound(getWebDriver(), path);

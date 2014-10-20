@@ -35,9 +35,10 @@ public class IllusionEventMaterialTestsBase extends AbstractUITest {
   public void testLoggedInParticipant() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     testTitle("/illusion/event/openevent/materials/document", "Illusion - Open Event");
-    assertSelectorCount(".illusion-event-navigation a", 2);
+    assertSelectorCount(".illusion-event-navigation>a", 2);
     assertSelectorCount(".illusion-event-navigation-item-active", 1);
-    assertSelectorPresent(".illusion-event-material");
+    assertSelectorPresent(".illusion-event-material");    
+    assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
     assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "materials");
   }
   
@@ -47,9 +48,10 @@ public class IllusionEventMaterialTestsBase extends AbstractUITest {
   public void testLoggedInOrganizer() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
     testTitle("/illusion/event/openevent/materials/document", "Illusion - Open Event");
-    assertSelectorCount(".illusion-event-navigation a", 5);
+    assertSelectorCount(".illusion-event-navigation>a", 2);
     assertSelectorCount(".illusion-event-navigation-item-active", 1);
     assertSelectorPresent(".illusion-event-material");
+    assertSelectorPresent(".illusion-event-navigation-admin-menu");
     assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "materials");
   }
   

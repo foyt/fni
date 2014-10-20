@@ -53,6 +53,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     
     assertSelectorTextIgnoreCase(".view-header-description-title", name);
     assertSelectorTextIgnoreCase(".view-header-description-text", description);
+    assertSelectorPresent(".illusion-event-navigation-admin-menu");
     
     executeSql("delete from IllusionEventParticipant where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
     executeSql("delete from IllusionEvent where urlName = ?", urlName);
