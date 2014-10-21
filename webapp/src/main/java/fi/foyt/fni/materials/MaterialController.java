@@ -281,6 +281,10 @@ public class MaterialController {
     Folder parentFolder;
 
     if (lastSlash != -1) {
+      if ((lastSlash + 1) >= path.length()) {
+        return null;
+      }
+      
       path = path.substring(0, lastSlash);
       urlName = path.substring(lastSlash + 1);
       parentFolder = (Folder) materialDAO.findByParentFolderAndUrlName(rootFolder, path);
