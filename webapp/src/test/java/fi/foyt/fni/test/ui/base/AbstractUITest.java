@@ -79,6 +79,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void waitForUrlNotMatches(String regex) {
     waitForUrlNotMatches(getWebDriver(), regex);
   }
+  
+  protected void assertUrlMatches(String regex) {
+    assertTrue("url '" + getWebDriver().getCurrentUrl() + "' does not match " + regex, getWebDriver().getCurrentUrl().matches(regex));
+  }
 
   protected void waitForNotification() {
     waitForNotification(getWebDriver());
@@ -126,6 +130,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   
   protected void clickSelector(String selector) {
     getWebDriver().findElementByCssSelector(selector).click();
+  }
+  
+  protected void sendKeysSelector(String selector, String keysToSend) {
+    getWebDriver().findElementByCssSelector(selector).sendKeys(keysToSend);
   }
 
   protected void testNotFound(String path) {
