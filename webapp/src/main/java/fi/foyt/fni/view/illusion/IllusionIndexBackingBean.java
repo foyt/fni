@@ -14,7 +14,6 @@ import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.persistence.model.users.UserRole;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 
@@ -34,9 +33,6 @@ public class IllusionIndexBackingBean {
   @RequestAction
   public String init() {
     User loggedUser = sessionController.getLoggedUser();
-    if (loggedUser.getRole() != UserRole.ADMINISTRATOR) {
-      return "/index.jsf?faces-redirect=true";
-    }
     
     organizingEvents = illusionEventController.listIllusionEventsByUserAndRole(loggedUser, IllusionEventParticipantRole.ORGANIZER);
     events = illusionEventController.listIllusionEventsByUserAndRole(loggedUser, IllusionEventParticipantRole.PARTICIPANT);
