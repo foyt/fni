@@ -45,7 +45,7 @@
 
     <!-- Publications and Forum -->
    
-    <h:panelGroup layout="block" styleClass="grid_16 tight index-publications-forum">
+    <h:panelGroup layout="block" styleClass="grid_16 tight index-row">
       <h:panelGroup layout="block" styleClass="grid_12 tight index-publications">
         <h:panelGroup layout="block" styleClass="index-publications-panel">
           <h3>
@@ -91,80 +91,108 @@
         </h:panelGroup>
       </h:panelGroup>
           
-      <h:panelGroup layout="block" styleClass="grid_4 omega index-forum">
-        <h:panelGroup layout="block" styleClass="index-forum-panel">
+      <div class="grid_4 omega index-illusion-events-container">
+        <div class="index-illusion-events-panel">
           <h3>
-            <h:link outcome="/forum/index.jsf">
-              #{locales['index.forumTopics']}
-            </h:link>
+            <h:link outcome="/illusion/index.jsf">#{locales['index.illusionEvents']}</h:link>
           </h3>
           
-          <h:panelGroup layout="block" styleClass="index-forum-topics">
-            <ui:repeat var="forumTopic" value="#{indexViewBackingBean.latestForumTopics}">
-              <h:panelGroup layout="block" styleClass="index-forum-topic">
-                <h:panelGroup layout="block" styleClass="index-forum-topic-subject">
-                  <h:outputLink value="#{request.contextPath}/forum/#{forumTopic.forum.urlName}/#{forumTopic.urlName}">#{forumTopic.subject}</h:outputLink>
-                </h:panelGroup>
-                <h:panelGroup layout="block" styleClass="index-forum-topic-author">
-                  <h:panelGroup styleClass="index-forum-topic-author-prefix">#{locales['index.forumAuthor']}</h:panelGroup>
-                  <h:outputLink styleClass="index-forum-topic-author-link" value="#{request.contextPath}/profile/#{forumTopic.author.id}">#{forumTopic.author.fullName}</h:outputLink>
-                </h:panelGroup>
-              </h:panelGroup>
-            </ui:repeat>
-          </h:panelGroup>
+          <div class="index-illusion-events">
+            <div class="index-illusion-event">
+              <div class="index-illusion-event-title"><a href="#">Lorem</a></div>
+              <div class="index-illusion-event-date">14.10.2014 - 15.10.2014</div>
+              <div class="index-illusion-event-desc">Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger omero undead surv...</div>
+            </div>
+            
+            <div class="index-illusion-event">
+              <div class="index-illusion-event-title"><a href="#">Lorem</a></div>
+              <div class="index-illusion-event-date">14.10.2014 - 15.10.2014</div>
+              <div class="index-illusion-event-desc">Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger omero undead surv...</div>
+            </div>
+          </div>
           
-          <h:panelGroup layout="block" styleClass="index-forum-more-container">
-            <h:link value="#{locales['index.forumMoreLink']}" outcome="/forum/index.jsf"  styleClass="index-forum-more"/>
-          </h:panelGroup>          
-        </h:panelGroup>
-      </h:panelGroup>
+          <div class="index-illusion-events-more-container">
+            <h:link value="#{locales['index.illusionEventsMoreLink']}" outcome="/illusion/index.jsf"  styleClass="index-illusion-events-more"/>
+          </div>          
+        </div>
+      </div>
     </h:panelGroup>
     
     <!-- Blog -->
     
-    <h:panelGroup layout="block" styleClass="grid_12 tight index-blog">
-      <h:panelGroup layout="block" styleClass="index-blog-panel">
-        <h3>
-          <h:outputLink value="http://loki.pelilauta.fi/wordpress/">#{locales['index.blog']}</h:outputLink>
-        </h3>
-        
-        <h:panelGroup layout="block" styleClass="index-blog-entries">
-          <ui:repeat var="blogEntry" value="#{indexViewBackingBean.latestBlogEntries}">
-            <h:panelGroup layout="block" styleClass="index-blog-entry">
-              <h:panelGroup layout="block" styleClass="index-blog-entry-date">
-                <h:outputFormat value="#{blogEntry.created}">
-                  <f:convertDateTime type="date"/>
-                </h:outputFormat>
-              </h:panelGroup>
-              
-              <h:panelGroup layout="block" styleClass="index-blog-entry-title-container">
-                <h:outputLink styleClass="index-blog-entry-title" value="#{blogEntry.link}">#{blogEntry.title}</h:outputLink>
-                <h:panelGroup styleClass="index-blog-entry-author">#{blogEntry.authorName}</h:panelGroup>
-              </h:panelGroup>
-
-              <h:panelGroup layout="block" styleClass="index-blog-entry-tags">
-                <ui:repeat var="blogEntryTag" value="#{indexViewBackingBean.getBlogEntryTags(blogEntry)}">
-                  <h:outputText value="#{blogEntryTag.text}" styleClass="index-blog-entry-tag"/>
-                </ui:repeat>
-              </h:panelGroup>
-              
-              <h:panelGroup layout="block" styleClass="index-blog-entry-content">
-                <h:outputText value="#{blogEntry.summary}" escape="false"/>
-              </h:panelGroup>
-              
-              <h:panelGroup layout="block" styleClass="index-blog-entry-more-container">
-                <h:outputLink styleClass="index-blog-entry-more" value="#{blogEntry.link}">#{locales['index.blogMore']}</h:outputLink>
-              </h:panelGroup>
-            </h:panelGroup>
-          </ui:repeat>         
-        </h:panelGroup>
-        
-        <h:panelGroup layout="block" styleClass="index-blog-more-container">
-          <h:outputLink value="http://loki.pelilauta.fi/wordpress/" styleClass="index-blog-more">#{locales['index.blogMoreLink']}</h:outputLink>
-        </h:panelGroup>     
-      </h:panelGroup>
-      
-    </h:panelGroup>
+    <h:panelGroup layout="block" styleClass="grid_16 tight index-row">
+	    <h:panelGroup layout="block" styleClass="grid_12 tight index-blog">
+	      <h:panelGroup layout="block" styleClass="index-blog-panel">
+	        <h3>
+	          <h:outputLink value="http://loki.pelilauta.fi/wordpress/">#{locales['index.blog']}</h:outputLink>
+	        </h3>
+	        
+	        <h:panelGroup layout="block" styleClass="index-blog-entries">
+	          <ui:repeat var="blogEntry" value="#{indexViewBackingBean.latestBlogEntries}">
+	            <h:panelGroup layout="block" styleClass="index-blog-entry">
+	              <h:panelGroup layout="block" styleClass="index-blog-entry-date">
+	                <h:outputFormat value="#{blogEntry.created}">
+	                  <f:convertDateTime type="date"/>
+	                </h:outputFormat>
+	              </h:panelGroup>
+	              
+	              <h:panelGroup layout="block" styleClass="index-blog-entry-title-container">
+	                <h:outputLink styleClass="index-blog-entry-title" value="#{blogEntry.link}">#{blogEntry.title}</h:outputLink>
+	                <h:panelGroup styleClass="index-blog-entry-author">#{blogEntry.authorName}</h:panelGroup>
+	              </h:panelGroup>
+	
+	              <h:panelGroup layout="block" styleClass="index-blog-entry-tags">
+	                <ui:repeat var="blogEntryTag" value="#{indexViewBackingBean.getBlogEntryTags(blogEntry)}">
+	                  <h:outputText value="#{blogEntryTag.text}" styleClass="index-blog-entry-tag"/>
+	                </ui:repeat>
+	              </h:panelGroup>
+	              
+	              <h:panelGroup layout="block" styleClass="index-blog-entry-content">
+	                <h:outputText value="#{blogEntry.summary}" escape="false"/>
+	              </h:panelGroup>
+	              
+	              <h:panelGroup layout="block" styleClass="index-blog-entry-more-container">
+	                <h:outputLink styleClass="index-blog-entry-more" value="#{blogEntry.link}">#{locales['index.blogMore']}</h:outputLink>
+	              </h:panelGroup>
+	            </h:panelGroup>
+	          </ui:repeat>         
+	        </h:panelGroup>
+	        
+	        <h:panelGroup layout="block" styleClass="index-blog-more-container">
+	          <h:outputLink value="http://loki.pelilauta.fi/wordpress/" styleClass="index-blog-more">#{locales['index.blogMoreLink']}</h:outputLink>
+	        </h:panelGroup>     
+	      </h:panelGroup>
+	          
+	    </h:panelGroup>
+	    
+	    <h:panelGroup layout="block" styleClass="grid_4 omega index-forum">
+	      <h:panelGroup layout="block" styleClass="index-forum-panel">
+	        <h3>
+	          <h:link outcome="/forum/index.jsf">
+	            #{locales['index.forumTopics']}
+	          </h:link>
+	        </h3>
+	        
+	        <h:panelGroup layout="block" styleClass="index-forum-topics">
+	          <ui:repeat var="forumTopic" value="#{indexViewBackingBean.latestForumTopics}">
+	            <h:panelGroup layout="block" styleClass="index-forum-topic">
+	              <h:panelGroup layout="block" styleClass="index-forum-topic-subject">
+	                <h:outputLink value="#{request.contextPath}/forum/#{forumTopic.forum.urlName}/#{forumTopic.urlName}">#{forumTopic.subject}</h:outputLink>
+	              </h:panelGroup>
+	              <h:panelGroup layout="block" styleClass="index-forum-topic-author">
+	                <h:panelGroup styleClass="index-forum-topic-author-prefix">#{locales['index.forumAuthor']}</h:panelGroup>
+	                <h:outputLink styleClass="index-forum-topic-author-link" value="#{request.contextPath}/profile/#{forumTopic.author.id}">#{forumTopic.author.fullName}</h:outputLink>
+	              </h:panelGroup>
+	            </h:panelGroup>
+	          </ui:repeat>
+	        </h:panelGroup>
+	        
+	        <h:panelGroup layout="block" styleClass="index-forum-more-container">
+	          <h:link value="#{locales['index.forumMoreLink']}" outcome="/forum/index.jsf"  styleClass="index-forum-more"/>
+	        </h:panelGroup>          
+	      </h:panelGroup>
+	    </h:panelGroup>
+	  </h:panelGroup>
     
   </ui:define>
   
