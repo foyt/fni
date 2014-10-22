@@ -15,12 +15,14 @@ import fi.foyt.fni.blog.BlogController;
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 
 @RequestScoped
 @Named
@@ -30,9 +32,11 @@ public class IndexViewBackingBean {
 	
 	private static final int MAX_GAME_LIBRARY_PUBLICATIONS = 2;
 	
+  private static final int MAX_ILLUSION_EVENTS = 2;
+	
 	private static final int MAX_LATEST_ENTRIES = 5;
 	
-	private static final int MAX_FORUM_TOPICS = 6;
+	private static final int MAX_FORUM_TOPICS = 20;
 	
 	private static final int DEFAULT_FEED_ENTRIES = 3;
 
@@ -47,11 +51,15 @@ public class IndexViewBackingBean {
 	
 	@Inject
 	private ForumController forumController;
+
+  @Inject
+	private IllusionEventController illusionEventController;
 	
 	@PostConstruct
 	public void init() {
 		latestGameLibraryPublications = publicationController.listRecentPublications(MAX_GAME_LIBRARY_PUBLICATIONS);
 		latestForumTopics = forumController.listLatestForumTopics(MAX_FORUM_TOPICS);
+		illusionEvents = illusionEventController.listLatestsIllusionEvents(MAX_ILLUSION_EVENTS);
 	}
 	
 	public List<BlogEntry> getLatestBlogEntries() {
@@ -85,6 +93,11 @@ public class IndexViewBackingBean {
 		return latestForumTopics;
 	}
 	
+	public List<IllusionEvent> getIllusionEvents() {
+    return illusionEvents;
+  }
+	
 	private List<Publication> latestGameLibraryPublications;
 	private List<ForumTopic> latestForumTopics;
+	private List<IllusionEvent> illusionEvents;
 }

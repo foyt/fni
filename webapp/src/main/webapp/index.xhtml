@@ -98,17 +98,20 @@
           </h3>
           
           <div class="index-illusion-events">
-            <div class="index-illusion-event">
-              <div class="index-illusion-event-title"><a href="#">Lorem</a></div>
-              <div class="index-illusion-event-date">14.10.2014 - 15.10.2014</div>
-              <div class="index-illusion-event-desc">Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger omero undead surv...</div>
-            </div>
-            
-            <div class="index-illusion-event">
-              <div class="index-illusion-event-title"><a href="#">Lorem</a></div>
-              <div class="index-illusion-event-date">14.10.2014 - 15.10.2014</div>
-              <div class="index-illusion-event-desc">Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger omero undead surv...</div>
-            </div>
+            <ui:repeat var="event" value="#{indexViewBackingBean.illusionEvents}">
+	            <div class="index-illusion-event">
+	              <div class="index-illusion-event-title">
+	                <h:link outcome="/illusion/event.jsf?urlName=#{event.urlName}" value="#{event.name}"/>
+	              </div>
+	              <div class="index-illusion-event-date">
+                  <h:outputFormat value="#{locales['index.illusionEventDate']}">
+                    <f:param value="#{event.created}"/>
+                    <f:param value="#{event.created}"/>
+                  </h:outputFormat>
+                </div>
+                <div class="index-illusion-event-desc" title="#{event.description}">#{event.description.length() > 200 ? event.description.substring(0, 200).concat('...') : event.description}</div>
+	            </div>
+            </ui:repeat>
           </div>
           
           <div class="index-illusion-events-more-container">

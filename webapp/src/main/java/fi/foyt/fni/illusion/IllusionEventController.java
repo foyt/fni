@@ -102,6 +102,10 @@ public class IllusionEventController {
     return illusionEventParticipantDAO.listIllusionEventsByUserAndRole(user, role);
   }
 
+  public List<IllusionEvent> listLatestsIllusionEvents(int maxResults) {
+    return illusionEventDAO.listAllSortByCreated(0, maxResults);
+  }
+
   public IllusionEvent updateIllusionEventName(IllusionEvent illusionEvent, String name) {
     return illusionEventDAO.updateName(illusionEvent, name);
   }
@@ -275,4 +279,5 @@ public class IllusionEventController {
   public List<IllusionEventDocument> listPages() {
     return illusionEventDocumentDAO.listByDocumentType(IllusionEventDocumentType.PAGE);
   }
+
 }

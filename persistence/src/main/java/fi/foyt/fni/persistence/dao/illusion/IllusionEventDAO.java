@@ -2,8 +2,10 @@ package fi.foyt.fni.persistence.dao.illusion;
 
 import java.util.Currency;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -60,6 +62,28 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     );
 
     return getSingleResult(entityManager.createQuery(criteria));
+  }
+
+  public List<IllusionEvent> listAllSortByCreated(Integer firstResult, Integer maxResults) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<IllusionEvent> criteria = criteriaBuilder.createQuery(IllusionEvent.class);
+    Root<IllusionEvent> root = criteria.from(IllusionEvent.class);
+    criteria.select(root);
+    
+    criteria.orderBy(criteriaBuilder.desc(root.get(IllusionEvent_.created)));
+
+    TypedQuery<IllusionEvent> query = entityManager.createQuery(criteria);
+    if (firstResult != null) {
+      query.setFirstResult(firstResult);
+    }
+    
+    if (maxResults != null) {
+      query.setMaxResults(maxResults);
+    }
+
+    return query.getResultList();
   }
 
   public IllusionEvent updateName(IllusionEvent illusionEvent, String name) {
