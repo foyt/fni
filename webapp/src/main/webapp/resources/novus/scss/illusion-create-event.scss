@@ -74,6 +74,42 @@ h3 {
   margin-left: 8px;
 }
 
+.illusion-create-event-field input.datepicker {
+  width: 170px;
+  border: 1px solid #aaa;
+  margin-left: -5px;
+  padding: 1px;
+  font-size: 14px;
+  font-family: $default-font;
+  margin-bottom: 8px;
+}
+
+.illusion-create-event-field input.timepicker {
+  width: 114px;
+  border: 1px solid #aaa;
+  margin-left: 5px;
+  padding: 1px;
+  font-size: 14px;
+  font-family: $default-font;
+  margin-bottom: 8px;
+}
+
+.timezone {
+  display: inline-block;
+  font-size: 11px;
+  font-family: $default-font;
+  margin-left: 2px;
+  vertical-align: middle;
+}
+
+.timezone:before {
+  content: '(';  
+}
+
+.timezone:after {
+  content: ')';  
+}
+
 .illusion-create-event-save {
   @include header-4;
   width: 256px;

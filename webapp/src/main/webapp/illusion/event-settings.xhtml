@@ -12,6 +12,9 @@
     <!-- View scripts -->
     
     <h:outputScript name="scripts/gui/illusion-event-settings.js"></h:outputScript>
+    <h:outputScript name="scripts/jquery-ui/i18n/datepicker-fi.js" rendered="#{sessionBackingBean.locale.language eq 'fi'}"></h:outputScript>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.timepicker/1.3.7/jquery.timepicker.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
   </ui:define>
   
   <ui:define name="view-stylesheets">
@@ -19,7 +22,8 @@
     
     <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-settings.css"/>
-    
+    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <link rel="StyleSheet" href="//cdn.jsdelivr.net/jquery.timepicker/1.3.7/jquery.timepicker.css"/>
   </ui:define>
 
   <ui:define name="grid-content">
@@ -81,6 +85,24 @@
               <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
                 <h:outputLabel value="#{locales['illusion.eventSettings.descriptionLabel']}" />
                 <h:inputTextarea id="description" value="#{illusionEventSettingsBackingBean.description}"/>
+              </h:panelGroup>  
+               
+              <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
+                <label>#{locales['illusion.eventSettings.startTime']}</label>
+                <input type="date" class="datepicker" placeholder="#{locales['illusion.eventSettings.startDatePlaceholder']}" data-alt-field=".actual-start-date"/>
+                <input type="time" class="timepicker" placeholder="#{locales['illusion.eventSettings.startTimePlaceholder']}" data-alt-field=".actual-start-time"/>
+                <input type="hidden" class="actual-start-date" jsf:value="#{illusionEventSettingsBackingBean.startDate}"/>
+                <input type="hidden" class="actual-start-time" jsf:value="#{illusionEventSettingsBackingBean.startTime}"/>
+                <div class="timezone"></div>
+              </h:panelGroup>
+               
+              <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
+                <label>#{locales['illusion.eventSettings.endTime']}</label>
+                <input type="date" class="datepicker" placeholder="#{locales['illusion.eventSettings.endDatePlaceholder']}" data-alt-field=".actual-end-date"/>
+                <input type="time" class="timepicker" placeholder="#{locales['illusion.eventSettings.endTimePlaceholder']}" data-alt-field=".actual-end-time"/>
+                <input type="hidden" class="actual-end-date" jsf:value="#{illusionEventSettingsBackingBean.endDate}"/>
+                <input type="hidden" class="actual-end-time" jsf:value="#{illusionEventSettingsBackingBean.endTime}"/>
+                <div class="timezone"></div>
               </h:panelGroup>  
   
               <h:panelGroup layout="block" styleClass="illusion-event-settings-field">

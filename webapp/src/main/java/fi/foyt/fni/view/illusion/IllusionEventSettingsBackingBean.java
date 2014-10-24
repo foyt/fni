@@ -1,11 +1,15 @@
 package fi.foyt.fni.view.illusion;
 
+import java.util.Date;
+
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
@@ -24,10 +28,10 @@ import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedItem;
 @RequestScoped
 @Named
 @Stateful
-@Join (path = "/illusion/event/{urlName}/settings", to = "/illusion/event-settings.jsf")
+@Join(path = "/illusion/event/{urlName}/settings", to = "/illusion/event-settings.jsf")
 @LoggedIn
-@Secure (value = Permission.ILLUSION_EVENT_MANAGE)
-@SecurityContext (context = "@urlName")
+@Secure(value = Permission.ILLUSION_EVENT_MANAGE)
+@SecurityContext(context = "@urlName")
 public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBackingBean {
 
   @Parameter
@@ -35,10 +39,10 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
 
   @Inject
   private IllusionEventController illusionEventController;
-  
+
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
-  
+
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
@@ -51,44 +55,80 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     name = illusionEvent.getName();
     description = illusionEvent.getDescription();
     joinMode = illusionEvent.getJoinMode();
-    
+    startDate = formatDate(illusionEvent.getStartDate());
+    startTime = formatTime(illusionEvent.getStartTime());
+    endDate = formatDate(illusionEvent.getEndDate());
+    endTime = formatTime(illusionEvent.getEndTime());
+
     return null;
   }
-  
-	public String getName() {
+
+  public String getName() {
     return name;
   }
-	
-	public void setName(String name) {
+
+  public void setName(String name) {
     this.name = name;
   }
-	
-	public String getDescription() {
+
+  public String getDescription() {
     return description;
   }
-	
-	public void setDescription(String description) {
+
+  public void setDescription(String description) {
     this.description = description;
   }
-	
-	public IllusionEventJoinMode getJoinMode() {
+
+  public IllusionEventJoinMode getJoinMode() {
     return joinMode;
   }
-	
-	public void setJoinMode(IllusionEventJoinMode joinMode) {
+
+  public void setJoinMode(IllusionEventJoinMode joinMode) {
     this.joinMode = joinMode;
   }
-	
-	@Override
-	public String getUrlName() {
-	  return urlName;
-	}
-	
-	public void setUrlName(@SecurityContext String urlName) {
+
+  @Override
+  public String getUrlName() {
+    return urlName;
+  }
+
+  public void setUrlName(@SecurityContext String urlName) {
     this.urlName = urlName;
   }
-	
-	private String createUrlName(String name) {
+
+  public String getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(String startDate) {
+    this.startDate = startDate;
+  }
+
+  public String getStartTime() {
+    return startTime;
+  }
+
+  public void setStartTime(String startTime) {
+    this.startTime = startTime;
+  }
+
+  public String getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(String endDate) {
+    this.endDate = endDate;
+  }
+
+  public String getEndTime() {
+    return endTime;
+  }
+
+  public void setEndTime(String endTime) {
+    this.endTime = endTime;
+  }
+
+  private String createUrlName(String name) {
     int maxLength = 20;
     int padding = 0;
     do {
@@ -96,12 +136,12 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
       if (padding > 0) {
         urlName = urlName.concat(StringUtils.repeat('_', padding));
       }
-      
+
       IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(urlName);
       if (illusionEvent == null) {
         return urlName;
       }
-      
+
       if (maxLength < name.length()) {
         maxLength++;
       } else {
@@ -109,7 +149,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
       }
     } while (true);
   }
-	
+
   public String save() throws Exception {
     IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
     if (!illusionEvent.getName().equals(getName())) {
@@ -118,13 +158,48 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
       illusionEventController.updateIllusionEventUrlName(illusionEvent, urlName);
     }
 
-    illusionEventController.updateIllusionEventDescription(illusionEvent, getDescription()); 
+    illusionEventController.updateIllusionEventDescription(illusionEvent, getDescription());
     illusionEventController.updateIllusionEventJoinMode(illusionEvent, getJoinMode());
-    
+    illusionEventController.updateIllusionEventStartDate(illusionEvent, parseDate(getStartDate()));
+    illusionEventController.updateIllusionEventStartTime(illusionEvent, parseDate(getStartTime()));
+    illusionEventController.updateIllusionEventEndDate(illusionEvent, parseDate(getEndDate()));
+    illusionEventController.updateIllusionEventEndTime(illusionEvent, parseDate(getEndTime()));
+
     return "/illusion/event-settings.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
   }
-	
-	private String name;
-	private String description;
-	private IllusionEventJoinMode joinMode;
+
+  private String formatDate(Date time) {
+    if (time == null) {
+      return null;
+    }
+    
+    DateTimeFormatter formatter = ISODateTimeFormat.date();
+    return formatter.print(time.getTime());
+  }
+
+  private String formatTime(Date time) {
+    if (time == null) {
+      return null;
+    }
+    
+    DateTimeFormatter formatter = ISODateTimeFormat.dateTimeNoMillis();
+    return formatter.print(time.getTime());
+  }
+
+  private Date parseDate(String iso) {
+    if (StringUtils.isBlank(iso)) {
+      return null;
+    }
+
+    DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
+    return parser.parseDateTime(iso).toDate();
+  }
+  
+  private String name;
+  private String description;
+  private IllusionEventJoinMode joinMode;
+  private String startDate;
+  private String startTime;
+  private String endDate;
+  private String endTime;
 }
