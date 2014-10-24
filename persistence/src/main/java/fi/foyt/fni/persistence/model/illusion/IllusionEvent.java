@@ -13,12 +13,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 
 @Entity
@@ -102,6 +103,38 @@ public class IllusionEvent {
     this.signUpFeeCurrency = signUpFeeCurrency;
   }
   
+  public Date getStartDate() {
+    return startDate;
+  }
+  
+  public void setStartDate(Date startDate) {
+    this.startDate = startDate;
+  }
+  
+  public Date getStartTime() {
+    return startTime;
+  }
+  
+  public void setStartTime(Date startTime) {
+    this.startTime = startTime;
+  }
+  
+  public Date getEndDate() {
+    return endDate;
+  }
+  
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
+  }
+  
+  public Date getEndTime() {
+    return endTime;
+  }
+  
+  public void setEndTime(Date endTime) {
+    this.endTime = endTime;
+  }
+  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
@@ -138,5 +171,17 @@ public class IllusionEvent {
   private Double signUpFee;
   
   private Currency signUpFeeCurrency; 
+
+  @Temporal (TemporalType.DATE)
+  private Date startDate;
+  
+  @Temporal (TemporalType.TIME)
+  private Date startTime;
+  
+  @Temporal (TemporalType.DATE)
+  private Date endDate;
+  
+  @Temporal (TemporalType.TIME)
+  private Date endTime;
   
 }

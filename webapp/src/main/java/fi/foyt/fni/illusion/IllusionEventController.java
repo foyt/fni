@@ -17,7 +17,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
-
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
@@ -86,8 +85,8 @@ public class IllusionEventController {
   
   /* IllusionEvent */
 
-  public IllusionEvent createIllusionEvent(String urlName, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency) {
-    return illusionEventDAO.create(urlName, name, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency);
+  public IllusionEvent createIllusionEvent(String urlName, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime) {
+    return illusionEventDAO.create(urlName, name, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency, startDate, startTime, endDate, endTime);
   }
 
   public IllusionEvent findIllusionEventById(Long id) {
@@ -120,6 +119,22 @@ public class IllusionEventController {
 
   public IllusionEvent updateIllusionEventJoinMode(IllusionEvent illusionEvent, IllusionEventJoinMode joinMode) {
     return illusionEventDAO.updateJoinMode(illusionEvent, joinMode);
+  }
+
+  public IllusionEvent updateIllusionEventStartDate(IllusionEvent illusionEvent, Date startDate) {
+    return illusionEventDAO.updateStartDate(illusionEvent, startDate);
+  }
+
+  public IllusionEvent updateIllusionEventStartTime(IllusionEvent illusionEvent, Date startTime) {
+    return illusionEventDAO.updateStartTime(illusionEvent, startTime);
+  }
+
+  public IllusionEvent updateIllusionEventEndDate(IllusionEvent illusionEvent, Date endDate) {
+    return illusionEventDAO.updateEndDate(illusionEvent, endDate);
+  }
+
+  public IllusionEvent updateIllusionEventEndTime(IllusionEvent illusionEvent, Date endTime) {
+    return illusionEventDAO.updateEndTime(illusionEvent, endTime);
   }
 
   /* IllusionEventParticipant */

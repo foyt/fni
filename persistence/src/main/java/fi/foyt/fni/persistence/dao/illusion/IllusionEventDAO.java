@@ -20,7 +20,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionEvent create(String urlName, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency) {
+	public IllusionEvent create(String urlName, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime) {
 		IllusionEvent illusionEvent = new IllusionEvent();
 		
 		illusionEvent.setName(name);
@@ -32,7 +32,11 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 		illusionEvent.setJoinMode(joinMode);
 		illusionEvent.setSignUpFee(signUpFee);
 		illusionEvent.setSignUpFeeCurrency(signUpFeeCurrency);
-		
+		illusionEvent.setStartDate(startDate);
+		illusionEvent.setStartTime(startTime);
+		illusionEvent.setEndDate(endDate);
+		illusionEvent.setEndTime(endTime);
+    
 		return persist(illusionEvent);
 	}
 
@@ -113,6 +117,26 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 
   public IllusionEvent updateDescription(IllusionEvent illusionEvent, String description) {
     illusionEvent.setDescription(description);
+    return persist(illusionEvent);
+  }
+
+  public IllusionEvent updateStartDate(IllusionEvent illusionEvent, Date startDate) {
+    illusionEvent.setStartDate(startDate);
+    return persist(illusionEvent);
+  }
+
+  public IllusionEvent updateStartTime(IllusionEvent illusionEvent, Date startTime) {
+    illusionEvent.setStartTime(startTime);
+    return persist(illusionEvent);
+  }
+
+  public IllusionEvent updateEndDate(IllusionEvent illusionEvent, Date endDate) {
+    illusionEvent.setEndDate(endDate);
+    return persist(illusionEvent);
+  }
+
+  public IllusionEvent updateEndTime(IllusionEvent illusionEvent, Date endTime) {
+    illusionEvent.setEndTime(endTime);
     return persist(illusionEvent);
   }
 	
