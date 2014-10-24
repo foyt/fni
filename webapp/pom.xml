@@ -325,6 +325,14 @@
       <artifactId>jboss-websocket-api_1.0_spec</artifactId>
       <scope>provided</scope>
     </dependency>
+    
+    <!-- Joda -->
+    
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
     <!-- Test -->
     
@@ -459,7 +467,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.codehaus.jackson.jackson-core-asl, org.codehaus.jackson.jackson-mapper-asl, org.apache.httpcomponents</Dependencies>
+              <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.codehaus.jackson.jackson-core-asl, org.codehaus.jackson.jackson-mapper-asl, org.apache.httpcomponents, org.joda.time</Dependencies>
             </manifestEntries>
           </archive>
         </configuration>
