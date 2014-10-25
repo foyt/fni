@@ -59,13 +59,13 @@ public class IllusionEventPageController {
     String contextPath = systemSettingsController.getSiteContextPath();
     String eventUrl = contextPath + "/illusion/event/" + illusionEvent.getUrlName();
 
-    pages.add(new IllusionEventPage("INDEX", eventUrl, indexDocument.getTitle(), "INDEX", true, false, false, getPageVisibility(illusionEvent, "INDEX")));
+    pages.add(new IllusionEventPage("INDEX", eventUrl, indexDocument.getTitle(), "INDEX", true, false, false, false, getPageVisibility(illusionEvent, "INDEX")));
     
     for (IllusionEventDocument customPage : listCustomPages(illusionEvent.getFolder())) {
-      pages.add(new IllusionEventPage(customPage.getId().toString(), eventUrl + "/pages/" + customPage.getUrlName(), customPage.getTitle(), "PAGE", true, true, true, getPageVisibility(illusionEvent, customPage.getId().toString())));
+      pages.add(new IllusionEventPage(customPage.getId().toString(), eventUrl + "/pages/" + customPage.getUrlName(), customPage.getTitle(), "PAGE", true, true, true, false, getPageVisibility(illusionEvent, customPage.getId().toString())));
     }
     
-    pages.add(new IllusionEventPage("MATERIALS", eventUrl + "/materials", "Materiaalit", "MATERIALS", false, false, true, getPageVisibility(illusionEvent, "MATERIALS")));
+    pages.add(new IllusionEventPage("MATERIALS", eventUrl + "/materials", "Materiaalit", "MATERIALS", false, false, true, true, getPageVisibility(illusionEvent, "MATERIALS")));
     
     return pages;
   }
