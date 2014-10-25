@@ -16,6 +16,8 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.illusion.IllusionEventPage;
+import fi.foyt.fni.illusion.IllusionEventPageController;
+import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.MaterialTypeComparator;
@@ -56,14 +58,24 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
   
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
+
+  @Inject
+  private IllusionEventPageController illusionEventPageController;
   
   @SuppressWarnings("unchecked")
   @Override
-  public String init(IllusionEvent illusionEvent, IllusionEventParticipant member) {
-    if (member == null) {
+  public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
+    if (participant == null) {
       return "/error/access-denied.jsf";
     }
-      
+    
+    if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
+      IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, IllusionEventPage.Static.MATERIALS.name());
+      if (visibility == IllusionEventPageVisibility.HIDDEN) {
+        return "/error/access-denied.jsf";
+      }
+    }
+
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.MATERIALS);
     illusionEventNavigationController.setEventUrlName(getUrlName());
 
@@ -84,7 +96,7 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
       MaterialType.CHARACTER_SHEET
     ));
     
-    if (member.getRole() == IllusionEventParticipantRole.ORGANIZER) {
+    if (participant.getRole() == IllusionEventParticipantRole.ORGANIZER) {
       materials = allMaterials;
     } else {
       for (Material material : allMaterials) {

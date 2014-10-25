@@ -11,6 +11,8 @@ import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.illusion.IllusionEventPage;
+import fi.foyt.fni.illusion.IllusionEventPageController;
+import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -52,6 +54,9 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
   
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
+
+  @Inject
+  private IllusionEventPageController illusionEventPageController;
   
   @Inject
   private HttpServletRequest httpServletRequest;
@@ -60,6 +65,13 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     if (participant == null) {
       return "/error/access-denied.jsf";
+    }
+    
+    if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
+      IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, IllusionEventPage.Static.MATERIALS.name());
+      if (visibility == IllusionEventPageVisibility.HIDDEN) {
+        return "/error/access-denied.jsf";
+      }
     }
 
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.MATERIALS);
