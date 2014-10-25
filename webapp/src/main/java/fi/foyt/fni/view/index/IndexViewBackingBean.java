@@ -59,7 +59,7 @@ public class IndexViewBackingBean {
 	public void init() {
 		latestGameLibraryPublications = publicationController.listRecentPublications(MAX_GAME_LIBRARY_PUBLICATIONS);
 		latestForumTopics = forumController.listLatestForumTopics(MAX_FORUM_TOPICS);
-		illusionEvents = illusionEventController.listLatestsIllusionEvents(MAX_ILLUSION_EVENTS);
+		illusionEvents = illusionEventController.listNextIllusionEvents(MAX_ILLUSION_EVENTS);
 	}
 	
 	public List<BlogEntry> getLatestBlogEntries() {

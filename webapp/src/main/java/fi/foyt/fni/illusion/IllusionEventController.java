@@ -101,8 +101,9 @@ public class IllusionEventController {
     return illusionEventParticipantDAO.listIllusionEventsByUserAndRole(user, role);
   }
 
-  public List<IllusionEvent> listLatestsIllusionEvents(int maxResults) {
-    return illusionEventDAO.listAllSortByCreated(0, maxResults);
+  public List<IllusionEvent> listNextIllusionEvents(int maxResults) {
+    Date now = new Date();
+    return illusionEventDAO.listByStartDateGEOrEndDateGESortByStartDateAndStartTime(now, now, 0, maxResults);
   }
 
   public IllusionEvent updateIllusionEventName(IllusionEvent illusionEvent, String name) {

@@ -104,9 +104,12 @@
 	                <h:link outcome="/illusion/event.jsf?urlName=#{event.urlName}" value="#{event.name}"/>
 	              </div>
 	              <div class="index-illusion-event-date">
-                  <h:outputFormat value="#{locales['index.illusionEventDate']}">
-                    <f:param value="#{event.created}"/>
-                    <f:param value="#{event.created}"/>
+                  <h:outputFormat value="#{locales['index.illusionEventDateRange']}" rendered="#{event.endDate ne null}">
+                    <f:param value="#{event.startDate}"/>
+                    <f:param value="#{event.endDate}"/>
+                  </h:outputFormat>
+                  <h:outputFormat value="#{locales['index.illusionEventDateSingle']}" rendered="#{event.endDate eq null}">
+                    <f:param value="#{event.startDate}"/>
                   </h:outputFormat>
                 </div>
                 <div class="index-illusion-event-desc" title="#{event.description}">#{event.description.length() > 200 ? event.description.substring(0, 200).concat('...') : event.description}</div>
