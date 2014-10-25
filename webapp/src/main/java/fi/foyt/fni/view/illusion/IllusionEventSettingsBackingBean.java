@@ -14,6 +14,7 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.illusion.IllusionEventController;
+import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
@@ -23,7 +24,6 @@ import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.utils.servlet.RequestUtils;
-import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedItem;
 
 @RequestScoped
 @Named
@@ -49,7 +49,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
       return "/error/access-denied.jsf";
     }
 
-    illusionEventNavigationController.setSelectedItem(SelectedItem.SETTINGS);
+    illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.SETTINGS);
     illusionEventNavigationController.setEventUrlName(getUrlName());
 
     name = illusionEvent.getName();

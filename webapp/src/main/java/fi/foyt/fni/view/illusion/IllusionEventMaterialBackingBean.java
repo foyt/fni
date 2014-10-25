@@ -10,6 +10,7 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
+import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -23,7 +24,6 @@ import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedItem;
 
 @RequestScoped
 @Named
@@ -62,7 +62,7 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
       return "/error/access-denied.jsf";
     }
 
-    illusionEventNavigationController.setSelectedItem(SelectedItem.MATERIALS);
+    illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.MATERIALS);
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
     Material material = materialController.findMaterialByPath(illusionEvent.getFolder(), getMaterialPath());
@@ -76,7 +76,7 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
         return "/error/access-denied.jsf";
       }
     }
-    
+
     String contextPath =  httpServletRequest.getContextPath();
     
     materialUrl = contextPath + "/materials/" + material.getPath();

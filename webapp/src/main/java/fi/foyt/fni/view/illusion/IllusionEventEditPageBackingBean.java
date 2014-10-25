@@ -8,6 +8,7 @@ import javax.inject.Named;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
+import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
@@ -18,7 +19,6 @@ import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
-import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedItem;
 
 @RequestScoped
 @Named
@@ -43,7 +43,7 @@ public class IllusionEventEditPageBackingBean extends AbstractIllusionEventBacki
 
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
-    illusionEventNavigationController.setSelectedItem(SelectedItem.MANAGE_PAGES);
+    illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.MANAGE_PAGES);
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
     Material material = materialController.findMaterialById(getId());

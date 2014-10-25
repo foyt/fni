@@ -9,8 +9,9 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
+import fi.foyt.fni.illusion.IllusionEventPageController;
+import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.materials.MaterialController;
-import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
@@ -18,20 +19,12 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
-import fi.foyt.fni.persistence.model.users.Permission;
-import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.security.LoggedIn;
-import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
-import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
 @Named
 @Stateful
 @Join(path = "/illusion/event/{urlName}/pages/{materialPath}", to = "/illusion/event-page.jsf")
-@LoggedIn
-@Secure(value = Permission.ILLUSION_EVENT_ACCESS)
-@SecurityContext(context = "@urlName")
 public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBean {
 
   @Parameter
@@ -45,20 +38,13 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
   private MaterialController materialController;
 
   @Inject
-  private MaterialPermissionController materialPermissionController;
-
-  @Inject
-  private SessionController sessionController;
+  private IllusionEventPageController illusionEventPageController;
 
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
-
+  
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
-    if (participant == null) {
-      return "/error/access-denied.jsf";
-    }
-
     illusionEventNavigationController.setEventUrlName(getUrlName());
 
     Material material = materialController.findMaterialByPath(illusionEvent.getFolder(), getMaterialPath());
@@ -70,17 +56,25 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
     if (document.getDocumentType() != IllusionEventDocumentType.PAGE) {
       return "/error/not-found.jsf";
     }
-
-    if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
-      User loggedUser = sessionController.getLoggedUser();
-      if (!materialPermissionController.isPublic(loggedUser, material) && !materialPermissionController.hasAccessPermission(loggedUser, material)) {
-        return "/error/access-denied.jsf";
+    
+    if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
+      IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, document.getId().toString());
+      if (visibility != IllusionEventPageVisibility.VISIBLE) {
+        if (visibility == IllusionEventPageVisibility.HIDDEN) {
+          return "/error/access-denied.jsf";
+        }
+        
+        if (visibility == IllusionEventPageVisibility.PARTICIPANTS) {
+          if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.PARTICIPANT)) {
+            return "/error/access-denied.jsf";
+          }
+        }
       }
     }
 
     pageTitle = material.getTitle();
     pageContent = document.getData();
-    illusionEventNavigationController.setSelectedPage(material.getId());
+    illusionEventNavigationController.setSelectedPage(material.getId().toString());
 
     return null;
   }

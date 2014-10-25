@@ -15,6 +15,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventGroupController;
+import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventGroupMember;
@@ -24,7 +25,6 @@ import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
-import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedItem;
 
 @RequestScoped
 @Named
@@ -49,7 +49,7 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
 
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
-    illusionEventNavigationController.setSelectedItem(SelectedItem.GROUPS);
+    illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.GROUPS);
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
     groups = illusionEventGroupController.listGroups(illusionEvent);

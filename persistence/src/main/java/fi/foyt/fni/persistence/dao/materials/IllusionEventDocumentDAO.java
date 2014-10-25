@@ -57,7 +57,7 @@ public class IllusionEventDocumentDAO extends GenericDAO<IllusionEventDocument> 
     return getSingleResult(entityManager.createQuery(criteria));
   }
 
-  public List<IllusionEventDocument> listByDocumentType(IllusionEventDocumentType documentType) {
+  public List<IllusionEventDocument> listByParentFolderAndDocumentType(Folder parentFolder, IllusionEventDocumentType documentType) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -65,7 +65,10 @@ public class IllusionEventDocumentDAO extends GenericDAO<IllusionEventDocument> 
     Root<IllusionEventDocument> root = criteria.from(IllusionEventDocument.class);
     criteria.select(root);
     criteria.where(
-      criteriaBuilder.equal(root.get(IllusionEventDocument_.documentType), documentType)
+      criteriaBuilder.and(
+        criteriaBuilder.equal(root.get(IllusionEventDocument_.parentFolder), parentFolder),
+        criteriaBuilder.equal(root.get(IllusionEventDocument_.documentType), documentType)
+      )
     );
     
     return entityManager.createQuery(criteria).getResultList();

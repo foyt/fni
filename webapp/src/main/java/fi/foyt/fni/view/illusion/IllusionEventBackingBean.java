@@ -18,6 +18,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
+import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.materials.IllusionEventDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -30,7 +31,6 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.utils.data.FileData;
 import fi.foyt.fni.utils.faces.FacesUtils;
-import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedItem;
 
 @RequestScoped
 @Named
@@ -61,7 +61,7 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
 
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant member) {
-    illusionEventNavigationController.setSelectedItem(SelectedItem.INDEX);
+    illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.INDEX);
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
     if (member != null) {
