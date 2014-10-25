@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['index.title']}</ui:define>
   
@@ -94,10 +99,11 @@
       <div class="grid_4 omega index-illusion-events-container">
         <div class="index-illusion-events-panel">
           <h3>
-            <h:link outcome="/illusion/index.jsf">#{locales['index.illusionEvents']}</h:link>
+            <h:link outcome="/illusion/index.jsf">#{locales['index.illusionUpcomingEvents']}</h:link>
           </h3>
           
           <div class="index-illusion-events">
+            <div class="index-illusion-no-events" jsf:rendered="#{indexViewBackingBean.illusionEvents.isEmpty()}">#{locales['index.illusionNoUpcomingEvents']}</div>
             <ui:repeat var="event" value="#{indexViewBackingBean.illusionEvents}">
 	            <div class="index-illusion-event">
 	              <div class="index-illusion-event-title">

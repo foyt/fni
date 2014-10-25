@@ -47,8 +47,6 @@ h3 a {
   color: $description-color;
 }
 
-/* Publications and forum posts row */
-
 .index-publications-panel, 
 .index-illusion-events-panel,
 .index-forum-panel,
@@ -56,6 +54,12 @@ h3 a {
   background-color: $panel-background-color;
   padding-top: 10px;
   padding-left:26px;
+}
+
+.index-illusion-no-events {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 14px;
 }
 
 .index-publications-panel {
