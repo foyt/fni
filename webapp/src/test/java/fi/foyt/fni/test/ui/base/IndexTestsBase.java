@@ -9,6 +9,9 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import fi.foyt.fni.test.SqlAfter;
+import fi.foyt.fni.test.SqlBefore;
+
 public class IndexTestsBase extends AbstractUITest {
 
   @Test
@@ -45,4 +48,30 @@ public class IndexTestsBase extends AbstractUITest {
       assertEquals(getAppUrl() + "/gamelibrary/tags/" + URLEncoder.encode(tag, "UTF-8").replaceAll("\\+", "%20"), tagLink.getAttribute("href"));
     }
   }
+
+
+  @Test
+  public void testNoUpcomingEvents() throws Exception {
+    navigate("/");
+    assertSelectorPresent(".index-illusion-no-events");
+  }
+  
+  @Test
+  @SqlBefore ({"illusion-basic-setup.sql", "illusion-upcoming-events-setup.sql"})
+  @SqlAfter ({"illusion-upcoming-events-teardown.sql", "illusion-basic-teardown.sql"})
+  public void testUpcomingEvents() throws Exception {
+    navigate("/");
+    assertSelectorNotPresent(".index-illusion-no-events");
+    assertSelectorCount(".index-illusion-event", 2);
+    assertSelectorTextIgnoreCase(".index-illusion-event:nth-child(1) .index-illusion-event-title a", "Upcoming #2");
+    assertSelectorPresent(".index-illusion-event:nth-child(1) .index-illusion-event-date");
+    assertSelectorPresent(".index-illusion-event:nth-child(1) .index-illusion-event-desc");
+    assertSelectorTextIgnoreCase(".index-illusion-event:nth-child(2) .index-illusion-event-title a", "Upcoming #1");
+    assertSelectorPresent(".index-illusion-event:nth-child(2) .index-illusion-event-date");
+    assertSelectorPresent(".index-illusion-event:nth-child(2) .index-illusion-event-desc");
+  }
+  
+  
+  
+  
 }

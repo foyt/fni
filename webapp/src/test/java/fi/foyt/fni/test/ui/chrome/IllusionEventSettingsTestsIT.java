@@ -4,9 +4,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import fi.foyt.fni.test.ui.base.IllusionEventParticipantsTestsBase;
+import fi.foyt.fni.test.ui.base.IllusionEventSettingsTestsBase;
 
-public class IllusionEventSettingsTestsIT extends IllusionEventParticipantsTestsBase {
+public class IllusionEventSettingsTestsIT extends IllusionEventSettingsTestsBase {
 
   @Before
   public void setUp() {

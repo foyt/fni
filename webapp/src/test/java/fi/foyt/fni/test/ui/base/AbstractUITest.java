@@ -127,7 +127,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void assertSelectorCount(String selector, int expected) {
     assertEquals(expected, getWebDriver().findElementsByCssSelector(selector).size());
   }
-  
+
+  protected void assertSelectorValue(String selector, String expected) {
+    assertEquals(expected, findElementBySelector(selector).getAttribute("value"));
+  }
+
   protected void clickSelector(String selector) {
     getWebDriver().findElementByCssSelector(selector).click();
   }
@@ -138,6 +142,14 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
 
   protected void testNotFound(String path) {
     testNotFound(getWebDriver(), path);
+  }
+  
+  protected void clearSelectorInput(String selector) {
+    findElementBySelector(selector).clear();
+  }
+  
+  protected void setSelectorInputValue(String selector, String value) {
+    findElementBySelector(selector).sendKeys(value);
   }
   
   private String sessionId;
