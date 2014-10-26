@@ -31,7 +31,8 @@
           timeFormat: 'G:i'
         })
         .on("change", function (e, data) {
-          $($(this).data('alt-field')).val($(this).timepicker('getTime').toISOString());
+          var time = $(this).timepicker('getTime');
+          $($(this).data('alt-field')).val(time ? time.toISOString() : '');
         });
       
       var time = $($(element).data('alt-field')).val();
