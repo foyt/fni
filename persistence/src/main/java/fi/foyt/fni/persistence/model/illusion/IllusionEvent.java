@@ -103,6 +103,14 @@ public class IllusionEvent {
     this.signUpFeeCurrency = signUpFeeCurrency;
   }
   
+  public String getLocation() {
+    return location;
+  }
+  
+  public void setLocation(String location) {
+    this.location = location;
+  }
+  
   public Date getStartDate() {
     return startDate;
   }
@@ -171,6 +179,8 @@ public class IllusionEvent {
   private Double signUpFee;
   
   private Currency signUpFeeCurrency; 
+  
+  private String location;
 
   @Column (nullable = false)
   @Temporal (TemporalType.DATE)

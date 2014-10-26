@@ -57,8 +57,8 @@ public class IllusionEventController {
   
   /* IllusionEvent */
 
-  public IllusionEvent createIllusionEvent(String urlName, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime) {
-    return illusionEventDAO.create(urlName, name, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency, startDate, startTime, endDate, endTime);
+  public IllusionEvent createIllusionEvent(String urlName, String location, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime) {
+    return illusionEventDAO.create(urlName, name, location, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency, startDate, startTime, endDate, endTime);
   }
 
   public IllusionEvent findIllusionEventById(Long id) {
@@ -113,6 +113,10 @@ public class IllusionEventController {
 
   public IllusionEvent updateIllusionEventEndTime(IllusionEvent illusionEvent, Date endTime) {
     return illusionEventDAO.updateEndTime(illusionEvent, endTime);
+  }
+
+  public IllusionEvent updateIllusionEventLocation(IllusionEvent illusionEvent, String location) {
+    return illusionEventDAO.updateLocation(illusionEvent, location);
   }
 
   /* IllusionEventParticipant */

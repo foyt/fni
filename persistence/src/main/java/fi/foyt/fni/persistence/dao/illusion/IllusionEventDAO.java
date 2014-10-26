@@ -20,7 +20,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionEvent create(String urlName, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime) {
+	public IllusionEvent create(String urlName, String name, String location, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime) {
 		IllusionEvent illusionEvent = new IllusionEvent();
 		
 		illusionEvent.setName(name);
@@ -32,6 +32,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 		illusionEvent.setJoinMode(joinMode);
 		illusionEvent.setSignUpFee(signUpFee);
 		illusionEvent.setSignUpFeeCurrency(signUpFeeCurrency);
+		illusionEvent.setLocation(location);
 		illusionEvent.setStartDate(startDate);
 		illusionEvent.setStartTime(startTime);
 		illusionEvent.setEndDate(endDate);
@@ -157,6 +158,11 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 
   public IllusionEvent updateDescription(IllusionEvent illusionEvent, String description) {
     illusionEvent.setDescription(description);
+    return persist(illusionEvent);
+  }
+
+  public IllusionEvent updateLocation(IllusionEvent illusionEvent, String location) {
+    illusionEvent.setLocation(location);
     return persist(illusionEvent);
   }
 
