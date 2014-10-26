@@ -21,9 +21,7 @@ import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantImage;
-import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.images.ImageUtils;
@@ -39,9 +37,6 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
 
 	@Inject
 	private UserController userController;
-
-  @Inject
-	private SessionController sessionController;
 
   @Inject
   private IllusionEventController illusionEventController;
@@ -73,11 +68,6 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Size parameters is mandatory");
       return;
     }
-    
-	  if (!sessionController.isLoggedIn()) {
-	    response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-      return;
-	  }
 	  
 	  IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(eventUrlName);
 	  if (illusionEvent == null) {
@@ -193,11 +183,6 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
     
     String eventUrlName = pathItems[0];
     Long participantId = NumberUtils.createLong(pathItems[1]);
-    
-    if (!sessionController.isLoggedIn()) {
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-      return;
-    }
 
     IllusionEvent event = illusionEventController.findIllusionEventByUrlName(eventUrlName);
     if (event == null) {
@@ -227,19 +212,6 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
 	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
-    
-    if (!participant.getUser().getId().equals(sessionController.getLoggedUserId())) {
-      IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
-      if (loggedParticipant == null) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN);
-        return;
-      }
-      
-      if (loggedParticipant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN);
-        return;
-      }
-    }
     
     String contentType = dataParts[0];
     byte[] data = Base64.decodeBase64(dataParts[1]);
