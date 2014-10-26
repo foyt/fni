@@ -49,6 +49,8 @@ public class IllusionEventNavigationBackingBean {
           boolean participant = eventParticipant.getRole() == IllusionEventParticipantRole.PARTICIPANT;
           administrationVisible = organizer;
           pages = participant || organizer ? illusionEventPagesController.listParticipantPages(illusionEvent) : illusionEventPagesController.listPublicPages(illusionEvent);
+        } else {
+          pages = illusionEventPagesController.listPublicPages(illusionEvent);
         }
       }
     } else {
