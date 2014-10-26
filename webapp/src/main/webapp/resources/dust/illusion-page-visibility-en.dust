@@ -1,0 +1,35 @@
+<div title="Change visibility of page '{pageTitle}'" data-change-button="Change" data-cancel-button="Cancel">
+  <div class="illusion-page-visibility-dialog">
+    <p>  
+      Change visibility of page '{pageTitle}'
+    </p>
+      
+    {@if cond="'{pageRequiresUser}' != 'true'"}
+      <div>
+        {@if cond="'{pageVisibility}' == 'VISIBLE'"}
+          <input checked="checked" type="radio" name="visibility" value="VISIBLE"/> 
+        {:else}
+          <input type="radio" name="visibility" value="VISIBLE"/> 
+        {/if}
+        
+        <label>Visible for all</label>
+      </div>
+    {/if}
+    <div>
+      {@if cond="'{pageVisibility}' == 'PARTICIPANTS'"}
+        <input checked="checked" type="radio" name="visibility" value="PARTICIPANTS"/> 
+      {:else}
+        <input type="radio" name="visibility" value="PARTICIPANTS"/> 
+      {/if}
+      <label>Visible for participants</label>
+    </div>
+    <div>
+      {@if cond="'{pageVisibility}' == 'HIDDEN'"}
+        <input checked="checked" type="radio" name="visibility" value="HIDDEN"/> 
+      {:else}
+        <input type="radio" name="visibility" value="HIDDEN"/> 
+      {/if}
+      <label>Hidden</label>
+    </div>
+  </div>
+</div>

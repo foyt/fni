@@ -13,6 +13,9 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.illusion.IllusionEventController;
+import fi.foyt.fni.illusion.IllusionEventPage;
+import fi.foyt.fni.illusion.IllusionEventPageVisibility;
+import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.materials.IllusionEventDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.common.Language;
@@ -30,15 +33,14 @@ import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.faces.FacesUtils;
-import fi.foyt.fni.view.illusion.IllusionEventNavigationController.SelectedItem;
 
 @RequestScoped
 @Named
 @Stateful
-@Join (path = "/illusion/event/{urlName}/manage-pages", to = "/illusion/event-manage-pages.jsf")
+@Join(path = "/illusion/event/{urlName}/manage-pages", to = "/illusion/event-manage-pages.jsf")
 @LoggedIn
-@Secure (value = Permission.ILLUSION_EVENT_MANAGE)
-@SecurityContext (context = "@urlName")
+@Secure(value = Permission.ILLUSION_EVENT_MANAGE)
+@SecurityContext(context = "@urlName")
 public class IllusionEventManagePagesBackingBean extends AbstractIllusionEventBackingBean {
 
   @Parameter
@@ -46,13 +48,16 @@ public class IllusionEventManagePagesBackingBean extends AbstractIllusionEventBa
 
   @Inject
   private IllusionEventController illusionEventController;
+  
+  @Inject
+  private IllusionEventPageController illusionEventPageController;
 
   @Inject
   private IllusionEventDocumentController illusionEventDocumentController;
 
   @Inject
   private SessionController sessionController;
-  
+
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
 
@@ -61,12 +66,14 @@ public class IllusionEventManagePagesBackingBean extends AbstractIllusionEventBa
 
   @Inject
   private MaterialController materialController;
-  
+
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant member) {
-    illusionEventNavigationController.setSelectedItem(SelectedItem.MANAGE_PAGES);
+    illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.MANAGE_PAGES);
     illusionEventNavigationController.setEventUrlName(getUrlName());
-    pages = illusionEventController.listPages();
+    
+    pages = illusionEventPageController.listPages(illusionEvent);
+    
     return null;
   }
 
@@ -79,21 +86,37 @@ public class IllusionEventManagePagesBackingBean extends AbstractIllusionEventBa
     this.urlName = urlName;
   }
 
-  public List<IllusionEventDocument> getPages() {
+  public List<IllusionEventPage> getPages() {
     return pages;
   }
   
+  public String getPageId() {
+    return pageId;
+  }
+  
+  public void setPageId(String pageId) {
+    this.pageId = pageId;
+  }
+  
+  public IllusionEventPageVisibility getPageVisibility() {
+    return pageVisibility;
+  }
+  
+  public void setPageVisibility(IllusionEventPageVisibility pageVisibility) {
+    this.pageVisibility = pageVisibility;
+  }
+
   public String getRelativePath(Material material) {
     List<String> path = new ArrayList<>();
-    
+
     Material current = material;
     do {
       path.add(0, current.getUrlName());
-    } while ((current == null)||(current.getType() == MaterialType.ILLUSION_FOLDER));
-    
+    } while ((current == null) || (current.getType() == MaterialType.ILLUSION_FOLDER));
+
     return StringUtils.join(path, "/");
   }
-  
+
   public String newPage() {
     IllusionEvent event = illusionEventController.findIllusionEventByUrlName(getUrlName());
     String title = FacesUtils.getLocalizedValue("illusion.managePages.untitledPage");
@@ -103,5 +126,14 @@ public class IllusionEventManagePagesBackingBean extends AbstractIllusionEventBa
     return "/illusion/event-edit-page.jsf?faces-redirect=true&urlName=" + event.getUrlName() + "&id=" + page.getId();
   }
   
-  private List<IllusionEventDocument> pages;
+  public String changePageVisibility() {
+    IllusionEvent event = illusionEventController.findIllusionEventByUrlName(getUrlName());
+    illusionEventPageController.setPageVisibility(event, getPageId(), getPageVisibility());
+    return "/illusion/event-manage-pages.jsf?faces-redirect=true&urlName=" + event.getUrlName();
+  }
+
+  private List<IllusionEventPage> pages;
+  private String pageId;
+  private IllusionEventPageVisibility pageVisibility;
+  
 }

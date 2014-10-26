@@ -1,0 +1,35 @@
+<div title="Muuta sivun '{pageTitle}' näkyvyyttä" data-change-button="Muuta" data-cancel-button="Peruuta">
+  <div class="illusion-page-visibility-dialog">
+    <p>  
+      Muuta sivun '{pageTitle}' näkyvyyttä
+    </p>
+      
+    {@if cond="'{pageRequiresUser}' != 'true'"}
+      <div>
+        {@if cond="'{pageVisibility}' == 'VISIBLE'"}
+          <input checked="checked" type="radio" name="visibility" value="VISIBLE"/> 
+        {:else}
+          <input type="radio" name="visibility" value="VISIBLE"/> 
+        {/if}
+        
+        <label>Näkyvissä kaikille</label>
+      </div>
+    {/if}
+    <div>
+      {@if cond="'{pageVisibility}' == 'PARTICIPANTS'"}
+        <input checked="checked" type="radio" name="visibility" value="PARTICIPANTS"/> 
+      {:else}
+        <input type="radio" name="visibility" value="PARTICIPANTS"/> 
+      {/if}
+      <label>Näkyvissä osallistujille</label>
+    </div>
+    <div>
+      {@if cond="'{pageVisibility}' == 'HIDDEN'"}
+        <input checked="checked" type="radio" name="visibility" value="HIDDEN"/> 
+      {:else}
+        <input type="radio" name="visibility" value="HIDDEN"/> 
+      {/if}
+      <label>Piilotettu</label>
+    </div>
+  </div>
+</div>

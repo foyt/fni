@@ -119,6 +119,43 @@ h4>a{
   color: $default-color;
 }
 
+/* Table */
+
+.illusion-table {
+  
+}
+
+.illusion-table th,
+.illusion-table td {
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: $default-color;
+  font-family: $default-font;
+  @include box-sizing(border-box);
+  vertical-align: top;
+}
+
+.illusion-table th {
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+.illusion-table td a {
+  text-decoration: none;
+  color: $default-color;
+}
+
+.illusion-table td img {
+  vertical-align: top;
+  margin-left: 8px;
+  max-height: 20px;
+}
+
+.illusion-table tbody td {
+  padding-top: 10px;
+}
+
 /* List */
 
 .illusion-list {

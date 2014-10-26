@@ -72,27 +72,54 @@
           <div class="illusion-event-sub-panel">
             <h:form>
               <h:commandButton styleClass="illusion-event-manage-pages-new-page" value="#{locales['illusion.managePages.newPage']}" action="#{illusionEventManagePagesBackingBean.newPage}" />
+              <input type="hidden" class="jsfActionPageId" jsf:value="#{illusionEventManagePagesBackingBean.pageId}"/>
+              <input type="hidden" class="jsfActionPageVisibility" jsf:value="#{illusionEventManagePagesBackingBean.pageVisibility}"/>
+              <h:commandLink styleClass="jsfActionChangeVisibility" action="#{illusionEventManagePagesBackingBean.changePageVisibility()}" />
 	          </h:form>
             
             <h3>#{locales['illusion.managePages.pagesListTitle']}</h3>
 
-            <div class="illusion-list illusion-event-manage-pages">
-              <ui:repeat var="page" value="#{illusionEventManagePagesBackingBean.pages}">
-                <div class="illusion-list-item">
-                  <f:param name="urlName" value="#{illusionEventNavigationBackingBean.eventUrlName}"/>
-                  <f:param name="pagePath" value="#{illusionEventManagePagesBackingBean.getRelativePath(page)}"/>
-                  <h:link outcome="/illusion/event-page.jsf?urlName=#{illusionEventNavigationBackingBean.eventUrlName}&amp;materialPath=#{page.urlName}" value="#{page.title}"></h:link>
-                  <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-document.png"/> 
-                  <span class="illusion-list-item-actions">
-                    <h:link outcome="/illusion/event-edit-page.jsf" value="#{locales['illusion.managePages.editPage']}">
-					            <f:param name="urlName" value="#{illusionEventNavigationBackingBean.eventUrlName}"/>
-					            <f:param name="id" value="#{page.id}"/>
-					          </h:link>
-                    <a class="illusion-remove-page" href="javascript:void(null)" data-event-id="#{illusionEventManagePagesBackingBean.id}" data-page-id="#{page.id}" data-page-title="#{page.title}">#{locales['illusion.managePages.deletePage']}</a>
-                  </span>
-                </div>
-              </ui:repeat>
-            </div>      
+            <table class="illusion-table illusion-event-manage-pages">
+              <thead>
+                <tr>
+                  <th width="700">#{locales['illusion.managePages.pageTitle']}</th>
+                  <th width="216">#{locales['illusion.managePages.pageVisibility']}</th>
+                  <th width="20"/>
+                </tr>
+              </thead>
+              <tbody>
+                <ui:repeat var="page" value="#{illusionEventManagePagesBackingBean.pages}">
+	                <tr>
+		                <td>
+		                  <div>
+		                    <a href="#{page.url}">#{page.title}</a>
+		                  </div>
+		                  <div>
+		                    <span class="illusion-list-item-actions">
+		                      <h:link rendered="#{page.editable}" outcome="/illusion/event-edit-page.jsf" value="#{locales['illusion.managePages.editPage']}">
+		                        <f:param name="urlName" value="#{illusionEventNavigationBackingBean.eventUrlName}"/>
+		                      </h:link>
+		                      <ui:fragment rendered="#{page.deletable}">
+		                        <a class="illusion-remove-page" href="javascript:void(null)" data-event-id="#{illusionEventManagePagesBackingBean.id}" data-page-id="#{page.id}" data-page-title="#{page.title}">#{locales['illusion.managePages.deletePage']}</a>
+		                      </ui:fragment>
+                          <ui:fragment rendered="#{page.visibilityChangeable}">
+                            <a class="illusion-change-visibility" href="javascript:void(null)" data-page-id="#{page.id}" data-page-title="#{page.title}" data-page-visibility="#{page.visibility}" data-page-requires-user="#{page.requiresUser}">#{locales['illusion.managePages.changeVisibility']}</a>
+                          </ui:fragment>
+		                    </span>
+		                  </div>
+		                </td>
+		                <td>
+                      <h:outputText rendered="#{page.visibility eq 'HIDDEN'}" value="#{locales['illusion.managePages.visibilityHidden']}"/>
+                      <h:outputText rendered="#{page.visibility eq 'VISIBLE'}" value="#{locales['illusion.managePages.visibilityVisible']}"/>
+                      <h:outputText rendered="#{page.visibility eq 'PARTICIPANTS'}" value="#{locales['illusion.managePages.visibilityParticipants']}"/>
+		                </td>
+		                <td>
+		                  <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-document.png"/> 
+		                </td>    
+	                </tr>  
+	              </ui:repeat>          
+              </tbody>
+            </table>
           </div>
         </div>
 
