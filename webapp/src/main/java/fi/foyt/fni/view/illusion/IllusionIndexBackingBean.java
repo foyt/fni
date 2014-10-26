@@ -68,7 +68,7 @@ public class IllusionIndexBackingBean {
       }
     }
 
-    return new Event(event.getName(), event.getUrlName(), event.getDescription(), event.getStartDate(), event.getStartTime(), event.getEndDate(), event.getEndTime(), organizers, role);
+    return new Event(event.getName(), event.getLocation(), event.getUrlName(), event.getDescription(), event.getStartDate(), event.getStartTime(), event.getEndDate(), event.getEndTime(), organizers, role);
   }
 
   public List<Event> getUpcomingEvents() {
@@ -84,10 +84,11 @@ public class IllusionIndexBackingBean {
   
   public class Event {
     
-    public Event(String name, String urlName, String description, Date startDate, Date startTime, Date endDate, Date endTime, List<EventOrganizer> organizers,
+    public Event(String name, String location, String urlName, String description, Date startDate, Date startTime, Date endDate, Date endTime, List<EventOrganizer> organizers,
         IllusionEventParticipantRole role) {
       super();
       this.name = name;
+      this.location = location;
       this.urlName = urlName;
       this.description = description;
       this.startDate = startDate;
@@ -133,6 +134,10 @@ public class IllusionIndexBackingBean {
     public IllusionEventParticipantRole getRole() {
       return role;
     }
+    
+    public String getLocation() {
+      return location;
+    }
 
     private String name;
     private String urlName;
@@ -141,6 +146,7 @@ public class IllusionIndexBackingBean {
     private Date startTime;
     private Date endDate;
     private Date endTime;
+    private String location;
     private List<EventOrganizer> organizers;
     private IllusionEventParticipantRole role;
   }

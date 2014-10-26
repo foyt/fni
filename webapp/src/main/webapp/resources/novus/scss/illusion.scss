@@ -91,12 +91,14 @@ h3 {
   vertical-align: bottom;
 }
 
+.index-illusion-event-location,
 .index-illusion-event-date {
   font-family: $default-font;
   font-size: 10px;
   text-transform: uppercase;
   padding-right: 14px;
   float: right;
+  clear: both;
 }
 
 .illusion-index-event-organizer {
