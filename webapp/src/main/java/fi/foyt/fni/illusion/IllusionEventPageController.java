@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventSettingDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionEventDocumentDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -22,6 +23,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventSettingKey;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
+import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 
 @Dependent
@@ -39,6 +41,9 @@ public class IllusionEventPageController {
 
   @Inject
   private IllusionEventSettingDAO illusionEventSettingDAO;
+
+  @Inject
+  private SessionController sessionController;
   
   @PostConstruct
   public void init() {
@@ -54,19 +59,22 @@ public class IllusionEventPageController {
   public List<IllusionEventPage> listPages(IllusionEvent illusionEvent) {
     List<IllusionEventPage> pages = new ArrayList<>();
     
-    IllusionEventDocument indexDocument = illusionEventDocumentDAO.findByParentFolderAndDocumentType(illusionEvent.getFolder(), IllusionEventDocumentType.INDEX);
-
     String contextPath = systemSettingsController.getSiteContextPath();
     String eventUrl = contextPath + "/illusion/event/" + illusionEvent.getUrlName();
 
-    pages.add(new IllusionEventPage("INDEX", eventUrl, indexDocument.getTitle(), "INDEX", true, false, false, false, getPageVisibility(illusionEvent, "INDEX")));
+    IllusionEventDocument indexDocument = illusionEventDocumentDAO.findByParentFolderAndDocumentType(illusionEvent.getFolder(), IllusionEventDocumentType.INDEX);
+    if (indexDocument != null) {
+      pages.add(new IllusionEventPage("INDEX", eventUrl, indexDocument.getTitle(), "INDEX", true, false, false, false, getPageVisibility(illusionEvent, "INDEX")));
+    } else {
+      logger.severe("Could not find index page document for event #" + illusionEvent.getId());
+    }
     
     for (IllusionEventDocument customPage : listCustomPages(illusionEvent.getFolder())) {
       pages.add(new IllusionEventPage(customPage.getId().toString(), eventUrl + "/pages/" + customPage.getUrlName(), customPage.getTitle(), "PAGE", true, true, true, false, getPageVisibility(illusionEvent, customPage.getId().toString())));
     }
     
-    pages.add(new IllusionEventPage("MATERIALS", eventUrl + "/materials", "Materiaalit", "MATERIALS", false, false, true, true, getPageVisibility(illusionEvent, "MATERIALS")));
-    
+    pages.add(new IllusionEventPage("MATERIALS", eventUrl + "/materials", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.materials"), "MATERIALS", false, false, true, true, getPageVisibility(illusionEvent, "MATERIALS")));
+
     return pages;
   }
   
