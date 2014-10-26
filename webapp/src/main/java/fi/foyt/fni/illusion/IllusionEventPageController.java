@@ -101,8 +101,6 @@ public class IllusionEventPageController {
     switch (pageId) {
       case "INDEX":
         return IllusionEventPageVisibility.VISIBLE;
-      case "MATERIALS":
-        return IllusionEventPageVisibility.PARTICIPANTS;
     }
     
     return IllusionEventPageVisibility.HIDDEN;
