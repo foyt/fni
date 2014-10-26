@@ -27,6 +27,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
   public void testNameRequired() {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/createevent");
+    setSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
     findElementBySelector(".illusion-create-event-save").click();
     waitForNotification();
     assertNotification("error", "Name is required");
@@ -44,6 +45,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     
     findElementBySelector(".illusion-create-event-name").sendKeys(name);
     findElementBySelector(".illusion-create-event-description").sendKeys(description);
+    setSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
     
     waitSelectorToBeClickable(".illusion-create-event-save");
     findElementBySelector(".illusion-create-event-save").click();
