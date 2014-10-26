@@ -78,6 +78,11 @@ public class IllusionEventController {
     return illusionEventDAO.listByStartDateGEOrEndDateGESortByStartDateAndStartTime(now, now, 0, maxResults);
   }
 
+  public List<IllusionEvent> listPastIllusionEvents(int maxResults) {
+    Date now = new Date();
+    return illusionEventDAO.listByStartDateLTAndEndDateLTSortByEndDateEndTimeStartDateStartTime(now, now, 0, maxResults);
+  }
+  
   public IllusionEvent updateIllusionEventName(IllusionEvent illusionEvent, String name) {
     return illusionEventDAO.updateName(illusionEvent, name);
   }
@@ -189,5 +194,6 @@ public class IllusionEventController {
   public IllusionEvent findIllusionEventByFolder(IllusionEventFolder folder) {
     return illusionEventDAO.findByFolder(folder);
   }
+
 
 }

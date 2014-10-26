@@ -97,6 +97,39 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     return query.getResultList();
   }
 
+  public List<IllusionEvent> listByStartDateLTAndEndDateLTSortByEndDateEndTimeStartDateStartTime(Date startDate, Date endDate, Integer firstResult, Integer maxResults) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<IllusionEvent> criteria = criteriaBuilder.createQuery(IllusionEvent.class);
+    Root<IllusionEvent> root = criteria.from(IllusionEvent.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.and(
+        criteriaBuilder.lessThan(root.get(IllusionEvent_.startDate), startDate),
+        criteriaBuilder.lessThan(root.get(IllusionEvent_.endDate), endDate)
+      )
+    );
+    
+    criteria.orderBy(
+      criteriaBuilder.desc(root.get(IllusionEvent_.startDate)), 
+      criteriaBuilder.desc(root.get(IllusionEvent_.startTime)), 
+      criteriaBuilder.desc(root.get(IllusionEvent_.endDate)), 
+      criteriaBuilder.desc(root.get(IllusionEvent_.endTime))
+    );
+
+    TypedQuery<IllusionEvent> query = entityManager.createQuery(criteria);
+    if (firstResult != null) {
+      query.setFirstResult(firstResult);
+    }
+    
+    if (maxResults != null) {
+      query.setMaxResults(maxResults);
+    }
+
+    return query.getResultList();
+  }
+
   public IllusionEvent updateName(IllusionEvent illusionEvent, String name) {
     illusionEvent.setName(name);
     return persist(illusionEvent);
