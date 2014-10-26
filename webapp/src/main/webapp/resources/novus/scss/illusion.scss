@@ -15,54 +15,94 @@ $event-border-color: rgb(71, 176, 176);
 
 h3 {
   @include header-2;
+  margin-bottom: 10px;
 }
 
 .illusion-index-create-event-link {
   @include header-3;
+  padding-left: 23px;
+  padding-right: 23px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 15px;
+  cursor: pointer;
   text-decoration: none;
-  color: $title-color;
-  display: block;
-  margin-bottom: 20px;
+  float: right;
 }
 
 .illusion-index-event-list {
-  padding-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .illusion-index-event {
   padding-top: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
   border-bottom: 1px solid $event-border-color;
 }
 
-.illusion-index-event-list-empty {
-  margin-top: 20px;
+.index-illusion-event-role {
+  font-weight: bold;
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 13px;
+  margin-top: 10px;
 }
 
 .illusion-index-event-name {
-  font-size: 16px;
-  font-family: $default-font;
-  margin-bottom: 5px;
-  font-weight: bold;
   text-decoration: none;
   color: $default-color;
-  display: block;
-}
-
-.illusion-index-event-info {
-  float: right;
-  text-align: right;
-}
-
-.illusion-index-event-participants, .illusion-index-event-created {
-  font-size: 13px;
   font-family: $default-font;
-  color: $default-color;
   font-weight: bold;
+  font-size: 16px;
 }
 
 .illusion-index-event-description {
   font-family: $default-font;
   font-size: 13px;
   width: 700px;
+  margin-top: 10px;
 }
+
+.illusion-index-event h4 {
+  text-decoration: none;
+  text-transform: uppercase;
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 13px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.illusion-index-event-organizer-image {
+  vertical-align: top;
+}
+
+.illusion-index-event-organizer-name {
+  display: inline-block;
+  text-decoration: none;
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 13px;
+  display: inline-block;
+  margin-left: 5px;
+  vertical-align: bottom;
+}
+
+.index-illusion-event-date {
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase;
+  padding-right: 14px;
+  float: right;
+}
+
+.illusion-index-event-organizer {
+  margin-bottom: 10px;
+}
+
+.illusion-index-event-organizer:last-child {
+  margin-bottom: 0px;
+  }
