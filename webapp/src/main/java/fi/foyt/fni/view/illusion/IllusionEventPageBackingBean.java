@@ -1,5 +1,8 @@
 package fi.foyt.fni.view.illusion;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -20,6 +23,8 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.security.SecurityContext;
+import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.system.SystemSettingsController;
 
 @RequestScoped
 @Named
@@ -42,6 +47,12 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
 
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
+
+  @Inject
+  private SessionController sessionController;
+
+  @Inject
+  private SystemSettingsController systemSettingsController;
   
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
@@ -65,6 +76,15 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
         }
         
         if (visibility == IllusionEventPageVisibility.PARTICIPANTS) {
+          if (!sessionController.isLoggedIn()) {
+            String redirectUrl = String.format("%s/illusion/event/%s/pages/%s", systemSettingsController.getSiteContextPath(), getUrlName(), getMaterialPath());
+            try {
+              return "/users/login.jsf?faces-redirect=true&redirectUrl=" + URLEncoder.encode(redirectUrl, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+              return "/error/internal-error.jsf";
+            }
+          }
+          
           if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.PARTICIPANT)) {
             return "/error/access-denied.jsf";
           }
