@@ -123,7 +123,7 @@ public class IllusionEventManagePagesBackingBean extends AbstractIllusionEventBa
     String pageUrlName = materialController.getUniqueMaterialUrlName(sessionController.getLoggedUser(), event.getFolder(), null, title);
     Language language = systemSettingsController.findLocaleByIso2(sessionController.getLocale().getLanguage());
     IllusionEventDocument page = illusionEventDocumentController.createIllusionEventDocument(sessionController.getLoggedUser(), IllusionEventDocumentType.PAGE, language, event.getFolder(), pageUrlName, title, "", MaterialPublicity.PUBLIC);
-    return "/illusion/event-edit-page.jsf?faces-redirect=true&urlName=" + event.getUrlName() + "&id=" + page.getId();
+    return "/illusion/event-edit-page.jsf?faces-redirect=true&urlName=" + event.getUrlName() + "&pageId=" + page.getId();
   }
   
   public String changePageVisibility() {
