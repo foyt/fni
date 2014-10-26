@@ -68,9 +68,7 @@
             <h:form>
               <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
                 <h:outputLabel value="#{locales['illusion.eventSettings.nameLabel']}" />
-                <h:inputText autocomplete="false" id="name" value="#{illusionEventSettingsBackingBean.name}" required="true" requiredMessage="#{locales['illusion.eventSettings.nameRequired']}">
-                  <f:ajax execute="@form" render="@form"/>
-                </h:inputText>
+                <h:inputText autocomplete="false" id="name" value="#{illusionEventSettingsBackingBean.name}" required="true" requiredMessage="#{locales['illusion.eventSettings.nameRequired']}"/>
               </h:panelGroup>
               
               <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
@@ -86,6 +84,11 @@
                 <h:outputLabel value="#{locales['illusion.eventSettings.descriptionLabel']}" />
                 <h:inputTextarea id="description" value="#{illusionEventSettingsBackingBean.description}"/>
               </h:panelGroup>  
+              
+              <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
+                <h:outputLabel value="#{locales['illusion.eventSettings.locationLabel']}" />
+                <h:inputText value="#{illusionEventSettingsBackingBean.location}"/>
+              </h:panelGroup>
                
               <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
                 <label>#{locales['illusion.eventSettings.startTime']}</label>

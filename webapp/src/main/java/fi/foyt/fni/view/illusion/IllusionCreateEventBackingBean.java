@@ -78,6 +78,14 @@ public class IllusionCreateEventBackingBean {
     this.description = description;
   }
 
+  public String getLocation() {
+    return location;
+  }
+  
+  public void setLocation(String location) {
+    this.location = location;
+  }
+  
   public IllusionEventJoinMode getJoinMode() {
     return joinMode;
   }
@@ -176,7 +184,7 @@ public class IllusionCreateEventBackingBean {
 
     IllusionFolder illusionFolder = illusionEventController.findUserIllusionFolder(loggedUser, true);
     IllusionEventFolder illusionEventFolder = illusionEventController.createIllusionEventFolder(loggedUser, illusionFolder, urlName, getName());
-    IllusionEvent event = illusionEventController.createIllusionEvent(urlName, getName(), getDescription(), xmppRoom, illusionEventFolder, getJoinMode(), now,
+    IllusionEvent event = illusionEventController.createIllusionEvent(urlName, getLocation(), getName(), getDescription(), xmppRoom, illusionEventFolder, getJoinMode(), now,
         signUpFee, signUpFeeCurrency, parseDate(getStartDate()), parseDate(getStartTime()), parseDate(getEndDate()), parseDate(getEndTime()));
 
     String indexDocumentTitle = FacesUtils.getLocalizedValue("illusion.createEvent.indexDocumentTitle");
@@ -214,6 +222,7 @@ public class IllusionCreateEventBackingBean {
 
   private String name;
   private String description;
+  private String location;
   private IllusionEventJoinMode joinMode;
   private Double signUpFee;
   private String signUpFeeCurrency;

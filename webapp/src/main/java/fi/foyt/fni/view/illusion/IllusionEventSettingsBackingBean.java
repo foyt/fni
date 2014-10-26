@@ -54,6 +54,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
 
     name = illusionEvent.getName();
     description = illusionEvent.getDescription();
+    location = illusionEvent.getLocation();
     joinMode = illusionEvent.getJoinMode();
     startDate = formatDate(illusionEvent.getStartDate());
     startTime = formatTime(illusionEvent.getStartTime());
@@ -77,6 +78,14 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
 
   public void setDescription(String description) {
     this.description = description;
+  }
+  
+  public String getLocation() {
+    return location;
+  }
+  
+  public void setLocation(String location) {
+    this.location = location;
   }
 
   public IllusionEventJoinMode getJoinMode() {
@@ -164,6 +173,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     illusionEventController.updateIllusionEventStartTime(illusionEvent, parseDate(getStartTime()));
     illusionEventController.updateIllusionEventEndDate(illusionEvent, parseDate(getEndDate()));
     illusionEventController.updateIllusionEventEndTime(illusionEvent, parseDate(getEndTime()));
+    illusionEventController.updateIllusionEventLocation(illusionEvent, getLocation());
 
     return "/illusion/event-settings.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
   }
@@ -197,6 +207,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   
   private String name;
   private String description;
+  private String location;
   private IllusionEventJoinMode joinMode;
   private String startDate;
   private String startTime;

@@ -85,7 +85,12 @@
             <h:panelGroup layout="block" styleClass="illusion-create-event-field">
               <h:outputLabel value="#{locales['illusion.createEvent.descriptionLabel']}" />
               <h:inputTextarea styleClass="illusion-create-event-description" id="description" value="#{illusionCreateEventBackingBean.description}"/>
-            </h:panelGroup>    
+            </h:panelGroup>   
+            
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+              <h:outputLabel value="#{locales['illusion.createEvent.locationLabel']}" />
+              <h:inputText styleClass="illusion-create-event-location" value="#{illusionCreateEventBackingBean.location}"/>
+            </h:panelGroup> 
                
             <h:panelGroup layout="block" styleClass="illusion-create-event-field">
               <label>#{locales['illusion.createEvent.startTime']}</label>
