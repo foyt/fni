@@ -172,6 +172,7 @@ public class IllusionEvent {
   
   private Currency signUpFeeCurrency; 
 
+  @Column (nullable = false)
   @Temporal (TemporalType.DATE)
   private Date startDate;
   

@@ -89,7 +89,7 @@
                
             <h:panelGroup layout="block" styleClass="illusion-create-event-field">
               <label>#{locales['illusion.createEvent.startTime']}</label>
-              <input type="date" class="datepicker" placeholder="#{locales['illusion.createEvent.startDatePlaceholder']}" data-alt-field=".actual-start-date"/>
+              <input type="date" required="required" class="datepicker" placeholder="#{locales['illusion.createEvent.startDatePlaceholder']}" data-alt-field=".actual-start-date"/>
               <input type="time" class="timepicker" placeholder="#{locales['illusion.createEvent.startTimePlaceholder']}" data-alt-field=".actual-start-time"/>
               <input type="hidden" class="actual-start-date" jsf:value="#{illusionCreateEventBackingBean.startDate}"/>
               <input type="hidden" class="actual-start-time" jsf:value="#{illusionCreateEventBackingBean.startTime}"/>
