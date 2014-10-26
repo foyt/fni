@@ -718,6 +718,9 @@ alter table IllusionEvent
 alter table IllusionEventMaterialParticipantSetting 
     add constraint UK_ffd2dyc9j5kd430i27mshcbra  unique (material_id, participant_id, settingKey);
 
+alter table IllusionEventSetting 
+    add constraint UK_surut0q7540sfqcn5mt9063qq  unique (event_id, settingKey);
+        
 alter table UserEmail 
     add constraint UK_64595ikvvhrgya5f17x4y5bh9  unique (email);
 

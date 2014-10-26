@@ -51,7 +51,7 @@ public class IllusionEventGroupsTestsBase extends AbstractUITest {
   public void testLoggedInOrganizer() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
     testTitle("/illusion/event/openevent", "Illusion - Open Event");
-    assertSelectorCount(".illusion-event-navigation>a", 2);
+    assertSelectorCount(".illusion-event-navigation>a", 1);
     assertSelectorNotPresent(".illusion-event-join-button");
     assertSelectorPresent(".illusion-event-navigation-admin-menu");
   }

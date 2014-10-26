@@ -50,7 +50,7 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
   public void testLoggedInParticipant() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     testTitle("/illusion/event/openevent", "Illusion - Open Event");
-    assertSelectorCount(".illusion-event-navigation>a", 2);
+    assertSelectorCount(".illusion-event-navigation>a", 1);
     assertSelectorNotPresent(".illusion-event-join-button");
     assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
     assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
@@ -62,7 +62,7 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
   public void testLoggedInOrganizer() throws Exception {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
     testTitle("/illusion/event/openevent", "Illusion - Open Event");
-    assertSelectorCount(".illusion-event-navigation>a", 2);
+    assertSelectorCount(".illusion-event-navigation>a", 1);
     assertSelectorNotPresent(".illusion-event-join-button");
     assertSelectorPresent(".illusion-event-navigation-admin-menu");
     assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");

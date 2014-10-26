@@ -38,6 +38,22 @@ public abstract class AbstractTest {
         executeSqlFile(sqlFile);
       }
     }
+    
+    SqlSets sqlSets = method.getAnnotation(SqlSets.class);
+    if (sqlSets != null) {
+      for (String sqlSetId : sqlSets.value()) {
+        SqlSet sqlSet = getSqlSet(method, sqlSetId);
+        if (sqlSet == null) {
+          throw new RuntimeException("Could not find sqlset " + sqlSetId);
+        }
+        
+        if (sqlSet.getBefore() != null) {
+          for (String sqlFile : sqlSet.getBefore()) {
+            executeSqlFile(sqlFile);
+          }
+        }
+      }
+    }
   }
 
   @After
@@ -49,6 +65,35 @@ public abstract class AbstractTest {
         executeSqlFile(sqlFile);
       }
     }
+    
+    SqlSets sqlSets = method.getAnnotation(SqlSets.class);
+    if (sqlSets != null) {
+      for (String sqlSetId : sqlSets.value()) {
+        SqlSet sqlSet = getSqlSet(method, sqlSetId);
+        if (sqlSet == null) {
+          throw new RuntimeException("Could not find sqlset " + sqlSetId);
+        }
+        
+        if (sqlSet.getAfter() != null) {
+          for (String sqlFile : sqlSet.getAfter()) {
+            executeSqlFile(sqlFile);
+          }
+        }
+      }
+    }
+  }
+  
+  private SqlSet getSqlSet(Method method, String id) {
+    DefineSqlSets defineSqlSets = method.getDeclaringClass().getAnnotation(DefineSqlSets.class);
+    if (defineSqlSets != null) {
+      for (DefineSqlSet defineSqlSet : defineSqlSets.value()) {
+        if (defineSqlSet.id().equals(id)) {
+          return new SqlSet(defineSqlSet.before(), defineSqlSet.after());
+        }
+      }
+    }
+    
+    return null;
   }
 
   protected String getAppUrl() {
@@ -290,5 +335,24 @@ public abstract class AbstractTest {
     GreenMail greenMail = new GreenMail(new ServerSetup(getSmtpPort(), "localhost", ServerSetup.PROTOCOL_SMTP));
     greenMail.start();
     return greenMail;
+  }
+
+  private class SqlSet {
+
+    public SqlSet(String[] before, String[] after) {
+      this.before = before;
+      this.after = after;
+    }
+    
+    public String[] getBefore() {
+      return before;
+    }
+    
+    public String[] getAfter() {
+      return after;
+    }
+    
+    private String[] before;
+    private String[] after;
   }
 }

@@ -2,21 +2,34 @@ package fi.foyt.fni.test.ui.base;
 
 import org.junit.Test;
 
-import fi.foyt.fni.test.SqlAfter;
-import fi.foyt.fni.test.SqlBefore;
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
 
+@DefineSqlSets ({
+  @DefineSqlSet (id = "illusion-open-page", 
+    before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql"}, 
+    after = {"illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
+  ),
+  @DefineSqlSet (id = "illusion-open-page-participant", 
+    before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql", "illusion-event-open-participant-setup.sql"}, 
+    after = {"illusion-event-open-participant-teardown.sql", "illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
+  ),
+  @DefineSqlSet (id = "illusion-open-page-organizer", 
+    before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql", "illusion-event-open-organizer-setup.sql"}, 
+    after = {"illusion-event-open-organizer-teardown.sql", "illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
+  )
+})
 public class IllusionEventPagesTestsBase extends AbstractUITest {
-
+  
   @Test
-  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql"})
-  @SqlAfter ({"illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  @SqlSets ("illusion-open-page")
   public void testLoginRequired() throws Exception {
     testLoginRequired("/illusion/event/openevent/pages/testpage");
   }
   
   @Test
-  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-participant-setup.sql", "illusion-event-open-page-setup.sql"})
-  @SqlAfter ({"illusion-event-open-page-teardown.sql", "illusion-event-open-participant-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  @SqlSets ("illusion-open-page")
   public void testNotFound() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     testNotFound("/illusion/event/openevent/pages/testpage/");
@@ -33,16 +46,14 @@ public class IllusionEventPagesTestsBase extends AbstractUITest {
   }
   
   @Test
-  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-participant-setup.sql"})
-  @SqlAfter ({"illusion-event-open-participant-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  @SqlSets ("illusion-open-page-participant")
   public void testPageTitle() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     testTitle("/illusion/event/openevent/pages/testpage", "Open Event - Test Page");
   }
   
   @Test
-  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-participant-setup.sql"})
-  @SqlAfter ({"illusion-event-open-participant-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  @SqlSets ("illusion-open-page-participant")
   public void testPageText() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     navigate("/illusion/event/openevent/pages/testpage");
@@ -50,8 +61,7 @@ public class IllusionEventPagesTestsBase extends AbstractUITest {
   }
   
   @Test
-  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-organizer-setup.sql"})
-  @SqlAfter ({"illusion-event-open-organizer-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  @SqlSets ("illusion-open-page-organizer")
   public void testCreatePage() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/manage-pages");
