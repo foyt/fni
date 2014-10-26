@@ -1,5 +1,7 @@
 package fi.foyt.fni.test.ui.base;
 
+import java.io.UnsupportedEncodingException;
+
 import org.junit.Test;
 
 import fi.foyt.fni.test.DefineSqlSet;
@@ -18,6 +20,14 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet (id = "illusion-open-page-organizer", 
     before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql", "illusion-event-open-organizer-setup.sql"}, 
     after = {"illusion-event-open-organizer-teardown.sql", "illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
+  ),
+  @DefineSqlSet (id = "illusion-open-page-hidden", 
+    before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql" }, 
+    after = {"illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
+  ),
+  @DefineSqlSet (id = "illusion-open-page-hidden-participant", 
+    before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-participant-setup.sql"}, 
+    after = {"illusion-event-open-participant-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
   )
 })
 public class IllusionEventPagesTestsBase extends AbstractUITest {
@@ -75,6 +85,39 @@ public class IllusionEventPagesTestsBase extends AbstractUITest {
     executeSql("delete from IllusionEventDocument where id in (select id from Material where parentFolder_id = ? and urlName = ?)", 20000, "new_page");
     executeSql("delete from Document where id in (select id from Material where parentFolder_id = ? and urlName = ?)", 20000, "new_page");
     executeSql("delete from Material where parentFolder_id = ? and urlName = ?", 20000, "new_page");
+  }
+  
+  @Test
+  @SqlSets ("illusion-open-page-hidden")
+  public void testHiddenNotLoggedIn() throws UnsupportedEncodingException {
+    testAccessDenied("/illusion/event/openevent/pages/testpage");
+  }
+  
+  @Test
+  @SqlSets ("illusion-open-page-hidden")
+  public void testHiddenLoggedIn() throws UnsupportedEncodingException {
+    loginInternal("user@foyt.fi", "pass");
+    testAccessDenied("/illusion/event/openevent/pages/testpage");
+  }
+  
+  @Test
+  @SqlSets ("illusion-open-page-hidden-participant")
+  public void testHiddenLoggedParticipant() throws UnsupportedEncodingException {
+    loginInternal("user@foyt.fi", "pass");
+    testAccessDenied("/illusion/event/openevent/pages/testpage");
+  }
+  
+  @Test
+  @SqlSets ("illusion-open-page-participant")
+  public void testVisibleForParticipantsNotLoggedIn() throws UnsupportedEncodingException {
+    testLoginRequired("/illusion/event/openevent/pages/testpage");
+  }
+  
+  @Test
+  @SqlSets ("illusion-open-page-participant")
+  public void testVisibleForParticipantsLoggedIn() throws UnsupportedEncodingException {
+    loginInternal("admin@foyt.fi", "pass");
+    testAccessDenied("/illusion/event/openevent/pages/testpage");
   }
   
 }

@@ -6,6 +6,10 @@ import fi.foyt.fni.test.DefineSqlSets;
 import fi.foyt.fni.test.SqlSets;
 
 @DefineSqlSets ({
+  @DefineSqlSet (id = "illusion-open-materials-hidden", 
+    before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-participant-setup.sql"}, 
+    after = {"illusion-event-open-participant-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
+  ),
   @DefineSqlSet (id = "illusion-open-materials-participant", 
     before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-participant-setup.sql", "illusion-event-open-materials-to-participants-setup.sql"}, 
     after = {"illusion-event-open-materials-to-participants-teardown.sql", "illusion-event-open-participant-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
@@ -59,4 +63,16 @@ public class IllusionEventMaterialsTestsBase extends AbstractUITest {
     assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "materials");
   }
   
+  @Test
+  @SqlSets ("illusion-open-materials-hidden")
+  public void testHiddenNotLoggedIn() throws Exception {
+    testLoginRequired("/illusion/event/openevent/materials");
+  }
+  
+  @Test
+  @SqlSets ("illusion-open-materials-hidden")
+  public void testHiddenLoggedIn() throws Exception {
+    loginInternal("user@foyt.fi", "pass");
+    testAccessDenied("/illusion/event/openevent/materials");
+  }
 }
