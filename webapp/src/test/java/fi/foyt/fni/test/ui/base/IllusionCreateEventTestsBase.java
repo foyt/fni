@@ -133,4 +133,29 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     executeSql("delete from IllusionEvent where urlName = ?", urlName);
   }
   
+  @Test
+  public void testCreateEventWithLocation() throws Exception {
+    loginInternal("admin@foyt.fi", "pass");
+
+    String name = "timesanddates";
+    String urlName = "timesanddates";
+    String description = "timesanddates";
+    String location = "location";
+    String startDate = "10/20/2030";
+    
+    navigate("/illusion/createevent");
+    setSelectorInputValue(".illusion-create-event-name", name);
+    setSelectorInputValue(".illusion-create-event-description", description);
+    setSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
+    setSelectorInputValue(".illusion-create-event-location", location);
+    waitSelectorToBeClickable(".illusion-create-event-save");
+    findElementBySelector(".illusion-create-event-save").click();
+    waitForUrlMatches(".*/illusion/event/" + urlName);
+    navigate("/illusion/event/" + urlName + "/settings");
+    assertSelectorValue(".illusion-event-settings-location", location);
+    
+    executeSql("delete from IllusionEventParticipant where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
+    executeSql("delete from IllusionEvent where urlName = ?", urlName);
+  }
+  
 }

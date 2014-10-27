@@ -96,4 +96,17 @@ public class IllusionEventSettingsTestsBase extends AbstractUITest {
     assertSelectorValue("input[data-alt-field='.actual-end-time']", endTime);
   }
   
+  @Test
+  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-organizer-setup.sql"})
+  @SqlAfter ({ "illusion-event-open-organizer-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  public void testLocation() throws Exception {
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    String location = "Test place";
+    setSelectorInputValue(".illusion-event-settings-location", location);
+    clickSelector(".illusion-event-settings-save");
+    assertSelectorValue(".illusion-event-settings-location", location);
+  }
+  
 }

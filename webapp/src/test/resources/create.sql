@@ -212,6 +212,7 @@ create table IllusionEvent (
     endDate date,
     endTime time,
     joinMode varchar(255) not null,
+    location varchar(255),
     name varchar(255) not null,
     signUpFee double,
     signUpFeeCurrency varchar(255),
