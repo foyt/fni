@@ -59,6 +59,13 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
     illusionEventNavigationController.setEventUrlName(getUrlName());
 
     Material material = materialController.findMaterialByPath(illusionEvent.getFolder(), getMaterialPath());
+    if (material == null) {
+      material = materialController.findMaterialByPermaLink(illusionEvent.getFolder().getPath() + "/" + getMaterialPath());
+      if (material != null) {
+        return "/illusion/event-page.jsf?faces-redirect=true&urlName=" + getUrlName() + "&materialPath=" + material.getUrlName();
+      }
+    }
+    
     if ((material == null) || (material.getType() != MaterialType.ILLUSION_GROUP_DOCUMENT)) {
       return "/error/not-found.jsf";
     }
