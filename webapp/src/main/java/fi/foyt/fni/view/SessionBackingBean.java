@@ -7,8 +7,10 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.LocaleUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
@@ -24,6 +26,9 @@ public class SessionBackingBean {
 
 	@Inject
 	private UserController userController;
+
+  @Inject
+	private HttpServletRequest request;
 	
 	public boolean isLoggedIn() {
 		return sessionController.isLoggedIn();
@@ -48,5 +53,14 @@ public class SessionBackingBean {
 	
 	public void changeLocale(String locale) throws IOException {
 		sessionController.setLocale(LocaleUtils.toLocale(locale));
+	}
+	
+	public String getRequestPath() {
+	  String forwardRequestUri = (String) request.getAttribute("javax.servlet.forward.request_uri");
+	  if (StringUtils.isNotBlank(forwardRequestUri)) {
+	    return forwardRequestUri;
+	  }
+
+	  return request.getRequestURI();
 	}
 }

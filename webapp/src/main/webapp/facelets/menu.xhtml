@@ -68,7 +68,7 @@
         </h:form>
       </h:panelGroup>
       
-      <h:link outcome="/users/login.jsf" styleClass="menu-tools-login" rendered="#{!sessionBackingBean.loggedIn}">#{locales['menu.toolLogin']}</h:link>
+      <h:link outcome="/users/login.jsf?redirectUrl=#{sessionBackingBean.requestPath}" styleClass="menu-tools-login" rendered="#{!sessionBackingBean.loggedIn}">#{locales['menu.toolLogin']}</h:link>
       
       <h:panelGroup layout="block" styleClass="menu-tools-account-container" rendered="#{sessionBackingBean.loggedIn}">
         <h:outputLink value="javascript:void(null)" styleClass="menu-tools-account">
