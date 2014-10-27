@@ -151,6 +151,10 @@ public class UserController {
   	return userDAO.updatePhone(user, phone);
 	}
 
+  public User updateUserLocale(User user, Locale locale) {
+    return userDAO.updateLocale(user, locale);
+  }
+
   private List<SearchResult<User>> searchUsersByEmail(String[] criterias, int maxResults) throws ParseException {
     List<SearchResult<User>> result = new ArrayList<>();
 

@@ -51,10 +51,15 @@ public class SessionBackingBean {
 		return sessionController.getLocale();
 	}
 	
-	public void changeLocale(String locale) throws IOException {
-		sessionController.setLocale(LocaleUtils.toLocale(locale));
+	public void changeLocale(String str) throws IOException {
+	  Locale locale = LocaleUtils.toLocale(str);
+	  sessionController.setLocale(locale);
+		
+		if (sessionController.isLoggedIn()) {
+		  userController.updateUserLocale(sessionController.getLoggedUser(), locale);
+		}
 	}
-	
+
 	public String getRequestPath() {
 	  String forwardRequestUri = (String) request.getAttribute("javax.servlet.forward.request_uri");
 	  if (StringUtils.isNotBlank(forwardRequestUri)) {
