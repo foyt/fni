@@ -153,7 +153,7 @@ public class SystemSettingsController {
     String host = getSiteHost();
     int port = secure ? getSiteHttpsPort() : getSiteHttpPort();
     String scheme = secure ? "https" : "http";
-    boolean dropPort = secure ? port == 80 : port == 443;
+    boolean dropPort = secure ? port == 443 : port == 80;
     
     StringBuilder resultBuilder = new StringBuilder();
     
