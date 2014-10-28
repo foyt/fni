@@ -73,8 +73,8 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
       eventUrl += "/illusion/event/" + illusionEvent.getUrlName();
     }
     
-    joinUrl = eventUrl + "/dojoin?ref=inv";
-    eventUrl = eventUrl + "?ref=inv";
+    this.joinUrl = eventUrl + "/dojoin?ref=inv";
+    this.eventUrl = eventUrl + "?ref=inv";
     
     return null;
   }
