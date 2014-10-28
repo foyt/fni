@@ -86,8 +86,10 @@
     $('.illusion-edit-page-title').change(function (event) {
       var oldValue = $(this).parent().data('old-value');
       var value = $(this).val();
-      $(this).parent().data('old-value', value);
-      $('.illusion-page-editor').coOpsCK("changeProperty", 'title', oldValue, value);
+      if (value) {
+        $(this).parent().data('old-value', value);
+        $('.illusion-page-editor').coOpsCK("changeProperty", 'title', oldValue, value);
+      }
     });
 
     $('.collaborators').collaborators();
