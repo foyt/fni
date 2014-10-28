@@ -71,7 +71,7 @@ public class RequestUtils {
   public static String createUrlName(String text, int maxLength) {
   	String urlName = StringUtils.normalizeSpace(text);
     if (StringUtils.isBlank(urlName))
-      return null;
+      return UUID.randomUUID().toString();
     
     urlName = StringUtils.lowerCase(StringUtils.substring(StringUtils.stripAccents(urlName.replaceAll(" ", "_")).replaceAll("[^a-zA-Z0-9\\-\\.\\_]", ""), 0, maxLength));
     if (StringUtils.isBlank(urlName)) {
