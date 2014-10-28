@@ -108,15 +108,17 @@
     $('.forge-ckdocument-title').change(function (event) {
       var oldValue = $(this).parent().data('old-value');
       var value = $(this).val();
-      $(this).parent().data('old-value', value);
-      
-      editor.fire("propertiesChange", {
-        properties : [{
-          property: 'title',
-          oldValue: oldValue,
-          currentValue: value
-        }]
-      });
+      if (value) {
+        $(this).parent().data('old-value', value);
+        
+        editor.fire("propertiesChange", {
+          properties : [{
+            property: 'title',
+            oldValue: oldValue,
+            currentValue: value
+          }]
+        });
+      }
     });
     
     editor.on("CoOPS:PatchReceived", function (event) {
