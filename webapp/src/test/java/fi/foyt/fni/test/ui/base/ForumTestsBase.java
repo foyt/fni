@@ -6,6 +6,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import fi.foyt.fni.test.SqlAfter;
+import fi.foyt.fni.test.SqlBefore;
+
 public class ForumTestsBase extends AbstractUITest {
 
   @Test
@@ -35,9 +38,11 @@ public class ForumTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlBefore ("forum-with-hyphen-setup.sql")
+  @SqlAfter ("forum-with-hyphen-teardown.sql")
   public void testWithHyphen() throws Exception {
-    getWebDriver().get(getAppUrl(false) + "/forum/with-hyphen");
-    assertEquals("Forum", getWebDriver().getTitle());
+    navigate("/forum/with-hyphen");
+    assertTitle("Forum");
   }
 
 }

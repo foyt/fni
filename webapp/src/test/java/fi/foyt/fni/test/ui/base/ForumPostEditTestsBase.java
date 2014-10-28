@@ -5,6 +5,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import fi.foyt.fni.test.SqlAfter;
+import fi.foyt.fni.test.SqlBefore;
+
 public class ForumPostEditTestsBase extends AbstractUITest {
 
   private static final String TEST_POST = "/forum/1_topic_forum/single_topic/edit/11";
@@ -38,6 +41,15 @@ public class ForumPostEditTestsBase extends AbstractUITest {
     testNotFound(getWebDriver(), "/forum/1_topic_forum/single_topic/edit/abc");
     testNotFound(getWebDriver(), "/forum/1_topic_forum/single_topic/edit/1024");
     testNotFound(getWebDriver(), "/forum/1_topic_forum/single_topic/edit/9");
+  }
+
+  @Test
+  @SqlBefore ("forum-with-hyphen-setup.sql")
+  @SqlAfter ("forum-with-hyphen-teardown.sql")
+  public void testWithHyphen() throws Exception {
+    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
+    navigate("/forum/with-hyphen/with-hyphen/edit/28");
+    assertTitle("Edit Reply");
   }
 
 }

@@ -151,6 +151,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     assertEquals(expected, findElementBySelector(selector).getAttribute("value"));
   }
 
+  protected void assertTitle(String expected) {
+    assertEquals(expected, getWebDriver().getTitle());
+  }
+
   protected void clickSelector(String selector) {
     getWebDriver().findElementByCssSelector(selector).click();
   }

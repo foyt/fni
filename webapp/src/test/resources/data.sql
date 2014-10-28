@@ -156,8 +156,7 @@ values
   (1, true, 'Empty Forum', 'Topicless forum', 'empty_forum', 1),
   (2, true, 'Single topic Forum', 'Single topic forum', '1_topic_forum', 1),
   (3, true, 'Five topic Forum', 'Five topic forum', '5_topic_forum', 1),
-  (4, false, 'Immutable Forum', 'No topic creation allowed Forum', 'immutable', 1),
-  (5, true, 'With Hyphen', 'Forum with hyphen in urlname', 'with-hyphen', 1);
+  (4, false, 'Immutable Forum', 'No topic creation allowed Forum', 'immutable', 1);
   
 insert into 
   ForumMessage (id, created, modified, views, author_id)
@@ -171,8 +170,7 @@ values
   (7, PARSEDATETIME('1 1 2010 18:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2010 17:30', 'd M yyyy HH:mm'), 0, 1),
   (8, PARSEDATETIME('1 1 2011 16:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2011 16:30', 'd M yyyy HH:mm'), 0, 1),
   (9, PARSEDATETIME('1 1 2012 17:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2012 17:30', 'd M yyyy HH:mm'), 0, 1),
-  (10, PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), 0, 1),
-  (27, PARSEDATETIME('1 1 2013 20:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2013 20:30', 'd M yyyy HH:mm'), 0, 1);
+  (10, PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), 0, 1);
 
 insert into 
   ForumTopic (id, forum_id, urlName, subject) 
@@ -186,8 +184,7 @@ values
   (7, 4, 'immutable_topic', 'Topic of immutable Forum topic'),
   (8, 4, 'testbook_1', 'Fat hag dwarves quickly zap jinx mob'),
   (9, 4, 'testbook_2', 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг'),
-  (10, 4, 'pangram_fi', 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.'),
-  (27, 5, 'with-hyphen', 'Topic for testing url names with hyphens');
+  (10, 4, 'pangram_fi', 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.');
  
 insert into 
   ForumMessage (id, created, modified, views, author_id)
@@ -207,8 +204,7 @@ values
   (23, PARSEDATETIME('1 1 2011 02:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2011 02:00', 'd M yyyy HH:mm'), 0, 1),
   (24, PARSEDATETIME('1 1 2012 02:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2012 02:00', 'd M yyyy HH:mm'), 0, 1),
   (25, PARSEDATETIME('1 1 2013 02:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2013 02:00', 'd M yyyy HH:mm'), 0, 1),
-  (26, PARSEDATETIME('1 1 2014 02:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2014 02:00', 'd M yyyy HH:mm'), 0, 1),
-  (28, PARSEDATETIME('1 1 2014 03:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2014 03:00', 'd M yyyy HH:mm'), 0, 1);
+  (26, PARSEDATETIME('1 1 2014 02:00', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2014 02:00', 'd M yyyy HH:mm'), 0, 1);
   
 insert into 
   ForumPost (id, topic_id, content)
@@ -228,8 +224,7 @@ values
   (23, 7, '<p>Re: Immutable</p>'),
   (24, 8, '<p>Re: Fat hag dwarves</p>'),
   (25, 8, '<p>Re: Fat hag dwarves quickly zap jinx mob</p>'),
-  (26, 9, '<p>Re: Эх, чужак</p>'),
-  (28, 27, '<p>With Hyphen</p>');
+  (26, 9, '<p>Re: Эх, чужак</p>');
   
 insert into 
   Publication (id, license, name, published, urlName, creator_id, defaultImage_id, forumTopic_id, modifier_id, language_id, price, weight, depth, height, width, created, modified, description, authorsShare)
