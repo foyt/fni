@@ -9,10 +9,13 @@ import java.net.URL;
 import java.util.Arrays;
 
 import org.apache.commons.lang.StringUtils;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -78,6 +81,22 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
 
   protected void waitForUrlNotMatches(String regex) {
     waitForUrlNotMatches(getWebDriver(), regex);
+  }
+  
+  protected void waitForSelectorText(final String selector, final String text) {
+    waitForSelectorText(selector, text, false);
+  }
+  
+  protected void waitForSelectorText(final String selector, final String text, final boolean ignoreCase) {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        if (ignoreCase) {
+          return text.equalsIgnoreCase(driver.findElement(By.cssSelector(selector)).getText());
+        } else {
+          return text.equals(driver.findElement(By.cssSelector(selector)).getText());
+        }
+      }
+    }); 
   }
   
   protected void assertUrlMatches(String regex) {

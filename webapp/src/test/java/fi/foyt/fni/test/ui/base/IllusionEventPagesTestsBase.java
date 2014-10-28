@@ -1,6 +1,8 @@
 package fi.foyt.fni.test.ui.base;
 
 import java.io.UnsupportedEncodingException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 
@@ -87,6 +89,42 @@ public class IllusionEventPagesTestsBase extends AbstractUITest {
     executeSql("delete from Material where parentFolder_id = ? and urlName = ?", 20000, "new_page");
   }
   
+  @Test
+  @SqlSets ("illusion-open-page-organizer")
+  public void testPagePermaLink() throws Exception {
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/manage-pages");
+    testTitle("Open Event - Manage Pages");
+    clickSelector(".illusion-event-manage-pages-new-page");
+    waitForUrlMatches(".*/edit-page.*");
+    String pageId = null;
+    
+    Pattern pattern = Pattern.compile("(.*pageId=)([0-9]{1,})(.*)");
+    Matcher matcher = pattern.matcher(getWebDriver().getCurrentUrl());
+    if (matcher.matches()) {
+      pageId = matcher.group(2);
+    }
+    
+    waitForSelectorText(".illusion-edit-page-editor-status", "Loaded", true);
+    clearSelectorInput(".illusion-edit-page-title");
+    setSelectorInputValue(".illusion-edit-page-title", "changed");
+    clickSelector(".illusion-edit-page-editor-status");
+    waitForSelectorText(".illusion-edit-page-editor-status", "Saved", true);
+    executeSql("update IllusionEventSetting set value = '{\"" + pageId + "\":{\"visibility\":\"VISIBLE\"}}' where id = 1");
+    
+    testTitle("/illusion/event/openevent/pages/new_page", "Open Event - changed");
+
+    executeSql("delete from PermaLink where material_id = (select id from Material where parentFolder_id = ? and urlName = ?)", 20000, "changed");
+    executeSql("delete from MaterialRevisionSetting where materialRevision_id in (select id from DocumentRevision where document_id in (select id from Material where parentFolder_id = ? and urlName = ?))", 20000, "changed");
+    executeSql("update MaterialRevision set checksum = ? where id in (select id from DocumentRevision where document_id in (select id from Material where parentFolder_id = ? and urlName = ?))", "DELETE", 20000, "changed");
+    executeSql("delete from DocumentRevision where document_id in (select id from Material where parentFolder_id = ? and urlName = ?)", 20000, "changed");
+    executeSql("delete from MaterialRevision where checksum = ?", "DELETE");
+    executeSql("delete from CoOpsSession where material_id in (select id from Material where parentFolder_id = ? and urlName = ?)", 20000, "changed");
+    executeSql("delete from IllusionEventDocument where id in (select id from Material where parentFolder_id = ? and urlName = ?)", 20000, "changed");
+    executeSql("delete from Document where id in (select id from Material where parentFolder_id = ? and urlName = ?)", 20000, "changed");
+    executeSql("delete from Material where parentFolder_id = ? and urlName = ?", 20000, "changed");
+  }
+
   @Test
   @SqlSets ("illusion-open-page-hidden")
   public void testHiddenNotLoggedIn() throws UnsupportedEncodingException {
