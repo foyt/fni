@@ -1,4 +1,4 @@
-<div title="Invite" data-invite-button="Invite" data-cancel-button="Cancel">
+<div title="Invite" data-invite-button="Invite" data-cancel-button="Cancel" data-wait-title="Please wait" data-wait-text="Please wait while the invitations are being sent....">
   <div class="illusion-event-invite-participants-dialog">
     <p>
       Type the emails of people you wish to invite into the field below. 

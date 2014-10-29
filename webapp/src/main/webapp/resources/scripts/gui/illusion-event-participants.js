@@ -17,6 +17,15 @@
             buttons: [{
               'text': dialog.data('invite-button'),
               'click': function(event) {
+                var waitDialog = $('<div>')
+                  .attr('title', dialog.data('wait-title'))
+                  .addClass('illusion-event-inviting-dialog')
+                  .append($('<p>').html(dialog.data('wait-text')))
+                  .dialog({
+                    modal: true,
+                    buttons: { }
+                  });
+                   
                 var emails = $(this).find('input[name="invite"]').val().split(',');
                 var mailSubject = $(this).find('input[name="mail-subject"]').val();
                 var mailContent = $(this).find('textarea[name="mail-content"]').val();
@@ -31,10 +40,17 @@
                     'mailContent': mailContent
                   },
                   complete: function (jqXHR, textStatus) {
+                    $(dialog).dialog('close');
+                    $(waitDialog).dialog("close");
+                  },
+                  error: function ( jqXHR, textStatus, errorThrown ) {
+                    $('.notifications').notifications('notification', 'error', textStatus);
+                  },
+                  success: function () {
                     window.location.reload(true);
                   }
                 });
-                
+
               }
             }, {
               'text': dialog.data('cancel-button'),
@@ -57,8 +73,7 @@
           });
 
         } else {
-          // TODO: Proper error handling...
-          alert(err);
+          $('.notifications').notifications('notification', 'error', err);
         }
       });
     });

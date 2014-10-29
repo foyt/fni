@@ -1,4 +1,4 @@
-<div title="Kutsu" data-invite-button="Kutsu" data-cancel-button="Peruuta">
+<div title="Kutsu" data-invite-button="Kutsu" data-cancel-button="Peruuta" data-wait-title="Odota hetki" data-wait-text="Odota hetki, kutsuja lähetetään...">
   <div class="illusion-event-invite-participants-dialog">
     <p>
       Kirjoita kutsuttavien henkilöiden sähköpostiosoitteet alla olevaan kenttään

@@ -111,3 +111,24 @@ form input[type="text"], form select {
   width: 100%;
   @include box-sizing(border-box);
 }
+
+.illusion-event-inviting-dialog p {
+  font-style: italic;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 48px;
+}
+
+.illusion-event-inviting-dialog p:after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: url('#' + '{resource["novus:gfx/layout/loader-bw.gif"]}') no-repeat center center;
+  background-position: center center;
+  background-repeat: no-repeat;
+  margin-top: -32px;
+  right: 0px;
+  left: 0px;
+  width: 100%;
+}
