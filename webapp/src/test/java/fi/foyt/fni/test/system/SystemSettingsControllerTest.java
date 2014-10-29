@@ -1,4 +1,4 @@
-package fi.foyt.fni.system;
+package fi.foyt.fni.test.system;
 
 import javax.inject.Inject;
 
@@ -6,6 +6,7 @@ import org.jglue.cdiunit.CdiRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import fi.foyt.fni.system.SystemSettingsController;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(CdiRunner.class)
