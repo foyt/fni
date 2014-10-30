@@ -1,6 +1,15 @@
 package fi.foyt.fni.test.ui.base;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import javax.mail.MessagingException;
+
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
+
+import com.icegreen.greenmail.util.GreenMail;
+import com.icegreen.greenmail.util.GreenMailUtil;
 
 import fi.foyt.fni.test.SqlAfter;
 import fi.foyt.fni.test.SqlBefore;
@@ -66,6 +75,120 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
     assertSelectorNotPresent(".illusion-event-join-button");
     assertSelectorPresent(".illusion-event-navigation-admin-menu");
     assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
+  }
+  
+  @Test
+  @SqlBefore ({"illusion-event-oai-setup.sql"})
+  @SqlAfter ({"illusion-event-oai-teardown.sql"})
+  public void testJoinOpenNotLoggedIn() {
+    navigate("/illusion/event/open");
+    assertSelectorClickable(".illusion-event-join-button");
+    clickSelector(".illusion-event-join-button");
+    assertLogin();
+    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    assertUrlMatches(".*/illusion/event/open");
+    assertSelectorCount(".illusion-event-navigation>a", 1);
+    assertSelectorNotPresent(".illusion-event-join-button");
+    assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
+    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
+  }
+
+  @Test
+  @SqlBefore ({"illusion-event-oai-setup.sql"})
+  @SqlAfter ({"illusion-event-oai-teardown.sql"})
+  public void testJoinApproveNotLoggedIn() throws MessagingException {
+    GreenMail greenMail = startSmtpServer();
+    try {
+      navigate("/illusion/event/approve");
+      assertSelectorClickable(".illusion-event-join-button");
+      clickSelector(".illusion-event-join-button");
+      assertLogin();
+      loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+      assertUrlMatches(".*/illusion/event/approve.*");
+      waitForNotification();
+      assertNotification("info", "Your request to join the event was sent to event organizers for approval.");
+      navigate("/illusion/event/approve");
+      assertNotification("warning", "Waiting for event organizer to accept your request...");
+      
+      assertEquals(1, greenMail.getReceivedMessages().length);
+
+      String mailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
+      assertEquals("Request to join group", greenMail.getReceivedMessages()[0].getSubject());
+      assertTrue(mailBody, StringUtils.startsWithIgnoreCase(mailBody, "Hi Test Admin"));
+    } finally {
+      greenMail.stop();
+    } 
+  }
+  
+  @Test
+  @SqlBefore ({"illusion-event-oai-setup.sql"})
+  @SqlAfter ({"illusion-event-oai-teardown.sql"})
+  public void testJoinInviteNotLoggedIn() throws MessagingException {
+    navigate("/illusion/event/invite");
+    assertSelectorNotPresent(".illusion-event-join-button");
+  }
+  
+  @Test
+  @SqlBefore ({"illusion-event-oai-setup.sql"})
+  @SqlAfter ({"illusion-event-oai-teardown.sql"})
+  public void testJoinOpenLoggedIn() {
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/illusion/event/open");
+    assertSelectorClickable(".illusion-event-join-button");
+    clickSelector(".illusion-event-join-button");
+    assertUrlMatches(".*/illusion/event/open");
+    assertSelectorCount(".illusion-event-navigation>a", 1);
+    assertSelectorNotPresent(".illusion-event-join-button");
+    assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
+    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
+  }
+
+  @Test
+  @SqlBefore ({"illusion-event-oai-setup.sql"})
+  @SqlAfter ({"illusion-event-oai-teardown.sql"})
+  public void testJoinApproveLoggedIn() throws MessagingException {
+    GreenMail greenMail = startSmtpServer();
+    try {
+      loginInternal("user@foyt.fi", "pass");
+      navigate("/illusion/event/approve");
+      assertSelectorClickable(".illusion-event-join-button");
+      clickSelector(".illusion-event-join-button");
+      assertUrlMatches(".*/illusion/event/approve.*");
+      waitForNotification();
+      assertNotification("info", "Your request to join the event was sent to event organizers for approval.");
+      navigate("/illusion/event/approve");
+      assertNotification("warning", "Waiting for event organizer to accept your request...");
+      
+      assertEquals(1, greenMail.getReceivedMessages().length);
+
+      String mailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
+      assertEquals("Request to join group", greenMail.getReceivedMessages()[0].getSubject());
+      assertTrue(mailBody, StringUtils.startsWithIgnoreCase(mailBody, "Hi Test Admin"));
+    } finally {
+      greenMail.stop();
+    } 
+  }
+  
+  @Test
+  @SqlBefore ({"illusion-event-oai-setup.sql"})
+  @SqlAfter ({"illusion-event-oai-teardown.sql"})
+  public void testJoinInviteLoggedIn() throws MessagingException {
+    navigate("/illusion/event/invite");
+    loginInternal("user@foyt.fi", "pass");
+    assertSelectorNotPresent(".illusion-event-join-button");
+  }
+  
+  @Test
+  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-banned-setup.sql"})
+  @SqlAfter ({ "illusion-event-open-banned-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  public void testBanned() throws MessagingException {
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/illusion/event/openevent");
+    waitForNotification();
+    assertNotification("warning", "You have been banned from this event");
+    assertSelectorNotPresent(".illusion-event-join-button");
+    navigate("/illusion/event/openevent/dojoin");
+    assertAccessDenied();
   }
 
 }

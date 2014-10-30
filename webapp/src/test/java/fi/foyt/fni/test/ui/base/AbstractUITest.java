@@ -2,6 +2,7 @@ package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -111,6 +112,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     assertNotification(getWebDriver(), serverity, text);
   }
   
+  protected void assertNotificationStartsWith(String serverity, String text) {
+    assertNotificationStartsWith(getWebDriver(), serverity, text);
+  }
+  
   protected void navigate(String path) {
     navigate(path, false);
   }
@@ -143,6 +148,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     assertTrue("Element present '" + selector + "'", getWebDriver().findElementsByCssSelector(selector).size() == 0);
   }
   
+  protected void assertSelectorClickable(String selector) {
+    assertNotNull(ExpectedConditions.elementToBeClickable(findElementBySelector(selector)).apply(getWebDriver()));
+  }
+  
   protected void assertSelectorCount(String selector, int expected) {
     assertEquals(expected, getWebDriver().findElementsByCssSelector(selector).size());
   }
@@ -153,6 +162,14 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
 
   protected void assertTitle(String expected) {
     assertEquals(expected, getWebDriver().getTitle());
+  }
+  
+  protected void assertAccessDenied() {
+    assertEquals("Access Denied!", getWebDriver().getTitle());
+  }
+  
+  protected void assertLogin() {
+    assertUrlMatches(".*/login.*");
   }
 
   protected void clickSelector(String selector) {
