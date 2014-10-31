@@ -21,8 +21,8 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
-
 import fi.foyt.fni.gamelibrary.PublicationController;
+import fi.foyt.fni.gamelibrary.PublicationImageCache;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.users.Permission;
@@ -44,6 +44,9 @@ public class PublicationImageServlet extends AbstractFileServlet {
 	@Inject
 	private SessionController sessionController;
 
+  @Inject
+	private PublicationImageCache publicationImageCache;
+	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// PublicationImageId could not be resolved, send 404
@@ -76,6 +79,7 @@ public class PublicationImageServlet extends AbstractFileServlet {
 
 		Integer width = NumberUtils.createInteger(request.getParameter("width"));
 		Integer height = NumberUtils.createInteger(request.getParameter("height"));
+		
 		String eTag = createETag(publicationImage.getModified(), width, height);
 		long lastModified = publicationImage.getModified().getTime();
 
@@ -85,17 +89,22 @@ public class PublicationImageServlet extends AbstractFileServlet {
 			return;
 		}
 
-		TypedData data = new TypedData(publicationImage.getContent(), publicationImage.getContentType());
-
-		if ((width != null) || (height != null)) {
-			try {
-				data = ImageUtils.resizeImage(data, width != null ? width : -1, height != null ? height : -1, null);
-			} catch (IOException e) {
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to resize image");
-				return;
-			}
-		}
-
+    TypedData data = publicationImageCache.get(publicationImageId, width, height);
+    if (data == null) {
+  		data = new TypedData(publicationImage.getContent(), publicationImage.getContentType());
+  
+  		if ((width != null) || (height != null)) {
+  			try {
+  				data = ImageUtils.resizeImage(data, width != null ? width : -1, height != null ? height : -1, null);
+  			} catch (IOException e) {
+  				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to resize image");
+  				return;
+  			}
+  		}
+  		
+  		publicationImageCache.put(publicationImageId, width, height, data);
+    }
+  
 		response.setContentType(data.getContentType());
 		response.setHeader("ETag", eTag);
 		response.setDateHeader("Last-Modified", lastModified);
@@ -158,6 +167,7 @@ public class PublicationImageServlet extends AbstractFileServlet {
 				publicationController.updatePublicationDefaultImage(publication, null);
 				List<PublicationImage> oldImages = publicationController.listPublicationImagesByPublication(publication);
 				for (PublicationImage oldImage : oldImages) {
+          publicationImageCache.remove(oldImage.getId());
 					publicationController.deletePublicationImage(oldImage);
 				}
 			}
