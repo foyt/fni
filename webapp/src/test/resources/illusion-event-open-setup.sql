@@ -1,7 +1,7 @@
 insert into 
   Material (id, created, modified, publicity, title, type, urlName, creator_id, language_id, modifier_id, parentFolder_id) 
 values 
-  (20000, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Open Event', 'ILLUSION_GROUP_FOLDER', 'illusion', 1, null, 1, null);
+  (20000, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Open Event', 'ILLUSION_GROUP_FOLDER', 'openevent', 2, null, 2, 10000);
 insert into Folder (id) values (20000);
 insert into IllusionEventFolder (id) values (20000);
 insert into 
@@ -12,7 +12,7 @@ values
 insert into 
   Material (id, created, modified, publicity, title, type, urlName, creator_id, language_id, modifier_id, parentFolder_id) 
 values 
-  (20001, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Front page', 'ILLUSION_GROUP_DOCUMENT', 'index', 1, null, 1, 20000);
+  (20001, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Front page', 'ILLUSION_GROUP_DOCUMENT', 'index', 2, null, 2, 20000);
   
 insert into 
   Document (id, data)

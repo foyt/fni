@@ -53,4 +53,16 @@ public class ForgeFolderTestsBase extends AbstractUITest {
     assertEquals("Forge", driver.getTitle());
   }
 
+  @Test
+  public void testOpenShareDialog() {
+    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    navigate(FOLDER);
+    waitForSelectorVisible(".forge-material[data-material-id=\"4\"] .forge-material-icon");
+    clickSelector(".forge-material[data-material-id=\"4\"] .forge-material-icon");
+    waitSelectorToBeClickable(".forge-material[data-material-id=\"4\"] .forge-material-action-share a");
+    clickSelector(".forge-material[data-material-id=\"4\"] .forge-material-action-share a");
+    waitForSelectorVisible(".forge-share-material-dialog");
+    assertSelectorPresent(".forge-share-material-dialog");
+  }
+
 }

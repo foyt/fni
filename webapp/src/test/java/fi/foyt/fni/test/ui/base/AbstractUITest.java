@@ -67,6 +67,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void waitForElementVisible(WebElement element) {
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.visibilityOf(element));
   }
+
+  protected void waitForSelectorVisible(String selector) {
+    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(selector)));
+  }
   
   protected WebElement findElementBySelector(String selector) {
     return getWebDriver().findElementByCssSelector(selector);
