@@ -18,7 +18,6 @@ import javax.servlet.http.HttpSession;
   "search",
   "materials",
   "users-profileimage", 
-  "gamelibrary-publicationimage", 
   "gamelibrary-publicationfile",
   "gamelibrary-paytrail",
   "forge-folderbrowser",
