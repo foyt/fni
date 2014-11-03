@@ -1,8 +1,11 @@
+@charset "utf-8";
 @import "vars";
 @import "compass";
 @import "styles";
 
 $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
+$menu-background: rgba(250, 250, 250, 1);
+$menu-active-background: lighten($menu-background, 5%);
 
 /* Panels */ 
 
@@ -22,17 +25,64 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   margin-bottom: 10px;
 }
 
-/* Invite link */
+/* Actions */
 
-.illusion-invite-participants {
+.illusion-event-participant-action-menu {
   float: right;
+  position: relative;
+  min-height: 20px;
+}
+
+.illusion-event-participant-action-menu>label {
   color: $default-color;
   font-family: $default-font;
   font-size: 14px;
   text-decoration: none;
   text-transform: uppercase;
+  position: relative;
+  z-index: 1;
 }
 
+.illusion-event-participant-action-menu>label:after {
+  content: '▼';
+  margin-left: 5px;
+}
+
+.illusion-event-participant-action-menu ul {
+  display: none;
+  position: absolute;
+  white-space: nowrap;
+  right: 0px;
+  background: $menu-background;
+  margin-top: -30px;
+  padding-top: 30px;
+  padding-right: 10px;
+  margin-right: -10px;
+}
+
+.illusion-event-participant-action-menu:hover ul{
+  display: block;
+}
+
+.illusion-event-participant-action-menu ul li {
+  text-align: right;
+  padding: 10px;
+  margin-right: -10px;
+  padding-right: 20px;
+}
+
+.illusion-event-participant-action-menu ul li:hover {
+  background: $menu-active-background;
+}
+
+.illusion-event-participant-action-menu li a {
+  color:$default-color;
+  font-family: $default-font;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+  
 /* Form */
 
 form label {
@@ -79,8 +129,9 @@ form input[type="text"], form select {
   cursor: default;
 }
 
-/* Invite participants dialog */
+/* Dialogs */
 
+.illusion-event-participants-send-mail-dialog p,
 .illusion-event-invite-participants-dialog p {
   font-style: italic;
   font-size: 13px;
@@ -88,6 +139,7 @@ form input[type="text"], form select {
   margin-bottom: 8px;
 }
 
+.illusion-event-participants-send-mail-dialog label,
 .illusion-event-invite-participants-dialog label {
   display: block;
   font-size: 13px;
@@ -96,22 +148,33 @@ form input[type="text"], form select {
   margin-bottom: 8px;
 }
 
+
+.illusion-event-participants-send-mail-dialog .illusion-event-participants-send-mail-recipient label {
+  display: inline-block;
+  margin-left: 8px;
+  font-weight: normal;
+  margin-bottom: 0px;
+}
+
 .illusion-event-invite-participants-dialog .tagsinput {
   @include box-sizing(border-box);
 }
 
+.illusion-event-participants-send-mail-dialog input[name="mail-subject"],
 .illusion-event-invite-participants-dialog input[name="mail-subject"] {
   width: 100%;
   margin-bottom: 8px;
   @include box-sizing(border-box);
 }
 
+.illusion-event-participants-send-mail-dialog textarea[name="mail-content"],
 .illusion-event-invite-participants-dialog textarea[name="mail-content"] {
   height: 210px;
   width: 100%;
   @include box-sizing(border-box);
 }
 
+.illusion-event-mailing-dialog p,
 .illusion-event-inviting-dialog p {
   font-style: italic;
   font-size: 12px;
@@ -119,6 +182,7 @@ form input[type="text"], form select {
   margin-top: 48px;
 }
 
+.illusion-event-mailing-dialog p:after,
 .illusion-event-inviting-dialog p:after {
   content: '';
   position: absolute;
@@ -132,3 +196,4 @@ form input[type="text"], form select {
   left: 0px;
   width: 100%;
 }
+

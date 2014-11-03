@@ -69,9 +69,15 @@
         <h:panelGroup layout="block" styleClass="grid_8 narrow-right">
           <h:panelGroup layout="block" styleClass="illusion-event-sub-panel">
             <h:panelGroup layout="block" styleClass="illusion-event-participants">
-              <h:form>
-                <a href="javascript:void(null)" class="illusion-invite-participants">#{locales['illusion.eventParticipants.inviteParticipants']}</a>
-  
+              <h:form> 
+                <div class="illusion-event-participant-action-menu">
+                  <label>#{locales['illusion.eventParticipants.actionsMenu']}</label>
+                  <ul>
+                    <li><a href="javascript:void(null)" class="illusion-invite-participants">#{locales['illusion.eventParticipants.inviteParticipants']}</a></li>
+                    <li><a href="javascript:void(null)" class="illusion-participants-send-mail">#{locales['illusion.eventParticipants.sendMail']}</a></li>
+                  </ul>
+                </div>
+                
                 <ui:fragment rendered="#{not empty illusionEventParticipantsBackingBean.participants}">
                   <h3>#{locales['illusion.eventParticipants.participantsListTitle']}</h3>
                   <div class="illusion-list">
@@ -187,6 +193,7 @@
     </h:panelGroup>
     
     <input type="hidden" name="eventUrlName" value="#{illusionEventParticipantsBackingBean.urlName}"/>
+    <input type="hidden" name="eventId" value="#{illusionEventParticipantsBackingBean.id}"/>
     <input type="hidden" name="eventName" value="#{illusionEventParticipantsBackingBean.name}"/>
     <input type="hidden" name="eventUrl" value="#{illusionEventParticipantsBackingBean.eventUrl}"/>
     <input type="hidden" name="joinUrl" value="#{illusionEventParticipantsBackingBean.joinUrl}"/>

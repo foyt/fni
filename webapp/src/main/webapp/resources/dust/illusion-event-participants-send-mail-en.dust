@@ -1,0 +1,34 @@
+<div title="Send email" data-send-button="Send" data-cancel-button="Cancel" data-wait-title="Please wait" data-wait-text="Please wait while the emails are being sent....">
+  <div class="illusion-event-participants-send-mail-dialog">
+    <div>
+      <label>Recipients</label>
+      <div class="illusion-event-participants-send-mail-recipient">
+        <input type="radio" name="recipients" value="PARTICIPANTS" checked="checked"/><label>Participants</label>
+      </div>
+      <div class="illusion-event-participants-send-mail-recipient">
+        <input type="radio" name="recipients" value="ORGANIZERS"/><label>Organizers</label>
+      </div>
+      <div class="illusion-event-participants-send-mail-recipient">
+        <input type="radio" name="recipients" value="INVITED"/><label>Invited</label>
+      </div>
+      <div class="illusion-event-participants-send-mail-recipient">
+        <input type="radio" name="recipients" value="PARTICIPANTS_ORGANIZERS_INVITED"/><label>Participants, Organizers and Invited</label>
+      </div>
+      {#groups}
+        <div class="illusion-event-participants-send-mail-recipient">
+          <input type="radio" name="recipients" value="GROUP_{id}"/><label>{name}</label>      
+        </div>
+      {/groups}
+    </div>
+    <p>Type the invitation message into the fields below</p>
+    <div>
+      <label>Message</label>
+    </div>
+    <div>
+      <input type="text" required="required" name="mail-subject" data-required-message="Subject is required"/>
+    </div>
+    <div>
+      <textarea required="required" name="mail-content" data-required-message="Content is required"></textarea>    
+    </div>
+  </div>
+</div>

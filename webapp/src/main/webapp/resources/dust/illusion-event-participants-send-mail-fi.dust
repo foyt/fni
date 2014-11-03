@@ -1,0 +1,34 @@
+<div title="Lähetä sähköpostia" data-send-button="Lähetä" data-cancel-button="Peruuta" data-wait-title="Odota hetki" data-wait-text="Odota hetki, sähköposteja lähetetään...">
+  <div class="illusion-event-participants-send-mail-dialog">
+    <div>
+      <label>Vastaanottajat</label>
+      <div class="illusion-event-participants-send-mail-recipient">
+        <input type="radio" name="recipients" value="PARTICIPANTS" checked="checked"/><label>Osallistujat</label>
+      </div>
+      <div class="illusion-event-participants-send-mail-recipient">
+        <input type="radio" name="recipients" value="ORGANIZERS"/><label>Järjestäjät</label>
+      </div>
+      <div class="illusion-event-participants-send-mail-recipient">
+        <input type="radio" name="recipients" value="INVITED"/><label>Kutsutut</label>
+      </div>
+      <div class="illusion-event-participants-send-mail-recipient">
+        <input type="radio" name="recipients" value="PARTICIPANTS_ORGANIZERS_INVITED"/><label>Osallistujat, järjestäjät sekä kutsutut</label>
+      </div>
+      {#groups}
+        <div class="illusion-event-participants-send-mail-recipient">
+          <input type="radio" name="recipients" value="GROUP_{id}"/><label>{name}</label>      
+        </div>
+      {/groups}
+    </div>
+    <p>Kirjoita alla oleviin kenttiin lähetettävä viesti</p>
+    <div>
+      <label>Viesti</label>
+    </div>
+    <div>
+      <input type="text" required="required" name="mail-subject" data-required-message="Otsikko on pakollinen"/>
+    </div>
+    <div>
+      <textarea required="required" name="mail-content" data-required-message="Sisältö on pakollinen"></textarea>    
+    </div>
+  </div>
+</div>
