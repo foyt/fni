@@ -36,7 +36,7 @@ public class IndexViewBackingBean {
 	
 	private static final int MAX_LATEST_ENTRIES = 5;
 	
-	private static final int MAX_FORUM_TOPICS = 20;
+	private static final int MAX_FORUM_TOPICS = 19;
 	
 	private static final int DEFAULT_FEED_ENTRIES = 3;
 
