@@ -63,6 +63,26 @@ public class IllusionRestServices {
   @Inject
   private MaterialPermissionController materialPermissionController;
   
+  @Path("/events/{EVENTID}/groups/")
+  @GET
+  public Response listEventGroups(@PathParam ("EVENTID") Long eventId) {
+    if (!sessionController.isLoggedIn()) {
+      return Response.status(Status.UNAUTHORIZED).build();
+    }
+    
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+    
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
+    if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) { 
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    return Response.ok(createRestModel(illusionEventGroupController.listGroups(event).toArray(new fi.foyt.fni.persistence.model.illusion.IllusionEventGroup[0]))).build();
+  }
+  
   @Path("/events/{EVENTURLNAME}/groups/")
   @POST
   public Response createGroup(@PathParam ("EVENTURLNAME") String eventUrlName, IllusionEventGroup entity) {
@@ -341,6 +361,16 @@ public class IllusionRestServices {
     return new IllusionEventMaterialParticipantSetting(participantSetting.getId(), participantSetting.getKey(), participantSetting.getValue());
   }
 
+  private List<IllusionEventGroup> createRestModel(fi.foyt.fni.persistence.model.illusion.IllusionEventGroup... eventGroups) {
+    List<IllusionEventGroup> result = new ArrayList<>();
+    
+    for (fi.foyt.fni.persistence.model.illusion.IllusionEventGroup eventGroup : eventGroups) {
+      result.add(createRestModel(eventGroup));
+    }
+    
+    return result;
+  }
+  
   private IllusionEventGroup createRestModel(fi.foyt.fni.persistence.model.illusion.IllusionEventGroup group) {
     Long eventId = group.getEvent() != null ? group.getEvent().getId() : null;
     return new IllusionEventGroup(group.getId(), group.getName(), eventId);
