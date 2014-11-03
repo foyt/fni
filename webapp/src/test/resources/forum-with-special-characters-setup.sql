@@ -1,7 +1,7 @@
 insert into 
   Forum (id, allowTopicCreation, name, description, urlName, category_id)
 values 
-  (5, true, 'With Hyphen', 'Forum with hyphen in urlname', 'with-hyphen', 1);
+  (5, true, 'With Special Characters', 'Forum with special characters in urlname', 'with-special.characters', 1);
   
 insert into 
   ForumMessage (id, created, modified, views, author_id)
@@ -11,7 +11,7 @@ values
 insert into 
   ForumTopic (id, forum_id, urlName, subject) 
 values 
-  (27, 5, 'with-hyphen', 'Topic for testing url names with hyphens');
+  (27, 5, 'with-special.characters', 'Topic for testing url names with special characters');
   
 insert into 
   ForumMessage (id, created, modified, views, author_id)
@@ -21,4 +21,4 @@ values
 insert into 
   ForumPost (id, topic_id, content)
 values 
-  (28, 27, '<p>With Hyphen</p>');
+  (28, 27, '<p>With special characters</p>');

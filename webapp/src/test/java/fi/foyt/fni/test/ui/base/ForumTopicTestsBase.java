@@ -45,10 +45,10 @@ public class ForumTopicTestsBase extends AbstractUITest {
   }
 
   @Test
-  @SqlBefore ("forum-with-hyphen-setup.sql")
-  @SqlAfter ("forum-with-hyphen-teardown.sql")
+  @SqlBefore ("forum-with-special-characters-setup.sql")
+  @SqlAfter ("forum-with-special-characters-teardown.sql")
   public void testWithHyphen() throws Exception {
-    navigate("/forum/with-hyphen/with-hyphen");
+    navigate("/forum/with-special.characters/with-special.characters");
     assertTitle("Forum");
   }
 

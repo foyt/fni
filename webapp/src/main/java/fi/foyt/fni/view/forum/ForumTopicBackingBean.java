@@ -40,11 +40,11 @@ public class ForumTopicBackingBean {
   public static final int POST_PER_PAGE = 3;
 
   @Parameter
-  @Matches ("[a-z0-9_-]{1,}")
+  @Matches ("[a-z0-9_.-]{1,}")
   private String forumUrlName;
   
   @Parameter
-  @Matches ("[a-z0-9_-]{1,}")
+  @Matches ("[a-z0-9_.-]{1,}")
   private String topicUrlName;
   
   @Parameter

@@ -32,11 +32,11 @@ import fi.foyt.fni.security.SecurityContext;
 public class ForumEditPostBackingBean {
   
   @Parameter
-  @Matches ("[a-z0-9_-]{1,}")
+  @Matches ("[a-z0-9_.-]{1,}")
   private String forumUrlName;
   
   @Parameter
-  @Matches ("[a-z0-9_-]{1,}")
+  @Matches ("[a-z0-9_.-]{1,}")
   private String topicUrlName;
 
   @Parameter

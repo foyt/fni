@@ -44,11 +44,11 @@ public class ForumPostEditTestsBase extends AbstractUITest {
   }
 
   @Test
-  @SqlBefore ("forum-with-hyphen-setup.sql")
-  @SqlAfter ("forum-with-hyphen-teardown.sql")
-  public void testWithHyphen() throws Exception {
+  @SqlBefore ("forum-with-special-characters-setup.sql")
+  @SqlAfter ("forum-with-special-characters-teardown.sql")
+  public void testWithSpecialCharacters() throws Exception {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
-    navigate("/forum/with-hyphen/with-hyphen/edit/28");
+    navigate("/forum/with-special.characters/with-special.characters/edit/28");
     assertTitle("Edit Reply");
   }
 
