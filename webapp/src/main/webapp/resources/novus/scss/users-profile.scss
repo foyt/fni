@@ -28,7 +28,8 @@ h3 {
 .users-profile-about-panel,
 .users-profile-publications-panel,
 .users-profile-forum-panel,
-.users-profile-contact-info-panel {
+.users-profile-contact-info-panel,
+.users-profile-events-panel {
   @include generic-panel;
   padding: 25px;
 }
@@ -190,6 +191,28 @@ h3 {
   text-transform: uppercase; 
   text-decoration: none;
   float: right;
+}
+
+/* Events */
+
+.users-profile-illusion-event {
+  margin-top: 25px;
+}
+
+.users-profile-illusion-event-date {
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase;
+  padding-right: 13px;
+  margin-top: 10px;
+}
+
+.users-profile-illusion-event-desc {
+  font-family: $default-font;
+  font-size: 13px;
+  margin-bottom: 10px;
+  margin-right: 180px;
+  margin-top: 10px;
 }
 
 /* Forum Activity */

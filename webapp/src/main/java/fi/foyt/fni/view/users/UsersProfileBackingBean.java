@@ -2,6 +2,8 @@ package fi.foyt.fni.view.users;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.ejb.Stateful;
@@ -19,12 +21,15 @@ import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationAuthor;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserContactFieldType;
 import fi.foyt.fni.users.UserController;
@@ -55,6 +60,9 @@ public class UsersProfileBackingBean {
 
 	@Inject
 	private SessionShoppingCartController sessionShoppingCartController;
+
+  @Inject
+	private IllusionEventController illusionEventController;
 
 	@RequestAction 
 	public String init() throws FileNotFoundException {
@@ -88,6 +96,13 @@ public class UsersProfileBackingBean {
 		this.about = user.getAbout();
 		this.publishedPublications = publicationController.listPublishedPublicationsByAuthor(user);
 		this.hasGameLibraryPublications = publishedPublications.size() > 0;
+		this.organizerInEvents = illusionEventController.listIllusionEventsByUserAndRole(user, IllusionEventParticipantRole.ORGANIZER);
+		Collections.sort(this.organizerInEvents, new Comparator<IllusionEvent>() {
+		  @Override
+		  public int compare(IllusionEvent o1, IllusionEvent o2) {
+		    return o2.getStartDate().compareTo(o1.getStartDate());
+		  }
+    });
 		
 		forumTotalPosts = forumController.countPostsByAuthor(user);
 		if (forumTotalPosts > 0) {
@@ -251,6 +266,10 @@ public class UsersProfileBackingBean {
 		return forumMostActiveInTopicUrl;
 	}
 	
+	public List<IllusionEvent> getOrganizerInEvents() {
+    return organizerInEvents;
+  }
+	
 	private String fullName;
 	private String about;
 	private Long forumTotalPosts;
@@ -267,4 +286,5 @@ public class UsersProfileBackingBean {
 	private String contactFieldTwitter;
 	private String contactFieldLinkedIn;
 	private String contactFieldGooglePlus;
+	private List<IllusionEvent> organizerInEvents;
 }

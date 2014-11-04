@@ -80,8 +80,29 @@
             </ui:include>
           </ui:repeat>
         </h:panelGroup>
-      </h:panelGroup>
       
+	      <h:panelGroup layout="block" styleClass="users-profile-events-panel" rendered="#{not empty usersProfileBackingBean.organizerInEvents}">
+          <h3>#{locales['users.profile.illusionEvents']}</h3>
+          
+          <ui:repeat var="event" value="#{usersProfileBackingBean.organizerInEvents}">
+            <div class="users-profile-illusion-event">
+              <h2>
+                <h:link outcome="/illusion/event.jsf?urlName=#{event.urlName}" value="#{event.name}"/>
+              </h2>
+              <div class="users-profile-illusion-event-date">
+                <h:outputFormat value="#{locales['users.profile.illusionEventDateRange']}" rendered="#{event.endDate ne null}">
+                  <f:param value="#{event.startDate}"/>
+                  <f:param value="#{event.endDate}"/>
+                </h:outputFormat>
+                <h:outputFormat value="#{locales['users.profile.illusionEventDateSingle']}" rendered="#{event.endDate eq null}">
+                  <f:param value="#{event.startDate}"/>
+                </h:outputFormat>
+              </div>
+              <div class="users-profile-illusion-event-desc" title="#{event.description}">#{event.description.length() > 200 ? event.description.substring(0, 200).concat('...') : event.description}</div>
+            </div>
+          </ui:repeat>
+	      </h:panelGroup>
+      </h:panelGroup>
 
       <h:panelGroup layout="block" styleClass="grid_4 omega">
         <!-- Forum -->
