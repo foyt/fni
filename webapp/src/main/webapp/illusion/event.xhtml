@@ -9,10 +9,12 @@
   </ui:define>
   
   <ui:define name="view-scripts">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/social-likes/3.0.3/social-likes.min.js"/>
   </ui:define>
   
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/social-likes/3.0.3/social-likes_birman.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event.css"/>
   </ui:define>  
@@ -80,6 +82,13 @@
             <h:panelGroup layout="block" styleClass="illusion-event-index-text">
               <h:outputText value="#{illusionEventBackingBean.indexText}" escape="false"/>
             </h:panelGroup>
+            <div class="social-likes-container">
+	            <div class="social-likes" data-counters="no">
+							  <div class="facebook" title="#{locales['illusion.event.shareOnFacebook']}">Facebook</div>
+							  <div class="twitter" title="#{locales['illusion.event.shareOnTwitter']}">Twitter</div>
+							  <div class="plusone" title="#{locales['illusion.event.shareOnGooglePlus']}">Google+</div>
+						  </div>
+						</div>
           </div>
         </div>
       </div>
