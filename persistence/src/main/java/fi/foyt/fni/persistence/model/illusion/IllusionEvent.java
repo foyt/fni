@@ -111,6 +111,14 @@ public class IllusionEvent {
     this.location = location;
   }
   
+  public String getDomain() {
+    return domain;
+  }
+  
+  public void setDomain(String domain) {
+    this.domain = domain;
+  }
+  
   public Date getStartDate() {
     return startDate;
   }
@@ -181,6 +189,8 @@ public class IllusionEvent {
   private Currency signUpFeeCurrency; 
   
   private String location;
+  
+  private String domain;
 
   @Column (nullable = false)
   @Temporal (TemporalType.DATE)

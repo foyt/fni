@@ -82,7 +82,11 @@ public class IllusionEventController {
     Date now = new Date();
     return illusionEventDAO.listByStartDateLTAndEndDateLTSortByEndDateEndTimeStartDateStartTime(now, now, 0, maxResults);
   }
-  
+
+  public List<IllusionEvent> listIllusionEventsWithDomain() {
+    return illusionEventDAO.listByDomainNotNull();
+  }
+
   public IllusionEvent updateIllusionEventName(IllusionEvent illusionEvent, String name) {
     return illusionEventDAO.updateName(illusionEvent, name);
   }
