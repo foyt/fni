@@ -40,7 +40,12 @@ public class GoogleAuthenticationStrategy extends OAuthAuthenticationStrategy {
 
 	@Inject
 	private SystemSettingsController systemSettingsController;
-	
+
+  @Override
+  public AuthSource getAuthSource() {
+    return AuthSource.GOOGLE;
+  }
+
   @Override
   protected String getApiKey() {
   	return systemSettingsController.getSetting(SystemSettingKey.GOOGLE_APIKEY);

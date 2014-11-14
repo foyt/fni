@@ -7,10 +7,16 @@ import javax.enterprise.context.RequestScoped;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.users.UserToken;
 
 @RequestScoped
 public class InternalAuthenticationStrategy extends AbstractInternalAuthenticationStrategy {
+
+  @Override
+  public AuthSource getAuthSource() {
+    return AuthSource.INTERNAL;
+  }
 
   @Override
   public boolean getSupportLogin() {

@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
@@ -12,6 +13,8 @@ import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -28,7 +31,6 @@ import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.auth.AuthenticationStrategy;
-import fi.foyt.fni.auth.AuthenticationStrategyManager;
 import fi.foyt.fni.auth.ConfigurationErrorException;
 import fi.foyt.fni.auth.EmailDoesNotMatchLoggedUserException;
 import fi.foyt.fni.auth.ExternalLoginFailedException;
@@ -76,7 +78,8 @@ public class LoginBackingBean {
 	private SessionController sessionController;
 
 	@Inject
-	private AuthenticationStrategyManager authenticationStrategyManager;
+	@Any
+	private Instance<AuthenticationStrategy> authenticationStrategies;
 
 	@Inject
 	private AuthenticationController authenticationController;
@@ -119,7 +122,7 @@ public class LoginBackingBean {
 	}
 
 	public void login() {
-		AuthenticationStrategy authenticationStrategy = authenticationStrategyManager.getStrategy(AuthSource.INTERNAL);
+		AuthenticationStrategy authenticationStrategy = getStrategy(AuthSource.INTERNAL);
 		if (authenticationStrategy != null) {
 			try {
 				if (authenticationStrategy instanceof InternalAuthenticationStrategy) {
@@ -294,7 +297,7 @@ public class LoginBackingBean {
 	  ExternalContext externalContext = facesContext.getExternalContext();
 		Map<String, String[]> parameters = externalContext.getRequestParameterValuesMap();
 
-		AuthenticationStrategy authenticationStrategy = authenticationStrategyManager.getStrategy(authSource);
+		AuthenticationStrategy authenticationStrategy = getStrategy(authSource);
 		if (authenticationStrategy != null) {
 			try {
 				if (authenticationStrategy instanceof OAuthAuthenticationStrategy) {
@@ -385,6 +388,18 @@ public class LoginBackingBean {
     }
     
     externalContext.redirect(redirectUrl);
+  }
+  
+  private AuthenticationStrategy getStrategy(AuthSource authSource) {
+    Iterator<AuthenticationStrategy> iterator = authenticationStrategies.iterator();
+    while (iterator.hasNext()) {
+      AuthenticationStrategy authenticationStrategy = iterator.next();
+      if (authenticationStrategy.getAuthSource().equals(authSource)) {
+        return authenticationStrategy;
+      }
+    }
+    
+    return null;
   }
   
 	private String loginEmail;

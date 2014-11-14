@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
+import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.system.SystemSettingsController;
@@ -15,6 +16,11 @@ public class GuestAuthenticationStrategy extends AbstractInternalAuthenticationS
 
 	@Inject
 	private SystemSettingsController systemSettingsController;
+
+  @Override
+  public AuthSource getAuthSource() {
+    return AuthSource.GUEST;
+  }
 
 	@Override
 	public boolean getSupportLogin() {

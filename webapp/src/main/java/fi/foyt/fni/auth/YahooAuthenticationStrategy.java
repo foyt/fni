@@ -33,7 +33,12 @@ public class YahooAuthenticationStrategy extends OAuthAuthenticationStrategy {
 	
 	@Inject
 	private SystemSettingsController systemSettingsController;
-	
+
+  @Override
+  public AuthSource getAuthSource() {
+    return AuthSource.YAHOO;
+  }
+
 	@Override
 	protected String getApiKey() {
 		return systemSettingsController.getSetting(SystemSettingKey.YAHOO_APIKEY);

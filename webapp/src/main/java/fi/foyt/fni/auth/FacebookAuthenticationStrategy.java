@@ -34,6 +34,11 @@ public class FacebookAuthenticationStrategy extends OAuthAuthenticationStrategy 
 	@Inject
 	private SystemSettingsController systemSettingsController;
 
+  @Override
+  public AuthSource getAuthSource() {
+    return AuthSource.FACEBOOK;
+  }
+
 	@Override
 	protected String getApiKey() {
 		return systemSettingsController.getSetting(SystemSettingKey.FACEBOOK_APIKEY);

@@ -46,6 +46,8 @@ public abstract class AuthenticationStrategy {
 	
 	@Inject
 	private UserDAO userDAO;
+	
+	public abstract AuthSource getAuthSource();
 
 	/**
 	 * Returns whether authentication source can be used for logging in.

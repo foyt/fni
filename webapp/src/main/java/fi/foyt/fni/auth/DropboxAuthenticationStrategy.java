@@ -28,6 +28,11 @@ public class DropboxAuthenticationStrategy extends OAuthAuthenticationStrategy {
 	private SystemSettingsController systemSettingsController;
 
 	@Override
+	public AuthSource getAuthSource() {
+	  return AuthSource.DROPBOX;
+	}
+	
+	@Override
 	protected String getApiKey() {
 		return systemSettingsController.getSetting(SystemSettingKey.DROPBOX_APIKEY);
 	}
