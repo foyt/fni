@@ -1,0 +1,42 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+/* Panel */ 
+
+.users-oauth2-authorize-panel {
+  @include generic-panel;
+  padding-bottom: 20px;
+  text-align: center;
+}
+
+.users-oauth2-authorize-panel p {
+  margin-top: 40px;
+  margin-bottom: 80px; 
+  font-size: 20px;
+  font-family: $title-font;
+}
+
+input[type="submit"] {
+  @include header-3;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  color: #fff;
+  border: 0px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 80px;
+}
+
+.users-oauth2-authorize-authorize-button {
+  color: $default-color;
+  background: #0c0;  
+}
+
+.users-oauth2-authorize-deny-button {
+  background: #c00;
+}

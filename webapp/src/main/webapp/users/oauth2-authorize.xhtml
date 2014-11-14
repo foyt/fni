@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['users.oauth2authorize.pageTitle']}</ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/users-oauth2-authorize.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/menu.xhtml" />
+    
+    <!-- Header -->
+    
+    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+
+      <!-- Navigation -->
+      
+      <h:panelGroup layout="block" styleClass="view-header-navigation">
+        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['users.oauth2authorize.navigationIndex']}</h:link>
+      </h:panelGroup>
+        
+      <!-- Description -->
+  
+      <div class="view-header-description">
+        <p class="view-header-description-title">#{locales['users.oauth2authorize.descriptionTitle']}</p>
+        <p class="view-header-description-text">#{locales['users.oauth2authorize.descriptionText']}</p>
+      </div>
+    </h:panelGroup>
+    
+    <div class="grid_16 tight">
+      <h:panelGroup layout="block" styleClass="users-oauth2-authorize-panel">
+        <p>
+          <h:outputFormat value="#{locales['users.oauth2authorize.question']}">
+            <f:param value="#{oAuth2AuthorizeBackingBean.clientName}"/>
+          </h:outputFormat>
+        </p>
+        
+        <h:form>
+          <h:commandButton styleClass="users-oauth2-authorize-authorize-button" action="#{oAuth2AuthorizeBackingBean.authorize}" value="#{locales['users.oauth2authorize.authorize']}"/>
+          <h:commandButton styleClass="users-oauth2-authorize-deny-button" action="#{oAuth2AuthorizeBackingBean.deny}" value="#{locales['users.oauth2authorize.deny']}"/>
+        
+          <input type="hidden" jsf:value="#{oAuth2AuthorizeBackingBean.clientId}"/>
+          <input type="hidden" jsf:value="#{oAuth2AuthorizeBackingBean.requestType}"/>
+        </h:form>      
+      </h:panelGroup>
+    </div>
+
+  </ui:define>
+
+</ui:composition>

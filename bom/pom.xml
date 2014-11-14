@@ -117,6 +117,10 @@
     
     <cssparser.version>0.9.14</cssparser.version>
     
+    <!-- Apache Oltu -->
+    
+    <apache-oltu.version>1.0.0</apache-oltu.version>
+    
     <!-- Selenium -->
 
     <selenium-java.version>2.41.0</selenium-java.version>
@@ -302,7 +306,21 @@
         <artifactId>cssparser</artifactId>
         <version>${cssparser.version}</version>
       </dependency>
+
+      <!-- Apache Oltu -->
       
+      <dependency>
+        <groupId>org.apache.oltu.oauth2</groupId>
+        <artifactId>org.apache.oltu.oauth2.authzserver</artifactId>
+        <version>${apache-oltu.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.apache.oltu.oauth2</groupId>
+        <artifactId>org.apache.oltu.oauth2.resourceserver</artifactId>
+        <version>${apache-oltu.version}</version>
+      </dependency>
+
       <!-- Jackson -->
       
       <dependency>
