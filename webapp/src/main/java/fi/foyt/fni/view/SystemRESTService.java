@@ -7,12 +7,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import fi.foyt.fni.rest.Unsecure;
+
 @Path ("/system")
 @RequestScoped
 @Produces (MediaType.APPLICATION_JSON)
 public class SystemRESTService {
 
   @GET
+  @Unsecure
   @Path ("/ping")
   @Produces (MediaType.TEXT_PLAIN)
   public Response getPing() {
