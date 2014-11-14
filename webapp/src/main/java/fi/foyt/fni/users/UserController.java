@@ -313,6 +313,16 @@ public class UserController {
 	  return userEmailDAO.listByUser(user);
 	}
 	
+	public List<String> getUserEmails(User user) {
+	  List<String> emails = new ArrayList<>();
+	  
+	  for (UserEmail userEmail : listUserEmailsByUser(user)) {
+	    emails.add(userEmail.getEmail());
+	  }
+	  
+	  return emails;
+	}
+	
 	/* Friends */
   
   public UserFriend getUserFriendByUsers(User user1, User user2) {
