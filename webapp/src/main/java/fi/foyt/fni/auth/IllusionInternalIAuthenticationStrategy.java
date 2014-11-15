@@ -50,7 +50,7 @@ public class IllusionInternalIAuthenticationStrategy extends OAuthAuthentication
       redirectUrl = illusionEvent.getOAuthClient().getRedirectUrl();
 	  }
 	  
-	  siteUrl = systemSettingsController.getSiteUrl(false, true);
+	  siteUrl = systemSettingsController.getSiteUrl(true, true);
 	}
 
   @Override

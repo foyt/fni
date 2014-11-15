@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.system.SystemSettingsController;
 
-@WebFilter (urlPatterns = { "/login/*", "/gamelibrary/*" })
+@WebFilter (urlPatterns = { "/login/*", "/gamelibrary/*", "/oauth2/*" })
 public class HttpsRedirectFilter implements Filter {
   
   @Inject
@@ -33,12 +33,15 @@ public class HttpsRedirectFilter implements Filter {
       HttpServletRequest request = (HttpServletRequest) req;
       HttpServletResponse response = (HttpServletResponse) resp;
       
-      if (!request.isSecure()) {
+      String siteHost = systemSettingsController.getSiteHost();
+      String currentHost = request.getServerName();
+      
+      if (!request.isSecure() && (siteHost.equals(currentHost))) {
         StringBuilder redirectUrlBuilder = new StringBuilder();
         
         redirectUrlBuilder
           .append("https://")
-          .append(request.getServerName());
+          .append(currentHost);
         
         Integer httpsPort = systemSettingsController.getSiteHttpsPort();
         if (httpsPort != 443) {
