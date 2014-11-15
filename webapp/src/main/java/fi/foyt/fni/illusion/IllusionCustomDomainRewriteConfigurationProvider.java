@@ -33,6 +33,15 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
     
     for (IllusionEvent event : illusionEventController.listIllusionEventsWithDomain()) {
       addCustomDomainForwards(configuration, event.getDomain(), event.getUrlName());
+      String eventUrl = systemSettingsController.getHostUrl(event.getDomain(), false, true);
+      
+      configuration.addRule()
+        .when(Direction.isOutbound()
+          .and(PathAndQuery.matches("/illusion/event.jsf?urlName=" + event.getUrlName()))
+        )
+        .perform(Substitute.with(eventUrl)
+          .and(Log.message(Level.DEBUG, String.format("Event to custom domain outbound substitute %s", eventUrl)))
+        );
     }
     
     String siteHost = systemSettingsController.getSiteHost();
@@ -67,6 +76,7 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
     addDomainRule(configuration, domain, eventUrl, "/illusion/event-edit-page.jsf", "edit-page");
     addDomainRule(configuration, domain, eventUrl, "/illusion/event-material.jsf?materialPath={materialPath}", "materials/{materialPath}");
     addDomainRule(configuration, domain, eventUrl, "/illusion/event-page.jsf?materialPath={materialPath}", "pages/{materialPath}");
+    
   }
 
   private void addDomainRule(ConfigurationBuilder configuration, String domain, String eventUrl, String jsfRule, String page) {
@@ -102,7 +112,7 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
       .perform(Substitute.with(path).and(Log.message(Level.DEBUG, String.format("Custom domain outbound substitute %s -> %s", jsfRule, path))))
       .withPriority(0);
   }
-
+  
   private void addOutboundSiteRule(ConfigurationBuilder configuration, String siteHost, String siteUrl, String jsfRule, String path) {
     configuration.addRule()
       .when(Direction.isOutbound()
