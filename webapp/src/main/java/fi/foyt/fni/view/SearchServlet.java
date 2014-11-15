@@ -29,6 +29,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.search.SearchResult;
 
@@ -52,6 +53,9 @@ public class SearchServlet extends HttpServlet {
 
   @Inject
   private SessionController sessionController;
+
+  @Inject
+  private SystemSettingsController systemSettingsController;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -88,7 +92,7 @@ public class SearchServlet extends HttpServlet {
 		
 		try {
 			for (Source source : sources) {
-				results.put(source.toString(), executeSearch(source, request.getContextPath(), queryText, maxHits));
+				results.put(source.toString(), executeSearch(source, queryText, maxHits));
 			}
 
 			response.setContentType("application/json");
@@ -108,24 +112,24 @@ public class SearchServlet extends HttpServlet {
 		}
 	}
 	
-	private List<Map<String, Object>> executeSearch(Source source, String contextPath, String queryText, int maxHits) throws ParseException {
+	private List<Map<String, Object>> executeSearch(Source source, String queryText, int maxHits) throws ParseException {
 		switch (source) {
 			case GAMELIBRARY:
-			  return searchGameLibrary(contextPath, queryText, maxHits);
+			  return searchGameLibrary(queryText, maxHits);
 			case BLOG:
 				return searchBlog(queryText, maxHits);
 			case FORGE:
-				return searchForge(contextPath, queryText, maxHits);
+				return searchForge(queryText, maxHits);
 			case FORUM:
-				return searchForum(contextPath, queryText, maxHits);
+				return searchForum(queryText, maxHits);
 			case USERS:
-				return searchUsers(contextPath, queryText, maxHits);
+				return searchUsers(queryText, maxHits);
 		}
 		
 		return null;
 	}
 	
-	private List<Map<String, Object>> searchGameLibrary(String contextPath, String queryText, int maxHits) throws ParseException {
+	private List<Map<String, Object>> searchGameLibrary(String queryText, int maxHits) throws ParseException {
 		List<Map<String, Object>> result = new ArrayList<>();
 
 		List<SearchResult<Publication>> searchResults = publicationController.searchPublications(queryText, maxHits);
@@ -134,7 +138,7 @@ public class SearchServlet extends HttpServlet {
 			Map<String, Object> jsonItem = new HashMap<>();
       jsonItem.put("id", searchResult.getEntity().getId());
 			jsonItem.put("name", searchResult.getTitle());
-			jsonItem.put("link", contextPath + searchResult.getLink());
+			jsonItem.put("link", systemSettingsController.getSiteUrl(false, true) + searchResult.getLink());
 			result.add(jsonItem);
 		}
 		
@@ -146,7 +150,7 @@ public class SearchServlet extends HttpServlet {
 		return result;
 	}
 	
-	private List<Map<String, Object>> searchForge(String contextPath, String queryText, int maxHits) throws ParseException {
+	private List<Map<String, Object>> searchForge(String queryText, int maxHits) throws ParseException {
 	  User loggedUser = sessionController.getLoggedUser();
 	  
 		List<Map<String, Object>> result = new ArrayList<>();
@@ -158,14 +162,14 @@ public class SearchServlet extends HttpServlet {
       Map<String, Object> jsonItem = new HashMap<>();
       jsonItem.put("id", searchResult.getEntity().getId());
       jsonItem.put("name", searchResult.getTitle());
-      jsonItem.put("link", contextPath + link);
+      jsonItem.put("link", systemSettingsController.getSiteUrl(false, true) + link);
       result.add(jsonItem);
     }
 		
 		return result;
 	}
 	
-	private List<Map<String, Object>> searchForum(String contextPath, String queryText, int maxHits) throws ParseException {
+	private List<Map<String, Object>> searchForum(String queryText, int maxHits) throws ParseException {
 		List<Map<String, Object>> result = new ArrayList<>();
 		
 		List<SearchResult<ForumTopic>> searchResults = forumController.searchTopics(queryText, maxHits);
@@ -173,14 +177,14 @@ public class SearchServlet extends HttpServlet {
 			Map<String, Object> jsonItem = new HashMap<>();
       jsonItem.put("id", searchResult.getEntity().getId());
 			jsonItem.put("name", searchResult.getTitle());
-			jsonItem.put("link", contextPath + searchResult.getLink());
+			jsonItem.put("link", systemSettingsController.getSiteUrl(false, true) + searchResult.getLink());
 			result.add(jsonItem);
 		}
 		
 		return result;
 	}
 	
-	private List<Map<String, Object>> searchUsers(String contextPath, String queryText, int maxHits) throws ParseException {
+	private List<Map<String, Object>> searchUsers(String queryText, int maxHits) throws ParseException {
 	  List<Map<String, Object>> result = new ArrayList<>();
     
     List<SearchResult<User>> searchResults = userController.searchUsers(queryText, maxHits);
@@ -188,7 +192,7 @@ public class SearchServlet extends HttpServlet {
       Map<String, Object> jsonItem = new HashMap<>();
       jsonItem.put("id", searchResult.getEntity().getId());
       jsonItem.put("name", searchResult.getTitle());
-      jsonItem.put("link", contextPath + searchResult.getLink());
+      jsonItem.put("link", systemSettingsController.getSiteUrl(false, true) + searchResult.getLink());
       result.add(jsonItem);
     }
     
