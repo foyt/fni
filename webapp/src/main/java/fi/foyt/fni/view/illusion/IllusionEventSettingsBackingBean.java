@@ -1,6 +1,7 @@
 package fi.foyt.fni.view.illusion;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -13,16 +14,19 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
+import fi.foyt.fni.auth.OAuthController;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.oauth.OAuthClient;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
+import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @RequestScoped
@@ -41,7 +45,13 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   private IllusionEventController illusionEventController;
 
   @Inject
+  private OAuthController oAuthController;
+  
+  @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
+  
+  @Inject
+  private SystemSettingsController systemSettingsController;
 
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
@@ -60,6 +70,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     startTime = formatTime(illusionEvent.getStartTime());
     endDate = formatDate(illusionEvent.getEndDate());
     endTime = formatTime(illusionEvent.getEndTime());
+    domain = illusionEvent.getDomain();
 
     return null;
   }
@@ -136,6 +147,14 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   public void setEndTime(String endTime) {
     this.endTime = endTime;
   }
+  
+  public String getDomain() {
+    return domain;
+  }
+  
+  public void setDomain(String domain) {
+    this.domain = domain;
+  }
 
   private String createUrlName(String name) {
     int maxLength = 20;
@@ -174,6 +193,24 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     illusionEventController.updateIllusionEventEndDate(illusionEvent, parseDate(getEndDate()));
     illusionEventController.updateIllusionEventEndTime(illusionEvent, parseDate(getEndTime()));
     illusionEventController.updateIllusionEventLocation(illusionEvent, getLocation());
+    
+    // TODO: Validate domain
+    String domain = getDomain();
+    if (StringUtils.isNotBlank(domain)) {
+      if (illusionEvent.getOAuthClient() == null) {
+        String clientId = UUID.randomUUID().toString();
+        String clientSecret = UUID.randomUUID().toString();
+        
+        String redirectUrl = new StringBuilder(systemSettingsController.getHostUrl(domain, false, true))
+          .append("/login/?return=1&loginMethod=ILLUSION_INTERNAL")
+          .toString();
+        
+        OAuthClient oAuthClient = oAuthController.createClient(illusionEvent.getName(), clientId, clientSecret, redirectUrl);
+        illusionEventController.updateEventOAuthClient(illusionEvent, oAuthClient);
+      }
+      
+      illusionEventController.updateEventDomain(illusionEvent, domain);
+    }
 
     return "/illusion/event-settings.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
   }
@@ -213,4 +250,5 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   private String startTime;
   private String endDate;
   private String endTime;
+  private String domain;
 }

@@ -107,7 +107,13 @@
                 <input type="hidden" class="actual-end-time" jsf:value="#{illusionEventSettingsBackingBean.endTime}"/>
                 <div class="timezone"></div>
               </h:panelGroup>  
-  
+              
+              <div class="illusion-event-settings-field">
+                <label>#{locales['illusion.eventSettings.customDomain']}</label>
+                <input type="text" jsf:value="#{illusionEventSettingsBackingBean.domain}"/>
+                <p class="illusion-event-settings-field-hint">#{locales['illusion.eventSettings.customDomainHint']}</p>
+              </div>
+              
               <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
                 <h:commandButton id="save" styleClass="illusion-event-settings-save" value="#{locales['illusion.eventSettings.saveButton']}" action="#{illusionEventSettingsBackingBean.save}"/>
               </h:panelGroup>

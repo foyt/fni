@@ -150,7 +150,10 @@ public class SystemSettingsController {
   }
   
   public String getSiteUrl(boolean secure, boolean includeContextPath) {
-    String host = getSiteHost();
+    return getHostUrl(getSiteHost(), secure, includeContextPath);
+  }
+  
+  public String getHostUrl(String host, boolean secure, boolean includeContextPath) {
     int port = secure ? getSiteHttpsPort() : getSiteHttpPort();
     String scheme = secure ? "https" : "http";
     boolean dropPort = secure ? port == 443 : port == 80;
