@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.scribe.builder.api.Api;
 import org.scribe.builder.api.YahooApi;
 import org.scribe.model.Token;
 import org.scribe.oauth.OAuthService;
@@ -65,9 +66,10 @@ public class YahooAuthenticationStrategy extends OAuthAuthenticationStrategy {
     return true;
   }
 
-  protected java.lang.Class<? extends org.scribe.builder.api.Api> getApiClass() {
-    return YahooApi.class;
-  };
+  @Override
+  protected Api getApi() {
+    return new YahooApi();
+  }
   
   @Override
   protected String getVerifier(Map<String, String[]> parameters) {

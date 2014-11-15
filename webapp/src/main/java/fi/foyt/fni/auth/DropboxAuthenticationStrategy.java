@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.scribe.builder.api.Api;
 import org.scribe.builder.api.DropBoxApi;
 import org.scribe.model.Token;
 import org.scribe.oauth.OAuthService;
@@ -56,10 +57,11 @@ public class DropboxAuthenticationStrategy extends OAuthAuthenticationStrategy {
   public boolean getSupportLogin() {
     return false;
   }
-
-  protected java.lang.Class<? extends org.scribe.builder.api.Api> getApiClass() {
-    return DropBoxApi.class;
-  };
+  
+  @Override
+  protected Api getApi() {
+    return new DropBoxApi();
+  }
   
   @Override
   protected String getVerifier(Map<String, String[]> parameters) {

@@ -18,6 +18,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.scribe.builder.api.Api;
 import org.scribe.builder.api.FacebookApi;
 import org.scribe.model.Token;
 import org.scribe.oauth.OAuthService;
@@ -65,10 +66,11 @@ public class FacebookAuthenticationStrategy extends OAuthAuthenticationStrategy 
   public boolean getSupportLogin() {
     return true;
   }
-
-  protected java.lang.Class<? extends org.scribe.builder.api.Api> getApiClass() {
-    return FacebookApi.class;
-  };
+  
+  @Override
+  protected Api getApi() {
+    return new FacebookApi();
+  }
   
   @Override
   protected String getVerifier(Map<String, String[]> parameters) {

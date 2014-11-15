@@ -43,7 +43,8 @@ public abstract class OAuthAuthenticationStrategy extends AuthenticationStrategy
     
     Token requestToken = null;
     
-    boolean isV1 = DefaultApi10a.class.isAssignableFrom(getApiClass());
+    
+    boolean isV1 = getApi() instanceof DefaultApi10a;
     if (isV1) {
       requestToken = service.getRequestToken();
     }
@@ -84,7 +85,7 @@ public abstract class OAuthAuthenticationStrategy extends AuthenticationStrategy
   
   protected abstract UserToken handleLogin(Locale locale, OAuthService service, Token accessToken, String[] grantedScopes) throws MultipleEmailAccountsException, EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException, ExternalLoginFailedException;
   
-  protected abstract Class<? extends Api> getApiClass();
+  protected abstract Api getApi();
   
   protected abstract String getApiKey();
   
@@ -95,7 +96,7 @@ public abstract class OAuthAuthenticationStrategy extends AuthenticationStrategy
   protected abstract String[] getRequiredScopes();
   
   public OAuthService getOAuthService(String... scopes) {
-    ServiceBuilder serviceBuilder = new ServiceBuilder().provider(getApiClass())
+    ServiceBuilder serviceBuilder = new ServiceBuilder().provider(getApi())
       .apiKey(getApiKey())
       .apiSecret(getApiSecret())
       .callback(getCallbackUrl());

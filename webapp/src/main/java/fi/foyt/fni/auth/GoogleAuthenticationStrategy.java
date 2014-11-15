@@ -16,6 +16,7 @@ import org.apache.commons.codec.net.URLCodec;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.scribe.builder.api.Api;
 import org.scribe.builder.api.DefaultApi20;
 import org.scribe.extractors.AccessTokenExtractor;
 import org.scribe.extractors.JsonTokenExtractor;
@@ -72,7 +73,12 @@ public class GoogleAuthenticationStrategy extends OAuthAuthenticationStrategy {
   public boolean getSupportLogin() {
     return true;
   }
-
+  
+  @Override
+  protected Api getApi() {
+    return new GoogleApi20();
+  }
+  
   protected java.lang.Class<? extends org.scribe.builder.api.Api> getApiClass() {
     return GoogleApi20.class;
   };
