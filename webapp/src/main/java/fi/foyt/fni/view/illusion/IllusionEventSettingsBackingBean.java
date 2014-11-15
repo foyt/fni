@@ -27,6 +27,7 @@ import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.utils.faces.FacesUtils;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @RequestScoped
@@ -194,22 +195,27 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     illusionEventController.updateIllusionEventEndTime(illusionEvent, parseDate(getEndTime()));
     illusionEventController.updateIllusionEventLocation(illusionEvent, getLocation());
     
-    // TODO: Validate domain
     String domain = getDomain();
     if (StringUtils.isNotBlank(domain)) {
-      if (illusionEvent.getOAuthClient() == null) {
-        String clientId = UUID.randomUUID().toString();
-        String clientSecret = UUID.randomUUID().toString();
+      // RegEx from http://stackoverflow.com/questions/10306690/domain-name-validation-with-regex
+      if (!domain.matches("^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\\.[a-zA-Z]{2,3})$")) {
+        FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.customDomainInvalid"));
+        return null;
+      } else {
+        if (illusionEvent.getOAuthClient() == null) {
+          String clientId = UUID.randomUUID().toString();
+          String clientSecret = UUID.randomUUID().toString();
+          
+          String redirectUrl = new StringBuilder(systemSettingsController.getHostUrl(domain, false, true))
+            .append("/login/?return=1&loginMethod=ILLUSION_INTERNAL")
+            .toString();
+          
+          OAuthClient oAuthClient = oAuthController.createClient(illusionEvent.getName(), clientId, clientSecret, redirectUrl);
+          illusionEventController.updateEventOAuthClient(illusionEvent, oAuthClient);
+        }
         
-        String redirectUrl = new StringBuilder(systemSettingsController.getHostUrl(domain, false, true))
-          .append("/login/?return=1&loginMethod=ILLUSION_INTERNAL")
-          .toString();
-        
-        OAuthClient oAuthClient = oAuthController.createClient(illusionEvent.getName(), clientId, clientSecret, redirectUrl);
-        illusionEventController.updateEventOAuthClient(illusionEvent, oAuthClient);
+        illusionEventController.updateEventDomain(illusionEvent, domain);
       }
-      
-      illusionEventController.updateEventDomain(illusionEvent, domain);
     }
 
     return "/illusion/event-settings.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
