@@ -63,6 +63,9 @@ public class LoginBackingBean {
   private String returnParam;
   
   @Parameter
+  private String error;
+  
+  @Parameter
   private String loginMethod;
   
   @Parameter
@@ -306,13 +309,21 @@ public class LoginBackingBean {
 						FacesUtils.addMessage(FacesMessage.SEVERITY_ERROR, FacesUtils.getLocalizedValue("users.login.authenticationStrategyDoesNotSupportLogginIn"));
 					} else {
 					  if ("1".equals(returnParam)) {
-							Locale locale = externalContext.getRequestLocale();
-							UserToken userToken = oAuthStrategy.accessToken(locale, parameters);
-							if (userToken != null) {
-								login(userToken);
-							} else {
-								FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.externalLoginFailed"));
-							}
+					    if (StringUtils.isBlank(error)) {
+  							Locale locale = externalContext.getRequestLocale();
+  							UserToken userToken = oAuthStrategy.accessToken(locale, parameters);
+  							if (userToken != null) {
+  								login(userToken);
+  							} else {
+  								FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.externalLoginFailed"));
+  							}
+					    } else {
+					      if ("access_denied".equals(error)) {
+					        FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.noGrant"));
+					      } else {
+                  FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, error);
+					      }
+					    }
 						} else {
 							String[] extraScopes = parameters.get("extraScopes");
 							String redirectUrl = oAuthStrategy.authorize(extraScopes);
@@ -363,6 +374,14 @@ public class LoginBackingBean {
   
   public void setLoginMethod(String loginMethod) {
     this.loginMethod = loginMethod;
+  }
+  
+  public String getError() {
+    return error;
+  }
+  
+  public void setError(String error) {
+    this.error = error;
   }
 
   private void login(UserToken userToken) throws IOException {

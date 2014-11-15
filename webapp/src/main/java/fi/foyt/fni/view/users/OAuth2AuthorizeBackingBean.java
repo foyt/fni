@@ -15,6 +15,7 @@ import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuerImpl;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;
+import org.apache.oltu.oauth2.common.error.OAuthError;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.ocpsoft.rewrite.annotation.Join;
@@ -96,8 +97,22 @@ public class OAuth2AuthorizeBackingBean {
     return null;
   }
 
-  public void deny() {
+  public String deny() {
+    OAuthClient client = oAuthController.findClientByClientId(getClientId());
+    if (client == null) {
+      return "/error/access-denied.jsf";
+    }
+    
+    try {
+      OAuthASResponse.OAuthAuthorizationResponseBuilder responseBuilder = OAuthASResponse.authorizationResponse(request, HttpServletResponse.SC_FORBIDDEN)
+          .setParam("error", OAuthError.CodeResponse.ACCESS_DENIED)
+          .location(client.getRedirectUrl());
+      FacesContext.getCurrentInstance().getExternalContext().redirect(responseBuilder.buildQueryMessage().getLocationUri());
+    } catch (IOException | OAuthSystemException e) {
+      return "/error/internal-error.jsf";
+    }
 
+    return null;
   }
 
   public String getClientId() {
