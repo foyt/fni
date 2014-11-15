@@ -15,12 +15,13 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent_;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
+import fi.foyt.fni.persistence.model.oauth.OAuthClient;
 
 public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionEvent create(String urlName, String name, String location, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime) {
+	public IllusionEvent create(String urlName, String name, String location, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime, OAuthClient oAuthClient) {
 		IllusionEvent illusionEvent = new IllusionEvent();
 		
 		illusionEvent.setName(name);
@@ -37,7 +38,8 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 		illusionEvent.setStartTime(startTime);
 		illusionEvent.setEndDate(endDate);
 		illusionEvent.setEndTime(endTime);
-    
+		illusionEvent.setOAuthClient(oAuthClient);
+		
 		return persist(illusionEvent);
 	}
 
@@ -64,6 +66,20 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     criteria.select(root);
     criteria.where(
       criteriaBuilder.equal(root.get(IllusionEvent_.folder), folder)
+    );
+
+    return getSingleResult(entityManager.createQuery(criteria));
+  }
+
+  public IllusionEvent findByDomain(String domain) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<IllusionEvent> criteria = criteriaBuilder.createQuery(IllusionEvent.class);
+    Root<IllusionEvent> root = criteria.from(IllusionEvent.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(IllusionEvent_.domain), domain)
     );
 
     return getSingleResult(entityManager.createQuery(criteria));
@@ -196,6 +212,16 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 
   public IllusionEvent updateEndTime(IllusionEvent illusionEvent, Date endTime) {
     illusionEvent.setEndTime(endTime);
+    return persist(illusionEvent);
+  }
+
+  public IllusionEvent updateOAuthClient(IllusionEvent illusionEvent, OAuthClient oAuthClient) {
+    illusionEvent.setOAuthClient(oAuthClient);
+    return persist(illusionEvent);
+  }
+
+  public IllusionEvent updateDomain(IllusionEvent illusionEvent, String domain) {
+    illusionEvent.setDomain(domain);
     return persist(illusionEvent);
   }
 

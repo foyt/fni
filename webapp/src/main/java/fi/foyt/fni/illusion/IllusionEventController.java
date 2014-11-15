@@ -23,6 +23,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
+import fi.foyt.fni.persistence.model.oauth.OAuthClient;
 import fi.foyt.fni.persistence.model.users.User;
 
 @Dependent
@@ -58,7 +59,7 @@ public class IllusionEventController {
   /* IllusionEvent */
 
   public IllusionEvent createIllusionEvent(String urlName, String location, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime) {
-    return illusionEventDAO.create(urlName, name, location, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency, startDate, startTime, endDate, endTime);
+    return illusionEventDAO.create(urlName, name, location, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency, startDate, startTime, endDate, endTime, null);
   }
 
   public IllusionEvent findIllusionEventById(Long id) {
@@ -122,7 +123,15 @@ public class IllusionEventController {
   public IllusionEvent updateIllusionEventLocation(IllusionEvent illusionEvent, String location) {
     return illusionEventDAO.updateLocation(illusionEvent, location);
   }
+  
+  public IllusionEvent updateEventOAuthClient(IllusionEvent illusionEvent, OAuthClient oAuthClient) {
+    return illusionEventDAO.updateOAuthClient(illusionEvent, oAuthClient);
+  }
 
+  public IllusionEvent updateEventDomain(IllusionEvent illusionEvent, String domain) {
+    return illusionEventDAO.updateDomain(illusionEvent, domain);
+  }
+  
   /* IllusionEventParticipant */
   
   public IllusionEventParticipant createIllusionEventParticipant(User user, IllusionEvent event, String characterName, IllusionEventParticipantRole role) {
@@ -201,6 +210,10 @@ public class IllusionEventController {
 
   public IllusionEvent findIllusionEventByFolder(IllusionEventFolder folder) {
     return illusionEventDAO.findByFolder(folder);
+  }
+
+  public IllusionEvent findIllusionEventByDomain(String domain) {
+    return illusionEventDAO.findByDomain(domain);
   }
 
 

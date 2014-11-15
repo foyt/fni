@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,7 +21,9 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.NotEmpty;
+
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
+import fi.foyt.fni.persistence.model.oauth.OAuthClient;
 
 @Entity
 @Cacheable (true)
@@ -151,6 +154,14 @@ public class IllusionEvent {
     this.endTime = endTime;
   }
   
+  public OAuthClient getOAuthClient() {
+    return oAuthClient;
+  }
+  
+  public void setOAuthClient(OAuthClient oAuthClient) {
+    this.oAuthClient = oAuthClient;
+  }
+  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
@@ -190,6 +201,7 @@ public class IllusionEvent {
   
   private String location;
   
+  @Column (unique = true)
   private String domain;
 
   @Column (nullable = false)
@@ -204,5 +216,7 @@ public class IllusionEvent {
   
   @Temporal (TemporalType.TIME)
   private Date endTime;
-  
+
+  @ManyToOne
+  private OAuthClient oAuthClient;
 }
