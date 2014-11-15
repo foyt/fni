@@ -29,16 +29,16 @@
       <h:panelGroup layout="block" styleClass="menu-about-container">
         <h:outputLink value="javascript:void(null)" styleClass="menu-about">#{locales['menu.menuAbout']}</h:outputLink>
         <ul class="menu-about-list" style="display: none">
-          <li><h:outputLink value="#{request.contextPath}/about#vision">#{locales['menu.menuAboutVision']}</h:outputLink></li>
-          <li><h:outputLink value="#{request.contextPath}/about#information">#{locales['menu.menuAboutInformation']}</h:outputLink></li>
-          <li><h:outputLink value="#{request.contextPath}/about#forum">#{locales['menu.menuAboutForum']}</h:outputLink></li>
-          <li><h:outputLink value="#{request.contextPath}/about#distribution">#{locales['menu.menuAboutDistribution']}</h:outputLink></li>
-          <li><h:outputLink value="#{request.contextPath}/about#gameplay">#{locales['menu.menuAboutGameplay']}</h:outputLink></li>
-          <li><h:outputLink value="#{request.contextPath}/about#history">#{locales['menu.menuAboutHistory']}</h:outputLink></li>
-          <li><h:outputLink value="#{request.contextPath}/about#cookies">#{locales['menu.menuAboutCookies']}</h:outputLink></li>
-          <li><h:outputLink value="#{request.contextPath}/about#opensource">#{locales['menu.menuAboutOpenSource']}</h:outputLink></li>
-          <li><h:outputLink value="#{request.contextPath}/about#contact">#{locales['menu.menuAboutContact']}</h:outputLink></li>
-          <li><h:outputLink value="#{request.contextPath}/about#acknowledgements">#{locales['menu.menuAboutAcknowledgements']}</h:outputLink></li>
+          <li><h:link outcome="/about.jsf" fragment="vision">#{locales['menu.menuAboutVision']}</h:link></li>
+          <li><h:link outcome="/about.jsf" fragment="information">#{locales['menu.menuAboutInformation']}</h:link></li>
+          <li><h:link outcome="/about.jsf" fragment="forum">#{locales['menu.menuAboutForum']}</h:link></li>
+          <li><h:link outcome="/about.jsf" fragment="distribution">#{locales['menu.menuAboutDistribution']}</h:link></li>
+          <li><h:link outcome="/about.jsf" fragment="gameplay">#{locales['menu.menuAboutGameplay']}</h:link></li>
+          <li><h:link outcome="/about.jsf" fragment="history">#{locales['menu.menuAboutHistory']}</h:link></li>
+          <li><h:link outcome="/about.jsf" fragment="cookies">#{locales['menu.menuAboutCookies']}</h:link></li>
+          <li><h:link outcome="/about.jsf" fragment="opensource">#{locales['menu.menuAboutOpenSource']}</h:link></li>
+          <li><h:link outcome="/about.jsf" fragment="contact">#{locales['menu.menuAboutContact']}</h:link></li>
+          <li><h:link outcome="/about.jsf" fragment="acknowledgements">#{locales['menu.menuAboutAcknowledgements']}</h:link></li>
         </ul>
       </h:panelGroup>
     </h:panelGroup>
