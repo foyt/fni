@@ -31,8 +31,8 @@ public class SessionController implements Serializable {
 	
 	@Inject
 	private Logger logger;
-	
-	@Inject
+  
+  @Inject
 	private PermissionController permissionController;
 
 	@Inject
@@ -111,9 +111,12 @@ public class SessionController implements Serializable {
   }
 	
   public void login(UserToken token) {
-    this.loggedUserId = token.getUserIdentifier().getUser().getId();
     this.loggedUserTokenId = token.getId();
-    
+    login(token.getUserIdentifier().getUser());
+  }
+  
+  public void login(User user) {
+    this.loggedUserId = user.getId();
     loginEvent.fire(new UserSessionEvent(loggedUserId));
   }
 
