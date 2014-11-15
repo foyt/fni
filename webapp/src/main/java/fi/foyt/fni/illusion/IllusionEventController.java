@@ -216,5 +216,9 @@ public class IllusionEventController {
     return illusionEventDAO.findByDomain(domain);
   }
 
+  public IllusionEvent findIllusionEventByOAuthClient(OAuthClient oAuthClient) {
+    return illusionEventDAO.findByOAuthClient(oAuthClient);
+  }
+
 
 }

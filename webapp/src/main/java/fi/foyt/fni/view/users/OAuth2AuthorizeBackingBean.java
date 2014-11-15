@@ -21,6 +21,7 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.auth.OAuthController;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.oauth.OAuthAuthorizationCode;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient;
 import fi.foyt.fni.persistence.model.users.User;
@@ -42,6 +43,9 @@ public class OAuth2AuthorizeBackingBean {
 
   @Inject
   private SessionController sessionController;
+
+  @Inject
+  private IllusionEventController illusionEventController;
   
   @RequestAction
   public String init() {
@@ -55,6 +59,10 @@ public class OAuth2AuthorizeBackingBean {
       setClientId(oAuthClient.getClientId());
       setClientName(oAuthClient.getName());
       setRequestType(oAuthRequest.getResponseType());
+
+      if (illusionEventController.findIllusionEventByOAuthClient(oAuthClient) != null) {
+        return "/users/oauth2-auto-authorize.jsf";
+      }
     } catch (OAuthSystemException | OAuthProblemException e) {
       return "/error/internal-error.jsf";
     }

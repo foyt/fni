@@ -67,7 +67,7 @@ public class OAuth2TokenServlet extends HttpServlet {
           return;
       }
       
-      Long expires = (System.currentTimeMillis() / 1000L) + TOKEN_EXPIRES;
+      Long expires = (System.currentTimeMillis() / 1000l) + TOKEN_EXPIRES;
       OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
       String accessToken = oauthIssuerImpl.accessToken();
       OAuthAccessToken token = oAuthController.createAccessToken(authorizationCode, accessToken, expires);
