@@ -12,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import fi.foyt.fni.i18n.ExternalLocales;
@@ -58,10 +59,14 @@ public class IllusionEventPageController {
   
   public List<IllusionEventPage> listPages(IllusionEvent illusionEvent) {
     List<IllusionEventPage> pages = new ArrayList<>();
+    String eventUrl = null;
     
-    String contextPath = systemSettingsController.getSiteContextPath();
-    String eventUrl = contextPath + "/illusion/event/" + illusionEvent.getUrlName();
-
+    if (StringUtils.isNotBlank(illusionEvent.getDomain())) {
+      eventUrl = systemSettingsController.getHostUrl(illusionEvent.getDomain(), false, true);
+    } else {
+      eventUrl = systemSettingsController.getSiteUrl(false, true) + "/illusion/event/" + illusionEvent.getUrlName();
+    }
+    
     IllusionEventDocument indexDocument = illusionEventDocumentDAO.findByParentFolderAndDocumentType(illusionEvent.getFolder(), IllusionEventDocumentType.INDEX);
     if (indexDocument != null) {
       pages.add(new IllusionEventPage("INDEX", eventUrl, indexDocument.getTitle(), "INDEX", true, false, false, false, getPageVisibility(illusionEvent, "INDEX")));

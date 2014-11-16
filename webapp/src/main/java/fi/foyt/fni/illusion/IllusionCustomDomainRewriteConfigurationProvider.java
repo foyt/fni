@@ -75,16 +75,20 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
     addDomainRule(configuration, domain, eventUrl, "/illusion/event-payment.jsf", "payment");
     addDomainRule(configuration, domain, eventUrl, "/illusion/event-settings.jsf", "settings");
     addDomainRule(configuration, domain, eventUrl, "/illusion/dojoin.jsf", "dojoin");
-    addDomainRule(configuration, domain, eventUrl, "/illusion/event-edit-page.jsf", "edit-page", "pageId");
-    addDomainRule(configuration, domain, eventUrl, "/illusion/event-material.jsf?materialPath={materialPath}", "materials/{materialPath}");
-    addDomainRule(configuration, domain, eventUrl, "/illusion/event-page.jsf?materialPath={materialPath}", "pages/{materialPath}");
+    addDomainRule(configuration, domain, eventUrl, "/illusion/event-edit-page.jsf", "edit-page", null, new String[] { "pageId" });
+    addDomainRule(configuration, domain, eventUrl, "/illusion/event-material.jsf", "materials/{materialPath}", new String[] { "materialPath" }, null);
+    addDomainRule(configuration, domain, eventUrl, "/illusion/event-page.jsf", "pages/{materialPath}", new String[] { "materialPath" }, null);
     
   }
-
-  private void addDomainRule(ConfigurationBuilder configuration, String domain, String eventUrl, String jsfRule, String page, String... queryParams) {
+  
+  private void addDomainRule(ConfigurationBuilder configuration, String domain, String eventUrl, String jsfRule, String page) {
+    addDomainRule(configuration, domain, eventUrl, jsfRule, page, null, null);
+  }
+  
+  private void addDomainRule(ConfigurationBuilder configuration, String domain, String eventUrl, String jsfRule, String page, String[] pathParams, String[] queryParams) {
     String path = "/" + page;
     addInboundDomainRule(configuration, domain, eventUrl, page, path);
-    addOutboundDomainRule(configuration, domain, jsfRule, path, queryParams);
+    addOutboundDomainRule(configuration, domain, jsfRule, path, pathParams, queryParams);
   }
 
   private void addInboundDomainRule(ConfigurationBuilder configuration, String domain, String eventUrl, String page, String path) {
@@ -105,24 +109,34 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
       .perform(Substitute.with(forwardTo).and(Log.message(Level.DEBUG, String.format("Custom domain inbound substitute %s -> %s", path, forwardTo))));
   }
 
-  private void addOutboundDomainRule(ConfigurationBuilder configuration, String domain, String jsfRule, String path, String... queryParams) {
+  private void addOutboundDomainRule(ConfigurationBuilder configuration, String domain, String jsfRule, String path, String[] pathParams, String[] queryParams) {
     ConditionBuilder when = Direction.isOutbound()
       .and(Domain.matches(domain))
-      .and(jsfRule.contains("?") ? PathAndQuery.matches(jsfRule) : Path.matches(jsfRule));
+      .and(Path.matches(jsfRule));
     
-    for (String queryParam : queryParams) {
-      when = when.and(Query.parameterExists(queryParam));
+    if (pathParams != null) {
+      for (String pathParam : pathParams) {
+        when = when.and(Query.parameterExists(pathParam));
+      }
+    }
+    
+    if (queryParams != null) {
+      for (String queryParam : queryParams) {
+        when = when.and(Query.parameterExists(queryParam));
+      }
     }
     
     StringBuilder locationBuilder = new StringBuilder(path);
-    for (int i = 0, l = queryParams.length; i < l; i++) {
-      String queryParam = queryParams[i];
-      locationBuilder
-        .append(i == 0 ? '?' : '&')
-        .append(queryParam)
-        .append("={")
-        .append(queryParam)
-        .append("}");
+    if (queryParams != null) {
+      for (int i = 0, l = queryParams.length; i < l; i++) {
+        String queryParam = queryParams[i];
+        locationBuilder
+          .append(i == 0 ? '?' : '&')
+          .append(queryParam)
+          .append("={")
+          .append(queryParam)
+          .append("}");
+      }
     }
     
     configuration.addRule()
