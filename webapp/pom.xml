@@ -82,6 +82,12 @@
       <artifactId>jaxrs-api</artifactId>
       <scope>provided</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jaxrs</artifactId>
+      <scope>provided</scope>
+    </dependency>
     
     <!-- Hibernate -->
     
@@ -520,6 +526,7 @@
         <it.jdbc.jndi>java:/jboss/datasources/fni</it.jdbc.jndi>
         <it.jdbc.username>sa</it.jdbc.username>
         <it.jdbc.password>sa</it.jdbc.password>
+        <it.hibernate.dialect>org.hibernate.dialect.H2Dialect</it.hibernate.dialect>
       </properties>
       
       <dependencies>
@@ -626,7 +633,51 @@
               </execution>
             </executions>
           </plugin>
-    
+          
+          <plugin>
+            <groupId>de.juplo</groupId>
+            <artifactId>hibernate4-maven-plugin</artifactId>
+            <version>1.0.5</version>
+            <dependencies>
+              <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
+              </dependency>
+            </dependencies>
+            <configuration>
+              <driverClassName>${it.jdbc.driver}</driverClassName>
+              <hibernateDialect>${it.hibernate.dialect}</hibernateDialect> 
+              <url><![CDATA[${it.jdbc.url}]]></url>
+              <username>${it.jdbc.username}</username>
+              <password>${it.jdbc.password}</password>
+            </configuration>
+            <executions>
+              <execution> 
+                <id>create-schema</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>export</goal>
+                </goals>
+                <configuration>
+                  <type>CREATE</type>
+                </configuration>
+              </execution>
+              
+              <execution> 
+                <id>drop-db-after-test</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>export</goal>
+                </goals>
+                <configuration>
+                  <type>DROP</type>
+                  <force>true</force>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>sql-maven-plugin</artifactId>
@@ -647,7 +698,7 @@
             </configuration>
             <executions>
               <execution>
-                <id>create-schema</id>
+                <id>inital-dada</id>
                 <phase>pre-integration-test</phase>
                 <goals>
                   <goal>execute</goal>
@@ -655,25 +706,11 @@
                 <configuration>
                   <autocommit>true</autocommit>
                   <srcFiles>
-                    <srcFile>src/test/resources/create.sql</srcFile>
                     <srcFile>src/test/resources/data.sql</srcFile>
                   </srcFiles>
                 </configuration>
               </execution>
-              
-              <execution>
-                <id>drop-db-after-test</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>execute</goal>
-                </goals>
-                <configuration>
-                  <autocommit>true</autocommit>
-                  <srcFiles>
-                    <srcFile>src/test/resources/drop.sql</srcFile>
-                  </srcFiles>
-                </configuration>
-              </execution>
+
             </executions>
           </plugin>
           
@@ -895,6 +932,7 @@
         <it.jdbc.jndi>java:/jboss/datasources/fni</it.jdbc.jndi>
         <it.jdbc.username>sa</it.jdbc.username>
         <it.jdbc.password>sa</it.jdbc.password>
+        <it.hibernate.dialect>org.hibernate.dialect.H2Dialect</it.hibernate.dialect>
       </properties>
       
       <dependencies>
@@ -1004,6 +1042,50 @@
               </execution>
             </executions>
           </plugin>
+          
+          <plugin>
+            <groupId>de.juplo</groupId>
+            <artifactId>hibernate4-maven-plugin</artifactId>
+            <version>1.0.5</version>
+            <dependencies>
+              <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
+              </dependency>
+            </dependencies>
+            <configuration>
+              <driverClassName>${it.jdbc.driver}</driverClassName>
+              <hibernateDialect>${it.hibernate.dialect}</hibernateDialect> 
+              <url><![CDATA[${it.jdbc.url}]]></url>
+              <username>${it.jdbc.username}</username>
+              <password>${it.jdbc.password}</password>
+            </configuration>
+            <executions>
+              <execution> 
+                <id>create-schema</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>export</goal>
+                </goals>
+                <configuration>
+                  <type>CREATE</type>
+                </configuration>
+              </execution>
+              
+              <execution> 
+                <id>drop-db-after-test</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>export</goal>
+                </goals>
+                <configuration>
+                  <type>DROP</type>
+                  <force>true</force>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
     
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
@@ -1025,7 +1107,7 @@
             </configuration>
             <executions>
               <execution>
-                <id>create-schema</id>
+                <id>inital-dada</id>
                 <phase>pre-integration-test</phase>
                 <goals>
                   <goal>execute</goal>
@@ -1033,7 +1115,6 @@
                 <configuration>
                   <autocommit>true</autocommit>
                   <srcFiles>
-                    <srcFile>src/test/resources/create.sql</srcFile>
                     <srcFile>src/test/resources/data.sql</srcFile>
                   </srcFiles>
                 </configuration>
