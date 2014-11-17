@@ -57,8 +57,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     assertSelectorTextIgnoreCase(".view-header-description-text", description);
     assertSelectorPresent(".illusion-event-navigation-admin-menu");
     
-    executeSql("delete from IllusionEventParticipant where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
-    executeSql("delete from IllusionEvent where urlName = ?", urlName);
+    deleteIllusionEventByUrl(urlName);
   }
   
   @Test
@@ -89,8 +88,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     navigate("/illusion/event/" + urlName + "/settings");
     assertSelectorValue("input[data-alt-field='.actual-start-date']", startDate);
     
-    executeSql("delete from IllusionEventParticipant where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
-    executeSql("delete from IllusionEvent where urlName = ?", urlName);
+    deleteIllusionEventByUrl(urlName);
   }
   
   @Test
@@ -128,9 +126,8 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     assertSelectorValue("input[data-alt-field='.actual-start-time']", startTime);
     assertSelectorValue("input[data-alt-field='.actual-end-date']", endDate);
     assertSelectorValue("input[data-alt-field='.actual-end-time']", endTime);
-    
-    executeSql("delete from IllusionEventParticipant where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
-    executeSql("delete from IllusionEvent where urlName = ?", urlName);
+
+    deleteIllusionEventByUrl(urlName);
   }
   
   @Test
@@ -154,8 +151,19 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     navigate("/illusion/event/" + urlName + "/settings");
     assertSelectorValue(".illusion-event-settings-location", location);
     
+    deleteIllusionEventByUrl(urlName);
+  }
+
+  private void deleteIllusionEventByUrl(String urlName) throws Exception {
     executeSql("delete from IllusionEventParticipant where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
+    executeSql("update Material set type = 'DELETE' where id in (select folder_id from IllusionEvent where urlName = ?) or parentFolder_id in (select folder_id from IllusionEvent where urlName = ?)", urlName, urlName);
     executeSql("delete from IllusionEvent where urlName = ?", urlName);
+    executeSql("update Material set parentFolder_id = null where id in (select id from Material where type = 'DELETE')");
+    executeSql("delete from IllusionEventDocument where id in (select id from Material where type = 'DELETE')");
+    executeSql("delete from IllusionEventFolder where id in (select id from Material where type = 'DELETE')");
+    executeSql("delete from Document where id in (select id from Material where type = 'DELETE')");
+    executeSql("delete from Folder where id in (select id from Material where type = 'DELETE')");
+    executeSql("delete from Material where type = 'DELETE'");
   }
   
 }

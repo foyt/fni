@@ -11,9 +11,18 @@ import org.junit.Test;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
 import fi.foyt.fni.test.SqlAfter;
 import fi.foyt.fni.test.SqlBefore;
+import fi.foyt.fni.test.SqlSets;
 
+@DefineSqlSets ({
+  @DefineSqlSet (id = "illusion-event-oai", 
+    before = {"illusion-event-oai-setup.sql"}, 
+    after = {"illusion-event-oai-teardown.sql"}
+  )
+})
 public class IllusionEventIndexTestsBase extends AbstractUITest {
   
   @Test
@@ -78,8 +87,7 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
   }
   
   @Test
-  @SqlBefore ({"illusion-event-oai-setup.sql"})
-  @SqlAfter ({"illusion-event-oai-teardown.sql"})
+  @SqlSets ("illusion-event-oai")
   public void testJoinOpenNotLoggedIn() {
     navigate("/illusion/event/open");
     assertSelectorClickable(".illusion-event-join-button");
@@ -94,8 +102,7 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
   }
 
   @Test
-  @SqlBefore ({"illusion-event-oai-setup.sql"})
-  @SqlAfter ({"illusion-event-oai-teardown.sql"})
+  @SqlSets ("illusion-event-oai")
   public void testJoinApproveNotLoggedIn() throws MessagingException {
     GreenMail greenMail = startSmtpServer();
     try {
@@ -121,16 +128,14 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
   }
   
   @Test
-  @SqlBefore ({"illusion-event-oai-setup.sql"})
-  @SqlAfter ({"illusion-event-oai-teardown.sql"})
+  @SqlSets ("illusion-event-oai")
   public void testJoinInviteNotLoggedIn() throws MessagingException {
     navigate("/illusion/event/invite");
     assertSelectorNotPresent(".illusion-event-join-button");
   }
   
   @Test
-  @SqlBefore ({"illusion-event-oai-setup.sql"})
-  @SqlAfter ({"illusion-event-oai-teardown.sql"})
+  @SqlSets ("illusion-event-oai")
   public void testJoinOpenLoggedIn() {
     loginInternal("user@foyt.fi", "pass");
     navigate("/illusion/event/open");
@@ -144,8 +149,7 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
   }
 
   @Test
-  @SqlBefore ({"illusion-event-oai-setup.sql"})
-  @SqlAfter ({"illusion-event-oai-teardown.sql"})
+  @SqlSets ("illusion-event-oai")
   public void testJoinApproveLoggedIn() throws MessagingException {
     GreenMail greenMail = startSmtpServer();
     try {
@@ -170,8 +174,7 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
   }
   
   @Test
-  @SqlBefore ({"illusion-event-oai-setup.sql"})
-  @SqlAfter ({"illusion-event-oai-teardown.sql"})
+  @SqlSets ("illusion-event-oai")
   public void testJoinInviteLoggedIn() throws MessagingException {
     navigate("/illusion/event/invite");
     loginInternal("user@foyt.fi", "pass");
