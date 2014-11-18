@@ -21,9 +21,19 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet (id = "illusion-event-oai", 
     before = {"illusion-event-oai-setup.sql"}, 
     after = {"illusion-event-oai-teardown.sql"}
+  ),
+  @DefineSqlSet (id = "illusion-event-custom", 
+    before = { "illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-custom-setup.sql" },
+    after = { "illusion-event-open-custom-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql" }
   )
 })
 public class IllusionEventIndexTestsBase extends AbstractUITest {
+
+  private static final String CUSTOM_EVENT_HOST = "custom-test.forgeandillusion.net";
+  
+  private String getCustomEventUrl() {
+    return "http://" + CUSTOM_EVENT_HOST + ':' + getPortHttp() + '/' + getCtxPath();
+  }
   
   @Test
   @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql"})
@@ -34,6 +44,13 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
     assertSelectorPresent(".illusion-event-join-button");
     assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
     assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
+  }
+  
+  @Test
+  @SqlSets ("illusion-event-custom")
+  public void testCustomDomainNotLoggedIn() {
+    getWebDriver().get(getCustomEventUrl());
+    testTitle("Illusion - Open Event");
   }
   
   @Test
