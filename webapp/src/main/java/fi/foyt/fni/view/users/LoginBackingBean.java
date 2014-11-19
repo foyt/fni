@@ -21,6 +21,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -89,9 +90,12 @@ public class LoginBackingBean {
 
 	@Inject
 	private SystemSettingsController systemSettingsController;
-	
+
 	@Inject
 	private Mailer mailer;
+
+  @Inject
+  private HttpServletRequest request;
 	
 	@RequestAction
 	@Deferred
@@ -104,6 +108,10 @@ public class LoginBackingBean {
 	    AuthSource authSource = AuthSource.valueOf(loginMethod);
 	    if (authSource != null) {
 	      handleExternalLogin(authSource);
+	    }
+	  } else {
+	    if (!systemSettingsController.getSiteHost().equals(request.getServerName())) {
+        handleExternalLogin(AuthSource.ILLUSION_INTERNAL);
 	    }
 	  }
 	}

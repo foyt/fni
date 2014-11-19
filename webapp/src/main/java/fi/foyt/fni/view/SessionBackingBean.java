@@ -3,7 +3,6 @@ package fi.foyt.fni.view;
 import java.io.IOException;
 import java.util.Locale;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -15,7 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
 
 @Named
@@ -24,9 +22,6 @@ import fi.foyt.fni.users.UserController;
 public class SessionBackingBean {
 
   @Inject
-  private SystemSettingsController systemSettingController;
-  
-	@Inject
 	private SessionController sessionController;
 
 	@Inject
@@ -34,11 +29,6 @@ public class SessionBackingBean {
 
   @Inject
 	private HttpServletRequest request;
-
-  @PostConstruct
-  public void init() {
-    customDomain = !systemSettingController.getSiteHost().equals(request.getServerName());
-  }
   
 	public boolean isLoggedIn() {
 		return sessionController.isLoggedIn();
@@ -78,10 +68,4 @@ public class SessionBackingBean {
 
 	  return request.getRequestURI();
 	}
-
-  public boolean isCustomDomain() {
-    return customDomain;
-  }
-  
-  private boolean customDomain;
 }
