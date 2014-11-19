@@ -7,6 +7,8 @@ import javax.mail.MessagingException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
@@ -27,14 +29,8 @@ import fi.foyt.fni.test.SqlSets;
     after = { "illusion-event-open-custom-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql" }
   )
 })
-public class IllusionEventIndexTestsBase extends AbstractUITest {
+public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
 
-  private static final String CUSTOM_EVENT_HOST = "custom-test.forgeandillusion.net";
-  
-  private String getCustomEventUrl() {
-    return "http://" + CUSTOM_EVENT_HOST + ':' + getPortHttp() + '/' + getCtxPath();
-  }
-  
   @Test
   @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql"})
   @SqlAfter ({"illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
@@ -45,14 +41,7 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
     assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
     assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
   }
-  
-  @Test
-  @SqlSets ("illusion-event-custom")
-  public void testCustomDomainNotLoggedIn() {
-    getWebDriver().get(getCustomEventUrl());
-    testTitle("Illusion - Open Event");
-  }
-  
+
   @Test
   @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql"})
   @SqlAfter ({"illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
@@ -209,6 +198,50 @@ public class IllusionEventIndexTestsBase extends AbstractUITest {
     assertSelectorNotPresent(".illusion-event-join-button");
     navigate("/illusion/event/openevent/dojoin");
     assertAccessDenied();
+  }
+  
+  @Test
+  @SqlSets ("illusion-event-custom")
+  public void testCustomDomainNotLoggedIn() {
+    getWebDriver().get(getCustomEventUrl());
+    testTitle("Illusion - Open Event");
+  }
+  
+  @Test
+  @SqlSets ("illusion-event-custom")
+  public void testCustomDomainMenuItems() {
+    getWebDriver().get(getCustomEventUrl());
+    testTitle("Illusion - Open Event");
+
+    WebElement logoLink = getWebDriver().findElement(By.cssSelector(".index-menu>a:first-child"));
+    WebElement forgeMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(1)"));
+    WebElement illusionMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(2)"));
+    WebElement gameLibraryMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(3)"));
+    WebElement forumMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(4)"));
+
+    assertEquals("Forge", forgeMenuLink.getText());
+    assertEquals("Illusion", illusionMenuLink.getText());
+    assertEquals("Game Library", gameLibraryMenuLink.getText());
+    assertEquals("Forum", forumMenuLink.getText());
+
+    assertEquals(getAppUrl() + "/", stripLinkJSessionId(logoLink.getAttribute("href")));
+    assertEquals(getAppUrl() + "/forge", stripLinkJSessionId(forgeMenuLink.getAttribute("href")));
+    assertEquals(getAppUrl() + "/illusion", stripLinkJSessionId(illusionMenuLink.getAttribute("href")));
+    assertEquals(getAppUrl() + "/gamelibrary", stripLinkJSessionId(gameLibraryMenuLink.getAttribute("href")));
+    assertEquals(getAppUrl() + "/forum", stripLinkJSessionId(forumMenuLink.getAttribute("href")));
+  }
+  
+  @Test
+  @SqlSets ("illusion-event-custom")
+  public void testCustomDomainNavigationLinks() {
+    String customEventUrl = getCustomEventUrl();
+    
+    getWebDriver().get(customEventUrl);
+    testTitle("Illusion - Open Event");
+
+    assertEquals(getAppUrl() + "/", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(1) a").getAttribute("href"));
+    assertEquals(getAppUrl() + "/illusion", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(3) a").getAttribute("href"));
+    assertEquals(customEventUrl + "/", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(5) a").getAttribute("href"));
   }
 
 }
