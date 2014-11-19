@@ -192,7 +192,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     findElementBySelector(selector).clear();
   }
   
-  protected void setSelectorInputValue(String selector, String value) {
+  protected void typeSelectorInputValue(String selector, String value) {
     findElementBySelector(selector).sendKeys(value);
   }
   

@@ -78,10 +78,10 @@ public class IllusionEventSettingsTestsBase extends AbstractUITest {
     assertSelectorValue("input[data-alt-field='.actual-end-time']", "");
     
     clearSelectorInput("input[data-alt-field='.actual-start-date']");
-    setSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
-    setSelectorInputValue("input[data-alt-field='.actual-start-time']", startTime);
-    setSelectorInputValue("input[data-alt-field='.actual-end-date']", endDate);
-    setSelectorInputValue("input[data-alt-field='.actual-end-time']", endTime);
+    typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
+    typeSelectorInputValue("input[data-alt-field='.actual-start-time']", startTime);
+    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", endDate);
+    typeSelectorInputValue("input[data-alt-field='.actual-end-time']", endTime);
     
     assertSelectorValue("input[data-alt-field='.actual-start-date']", startDate);
     assertSelectorValue("input[data-alt-field='.actual-start-time']", startTime);
@@ -105,7 +105,7 @@ public class IllusionEventSettingsTestsBase extends AbstractUITest {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     String location = "Test place";
-    setSelectorInputValue(".illusion-event-settings-location", location);
+    typeSelectorInputValue(".illusion-event-settings-location", location);
     clickSelector(".illusion-event-settings-save");
     assertSelectorValue(".illusion-event-settings-location", location);
   }

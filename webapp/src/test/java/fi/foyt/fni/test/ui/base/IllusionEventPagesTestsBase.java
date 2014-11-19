@@ -107,7 +107,7 @@ public class IllusionEventPagesTestsBase extends AbstractUITest {
     
     waitForSelectorText(".illusion-edit-page-editor-status", "Loaded", true);
     clearSelectorInput(".illusion-edit-page-title");
-    setSelectorInputValue(".illusion-edit-page-title", "changed");
+    typeSelectorInputValue(".illusion-edit-page-title", "changed");
     clickSelector(".illusion-edit-page-editor-status");
     waitForSelectorText(".illusion-edit-page-editor-status", "Saved", true);
     executeSql("update IllusionEventSetting set value = '{\"" + pageId + "\":{\"visibility\":\"VISIBLE\"}}' where id = 1");

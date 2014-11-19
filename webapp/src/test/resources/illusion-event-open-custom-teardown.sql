@@ -1,2 +1,5 @@
-update IllusionEvent set domain = null where id = 1;  
-  
+update IllusionEvent set domain = null, oAuthClient_id = null where id = 1; 
+delete from OAuthAccessToken where authorizationCode_id = (select id from OAuthAuthorizationCode where client_id = 10000); 
+delete from OAuthAuthorizationCode where client_id = 10000; 
+delete from OAuthClient where id = 10000;
+ 

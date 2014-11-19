@@ -27,7 +27,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
   public void testNameRequired() {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/createevent");
-    setSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
+    typeSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
     findElementBySelector(".illusion-create-event-save").click();
     waitForNotification();
     assertNotification("error", "Name is required");
@@ -45,7 +45,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     
     findElementBySelector(".illusion-create-event-name").sendKeys(name);
     findElementBySelector(".illusion-create-event-description").sendKeys(description);
-    setSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
+    typeSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
     
     waitSelectorToBeClickable(".illusion-create-event-save");
     findElementBySelector(".illusion-create-event-save").click();
@@ -71,9 +71,9 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     
     navigate("/illusion/createevent");
     
-    setSelectorInputValue(".illusion-create-event-name", name);
-    setSelectorInputValue(".illusion-create-event-description", description);
-    setSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
+    typeSelectorInputValue(".illusion-create-event-name", name);
+    typeSelectorInputValue(".illusion-create-event-description", description);
+    typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
     
     waitSelectorToBeClickable(".illusion-create-event-save");
     findElementBySelector(".illusion-create-event-save").click();
@@ -104,12 +104,12 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     String endTime = "10:30";
     
     navigate("/illusion/createevent");
-    setSelectorInputValue(".illusion-create-event-name", name);
-    setSelectorInputValue(".illusion-create-event-description", description);
-    setSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
-    setSelectorInputValue("input[data-alt-field='.actual-start-time']", startTime);
-    setSelectorInputValue("input[data-alt-field='.actual-end-date']", endDate);
-    setSelectorInputValue("input[data-alt-field='.actual-end-time']", endTime);
+    typeSelectorInputValue(".illusion-create-event-name", name);
+    typeSelectorInputValue(".illusion-create-event-description", description);
+    typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
+    typeSelectorInputValue("input[data-alt-field='.actual-start-time']", startTime);
+    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", endDate);
+    typeSelectorInputValue("input[data-alt-field='.actual-end-time']", endTime);
     
     waitSelectorToBeClickable(".illusion-create-event-save");
     findElementBySelector(".illusion-create-event-save").click();
@@ -141,10 +141,10 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     String startDate = "10/20/2030";
     
     navigate("/illusion/createevent");
-    setSelectorInputValue(".illusion-create-event-name", name);
-    setSelectorInputValue(".illusion-create-event-description", description);
-    setSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
-    setSelectorInputValue(".illusion-create-event-location", location);
+    typeSelectorInputValue(".illusion-create-event-name", name);
+    typeSelectorInputValue(".illusion-create-event-description", description);
+    typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
+    typeSelectorInputValue(".illusion-create-event-location", location);
     waitSelectorToBeClickable(".illusion-create-event-save");
     findElementBySelector(".illusion-create-event-save").click();
     waitForUrlMatches(".*/illusion/event/" + urlName);
