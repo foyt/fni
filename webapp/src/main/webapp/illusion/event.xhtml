@@ -37,7 +37,7 @@
         </h:panelGroup>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
         <h:panelGroup styleClass="view-header-navigation-item">
-          <h:outputLink value="#{request.contextPath}/illusion/event/#{illusionEventBackingBean.urlName}">#{illusionEventBackingBean.name}</h:outputLink>
+          <h:link outcome="/illusion/event.jsf?urlName=#{illusionEventBackingBean.urlName}">#{illusionEventBackingBean.name}</h:link>
         </h:panelGroup>
       </h:panelGroup>
   
