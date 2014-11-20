@@ -1,10 +1,14 @@
 package fi.foyt.fni.test.ui.base;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -30,9 +34,13 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet (id = "illusion-open-page-hidden-participant", 
     before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-participant-setup.sql"}, 
     after = {"illusion-event-open-participant-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
+  ),
+  @DefineSqlSet (id = "illusion-event-custom", 
+    before = { "illusion-event-open-custom-setup.sql" },
+    after = { "illusion-event-open-custom-teardown.sql" }
   )
 })
-public class IllusionEventPagesTestsBase extends AbstractUITest {
+public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   
   @Test
   @SqlSets ("illusion-open-page")
@@ -156,6 +164,64 @@ public class IllusionEventPagesTestsBase extends AbstractUITest {
   public void testVisibleForParticipantsLoggedIn() throws UnsupportedEncodingException {
     loginInternal("admin@foyt.fi", "pass");
     testAccessDenied("/illusion/event/openevent/pages/testpage");
+  }
+  
+  @Test
+  @SqlSets ({"illusion-open-page-organizer", "illusion-event-custom"})
+  public void testCustomDomain() {
+    getWebDriver().get(getCustomEventUrl());
+    loginCustomEvent("admin@foyt.fi", "pass");
+    getWebDriver().get(getCustomEventUrl() + "/pages/testpage");
+    testTitle("Open Event - Test Page");
+  }
+  
+  @Test
+  @SqlSets ({"illusion-open-page-organizer", "illusion-event-custom"})
+  public void testCustomDomainLoginRedirect() {
+    getWebDriver().get(getCustomEventUrl() + "/pages/testpage");
+    waitForUrlMatches(".*/login.*");
+    loginCustomEvent("admin@foyt.fi", "pass");
+    testTitle("Open Event - Test Page");
+  }
+  
+  @Test
+  @SqlSets ({"illusion-open-page-organizer", "illusion-event-custom"})
+  public void testCustomDomainMenuItems() {
+    getWebDriver().get(getCustomEventUrl());
+    loginCustomEvent("admin@foyt.fi", "pass");
+    getWebDriver().get(getCustomEventUrl() + "/pages/testpage");
+    testTitle("Open Event - Test Page");
+
+    WebElement logoLink = getWebDriver().findElement(By.cssSelector(".index-menu>a:first-child"));
+    WebElement forgeMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(1)"));
+    WebElement illusionMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(2)"));
+    WebElement gameLibraryMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(3)"));
+    WebElement forumMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(4)"));
+
+    assertEquals("Forge", forgeMenuLink.getText());
+    assertEquals("Illusion", illusionMenuLink.getText());
+    assertEquals("Game Library", gameLibraryMenuLink.getText());
+    assertEquals("Forum", forumMenuLink.getText());
+
+    assertEquals(getAppUrl() + "/", stripLinkJSessionId(logoLink.getAttribute("href")));
+    assertEquals(getAppUrl() + "/forge", stripLinkJSessionId(forgeMenuLink.getAttribute("href")));
+    assertEquals(getAppUrl() + "/illusion", stripLinkJSessionId(illusionMenuLink.getAttribute("href")));
+    assertEquals(getAppUrl() + "/gamelibrary", stripLinkJSessionId(gameLibraryMenuLink.getAttribute("href")));
+    assertEquals(getAppUrl() + "/forum", stripLinkJSessionId(forumMenuLink.getAttribute("href")));
+  }
+  
+  @Test
+  @SqlSets ({"illusion-open-page-organizer", "illusion-event-custom"})
+  public void testCustomDomainNavigationLinks() {
+    getWebDriver().get(getCustomEventUrl());
+    loginCustomEvent("admin@foyt.fi", "pass");
+    getWebDriver().get(getCustomEventUrl() + "/pages/testpage");
+    testTitle("Open Event - Test Page");
+
+    assertEquals(getAppUrl() + "/", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(1) a").getAttribute("href"));
+    assertEquals(getAppUrl() + "/illusion", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(3) a").getAttribute("href"));
+    assertEquals(getCustomEventUrl() + "/", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(5) a").getAttribute("href"));
+    assertEquals(getCustomEventUrl() + "/pages/testpage", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(7) a").getAttribute("href"));
   }
   
 }

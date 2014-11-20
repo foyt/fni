@@ -125,7 +125,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   
   @Test
   @SqlSets ("illusion-event-custom")
-  public void testCustomDomainNotLoggedIn() {
+  public void testCustomDomain() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");
     getWebDriver().get(getCustomEventUrl() + "/settings");
@@ -178,6 +178,21 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     assertEquals(getAppUrl() + "/", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(1)").getAttribute("href"));
     assertEquals(getAppUrl() + "/illusion", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(3)").getAttribute("href"));
     assertEquals(getCustomEventUrl() + "/settings", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(5)").getAttribute("href"));
+  }
+  
+  @Test
+  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-organizer-setup.sql"})
+  @SqlAfter ({ "illusion-event-open-organizer-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  public void testDomain() throws Exception {
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    String location = "Test place";
+    typeSelectorInputValue(".illusion-event-settings-domain", location);
+    clickSelector(".illusion-event-settings-save");
+    assertSelectorValue(".illusion-event-settings-domain", location);
+    getWebDriver().get(getCustomEventUrl());
+    testTitle("Illusion - Open Event");
   }
   
 }

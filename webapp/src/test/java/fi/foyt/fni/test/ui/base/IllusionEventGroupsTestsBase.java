@@ -71,7 +71,7 @@ public class IllusionEventGroupsTestsBase extends AbstractIllusionUITest {
   
   @Test
   @SqlSets ("illusion-event-custom")
-  public void testCustomDomainNotLoggedIn() {
+  public void testCustomDomain() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");
     getWebDriver().get(getCustomEventUrl() + "/groups");
@@ -124,6 +124,7 @@ public class IllusionEventGroupsTestsBase extends AbstractIllusionUITest {
     assertEquals(getAppUrl() + "/", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(1) a").getAttribute("href"));
     assertEquals(getAppUrl() + "/illusion", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(3) a").getAttribute("href"));
     assertEquals(getCustomEventUrl() + "/", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(5) a").getAttribute("href"));
+    assertEquals(getCustomEventUrl() + "/groups", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(7) a").getAttribute("href"));
   }
 
 }

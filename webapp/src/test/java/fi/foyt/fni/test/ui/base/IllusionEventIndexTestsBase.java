@@ -243,5 +243,23 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
     assertEquals(getAppUrl() + "/illusion", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(3) a").getAttribute("href"));
     assertEquals(customEventUrl + "/", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(5) a").getAttribute("href"));
   }
+  
+  @Test
+  @SqlSets ("illusion-event-custom")
+  public void testCustomDomainJoinOpenLoggedIn() {
+    loginInternal("user@foyt.fi", "pass");
+    getWebDriver().get(getCustomEventUrl());
+    
+    assertSelectorClickable(".illusion-event-join-button");
+    clickSelector(".illusion-event-join-button");
+    testTitle("Illusion - Open Event");
+    
+    assertSelectorCount(".illusion-event-navigation>a", 1);
+    assertSelectorNotPresent(".illusion-event-join-button");
+    assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
+    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
+    
+    
+  }
 
 }

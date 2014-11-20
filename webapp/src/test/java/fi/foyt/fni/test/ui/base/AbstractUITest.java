@@ -195,7 +195,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void typeSelectorInputValue(String selector, String value) {
     findElementBySelector(selector).sendKeys(value);
   }
-  
+
+  protected void assertNotFound() {
+    assertEquals("Page Not Found!", getWebDriver().getTitle());
+  }
+
   private String sessionId;
   
   private RemoteWebDriver webDriver;

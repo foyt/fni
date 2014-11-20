@@ -126,6 +126,10 @@ public abstract class AbstractUITest extends AbstractTest {
   
   protected void testNotFound(RemoteWebDriver driver, String view, boolean secure) {
     driver.get(getAppUrl(secure) + view);
+    assertNotFound(driver);
+  }
+
+  protected void assertNotFound(RemoteWebDriver driver) {
     assertEquals("Page Not Found!", driver.getTitle());
   }
   

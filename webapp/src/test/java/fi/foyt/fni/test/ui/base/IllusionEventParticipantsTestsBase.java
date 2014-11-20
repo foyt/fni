@@ -73,7 +73,7 @@ public class IllusionEventParticipantsTestsBase extends AbstractIllusionUITest {
   
   @Test
   @SqlSets ("illusion-event-custom")
-  public void testCustomDomainNotLoggedIn() {
+  public void testCustomDomain() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");
     getWebDriver().get(getCustomEventUrl() + "/participants");
