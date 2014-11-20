@@ -1,11 +1,17 @@
 package fi.foyt.fni.illusion;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.Stateful;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.logging.Logger.Level;
 import org.ocpsoft.rewrite.annotation.RewriteConfiguration;
 import org.ocpsoft.rewrite.config.ConditionBuilder;
@@ -31,10 +37,18 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.system.SystemSettingsController;
 
 @RewriteConfiguration
+@ApplicationScoped
+@Stateful
 public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfigurationProvider {
 
   @Inject
   private SystemSettingsController systemSettingsController;
+  
+  @PostConstruct
+  public void init() {
+    eventCustomDomainUrlNameMap = new HashMap<>();
+    eventUrlNameCustomDomainMap = new HashMap<>();
+  }
   
   @Inject
   private IllusionEventController illusionEventController;
@@ -46,8 +60,19 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
     String contextPath = systemSettingsController.getSiteContextPath();
     Integer httpPort = systemSettingsController.getSiteHttpPort();
     String port = httpPort != 80 ? ":" + httpPort : "";
+    String siteHost = systemSettingsController.getSiteHost();
     
-    addCustomDomainForwards(configuration);
+    addDomainRule(configuration, siteHost, "/illusion/event.jsf", "");
+    addDomainRule(configuration, siteHost, "/illusion/event-manage-pages.jsf", "manage-pages");
+    addDomainRule(configuration, siteHost, "/illusion/event-groups.jsf", "groups");
+    addDomainRule(configuration, siteHost, "/illusion/event-materials.jsf", "materials");
+    addDomainRule(configuration, siteHost, "/illusion/event-participants.jsf", "participants");
+    addDomainRule(configuration, siteHost, "/illusion/event-payment.jsf", "payment");
+    addDomainRule(configuration, siteHost, "/illusion/event-settings.jsf", "settings");
+    addDomainRule(configuration, siteHost, "/illusion/dojoin.jsf", "dojoin");
+    addDomainRule(configuration, siteHost, "/illusion/event-edit-page.jsf", "edit-page", null, new String[] { "pageId" });
+    addDomainRule(configuration, siteHost, "/illusion/event-material.jsf", "materials/{materialPath}", new String[] { "materialPath" }, null);
+    addDomainRule(configuration, siteHost, "/illusion/event-page.jsf", "pages/{materialPath}", new String[] { "materialPath" }, null);
     
     configuration.addRule()
       .when(Direction.isOutbound()
@@ -59,7 +84,6 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
         .and(Log.message(Level.DEBUG, String.format("Event to custom domain outbound substitute %s", String.format("http://{eventDomain}%s%s", port, contextPath))))    
       );
     
-    String siteHost = systemSettingsController.getSiteHost();
     String siteUrl = systemSettingsController.getSiteUrl(false, true);
 
     addOutboundSiteRule(configuration, siteHost, siteUrl, "/index.jsf", "/");
@@ -76,45 +100,32 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
   public int priority() {
     return 10;
   }
-  
-  private void addCustomDomainForwards(ConfigurationBuilder configuration) {
-    addDomainRule(configuration, "/illusion/event.jsf", "");
-    addDomainRule(configuration, "/illusion/event-manage-pages.jsf", "manage-pages");
-    addDomainRule(configuration, "/illusion/event-groups.jsf", "groups");
-    addDomainRule(configuration, "/illusion/event-materials.jsf", "materials");
-    addDomainRule(configuration, "/illusion/event-participants.jsf", "participants");
-    addDomainRule(configuration, "/illusion/event-payment.jsf", "payment");
-    addDomainRule(configuration, "/illusion/event-settings.jsf", "settings");
-    addDomainRule(configuration, "/illusion/dojoin.jsf", "dojoin");
-    addDomainRule(configuration, "/illusion/event-edit-page.jsf", "edit-page", null, new String[] { "pageId" });
-    addDomainRule(configuration, "/illusion/event-material.jsf", "materials/{materialPath}", new String[] { "materialPath" }, null);
-    addDomainRule(configuration, "/illusion/event-page.jsf", "pages/{materialPath}", new String[] { "materialPath" }, null);
+    
+  private void addDomainRule(ConfigurationBuilder configuration, String siteHost, String jsfRule, String page) {
+    addDomainRule(configuration, siteHost, jsfRule, page, null, null);
   }
   
-  private void addDomainRule(ConfigurationBuilder configuration, String jsfRule, String page) {
-    addDomainRule(configuration, jsfRule, page, null, null);
-  }
-  
-  private void addDomainRule(ConfigurationBuilder configuration, String jsfRule, String page, String[] pathParams, String[] queryParams) {
+  private void addDomainRule(ConfigurationBuilder configuration, String siteHost, String jsfRule, String page, String[] pathParams, String[] queryParams) {
     String path = "/" + page;
-    addInboundDomainRule(configuration, page, path);
-    addOutboundDomainRule(configuration, jsfRule, path, pathParams, queryParams);
+    addInboundDomainRule(configuration, siteHost, page, path);
+    addOutboundDomainRule(configuration, siteHost, jsfRule, path, pathParams, queryParams);
   }
 
-  private void addInboundDomainRule(ConfigurationBuilder configuration, String page, String path) {
+  private void addInboundDomainRule(ConfigurationBuilder configuration, String siteHost, String page, String path) {
     String substitute = "/illusion/event/{eventUrlName}" + (page.equals("") ? "" : "/" + page);
     configuration.addRule()
       .when(
           Direction.isInbound()
+            .andNot(Domain.matches(siteHost))
             .and(Path.matches(path))
             .and(new EventCustomDomainRule())
       )
       .perform(Substitute.with(substitute).and(Log.message(Level.DEBUG, String.format("Custom domain inbound substitute %s -> %s", path, substitute))));
   }
 
-  private void addOutboundDomainRule(ConfigurationBuilder configuration, String jsfRule, String path, String[] pathParams, String[] queryParams) {
+  private void addOutboundDomainRule(ConfigurationBuilder configuration, String siteHost, String jsfRule, String path, String[] pathParams, String[] queryParams) {
     ConditionBuilder when = Direction.isOutbound()
-      .and(new EventCustomDomainRule())
+      .andNot(Domain.matches(siteHost))
       .and(Path.matches(jsfRule));
     
     if (pathParams != null) {
@@ -128,6 +139,8 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
         when = when.and(Query.parameterExists(queryParam));
       }
     }
+
+    when = when.and(new EventCustomDomainRule());
     
     StringBuilder locationBuilder = new StringBuilder(path);
     if (queryParams != null) {
@@ -156,9 +169,65 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
       )
       .perform(Substitute.with(siteUrl + path).and(Log.message(Level.DEBUG, String.format("Site outbound substitute %s -> %s", jsfRule, siteUrl + path))))
       .withPriority(0);
+  }  
+
+  private synchronized String getDomainForUrlName(String urlName) {
+    String domain = eventUrlNameCustomDomainMap.get(urlName);
+    if ("N/A".equals(domain)) {
+      return null;
+    }
+    
+    if (StringUtils.isBlank(domain)) {
+      IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(urlName);
+      if (illusionEvent != null) {
+        domain = illusionEvent.getDomain();
+        
+        if (StringUtils.isNotBlank(domain)) {
+          eventUrlNameCustomDomainMap.put(urlName, domain);
+          eventCustomDomainUrlNameMap.put(domain, urlName);
+          return domain;
+        } else {
+          eventUrlNameCustomDomainMap.put(urlName, "N/A");
+          return null;
+        }
+      } else {
+        eventUrlNameCustomDomainMap.put(urlName, "N/A");
+      }
+    }
+    
+    return domain;
+  }
+  
+  private synchronized String getUrlNameByDomain(String domain) {
+    String urlName = eventCustomDomainUrlNameMap.get(domain);
+    if ("N/A".equals(urlName)) {
+      return null;
+    }
+    
+    if (StringUtils.isBlank(urlName)) {
+      IllusionEvent illusionEvent = illusionEventController.findIllusionEventByDomain(domain);
+      if (illusionEvent != null) {
+        String eventUrl = illusionEvent.getUrlName();
+        
+        if (StringUtils.isNotBlank(eventUrl)) {
+          eventUrlNameCustomDomainMap.put(eventUrl, domain);
+          eventCustomDomainUrlNameMap.put(domain, eventUrl);
+          return domain;
+        } else {
+          eventCustomDomainUrlNameMap.put(domain, "N/A");
+          return null;
+        }
+      } else {
+        eventCustomDomainUrlNameMap.put(domain, "N/A");
+      }
+    }
+    
+    return urlName;
   }
 
-  // TODO: This is too slow for production
+  private Map<String, String> eventCustomDomainUrlNameMap;
+  private Map<String, String> eventUrlNameCustomDomainMap;
+
   private class EventCustomDomainRule extends HttpCondition implements Parameterized {
 
     @Override
@@ -188,10 +257,10 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
       }
       
       if (hostName != null) {
-        IllusionEvent illusionEvent = illusionEventController.findIllusionEventByDomain(hostName);
-        if (illusionEvent != null) {
+        String urlName = getUrlNameByDomain(hostName);
+        if (StringUtils.isNotBlank(urlName)) {
           ParameterValueStore parameterValueStore = (ParameterValueStore) context.get(ParameterValueStore.class);
-          parameterValueStore.submit(event, context, parameterStore.get("eventUrlName"), illusionEvent.getUrlName());
+          parameterValueStore.submit(event, context, parameterStore.get("eventUrlName"), urlName);
           return true;
         }
       }
@@ -202,7 +271,6 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
     private ParameterStore parameterStore;
   }
   
-  // TODO: This is too slow for production
   private class EventUrlNameRule extends HttpCondition implements Parameterized {
 
     public EventUrlNameRule(String paramName) {
@@ -228,16 +296,16 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
       String urlName = parameterValueStore.retrieve(parameterStore.get(paramName));
       
       if (urlName != null) {
-        IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(urlName);
-        if (illusionEvent != null && illusionEvent.getDomain() != null) {
-          parameterValueStore.submit(event, context, parameterStore.get("eventDomain"), illusionEvent.getDomain());
+        String eventDomain = getDomainForUrlName(urlName);
+        if (StringUtils.isNotBlank(eventDomain)) {
+          parameterValueStore.submit(event, context, parameterStore.get("eventDomain"), eventDomain);
           return true;
         }
       }
       
       return false;
     }
-    
+
     private ParameterStore parameterStore;
     private String paramName;
   }
