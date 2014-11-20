@@ -527,6 +527,10 @@
         <it.jdbc.username>sa</it.jdbc.username>
         <it.jdbc.password>sa</it.jdbc.password>
         <it.hibernate.dialect>org.hibernate.dialect.H2Dialect</it.hibernate.dialect>
+        <it.keystore>${project.build.directory}/fnici.keystore</it.keystore>
+        <it.truststore>${project.build.directory}/fnici.truststore</it.truststore>
+        <it.keystorepass>keystorepass</it.keystorepass>
+        <it.truststorepass>truststorepass</it.truststorepass>
       </properties>
       
       <dependencies>
@@ -721,12 +725,22 @@
             <executions>
               <execution>
                 <phase>generate-resources</phase>
-                <id>keyclean</id>
+                <id>keystoreclean</id>
                 <goals>
                   <goal>clean</goal>
                 </goals>
                 <configuration>
-                  <keystore>${project.build.directory}/fnici.keystore</keystore>
+                  <keystore>${it.keystore}</keystore>
+                </configuration>
+              </execution>
+              <execution>
+                <phase>generate-resources</phase>
+                <id>truststoreclean</id>
+                <goals>
+                  <goal>clean</goal>
+                </goals>
+                <configuration>
+                  <keystore>${it.truststore}</keystore>
                 </configuration>
               </execution>
               <execution> 
@@ -736,9 +750,9 @@
                   <goal>generateKeyPair</goal>
                 </goals>
                 <configuration>
-                  <keystore>${project.build.directory}/fnici.keystore</keystore>
+                  <keystore>${it.keystore}</keystore>
                   <dname>cn=${it.host}, ou=None, L=Test, ST=Test, o=Test, c=TE</dname>
-                  <storepass>storepass</storepass>
+                  <storepass>${it.keystorepass}</storepass>
                   <alias>fnici</alias>
                   <keyalg>RSA</keyalg>
                   <keysize>2048</keysize>
@@ -751,23 +765,53 @@
                   <goal>exportCertificate</goal>
                 </goals>
                 <configuration>
-                  <keystore>${project.build.directory}/fnici.keystore</keystore>
+                  <keystore>${it.keystore}</keystore>
                   <alias>fnici</alias>
                   <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>storepass</storepass>
+                  <storepass>${it.keystorepass}</storepass>
                 </configuration>
               </execution>
               <execution>
                 <phase>generate-resources</phase>
-                <id>importkey</id>
+                <id>importkey-keystore</id>
                 <goals>
                   <goal>importCertificate</goal>
                 </goals>
                 <configuration>
-                  <keystore>${project.build.directory}/fnici.keystore</keystore>
+                  <keystore>${it.keystore}</keystore>
                   <alias>root</alias>
                   <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>storepass</storepass>
+                  <storepass>${it.keystorepass}</storepass>
+                  <noprompt>true</noprompt>
+                  <trustcacerts>true</trustcacerts>
+                </configuration>
+              </execution>
+              <execution>
+                <phase>generate-resources</phase>
+                <id>importkey-truststore</id>
+                <goals>
+                  <goal>importCertificate</goal>
+                </goals>
+                <configuration>
+                  <keystore>${it.truststore}</keystore>
+                  <alias>fnici</alias>
+                  <file>${project.build.directory}/fnici.crt</file>
+                  <storepass>${it.truststorepass}</storepass>
+                  <noprompt>true</noprompt>
+                  <trustcacerts>true</trustcacerts>
+                </configuration>
+              </execution>
+              <execution>
+                <phase>generate-resources</phase>
+                <id>importkey-jre-truststore</id>
+                <goals>
+                  <goal>importKeystore</goal>
+                </goals>
+                <configuration>
+                  <srckeystore>${java.home}/lib/security/cacerts</srckeystore>
+                  <srcstorepass>changeit</srcstorepass>
+                  <destkeystore>${it.truststore}</destkeystore>
+                  <deststorepass>${it.truststorepass}</deststorepass>
                   <noprompt>true</noprompt>
                   <trustcacerts>true</trustcacerts>
                 </configuration>
@@ -795,6 +839,12 @@
                     <artifactId>h2</artifactId>
                   </dependency>
                 </dependencies>
+                <systemProperties>
+                  <javax.net.ssl.keyStore>${it.keystore}</javax.net.ssl.keyStore>
+                  <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
+                  <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
+                  <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
+                </systemProperties>                
               </container>
               <configuration>
                 <properties>
@@ -861,7 +911,7 @@
                       <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
                       <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
-                      <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${project.build.directory}/fnici.keystore",keystore-password="storepass",alias="fnici")</command>
+                      <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="fnici")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
                       <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
                     </commands>
@@ -933,6 +983,10 @@
         <it.jdbc.username>sa</it.jdbc.username>
         <it.jdbc.password>sa</it.jdbc.password>
         <it.hibernate.dialect>org.hibernate.dialect.H2Dialect</it.hibernate.dialect>
+        <it.keystore>${project.build.directory}/fnici.keystore</it.keystore>
+        <it.truststore>${project.build.directory}/fnici.truststore</it.truststore>
+        <it.keystorepass>keystorepass</it.keystorepass>
+        <it.truststorepass>truststorepass</it.truststorepass>
       </properties>
       
       <dependencies>
@@ -1143,12 +1197,22 @@
             <executions>
               <execution>
                 <phase>generate-resources</phase>
-                <id>keyclean</id>
+                <id>keystoreclean</id>
                 <goals>
                   <goal>clean</goal>
                 </goals>
                 <configuration>
-                  <keystore>${project.build.directory}/fnici.keystore</keystore>
+                  <keystore>${it.keystore}</keystore>
+                </configuration>
+              </execution>
+              <execution>
+                <phase>generate-resources</phase>
+                <id>truststoreclean</id>
+                <goals>
+                  <goal>clean</goal>
+                </goals>
+                <configuration>
+                  <keystore>${it.truststore}</keystore>
                 </configuration>
               </execution>
               <execution> 
@@ -1158,9 +1222,9 @@
                   <goal>generateKeyPair</goal>
                 </goals>
                 <configuration>
-                  <keystore>${project.build.directory}/fnici.keystore</keystore>
+                  <keystore>${it.keystore}</keystore>
                   <dname>cn=${it.host}, ou=None, L=Test, ST=Test, o=Test, c=TE</dname>
-                  <storepass>storepass</storepass>
+                  <storepass>${it.keystorepass}</storepass>
                   <alias>fnici</alias>
                   <keyalg>RSA</keyalg>
                   <keysize>2048</keysize>
@@ -1173,56 +1237,60 @@
                   <goal>exportCertificate</goal>
                 </goals>
                 <configuration>
-                  <keystore>${project.build.directory}/fnici.keystore</keystore>
+                  <keystore>${it.keystore}</keystore>
                   <alias>fnici</alias>
                   <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>storepass</storepass>
+                  <storepass>${it.keystorepass}</storepass>
                 </configuration>
               </execution>
               <execution>
                 <phase>generate-resources</phase>
-                <id>importkey</id>
+                <id>importkey-keystore</id>
                 <goals>
                   <goal>importCertificate</goal>
                 </goals>
                 <configuration>
-                  <keystore>${project.build.directory}/fnici.keystore</keystore>
+                  <keystore>${it.keystore}</keystore>
                   <alias>root</alias>
                   <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>storepass</storepass>
+                  <storepass>${it.keystorepass}</storepass>
+                  <noprompt>true</noprompt>
+                  <trustcacerts>true</trustcacerts>
+                </configuration>
+              </execution>
+              <execution>
+                <phase>generate-resources</phase>
+                <id>importkey-truststore</id>
+                <goals>
+                  <goal>importCertificate</goal>
+                </goals>
+                <configuration>
+                  <keystore>${it.truststore}</keystore>
+                  <alias>fnici</alias>
+                  <file>${project.build.directory}/fnici.crt</file>
+                  <storepass>${it.truststorepass}</storepass>
+                  <noprompt>true</noprompt>
+                  <trustcacerts>true</trustcacerts>
+                </configuration>
+              </execution>
+              <execution>
+                <phase>generate-resources</phase>
+                <id>importkey-jre-truststore</id>
+                <goals>
+                  <goal>importKeystore</goal>
+                </goals>
+                <configuration>
+                  <srckeystore>${java.home}/lib/security/cacerts</srckeystore>
+                  <srcstorepass>changeit</srcstorepass>
+                  <destkeystore>${it.truststore}</destkeystore>
+                  <deststorepass>${it.truststorepass}</deststorepass>
                   <noprompt>true</noprompt>
                   <trustcacerts>true</trustcacerts>
                 </configuration>
               </execution>
             </executions>
           </plugin>
-          
-          <plugin>
-            <groupId>com.saucelabs.maven.plugin</groupId>
-            <artifactId>sauce-connect-plugin</artifactId>
-            <version>2.1.1</version>
-            <configuration>
-              <sauceUsername>${it.sauce.username}</sauceUsername>
-              <sauceAccessKey>${it.sauce.accessKey}</sauceAccessKey>
-            </configuration>
-            <executions>
-              <execution>
-                <id>start-sauceconnct</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>start-sauceconnect</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>stop-sauceconnect</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>stop-sauceconnect</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          
+
           <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
@@ -1243,6 +1311,12 @@
                     <artifactId>h2</artifactId>
                   </dependency>
                 </dependencies>
+                <systemProperties>
+                  <javax.net.ssl.keyStore>${it.keystore}</javax.net.ssl.keyStore>
+                  <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
+                  <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
+                  <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
+                </systemProperties>                
               </container>
               <configuration>
                 <properties>
@@ -1259,6 +1333,7 @@
                   </cargo.datasource.datasource.fnici>
                 </properties>    
               </configuration>
+
               <deployables>
                 <deployable>
                   <properties>
@@ -1266,6 +1341,7 @@
                   </properties>
                 </deployable>
               </deployables>
+
             </configuration>
             <executions>
               <execution>
@@ -1307,7 +1383,7 @@
                       <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
                       <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
-                      <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${project.build.directory}/fnici.keystore",keystore-password="storepass",alias="fnici")</command>
+                      <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="fnici")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
                       <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
                     </commands>
