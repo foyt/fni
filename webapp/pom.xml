@@ -850,7 +850,7 @@
                 <properties>
                   <cargo.servlet.port>${it.port.http}</cargo.servlet.port>
                   <cargo.jboss.configuration>standalone</cargo.jboss.configuration>
-                  <cargo.jvmargs>-Xms64m -Xmx1152m -XX:MaxPermSize=512m -XX:-UseSplitVerifier</cargo.jvmargs>
+                  <cargo.jvmargs>-Xms64m -Xmx1152m -XX:MaxPermSize=512m</cargo.jvmargs>
                   <cargo.datasource.datasource.fnici>
                     cargo.datasource.driver=${it.jdbc.driver}|
                     cargo.datasource.url=${it.jdbc.url}|
@@ -1322,7 +1322,7 @@
                 <properties>
                   <cargo.servlet.port>${it.port.http}</cargo.servlet.port>
                   <cargo.jboss.configuration>standalone</cargo.jboss.configuration>
-                  <cargo.jvmargs>-Xms64m -Xmx1152m -XX:MaxPermSize=512m -XX:-UseSplitVerifier</cargo.jvmargs>
+                  <cargo.jvmargs>-Xms64m -Xmx1152m -XX:MaxPermSize=512m</cargo.jvmargs>
                   <cargo.datasource.datasource.fnici>
                     cargo.datasource.driver=${it.jdbc.driver}|
                     cargo.datasource.url=${it.jdbc.url}|
