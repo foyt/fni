@@ -13,6 +13,7 @@ import javax.persistence.criteria.Root;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent_;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient;
@@ -21,7 +22,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionEvent create(String urlName, String name, String location, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime, OAuthClient oAuthClient) {
+	public IllusionEvent create(String urlName, String name, String location, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime, OAuthClient oAuthClient, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date registrationStartDate, Date registrationEndDate) {
 		IllusionEvent illusionEvent = new IllusionEvent();
 		
 		illusionEvent.setName(name);
@@ -39,6 +40,12 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 		illusionEvent.setEndDate(endDate);
 		illusionEvent.setEndTime(endTime);
 		illusionEvent.setOAuthClient(oAuthClient);
+		illusionEvent.setAgeLimit(ageLimit);
+		illusionEvent.setBeginnerFriendly(beginnerFriendly);
+		illusionEvent.setImageUrl(imageUrl);
+		illusionEvent.setType(type);
+		illusionEvent.setRegistrationStartDate(registrationStartDate);
+		illusionEvent.setRegistrationEndDate(registrationEndDate);
 		
 		return persist(illusionEvent);
 	}
@@ -238,5 +245,31 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     illusionEvent.setDomain(domain);
     return persist(illusionEvent);
   }
+
+  public IllusionEvent updateBeginnerFriendly(IllusionEvent illusionEvent, Boolean beginnerFriendly) {
+    illusionEvent.setBeginnerFriendly(beginnerFriendly);
+    return persist(illusionEvent);
+  }
+
+  public IllusionEvent updateImageUrl(IllusionEvent illusionEvent, String imageUrl) {
+    illusionEvent.setImageUrl(imageUrl);
+    return persist(illusionEvent);
+  }
+
+  public IllusionEvent updateType(IllusionEvent illusionEvent, IllusionEventType type) {
+    illusionEvent.setType(type);
+    return persist(illusionEvent);
+  }
+
+  public IllusionEvent updateRegistrationStartDate(IllusionEvent illusionEvent, Date registrationStartDate) {
+    illusionEvent.setRegistrationStartDate(registrationStartDate);
+    return persist(illusionEvent);
+  }
+
+  public IllusionEvent updateRegistrationEndDate(IllusionEvent illusionEvent, Date registrationEndDate) {
+    illusionEvent.setRegistrationEndDate(registrationEndDate);
+    return persist(illusionEvent);
+  }
+  
 
 }

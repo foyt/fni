@@ -1,8 +1,11 @@
 package fi.foyt.fni.illusion;
 
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
@@ -10,16 +13,22 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import fi.foyt.fni.materials.MaterialController;
+import fi.foyt.fni.persistence.dao.illusion.GenreDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventGenreDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantImageDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventTypeDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionEventFolderDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionFolderDAO;
+import fi.foyt.fni.persistence.model.illusion.Genre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventGenre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantImage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
@@ -36,6 +45,9 @@ public class IllusionEventController {
   private IllusionEventDAO illusionEventDAO;
 
   @Inject
+  private IllusionEventGenreDAO illusionEventGenreDAO;
+
+  @Inject
   private IllusionEventParticipantDAO illusionEventParticipantDAO;
 
   @Inject
@@ -46,6 +58,12 @@ public class IllusionEventController {
 
   @Inject
   private IllusionEventFolderDAO illusionEventFolderDAO;
+
+  @Inject
+  private IllusionEventTypeDAO illusionEventTypeDAO;
+  
+  @Inject
+  private GenreDAO genreDAO;
   
   @Inject
   private MaterialController materialController;
@@ -58,8 +76,8 @@ public class IllusionEventController {
   
   /* IllusionEvent */
 
-  public IllusionEvent createIllusionEvent(String urlName, String location, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime) {
-    return illusionEventDAO.create(urlName, name, location, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency, startDate, startTime, endDate, endTime, null);
+  public IllusionEvent createIllusionEvent(String urlName, String location, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate) {
+    return illusionEventDAO.create(urlName, name, location, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency, startDate, startTime, endDate, endTime, null, ageLimit, beginnerFriendly, imageUrl, type, signUpStartDate, signUpEndDate);
   }
 
   public IllusionEvent findIllusionEventById(Long id) {
@@ -130,6 +148,36 @@ public class IllusionEventController {
 
   public IllusionEvent updateEventDomain(IllusionEvent illusionEvent, String domain) {
     return illusionEventDAO.updateDomain(illusionEvent, domain);
+  }
+
+  public IllusionEvent updateEventGenres(IllusionEvent event, List<Genre> genres) {
+    List<IllusionEventGenre> existingGenres = illusionEventGenreDAO.listByEvent(event);
+    List<Genre> addGenres = new ArrayList<>(genres);
+    
+    Map<Long, IllusionEventGenre> existingGenreMap = new HashMap<>();
+    for (IllusionEventGenre existingGender : existingGenres) {
+      existingGenreMap.put(existingGender.getGenre().getId(), existingGender);
+    }
+    
+    for (int i = addGenres.size() - 1; i >= 0; i--) {
+      Genre addGenre = addGenres.get(i);
+      
+      if (existingGenreMap.containsKey(addGenre.getId())) {
+        addGenres.remove(i);
+      } 
+      
+      existingGenreMap.remove(addGenre.getId());
+    }
+    
+    for (IllusionEventGenre removeGenre : existingGenreMap.values()) {
+      illusionEventGenreDAO.delete(removeGenre);
+    }
+    
+    for (Genre genre : addGenres) {
+      illusionEventGenreDAO.create(event, genre);
+    }
+    
+    return event;
   }
   
   /* IllusionEventParticipant */
@@ -219,6 +267,25 @@ public class IllusionEventController {
   public IllusionEvent findIllusionEventByOAuthClient(OAuthClient oAuthClient) {
     return illusionEventDAO.findByOAuthClient(oAuthClient);
   }
+  
+  /* Types */
+  
+  public IllusionEventType findTypeById(Long id) {
+    return illusionEventTypeDAO.findById(id);
+  }
 
+  public List<IllusionEventType> listTypes() {
+    return illusionEventTypeDAO.listAll();
+  }
+  
+  /* Genres */
+
+  public Genre findGenreById(Long genreId) {
+    return genreDAO.findById(genreId);
+  }
+  
+  public List<Genre> listGenres() {
+    return genreDAO.listAll();
+  }
 
 }

@@ -162,6 +162,54 @@ public class IllusionEvent {
     this.oAuthClient = oAuthClient;
   }
   
+  public Integer getAgeLimit() {
+    return ageLimit;
+  }
+
+  public void setAgeLimit(Integer ageLimit) {
+    this.ageLimit = ageLimit;
+  }
+
+  public Boolean getBeginnerFriendly() {
+    return beginnerFriendly;
+  }
+
+  public void setBeginnerFriendly(Boolean beginnerFriendly) {
+    this.beginnerFriendly = beginnerFriendly;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
+  public IllusionEventType getType() {
+    return type;
+  }
+
+  public void setType(IllusionEventType type) {
+    this.type = type;
+  }
+  
+  public Date getRegistrationStartDate() {
+    return registrationStartDate;
+  }
+  
+  public void setRegistrationStartDate(Date registrationStartDate) {
+    this.registrationStartDate = registrationStartDate;
+  }
+
+  public Date getRegistrationEndDate() {
+    return registrationEndDate;
+  }
+  
+  public void setRegistrationEndDate(Date registrationEndDate) {
+    this.registrationEndDate = registrationEndDate;
+  }
+
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
@@ -201,6 +249,21 @@ public class IllusionEvent {
   
   private String location;
   
+  private Integer ageLimit;
+  
+  private Boolean beginnerFriendly;
+  
+  private String imageUrl;
+
+  @ManyToOne
+  private IllusionEventType type;
+
+  @Temporal (TemporalType.DATE)
+  private Date registrationStartDate;
+  
+  @Temporal (TemporalType.DATE)
+  private Date registrationEndDate;
+
   @Column (unique = true)
   private String domain;
 
