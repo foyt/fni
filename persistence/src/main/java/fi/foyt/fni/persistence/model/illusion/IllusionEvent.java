@@ -194,20 +194,20 @@ public class IllusionEvent {
     this.type = type;
   }
   
-  public Date getRegistrationStartDate() {
-    return registrationStartDate;
+  public Date getSignUpStartDate() {
+    return signUpStartDate;
   }
   
-  public void setRegistrationStartDate(Date registrationStartDate) {
-    this.registrationStartDate = registrationStartDate;
-  }
-
-  public Date getRegistrationEndDate() {
-    return registrationEndDate;
+  public void setSignUpStartDate(Date signUpStartDate) {
+    this.signUpStartDate = signUpStartDate;
   }
   
-  public void setRegistrationEndDate(Date registrationEndDate) {
-    this.registrationEndDate = registrationEndDate;
+  public Date getSignUpEndDate() {
+    return signUpEndDate;
+  }
+  
+  public void setSignUpEndDate(Date signUpEndDate) {
+    this.signUpEndDate = signUpEndDate;
   }
 
   @Id
@@ -259,10 +259,10 @@ public class IllusionEvent {
   private IllusionEventType type;
 
   @Temporal (TemporalType.DATE)
-  private Date registrationStartDate;
+  private Date signUpStartDate;
   
   @Temporal (TemporalType.DATE)
-  private Date registrationEndDate;
+  private Date signUpEndDate;
 
   @Column (unique = true)
   private String domain;

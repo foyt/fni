@@ -150,6 +150,27 @@ public class IllusionEventController {
     return illusionEventDAO.updateDomain(illusionEvent, domain);
   }
 
+  public IllusionEvent updateIllusionEventType(IllusionEvent illusionEvent, IllusionEventType type) {
+    return illusionEventDAO.updateType(illusionEvent, type);
+  }
+
+  public IllusionEvent updateIllusionEventSignUpTimes(IllusionEvent illusionEvent, Date signUpStartDate, Date signUpEndDate) {
+    return illusionEventDAO.updateSignUpEndDate(illusionEventDAO.updateSignUpStartDate(illusionEvent, signUpStartDate), signUpEndDate);
+  }
+  
+  public IllusionEvent updateIllusionEventAgeLimit(IllusionEvent illusionEvent, Integer ageLimit) {
+    return illusionEventDAO.updateAgeLimit(illusionEvent, ageLimit);
+  }
+  
+  public IllusionEvent updateIllusionEventBeginnerFriendly(IllusionEvent illusionEvent, Boolean beginnerFriendly) {
+    return illusionEventDAO.updateBeginnerFriendly(illusionEvent, beginnerFriendly);
+  }
+  
+  public IllusionEvent updateIllusionEventImageUrl(IllusionEvent illusionEvent, String imageUrl) {
+    return illusionEventDAO.updateImageUrl(illusionEvent, imageUrl);
+  }
+  
+  
   public IllusionEvent updateEventGenres(IllusionEvent event, List<Genre> genres) {
     List<IllusionEventGenre> existingGenres = illusionEventGenreDAO.listByEvent(event);
     List<Genre> addGenres = new ArrayList<>(genres);
@@ -286,6 +307,10 @@ public class IllusionEventController {
   
   public List<Genre> listGenres() {
     return genreDAO.listAll();
+  }
+
+  public List<IllusionEventGenre> listIllusionEventGenres(IllusionEvent illusionEvent) {
+    return illusionEventGenreDAO.listByEvent(illusionEvent);
   }
 
 }

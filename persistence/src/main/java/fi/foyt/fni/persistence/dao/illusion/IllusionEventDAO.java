@@ -22,7 +22,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionEvent create(String urlName, String name, String location, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime, OAuthClient oAuthClient, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date registrationStartDate, Date registrationEndDate) {
+	public IllusionEvent create(String urlName, String name, String location, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime, OAuthClient oAuthClient, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate) {
 		IllusionEvent illusionEvent = new IllusionEvent();
 		
 		illusionEvent.setName(name);
@@ -44,8 +44,8 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 		illusionEvent.setBeginnerFriendly(beginnerFriendly);
 		illusionEvent.setImageUrl(imageUrl);
 		illusionEvent.setType(type);
-		illusionEvent.setRegistrationStartDate(registrationStartDate);
-		illusionEvent.setRegistrationEndDate(registrationEndDate);
+		illusionEvent.setSignUpStartDate(signUpStartDate);
+		illusionEvent.setSignUpEndDate(signUpEndDate);
 		
 		return persist(illusionEvent);
 	}
@@ -261,13 +261,18 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     return persist(illusionEvent);
   }
 
-  public IllusionEvent updateRegistrationStartDate(IllusionEvent illusionEvent, Date registrationStartDate) {
-    illusionEvent.setRegistrationStartDate(registrationStartDate);
+  public IllusionEvent updateAgeLimit(IllusionEvent illusionEvent, Integer ageLimit) {
+    illusionEvent.setAgeLimit(ageLimit);
     return persist(illusionEvent);
   }
 
-  public IllusionEvent updateRegistrationEndDate(IllusionEvent illusionEvent, Date registrationEndDate) {
-    illusionEvent.setRegistrationEndDate(registrationEndDate);
+  public IllusionEvent updateSignUpStartDate(IllusionEvent illusionEvent, Date signUpStartDate) {
+    illusionEvent.setSignUpStartDate(signUpStartDate);
+    return persist(illusionEvent);
+  }
+
+  public IllusionEvent updateSignUpEndDate(IllusionEvent illusionEvent, Date signUpEndDate) {
+    illusionEvent.setSignUpEndDate(signUpEndDate);
     return persist(illusionEvent);
   }
   

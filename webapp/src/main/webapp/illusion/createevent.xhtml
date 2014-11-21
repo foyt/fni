@@ -5,7 +5,7 @@
   xmlns:h="http://java.sun.com/jsf/html"  
   xmlns:jsf="http://xmlns.jcp.org/jsf"
   template="/WEB-INF/templates/gridbase.xhtml">
-
+  
   <ui:define name="page-title">#{locales['illusion.createEvent.pageTitle']}</ui:define>
  
   <ui:define name="view-scripts">
@@ -61,37 +61,15 @@
           <h3>#{locales['illusion.createEvent.createEventTitle']}</h3>
           <h:form>
             <h:panelGroup layout="block" styleClass="illusion-create-event-field">
-              <h:outputLabel value="#{locales['illusion.createEvent.nameLabel']}" />
-              <h:inputText styleClass="illusion-create-event-name" autocomplete="false" id="name" value="#{illusionCreateEventBackingBean.name}" required="true" requiredMessage="#{locales['illusion.createEvent.nameRequired']}"/>
-            </h:panelGroup>
-            
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
-              <h:outputLabel value="#{locales['illusion.createEvent.joining']}" />
-              <h:selectOneMenu value="#{illusionCreateEventBackingBean.joinMode}">
-                <f:selectItem itemValue="OPEN" itemLabel="#{locales['illusion.createEvent.joiningPublic']}"/>
-                <f:selectItem itemValue="APPROVE" itemLabel="#{locales['illusion.createEvent.joiningApprove']}"/>
-                <f:selectItem itemValue="INVITE_ONLY" itemLabel="#{locales['illusion.createEvent.joiningInviteOnly']}"/>
-              </h:selectOneMenu>
-            </h:panelGroup>
-            
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field illusion-create-event-sign-up-fee-field" style="display: none">
-              <h:outputLabel value="#{locales['illusion.createEvent.signUpFeeLabel']}" />
-              <input type="number" min="0" step="0.01" jsf:value="#{illusionCreateEventBackingBean.signUpFee}"/>
-              <h:selectOneMenu value="#{illusionCreateEventBackingBean.signUpFeeCurrency}">
-                <f:selectItem itemValue="EUR" itemLabel="EUR"/>
-              </h:selectOneMenu>
-            </h:panelGroup>
-             
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
-              <h:outputLabel value="#{locales['illusion.createEvent.descriptionLabel']}" />
-              <h:inputTextarea styleClass="illusion-create-event-description" id="description" value="#{illusionCreateEventBackingBean.description}"/>
-            </h:panelGroup>   
-            
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
-              <h:outputLabel value="#{locales['illusion.createEvent.locationLabel']}" />
-              <h:inputText styleClass="illusion-create-event-location" value="#{illusionCreateEventBackingBean.location}"/>
+              <label>#{locales['illusion.createEvent.nameLabel']}</label>
+              <input type="text" class="illusion-create-event-name" autocomplete="off" jsf:value="#{illusionCreateEventBackingBean.name}" required="required"/>
             </h:panelGroup> 
-               
+                        
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+              <label>#{locales['illusion.createEvent.locationLabel']}</label>
+              <input type="text" class="illusion-create-event-location" jsf:value="#{illusionCreateEventBackingBean.location}"/>
+            </h:panelGroup> 
+
             <h:panelGroup layout="block" styleClass="illusion-create-event-field">
               <label>#{locales['illusion.createEvent.startTime']}</label>
               <input type="date" required="required" class="datepicker" placeholder="#{locales['illusion.createEvent.startDatePlaceholder']}" data-alt-field=".actual-start-date"/>
@@ -108,6 +86,72 @@
               <input type="hidden" class="actual-end-date" jsf:value="#{illusionCreateEventBackingBean.endDate}"/>
               <input type="hidden" class="actual-end-time" jsf:value="#{illusionCreateEventBackingBean.endTime}"/>
               <div class="timezone"></div>
+            </h:panelGroup> 
+            
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+              <label>#{locales['illusion.createEvent.joining']}</label>
+              <h:selectOneMenu value="#{illusionCreateEventBackingBean.joinMode}">
+                <f:selectItem itemValue="OPEN" itemLabel="#{locales['illusion.createEvent.joiningPublic']}"/>
+                <f:selectItem itemValue="APPROVE" itemLabel="#{locales['illusion.createEvent.joiningApprove']}"/>
+                <f:selectItem itemValue="INVITE_ONLY" itemLabel="#{locales['illusion.createEvent.joiningInviteOnly']}"/>
+              </h:selectOneMenu>
+            </h:panelGroup> 
+            
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+              <label>#{locales['illusion.createEvent.typeLabel']}</label>
+              <h:selectOneMenu value="#{illusionCreateEventBackingBean.typeId}">
+                <f:selectItems value="#{illusionCreateEventBackingBean.typeSelectItems}"/>
+              </h:selectOneMenu>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field illusion-create-event-sign-up-fee-field" style="display: none">
+              <h:outputLabel value="#{locales['illusion.createEvent.signUpFeeLabel']}" />
+              <input type="number" min="0" step="0.01" jsf:value="#{illusionCreateEventBackingBean.signUpFee}"/>
+              <h:selectOneMenu value="#{illusionCreateEventBackingBean.signUpFeeCurrency}">
+                <f:selectItem itemValue="EUR" itemLabel="EUR"/>
+              </h:selectOneMenu>
+            </h:panelGroup>
+             
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+              <h:outputLabel value="#{locales['illusion.createEvent.descriptionLabel']}" />
+              <h:inputTextarea styleClass="illusion-create-event-description" id="description" value="#{illusionCreateEventBackingBean.description}"/>
+            </h:panelGroup>  
+            
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+              <h:outputLabel value="#{locales['illusion.createEvent.ageLimit']}" />
+              <input type="number" class="illusion-create-event-age-limit" jsf:value="#{illusionCreateEventBackingBean.ageLimit}"/>
+            </h:panelGroup>  
+            
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+              <h:outputLabel value="#{locales['illusion.createEvent.imageUrlLabel']}" />
+              <input type="text" class="illusion-create-event-image-url" jsf:value="#{illusionCreateEventBackingBean.imageUrl}"/>
+            </h:panelGroup> 
+            
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+              <label>#{locales['illusion.createEvent.signUpTimeLabel']}</label>
+              <input type="date" class="datepicker sign-up-start-date" placeholder="#{locales['illusion.createEvent.signUpTimeStartPlaceholder']}" data-alt-field=".actual-sign-up-start-date"/>
+              <input type="date" class="datepicker sign-up-end-date" placeholder="#{locales['illusion.createEvent.signUpTimeEndPlaceholder']}" data-alt-field=".actual-sign-up-end-date"/>
+              <input type="hidden" class="actual-sign-up-start-date" jsf:value="#{illusionCreateEventBackingBean.signUpStartDate}"/>
+              <input type="hidden" class="actual-sign-up-end-date" jsf:value="#{illusionCreateEventBackingBean.signUpEndDate}"/>
+            </h:panelGroup>
+            
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+              <h:outputLabel value="#{locales['illusion.createEvent.beginnerFriendlyLabel']}" />
+              <input type="checkbox" class="illusion-create-event-beginner-friendly" jsf:value="#{illusionCreateEventBackingBean.beginnerFriendly}"/>
+            </h:panelGroup> 
+            
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+              <label>#{locales['illusion.createEvent.genreLabel']}</label>
+              <div class="illusion-create-event-genres">
+                <ui:repeat var="genre" value="#{illusionCreateEventBackingBean.genres}">
+                  <span class="illusion-create-event-genre">
+                    <input type="checkbox" name="genre" value="#{genre.id}"/>
+                    <label>#{genre.name}</label>
+                  </span>
+                </ui:repeat>
+                
+                <input type="hidden" jsf:value="#{illusionCreateEventBackingBean.genreIds}" jsf:converter="fi.foyt.fni.jsf.LongListConverter"/>
+              </div>
             </h:panelGroup> 
             
             <h:panelGroup layout="block" styleClass="illusion-create-event-field">

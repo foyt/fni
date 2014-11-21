@@ -41,6 +41,20 @@
       }
     });
     
+    $('.illusion-create-event-genres input[type="checkbox"]').change(function () {
+      var input = $(this).closest('.illusion-create-event-genres').find('input[type="hidden"]');
+      var inputVal = input.val();
+      var genres = inputVal ? inputVal.split('&') : [];
+      var id = $(this).val();
+      
+      if ($(this).prop('checked')) {
+        genres.push($(this).val());
+      } else {
+        genres.splice($.inArray(id, genres), 1);
+      }
+      
+      input.val(genres.join('&'));
+    });
   });
 
 }).call(this);

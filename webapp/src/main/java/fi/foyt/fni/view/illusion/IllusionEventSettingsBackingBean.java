@@ -1,10 +1,13 @@
 package fi.foyt.fni.view.illusion;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -17,10 +20,13 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 import fi.foyt.fni.auth.OAuthController;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
+import fi.foyt.fni.persistence.model.illusion.Genre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventGenre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
@@ -47,10 +53,10 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
 
   @Inject
   private OAuthController oAuthController;
-  
+
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
-  
+
   @Inject
   private SystemSettingsController systemSettingsController;
 
@@ -72,7 +78,27 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     endDate = formatDate(illusionEvent.getEndDate());
     endTime = formatTime(illusionEvent.getEndTime());
     domain = illusionEvent.getDomain();
+    ageLimit = illusionEvent.getAgeLimit();
+    imageUrl = illusionEvent.getImageUrl();
+    beginnerFriendly = illusionEvent.getBeginnerFriendly();
+    signUpStartDate = formatTime(illusionEvent.getSignUpStartDate());
+    signUpEndDate = formatTime(illusionEvent.getSignUpEndDate());
+    typeId = illusionEvent.getType() != null ? illusionEvent.getType().getId() : null;
+    genreIds = new ArrayList<Long>();
+    
+    List<IllusionEventGenre> eventGenres = illusionEventController.listIllusionEventGenres(illusionEvent);
+    for (IllusionEventGenre eventGenre : eventGenres) {
+      genreIds.add(eventGenre.getGenre().getId());
+    }
+    
+    List<IllusionEventType> eventTypes = illusionEventController.listTypes();
+    typeSelectItems = new ArrayList<>(eventTypes.size());
+    for (IllusionEventType eventType : eventTypes) {
+      typeSelectItems.add(new SelectItem(eventType.getId(), eventType.getName()));
+    }
 
+    genres = illusionEventController.listGenres();
+    
     return null;
   }
 
@@ -91,11 +117,11 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   public void setDescription(String description) {
     this.description = description;
   }
-  
+
   public String getLocation() {
     return location;
   }
-  
+
   public void setLocation(String location) {
     this.location = location;
   }
@@ -148,13 +174,77 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   public void setEndTime(String endTime) {
     this.endTime = endTime;
   }
-  
+
   public String getDomain() {
     return domain;
   }
-  
+
   public void setDomain(String domain) {
     this.domain = domain;
+  }
+
+  public Integer getAgeLimit() {
+    return ageLimit;
+  }
+
+  public void setAgeLimit(Integer ageLimit) {
+    this.ageLimit = ageLimit;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
+  public Boolean getBeginnerFriendly() {
+    return beginnerFriendly;
+  }
+
+  public void setBeginnerFriendly(Boolean beginnerFriendly) {
+    this.beginnerFriendly = beginnerFriendly;
+  }
+  
+  public String getSignUpStartDate() {
+    return signUpStartDate;
+  }
+  
+  public void setSignUpStartDate(String signUpStartDate) {
+    this.signUpStartDate = signUpStartDate;
+  }
+  
+  public String getSignUpEndDate() {
+    return signUpEndDate;
+  }
+  
+  public void setSignUpEndDate(String signUpEndDate) {
+    this.signUpEndDate = signUpEndDate;
+  }
+
+  public Long getTypeId() {
+    return typeId;
+  }
+
+  public void setTypeId(Long typeId) {
+    this.typeId = typeId;
+  }
+
+  public List<Long> getGenreIds() {
+    return genreIds;
+  }
+
+  public void setGenreIds(List<Long> genreIds) {
+    this.genreIds = genreIds;
+  }
+
+  public List<Genre> getGenres() {
+    return genres;
+  }
+
+  public List<SelectItem> getTypeSelectItems() {
+    return typeSelectItems;
   }
 
   private String createUrlName(String name) {
@@ -194,29 +284,44 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     illusionEventController.updateIllusionEventEndDate(illusionEvent, parseDate(getEndDate()));
     illusionEventController.updateIllusionEventEndTime(illusionEvent, parseDate(getEndTime()));
     illusionEventController.updateIllusionEventLocation(illusionEvent, getLocation());
+    illusionEventController.updateIllusionEventType(illusionEvent, illusionEventController.findTypeById(getTypeId()));
+    illusionEventController.updateIllusionEventSignUpTimes(illusionEvent, parseDate(getSignUpStartDate()), parseDate(getSignUpEndDate()));
+    illusionEventController.updateIllusionEventAgeLimit(illusionEvent, getAgeLimit());
+    illusionEventController.updateIllusionEventBeginnerFriendly(illusionEvent, getBeginnerFriendly());
+    illusionEventController.updateIllusionEventImageUrl(illusionEvent, getImageUrl());
     
     String domain = getDomain();
     if (StringUtils.isNotBlank(domain)) {
-      // RegEx from http://stackoverflow.com/questions/10306690/domain-name-validation-with-regex
-      if (!domain.matches("^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\\.[a-zA-Z]{2,3})$")) {
+      // RegEx from
+      // http://stackoverflow.com/questions/10306690/domain-name-validation-with-regex
+      if (!domain
+          .matches("^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\\.[a-zA-Z]{2,3})$")) {
         FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.customDomainInvalid"));
         return null;
       } else {
         if (illusionEvent.getOAuthClient() == null) {
           String clientId = UUID.randomUUID().toString();
           String clientSecret = UUID.randomUUID().toString();
-          
-          String redirectUrl = new StringBuilder(systemSettingsController.getHostUrl(domain, false, true))
-            .append("/login/?return=1&loginMethod=ILLUSION_INTERNAL")
-            .toString();
-          
+
+          String redirectUrl = new StringBuilder(systemSettingsController.getHostUrl(domain, false, true)).append(
+              "/login/?return=1&loginMethod=ILLUSION_INTERNAL").toString();
+
           OAuthClient oAuthClient = oAuthController.createClient(illusionEvent.getName(), clientId, clientSecret, redirectUrl);
           illusionEventController.updateEventOAuthClient(illusionEvent, oAuthClient);
         }
-        
+
         illusionEventController.updateEventDomain(illusionEvent, domain);
       }
     }
+    
+    List<Genre> genres = new ArrayList<>();
+    
+    for (Long genreId : genreIds) {
+      Genre genre = illusionEventController.findGenreById(genreId);
+      genres.add(genre);
+    }
+    
+    illusionEventController.updateEventGenres(illusionEvent, genres);
 
     return "/illusion/event-settings.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
   }
@@ -225,7 +330,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     if (time == null) {
       return null;
     }
-    
+
     DateTimeFormatter formatter = ISODateTimeFormat.date();
     return formatter.print(time.getTime());
   }
@@ -234,7 +339,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     if (time == null) {
       return null;
     }
-    
+
     DateTimeFormatter formatter = ISODateTimeFormat.dateTimeNoMillis();
     return formatter.print(time.getTime());
   }
@@ -247,7 +352,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
     return parser.parseDateTime(iso).toDate();
   }
-  
+
   private String name;
   private String description;
   private String location;
@@ -257,4 +362,13 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   private String endDate;
   private String endTime;
   private String domain;
+  private Integer ageLimit;
+  private String imageUrl;
+  private Boolean beginnerFriendly;
+  private String signUpStartDate;
+  private String signUpEndDate;
+  private List<Genre> genres;
+  private Long typeId;
+  private List<Long> genreIds;
+  private List<SelectItem> typeSelectItems;
 }

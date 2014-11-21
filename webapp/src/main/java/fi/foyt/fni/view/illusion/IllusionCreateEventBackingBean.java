@@ -1,11 +1,15 @@
 package fi.foyt.fni.view.illusion;
 
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -19,9 +23,11 @@ import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.materials.IllusionEventDocumentController;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.common.Language;
+import fi.foyt.fni.persistence.model.illusion.Genre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
@@ -60,7 +66,15 @@ public class IllusionCreateEventBackingBean {
   public void init() {
     signUpFee = null;
     signUpFeeCurrency = systemSettingsController.getDefaultCurrency().getCurrencyCode();
-  }
+
+    List<IllusionEventType> eventTypes = illusionEventController.listTypes();
+    typeSelectItems = new ArrayList<>(eventTypes.size());
+    for (IllusionEventType eventType : eventTypes) {
+      typeSelectItems.add(new SelectItem(eventType.getId(), eventType.getName()));
+    }
+
+    genres = illusionEventController.listGenres();
+}
 
   public String getName() {
     return name;
@@ -141,7 +155,71 @@ public class IllusionCreateEventBackingBean {
   public void setEndTime(String endTime) {
     this.endTime = endTime;
   }
+  
+  public Integer getAgeLimit() {
+    return ageLimit;
+  }
 
+  public void setAgeLimit(Integer ageLimit) {
+    this.ageLimit = ageLimit;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
+  public Boolean getBeginnerFriendly() {
+    return beginnerFriendly;
+  }
+
+  public void setBeginnerFriendly(Boolean beginnerFriendly) {
+    this.beginnerFriendly = beginnerFriendly;
+  }
+
+  public String getSignUpStartDate() {
+    return signUpStartDate;
+  }
+  
+  public void setSignUpStartDate(String signUpStartDate) {
+    this.signUpStartDate = signUpStartDate;
+  }
+  
+  public String getSignUpEndDate() {
+    return signUpEndDate;
+  }
+  
+  public void setSignUpEndDate(String signUpEndDate) {
+    this.signUpEndDate = signUpEndDate;
+  }
+  
+  public Long getTypeId() {
+    return typeId;
+  }
+  
+  public void setTypeId(Long typeId) {
+    this.typeId = typeId;
+  }
+
+  public List<Genre> getGenres() {
+    return genres;
+  }
+  
+  public List<SelectItem> getTypeSelectItems() {
+    return typeSelectItems;
+  }
+  
+  public List<Long> getGenreIds() {
+    return genreIds;
+  }
+  
+  public void setGenreIds(List<Long> genreIds) {
+    this.genreIds = genreIds;
+  }
+  
   private String createUrlName(String name) {
     int maxLength = 20;
     int padding = 0;
@@ -166,6 +244,11 @@ public class IllusionCreateEventBackingBean {
 
   public String save() throws Exception {
     Date now = new Date();
+    
+    if (StringUtils.isBlank(getName())) {
+      FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.createEvent.nameRequired"));
+      return null;
+    }
 
     String urlName = createUrlName(getName());
     String xmppRoom = urlName + '@' + systemSettingsController.getSetting(SystemSettingKey.CHAT_MUC_HOST);
@@ -184,8 +267,13 @@ public class IllusionCreateEventBackingBean {
 
     IllusionFolder illusionFolder = illusionEventController.findUserIllusionFolder(loggedUser, true);
     IllusionEventFolder illusionEventFolder = illusionEventController.createIllusionEventFolder(loggedUser, illusionFolder, urlName, getName());
+    IllusionEventType type = illusionEventController.findTypeById(getTypeId());
+    Date signUpStartDate = parseDate(getSignUpStartDate());
+    Date signUpEndDate = parseDate(getSignUpEndDate());
+    
     IllusionEvent event = illusionEventController.createIllusionEvent(urlName, getLocation(), getName(), getDescription(), xmppRoom, illusionEventFolder, getJoinMode(), now,
-        signUpFee, signUpFeeCurrency, parseDate(getStartDate()), parseDate(getStartTime()), parseDate(getEndDate()), parseDate(getEndTime()));
+        signUpFee, signUpFeeCurrency, parseDate(getStartDate()), parseDate(getStartTime()), parseDate(getEndDate()), parseDate(getEndTime()),
+        getAgeLimit(), getBeginnerFriendly(), getImageUrl(), type, signUpStartDate, signUpEndDate);
 
     String indexDocumentTitle = FacesUtils.getLocalizedValue("illusion.createEvent.indexDocumentTitle");
     String indexDocumentContent = FacesUtils.getLocalizedValue("illusion.createEvent.indexDocumentContent");
@@ -203,6 +291,15 @@ public class IllusionCreateEventBackingBean {
       illusionEventController.createIllusionEventParticipant(botChatCredentials.getUser(), event, getUserNickname(botChatCredentials.getUser()),
           IllusionEventParticipantRole.BOT);
     }
+    
+    List<Genre> genres = new ArrayList<>();
+    
+    for (Long genreId : genreIds) {
+      Genre genre = illusionEventController.findGenreById(genreId);
+      genres.add(genre);
+    }
+    
+    illusionEventController.updateEventGenres(event, genres);
 
     return "/illusion/event.jsf?faces-redirect=true&urlName=" + event.getUrlName();
   }
@@ -230,4 +327,13 @@ public class IllusionCreateEventBackingBean {
   private String startTime;
   private String endDate;
   private String endTime;
+  private Integer ageLimit;
+  private String imageUrl;
+  private Boolean beginnerFriendly;
+  private String signUpStartDate;
+  private String signUpEndDate;
+  private List<Genre> genres;
+  private Long typeId;
+  private List<Long> genreIds;
+  private List<SelectItem> typeSelectItems;
 }

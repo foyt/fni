@@ -79,11 +79,55 @@
                   <f:selectItem itemValue="INVITE_ONLY" itemLabel="#{locales['illusion.eventSettings.joiningInviteOnly']}"/>
                 </h:selectOneMenu>
               </h:panelGroup>
+            
+	            <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
+	              <label>#{locales['illusion.eventSettings.typeLabel']}</label>
+	              <h:selectOneMenu value="#{illusionEventSettingsBackingBean.typeId}">
+	                <f:selectItems value="#{illusionEventSettingsBackingBean.typeSelectItems}"/>
+	              </h:selectOneMenu>
+	            </h:panelGroup>
                
               <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
                 <h:outputLabel value="#{locales['illusion.eventSettings.descriptionLabel']}" />
                 <h:inputTextarea id="description" value="#{illusionEventSettingsBackingBean.description}"/>
               </h:panelGroup>  
+            
+	            <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
+	              <h:outputLabel value="#{locales['illusion.eventSettings.ageLimit']}" />
+	              <input type="number" class="illusion-event-settings-age-limit" jsf:value="#{illusionEventSettingsBackingBean.ageLimit}"/>
+	            </h:panelGroup> 
+            
+	            <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
+	              <h:outputLabel value="#{locales['illusion.eventSettings.imageUrlLabel']}" />
+	              <input type="text" class="illusion-event-settings-image-url" jsf:value="#{illusionEventSettingsBackingBean.imageUrl}"/>
+	            </h:panelGroup> 
+            
+	            <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
+	              <label>#{locales['illusion.eventSettings.signUpTimeLabel']}</label>
+	              <input type="date" class="datepicker registration-start-date" placeholder="#{locales['illusion.eventSettings.signUpTimeStartPlaceholder']}" data-alt-field=".actual-registration-start-date"/>
+	              <input type="date" class="datepicker registration-end-date" placeholder="#{locales['illusion.eventSettings.signUpTimeEndPlaceholder']}" data-alt-field=".actual-registration-end-date"/>
+	              <input type="hidden" class="actual-registration-start-date" jsf:value="#{illusionEventSettingsBackingBean.signUpStartDate}"/>
+	              <input type="hidden" class="actual-registration-end-date" jsf:value="#{illusionEventSettingsBackingBean.signUpEndDate}"/>
+	            </h:panelGroup>
+	            
+	            <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
+	              <h:outputLabel value="#{locales['illusion.eventSettings.beginnerFriendlyLabel']}" />
+	              <input type="checkbox" class="illusion-event-settings-beginner-friendly" jsf:value="#{illusionEventSettingsBackingBean.beginnerFriendly}"/>
+	            </h:panelGroup> 
+	            
+	            <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
+	              <label>#{locales['illusion.eventSettings.genreLabel']}</label>
+	              <div class="illusion-event-settings-genres">
+	                <ui:repeat var="genre" value="#{illusionEventSettingsBackingBean.genres}">
+	                  <span class="illusion-event-settings-genre">
+	                    <input type="checkbox" name="genre" value="#{genre.id}"/>
+	                    <label>#{genre.name}</label>
+	                  </span>
+	                </ui:repeat>
+	                
+	                <input type="hidden" jsf:value="#{illusionEventSettingsBackingBean.genreIds}" jsf:converter="fi.foyt.fni.jsf.LongListConverter"/>
+	              </div>
+	            </h:panelGroup>
               
               <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
                 <h:outputLabel value="#{locales['illusion.eventSettings.locationLabel']}" />

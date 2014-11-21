@@ -40,6 +40,21 @@ h3 {
   margin-top: 4px;
 }
 
+.illusion-event-settings-field input[type="checkbox"] {
+  margin-top: 5px;
+  vertical-align: top;
+} 
+
+.illusion-event-settings-genres {
+  margin-top: -25px;
+  margin-left: 150px;
+}
+
+.illusion-event-settings-genre {
+  width: 180px;  
+  white-space: nowrap;
+}
+
 .illusion-event-settings-field-hint {
   font-size: 11px;
   color: #aaa;
@@ -58,7 +73,6 @@ h3 {
 
 .illusion-event-settings-field input.datepicker {
   width: 170px;
-  border: 1px solid #aaa;
   margin-left: -5px;
   padding: 1px;
   font-size: 14px;
@@ -67,8 +81,7 @@ h3 {
 }
 
 .illusion-event-settings-field input.timepicker {
-  width: 114px;
-  border: 1px solid #aaa;
+  width: 121px;
   margin-left: 5px;
   padding: 1px;
   font-size: 14px;
@@ -99,6 +112,15 @@ h3 {
 
 .timezone:after {
   content: ')';  
+}
+
+.illusion-event-settings-field input.registration-start-date {
+  width: 146px;
+}
+
+.illusion-event-settings-field input.registration-end-date {
+  margin-left: 5px;
+  width: 145px;
 }
 
 .illusion-event-settings-save {
