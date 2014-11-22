@@ -13,7 +13,11 @@ import fi.foyt.fni.test.SqlBefore;
 import fi.foyt.fni.test.SqlSets;
 
 @DefineSqlSets ({
-  @DefineSqlSet (id = "illusion-event-custom", 
+  @DefineSqlSet (id = "event-organizer", 
+      before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-organizer-setup.sql"},
+      after = { "illusion-event-open-organizer-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
+  ),
+  @DefineSqlSet (id = "event-custom", 
     before = { "illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-custom-setup.sql", "illusion-event-open-organizer-setup.sql" },
     after = { "illusion-event-open-organizer-teardown.sql", "illusion-event-open-custom-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql" }
   )
@@ -28,8 +32,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-organizer-setup.sql"})
-  @SqlAfter ({ "illusion-event-open-organizer-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  @SqlSets ("event-organizer")
   public void testNotFound() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     testNotFound("/illusion/event/openevent/settings/");
@@ -51,16 +54,14 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-participant-setup.sql"})
-  @SqlAfter ({ "illusion-event-open-participant-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  @SqlSets ("event-organizer")
   public void testAccessDeniedParticipant() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     testAccessDenied("/illusion/event/openevent/settings");
   }
   
   @Test
-  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-organizer-setup.sql"})
-  @SqlAfter ({ "illusion-event-open-organizer-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  @SqlSets ("event-organizer")
   public void testLoggedInOrganizer() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
     testTitle("/illusion/event/openevent/settings", "Event Settings");
@@ -72,8 +73,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-organizer-setup.sql"})
-  @SqlAfter ({ "illusion-event-open-organizer-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  @SqlSets ("event-organizer")
   public void testDates() throws Exception {
     acceptCookieDirective(getWebDriver());
     
@@ -111,8 +111,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-organizer-setup.sql"})
-  @SqlAfter ({ "illusion-event-open-organizer-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  @SqlSets ("event-organizer")
   public void testLocation() throws Exception {
     acceptCookieDirective(getWebDriver());
     loginInternal("admin@foyt.fi", "pass");
@@ -124,7 +123,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("illusion-event-custom")
+  @SqlSets ("event-custom")
   public void testCustomDomain() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");
@@ -133,7 +132,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("illusion-event-custom")
+  @SqlSets ("event-custom")
   public void testCustomDomainLoginRedirect() {
     getWebDriver().get(getCustomEventUrl() + "/settings");
     waitForUrlMatches(".*/login.*");
@@ -142,7 +141,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("illusion-event-custom")
+  @SqlSets ("event-custom")
   public void testCustomDomainMenuItems() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");
@@ -168,7 +167,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("illusion-event-custom")
+  @SqlSets ("event-custom")
   public void testCustomDomainNavigationLinks() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");
@@ -181,8 +180,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-organizer-setup.sql"})
-  @SqlAfter ({ "illusion-event-open-organizer-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  @SqlSets ("event-organizer")
   public void testDomain() throws Exception {
     acceptCookieDirective(getWebDriver());
     loginInternal("admin@foyt.fi", "pass");
@@ -194,5 +192,92 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     getWebDriver().get(getCustomEventUrl());
     testTitle("Illusion - Open Event");
   }
+
+  @Test
+  @SqlSets ("event-organizer")
+  public void testEventSignUpDates() throws Exception {
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    String signUpStartDate = "10/05/2030";
+    String signUpEndDate = "10/10/2030";
+    
+    typeSelectorInputValue(".sign-up-start-date", signUpStartDate);
+    typeSelectorInputValue(".sign-up-end-date", signUpEndDate);
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    assertSelectorValue(".sign-up-start-date", signUpStartDate);
+    assertSelectorValue(".sign-up-end-date", signUpEndDate);
+  }
   
+  @Test
+  @SqlSets ("event-organizer")
+  public void testEventImageUrl() throws Exception {
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    String imageUrl = "http://www.url.to/image.png";
+
+    typeSelectorInputValue(".illusion-event-settings-image-url", imageUrl);
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    assertSelectorValue(".illusion-event-settings-image-url", imageUrl);
+  }
+
+  @Test
+  @SqlSets ("event-organizer")
+  public void testEventBeginnerFriendly() throws Exception {
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    
+    clickSelector(".illusion-event-settings-beginner-friendly");
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    assertSelectorPresent(".illusion-event-settings-beginner-friendly:checked");
+  }
+
+  @Test
+  @SqlSets ("event-organizer")
+  public void testEventAgeLimit() throws Exception {
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    String ageLimit = "16";
+
+    typeSelectorInputValue(".illusion-event-settings-age-limit", ageLimit);
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    assertSelectorValue(".illusion-event-settings-age-limit", ageLimit);
+  }
+
+  @Test
+  @SqlSets ("event-organizer")
+  public void testEventType() throws Exception {
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+
+    selectSelectBoxByValue(".illusion-event-settings-type", "2");
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    assertSelectBoxValue(".illusion-event-settings-type", "2");
+  }
+
+  @Test
+  @SqlSets ("event-organizer")
+  public void testEventGenres() throws Exception {
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+
+    clickSelector(".illusion-event-settings-genre input[value='1']");
+    clickSelector(".illusion-event-settings-genre input[value='3']");
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    assertSelectorPresent(".illusion-event-settings-genre input[value='1']:checked");
+    assertSelectorNotPresent(".illusion-event-settings-genre input[value='2']:checked");
+    assertSelectorPresent(".illusion-event-settings-genre input[value='3']:checked");
+    assertSelectorNotPresent(".illusion-event-settings-genre input[value='4']:checked");
+  }
 }

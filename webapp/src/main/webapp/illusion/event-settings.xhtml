@@ -82,7 +82,7 @@
             
 	            <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
 	              <label>#{locales['illusion.eventSettings.typeLabel']}</label>
-	              <h:selectOneMenu value="#{illusionEventSettingsBackingBean.typeId}">
+	              <h:selectOneMenu styleClass="illusion-event-settings-type" value="#{illusionEventSettingsBackingBean.typeId}">
 	                <f:selectItems value="#{illusionEventSettingsBackingBean.typeSelectItems}"/>
 	              </h:selectOneMenu>
 	            </h:panelGroup>
@@ -104,10 +104,10 @@
             
 	            <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
 	              <label>#{locales['illusion.eventSettings.signUpTimeLabel']}</label>
-	              <input type="date" class="datepicker registration-start-date" placeholder="#{locales['illusion.eventSettings.signUpTimeStartPlaceholder']}" data-alt-field=".actual-registration-start-date"/>
-	              <input type="date" class="datepicker registration-end-date" placeholder="#{locales['illusion.eventSettings.signUpTimeEndPlaceholder']}" data-alt-field=".actual-registration-end-date"/>
-	              <input type="hidden" class="actual-registration-start-date" jsf:value="#{illusionEventSettingsBackingBean.signUpStartDate}"/>
-	              <input type="hidden" class="actual-registration-end-date" jsf:value="#{illusionEventSettingsBackingBean.signUpEndDate}"/>
+	              <input type="date" class="datepicker sign-up-start-date" placeholder="#{locales['illusion.eventSettings.signUpTimeStartPlaceholder']}" data-alt-field=".actual-sign-up-start-date"/>
+	              <input type="date" class="datepicker sign-up-end-date" placeholder="#{locales['illusion.eventSettings.signUpTimeEndPlaceholder']}" data-alt-field=".actual-sign-up-end-date"/>
+	              <input type="hidden" class="actual-sign-up-start-date" jsf:value="#{illusionEventSettingsBackingBean.signUpStartDate}"/>
+	              <input type="hidden" class="actual-sign-up-end-date" jsf:value="#{illusionEventSettingsBackingBean.signUpEndDate}"/>
 	            </h:panelGroup>
 	            
 	            <h:panelGroup layout="block" styleClass="illusion-event-settings-field">

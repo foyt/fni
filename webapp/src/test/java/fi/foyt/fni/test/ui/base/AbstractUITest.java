@@ -1,8 +1,8 @@
 package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -18,6 +18,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
@@ -198,6 +199,20 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
 
   protected void assertNotFound() {
     assertEquals("Page Not Found!", getWebDriver().getTitle());
+  }
+  
+  protected void acceptCookieDirective() {
+    acceptCookieDirective(getWebDriver()); 
+  }
+  
+  protected void selectSelectBoxByValue(String selector, String value) {
+    new Select(findElementBySelector(selector)).selectByValue(value);
+  }
+  
+  protected void assertSelectBoxValue(String selector, String value) {
+    WebElement selectedOption = new Select(findElementBySelector(selector)).getFirstSelectedOption();
+    assertNotNull(selectedOption);
+    assertEquals(value, selectedOption.getAttribute("value"));
   }
 
   private String sessionId;

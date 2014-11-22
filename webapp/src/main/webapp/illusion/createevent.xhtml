@@ -99,7 +99,7 @@
             
             <h:panelGroup layout="block" styleClass="illusion-create-event-field">
               <label>#{locales['illusion.createEvent.typeLabel']}</label>
-              <h:selectOneMenu value="#{illusionCreateEventBackingBean.typeId}">
+              <h:selectOneMenu styleClass="illusion-create-event-type" value="#{illusionCreateEventBackingBean.typeId}">
                 <f:selectItems value="#{illusionCreateEventBackingBean.typeSelectItems}"/>
               </h:selectOneMenu>
             </h:panelGroup>

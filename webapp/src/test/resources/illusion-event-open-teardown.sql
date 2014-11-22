@@ -1,3 +1,4 @@
+delete from IllusionEventGenre where event_id = 1;
 delete from IllusionEventParticipant where event_id in (1);
 delete from IllusionEventDocument where id = 20001;
 delete from Document where id = 20001;
