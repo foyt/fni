@@ -18,11 +18,10 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Folder;
@@ -40,9 +39,6 @@ public class ForgeUploadServlet extends AbstractFileServlet {
 
   @Inject
 	private MaterialController materialController;
-
-  @Inject
-	private FolderController folderController;
 
 	@Inject
 	private MaterialPermissionController materialPermissionController;
@@ -62,7 +58,7 @@ public class ForgeUploadServlet extends AbstractFileServlet {
 		if (StringUtils.isNotBlank(parentFolderIdParameter)) {
 		  Long parentFolderId = NumberUtils.createLong(parentFolderIdParameter);
 		  if (parentFolderId != null) {
-		    parentFolder = folderController.findFolderById(parentFolderId);
+		    parentFolder = materialController.findFolderById(parentFolderId);
 	      if (parentFolder != null) {
 	        if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
 	          response.sendError(HttpServletResponse.SC_FORBIDDEN);

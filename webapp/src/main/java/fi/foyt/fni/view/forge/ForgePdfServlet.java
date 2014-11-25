@@ -18,7 +18,7 @@ import org.xml.sax.SAXException;
 
 import com.itextpdf.text.DocumentException;
 
-import fi.foyt.fni.materials.DocumentController;
+import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.users.User;
@@ -32,7 +32,7 @@ public class ForgePdfServlet extends HttpServlet {
 	private static final long serialVersionUID = -1L;
 	
 	@Inject
-	private DocumentController documentController;
+	private MaterialController materialController;
 	
 	@Inject
 	private SessionController sessionController;
@@ -50,7 +50,7 @@ public class ForgePdfServlet extends HttpServlet {
 		}
 		
 		Long documentId = NumberUtils.createLong(documentIdStr);
-		Document document = documentController.findDocumentById(documentId);
+		Document document = materialController.findDocumentById(documentId);
 		if (document == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not Found");
 			return;
@@ -75,7 +75,7 @@ public class ForgePdfServlet extends HttpServlet {
 		
 		TypedData pdfData;
 		try {
-			pdfData = documentController.printDocumentAsPdf(contextPath, baseUrl, sessionController.getLoggedUser(), document);
+			pdfData = materialController.printDocumentAsPdf(contextPath, baseUrl, sessionController.getLoggedUser(), document);
 		} catch (DocumentException | ParserConfigurationException | SAXException e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
 			return;

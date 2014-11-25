@@ -22,7 +22,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import fi.foyt.fni.i18n.ExternalLocales;
-import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.TitleComparator;
@@ -45,9 +44,6 @@ public class FolderBrowserServlet extends HttpServlet {
   private SessionController sessionController;
 
   @Inject
-  private FolderController folderController;
-
-  @Inject
   private MaterialController materialController;
 
   @Override
@@ -62,7 +58,7 @@ public class FolderBrowserServlet extends HttpServlet {
 		
 		Long folderId = NumberUtils.createLong(request.getParameter("parent"));
 		if (folderId != null) {
-			parentFolder = folderController.findFolderById(folderId);
+			parentFolder = materialController.findFolderById(folderId);
 			if (!materialPermissionController.hasAccessPermission(loggedUser, parentFolder)) {
 				response.sendError(HttpServletResponse.SC_FORBIDDEN);
 				return;

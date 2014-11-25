@@ -29,7 +29,7 @@ import fi.foyt.coops.CoOpsInternalErrorException;
 import fi.foyt.coops.CoOpsNotFoundException;
 import fi.foyt.coops.CoOpsUsageException;
 import fi.foyt.coops.model.Patch;
-import fi.foyt.fni.materials.DocumentController;
+import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.persistence.model.materials.CoOpsSessionType;
 import fi.foyt.fni.persistence.model.materials.Document;
@@ -44,7 +44,7 @@ public class CoOpsDocumentWebSocket {
   private CoOpsApiDocument coOpsApiDocument;
 
   @Inject
-  private DocumentController documentController;
+  private MaterialController materialController;
   
   @Inject
   private CoOpsSessionController coOpsSessionController;
@@ -76,7 +76,7 @@ public class CoOpsDocumentWebSocket {
       Material material = coOpsSession.getMaterial();
       if (material instanceof Document) {
         Document document = (Document) material;
-        Long currentRevisionNumber = documentController.getDocumentRevision(document);
+        Long currentRevisionNumber = materialController.getDocumentRevision(document);
         
         if (coOpsSession.getJoinRevision() < currentRevisionNumber) {
           ObjectMapper objectMapper = new ObjectMapper();

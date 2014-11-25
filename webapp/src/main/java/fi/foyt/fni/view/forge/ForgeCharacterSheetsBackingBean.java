@@ -14,7 +14,6 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
-import fi.foyt.fni.materials.CharacterSheetMaterialController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
@@ -47,9 +46,6 @@ public class ForgeCharacterSheetsBackingBean {
 
   @Inject
 	private MaterialPermissionController materialPermissionController;
-
-  @Inject
-  private CharacterSheetMaterialController characterSheetMaterialController;
 	
 	@RequestAction
 	@Deferred
@@ -146,10 +142,10 @@ public class ForgeCharacterSheetsBackingBean {
 	
 	public String save() {
     User loggedUser = sessionController.getLoggedUser();
-    CharacterSheet characterSheet = characterSheetMaterialController.findCharacterSheetById(materialId);
+    CharacterSheet characterSheet = materialController.findCharacterSheetById(materialId);
     
 	  if (materialPermissionController.hasModifyPermission(loggedUser, characterSheet)) {
-	    characterSheetMaterialController.updateCharacterSheet(characterSheet, getCharacterSheetTitle(), 
+	    materialController.updateCharacterSheet(characterSheet, getCharacterSheetTitle(), 
         getCharacterSheetContents(), getCharacterSheetStyles(), getCharacterSheetScripts(), loggedUser);
 
       String ownerId = characterSheet.getCreator().getId().toString();

@@ -7,6 +7,7 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 
+import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.dao.materials.DropboxRootFolderDAO;
 import fi.foyt.fni.persistence.model.materials.DropboxRootFolder;
 
@@ -17,7 +18,7 @@ public class DropboxSynchronizationScheduler {
   private Logger logger;
 
   @Inject
-  private DropboxManager dropboxManager;
+  private MaterialController materialController;
 
   @Inject
   private DropboxRootFolderDAO dropboxRootFolderDAO;
@@ -29,7 +30,7 @@ public class DropboxSynchronizationScheduler {
     List<DropboxRootFolder> dropboxRootFolders = dropboxRootFolderDAO.listAllSortByAscLastSynchronized(0, 10);
     for (DropboxRootFolder dropboxRootFolder : dropboxRootFolders) {
       logger.info("Synchronizing Dropbox folder of user " + dropboxRootFolder.getCreator().getId() + " - last synchronized " + dropboxRootFolder.getLastSynchronized());
-      dropboxManager.synchronizeFolder(dropboxRootFolder);
+      materialController.synchronizeDropboxFolder(dropboxRootFolder);
       logger.info("Dropbox folder of user " + dropboxRootFolder.getCreator().getId() + " synchronized");
     }
 

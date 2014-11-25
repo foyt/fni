@@ -11,11 +11,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import fi.foyt.fni.materials.DocumentController;
-import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.materials.VectorImageController;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
@@ -40,15 +37,6 @@ public class ForgeMaterialsBackingBean {
 
   @Inject
   private MaterialPermissionController materialPermissionController;
-
-  @Inject
-  private FolderController folderController;
-
-  @Inject
-  private DocumentController documentController;
-
-  @Inject
-  private VectorImageController vectorImageController;
 
   @PostConstruct
   public void init() {
@@ -228,9 +216,9 @@ public class ForgeMaterialsBackingBean {
 
   public void createNewDocument(Long folderId) throws IOException {
     User loggedUser = sessionController.getLoggedUser();
-    Folder parentFolder = folderId != null ? folderController.findFolderById(folderId) : null;
+    Folder parentFolder = folderId != null ? materialController.findFolderById(folderId) : null;
     String title = FacesUtils.getLocalizedValue("forge.index.untitledDocument");
-    Document document = documentController.createDocument(parentFolder, title, loggedUser);
+    Document document = materialController.createDocument(parentFolder, title, loggedUser);
 
     FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
       .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
@@ -239,9 +227,9 @@ public class ForgeMaterialsBackingBean {
 
   public void createNewVectorImage(Long folderId) throws IOException {
     User loggedUser = sessionController.getLoggedUser();
-    Folder parentFolder = folderId != null ? folderController.findFolderById(folderId) : null;
+    Folder parentFolder = folderId != null ? materialController.findFolderById(folderId) : null;
     String title = FacesUtils.getLocalizedValue("forge.index.untitledVectorImage");
-    VectorImage vectorImage = vectorImageController.createVectorImage(null, parentFolder, title, null, loggedUser);
+    VectorImage vectorImage = materialController.createVectorImage(null, parentFolder, title, null, loggedUser);
 
     FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
       .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())

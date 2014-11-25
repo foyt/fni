@@ -16,7 +16,7 @@ import fi.foyt.coops.CoOpsForbiddenException;
 import fi.foyt.coops.CoOpsInternalErrorException;
 import fi.foyt.coops.CoOpsNotFoundException;
 import fi.foyt.coops.CoOpsUsageException;
-import fi.foyt.fni.materials.DocumentController;
+import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.persistence.model.materials.CoOpsSessionType;
@@ -42,7 +42,7 @@ public class CoOpsSessionEventsListener {
   private CoOpsSessionController coOpsSessionController;
 
   @Inject
-  private DocumentController documentController;
+  private MaterialController materialController;
 
   @Inject
   private CoOpsSessionEventsController coOpsSessionEventsController;
@@ -74,7 +74,7 @@ public class CoOpsSessionEventsListener {
     if (session != null) {
       Document document = (Document) session.getMaterial();
       if (materialPermissionController.hasModifyPermission(session.getUser(), document)) {
-        Long currentRevisionNumber = documentController.getDocumentRevision(document);
+        Long currentRevisionNumber = materialController.getDocumentRevision(document);
         
         CoOpsSession serverSession = coOpsSessionController.createSession(session.getMaterial(), session.getUser(), CoOpsSessionType.SERVER, session.getAlgorithm(), currentRevisionNumber);
         try {

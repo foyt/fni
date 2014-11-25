@@ -29,7 +29,7 @@ import fi.foyt.coops.CoOpsUsageException;
 import fi.foyt.coops.model.File;
 import fi.foyt.coops.model.Join;
 import fi.foyt.coops.model.Patch;
-import fi.foyt.fni.materials.DocumentController;
+import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.common.Tag;
@@ -53,14 +53,14 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
   private final static String COOPS_DOCUMENT_CONTENTTYPE = "text/html;editor=CKEditor";
 
   @Inject
+  private MaterialController materialController;
+
+  @Inject
   private CoOpsSessionController coOpsSessionController;
 
   @Inject
   private SessionController sessionController;
   
-  @Inject
-  private DocumentController documentController;
-
   @Inject
   private TagController tagController;
   
@@ -95,10 +95,10 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
       // TODO: Implement
       throw new CoOpsNotImplementedException();
     } else {
-      Long currentRevisionNumber = documentController.getDocumentRevision(document);
+      Long currentRevisionNumber = materialController.getDocumentRevision(document);
       String data = document.getData();
       
-      Map<String, String> properties = settingToProperties("document.", documentController.listDocumentSettings(document));
+      Map<String, String> properties = settingToProperties("document.", materialController.listDocumentSettings(document));
       properties.put("title", document.getTitle());
 
       return new File(currentRevisionNumber, data, COOPS_DOCUMENT_CONTENTTYPE, properties);
@@ -124,7 +124,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
     
     ObjectMapper objectMapper = new ObjectMapper();
     
-    List<DocumentRevision> documentRevisions = documentController.listDocumentRevisionsAfter(document, revisionNumber);
+    List<DocumentRevision> documentRevisions = materialController.listDocumentRevisionsAfter(document, revisionNumber);
     List<Patch> updateResults = new ArrayList<>();
 
     if (!documentRevisions.isEmpty()) {
@@ -150,7 +150,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
         Map<String, String> properties = null;
         Map<String, Object> extensions = null;
         
-        List<MaterialRevisionSetting> revisionSettings = documentController.listDocumentRevisionSettings(documentRevision);
+        List<MaterialRevisionSetting> revisionSettings = materialController.listDocumentRevisionSettings(documentRevision);
         if (revisionSettings.size() > 0) {
           properties = new HashMap<>();
           for (MaterialRevisionSetting revisionSetting : revisionSettings) {
@@ -203,7 +203,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
       throw new CoOpsForbiddenException();
     }
 
-    Long currentRevision = documentController.getDocumentRevision(document);
+    Long currentRevision = materialController.getDocumentRevision(document);
     if (!currentRevision.equals(revisionNumber)) {
       throw new CoOpsConflictException();
     }
@@ -221,7 +221,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
       }
       
       String data = patchResult.getPatchedText();
-      documentController.updateDocumentData(document, data, session.getUser());
+      materialController.updateDocumentData(document, data, session.getUser());
       checksum = DigestUtils.md5Hex(data);
       try {
         patchData = patch.getBytes("UTF-8");
@@ -231,7 +231,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
     }
 
     Long patchRevisionNumber = currentRevision + 1;
-    DocumentRevision documentRevision = documentController.createDocumentRevision(document, patchRevisionNumber, new Date(), false, false, patchData, checksum, sessionId);
+    DocumentRevision documentRevision = materialController.createDocumentRevision(document, patchRevisionNumber, new Date(), false, false, patchData, checksum, sessionId);
     
     if (properties != null) {
       Iterator<String> keyIterator = properties.keySet().iterator();
@@ -240,11 +240,11 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
         String value = properties.get(key);
         if ("title".equals(key)) {
           // title is saved as a document title
-          documentController.updateDocumentTitle(document, value, session.getUser());
+          materialController.updateDocumentTitle(document, value, session.getUser());
         } else if ("langCode".equals(key)) {
           // language is saved as document language property
           Language language = systemSettingsController.findLocaleByIso2(value);
-          documentController.updateDocumentLanguage(document, language, session.getUser());
+          materialController.updateDocumentLanguage(document, language, session.getUser());
         } else if ("metaKeywords".equals(key)) {
           // keywords are saved as tags
           List<Tag> tags = new ArrayList<>();
@@ -261,14 +261,14 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
             }
           }
           
-          documentController.setDocumentTags(document, tags);
+          materialController.setDocumentTags(document, tags);
         } else {
           // everything else is saved as document.property
-          documentController.setDocumentSetting(document, "document." + key, value);
+          materialController.setDocumentSetting(document, "document." + key, value);
         }
         
         // Everything is saved as revision setting
-        documentController.createDocumentRevisionSetting(documentRevision, "document." + key, value);
+        materialController.createDocumentRevisionSetting(documentRevision, "document." + key, value);
       }
     }
     
@@ -276,7 +276,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
       for (String extension : extensions.keySet()) {
         try {
           String value = objectMapper.writeValueAsString(extensions.get(extension));
-          documentController.createDocumentRevisionSetting(documentRevision, "extension." + extension, value);
+          materialController.createDocumentRevisionSetting(documentRevision, "extension." + extension, value);
         } catch (IOException e) {
           throw new CoOpsInternalErrorException(extension);
         }
@@ -311,7 +311,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
       throw new CoOpsForbiddenException();
     }
     
-    Long currentRevision = documentController.getDocumentRevision(document);
+    Long currentRevision = materialController.getDocumentRevision(document);
     String data = document.getData();
     if (data == null) {
       data = "";
@@ -319,7 +319,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
 
     List<CoOpsSession> openSessions = coOpsSessionController.listSessionsByMaterialAndClosed(document, Boolean.FALSE);
 
-    Map<String, String> properties = settingToProperties("document.", documentController.listDocumentSettings(document));
+    Map<String, String> properties = settingToProperties("document.", materialController.listDocumentSettings(document));
     properties.put("title", document.getTitle());
 
     Map<String, Object> extensions = new HashMap<>();
@@ -353,7 +353,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
       throw new CoOpsUsageException("fileId must be a number");
     }
     
-    Document document = documentController.findDocumentById(documentId);
+    Document document = materialController.findDocumentById(documentId);
     if (document == null) {
       throw new CoOpsNotFoundException();
     }

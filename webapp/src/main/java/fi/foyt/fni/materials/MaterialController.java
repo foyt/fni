@@ -1,7 +1,10 @@
 package fi.foyt.fni.materials;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
@@ -10,17 +13,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
-import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -32,25 +41,47 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
+import org.apache.xpath.XPathAPI;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 import org.scribe.model.Response;
+import org.scribe.model.Token;
+import org.scribe.oauth.OAuthService;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.tidy.Tidy;
+import org.xhtmlrenderer.extend.ReplacedElementFactory;
+import org.xhtmlrenderer.pdf.ITextRenderer;
+import org.xml.sax.SAXException;
 
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
+import com.itextpdf.text.DocumentException;
 
+import fi.foyt.fni.auth.DropboxAuthenticationStrategy;
 import fi.foyt.fni.coops.CoOpsSessionController;
 import fi.foyt.fni.drive.DriveManager;
 import fi.foyt.fni.drive.SystemGoogleDriveCredentials;
-import fi.foyt.fni.dropbox.DropboxManager;
+import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
 import fi.foyt.fni.persistence.dao.materials.BinaryDAO;
+import fi.foyt.fni.persistence.dao.materials.CharacterSheetDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentRevisionDAO;
+import fi.foyt.fni.persistence.dao.materials.DropboxFileDAO;
+import fi.foyt.fni.persistence.dao.materials.DropboxFolderDAO;
+import fi.foyt.fni.persistence.dao.materials.DropboxRootFolderDAO;
 import fi.foyt.fni.persistence.dao.materials.FileDAO;
 import fi.foyt.fni.persistence.dao.materials.FolderDAO;
 import fi.foyt.fni.persistence.dao.materials.GoogleDocumentDAO;
+import fi.foyt.fni.persistence.dao.materials.ImageDAO;
+import fi.foyt.fni.persistence.dao.materials.ImageRevisionDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
+import fi.foyt.fni.persistence.dao.materials.MaterialRevisionSettingDAO;
+import fi.foyt.fni.persistence.dao.materials.MaterialSettingDAO;
+import fi.foyt.fni.persistence.dao.materials.MaterialSettingKeyDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialTagDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialThumbnailDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialViewDAO;
@@ -61,20 +92,31 @@ import fi.foyt.fni.persistence.dao.materials.UserMaterialRoleDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageRevisionDAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
+import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
+import fi.foyt.fni.persistence.model.auth.AuthSource;
+import fi.foyt.fni.persistence.model.auth.UserIdentifier;
 import fi.foyt.fni.persistence.model.common.Language;
+import fi.foyt.fni.persistence.model.common.Tag;
 import fi.foyt.fni.persistence.model.materials.Binary;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
 import fi.foyt.fni.persistence.model.materials.DropboxFile;
+import fi.foyt.fni.persistence.model.materials.DropboxFolder;
+import fi.foyt.fni.persistence.model.materials.DropboxRootFolder;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.GoogleDocument;
 import fi.foyt.fni.persistence.model.materials.Image;
+import fi.foyt.fni.persistence.model.materials.ImageRevision;
 import fi.foyt.fni.persistence.model.materials.ImageSize;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
+import fi.foyt.fni.persistence.model.materials.MaterialRevision;
+import fi.foyt.fni.persistence.model.materials.MaterialRevisionSetting;
 import fi.foyt.fni.persistence.model.materials.MaterialRole;
+import fi.foyt.fni.persistence.model.materials.MaterialSetting;
+import fi.foyt.fni.persistence.model.materials.MaterialSettingKey;
 import fi.foyt.fni.persistence.model.materials.MaterialTag;
 import fi.foyt.fni.persistence.model.materials.MaterialThumbnail;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
@@ -85,20 +127,24 @@ import fi.foyt.fni.persistence.model.materials.StarredMaterial;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.materials.VectorImageRevision;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.security.LoggedIn;
+import fi.foyt.fni.security.UnauthorizedException;
+import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.utils.auth.OAuthUtils;
 import fi.foyt.fni.utils.data.FileData;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.html.HtmlUtils;
 import fi.foyt.fni.utils.images.ImageUtils;
+import fi.foyt.fni.utils.itext.B64ImgReplacedElementFactory;
 import fi.foyt.fni.utils.language.GuessedLanguage;
 import fi.foyt.fni.utils.language.LanguageUtils;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.utils.search.SearchResultScoreComparator;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
-@RequestScoped
-@Stateful
 public class MaterialController {
 
   private static final String MATERIALS_PATH = "materials";
@@ -167,6 +213,39 @@ public class MaterialController {
   private VectorImageRevisionDAO vectorImageRevisionDAO;
 
   @Inject
+  private ImageDAO imageDAO;
+
+  @Inject
+  private ImageRevisionDAO imageRevisionDAO;
+
+  @Inject
+  private MaterialSettingKeyDAO materialSettingKeyDAO;
+
+  @Inject
+  private MaterialSettingDAO materialSettingDAO;
+
+  @Inject
+  private MaterialRevisionSettingDAO materialRevisionSettingDAO;
+
+  @Inject
+  private CharacterSheetDAO characterSheetDAO;
+
+  @Inject
+  private DropboxFolderDAO dropboxFolderDAO;
+
+  @Inject
+  private DropboxRootFolderDAO dropboxRootFolderDAO;
+
+  @Inject
+  private DropboxFileDAO dropboxFileDAO;
+
+  @Inject
+  private UserIdentifierDAO userIdentifierDAO;
+
+  @Inject
+  private UserTokenDAO userTokenDAO;
+  
+  @Inject
   private DriveManager driveManager;
   
   @Inject
@@ -174,19 +253,630 @@ public class MaterialController {
 
   @Inject
   private MaterialPermissionController materialPermissionController;
-
-  @Inject
-  private ImageController imageController;
   
-  @Inject
-  private GoogleDriveMaterialController googleDriveMaterialController;
-
   @Inject
   private CoOpsSessionController coOpsSessionController;
+
+  @Inject
+  private SystemSettingsController systemSettingsController;
   
   @Inject
-  private DropboxManager dropboxManager;
+  private DropboxAuthenticationStrategy dropboxAuthenticationStrategy;
 
+  /* Character Sheets */
+
+  public CharacterSheet createCharacterSheet(Folder parentFolder, String title, String content, User creator, String styles, String scripts) {
+    Date now = new Date();
+    String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, title);
+    return characterSheetDAO.create(parentFolder, content, styles, scripts, null, title, urlName, MaterialPublicity.PRIVATE, creator, now, creator, now);
+  }
+  
+  public CharacterSheet findCharacterSheetById(Long id) {
+    return characterSheetDAO.findById(id);
+  }
+  
+  public CharacterSheet updateCharacterSheet(CharacterSheet characterSheet, String title, String contents, String styles, String scripts, User modifier) {
+    if (!StringUtils.equals(characterSheet.getTitle(), title)) {
+      characterSheetDAO.updateTitle(characterSheet, title);
+      String urlName = getUniqueMaterialUrlName(characterSheet.getCreator(), characterSheet.getParentFolder(), characterSheet, title);
+      characterSheetDAO.updateUrlName(characterSheet, urlName);
+    }
+    
+    characterSheetDAO.updateContents(characterSheet, contents);
+    characterSheetDAO.updateStyles(characterSheet, styles);
+    characterSheetDAO.updateScripts(characterSheet, scripts);
+    characterSheetDAO.updateModifier(characterSheet, modifier);
+    characterSheetDAO.updateModified(characterSheet, new Date());
+    return characterSheet;
+  }
+
+  /* Document */
+
+  public Document createDocument(Folder parentFolder, String title, User creator) {
+    String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())));    
+    return createDocument(parentFolder, urlName, title, "", null, creator);
+  }
+
+  public Document createDocument(Folder parentFolder, String urlName, String title, String data, Language language, User creator) {
+    return documentDAO.create(creator, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
+  }
+  
+  public Document findDocumentById(Long documentId) {
+    return documentDAO.findById(documentId);
+  }
+
+  public Document updateDocumentData(Document document, String data, User user) {
+    return documentDAO.updateData(document, user, data);
+  }
+
+  public Document updateDocumentTitle(Document document, String title, User modifier) {
+    String oldUrlName = document.getUrlName();
+    String newUrlName = getUniqueMaterialUrlName(document.getCreator(), document.getParentFolder(), document, title);
+    
+    if (!StringUtils.equals(oldUrlName, newUrlName)) {
+      String oldPath = document.getPath();
+      PermaLink permaLink = permaLinkDAO.findByPath(oldPath);
+      if (permaLink == null) {
+        permaLink = permaLinkDAO.create(document, oldPath);
+      }
+
+      materialDAO.updateUrlName(document, newUrlName, modifier);
+    }
+    
+    return (Document) materialDAO.updateTitle(document, title, modifier);
+  }
+
+  public Document updateDocumentLanguage(Document document, Language language, User modifier) {
+    return documentDAO.updateLanguage(document, modifier, language);
+  }
+  
+  /* Document Revisions */
+  
+  public DocumentRevision createDocumentRevision(Document document, Long revisionNumber, Date created, boolean compressed, boolean completeVersion, byte[] revisionBytes, String checksum, String clientId) {
+    return documentRevisionDAO.create(document, revisionNumber, created, compressed, completeVersion, revisionBytes, checksum, clientId);
+  }
+
+  public List<DocumentRevision> listDocumentRevisionsAfter(Document document, Long revisionNumber) {
+    List<DocumentRevision> documentRevisions = documentRevisionDAO.listByDocumentAndRevisionGreaterThan(document, revisionNumber);
+    Collections.sort(documentRevisions, new Comparator<DocumentRevision>() {
+      @Override
+      public int compare(DocumentRevision documentRevision1, DocumentRevision documentRevision2) {
+        return documentRevision1.getRevision().compareTo(documentRevision2.getRevision());
+      }
+    });
+    
+    return documentRevisions;
+  }
+
+  public Long getDocumentRevision(Document document) {
+    Long result = documentRevisionDAO.maxRevisionByDocument(document);
+    if (result == null) {
+      result = 0l;
+    }
+    
+    return result;
+  }
+  
+  /* Document Revision Settings */
+
+  public MaterialRevisionSetting createDocumentRevisionSetting(MaterialRevision materialRevision, String key, String value) {
+    MaterialSettingKey settingKey = materialSettingKeyDAO.findByName(key);
+    if (settingKey != null) {
+      return materialRevisionSettingDAO.create(materialRevision, settingKey, value);
+    }
+    
+    return null;
+  }
+
+  public List<MaterialRevisionSetting> listDocumentRevisionSettings(DocumentRevision documentRevision) {
+    return materialRevisionSettingDAO.listByMaterialRevision(documentRevision);
+  }
+  
+  /* Document PDF */
+
+  public TypedData printDocumentAsPdf(String contextPath, String baseUrl, User user, Document document) throws DocumentException, IOException, ParserConfigurationException, SAXException {
+    ITextRenderer renderer = new ITextRenderer();
+    ReplacedElementFactory replacedElementFactory = new B64ImgReplacedElementFactory();
+    renderer.getSharedContext().setReplacedElementFactory(replacedElementFactory);
+    
+    String documentContent = document.getData();
+    org.w3c.dom.Document domDocument = tidyForPdf(document.getTitle(), documentContent);
+    
+    try {
+      NodeList imageList = XPathAPI.selectNodeList(domDocument, "//img");
+      for (int i = 0, l = imageList.getLength(); i < l; i++) {
+        Element imageElement = (Element) imageList.item(i);
+        String src = imageElement.getAttribute("src");
+        
+        try {
+          boolean internal = false;
+          
+          if (src.startsWith("http://") || src.startsWith("https://")) {
+            if (src.startsWith(baseUrl)) {
+              src = RequestUtils.stripCtxPath(contextPath, src.substring(baseUrl.length()));  
+              internal = true;
+            } else {
+              internal = false;
+            }
+          } else {
+            src = RequestUtils.stripCtxPath(contextPath, src);
+            internal = true;
+          }
+          
+          if (internal) {
+            Material material = findMaterialByCompletePath(src);
+            if (materialPermissionController.hasAccessPermission(user, material)) {
+              if (material.getType() == MaterialType.IMAGE) {
+                Image image = (Image) material;
+
+                StringBuilder srcBuilder = new StringBuilder()
+                  .append("data:")
+                  .append(image.getContentType())
+                  .append(";base64,")
+                  .append(new String(Base64.encodeBase64(image.getData())));
+                
+                imageElement.setAttribute("src", srcBuilder.toString());
+              }
+            }
+          }
+          
+        } catch (Exception e) {
+          // If anything goes wrong we just leave this img "as is".
+        }
+      }
+    } catch (Exception e) {
+      // If anything goes wrong we just leave the document "as is".
+    }
+    
+    ByteArrayOutputStream pdfStream = new ByteArrayOutputStream();
+    renderer.setDocument(domDocument, baseUrl);
+    renderer.layout();
+    renderer.createPDF(pdfStream);
+    pdfStream.flush();
+    pdfStream.close();
+    
+    return new TypedData(pdfStream.toByteArray(), "application/pdf");
+  }
+  
+  private org.w3c.dom.Document tidyForPdf(String title, String bodyContent) throws ParserConfigurationException, IOException, SAXException {
+    String documentHtml = HtmlUtils.getAsHtmlText(title, bodyContent);
+    String cleanedHtml = null;
+    
+    ByteArrayOutputStream tidyStream = new ByteArrayOutputStream();
+    try {
+      Tidy tidy = new Tidy();
+      tidy.setInputEncoding("UTF-8");
+      tidy.setOutputEncoding("UTF-8");
+      tidy.setShowWarnings(true);
+      tidy.setNumEntities(false);
+      tidy.setXmlOut(true);
+      tidy.setXHTML(true);
+
+      cleanedHtml = HtmlUtils.printDocument(tidy.parseDOM(new StringReader(documentHtml), null));
+    } catch (Exception e) {
+      throw e;
+    } finally {
+      tidyStream.flush();
+      tidyStream.close();
+    }
+    
+    InputStream documentStream = new ByteArrayInputStream(cleanedHtml.getBytes("UTF-8"));
+    try {
+
+      DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+      builderFactory.setNamespaceAware(false);
+      builderFactory.setValidating(false);
+      builderFactory.setFeature("http://xml.org/sax/features/namespaces", false);
+      builderFactory.setFeature("http://xml.org/sax/features/validation", false);
+      builderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+      builderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+      DocumentBuilder builder = builderFactory.newDocumentBuilder();
+  
+      return builder.parse(documentStream);
+
+    } finally {
+      documentStream.close();
+    }
+  }
+  
+  /* Document Tags */
+
+  public List<MaterialTag> listDocumentTags(Document document) {
+    return materialTagDAO.listByMaterial(document);
+  }
+  
+  public Document setDocumentTags(Document document, List<Tag> tags) {
+    List<MaterialTag> removeTags = null;
+    if (tags.size() > 0) {
+      removeTags = materialTagDAO.listByMaterialAndTagsNotIn(document, tags);
+    } else {
+      removeTags = materialTagDAO.listByMaterial(document);
+    }
+    
+    for (MaterialTag removeTag : removeTags) {
+      materialTagDAO.delete(removeTag);
+    }
+    
+    for (Tag tag : tags) {
+      if (materialTagDAO.findByMaterialAndTag(document, tag) == null) {
+        materialTagDAO.create(document, tag);
+      }
+    }
+    
+    return document;
+  }
+
+  /* Document Properties */
+  
+  public void setDocumentSetting(Document document, String key, String value) {
+    MaterialSettingKey settingKey = materialSettingKeyDAO.findByName("document." + key);
+    if (settingKey != null) {
+      MaterialSetting materialSetting = materialSettingDAO.findByMaterialAndKey(document, settingKey);
+      if (materialSetting != null) {
+        materialSettingDAO.updateValue(materialSetting, value);
+      } else {
+        materialSettingDAO.create(document, settingKey, value);
+      }
+    }
+  }
+
+  public List<MaterialSetting> listDocumentSettings(Document document) {
+    return materialSettingDAO.listByMaterial(document);
+  }
+  
+  /* Folder */
+
+  public Folder createFolder(Folder parentFolder, String title, User creator) {
+    Date now = new Date();
+    String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, title);
+    return folderDAO.create(creator, now, creator, now, null, parentFolder, urlName, title, MaterialPublicity.PRIVATE);
+  }
+  
+  public Folder findFolderById(Long folderId) {
+    return folderDAO.findById(folderId);
+  }
+  
+  /* GoogleDocument */
+
+  public GoogleDocument createGoogleDocument(User creator, Language language, Folder parentFolder, String title, String documentId, String mimeType, MaterialPublicity publicity) {
+    String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, title);
+    return googleDocumentDAO.create(creator, language, parentFolder, urlName, title, documentId, mimeType, publicity);
+  }
+  
+  public GoogleDocument findGoogleDocumentById(Long googleDocumentId) {
+    return googleDocumentDAO.findById(googleDocumentId);
+  }
+
+  public GoogleDocument findGoogleDocumentByCreatorAndDocumentId(User creator, String documentId) {
+    return googleDocumentDAO.findByCreatorAndDocumentId(creator, documentId);
+  }
+  
+  public String getGoogleDocumentEditLink(GoogleDocument googleDocument) throws IOException, GeneralSecurityException {
+    Drive systemDrive = driveManager.getDrive(systemGoogleDriveCredentials.getSystemCredential());
+    File file = driveManager.getFile(systemDrive, googleDocument.getDocumentId());
+    return file.getAlternateLink();
+  }
+  
+  public TypedData getGoogleDocumentData(GoogleDocument googleDocument) throws MalformedURLException, IOException, GeneralSecurityException {
+    Drive systemDrive = driveManager.getDrive(systemGoogleDriveCredentials.getSystemCredential());
+    File file = driveManager.getFile(systemDrive, googleDocument.getDocumentId());
+    TypedData typedData = null;
+    String mimeType = googleDocument.getMimeType();
+    
+    if (GoogleDriveType.DOCUMENT.getMimeType().equals(mimeType)) {
+      typedData = driveManager.exportFile(systemDrive, file, "text/html");
+    } else if (GoogleDriveType.DRAWING.getMimeType().equals(mimeType)) {
+      typedData = driveManager.exportFile(systemDrive, file, "image/png");
+    } else if (GoogleDriveType.PRESENTATION.getMimeType().equals(mimeType)) {
+      typedData = driveManager.exportFile(systemDrive, file, "application/pdf");
+    } else if (GoogleDriveType.SPREADSHEET.getMimeType().equals(mimeType)) {
+      typedData = driveManager.exportSpreadsheet(systemDrive, file);
+    } else {
+      typedData = driveManager.downloadFile(systemDrive, file);
+    }
+    
+    return typedData;
+  }
+
+  /* Images */
+  
+  public Image createImage(Folder parentFolder, User loggedUser, byte[] data, String contentType, String title) {
+    Date now = new Date();
+    String urlName = getUniqueMaterialUrlName(loggedUser, parentFolder, null, title);
+    return imageDAO.create(loggedUser, now, loggedUser, now, null, parentFolder, urlName, title, data, contentType, MaterialPublicity.PRIVATE);
+  }
+
+  public Image findImageById(Long id) {
+    return imageDAO.findById(id);
+  }
+
+  public void updateImageTitle(Image image, String title, User modifier) {
+    materialDAO.updateTitle(image, title, modifier);
+  }
+  
+  public Image updateImageContent(Image image, String contentType, byte[] data, User modifier) {
+    return imageDAO.updateData(imageDAO.updateContentType(image, modifier, contentType), modifier, data);
+  }
+  
+  /* Image Revisions */
+  
+  public ImageRevision createImageRevision(Image image, Long revisionNumber, Date created, boolean compressed, boolean completeVersion, byte[] revisionBytes, String checksum, String clientId) {
+    return imageRevisionDAO.create(image, revisionNumber, created, compressed, completeVersion, revisionBytes, checksum, clientId);
+  }
+
+  public List<ImageRevision> listImageRevisionsAfter(Image image, Long revisionNumber) {
+    List<ImageRevision> imageRevisions = imageRevisionDAO.listByImageAndRevisionGreaterThan(image, revisionNumber);
+    Collections.sort(imageRevisions, new Comparator<ImageRevision>() {
+      @Override
+      public int compare(ImageRevision revision1, ImageRevision revision2) {
+        return revision1.getRevision().compareTo(revision2.getRevision());
+      }
+    });
+    
+    return imageRevisions;
+  }
+  
+  public Long getImageRevision(Image image) {
+    Long result = imageRevisionDAO.maxRevisionByImage(image);
+    if (result == null) {
+      result = 0l;
+    }
+    
+    return result;
+  }
+
+  /* Image Properties */
+  
+  public void setImageSetting(Image image, String key, String value) {
+    MaterialSettingKey settingKey = materialSettingKeyDAO.findByName("image." + key);
+    if (settingKey != null) {
+      MaterialSetting materialSetting = materialSettingDAO.findByMaterialAndKey(image, settingKey);
+      if (materialSetting != null) {
+        materialSettingDAO.updateValue(materialSetting, value);
+      } else {
+        materialSettingDAO.create(image, settingKey, value);
+      }
+    }
+  }
+
+  public List<MaterialSetting> listImageSettings(Image image) {
+    return materialSettingDAO.listByMaterial(image);
+  }
+  
+  /* Image Tags */
+
+  public List<MaterialTag> listImageTags(Image image) {
+    return materialTagDAO.listByMaterial(image);
+  }
+  
+  public Image setImageTags(Image image, List<Tag> tags) {
+    List<MaterialTag> removeTags = null;
+    if (tags.size() > 0) {
+      removeTags = materialTagDAO.listByMaterialAndTagsNotIn(image, tags);
+    } else {
+      removeTags = materialTagDAO.listByMaterial(image);
+    }
+    
+    for (MaterialTag removeTag : removeTags) {
+      materialTagDAO.delete(removeTag);
+    }
+    
+    for (Tag tag : tags) {
+      if (materialTagDAO.findByMaterialAndTag(image, tag) == null) {
+        materialTagDAO.create(image, tag);
+      }
+    }
+    
+    return image;
+  }
+
+  /* Image Revision Settings */
+
+  public MaterialRevisionSetting createImageRevisionSetting(MaterialRevision materialRevision, String key, String value) {
+    MaterialSettingKey settingKey = materialSettingKeyDAO.findByName("image." + key);
+    if (settingKey != null) {
+      return materialRevisionSettingDAO.create(materialRevision, settingKey, value);
+    }
+    
+    return null;
+  }
+
+  public List<MaterialRevisionSetting> listImageRevisionSettings(ImageRevision imageRevision) {
+    return materialRevisionSettingDAO.listByMaterialRevision(imageRevision);
+  }
+  
+  /* Pdf */
+
+  public Pdf createPdf(User creator, Language language, Folder parentFolder, String urlName, String title, byte[] data) {
+    Date now = new Date();
+    return pdfDAO.create(creator, now, creator, now, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
+  }
+
+  public Pdf findPdfById(Long pdfId) {
+    return pdfDAO.findById(pdfId);
+  }
+  
+  /* VectorImage */
+  
+  public VectorImage createVectorImage(Language language, Folder parentFolder, String title, String data, User creator) {
+    String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())));    
+    return vectorImageDAO.create(creator, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
+  }
+  
+  public VectorImage findVectorImageById(Long documentId) {
+    return vectorImageDAO.findById(documentId);
+  }
+
+  public VectorImage updateVectorImageData(VectorImage vectorImage, String data, User modifier) {
+    return vectorImageDAO.updateData(vectorImage, modifier, data);
+  }
+
+  public VectorImage updateVectorImageTitle(VectorImage vectorImage, String title, User modifier) {
+    String oldUrlName = vectorImage.getUrlName();
+    String newUrlName = getUniqueMaterialUrlName(vectorImage.getCreator(), vectorImage.getParentFolder(), vectorImage, title);
+    
+    if (!StringUtils.equals(oldUrlName, newUrlName)) {
+      String oldPath = vectorImage.getPath();
+      PermaLink permaLink = permaLinkDAO.findByPath(oldPath);
+      if (permaLink == null) {
+        permaLink = permaLinkDAO.create(vectorImage, oldPath);
+      }
+
+      materialDAO.updateUrlName(vectorImage, newUrlName, modifier);
+    }
+    
+    return (VectorImage) materialDAO.updateTitle(vectorImage, title, modifier);
+  }
+
+  /* Dropbox */
+  
+  public Token getDropboxToken(User user) {
+    List<UserIdentifier> dropboxIdentifiers = userIdentifierDAO.listByAuthSourceAndUser(AuthSource.DROPBOX, user);
+    for (UserIdentifier dropboxIdentifier : dropboxIdentifiers) {
+      UserToken dropboxToken = userTokenDAO.findByUserIdentifier(dropboxIdentifier);
+      if (dropboxToken != null) {
+        return new Token(dropboxToken.getToken(), dropboxToken.getSecret());
+      }
+    }
+
+    return null;
+  }
+
+  public DropboxRootFolder getDropboxRootFolder(User user) {
+    return dropboxRootFolderDAO.findByUser(user);
+  }
+
+  public void synchronizeDropboxFolder(DropboxRootFolder dropboxRootFolder) {
+    User user = dropboxRootFolder.getCreator();
+    Token dropboxToken = getDropboxToken(user);
+
+    if (dropboxToken != null && dropboxRootFolder != null) {
+      OAuthService service = dropboxAuthenticationStrategy.getOAuthService();
+
+      Boolean hasMore = true;
+
+      while (hasMore) {
+        try {
+          Map<String, String> parameters = new HashMap<String, String>();
+
+          if (StringUtils.isNotBlank(dropboxRootFolder.getDeltaCursor()))
+            parameters.put("cursor", dropboxRootFolder.getDeltaCursor());
+
+          Map<String, Object> deltaResponse = new ObjectMapper().readValue(OAuthUtils.doPostRequest(service, dropboxToken, "https://api.dropbox.com/1/delta", parameters).getBody(), new TypeReference<Map<String, Object>>(){});
+          hasMore = (Boolean) deltaResponse.get("has_more");
+          if (hasMore == null) {
+            hasMore = false;
+          }
+          
+          Boolean reset = (Boolean) deltaResponse.get("reset");
+          String cursor = (String) deltaResponse.get("cursor");
+          Date now = new Date();
+
+          if (reset) {
+            List<Material> files = materialDAO.listByParentFolder(dropboxRootFolder);
+            for (Material file : files) {
+              deleteMaterial(file, user);
+            }
+          }
+
+          @SuppressWarnings("unchecked")
+          List<Object> entries = (List<Object>) deltaResponse.get("entries");
+          for (int i = 0, l = entries.size(); i < l; i++) {
+            @SuppressWarnings("unchecked")
+            List<Object> entry = (List<Object>) entries.get(i);
+            String entryPath = (String) entry.get(0);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> metaData = (Map<String, Object>) entry.get(1);
+            if (metaData == null) {
+              DropboxFile dropboxFile = dropboxFileDAO.findByDropboxPath(entryPath);
+              if (dropboxFile != null) {
+                deleteMaterial(dropboxFile, user);
+                logger.info("Dropbox file " + entryPath + " removed.");
+              } else {
+                DropboxFolder dropboxFolder = dropboxFolderDAO.findByCreatorAndDropboxPath(user, entryPath);
+                if (dropboxFolder != null) {
+                  deleteMaterial(dropboxFolder, user);
+                } else {
+                  logger.warning("Could not find removed Dropbox file " + entryPath);
+                }
+              }
+            } else {
+              // String rev = metaData.getString("rev");
+              // Boolean thumbExists = metaData.getBoolean("thumb_exists");
+              // Long revision = metaData.getLong("revision");
+              // Long bytes = metaData.getLong("bytes");
+              // String modified = metaData.getString("modified");
+              // String root = metaData.getString("root");
+              // String icon = metaData.getString("icon");
+              // String size = metaData.getString("size");
+              Boolean isDir = (Boolean) metaData.get("is_dir");
+              String path = (String) metaData.get("path");
+              String[] parents = path.split("/");
+
+              Folder parentFolder = null;
+              if (parents.length == 2) {
+                parentFolder = dropboxRootFolder;
+              } else {
+                // If the new entry includes parent folders that don't yet exist in
+                // Forge & Illusion, we need to create those parent folders before continuing.
+                parentFolder = dropboxRootFolder;
+                for (int parentIndex = 1, parentsLength = parents.length - 1; parentIndex < parentsLength; parentIndex++) {
+                  String parent = parents[parentIndex];
+                  Folder foundFolder = (Folder) materialDAO.findByParentFolderAndUrlName(parentFolder, parent);
+                  if (foundFolder != null) {
+                    parentFolder = foundFolder;
+                  } else {
+                    String urlName = getUniqueMaterialUrlName(user, parentFolder, null, parent);
+                    parentFolder = dropboxFolderDAO.create(user, now, user, now, parentFolder, urlName, parent, MaterialPublicity.PRIVATE, entryPath);
+                    logger.info("Created new dropbox folder: " + parent);
+                  }
+                }
+              }
+              
+              int slashPos = path.lastIndexOf("/");
+              String title = slashPos > -1 ? path.substring(slashPos + 1) : path;
+              String urlName = getUniqueMaterialUrlName(user, parentFolder, null, title);
+
+              if (isDir) {
+                dropboxFolderDAO.create(user, now, user, now, parentFolder, urlName, title, MaterialPublicity.PRIVATE, entryPath);
+                logger.info("Created new dropbox folder: " + title);
+              } else {
+                String mimeType = (String) metaData.get("mime_type");
+                // String clientMtime = metaData.optString("client_mtime");
+                dropboxFileDAO.create(user, null, parentFolder, urlName, title, MaterialPublicity.PRIVATE, entryPath, mimeType);
+                logger.info("Created new dropbox file: " + title);
+              }
+            }
+          }
+
+          dropboxRootFolderDAO.updateDeltaCursor(dropboxRootFolder, cursor, user);
+          dropboxRootFolderDAO.updateLastSynchronized(dropboxRootFolder, new Date(), user);
+        } catch (IOException e) {
+          logger.log(Level.SEVERE, "Failed to read Dropbox Delta JSON", e);
+        }
+      }
+    }
+  }
+
+  public DropboxFile getDropboxFile(String path) {
+    DropboxFile dropboxFile = dropboxFileDAO.findByDropboxPath(path);
+    return dropboxFile;
+  }
+
+  public Response getDropboxFileContent(User user, DropboxFile dropboxFile) throws IOException {
+    Token dropboxToken = getDropboxToken(user);
+    if (dropboxToken == null) {
+      throw new UnauthorizedException();
+    }
+    
+    OAuthService service = dropboxAuthenticationStrategy.getOAuthService();
+
+    String root = systemSettingsController.getSetting(SystemSettingKey.DROPBOX_ROOT);
+    String url = "https://api-content.dropbox.com/1/files/" + root + dropboxFile.getDropboxPath();
+
+    return OAuthUtils.doGetRequest(service, dropboxToken, url);
+  }
+  
   public MimeType parseMimeType(String mimeType) throws MimeTypeParseException {
     MimeType type = new MimeType(mimeType);
     return type;
@@ -819,7 +1509,7 @@ public class MaterialController {
         return createVectorImage(parentFolder, user, new String(fileData.getData(), "UTF-8"), fileData.getFileName());
       } else {
         if (fileData.getContentType().equals("image/png")) {
-          return imageController.createImage(parentFolder, user, fileData.getData(), fileData.getContentType(), fileData.getFileName());
+          return createImage(parentFolder, user, fileData.getData(), fileData.getContentType(), fileData.getFileName());
         } else {
           return uploadImage(parentFolder, user, fileData);
         }
@@ -867,7 +1557,7 @@ public class MaterialController {
 
   private Material uploadImage(Folder parentFolder, User loggedUser, FileData fileData) throws IOException {
     TypedData imageData = ImageUtils.convertToPng(fileData);
-    return imageController.createImage(parentFolder, loggedUser, imageData.getData(), imageData.getContentType(), fileData.getFileName());
+    return createImage(parentFolder, loggedUser, imageData.getData(), imageData.getContentType(), fileData.getFileName());
   }
 
   private Material createVectorImage(Folder parentFolder, User loggedUser, String data, String title) {
@@ -943,10 +1633,6 @@ public class MaterialController {
     }
   }
 
-  public GoogleDocument findGoogleDocumentById(Long id) {
-    return googleDocumentDAO.findById(id);
-  }
-
   public FileData getMaterialData(String contextPath, User user, Material material) throws UnsupportedEncodingException,
       MalformedURLException, IOException, GeneralSecurityException {
     switch (material.getType()) {
@@ -962,7 +1648,7 @@ public class MaterialController {
       case FILE:
         return getBinaryMaterialData((fi.foyt.fni.persistence.model.materials.File) material);
       case GOOGLE_DOCUMENT:
-        TypedData typedData = googleDriveMaterialController.getGoogleDocumentData((GoogleDocument) material);
+        TypedData typedData = getGoogleDocumentData((GoogleDocument) material);
         return new FileData(null, material.getUrlName(), typedData.getData(), typedData.getContentType(), typedData.getModified());
       case DROPBOX_FILE:
         return getDropboxMaterialData(user, (DropboxFile) material);
@@ -1039,7 +1725,7 @@ public class MaterialController {
   }
   
   private FileData getDropboxMaterialData(User user, DropboxFile dropboxFile) throws IOException {
-    Response response = dropboxManager.getFileContent(user, dropboxFile);
+    Response response = getDropboxFileContent(user, dropboxFile);
     if (response.getCode() == 200) {
       byte[] data = null;
       

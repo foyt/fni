@@ -18,12 +18,9 @@ import org.xml.sax.SAXException;
 
 import com.itextpdf.text.DocumentException;
 
-import fi.foyt.fni.materials.DocumentController;
-import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.MaterialUserController;
-import fi.foyt.fni.materials.PdfController;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
@@ -50,15 +47,6 @@ public class ForgeMaterialActionBackingBean {
 
   @Inject
   private UserController userController;
-
-	@Inject
-	private DocumentController documentController;
-
-  @Inject
-	private PdfController pdfController;
-
-  @Inject
-	private FolderController folderController;
 	
 	@Inject
 	private SessionController sessionController;
@@ -148,7 +136,7 @@ public class ForgeMaterialActionBackingBean {
     
     Material material = materialController.findMaterialById(getMaterialId());
     if (material != null) {
-      Folder targetFolder = moveTargetFolderId == null ? null : folderController.findFolderById(moveTargetFolderId);
+      Folder targetFolder = moveTargetFolderId == null ? null : materialController.findFolderById(moveTargetFolderId);
       materialController.moveMaterial(material, targetFolder, sessionController.getLoggedUser());
       
       if (targetFolder != null) {
@@ -172,7 +160,7 @@ public class ForgeMaterialActionBackingBean {
 	public void printFile() throws DocumentException, IOException, ParserConfigurationException, SAXException {
 		// TODO: Proper error handling 
 		
-		Document document = documentController.findDocumentById(getMaterialId());
+		Document document = materialController.findDocumentById(getMaterialId());
 		if (document == null) {
 			throw new FileNotFoundException();
 		}
@@ -182,11 +170,11 @@ public class ForgeMaterialActionBackingBean {
 		String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
 		String baseUrl = FacesUtils.getLocalAddress(true);
 		
-		TypedData pdfData = documentController.printDocumentAsPdf(contextPath, baseUrl, loggedUser, document);
+		TypedData pdfData = materialController.printDocumentAsPdf(contextPath, baseUrl, loggedUser, document);
 		if (pdfData != null) {
 			Folder parentFolder = document.getParentFolder();
 			
-			pdfController.createPdf(loggedUser, document.getLanguage(), parentFolder, document.getUrlName() + ".pdf", document.getTitle(), pdfData.getData());
+			materialController.createPdf(loggedUser, document.getLanguage(), parentFolder, document.getUrlName() + ".pdf", document.getTitle(), pdfData.getData());
 			
 			if (parentFolder != null) {
 				FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
@@ -242,14 +230,14 @@ public class ForgeMaterialActionBackingBean {
 	    FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("forge.newFolder.nameRequired"));
 	  } else {
 	    User loggedUser = sessionController.getLoggedUser();
-  	  Folder parentFolder = getParentFolderId() != null ? folderController.findFolderById(getParentFolderId()) : null;
+  	  Folder parentFolder = getParentFolderId() != null ? materialController.findFolderById(getParentFolderId()) : null;
   	  if (parentFolder != null) {
   	    if (!materialPermissionController.hasModifyPermission(loggedUser, parentFolder)) {
   	      throw new UnauthorizedException();
   	    }
   	  }
   	  
-	    Folder folder = folderController.createFolder(parentFolder, getNewFolderName(), loggedUser);
+	    Folder folder = materialController.createFolder(parentFolder, getNewFolderName(), loggedUser);
       FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
         .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
         .append("/forge/folders/")

@@ -17,7 +17,7 @@ import javax.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import fi.foyt.fni.materials.GoogleDriveMaterialController;
+import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.GoogleDocument;
 import fi.foyt.fni.persistence.model.users.User;
@@ -33,7 +33,7 @@ public class ForgeGoogleDriveServlet extends HttpServlet {
 	private static final long DEFAULT_EXPIRE_TIME = 1000 * 60 * 60;
 
 	@Inject
-	private GoogleDriveMaterialController googleDriveMaterialController;
+	private MaterialController materialController;
 	
 	@Inject
 	private SessionController sessionController;
@@ -51,7 +51,7 @@ public class ForgeGoogleDriveServlet extends HttpServlet {
 		}
 		
 		Long googleDocumentId = NumberUtils.createLong(googleDocumentIdStr);
-		GoogleDocument googleDocument = googleDriveMaterialController.findGoogleDocumentById(googleDocumentId);
+		GoogleDocument googleDocument = materialController.findGoogleDocumentById(googleDocumentId);
 		if (googleDocument == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not Found");
 			return;
@@ -81,7 +81,7 @@ public class ForgeGoogleDriveServlet extends HttpServlet {
 		
 		TypedData data;
 		try {
-			data = googleDriveMaterialController.getGoogleDocumentData(googleDocument);
+			data = materialController.getGoogleDocumentData(googleDocument);
 		} catch (MalformedURLException | GeneralSecurityException e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
 			return;

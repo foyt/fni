@@ -18,7 +18,6 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.materials.VectorImageController;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
@@ -48,9 +47,6 @@ public class ForgeVectorImagesBackingBean {
 	
 	@Inject
 	private MaterialController materialController;
-
-	@Inject
-	private VectorImageController vectorImageController;
 
   @Inject
   private MaterialPermissionController materialPermissionController;
@@ -144,10 +140,10 @@ public class ForgeVectorImagesBackingBean {
 	@Secure (Permission.MATERIAL_MODIFY)
 	@SecurityContext (context = "#{forgeVectorImagesBackingBean.materialId}")
 	public void save() throws IOException {
-		VectorImage vectorImage = vectorImageController.findVectorImageById(materialId);
+		VectorImage vectorImage = materialController.findVectorImageById(materialId);
 		if (getMaterialModified().equals(vectorImage.getModified().getTime())) {
-			vectorImageController.updateVectorImageData(vectorImage, getVectorImageContent(), sessionController.getLoggedUser());
-			vectorImageController.updateVectorImageTitle(vectorImage, getVectorImageTitle(), sessionController.getLoggedUser());
+			materialController.updateVectorImageData(vectorImage, getVectorImageContent(), sessionController.getLoggedUser());
+			materialController.updateVectorImageTitle(vectorImage, getVectorImageTitle(), sessionController.getLoggedUser());
 			
 			FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
   		  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())

@@ -23,7 +23,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import fi.foyt.fni.i18n.ExternalLocales;
-import fi.foyt.fni.materials.FolderController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.MaterialTypeComparator;
@@ -48,9 +47,6 @@ public class CKBrowserConnectorServlet extends HttpServlet {
   @Inject
   private SessionController sessionController;
 
-  @Inject
-  private FolderController folderController;
-
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     if (!sessionController.isLoggedIn()) {
@@ -60,7 +56,7 @@ public class CKBrowserConnectorServlet extends HttpServlet {
 
     Long folderId = NumberUtils.createLong(request.getParameter("parent"));
     if (folderId != null) {
-      Folder parentFolder = folderController.findFolderById(folderId);
+      Folder parentFolder = materialController.findFolderById(folderId);
       if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), parentFolder)) {
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
         return;
@@ -92,7 +88,7 @@ public class CKBrowserConnectorServlet extends HttpServlet {
     if (folderId == null) {
       rootFolder = true;
     } else {
-      parentFolder = folderController.findFolderById(folderId);
+      parentFolder = materialController.findFolderById(folderId);
     }
 
     String contextPath = request.getContextPath();

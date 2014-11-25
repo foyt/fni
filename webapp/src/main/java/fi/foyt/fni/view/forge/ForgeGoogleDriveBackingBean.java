@@ -14,7 +14,6 @@ import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
-import fi.foyt.fni.materials.GoogleDriveMaterialController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Folder;
@@ -41,9 +40,6 @@ public class ForgeGoogleDriveBackingBean {
   
 	@Inject
 	private MaterialController materialController;
-
-	@Inject
-	private GoogleDriveMaterialController googleDriveMaterialController;
 	
 	@Inject
 	private SessionController sessionController;
@@ -75,7 +71,7 @@ public class ForgeGoogleDriveBackingBean {
 		materialPath = "/forge/gdrive/" + materialId; 
 		folders = ForgeViewUtils.getParentList(googleDocument);
 		
-	  googleDriveEditLink = googleDriveMaterialController.getGoogleDocumentEditLink(googleDocument);
+	  googleDriveEditLink = materialController.getGoogleDocumentEditLink(googleDocument);
 	  
 	  return null;
 	}

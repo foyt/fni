@@ -15,7 +15,7 @@ import org.ocpsoft.rewrite.faces.annotation.Deferred;
 import org.scribe.model.Token;
 
 import fi.foyt.fni.dropbox.DropboxController;
-import fi.foyt.fni.dropbox.DropboxManager;
+import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.materials.DropboxRootFolder;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
@@ -33,7 +33,7 @@ public class ForgeConnectDropboxBackingBean {
   private SessionController sessionController;
 
   @Inject
-  private DropboxManager dropboxManager;
+  private MaterialController materialController;
 
   @Inject
   private DropboxController dropboxController;
@@ -44,7 +44,7 @@ public class ForgeConnectDropboxBackingBean {
 		// TODO: Proper error handling
 		
     User loggedUser = sessionController.getLoggedUser();
-    Token dropboxToken = dropboxManager.getDropboxToken(loggedUser);
+    Token dropboxToken = materialController.getDropboxToken(loggedUser);
   	String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
     
     if (dropboxToken == null) {

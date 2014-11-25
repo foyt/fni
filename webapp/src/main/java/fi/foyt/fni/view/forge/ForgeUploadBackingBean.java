@@ -13,7 +13,7 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
-import fi.foyt.fni.materials.FolderController;
+import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.security.ForbiddenException;
@@ -31,7 +31,7 @@ public class ForgeUploadBackingBean {
   private Long parentFolderId;
   
   @Inject
-  private FolderController folderController;
+  private MaterialController materialController;
 
   @Inject
   private SessionController sessionController;
@@ -43,7 +43,7 @@ public class ForgeUploadBackingBean {
 	public void load() throws FileNotFoundException {
     folders = new ArrayList<>();
     if (parentFolderId != null) {
-      Folder parentFolder = parentFolderId != null ? folderController.findFolderById(parentFolderId) : null;
+      Folder parentFolder = parentFolderId != null ? materialController.findFolderById(parentFolderId) : null;
       if (parentFolder != null) {
         if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
           throw new ForbiddenException();

@@ -30,9 +30,8 @@ import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
 
 import fi.foyt.fni.drive.DriveManager;
-import fi.foyt.fni.materials.FolderController;
-import fi.foyt.fni.materials.GoogleDriveMaterialController;
 import fi.foyt.fni.materials.GoogleDriveType;
+import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
@@ -67,14 +66,11 @@ public class ForgeImportGoogleDriveBackingBean {
   private SessionController sessionController;
 
   @Inject
-  private GoogleDriveMaterialController googleDriveMaterialController;
+  private MaterialController materialController;
 
   @Inject
   private MaterialPermissionController materialPermissionController;
   
-  @Inject
-  private FolderController folderController;
-
   @Inject
   private DriveManager driveManager;
   
@@ -87,7 +83,7 @@ public class ForgeImportGoogleDriveBackingBean {
     String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
     
     if (parentFolderId != null) {
-      Folder parentFolder = parentFolderId != null ? folderController.findFolderById(parentFolderId) : null;
+      Folder parentFolder = parentFolderId != null ? materialController.findFolderById(parentFolderId) : null;
       if (parentFolder != null) {
         if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
           return "/error/access-denied.jsf";
@@ -120,7 +116,7 @@ public class ForgeImportGoogleDriveBackingBean {
       
       for (File file : fileList.getItems()) {
         if (!file.getMimeType().equals(GoogleDriveType.FORM.getMimeType())) {
-          if (googleDriveMaterialController.findGoogleDocumentByCreatorAndDocumentId(loggedUser, file.getId()) == null) {
+          if (materialController.findGoogleDocumentByCreatorAndDocumentId(loggedUser, file.getId()) == null) {
             files.add(file);
           }
         }
@@ -162,7 +158,7 @@ public class ForgeImportGoogleDriveBackingBean {
   }
 
 	public void importFiles() throws IOException {
-    Folder parentFolder = parentFolderId != null ? folderController.findFolderById(parentFolderId) : null;
+    Folder parentFolder = parentFolderId != null ? materialController.findFolderById(parentFolderId) : null;
     if (parentFolder != null) {
       if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
         throw new ForbiddenException();
@@ -175,7 +171,7 @@ public class ForgeImportGoogleDriveBackingBean {
     User loggedUser = userToken.getUserIdentifier().getUser();
     
     for (String entryId : importEntryIds) {
-      if (googleDriveMaterialController.findGoogleDocumentByCreatorAndDocumentId(loggedUser, entryId) == null) {
+      if (materialController.findGoogleDocumentByCreatorAndDocumentId(loggedUser, entryId) == null) {
         try {
           File file = driveManager.getFile(drive, entryId);
 
@@ -185,7 +181,7 @@ public class ForgeImportGoogleDriveBackingBean {
             permission.setType("user");
             permission.setValue(accountUser);
             driveManager.insertPermission(drive, file.getId(), permission);
-            googleDriveMaterialController.createGoogleDocument(loggedUser, null, parentFolder, file.getTitle(), file.getId(), file.getMimeType(), MaterialPublicity.PRIVATE);
+            materialController.createGoogleDocument(loggedUser, null, parentFolder, file.getTitle(), file.getId(), file.getMimeType(), MaterialPublicity.PRIVATE);
           }
           
         } catch (IOException e) {
