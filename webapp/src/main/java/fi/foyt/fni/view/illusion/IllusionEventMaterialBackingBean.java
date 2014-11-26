@@ -1,5 +1,7 @@
 package fi.foyt.fni.view.illusion;
 
+import java.util.UUID;
+
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -10,12 +12,15 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
+import fi.foyt.fni.illusion.IllusionEventMaterialController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.materials.Material;
@@ -57,6 +62,9 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
 
   @Inject
   private IllusionEventPageController illusionEventPageController;
+
+  @Inject
+  private IllusionEventMaterialController illusionEventMaterialController;
   
   @Inject
   private HttpServletRequest httpServletRequest;
@@ -93,8 +101,18 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
     
     materialUrl = contextPath + "/materials/" + material.getPath();
     if (material.getType() == MaterialType.CHARACTER_SHEET) {
-      String dataUrl = contextPath + "/rest/illusion/events/" + illusionEvent.getId() + "/materials/" + material.getId() + "/participantSettings/" + participant.getId();
-      materialUrl += "?dataUrl=" + dataUrl;
+      String key = null;
+      
+      synchronized (this) {
+        IllusionEventMaterialParticipantSetting webSocketKeySetting = illusionEventMaterialController.findParticipantSettingByMaterialAndParticipantAndKey(material, participant, IllusionEventMaterialParticipantSettingKey.WEBSOCKET_KEY);
+        if (webSocketKeySetting == null) {
+          webSocketKeySetting = illusionEventMaterialController.createParticipantSetting(material, participant, IllusionEventMaterialParticipantSettingKey.WEBSOCKET_KEY, UUID.randomUUID().toString());
+        }
+        
+        key = webSocketKeySetting.getValue();
+      }
+      
+      materialUrl += "?contextPath=" + contextPath + "&participantId=" + participant.getId() + "&eventId=" + illusionEvent.getId() + "&materialId=" + material.getId() + "&key=" + key;
     }
     
     switch (material.getType()) {

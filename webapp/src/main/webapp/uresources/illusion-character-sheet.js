@@ -16,119 +16,10 @@
     
     return result;
   }
-    
-  var SHEETDATA = null;
-  var SETTINGID = null;
-  var DATAURL = null; 
   
-  function createSetting(callback) {
-    $.ajax(DATAURL, {
-      type: 'POST',
-      contentType: "application/json",
-      dataType : "json",
-      accepts: {
-        'json' : 'application/json'
-      },
-      data: JSON.stringify({
-        'key': 'CHARACTER_SHEET_DATA',
-        'value': '{}'
-      }),
-      success : function(data, textStatus, jqXHR) {
-        callback(data);
-      },
-      error: function ( jqXHR, textStatus, errorThrown) {
-        // TODO: Proper error handling
-        alert(textStatus);
-      }
-    });    
-  }
-  
-  function findSetting(callback) {
-    $.ajax(DATAURL, {
-      data: {
-        'key': 'CHARACTER_SHEET_DATA'
-      },
-      success : function(data, textStatus, jqXHR) {
-        if (jqXHR.status == 204) {
-          createSetting(callback);      
-        } else {
-          callback(data[0]);
-        }
-      },
-      error: function ( jqXHR, textStatus, errorThrown) {
-        // TODO: Proper error handling
-        
-        alert(textStatus);
-      }
-    });
-  }
-  
-  function loadSheetData(callback) {
-    if (!DATAURL) {
-      // Preview mode
-      return callback({});
-    }
-    
-    if (SHEETDATA) {
-      callback(SHEETDATA);
-    } else {
-      if (!SETTINGID) {
-        findSetting(function (setting) {
-          SETTINGID = setting.id;
-          var data = setting.value;
-          SHEETDATA = data ? JSON.parse(data) : {};
-          callback(SHEETDATA);
-        });
-      } else {
-        $.ajax(DATAURL + '/' + SETTINGID, {
-          success : function(setting, textStatus, jqXHR) {
-            var data = setting.value;
-            SHEETDATA = data ? JSON.parse(data) : {};
-            callback(SHEETDATA);
-          },
-          error: function ( jqXHR, textStatus, errorThrown) {
-            // TODO: Proper error handling
-            
-            alert(textStatus);
-          }
-        });
-      }
-    }
-  }
-  
-  function saveSheetData(sheetData, callback) {
-    if (!DATAURL) {
-      // Preview mode
-      return callback({});
-    }
-    
-    SHEETDATA = null;
-    
-    $.ajax(DATAURL + '/' + SETTINGID, {
-      type: 'PUT',
-      contentType: "application/json",
-      dataType : "json",
-      accepts: {
-        'json' : 'application/json'
-      },
-      data: JSON.stringify({
-        'key': 'CHARACTER_SHEET_DATA',
-        'value': JSON.stringify(sheetData)
-      }),
-      success : function(data, textStatus, jqXHR) {
-        callback();
-      },
-      error: function ( jqXHR, textStatus, errorThrown) {
-        // TODO: Proper error handling
-        alert(textStatus);
-      }
-    });    
-  }
-
   $.widget("custom.illusionField", {
     options: {
       sum: [],
-      store: false,
     },
     _create : function() {
       if (this.options.sum.length > 0) {
@@ -142,22 +33,12 @@
 
         this._updateSum();
       }
-
-      if (this.options.store) {
-        if (!$(this.element).attr('name')) {
-          throw new Error("Stored field does not have a name");
-        }
-
-        var storedValue = this._retrievedValue($.proxy(function (storedValue) {
-          this.element.val(storedValue);
-          this.element.trigger("change");
-        }, this));
-        
-        this.element.change($.proxy(function (event) {
-          this._storeValue($(event.target).val());
-        }, this));
-      }
     },
+    
+    readOnly: function () {
+      return $(this.element).attr('readOnly') == 'readOnly';
+    },
+    
     _updateSum: function () {
       var sum = 0;
       $.each(this.options.sum, $.proxy(function (index, field) {
@@ -172,23 +53,6 @@
       }, this));
       
       $(this.element).val(sum);
-    },
-
-    _retrievedValue: function (callback) {
-      loadSheetData($.proxy(function (sheetJson) {
-        var name = $(this.element).attr('name');
-        callback(sheetJson[name]);
-      }, this));
-    },
-
-    _storeValue: function (value) {
-      loadSheetData($.proxy(function (sheetData) {
-        sheetData[$(this.element).attr('name')] = value;
-        saveSheetData(sheetData, function () {
-          // Update data links
-          $('.i-data-link').attr('href', '?d=' + btoa(JSON.stringify(sheetData)));
-        });
-      }, this));
     }
   });
   
@@ -239,40 +103,28 @@
     }
   });
   
-  $(document).ready(function () {
-    
-    var params = getQueryParameters();
-    if (params['d']) {
-      if (window.atob) {
-        var data = atob(params['d']);
-        // TODO: Load sheet data
-      }
-    }
-    
-    DATAURL = params['dataUrl'];
-
-    loadSheetData(function (sheetData) {
-      // Initialize data links
-      
-      $('.i-data-link').attr('href', '?d=' + btoa(JSON.stringify(sheetData)));
-      
+  $.widget("custom.illusionCharacterSheet", {
+    options: {
+      preview: false
+    },
+    _create : function() {
       // Initialize fields
       
-      $('.i-field').each(function (index, field) {
+      $(this.element).find('.i-field').each($.proxy(function (index, field) {
         if ($(field).hasClass('i-field-sum')) {
           $(field).illusionField({
             sum: $(field).attr('data-fields').split(',')
           });
         } else {
-          $(field).illusionField({
-            store: true
-          });   
+          $(field)
+            .illusionField()
+            .on('change', $.proxy(this._onIllusionFieldChange, this));   
         }
-      });    
+      }, this));    
       
-      // Initilize progressbars
+      // Initialize progress bars
       
-      $('.i-progressbar').each(function (index, field) {
+      $(this.element).find('.i-progressbar').each(function (index, field) {
         var targetField = $($(field).attr('data-field'));
         
         $(field).progressbar({
@@ -286,7 +138,7 @@
       
       // Initialize rolls
       
-      $('.i-roll')
+      $(this.element).find('.i-roll')
         .illusionRoll()
         .click(function () {
           var roll = $(this).illusionRoll('roll');
@@ -295,27 +147,125 @@
             roll: roll[1]
           });
         });
+      
+      if (!this.options.preview) {
+        var socketUrl = (window.location.protocol == 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + this.options.contextPath + '/ws/' + this.options.eventId + '/characterSheet/' + this.options.materialId + '/' + this.options.participantId + '/' + this.options.key;
+        this._webSocket = this._openWebSocket(socketUrl);
+        this._webSocket.onmessage = $.proxy(this._onWebSocketMessage, this);
+        this._webSocket.onopen = $.proxy(this._onWebSocketOpen, this);
+        $(window).on('beforeunload', $.proxy(this._onWindowBeforeUnload, this));
+      }
+    },
+    
+    load: function (sheetData) {
+      for (var key in sheetData) {
+        var value = sheetData[key];
+        $('*[name="' + key + '"]').val(value);
+      }
+
+      if ($(this.element).find('.i-data-link').length > 0) {
+        this._updateDataLinks(sheetData);
+      }
+    },
+    
+    _sendUpdate: function (key, value) {
+      if (!this.options.preview) {
+        this._webSocket.send(JSON.stringify({
+          type: 'update',
+          data: { 
+            key: key, 
+            value: value 
+          }
+        }));
+      }
+      
+      if ($(this.element).find('.i-data-link').length > 0) {
+        var sheetData = {};
+        $(this.element).find('.i-field').each(function (index, field) {
+          if ($(field).illusionField('readOnly')) {
+            sheetData[$(field).attr('name')] = $(field).val();
+          }
+        });
+        
+        this._updateDataLinks(sheetData);
+      }
+    },
+    
+    _updateDataLinks: function (sheetData) {
+      $(this.element).find('.i-data-link').attr('href', window.document.location.search + '&d=' + btoa(JSON.stringify(sheetData)));
+    },
+    
+    _openWebSocket: function (url) {
+      if ((typeof window.WebSocket) !== 'undefined') {
+        return new WebSocket(url);
+      } else if ((typeof window.MozWebSocket) !== 'undefined') {
+        return new MozWebSocket(url);
+      }
+      
+      return null;
+    },
+    
+    _onWebSocketMessage: function (event) {
+      var data = event.data;
+      var message = $.parseJSON(data);
+      var messageData = $.parseJSON(message.data);
+      switch (message.type) {
+        case 'load':
+          this.load(messageData.values);
+        break;
+        case 'update':
+          $('*[name="' + messageData.key + '"]').val(messageData.value);
+        break;
+      }
+    },
+    
+    _onWebSocketOpen: function (event) {
+      this._webSocket.onclose = $.proxy(this._onWebSocketClose, this);    
+      this._webSocket.onerror = $.proxy(this._onWebSocketError, this);    
+    },
+    
+    _onWebSocketClose: function (event) {
+      if (event.code == 1000) {
+        window.location.reload(true);
+      } else {
+        alert('Communication error with server, please try again later');
+      }
+    },
+    
+    _onWebSocketError: function (event) {
+      alert('Communication error with server, please try again later');
+    },
+    
+    _onIllusionFieldChange: function (event, data) {
+      this._sendUpdate($(event.target).attr('name'), $(event.target).val());
+    },
+    
+    _onWindowBeforeUnload: function (event) {
+      this._webSocket.onclose = function () {};
+      this._webSocket.close();
+    }
+  });
+  
+  $(document).ready(function () {
+    var params = getQueryParameters();
+
+    $('#character-sheet').illusionCharacterSheet({
+      preview: (typeof PREVIEW != 'undefined') ? PREVIEW : false,
+      contextPath: params.contextPath,
+      participantId: params.participantId,
+      eventId: params.eventId,
+      materialId: params.materialId,
+      key: params.key
     });
     
-    $('.properties .property-exp').change(function (event) {
-      var currentExp = parseInt($(this).val()||'0');
-      if (currentExp >= 100) {
-        var expFieldName = $(this).attr('name');
-        var fieldName = expFieldName.substring(0, expFieldName.length - 4);
-        
-        var currentLevel = parseInt($('input[name="' + fieldName + '"]').val()||'0');
-        var raiseLevels = Math.floor(currentExp / 100);
-        if (raiseLevels > 0) {
-          $(this)
-            .val(currentExp - (raiseLevels * 100))
-            .trigger('change');
-          
-          $('input[name="' + fieldName + '"]')
-            .val(currentLevel + raiseLevels)
-            .trigger("change");
+    if (params['d']) {
+      if (window.atob) {
+        var data = atob(params['d']);
+        if (data) {
+          $('#character-sheet').illusionCharacterSheet('data', $.parseJSON(data));
         }
       }
-    });
+    }
   }); 
   
 }).call(this);
