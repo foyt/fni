@@ -48,7 +48,8 @@
         "title": title,
         "styles": styles,
         "contents": contents,
-        "scripts": scripts 
+        "scripts": scripts,
+        "mode": "preview"
       }, function(err, html) {
         var previewFrame = $('.forge-chracter-sheet-editor-preview');
         previewFrame.attr("src", 'data:text/html;base64,' + utf8_to_b64(html));

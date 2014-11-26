@@ -9,6 +9,9 @@
     <script src="{@baseUrl/}/uresources/illusion-character-sheet.js" charset="utf8" type="text/javascript"></script>
     <title>{title}</title>
     <style type="text/css">{styles|s}</style>
+    {@if cond="'{mode}' == 'preview'"}
+      <script type="text/javascript">var PREVIEW = true;</script>
+    {/if}
     <script type="text/javascript">{scripts|s}</script>
   </head>
   <body>
