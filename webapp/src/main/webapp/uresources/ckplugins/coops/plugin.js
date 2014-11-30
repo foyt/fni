@@ -88,7 +88,7 @@
       },
       
       _onSessionStart: function (event) {
-        this.setSavedContent(this.getUnsavedContent());
+        this.setSavedContent(event.data.content);
       },
       
       _onContentPatch: function (event) {
@@ -104,10 +104,12 @@
       },
       
       _onPatchSent: function (event) {
+        console.log("Sent");
         this._editor.getChangeObserver().pause();
       },
       
       _onPatchAccepted: function (event) {
+        console.log("Accepted");
         if (event.data.content !== undefined) {
           this.setSavedContent(event.data.content);
         }
@@ -120,6 +122,7 @@
       },
       
       _onPatchRejected: function (event) {
+        console.log("Rejected");
         this._resetAndResume(1000);
       },
       
@@ -159,7 +162,9 @@
               this.setReadOnly(false);
             }
               
-            this.fire("CoOPS:SessionStart");
+            this.fire("CoOPS:SessionStart", {
+              content: content
+            });
           });
         } else {
           this._editor.fire("CoOPS:Error", {
