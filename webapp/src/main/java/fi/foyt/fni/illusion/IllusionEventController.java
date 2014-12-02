@@ -18,6 +18,7 @@ import fi.foyt.fni.persistence.dao.illusion.IllusionEventDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventGenreDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantImageDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventTemplateDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventTypeDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionEventFolderDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionFolderDAO;
@@ -28,6 +29,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantImage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventTemplate;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
@@ -67,6 +69,9 @@ public class IllusionEventController {
   
   @Inject
   private MaterialController materialController;
+
+  @Inject
+  private IllusionEventTemplateDAO illusionEventTemplateDAO;
   
   @Inject
   private Event<IllusionParticipantAddedEvent> illusionParticipantAddedEvent;
@@ -311,6 +316,24 @@ public class IllusionEventController {
 
   public List<IllusionEventGenre> listIllusionEventGenres(IllusionEvent illusionEvent) {
     return illusionEventGenreDAO.listByEvent(illusionEvent);
+  }
+  
+  /* Templates */
+
+  public IllusionEventTemplate findEventTemplateById(Long templateId) {
+    return illusionEventTemplateDAO.findById(templateId);
+  }
+  
+  public IllusionEventTemplate findEventTemplate(IllusionEvent event, String name) {
+    return illusionEventTemplateDAO.findByEventAndName(event, name); 
+  }
+  
+  public IllusionEventTemplate findRootTemplate(String name) {
+    return illusionEventTemplateDAO.findByEventIsNullAndName(name); 
+  }
+
+  public IllusionEventTemplate updateEventTemplateData(IllusionEventTemplate template, String templateData) {
+    return illusionEventTemplateDAO.updateData(illusionEventTemplateDAO.updateModified(template, new Date()), templateData);
   }
 
 }
