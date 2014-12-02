@@ -23,8 +23,19 @@ public class IllusionEventDocumentController {
     return illusionEventDocumentDAO.findByParentFolderAndDocumentType(folder, documentType);
   }
 
-  public IllusionEventDocument createIllusionEventDocument(User creator, IllusionEventDocumentType documentType, Language language, IllusionEventFolder parentFolder, String urlName, String title, String data, MaterialPublicity publicity) {
-    return illusionEventDocumentDAO.create(creator, documentType, language, parentFolder, urlName, title, data, publicity);
+  public IllusionEventDocument createIllusionEventDocument(User creator, IllusionEventDocumentType documentType, Language language, IllusionEventFolder parentFolder, String urlName, String title, String data, MaterialPublicity publicity, Integer indexNumber) {
+    return illusionEventDocumentDAO.create(creator, documentType, language, parentFolder, urlName, title, data, publicity, indexNumber);
   }
+  
+  public IllusionEventDocument createIllusionEventDocument(User creator, IllusionEventDocumentType documentType, Language language, IllusionEventFolder parentFolder, String urlName, String title, String data, MaterialPublicity publicity) {
+    Integer indexNumber = illusionEventDocumentDAO.maxIndexNumberByParentFolder(parentFolder);
+    if (indexNumber == null) {
+      indexNumber = 0;
+    } else {
+      indexNumber++;
+    }
+    
+    return createIllusionEventDocument(creator, documentType, language, parentFolder, urlName, title, data, publicity, indexNumber);
+  }  
 
 }

@@ -21,7 +21,7 @@ public class IllusionEventDocumentDAO extends GenericDAO<IllusionEventDocument> 
 
   private static final long serialVersionUID = -4644199519384824575L;
 
-  public IllusionEventDocument create(User creator, IllusionEventDocumentType documentType, Language language, Folder parentFolder, String urlName, String title, String data, MaterialPublicity publicity) {
+  public IllusionEventDocument create(User creator, IllusionEventDocumentType documentType, Language language, Folder parentFolder, String urlName, String title, String data, MaterialPublicity publicity, Integer indexNumber) {
     Date now = new Date();
 
     IllusionEventDocument illusionEventDocument = new IllusionEventDocument();
@@ -36,7 +36,8 @@ public class IllusionEventDocumentDAO extends GenericDAO<IllusionEventDocument> 
     illusionEventDocument.setDocumentType(documentType);
     illusionEventDocument.setLanguage(language);
     illusionEventDocument.setParentFolder(parentFolder);
-
+    illusionEventDocument.setIndexNumber(indexNumber);
+    
     return persist(illusionEventDocument);
   }
 
@@ -72,5 +73,19 @@ public class IllusionEventDocumentDAO extends GenericDAO<IllusionEventDocument> 
     );
     
     return entityManager.createQuery(criteria).getResultList();
+  }
+
+  public Integer maxIndexNumberByParentFolder(Folder parentFolder) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Integer> criteria = criteriaBuilder.createQuery(Integer.class);
+    Root<IllusionEventDocument> root = criteria.from(IllusionEventDocument.class);
+    criteria.select(criteriaBuilder.max(root.get(IllusionEventDocument_.indexNumber)));
+    criteria.where(
+      criteriaBuilder.equal(root.get(IllusionEventDocument_.parentFolder), parentFolder)
+    );
+    
+    return entityManager.createQuery(criteria).getSingleResult();
   }
 }

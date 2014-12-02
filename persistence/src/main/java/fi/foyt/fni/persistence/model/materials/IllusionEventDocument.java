@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.search.annotations.Indexed;
 
@@ -25,7 +26,18 @@ public class IllusionEventDocument extends Document {
     this.documentType = documentType;
   }
   
+  public Integer getIndexNumber() {
+    return indexNumber;
+  }
+  
+  public void setIndexNumber(Integer indexNumber) {
+    this.indexNumber = indexNumber;
+  }
+  
   @Enumerated (EnumType.STRING)
   @Column (nullable = false)
   private IllusionEventDocumentType documentType;
+  
+  @NotNull
+  private Integer indexNumber;
 }
