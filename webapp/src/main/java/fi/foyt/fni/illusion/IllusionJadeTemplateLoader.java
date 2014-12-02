@@ -1,6 +1,8 @@
 package fi.foyt.fni.illusion;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 
@@ -35,6 +37,17 @@ public class IllusionJadeTemplateLoader implements TemplateLoader {
       return new StringReader(template.getData());
     }
     
+    String eventUrl = RequestUtils.extractToNextSlash(name);
+    name = name.substring(eventUrl.length());
+    
+    if (!name.endsWith(".jade"))
+      name = name + ".jade";
+    
+    InputStream resourceStream = getClass().getClassLoader().getResourceAsStream("/jade/illusion" + name);
+    if (resourceStream != null) {
+      return new InputStreamReader(resourceStream);
+    }
+    
     return null;
   }
 
@@ -50,12 +63,10 @@ public class IllusionJadeTemplateLoader implements TemplateLoader {
             return template;
           }
         }
-        
-        return illusionEventController.findRootTemplate(templateName);
       }
     }
     
     return null;
   }
-  
+
 }

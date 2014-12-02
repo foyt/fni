@@ -327,10 +327,6 @@ public class IllusionEventController {
   public IllusionEventTemplate findEventTemplate(IllusionEvent event, String name) {
     return illusionEventTemplateDAO.findByEventAndName(event, name); 
   }
-  
-  public IllusionEventTemplate findRootTemplate(String name) {
-    return illusionEventTemplateDAO.findByEventIsNullAndName(name); 
-  }
 
   public IllusionEventTemplate updateEventTemplateData(IllusionEventTemplate template, String templateData) {
     return illusionEventTemplateDAO.updateData(illusionEventTemplateDAO.updateModified(template, new Date()), templateData);

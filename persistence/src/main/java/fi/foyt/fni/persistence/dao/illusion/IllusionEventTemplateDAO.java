@@ -45,23 +45,6 @@ public class IllusionEventTemplateDAO extends GenericDAO<IllusionEventTemplate> 
     return getSingleResult(entityManager.createQuery(criteria));
   }
 
-  public IllusionEventTemplate findByEventIsNullAndName(String name) {
-    EntityManager entityManager = getEntityManager();
-
-    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<IllusionEventTemplate> criteria = criteriaBuilder.createQuery(IllusionEventTemplate.class);
-    Root<IllusionEventTemplate> root = criteria.from(IllusionEventTemplate.class);
-    criteria.select(root);
-    criteria.where(
-      criteriaBuilder.and(
-        criteriaBuilder.isNull(root.get(IllusionEventTemplate_.event)),
-        criteriaBuilder.equal(root.get(IllusionEventTemplate_.name), name)
-      )
-    );
-
-    return getSingleResult(entityManager.createQuery(criteria));
-  }
-
   public List<IllusionEventTemplate> listByEvent(IllusionEvent event) {
     EntityManager entityManager = getEntityManager();
 
