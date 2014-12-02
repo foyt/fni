@@ -1,0 +1,21 @@
+include common
++view-header()
++breadcrumps()
+div(class="grid_16 tight")
+  div(class="illusion-content-panel grid_16 tight")
+    div(class="grid_16 tight")
+      div(class="illusion-event-sub-panel")
+        h3
+          =locales['illusion.materials.title']
+        div(class="illusion-list illusion-event-materials")
+          for material in materials
+            if material.viewable
+              a(href=eventUrl + '/materials/' + material.path, class="illusion-event-material illusion-list-item")
+                span
+                  =material.title
+                img(src=contextPath + "/theme/gfx/icons/48x48/forge/icon-" + material.icon + ".png")
+            else 
+              a(href=siteUrl + material.downloadUrl, class="illusion-event-material illusion-list-item")
+                span
+                  =material.title
+                img(src=contextPath + "/theme/gfx/icons/48x48/forge/icon-" + material.icon + ".png")

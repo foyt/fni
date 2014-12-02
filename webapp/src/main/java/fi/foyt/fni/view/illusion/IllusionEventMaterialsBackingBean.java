@@ -3,7 +3,11 @@ package fi.foyt.fni.view.illusion;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -15,9 +19,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
+import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionEventPageVisibility;
+import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
+import fi.foyt.fni.jade.JadeController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.MaterialTypeComparator;
@@ -44,6 +51,9 @@ import fi.foyt.fni.session.SessionController;
 @SecurityContext (context = "@urlName")
 public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBackingBean {
 
+  @Inject
+  private Logger logger;
+
   @Parameter
   private String urlName;
 
@@ -61,6 +71,9 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
 
   @Inject
   private IllusionEventPageController illusionEventPageController;
+
+  @Inject
+  private JadeController jadeController;
   
   @SuppressWarnings("unchecked")
   @Override
@@ -82,7 +95,7 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
     User loggedUser = sessionController.getLoggedUser();
     IllusionEventFolder folder = illusionEvent.getFolder();
     
-    materials = new ArrayList<>();
+    List<Material> materials = new ArrayList<>();
     
     List<Material> allMaterials = materialController.listMaterialsByFolderAndTypes(loggedUser, folder, Arrays.asList(
       MaterialType.DOCUMENT,
@@ -118,6 +131,36 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
         new TitleComparator())
       )
     );
+
+    List<Map<String, Object>> materialsModel = new ArrayList<>();
+    
+    for (Material material : materials) {
+      Map<String, Object> materialModel = new HashMap<>();
+      materialModel.put("id", material.getId());
+      materialModel.put("type", material.getType());
+      materialModel.put("title", material.getTitle());
+      materialModel.put("publicity", material.getPublicity());
+      materialModel.put("urlName", material.getUrlName());
+      materialModel.put("path", getRelativePath(material));
+      materialModel.put("downloadUrl", "/materials/" + material.getPath() + "?download=true");
+      materialModel.put("viewable", isViewable(material));
+      materialModel.put("icon", materialController.getMaterialIcon(material.getType()));
+      materialsModel.add(materialModel);
+    }
+    
+    try {
+      IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.MATERIALS)
+          .addBreadcrump(illusionEvent, "/materials", ExternalLocales.getText(sessionController.getLocale(), "illusion.breadcrumps.materials"))
+          .put("materials", materialsModel)
+          .addLocale(sessionController.getLocale(), "illusion.materials.title");
+      
+      Map<String, Object> tempalteModel = templateModelBuilder.build();
+      headHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/materials-head", tempalteModel);
+      contentsHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/materials-contents", tempalteModel);
+    } catch (Exception e) {
+      logger.log(Level.SEVERE, "Could not parse jade template", e);
+      return "/error/internal-error.jsf";
+    }
     
     return null;
   }
@@ -130,12 +173,16 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
   public void setUrlName(@SecurityContext String urlName) {
     this.urlName = urlName;
   }
-
-  public List<Material> getMaterials() {
-    return materials;
+  
+  public String getHeadHtml() {
+    return headHtml;
   }
   
-  public String getRelativePath(Material material) {
+  public String getContentsHtml() {
+    return contentsHtml;
+  }
+  
+  private String getRelativePath(Material material) {
     List<String> path = new ArrayList<>();
     
     Material current = material;
@@ -146,7 +193,7 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
     return StringUtils.join(path, "/");
   }
   
-  public boolean isViewable(Material material) {
+  private boolean isViewable(Material material) {
     switch (material.getType()) {
       case FILE:
       case PDF:
@@ -156,5 +203,6 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
     }
   }
   
-  private List<Material> materials;
+  private String headHtml;
+  private String contentsHtml;
 }

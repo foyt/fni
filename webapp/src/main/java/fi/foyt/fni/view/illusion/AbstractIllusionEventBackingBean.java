@@ -4,7 +4,13 @@ import javax.inject.Inject;
 
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
+import de.neuland.jade4j.JadeConfiguration;
 import fi.foyt.fni.illusion.IllusionEventController;
+import fi.foyt.fni.illusion.IllusionEventPage;
+import fi.foyt.fni.illusion.IllusionEventPageController;
+import fi.foyt.fni.illusion.IllusionJadeTemplateLoader;
+import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory;
+import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
@@ -23,7 +29,16 @@ public abstract class AbstractIllusionEventBackingBean {
 
   @Inject
   private UserController userController;
-  
+
+  @Inject
+  private IllusionEventPageController illusionEventPageController;
+
+  @Inject
+  private IllusionJadeTemplateLoader templateLoader;
+
+  @Inject
+  private IllusionTemplateModelBuilderFactory illusionTemplateModelBuilderFactory;
+
   @RequestAction
   public String basicInit() {
     IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
@@ -46,6 +61,10 @@ public abstract class AbstractIllusionEventBackingBean {
     description = illusionEvent.getDescription();
     illusionFolderPath = folder.getPath();
     mayManageEvent = participant != null ? participant.getRole() == IllusionEventParticipantRole.ORGANIZER : false;
+    
+    jadeConfiguration = new JadeConfiguration();
+    jadeConfiguration.setTemplateLoader(templateLoader);
+    jadeConfiguration.setCaching(false);
   
     return init(illusionEvent, participant);
   }
@@ -80,10 +99,39 @@ public abstract class AbstractIllusionEventBackingBean {
   public String getParticipantDisplayName(IllusionEventParticipant participant) {
     return userController.getUserDisplayName(participant.getUser());
   }
+
+  protected IllusionTemplateModelBuilder createDefaultTemplateModelBuilder(IllusionEvent illusionEvent, IllusionEventParticipant participant, fi.foyt.fni.illusion.IllusionEventPage.Static currentPage) {
+    return createDefaultTemplateModelBuilder(illusionEvent, participant, currentPage.name());
+  }
+  
+  protected IllusionTemplateModelBuilder createDefaultTemplateModelBuilder(IllusionEvent illusionEvent, IllusionEventParticipant participant, String currentPageId) {
+    IllusionTemplateModelBuilder modelBuilder = illusionTemplateModelBuilderFactory
+      .newBuilder();
+    
+    if (participant != null) {
+      for (IllusionEventPage page : illusionEventPageController.listParticipantPages(illusionEvent)) {
+        modelBuilder.addPage(page);
+      }
+    } else {
+      for (IllusionEventPage page : illusionEventPageController.listPublicPages(illusionEvent)) {
+        modelBuilder.addPage(page);
+      }
+    }
+    
+    return modelBuilder
+        .defaults(sessionController.getLocale())
+        .setCurrentPage(currentPageId)
+        .eventDefaults(illusionEvent);
+  }
+  
+  protected JadeConfiguration getJadeConfiguration() {
+    return jadeConfiguration;
+  }
   
   private Long id;
   private String name;
   private String description;
   private String illusionFolderPath;
   private boolean mayManageEvent;
+  private JadeConfiguration jadeConfiguration;
 }

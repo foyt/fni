@@ -20,99 +20,14 @@
     <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-materials.css"/>
   </ui:define>  
+  
+  <ui:define name="view-custom-head">
+    <h:outputText value="#{illusionEventMaterialsBackingBean.headHtml}" escape="false"/>
+  </ui:define>
 
   <ui:define name="grid-content">
-    <!-- Menu -->
-
     <ui:include src="/facelets/menu.xhtml" />
-    
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/index.jsf">#{locales['illusion.eventMaterials.navigationIndex']}</h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/index.jsf">#{locales['illusion.eventMaterials.navigationIllusion']}</h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/event.jsf">
-            <f:param name="urlName" value="#{illusionEventMaterialsBackingBean.urlName}"/>
-            <h:outputText value="#{illusionEventMaterialsBackingBean.name}" />
-          </h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/event-materials.jsf">
-            <f:param name="urlName" value="#{illusionEventMaterialsBackingBean.urlName}"/>
-            <h:outputText value="#{locales['illusion.eventMaterials.navigationMaterials']}" />
-          </h:link>
-        </h:panelGroup>
-      </h:panelGroup>
-  
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{illusionEventMaterialsBackingBean.name}</p>
-        <p class="view-header-description-text">#{illusionEventMaterialsBackingBean.description}</p>
-      </h:panelGroup>
-    </h:panelGroup>
-  
-    <div class="grid_16 tight">
-      <ui:include src="/facelets/illusionnavigation.xhtml"/>
-    </div>
-
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <div class="illusion-content-panel grid_16 tight">
-        <div class="grid_8 narrow-right">
-          <div class="illusion-event-sub-panel">
-            <h3>#{locales['illusion.eventMaterials.materialsListTitle']}</h3>
-    
-            <div class="illusion-list illusion-event-materials">
-              <ui:repeat var="material" offset="0" step="2" value="#{illusionEventMaterialsBackingBean.materials}">
-                <h:link outcome="/illusion/event-material.jsf" styleClass="illusion-event-material illusion-list-item" rendered="#{illusionEventMaterialsBackingBean.isViewable(material)}">
-                  <f:param name="urlName" value="#{illusionEventNavigationBackingBean.eventUrlName}"/>
-                  <f:param name="materialPath" value="#{illusionEventMaterialsBackingBean.getRelativePath(material)}"/>
-                  <span>#{material.title}</span>
-                  <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
-                </h:link>
-                
-                <h:outputLink styleClass="illusion-event-material illusion-list-item" value="#{request.contextPath}/materials/#{material.path}?download=true" rendered="#{not illusionEventMaterialsBackingBean.isViewable(material)}">
-                  <span>#{material.title}</span>
-                  <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
-                </h:outputLink>
-              </ui:repeat>
-            </div>
-          </div>
-        </div>
-        
-        <div class="grid_8 narrow-left">
-          <div class="illusion-event-sub-panel">
-            <h3>#{locales['illusion.eventMaterials.materialsListTitle']}</h3>
-    
-            <div class="illusion-list illusion-event-materials">
-              <ui:repeat var="material" offset="1" step="2" value="#{illusionEventMaterialsBackingBean.materials}">
-                <h:link outcome="/illusion/event-material.jsf" styleClass="illusion-event-material illusion-list-item" rendered="#{illusionEventMaterialsBackingBean.isViewable(material)}">
-                  <f:param name="urlName" value="#{illusionEventNavigationBackingBean.eventUrlName}"/>
-                  <f:param name="materialPath" value="#{illusionEventMaterialsBackingBean.getRelativePath(material)}"/>
-                  <span>#{material.title}</span>
-                  <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
-                </h:link>
-                
-                <h:outputLink styleClass="illusion-event-material illusion-list-item" value="#{request.contextPath}/materials/#{material.path}?download=true" rendered="#{not illusionEventMaterialsBackingBean.isViewable(material)}">
-                  <span>#{material.title}</span>
-                  <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
-                </h:outputLink>
-              </ui:repeat>
-            </div>
-          </div>
-        </div>
-      </div>      
-    </h:panelGroup>
-
+    <h:outputText value="#{illusionEventMaterialsBackingBean.contentsHtml}" escape="false"/>
   </ui:define>
 
 </ui:composition>
