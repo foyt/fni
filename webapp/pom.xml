@@ -352,6 +352,11 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>de.neuland-bfi</groupId>
+      <artifactId>jade4j</artifactId>
+    </dependency>
+
     <!-- Test -->
     
     <dependency>

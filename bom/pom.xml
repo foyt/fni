@@ -121,6 +121,10 @@
     
     <apache-oltu.version>1.0.0</apache-oltu.version>
     
+    <!-- Jade -->
+    
+    <jade4j.version>0.4.0</jade4j.version>
+    
     <!-- Selenium -->
 
     <selenium-java.version>2.41.0</selenium-java.version>
@@ -320,7 +324,15 @@
         <artifactId>org.apache.oltu.oauth2.resourceserver</artifactId>
         <version>${apache-oltu.version}</version>
       </dependency>
-
+  
+      <!-- Jade -->
+  
+      <dependency>
+        <groupId>de.neuland-bfi</groupId>
+        <artifactId>jade4j</artifactId>
+        <version>${jade4j.version}</version>
+      </dependency>
+    
       <!-- Jackson -->
       
       <dependency>
