@@ -1289,6 +1289,43 @@ public class MaterialController {
     return "todo";
   }
   
+  public String getMaterialIcon(MaterialType type) {
+    switch (type) {
+      case DROPBOX_FILE:
+        return "file";
+      case DROPBOX_FOLDER:
+        return "folder";
+      case DROPBOX_ROOT_FOLDER:
+        return "dropbox";
+      case GOOGLE_DOCUMENT:
+        return "google-drive";
+      case DOCUMENT:
+        return "document";
+      case BINARY:
+        return "file";
+      case FILE:
+        return "file";
+      case PDF:
+        return "pdf";
+      case FOLDER:
+        return "folder";
+      case IMAGE:
+        return "image";
+      case VECTOR_IMAGE:
+        return "vector-image";
+      case ILLUSION_GROUP_FOLDER:
+        return "illusion-group-folder";
+      case ILLUSION_FOLDER:
+        return "illusion-group-folder";
+      case ILLUSION_GROUP_DOCUMENT:
+        return "document";
+      case CHARACTER_SHEET:
+        return "character-sheet";
+    }
+
+    return null;
+  }
+  
   public String getForgeMaterialViewerUrl(Material material) {
     return new StringBuilder()
       .append("/forge/")
