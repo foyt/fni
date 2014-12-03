@@ -18,82 +18,14 @@
     <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event.css"/>
   </ui:define>  
-
+  
+  <ui:define name="view-custom-head">
+    <h:outputText value="#{illusionEventBackingBean.headHtml}" escape="false"/>
+  </ui:define>
+  
   <ui:define name="grid-content">
-    <!-- Menu -->
-
     <ui:include src="/facelets/menu.xhtml"/>
-    
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/index.jsf">#{locales['illusion.event.navigationIndex']}</h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/index.jsf">#{locales['illusion.event.navigationIllusion']}</h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/event.jsf?urlName=#{illusionEventBackingBean.urlName}">#{illusionEventBackingBean.name}</h:link>
-        </h:panelGroup>
-      </h:panelGroup>
-  
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{illusionEventBackingBean.name}</p>
-        <p class="view-header-description-text">#{illusionEventBackingBean.description}</p>
-      </h:panelGroup>
-    </h:panelGroup>
-    
-    <div class="grid_16 tight">
-      <ui:include src="/facelets/illusionnavigation.xhtml"/>
-    </div>
-          
-    <h:panelGroup layout="block" styleClass="illusion-event-join" rendered="#{(illusionEventBackingBean.memberRole == null) and (illusionEventBackingBean.joinMode eq 'OPEN' or illusionEventBackingBean.joinMode eq 'APPROVE')}">
-      <h:panelGroup layout="block" styleClass="illusion-event-join-info" rendered="#{!illusionEventBackingBean.hasSignUpFee}">
-        <h:outputText value="#{locales['illusion.event.joinInfoFree']}"/>
-      </h:panelGroup>
-      
-      <h:panelGroup layout="block" styleClass="illusion-event-join-info" rendered="#{illusionEventBackingBean.hasSignUpFee}">
-        <h:outputFormat value="#{locales['illusion.event.joinInfoPrice']}">
-          <f:param value="#{illusionEventBackingBean.signUpFee}"/>
-        </h:outputFormat>
-      </h:panelGroup>
-      
-      <h:form>
-        <h:link outcome="/illusion/dojoin.jsf" styleClass="illusion-event-join-button" rendered="#{illusionEventBackingBean.joinMode eq 'OPEN' or illusionEventBackingBean.ref eq 'inv'}">
-          <h:outputText value="#{locales['illusion.event.joinButton']}"/>
-          <f:param name="urlName" value="#{illusionEventBackingBean.urlName}"/>
-        </h:link>
-        <h:link outcome="/illusion/dojoin.jsf" value="#{locales['illusion.event.requestToJoinButton']}" styleClass="illusion-event-join-button" rendered="#{illusionEventBackingBean.joinMode eq 'APPROVE' and illusionEventBackingBean.ref ne 'inv'}">              
-          <f:param name="urlName" value="#{illusionEventBackingBean.urlName}"/>
-        </h:link>
-      </h:form>
-    </h:panelGroup>
-    
-    <div class="grid_16 tight">
-      <div class="illusion-content-panel grid_16 tight">
-        <div class="grid_16">
-          <div class="illusion-event-sub-panel">
-            <h:panelGroup layout="block" styleClass="illusion-event-index-text">
-              <h:outputText value="#{illusionEventBackingBean.indexText}" escape="false"/>
-            </h:panelGroup>
-            <div class="social-likes-container">
-	            <div class="social-likes" data-counters="no">
-							  <div class="facebook" title="#{locales['illusion.event.shareOnFacebook']}">Facebook</div>
-							  <div class="twitter" title="#{locales['illusion.event.shareOnTwitter']}">Twitter</div>
-							  <div class="plusone" title="#{locales['illusion.event.shareOnGooglePlus']}">Google+</div>
-						  </div>
-						</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    <h:outputText value="#{illusionEventBackingBean.contentsHtml}" escape="false"/>
   </ui:define>
 
 </ui:composition>

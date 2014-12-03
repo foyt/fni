@@ -1,0 +1,31 @@
+include common
++view-header()
++breadcrumps()
+if (!memberRole) && ((joinMode == 'OPEN')||(joinMode == 'APPROVE'))
+  div.illusion-event-join
+    if hasSignUpFee
+      div.illusion-event-join-info
+        =locales['illusion.event.joinInfoPrice']
+    else
+      div.illusion-event-join-info
+        =locales['illusion.event.joinInfoFree']
+    if (joinMode == 'OPEN')||(ref == 'inv')
+      a(class="illusion-event-join-button",href=eventUrl + "/dojoin")
+        =locales['illusion.event.joinButton']
+    if (joinMode == 'APPROVE')&&(ref != 'inv')
+      a(class="illusion-event-join-button",href=eventUrl + "/dojoin")
+        =locales['illusion.event.requestToJoinButton']   
+div.grid_16.tight
+  .illusion-content-panel.grid_16.tight
+    .grid_16
+      .illusion-event-sub-panel
+        .illusion-event-index-text
+          !={indexText}
+        .social-likes-container
+          .social-likes.social-likes_visible(data-counters='no')
+            div.facebook(title=locales['illusion.event.shareOnFacebook'])
+              | Facebook
+            div.twitter(title=locales['illusion.event.shareOnTwitter'])
+              | Facebook
+            div.plusone(title=locales['illusion.event.shareOnGooglePlus'])
+              | Facebook

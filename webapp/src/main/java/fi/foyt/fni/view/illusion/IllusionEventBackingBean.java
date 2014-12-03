@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.NumberFormat;
 import java.util.Currency;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,7 +19,10 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
+import de.neuland.jade4j.exceptions.JadeException;
 import fi.foyt.fni.illusion.IllusionEventPage;
+import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
+import fi.foyt.fni.jade.JadeController;
 import fi.foyt.fni.materials.IllusionEventDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -29,6 +33,7 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.security.SecurityContext;
+import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.FileData;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
@@ -59,13 +64,19 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
 
+  @Inject
+  private JadeController jadeController;
+
+  @Inject
+  private SessionController sessionController;
+  
   @Override
-  public String init(IllusionEvent illusionEvent, IllusionEventParticipant member) {
+  public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.INDEX);
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
-    if (member != null) {
-      memberRole = member.getRole();
+    if (participant != null) {
+      memberRole = participant.getRole();
       switch (memberRole) {
         case BOT:
           return "/error/access-denied.jsf";
@@ -80,6 +91,7 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
     }
 
     IllusionEventFolder folder = illusionEvent.getFolder();
+    String indexText = null;
     
     IllusionEventDocument indexDocument = illusionEventDocumentController.findByFolderAndDocumentType(folder, IllusionEventDocumentType.INDEX);
     if (indexDocument != null) {
@@ -93,8 +105,9 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
       }
     }
 
-    joinMode = illusionEvent.getJoinMode();
-    hasSignUpFee = illusionEvent.getSignUpFee() != null;
+    IllusionEventJoinMode joinMode = illusionEvent.getJoinMode();
+    boolean hasSignUpFee = illusionEvent.getSignUpFee() != null;
+    String signUpFee = null;
     if (hasSignUpFee) {
       Currency currency = illusionEvent.getSignUpFeeCurrency();
       NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
@@ -102,6 +115,26 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
       signUpFee = currencyFormatter.format(illusionEvent.getSignUpFee());
     }
     
+    IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.INDEX)
+      .put("indexText", indexText)
+      .put("joinMode", joinMode.toString())
+      .put("hasSignUpFee", hasSignUpFee)
+      .put("signUpFee", signUpFee)
+      .put("memberRole", memberRole)
+      .put("ref", ref)
+      .addLocales(sessionController.getLocale(), "illusion.event.joinInfoFree", "illusion.event.joinInfoPrice", 
+          "illusion.event.joinButton", "illusion.event.requestToJoinButton",  "illusion.event.shareOnFacebook", 
+          "illusion.event.shareOnTwitter", "illusion.event.shareOnGooglePlus");
+    
+    try {
+      Map<String, Object> templateModel = templateModelBuilder.build();
+      headHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/index-head", templateModel);
+      contentsHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/index-contents", templateModel);
+    } catch (JadeException | IOException e) {
+      logger.log(Level.SEVERE, "Could not parse jade template", e);
+      return "/error/internal-error.jsf";
+    }
+
     return null;
   }
   
@@ -136,22 +169,6 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
     this.urlName = urlName;
   }
   
-  public String getIndexText() {
-    return indexText;
-  }
-
-  public IllusionEventJoinMode getJoinMode() {
-    return joinMode;
-  }
-  
-  public boolean getHasSignUpFee() {
-    return hasSignUpFee;
-  }
-
-  public String getSignUpFee() {
-    return signUpFee;
-  }
-  
   public String getRef() {
     return ref;
   }
@@ -168,13 +185,15 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
     this.ignoreMessages = ignoreMessages;
   }
   
-  public IllusionEventParticipantRole getMemberRole() {
-    return memberRole;
+  public String getHeadHtml() {
+    return headHtml;
   }
   
-  private String indexText;
-  private IllusionEventJoinMode joinMode;
-  private boolean hasSignUpFee;
-  private String signUpFee;
+  public String getContentsHtml() {
+    return contentsHtml;
+  }
+  
   private IllusionEventParticipantRole memberRole;
+  private String headHtml;
+  private String contentsHtml;
 }

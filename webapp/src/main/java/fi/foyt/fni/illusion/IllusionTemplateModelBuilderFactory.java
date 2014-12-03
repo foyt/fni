@@ -18,7 +18,7 @@ public class IllusionTemplateModelBuilderFactory {
 
   @Inject
   private SystemSettingsController systemSettingsController;
-
+  
   public IllusionTemplateModelBuilder newBuilder() {
     return new IllusionTemplateModelBuilder();
   }
@@ -88,6 +88,14 @@ public class IllusionTemplateModelBuilderFactory {
 
     public IllusionTemplateModelBuilder addLocale(Locale locale, String key) {
       locales.put(key, ExternalLocales.getText(locale, key));
+      return this;
+    }
+
+    public IllusionTemplateModelBuilder addLocales(Locale locale, String... keys) {
+      for (String key : keys) {
+        locales.put(key, ExternalLocales.getText(locale, key));
+      }
+      
       return this;
     }
     
