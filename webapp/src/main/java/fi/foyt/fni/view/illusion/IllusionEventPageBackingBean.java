@@ -1,7 +1,11 @@
 package fi.foyt.fni.view.illusion;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -12,8 +16,11 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
+import de.neuland.jade4j.exceptions.JadeException;
 import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionEventPageVisibility;
+import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
+import fi.foyt.fni.jade.JadeController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
@@ -32,6 +39,9 @@ import fi.foyt.fni.system.SystemSettingsController;
 @Join(path = "/illusion/event/{urlName}/pages/{materialPath}", to = "/illusion/event-page.jsf")
 public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBean {
 
+  @Inject
+  private Logger logger;
+  
   @Parameter
   private String urlName;
 
@@ -50,6 +60,9 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
 
   @Inject
   private SessionController sessionController;
+
+  @Inject
+  private JadeController jadeController;
 
   @Inject
   private SystemSettingsController systemSettingsController;
@@ -99,9 +112,22 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
       }
     }
 
-    pageTitle = material.getTitle();
-    pageContent = document.getData();
     illusionEventNavigationController.setSelectedPage(material.getId().toString());
+    pageTitle = material.getTitle();
+    
+    IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, material.getId().toString())
+        .put("pageContent", document.getData())
+        .put("pageTitle", pageTitle)
+        .addBreadcrump(illusionEvent, "/pages/" + getMaterialPath(), pageTitle);
+    
+    try {
+      Map<String, Object> templateModel = templateModelBuilder.build(sessionController.getLocale());
+      headHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/page-head", templateModel);
+      contentsHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/page-contents", templateModel);
+    } catch (JadeException | IOException e) {
+      logger.log(Level.SEVERE, "Could not parse jade template", e);
+      return "/error/internal-error.jsf";
+    }
 
     return null;
   }
@@ -123,14 +149,19 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
     this.materialPath = materialPath;
   }
   
+  public String getHeadHtml() {
+    return headHtml;
+  }
+  
+  public String getContentsHtml() {
+    return contentsHtml;
+  }
+  
   public String getPageTitle() {
     return pageTitle;
   }
-  
-  public String getPageContent() {
-    return pageContent;
-  }
-  
+
+  private String headHtml;
+  private String contentsHtml;
   private String pageTitle;
-  private String pageContent;
 }
