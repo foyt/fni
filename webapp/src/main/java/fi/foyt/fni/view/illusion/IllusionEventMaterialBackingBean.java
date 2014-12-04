@@ -17,6 +17,7 @@ import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
 import de.neuland.jade4j.exceptions.JadeException;
+import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionEventMaterialController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionEventPageController;
@@ -142,6 +143,8 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
     }
     
     IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.INDEX)
+        .addBreadcrump(illusionEvent, "/materials", ExternalLocales.getText(sessionController.getLocale(), "illusion.breadcrumps.materials"))
+        .addBreadcrump(illusionEvent, "/materials/" + getMaterialPath(), material.getTitle())
         .put("materialTitle", material.getTitle())
         .put("materialUrl", materialUrl)
         .put("materialEmbedType", materialEmbedType.toString())
