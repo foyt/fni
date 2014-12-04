@@ -152,9 +152,9 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
       IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.MATERIALS)
           .addBreadcrump(illusionEvent, "/materials", ExternalLocales.getText(sessionController.getLocale(), "illusion.breadcrumps.materials"))
           .put("materials", materialsModel)
-          .addLocale(sessionController.getLocale(), "illusion.materials.title");
+          .addLocale("illusion.materials.title");
       
-      Map<String, Object> tempalteModel = templateModelBuilder.build();
+      Map<String, Object> tempalteModel = templateModelBuilder.build(sessionController.getLocale());
       headHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/materials-head", tempalteModel);
       contentsHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/materials-contents", tempalteModel);
     } catch (Exception e) {

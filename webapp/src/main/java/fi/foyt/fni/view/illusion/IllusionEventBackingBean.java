@@ -122,12 +122,12 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
       .put("signUpFee", signUpFee)
       .put("memberRole", memberRole)
       .put("ref", ref)
-      .addLocales(sessionController.getLocale(), "illusion.event.joinInfoFree", "illusion.event.joinInfoPrice", 
+      .addLocales("illusion.event.joinInfoFree", "illusion.event.joinInfoPrice", 
           "illusion.event.joinButton", "illusion.event.requestToJoinButton",  "illusion.event.shareOnFacebook", 
           "illusion.event.shareOnTwitter", "illusion.event.shareOnGooglePlus");
     
     try {
-      Map<String, Object> templateModel = templateModelBuilder.build();
+      Map<String, Object> templateModel = templateModelBuilder.build(sessionController.getLocale());
       headHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/index-head", templateModel);
       contentsHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/index-contents", templateModel);
     } catch (JadeException | IOException e) {

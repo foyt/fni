@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.i18n.ExternalLocales;
+import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.system.SystemSettingsController;
 
@@ -28,12 +29,18 @@ public class IllusionTemplateModelBuilderFactory {
     public IllusionTemplateModelBuilder() {
       model = new HashMap<>();
       pages = new ArrayList<>();
-      locales = new HashMap<>();
+      adminPages = new ArrayList<>();
+      localeKeys = new ArrayList<>();
       breadcrumps = new ArrayList<>();
     }
 
     public IllusionTemplateModelBuilder addPage(IllusionEventPage page) {
       pages.add(page);
+      return this;
+    }
+
+    public IllusionTemplateModelBuilder addAdminPage(IllusionEventPage.Static id, String path, String title) {
+      adminPages.add(new AdminPage(id.toString(), path, title));
       return this;
     }
     
@@ -86,14 +93,14 @@ public class IllusionTemplateModelBuilderFactory {
       return this;
     }
 
-    public IllusionTemplateModelBuilder addLocale(Locale locale, String key) {
-      locales.put(key, ExternalLocales.getText(locale, key));
+    public IllusionTemplateModelBuilder addLocale(String key) {
+      localeKeys.add(key);
       return this;
     }
 
-    public IllusionTemplateModelBuilder addLocales(Locale locale, String... keys) {
+    public IllusionTemplateModelBuilder addLocales(String... keys) {
       for (String key : keys) {
-        locales.put(key, ExternalLocales.getText(locale, key));
+        localeKeys.add(key);
       }
       
       return this;
@@ -104,11 +111,17 @@ public class IllusionTemplateModelBuilderFactory {
       return this;
     }
 
-    public Map<String, Object> build() {
+    public Map<String, Object> build(Locale locale) {
       Map<String, Object> result = new HashMap<>(model);
+      Map<String, String> locales = new HashMap<>();
+      
+      for (String localeKey : localeKeys) {
+        locales.put(localeKey, ExternalLocales.getText(locale, localeKey));
+      }
 
       result.put("breadcrumps", breadcrumps);
       result.put("pages", pages);
+      result.put("adminPages", adminPages);
       result.put("locales", locales);
       
       return result;
@@ -116,34 +129,34 @@ public class IllusionTemplateModelBuilderFactory {
 
     private Map<String, Object> model;
     private List<IllusionEventPage> pages;
-    private Map<String, String> locales; 
+    private List<AdminPage> adminPages;
+    private List<String> localeKeys; 
     private List<Breadcrump> breadcrumps;
   }
 
-  public class Page {
+  public class AdminPage {
 
-    public Page(String urlName, String title, String content) {
-      super();
-      this.urlName = urlName;
+    public AdminPage(String id, String path, String title) {
+      this.id = id;
+      this.path = path;
       this.title = title;
-      this.content = content;
     }
-
-    public String getContent() {
-      return content;
+    
+    public String getId() {
+      return id;
     }
 
     public String getTitle() {
       return title;
     }
-
-    public String getUrlName() {
-      return urlName;
+    
+    public String getPath() {
+      return path;
     }
 
-    private String urlName;
+    private String id;
+    private String path;
     private String title;
-    private String content;
   }
 
   public class Breadcrump {
