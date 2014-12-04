@@ -1,6 +1,10 @@
 package fi.foyt.fni.view.illusion;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -12,10 +16,13 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
+import de.neuland.jade4j.exceptions.JadeException;
 import fi.foyt.fni.illusion.IllusionEventMaterialController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionEventPageVisibility;
+import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
+import fi.foyt.fni.jade.JadeController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -41,6 +48,9 @@ import fi.foyt.fni.session.SessionController;
 @SecurityContext (context = "@urlName")
 public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBackingBean {
 
+  @Inject
+  private Logger logger;
+  
   @Parameter
   private String urlName;
   
@@ -65,6 +75,9 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
 
   @Inject
   private IllusionEventMaterialController illusionEventMaterialController;
+
+  @Inject
+  private JadeController jadeController;
   
   @Inject
   private HttpServletRequest httpServletRequest;
@@ -98,8 +111,7 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
     }
 
     String contextPath =  httpServletRequest.getContextPath();
-    
-    materialUrl = contextPath + "/materials/" + material.getPath();
+    String materialUrl = contextPath + "/materials/" + material.getPath();
     if (material.getType() == MaterialType.CHARACTER_SHEET) {
       String key = null;
       
@@ -115,6 +127,8 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
       materialUrl += "?contextPath=" + contextPath + "&participantId=" + participant.getId() + "&eventId=" + illusionEvent.getId() + "&materialId=" + material.getId() + "&key=" + key;
     }
     
+    EmbedType materialEmbedType = null;
+    
     switch (material.getType()) {
       case IMAGE:
         materialEmbedType = EmbedType.IMG;
@@ -127,7 +141,21 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
       break;
     }
     
-    materialTitle = material.getTitle();
+    IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.INDEX)
+        .put("materialTitle", material.getTitle())
+        .put("materialUrl", materialUrl)
+        .put("materialEmbedType", materialEmbedType.toString())
+        .addLocales("illusion.eventMaterial.backLink", "illusion.eventMaterial.openInNewWindowLink");
+      
+    try {
+      Map<String, Object> templateModel = templateModelBuilder.build(sessionController.getLocale());
+      headHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/material-head", templateModel);
+      contentsHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/material-contents", templateModel);
+    } catch (JadeException | IOException e) {
+      logger.log(Level.SEVERE, "Could not parse jade template", e);
+      return "/error/internal-error.jsf";
+    }
+  
     
     return null;
   }
@@ -149,23 +177,19 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
     this.materialPath = materialPath;
   }
   
-  public String getMaterialUrl() {
-    return materialUrl;
+  public String getHeadHtml() {
+    return headHtml;
   }
   
-  public EmbedType getMaterialEmbedType() {
-    return materialEmbedType;
+  public String getContentsHtml() {
+    return contentsHtml;
   }
+
+  private String headHtml;
+
+  private String contentsHtml;
   
-  public String getMaterialTitle() {
-    return materialTitle;
-  }
-  
-  private String materialUrl;
-  private EmbedType materialEmbedType;
-  private String materialTitle;
-  
-  public enum EmbedType {
+  private enum EmbedType {
     IFRAME,
     IMG,
     SVG

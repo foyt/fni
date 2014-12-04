@@ -21,77 +21,14 @@
     <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-material.css"/>
   </ui:define>  
-
+  
+  <ui:define name="view-custom-head">
+    <h:outputText value="#{illusionEventMaterialBackingBean.headHtml}" escape="false"/>
+  </ui:define>
+  
   <ui:define name="grid-content">
-    <!-- Menu -->
-
-    <ui:include src="/facelets/menu.xhtml" />
-    
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/index.jsf">#{locales['illusion.eventMaterial.navigationIndex']}</h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/index.jsf">#{locales['illusion.eventMaterial.navigationIllusion']}</h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/event.jsf">
-            <f:param name="urlName" value="#{illusionEventMaterialBackingBean.urlName}"/>
-            <h:outputText value="#{illusionEventMaterialBackingBean.name}" />
-          </h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/event-materials.jsf">
-            <f:param name="urlName" value="#{illusionEventMaterialBackingBean.urlName}"/>
-            <h:outputText value="#{locales['illusion.eventMaterial.navigationMaterials']}" />
-          </h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/event-material.jsf">
-            <f:param name="urlName" value="#{illusionEventMaterialBackingBean.urlName}"/>
-            <f:param name="materialPath" value="#{illusionEventMaterialBackingBean.materialPath}"/>
-            <h:outputFormat value="#{locales['illusion.eventMaterial.navigationMaterial']}">
-              <f:param value="#{illusionEventMaterialBackingBean.materialTitle}"/>
-            </h:outputFormat>
-          </h:link>
-        </h:panelGroup>
-      </h:panelGroup>
-  
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{illusionEventMaterialBackingBean.name}</p>
-        <p class="view-header-description-text">#{illusionEventMaterialBackingBean.description}</p>
-      </h:panelGroup>
-    </h:panelGroup>
-  
-    <div class="grid_16 tight">
-      <ui:include src="/facelets/illusionnavigation.xhtml"/>
-    </div>
-
-    <div class="grid_16 tight">
-      <div class="illusion-content-panel grid_16 tight">
-        <div class="grid_16 tight">
-          <div class="illusion-event-sub-panel">
-            <h:link styleClass="illusion-event-material-back-link" outcome="/illusion/event-materials.jsf" value="#{locales['illusion.eventMaterial.backLink']}">
-              <f:param name="urlName" value="#{illusionEventMaterialBackingBean.urlName}"/>
-            </h:link>
-            
-            <a class="illusion-event-material-new-window-link" href="#{illusionEventMaterialBackingBean.materialUrl}" target="_blank">#{locales['illusion.eventMaterial.openInNewWindowLink']}</a>
-            <iframe class="illusion-event-material" src="#{illusionEventMaterialBackingBean.materialUrl}" seamless="seamless" jsf:rendered="#{illusionEventMaterialBackingBean.materialEmbedType eq 'IFRAME'}"></iframe>
-            <img class="illusion-event-material" src="#{illusionEventMaterialBackingBean.materialUrl}" jsf:rendered="#{illusionEventMaterialBackingBean.materialEmbedType eq 'IMG' or illusionEventMaterialBackingBean.materialEmbedType eq 'SVG'}"/>
-          </div>
-        </div>
-      </div>      
-    </div>
-
+    <ui:include src="/facelets/menu.xhtml"/>
+    <h:outputText value="#{illusionEventMaterialBackingBean.contentsHtml}" escape="false"/>
   </ui:define>
 
 </ui:composition>
