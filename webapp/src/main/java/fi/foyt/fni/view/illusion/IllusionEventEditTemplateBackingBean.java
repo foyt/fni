@@ -41,7 +41,7 @@ public class IllusionEventEditTemplateBackingBean extends AbstractIllusionEventB
   
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
-    illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.MANAGE_PAGES);
+    illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.MANAGE_TEMPLATES);
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
     IllusionEventTemplate template = illusionEventController.findEventTemplate(illusionEvent, getTemplateName());

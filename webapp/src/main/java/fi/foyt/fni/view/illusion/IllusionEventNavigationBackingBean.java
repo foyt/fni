@@ -77,6 +77,7 @@ public class IllusionEventNavigationBackingBean {
       case "PARTICIPANTS":
       case "SETTINGS":
       case "MANAGE_PAGES":
+      case "MANAGE_TEMPLATES":
         return true;
       default:
         return false;

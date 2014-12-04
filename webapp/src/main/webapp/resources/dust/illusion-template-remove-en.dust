@@ -1,0 +1,7 @@
+<div title="Remove '{name}'?" data-remove-button="Remove" data-cancel-button="Cancel">
+  <div class="illusion-remove-template-dialog">
+    <p>
+      Do you really wish to template '{name}'?
+    </p>
+  </div>
+</div>

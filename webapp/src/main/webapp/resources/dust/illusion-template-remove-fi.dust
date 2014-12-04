@@ -1,0 +1,7 @@
+<div title="Poista '{name}'?" data-remove-button="Poista" data-cancel-button="Peruuta">
+  <div class="illusion-remove-template-dialog">
+    <p>
+      Halutko varmasti poistaa sivupohjan '{name}'?
+    </p>
+  </div>
+</div>

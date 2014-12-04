@@ -14,7 +14,9 @@ public class IllusionEventPage {
     
     SETTINGS,
     
-    MANAGE_PAGES
+    MANAGE_PAGES,
+    
+    MANAGE_TEMPLATES
     
   }
   

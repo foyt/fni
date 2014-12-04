@@ -13,6 +13,7 @@
         <h:link styleClass="illusion-event-navigation-item #{illusionEventNavigationBackingBean.selectedPage eq 'PARTICIPANTS' ? 'illusion-event-navigation-item-active' : ''}" outcome="/illusion/event-participants.jsf?urlName=#{illusionEventNavigationBackingBean.eventUrlName}" value="#{locales['illusion.eventNavigation.participants']}"/>
         <h:link styleClass="illusion-event-navigation-item #{illusionEventNavigationBackingBean.selectedPage eq 'GROUPS' ? 'illusion-event-navigation-item-active' : ''}" outcome="/illusion/event-groups.jsf?urlName=#{illusionEventNavigationBackingBean.eventUrlName}" value="#{locales['illusion.eventNavigation.groups']}"/>
         <h:link styleClass="illusion-event-navigation-item #{illusionEventNavigationBackingBean.selectedPage eq 'SETTINGS' ? 'illusion-event-navigation-item-active' : ''}" outcome="/illusion/event-settings.jsf?urlName=#{illusionEventNavigationBackingBean.eventUrlName}" value="#{locales['illusion.eventNavigation.settings']}"/>
+        <h:link styleClass="illusion-event-navigation-item #{illusionEventNavigationBackingBean.selectedPage eq 'MANAGE_TEMPLATES' ? 'illusion-event-navigation-item-active' : ''}" outcome="/illusion/event-manage-templates.jsf?urlName=#{illusionEventNavigationBackingBean.eventUrlName}" value="#{locales['illusion.eventNavigation.manageTemplates']}"/>
       </div>
     </h:panelGroup>
   </div>

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
@@ -319,6 +320,14 @@ public class IllusionEventController {
   }
   
   /* Templates */
+  
+  public IllusionEventTemplate createEventTemplate(IllusionEvent event, String name, String data) {
+    return illusionEventTemplateDAO.create(event, name, data, new Date());
+  }
+  
+  public IllusionEventTemplate createEventTemplate(IllusionEvent event) {
+    return createEventTemplate(event, UUID.randomUUID().toString(), null);
+  }
 
   public IllusionEventTemplate findEventTemplateById(Long templateId) {
     return illusionEventTemplateDAO.findById(templateId);
@@ -328,8 +337,16 @@ public class IllusionEventController {
     return illusionEventTemplateDAO.findByEventAndName(event, name); 
   }
 
+  public List<IllusionEventTemplate> listTemplates(IllusionEvent illusionEvent) {
+    return illusionEventTemplateDAO.listByEvent(illusionEvent);
+  }
+
   public IllusionEventTemplate updateEventTemplateData(IllusionEventTemplate template, String templateData) {
     return illusionEventTemplateDAO.updateData(illusionEventTemplateDAO.updateModified(template, new Date()), templateData);
+  }
+
+  public void deleteEventTemplate(IllusionEventTemplate template) {
+    illusionEventTemplateDAO.delete(template);
   }
 
 }
