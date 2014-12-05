@@ -73,7 +73,7 @@ public class IllusionEventManageTemplatesBackingBean extends AbstractIllusionEve
   public String newTemplate() {
     IllusionEvent event = illusionEventController.findIllusionEventByUrlName(getUrlName());
     IllusionEventTemplate template = illusionEventController.createEventTemplate(event);
-    return "/illusion/event-edit-template.jsf?faces-redirect=true&urlName=" + event.getUrlName() + "&templateName=" + template.getName();
+    return "/illusion/event-edit-template.jsf?faces-redirect=true&urlName=" + event.getUrlName() + "&templateId=" + template.getId();
   }
   
   public String deleteTemplate() {

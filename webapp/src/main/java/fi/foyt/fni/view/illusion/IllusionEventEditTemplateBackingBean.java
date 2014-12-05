@@ -31,7 +31,7 @@ public class IllusionEventEditTemplateBackingBean extends AbstractIllusionEventB
   private String urlName;
 
   @Parameter
-  private String templateName;
+  private Long templateId;
   
   @Inject
   private IllusionEventController illusionEventController;
@@ -44,13 +44,17 @@ public class IllusionEventEditTemplateBackingBean extends AbstractIllusionEventB
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.MANAGE_TEMPLATES);
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
-    IllusionEventTemplate template = illusionEventController.findEventTemplate(illusionEvent, getTemplateName());
+    IllusionEventTemplate template = illusionEventController.findEventTemplateById(getTemplateId());
     if (template == null) {
       return "/error/not-found.jsf";
     }
     
+    if (!template.getEvent().getId().equals(illusionEvent.getId())) {
+      return "/error/not-found.jsf";
+    }
+    
+    templateName = template.getName();
     templateData = template.getData();
-    templateId = template.getId();
     
     return null;
   }
@@ -84,12 +88,17 @@ public class IllusionEventEditTemplateBackingBean extends AbstractIllusionEventB
     return templateId;
   }
   
-  public String save() {
-    IllusionEventTemplate template = illusionEventController.findEventTemplateById(getTemplateId());
-    illusionEventController.updateEventTemplateData(template, getTemplateData());
-    return "/illusion/event-edit-template.jsf?faces-redirect=true&urlName=" + getUrlName() + "&templateName=" + getTemplateName();
+  public void setTemplateId(Long templateId) {
+    this.templateId = templateId;
   }
   
+  public String save() {
+    IllusionEventTemplate template = illusionEventController.findEventTemplateById(getTemplateId());
+    illusionEventController.updateEventTemplateName(template, getTemplateName());
+    illusionEventController.updateEventTemplateData(template, getTemplateData());
+    return "/illusion/event-edit-template.jsf?faces-redirect=true&urlName=" + getUrlName() + "&templateId=" + getTemplateId();
+  }
+  
+  private String templateName;
   private String templateData;
-  private Long templateId;
 }

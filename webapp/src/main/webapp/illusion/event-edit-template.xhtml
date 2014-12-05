@@ -92,13 +92,14 @@
           <div class="illusion-event-sub-panel">
             <h3>
               <h:outputFormat value="#{locales['illusion.editTemplate.editorTitle']}">
-					      <f:param value="#{illusionEventEditTemplateBackingBean.templateName}"/>
-					    </h:outputFormat>
+                <f:param value="#{illusionEventEditTemplateBackingBean.templateName}"/>
+              </h:outputFormat>
             </h3>
-            
+
             <h:form>
+              <input required="required" type="text" jsf:value="#{illusionEventEditTemplateBackingBean.templateName}" class="illusion-event-template-name"/>
 		          <textarea jsf:value="#{illusionEventEditTemplateBackingBean.templateData}" class="illusion-event-template-editor"/>
-		          <h:commandButton action="#{illusionEventEditTemplateBackingBean.save}" class="illusion-event-template-save" value="#{locales['illusion.editTemplate.save']}" />
+              <h:commandButton action="#{illusionEventEditTemplateBackingBean.save}" class="illusion-event-template-save" value="#{locales['illusion.editTemplate.save']}" />
 		        </h:form>
           </div>
         </div>

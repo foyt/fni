@@ -347,6 +347,10 @@ public class IllusionEventController {
     return illusionEventTemplateDAO.listByEvent(illusionEvent);
   }
 
+  public IllusionEventTemplate updateEventTemplateName(IllusionEventTemplate template, String templateName) {
+    return illusionEventTemplateDAO.updateName(illusionEventTemplateDAO.updateModified(template, new Date()), templateName);
+  }
+
   public IllusionEventTemplate updateEventTemplateData(IllusionEventTemplate template, String templateData) {
     return illusionEventTemplateDAO.updateData(illusionEventTemplateDAO.updateModified(template, new Date()), templateData);
   }
