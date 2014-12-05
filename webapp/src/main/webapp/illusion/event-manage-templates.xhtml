@@ -31,27 +31,19 @@
       <!-- Navigation -->
       
       <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/index.jsf">#{locales['illusion.manageTemplates.navigationIndex']}</h:link>
-        </h:panelGroup>
+        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['illusion.manageTemplates.navigationIndex']}</h:link>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/index.jsf">#{locales['illusion.manageTemplates.navigationIllusion']}</h:link>
-        </h:panelGroup>
+        <h:link styleClass="view-header-navigation-item" outcome="/illusion/index.jsf">#{locales['illusion.manageTemplates.navigationIllusion']}</h:link>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/event.jsf">
-            <f:param name="urlName" value="#{illusionEventManageTemplatesBackingBean.urlName}"/>
-            <h:outputText value="#{illusionEventManageTemplatesBackingBean.name}" />
-          </h:link>
-        </h:panelGroup>
+        <h:link styleClass="view-header-navigation-item" outcome="/illusion/event.jsf">
+          <f:param name="urlName" value="#{illusionEventManageTemplatesBackingBean.urlName}"/>
+          <h:outputText value="#{illusionEventManageTemplatesBackingBean.name}" />
+        </h:link>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/event-manage-templates.jsf">
-            <f:param name="urlName" value="#{illusionEventManageTemplatesBackingBean.urlName}"/>
-            <h:outputText value="#{locales['illusion.manageTemplates.navigationManageTemplates']}" />
-          </h:link>
-        </h:panelGroup>
+        <h:link styleClass="view-header-navigation-item" outcome="/illusion/event-manage-templates.jsf">
+          <f:param name="urlName" value="#{illusionEventManageTemplatesBackingBean.urlName}"/>
+          <h:outputText value="#{locales['illusion.manageTemplates.navigationManageTemplates']}" />
+        </h:link>
       </h:panelGroup>
         
       <!-- Description -->
