@@ -1,0 +1,1 @@
+delete from IllusionEventTemplate where id = 1;
