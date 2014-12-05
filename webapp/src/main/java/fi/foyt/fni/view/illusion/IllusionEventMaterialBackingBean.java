@@ -142,7 +142,7 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
       break;
     }
     
-    IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.INDEX)
+    IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.MATERIALS)
         .addBreadcrump(illusionEvent, "/materials", ExternalLocales.getText(sessionController.getLocale(), "illusion.breadcrumps.materials"))
         .addBreadcrump(illusionEvent, "/materials/" + getMaterialPath(), material.getTitle())
         .put("materialTitle", material.getTitle())
