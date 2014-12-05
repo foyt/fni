@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.NumberFormat;
 import java.util.Currency;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,13 +16,16 @@ import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
 import de.neuland.jade4j.exceptions.JadeException;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
+import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.jade.JadeController;
 import fi.foyt.fni.materials.IllusionEventDocumentController;
@@ -29,6 +34,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventSettingKey;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
@@ -55,6 +61,12 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
   @Inject
   private Logger logger;
 
+  @Inject
+  private IllusionEventController illusionEventController;
+
+  @Inject
+  private IllusionEventPageController illusionEventPageController;
+  
   @Inject
   private IllusionEventDocumentController illusionEventDocumentController;
 
@@ -116,7 +128,6 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
     }
     
     IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.INDEX)
-      .put("indexText", indexText)
       .put("joinMode", joinMode.toString())
       .put("hasSignUpFee", hasSignUpFee)
       .put("signUpFee", signUpFee)
@@ -125,6 +136,38 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
       .addLocales("illusion.event.joinInfoFree", "illusion.event.joinInfoPrice", 
           "illusion.event.joinButton", "illusion.event.requestToJoinButton",  "illusion.event.shareOnFacebook", 
           "illusion.event.shareOnTwitter", "illusion.event.shareOnGooglePlus");
+    
+    if ("1".equals(illusionEventController.getSetting(illusionEvent, IllusionEventSettingKey.INDEX_INCLUDE_ALL_PAGES))) {
+      List<IllusionEventPage> pages = participant != null ? 
+          illusionEventPageController.listParticipantPages(illusionEvent) : illusionEventPageController.listPublicPages(illusionEvent);
+      
+      Map<String, String> pageContents = new HashMap<>();
+          
+      for (IllusionEventPage page : pages) {
+        String content = null;
+        
+        switch (page.getType()) {
+          case "INDEX":
+            content = indexText;
+          break;
+          case "PAGE":
+            Long pageId = NumberUtils.createLong(page.getId());
+            IllusionEventDocument eventDocument = illusionEventPageController.findCustomPageById(pageId);
+            if (eventDocument != null) {
+              content = eventDocument.getData();
+            }
+          break;
+        }
+        
+        if (content != null) {
+          pageContents.put(page.getId(), content);
+        }
+      }
+      
+      templateModelBuilder.put("pageContents", pageContents);
+    } else {
+      templateModelBuilder.put("indexText", indexText);
+    }
     
     try {
       Map<String, Object> templateModel = templateModelBuilder.build(sessionController.getLocale());

@@ -19,6 +19,7 @@ import fi.foyt.fni.persistence.dao.illusion.IllusionEventDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventGenreDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantImageDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventTemplateDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventTypeDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionEventFolderDAO;
@@ -30,6 +31,8 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantImage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventSetting;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventTemplate;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
@@ -73,7 +76,10 @@ public class IllusionEventController {
 
   @Inject
   private IllusionEventTemplateDAO illusionEventTemplateDAO;
-  
+
+  @Inject
+  private IllusionEventSettingDAO illusionEventSettingDAO;
+
   @Inject
   private Event<IllusionParticipantAddedEvent> illusionParticipantAddedEvent;
 
@@ -347,6 +353,26 @@ public class IllusionEventController {
 
   public void deleteEventTemplate(IllusionEventTemplate template) {
     illusionEventTemplateDAO.delete(template);
+  }
+  
+  /* Settings */
+  
+  public synchronized String getSetting(IllusionEvent event, IllusionEventSettingKey key) {
+    IllusionEventSetting eventSetting = illusionEventSettingDAO.findByEventAndKey(event, key);
+    if (eventSetting != null) {
+      return eventSetting.getValue();
+    }
+    
+    return null;
+  }
+  
+  public synchronized void setSetting(IllusionEvent event, IllusionEventSettingKey key, String value) {
+    IllusionEventSetting eventSetting = illusionEventSettingDAO.findByEventAndKey(event, key);
+    if (eventSetting != null) {
+      illusionEventSettingDAO.updateValue(eventSetting, value);
+    } else {
+      illusionEventSettingDAO.create(event, key, value);
+    }
   }
 
 }

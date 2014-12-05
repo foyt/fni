@@ -52,6 +52,10 @@ public class IllusionEventPageController {
   }
 
   /* Pages*/
+  
+  public IllusionEventDocument findCustomPageById(Long id) {
+    return illusionEventDocumentDAO.findById(id);
+  }
 
   public List<IllusionEventDocument> listCustomPages(IllusionEventFolder folder) {
     return illusionEventDocumentDAO.listByParentFolderAndDocumentType(folder, IllusionEventDocumentType.PAGE);
