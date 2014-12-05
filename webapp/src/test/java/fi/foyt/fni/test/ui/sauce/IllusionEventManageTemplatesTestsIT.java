@@ -11,9 +11,9 @@ import org.junit.runners.Parameterized;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
-import fi.foyt.fni.test.ui.base.IllusionEventIndexTestsBase;
+import fi.foyt.fni.test.ui.base.IllusionEventManageTemplatesTestsBase;
 
-public class IllusionEventManageTemplatesTestsIT extends IllusionEventIndexTestsBase {
+public class IllusionEventManageTemplatesTestsIT extends IllusionEventManageTemplatesTestsBase {
 
   public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(getSauceUsername(), getSauceAccessKey());
 
