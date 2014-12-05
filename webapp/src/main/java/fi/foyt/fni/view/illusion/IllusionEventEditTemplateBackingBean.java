@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.illusion.IllusionEventController;
@@ -31,6 +32,7 @@ public class IllusionEventEditTemplateBackingBean extends AbstractIllusionEventB
   private String urlName;
 
   @Parameter
+  @Matches ("[0-9]{1,}")
   private Long templateId;
   
   @Inject
@@ -41,6 +43,10 @@ public class IllusionEventEditTemplateBackingBean extends AbstractIllusionEventB
   
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
+    if (getTemplateId() == null) {
+      return "/error/not-found.jsf";
+    }
+    
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.MANAGE_TEMPLATES);
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
