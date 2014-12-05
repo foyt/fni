@@ -52,28 +52,25 @@
     <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
       
       <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/index.jsf">#{locales['illusion.editTemplate.navigationIndex']}</h:link>
-        </h:panelGroup>
+        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['illusion.editTemplate.navigationIndex']}</h:link>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/index.jsf">#{locales['illusion.editTemplate.navigationIllusion']}</h:link>
-        </h:panelGroup>
+        <h:link styleClass="view-header-navigation-item" outcome="/illusion/index.jsf">#{locales['illusion.editTemplate.navigationIllusion']}</h:link>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/event.jsf">
-            <f:param name="urlName" value="#{illusionEventEditTemplateBackingBean.urlName}"/>
-            <h:outputText value="#{illusionEventEditTemplateBackingBean.name}" />
-          </h:link>
-        </h:panelGroup>
+        <h:link styleClass="view-header-navigation-item" outcome="/illusion/event.jsf">
+          <f:param name="urlName" value="#{illusionEventEditTemplateBackingBean.urlName}"/>
+          <h:outputText value="#{illusionEventEditTemplateBackingBean.name}" />
+        </h:link>
         <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/event-edit-template.jsf">
-            <f:param name="urlName" value="#{illusionEventEditTemplateBackingBean.urlName}"/>
-            <f:param name="id" value="#{illusionEventEditTemplateBackingBean.id}"/>
-            <h:outputFormat value="#{locales['illusion.editTemplate.navigationEditTemplate']}"/>
-          </h:link>
-        </h:panelGroup>
+        <h:link styleClass="view-header-navigation-item" outcome="/illusion/event-manage-templates.jsf">
+          <f:param name="urlName" value="#{illusionEventEditTemplateBackingBean.urlName}"/>
+          <h:outputFormat value="#{locales['illusion.editTemplate.navigationManageTemplates']}"/>
+        </h:link>
+        <h:panelGroup styleClass="view-header-navigation-separator"/>
+        <h:link styleClass="view-header-navigation-item" outcome="/illusion/event-edit-template.jsf">
+          <f:param name="urlName" value="#{illusionEventEditTemplateBackingBean.urlName}"/>
+          <f:param name="templateId" value="#{illusionEventEditTemplateBackingBean.id}"/>
+          <h:outputFormat value="#{locales['illusion.editTemplate.navigationEditTemplate']}"/>
+        </h:link>
       </h:panelGroup>
   
       <h:panelGroup layout="block" styleClass="view-header-description">
