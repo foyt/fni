@@ -20,7 +20,7 @@ values
   (20001, '<p>Index</p>');
 
 insert into
-  IllusionEventDocument (id, documentType)
+  IllusionEventDocument (id, documentType, indexNumber)
 values 
-  (20001, 'INDEX');  
+  (20001, 'INDEX', 0);  
   

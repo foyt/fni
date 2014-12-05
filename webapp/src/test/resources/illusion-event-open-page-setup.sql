@@ -9,6 +9,6 @@ values
   (20150, '<p>Page contents</p>');
 
 insert into
-  IllusionEventDocument (id, documentType)
+  IllusionEventDocument (id, documentType, indexNumber)
 values 
-  (20150, 'PAGE');  
+  (20150, 'PAGE', 1);  

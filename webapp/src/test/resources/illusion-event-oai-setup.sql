@@ -29,11 +29,11 @@ values
   (20014, '<p>Index</p>');
 
 insert into
-  IllusionEventDocument (id, documentType)
+  IllusionEventDocument (id, documentType, indexNumber)
 values 
-  (20012, 'INDEX'),
-  (20013, 'INDEX'),
-  (20014, 'INDEX');  
+  (20012, 'INDEX', 0),
+  (20013, 'INDEX', 0),
+  (20014, 'INDEX', 0);  
   
 insert into
   IllusionEventParticipant (id, role, event_id, user_id)
