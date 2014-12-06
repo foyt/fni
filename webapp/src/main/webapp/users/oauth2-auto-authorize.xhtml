@@ -6,6 +6,7 @@
   xmlns:jsf="http://xmlns.jcp.org/jsf">
   
   <body onload="document.getElementsByName('form:authorize')[0].click();">
+    Please wait...
 	  <h:form style="display: none" id="form">
 	    <h:commandButton id="authorize" action="#{oAuth2AuthorizeBackingBean.authorize}"/>
 	    <input type="hidden" jsf:value="#{oAuth2AuthorizeBackingBean.clientId}"/>
