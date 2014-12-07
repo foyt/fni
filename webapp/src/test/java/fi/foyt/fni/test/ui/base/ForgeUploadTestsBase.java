@@ -32,24 +32,24 @@ public class ForgeUploadTestsBase extends AbstractUITest {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     
     getWebDriver().get(getAppUrl() + "/forge/upload");
-    List<WebElement> breadcrumps = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item a"));
-    assertEquals(2, breadcrumps.size());
-    assertEquals(getAppUrl() + "/", breadcrumps.get(0).getAttribute("href"));
-    assertEquals(getAppUrl() + "/forge/", breadcrumps.get(1).getAttribute("href"));
+    List<WebElement> breadcrumbs = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item a"));
+    assertEquals(2, breadcrumbs.size());
+    assertEquals(getAppUrl() + "/", breadcrumbs.get(0).getAttribute("href"));
+    assertEquals(getAppUrl() + "/forge/", breadcrumbs.get(1).getAttribute("href"));
     
     getWebDriver().get(getAppUrl() + "/forge/upload?parentFolderId=1");
-    breadcrumps = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item a"));
-    assertEquals(3, breadcrumps.size());
-    assertEquals(getAppUrl() + "/", breadcrumps.get(0).getAttribute("href"));
-    assertEquals(getAppUrl() + "/forge/", breadcrumps.get(1).getAttribute("href"));
-    assertEquals(getAppUrl() + "/forge/folders/2/folder", breadcrumps.get(2).getAttribute("href"));
+    breadcrumbs = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item a"));
+    assertEquals(3, breadcrumbs.size());
+    assertEquals(getAppUrl() + "/", breadcrumbs.get(0).getAttribute("href"));
+    assertEquals(getAppUrl() + "/forge/", breadcrumbs.get(1).getAttribute("href"));
+    assertEquals(getAppUrl() + "/forge/folders/2/folder", breadcrumbs.get(2).getAttribute("href"));
     
     getWebDriver().get(getAppUrl() + "/forge/upload?parentFolderId=2");
-    breadcrumps = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item a"));
-    assertEquals(4, breadcrumps.size());
-    assertEquals(getAppUrl() + "/", breadcrumps.get(0).getAttribute("href"));
-    assertEquals(getAppUrl() + "/forge/", breadcrumps.get(1).getAttribute("href"));
-    assertEquals(getAppUrl() + "/forge/folders/2/folder", breadcrumps.get(2).getAttribute("href"));
-    assertEquals(getAppUrl() + "/forge/folders/2/folder/subfolder", breadcrumps.get(3).getAttribute("href"));
+    breadcrumbs = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item a"));
+    assertEquals(4, breadcrumbs.size());
+    assertEquals(getAppUrl() + "/", breadcrumbs.get(0).getAttribute("href"));
+    assertEquals(getAppUrl() + "/forge/", breadcrumbs.get(1).getAttribute("href"));
+    assertEquals(getAppUrl() + "/forge/folders/2/folder", breadcrumbs.get(2).getAttribute("href"));
+    assertEquals(getAppUrl() + "/forge/folders/2/folder/subfolder", breadcrumbs.get(3).getAttribute("href"));
   }
 }

@@ -36,7 +36,7 @@ public class IllusionTemplateModelBuilderFactory {
       pages = new ArrayList<>();
       adminPages = new ArrayList<>();
       localeKeys = new ArrayList<>();
-      breadcrumps = new ArrayList<>();
+      breadcrumbs = new ArrayList<>();
     }
 
     public IllusionTemplateModelBuilder addPage(IllusionEventPage page) {
@@ -49,9 +49,9 @@ public class IllusionTemplateModelBuilderFactory {
       return this;
     }
 
-    public IllusionTemplateModelBuilder addBreadcrump(IllusionEvent illusionEvent, String path, String text) {
+    public IllusionTemplateModelBuilder addBreadcrumb(IllusionEvent illusionEvent, String path, String text) {
       String eventUrl = getEventUrl(illusionEvent);
-      breadcrumps.add(new Breadcrump(BreadcrumpType.EVENT, eventUrl + path, text));
+      breadcrumbs.add(new Breadcrumb(BreadcrumbType.EVENT, eventUrl + path, text));
       return this;
     }
 
@@ -60,8 +60,8 @@ public class IllusionTemplateModelBuilderFactory {
       model.put("siteUrl", siteUrl);
       model.put("contextPath", systemSettingsController.getSiteContextPath());
 
-      breadcrumps.add(new Breadcrump(BreadcrumpType.ENVIRONMENT, siteUrl, ExternalLocales.getText(locale, "illusion.breadcrumps.forgeAndIllusion")));
-      breadcrumps.add(new Breadcrump(BreadcrumpType.ENVIRONMENT, siteUrl + "/illusion", ExternalLocales.getText(locale, "illusion.breadcrumps.events")));
+      breadcrumbs.add(new Breadcrumb(BreadcrumbType.ENVIRONMENT, siteUrl, ExternalLocales.getText(locale, "illusion.breadcrumbs.forgeAndIllusion")));
+      breadcrumbs.add(new Breadcrumb(BreadcrumbType.ENVIRONMENT, siteUrl + "/illusion", ExternalLocales.getText(locale, "illusion.breadcrumbs.events")));
 
       return this;
     }
@@ -73,7 +73,7 @@ public class IllusionTemplateModelBuilderFactory {
       model.put("eventName", illusionEvent.getName());
       model.put("eventDescription", illusionEvent.getDescription());
 
-      breadcrumps.add(new Breadcrump(BreadcrumpType.EVENT, eventUrl, illusionEvent.getName()));
+      breadcrumbs.add(new Breadcrumb(BreadcrumbType.EVENT, eventUrl, illusionEvent.getName()));
 
       return this;
     }
@@ -136,11 +136,11 @@ public class IllusionTemplateModelBuilderFactory {
         locales.put(localeKey, ExternalLocales.getText(locale, localeKey));
       }
 
-      result.put("breadcrumps", breadcrumps);
+      result.put("breadcrumbs", breadcrumbs);
       result.put("pages", pages);
       result.put("adminPages", adminPages);
       result.put("locales", locales);
-
+      
       return result;
     }
 
@@ -148,7 +148,7 @@ public class IllusionTemplateModelBuilderFactory {
     private List<IllusionEventPage> pages;
     private List<AdminPage> adminPages;
     private List<String> localeKeys;
-    private List<Breadcrump> breadcrumps;
+    private List<Breadcrumb> breadcrumbs;
   }
 
   public class AdminPage {
@@ -176,33 +176,33 @@ public class IllusionTemplateModelBuilderFactory {
     private String title;
   }
 
-  public class Breadcrump {
+  public class Breadcrumb {
 
-    public Breadcrump(BreadcrumpType type, String path, String text) {
+    public Breadcrumb(BreadcrumbType type, String url, String text) {
       super();
       this.type = type;
-      this.path = path;
+      this.url = url;
       this.text = text;
     }
 
-    public String getPath() {
-      return path;
+    public String getUrl() {
+      return url;
     }
-
+    
     public String getText() {
       return text;
     }
 
-    public BreadcrumpType getType() {
+    public BreadcrumbType getType() {
       return type;
     }
 
-    private BreadcrumpType type;
-    private String path;
+    private BreadcrumbType type;
+    private String url;
     private String text;
   }
 
-  private enum BreadcrumpType {
+  private enum BreadcrumbType {
 
     ENVIRONMENT,
 

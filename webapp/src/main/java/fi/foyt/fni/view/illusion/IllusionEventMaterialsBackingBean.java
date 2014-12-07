@@ -150,7 +150,7 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
     
     try {
       IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.MATERIALS)
-          .addBreadcrump(illusionEvent, "/materials", ExternalLocales.getText(sessionController.getLocale(), "illusion.breadcrumps.materials"))
+          .addBreadcrumb(illusionEvent, "/materials", ExternalLocales.getText(sessionController.getLocale(), "illusion.breadcrumbs.materials"))
           .put("materials", materialsModel)
           .addLocale("illusion.materials.title");
       

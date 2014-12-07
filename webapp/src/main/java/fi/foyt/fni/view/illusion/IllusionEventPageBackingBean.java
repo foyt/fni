@@ -118,7 +118,7 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
     IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, material.getId().toString())
         .put("pageContent", document.getData())
         .put("pageTitle", pageTitle)
-        .addBreadcrump(illusionEvent, "/pages/" + getMaterialPath(), pageTitle);
+        .addBreadcrumb(illusionEvent, "/pages/" + getMaterialPath(), pageTitle);
     
     try {
       Map<String, Object> templateModel = templateModelBuilder.build(sessionController.getLocale());

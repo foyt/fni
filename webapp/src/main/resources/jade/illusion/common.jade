@@ -1,10 +1,10 @@
 mixin view-header()
   div(class="grid_16 tight view-header")
     div(class="view-header-navigation")
-      for breadcrump, index in breadcrumps
-        a(class="view-header-navigation-item",href=breadcrump.path)
-          =breadcrump.text 
-        unless index >= (size(breadcrumps) - 1)
+      for breadcrumb, index in breadcrumbs
+        a(class="view-header-navigation-item",href=breadcrumb.url)
+          =breadcrumb.text 
+        unless index >= (size(breadcrumbs) - 1)
           span(class="view-header-navigation-separator")
     div(class="view-header-description")
       p(class="view-header-description-title")
