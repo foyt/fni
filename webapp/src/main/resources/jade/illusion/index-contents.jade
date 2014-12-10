@@ -1,7 +1,7 @@
 include common
 +view-header()
 +navigation()
-if (!memberRole) && ((joinMode == 'OPEN')||(joinMode == 'APPROVE'))
+if (!user) && ((joinMode == 'OPEN')||(joinMode == 'APPROVE'))
   div.illusion-event-join
     if hasSignUpFee
       div.illusion-event-join-info

@@ -131,7 +131,6 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
       .put("joinMode", joinMode.toString())
       .put("hasSignUpFee", hasSignUpFee)
       .put("signUpFee", signUpFee)
-      .put("memberRole", memberRole)
       .put("ref", ref)
       .addLocales("illusion.event.joinInfoFree", "illusion.event.joinInfoPrice", 
           "illusion.event.joinButton", "illusion.event.requestToJoinButton",  "illusion.event.shareOnFacebook", 
