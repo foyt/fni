@@ -1,0 +1,18 @@
+mixin navigation()
+  div(class="grid_16 tight")
+    div(class="illusion-event-navigation")
+      for page in pages
+        if page.id == currentPageId
+          a(class="illusion-event-navigation-item illusion-event-navigation-item-active",href=page.url)
+            =page.title
+        else
+          a(class="illusion-event-navigation-item",href=page.url)
+            =page.title
+      if size(adminPages) > 0
+        div(class="illusion-event-navigation-menu illusion-event-navigation-admin-menu")
+          span(class="illusion-event-navigation-menu-label")
+            =locales['illusion.eventNavigation.administration']
+          div(class="illusion-event-navigation-menu-items")
+            for adminPage in adminPages
+              a(class="illusion-event-navigation-item",href=eventUrl + adminPage.path)
+                =adminPage.title
