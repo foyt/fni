@@ -40,10 +40,10 @@ public class IllusionTemplateModelBuilderFactory {
     }
 
     public IllusionTemplateModelBuilder addPage(IllusionEventPage page) {
-      pages.add(page);
+      pages.add(new Page(page.getId(), page.getUrlName(), page.getUrl(), page.getTitle(), page.getType()));
       return this;
     }
-
+    
     public IllusionTemplateModelBuilder addAdminPage(IllusionEventPage.Static id, String path, String title) {
       adminPages.add(new AdminPage(id.toString(), path, title));
       return this;
@@ -145,10 +145,47 @@ public class IllusionTemplateModelBuilderFactory {
     }
 
     private Map<String, Object> model;
-    private List<IllusionEventPage> pages;
+    private List<Page> pages;
     private List<AdminPage> adminPages;
     private List<String> localeKeys;
     private List<Breadcrumb> breadcrumbs;
+  }
+  
+  public class Page {
+    
+    public Page(String id, String urlName, String url, String title, String type) {
+      this.id = id;
+      this.urlName = urlName;
+      this.url = url;
+      this.title = title;
+      this.type = type;
+    }
+
+    public String getId() {
+      return id;
+    }
+    
+    public String getUrlName() {
+      return urlName;
+    }
+
+    public String getTitle() {
+      return title;
+    }
+
+    public String getUrl() {
+      return url;
+    }
+
+    public String getType() {
+      return type;
+    }
+    
+    private String id;
+    private String urlName;
+    private String url;
+    private String title;
+    private String type;
   }
 
   public class AdminPage {
