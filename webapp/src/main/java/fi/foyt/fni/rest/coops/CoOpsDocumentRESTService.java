@@ -1,4 +1,4 @@
-package fi.foyt.fni.coops;
+package fi.foyt.fni.rest.coops;
 
 import java.util.List;
 
@@ -21,6 +21,8 @@ import fi.foyt.coops.CoOpsNotImplementedException;
 import fi.foyt.coops.CoOpsUsageException;
 import fi.foyt.coops.model.File;
 import fi.foyt.coops.model.Patch;
+import fi.foyt.fni.coops.CoOpsApiDocument;
+import fi.foyt.fni.coops.CoOpsSessionController;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.rest.PATCH;
 import fi.foyt.fni.session.SessionController;

@@ -1,4 +1,4 @@
-package fi.foyt.fni.users.rest;
+package fi.foyt.fni.rest.users.model;
 
 import java.util.List;
 

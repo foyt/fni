@@ -24,8 +24,8 @@ import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.users.UserToken;
+import fi.foyt.fni.rest.users.model.UserInfo;
 import fi.foyt.fni.system.SystemSettingsController;
-import fi.foyt.fni.users.rest.UserInfo;
 import fi.foyt.fni.utils.auth.OAuthUtils;
 
 @RequestScoped

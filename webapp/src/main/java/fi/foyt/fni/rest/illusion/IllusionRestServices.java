@@ -1,4 +1,4 @@
-package fi.foyt.fni.illusion;
+package fi.foyt.fni.rest.illusion;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,8 +23,9 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
 
-import fi.foyt.fni.illusion.rest.IllusionEventGroup;
-import fi.foyt.fni.illusion.rest.IllusionEventMaterialParticipantSetting;
+import fi.foyt.fni.illusion.IllusionEventController;
+import fi.foyt.fni.illusion.IllusionEventGroupController;
+import fi.foyt.fni.illusion.IllusionEventMaterialController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -36,6 +37,8 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.rest.illusion.model.IllusionEventGroup;
+import fi.foyt.fni.rest.illusion.model.IllusionEventMaterialParticipantSetting;
 import fi.foyt.fni.session.SessionController;
 
 @Path("/illusion")

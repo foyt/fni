@@ -1,4 +1,4 @@
-package fi.foyt.fni.users;
+package fi.foyt.fni.rest.users;
 
 import java.util.List;
 
@@ -13,8 +13,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.rest.users.model.UserInfo;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.users.rest.UserInfo;
+import fi.foyt.fni.users.UserController;
 
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)

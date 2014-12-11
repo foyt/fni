@@ -1,4 +1,4 @@
-package fi.foyt.fni.illusion.rest;
+package fi.foyt.fni.rest.illusion.model;
 
 public class IllusionEventGroup {
 

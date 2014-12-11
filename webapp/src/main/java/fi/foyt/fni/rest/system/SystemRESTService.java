@@ -1,4 +1,4 @@
-package fi.foyt.fni.view;
+package fi.foyt.fni.rest.system;
 
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.GET;
