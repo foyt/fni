@@ -14,6 +14,11 @@ import fi.foyt.fni.rest.Unsecure;
 @Produces (MediaType.APPLICATION_JSON)
 public class SystemRESTService {
 
+  /**
+   * Returns pong
+   * 
+   * @return pong
+   */
   @GET
   @Unsecure
   @Path ("/ping")

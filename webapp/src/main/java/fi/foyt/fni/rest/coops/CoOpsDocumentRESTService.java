@@ -27,7 +27,7 @@ import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.rest.PATCH;
 import fi.foyt.fni.session.SessionController;
 
-@Path ("/coops/document/{FILEID}")
+@Path ("/coops")
 @RequestScoped
 @Produces (MediaType.APPLICATION_JSON)
 public class CoOpsDocumentRESTService {
@@ -41,8 +41,17 @@ public class CoOpsDocumentRESTService {
   @Inject
   private SessionController sessionController;
   
+  /**
+   * Returns a file and file meta-information
+   * 
+   * @see https://github.com/foyt/coops-spec/#get--load-request
+   * 
+   * @param fileId file id
+   * @param revisionNumber specifies file revision to be returned (defaults to latest)
+   * @return Response
+   */
   @GET
-  @Path ("/")
+  @Path ("/document/{FILEID}")
   public Response load(@PathParam ("FILEID") String fileId, @QueryParam ("revisionNumber") Long revisionNumber) {
     try {
       File file = coOpsApiDocument.fileGet(fileId, revisionNumber);
@@ -60,8 +69,16 @@ public class CoOpsDocumentRESTService {
     } 
   }
   
+  /**
+   * Patches a file.
+   * 
+   * @see https://github.com/foyt/coops-spec/#patch--patch-request
+   * @param fileId file id
+   * @param patch patch object
+   * @return Response
+   */
   @PATCH
-  @Path ("/")
+  @Path ("/document/{FILEID}")
   public Response patch(@PathParam ("FILEID") String fileId, Patch patch) {
     try {
       CoOpsSession coOpsSession = coOpsSessionController.findSessionBySessionId(patch.getSessionId());
@@ -88,8 +105,17 @@ public class CoOpsDocumentRESTService {
     } 
   }
   
+  /**
+   * Returns updates to the file.
+   * 
+   * @see https://github.com/foyt/coops-spec/#get-update-update-request 
+   * @param fileId file id
+   * @param sessionId session id 
+   * @param revisionNumber revision after the updates are returned
+   * @return
+   */
   @GET
-  @Path ("/update")
+  @Path ("/document/{FILEID}/update")
   public Response update(@PathParam ("FILEID") String fileId, @QueryParam ("sessionId") String sessionId, @QueryParam ("revisionNumber") Long revisionNumber) {
     CoOpsSession coOpsSession = coOpsSessionController.findSessionBySessionId(sessionId);
     if (coOpsSession == null) {
@@ -118,8 +144,17 @@ public class CoOpsDocumentRESTService {
     } 
   }
   
+  /**
+   * Client joins the collaboration session
+   * 
+   * @see https://github.com/foyt/coops-spec/#get-join-join-request
+   * @param fileId file id
+   * @param algorithms supported algorithms
+   * @param protocolVersion version of protocol client is using
+   * @return Response
+   */
   @GET
-  @Path ("/join")
+  @Path ("/document/{FILEID}/join")
   public Response join(@PathParam ("FILEID") String fileId, @QueryParam("algorithm") List<String> algorithms, @QueryParam ("protocolVersion") String protocolVersion) {
     try {
       return Response.ok(coOpsApiDocument.fileJoin(fileId, algorithms, protocolVersion)).build();

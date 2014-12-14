@@ -15,6 +15,11 @@ public class UserInfo {
     this.emails = emails;
   }
 
+  /**
+   * Returns user id
+   * 
+   * @return user id
+   */
   public Long getId() {
     return id;
   }
@@ -23,6 +28,11 @@ public class UserInfo {
     this.id = id;
   }
 
+  /**
+   * Returns user's first name
+   * 
+   * @return user's first name
+   */
   public String getFirstName() {
     return firstName;
   }
@@ -31,6 +41,12 @@ public class UserInfo {
     this.firstName = firstName;
   }
 
+
+  /**
+   * Returns user's last name
+   * 
+   * @return user's last name
+   */
   public String getLastName() {
     return lastName;
   }
@@ -39,6 +55,11 @@ public class UserInfo {
     this.lastName = lastName;
   }
 
+  /**
+   * Returns user's email addresses
+   * 
+   * @return user's email addresses
+   */
   public List<String> getEmails() {
     return emails;
   }

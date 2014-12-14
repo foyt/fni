@@ -66,6 +66,13 @@ public class IllusionRestServices {
   @Inject
   private MaterialPermissionController materialPermissionController;
   
+  /**
+   * Returns list of event groups
+   * 
+   * @param eventId event id 
+   * @return Response
+   * @responseType java.util.List<fi.foyt.fni.rest.illusion.model.IllusionEventGroup>
+   */
   @Path("/events/{EVENTID}/groups/")
   @GET
   public Response listEventGroups(@PathParam ("EVENTID") Long eventId) {
@@ -86,6 +93,14 @@ public class IllusionRestServices {
     return Response.ok(createRestModel(illusionEventGroupController.listGroups(event).toArray(new fi.foyt.fni.persistence.model.illusion.IllusionEventGroup[0]))).build();
   }
   
+  /**
+   * Creates an event group
+   * 
+   * @param eventUrlName event's urlname
+   * @param entity payload
+   * @return Response
+   * @responseType fi.foyt.fni.rest.illusion.model.IllusionEventGroup
+   */
   @Path("/events/{EVENTURLNAME}/groups/")
   @POST
   public Response createGroup(@PathParam ("EVENTURLNAME") String eventUrlName, IllusionEventGroup entity) {
@@ -112,6 +127,16 @@ public class IllusionRestServices {
     return Response.ok(createRestModel(illusionEventGroupController.createGroup(event, name))).build();
   }
   
+  /**
+   * Creates event's material participant setting
+   * 
+   * @param eventId event's is
+   * @param materialId material's id
+   * @param participantId participant's id
+   * @param entity payload
+   * @return Response
+   * @responseType fi.foyt.fni.rest.illusion.model.IllusionEventMaterialParticipantSetting
+   */
   @Path("/events/{EVENTID}/materials/{MATERIALID}/participantSettings/{PARTICIPANTID}")
   @POST
   public Response createMaterialSetting(@PathParam ("EVENTID") Long eventId, @PathParam ("MATERIALID") Long materialId, @PathParam ("PARTICIPANTID") Long participantId, IllusionEventMaterialParticipantSetting entity) {
@@ -162,6 +187,16 @@ public class IllusionRestServices {
     return participant != null && participant.getRole() == IllusionEventParticipantRole.ORGANIZER;
   }
   
+  /**
+   * Lists event's material participant settings
+   * 
+   * @param eventId event's is
+   * @param materialId material's id
+   * @param participantId participant's id
+   * @param keyName return only by key
+   * @return Response
+   * @responseType java.util.List<fi.foyt.fni.rest.illusion.model.IllusionEventGroup>
+   */
   @Path("/events/{EVENTID}/materials/{MATERIALID}/participantSettings/{PARTICIPANTID}")
   @GET
   public Response listMaterialSettings(@PathParam ("EVENTID") Long eventId, @PathParam ("MATERIALID") Long materialId, @PathParam ("PARTICIPANTID") Long participantId, @QueryParam ("key") String keyName) {
@@ -222,6 +257,16 @@ public class IllusionRestServices {
     return Response.ok(createRestModel(result.toArray(new fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting[0]))).build();
   }
   
+  /**
+   * Finds event's material participant setting
+   * 
+   * @param eventId event's is
+   * @param materialId material's id
+   * @param participantId participant's id
+   * @param id participant setting id
+   * @return Response
+   * @responseType fi.foyt.fni.rest.illusion.model.IllusionEventMaterialParticipantSetting
+   */
   @Path("/events/{EVENTID}/materials/{MATERIALID}/participantSettings/{PARTICIPANTID}/{ID}")
   @GET
   public Response getMaterialSetting(@PathParam ("EVENTID") Long eventId, @PathParam ("MATERIALID") Long materialId, @PathParam ("PARTICIPANTID") Long participantId, @PathParam ("ID") Long id) {
@@ -248,6 +293,16 @@ public class IllusionRestServices {
     return Response.ok(createRestModel(participantSetting)).build();
   }
   
+  /**
+   * Updates event's material participant setting
+   * 
+   * @param eventId event's is
+   * @param materialId material's id
+   * @param participantId participant's id
+   * @param id setting id
+   * @param entity payload
+   * @return Response
+   */
   @Path("/events/{EVENTID}/materials/{MATERIALID}/participantSettings/{PARTICIPANTID}/{ID}")
   @PUT
   public Response updateMaterialSetting(@PathParam ("EVENTID") Long eventId, @PathParam ("MATERIALID") Long materialId, @PathParam ("PARTICIPANTID") Long participantId, @PathParam ("ID") Long id, IllusionEventMaterialParticipantSetting entity) {
@@ -307,6 +362,13 @@ public class IllusionRestServices {
     return Response.ok(createRestModel(illusionEventMaterialController.updateParticipantSettingValue(participantSetting, entity.getValue()))).build();
   }
   
+  /**
+   * Deletes an event page 
+   * 
+   * @param eventId event id 
+   * @param pageId page id
+   * @return Response
+   */
   @Path("/events/{EVENTID}/pages/{PAGEID}")
   @DELETE
   public Response deletePage(@PathParam ("EVENTID") Long eventId, @PathParam ("PAGEID") Long pageId) {

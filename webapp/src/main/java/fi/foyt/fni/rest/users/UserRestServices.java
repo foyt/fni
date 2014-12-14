@@ -17,6 +17,9 @@ import fi.foyt.fni.rest.users.model.UserInfo;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
 
+/**
+ * User REST services
+ */
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -30,6 +33,12 @@ public class UserRestServices {
   @Inject
   private UserController userController;
   
+  /**
+   * Returns logged user info
+   * 
+   * @return Response response
+   * @responseType fi.foyt.fni.rest.users.model.UserInfo
+   */
   @Path("/me/info")
   @GET
   public Response getOwnInfo() {
