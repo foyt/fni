@@ -64,6 +64,12 @@
     <!-- Hibernate -->
 
     <hibernate-jpamodelgen.version>4.3.6.Final</hibernate-jpamodelgen.version>
+
+    <!-- APIDocs -->
+
+    <apidocs.apiVersion>1</apidocs.apiVersion>
+    <apidocs.docBasePath>http://foyt.github.io/fni/api/</apidocs.docBasePath>
+    <apidocs.apiBasePath>http://www.forgeandillusion/rest/</apidocs.apiBasePath>
   </properties>
 
   <dependencyManagement>
@@ -79,6 +85,34 @@
   </dependencyManagement>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <versionRange>[2.9,)</versionRange>
+                    <goals>
+                      <goal>javadoc</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -113,6 +147,25 @@
             <id>attach-javadocs</id>
             <goals>
               <goal>jar</goal>
+            </goals>
+          </execution>
+
+          <execution>
+            <id>generate-service-docs</id>
+            <phase>generate-resources</phase>
+            <configuration>
+              <doclet>com.carma.swagger.doclet.ServiceDoclet</doclet>
+              <docletArtifact>
+                <groupId>com.carma</groupId>
+                <artifactId>swagger-doclet</artifactId>
+                <version>1.0.3</version>
+              </docletArtifact>
+              <reportOutputDirectory>${project.build.outputDirectory}</reportOutputDirectory>
+              <useStandardDocletOptions>false</useStandardDocletOptions>
+              <additionalparam>-apiVersion ${apidocs.apiVersion} -docBasePath ${apidocs.docBasePath} -apiBasePath ${apidocs.apiBasePath}</additionalparam>
+            </configuration>
+            <goals>
+              <goal>javadoc</goal>
             </goals>
           </execution>
         </executions>
