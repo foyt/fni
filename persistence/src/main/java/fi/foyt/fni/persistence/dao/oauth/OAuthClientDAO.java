@@ -7,19 +7,21 @@ import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient;
+import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient_;
 
 public class OAuthClientDAO extends GenericDAO<OAuthClient> {
 
 	private static final long serialVersionUID = 1L;
 
-	public OAuthClient create(String name, String clientId, String clientSecret, String redirectUrl) {
+	public OAuthClient create(String name, OAuthClientType type, String clientId, String clientSecret, String redirectUrl) {
 	  OAuthClient oAuthClient = new OAuthClient();
 
 	  oAuthClient.setClientId(clientId);
 	  oAuthClient.setClientSecret(clientSecret);
 	  oAuthClient.setName(name);
 	  oAuthClient.setRedirectUrl(redirectUrl);
+	  oAuthClient.setType(type);
 	  
 	  return persist(oAuthClient);
   }

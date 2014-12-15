@@ -8,6 +8,7 @@ import fi.foyt.fni.persistence.dao.oauth.OAuthClientDAO;
 import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
 import fi.foyt.fni.persistence.model.oauth.OAuthAuthorizationCode;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient;
+import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.users.User;
 
 public class OAuthController {
@@ -23,8 +24,8 @@ public class OAuthController {
 
   /* OAuthClient */
   
-  public OAuthClient createClient(String name, String clientId, String clientSecret, String redirectUrl) {
-    return oAuthClientDAO.create(name, clientId, clientSecret, redirectUrl);
+  public OAuthClient createClient(String name, OAuthClientType type, String clientId, String clientSecret, String redirectUrl) {
+    return oAuthClientDAO.create(name, type, clientId, clientSecret, redirectUrl);
   }
 
   public OAuthClient findClientByClientId(String clientId) {

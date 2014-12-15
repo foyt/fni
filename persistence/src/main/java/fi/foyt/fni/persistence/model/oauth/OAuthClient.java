@@ -2,6 +2,8 @@ package fi.foyt.fni.persistence.model.oauth;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,6 +49,14 @@ public class OAuthClient {
   public void setRedirectUrl(String redirectUrl) {
     this.redirectUrl = redirectUrl;
   }
+  
+  public OAuthClientType getType() {
+    return type;
+  }
+  
+  public void setType(OAuthClientType type) {
+    this.type = type;
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,4 +81,9 @@ public class OAuthClient {
   @NotEmpty
   @Column(nullable = false)
   private String redirectUrl;
+  
+  @NotNull
+  @Column(nullable = false)
+  @Enumerated (EnumType.STRING)
+  private OAuthClientType type;
 }

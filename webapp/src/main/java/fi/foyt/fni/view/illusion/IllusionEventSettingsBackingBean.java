@@ -28,6 +28,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient;
+import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
@@ -306,7 +307,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
           String redirectUrl = new StringBuilder(systemSettingsController.getHostUrl(domain, false, true)).append(
               "/login/?return=1&loginMethod=ILLUSION_INTERNAL").toString();
 
-          OAuthClient oAuthClient = oAuthController.createClient(illusionEvent.getName(), clientId, clientSecret, redirectUrl);
+          OAuthClient oAuthClient = oAuthController.createClient(illusionEvent.getName(), OAuthClientType.USER, clientId, clientSecret, redirectUrl);
           illusionEventController.updateEventOAuthClient(illusionEvent, oAuthClient);
         }
 
