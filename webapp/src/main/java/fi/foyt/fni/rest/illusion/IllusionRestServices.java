@@ -67,6 +67,113 @@ public class IllusionRestServices {
   private MaterialPermissionController materialPermissionController;
   
   /**
+   * Creates new event
+   * 
+   * @param entity payload
+   * @return Response
+   * @responseType fi.foyt.fni.rest.illusion.model.IllusionEvent
+   */
+  @Path("/events")
+  @POST
+  public Response createEvent(fi.foyt.fni.rest.illusion.model.IllusionEvent entity) {
+    return null;
+  }
+  
+  /**
+   * Returns an event
+   * 
+   * @param eventId event id 
+   * @return Response
+   * @responseType fi.foyt.fni.rest.illusion.model.IllusionEvent
+   */
+  @Path("/events/{EVENTID}")
+  @GET
+  public Response getEvent(@PathParam ("EVENTID") Long eventId) {
+    return null;
+  }
+  
+  /**
+   * Updates an event
+   * 
+   * @param eventId event id 
+   * @param entity payload
+   * @return Response
+   */
+  @Path("/events/{EVENTID}")
+  @PUT
+  public Response updateEvent(@PathParam ("EVENTID") Long eventId, fi.foyt.fni.rest.illusion.model.IllusionEvent entity) {
+    return null;
+  }
+  
+  /**
+   * Deletes an event
+   * 
+   * @param eventId event id 
+   * @return Response
+   */
+  @Path("/events/{EVENTID}")
+  @DELETE
+  public Response deleteEvent(@PathParam ("EVENTID") Long eventId) {
+    return null;
+  }
+  
+  /**
+   * Creates an event participant
+   * 
+   * @param eventId event id 
+   * @param entity payload
+   * @return Response
+   * @responseType fi.foyt.fni.rest.illusion.model.IllusionEventParticipant
+   */
+  @Path("/events/{EVENTID}/participants")
+  @POST
+  public Response createEventParticipant(@PathParam ("EVENTID") Long eventId, fi.foyt.fni.rest.illusion.model.IllusionEventParticipant entity) {
+    return null;
+  }
+  
+  /**
+   * Retrieves an event participant
+   * 
+   * @param eventId event id 
+   * @param event participant id
+   * @return Response
+   * @responseType fi.foyt.fni.rest.illusion.model.IllusionEventParticipant
+   */
+  @Path("/events/{EVENTID}/participants/{ID}")
+  @GET
+  public Response getEventParticipant(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long participantId) {
+    return null;
+  }
+  
+  /**
+   * Updates an event participant
+   * 
+   * @param eventId event id 
+   * @param event participant id
+   * @param entity payload
+   * @return Response
+   * @responseType fi.foyt.fni.rest.illusion.model.IllusionEventParticipant
+   */
+  @Path("/events/{EVENTID}/participants/{ID}")
+  @PUT
+  public Response updateEventParticipant(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long participantId, fi.foyt.fni.rest.illusion.model.IllusionEventParticipant entity) {
+    return null;
+  }
+  
+  /**
+   * Deletes an event participant
+   * 
+   * @param eventId event id 
+   * @param event participant id
+   * @return Response
+   */
+  @Path("/events/{EVENTID}/participants/{ID}")
+  @DELETE
+  public Response deleteEventParticipant(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long participantId) {
+    return null;
+  }
+  
+  /**
    * Returns list of event groups
    * 
    * @param eventId event id 
