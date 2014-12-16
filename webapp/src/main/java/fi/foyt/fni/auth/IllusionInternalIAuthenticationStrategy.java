@@ -24,7 +24,7 @@ import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.users.UserToken;
-import fi.foyt.fni.rest.users.model.UserInfo;
+import fi.foyt.fni.rest.users.model.User;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.auth.OAuthUtils;
 
@@ -99,8 +99,8 @@ public class IllusionInternalIAuthenticationStrategy extends OAuthAuthentication
     try {
       ObjectMapper objectMapper = new ObjectMapper();
       
-      String response = OAuthUtils.doGetRequest(service, accessToken, new StringBuilder(siteUrl).append("/rest/users/me/info").toString()).getBody();
-      UserInfo userInfo = objectMapper.readValue(response, UserInfo.class);
+      String response = OAuthUtils.doGetRequest(service, accessToken, new StringBuilder(siteUrl).append("/rest/users/users/me").toString()).getBody();
+      User userInfo = objectMapper.readValue(response, User.class);
       String sourceId = userInfo.getFirstName() + " " + userInfo.getLastName();
         
       AccessToken rawAccessToken = objectMapper.readValue(accessToken.getRawResponse(), AccessToken.class);

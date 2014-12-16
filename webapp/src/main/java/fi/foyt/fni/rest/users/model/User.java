@@ -2,23 +2,26 @@ package fi.foyt.fni.rest.users.model;
 
 import java.util.List;
 
-public class UserInfo {
+public class User {
 
-  public UserInfo() {
+  public User() {
   }
-
-  public UserInfo(Long id, String firstName, String lastName, List<String> emails) {
+  
+  public User(Long id, String firstName, String lastName, String nickname, String locale, List<String> emails) {
     super();
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
+    this.nickname = nickname;
+    this.locale = locale;
     this.emails = emails;
   }
 
   /**
    * Returns user id
    * 
-   * @return user id
+   * @return user id (ignored when creating or updating user)
+   * @requiredField
    */
   public Long getId() {
     return id;
@@ -40,8 +43,7 @@ public class UserInfo {
   public void setFirstName(String firstName) {
     this.firstName = firstName;
   }
-
-
+  
   /**
    * Returns user's last name
    * 
@@ -54,16 +56,44 @@ public class UserInfo {
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
-
+  
   /**
-   * Returns user's email addresses
+   * Returns user's nickname
    * 
-   * @return user's email addresses
+   * @return user's nickname
+   */
+  public String getNickname() {
+    return nickname;
+  }
+  
+  public void setNickname(String nickname) {
+    this.nickname = nickname;
+  }
+  
+  /**
+   * Returns user's locale in ISO 639 alpha-2 format
+   * 
+   * @return user's locale in ISO 639 alpha-2 format
+   * @default en
+   */
+  public String getLocale() {
+    return locale;
+  }
+  
+  public void setLocale(String locale) {
+    this.locale = locale;
+  }
+  
+  /**
+   * Returns user's emails
+   * 
+   * @return user's emails
+   * @requiredField
    */
   public List<String> getEmails() {
     return emails;
   }
-
+  
   public void setEmails(List<String> emails) {
     this.emails = emails;
   }
@@ -71,5 +101,7 @@ public class UserInfo {
   private Long id;
   private String firstName;
   private String lastName;
+  private String nickname;
+  private String locale;
   private List<String> emails;
 }
