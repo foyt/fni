@@ -55,8 +55,7 @@ public class OAuthAccessToken {
   @Column(nullable = false)
   private Long expires;
 
-  @NotNull
   @ManyToOne
-  @JoinColumn(nullable = false)
+  @JoinColumn
   private OAuthAuthorizationCode authorizationCode;
 }
