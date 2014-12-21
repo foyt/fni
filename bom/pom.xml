@@ -135,6 +135,10 @@
     
     <cdi-unit.version>3.1.0</cdi-unit.version>
     
+    <!-- REST Assured -->
+    
+    <restassured.version>2.4.0</restassured.version>
+    
     <!-- CoOps -->
               
     <coops-spec.version>1.0.0</coops-spec.version> 
@@ -315,6 +319,12 @@
       
       <dependency>
         <groupId>org.apache.oltu.oauth2</groupId>
+        <artifactId>org.apache.oltu.oauth2.client</artifactId>
+        <version>${apache-oltu.version}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.apache.oltu.oauth2</groupId>
         <artifactId>org.apache.oltu.oauth2.authzserver</artifactId>
         <version>${apache-oltu.version}</version>
       </dependency>
@@ -363,6 +373,12 @@
         <groupId>org.jglue.cdi-unit</groupId>
         <artifactId>cdi-unit</artifactId>
         <version>${cdi-unit.version}</version>
+      </dependency>      
+
+      <dependency>
+        <groupId>com.jayway.restassured</groupId>
+        <artifactId>rest-assured</artifactId>
+        <version>${restassured.version}</version>
       </dependency>
       
       <dependency>
