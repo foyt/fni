@@ -40,28 +40,42 @@ public class SecurityFilter implements ContainerRequestFilter {
     Method method = methodInvoker.getMethod();
     if (method == null) {
       requestContext.abortWith(Response.status(javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR).build());
+      return;
     }
     
-    if (!method.isAnnotationPresent(Unsecure.class)) {
-      if (!sessionController.isLoggedIn()) {
-        try {
-          OAuthAccessResourceRequest oAuthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY, ParameterStyle.HEADER);
-          if (oAuthRequest != null) {
-            OAuthAccessToken accessToken = oAuthController.findAccessTokenByAccessToken(oAuthRequest.getAccessToken());
-            if (accessToken == null) {
-              requestContext.abortWith(Response.status(Status.FORBIDDEN).build());
-            }
-  
-            sessionController.login(accessToken.getAuthorizationCode().getUser());
-          }
-        } catch (OAuthSystemException | OAuthProblemException e) {
-          requestContext.abortWith(Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build());
-        }
-      }
+    if (!method.isAnnotationPresent(Security.class)) {
+      requestContext.abortWith(Response.status(Status.INTERNAL_SERVER_ERROR).entity("Endpoint is configured incorrectly").build());
+      return;
       
-      if (!sessionController.isLoggedIn()) {
-        requestContext.abortWith(Response.status(Status.UNAUTHORIZED).build());
+    } 
+    
+    Security secure = method.getAnnotation(Security.class);
+    if (!sessionController.isLoggedIn()) {
+      try {
+        OAuthAccessResourceRequest oAuthRequest = new OAuthAccessResourceRequest(request, ParameterStyle.QUERY, ParameterStyle.HEADER);
+        
+        OAuthAccessToken accessToken = oAuthController.findAccessTokenByAccessToken(oAuthRequest.getAccessToken());
+        if (accessToken == null) {
+          requestContext.abortWith(Response.status(Status.FORBIDDEN).build());
+          return;
+        }
+
+        if (accessToken.getAuthorizationCode() != null) {
+          sessionController.login(accessToken.getAuthorizationCode().getUser());
+        } else {
+          return;
+        }
+      } catch (OAuthProblemException e) {
+        
+      } catch (OAuthSystemException e) {
+        requestContext.abortWith(Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build());
+        return;
       }
+    }
+      
+    if (!secure.allowNotLogged() && !sessionController.isLoggedIn()) {
+      requestContext.abortWith(Response.status(Status.UNAUTHORIZED).build());
+      return;
     }
   }
 
