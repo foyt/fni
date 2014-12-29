@@ -10,6 +10,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
+
+@DefineSqlSets ({
+  @DefineSqlSet (id = "basic-materials-users", before = {"basic-users-setup.sql","basic-materials-setup.sql"}, after = { "basic-materials-teardown.sql","basic-users-teardown.sql" }),
+})
 public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
 
   @Before
@@ -28,18 +35,21 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testNotFound() throws Exception {
     loginGoogle(getWebDriver());
     testNotFound(getWebDriver(), "/forge/import-google-drive?parentFolderId=12345");
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testLoggedInWithGoogle() throws Exception {
     loginGoogle(getWebDriver());
     testTitle(getWebDriver(), "/forge/import-google-drive", "Forge - Import From Google Drive");
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testLoggedInWithFacebook() throws Exception {
     loginFacebook(getWebDriver());
     getWebDriver().get(getAppUrl() + "/forge/import-google-drive");
@@ -52,6 +62,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testImportMaterial() throws Exception {
     loginGoogle(getWebDriver());
     getWebDriver().get(getAppUrl() + "/forge/import-google-drive");
@@ -64,6 +75,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testImportMaterialIntoFolder() throws Exception {
     loginGoogle(getWebDriver());
     getWebDriver().get(getAppUrl() + "/forge/");

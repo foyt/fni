@@ -6,6 +6,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
+
+@DefineSqlSets ({
+  @DefineSqlSet (id = "basic-users", before = "basic-users-setup.sql", after = "basic-users-teardown.sql")
+})
 public class AdminArchiveUserTestsBase extends AbstractUITest {
   
   private static final Long USER_ID = 1024l;
@@ -26,6 +33,7 @@ public class AdminArchiveUserTestsBase extends AbstractUITest {
   }
   
   @Test
+  @SqlSets ({"basic-users"})
   public void testNotFound() throws Exception {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
     testNotFound(getWebDriver(), "/admin/archive-user");
@@ -36,6 +44,7 @@ public class AdminArchiveUserTestsBase extends AbstractUITest {
   }
   
   @Test
+  @SqlSets ({"basic-users"})
   public void testArchive() throws Exception {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/admin/archive-user/" + USER_ID);
@@ -43,6 +52,7 @@ public class AdminArchiveUserTestsBase extends AbstractUITest {
   }
   
   @Test
+  @SqlSets ({"basic-users"})
   public void testUnauthorized() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     testAccessDenied(getWebDriver(), "/admin/archive-user/" + USER_ID);

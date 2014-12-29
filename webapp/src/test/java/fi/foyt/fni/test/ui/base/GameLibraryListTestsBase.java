@@ -16,9 +16,15 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
 import fi.foyt.fni.utils.licenses.CreativeCommonsLicense;
 import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 
+@DefineSqlSets({
+  @DefineSqlSet (id = "basic-gamelibrary", before = { "basic-users-setup.sql","basic-forum-setup.sql","basic-gamelibrary-setup.sql"}, after={"basic-gamelibrary-teardown.sql", "basic-forum-teardown.sql","basic-users-teardown.sql"}),
+})
 public class GameLibraryListTestsBase extends AbstractUITest {
 
   private static final String UML_ID = "3";
@@ -64,12 +70,14 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   private static final int SIMPLE_COMMENTS = 2;
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testHttps() {
     getWebDriver().get(getAppUrl() + "/gamelibrary/");
     assertTrue(StringUtils.startsWith(getWebDriver().getCurrentUrl(), "https://"));
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testTagNotFound() {
     testNotFound(getWebDriver(), "/gamelibrary/tags/bogus", true);
     testNotFound(getWebDriver(), "/gamelibrary/tags/~", true);
@@ -79,6 +87,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testPublicationNotFound() {
     testNotFound(getWebDriver(), "/gamelibrary/bogus", true);
     testNotFound(getWebDriver(), "/gamelibrary/~", true);
@@ -87,6 +96,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testMiniCartTexts() {
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
     assertEquals("SHOPPING CART", getWebDriver().findElement(By.cssSelector(".gamelibrary-mini-shopping-cart-title")).getText());
@@ -97,6 +107,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testMostRecentList() {
     acceptCookieDirective(getWebDriver(), true);
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
@@ -112,6 +123,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   }
   
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testProposeLinkNotLogged() throws UnsupportedEncodingException {
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
     assertEquals("Login to propose a game to the Library", getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getText());
@@ -120,6 +132,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   }
   
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testProposeLinkLogged() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
@@ -128,6 +141,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testTagList() {
     acceptCookieDirective(getWebDriver(), true);
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/tags/test");
@@ -140,6 +154,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testPublicationDetailsSimple() {
     acceptCookieDirective(getWebDriver(), true);
     getWebDriver().get(getAppUrl(true) + SIMPLE_PATH);
@@ -148,6 +163,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testPublicationDetailsBySaAndRus() {
     acceptCookieDirective(getWebDriver(), true);
     getWebDriver().get(getAppUrl(true) + BYSARUS_PATH);
@@ -156,6 +172,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testPublicationDetailsUmlaut() {
     acceptCookieDirective(getWebDriver(), true);
     getWebDriver().get(getAppUrl(true) + UML_PATH);

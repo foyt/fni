@@ -10,6 +10,13 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
+
+@DefineSqlSets ({
+  @DefineSqlSet (id = "basic-materials-users", before = {"basic-users-setup.sql","basic-materials-setup.sql"}, after = { "basic-materials-teardown.sql","basic-users-teardown.sql" }),
+})
 public class ForgeDocumentTestsBase extends AbstractUITest {
 
   private static final String DOCUMENT_IN_ROOT = "/forge/documents/2/document";
@@ -24,6 +31,7 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
   }
   
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testForbidden() throws Exception {
     loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
     testAccessDenied(getWebDriver(), DOCUMENT_IN_ROOT);
@@ -32,6 +40,7 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testNotFound() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     testNotFound(getWebDriver(), "/forge/documents/2/folder/subfolder");
@@ -43,6 +52,7 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testMayView() {
     loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
     testMayViewDocument(getWebDriver(), DOCUMENT_IN_ROOT);
@@ -51,6 +61,7 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testMayEdit() {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
     testMayEditDocument(getWebDriver(), DOCUMENT_IN_ROOT);

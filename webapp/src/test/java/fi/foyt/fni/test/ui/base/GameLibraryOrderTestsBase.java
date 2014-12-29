@@ -6,20 +6,30 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
+
+@DefineSqlSets({
+  @DefineSqlSet (id = "basic-gamelibrary", before = { "basic-users-setup.sql","basic-forum-setup.sql","basic-gamelibrary-setup.sql"}, after={"basic-gamelibrary-teardown.sql", "basic-forum-teardown.sql","basic-users-teardown.sql"}),
+})
 public class GameLibraryOrderTestsBase extends AbstractUITest {
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testAccessKey() throws Exception {
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/orders/1?key=bogus-access-key");
     testOrderDetails(getWebDriver());
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testInvalidAccessKey() throws Exception {
     testAccessDenied(getWebDriver(), "/gamelibrary/orders/1?key=invalid-access-key", true);
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testNotFound() throws Exception {
     testNotFound(getWebDriver(), "/gamelibrary/orders/~", true);
     testNotFound(getWebDriver(), "/gamelibrary/orders/-1", true);
@@ -28,12 +38,14 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testAccessDenied() throws Exception {
     loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
     testAccessDenied(getWebDriver(), "/gamelibrary/orders/1", true);
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testUser() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/orders/1");
@@ -41,6 +53,7 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testLibrarian() throws Exception {
     loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/orders/1");
@@ -48,6 +61,7 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testAdmin() throws Exception {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/orders/1");

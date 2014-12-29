@@ -702,7 +702,7 @@
               </execution>
             </executions>
           </plugin>
-<!--           
+
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>sql-maven-plugin</artifactId>
@@ -723,7 +723,7 @@
             </configuration>
             <executions>
               <execution>
-                <id>inital-dada</id>
+                <id>basic-sql-setup</id>
                 <phase>pre-integration-test</phase>
                 <goals>
                   <goal>execute</goal>
@@ -731,14 +731,13 @@
                 <configuration>
                   <autocommit>true</autocommit>
                   <srcFiles>
-                    <srcFile>src/test/resources/data.sql</srcFile>
+                    <srcFile>src/test/resources/basic-setup.sql</srcFile>
                   </srcFiles>
                 </configuration>
               </execution>
-
             </executions>
           </plugin>
- -->         
+
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>keytool-maven-plugin</artifactId>
@@ -1179,7 +1178,7 @@
             </configuration>
             <executions>
               <execution>
-                <id>inital-dada</id>
+                <id>basic-sql-setup</id>
                 <phase>pre-integration-test</phase>
                 <goals>
                   <goal>execute</goal>
@@ -1187,11 +1186,10 @@
                 <configuration>
                   <autocommit>true</autocommit>
                   <srcFiles>
-                    <srcFile>src/test/resources/data.sql</srcFile>
+                    <srcFile>src/test/resources/basic-setup.sql</srcFile>
                   </srcFiles>
                 </configuration>
               </execution>
-
             </executions>
           </plugin>
           
@@ -1638,7 +1636,7 @@
             </configuration>
             <executions>
               <execution>
-                <id>inital-dada</id>
+                <id>basic-sql-setup</id>
                 <phase>pre-integration-test</phase>
                 <goals>
                   <goal>execute</goal>
@@ -1646,21 +1644,7 @@
                 <configuration>
                   <autocommit>true</autocommit>
                   <srcFiles>
-                    <srcFile>src/test/resources/data.sql</srcFile>
-                  </srcFiles>
-                </configuration>
-              </execution>
-              
-              <execution>
-                <id>drop-db-after-test</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>execute</goal>
-                </goals>
-                <configuration>
-                  <autocommit>true</autocommit>
-                  <srcFiles>
-                    <srcFile>src/test/resources/drop.sql</srcFile>
+                    <srcFile>src/test/resources/basic-setup.sql</srcFile>
                   </srcFiles>
                 </configuration>
               </execution>

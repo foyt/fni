@@ -9,6 +9,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
+
+@DefineSqlSets ({
+  @DefineSqlSet (id = "basic-users", before = "basic-users-setup.sql", after = "basic-users-teardown.sql")
+})
 public class ForgeConnectDropboxTestsBase extends AbstractUITest {
   
   @Before
@@ -27,6 +34,7 @@ public class ForgeConnectDropboxTestsBase extends AbstractUITest {
   }
   
   @Test
+  @SqlSets ({"basic-users"})
   public void testConnect() {
     acceptCookieDirective(getWebDriver());
 

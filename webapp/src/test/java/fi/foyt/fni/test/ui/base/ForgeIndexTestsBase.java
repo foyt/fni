@@ -9,9 +9,17 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
+
+@DefineSqlSets ({
+  @DefineSqlSet (id = "basic-materials-users", before = {"basic-users-setup.sql","basic-materials-setup.sql"}, after = { "basic-materials-teardown.sql","basic-users-teardown.sql" }),
+})
 public class ForgeIndexTestsBase extends AbstractUITest {
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testTitle() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     testTitle(getWebDriver(), "/forge/", "Forge");
@@ -23,6 +31,7 @@ public class ForgeIndexTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testRemoveDialogLongText() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/forge/");
@@ -41,6 +50,7 @@ public class ForgeIndexTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testOpenShareDialog() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     navigate("/forge");

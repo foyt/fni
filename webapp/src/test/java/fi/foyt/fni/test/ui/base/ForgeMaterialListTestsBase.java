@@ -1,17 +1,25 @@
 package fi.foyt.fni.test.ui.base;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 
-
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
+
+@DefineSqlSets ({
+  @DefineSqlSet (
+    id = "basic-materials-users", 
+    before = {"basic-users-setup.sql","basic-materials-setup.sql"}, 
+    after = { "basic-materials-teardown.sql","basic-users-teardown.sql" }
+  )
+})
 public class ForgeMaterialListTestsBase extends AbstractUITest {
 
   @Test 
+  @SqlSets ({"basic-materials-users"})
   public void testPrivateRootMaterialOwner() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/forge/");
@@ -19,6 +27,7 @@ public class ForgeMaterialListTestsBase extends AbstractUITest {
   }
 
   @Test 
+  @SqlSets ({"basic-materials-users"})
   public void testPrivateRootMaterialMayEdit() {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/forge/");
@@ -26,6 +35,7 @@ public class ForgeMaterialListTestsBase extends AbstractUITest {
   }
 
   @Test 
+  @SqlSets ({"basic-materials-users"})
   public void testPrivateRootMaterialMayView() {
     loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/forge/");
@@ -33,6 +43,7 @@ public class ForgeMaterialListTestsBase extends AbstractUITest {
   }
   
   @Test 
+  @SqlSets ({"basic-materials-users"})
   public void testPrivateRootMaterialNoPermission() {
     loginInternal(getWebDriver(), "noshares@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/forge/");
@@ -41,6 +52,7 @@ public class ForgeMaterialListTestsBase extends AbstractUITest {
   }
   
   @Test 
+  @SqlSets ({"basic-materials-users"})
   public void testPrivateFolderMaterialOwner() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/forge/folders/2/prifol");
@@ -48,6 +60,7 @@ public class ForgeMaterialListTestsBase extends AbstractUITest {
   }
 
   @Test 
+  @SqlSets ({"basic-materials-users"})
   public void testPrivateFolderMaterialMayEdit() {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/forge/folders/2/folder");
@@ -55,6 +68,7 @@ public class ForgeMaterialListTestsBase extends AbstractUITest {
   }
 
   @Test 
+  @SqlSets ({"basic-materials-users"})
   public void testPrivateFolderMaterialMayView() {
     loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/forge/folders/2/folder");
@@ -62,6 +76,7 @@ public class ForgeMaterialListTestsBase extends AbstractUITest {
   }
   
   @Test 
+  @SqlSets ({"basic-materials-users"})
   public void testPrivateFolderMaterialNoPermission() {
     loginInternal(getWebDriver(), "noshares@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/forge/folders/2/prifol");
@@ -69,6 +84,7 @@ public class ForgeMaterialListTestsBase extends AbstractUITest {
   }
   
   @Test 
+  @SqlSets ({"basic-materials-users"})
   public void testPrivateSubfolderMaterialOwner() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/forge/folders/2/prifol/prisubfol");
@@ -76,6 +92,7 @@ public class ForgeMaterialListTestsBase extends AbstractUITest {
   }
 
   @Test 
+  @SqlSets ({"basic-materials-users"})
   public void testPrivateSubfolderMaterialMayEdit() {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/forge/folders/2/folder/subfolder");
@@ -83,6 +100,7 @@ public class ForgeMaterialListTestsBase extends AbstractUITest {
   }
 
   @Test 
+  @SqlSets ({"basic-materials-users"})
   public void testPrivateSubfolderMaterialMayView() {
     loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/forge/folders/2/folder/subfolder");
@@ -90,6 +108,7 @@ public class ForgeMaterialListTestsBase extends AbstractUITest {
   }
   
   @Test 
+  @SqlSets ({"basic-materials-users"})
   public void testPrivateSubfolderMaterialNoPermission() {
     loginInternal(getWebDriver(), "noshares@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/forge/folders/2/prifol/prisubfol");
@@ -97,11 +116,14 @@ public class ForgeMaterialListTestsBase extends AbstractUITest {
   }
   
   private void assertMaterialExists(RemoteWebDriver driver, Long id) {
-    assertFalse(driver.findElements(By.cssSelector(".forge-material[data-material-id=\"" + id + "\"]")).isEmpty());
+    String selector = ".forge-material[data-material-id=\"" + id + "\"]";
+    waitForSelectorVisible(selector);
+    assertSelectorPresent(selector);
   }
   
   private void assertMaterialNotExists(RemoteWebDriver driver, Long id) {
-    assertTrue(driver.findElements(By.cssSelector(".forge-material[data-material-id=\"" + id + "\"]")).isEmpty());
+    String selector = ".forge-material[data-material-id=\"" + id + "\"]";
+    assertSelectorNotPresent(selector);
   }
 
 }

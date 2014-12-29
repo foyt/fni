@@ -31,11 +31,13 @@ public abstract class AbstractTest {
 
   @Before
   public void sqlSetup() throws Exception {
+    List<String> sqlFiles = new ArrayList<>();
+    
     Method method = getClass().getMethod(testName.getMethodName(), new Class<?>[] {});
     SqlBefore sqlBefore = method.getAnnotation(SqlBefore.class);
     if (sqlBefore != null) {
       for (String sqlFile : sqlBefore.value()) {
-        executeSqlFile(sqlFile);
+        sqlFiles.add(sqlFile);
       }
     }
     
@@ -49,20 +51,26 @@ public abstract class AbstractTest {
         
         if (sqlSet.getBefore() != null) {
           for (String sqlFile : sqlSet.getBefore()) {
-            executeSqlFile(sqlFile);
+            sqlFiles.add(sqlFile);
           }
         }
       }
+    }
+    
+    for (String sqlFile : sqlFiles) {
+      executeSqlFile(sqlFile);
     }
   }
 
   @After
   public void sqlTearDown() throws Exception {
+    List<String> sqlFiles = new ArrayList<>();
+    
     Method method = getClass().getMethod(testName.getMethodName(), new Class<?>[] {});
     SqlAfter sqlAfter = method.getAnnotation(SqlAfter.class);
     if (sqlAfter != null) {
       for (String sqlFile : sqlAfter.value()) {
-        executeSqlFile(sqlFile);
+        sqlFiles.add(sqlFile);
       }
     }
     
@@ -76,10 +84,14 @@ public abstract class AbstractTest {
         
         if (sqlSet.getAfter() != null) {
           for (String sqlFile : sqlSet.getAfter()) {
-            executeSqlFile(sqlFile);
+            sqlFiles.add(sqlFile);
           }
         }
       }
+    }
+    
+    for (String sqlFile : sqlFiles) {
+      executeSqlFile(sqlFile);
     }
   }
   

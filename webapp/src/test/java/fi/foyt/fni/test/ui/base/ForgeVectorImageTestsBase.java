@@ -6,6 +6,13 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
+
+@DefineSqlSets ({
+  @DefineSqlSet (id = "basic-materials-users", before = {"basic-users-setup.sql","basic-materials-setup.sql"}, after = { "basic-materials-teardown.sql","basic-users-teardown.sql" }),
+})
 public class ForgeVectorImageTestsBase extends AbstractUITest {
 
   private static final String VECTOR_IMAGE_IN_ROOT = "/forge/vectorimages/2/vectorimage";
@@ -20,6 +27,7 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testForbidden() throws Exception {
     loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
     testAccessDenied(getWebDriver(), VECTOR_IMAGE_IN_ROOT);
@@ -28,6 +36,7 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testNotFound() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     testNotFound(getWebDriver(), "/forge/vectorimages/2/folder/subfolder");
@@ -39,6 +48,7 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testMayView() {
     loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
     testMayViewVectorImage(getWebDriver(), VECTOR_IMAGE_IN_ROOT);
@@ -47,6 +57,7 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testMayEdit() {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
     testMayEditVectorImage(getWebDriver(), VECTOR_IMAGE_IN_ROOT);

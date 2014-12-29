@@ -8,9 +8,17 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
+
+@DefineSqlSets ({
+  @DefineSqlSet (id = "basic-materials-users", before = {"basic-users-setup.sql","basic-materials-setup.sql"}, after = { "basic-materials-teardown.sql","basic-users-teardown.sql" }),
+})
 public class ForgeUploadTestsBase extends AbstractUITest {
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testTitle() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     testTitle(getWebDriver(), "/forge/upload", "Forge - Import From My Computer");
@@ -22,12 +30,14 @@ public class ForgeUploadTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testNotFound() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     testNotFound(getWebDriver(), "/forge/upload?parentFolderId=12345");
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testBreadcrumbs() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     

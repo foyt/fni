@@ -9,9 +9,16 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import fi.foyt.fni.test.SqlAfter;
-import fi.foyt.fni.test.SqlBefore;
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
 
+@DefineSqlSets ({
+  @DefineSqlSet (id = "upcoming-events", 
+    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-upcoming-events-setup.sql"},
+    after = {"illusion-upcoming-events-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
+  )
+})
 public class IndexTestsBase extends AbstractUITest {
 
   @Test
@@ -57,8 +64,7 @@ public class IndexTestsBase extends AbstractUITest {
   }
   
   @Test
-  @SqlBefore ({"illusion-basic-setup.sql", "illusion-upcoming-events-setup.sql"})
-  @SqlAfter ({"illusion-upcoming-events-teardown.sql", "illusion-basic-teardown.sql"})
+  @SqlSets ("upcoming-events")
   public void testUpcomingEvents() throws Exception {
     navigate("/");
     assertSelectorNotPresent(".index-illusion-no-events");

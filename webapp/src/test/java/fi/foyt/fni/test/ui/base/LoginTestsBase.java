@@ -16,6 +16,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
+
+@DefineSqlSets ({
+  @DefineSqlSet (id = "basic", 
+    before = {"basic-users-setup.sql"},
+    after = {"basic-users-teardown.sql"}
+  )
+})
 public class LoginTestsBase extends AbstractUITest {
   
   @Before
@@ -34,16 +44,19 @@ public class LoginTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic")
   public void testInternal() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
   }
 
   @Test
+  @SqlSets ("basic")
   public void testFacebook() {
     loginFacebook(getWebDriver());
   }
 
   @Test
+  @SqlSets ("basic")
   public void testGoogle() {
     loginGoogle(getWebDriver());
   }
@@ -120,6 +133,7 @@ public class LoginTestsBase extends AbstractUITest {
   }
   
   @Test
+  @SqlSets ("basic")
   public void testResetPasswordInvalidEmail() {
     getWebDriver().get(getAppUrl(true) + "/login/");
     
@@ -138,6 +152,7 @@ public class LoginTestsBase extends AbstractUITest {
   }
   
   @Test
+  @SqlSets ("basic")
   public void testResetPassword() throws MessagingException {
     GreenMail greenMail = startSmtpServer();
     try {
@@ -166,6 +181,7 @@ public class LoginTestsBase extends AbstractUITest {
   }
   
   @Test
+  @SqlSets ("basic")
   public void testMissingInformation() {
     loginInternal(getWebDriver(), "missinginfo@foyt.fi", "pass");
     waitForUrlMatches(getWebDriver(), ".*/editprofile.*");

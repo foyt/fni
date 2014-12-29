@@ -8,11 +8,8 @@ import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
 import fi.foyt.fni.test.SqlSets;
 
-@DefineSqlSets ({
-  @DefineSqlSet (id = "illusion-basic", 
-    before = {"illusion-basic-setup.sql"}, 
-    after = {"illusion-basic-teardown.sql"}
-  )
+@DefineSqlSets({
+  @DefineSqlSet (id = "illusion-basic", before = { "basic-users-setup.sql","illusion-basic-setup.sql"}, after = {"illusion-basic-teardown.sql","basic-users-teardown.sql"}),
 })
 public class IllusionCreateEventTestsBase extends AbstractUITest {
 
@@ -22,12 +19,14 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("illusion-basic")
   public void testTitleAdmin() {
     loginInternal("admin@foyt.fi", "pass");
     testTitle("/illusion/createevent", "Create Event");
   }
 
   @Test
+  @SqlSets ("illusion-basic")
   public void testTitleUser() {
     loginInternal("user@foyt.fi", "pass");
     testTitle("/illusion/createevent", "Create Event");
@@ -72,6 +71,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     assertSelectorPresent(".illusion-event-navigation-admin-menu");
     
     deleteIllusionEventByUrl(urlName);
+    deleteIllusionFolderByUser("admin@foyt.fi");
   }
   
   @Test
@@ -106,6 +106,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     assertSelectorValue("input[data-alt-field='.actual-start-date']", startDate);
     
     deleteIllusionEventByUrl(urlName);
+    deleteIllusionFolderByUser("admin@foyt.fi");
   }
   
   @Test
@@ -148,6 +149,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     assertSelectorValue("input[data-alt-field='.actual-end-time']", endTime);
 
     deleteIllusionEventByUrl(urlName);
+    deleteIllusionFolderByUser("admin@foyt.fi");
   }
   
   @Test
@@ -175,6 +177,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     assertSelectorValue(".illusion-event-settings-location", location);
     
     deleteIllusionEventByUrl(urlName);
+    deleteIllusionFolderByUser("admin@foyt.fi");
   }
   
   @Test
@@ -201,6 +204,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     assertSelectorValue(".sign-up-end-date", signUpEndDate);
     
     deleteIllusionEventByUrl(name);
+    deleteIllusionFolderByUser("admin@foyt.fi");
   }
   
   @Test
@@ -224,6 +228,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     assertSelectorValue(".illusion-event-settings-image-url", imageUrl);
     
     deleteIllusionEventByUrl(name);
+    deleteIllusionFolderByUser("admin@foyt.fi");
   }
 
   @Test
@@ -245,6 +250,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     navigate("/illusion/event/" + name + "/settings");
     assertSelectorPresent(".illusion-event-settings-beginner-friendly:checked");
     deleteIllusionEventByUrl(name);
+    deleteIllusionFolderByUser("admin@foyt.fi");
   }
 
   @Test
@@ -268,6 +274,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     assertSelectorValue(".illusion-event-settings-age-limit", ageLimit);
     
     deleteIllusionEventByUrl(name);
+    deleteIllusionFolderByUser("admin@foyt.fi");
   }
 
   @Test
@@ -290,6 +297,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     assertSelectBoxValue(".illusion-event-settings-type", "2");
 
     deleteIllusionEventByUrl(name);
+    deleteIllusionFolderByUser("admin@foyt.fi");
   }
 
   @Test
@@ -316,6 +324,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     assertSelectorNotPresent(".illusion-event-settings-genre input[value='4']:checked");
     
     deleteIllusionEventByUrl(name);
+    deleteIllusionFolderByUser("admin@foyt.fi");
   }
 
   private void deleteIllusionEventByUrl(String urlName) throws Exception {
@@ -330,5 +339,10 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     executeSql("delete from Folder where id in (select id from Material where type = 'DELETE')");
     executeSql("delete from Material where type = 'DELETE'");
   }
-  
+
+  private void deleteIllusionFolderByUser(String email) throws Exception {
+    executeSql("delete from IllusionFolder where id = (select id from Material where type = 'ILLUSION_FOLDER' and creator_id = (select user_id from UserEmail where email = ?))", email);
+    executeSql("delete from Folder where id = (select id from Material where type = 'ILLUSION_FOLDER' and creator_id = (select user_id from UserEmail where email = ?))", email);
+    executeSql("delete from Material where type = 'ILLUSION_FOLDER' and creator_id = (select user_id from UserEmail where email = ?)", email);
+  }
 }

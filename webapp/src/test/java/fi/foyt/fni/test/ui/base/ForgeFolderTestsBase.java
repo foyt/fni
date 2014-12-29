@@ -5,6 +5,13 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
+
+@DefineSqlSets ({
+  @DefineSqlSet (id = "basic-materials-users", before = {"basic-users-setup.sql","basic-materials-setup.sql"}, after = { "basic-materials-teardown.sql","basic-users-teardown.sql" }),
+})
 public class ForgeFolderTestsBase extends AbstractUITest {
 
   private static final String FOLDER = "/forge/folders/2/folder";
@@ -17,6 +24,7 @@ public class ForgeFolderTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testForbidden() throws Exception {
     loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
     testAccessDenied(getWebDriver(), FOLDER);
@@ -24,6 +32,7 @@ public class ForgeFolderTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testNotFound() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     testNotFound(getWebDriver(), "/forge/folders/2/folder/image_in_folder");
@@ -35,6 +44,7 @@ public class ForgeFolderTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testMayView() {
     loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
     testMayViewFolder(getWebDriver(), FOLDER);
@@ -42,6 +52,7 @@ public class ForgeFolderTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testMayEdit() {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
     testMayViewFolder(getWebDriver(), FOLDER);
@@ -54,6 +65,7 @@ public class ForgeFolderTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testOpenShareDialog() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     navigate(FOLDER);

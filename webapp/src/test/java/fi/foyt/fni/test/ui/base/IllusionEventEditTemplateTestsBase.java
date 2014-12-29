@@ -8,29 +8,30 @@ import org.openqa.selenium.WebElement;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
-import fi.foyt.fni.test.SqlAfter;
-import fi.foyt.fni.test.SqlBefore;
 import fi.foyt.fni.test.SqlSets;
 
 @DefineSqlSets ({
+  @DefineSqlSet (id = "event-basic", 
+      before = { "basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql" },
+      after = { "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
+  ),
   @DefineSqlSet (id = "event-organizer", 
-      before = { "illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-organizer-setup.sql", "illusion-event-open-templates-setup.sql" },
-      after = { "illusion-event-open-templates-teardown.sql", "illusion-event-open-organizer-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql" }
+      before = { "basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-organizer-setup.sql", "illusion-event-open-templates-setup.sql" },
+      after = { "illusion-event-open-templates-teardown.sql", "illusion-event-open-organizer-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   ),
   @DefineSqlSet (id = "event-custom", 
-    before = { "illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-custom-setup.sql", "illusion-event-open-organizer-setup.sql", "illusion-event-open-templates-setup.sql" },
-    after = { "illusion-event-open-templates-teardown.sql", "illusion-event-open-organizer-teardown.sql", "illusion-event-open-custom-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql" }
+    before = { "basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-custom-setup.sql", "illusion-event-open-organizer-setup.sql", "illusion-event-open-templates-setup.sql" },
+    after = { "illusion-event-open-templates-teardown.sql", "illusion-event-open-organizer-teardown.sql", "illusion-event-open-custom-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   ),
   @DefineSqlSet (id = "event-participant", 
-    before = { "illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-participant-setup.sql", "illusion-event-open-templates-setup.sql" },
-    after = { "illusion-event-open-templates-teardown.sql", "illusion-event-open-participant-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql" }
+    before = { "basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-participant-setup.sql", "illusion-event-open-templates-setup.sql" },
+    after = { "illusion-event-open-templates-teardown.sql", "illusion-event-open-participant-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   )
 })
 public class IllusionEventEditTemplateTestsBase extends AbstractIllusionUITest {
   
   @Test
-  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql"})
-  @SqlAfter ({"illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  @SqlSets ("event-basic")
   public void testLoginRequired() throws Exception {
     testLoginRequired("/illusion/event/openevent/edit-template?templateId=1");
   }
@@ -55,8 +56,7 @@ public class IllusionEventEditTemplateTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlBefore ({"illusion-basic-setup.sql", "illusion-event-open-setup.sql" })
-  @SqlAfter ({"illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"})
+  @SqlSets ("event-basic")
   public void testAccessDenied() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     testAccessDenied("/illusion/event/openevent/edit-template?templateId=1");

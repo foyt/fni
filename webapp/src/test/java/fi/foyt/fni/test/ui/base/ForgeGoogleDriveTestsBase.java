@@ -8,6 +8,13 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
+
+@DefineSqlSets ({
+  @DefineSqlSet (id = "basic-materials-users", before = {"basic-users-setup.sql","basic-materials-setup.sql"}, after = { "basic-materials-teardown.sql","basic-users-teardown.sql" }),
+})
 public class ForgeGoogleDriveTestsBase extends AbstractUITest {
 
   private static final String GOOGLEDOC_IN_ROOT = "/forge/google-drive/2/googledoc";
@@ -22,6 +29,7 @@ public class ForgeGoogleDriveTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testForbidden() throws Exception {
     loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
     testAccessDenied(getWebDriver(), GOOGLEDOC_IN_ROOT);
@@ -30,6 +38,7 @@ public class ForgeGoogleDriveTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testMayView() {
     loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
     testMayView(getWebDriver(), GOOGLEDOC_IN_ROOT);
@@ -38,6 +47,7 @@ public class ForgeGoogleDriveTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ({"basic-materials-users"})
   public void testMayEdit() {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
     testMayView(getWebDriver(), GOOGLEDOC_IN_ROOT);

@@ -16,28 +16,28 @@ import fi.foyt.fni.test.SqlSets;
 
 @DefineSqlSets ({
   @DefineSqlSet (id = "illusion-open-page", 
-    before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql"}, 
-    after = {"illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
+    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql"}, 
+    after = {"illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   ),
   @DefineSqlSet (id = "illusion-open-page-participant", 
-    before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql", "illusion-event-open-participant-setup.sql"}, 
-    after = {"illusion-event-open-participant-teardown.sql", "illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
+    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql", "illusion-event-open-participant-setup.sql"}, 
+    after = {"illusion-event-open-participant-teardown.sql", "illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   ),
   @DefineSqlSet (id = "illusion-open-page-organizer", 
-    before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql", "illusion-event-open-organizer-setup.sql"}, 
-    after = {"illusion-event-open-organizer-teardown.sql", "illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
+    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql", "illusion-event-open-organizer-setup.sql"}, 
+    after = {"illusion-event-open-organizer-teardown.sql", "illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   ),
   @DefineSqlSet (id = "illusion-open-page-hidden", 
-    before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql" }, 
-    after = {"illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
+    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql" }, 
+    after = {"illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   ),
   @DefineSqlSet (id = "illusion-open-page-hidden-participant", 
-    before = {"illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-participant-setup.sql"}, 
-    after = {"illusion-event-open-participant-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql"}
+    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-participant-setup.sql"}, 
+    after = {"illusion-event-open-participant-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   ),
-  @DefineSqlSet (id = "illusion-event-custom", 
-    before = { "illusion-event-open-custom-setup.sql" },
-    after = { "illusion-event-open-custom-teardown.sql" }
+  @DefineSqlSet (id = "illusion-open-page-organizer-custom", 
+    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql", "illusion-event-open-organizer-setup.sql","illusion-event-open-custom-setup.sql"}, 
+    after = {"illusion-event-open-custom-teardown.sql","illusion-event-open-organizer-teardown.sql", "illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql", "basic-users-teardown.sql"}
   )
 })
 public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
@@ -167,7 +167,7 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ({"illusion-open-page-organizer", "illusion-event-custom"})
+  @SqlSets ({"illusion-open-page-organizer-custom"})
   public void testCustomDomain() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");
@@ -176,7 +176,7 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ({"illusion-open-page-organizer", "illusion-event-custom"})
+  @SqlSets ({"illusion-open-page-organizer-custom"})
   public void testCustomDomainLoginRedirect() {
     getWebDriver().get(getCustomEventUrl() + "/pages/testpage");
     waitForUrlMatches(".*/login.*");
@@ -185,7 +185,7 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ({"illusion-open-page-organizer", "illusion-event-custom"})
+  @SqlSets ({"illusion-open-page-organizer-custom"})
   public void testCustomDomainMenuItems() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");
@@ -211,7 +211,7 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ({"illusion-open-page-organizer", "illusion-event-custom"})
+  @SqlSets ({"illusion-open-page-organizer-custom"})
   public void testCustomDomainNavigationLinks() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");

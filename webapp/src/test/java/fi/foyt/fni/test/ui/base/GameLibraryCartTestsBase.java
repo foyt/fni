@@ -10,6 +10,13 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import fi.foyt.fni.test.DefineSqlSet;
+import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlSets;
+
+@DefineSqlSets({
+  @DefineSqlSet (id = "basic-gamelibrary", before = { "basic-users-setup.sql","basic-forum-setup.sql","basic-gamelibrary-setup.sql"}, after={"basic-gamelibrary-teardown.sql", "basic-forum-teardown.sql","basic-users-teardown.sql"}),
+})
 public class GameLibraryCartTestsBase extends AbstractUITest {
 
   @Test
@@ -20,6 +27,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testSingleItemPurchase() throws Exception {
     String firstName = "Test";
     String lastName = "Orderer";
@@ -72,6 +80,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testMultiItemPurchase() throws Exception {
     String firstName = "Ärri";
     String lastName = "Pörri";
@@ -134,6 +143,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testCartDelete() throws Exception {
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
     getWebDriver().manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
@@ -154,6 +164,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testCartLoggedIn() throws Exception {
     Long userId = 2048l;
     String firstName = "Cart";
