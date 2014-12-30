@@ -46,10 +46,10 @@ public class UserMaterialRole {
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
   
-  @ManyToOne
+  @ManyToOne (optional = false)
   private Material material;
   
-  @ManyToOne
+  @ManyToOne (optional = false)
   private User user;
   
   @Column 
