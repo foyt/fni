@@ -71,9 +71,9 @@ public class User {
   }
   
   /**
-   * Returns user's locale in ISO 639 alpha-2 format
+   * Returns user's locale (language part) in ISO 639 alpha-2 format
    * 
-   * @return user's locale in ISO 639 alpha-2 format
+   * @return user's locale (language part) in ISO 639 alpha-2 format
    * @default en
    */
   public String getLocale() {
