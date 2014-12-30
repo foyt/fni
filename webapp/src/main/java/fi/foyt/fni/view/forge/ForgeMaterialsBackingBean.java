@@ -3,6 +3,7 @@ package fi.foyt.fni.view.forge;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -28,6 +29,9 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Stateful
 @LoggedIn
 public class ForgeMaterialsBackingBean {
+  
+  @Inject
+  private Logger logger;
 
   @Inject
   private SessionController sessionController;
@@ -57,7 +61,7 @@ public class ForgeMaterialsBackingBean {
     return materialController.getMaterialIcon(type);
   }
 
-  public synchronized boolean isStarred(Long materialId) {
+  public boolean isStarred(Long materialId) {
     if (!materialStarred.containsKey(materialId)) {
       Boolean starred = false;
 
@@ -73,7 +77,7 @@ public class ForgeMaterialsBackingBean {
     }
   }
   
-  public synchronized void starMaterial(Long materialId) {
+  public void starMaterial(Long materialId) {
     Material material = materialController.findMaterialById(materialId);
     if (material != null) {
       User loggedUser = sessionController.getLoggedUser();
@@ -82,7 +86,7 @@ public class ForgeMaterialsBackingBean {
     }
   }
 
-  public synchronized void unstarMaterial(Long materialId) {
+  public void unstarMaterial(Long materialId) {
     Material material = materialController.findMaterialById(materialId);
     if (material != null) {
       User loggedUser = sessionController.getLoggedUser();
@@ -91,7 +95,7 @@ public class ForgeMaterialsBackingBean {
     }
   }
 
-  public synchronized boolean getMaterialDownloadable(Material material) {
+  public boolean getMaterialDownloadable(Material material) {
     if (!materialDownlodable.containsKey(material.getId())) {
       Boolean downlodable = false;
       
@@ -106,7 +110,7 @@ public class ForgeMaterialsBackingBean {
     }
   }
 
-  public synchronized boolean getMaterialEditable(Material material) {
+  public boolean getMaterialEditable(Material material) {
     if (!materialEditable.containsKey(material.getId())) {
       Boolean editable = false;
       
@@ -154,6 +158,10 @@ public class ForgeMaterialsBackingBean {
   public boolean getMaterialShareable(Material material) {
     if (!materialShareable.containsKey(material.getId())) {
       Boolean shareable = false;
+      
+      logger.info("------>>>>> DEBUG <<<<------");
+      logger.info(String.valueOf(sessionController.getLoggedUserId()));
+      logger.info("------>>>>> DEBUG <<<<------");
       
       if (materialController.isShareableType(material.getType())) {
         shareable = materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
