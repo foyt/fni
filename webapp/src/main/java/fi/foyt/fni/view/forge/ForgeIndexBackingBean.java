@@ -36,7 +36,7 @@ public class ForgeIndexBackingBean extends AbstractForgeMaterialViewBackingBean 
   
   @SuppressWarnings("unchecked")
   @RequestAction
-  public void load() {
+  public String load() {
     List<Material> materials = materialController.listMaterialsByFolder(sessionController.getLoggedUser(), null);
 
     Collections.sort(materials, ComparatorUtils.chainedComparator(
@@ -49,6 +49,8 @@ public class ForgeIndexBackingBean extends AbstractForgeMaterialViewBackingBean 
     );
     
     setMaterials(materials);
+    
+    return null;
   }
 
 }

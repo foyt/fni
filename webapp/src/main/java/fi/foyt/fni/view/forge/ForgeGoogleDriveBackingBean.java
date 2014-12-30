@@ -3,6 +3,8 @@ package fi.foyt.fni.view.forge;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -19,7 +21,6 @@ import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.GoogleDocument;
 import fi.foyt.fni.persistence.model.materials.Material;
-import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 
@@ -29,7 +30,7 @@ import fi.foyt.fni.session.SessionController;
 @Join (path = "/forge/google-drive/{ownerId}/{urlPath}", to = "/forge/googledrive.jsf")
 @LoggedIn
 public class ForgeGoogleDriveBackingBean {
-
+  
   @Parameter
   @Matches ("[0-9]{1,}")
   private Long ownerId;
@@ -37,6 +38,9 @@ public class ForgeGoogleDriveBackingBean {
   @Parameter
   @Matches ("[a-zA-Z0-9_/.\\-:,]{1,}")
   private String urlPath;
+
+  @Inject
+  private Logger logger;
   
 	@Inject
 	private MaterialController materialController;
@@ -48,7 +52,7 @@ public class ForgeGoogleDriveBackingBean {
   private MaterialPermissionController materialPermissionController;
 	
 	@RequestAction
-	public String load() throws IOException, GeneralSecurityException {
+	public String load() {
 		if ((getOwnerId() == null)||(getUrlPath() == null)) {
 			return "/error/not-found.jsf";
 		}
@@ -61,7 +65,7 @@ public class ForgeGoogleDriveBackingBean {
 		}
 
 		if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
-      throw new ForbiddenException();
+      return "/error/access-denied.jsf";
     }
     
 		GoogleDocument googleDocument = (GoogleDocument) material;
@@ -71,7 +75,12 @@ public class ForgeGoogleDriveBackingBean {
 		materialPath = "/forge/gdrive/" + materialId; 
 		folders = ForgeViewUtils.getParentList(googleDocument);
 		
-	  googleDriveEditLink = materialController.getGoogleDocumentEditLink(googleDocument);
+	  try {
+      googleDriveEditLink = materialController.getGoogleDocumentEditLink(googleDocument);
+    } catch (IOException | GeneralSecurityException e) {
+      logger.log(Level.SEVERE, "Failed to retrieve Google Drive edit link", e);
+      return "/error/internal-error.jsf";
+    }
 	  
 	  return null;
 	}

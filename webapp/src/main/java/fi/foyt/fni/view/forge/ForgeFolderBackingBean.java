@@ -26,7 +26,6 @@ import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
@@ -84,7 +83,7 @@ public class ForgeFolderBackingBean extends AbstractForgeMaterialViewBackingBean
       Folder folder = (Folder) material;
 
       if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), folder)) {
-        throw new ForbiddenException();
+        return "/error/access-denied.jsf";
       }
 
       setFolderId(material.getId());
