@@ -79,8 +79,13 @@ public class ProfileImageServlet extends AbstractFileServlet {
 				}
 				
 				String gravatarUrl = getGravatar(protocol, user, Math.max(width, height));
-			  response.sendRedirect(gravatarUrl);
-			  return;
+				if (StringUtils.isBlank(gravatarUrl)) {
+		      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+		      return;
+				} else {
+  			  response.sendRedirect(gravatarUrl);
+	  		  return;
+				}
 		}
 		
     if (profileImage == null) {
@@ -121,6 +126,10 @@ public class ProfileImageServlet extends AbstractFileServlet {
 
 	private String getGravatar(String protocol, User user, int size) {
 		String email = StringUtils.lowerCase(StringUtils.trim(userController.getUserPrimaryEmail(user)));
+		if (StringUtils.isBlank(email)) {
+		  return null;
+		}
+		
 		String emailHash = DigestUtils.md5Hex(email);
 		
 		return new StringBuilder()
