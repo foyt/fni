@@ -112,7 +112,7 @@ public class IllusionInternalIAuthenticationStrategy extends OAuthAuthentication
 
       return loginUser(AuthSource.ILLUSION_INTERNAL, sourceId, accessToken.getToken(), accessToken.getSecret(), expires, userInfo.getId().toString(), userInfo.getEmails(), userInfo.getFirstName(), userInfo.getLastName(), null, null, grantedScopes);
     } catch (IOException e) {
-    	throw new ExternalLoginFailedException();
+    	throw new ExternalLoginFailedException(e);
     }
   };
   
