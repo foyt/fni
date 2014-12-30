@@ -5,6 +5,7 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
@@ -42,6 +43,12 @@ public class SessionController implements Serializable {
 	@Inject
 	@Logout
 	private Event<UserSessionEvent> logoutEvent;
+	
+	@PostConstruct
+	public void init() {
+	  loggedUserId = null;
+	  locale = null;
+	}
 	
 	@PreDestroy
 	public void preDestroy() {
@@ -194,8 +201,8 @@ public class SessionController implements Serializable {
     this.loginScopes = loginScopes;
   }
   
-  private Long loggedUserId = null;
-  private Locale locale = null;
+  private Long loggedUserId;
+  private Locale locale;
   private Long loggedUserTokenId;
   private String redirectUrl;
   private Token loginRequestToken;
