@@ -25,6 +25,8 @@ import fi.foyt.fni.coops.CoOpsApiDocument;
 import fi.foyt.fni.coops.CoOpsSessionController;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.rest.PATCH;
+import fi.foyt.fni.rest.Security;
+import fi.foyt.fni.rest.illusion.OAuthScopes;
 import fi.foyt.fni.session.SessionController;
 
 @Path ("/coops")
@@ -52,6 +54,10 @@ public class CoOpsDocumentRESTService {
    */
   @GET
   @Path ("/document/{FILEID}")
+  @Security (
+    allowService = false,
+    scopes = { OAuthScopes.FORGE_COOPS_ACCESS_FILE }
+  )
   public Response load(@PathParam ("FILEID") String fileId, @QueryParam ("revisionNumber") Long revisionNumber) {
     try {
       File file = coOpsApiDocument.fileGet(fileId, revisionNumber);
@@ -79,6 +85,10 @@ public class CoOpsDocumentRESTService {
    */
   @PATCH
   @Path ("/document/{FILEID}")
+  @Security (
+    allowService = false,
+    scopes = { OAuthScopes.FORGE_COOPS_MODIFY_FILE }
+  )
   public Response patch(@PathParam ("FILEID") String fileId, Patch patch) {
     try {
       CoOpsSession coOpsSession = coOpsSessionController.findSessionBySessionId(patch.getSessionId());
@@ -116,6 +126,10 @@ public class CoOpsDocumentRESTService {
    */
   @GET
   @Path ("/document/{FILEID}/update")
+  @Security (
+    allowService = false,
+    scopes = { OAuthScopes.FORGE_COOPS_ACCESS_FILE }
+  )
   public Response update(@PathParam ("FILEID") String fileId, @QueryParam ("sessionId") String sessionId, @QueryParam ("revisionNumber") Long revisionNumber) {
     CoOpsSession coOpsSession = coOpsSessionController.findSessionBySessionId(sessionId);
     if (coOpsSession == null) {
@@ -155,6 +169,10 @@ public class CoOpsDocumentRESTService {
    */
   @GET
   @Path ("/document/{FILEID}/join")
+  @Security (
+    allowService = false,
+    scopes = { OAuthScopes.FORGE_COOPS_ACCESS_FILE }
+  )
   public Response join(@PathParam ("FILEID") String fileId, @QueryParam("algorithm") List<String> algorithms, @QueryParam ("protocolVersion") String protocolVersion) {
     try {
       return Response.ok(coOpsApiDocument.fileJoin(fileId, algorithms, protocolVersion)).build();
