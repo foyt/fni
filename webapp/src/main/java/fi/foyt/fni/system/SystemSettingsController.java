@@ -92,6 +92,20 @@ public class SystemSettingsController {
 	public List<Language> listLocalizedLanguages() {
 		return languageDAO.listByLocalized(Boolean.TRUE);
 	}
+	
+	public boolean isSupportedLocale(String locale) {
+	  return isSupportedLocale(LocaleUtils.toLocale(locale));
+	}
+	
+	public boolean isSupportedLocale(Locale locale) {
+    for (Language language : listLocalizedLanguages()) {
+      if (locale.getLanguage().equals(LocaleUtils.toLocale(language.getISO2()).getLanguage())) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
 
 	public Country findCountryById(Long id) {
 		return countryDAO.findById(id);
