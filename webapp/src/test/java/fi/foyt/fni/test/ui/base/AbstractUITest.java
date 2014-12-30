@@ -4,14 +4,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -24,7 +30,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 
 public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implements SauceOnDemandSessionIdProvider {
-
+  
   @Override
   public String getSessionId() {
     return sessionId;
@@ -214,8 +220,21 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     assertNotNull(selectedOption);
     assertEquals(value, selectedOption.getAttribute("value"));
   }
+  
+  protected void takeScreenshot() throws WebDriverException, IOException {
+    takeScreenshot(new File("target", UUID.randomUUID().toString() + ".png"));
+  }
+  
+  protected void takeScreenshot(File file) throws WebDriverException, IOException {
+    FileOutputStream fileOuputStream = new FileOutputStream(file);
+    try {
+     fileOuputStream.write(webDriver.getScreenshotAs(OutputType.BYTES));
+    } finally {
+      fileOuputStream.flush();
+      fileOuputStream.close();
+    }
+  }
 
   private String sessionId;
-  
   private RemoteWebDriver webDriver;
 }
