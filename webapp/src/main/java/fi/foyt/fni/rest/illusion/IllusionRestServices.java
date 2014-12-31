@@ -3,6 +3,7 @@ package fi.foyt.fni.rest.illusion;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateful;
@@ -22,6 +23,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventGroupController;
@@ -37,6 +39,7 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.rest.Security;
 import fi.foyt.fni.rest.illusion.model.IllusionEventGroup;
 import fi.foyt.fni.rest.illusion.model.IllusionEventMaterialParticipantSetting;
 import fi.foyt.fni.session.SessionController;
@@ -80,18 +83,44 @@ public class IllusionRestServices {
   }
   
   /**
+   * Lists events
+   * 
+   * @return Response
+   * @responseType java.util.List<fi.foyt.fni.rest.illusion.model.IllusionEvent>
+   */
+  @Path("/events")
+  @GET
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_LIST_EVENTS }
+  )
+  public Response listEvents() {
+    return null;
+  }
+  
+  /**
    * Returns an event
    * 
    * @param eventId event id 
    * @return Response
    * @responseType fi.foyt.fni.rest.illusion.model.IllusionEvent
    */
-  @Path("/events/{EVENTID}")
+  @Path("/events/{EVENTID:[0-9]*}")
   @GET
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_FIND_EVENT }
+  )
   public Response getEvent(@PathParam ("EVENTID") Long eventId) {
-    return null;
+    IllusionEvent illusionEvent = illusionEventController.findIllusionEventById(eventId);
+    if (illusionEvent == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    return Response.ok(createRestModel(illusionEvent))
+      .build();
   }
-  
+
   /**
    * Updates an event
    * 
@@ -99,8 +128,12 @@ public class IllusionRestServices {
    * @param entity payload
    * @return Response
    */
-  @Path("/events/{EVENTID}")
+  @Path("/events/{EVENTID:[0-9]*}")
   @PUT
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_UPDATE_EVENT }
+  )
   public Response updateEvent(@PathParam ("EVENTID") Long eventId, fi.foyt.fni.rest.illusion.model.IllusionEvent entity) {
     return null;
   }
@@ -111,8 +144,12 @@ public class IllusionRestServices {
    * @param eventId event id 
    * @return Response
    */
-  @Path("/events/{EVENTID}")
+  @Path("/events/{EVENTID:[0-9]*}")
   @DELETE
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_DELETE_EVENT }
+  )
   public Response deleteEvent(@PathParam ("EVENTID") Long eventId) {
     return null;
   }
@@ -125,7 +162,7 @@ public class IllusionRestServices {
    * @return Response
    * @responseType fi.foyt.fni.rest.illusion.model.IllusionEventParticipant
    */
-  @Path("/events/{EVENTID}/participants")
+  @Path("/events/{EVENTID:[0-9]*}/participants")
   @POST
   public Response createEventParticipant(@PathParam ("EVENTID") Long eventId, fi.foyt.fni.rest.illusion.model.IllusionEventParticipant entity) {
     return null;
@@ -139,7 +176,7 @@ public class IllusionRestServices {
    * @return Response
    * @responseType fi.foyt.fni.rest.illusion.model.IllusionEventParticipant
    */
-  @Path("/events/{EVENTID}/participants/{ID}")
+  @Path("/events/{EVENTID:[0-9]*}/participants/{ID:[0-9]*}")
   @GET
   public Response getEventParticipant(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long participantId) {
     return null;
@@ -154,7 +191,7 @@ public class IllusionRestServices {
    * @return Response
    * @responseType fi.foyt.fni.rest.illusion.model.IllusionEventParticipant
    */
-  @Path("/events/{EVENTID}/participants/{ID}")
+  @Path("/events/{EVENTID:[0-9]*}/participants/{ID:[0-9]*}")
   @PUT
   public Response updateEventParticipant(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long participantId, fi.foyt.fni.rest.illusion.model.IllusionEventParticipant entity) {
     return null;
@@ -167,7 +204,7 @@ public class IllusionRestServices {
    * @param event participant id
    * @return Response
    */
-  @Path("/events/{EVENTID}/participants/{ID}")
+  @Path("/events/{EVENTID:[0-9]*}/participants/{ID:[0-9]*}")
   @DELETE
   public Response deleteEventParticipant(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long participantId) {
     return null;
@@ -180,7 +217,7 @@ public class IllusionRestServices {
    * @return Response
    * @responseType java.util.List<fi.foyt.fni.rest.illusion.model.IllusionEventGroup>
    */
-  @Path("/events/{EVENTID}/groups/")
+  @Path("/events/{EVENTID:[0-9]*}/groups/")
   @GET
   public Response listEventGroups(@PathParam ("EVENTID") Long eventId) {
     if (!sessionController.isLoggedIn()) {
@@ -244,7 +281,7 @@ public class IllusionRestServices {
    * @return Response
    * @responseType fi.foyt.fni.rest.illusion.model.IllusionEventMaterialParticipantSetting
    */
-  @Path("/events/{EVENTID}/materials/{MATERIALID}/participantSettings/{PARTICIPANTID}")
+  @Path("/events/{EVENTID:[0-9]*}/materials/{MATERIALID:[0-9]*}/participantSettings/{PARTICIPANTID:[0-9]*}")
   @POST
   public Response createMaterialSetting(@PathParam ("EVENTID") Long eventId, @PathParam ("MATERIALID") Long materialId, @PathParam ("PARTICIPANTID") Long participantId, IllusionEventMaterialParticipantSetting entity) {
     if (entity.getKey() == null) {
@@ -304,7 +341,7 @@ public class IllusionRestServices {
    * @return Response
    * @responseType java.util.List<fi.foyt.fni.rest.illusion.model.IllusionEventGroup>
    */
-  @Path("/events/{EVENTID}/materials/{MATERIALID}/participantSettings/{PARTICIPANTID}")
+  @Path("/events/{EVENTID:[0-9]*}/materials/{MATERIALID:[0-9]*}/participantSettings/{PARTICIPANTID:[0-9]*}")
   @GET
   public Response listMaterialSettings(@PathParam ("EVENTID") Long eventId, @PathParam ("MATERIALID") Long materialId, @PathParam ("PARTICIPANTID") Long participantId, @QueryParam ("key") String keyName) {
     IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
@@ -374,7 +411,7 @@ public class IllusionRestServices {
    * @return Response
    * @responseType fi.foyt.fni.rest.illusion.model.IllusionEventMaterialParticipantSetting
    */
-  @Path("/events/{EVENTID}/materials/{MATERIALID}/participantSettings/{PARTICIPANTID}/{ID}")
+  @Path("/events/{EVENTID:[0-9]*}/materials/{MATERIALID:[0-9]*}/participantSettings/{PARTICIPANTID:[0-9]*}/{ID:[0-9]*}")
   @GET
   public Response getMaterialSetting(@PathParam ("EVENTID") Long eventId, @PathParam ("MATERIALID") Long materialId, @PathParam ("PARTICIPANTID") Long participantId, @PathParam ("ID") Long id) {
     IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
@@ -410,7 +447,7 @@ public class IllusionRestServices {
    * @param entity payload
    * @return Response
    */
-  @Path("/events/{EVENTID}/materials/{MATERIALID}/participantSettings/{PARTICIPANTID}/{ID}")
+  @Path("/events/{EVENTID:[0-9]*}/materials/{MATERIALID:[0-9]*}/participantSettings/{PARTICIPANTID:[0-9]*}/{ID:[0-9]*}")
   @PUT
   public Response updateMaterialSetting(@PathParam ("EVENTID") Long eventId, @PathParam ("MATERIALID") Long materialId, @PathParam ("PARTICIPANTID") Long participantId, @PathParam ("ID") Long id, IllusionEventMaterialParticipantSetting entity) {
     if (entity.getKey() == null) {
@@ -476,7 +513,7 @@ public class IllusionRestServices {
    * @param pageId page id
    * @return Response
    */
-  @Path("/events/{EVENTID}/pages/{PAGEID}")
+  @Path("/events/{EVENTID:[0-9]*}/pages/{PAGEID:[0-9]*}")
   @DELETE
   public Response deletePage(@PathParam ("EVENTID") Long eventId, @PathParam ("PAGEID") Long pageId) {
     if (!sessionController.isLoggedIn()) {
@@ -547,5 +584,39 @@ public class IllusionRestServices {
     Long eventId = group.getEvent() != null ? group.getEvent().getId() : null;
     return new IllusionEventGroup(group.getId(), group.getName(), eventId);
   }
+  
+  private Object createRestModel(IllusionEvent illusionEvent) {
+    String signUpFeeCurrency = illusionEvent.getSignUpFeeCurrency() != null ? illusionEvent.getSignUpFeeCurrency().getCurrencyCode() : null;
+    Long typeId = illusionEvent.getType() != null ? illusionEvent.getType().getId() : null;
+    List<Long> genreIds = new ArrayList<>();
+    DateTime signUpStartDate = getDateAsDateTime(illusionEvent.getSignUpStartDate());
+    DateTime signUpEndDate = getDateAsDateTime(illusionEvent.getSignUpEndDate());
+    DateTime start = getDateAndTimeAsDateTime(illusionEvent.getStartDate(), illusionEvent.getStartTime());
+    DateTime end = getDateAndTimeAsDateTime(illusionEvent.getEndDate(), illusionEvent.getEndTime());
+    
+    return new fi.foyt.fni.rest.illusion.model.IllusionEvent(illusionEvent.getId(), illusionEvent.getName(), illusionEvent.getDescription(), 
+        getDateAsDateTime(illusionEvent.getCreated()), illusionEvent.getUrlName(), illusionEvent.getXmppRoom(), illusionEvent.getJoinMode(), 
+        illusionEvent.getSignUpFee(), signUpFeeCurrency, illusionEvent.getLocation(), illusionEvent.getAgeLimit(), illusionEvent.getBeginnerFriendly(),
+        illusionEvent.getImageUrl(), typeId, signUpStartDate, signUpEndDate, illusionEvent.getDomain(), start, end, genreIds);
+  }
 
+  private DateTime getDateAsDateTime(Date date) {
+    if (date == null) {
+      return null;
+    }
+    
+    return new DateTime(date.getTime());
+  }
+  
+  private DateTime getDateAndTimeAsDateTime(Date date, Date time) {
+    DateTime result = getDateAsDateTime(date);
+    if (result == null || time == null) {
+      return result;
+    }
+    
+    result.plus(time.getTime());
+
+    return result;
+  }
+  
 }

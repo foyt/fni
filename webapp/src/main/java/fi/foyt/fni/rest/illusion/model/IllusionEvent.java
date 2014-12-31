@@ -10,6 +10,31 @@ public class IllusionEvent {
 
   public IllusionEvent() {
   }
+  
+  public IllusionEvent(Long id, String name, String description, DateTime created, String urlName, String xmppRoom, IllusionEventJoinMode joinMode,
+      Double signUpFee, String signUpFeeCurrency, String location, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, Long typeId,
+      DateTime signUpStartDate, DateTime signUpEndDate, String domain, DateTime start, DateTime end, List<Long> genreIds) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.created = created;
+    this.urlName = urlName;
+    this.xmppRoom = xmppRoom;
+    this.joinMode = joinMode;
+    this.signUpFee = signUpFee;
+    this.signUpFeeCurrency = signUpFeeCurrency;
+    this.location = location;
+    this.ageLimit = ageLimit;
+    this.beginnerFriendly = beginnerFriendly;
+    this.imageUrl = imageUrl;
+    this.typeId = typeId;
+    this.signUpStartDate = signUpStartDate;
+    this.signUpEndDate = signUpEndDate;
+    this.domain = domain;
+    this.start = start;
+    this.end = end;
+    this.genreIds = genreIds;
+  }
 
   /**
    * Returns event's id
