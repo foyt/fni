@@ -1,4 +1,4 @@
 delete from 
   OAuthClient 
 where
-  id = 1;
+  id = 100;
