@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -76,7 +77,10 @@ public abstract class AbstractTest {
     
     SqlSets sqlSets = method.getAnnotation(SqlSets.class);
     if (sqlSets != null) {
-      for (String sqlSetId : sqlSets.value()) {
+      String[] sqlSetIds = sqlSets.value();
+      ArrayUtils.reverse(sqlSetIds);
+      
+      for (String sqlSetId : sqlSetIds) {
         SqlSet sqlSet = getSqlSet(method, sqlSetId);
         if (sqlSet == null) {
           throw new RuntimeException("Could not find sqlset " + sqlSetId);
