@@ -341,6 +341,21 @@
       <scope>provided</scope>
     </dependency>
     
+    <!-- RESTEasy -->
+    
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jackson2-provider</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <!-- Jackson -->
+    
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-joda</artifactId>
+    </dependency>
+
     <!-- WebSockets -->
     
     <dependency>
@@ -507,7 +522,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.codehaus.jackson.jackson-core-asl, org.codehaus.jackson.jackson-mapper-asl, org.apache.httpcomponents, org.joda.time</Dependencies>
+              <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.codehaus.jackson.jackson-core-asl, org.codehaus.jackson.jackson-mapper-asl, org.jboss.resteasy.resteasy-jackson2-provider, org.apache.httpcomponents, org.joda.time</Dependencies>
             </manifestEntries>
           </archive>
         </configuration>
