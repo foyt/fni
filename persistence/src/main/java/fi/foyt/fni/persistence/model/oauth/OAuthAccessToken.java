@@ -41,6 +41,14 @@ public class OAuthAccessToken {
   public void setAuthorizationCode(OAuthAuthorizationCode authorizationCode) {
     this.authorizationCode = authorizationCode;
   }
+  
+  public OAuthClient getClient() {
+    return client;
+  }
+  
+  public void setClient(OAuthClient client) {
+    this.client = client;
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,4 +66,9 @@ public class OAuthAccessToken {
   @ManyToOne
   @JoinColumn
   private OAuthAuthorizationCode authorizationCode;
+
+  @NotNull
+  @ManyToOne
+  @JoinColumn(nullable = false)
+  private OAuthClient client;
 }

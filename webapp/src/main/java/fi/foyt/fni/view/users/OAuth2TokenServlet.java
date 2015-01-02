@@ -70,7 +70,7 @@ public class OAuth2TokenServlet extends HttpServlet {
             return;
           }
           
-          OAuthAccessToken token = oAuthController.createAccessToken(authorizationCode, accessToken, expires);
+          OAuthAccessToken token = oAuthController.createAccessToken(client, authorizationCode, accessToken, expires);
 
           authResponse = OAuthASResponse.tokenResponse(HttpServletResponse.SC_OK)
             .setAccessToken(token.getAccessToken())
@@ -85,7 +85,7 @@ public class OAuth2TokenServlet extends HttpServlet {
             return;
           }
           
-          OAuthAccessToken serviceToken = oAuthController.createAccessToken(null, accessToken, expires);
+          OAuthAccessToken serviceToken = oAuthController.createAccessToken(client, null, accessToken, expires);
 
           authResponse = OAuthASResponse.tokenResponse(HttpServletResponse.SC_OK)
             .setAccessToken(serviceToken.getAccessToken())

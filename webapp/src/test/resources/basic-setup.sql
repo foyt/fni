@@ -29,7 +29,7 @@ values
   (1, 'it', 'pass', 'itest', 'SERVICE', 'https://dev.forgeandillusion.net:8443/fnici/fake-redirect');
   
 insert into 
-  OAuthAccessToken (id, accessToken, expires, authorizationCode_id)
+  OAuthAccessToken (id, accessToken, expires, authorizationCode_id, client_id)
 values 
-  (1, 'systemtoken', 5000000000, null);
+  (1, 'systemtoken', 5000000000, null, 1);
   

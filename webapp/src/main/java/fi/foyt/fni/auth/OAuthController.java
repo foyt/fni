@@ -49,8 +49,8 @@ public class OAuthController {
   
   /* OAuthAccessToken */
   
-  public OAuthAccessToken createAccessToken(OAuthAuthorizationCode authorizationCode, String accessToken, Long expires) {
-    return oAuthAccessTokenDAO.create(authorizationCode, accessToken, expires); 
+  public OAuthAccessToken createAccessToken(OAuthClient client, OAuthAuthorizationCode authorizationCode, String accessToken, Long expires) {
+    return oAuthAccessTokenDAO.create(client, authorizationCode, accessToken, expires); 
   }
 
   public OAuthAccessToken findAccessTokenByAccessToken(String accessToken) {

@@ -9,18 +9,20 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
 import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken_;
 import fi.foyt.fni.persistence.model.oauth.OAuthAuthorizationCode;
+import fi.foyt.fni.persistence.model.oauth.OAuthClient;
 
 public class OAuthAccessTokenDAO extends GenericDAO<OAuthAccessToken> {
 
 	private static final long serialVersionUID = 1L;
 
-	public OAuthAccessToken create(OAuthAuthorizationCode authorizationCode, String accessToken, Long expires) {
+	public OAuthAccessToken create(OAuthClient client, OAuthAuthorizationCode authorizationCode, String accessToken, Long expires) {
 	  OAuthAccessToken oAuthAccessToken = new OAuthAccessToken();
     
 	  oAuthAccessToken.setAccessToken(accessToken);
 	  oAuthAccessToken.setAuthorizationCode(authorizationCode);
 	  oAuthAccessToken.setExpires(expires);
-
+	  oAuthAccessToken.setClient(client);
+	  
     return persist(oAuthAccessToken);
   }
 
@@ -37,4 +39,5 @@ public class OAuthAccessTokenDAO extends GenericDAO<OAuthAccessToken> {
 
     return getSingleResult(entityManager.createQuery(criteria));
   }
+	
 }
