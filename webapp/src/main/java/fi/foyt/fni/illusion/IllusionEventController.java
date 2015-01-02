@@ -100,6 +100,10 @@ public class IllusionEventController {
     return illusionEventDAO.findByUrlName(urlName);
   }
 
+  public List<IllusionEvent> listIllusionEvents() {
+    return illusionEventDAO.listAll();
+  }
+
   public List<IllusionEvent> listIllusionEventsByUserAndRole(User user, IllusionEventParticipantRole role) {
     return illusionEventParticipantDAO.listIllusionEventsByUserAndRole(user, role);
   }
@@ -181,7 +185,10 @@ public class IllusionEventController {
   public IllusionEvent updateIllusionEventImageUrl(IllusionEvent illusionEvent, String imageUrl) {
     return illusionEventDAO.updateImageUrl(illusionEvent, imageUrl);
   }
-  
+
+  public void deleteIllusionEvent(IllusionEvent event) {
+    illusionEventDAO.delete(event);
+  }
   
   public IllusionEvent updateEventGenres(IllusionEvent event, List<Genre> genres) {
     List<IllusionEventGenre> existingGenres = illusionEventGenreDAO.listByEvent(event);

@@ -95,9 +95,15 @@ public class IllusionRestServices {
     scopes = { OAuthScopes.ILLUSION_LIST_EVENTS }
   )
   public Response listEvents() {
-    return null;
+    List<IllusionEvent> events = illusionEventController.listIllusionEvents();
+    if (events.isEmpty()) {
+      return Response.status(Status.NO_CONTENT).build();
+    }
+    
+    return Response.ok(createRestModel(events))
+        .build();
   }
-  
+
   /**
    * Returns an event
    * 
@@ -147,11 +153,32 @@ public class IllusionRestServices {
   @Path("/events/{EVENTID:[0-9]*}")
   @DELETE
   @Security (
-    allowService = true,
+    allowService = false,
     scopes = { OAuthScopes.ILLUSION_DELETE_EVENT }
   )
   public Response deleteEvent(@PathParam ("EVENTID") Long eventId) {
-    return null;
+    User user = sessionController.getLoggedUser();
+    if (user == null) {
+      return Response.status(Status.UNAUTHORIZED).build();
+    }
+    
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
+    if (participant == null) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    illusionEventController.deleteIllusionEvent(event);
+    
+    return Response.noContent().build();
   }
   
   /**
@@ -585,7 +612,17 @@ public class IllusionRestServices {
     return new IllusionEventGroup(group.getId(), group.getName(), eventId);
   }
   
-  private Object createRestModel(IllusionEvent illusionEvent) {
+  private List<fi.foyt.fni.rest.illusion.model.IllusionEvent> createRestModel(List<IllusionEvent> events) {
+    List<fi.foyt.fni.rest.illusion.model.IllusionEvent> result = new ArrayList<>();
+    
+    for (IllusionEvent event : events) {
+      result.add(createRestModel(event));
+    }
+    
+    return result;
+  }
+  
+  private fi.foyt.fni.rest.illusion.model.IllusionEvent createRestModel(IllusionEvent illusionEvent) {
     String signUpFeeCurrency = illusionEvent.getSignUpFeeCurrency() != null ? illusionEvent.getSignUpFeeCurrency().getCurrencyCode() : null;
     Long typeId = illusionEvent.getType() != null ? illusionEvent.getType().getId() : null;
     List<Long> genreIds = new ArrayList<>();
