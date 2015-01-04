@@ -7,9 +7,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
@@ -258,7 +262,7 @@ public abstract class AbstractTest {
       connection.close();
     }
   }
-
+  
   protected void createUser(Long userId, String firstName, String lastName, String email, String password, String locale, String profileImageSource, String role)
       throws Exception {
     createUser(userId, firstName, lastName, email, password, locale, profileImageSource, role, true);
@@ -277,6 +281,57 @@ public abstract class AbstractTest {
 
     executeSql("insert into " + "  InternalAuth (id, password, verified, user_id) " + "values " + "  (?, ?, ?, ?)", userId, DigestUtils.md5Hex(password),
         verified, userId);
+  }
+  
+  protected void deleteUser(String email) throws Exception {
+    Long userId = findUserIdByEmail(email);
+    assertNotNull(userId);
+    deleteUser(userId);
+  }
+
+  protected void assertInternalAuthExists(String email, String password) throws Exception {
+    Long userId = findUserIdByEmail(email);
+    
+    Connection connection = getConnection();
+    try {
+      connection.setAutoCommit(true);
+      PreparedStatement statement = connection.prepareStatement("select id from InternalAuth where user_id = ? and password = ?");
+      try {
+        statement.setObject(1, userId);
+        statement.setObject(2, DigestUtils.md5(password));        
+        statement.execute();
+        ResultSet resultSet = statement.getResultSet();
+        assertNotNull(resultSet);
+        assertTrue(resultSet.next());
+        assertNotNull(resultSet.getLong(1));
+      } finally {
+        statement.close();
+      }
+    } finally {
+      connection.close();
+    }
+  }
+  
+  private Long findUserIdByEmail(String email) throws Exception, SQLException {
+    Connection connection = getConnection();
+    try {
+      connection.setAutoCommit(true);
+      PreparedStatement statement = connection.prepareStatement("select user_id from UserEmail where email = ?");
+      try {
+        statement.setObject(1, email);
+        statement.execute();
+        ResultSet resultSet = statement.getResultSet();
+        if (resultSet.next()) {
+          return resultSet.getLong(1);
+        }
+      } finally {
+        statement.close();
+      }
+    } finally {
+      connection.close();
+    }
+    
+    return null;
   }
 
   protected void deleteUser(Long userId) throws Exception {
