@@ -20,10 +20,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.i18n.ExternalLocales;
@@ -152,7 +154,24 @@ public class UserRestServices {
     scopes = { OAuthScopes.USERS_LIST }
   )
   public Response listUsers(@QueryParam ("email") String email) {
-    return null;
+    if (StringUtils.isBlank(email)) {
+      return Response.status(Status.NOT_IMPLEMENTED).entity("listing all users without a filter is not supported yet").build();
+    }
+    
+    List<User> result = new ArrayList<>();
+    
+    if (StringUtils.isNotBlank(email)) {
+      User user = userController.findUserByEmail(email);
+      if (user != null) {
+        result.add(user);
+      }
+    }
+    
+    if (result.isEmpty()) {
+      return Response.status(Status.NO_CONTENT).build();
+    }
+    
+    return Response.ok(createRestModel(result.toArray(new User[0]))).build();
   }
   
   /**
@@ -176,6 +195,16 @@ public class UserRestServices {
   private fi.foyt.fni.rest.users.model.User createRestModel(fi.foyt.fni.persistence.model.users.User user) {
     List<String> emails = userController.getUserEmails(user);
     return new fi.foyt.fni.rest.users.model.User(user.getId(), user.getFirstName(), user.getLastName(), user.getNickname(), user.getLocale(), emails);
+  }
+
+  private fi.foyt.fni.rest.users.model.User[] createRestModel(fi.foyt.fni.persistence.model.users.User... users) {
+    List<fi.foyt.fni.rest.users.model.User> result = new ArrayList<>();
+    
+    for (User user : users) {
+      result.add(createRestModel(user)); 
+    }
+    
+    return result.toArray(new fi.foyt.fni.rest.users.model.User[0]);
   }
 
 }
