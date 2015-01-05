@@ -1,5 +1,6 @@
 package fi.foyt.fni.test.rest;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -111,5 +112,43 @@ public class UsersRestTestsIT extends AbstractRestTest {
       greenMail.stop();
     } 
   }
- 
+  
+  @Test
+  @SqlSets ({"basic-users", "service-client"})
+  public void testListUsersUnauthorized() {
+    givenJson()
+      .get("/users/users")
+      .then()
+      .statusCode(401);
+
+  }
+  
+  @Test
+  @SqlSets ({"service-client"})
+  public void testListUsersNoContent() throws Exception {
+    givenJson(createServiceToken())
+      .queryParam("email", "noone@foyt.fi")
+      .get("/users/users")
+      .then()
+      .statusCode(204);
+  }
+  
+  @Test
+  @SqlSets ({"basic-users", "service-client"})
+  public void testFindUserByEmail() throws Exception {
+    givenJson(createServiceToken())
+      .queryParam("email", "user@foyt.fi")
+      .get("/users/users")
+      .then()
+      .statusCode(200)
+      .body("id.size()", is(1))
+      .body("id[0]", is(2))
+      .body("firstName[0]", is("Test"))
+      .body("lastName[0]", is("User"))
+      .body("nickname[0]", is((String) null))
+      .body("locale[0]", is("en_US"))
+      .body("emails[0].size()", is(1))
+      .body("emails[0][0]", is("user@foyt.fi"));
+  }
+  
 }
