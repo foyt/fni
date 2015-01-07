@@ -28,7 +28,6 @@ import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.jade.JadeController;
-import fi.foyt.fni.materials.IllusionEventDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
@@ -68,9 +67,6 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
   private IllusionEventPageController illusionEventPageController;
   
   @Inject
-  private IllusionEventDocumentController illusionEventDocumentController;
-
-  @Inject
   private MaterialController materialController;
 
   @Inject
@@ -105,7 +101,7 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
     IllusionEventFolder folder = illusionEvent.getFolder();
     String indexText = null;
     
-    IllusionEventDocument indexDocument = illusionEventDocumentController.findByFolderAndDocumentType(folder, IllusionEventDocumentType.INDEX);
+    IllusionEventDocument indexDocument = illusionEventController.findByFolderAndDocumentType(folder, IllusionEventDocumentType.INDEX);
     if (indexDocument != null) {
       try {
         FileData indexData = materialController.getMaterialData(null, null, indexDocument);

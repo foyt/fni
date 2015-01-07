@@ -5,6 +5,7 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,6 +14,10 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
+
+import fi.foyt.fni.chat.ChatCredentialsController;
+import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.dao.illusion.GenreDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventDAO;
@@ -22,8 +27,11 @@ import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantImageDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventTemplateDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventTypeDAO;
+import fi.foyt.fni.persistence.dao.materials.IllusionEventDocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionEventFolderDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionFolderDAO;
+import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
+import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.illusion.Genre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventGenre;
@@ -35,11 +43,16 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventTemplate;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
+import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
+import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @Dependent
 @Stateless
@@ -72,6 +85,9 @@ public class IllusionEventController {
   private GenreDAO genreDAO;
   
   @Inject
+  private IllusionEventDocumentDAO illusionEventDocumentDAO;
+
+  @Inject
   private MaterialController materialController;
 
   @Inject
@@ -79,7 +95,13 @@ public class IllusionEventController {
 
   @Inject
   private IllusionEventSettingDAO illusionEventSettingDAO;
+ 
+  @Inject
+  private SystemSettingsController systemSettingsController;
 
+  @Inject
+  private ChatCredentialsController chatCredentialsController;
+  
   @Inject
   private Event<IllusionParticipantAddedEvent> illusionParticipantAddedEvent;
 
@@ -88,7 +110,35 @@ public class IllusionEventController {
   
   /* IllusionEvent */
 
-  public IllusionEvent createIllusionEvent(String urlName, String location, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate) {
+
+  public IllusionEvent createIllusionEvent(User user, Locale locale, String location, String name, String description, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate, List<Genre> genres) {
+    Language language = systemSettingsController.findLocaleByIso2(locale.getLanguage());
+    String urlName = createUrlName(name);
+    String xmppRoom = urlName + '@' + systemSettingsController.getSetting(SystemSettingKey.CHAT_MUC_HOST);
+
+    IllusionFolder illusionFolder = findUserIllusionFolder(user, true);
+    IllusionEventFolder illusionEventFolder = createIllusionEventFolder(user, illusionFolder, urlName, name);
+    IllusionEvent event = createIllusionEvent(urlName, location, name, description, xmppRoom, illusionEventFolder, joinMode, created, signUpFee, signUpFeeCurrency, startDate, startTime, endDate, endTime, ageLimit, beginnerFriendly, imageUrl, type, signUpStartDate, signUpEndDate);
+
+    String indexDocumentTitle = ExternalLocales.getText(locale, "illusion.newEvent.indexDocumentTitle");
+    String indexDocumentContent = ExternalLocales.getText(locale, "illusion.newEvent.indexDocumentContent");
+
+    createIllusionEventDocument(user, IllusionEventDocumentType.INDEX, language, illusionEventFolder, "index",
+        indexDocumentTitle, indexDocumentContent, MaterialPublicity.PRIVATE);
+
+    // Add bot
+    String botJid = systemSettingsController.getSetting(SystemSettingKey.CHAT_BOT_JID);
+    UserChatCredentials botChatCredentials = chatCredentialsController.findUserChatCredentialsByUserJid(botJid);
+    if (botChatCredentials != null) {
+      createIllusionEventParticipant(botChatCredentials.getUser(), event, getUserNickname(botChatCredentials.getUser()), IllusionEventParticipantRole.BOT);
+    }
+    
+    updateEventGenres(event, genres);
+    
+    return event;
+  }
+
+  private IllusionEvent createIllusionEvent(String urlName, String location, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate) {
     return illusionEventDAO.create(urlName, name, location, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency, startDate, startTime, endDate, endTime, null, ageLimit, beginnerFriendly, imageUrl, type, signUpStartDate, signUpEndDate);
   }
 
@@ -228,6 +278,10 @@ public class IllusionEventController {
     
     return member;
   }
+  
+  public IllusionEventParticipant createIllusionEventParticipant(User user, IllusionEvent event, IllusionEventParticipantRole organizer) {
+    return createIllusionEventParticipant(user, event, getUserNickname(user), organizer);
+  } 
 
   public IllusionEventParticipant findIllusionEventParticipantById(Long id) {
     return illusionEventParticipantDAO.findById(id);
@@ -264,6 +318,32 @@ public class IllusionEventController {
     return participant;
   }
 
+  private String createUrlName(String name) {
+    int maxLength = 20;
+    int padding = 0;
+    do {
+      String urlName = RequestUtils.createUrlName(name, maxLength);
+      if (padding > 0) {
+        urlName = urlName.concat(StringUtils.repeat('_', padding));
+      }
+
+      IllusionEvent illusionEvent = findIllusionEventByUrlName(urlName);
+      if (illusionEvent == null) {
+        return urlName;
+      }
+
+      if (maxLength < name.length()) {
+        maxLength++;
+      } else {
+        padding++;
+      }
+    } while (true);
+  }
+
+  private String getUserNickname(User user) {
+    return StringUtils.isNotBlank(user.getNickname()) ? user.getNickname() : user.getFullName();
+  }
+  
   /* IllusionEventParticipantImage */
 
   public IllusionEventParticipantImage createIllusionEeventParticipantImage(IllusionEventParticipant participant, String contentType, byte[] data, Date modified) {
@@ -386,4 +466,24 @@ public class IllusionEventController {
     }
   }
 
+  /* IllusionEventDocument */
+  
+  public IllusionEventDocument findByFolderAndDocumentType(IllusionEventFolder folder, IllusionEventDocumentType documentType) {
+    return illusionEventDocumentDAO.findByParentFolderAndDocumentType(folder, documentType);
+  }
+
+  public IllusionEventDocument createIllusionEventDocument(User creator, IllusionEventDocumentType documentType, Language language, IllusionEventFolder parentFolder, String urlName, String title, String data, MaterialPublicity publicity, Integer indexNumber) {
+    return illusionEventDocumentDAO.create(creator, documentType, language, parentFolder, urlName, title, data, publicity, indexNumber);
+  }
+  
+  public IllusionEventDocument createIllusionEventDocument(User creator, IllusionEventDocumentType documentType, Language language, IllusionEventFolder parentFolder, String urlName, String title, String data, MaterialPublicity publicity) {
+    Integer indexNumber = illusionEventDocumentDAO.maxIndexNumberByParentFolder(parentFolder);
+    if (indexNumber == null) {
+      indexNumber = 0;
+    } else {
+      indexNumber++;
+    }
+    
+    return createIllusionEventDocument(creator, documentType, language, parentFolder, urlName, title, data, publicity, indexNumber);
+  } 
 }

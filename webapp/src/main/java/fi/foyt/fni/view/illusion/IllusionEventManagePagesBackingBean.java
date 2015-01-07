@@ -14,9 +14,8 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
-import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.illusion.IllusionEventPageController;
-import fi.foyt.fni.materials.IllusionEventDocumentController;
+import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -51,9 +50,6 @@ public class IllusionEventManagePagesBackingBean extends AbstractIllusionEventBa
   
   @Inject
   private IllusionEventPageController illusionEventPageController;
-
-  @Inject
-  private IllusionEventDocumentController illusionEventDocumentController;
 
   @Inject
   private SessionController sessionController;
@@ -122,7 +118,7 @@ public class IllusionEventManagePagesBackingBean extends AbstractIllusionEventBa
     String title = FacesUtils.getLocalizedValue("illusion.managePages.untitledPage");
     String pageUrlName = materialController.getUniqueMaterialUrlName(sessionController.getLoggedUser(), event.getFolder(), null, title);
     Language language = systemSettingsController.findLocaleByIso2(sessionController.getLocale().getLanguage());
-    IllusionEventDocument page = illusionEventDocumentController.createIllusionEventDocument(sessionController.getLoggedUser(), IllusionEventDocumentType.PAGE, language, event.getFolder(), pageUrlName, title, "", MaterialPublicity.PUBLIC);
+    IllusionEventDocument page = illusionEventController.createIllusionEventDocument(sessionController.getLoggedUser(), IllusionEventDocumentType.PAGE, language, event.getFolder(), pageUrlName, title, "", MaterialPublicity.PUBLIC);
     return "/illusion/event-edit-page.jsf?faces-redirect=true&urlName=" + event.getUrlName() + "&pageId=" + page.getId();
   }
   

@@ -5,13 +5,13 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
-import fi.foyt.fni.materials.IllusionEventDocumentController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
@@ -42,7 +42,7 @@ public class IllusionEventEditPageBackingBean extends AbstractIllusionEventBacki
   private MaterialController materialController;
 
   @Inject
-  private IllusionEventDocumentController illusionEventDocumentController;
+  private IllusionEventController illusionEventController;
 
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
@@ -67,7 +67,7 @@ public class IllusionEventEditPageBackingBean extends AbstractIllusionEventBacki
       }      
     } else {
       if ("INDEX".equals(getPageId())) {
-        page = illusionEventDocumentController.findByFolderAndDocumentType(illusionEvent.getFolder(), IllusionEventDocumentType.INDEX);
+        page = illusionEventController.findByFolderAndDocumentType(illusionEvent.getFolder(), IllusionEventDocumentType.INDEX);
       } else {
         return "/error/not-found.jsf";
       }
