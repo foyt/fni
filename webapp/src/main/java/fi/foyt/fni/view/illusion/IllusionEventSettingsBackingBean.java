@@ -74,16 +74,16 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     description = illusionEvent.getDescription();
     location = illusionEvent.getLocation();
     joinMode = illusionEvent.getJoinMode();
-    startDate = formatDate(illusionEvent.getStartDate());
-    startTime = formatTime(illusionEvent.getStartTime());
-    endDate = formatDate(illusionEvent.getEndDate());
-    endTime = formatTime(illusionEvent.getEndTime());
+    startDate = formatDate(illusionEvent.getStart());
+    startTime = formatTime(illusionEvent.getStart());
+    endDate = formatDate(illusionEvent.getEnd());
+    endTime = formatTime(illusionEvent.getEnd());
     domain = illusionEvent.getDomain();
     ageLimit = illusionEvent.getAgeLimit();
     imageUrl = illusionEvent.getImageUrl();
     beginnerFriendly = illusionEvent.getBeginnerFriendly();
-    signUpStartDate = formatTime(illusionEvent.getSignUpStartDate());
-    signUpEndDate = formatTime(illusionEvent.getSignUpEndDate());
+    signUpStartDate = formatDate(illusionEvent.getSignUpStartDate());
+    signUpEndDate = formatDate(illusionEvent.getSignUpEndDate());
     typeId = illusionEvent.getType() != null ? illusionEvent.getType().getId() : null;
     genreIds = new ArrayList<Long>();
     
@@ -280,10 +280,8 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
 
     illusionEventController.updateIllusionEventDescription(illusionEvent, getDescription());
     illusionEventController.updateIllusionEventJoinMode(illusionEvent, getJoinMode());
-    illusionEventController.updateIllusionEventStartDate(illusionEvent, parseDate(getStartDate()));
-    illusionEventController.updateIllusionEventStartTime(illusionEvent, parseDate(getStartTime()));
-    illusionEventController.updateIllusionEventEndDate(illusionEvent, parseDate(getEndDate()));
-    illusionEventController.updateIllusionEventEndTime(illusionEvent, parseDate(getEndTime()));
+    illusionEventController.updateIllusionEventStart(illusionEvent, parseDate(getStartISODate()));
+    illusionEventController.updateIllusionEventEnd(illusionEvent, parseDate(getEndISODate()));
     illusionEventController.updateIllusionEventLocation(illusionEvent, getLocation());
     illusionEventController.updateIllusionEventType(illusionEvent, illusionEventController.findTypeById(getTypeId()));
     illusionEventController.updateIllusionEventSignUpTimes(illusionEvent, parseDate(getSignUpStartDate()), parseDate(getSignUpEndDate()));
@@ -326,6 +324,24 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
 
     return "/illusion/event-settings.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
   }
+  
+  private String getStartISODate() {
+    StringBuilder result = new StringBuilder(getStartDate());
+    if (StringUtils.isNotBlank(getStartTime())) {
+      result.append('T').append(getStartTime());
+    }
+    
+    return result.toString();
+  }
+  
+  private String getEndISODate() {
+    StringBuilder result = new StringBuilder(getEndDate());
+    if (StringUtils.isNotBlank(getEndTime())) {
+      result.append('T').append(getEndTime());
+    }
+    
+    return result.toString();
+  }
 
   private String formatDate(Date time) {
     if (time == null) {
@@ -341,7 +357,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
       return null;
     }
 
-    DateTimeFormatter formatter = ISODateTimeFormat.dateTimeNoMillis();
+    DateTimeFormatter formatter = ISODateTimeFormat.timeNoMillis();
     return formatter.print(time.getTime());
   }
 

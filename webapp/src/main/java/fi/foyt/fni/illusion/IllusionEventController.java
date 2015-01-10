@@ -111,14 +111,14 @@ public class IllusionEventController {
   /* IllusionEvent */
 
 
-  public IllusionEvent createIllusionEvent(User user, Locale locale, String location, String name, String description, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate, List<Genre> genres) {
+  public IllusionEvent createIllusionEvent(User user, Locale locale, String location, String name, String description, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date start, Date end, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate, List<Genre> genres) {
     Language language = systemSettingsController.findLocaleByIso2(locale.getLanguage());
     String urlName = createUrlName(name);
     String xmppRoom = urlName + '@' + systemSettingsController.getSetting(SystemSettingKey.CHAT_MUC_HOST);
 
     IllusionFolder illusionFolder = findUserIllusionFolder(user, true);
     IllusionEventFolder illusionEventFolder = createIllusionEventFolder(user, illusionFolder, urlName, name);
-    IllusionEvent event = createIllusionEvent(urlName, location, name, description, xmppRoom, illusionEventFolder, joinMode, created, signUpFee, signUpFeeCurrency, startDate, startTime, endDate, endTime, ageLimit, beginnerFriendly, imageUrl, type, signUpStartDate, signUpEndDate);
+    IllusionEvent event = createIllusionEvent(urlName, location, name, description, xmppRoom, illusionEventFolder, joinMode, created, signUpFee, signUpFeeCurrency, start, end, ageLimit, beginnerFriendly, imageUrl, type, signUpStartDate, signUpEndDate);
 
     String indexDocumentTitle = ExternalLocales.getText(locale, "illusion.newEvent.indexDocumentTitle");
     String indexDocumentContent = ExternalLocales.getText(locale, "illusion.newEvent.indexDocumentContent");
@@ -138,8 +138,8 @@ public class IllusionEventController {
     return event;
   }
 
-  private IllusionEvent createIllusionEvent(String urlName, String location, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date startDate, Date startTime, Date endDate, Date endTime, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate) {
-    return illusionEventDAO.create(urlName, name, location, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency, startDate, startTime, endDate, endTime, null, ageLimit, beginnerFriendly, imageUrl, type, signUpStartDate, signUpEndDate);
+  private IllusionEvent createIllusionEvent(String urlName, String location, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date start, Date end, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate) {
+    return illusionEventDAO.create(urlName, name, location, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency, start, end, null, ageLimit, beginnerFriendly, imageUrl, type, signUpStartDate, signUpEndDate);
   }
 
   public IllusionEvent findIllusionEventById(Long id) {
@@ -160,12 +160,12 @@ public class IllusionEventController {
 
   public List<IllusionEvent> listNextIllusionEvents(int maxResults) {
     Date now = new Date();
-    return illusionEventDAO.listByStartDateGEOrEndDateGESortByStartDateAndStartTime(now, now, 0, maxResults);
+    return illusionEventDAO.listByStartGEOrEndGESortByStart(now, now, 0, maxResults);
   }
 
   public List<IllusionEvent> listPastIllusionEvents(int maxResults) {
     Date now = new Date();
-    return illusionEventDAO.listByStartDateLTAndEndDateLTSortByEndDateEndTimeStartDateStartTime(now, now, 0, maxResults);
+    return illusionEventDAO.listByStartLTAndEndLTSortByEndAndStart(now, now, 0, maxResults);
   }
 
   public List<IllusionEvent> listIllusionEventsWithDomain() {
@@ -188,20 +188,12 @@ public class IllusionEventController {
     return illusionEventDAO.updateJoinMode(illusionEvent, joinMode);
   }
 
-  public IllusionEvent updateIllusionEventStartDate(IllusionEvent illusionEvent, Date startDate) {
-    return illusionEventDAO.updateStartDate(illusionEvent, startDate);
+  public IllusionEvent updateIllusionEventStart(IllusionEvent illusionEvent, Date start) {
+    return illusionEventDAO.updateStart(illusionEvent, start);
   }
 
-  public IllusionEvent updateIllusionEventStartTime(IllusionEvent illusionEvent, Date startTime) {
-    return illusionEventDAO.updateStartTime(illusionEvent, startTime);
-  }
-
-  public IllusionEvent updateIllusionEventEndDate(IllusionEvent illusionEvent, Date endDate) {
-    return illusionEventDAO.updateEndDate(illusionEvent, endDate);
-  }
-
-  public IllusionEvent updateIllusionEventEndTime(IllusionEvent illusionEvent, Date endTime) {
-    return illusionEventDAO.updateEndTime(illusionEvent, endTime);
+  public IllusionEvent updateIllusionEventEnd(IllusionEvent illusionEvent, Date end) {
+    return illusionEventDAO.updateEnd(illusionEvent, end);
   }
 
   public IllusionEvent updateIllusionEventLocation(IllusionEvent illusionEvent, String location) {

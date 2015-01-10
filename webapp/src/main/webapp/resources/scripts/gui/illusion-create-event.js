@@ -32,7 +32,7 @@
         })
         .on("change", function (e, data) {
           var time = $(this).timepicker('getTime');
-          $($(this).data('alt-field')).val(time ? time.toISOString() : '');
+          $($(this).data('alt-field')).val(time ? time.toISOString().split('T')[1] : '');
         });
       
       var time = $($(element).data('alt-field')).val();

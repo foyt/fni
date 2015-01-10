@@ -32,12 +32,12 @@
         })
         .on("change", function (e, data) {
           var time = $(this).timepicker('getTime');
-          $($(this).data('alt-field')).val(time ? time.toISOString() : '');
+          $($(this).data('alt-field')).val(time ? time.toISOString().split('T')[1] : '');
         });
       
       var time = $($(element).data('alt-field')).val();
       if (time) {
-        $(element).timepicker('setTime', new Date(Date.parse(time)));
+        $(element).timepicker('setTime', new Date(Date.parse("1970-01-01T" + time)));
       }
     });
     

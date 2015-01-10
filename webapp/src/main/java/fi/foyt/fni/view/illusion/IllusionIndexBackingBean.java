@@ -1,6 +1,7 @@
 package fi.foyt.fni.view.illusion;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
@@ -67,9 +69,18 @@ public class IllusionIndexBackingBean {
         role = eventParticipant.getRole();
       }
     }
-
-    return new Event(event.getName(), event.getLocation(), event.getUrlName(), event.getDescription(), event.getStartDate(), event.getStartTime(), event.getEndDate(), event.getEndTime(), organizers, role);
-  }
+    
+    if (DateUtils.isSameDay(event.getStart(), event.getEnd())) {
+      Date date = DateUtils.truncate(event.getStart(), Calendar.DAY_OF_MONTH);
+      long startDiff = event.getStart().getTime() - date.getTime();
+      long endDiff = event.getEnd().getTime() - date.getTime();
+      Date startTime = startDiff > 0 ? new Date(startDiff) : null;
+      Date endTime = endDiff > 0 ? new Date(endDiff) : null;
+      return new Event(event.getName(), event.getLocation(), event.getUrlName(), event.getDescription(), event.getStart(), startTime, event.getEnd(), endTime, organizers, role);
+    } else {
+      return new Event(event.getName(), event.getLocation(), event.getUrlName(), event.getDescription(), event.getStart(), null, event.getEnd(), null, organizers, role);
+    }
+  }    
 
   public List<Event> getUpcomingEvents() {
     return upcomingEvents;

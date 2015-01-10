@@ -234,10 +234,11 @@ public class IllusionCreateEventBackingBean {
     
     User loggedUser = sessionController.getLoggedUser();
     Date now = new Date();
-    
+    Date start = parseDate(getStartISODate());
+    Date end = parseDate(getEndISODate());
+
     IllusionEvent event = illusionEventController.createIllusionEvent(loggedUser, sessionController.getLocale(), getLocation(), getName(), 
-        getDescription(), getJoinMode(), now, signUpFee, signUpFeeCurrency, 
-        parseDate(getStartDate()), parseDate(getStartTime()), parseDate(getEndDate()), parseDate(getEndTime()),
+        getDescription(), getJoinMode(), now, signUpFee, signUpFeeCurrency, start, end, 
         getAgeLimit(), getBeginnerFriendly(), getImageUrl(), type, signUpStartDate, signUpEndDate, genres);
 
     // Add organizer
@@ -245,6 +246,24 @@ public class IllusionCreateEventBackingBean {
     illusionEventController.createIllusionEventParticipant(loggedUser, event, IllusionEventParticipantRole.ORGANIZER);
 
     return "/illusion/event.jsf?faces-redirect=true&urlName=" + event.getUrlName();
+  }
+  
+  private String getStartISODate() {
+    StringBuilder result = new StringBuilder(getStartDate());
+    if (StringUtils.isNotBlank(getStartTime())) {
+      result.append('T').append(getStartTime());
+    }
+    
+    return result.toString();
+  }
+  
+  private String getEndISODate() {
+    StringBuilder result = new StringBuilder(getEndDate());
+    if (StringUtils.isNotBlank(getEndTime())) {
+      result.append('T').append(getEndTime());
+    }
+    
+    return result.toString();
   }
 
   private Date parseDate(String iso) {

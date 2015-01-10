@@ -100,7 +100,7 @@ public class UsersProfileBackingBean {
 		Collections.sort(this.organizerInEvents, new Comparator<IllusionEvent>() {
 		  @Override
 		  public int compare(IllusionEvent o1, IllusionEvent o2) {
-		    return o2.getStartDate().compareTo(o1.getStartDate());
+		    return o2.getStart().compareTo(o1.getStart());
 		  }
     });
 		

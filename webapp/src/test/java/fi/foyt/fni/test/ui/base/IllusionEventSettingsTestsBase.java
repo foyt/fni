@@ -86,11 +86,15 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     String endTime = "10:30";
     
     assertSelectorValue("input[data-alt-field='.actual-start-date']", "01/01/2010");
-    assertSelectorValue("input[data-alt-field='.actual-start-time']", "");
-    assertSelectorValue("input[data-alt-field='.actual-end-date']", "");
-    assertSelectorValue("input[data-alt-field='.actual-end-time']", "");
+    assertSelectorValue("input[data-alt-field='.actual-start-time']", "0:00");
+    assertSelectorValue("input[data-alt-field='.actual-end-date']", "01/02/2010");
+    assertSelectorValue("input[data-alt-field='.actual-end-time']", "0:00");
     
     clearSelectorInput("input[data-alt-field='.actual-start-date']");
+    clearSelectorInput("input[data-alt-field='.actual-start-time']");
+    clearSelectorInput("input[data-alt-field='.actual-end-date']");
+    clearSelectorInput("input[data-alt-field='.actual-end-time']");
+    
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
     typeSelectorInputValue("input[data-alt-field='.actual-start-time']", startTime);
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", endDate);

@@ -59,6 +59,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     findElementBySelector(".illusion-create-event-name").sendKeys(name);
     findElementBySelector(".illusion-create-event-description").sendKeys(description);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
+    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", "10/20/2030");
     
     waitSelectorToBeClickable(".illusion-create-event-save");
     findElementBySelector(".illusion-create-event-save").click();
@@ -91,6 +92,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     typeSelectorInputValue(".illusion-create-event-name", name);
     typeSelectorInputValue(".illusion-create-event-description", description);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
+    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
     
     waitSelectorToBeClickable(".illusion-create-event-save");
     findElementBySelector(".illusion-create-event-save").click();
@@ -169,6 +171,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     typeSelectorInputValue(".illusion-create-event-name", name);
     typeSelectorInputValue(".illusion-create-event-description", description);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
+    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
     typeSelectorInputValue(".illusion-create-event-location", location);
     waitSelectorToBeClickable(".illusion-create-event-save");
     findElementBySelector(".illusion-create-event-save").click();
@@ -194,6 +197,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     navigate("/illusion/createevent");
     typeSelectorInputValue(".illusion-create-event-name", name);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
+    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
     typeSelectorInputValue(".sign-up-start-date", signUpStartDate);
     typeSelectorInputValue(".sign-up-end-date", signUpEndDate);
     waitSelectorToBeClickable(".illusion-create-event-save");
@@ -220,6 +224,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     navigate("/illusion/createevent");
     typeSelectorInputValue(".illusion-create-event-name", name);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
+    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
     typeSelectorInputValue(".illusion-create-event-image-url", imageUrl);
     waitSelectorToBeClickable(".illusion-create-event-save");
     findElementBySelector(".illusion-create-event-save").click();
@@ -243,6 +248,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     navigate("/illusion/createevent");
     typeSelectorInputValue(".illusion-create-event-name", name);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
+    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
     clickSelector(".illusion-create-event-beginner-friendly");
     waitSelectorToBeClickable(".illusion-create-event-save");
     findElementBySelector(".illusion-create-event-save").click();
@@ -266,6 +272,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     navigate("/illusion/createevent");
     typeSelectorInputValue(".illusion-create-event-name", name);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
+    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
     typeSelectorInputValue(".illusion-create-event-age-limit", ageLimit);
     waitSelectorToBeClickable(".illusion-create-event-save");
     findElementBySelector(".illusion-create-event-save").click();
@@ -289,6 +296,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     navigate("/illusion/createevent");
     typeSelectorInputValue(".illusion-create-event-name", name);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
+    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
     selectSelectBoxByValue(".illusion-create-event-type", "2");
     waitSelectorToBeClickable(".illusion-create-event-save");
     findElementBySelector(".illusion-create-event-save").click();
@@ -312,6 +320,7 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     navigate("/illusion/createevent");
     typeSelectorInputValue(".illusion-create-event-name", name);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
+    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
     clickSelector(".illusion-create-event-genre input[value='1']");
     clickSelector(".illusion-create-event-genre input[value='3']");
     waitSelectorToBeClickable(".illusion-create-event-save");
@@ -325,24 +334,5 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     
     deleteIllusionEventByUrl(name);
     deleteIllusionFolderByUser("admin@foyt.fi");
-  }
-
-  private void deleteIllusionEventByUrl(String urlName) throws Exception {
-    executeSql("delete from IllusionEventGenre where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
-    executeSql("delete from IllusionEventParticipant where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
-    executeSql("update Material set type = 'DELETE' where id in (select folder_id from IllusionEvent where urlName = ?) or parentFolder_id in (select folder_id from IllusionEvent where urlName = ?)", urlName, urlName);
-    executeSql("delete from IllusionEvent where urlName = ?", urlName);
-    executeSql("update Material set parentFolder_id = null where id in (select id from Material where type = 'DELETE')");
-    executeSql("delete from IllusionEventDocument where id in (select id from Material where type = 'DELETE')");
-    executeSql("delete from IllusionEventFolder where id in (select id from Material where type = 'DELETE')");
-    executeSql("delete from Document where id in (select id from Material where type = 'DELETE')");
-    executeSql("delete from Folder where id in (select id from Material where type = 'DELETE')");
-    executeSql("delete from Material where type = 'DELETE'");
-  }
-
-  private void deleteIllusionFolderByUser(String email) throws Exception {
-    executeSql("delete from IllusionFolder where id = (select id from Material where type = 'ILLUSION_FOLDER' and creator_id = (select user_id from UserEmail where email = ?))", email);
-    executeSql("delete from Folder where id = (select id from Material where type = 'ILLUSION_FOLDER' and creator_id = (select user_id from UserEmail where email = ?))", email);
-    executeSql("delete from Material where type = 'ILLUSION_FOLDER' and creator_id = (select user_id from UserEmail where email = ?)", email);
   }
 }

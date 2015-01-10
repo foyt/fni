@@ -122,36 +122,20 @@ public class IllusionEvent {
     this.domain = domain;
   }
   
-  public Date getStartDate() {
-    return startDate;
+  public Date getStart() {
+    return start;
   }
   
-  public void setStartDate(Date startDate) {
-    this.startDate = startDate;
+  public void setStart(Date start) {
+    this.start = start;
   }
   
-  public Date getStartTime() {
-    return startTime;
+  public Date getEnd() {
+    return end;
   }
   
-  public void setStartTime(Date startTime) {
-    this.startTime = startTime;
-  }
-  
-  public Date getEndDate() {
-    return endDate;
-  }
-  
-  public void setEndDate(Date endDate) {
-    this.endDate = endDate;
-  }
-  
-  public Date getEndTime() {
-    return endTime;
-  }
-  
-  public void setEndTime(Date endTime) {
-    this.endTime = endTime;
+  public void setEnd(Date end) {
+    this.end = end;
   }
   
   public OAuthClient getOAuthClient() {
@@ -268,17 +252,12 @@ public class IllusionEvent {
   private String domain;
 
   @Column (nullable = false)
-  @Temporal (TemporalType.DATE)
-  private Date startDate;
-  
-  @Temporal (TemporalType.TIME)
-  private Date startTime;
-  
-  @Temporal (TemporalType.DATE)
-  private Date endDate;
-  
-  @Temporal (TemporalType.TIME)
-  private Date endTime;
+  @Temporal (TemporalType.TIMESTAMP)
+  private Date start;
+
+  @Column (nullable = false)
+  @Temporal (TemporalType.TIMESTAMP)
+  private Date end;
 
   @ManyToOne
   private OAuthClient oAuthClient;
