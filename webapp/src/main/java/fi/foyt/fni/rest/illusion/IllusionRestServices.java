@@ -3,6 +3,7 @@ package fi.foyt.fni.rest.illusion;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 
@@ -30,19 +31,24 @@ import fi.foyt.fni.illusion.IllusionEventGroupController;
 import fi.foyt.fni.illusion.IllusionEventMaterialController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
+import fi.foyt.fni.persistence.model.illusion.Genre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.rest.Security;
 import fi.foyt.fni.rest.illusion.model.IllusionEventGroup;
 import fi.foyt.fni.rest.illusion.model.IllusionEventMaterialParticipantSetting;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.users.UserController;
 
 @Path("/illusion")
 @Produces(MediaType.APPLICATION_JSON)
@@ -56,6 +62,12 @@ public class IllusionRestServices {
 
   @Inject
   private MaterialController materialController;
+
+  @Inject
+  private UserController userController;
+
+  @Inject
+  private SystemSettingsController systemSettingsController;
 
   @Inject
   private IllusionEventController illusionEventController;
@@ -78,10 +90,95 @@ public class IllusionRestServices {
    */
   @Path("/events")
   @POST
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_CREATE_EVENT }
+  )
   public Response createEvent(fi.foyt.fni.rest.illusion.model.IllusionEvent entity) {
-    return null;
+    if (entity == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Entity data is missing").build();
+    }
+    
+    if (entity.getStart() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Entity start is missing").build();
+    }
+    
+    if (entity.getEnd() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Entity end is missing").build();
+    }
+    
+    if (StringUtils.isBlank(entity.getName())) {
+      return Response.status(Status.BAD_REQUEST).entity("Name is required").build();
+    }
+    
+    if (entity.getTypeId() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("typeId is required").build();
+    }
+    
+    IllusionEventType type = illusionEventController.findTypeById(entity.getTypeId());
+    if (type == null) {
+      return Response.status(Status.BAD_REQUEST).entity("type could not be found").build();
+    }
+    
+    User user = null;
+    if (!sessionController.isLoggedIn()) {
+      // TODO: Should services have a matching service account?
+      
+      String systemUserEmail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_USER_EMAIL);
+      if (StringUtils.isBlank(systemUserEmail)) {
+        return Response.status(Status.INTERNAL_SERVER_ERROR).entity("System user email setting is undefined").build();
+      }
+      
+      user = userController.findUserByEmail(systemUserEmail);
+      if (user == null) {
+        return Response.status(Status.INTERNAL_SERVER_ERROR).entity("System user could not be found").build();
+      }
+    } else {
+      user = sessionController.getLoggedUser();
+    }
+    
+    Double signUpFee = entity.getSignUpFee();
+    Currency signUpFeeCurrency = null;
+
+    if (signUpFee != null && signUpFee <= 0) {
+      signUpFee = null;
+    }
+
+    if (signUpFee != null) {
+      signUpFeeCurrency = Currency.getInstance(entity.getSignUpFeeCurrency());
+    }
+    
+    List<Genre> genres = new ArrayList<>(entity.getGenreIds().size());
+    for (Long genreId : entity.getGenreIds()) {
+      Genre genre = illusionEventController.findGenreById(genreId);
+      if (genre == null) {
+        return Response.status(Status.INTERNAL_SERVER_ERROR).entity(String.format("Genre #%d could not be found", genreId)).build();
+      }
+      
+      genres.add(genre);
+    }
+    
+    Date start = entity.getStart().toDate();
+    Date end = entity.getEnd().toDate();
+    Date signUpStartDate = toDate(entity.getSignUpStartDate());
+    Date signUpEndDate = toDate(entity.getSignUpEndDate());
+    
+    IllusionEvent event = illusionEventController.createIllusionEvent(user, sessionController.getLocale(), entity.getLocation(), 
+        entity.getName(), entity.getDescription(), entity.getJoinMode(), new Date(), signUpFee, signUpFeeCurrency, 
+        start, end, entity.getAgeLimit(), entity.getBeginnerFriendly(), entity.getImageUrl(), 
+        type, signUpStartDate, signUpEndDate, genres);
+
+    return Response.ok(createRestModel(event)).build();
   }
-  
+
+  private Date toDate(DateTime dateTime) {
+    if (dateTime == null) {
+      return null;
+    }
+    
+    return dateTime.toDate();
+  }
+
   /**
    * Lists events
    * 
@@ -628,8 +725,9 @@ public class IllusionRestServices {
     List<Long> genreIds = new ArrayList<>();
     DateTime signUpStartDate = getDateAsDateTime(illusionEvent.getSignUpStartDate());
     DateTime signUpEndDate = getDateAsDateTime(illusionEvent.getSignUpEndDate());
-    DateTime start = getDateAndTimeAsDateTime(illusionEvent.getStartDate(), illusionEvent.getStartTime());
-    DateTime end = getDateAndTimeAsDateTime(illusionEvent.getEndDate(), illusionEvent.getEndTime());
+    
+    DateTime start = new DateTime(illusionEvent.getStart().getTime());
+    DateTime end = new DateTime(illusionEvent.getEnd().getTime());
     
     return new fi.foyt.fni.rest.illusion.model.IllusionEvent(illusionEvent.getId(), illusionEvent.getName(), illusionEvent.getDescription(), 
         getDateAsDateTime(illusionEvent.getCreated()), illusionEvent.getUrlName(), illusionEvent.getXmppRoom(), illusionEvent.getJoinMode(), 
@@ -643,17 +741,6 @@ public class IllusionRestServices {
     }
     
     return new DateTime(date.getTime());
-  }
-  
-  private DateTime getDateAndTimeAsDateTime(Date date, Date time) {
-    DateTime result = getDateAsDateTime(date);
-    if (result == null || time == null) {
-      return result;
-    }
-    
-    result.plus(time.getTime());
-
-    return result;
   }
   
 }
