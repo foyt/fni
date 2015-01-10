@@ -12,7 +12,13 @@ import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.junit.Before;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.config.ObjectMapperConfig;
+import com.jayway.restassured.config.RestAssuredConfig;
+import com.jayway.restassured.mapper.factory.Jackson2ObjectMapperFactory;
 import com.jayway.restassured.specification.RequestSpecification;
 
 import fi.foyt.fni.test.AbstractTest;
@@ -23,45 +29,49 @@ public class AbstractRestTest extends AbstractTest {
   public void setupRestAssured() {
     RestAssured.baseURI = getAppUrl() + "/rest";
     RestAssured.port = getPortHttps();
+
+    RestAssured.config = RestAssuredConfig.config().objectMapperConfig(
+      ObjectMapperConfig.objectMapperConfig().jackson2ObjectMapperFactory(new Jackson2ObjectMapperFactory() {
+        @Override
+        public ObjectMapper create(@SuppressWarnings("rawtypes") Class cls, String charset) {
+          ObjectMapper objectMapper = new ObjectMapper();
+          objectMapper.registerModule(new JodaModule());
+          objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+          return objectMapper;
+        }
+      })
+    );
   }
 
   protected RequestSpecification givenPlain(String accessToken) {
-    return given()
-        .header("Authorization", "Bearer " + accessToken);    
+    return given().header("Authorization", "Bearer " + accessToken);
   }
-  
+
   protected RequestSpecification givenJson() {
-    return given()
-        .contentType("application/json");    
+    return given().contentType("application/json");
   }
-  
+
   protected RequestSpecification givenJson(String accessToken) {
-    return given()
-        .header("Authorization", "Bearer " + accessToken)
-        .contentType("application/json");    
+    return given().header("Authorization", "Bearer " + accessToken).contentType("application/json");
   }
-  
+
   protected String createServiceToken() throws OAuthSystemException, OAuthProblemException {
     return createServiceToken("client-id", "client-secret", getAppUrl(true) + "/fake-redirect");
   }
-  
+
   protected String createServiceToken(String clientId, String clientSecet, String redirectURI) throws OAuthSystemException, OAuthProblemException {
     String tokenEndpoint = getAppUrl(true) + "/oauth2/token";
 
-    OAuthClientRequest request = OAuthClientRequest.tokenLocation(tokenEndpoint)
-        .setGrantType(GrantType.CLIENT_CREDENTIALS)
-        .setClientId(clientId)
-        .setClientSecret(clientSecet)
-        .setRedirectURI(redirectURI)
-        .buildQueryMessage();
-    
-    OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());    
+    OAuthClientRequest request = OAuthClientRequest.tokenLocation(tokenEndpoint).setGrantType(GrantType.CLIENT_CREDENTIALS).setClientId(clientId)
+        .setClientSecret(clientSecet).setRedirectURI(redirectURI).buildQueryMessage();
+
+    OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
 
     OAuthJSONAccessTokenResponse response = oAuthClient.accessToken(request);
-    
+
     assertNotNull(response);
     assertNotNull(response.getAccessToken());
-    
+
     return response.getAccessToken();
   }
 

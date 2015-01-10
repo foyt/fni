@@ -352,6 +352,25 @@ public abstract class AbstractTest {
     executeSql("delete from User where id = ?", userId);
   }
 
+  protected void deleteIllusionEventByUrl(String urlName) throws Exception {
+    executeSql("delete from IllusionEventGenre where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
+    executeSql("delete from IllusionEventParticipant where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
+    executeSql("update Material set type = 'DELETE' where id in (select folder_id from IllusionEvent where urlName = ?) or parentFolder_id in (select folder_id from IllusionEvent where urlName = ?)", urlName, urlName);
+    executeSql("delete from IllusionEvent where urlName = ?", urlName);
+    executeSql("update Material set parentFolder_id = null where id in (select id from Material where type = 'DELETE')");
+    executeSql("delete from IllusionEventDocument where id in (select id from Material where type = 'DELETE')");
+    executeSql("delete from IllusionEventFolder where id in (select id from Material where type = 'DELETE')");
+    executeSql("delete from Document where id in (select id from Material where type = 'DELETE')");
+    executeSql("delete from Folder where id in (select id from Material where type = 'DELETE')");
+    executeSql("delete from Material where type = 'DELETE'");
+  }
+
+  protected void deleteIllusionFolderByUser(String email) throws Exception {
+    executeSql("delete from IllusionFolder where id = (select id from Material where type = 'ILLUSION_FOLDER' and creator_id = (select user_id from UserEmail where email = ?))", email);
+    executeSql("delete from Folder where id = (select id from Material where type = 'ILLUSION_FOLDER' and creator_id = (select user_id from UserEmail where email = ?))", email);
+    executeSql("delete from Material where type = 'ILLUSION_FOLDER' and creator_id = (select user_id from UserEmail where email = ?)", email);
+  }
+  
   protected void createOAuthSettings() throws Exception {
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "FACEBOOK_APIKEY",
         getFacebookApiKey());

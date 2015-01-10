@@ -21,7 +21,8 @@ values
   (8, 'GAMELIBRARY_SHOP_OWNER_NAME', 'Bogus Shop Owner'),
   (9, 'GAMELIBRARY_SHOP_OWNER_MAIL', 'bogus.shop-owner@foyt.fi'),
   (10, 'SYSTEM_MAILER_NAME', 'Bogus System Mailer'),
-  (12, 'SYSTEM_MAILER_MAIL', 'bogus.system-mailer@foyt.fi');
+  (12, 'SYSTEM_MAILER_MAIL', 'bogus.system-mailer@foyt.fi'),
+  (13, 'SYSTEM_USER_EMAIL', 'admin@foyt.fi');
   
 insert into 
   OAuthClient (id, clientId, clientSecret, name, type, redirectUrl)
