@@ -16,6 +16,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 
+import fi.foyt.fni.auth.OAuthController;
 import fi.foyt.fni.chat.ChatCredentialsController;
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.materials.MaterialController;
@@ -49,6 +50,7 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient;
+import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
@@ -101,7 +103,10 @@ public class IllusionEventController {
 
   @Inject
   private ChatCredentialsController chatCredentialsController;
-  
+
+  @Inject
+  private OAuthController oAuthController;
+
   @Inject
   private Event<IllusionParticipantAddedEvent> illusionParticipantAddedEvent;
 
@@ -173,11 +178,13 @@ public class IllusionEventController {
   }
 
   public IllusionEvent updateIllusionEventName(IllusionEvent illusionEvent, String name) {
-    return illusionEventDAO.updateName(illusionEvent, name);
-  }
-
-  public IllusionEvent updateIllusionEventUrlName(IllusionEvent illusionEvent, String urlName) {
-    return illusionEventDAO.updateUrlName(illusionEvent, urlName);
+    if (!illusionEvent.getName().equals(name)) {
+      String urlName = createUrlName(name);
+      illusionEventDAO.updateName(illusionEvent, name);
+      illusionEventDAO.updateUrlName(illusionEvent, urlName);
+    }
+    
+    return illusionEvent;
   }
 
   public IllusionEvent updateIllusionEventDescription(IllusionEvent illusionEvent, String description) {
@@ -200,14 +207,6 @@ public class IllusionEventController {
     return illusionEventDAO.updateLocation(illusionEvent, location);
   }
   
-  public IllusionEvent updateEventOAuthClient(IllusionEvent illusionEvent, OAuthClient oAuthClient) {
-    return illusionEventDAO.updateOAuthClient(illusionEvent, oAuthClient);
-  }
-
-  public IllusionEvent updateEventDomain(IllusionEvent illusionEvent, String domain) {
-    return illusionEventDAO.updateDomain(illusionEvent, domain);
-  }
-
   public IllusionEvent updateIllusionEventType(IllusionEvent illusionEvent, IllusionEventType type) {
     return illusionEventDAO.updateType(illusionEvent, type);
   }
@@ -227,7 +226,36 @@ public class IllusionEventController {
   public IllusionEvent updateIllusionEventImageUrl(IllusionEvent illusionEvent, String imageUrl) {
     return illusionEventDAO.updateImageUrl(illusionEvent, imageUrl);
   }
+  
+  public boolean isEventAllowedDomain(String domain) {
+    // RegEx from
+    // http://stackoverflow.com/questions/10306690/domain-name-validation-with-regex
+    return domain.matches("^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\\.[a-zA-Z]{2,3})$");
+  }
 
+  public IllusionEvent updateEventDomain(IllusionEvent illusionEvent, String domain) {
+    if (StringUtils.isNotBlank(domain)) {
+      if (illusionEvent.getOAuthClient() == null) {
+        String clientId = UUID.randomUUID().toString();
+        String clientSecret = UUID.randomUUID().toString();
+  
+        String redirectUrl = new StringBuilder(systemSettingsController.getHostUrl(domain, false, true)).append(
+            "/login/?return=1&loginMethod=ILLUSION_INTERNAL").toString();
+  
+        OAuthClient oAuthClient = oAuthController.createClient(illusionEvent.getName(), OAuthClientType.USER, clientId, clientSecret, redirectUrl);
+        illusionEventDAO.updateOAuthClient(illusionEvent, oAuthClient);
+      }
+    }
+
+    return illusionEventDAO.updateDomain(illusionEvent, domain);
+  }
+
+  public IllusionEvent updateEventSignUpFee(IllusionEvent illusionEvent, Double signUpFee, Currency signUpFeeCurrency) {
+    illusionEventDAO.updateSignUpFee(illusionEvent, signUpFee);
+    illusionEventDAO.updateSignUpFeeCurrency(illusionEvent, signUpFeeCurrency);
+    return illusionEvent;
+  }
+  
   public void deleteIllusionEvent(IllusionEvent event) {
     illusionEventDAO.delete(event);
   }
@@ -477,5 +505,6 @@ public class IllusionEventController {
     }
     
     return createIllusionEventDocument(creator, documentType, language, parentFolder, urlName, title, data, publicity, indexNumber);
-  } 
+  }
+
 }

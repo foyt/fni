@@ -3,7 +3,6 @@ package fi.foyt.fni.view.illusion;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -17,7 +16,6 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
-import fi.foyt.fni.auth.OAuthController;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.persistence.model.illusion.Genre;
@@ -27,15 +25,11 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
-import fi.foyt.fni.persistence.model.oauth.OAuthClient;
-import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
-import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.faces.FacesUtils;
-import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @RequestScoped
 @Named
@@ -53,13 +47,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   private IllusionEventController illusionEventController;
 
   @Inject
-  private OAuthController oAuthController;
-
-  @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
-
-  @Inject
-  private SystemSettingsController systemSettingsController;
 
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
@@ -248,36 +236,10 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     return typeSelectItems;
   }
 
-  private String createUrlName(String name) {
-    int maxLength = 20;
-    int padding = 0;
-    do {
-      String urlName = RequestUtils.createUrlName(name, maxLength);
-      if (padding > 0) {
-        urlName = urlName.concat(StringUtils.repeat('_', padding));
-      }
-
-      IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(urlName);
-      if (illusionEvent == null) {
-        return urlName;
-      }
-
-      if (maxLength < name.length()) {
-        maxLength++;
-      } else {
-        padding++;
-      }
-    } while (true);
-  }
-
   public String save() throws Exception {
     IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
-    if (!illusionEvent.getName().equals(getName())) {
-      String urlName = createUrlName(getName());
-      illusionEventController.updateIllusionEventName(illusionEvent, getName());
-      illusionEventController.updateIllusionEventUrlName(illusionEvent, urlName);
-    }
-
+    
+    illusionEventController.updateIllusionEventName(illusionEvent, getName());
     illusionEventController.updateIllusionEventDescription(illusionEvent, getDescription());
     illusionEventController.updateIllusionEventJoinMode(illusionEvent, getJoinMode());
     illusionEventController.updateIllusionEventStart(illusionEvent, parseDate(getStartISODate()));
@@ -289,28 +251,11 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     illusionEventController.updateIllusionEventBeginnerFriendly(illusionEvent, getBeginnerFriendly());
     illusionEventController.updateIllusionEventImageUrl(illusionEvent, getImageUrl());
     
-    String domain = getDomain();
-    if (StringUtils.isNotBlank(domain)) {
-      // RegEx from
-      // http://stackoverflow.com/questions/10306690/domain-name-validation-with-regex
-      if (!domain
-          .matches("^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\\.[a-zA-Z]{2,3})$")) {
-        FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.customDomainInvalid"));
-        return null;
-      } else {
-        if (illusionEvent.getOAuthClient() == null) {
-          String clientId = UUID.randomUUID().toString();
-          String clientSecret = UUID.randomUUID().toString();
-
-          String redirectUrl = new StringBuilder(systemSettingsController.getHostUrl(domain, false, true)).append(
-              "/login/?return=1&loginMethod=ILLUSION_INTERNAL").toString();
-
-          OAuthClient oAuthClient = oAuthController.createClient(illusionEvent.getName(), OAuthClientType.USER, clientId, clientSecret, redirectUrl);
-          illusionEventController.updateEventOAuthClient(illusionEvent, oAuthClient);
-        }
-
-        illusionEventController.updateEventDomain(illusionEvent, domain);
-      }
+    if (!illusionEventController.isEventAllowedDomain(getDomain())) {
+      FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.customDomainInvalid"));
+      return null;
+    } else {
+      illusionEventController.updateEventDomain(illusionEvent, getDomain());
     }
     
     List<Genre> genres = new ArrayList<>();
