@@ -10,6 +10,11 @@ import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.joda.time.base.AbstractInstant;
+import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Before;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -75,4 +80,35 @@ public class AbstractRestTest extends AbstractTest {
     return response.getAccessToken();
   }
 
+  protected static Matcher<AbstractInstant> sameInstant(final AbstractInstant instant) {
+    return new BaseMatcher<AbstractInstant>(){
+
+      @Override
+      public void describeTo(Description description) {
+        description.appendText("same instant: ").appendValue(instant.toString());
+      }
+
+      @Override
+      public boolean matches(Object item) {
+        if (item == null && instant == null) {
+          return true;
+        }
+        
+        if (item instanceof String) {
+          item = ISODateTimeFormat.dateTimeParser().parseDateTime((String) item);
+        }
+        
+        if (!(item instanceof AbstractInstant)) {
+          return false;
+        }
+        
+        if (item == null || instant == null) {
+          return false;
+        }
+        
+        return ((AbstractInstant) item).getMillis() == instant.getMillis();
+      }
+      
+    };
+  }
 }
