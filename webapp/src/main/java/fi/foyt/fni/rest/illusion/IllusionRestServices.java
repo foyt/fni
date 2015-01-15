@@ -33,6 +33,7 @@ import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.illusion.Genre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventGenre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
@@ -238,7 +239,100 @@ public class IllusionRestServices {
     scopes = { OAuthScopes.ILLUSION_UPDATE_EVENT }
   )
   public Response updateEvent(@PathParam ("EVENTID") Long eventId, fi.foyt.fni.rest.illusion.model.IllusionEvent entity) {
-    return null;
+    if (entity == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Entity data is missing").build();
+    }
+    
+    if (entity.getStart() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Entity start is missing").build();
+    }
+    
+    if (entity.getEnd() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Entity end is missing").build();
+    }
+    
+    if (StringUtils.isBlank(entity.getName())) {
+      return Response.status(Status.BAD_REQUEST).entity("Name is required").build();
+    }
+    
+    if (entity.getTypeId() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("typeId is required").build();
+    }
+    
+    IllusionEventType type = illusionEventController.findTypeById(entity.getTypeId());
+    if (type == null) {
+      return Response.status(Status.BAD_REQUEST).entity("type could not be found").build();
+    }
+    
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+
+    if (StringUtils.isNotBlank(entity.getXmppRoom()) && !StringUtils.equals(entity.getXmppRoom(), event.getXmppRoom())) {
+      return Response.status(Status.BAD_REQUEST).entity("XmppRoom can not be changed").build();
+    }
+    
+    if (StringUtils.isNotBlank(entity.getDomain())) {
+      if (!illusionEventController.isEventAllowedDomain(entity.getDomain())) {
+        return Response.status(Status.BAD_REQUEST).entity(String.format("Invalid domain name: %s", entity.getDomain())).build();
+      } 
+    }
+
+    User user = null;
+    if (!sessionController.isLoggedIn()) {
+      // TODO: Should services have a matching service account?
+      
+      String systemUserEmail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_USER_EMAIL);
+      if (StringUtils.isBlank(systemUserEmail)) {
+        return Response.status(Status.INTERNAL_SERVER_ERROR).entity("System user email setting is undefined").build();
+      }
+      
+      user = userController.findUserByEmail(systemUserEmail);
+      if (user == null) {
+        return Response.status(Status.INTERNAL_SERVER_ERROR).entity("System user could not be found").build();
+      }
+    } else {
+      user = sessionController.getLoggedUser();
+    }
+    
+    Double signUpFee = entity.getSignUpFee();
+    Currency signUpFeeCurrency = null;
+
+    if (signUpFee != null && signUpFee <= 0) {
+      signUpFee = null;
+    }
+
+    if (signUpFee != null) {
+      signUpFeeCurrency = Currency.getInstance(entity.getSignUpFeeCurrency());
+    }
+    
+    List<Genre> genres = new ArrayList<>(entity.getGenreIds().size());
+    for (Long genreId : entity.getGenreIds()) {
+      Genre genre = illusionEventController.findGenreById(genreId);
+      if (genre == null) {
+        return Response.status(Status.INTERNAL_SERVER_ERROR).entity(String.format("Genre #%d could not be found", genreId)).build();
+      }
+      
+      genres.add(genre);
+    }
+
+    illusionEventController.updateIllusionEventName(event, entity.getName());
+    illusionEventController.updateIllusionEventDescription(event, entity.getDescription());
+    illusionEventController.updateIllusionEventJoinMode(event, entity.getJoinMode());
+    illusionEventController.updateIllusionEventStart(event, toDate(entity.getStart()));
+    illusionEventController.updateIllusionEventEnd(event, toDate(entity.getEnd()));
+    illusionEventController.updateIllusionEventLocation(event, entity.getLocation());
+    illusionEventController.updateIllusionEventType(event, type);
+    illusionEventController.updateIllusionEventSignUpTimes(event, toDate(entity.getSignUpStartDate()), toDate(entity.getSignUpEndDate()));
+    illusionEventController.updateIllusionEventAgeLimit(event, entity.getAgeLimit());
+    illusionEventController.updateIllusionEventBeginnerFriendly(event, entity.getBeginnerFriendly());
+    illusionEventController.updateIllusionEventImageUrl(event, entity.getImageUrl());
+    illusionEventController.updateEventGenres(event, genres);
+    illusionEventController.updateEventDomain(event, entity.getDomain());
+    illusionEventController.updateEventSignUpFee(event, signUpFee, signUpFeeCurrency);
+    
+    return Response.noContent().build();
   }
   
   /**
@@ -722,9 +816,15 @@ public class IllusionRestServices {
   private fi.foyt.fni.rest.illusion.model.IllusionEvent createRestModel(IllusionEvent illusionEvent) {
     String signUpFeeCurrency = illusionEvent.getSignUpFeeCurrency() != null ? illusionEvent.getSignUpFeeCurrency().getCurrencyCode() : null;
     Long typeId = illusionEvent.getType() != null ? illusionEvent.getType().getId() : null;
-    List<Long> genreIds = new ArrayList<>();
     DateTime signUpStartDate = getDateAsDateTime(illusionEvent.getSignUpStartDate());
     DateTime signUpEndDate = getDateAsDateTime(illusionEvent.getSignUpEndDate());
+    
+    List<IllusionEventGenre> genres = illusionEventController.listIllusionEventGenres(illusionEvent);
+    
+    List<Long> genreIds = new ArrayList<>(genres.size());
+    for (IllusionEventGenre genre : genres) {
+      genreIds.add(genre.getGenre().getId());
+    }
     
     DateTime start = new DateTime(illusionEvent.getStart().getTime());
     DateTime end = new DateTime(illusionEvent.getEnd().getTime());
