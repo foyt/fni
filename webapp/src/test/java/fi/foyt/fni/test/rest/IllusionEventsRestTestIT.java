@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
@@ -25,7 +26,7 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet(id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql")
 })
 public class IllusionEventsRestTestIT extends AbstractRestTest {
-
+  
   @Test
   public void testEventListUnauthorized() {
     givenJson()
@@ -153,12 +154,32 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   }
   
   @Test
-  @SqlSets({"basic-users","service-client", "events"})
+  @SqlSets({"basic-users", "service-client", "events"})
   public void testEventFind() throws OAuthSystemException, OAuthProblemException {
     givenJson(createServiceToken())
-      .get("/illusion/events/2")
+      .get("/illusion/events/{ID}", 2l)
       .then()
-      .statusCode(200);
+      .statusCode(200)
+      .body("id", is(2) )
+      .body("name", is("Open"))
+      .body("description", is("Event for automatic testing (Open)"))
+      .body("created", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("urlName", is("open"))
+      .body("xmppRoom", is("open@bogustalk.net"))
+      .body("joinMode", is("OPEN"))
+      .body("signUpFee", is((Double) null))
+      .body("signUpFeeCurrency", is((String) null))
+      .body("location", is((String) null))
+      .body("ageLimit", is((Integer) null))
+      .body("beginnerFriendly", is((Boolean) null))
+      .body("imageUrl", is((String) null))
+      .body("typeId", is((Long) null))
+      .body("signUpStartDate", is((DateTime) null))
+      .body("signUpEndDate", is((DateTime) null))
+      .body("domain", is((String) null))
+      .body("start", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("end", is(new DateTime(2010, 1, 2, 0, 0, 0, 0).toString()))
+      .body("genreIds.size()", is(0));
   }
   
   @Test
@@ -196,6 +217,89 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .statusCode(200);
     
     String urlName = response.body().jsonPath().getString("urlName");
+    
+    deleteIllusionEventByUrl(urlName);
+    deleteIllusionFolderByUser("admin@foyt.fi");
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "service-client", "illusion-basic" })
+  public void testEventUpdate() throws Exception {
+    String token = createServiceToken();
+    
+    IllusionEvent createEvent = new IllusionEvent(null, "To be modified", "Event to be modified", null, null, null, IllusionEventJoinMode.OPEN, 
+        null, null, "Unmodified location", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
+        null, new DateTime(2015, 6, 7, 8, 9, 0, 0), new DateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
+    
+    Response createResponse = givenJson(token)
+      .body(createEvent)
+      .post("/illusion/events");
+    
+    createResponse.then()
+      .body("id", is(not((Long) null)))
+      .body("name", is(createEvent.getName()))
+      .body("description", is(createEvent.getDescription()))
+      .body("created", is(not((String) null)))
+      .body("urlName", is(not((String) null)))
+      .body("xmppRoom", is(not((String) null)))
+      .body("joinMode", is(createEvent.getJoinMode().toString()))
+      .body("signUpFee", is((Double) null))
+      .body("signUpFeeCurrency", is((String) null))
+      .body("location", is(createEvent.getLocation()))
+      .body("ageLimit", is(createEvent.getAgeLimit()))
+      .body("beginnerFriendly", is(createEvent.getBeginnerFriendly()))
+      .body("imageUrl", is((String) null))
+      .body("typeId", is(createEvent.getTypeId().intValue()))
+      .body("signUpStartDate", is(createEvent.getSignUpStartDate().toString()))
+      .body("signUpEndDate", is(createEvent.getSignUpEndDate().toString()))
+      .body("domain", is((String) null))
+      .body("start", is(createEvent.getStart().toString()))
+      .body("end", is(createEvent.getEnd().toString()))
+      .body("genreIds.size()", is(0))
+      .statusCode(200);
+    
+
+    Long id = createResponse.body().jsonPath().getLong("id");
+    
+    IllusionEvent updateEvent = new IllusionEvent(id, "Changed", "Changed description", null, null, null, IllusionEventJoinMode.APPROVE, 
+        5.30, "EUR", "Central Park", 18, Boolean.FALSE, "http://www.fake.com/image.png", 2l, 
+        new DateTime(2020, 6, 7, 0, 0, 0, 0), new DateTime(2020, 7, 8, 0, 0, 0, 0), "www.customized.com", 
+        new DateTime(2020, 9, 7, 0, 0, 0, 0), new DateTime(2020, 10, 8, 0, 0, 0, 0), Arrays.asList(2l));
+    
+    givenJson(token)
+      .body(updateEvent)
+      .put("/illusion/events/{ID}", id)
+      .then()
+      .statusCode(204);
+
+    Response updatedResponse = givenJson(token)
+      .get("/illusion/events/{ID}", id);
+    
+    updatedResponse.then()
+      .statusCode(200)
+      .body("id", is(id.intValue()) )
+      .body("name", is(updateEvent.getName()))
+      .body("description", is(updateEvent.getDescription()))
+      .body("created", is(not((String) null)))
+      .body("urlName", is(not((String) null)))
+      .body("xmppRoom", is(not((String) null)))
+      .body("joinMode", is(updateEvent.getJoinMode().toString()))
+      .body("signUpFee", is(updateEvent.getSignUpFee().floatValue()))
+      .body("signUpFeeCurrency", is(updateEvent.getSignUpFeeCurrency()))
+      .body("location", is(updateEvent.getLocation()))
+      .body("ageLimit", is(updateEvent.getAgeLimit()))
+      .body("beginnerFriendly", is(updateEvent.getBeginnerFriendly()))
+      .body("imageUrl", is(updateEvent.getImageUrl()))
+      .body("typeId", is(updateEvent.getTypeId().intValue()))
+      .body("signUpStartDate", sameInstant(updateEvent.getSignUpStartDate()))
+      .body("signUpEndDate", sameInstant(updateEvent.getSignUpEndDate()))
+      .body("domain", is(updateEvent.getDomain()))
+      .body("start", is(updateEvent.getStart().toString()))
+      .body("end", is(updateEvent.getEnd().toString()))
+      .body("genreIds.size()", is(1))
+      .statusCode(200);
+
+    String urlName = updatedResponse.body().jsonPath().getString("urlName");
     
     deleteIllusionEventByUrl(urlName);
     deleteIllusionFolderByUser("admin@foyt.fi");
