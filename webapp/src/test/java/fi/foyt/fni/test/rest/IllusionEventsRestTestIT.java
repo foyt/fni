@@ -14,7 +14,9 @@ import org.junit.Test;
 import com.jayway.restassured.response.Response;
 
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.rest.illusion.model.IllusionEvent;
+import fi.foyt.fni.rest.illusion.model.IllusionEventParticipant;
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
 import fi.foyt.fni.test.SqlSets;
@@ -23,7 +25,8 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet(id = "basic-users", before = "basic-users-setup.sql", after = "basic-users-teardown.sql"),
   @DefineSqlSet(id = "service-client", before = "rest-service-client-setup.sql", after = "rest-service-client-teardown.sql"),
   @DefineSqlSet(id = "events", before = "illusion-event-oai-setup.sql", after = "illusion-event-oai-teardown.sql"),
-  @DefineSqlSet(id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql")
+  @DefineSqlSet(id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql"),
+  @DefineSqlSet(id = "event-participant", before = { "illusion-event-open-setup.sql","illusion-event-open-participant-setup.sql" }, after = {"illusion-event-open-participant-teardown.sql","illusion-event-open-teardown.sql"})
 })
 public class IllusionEventsRestTestIT extends AbstractRestTest {
   
@@ -344,5 +347,139 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     
     deleteIllusionEventByUrl(urlName);
     deleteIllusionFolderByUser("admin@foyt.fi");
+  }
+
+  @Test
+  public void testFindEventParticipantUnauthorized() {
+    givenJson()
+      .get("/illusion/events/1/participants/1")
+      .then()
+      .statusCode(401);
+  }
+
+  @Test
+  @SqlSets({"basic-users", "service-client", "illusion-basic", "event-participant", "events"})
+  public void testFindEventParticipantNotFound() throws OAuthSystemException, OAuthProblemException {
+    givenJson(createServiceToken())
+      .get("/illusion/events/123/participants/1")
+      .then()
+      .statusCode(404);
+    
+    givenJson(createServiceToken())
+      .get("/illusion/events/-1/participants/1")
+      .then()
+      .statusCode(404);
+    
+    givenJson(createServiceToken())
+      .get("/illusion/events/abc/participants/1")
+      .then()
+      .statusCode(404);
+    
+    givenJson(createServiceToken())
+      .get("/illusion/events/~/participants/1")
+      .then()
+      .statusCode(404);
+    
+    givenJson(createServiceToken())
+      .get("/illusion/events/%/participants/1")
+      .then()
+      .statusCode(404);    
+    
+    givenJson(createServiceToken())
+    .get("/illusion/events/1/participants/123")
+    .then()
+    .statusCode(404);
+  
+  givenJson(createServiceToken())
+    .get("/illusion/events/1/participants/-1")
+    .then()
+    .statusCode(404);
+  
+  givenJson(createServiceToken())
+    .get("/illusion/events/1/participants/abc")
+    .then()
+    .statusCode(404);
+  
+  givenJson(createServiceToken())
+    .get("/illusion/events/1/participants/~")
+    .then()
+    .statusCode(404);
+  
+  givenJson(createServiceToken())
+    .get("/illusion/events/1/participants/%")
+    .then()
+    .statusCode(404);    
+  
+  givenJson(createServiceToken())
+    .get("/illusion/events/2/participants/1")
+    .then()
+    .statusCode(404);    
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "service-client", "illusion-basic", "event-participant" })
+  public void findEventParticipant() throws Exception {
+    givenJson(createServiceToken())
+      .get("/illusion/events/1/participants/1")
+      .then()
+      .statusCode(200)
+      .body("id", is(1))
+      .body("role", is("PARTICIPANT"))
+      .body("userId", is(2));
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "service-client", "illusion-basic", "event-participant" })
+  public void findCreateParticipant() throws Exception {
+    String token = createServiceToken();
+    
+    IllusionEventParticipant participant = new IllusionEventParticipant(null, 1l, IllusionEventParticipantRole.PENDING_APPROVAL);
+    
+    Response response = givenJson(token)
+      .body(participant)
+      .post("/illusion/events/{EVENTID}/participants", 1l);
+
+    response.then()
+      .statusCode(200)
+      .body("id", not(is((Long) null)))
+      .body("role", is("PENDING_APPROVAL"))
+      .body("userId", is(1));
+    
+    long id = response.body().jsonPath().getLong("id");
+    
+    givenJson(token)
+      .delete("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+      .then()
+      .statusCode(204);
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "service-client", "illusion-basic", "event-participant" })
+  public void findDeleteParticipant() throws Exception {
+    String token = createServiceToken();
+    
+    IllusionEventParticipant participant = new IllusionEventParticipant(null, 1l, IllusionEventParticipantRole.PENDING_APPROVAL);
+    
+    Response response = givenJson(token)
+      .body(participant)
+      .post("/illusion/events/{EVENTID}/participants", 1l);    
+    response.then()
+      .statusCode(200);
+    
+    long id = response.body().jsonPath().getLong("id");
+    givenJson(createServiceToken())
+      .get("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+      .then()
+      .statusCode(200);
+    
+    givenJson(token)
+      .delete("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+      .then()
+      .statusCode(204);
+    
+    givenJson(createServiceToken())
+      .get("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+      .then()
+      .statusCode(404);
   }
 }

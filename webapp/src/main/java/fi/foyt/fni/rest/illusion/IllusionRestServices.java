@@ -382,10 +382,40 @@ public class IllusionRestServices {
    */
   @Path("/events/{EVENTID:[0-9]*}/participants")
   @POST
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_CREATE_EVENT_PARTICIPANT }
+  )
   public Response createEventParticipant(@PathParam ("EVENTID") Long eventId, fi.foyt.fni.rest.illusion.model.IllusionEventParticipant entity) {
-    return null;
+    if (entity == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Payload is missing").build();
+    }
+    
+    if (entity.getUserId() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("userId is missing").build();
+    }
+    
+    User user = userController.findUserById(entity.getUserId());
+    if (user == null) {
+      return Response.status(Status.BAD_REQUEST).entity("userId points to a non-existing user").build();
+    }
+    
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (illusionEventController.findIllusionEventParticipantByEventAndUser(event, user) != null) {
+      return Response.status(Status.BAD_REQUEST).entity("User is already a participant in this event").build();
+    }
+    
+    // TODO: parmissions?
+    
+    IllusionEventParticipant participant = illusionEventController.createIllusionEventParticipant(user, event, entity.getRole());
+    
+    return Response.ok(createRestModel(participant)).build();
   }
-  
+
   /**
    * Retrieves an event participant
    * 
@@ -396,8 +426,28 @@ public class IllusionRestServices {
    */
   @Path("/events/{EVENTID:[0-9]*}/participants/{ID:[0-9]*}")
   @GET
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_FIND_EVENT_PARTICIPANT }
+  )
   public Response getEventParticipant(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long participantId) {
-    return null;
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
+    if (participant == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    // TODO: permission?
+    
+    if (!participant.getEvent().getId().equals(event.getId())) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+
+    return Response.ok(createRestModel(participant)).build();
   }
   
   /**
@@ -411,6 +461,10 @@ public class IllusionRestServices {
    */
   @Path("/events/{EVENTID:[0-9]*}/participants/{ID:[0-9]*}")
   @PUT
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_UPDATE_EVENT_PARTICIPANT }
+  )
   public Response updateEventParticipant(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long participantId, fi.foyt.fni.rest.illusion.model.IllusionEventParticipant entity) {
     return null;
   }
@@ -424,8 +478,30 @@ public class IllusionRestServices {
    */
   @Path("/events/{EVENTID:[0-9]*}/participants/{ID:[0-9]*}")
   @DELETE
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_DELETE_EVENT_PARTICIPANT }
+  )
   public Response deleteEventParticipant(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long participantId) {
-    return null;
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
+    if (participant == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    // TODO: permission?
+    
+    if (!participant.getEvent().getId().equals(event.getId())) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    illusionEventController.deleteParticipant(participant);
+    
+    return Response.noContent().build();
   }
   
   /**
@@ -835,6 +911,10 @@ public class IllusionRestServices {
         illusionEvent.getImageUrl(), typeId, signUpStartDate, signUpEndDate, illusionEvent.getDomain(), start, end, genreIds);
   }
 
+  private fi.foyt.fni.rest.illusion.model.IllusionEventParticipant createRestModel(IllusionEventParticipant participant) {
+    return new fi.foyt.fni.rest.illusion.model.IllusionEventParticipant(participant.getId(), participant.getUser().getId(), participant.getRole());
+  }
+  
   private DateTime getDateAsDateTime(Date date) {
     if (date == null) {
       return null;
