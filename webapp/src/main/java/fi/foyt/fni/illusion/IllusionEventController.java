@@ -299,8 +299,8 @@ public class IllusionEventController {
     return member;
   }
   
-  public IllusionEventParticipant createIllusionEventParticipant(User user, IllusionEvent event, IllusionEventParticipantRole organizer) {
-    return createIllusionEventParticipant(user, event, getUserNickname(user), organizer);
+  public IllusionEventParticipant createIllusionEventParticipant(User user, IllusionEvent event, IllusionEventParticipantRole role) {
+    return createIllusionEventParticipant(user, event, getUserNickname(user), role);
   } 
 
   public IllusionEventParticipant findIllusionEventParticipantById(Long id) {
@@ -362,6 +362,10 @@ public class IllusionEventController {
 
   private String getUserNickname(User user) {
     return StringUtils.isNotBlank(user.getNickname()) ? user.getNickname() : user.getFullName();
+  }
+
+  public void deleteParticipant(IllusionEventParticipant participant) {
+    illusionEventParticipantDAO.delete(participant);
   }
   
   /* IllusionEventParticipantImage */
