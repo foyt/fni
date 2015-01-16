@@ -466,7 +466,25 @@ public class IllusionRestServices {
     scopes = { OAuthScopes.ILLUSION_UPDATE_EVENT_PARTICIPANT }
   )
   public Response updateEventParticipant(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long participantId, fi.foyt.fni.rest.illusion.model.IllusionEventParticipant entity) {
-    return null;
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
+    if (participant == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    // TODO: permission?
+    
+    if (!participant.getEvent().getId().equals(event.getId())) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    illusionEventController.updateIllusionEventParticipantRole(participant, entity.getRole());
+    
+    return Response.noContent().build();
   }
   
   /**

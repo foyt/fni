@@ -418,7 +418,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   
   @Test
   @SqlSets({"basic-users", "service-client", "illusion-basic", "event-participant" })
-  public void findEventParticipant() throws Exception {
+  public void testFindParticipant() throws Exception {
     givenJson(createServiceToken())
       .get("/illusion/events/1/participants/1")
       .then()
@@ -430,7 +430,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   
   @Test
   @SqlSets({"basic-users", "service-client", "illusion-basic", "event-participant" })
-  public void findCreateParticipant() throws Exception {
+  public void testCreateParticipant() throws Exception {
     String token = createServiceToken();
     
     IllusionEventParticipant participant = new IllusionEventParticipant(null, 1l, IllusionEventParticipantRole.PENDING_APPROVAL);
@@ -455,7 +455,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   
   @Test
   @SqlSets({"basic-users", "service-client", "illusion-basic", "event-participant" })
-  public void findDeleteParticipant() throws Exception {
+  public void testDeleteParticipant() throws Exception {
     String token = createServiceToken();
     
     IllusionEventParticipant participant = new IllusionEventParticipant(null, 1l, IllusionEventParticipantRole.PENDING_APPROVAL);
@@ -481,5 +481,49 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .get("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
       .then()
       .statusCode(404);
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "service-client", "illusion-basic", "event-participant" })
+  public void testUpdateParticipant() throws Exception {
+    String token = createServiceToken();
+    
+    IllusionEventParticipant createParticipant = new IllusionEventParticipant(null, 1l, IllusionEventParticipantRole.PENDING_APPROVAL);
+    
+    Response response = givenJson(token)
+      .body(createParticipant)
+      .post("/illusion/events/{EVENTID}/participants", 1l);    
+    response.then()
+      .statusCode(200);
+    
+    Long id = response.body().jsonPath().getLong("id");
+    givenJson(createServiceToken())
+      .get("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+      .then()
+      .statusCode(200)
+      .body("id", not(is((Long) null)))
+      .body("role", is("PENDING_APPROVAL"))
+      .body("userId", is(1));
+    
+    IllusionEventParticipant updateParticipant = new IllusionEventParticipant(id, createParticipant.getUserId(), IllusionEventParticipantRole.ORGANIZER);
+    
+    givenJson(token)
+      .body(updateParticipant)
+      .put("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+      .then()
+      .statusCode(204);
+    
+    givenJson(createServiceToken())
+      .get("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+      .then()
+      .statusCode(200)
+      .body("id", is(id.intValue()))
+      .body("role", is("ORGANIZER"))
+      .body("userId", is(1));
+    
+    givenJson(token)
+      .delete("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+      .then()
+      .statusCode(204);
   }
 }
