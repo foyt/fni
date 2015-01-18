@@ -17,9 +17,11 @@ import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.ParameterStyle;
 import org.apache.oltu.oauth2.rs.request.OAuthAccessResourceRequest;
 import org.jboss.resteasy.core.ResourceMethodInvoker;
+import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
 import fi.foyt.fni.auth.OAuthController;
 import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
+import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.session.SessionController;
 
 @Provider
@@ -59,11 +61,23 @@ public class SecurityFilter implements ContainerRequestFilter {
           requestContext.abortWith(Response.status(Status.FORBIDDEN).build());
           return;
         }
+        
+        ResteasyProviderFactory.pushContext(OAuthAccessToken.class, accessToken);
 
         if (accessToken.getAuthorizationCode() != null) {
           sessionController.login(accessToken.getAuthorizationCode().getUser());
         } else {
-          return;
+          if (accessToken.getClient().getType() != OAuthClientType.SERVICE) {
+            requestContext.abortWith(Response.status(Status.FORBIDDEN).build());
+            return;
+          } else {
+            if (!secure.allowService()) {
+              requestContext.abortWith(Response.status(Status.FORBIDDEN).build());
+              return;
+            } else {
+              return;
+            }
+          }
         }
       } catch (OAuthProblemException e) {
         

@@ -19,6 +19,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -42,6 +43,8 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
+import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.rest.Security;
@@ -81,6 +84,9 @@ public class IllusionRestServices {
 
   @Inject
   private MaterialPermissionController materialPermissionController;
+  
+  @Context 
+  private OAuthAccessToken accessToken;
   
   /**
    * Creates new event
@@ -409,9 +415,17 @@ public class IllusionRestServices {
       return Response.status(Status.BAD_REQUEST).entity("User is already a participant in this event").build();
     }
     
-    // TODO: parmissions?
-    
     IllusionEventParticipant participant = illusionEventController.createIllusionEventParticipant(user, event, entity.getRole());
+    
+    if ((accessToken == null) || (accessToken.getClient().getType() != OAuthClientType.SERVICE)) {
+      if (sessionController.isLoggedIn()) {
+        if (!isLoggedUserEventOrganizer(event)) {
+          return Response.status(Status.FORBIDDEN).build();
+        }
+      } else {
+        return Response.status(Status.UNAUTHORIZED).build();
+      }
+    } 
     
     return Response.ok(createRestModel(participant)).build();
   }
@@ -441,10 +455,18 @@ public class IllusionRestServices {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    // TODO: permission?
-    
     if (!participant.getEvent().getId().equals(event.getId())) {
       return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if ((accessToken == null) || (accessToken.getClient().getType() != OAuthClientType.SERVICE)) {
+      if (sessionController.isLoggedIn()) {
+        if (!isLoggedUserEventOrganizer(event)) {
+          return Response.status(Status.FORBIDDEN).build();
+        }
+      } else {
+        return Response.status(Status.UNAUTHORIZED).build();
+      }
     }
 
     return Response.ok(createRestModel(participant)).build();
@@ -476,11 +498,19 @@ public class IllusionRestServices {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    // TODO: permission?
-    
     if (!participant.getEvent().getId().equals(event.getId())) {
       return Response.status(Status.NOT_FOUND).build();
     }
+
+    if ((accessToken == null) || (accessToken.getClient().getType() != OAuthClientType.SERVICE)) {
+      if (sessionController.isLoggedIn()) {
+        if (!isLoggedUserEventOrganizer(event)) {
+          return Response.status(Status.FORBIDDEN).build();
+        }
+      } else {
+        return Response.status(Status.UNAUTHORIZED).build();
+      }
+    } 
     
     illusionEventController.updateIllusionEventParticipantRole(participant, entity.getRole());
     
@@ -511,11 +541,19 @@ public class IllusionRestServices {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    // TODO: permission?
-    
     if (!participant.getEvent().getId().equals(event.getId())) {
       return Response.status(Status.NOT_FOUND).build();
     }
+
+    if ((accessToken == null) || (accessToken.getClient().getType() != OAuthClientType.SERVICE)) {
+      if (sessionController.isLoggedIn()) {
+        if (!isLoggedUserEventOrganizer(event)) {
+          return Response.status(Status.FORBIDDEN).build();
+        }
+      } else {
+        return Response.status(Status.UNAUTHORIZED).build();
+      }
+    } 
     
     illusionEventController.deleteParticipant(participant);
     
@@ -637,6 +675,17 @@ public class IllusionRestServices {
     }
     
     return Response.ok(createRestModel(illusionEventMaterialController.createParticipantSetting(material, participant, entity.getKey(), entity.getValue()))).build();
+  }
+  
+  private boolean isLoggedUserEventOrganizer(IllusionEvent event) {
+    if (sessionController.isLoggedIn()) {
+      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
+      if (participant != null) {
+        return participant.getRole() == IllusionEventParticipantRole.ORGANIZER;
+      }
+    }
+    
+    return false;
   }
   
   private boolean isParticipantOrganizer(IllusionEventParticipant participant) {
