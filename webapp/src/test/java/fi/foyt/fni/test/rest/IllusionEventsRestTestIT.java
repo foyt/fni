@@ -360,60 +360,62 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   @Test
   @SqlSets({"basic-users", "service-client", "illusion-basic", "event-participant", "events"})
   public void testFindEventParticipantNotFound() throws OAuthSystemException, OAuthProblemException {
-    givenJson(createServiceToken())
+    String token = createServiceToken();
+    
+    givenJson(token)
       .get("/illusion/events/123/participants/1")
       .then()
       .statusCode(404);
     
-    givenJson(createServiceToken())
+    givenJson(token)
       .get("/illusion/events/-1/participants/1")
       .then()
       .statusCode(404);
     
-    givenJson(createServiceToken())
+    givenJson(token)
       .get("/illusion/events/abc/participants/1")
       .then()
       .statusCode(404);
     
-    givenJson(createServiceToken())
+    givenJson(token)
       .get("/illusion/events/~/participants/1")
       .then()
       .statusCode(404);
     
-    givenJson(createServiceToken())
+    givenJson(token)
       .get("/illusion/events/%/participants/1")
       .then()
       .statusCode(404);    
     
-    givenJson(createServiceToken())
-    .get("/illusion/events/1/participants/123")
-    .then()
-    .statusCode(404);
+    givenJson(token)
+      .get("/illusion/events/1/participants/123")
+      .then()
+      .statusCode(404);
   
-  givenJson(createServiceToken())
-    .get("/illusion/events/1/participants/-1")
-    .then()
-    .statusCode(404);
-  
-  givenJson(createServiceToken())
-    .get("/illusion/events/1/participants/abc")
-    .then()
-    .statusCode(404);
-  
-  givenJson(createServiceToken())
-    .get("/illusion/events/1/participants/~")
-    .then()
-    .statusCode(404);
-  
-  givenJson(createServiceToken())
-    .get("/illusion/events/1/participants/%")
-    .then()
-    .statusCode(404);    
-  
-  givenJson(createServiceToken())
-    .get("/illusion/events/2/participants/1")
-    .then()
-    .statusCode(404);    
+    givenJson(token)
+      .get("/illusion/events/1/participants/-1")
+      .then()
+      .statusCode(404);
+    
+    givenJson(token)
+      .get("/illusion/events/1/participants/abc")
+      .then()
+      .statusCode(404);
+    
+    givenJson(token)
+      .get("/illusion/events/1/participants/~")
+      .then()
+      .statusCode(404);
+    
+    givenJson(token)
+      .get("/illusion/events/1/participants/%")
+      .then()
+      .statusCode(404);    
+    
+    givenJson(token)
+      .get("/illusion/events/2/participants/1")
+      .then()
+      .statusCode(404);    
   }
   
   @Test
