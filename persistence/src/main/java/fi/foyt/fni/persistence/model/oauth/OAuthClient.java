@@ -7,9 +7,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
+
+import fi.foyt.fni.persistence.model.users.User;
 
 @Entity
 public class OAuthClient {
@@ -57,6 +60,14 @@ public class OAuthClient {
   public void setType(OAuthClientType type) {
     this.type = type;
   }
+  
+  public User getServiceUser() {
+    return serviceUser;
+  }
+  
+  public void setServiceUser(User serviceUser) {
+    this.serviceUser = serviceUser;
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -86,4 +97,7 @@ public class OAuthClient {
   @Column(nullable = false)
   @Enumerated (EnumType.STRING)
   private OAuthClientType type;
+
+  @ManyToOne
+  private User serviceUser;
 }

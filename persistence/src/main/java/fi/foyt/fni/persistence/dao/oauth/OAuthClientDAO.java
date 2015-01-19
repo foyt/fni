@@ -9,12 +9,13 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient;
 import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient_;
+import fi.foyt.fni.persistence.model.users.User;
 
 public class OAuthClientDAO extends GenericDAO<OAuthClient> {
 
 	private static final long serialVersionUID = 1L;
 
-	public OAuthClient create(String name, OAuthClientType type, String clientId, String clientSecret, String redirectUrl) {
+	public OAuthClient create(String name, OAuthClientType type, String clientId, String clientSecret, String redirectUrl, User serviceUser) {
 	  OAuthClient oAuthClient = new OAuthClient();
 
 	  oAuthClient.setClientId(clientId);
@@ -22,6 +23,7 @@ public class OAuthClientDAO extends GenericDAO<OAuthClient> {
 	  oAuthClient.setName(name);
 	  oAuthClient.setRedirectUrl(redirectUrl);
 	  oAuthClient.setType(type);
+	  oAuthClient.setServiceUser(serviceUser);
 	  
 	  return persist(oAuthClient);
   }
