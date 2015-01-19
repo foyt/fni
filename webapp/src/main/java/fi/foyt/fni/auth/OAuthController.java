@@ -24,8 +24,8 @@ public class OAuthController {
 
   /* OAuthClient */
   
-  public OAuthClient createClient(String name, OAuthClientType type, String clientId, String clientSecret, String redirectUrl) {
-    return oAuthClientDAO.create(name, type, clientId, clientSecret, redirectUrl);
+  public OAuthClient createUserClient(String name, String clientId, String clientSecret, String redirectUrl) {
+    return oAuthClientDAO.create(name, OAuthClientType.USER, clientId, clientSecret, redirectUrl, null);
   }
 
   public OAuthClient findClientByClientId(String clientId) {

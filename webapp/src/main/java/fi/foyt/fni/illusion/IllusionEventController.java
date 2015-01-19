@@ -50,7 +50,6 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.IllusionFolder;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient;
-import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
@@ -242,7 +241,7 @@ public class IllusionEventController {
         String redirectUrl = new StringBuilder(systemSettingsController.getHostUrl(domain, false, true)).append(
             "/login/?return=1&loginMethod=ILLUSION_INTERNAL").toString();
   
-        OAuthClient oAuthClient = oAuthController.createClient(illusionEvent.getName(), OAuthClientType.USER, clientId, clientSecret, redirectUrl);
+        OAuthClient oAuthClient = oAuthController.createUserClient(illusionEvent.getName(), clientId, clientSecret, redirectUrl);
         illusionEventDAO.updateOAuthClient(illusionEvent, oAuthClient);
       }
     }
