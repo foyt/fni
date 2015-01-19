@@ -251,7 +251,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     illusionEventController.updateIllusionEventBeginnerFriendly(illusionEvent, getBeginnerFriendly());
     illusionEventController.updateIllusionEventImageUrl(illusionEvent, getImageUrl());
     
-    if (!illusionEventController.isEventAllowedDomain(getDomain())) {
+    if (StringUtils.isNotBlank(getDomain()) && !illusionEventController.isEventAllowedDomain(getDomain())) {
       FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.customDomainInvalid"));
       return null;
     } else {
