@@ -45,13 +45,11 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
 import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
-import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.rest.Security;
 import fi.foyt.fni.rest.illusion.model.IllusionEventGroup;
 import fi.foyt.fni.rest.illusion.model.IllusionEventMaterialParticipantSetting;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
 
 @Path("/illusion")
@@ -69,9 +67,6 @@ public class IllusionRestServices {
 
   @Inject
   private UserController userController;
-
-  @Inject
-  private SystemSettingsController systemSettingsController;
 
   @Inject
   private IllusionEventController illusionEventController;
@@ -129,16 +124,17 @@ public class IllusionRestServices {
     
     User user = null;
     if (!sessionController.isLoggedIn()) {
-      // TODO: Should services have a matching service account?
-      
-      String systemUserEmail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_USER_EMAIL);
-      if (StringUtils.isBlank(systemUserEmail)) {
-        return Response.status(Status.INTERNAL_SERVER_ERROR).entity("System user email setting is undefined").build();
+      if (accessToken == null) {
+        return Response.status(Status.UNAUTHORIZED).build();
       }
       
-      user = userController.findUserByEmail(systemUserEmail);
+      if (accessToken.getClient().getType() != OAuthClientType.SERVICE) {
+        return Response.status(Status.FORBIDDEN).entity(String.format("Invalid client type %s", accessToken.getClient().getType().toString())).build();
+      }
+      
+      user = accessToken.getClient().getServiceUser();
       if (user == null) {
-        return Response.status(Status.INTERNAL_SERVER_ERROR).entity("System user could not be found").build();
+        return Response.status(Status.FORBIDDEN).entity("Client does not have an service user").build();
       }
     } else {
       user = sessionController.getLoggedUser();
@@ -287,16 +283,17 @@ public class IllusionRestServices {
 
     User user = null;
     if (!sessionController.isLoggedIn()) {
-      // TODO: Should services have a matching service account?
-      
-      String systemUserEmail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_USER_EMAIL);
-      if (StringUtils.isBlank(systemUserEmail)) {
-        return Response.status(Status.INTERNAL_SERVER_ERROR).entity("System user email setting is undefined").build();
+      if (accessToken == null) {
+        return Response.status(Status.UNAUTHORIZED).build();
       }
       
-      user = userController.findUserByEmail(systemUserEmail);
+      if (accessToken.getClient().getType() != OAuthClientType.SERVICE) {
+        return Response.status(Status.FORBIDDEN).entity(String.format("Invalid client type %s", accessToken.getClient().getType().toString())).build();
+      }
+      
+      user = accessToken.getClient().getServiceUser();
       if (user == null) {
-        return Response.status(Status.INTERNAL_SERVER_ERROR).entity("System user could not be found").build();
+        return Response.status(Status.FORBIDDEN).entity("Client does not have an service user").build();
       }
     } else {
       user = sessionController.getLoggedUser();

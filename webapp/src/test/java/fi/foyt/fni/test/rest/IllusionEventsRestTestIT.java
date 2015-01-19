@@ -222,7 +222,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     String urlName = response.body().jsonPath().getString("urlName");
     
     deleteIllusionEventByUrl(urlName);
-    deleteIllusionFolderByUser("admin@foyt.fi");
+    deleteIllusionFolderByUser("servicetest@foyt.fi");
   }
   
   @Test
@@ -305,11 +305,11 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     String urlName = updatedResponse.body().jsonPath().getString("urlName");
     
     deleteIllusionEventByUrl(urlName);
-    deleteIllusionFolderByUser("admin@foyt.fi");
+    deleteIllusionFolderByUser("servicetest@foyt.fi");
   }
   
   @Test
-  @SqlSets({"basic-users","service-client", "illusion-basic"})
+  @SqlSets({"basic-users", "service-client", "illusion-basic"})
   public void testEventCreateWithDatesAndTimes() throws Exception {
     IllusionEvent event = new IllusionEvent(null, "Test Event", "Event for testing", null, null, null, IllusionEventJoinMode.OPEN, 
         null, null, "Twilight zone", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
@@ -346,7 +346,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     String urlName = response.body().jsonPath().getString("urlName");
     
     deleteIllusionEventByUrl(urlName);
-    deleteIllusionFolderByUser("admin@foyt.fi");
+    deleteIllusionFolderByUser("servicetest@foyt.fi");
   }
 
   @Test
