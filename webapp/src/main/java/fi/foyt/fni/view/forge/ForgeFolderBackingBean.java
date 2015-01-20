@@ -65,7 +65,7 @@ public class ForgeFolderBackingBean extends AbstractForgeMaterialViewBackingBean
   @SuppressWarnings("unchecked")
   @RequestAction
   public String load() {
-    if (ownerId != null && StringUtils.isNotBlank(urlName)) {
+   if (ownerId != null && StringUtils.isNotBlank(urlName)) {
       User owner = userController.findUserById(getOwnerId());
       if (owner == null) {
         return "/error/not-found.jsf";
@@ -105,6 +105,8 @@ public class ForgeFolderBackingBean extends AbstractForgeMaterialViewBackingBean
       
       setMaterials(materials);
 
+      allowCharacterSheets = material.getType() == MaterialType.ILLUSION_GROUP_FOLDER;
+      
       return null;
     } else {
       return "/error/not-found.jsf";
@@ -130,6 +132,11 @@ public class ForgeFolderBackingBean extends AbstractForgeMaterialViewBackingBean
   public List<Folder> getFolders() {
     return folders;
   }
+  
+  public Boolean getAllowCharacterSheets() {
+    return allowCharacterSheets;
+  }
 
   private List<Folder> folders;
+  private Boolean allowCharacterSheets;
 }

@@ -3,17 +3,16 @@ package fi.foyt.fni.view.forge;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
+import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
@@ -30,9 +29,6 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @LoggedIn
 public class ForgeMaterialsBackingBean {
   
-  @Inject
-  private Logger logger;
-
   @Inject
   private SessionController sessionController;
 
@@ -159,10 +155,6 @@ public class ForgeMaterialsBackingBean {
     if (!materialShareable.containsKey(material.getId())) {
       Boolean shareable = false;
       
-      logger.info("------>>>>> DEBUG <<<<------");
-      logger.info(String.valueOf(sessionController.getLoggedUserId()));
-      logger.info("------>>>>> DEBUG <<<<------");
-      
       if (materialController.isShareableType(material.getType())) {
         shareable = materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
       }
@@ -189,26 +181,60 @@ public class ForgeMaterialsBackingBean {
     }
   }
 
-  public void createNewDocument(Long folderId) throws IOException {
+  public String createNewDocument(Long folderId) throws IOException {
     User loggedUser = sessionController.getLoggedUser();
     Folder parentFolder = folderId != null ? materialController.findFolderById(folderId) : null;
+
+    if (parentFolder != null) {
+      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
+        return "/error/access-denied.jsf";
+      }
+    }
+    
     String title = FacesUtils.getLocalizedValue("forge.index.untitledDocument");
     Document document = materialController.createDocument(parentFolder, title, loggedUser);
 
-    FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
-      .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
-      .append("/forge/documents/" + document.getPath()).toString());
+    Long ownerId = document.getCreator().getId();
+    String urlPath = document.getPath().substring(String.valueOf(ownerId).length() + 1);
+    
+    return String.format("/forge/documents.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
   }
 
-  public void createNewVectorImage(Long folderId) throws IOException {
+  public String createNewVectorImage(Long folderId) throws IOException {
     User loggedUser = sessionController.getLoggedUser();
     Folder parentFolder = folderId != null ? materialController.findFolderById(folderId) : null;
+    
+    if (parentFolder != null) {
+      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
+        return "/error/access-denied.jsf";
+      }
+    }
+    
     String title = FacesUtils.getLocalizedValue("forge.index.untitledVectorImage");
     VectorImage vectorImage = materialController.createVectorImage(null, parentFolder, title, null, loggedUser);
+    Long ownerId = vectorImage.getCreator().getId();
+    String urlPath = vectorImage.getPath().substring(String.valueOf(ownerId).length() + 1);
+    
+    return String.format("/forge/vectorimages.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
+  }
+  
+  public String createNewCharacterSheet(Long folderId) throws IOException {
+    User loggedUser = sessionController.getLoggedUser();
+    Folder parentFolder = folderId != null ? materialController.findFolderById(folderId) : null;
+    
+    if (parentFolder != null) {
+      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
+        return "/error/access-denied.jsf";
+      }
+    }
+    
+    String title = FacesUtils.getLocalizedValue("forge.index.untitledCharacterSheet");
+    CharacterSheet characterSheet = materialController.createCharacterSheet(parentFolder, title, null, loggedUser, null, null);
 
-    FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
-      .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
-      .append("/forge/vectorimages/" + vectorImage.getPath()).toString());
+    Long ownerId = characterSheet.getCreator().getId();
+    String urlPath = characterSheet.getPath().substring(String.valueOf(ownerId).length() + 1);
+    
+    return String.format("/forge/character-sheets.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
   }
 
   private Map<Long, Boolean> materialStarred;
