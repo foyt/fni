@@ -16,7 +16,7 @@
     
     return result;
   }
-  
+
   $.widget("custom.illusionField", {
     options: {
       sum: [],
@@ -27,19 +27,28 @@
 
         $.each(this.options.sum, $.proxy(function (index, field) {
           $(field).change($.proxy(function (event) {
-            this._updateSum();
+            this.updateSum();
           }, this));
         }, this));
 
-        this._updateSum();
-      }
+        this.updateSum();
+      } 
     },
     
     readOnly: function () {
       return $(this.element).attr('readOnly') == 'readOnly';
     },
     
-    _updateSum: function () {
+    val: function (value) {
+      if (value !== undefined) {
+        $(this.element).val(value);
+        $('.i-field-sum').illusionField('updateSum');
+      } else {
+        return $(this.element).val();
+      }
+    },
+    
+    updateSum: function () {
       var sum = 0;
       $.each(this.options.sum, $.proxy(function (index, field) {
         switch ($(field).attr('type')) {
@@ -160,12 +169,18 @@
     load: function (sheetData) {
       for (var key in sheetData) {
         var value = sheetData[key];
-        $('*[name="' + key + '"]').val(value);
+        $('*[name="' + key + '"]').illusionField('val', value);
       }
 
       if ($(this.element).find('.i-data-link').length > 0) {
         this._updateDataLinks(sheetData);
       }
+      
+      
+    },
+    
+    set: function (key, value) {
+      $('*[name="' + key + '"]').illusionField('val', value);
     },
     
     _sendUpdate: function (key, value) {
@@ -214,7 +229,7 @@
           this.load(messageData.values);
         break;
         case 'update':
-          $('*[name="' + messageData.key + '"]').val(messageData.value);
+          this.set(messageData.key, messageData.value);
         break;
       }
     },
@@ -249,7 +264,7 @@
   $(document).ready(function () {
     var params = getQueryParameters();
 
-    $('#character-sheet').illusionCharacterSheet({
+    $(document.body).illusionCharacterSheet({
       preview: (typeof PREVIEW != 'undefined') ? PREVIEW : false,
       contextPath: params.contextPath,
       participantId: params.participantId,
@@ -262,7 +277,7 @@
       if (window.atob) {
         var data = atob(params['d']);
         if (data) {
-          $('#character-sheet').illusionCharacterSheet('data', $.parseJSON(data));
+          $(document.body).illusionCharacterSheet('data', $.parseJSON(data));
         }
       }
     }

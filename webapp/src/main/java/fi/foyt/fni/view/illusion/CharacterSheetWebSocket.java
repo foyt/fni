@@ -19,6 +19,7 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -146,14 +147,16 @@ public class CharacterSheetWebSocket {
       switch (message.getType()) {
         case "update":
           UpdateMessageData updateData = objectMapper.readValue(message.getData(), UpdateMessageData.class);
-          if (participantSetting == null) {
-            Map<String, String> sheetData = new HashMap<>();
-            sheetData.put(updateData.getKey(), updateData.getValue());
-            illusionEventMaterialController.createParticipantSetting(material, participant, IllusionEventMaterialParticipantSettingKey.CHARACTER_SHEET_DATA, objectMapper.writeValueAsString(sheetData));
-          } else {
-            Map<String, String> sheetData = readSheetData(participantSetting);
-            sheetData.put(updateData.getKey(), updateData.getValue());
-            illusionEventMaterialController.updateParticipantSettingValue(participantSetting, objectMapper.writeValueAsString(sheetData));
+          if (StringUtils.isNotBlank(updateData.getKey())) {
+            if (participantSetting == null) {
+              Map<String, String> sheetData = new HashMap<>();
+              sheetData.put(updateData.getKey(), updateData.getValue());
+              illusionEventMaterialController.createParticipantSetting(material, participant, IllusionEventMaterialParticipantSettingKey.CHARACTER_SHEET_DATA, objectMapper.writeValueAsString(sheetData));
+            } else {
+              Map<String, String> sheetData = readSheetData(participantSetting);
+              sheetData.put(updateData.getKey(), updateData.getValue());
+              illusionEventMaterialController.updateParticipantSettingValue(participantSetting, objectMapper.writeValueAsString(sheetData));
+            }
           }
           
           for (Session otherClient : getOtherClients(client, eventId, materialId)) {
