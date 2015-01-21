@@ -22,7 +22,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionEvent create(String urlName, String name, String location, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date start, Date end, OAuthClient oAuthClient, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate) {
+	public IllusionEvent create(String urlName, String name, String location, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date start, Date end, OAuthClient oAuthClient, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate, Boolean published) {
 		IllusionEvent illusionEvent = new IllusionEvent();
 		
 		illusionEvent.setName(name);
@@ -44,6 +44,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 		illusionEvent.setType(type);
 		illusionEvent.setSignUpStartDate(signUpStartDate);
 		illusionEvent.setSignUpEndDate(signUpEndDate);
+		illusionEvent.setPublished(published);
 		
 		return persist(illusionEvent);
 	}
@@ -118,7 +119,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     return entityManager.createQuery(criteria).getResultList();
   }
 
-  public List<IllusionEvent> listByStartGEOrEndGESortByStart(Date start, Date end, Integer firstResult, Integer maxResults) {
+  public List<IllusionEvent> listByStartGEOrEndGEAndPublishedSortByStart(Date start, Date end, Integer firstResult, Integer maxResults, Boolean published) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -128,7 +129,8 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     criteria.where(
       criteriaBuilder.or(
         criteriaBuilder.greaterThanOrEqualTo(root.get(IllusionEvent_.start), start),
-        criteriaBuilder.greaterThanOrEqualTo(root.get(IllusionEvent_.end), end)
+        criteriaBuilder.greaterThanOrEqualTo(root.get(IllusionEvent_.end), end),
+        criteriaBuilder.equal(root.get(IllusionEvent_.published), published)
       )
     );
     
@@ -146,7 +148,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     return query.getResultList();
   }
 
-  public List<IllusionEvent> listByStartLTAndEndLTSortByEndAndStart(Date start, Date end, Integer firstResult, Integer maxResults) {
+  public List<IllusionEvent> listByStartLTAndEndLTAndPublishedSortByEndAndStart(Date start, Date end, Integer firstResult, Integer maxResults, Boolean published) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -156,7 +158,8 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     criteria.where(
       criteriaBuilder.and(
         criteriaBuilder.lessThan(root.get(IllusionEvent_.start), start),
-        criteriaBuilder.lessThan(root.get(IllusionEvent_.end), end)
+        criteriaBuilder.lessThan(root.get(IllusionEvent_.end), end),
+        criteriaBuilder.equal(root.get(IllusionEvent_.published), published)
       )
     );
     
@@ -261,6 +264,10 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     illusionEvent.setSignUpEndDate(signUpEndDate);
     return persist(illusionEvent);
   }
-  
 
+  public IllusionEvent updatePublished(IllusionEvent illusionEvent, Boolean published) {
+    illusionEvent.setPublished(published);
+    return persist(illusionEvent);
+  }
+  
 }

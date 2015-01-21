@@ -33,6 +33,14 @@ public class IllusionEvent {
   public Long getId() {
     return id;
   }
+  
+  public Boolean getPublished() {
+    return published;
+  }
+  
+  public void setPublished(Boolean published) {
+    this.published = published;
+  }
 
   public String getName() {
     return name;
@@ -197,6 +205,9 @@ public class IllusionEvent {
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
+  
+  @Column (nullable = false, columnDefinition = "BIT")
+  private Boolean published;
   
   @NotNull
   @NotEmpty
