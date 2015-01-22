@@ -10,11 +10,11 @@ $event-border-color: rgb(71, 176, 176);
   @include generic-panel;
   position: relative;
 }
-
+  
 /* Generic */
 
 h3 {
-  @include header-2;
+  @include header-3;
   margin-bottom: 10px;
 }
 
@@ -107,4 +107,27 @@ h3 {
 
 .illusion-index-event-organizer:last-child {
   margin-bottom: 0px;
-  }
+}
+
+/* Tabs */
+
+#tabs {
+  border: 0px;
+  background: none;
+}
+
+#tabs .ui-tabs-nav {
+  border: 0px;
+  background: none;
+}
+
+#tabs .ui-tabs-nav li {
+  border: 0px;
+  background: none;
+}
+
+#tabs .ui-tabs-nav li a {
+  @include header-3;
+  padding: 15px;
+  color: $title-color;
+}
