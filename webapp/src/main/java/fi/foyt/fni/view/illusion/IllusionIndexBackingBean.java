@@ -41,6 +41,7 @@ public class IllusionIndexBackingBean {
   public String init() {
     upcomingEvents = new ArrayList<>();
     pastEvents = new ArrayList<>();
+    unpublished = new ArrayList<>();
     
     for (IllusionEvent illusionEvent : illusionEventController.listNextIllusionEvents(1000)) {
       upcomingEvents.add(createEventPojo(illusionEvent));
@@ -48,6 +49,12 @@ public class IllusionIndexBackingBean {
 
     for (IllusionEvent illusionEvent : illusionEventController.listPastIllusionEvents(1000)) {
       pastEvents.add(createEventPojo(illusionEvent));
+    }
+    
+    if (sessionController.isLoggedIn()) {
+      for (IllusionEvent illusionEvent : illusionEventController.listEventsByUserOrganizedAndUnpublished(sessionController.getLoggedUser())) {
+        unpublished.add(createEventPojo(illusionEvent)); 
+      }
     }
     
     return null;
@@ -90,8 +97,13 @@ public class IllusionIndexBackingBean {
     return pastEvents;
   }
   
+  public List<Event> getUnpublished() {
+    return unpublished;
+  }
+  
   private List<Event> upcomingEvents;
   private List<Event> pastEvents;
+  private List<Event> unpublished;
   
   public class Event {
     

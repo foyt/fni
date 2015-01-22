@@ -175,6 +175,18 @@ public class IllusionEventController {
     return illusionEventDAO.listByDomainNotNull();
   }
 
+  public List<IllusionEvent> listEventsByUserOrganizedAndUnpublished(User user) {
+    List<IllusionEvent> result = new ArrayList<>();
+    
+    for (IllusionEventParticipant organizer : illusionEventParticipantDAO.listByUserAndRole(user, IllusionEventParticipantRole.ORGANIZER)) {
+      if (!organizer.getEvent().getPublished()) {
+        result.add(organizer.getEvent());
+      }
+    }
+    
+    return result;
+  }
+
   public IllusionEvent updateIllusionEventName(IllusionEvent illusionEvent, String name) {
     if (!illusionEvent.getName().equals(name)) {
       String urlName = createUrlName(name);
