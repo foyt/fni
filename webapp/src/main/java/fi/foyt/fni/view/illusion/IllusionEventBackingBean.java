@@ -92,9 +92,18 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
         case PENDING_APPROVAL:
         case WAITING_PAYMENT:
         case INVITED:
-        case ORGANIZER:
         case PARTICIPANT:
         break;
+        case ORGANIZER:
+        break;
+      }
+    }
+    
+    published = illusionEvent.getPublished();
+    
+    if (!published) {
+      if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
+        return "/error/access-denied.jsf";
       }
     }
 
@@ -191,10 +200,15 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
           case WAITING_PAYMENT:
             FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.event.waitingPaymentMessage"));
           break;
+          case ORGANIZER:
+            if (!published) {
+              FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.event.unpublishedMessage"));
+            }
+          break;
           default:
           break;
         }
-      }
+      }      
     }
   }
   
@@ -231,6 +245,7 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
     return contentsHtml;
   }
   
+  private boolean published;
   private IllusionEventParticipantRole memberRole;
   private String headHtml;
   private String contentsHtml;
