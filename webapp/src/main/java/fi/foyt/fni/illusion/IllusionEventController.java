@@ -156,6 +156,10 @@ public class IllusionEventController {
   public List<IllusionEvent> listIllusionEvents() {
     return illusionEventDAO.listAll();
   }
+  
+  public List<IllusionEvent> listPublishedEvents() {
+    return illusionEventDAO.listByPublishedOrderByStartAndEnd(Boolean.TRUE);
+  }
 
   public List<IllusionEvent> listIllusionEventsByUserAndRole(User user, IllusionEventParticipantRole role) {
     return illusionEventParticipantDAO.listIllusionEventsByUserAndRole(user, role);
@@ -163,12 +167,12 @@ public class IllusionEventController {
 
   public List<IllusionEvent> listNextIllusionEvents(int maxResults) {
     Date now = new Date();
-    return illusionEventDAO.listByStartGEOrEndGEAndPublishedSortByStart(now, now, 0, maxResults, Boolean.TRUE);
+    return illusionEventDAO.listByStartGEOrEndGEAndPublishedSortByStart(now, now, Boolean.TRUE, 0, maxResults);
   }
 
   public List<IllusionEvent> listPastIllusionEvents(int maxResults) {
     Date now = new Date();
-    return illusionEventDAO.listByStartLTAndEndLTAndPublishedSortByEndAndStart(now, now, 0, maxResults, Boolean.TRUE);
+    return illusionEventDAO.listByStartLTAndEndLTAndPublishedSortByEndAndStart(now, now, Boolean.TRUE, 0, maxResults);
   }
 
   public List<IllusionEvent> listIllusionEventsWithDomain() {
@@ -245,6 +249,18 @@ public class IllusionEventController {
     return illusionEventDAO.updatePublished(illusionEvent, Boolean.FALSE);
   }
   
+  public IllusionEvent updatePublished(IllusionEvent illusionEvent, Boolean published) {
+    if (!illusionEvent.getPublished().equals(published)) {
+      if (published) {
+        return publishEvent(illusionEvent);
+      } else {
+        return unpublishEvent(illusionEvent);
+      }
+    }
+    
+    return illusionEvent;
+  }
+  
   public boolean isEventAllowedDomain(String domain) {
     // RegEx from
     // http://stackoverflow.com/questions/10306690/domain-name-validation-with-regex
@@ -265,7 +281,7 @@ public class IllusionEventController {
       }
     }
 
-    return illusionEventDAO.updateDomain(illusionEvent, domain);
+    return illusionEventDAO.updateDomain(illusionEvent, StringUtils.isNotBlank(domain) ? domain : null);
   }
 
   public IllusionEvent updateEventSignUpFee(IllusionEvent illusionEvent, Double signUpFee, Currency signUpFeeCurrency) {

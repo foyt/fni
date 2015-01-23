@@ -119,7 +119,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     return entityManager.createQuery(criteria).getResultList();
   }
 
-  public List<IllusionEvent> listByStartGEOrEndGEAndPublishedSortByStart(Date start, Date end, Integer firstResult, Integer maxResults, Boolean published) {
+  public List<IllusionEvent> listByStartGEOrEndGEAndPublishedSortByStart(Date start, Date end, Boolean published, Integer firstResult, Integer maxResults) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -127,9 +127,11 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     Root<IllusionEvent> root = criteria.from(IllusionEvent.class);
     criteria.select(root);
     criteria.where(
-      criteriaBuilder.or(
-        criteriaBuilder.greaterThanOrEqualTo(root.get(IllusionEvent_.start), start),
-        criteriaBuilder.greaterThanOrEqualTo(root.get(IllusionEvent_.end), end),
+      criteriaBuilder.and(
+        criteriaBuilder.or(
+          criteriaBuilder.greaterThanOrEqualTo(root.get(IllusionEvent_.start), start),
+          criteriaBuilder.greaterThanOrEqualTo(root.get(IllusionEvent_.end), end)
+        ),
         criteriaBuilder.equal(root.get(IllusionEvent_.published), published)
       )
     );
@@ -148,7 +150,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     return query.getResultList();
   }
 
-  public List<IllusionEvent> listByStartLTAndEndLTAndPublishedSortByEndAndStart(Date start, Date end, Integer firstResult, Integer maxResults, Boolean published) {
+  public List<IllusionEvent> listByStartLTAndEndLTAndPublishedSortByEndAndStart(Date start, Date end, Boolean published, Integer firstResult, Integer maxResults) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -178,6 +180,25 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     }
 
     return query.getResultList();
+  }
+
+  public List<IllusionEvent> listByPublishedOrderByStartAndEnd(Boolean published) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<IllusionEvent> criteria = criteriaBuilder.createQuery(IllusionEvent.class);
+    Root<IllusionEvent> root = criteria.from(IllusionEvent.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(IllusionEvent_.published), published)
+    );
+    
+    criteria.orderBy(
+      criteriaBuilder.desc(root.get(IllusionEvent_.start)), 
+      criteriaBuilder.desc(root.get(IllusionEvent_.end))
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
   }
 
   public IllusionEvent updateName(IllusionEvent illusionEvent, String name) {

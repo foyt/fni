@@ -43,12 +43,15 @@ public class IllusionIndexBackingBean {
     pastEvents = new ArrayList<>();
     unpublished = new ArrayList<>();
     
-    for (IllusionEvent illusionEvent : illusionEventController.listNextIllusionEvents(1000)) {
-      upcomingEvents.add(createEventPojo(illusionEvent));
-    }
-
-    for (IllusionEvent illusionEvent : illusionEventController.listPastIllusionEvents(1000)) {
-      pastEvents.add(createEventPojo(illusionEvent));
+    Date now = new Date();
+    
+    for (IllusionEvent event : illusionEventController.listPublishedEvents()) {
+      Event eventPojo = createEventPojo(event);
+      if (event.getStart().after(now)) {
+        upcomingEvents.add(eventPojo);
+      } else {
+        pastEvents.add(eventPojo);
+      }
     }
     
     if (sessionController.isLoggedIn()) {
