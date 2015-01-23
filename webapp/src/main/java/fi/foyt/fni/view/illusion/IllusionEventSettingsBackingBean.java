@@ -58,6 +58,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.SETTINGS);
     illusionEventNavigationController.setEventUrlName(getUrlName());
 
+    published = illusionEvent.getPublished();
     name = illusionEvent.getName();
     description = illusionEvent.getDescription();
     location = illusionEvent.getLocation();
@@ -89,6 +90,14 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     genres = illusionEventController.listGenres();
     
     return null;
+  }
+  
+  public Boolean getPublished() {
+    return published;
+  }
+  
+  public void setPublished(Boolean published) {
+    this.published = published;
   }
 
   public String getName() {
@@ -266,6 +275,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     }
     
     illusionEventController.updateEventGenres(illusionEvent, genres);
+    illusionEventController.updatePublished(illusionEvent, getPublished());
 
     return "/illusion/event-settings.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
   }
@@ -315,6 +325,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     return parser.parseDateTime(iso).toDate();
   }
 
+  private Boolean published;
   private String name;
   private String description;
   private String location;
