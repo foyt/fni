@@ -170,6 +170,10 @@ public class IllusionRestServices {
         entity.getName(), entity.getDescription(), entity.getJoinMode(), new Date(), signUpFee, signUpFeeCurrency, 
         start, end, entity.getAgeLimit(), entity.getBeginnerFriendly(), entity.getImageUrl(), 
         type, signUpStartDate, signUpEndDate, genres);
+    
+    if (entity.getPublished()) {
+      illusionEventController.publishEvent(event);
+    }
 
     return Response.ok(createRestModel(event)).build();
   }
@@ -253,6 +257,10 @@ public class IllusionRestServices {
       return Response.status(Status.BAD_REQUEST).entity("Entity end is missing").build();
     }
     
+    if (entity.getPublished() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Entity published is missing").build();
+    }
+    
     if (StringUtils.isBlank(entity.getName())) {
       return Response.status(Status.BAD_REQUEST).entity("Name is required").build();
     }
@@ -334,6 +342,7 @@ public class IllusionRestServices {
     illusionEventController.updateEventGenres(event, genres);
     illusionEventController.updateEventDomain(event, entity.getDomain());
     illusionEventController.updateEventSignUpFee(event, signUpFee, signUpFeeCurrency);
+    illusionEventController.updatePublished(event, entity.getPublished());
     
     return Response.noContent().build();
   }
@@ -969,7 +978,7 @@ public class IllusionRestServices {
     DateTime start = new DateTime(illusionEvent.getStart().getTime());
     DateTime end = new DateTime(illusionEvent.getEnd().getTime());
     
-    return new fi.foyt.fni.rest.illusion.model.IllusionEvent(illusionEvent.getId(), illusionEvent.getName(), illusionEvent.getDescription(), 
+    return new fi.foyt.fni.rest.illusion.model.IllusionEvent(illusionEvent.getId(), illusionEvent.getPublished(), illusionEvent.getName(), illusionEvent.getDescription(), 
         getDateAsDateTime(illusionEvent.getCreated()), illusionEvent.getUrlName(), illusionEvent.getXmppRoom(), illusionEvent.getJoinMode(), 
         illusionEvent.getSignUpFee(), signUpFeeCurrency, illusionEvent.getLocation(), illusionEvent.getAgeLimit(), illusionEvent.getBeginnerFriendly(),
         illusionEvent.getImageUrl(), typeId, signUpStartDate, signUpEndDate, illusionEvent.getDomain(), start, end, genreIds);

@@ -11,10 +11,11 @@ public class IllusionEvent {
   public IllusionEvent() {
   }
   
-  public IllusionEvent(Long id, String name, String description, DateTime created, String urlName, String xmppRoom, IllusionEventJoinMode joinMode,
+  public IllusionEvent(Long id, Boolean published, String name, String description, DateTime created, String urlName, String xmppRoom, IllusionEventJoinMode joinMode,
       Double signUpFee, String signUpFeeCurrency, String location, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, Long typeId,
       DateTime signUpStartDate, DateTime signUpEndDate, String domain, DateTime start, DateTime end, List<Long> genreIds) {
     this.id = id;
+    this.published = published;
     this.name = name;
     this.description = description;
     this.created = created;
@@ -47,6 +48,19 @@ public class IllusionEvent {
 
   public void setId(Long id) {
     this.id = id;
+  }
+  
+  /**
+   * Returns whether event is public or not 
+   * 
+   * @return whether event is public or not 
+   */
+  public Boolean getPublished() {
+    return published;
+  }
+  
+  public void setPublished(Boolean published) {
+    this.published = published;
   }
 
   /**
@@ -301,6 +315,7 @@ public class IllusionEvent {
   }
 
   private Long id;
+  private Boolean published;
   private String name;
   private String description;
   private DateTime created;

@@ -188,7 +188,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   @Test
   @SqlSets({"basic-users","service-client", "illusion-basic"})
   public void testEventCreate() throws Exception {
-    IllusionEvent event = new IllusionEvent(null, "Test Event", "Event for testing", null, null, null, IllusionEventJoinMode.OPEN, 
+    IllusionEvent event = new IllusionEvent(null, Boolean.TRUE, "Test Event", "Event for testing", null, null, null, IllusionEventJoinMode.OPEN, 
         null, null, "Twilight zone", 16, Boolean.TRUE, null, 1l, null, null, null, new DateTime(2015, 6, 7, 0, 0, 0, 0), new DateTime(2015, 6, 7, 0, 0, 0, 0), new ArrayList<Long>());
     
     Response response = givenJson(createServiceToken())
@@ -198,6 +198,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     response
       .then()
       .body("id", is(not((Long) null)))
+      .body("published", is(event.getPublished()))
       .body("name", is(event.getName()))
       .body("description", is(event.getDescription()))
       .body("created", is(not((String) null)))
@@ -230,7 +231,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   public void testEventUpdate() throws Exception {
     String token = createServiceToken();
     
-    IllusionEvent createEvent = new IllusionEvent(null, "To be modified", "Event to be modified", null, null, null, IllusionEventJoinMode.OPEN, 
+    IllusionEvent createEvent = new IllusionEvent(null, Boolean.TRUE, "To be modified", "Event to be modified", null, null, null, IllusionEventJoinMode.OPEN, 
         null, null, "Unmodified location", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
         null, new DateTime(2015, 6, 7, 8, 9, 0, 0), new DateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
     
@@ -239,7 +240,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .post("/illusion/events");
     
     createResponse.then()
-      .body("id", is(not((Long) null)))
+      .body("id", is(not((Long) null)))      
+      .body("published", is(createEvent.getPublished()))
       .body("name", is(createEvent.getName()))
       .body("description", is(createEvent.getDescription()))
       .body("created", is(not((String) null)))
@@ -264,7 +266,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
 
     Long id = createResponse.body().jsonPath().getLong("id");
     
-    IllusionEvent updateEvent = new IllusionEvent(id, "Changed", "Changed description", null, null, null, IllusionEventJoinMode.APPROVE, 
+    IllusionEvent updateEvent = new IllusionEvent(id, Boolean.TRUE, "Changed", "Changed description", null, null, null, IllusionEventJoinMode.APPROVE, 
         5.30, "EUR", "Central Park", 18, Boolean.FALSE, "http://www.fake.com/image.png", 2l, 
         new DateTime(2020, 6, 7, 0, 0, 0, 0), new DateTime(2020, 7, 8, 0, 0, 0, 0), "www.customized.com", 
         new DateTime(2020, 9, 7, 0, 0, 0, 0), new DateTime(2020, 10, 8, 0, 0, 0, 0), Arrays.asList(2l));
@@ -280,7 +282,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     
     updatedResponse.then()
       .statusCode(200)
-      .body("id", is(id.intValue()) )
+      .body("id", is(id.intValue()) )      
+      .body("published", is(updateEvent.getPublished()))
       .body("name", is(updateEvent.getName()))
       .body("description", is(updateEvent.getDescription()))
       .body("created", is(not((String) null)))
@@ -311,7 +314,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   @Test
   @SqlSets({"basic-users", "service-client", "illusion-basic"})
   public void testEventCreateWithDatesAndTimes() throws Exception {
-    IllusionEvent event = new IllusionEvent(null, "Test Event", "Event for testing", null, null, null, IllusionEventJoinMode.OPEN, 
+    IllusionEvent event = new IllusionEvent(null, Boolean.TRUE, "Test Event", "Event for testing", null, null, null, IllusionEventJoinMode.OPEN, 
         null, null, "Twilight zone", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
         null, new DateTime(2015, 6, 7, 8, 9, 0, 0), new DateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
     
@@ -322,7 +325,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     response
       .then()
       .body("id", is(not((Long) null)))
-      .body("name", is(event.getName()))
+      .body("name", is(event.getName()))      
+      .body("published", is(event.getPublished()))
       .body("description", is(event.getDescription()))
       .body("created", is(not((String) null)))
       .body("urlName", is(not((String) null)))
