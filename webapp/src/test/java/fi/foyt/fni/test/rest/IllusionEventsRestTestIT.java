@@ -228,6 +228,92 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   
   @Test
   @SqlSets({"basic-users", "service-client", "illusion-basic" })
+  public void testEventPublish() throws Exception {
+    String token = createServiceToken();
+    
+    IllusionEvent event = new IllusionEvent(null, Boolean.FALSE, "To be published", "Event to be published", null, null, null, IllusionEventJoinMode.OPEN, 
+        null, null, "Location", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
+        null, new DateTime(2015, 6, 7, 8, 9, 0, 0), new DateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
+    
+    Response createResponse = givenJson(token)
+      .body(event)
+      .post("/illusion/events");
+    
+    createResponse.then()
+      .body("id", is(not((Long) null)))      
+      .body("published", is(event.getPublished()))
+      .statusCode(200);
+
+    Long id = createResponse.body().jsonPath().getLong("id");
+    String urlName = createResponse.body().jsonPath().getString("urlName");
+    
+    givenJson(token)
+      .get("/illusion/events/{ID}", id).then()
+      .statusCode(200)
+      .body("published", is(event.getPublished()));
+    
+    event.setPublished(Boolean.TRUE);
+    
+    givenJson(token)
+      .body(event)
+      .put("/illusion/events/{ID}", id)
+      .then()
+      .statusCode(204);
+
+    givenJson(token)
+      .get("/illusion/events/{ID}", id).then()
+      .statusCode(200)
+      .body("published", is(event.getPublished()));
+
+    deleteIllusionEventByUrl(urlName);
+    deleteIllusionFolderByUser("servicetest@foyt.fi");
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "service-client", "illusion-basic" })
+  public void testEventUnpublish() throws Exception {
+    String token = createServiceToken();
+    
+    IllusionEvent event = new IllusionEvent(null, Boolean.TRUE, "To be published", "Event to be published", null, null, null, IllusionEventJoinMode.OPEN, 
+        null, null, "Location", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
+        null, new DateTime(2015, 6, 7, 8, 9, 0, 0), new DateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
+    
+    Response createResponse = givenJson(token)
+      .body(event)
+      .post("/illusion/events");
+    
+    createResponse.then()
+      .body("id", is(not((Long) null)))      
+      .body("published", is(event.getPublished()))
+      .statusCode(200);
+
+    Long id = createResponse.body().jsonPath().getLong("id");
+    String urlName = createResponse.body().jsonPath().getString("urlName");
+    
+    givenJson(token)
+      .get("/illusion/events/{ID}", id).then()
+      .statusCode(200)
+      .body("published", is(event.getPublished()));
+    
+    event.setPublished(Boolean.FALSE);
+    
+    givenJson(token)
+      .body(event)
+      .put("/illusion/events/{ID}", id)
+      .then()
+      .statusCode(204);
+
+    givenJson(token)
+      .get("/illusion/events/{ID}", id).then()
+      .statusCode(200)
+      .body("published", is(event.getPublished()));
+
+    deleteIllusionEventByUrl(urlName);
+    deleteIllusionFolderByUser("servicetest@foyt.fi");
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "service-client", "illusion-basic" })
   public void testEventUpdate() throws Exception {
     String token = createServiceToken();
     
