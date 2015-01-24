@@ -83,6 +83,10 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
     }
     
     if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
+      if (!illusionEvent.getPublished()) {
+        return "/error/access-denied.jsf";
+      }
+
       IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, IllusionEventPage.Static.MATERIALS.name());
       if (visibility == IllusionEventPageVisibility.HIDDEN) {
         return "/error/access-denied.jsf";

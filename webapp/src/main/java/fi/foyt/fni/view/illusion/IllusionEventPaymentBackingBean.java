@@ -32,6 +32,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderType;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.Address;
 import fi.foyt.fni.persistence.model.users.AddressType;
@@ -109,6 +110,10 @@ public class IllusionEventPaymentBackingBean {
     User loggedUser = sessionController.getLoggedUser();
     IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
     if (participant == null) {
+      return "/error/access-denied.jsf";
+    }
+    
+    if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER && !illusionEvent.getPublished()) {
       return "/error/access-denied.jsf";
     }
 

@@ -48,6 +48,10 @@ public class IllusionEventDoJoinBackingBean {
     User loggedUser = sessionController.getLoggedUser();
     IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
     if (participant == null) {
+      if (!illusionEvent.getPublished()) {
+        return "/error/access-denied.jsf";
+      }
+      
       switch (illusionEvent.getJoinMode()) {
         case APPROVE:
           illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PENDING_APPROVAL);
@@ -60,6 +64,10 @@ public class IllusionEventDoJoinBackingBean {
           return "/error/access-denied.jsf";
       }      
     } else {
+      if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER && !illusionEvent.getPublished()) {
+        return "/error/access-denied.jsf";
+      }
+      
       switch (participant.getRole()) {
         case BANNED:
         case BOT:

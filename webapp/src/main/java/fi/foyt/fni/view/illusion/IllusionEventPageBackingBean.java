@@ -89,6 +89,10 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
     }
     
     if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
+      if (!illusionEvent.getPublished()) {
+        return "/error/access-denied.jsf";
+      }
+
       IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, document.getId().toString());
       if (visibility != IllusionEventPageVisibility.VISIBLE) {
         if (visibility == IllusionEventPageVisibility.HIDDEN) {
