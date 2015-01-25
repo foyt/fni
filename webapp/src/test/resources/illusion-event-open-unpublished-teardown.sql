@@ -1,0 +1,1 @@
+update IllusionEvent set published = true where id = 1;

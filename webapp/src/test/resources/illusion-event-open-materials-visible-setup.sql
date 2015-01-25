@@ -1,0 +1,2 @@
+delete from IllusionEventSetting where event_id = 1 and settingKey = 'PAGE_SETTINGS';
+insert into IllusionEventSetting (event_id, settingKey, value) values (1, 'PAGE_SETTINGS', '{"MATERIALS":{"visibility":"VISIBLE"}} ');

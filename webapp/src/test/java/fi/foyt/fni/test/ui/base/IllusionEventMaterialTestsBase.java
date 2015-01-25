@@ -2,6 +2,8 @@ package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.UnsupportedEncodingException;
+
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -26,6 +28,14 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet(id = "illusion-open-materials-organizer-custom", 
     before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-organizer-setup.sql", "illusion-event-open-materials-to-participants-setup.sql", "illusion-event-open-materials-setup.sql", "illusion-event-open-custom-setup.sql"},
     after = {"illusion-event-open-custom-teardown.sql", "illusion-event-open-materials-teardown.sql", "illusion-event-open-materials-to-participants-teardown.sql", "illusion-event-open-organizer-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
+  ),
+  @DefineSqlSet (id = "illusion-event-materials-visible", 
+    before = {"illusion-event-open-materials-visible-setup.sql"}, 
+    after = {"illusion-event-open-materials-visible-teardown.sql"}
+  ),
+  @DefineSqlSet (id = "illusion-event-unpublished", 
+    before = {"illusion-event-open-unpublished-setup.sql"}, 
+    after = {"illusion-event-open-unpublished-teardown.sql"}
   )
 })
 public class IllusionEventMaterialTestsBase extends AbstractIllusionUITest {
@@ -132,5 +142,17 @@ public class IllusionEventMaterialTestsBase extends AbstractIllusionUITest {
     assertEquals(getCustomEventUrl() + "/materials", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(7)").getAttribute("href"));
     assertEquals(getCustomEventUrl() + "/materials/document", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(9)").getAttribute("href"));
   }
+  
+  @Test
+  @SqlSets ({"illusion-open-materials-organizer", "illusion-event-materials-visible", "illusion-event-unpublished"})
+  public void testUnpublishedAccessDenied() throws UnsupportedEncodingException {
+    loginInternal("user@foyt.fi", "pass");
+    testAccessDenied("/illusion/event/openevent/materials/document");
+    logout();
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/materials/document");
+    testTitle("Illusion - Open Event");
+  }
+  
   
 }

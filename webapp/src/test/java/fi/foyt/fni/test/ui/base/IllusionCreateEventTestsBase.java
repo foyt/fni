@@ -71,6 +71,9 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     assertSelectorTextIgnoreCase(".view-header-description-text", description);
     assertSelectorPresent(".illusion-event-navigation-admin-menu");
     
+    waitForNotification();
+    assertNotificationStartsWith("warning", "Event is not published");
+    
     deleteIllusionEventByUrl(urlName);
     deleteIllusionFolderByUser("admin@foyt.fi");
   }

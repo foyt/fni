@@ -284,4 +284,24 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     assertSelectorPresent(".illusion-event-settings-genre input[value='3']:checked");
     assertSelectorNotPresent(".illusion-event-settings-genre input[value='4']:checked");
   }
+
+  @Test
+  @SqlSets ("event-organizer")
+  public void testEventPublished() throws Exception {
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+
+    assertSelectorPresent(".illusion-event-settings-published:checked");
+    
+    clickSelector(".illusion-event-settings-published");
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    assertSelectorNotPresent(".illusion-event-settings-published:checked");
+    
+    clickSelector(".illusion-event-settings-published");
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    assertSelectorPresent(".illusion-event-settings-published:checked");
+  }
 }

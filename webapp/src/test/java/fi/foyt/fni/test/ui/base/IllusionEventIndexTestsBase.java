@@ -3,6 +3,8 @@ package fi.foyt.fni.test.ui.base;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.mail.MessagingException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +43,11 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet (id = "illusion-event-custom", 
     before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-custom-setup.sql" },
     after = {"illusion-event-open-custom-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
-  )
+  ),
+  @DefineSqlSet (id = "illusion-event-unpublished", 
+  before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-upcoming-unpublished-event-setup.sql"},
+  after = {"illusion-upcoming-unpublished-event-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
+)
 })
 public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
 
@@ -267,8 +273,22 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
     assertSelectorNotPresent(".illusion-event-join-button");
     assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
     assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
-    
-    
   }
-
+  
+  @Test
+  @SqlSets ("illusion-event-unpublished")
+  public void testUnpublishedAccessDenied() throws UnsupportedEncodingException {
+    loginInternal("admin@foyt.fi", "pass");
+    testAccessDenied("/illusion/event/upcoming_unpublished");
+  }
+  
+  @Test
+  @SqlSets ("illusion-event-unpublished")
+  public void testUnpublishedWarning() throws UnsupportedEncodingException {
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/illusion/event/upcoming_unpublished");
+    waitForNotification();
+    assertNotificationStartsWith("warning", "Event is not published");
+  }
+  
 }

@@ -15,8 +15,8 @@ import fi.foyt.fni.test.SqlSets;
 
 @DefineSqlSets ({
   @DefineSqlSet (id = "upcoming-events", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-upcoming-events-setup.sql"},
-    after = {"illusion-upcoming-events-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
+    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-upcoming-events-setup.sql", "illusion-upcoming-unpublished-event-setup.sql"},
+    after = {"illusion-upcoming-unpublished-event-teardown.sql", "illusion-upcoming-events-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   )
 })
 public class IndexTestsBase extends AbstractUITest {
@@ -76,8 +76,5 @@ public class IndexTestsBase extends AbstractUITest {
     assertSelectorPresent(".index-illusion-event:nth-child(2) .index-illusion-event-date");
     assertSelectorPresent(".index-illusion-event:nth-child(2) .index-illusion-event-desc");
   }
-  
-  
-  
   
 }

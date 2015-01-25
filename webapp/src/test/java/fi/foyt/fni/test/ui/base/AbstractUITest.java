@@ -67,6 +67,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     loginInternal(getWebDriver(), email, password);
   }
   
+  protected void logout() {
+    logout(getWebDriver());
+  }
+  
   protected void waitSelectorToBeClickable(String selector) {
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.elementToBeClickable(findElementBySelector(selector)));
   }

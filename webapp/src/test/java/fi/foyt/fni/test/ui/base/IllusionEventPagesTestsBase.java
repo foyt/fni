@@ -38,6 +38,14 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet (id = "illusion-open-page-organizer-custom", 
     before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql", "illusion-event-open-organizer-setup.sql","illusion-event-open-custom-setup.sql"}, 
     after = {"illusion-event-open-custom-teardown.sql","illusion-event-open-organizer-teardown.sql", "illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql", "basic-users-teardown.sql"}
+  ),
+  @DefineSqlSet (id = "illusion-event-unpublished", 
+    before = {"illusion-event-open-unpublished-setup.sql"}, 
+    after = {"illusion-event-open-unpublished-teardown.sql"}
+  ),
+  @DefineSqlSet (id = "illusion-event-unpublished", 
+    before = {"illusion-event-open-unpublished-setup.sql"}, 
+    after = {"illusion-event-open-unpublished-teardown.sql"}
   )
 })
 public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
@@ -222,6 +230,17 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
     assertEquals(getAppUrl() + "/illusion", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(3)").getAttribute("href"));
     assertEquals(getCustomEventUrl(), findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(5)").getAttribute("href"));
     assertEquals(getCustomEventUrl() + "/pages/testpage", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(7)").getAttribute("href"));
+  }
+  
+  @Test
+  @SqlSets ({"illusion-open-page-organizer", "illusion-event-unpublished"})
+  public void testUnpublishedAccessDenied() throws UnsupportedEncodingException {
+    loginInternal("user@foyt.fi", "pass");
+    testAccessDenied("/illusion/event/openevent/pages/testpage");
+    logout();
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/pages/testpage");
+    testTitle("Open Event - Test Page");
   }
   
 }
