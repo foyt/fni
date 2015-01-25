@@ -47,7 +47,7 @@ public class IllusionIndexBackingBean {
     
     for (IllusionEvent event : illusionEventController.listPublishedEvents()) {
       Event eventPojo = createEventPojo(event);
-      if (event.getStart().after(now)) {
+      if (event.getEnd().after(now)) {
         upcomingEvents.add(eventPojo);
       } else {
         pastEvents.add(eventPojo);
