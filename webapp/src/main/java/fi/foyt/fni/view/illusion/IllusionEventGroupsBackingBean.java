@@ -14,7 +14,6 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.illusion.IllusionEventController;
-import fi.foyt.fni.illusion.IllusionEventGroupController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventGroup;
@@ -42,9 +41,6 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
   private IllusionEventController illusionEventController;
   
   @Inject
-  private IllusionEventGroupController illusionEventGroupController;
-  
-  @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
 
   @Override
@@ -52,7 +48,7 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.GROUPS);
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
-    groups = illusionEventGroupController.listGroups(illusionEvent);
+    groups = illusionEventController.listGroups(illusionEvent);
     participants = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.PARTICIPANT);
 
     return null;
@@ -106,7 +102,7 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
   public void selectGroup(IllusionEventGroup group) {
     selectedGroupId = group.getId();
     selectedGroupName = group.getName();
-    members = illusionEventGroupController.listMembers(group);
+    members = illusionEventController.listGroupMembers(group);
     selectedGroupMemberParticipantIds = new ArrayList<>();
     
     for (IllusionEventGroupMember member : members) {
@@ -117,8 +113,8 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
   }
   
   public void saveGroup() {
-    IllusionEventGroup group = illusionEventGroupController.findGroupById(selectedGroupId);
-    List<IllusionEventGroupMember> currentMembers = illusionEventGroupController.listMembers(group);
+    IllusionEventGroup group = illusionEventController.findGroupById(selectedGroupId);
+    List<IllusionEventGroupMember> currentMembers = illusionEventController.listGroupMembers(group);
     Set<Long> addParticipantIds = new HashSet<>();
     Set<Long> removeParticipantIds = new HashSet<>();
     
@@ -136,19 +132,19 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     
     for (Long participantId : removeParticipantIds) {
       IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
-      IllusionEventGroupMember member = illusionEventGroupController.findMemberByGroupAndParticipant(group, participant);
+      IllusionEventGroupMember member = illusionEventController.findGroupMemberByGroupAndParticipant(group, participant);
       if (member != null) {
-        illusionEventGroupController.deleteMember(member);
+        illusionEventController.deleteGroupMember(member);
       }
     }
     
     for (Long participantId : addParticipantIds) {
       IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
-      illusionEventGroupController.createMember(group, participant);
+      illusionEventController.createGroupMember(group, participant);
     }
     
-    illusionEventGroupController.updateGroupName(group, getSelectedGroupName());
-    groups = illusionEventGroupController.listGroups(group.getEvent());
+    illusionEventController.updateGroupName(group, getSelectedGroupName());
+    groups = illusionEventController.listGroups(group.getEvent());
   }
 private List<IllusionEventGroup> groups;
   private List<IllusionEventParticipant> participants;

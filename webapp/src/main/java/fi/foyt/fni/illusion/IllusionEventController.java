@@ -23,8 +23,12 @@ import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.dao.illusion.GenreDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventGenreDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventGroupDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventGroupMemberDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventMaterialParticipantSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantImageDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventTemplateDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventTypeDAO;
@@ -36,10 +40,14 @@ import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.illusion.Genre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventGenre;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventGroup;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventGroupMember;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantImage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventTemplate;
@@ -69,6 +77,12 @@ public class IllusionEventController {
 
   @Inject
   private IllusionEventParticipantDAO illusionEventParticipantDAO;
+
+  @Inject
+  private IllusionEventParticipantSettingDAO illusionEventParticipantSettingDAO;
+
+  @Inject
+  private IllusionEventMaterialParticipantSettingDAO illusionEventMaterialParticipantSettingDAO;
 
   @Inject
   private IllusionEventParticipantImageDAO illusionEventParticipantImageDAO;
@@ -102,6 +116,12 @@ public class IllusionEventController {
 
   @Inject
   private ChatCredentialsController chatCredentialsController;
+
+  @Inject
+  private IllusionEventGroupDAO illusionEventParticipantGroupDAO;
+
+  @Inject
+  private IllusionEventGroupMemberDAO illusionEventParticipantGroupMemberDAO;
 
   @Inject
   private OAuthController oAuthController;
@@ -291,6 +311,26 @@ public class IllusionEventController {
   }
   
   public void deleteIllusionEvent(IllusionEvent event) {
+    for (IllusionEventParticipant participant : listIllusionEventParticipantsByEvent(event)) {
+      deleteParticipant(participant);
+    }
+    
+    for (IllusionEventTemplate template : listTemplates(event)) {
+      deleteEventTemplate(template);
+    }
+    
+    for (IllusionEventGroup group : listGroups(event)) {
+      deleteGroup(group);
+    }
+    
+    for (IllusionEventSetting setting : illusionEventSettingDAO.listByEvent(event)) {
+      illusionEventSettingDAO.delete(setting);
+    }
+    
+    for (IllusionEventGenre genre : listIllusionEventGenres(event)) {
+      illusionEventGenreDAO.delete(genre);
+    }
+    
     illusionEventDAO.delete(event);
   }
   
@@ -399,6 +439,19 @@ public class IllusionEventController {
   }
 
   public void deleteParticipant(IllusionEventParticipant participant) {
+    for (IllusionEventParticipantSetting setting : illusionEventParticipantSettingDAO.listByParticipant(participant)) {
+      illusionEventParticipantSettingDAO.delete(setting);
+    }
+
+    IllusionEventParticipantImage participantImage = findIllusionEventParticipantImageByParticipant(participant);
+    if (participantImage != null) {
+      illusionEventParticipantImageDAO.delete(participantImage);
+    }
+    
+    for (IllusionEventMaterialParticipantSetting materialParticipantSetting : illusionEventMaterialParticipantSettingDAO.listByParticipant(participant)) {
+      illusionEventMaterialParticipantSettingDAO.delete(materialParticipantSetting);
+    }
+    
     illusionEventParticipantDAO.delete(participant);
   }
   
@@ -545,4 +598,47 @@ public class IllusionEventController {
     return createIllusionEventDocument(creator, documentType, language, parentFolder, urlName, title, data, publicity, indexNumber);
   }
 
+  /* Group */
+
+  public IllusionEventGroup findGroupById(Long id) {
+    return illusionEventParticipantGroupDAO.findById(id);
+  }
+  
+  public IllusionEventGroup createGroup(IllusionEvent event, String name) {
+    return illusionEventParticipantGroupDAO.create(event, name);
+  }
+  
+  public List<IllusionEventGroup> listGroups(IllusionEvent event) {
+    return illusionEventParticipantGroupDAO.listByEvent(event);
+  }
+  
+  public IllusionEventGroup updateGroupName(IllusionEventGroup group, String name) {
+    return illusionEventParticipantGroupDAO.updateName(group, name);
+  }
+  
+  public void deleteGroup(IllusionEventGroup group) {
+    for (IllusionEventGroupMember member : listGroupMembers(group)) {
+      deleteGroupMember(member); 
+    }
+
+    illusionEventParticipantGroupDAO.delete(group);
+  }
+  
+  /* Member */
+  
+  public IllusionEventGroupMember createGroupMember(IllusionEventGroup group, IllusionEventParticipant participant) {
+    return illusionEventParticipantGroupMemberDAO.create(group, participant);
+  }
+  
+  public List<IllusionEventGroupMember> listGroupMembers(IllusionEventGroup group) {
+    return illusionEventParticipantGroupMemberDAO.listByGroup(group); 
+  }
+  
+  public void deleteGroupMember(IllusionEventGroupMember member) {
+    illusionEventParticipantGroupMemberDAO.delete(member);
+  }
+
+  public IllusionEventGroupMember findGroupMemberByGroupAndParticipant(IllusionEventGroup group, IllusionEventParticipant participant) {
+    return illusionEventParticipantGroupMemberDAO.findByGroupAndParticipant(group, participant);
+  }
 }

@@ -28,7 +28,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import fi.foyt.fni.illusion.IllusionEventController;
-import fi.foyt.fni.illusion.IllusionEventGroupController;
 import fi.foyt.fni.illusion.IllusionEventMaterialController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
@@ -71,9 +70,6 @@ public class IllusionRestServices {
   @Inject
   private IllusionEventController illusionEventController;
   
-  @Inject
-  private IllusionEventGroupController illusionEventGroupController;
-
   @Inject
   private IllusionEventMaterialController illusionEventMaterialController;
 
@@ -590,7 +586,7 @@ public class IllusionRestServices {
       return Response.status(Status.FORBIDDEN).build();
     }
     
-    return Response.ok(createRestModel(illusionEventGroupController.listGroups(event).toArray(new fi.foyt.fni.persistence.model.illusion.IllusionEventGroup[0]))).build();
+    return Response.ok(createRestModel(illusionEventController.listGroups(event).toArray(new fi.foyt.fni.persistence.model.illusion.IllusionEventGroup[0]))).build();
   }
   
   /**
@@ -624,7 +620,7 @@ public class IllusionRestServices {
       return Response.status(Status.FORBIDDEN).build();
     }
     
-    return Response.ok(createRestModel(illusionEventGroupController.createGroup(event, name))).build();
+    return Response.ok(createRestModel(illusionEventController.createGroup(event, name))).build();
   }
   
   /**

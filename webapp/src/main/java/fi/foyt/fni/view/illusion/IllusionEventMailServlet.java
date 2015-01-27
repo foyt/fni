@@ -15,11 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import fi.foyt.fni.illusion.IllusionEventController;
-import fi.foyt.fni.illusion.IllusionEventGroupController;
 import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.mail.Mailer.MailBuilder;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -48,9 +47,6 @@ public class IllusionEventMailServlet extends AbstractFileServlet {
 
   @Inject
   private IllusionEventController illusionEventController;
-
-  @Inject
-  private IllusionEventGroupController illusionEventGroupController;
 
   @Inject
   private SystemSettingsController systemSettingsController;
@@ -157,9 +153,9 @@ public class IllusionEventMailServlet extends AbstractFileServlet {
     
     if (StringUtils.startsWith(recipients, "GROUP_")) {
       Long groupId = NumberUtils.createLong(recipients.substring(6));
-      IllusionEventGroup eventGroup = illusionEventGroupController.findGroupById(groupId);
+      IllusionEventGroup eventGroup = illusionEventController.findGroupById(groupId);
       if (eventGroup != null) {
-        List<IllusionEventGroupMember> members = illusionEventGroupController.listMembers(eventGroup);
+        List<IllusionEventGroupMember> members = illusionEventController.listGroupMembers(eventGroup);
         for (IllusionEventGroupMember member : members) {
           participants.add(member.getParticipant());
         }
