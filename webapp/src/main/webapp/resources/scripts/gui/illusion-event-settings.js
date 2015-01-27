@@ -79,6 +79,7 @@
           width: 400,
           buttons: [{
             'text': dialog.data('remove-button'),
+            'class': 'remove-button',
             'click': function(event) { 
               $.ajax(CONTEXTPATH + '/rest/illusion/events/' + eventId, {
                 type: 'DELETE',
@@ -92,6 +93,7 @@
             }
           }, {
             'text': dialog.data('cancel-button'),
+            'class': 'cancel-button',
             'click': function(event) { 
               $(this).dialog("close");
             }

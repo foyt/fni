@@ -304,4 +304,18 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     assertSelectorPresent(".illusion-event-settings-published:checked");
   }
+
+  @Test
+  @SqlSets ("event-organizer")
+  public void testEventDelete() throws Exception {
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    clickSelector(".illusion-remove-event");
+    waitForSelectorVisible(".ui-dialog");
+    assertSelectorClickable(".ui-dialog .remove-button");
+    clickSelector(".ui-dialog .remove-button");
+    waitForUrlNotMatches(".*/illusion/event/openevent/settings");
+    testNotFound("/illusion/event/openevent");
+  }
 }
