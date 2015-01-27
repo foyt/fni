@@ -64,5 +64,43 @@
       }
     }
   });
+  
+  $(document).on('click', '.illusion-remove-event', function (event) {
+    var eventId = $('#event-id').val();
+    var eventName = $('#event-name').val();
+    
+    dust.render("illusion-remove-event", {
+      eventName: eventName
+    }, function(err, html) {
+      if (!err) {
+        var dialog = $(html);
+        dialog.dialog({
+          modal: true,
+          width: 400,
+          buttons: [{
+            'text': dialog.data('remove-button'),
+            'click': function(event) { 
+              $.ajax(CONTEXTPATH + '/rest/illusion/events/' + eventId, {
+                type: 'DELETE',
+                success: function (jqXHR, textStatus) {
+                  window.location.href = CONTEXTPATH + "/";
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                  $('.notifications').notifications('notification', 'error', textStatus);
+                }
+              });
+            }
+          }, {
+            'text': dialog.data('cancel-button'),
+            'click': function(event) { 
+              $(this).dialog("close");
+            }
+          }]
+        });
+      } else {
+        $('.notifications').notifications('notification', 'error', err);
+      }
+    });
+  });
 
 }).call(this);

@@ -64,6 +64,7 @@
       <div class="illusion-content-panel grid_16 tight">
         <div class="grid_16">
           <div class="illusion-event-sub-panel">
+            <a href="javascript:void(null)" class="illusion-remove-event">#{locales['illusion.eventSettings.deleteButton']}</a>
             <h3>#{locales['illusion.eventSettings.eventSettingsTitle']}</h3>
             <h:form>
               <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
@@ -167,6 +168,9 @@
                 <h:commandButton id="save" styleClass="illusion-event-settings-save" value="#{locales['illusion.eventSettings.saveButton']}" action="#{illusionEventSettingsBackingBean.save}"/>
               </h:panelGroup>
             </h:form>
+            
+            <input type="hidden" id="event-id" value="#{illusionEventSettingsBackingBean.id}"/>
+            <input type="hidden" id="event-name" value="#{illusionEventSettingsBackingBean.name}"/>
           </div>
         </div>
       </div>

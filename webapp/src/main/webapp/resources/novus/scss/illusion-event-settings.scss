@@ -123,6 +123,21 @@ h3 {
   width: 145px;
 }
 
+.illusion-remove-event {
+  @include header-4;
+  width: 200px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background: #f00;
+  color: #fff;
+  border: 0px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  float: right;
+}
+
 .illusion-event-settings-save {
   @include header-4;
   width: 256px;

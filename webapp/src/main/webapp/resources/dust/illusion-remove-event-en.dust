@@ -1,0 +1,7 @@
+<div title="Remove event '{eventName}'?" data-remove-button="Remove" data-cancel-button="Cancel">
+  <div class="illusion-remove-event-dialog">
+    <p>
+      Do you really wish to remove event '{eventName}'?
+    </p>
+  </div>
+</div>

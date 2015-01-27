@@ -1,0 +1,7 @@
+<div title="Poista tapahtuma '{eventName}'?" data-remove-button="Poista" data-cancel-button="Peruuta">
+  <div class="illusion-remove-page-dialog">
+    <p>
+      Halutko varmasti poistaa tapahtuman '{eventName}'?
+    </p>
+  </div>
+</div>
