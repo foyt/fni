@@ -25,11 +25,53 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet(id = "basic-users", before = "basic-users-setup.sql", after = "basic-users-teardown.sql"),
   @DefineSqlSet(id = "service-client", before = "rest-service-client-setup.sql", after = "rest-service-client-teardown.sql"),
   @DefineSqlSet(id = "events", before = "illusion-event-oai-setup.sql", after = "illusion-event-oai-teardown.sql"),
+  @DefineSqlSet(id = "groups", before = "illusion-event-oai-groups-setup.sql", after = "illusion-event-oai-groups-teardown.sql"),
   @DefineSqlSet(id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql"),
   @DefineSqlSet(id = "event-participant", before = { "illusion-event-open-setup.sql","illusion-event-open-participant-setup.sql" }, after = {"illusion-event-open-participant-teardown.sql","illusion-event-open-teardown.sql"})
 })
 public class IllusionEventsRestTestIT extends AbstractRestTest {
   
+  @Test
+  @SqlSets({"basic-users", "events"})
+  public void testGroupListUnauthorized() {
+    givenJson()
+      .get("/illusion/events/{EVENTID}/groups", 1)
+      .then()
+      .statusCode(401);
+  }
+
+  @Test
+  @SqlSets({"basic-users","service-client", "events", "groups"})
+  public void testGroupLists() throws OAuthSystemException, OAuthProblemException {
+    String token = createServiceToken();
+    
+    givenJson(token)
+      .get("/illusion/events/{EVENTID}/groups", 2)
+      .then()
+      .statusCode(200)
+      .body("id.size()", is(1))
+      .body("id[0]", is(1) )
+      .body("eventId[0]", is(2) )
+      .body("name[0]", is("Test Group in event #2"));
+    
+    givenJson(token)
+      .get("/illusion/events/{EVENTID}/groups", 3)
+      .then()
+      .statusCode(200)
+      .body("id.size()", is(2))
+      .body("id[0]", is(2) )
+      .body("eventId[0]", is(3) )
+      .body("name[0]", is("Test Group #1 in event #3"))
+      .body("id[1]", is(3) )
+      .body("eventId[1]", is(3) )
+      .body("name[1]", is("Test Group #2 in event #3"));
+    
+    givenJson(token)
+      .get("/illusion/events/{EVENTID}/groups", 4)
+      .then()
+      .statusCode(204);
+  }
+
   @Test
   public void testEventListUnauthorized() {
     givenJson()

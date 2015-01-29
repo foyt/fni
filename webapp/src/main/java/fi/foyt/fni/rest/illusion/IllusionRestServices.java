@@ -571,22 +571,37 @@ public class IllusionRestServices {
    */
   @Path("/events/{EVENTID:[0-9]*}/groups/")
   @GET
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_GROUP_LIST }
+  )
   public Response listEventGroups(@PathParam ("EVENTID") Long eventId) {
-    if (!sessionController.isLoggedIn()) {
-      return Response.status(Status.UNAUTHORIZED).build();
-    }
-    
     IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
     if (event == null) {
       return Response.status(Status.NOT_FOUND).build(); 
     }
     
-    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
-    if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) { 
-      return Response.status(Status.FORBIDDEN).build();
+    if (!sessionController.isLoggedIn()) {
+      if (accessToken == null) {
+        return Response.status(Status.UNAUTHORIZED).build();
+      }
+      
+      if (accessToken.getClient().getType() != OAuthClientType.SERVICE) {
+        return Response.status(Status.FORBIDDEN).entity(String.format("Invalid client type %s", accessToken.getClient().getType().toString())).build();
+      }
+    } else {
+      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
+      if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) { 
+        return Response.status(Status.FORBIDDEN).build();
+      }
     }
     
-    return Response.ok(createRestModel(illusionEventController.listGroups(event).toArray(new fi.foyt.fni.persistence.model.illusion.IllusionEventGroup[0]))).build();
+    List<fi.foyt.fni.persistence.model.illusion.IllusionEventGroup> groups = illusionEventController.listGroups(event);
+    if (groups.isEmpty()) {
+      return Response.noContent().build();
+    }
+
+    return Response.ok(createRestModel(groups.toArray(new fi.foyt.fni.persistence.model.illusion.IllusionEventGroup[0]))).build();
   }
   
   /**
@@ -599,6 +614,10 @@ public class IllusionRestServices {
    */
   @Path("/events/{EVENTURLNAME}/groups/")
   @POST
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_CREATE_GROUP }
+  )
   public Response createGroup(@PathParam ("EVENTURLNAME") String eventUrlName, IllusionEventGroup entity) {
     String name = entity.getName();
     
@@ -606,20 +625,26 @@ public class IllusionRestServices {
       return Response.status(Status.BAD_REQUEST).build();
     }
     
-    if (!sessionController.isLoggedIn()) {
-      return Response.status(Status.UNAUTHORIZED).build();
-    }
-    
     IllusionEvent event = illusionEventController.findIllusionEventByUrlName(eventUrlName);
     if (event == null) {
       return Response.status(Status.NOT_FOUND).build(); 
     }
     
-    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
-    if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) { 
-      return Response.status(Status.FORBIDDEN).build();
+    if (!sessionController.isLoggedIn()) {
+      if (accessToken == null) {
+        return Response.status(Status.UNAUTHORIZED).build();
+      }
+      
+      if (accessToken.getClient().getType() != OAuthClientType.SERVICE) {
+        return Response.status(Status.FORBIDDEN).entity(String.format("Invalid client type %s", accessToken.getClient().getType().toString())).build();
+      }
+    } else {
+      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
+      if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) { 
+        return Response.status(Status.FORBIDDEN).build();
+      }
     }
-    
+
     return Response.ok(createRestModel(illusionEventController.createGroup(event, name))).build();
   }
   
