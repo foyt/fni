@@ -10,6 +10,18 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet (id = "basic", 
     before = {"basic-users-setup.sql"},
     after = {"basic-users-teardown.sql"}
+  ),
+  @DefineSqlSet (id = "event-basic", 
+    before = { "illusion-basic-setup.sql" },
+    after = { "illusion-basic-teardown.sql" }
+  ),
+  @DefineSqlSet (id = "event", 
+    before = {"illusion-event-open-setup.sql"},
+    after = {"illusion-event-open-teardown.sql"}
+  ),
+  @DefineSqlSet (id = "event-organizer", 
+    before = {"illusion-event-open-organizer-setup.sql"},
+    after = {"illusion-event-open-organizer-teardown.sql"}
   )
 })
 public class UserProfileTestsBase extends AbstractUITest {
@@ -19,7 +31,16 @@ public class UserProfileTestsBase extends AbstractUITest {
   public void testTitle() {
     testTitle(getWebDriver(), "/profile/1", "User Profile");
   }
-
+  
+  @Test
+  @SqlSets ({"basic", "event-basic", "event", "event-organizer"})
+  public void testWithOrganizedEvents() {
+    testTitle(getWebDriver(), "/profile/4", "User Profile");
+    assertSelectorPresent(".users-profile-events-panel");
+    assertSelectorCount(".users-profile-illusion-event", 1);
+    assertSelectorTextIgnoreCase(".users-profile-illusion-event h2 a", "Open Event");
+  }
+  
   @Test
   @SqlSets ("basic")
   public void testNotFound() throws Exception {

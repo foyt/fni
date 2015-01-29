@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.GenericDAO;
@@ -12,6 +13,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant_;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent_;
 import fi.foyt.fni.persistence.model.users.User;
 
 public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventParticipant> {
@@ -94,17 +96,20 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
     return entityManager.createQuery(criteria).getResultList();
   }
 
-  public List<IllusionEvent> listIllusionEventsByUserAndRole(User user, IllusionEventParticipantRole role) {
+  public List<IllusionEvent> listIllusionEventsByUserAndRole(User user, IllusionEventParticipantRole role, Boolean published) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<IllusionEvent> criteria = criteriaBuilder.createQuery(IllusionEvent.class);
     Root<IllusionEventParticipant> root = criteria.from(IllusionEventParticipant.class);
+    Join<IllusionEventParticipant, IllusionEvent> eventJoin = root.join(IllusionEventParticipant_.event);
+    
     criteria.select(root.get(IllusionEventParticipant_.event));
     criteria.where(
       criteriaBuilder.and(
         criteriaBuilder.equal(root.get(IllusionEventParticipant_.user), user),
-        criteriaBuilder.equal(root.get(IllusionEventParticipant_.role), role)
+        criteriaBuilder.equal(root.get(IllusionEventParticipant_.role), role),
+        criteriaBuilder.equal(eventJoin.get(IllusionEvent_.published), published)
       )
     );
 

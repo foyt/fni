@@ -181,8 +181,8 @@ public class IllusionEventController {
     return illusionEventDAO.listByPublishedOrderByStartAndEnd(Boolean.TRUE);
   }
 
-  public List<IllusionEvent> listIllusionEventsByUserAndRole(User user, IllusionEventParticipantRole role) {
-    return illusionEventParticipantDAO.listIllusionEventsByUserAndRole(user, role);
+  public List<IllusionEvent> listPublishedEventsByUserAndRole(User user, IllusionEventParticipantRole role) {
+    return illusionEventParticipantDAO.listIllusionEventsByUserAndRole(user, role, Boolean.TRUE);
   }
 
   public List<IllusionEvent> listNextIllusionEvents(int maxResults) {
