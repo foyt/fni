@@ -61,6 +61,20 @@ public class IllusionEventMaterialParticipantSettingDAO extends GenericDAO<Illus
     return entityManager.createQuery(criteria).getResultList();
   }
 
+  public List<IllusionEventMaterialParticipantSetting> listByMaterial(Material material) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<IllusionEventMaterialParticipantSetting> criteria = criteriaBuilder.createQuery(IllusionEventMaterialParticipantSetting.class);
+    Root<IllusionEventMaterialParticipantSetting> root = criteria.from(IllusionEventMaterialParticipantSetting.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(IllusionEventMaterialParticipantSetting_.material), material)
+    );
+
+    return entityManager.createQuery(criteria).getResultList();
+  }
+
   public List<IllusionEventMaterialParticipantSetting> listByMaterialAndParticipantAndKey(Material material, IllusionEventParticipant participant) {
     EntityManager entityManager = getEntityManager();
 
