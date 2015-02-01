@@ -23,6 +23,8 @@ import java.util.logging.Logger;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -64,8 +66,10 @@ import fi.foyt.fni.auth.DropboxAuthenticationStrategy;
 import fi.foyt.fni.coops.CoOpsSessionController;
 import fi.foyt.fni.drive.DriveManager;
 import fi.foyt.fni.drive.SystemGoogleDriveCredentials;
+import fi.foyt.fni.materials.operations.MaterialCopy;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventMaterialParticipantSettingDAO;
 import fi.foyt.fni.persistence.dao.materials.BinaryDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
@@ -97,6 +101,7 @@ import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.auth.UserIdentifier;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.common.Tag;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting;
 import fi.foyt.fni.persistence.model.materials.Binary;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
@@ -246,6 +251,9 @@ public class MaterialController {
   private UserTokenDAO userTokenDAO;
   
   @Inject
+  private IllusionEventMaterialParticipantSettingDAO IllusionEventMaterialParticipantSettingDAO;
+  
+  @Inject
   private DriveManager driveManager;
   
   @Inject
@@ -263,6 +271,10 @@ public class MaterialController {
   @Inject
   private DropboxAuthenticationStrategy dropboxAuthenticationStrategy;
 
+  @Any
+  @Inject
+  private Instance<MaterialCopy<? extends Material>> materialCopies;
+  
   /* Character Sheets */
 
   public CharacterSheet createCharacterSheet(Folder parentFolder, String title, String content, User creator, String styles, String scripts) {
@@ -1777,4 +1789,66 @@ public class MaterialController {
     
     return null;
   }
+  
+  /* Copy */
+  
+  @SuppressWarnings("unchecked")
+  public <T extends Material> T copyMaterial(T material, Folder targetFolder, User creator) {
+    MaterialCopy<T> copyOperation = (MaterialCopy<T>) getCopyOperation(material.getType());
+    if (copyOperation != null) {
+      
+      // New URL name
+      
+      String urlName = getUniqueMaterialUrlName(creator, targetFolder, material, material.getTitle());
+      
+      // Copy Material
+      
+      T copy = copyOperation.copy(material, targetFolder, urlName, creator);
+      if (copy == null) {
+        return null;
+      }
+
+      // Common Properties
+
+      for (MaterialSetting setting : materialSettingDAO.listByMaterial(material)) {
+        materialSettingDAO.create(copy, setting.getKey(), setting.getValue());
+      }
+      
+      for (MaterialTag tag : materialTagDAO.listByMaterial(material)) {
+        materialTagDAO.create(copy, tag.getTag());
+      }
+      
+      for (IllusionEventMaterialParticipantSetting setting : IllusionEventMaterialParticipantSettingDAO.listByMaterial(material)) {
+        IllusionEventMaterialParticipantSettingDAO.create(copy, setting.getParticipant(), setting.getKey(), setting.getValue());
+      }
+      
+      return copy;
+    }
+    
+    return null;
+  }
+
+  public boolean isCopyableType(MaterialType type) {
+    return getCopyOperation(type) != null;
+  }
+  
+  public MaterialType[] getAllowedCopyTargets(MaterialType type) {
+    MaterialCopy<?> materialCopy = getCopyOperation(type);
+    if (materialCopy != null) {
+      return materialCopy.getAllowedTargets();
+    }
+    
+    return null;
+  }
+  
+  private MaterialCopy<?> getCopyOperation(MaterialType type) {
+    for (MaterialCopy<? extends Material> materialCopy : materialCopies) {
+      if (materialCopy.getType().equals(type)) {
+        return materialCopy;
+      }
+    }
+    
+    return null;
+  }
+  
 }
