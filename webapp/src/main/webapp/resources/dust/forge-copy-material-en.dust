@@ -1,0 +1,8 @@
+<div title="Copy Material" data-copy-button="Copy" data-cancel-button="Cancel">
+  <div class="forge-copy-material-dialog">
+    <p>Choose a folder where wish to create new copy of the material</p>
+    <div class="forge-copy-material-list">
+      {>"forge-copy-material-list"/}
+    </div>
+  </div>
+</div>

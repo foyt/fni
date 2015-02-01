@@ -10,6 +10,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringUtils;
+
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
@@ -47,6 +49,7 @@ public class ForgeMaterialsBackingBean {
     materialShareable = new HashMap<>();
     materialDeletable = new HashMap<>();
     materialPrintableAsPdf = new HashMap<>();
+    materialCopyable = new HashMap<>();
   }
 
   public String getMaterialViewer(Material material) {
@@ -181,6 +184,30 @@ public class ForgeMaterialsBackingBean {
     }
   }
 
+  public boolean getMaterialCopyable(Material material) {
+    if (!materialCopyable.containsKey(material.getId())) {
+      Boolean copyable = false;
+      
+      if (materialController.isCopyableType(material.getType())) {
+        copyable = materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
+      }
+  
+      materialCopyable.put(material.getId(), copyable);
+      return copyable;
+    } else {
+      return materialCopyable.get(material.getId());
+    }
+  }
+  
+  public String getMaterialCopyTargets(MaterialType materialType) {
+    MaterialType[] copyTargets = materialController.getAllowedCopyTargets(materialType);
+    if (copyTargets != null) {
+      return StringUtils.join(copyTargets, ",");
+    }
+    
+    return null;
+  }
+
   public String createNewDocument(Long folderId) throws IOException {
     User loggedUser = sessionController.getLoggedUser();
     Folder parentFolder = folderId != null ? materialController.findFolderById(folderId) : null;
@@ -243,5 +270,6 @@ public class ForgeMaterialsBackingBean {
   private Map<Long, Boolean> materialMovable;
   private Map<Long, Boolean> materialShareable;
   private Map<Long, Boolean> materialDeletable;
+  private Map<Long, Boolean> materialCopyable;
   private Map<Long, Boolean> materialPrintableAsPdf;
 }

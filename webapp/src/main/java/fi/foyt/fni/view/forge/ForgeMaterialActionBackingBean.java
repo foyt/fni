@@ -65,12 +65,12 @@ public class ForgeMaterialActionBackingBean {
     this.materialId = materialId;
   }
   
-  public Long getMoveTargetFolderId() {
-    return moveTargetFolderId;
+  public Long getTargetFolderId() {
+    return targetFolderId;
   }
   
-  public void setMoveTargetFolderId(Long moveTargetFolderId) {
-    this.moveTargetFolderId = moveTargetFolderId;
+  public void setTargetFolderId(Long targetFolderId) {
+    this.targetFolderId = targetFolderId;
   }
   
   public Long getParentFolderId() {
@@ -136,8 +136,33 @@ public class ForgeMaterialActionBackingBean {
     
     Material material = materialController.findMaterialById(getMaterialId());
     if (material != null) {
-      Folder targetFolder = moveTargetFolderId == null ? null : materialController.findFolderById(moveTargetFolderId);
+      Folder targetFolder = targetFolderId == null ? null : materialController.findFolderById(targetFolderId);
       materialController.moveMaterial(material, targetFolder, sessionController.getLoggedUser());
+      
+      if (targetFolder != null) {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+          .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+          .append("/forge/folders/")
+          .append(targetFolder.getPath())
+          .toString());
+      } else {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+          .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+          .append("/forge/")
+          .toString());
+      }
+    }
+  }
+  
+  @LoggedIn
+  @Secure (Permission.MATERIAL_MODIFY)
+  @SecurityContext(context = "#{forgeMaterialActionBackingBean.materialId}")
+  public void copyMaterial() throws IOException {
+    
+    Material material = materialController.findMaterialById(getMaterialId());
+    if (material != null) {
+      Folder targetFolder = targetFolderId == null ? null : materialController.findFolderById(targetFolderId);
+      materialController.copyMaterial(material, targetFolder, sessionController.getLoggedUser());
       
       if (targetFolder != null) {
         FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
@@ -248,7 +273,7 @@ public class ForgeMaterialActionBackingBean {
 	
 	private Long materialId;
 	private Long parentFolderId;
-	private Long moveTargetFolderId;
+	private Long targetFolderId;
 	private String materialSharePublicity;
 	private Map<String, String> materialShareCollaborators;
 	private String newFolderName;

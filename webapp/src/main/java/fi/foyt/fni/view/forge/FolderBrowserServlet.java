@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -65,9 +64,8 @@ public class FolderBrowserServlet extends HttpServlet {
 			}
 		}
 		
-		List<Material> materials = materialController.listMaterialsByFolderAndTypes(loggedUser, parentFolder, Arrays.asList(new MaterialType[]{
-      MaterialType.FOLDER
-		}));
+		List<MaterialType> types = getTypes(request);
+		List<Material> materials = materialController.listMaterialsByFolderAndTypes(loggedUser, parentFolder, types);
 		
 		Collections.sort(materials, new TitleComparator());
 		
@@ -78,25 +76,25 @@ public class FolderBrowserServlet extends HttpServlet {
     if (parentFolder != null) {
       Folder grandParent = parentFolder.getParentFolder();
       
-      if (parentFolder.getParentFolder() == null) {
-        folders.add(new FolderBean(null, rootTitle, "parent", null, null));
+      if (grandParent == null) {
+        folders.add(new FolderBean(null, rootTitle, "parent", null, null, null));
       } else {
-        folders.add(new FolderBean(grandParent.getId(), grandParent.getTitle(), "parent", dateFormat.format(grandParent.getModified()), grandParent.getCreator().getFullName()));
+        folders.add(new FolderBean(grandParent.getId(), grandParent.getTitle(), "parent", dateFormat.format(grandParent.getModified()), grandParent.getCreator().getFullName(), grandParent.getType()));
       }
     }
     
 		for (Material material : materials) {
-      folders.add(new FolderBean(material.getId(), material.getTitle(), "folder", dateFormat.format(material.getModified()), material.getCreator().getFullName()));
+      folders.add(new FolderBean(material.getId(), material.getTitle(), "folder", dateFormat.format(material.getModified()), material.getCreator().getFullName(), material.getType()));
 		}
 		
 		List<FolderBean> parents = new ArrayList<>();
 		Folder folder = parentFolder;
 		while (folder != null) {
-		  parents.add(0, new FolderBean(folder.getId(), folder.getTitle(), null, null, null));
+		  parents.add(0, new FolderBean(folder.getId(), folder.getTitle(), null, null, null, folder.getType()));
 		  folder = folder.getParentFolder();
 		}
 		
-    parents.add(0, new FolderBean(null, rootTitle, null, null, null));
+    parents.add(0, new FolderBean(null, rootTitle, null, null, null, null));
     
     Map<String, Object> result = new HashMap<>();
     result.put("folders", folders);
@@ -113,14 +111,30 @@ public class FolderBrowserServlet extends HttpServlet {
     }
 	}
   
+  private List<MaterialType> getTypes(HttpServletRequest request) {
+    List<MaterialType> result = new ArrayList<>();
+    
+    String[] types = request.getParameterValues("types");
+    if ((types == null)||(types.length == 0)) {
+      result.add(MaterialType.FOLDER);
+    } else {
+      for (String type : types) {
+        result.add(MaterialType.valueOf(type));
+      }
+    }
+
+    return result;
+  }
+
   public class FolderBean {
     
-    public FolderBean(Long id, String title, String type, String modified, String creator) {
+    public FolderBean(Long id, String title, String type, String modified, String creator, MaterialType materialType) {
       this.id = id;
       this.type = type;
       this.title = title;
       this.modified = modified;
       this.creator = creator;
+      this.materialType = materialType;
     }
 
     public Long getId() {
@@ -143,10 +157,15 @@ public class FolderBrowserServlet extends HttpServlet {
       return title;
     }
     
+    public MaterialType getMaterialType() {
+      return materialType;
+    }
+    
     private Long id;
     private String type;
     private String title;
     private String modified;
     private String creator;
+    private MaterialType materialType;
   }
 }

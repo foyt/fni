@@ -1,0 +1,12 @@
+<div class="forge-copy-material-list-item">
+  <div class="forge-copy-material-list-item-icon forge-copy-material-list-item-icon-{type}"></div>
+  <div class="forge-copy-material-list-item-info">
+    <div class="forge-copy-material-list-item-title-container">
+      <span class="forge-copy-material-list-item-title">{title}</span>
+      <div class="forge-copy-material-list-date-container">
+        <span class="forge-copy-material-list-modified">{modified}</span>
+      </div>
+      <div class="forge-copy-material-list-creator">{creator}</div>
+    </div>
+  </div>
+</div>

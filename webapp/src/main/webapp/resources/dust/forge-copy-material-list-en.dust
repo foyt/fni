@@ -1,0 +1,9 @@
+<div class="forge-copy-material-parents">
+  {#parents}
+    <div data-parent-id="{id}" class="forge-copy-material-parent" data-parent-type="{materialType}">{title}</div>
+  {/parents}
+</div>
+
+{#folders}
+  {>"forge-copy-material-list-item"/}
+{/folders}

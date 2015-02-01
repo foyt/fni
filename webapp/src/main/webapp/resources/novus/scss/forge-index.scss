@@ -296,7 +296,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 }
   
 .forge-material:hover .forge-material-actions {
-  height: 120px;
+  height: 140px;
   @include transition-property(height);
   @include transition-duration(1s);
   @include transition-delay(0.25s);
@@ -320,39 +320,47 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   padding-left: 8px;  
 }
 
-/* Move dialog */
+/* Move dialog, Copy dialog */
 
-.forge-move-material-dialog p, .gamelibrary-manage-file-upload-dialog p {
+.forge-move-material-dialog p, 
+.forge-copy-material-dialog p, 
+.gamelibrary-manage-file-upload-dialog p {
   font-style: italic;
   font-size: 14px;
   margin-top: 8px;
   margin-bottom: 8px;
 }
 
-.forge-move-material-list {
+.forge-move-material-list,
+.forge-copy-material-list {
   overflow: auto;
   overflow-y: scroll;
   height: 450px;
 }
 
-.forge-move-material-list-item {
+.forge-move-material-list-item,
+.forge-copy-material-list-item {
   clear: both;
   margin-bottom: 8px;
   padding: 8px;
   cursor: pointer;
   height: 48px;
 }
-.forge-move-material-list-item:hover {
+
+.forge-move-material-list-item:hover,
+.forge-copy-material-list-item:hover {
   background-color: $selected-background-color;
 }
 
-.forge-move-material-list-item.forge-move-material-list-item-disabled {
+.forge-move-material-list-item.forge-move-material-list-item-disabled,
+.forge-copy-material-list-item.forge-copy-material-list-item-disabled {
   background-color: #ddd;
   cursor: default;
   opacity: 0.75;
 }
 
-.forge-move-material-list-item-icon-parent {
+.forge-move-material-list-item-icon-parent,
+.forge-copy-material-list-item-icon-parent {
   width: 48px;
   height: 48px;
   display: block;
@@ -360,7 +368,8 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/folder-go-up.png"]}'));
 }
 
-.forge-move-material-list-item-icon-folder {
+.forge-move-material-list-item-icon-folder,
+.forge-copy-material-list-item-icon-folder {
   width: 48px;
   height: 48px;
   display: block;
@@ -368,14 +377,19 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-folder.png"]}'));
 }
 
-.forge-move-material-list-item-info {
+.forge-move-material-list-item-info,
+.forge-copy-material-list-item-info {
   padding-left: 8px;
   margin-left: 48px;
 }
 
+
 .forge-move-material-list-item-title,
 .forge-move-material-list-modified,
-.forge-move-material-list-creator {
+.forge-move-material-list-creator,
+.forge-copy-material-list-item-title,
+.forge-copy-material-list-modified,
+.forge-copy-material-list-creator {
   font-family: $default-font;
   color: $default-color;
   font-size: 12px;
@@ -384,21 +398,25 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   display: block;
 }
 
-.forge-move-material-list-item-title {
+.forge-move-material-list-item-title,
+.forge-copy-material-list-item-title {
   font-weight: bold;
 }
 
-.forge-move-material-list-modified {
+.forge-move-material-list-modified,
+.forge-copy-material-list-modified {
   font-size: 10px;
 }
 
-.forge-move-material-parents {
+.forge-move-material-parents,
+.forge-copy-material-parents {
   border: 1px inset #aaa;
   padding: 8px;
   margin-bottom: 8px;
 }
 
-.forge-move-material-parent {
+.forge-move-material-parent,
+.forge-copy-material-parent {
   display: inline-block;
   margin-right: 8px;
   color: $default-color;
@@ -409,16 +427,19 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   cursor: pointer;
 }
 
-.forge-move-material-parent:after {
+.forge-move-material-parent:after,
+.forge-copy-material-parent:after {
   padding-left: 8px;
   content: '>>';
 }
 
-.forge-move-material-parent:last-child {
+.forge-move-material-parent:last-child,
+.forge-copy-material-parent:last-child {
   color: $title-color;
 }
 
-.forge-move-material-parent:last-child:after {
+.forge-move-material-parent:last-child:after,
+.forge-copy-material-parent:last-child:after {
   content: '';
 }
 

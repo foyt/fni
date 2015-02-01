@@ -154,7 +154,7 @@
 	          buttons: [{
 	            'text': dialog.data('move-button'),
 	            'click': function(event) { 
-            	  $('input[name="' + prefix + ':move-target-folder-id' + '"]').val($(dialog).data('folder-id'));
+            	  $('input[name="' + prefix + ':target-folder-id' + '"]').val($(dialog).data('folder-id'));
             	  $('input[name="' + prefix + ':material-id' + '"]').val(materialId);
             	  $('input[name="' + prefix + ':move' + '"]').click();
 	            }
@@ -326,4 +326,105 @@
     });
   });
   
+  $(document).on('click', '.forge-material-action-copy a', function (event) {
+    var materialId = $(this).data('material-id');                
+    var actionForm = $('#forge-action-form-container form');
+    var prefix = actionForm.attr('name');
+    var allowedTargets = ($(this).data('allowed-targets')||'').split(',');       
+    var folderTypes = allowedTargets.slice();
+    
+    // If we are allowing event folders as targets we have to allow browsing of the Illusion folder also 
+    if (folderTypes.indexOf('ILLUSION_GROUP_FOLDER') != -1) {
+      folderTypes.push('ILLUSION_FOLDER');
+    }
+ 
+    $.ajax({
+      url : CONTEXTPATH + "/forge/folderbrowser/",
+      traditional: true,
+      data: {
+        'types': folderTypes
+      },
+      success : function(result) {
+        dust.render("forge-copy-material", {
+          materialId : materialId,
+          parents : result.parents,
+          folders : result.folders
+        }, function(err, html) {
+          if (!err) {
+            var dialog = $(html);
+            $(dialog).data('folder-id', null);
+            $(dialog).data('folder-type', $(dialog).find('.forge-copy-material-parent').last().data('parent-type'));
+            var copyDisabled = allowedTargets.length != 0 && allowedTargets.indexOf($(dialog).data('folder-type')) == -1;
+            
+            dialog.dialog({
+              modal : true,
+              width : 600,
+              buttons : [ {
+                'text' : dialog.data('copy-button'),
+                'class': 'copy-button',
+                'disabled': copyDisabled,
+                'click' : function(event) {
+                  $('input[name="' + prefix + ':target-folder-id' + '"]').val($(dialog).data('folder-id'));
+                  $('input[name="' + prefix + ':material-id' + '"]').val(materialId);
+                  $('input[name="' + prefix + ':copy' + '"]').click();
+                }
+              }, {
+                'text' : dialog.data('cancel-button'),
+                'class': 'cancel-button',
+                'click' : function(event) {
+                  $(this).dialog("close");
+                }
+              } ]
+            });
+
+            var loadFolder = function(folderId) {
+              $.ajax({
+                url : CONTEXTPATH + "/forge/folderbrowser/",
+                traditional: true,
+                data : $.extend({
+                  types: folderTypes
+                }, folderId ? {
+                  parent : folderId,
+                } : {}),
+                success : function(result) {
+                  dust.render("forge-copy-material-list", {
+                    materialId : materialId,
+                    parents : result.parents,
+                    folders : result.folders
+                  }, function(err, html) {
+                    $(dialog).find('.forge-copy-material-list').html(html);
+                    $(dialog).data('folder-id', folderId);
+                    $(dialog).data('folder-type', $(dialog).find('.forge-copy-material-parent').last().data('parent-type'));
+                    $(dialog).dialog("option", "buttons", 
+                      $(dialog).dialog("option", "buttons").map($.proxy(function (button, index) {
+                        if (button['class'] == 'copy-button') {
+                          button['disabled'] = allowedTargets.length != 0 && allowedTargets.indexOf($(this).data('folder-type')) == -1;  
+                        }
+
+                        return button;
+                      }), dialog)
+                    ); 
+                  });
+                }
+              });
+            };
+
+            $(dialog).on('click', '.forge-copy-material-list-item', function(event) {
+              if ($(this).data('folder-id') != 'DISABLED') {
+                loadFolder($(this).data('folder-id'));
+              }
+            });
+
+            $(dialog).on('click', '.forge-copy-material-parent', function(event) {
+              loadFolder($(this).data('parent-id'));
+            });
+
+          } else {
+            $('.notifications').notifications('notification', 'error', err);
+          }
+        });
+      }
+    });
+  });
+
 }).call(this);

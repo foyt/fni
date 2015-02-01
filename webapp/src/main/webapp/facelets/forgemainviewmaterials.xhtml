@@ -96,7 +96,7 @@
     <h:form>
       <h:inputHidden id="material-id" value="#{forgeMaterialActionBackingBean.materialId}" />
       <h:inputHidden id="parent-folder-id" value="#{forgeMaterialActionBackingBean.parentFolderId}" />
-      <h:inputHidden id="move-target-folder-id" value="#{forgeMaterialActionBackingBean.moveTargetFolderId}" />
+      <h:inputHidden id="target-folder-id" value="#{forgeMaterialActionBackingBean.targetFolderId}" />
       <h:inputHidden id="material-share-publicity" value="#{forgeMaterialActionBackingBean.materialSharePublicity}" />
       <h:inputHidden id="material-share-collaborators" value="#{forgeMaterialActionBackingBean.materialShareCollaborators}" converter="fi.foyt.fni.jsf.JsonMapConverter" />
       <h:inputHidden id="new-folder-name" value="#{forgeMaterialActionBackingBean.newFolderName}" />
@@ -105,6 +105,7 @@
       <h:commandButton id="print-file" action="#{forgeMaterialActionBackingBean.printFile}" />
       <h:commandButton id="material-share-save" action="#{forgeMaterialActionBackingBean.materialShareSave}" />
       <h:commandButton id="new-folder" action="#{forgeMaterialActionBackingBean.newFolder}" />
+      <h:commandButton id="copy" action="#{forgeMaterialActionBackingBean.copyMaterial}" />
     </h:form>
   </h:panelGroup>
 

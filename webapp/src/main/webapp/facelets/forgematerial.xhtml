@@ -82,6 +82,13 @@
           <h:outputLabel value="#{locales['forge.index.materialShareLink']}" />
         </a>
       </h:panelGroup>
+
+      <h:panelGroup layout="block" styleClass="forge-material-action-copy" rendered="#{forgeMaterialsBackingBean.getMaterialCopyable(material)}">
+        <a href="javascript:void(null)" data-material-id="#{material.id}" data-allowed-targets="#{forgeMaterialsBackingBean.getMaterialCopyTargets(material.type)}">
+          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-copy.png"/>
+          <h:outputLabel value="#{locales['forge.index.materialCopyLink']}" />
+        </a>
+      </h:panelGroup>
     </h:panelGroup>
     
   </div>

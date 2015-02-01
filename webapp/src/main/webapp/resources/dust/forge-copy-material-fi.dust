@@ -1,0 +1,8 @@
+<div title="Tee kopio materiaalista" data-copy-button="Kopioi" data-cancel-button="Peruuta">
+  <div class="forge-copy-material-dialog">
+    <p>Valitse kansio, johon haluat kopioida materiaalin</p>
+    <div class="forge-copy-material-list">
+      {>"forge-copy-material-list"/}
+    </div>
+  </div>
+</div>
