@@ -337,6 +337,11 @@
     if (folderTypes.indexOf('ILLUSION_GROUP_FOLDER') != -1) {
       folderTypes.push('ILLUSION_FOLDER');
     }
+    
+    // If we are allowing folders empty folders (root) are included also
+    if (allowedTargets.indexOf('FOLDER') != -1) {
+      allowedTargets.push('');
+    }
  
     $.ajax({
       url : CONTEXTPATH + "/forge/folderbrowser/",
