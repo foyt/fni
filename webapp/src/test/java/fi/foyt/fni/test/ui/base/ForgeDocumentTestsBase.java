@@ -55,26 +55,33 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
   @SqlSets ({"basic-materials-users"})
   public void testMayView() {
     loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
-    testMayViewDocument(getWebDriver(), DOCUMENT_IN_ROOT);
-    testMayViewDocument(getWebDriver(), DOCUMENT_IN_FOLDER);
-    testMayViewDocument(getWebDriver(), DOCUMENT_IN_SUBFOLDER);
+    testMayViewDocument(DOCUMENT_IN_ROOT);
+    testMayViewDocument(DOCUMENT_IN_FOLDER);
+    testMayViewDocument(DOCUMENT_IN_SUBFOLDER);
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testMayEdit() {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
-    testMayEditDocument(getWebDriver(), DOCUMENT_IN_ROOT);
-    testMayEditDocument(getWebDriver(), DOCUMENT_IN_FOLDER);
-    testMayEditDocument(getWebDriver(), DOCUMENT_IN_SUBFOLDER);
+    testMayEditDocument(DOCUMENT_IN_ROOT);
+    testMayEditDocument(DOCUMENT_IN_FOLDER);
+    testMayEditDocument(DOCUMENT_IN_SUBFOLDER);
   }
 
-  private void testMayViewDocument(RemoteWebDriver driver, String documentPath) {
-    testDocumentEditable(driver, documentPath, false);
+  @Test
+  @SqlSets ({"basic-materials-users"})
+  public void testWithHyphen() {
+    loginInternal("user@foyt.fi", "pass");
+    testMayEditDocument("/forge/documents/2/document-hyphen");
   }
 
-  private void testMayEditDocument(RemoteWebDriver driver, String documentPath) {
-    testDocumentEditable(driver, documentPath, true);
+  private void testMayViewDocument(String documentPath) {
+    testDocumentEditable(getWebDriver(), documentPath, false);
+  }
+
+  private void testMayEditDocument(String documentPath) {
+    testDocumentEditable(getWebDriver(), documentPath, true);
   }
 
   protected void testDocumentEditable(RemoteWebDriver driver, String documentPath, boolean expect) {

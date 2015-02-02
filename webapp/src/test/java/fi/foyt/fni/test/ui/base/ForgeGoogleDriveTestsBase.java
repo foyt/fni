@@ -55,6 +55,13 @@ public class ForgeGoogleDriveTestsBase extends AbstractUITest {
     testMayView(getWebDriver(), GOOGLEDOC_IN_SUBFOLDER);
   }
 
+  @Test
+  @SqlSets ({"basic-materials-users"})
+  public void testWithHyphen() {
+    loginInternal("user@foyt.fi", "pass");
+    testMayView(getWebDriver(), "/forge/google-drive/2/googledoc-hyphen");
+  }
+
   private void testMayView(RemoteWebDriver driver, String path) {
     getWebDriver().get(getAppUrl() + path);
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".forge-google-drive-container iframe")));

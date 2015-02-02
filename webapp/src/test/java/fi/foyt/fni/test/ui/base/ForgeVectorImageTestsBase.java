@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -51,27 +50,34 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
   @SqlSets ({"basic-materials-users"})
   public void testMayView() {
     loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
-    testMayViewVectorImage(getWebDriver(), VECTOR_IMAGE_IN_ROOT);
-    testMayViewVectorImage(getWebDriver(), VECTOR_IMAGE_IN_FOLDER);
-    testMayViewVectorImage(getWebDriver(), VECTOR_IMAGE_IN_SUBFOLDER);
+    testMayViewVectorImage(VECTOR_IMAGE_IN_ROOT);
+    testMayViewVectorImage(VECTOR_IMAGE_IN_FOLDER);
+    testMayViewVectorImage(VECTOR_IMAGE_IN_SUBFOLDER);
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testMayEdit() {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
-    testMayEditVectorImage(getWebDriver(), VECTOR_IMAGE_IN_ROOT);
-    testMayEditVectorImage(getWebDriver(), VECTOR_IMAGE_IN_FOLDER);
-    testMayEditVectorImage(getWebDriver(), VECTOR_IMAGE_IN_SUBFOLDER);
+    testMayEditVectorImage(VECTOR_IMAGE_IN_ROOT);
+    testMayEditVectorImage(VECTOR_IMAGE_IN_FOLDER);
+    testMayEditVectorImage(VECTOR_IMAGE_IN_SUBFOLDER);
   }
 
-  private void testMayViewVectorImage(RemoteWebDriver driver, String path) {
+  @Test
+  @SqlSets ({"basic-materials-users"})
+  public void testWithHyphen() {
+    loginInternal("user@foyt.fi", "pass");
+    testMayEditVectorImage("/forge/vectorimages/2/vectorimage-hyphen");
+  }
+
+  private void testMayViewVectorImage(String path) {
     getWebDriver().get(getAppUrl() + path);
     assertEquals(1, getWebDriver().findElements(By.cssSelector(".forge-vector-image-container")).size());
     assertEquals(0, getWebDriver().findElements(By.cssSelector(".forge-vector-image-container .forge-vector-image-save")).size());
   }
 
-  private void testMayEditVectorImage(RemoteWebDriver driver, String path) {
+  private void testMayEditVectorImage(String path) {
     getWebDriver().get(getAppUrl() + path);
     assertEquals(1, getWebDriver().findElements(By.cssSelector(".forge-vector-image-container")).size());
     assertEquals(1, getWebDriver().findElements(By.cssSelector(".forge-vector-image-container .forge-vector-image-save")).size());

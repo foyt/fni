@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -21,51 +20,58 @@ public class ForgeImageTestsBase extends AbstractUITest {
 
   @Test
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), IMAGE_IN_ROOT);
-    testLoginRequired(getWebDriver(), IMAGE_IN_FOLDER);
-    testLoginRequired(getWebDriver(), IMAGE_IN_SUBFOLDER);
+    testLoginRequired(IMAGE_IN_ROOT);
+    testLoginRequired(IMAGE_IN_FOLDER);
+    testLoginRequired(IMAGE_IN_SUBFOLDER);
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testForbidden() throws Exception {
-    loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
-    testAccessDenied(getWebDriver(), IMAGE_IN_ROOT);
-    testAccessDenied(getWebDriver(), IMAGE_IN_FOLDER);
-    testAccessDenied(getWebDriver(), IMAGE_IN_SUBFOLDER);
+    loginInternal("guest@foyt.fi", "pass");
+    testAccessDenied(IMAGE_IN_ROOT);
+    testAccessDenied(IMAGE_IN_FOLDER);
+    testAccessDenied(IMAGE_IN_SUBFOLDER);
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testNotFound() throws Exception {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    testNotFound(getWebDriver(), "/forge/images/2/folder/subfolder");
-    testNotFound(getWebDriver(), "/forge/images//image");
-    testNotFound(getWebDriver(), "/forge/images/a/image");
-    testNotFound(getWebDriver(), "/forge/images/2");
-    testNotFound(getWebDriver(), "/forge/images/2/");
-    testNotFound(getWebDriver(), "/forge/images/2/*");
+    loginInternal("user@foyt.fi", "pass");
+    testNotFound("/forge/images/2/folder/subfolder");
+    testNotFound("/forge/images//image");
+    testNotFound("/forge/images/a/image");
+    testNotFound("/forge/images/2");
+    testNotFound("/forge/images/2/");
+    testNotFound("/forge/images/2/*");
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testMayView() {
-    loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
-    testMayViewImage(getWebDriver(), IMAGE_IN_ROOT);
-    testMayViewImage(getWebDriver(), IMAGE_IN_FOLDER);
-    testMayViewImage(getWebDriver(), IMAGE_IN_SUBFOLDER);
+    loginInternal("librarian@foyt.fi", "pass");
+    testMayViewImage(IMAGE_IN_ROOT);
+    testMayViewImage(IMAGE_IN_FOLDER);
+    testMayViewImage(IMAGE_IN_SUBFOLDER);
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testMayEdit() {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
-    testMayViewImage(getWebDriver(), IMAGE_IN_ROOT);
-    testMayViewImage(getWebDriver(), IMAGE_IN_FOLDER);
-    testMayViewImage(getWebDriver(), IMAGE_IN_SUBFOLDER);
+    loginInternal("admin@foyt.fi", "pass");
+    testMayViewImage(IMAGE_IN_ROOT);
+    testMayViewImage(IMAGE_IN_FOLDER);
+    testMayViewImage(IMAGE_IN_SUBFOLDER);
   }
 
-  private void testMayViewImage(RemoteWebDriver driver, String path) {
+  @Test
+  @SqlSets ({"basic-materials-users"})
+  public void testWithHyphen() {
+    loginInternal("user@foyt.fi", "pass");
+    testMayViewImage("/forge/images/2/image-hyphen");
+  }
+
+  private void testMayViewImage(String path) {
     getWebDriver().get(getAppUrl() + path);
     assertEquals(1, getWebDriver().findElements(By.cssSelector(".forge-image-container img")).size());
   }

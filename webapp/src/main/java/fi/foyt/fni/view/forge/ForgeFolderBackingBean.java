@@ -37,6 +37,14 @@ import fi.foyt.fni.users.UserController;
 @LoggedIn
 public class ForgeFolderBackingBean extends AbstractForgeMaterialViewBackingBean {
 
+  @Parameter
+  @Matches ("[0-9]{1,}")
+  private Long ownerId;
+
+  @Parameter
+  @Matches ("[a-zA-Z0-9_/.\\-:,]{1,}")
+  private String urlName;
+
   @Inject
   private UserController userController;
 
@@ -48,14 +56,6 @@ public class ForgeFolderBackingBean extends AbstractForgeMaterialViewBackingBean
 
   @Inject
   private SessionController sessionController;
-
-  @Parameter
-  @Matches ("[0-9]{1,}")
-  private Long ownerId;
-
-  @Parameter
-  @Matches ("[a-zA-Z0-9_/.\\-:,]{1,}")
-  private String urlName;
   
   @PostConstruct
   public void init() {
