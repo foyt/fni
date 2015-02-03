@@ -69,7 +69,9 @@ import fi.foyt.fni.drive.SystemGoogleDriveCredentials;
 import fi.foyt.fni.materials.operations.MaterialCopy;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventMaterialParticipantSettingDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
 import fi.foyt.fni.persistence.dao.materials.BinaryDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
@@ -101,7 +103,9 @@ import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.auth.UserIdentifier;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.common.Tag;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.materials.Binary;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
@@ -112,6 +116,7 @@ import fi.foyt.fni.persistence.model.materials.DropboxFolder;
 import fi.foyt.fni.persistence.model.materials.DropboxRootFolder;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.GoogleDocument;
+import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.ImageRevision;
 import fi.foyt.fni.persistence.model.materials.ImageSize;
@@ -251,7 +256,13 @@ public class MaterialController {
   private UserTokenDAO userTokenDAO;
   
   @Inject
-  private IllusionEventMaterialParticipantSettingDAO IllusionEventMaterialParticipantSettingDAO;
+  private IllusionEventMaterialParticipantSettingDAO illusionEventMaterialParticipantSettingDAO;
+
+  @Inject
+  private IllusionEventDAO illusionEventDAO;
+
+  @Inject
+  private IllusionEventParticipantDAO illusionEventParticipantDAO;
   
   @Inject
   private DriveManager driveManager;
@@ -1438,8 +1449,8 @@ public class MaterialController {
       materialViewDAO.delete(materialView);
     }
     
-    for (IllusionEventMaterialParticipantSetting setting : IllusionEventMaterialParticipantSettingDAO.listByMaterial(material)) {
-      IllusionEventMaterialParticipantSettingDAO.delete(setting);;
+    for (IllusionEventMaterialParticipantSetting setting : illusionEventMaterialParticipantSettingDAO.listByMaterial(material)) {
+      illusionEventMaterialParticipantSettingDAO.delete(setting);;
     }
 
     materialDAO.delete(material);
@@ -1803,7 +1814,7 @@ public class MaterialController {
       
       // New URL name
       
-      String urlName = getUniqueMaterialUrlName(creator, targetFolder, material, material.getTitle());
+      String urlName = getUniqueMaterialUrlName(creator, targetFolder, null, material.getTitle());
       
       // Copy Material
       
@@ -1822,11 +1833,40 @@ public class MaterialController {
         materialTagDAO.create(copy, tag.getTag());
       }
       
-      for (IllusionEventMaterialParticipantSetting setting : IllusionEventMaterialParticipantSettingDAO.listByMaterial(material)) {
-        IllusionEventMaterialParticipantSettingDAO.create(copy, setting.getParticipant(), setting.getKey(), setting.getValue());
+      IllusionEventFolder targetIllusionFolder = findMaterialIllusionFolder(targetFolder);
+      if (targetIllusionFolder != null) {
+        IllusionEvent targetEvent = illusionEventDAO.findByFolder(targetIllusionFolder);
+        
+        for (IllusionEventMaterialParticipantSetting setting : illusionEventMaterialParticipantSettingDAO.listByMaterial(material)) {
+          IllusionEventParticipant participant = illusionEventParticipantDAO.findByEventAndUser(targetEvent, setting.getParticipant().getUser());
+          if (participant != null) {
+            illusionEventMaterialParticipantSettingDAO.create(copy, participant, setting.getKey(), setting.getValue());
+          }
+        }
+      }
+
+      return copy;
+    }
+    
+    return null;
+  }
+  
+  private IllusionEventFolder findMaterialIllusionFolder(Material material) {
+    if (material == null) {
+      return null;
+    }
+    
+    if (material.getType() == MaterialType.ILLUSION_GROUP_FOLDER) {
+      return (IllusionEventFolder) material;
+    }
+    
+    Folder parent = material.getParentFolder();
+    while (parent != null) {
+      if (parent.getType() == MaterialType.ILLUSION_GROUP_FOLDER) {
+        return (IllusionEventFolder) parent;
       }
       
-      return copy;
+      parent = parent.getParentFolder();
     }
     
     return null;
