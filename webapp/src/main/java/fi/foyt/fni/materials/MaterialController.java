@@ -1437,6 +1437,10 @@ public class MaterialController {
     for (MaterialView materialView : materialViews) {
       materialViewDAO.delete(materialView);
     }
+    
+    for (IllusionEventMaterialParticipantSetting setting : IllusionEventMaterialParticipantSettingDAO.listByMaterial(material)) {
+      IllusionEventMaterialParticipantSettingDAO.delete(setting);;
+    }
 
     materialDAO.delete(material);
   }
