@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import javax.ejb.Stateful;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +43,7 @@ import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.forum.ForumTopicWatcher;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.utils.faces.FacesUtils;
+import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
@@ -77,7 +76,10 @@ public class ForumController implements Serializable {
 
   @Inject
 	private SessionController sessionController;
-	
+
+  @Inject
+  private SystemSettingsController systemSettingsController;
+  
 	@Inject
 	@ForumPostCreated
 	private Event<ForumPostEvent> postCreatedEvent;
@@ -166,7 +168,10 @@ public class ForumController implements Serializable {
 		Date now = new Date();
 		ForumPost forumPost = forumPostDAO.create(topic, author, now, now, content, 0l);
 		addTopicWatcher(author, topic);
-		postCreatedEvent.fire(new ForumPostEvent(FacesUtils.getLocalAddress(false), FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath(), sessionController.getLocale(), forumPost.getId()));
+		String localAddress = systemSettingsController.getSiteUrl(false, false);
+		String contextPath = systemSettingsController.getSiteContextPath();
+		
+		postCreatedEvent.fire(new ForumPostEvent(localAddress, contextPath, sessionController.getLocale(), forumPost.getId()));
 		return forumPost;
 	}
 
