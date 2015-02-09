@@ -665,6 +665,10 @@ public class IllusionRestServices {
    */
   @Path("/events/{EVENTID:[0-9]*}/materials/{MATERIALID:[0-9]*}/participantSettings/{PARTICIPANTID:[0-9]*}")
   @POST
+  @Security (
+    allowService = false,
+    scopes = { OAuthScopes.ILLUSION_CREATE_MATERIAL_PARTICIPANT_SETTING }
+  )
   public Response createMaterialSetting(@PathParam ("EVENTID") Long eventId, @PathParam ("MATERIALID") Long materialId, @PathParam ("PARTICIPANTID") Long participantId, IllusionEventMaterialParticipantSetting entity) {
     if (entity.getKey() == null) {
       return Response.status(Status.BAD_REQUEST).build();
@@ -736,6 +740,10 @@ public class IllusionRestServices {
    */
   @Path("/events/{EVENTID:[0-9]*}/materials/{MATERIALID:[0-9]*}/participantSettings/{PARTICIPANTID:[0-9]*}")
   @GET
+  @Security (
+    allowService = false,
+    scopes = { OAuthScopes.ILLUSION_LIST_MATERIAL_PARTICIPANT_SETTING }
+  )
   public Response listMaterialSettings(@PathParam ("EVENTID") Long eventId, @PathParam ("MATERIALID") Long materialId, @PathParam ("PARTICIPANTID") Long participantId, @QueryParam ("key") String keyName) {
     IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
     if (event == null) {
@@ -806,6 +814,10 @@ public class IllusionRestServices {
    */
   @Path("/events/{EVENTID:[0-9]*}/materials/{MATERIALID:[0-9]*}/participantSettings/{PARTICIPANTID:[0-9]*}/{ID:[0-9]*}")
   @GET
+  @Security (
+    allowService = false,
+    scopes = { OAuthScopes.ILLUSION_FIND_MATERIAL_PARTICIPANT_SETTING }
+  )
   public Response getMaterialSetting(@PathParam ("EVENTID") Long eventId, @PathParam ("MATERIALID") Long materialId, @PathParam ("PARTICIPANTID") Long participantId, @PathParam ("ID") Long id) {
     IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
     if (event == null) {
@@ -842,6 +854,10 @@ public class IllusionRestServices {
    */
   @Path("/events/{EVENTID:[0-9]*}/materials/{MATERIALID:[0-9]*}/participantSettings/{PARTICIPANTID:[0-9]*}/{ID:[0-9]*}")
   @PUT
+  @Security (
+    allowService = false,
+    scopes = { OAuthScopes.ILLUSION_UPDATE_MATERIAL_PARTICIPANT_SETTING }
+  )
   public Response updateMaterialSetting(@PathParam ("EVENTID") Long eventId, @PathParam ("MATERIALID") Long materialId, @PathParam ("PARTICIPANTID") Long participantId, @PathParam ("ID") Long id, IllusionEventMaterialParticipantSetting entity) {
     if (entity.getKey() == null) {
       return Response.status(Status.BAD_REQUEST).build();
@@ -908,6 +924,10 @@ public class IllusionRestServices {
    */
   @Path("/events/{EVENTID:[0-9]*}/pages/{PAGEID:[0-9]*}")
   @DELETE
+  @Security (
+    allowService = false,
+    scopes = { OAuthScopes.ILLUSION_DELETE_EVENT_PAGE }
+  )
   public Response deletePage(@PathParam ("EVENTID") Long eventId, @PathParam ("PAGEID") Long pageId) {
     if (!sessionController.isLoggedIn()) {
       return Response.status(Status.UNAUTHORIZED).build();
