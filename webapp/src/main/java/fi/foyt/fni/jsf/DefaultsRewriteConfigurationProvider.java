@@ -43,6 +43,9 @@ public class DefaultsRewriteConfigurationProvider extends HttpConfigurationProvi
       .perform(Substitute.with("/javax.faces.resource/{file}.jsf?ln=novus"))
       .where("file").matches("[a-zA-Z0-9/_.\\-]*");
     
+    configuration.addRule(Join.path("/scripts/{file}").to("/faces/javax.faces.resource/scripts/{file}"))
+      .where("file").matches("[a-zA-Z0-9/_.\\-]*");
+    
     return configuration;
   }
 
