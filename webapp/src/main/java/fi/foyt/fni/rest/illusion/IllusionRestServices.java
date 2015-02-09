@@ -27,6 +27,7 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
+import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventMaterialController;
 import fi.foyt.fni.materials.MaterialController;
@@ -46,6 +47,7 @@ import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
 import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.rest.Security;
+import fi.foyt.fni.rest.forum.model.ForumPost;
 import fi.foyt.fni.rest.illusion.model.IllusionEventGroup;
 import fi.foyt.fni.rest.illusion.model.IllusionEventMaterialParticipantSetting;
 import fi.foyt.fni.session.SessionController;
@@ -63,6 +65,9 @@ public class IllusionRestServices {
 
   @Inject
   private MaterialController materialController;
+
+  @Inject
+  private ForumController forumController;
 
   @Inject
   private UserController userController;
@@ -944,6 +949,145 @@ public class IllusionRestServices {
     return Response.status(Status.NO_CONTENT).build();
   }
   
+  @POST
+  @Path("/events/{EVENTID:[0-9]*}/forumPosts/")
+  @Security (
+    allowService = false,
+    scopes = { OAuthScopes.ILLUSION_CREATE_FORUM_POST }
+  )
+  public Response createForumPost(@PathParam ("EVENTID") Long eventId, ForumPost entity) {
+    if (entity == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Payload missing").build();
+    }
+    
+    if (StringUtils.isBlank(entity.getContent())) {
+      return Response.status(Status.BAD_REQUEST).entity("Content missing").build();
+    }
+    
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+    
+    User user = sessionController.getLoggedUser();
+
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
+    if (participant == null) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    if ((participant.getRole() != IllusionEventParticipantRole.ORGANIZER) && (participant.getRole() != IllusionEventParticipantRole.PARTICIPANT)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    return Response
+      .ok(createRestModel(forumController.createForumPost(event.getForumTopic(), user, entity.getContent())))
+      .build(); 
+  }
+  
+  @GET
+  @Path("/events/{EVENTID:[0-9]*}/forumPosts/")
+  @Security (
+    allowService = false,
+    scopes = { OAuthScopes.ILLUSION_LIST_FORUM_POSTS }
+  )
+  public Response createForumPost(@PathParam ("EVENTID") Long eventId) {
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+    
+    User user = sessionController.getLoggedUser();
+
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
+    if (participant == null) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    if ((participant.getRole() != IllusionEventParticipantRole.ORGANIZER) && (participant.getRole() != IllusionEventParticipantRole.PARTICIPANT)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    List<fi.foyt.fni.persistence.model.forum.ForumPost> posts = forumController.listPostsByTopic(event.getForumTopic());
+    if (posts.isEmpty()) {
+      return Response.noContent().build();
+    }
+    
+    return Response
+      .ok(createRestModel(posts.toArray(new fi.foyt.fni.persistence.model.forum.ForumPost[0])))
+      .build(); 
+  }
+  
+  @PUT
+  @Path("/events/{EVENTID:[0-9]*}/forumPosts/{POSTID:[0-9]*}")
+  @Security (
+    allowService = false,
+    scopes = { OAuthScopes.ILLUSION_UPDATE_FORUM_POST }
+  )
+  public Response updateForumPost(@PathParam ("EVENTID") Long eventId, @PathParam ("POSTID") Long postId, ForumPost entity) {
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+    
+    fi.foyt.fni.persistence.model.forum.ForumPost post = forumController.findForumPostById(postId);
+    if ((post == null) || (post.getTopic().getId().equals(event.getForumTopic().getId()))) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+      
+    User user = sessionController.getLoggedUser();
+
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
+    if (participant == null) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    if ((participant.getRole() != IllusionEventParticipantRole.ORGANIZER) && (participant.getRole() != IllusionEventParticipantRole.PARTICIPANT)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    forumController.updateForumPostContent(post, entity.getContent());
+    
+    return Response.noContent().build();
+  }
+  
+  @DELETE
+  @Path("/events/{EVENTID:[0-9]*}/forumPosts/{POSTID:[0-9]*}")
+  @Security (
+    allowService = false,
+    scopes = { OAuthScopes.ILLUSION_DELETE_FORUM_POST }
+  )
+  public Response deleteForumPost(@PathParam ("EVENTID") Long eventId, @PathParam ("POSTID") Long postId) {
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+    
+    fi.foyt.fni.persistence.model.forum.ForumPost post = forumController.findForumPostById(postId);
+    if ((post == null) || (post.getTopic().getId().equals(event.getForumTopic().getId()))) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+      
+    User user = sessionController.getLoggedUser();
+
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
+    if (participant == null) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    if ((participant.getRole() != IllusionEventParticipantRole.ORGANIZER) && (participant.getRole() != IllusionEventParticipantRole.PARTICIPANT)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    if (participant.getRole() == IllusionEventParticipantRole.PARTICIPANT && !post.getAuthor().getId().equals(user.getId())) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+
+    forumController.deletePost(post);
+
+    return Response.noContent().build();
+  }
+  
   private List<IllusionEventMaterialParticipantSetting> createRestModel(fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting... participantSettings) {
     List<IllusionEventMaterialParticipantSetting> result = new ArrayList<>();
     
@@ -1017,4 +1161,18 @@ public class IllusionRestServices {
     return new DateTime(date.getTime());
   }
   
+  private ForumPost[] createRestModel(fi.foyt.fni.persistence.model.forum.ForumPost... forumPosts) {
+    List<ForumPost> result = new ArrayList<>();
+    
+    for (fi.foyt.fni.persistence.model.forum.ForumPost forumPost : forumPosts) {
+      result.add(createRestModel(forumPost));
+    }
+    
+    return result.toArray(new ForumPost[0]);
+  }
+  
+  private ForumPost createRestModel(fi.foyt.fni.persistence.model.forum.ForumPost forumPost) {
+    return new ForumPost(forumPost.getId(), forumPost.getTopic().getId(), forumPost.getContent(), 
+        forumPost.getModified(), forumPost.getCreated(), forumPost.getAuthor().getId(), forumPost.getViews()); 
+  }
 }

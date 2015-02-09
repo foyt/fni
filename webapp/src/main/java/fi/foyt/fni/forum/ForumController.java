@@ -364,6 +364,10 @@ public class ForumController implements Serializable {
 		
 		return null;
 	}
+
+  public void deletePost(fi.foyt.fni.persistence.model.forum.ForumPost post) {
+    forumPostDAO.delete(post);
+  }
 	  
 	/* ForumTopicWatchers */
 
