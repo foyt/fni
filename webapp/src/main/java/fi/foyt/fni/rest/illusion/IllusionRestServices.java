@@ -969,6 +969,13 @@ public class IllusionRestServices {
     return Response.status(Status.NO_CONTENT).build();
   }
   
+  /**
+   * Creates Illusion event forum post 
+   * 
+   * @param eventId event id
+   * @param entity payload
+   * @return Response
+   */  
   @POST
   @Path("/events/{EVENTID:[0-9]*}/forumPosts/")
   @Security (
@@ -1005,6 +1012,12 @@ public class IllusionRestServices {
       .build(); 
   }
   
+  /**
+   * Lists Illusion event forum posts
+   * 
+   * @param eventId event id
+   * @return Response
+   */ 
   @GET
   @Path("/events/{EVENTID:[0-9]*}/forumPosts/")
   @Security (
@@ -1038,6 +1051,14 @@ public class IllusionRestServices {
       .build(); 
   }
   
+  /**
+   * Updates forum post event
+   * 
+   * @param eventId event id
+   * @param postId post id to be updated
+   * @param entity update payload
+   * @return Response
+   */
   @PUT
   @Path("/events/{EVENTID:[0-9]*}/forumPosts/{POSTID:[0-9]*}")
   @Security (
@@ -1071,6 +1092,13 @@ public class IllusionRestServices {
     return Response.noContent().build();
   }
   
+  /**
+   * Removes forum post from event
+   * 
+   * @param eventId event id
+   * @param postId post id to be removed
+   * @return Response
+   */
   @DELETE
   @Path("/events/{EVENTID:[0-9]*}/forumPosts/{POSTID:[0-9]*}")
   @Security (

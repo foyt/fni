@@ -18,6 +18,11 @@ public class ForumPost {
     this.views = views;
   }
 
+  /**
+   * Returns forum post id
+   * 
+   * @return forum post id
+   */
   public Long getId() {
     return id;
   }
@@ -26,6 +31,11 @@ public class ForumPost {
     this.id = id;
   }
 
+  /**
+   * Returns forum topic id
+   * 
+   * @return forum topic id
+   */
   public Long getTopicId() {
     return topicId;
   }
@@ -34,6 +44,11 @@ public class ForumPost {
     this.topicId = topicId;
   }
 
+  /**
+   * Returns forum post content
+   * 
+   * @return forum post content
+   */
   public String getContent() {
     return content;
   }
@@ -42,6 +57,11 @@ public class ForumPost {
     this.content = content;
   }
 
+  /**
+   * Returns last time when the post was removed
+   * 
+   * @return last time when the post was removed
+   */
   public Date getModified() {
     return modified;
   }
@@ -50,6 +70,11 @@ public class ForumPost {
     this.modified = modified;
   }
 
+  /**
+   * Returns when the post was created
+   * 
+   * @return when the post was created
+   */
   public Date getCreated() {
     return created;
   }
@@ -58,6 +83,11 @@ public class ForumPost {
     this.created = created;
   }
 
+  /**
+   * Returns post author's id
+   * 
+   * @return post author's id
+   */
   public Long getAuthorId() {
     return authorId;
   }
@@ -66,6 +96,11 @@ public class ForumPost {
     this.authorId = authorId;
   }
 
+  /**
+   * Returns post view count
+   * 
+   * @return post view count
+   */
   public Long getViews() {
     return views;
   }
