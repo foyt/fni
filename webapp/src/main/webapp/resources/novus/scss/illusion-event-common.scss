@@ -99,17 +99,17 @@ $menu-active-background: rgba(250, 250, 250, 1);
 
 /* Generic */
 
-h2 {
+h2, .illusion-event-sub-panel h2 {
   @include header-2;
   color: $title-color;
 }
 
-h3 {
+h3, .illusion-event-sub-panel h3 {
   @include header-3;
   color: $default-color;
 }
 
-h4 {
+h4, .illusion-event-sub-panel h4 {
   @include header-4;
   color: $default-color;
 }
