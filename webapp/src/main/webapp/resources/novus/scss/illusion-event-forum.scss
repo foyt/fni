@@ -1,0 +1,151 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+$border-color: rgb(71, 176, 176);
+
+/* Watch */
+
+/**
+.illusion-forum-watch-link, .illusion-forum-stop-watching-link {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 12px;
+  text-decoration: none;
+  text-transform: uppercase;
+  float: right;
+  margin-top: 6px; 
+}
+**/
+
+/* Pages */
+
+.illusion-forum-pages {
+  float: right;
+}
+
+.illusion-forum-pages a {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 10px;
+  text-decoration: none;
+  text-transform: uppercase;
+  margin-left: 4px;
+}
+
+.illusion-forum-pages a.illusion-forum-selected-page {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+/* Posts */
+
+.illusion-forum-post {
+  padding-top: 22px;
+  padding-bottom: 27px;
+  border-top: 1px solid $border-color;
+}
+
+.illusion-forum-post:nth-of-type(1) {
+  border-top: 0px;
+}
+
+.illusion-forum-post-author-info {
+  display: table-cell;
+  vertical-align: top;
+  width: 120px;
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 10px;
+}
+
+.illusion-forum-post-author-image-container {
+  padding-top: 3px;
+}
+
+.illusion-forum-post-content-container {
+  display: table-cell;
+  vertical-align: top;
+}
+
+.illusion-forum-post-content {
+  color: $default-color;
+  font-family: $default-font;
+  width: 800px;
+  font-size: 13px;
+  line-height: 1.6em;
+}
+
+.illusion-forum-post-content p {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.illusion-forum-post-content p:first-child {
+  margin-top: 0;
+}
+
+.illusion-forum-post-content b, .illusion-forum-post-content strong {
+  font-weight: bold;
+}
+
+.illusion-forum-post-content i, .illusion-forum-post-content em {
+  font-style: italic;
+}
+
+.illusion-forum-post-footer {
+  clear: both;
+  padding-top: 13px;
+}
+
+.illusion-forum-post-edit-container {
+  float: right;
+}
+
+.illusion-forum-post-dates-container {
+  float: left;
+  vertical-align: top;
+}
+
+.illusion-forum-post-sent, .illusion-forum-post-modified {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.illusion-forum-post-edit {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase; 
+  text-decoration: none;
+}
+
+/* Reply */
+
+.illusion-forum-reply-login-container {
+  margin-top: 20px;
+}
+
+.illusion-forum-reply-login-link {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 12px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.illusion-forum-post-reply {
+  color: $default-color;
+  font-family: $title-font;
+  font-size: 14px;
+  text-transform: uppercase;
+  padding: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}

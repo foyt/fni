@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">
+    <h:outputFormat value="#{locales['illusion.eventForum.pageTitle']}">
+      <f:param value="#{illusionEventForumBackingBean.name}"/>
+    </h:outputFormat>
+  </ui:define>
+  
+  <ui:define name="view-custom-head">
+    <h:outputText value="#{illusionEventForumBackingBean.headHtml}" escape="false"/>
+  </ui:define>
+  
+  <ui:define name="grid-content">
+    <ui:include src="/facelets/menu.xhtml"/>
+    <h:outputText value="#{illusionEventForumBackingBean.contentsHtml}" escape="false"/>
+    
+    <input type="hidden" value="#{illusionEventForumBackingBean.id}" id="event-id"/>
+  </ui:define>
+
+</ui:composition>

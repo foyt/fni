@@ -8,6 +8,8 @@ public class IllusionEventPage {
     
     MATERIALS,
     
+    FORUM,
+
     PARTICIPANTS,
     
     GROUPS,

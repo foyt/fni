@@ -1,0 +1,29 @@
+include common
++view-header()
++navigation()
+div.grid_16.tight
+  .illusion-content-panel.grid_16.tight
+    .grid_16
+      div.illusion-event-sub-panel
+        div.illusion-forum-pages
+          for topicPageNum in topicPages
+            a(href=eventUrl + "/forum" + (topicPageNum != 0 ? "?page=" + topicPageNum : ""), class=topicPageNum == topicPage ? "illusion-forum-selected-page" : "")
+              =topicPageNum + 1
+        h3
+          =locales['illusion.forum.title']
+        div.illusion-forum-posts
+          for post in posts
+            div.illusion-forum-post
+              div.illusion-forum-post-author-info
+                div.illusion-forum-post-author-image-container
+                  img(src=contextPath + "/users/profileImages/" + post.authorId + "?width=80&height=80")
+                div.illusion-forum-post-author-name
+                  =post.authorName
+                div.illusion-forum-post-author-posts
+                  =locales['illusion.forum.authorPosts'] + ' ' + post.authorPosts
+              div.illusion-forum-post-content-container
+                div.illusion-forum-post-content
+                  !=post.content
+        textarea.illusion-forum-post-editor
+        button.illusion-forum-post-reply
+          =locales['illusion.forum.postReply']
