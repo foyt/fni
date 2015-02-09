@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.auth.OAuthController;
 import fi.foyt.fni.chat.ChatCredentialsController;
+import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.dao.illusion.GenreDAO;
@@ -37,6 +38,8 @@ import fi.foyt.fni.persistence.dao.materials.IllusionEventFolderDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionFolderDAO;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.common.Language;
+import fi.foyt.fni.persistence.model.forum.Forum;
+import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.illusion.Genre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventGenre;
@@ -61,6 +64,7 @@ import fi.foyt.fni.persistence.model.oauth.OAuthClient;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @Dependent
@@ -127,6 +131,12 @@ public class IllusionEventController {
   private OAuthController oAuthController;
 
   @Inject
+  private ForumController forumController;
+
+  @Inject
+  private UserController userController;
+
+  @Inject
   private Event<IllusionParticipantAddedEvent> illusionParticipantAddedEvent;
 
   @Inject
@@ -162,7 +172,11 @@ public class IllusionEventController {
   }
 
   private IllusionEvent createIllusionEvent(String urlName, String location, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date start, Date end, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate) {
-    return illusionEventDAO.create(urlName, name, location, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency, start, end, null, ageLimit, beginnerFriendly, imageUrl, type, signUpStartDate, signUpEndDate, Boolean.FALSE);
+    Forum forum = forumController.findForumByUrlName("illusion");
+    String systemUserEmail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
+    User systemUser = userController.findUserByEmail(systemUserEmail);
+    ForumTopic forumTopic = forumController.createTopic(forum, name, systemUser);
+    return illusionEventDAO.create(urlName, name, location, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeCurrency, start, end, null, ageLimit, beginnerFriendly, imageUrl, type, signUpStartDate, signUpEndDate, Boolean.FALSE, forumTopic);
   }
 
   public IllusionEvent findIllusionEventById(Long id) {

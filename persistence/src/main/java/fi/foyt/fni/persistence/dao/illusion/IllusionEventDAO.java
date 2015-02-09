@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.GenericDAO;
+import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
@@ -22,7 +23,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionEvent create(String urlName, String name, String location, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date start, Date end, OAuthClient oAuthClient, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate, Boolean published) {
+	public IllusionEvent create(String urlName, String name, String location, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, Currency signUpFeeCurrency, Date start, Date end, OAuthClient oAuthClient, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate, Boolean published, ForumTopic forumTopic) {
 		IllusionEvent illusionEvent = new IllusionEvent();
 		
 		illusionEvent.setName(name);
@@ -45,6 +46,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 		illusionEvent.setSignUpStartDate(signUpStartDate);
 		illusionEvent.setSignUpEndDate(signUpEndDate);
 		illusionEvent.setPublished(published);
+		illusionEvent.setForumTopic(forumTopic);
 		
 		return persist(illusionEvent);
 	}

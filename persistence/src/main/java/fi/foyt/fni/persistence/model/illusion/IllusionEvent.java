@@ -22,6 +22,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient;
 
@@ -201,6 +202,14 @@ public class IllusionEvent {
   public void setSignUpEndDate(Date signUpEndDate) {
     this.signUpEndDate = signUpEndDate;
   }
+  
+  public ForumTopic getForumTopic() {
+    return forumTopic;
+  }
+  
+  public void setForumTopic(ForumTopic forumTopic) {
+    this.forumTopic = forumTopic;
+  }
 
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
@@ -272,4 +281,7 @@ public class IllusionEvent {
 
   @ManyToOne
   private OAuthClient oAuthClient;
+  
+  @ManyToOne
+  private ForumTopic forumTopic;
 }
