@@ -3,16 +3,10 @@ package fi.foyt.fni.test.ui;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.junit.After;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
@@ -24,19 +18,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import fi.foyt.fni.test.AbstractTest;
 
 public abstract class AbstractUITest extends AbstractTest {
-  
-  @After
-  public void flushCache() throws ClientProtocolException, IOException {
-    HttpGet get = new HttpGet(getAppUrl() + "/rest/system/jpa/cache/flush");
-    DefaultHttpClient client = new DefaultHttpClient();
-    try {
-      get.addHeader("Authorization", "Bearer systemtoken");
-      HttpResponse response = client.execute(get);
-      assertEquals(200, response.getStatusLine().getStatusCode());
-    } finally {
-      client.getConnectionManager().shutdown();
-    }
-  }
   
   protected String stripLinkJSessionId(String link) {
     if (StringUtils.isNotBlank(link)) {

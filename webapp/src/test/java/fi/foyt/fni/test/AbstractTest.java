@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -19,6 +20,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -33,6 +38,19 @@ public abstract class AbstractTest {
 
   @Rule
   public TestName testName = new TestName();
+  
+  @After
+  public void flushCache() throws ClientProtocolException, IOException {
+    HttpGet get = new HttpGet(getAppUrl() + "/rest/system/jpa/cache/flush");
+    DefaultHttpClient client = new DefaultHttpClient();
+    try {
+      get.addHeader("Authorization", "Bearer systemtoken");
+      HttpResponse response = client.execute(get);
+      assertEquals(200, response.getStatusLine().getStatusCode());
+    } finally {
+      client.getConnectionManager().shutdown();
+    }
+  }
 
   @Before
   public void sqlSetup() throws Exception {
