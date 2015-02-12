@@ -34,3 +34,12 @@ insert into
 values 
   (1, 'systemtoken', 5000000000, null, 1);
   
+insert into
+  ForumCategory (id, name)
+values 
+  (1, 'Forum');
+ 
+insert into 
+  Forum (name, urlName, category_id, allowTopicCreation, description)
+values 
+  ('Illusion', 'illusion', 1, false, 'Illusion');

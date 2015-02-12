@@ -15,6 +15,7 @@ import com.jayway.restassured.response.Response;
 
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.rest.forum.model.ForumPost;
 import fi.foyt.fni.rest.illusion.model.IllusionEvent;
 import fi.foyt.fni.rest.illusion.model.IllusionEventParticipant;
 import fi.foyt.fni.test.DefineSqlSet;
@@ -24,12 +25,18 @@ import fi.foyt.fni.test.SqlSets;
 @DefineSqlSets({ 
   @DefineSqlSet(id = "basic-users", before = "basic-users-setup.sql", after = "basic-users-teardown.sql"),
   @DefineSqlSet(id = "service-client", before = "rest-service-client-setup.sql", after = "rest-service-client-teardown.sql"),
+  @DefineSqlSet(id = "user-client", before = "rest-user-client-setup.sql", after = "rest-user-client-teardown.sql"),
   @DefineSqlSet(id = "events", before = "illusion-event-oai-setup.sql", after = "illusion-event-oai-teardown.sql"),
   @DefineSqlSet(id = "groups", before = "illusion-event-oai-groups-setup.sql", after = "illusion-event-oai-groups-teardown.sql"),
+  @DefineSqlSet(id = "posts", before = "illusion-event-oai-posts-setup.sql", after = "illusion-event-oai-posts-teardown.sql"),
   @DefineSqlSet(id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql"),
-  @DefineSqlSet(id = "event-participant", before = { "illusion-event-open-setup.sql","illusion-event-open-participant-setup.sql" }, after = {"illusion-event-open-participant-teardown.sql","illusion-event-open-teardown.sql"})
+  @DefineSqlSet(id = "event", before = { "illusion-event-open-setup.sql" }, after = { "illusion-event-open-teardown.sql"}),
+  @DefineSqlSet(id = "event-participant", before = {"illusion-event-open-participant-setup.sql" }, after = {"illusion-event-open-participant-teardown.sql"}),
+  @DefineSqlSet(id = "event-forum", before = { "illusion-event-open-forum-setup.sql" }, after = {"illusion-event-open-forum-teardown.sql"}),
+  @DefineSqlSet(id = "event-forum-posts", before = { "illusion-event-open-forum-posts-setup.sql" }, after = {"illusion-event-open-forum-posts-teardown.sql"})
 })
 public class IllusionEventsRestTestIT extends AbstractRestTest {
+  
   
   @Test
   @SqlSets({"basic-users", "events"})
@@ -490,7 +497,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   }
 
   @Test
-  @SqlSets({"basic-users", "service-client", "illusion-basic", "event-participant", "events"})
+  @SqlSets({"basic-users", "service-client", "illusion-basic", "event", "event-participant", "events"})
   public void testFindEventParticipantNotFound() throws OAuthSystemException, OAuthProblemException {
     String token = createServiceToken();
     
@@ -551,7 +558,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   }
   
   @Test
-  @SqlSets({"basic-users", "service-client", "illusion-basic", "event-participant" })
+  @SqlSets({"basic-users", "service-client", "illusion-basic", "event", "event-participant" })
   public void testFindParticipant() throws Exception {
     givenJson(createServiceToken())
       .get("/illusion/events/1/participants/1")
@@ -563,7 +570,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   }
   
   @Test
-  @SqlSets({"basic-users", "service-client", "illusion-basic", "event-participant" })
+  @SqlSets({"basic-users", "service-client", "illusion-basic", "event", "event-participant" })
   public void testCreateParticipant() throws Exception {
     String token = createServiceToken();
     
@@ -588,7 +595,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   }
   
   @Test
-  @SqlSets({"basic-users", "service-client", "illusion-basic", "event-participant" })
+  @SqlSets({"basic-users", "service-client", "illusion-basic", "event", "event-participant" })
   public void testDeleteParticipant() throws Exception {
     String token = createServiceToken();
     
@@ -618,7 +625,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   }
   
   @Test
-  @SqlSets({"basic-users", "service-client", "illusion-basic", "event-participant" })
+  @SqlSets({"basic-users", "service-client", "illusion-basic", "event", "event-participant" })
   public void testUpdateParticipant() throws Exception {
     String token = createServiceToken();
     
@@ -660,4 +667,125 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .then()
       .statusCode(204);
   }
+  
+  @Test
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-posts"})
+  public void testCreatePost() {
+    ForumPost post = new ForumPost(null, null, "created post", null, null, null, null);
+    
+    givenJson("access-token")
+      .body(post)
+      .post("/illusion/events/{EVENTID}/forumPosts", 1)
+      .then()
+      .statusCode(200)
+      .body("topicId", is(20000))
+      .body("content", is(post.getContent()))
+      .body("modified", is(not((String) null)))
+      .body("created", is(not((String) null)))
+      .body("authorId", is(2))
+      .body("views", is(0));
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum"})
+  public void testListPostsUnauthorized() {
+    givenJson()
+      .get("/illusion/events/{EVENTID}/forumPosts", 1)
+      .then()
+      .statusCode(401);
+  }
+  
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-forum"})
+  public void testListPostsForbiddeb() {
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts", 1)
+      .then()
+      .statusCode(403);
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum"})
+  public void testListPostsEmpty() {
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts", 1)
+      .then()
+      .statusCode(204);
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-posts"})
+  public void testListPosts() {
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts", 1)
+      .then()
+      .statusCode(200)
+      .body("id.size()", is(2))
+      .body("id[0]", is(20100))
+      .body("topicId[0]", is(20000))
+      .body("content[0]", is("message #1"))
+      .body("modified[0]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("created[0]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("authorId[0]", is(2))
+      .body("views[0]", is(0))
+      .body("id[1]", is(20101))
+      .body("topicId[1]", is(20000))
+      .body("content[1]", is("message #2"))
+      .body("modified[1]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("created[1]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("authorId[1]", is(2))
+      .body("views[1]", is(0));
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-posts"})
+  public void testUpdatePost() {
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts", 1)
+      .then()
+      .statusCode(200)
+      .body("id.size()", is(2))
+      .body("id[0]", is(20100))
+      .body("content[0]", is("message #1"));
+    
+    ForumPost post = new ForumPost(20100l, null, "Updated", null, null, null, null);
+
+    givenJson("access-token")
+      .body(post)
+      .put("/illusion/events/{EVENTID}/forumPosts/{ID}", 1, 20100)
+      .then()
+      .statusCode(204);
+
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts", 1)
+      .then()
+      .statusCode(200)
+      .body("id.size()", is(2))
+      .body("id[0]", is(20100))
+      .body("content[0]", is("Updated"));
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-posts"})
+  public void testDeletePost() {
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts", 1)
+      .then()
+      .statusCode(200)
+      .body("id.size()", is(2))
+      .body("id[0]", is(20100))
+      .body("id[1]", is(20101));
+    
+    givenJson("access-token")
+      .delete("/illusion/events/{EVENTID}/forumPosts/{ID}", 1, 20100)
+      .then()
+      .statusCode(204);
+
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts", 1)
+      .then()
+      .statusCode(200)
+      .body("id.size()", is(1))
+      .body("id[0]", is(20101));
+  }
+  
 }
