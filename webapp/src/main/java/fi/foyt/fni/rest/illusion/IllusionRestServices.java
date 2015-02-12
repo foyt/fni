@@ -1072,7 +1072,7 @@ public class IllusionRestServices {
     }
     
     fi.foyt.fni.persistence.model.forum.ForumPost post = forumController.findForumPostById(postId);
-    if ((post == null) || (post.getTopic().getId().equals(event.getForumTopic().getId()))) {
+    if ((post == null) || (!post.getTopic().getId().equals(event.getForumTopic().getId()))) {
       return Response.status(Status.NOT_FOUND).build(); 
     }
       
@@ -1112,7 +1112,7 @@ public class IllusionRestServices {
     }
     
     fi.foyt.fni.persistence.model.forum.ForumPost post = forumController.findForumPostById(postId);
-    if ((post == null) || (post.getTopic().getId().equals(event.getForumTopic().getId()))) {
+    if ((post == null) || (!post.getTopic().getId().equals(event.getForumTopic().getId()))) {
       return Response.status(Status.NOT_FOUND).build(); 
     }
       
@@ -1221,6 +1221,6 @@ public class IllusionRestServices {
   
   private ForumPost createRestModel(fi.foyt.fni.persistence.model.forum.ForumPost forumPost) {
     return new ForumPost(forumPost.getId(), forumPost.getTopic().getId(), forumPost.getContent(), 
-        forumPost.getModified(), forumPost.getCreated(), forumPost.getAuthor().getId(), forumPost.getViews()); 
+        new DateTime(forumPost.getModified().getTime()), new DateTime(forumPost.getCreated().getTime()), forumPost.getAuthor().getId(), forumPost.getViews()); 
   }
 }
