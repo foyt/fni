@@ -18,6 +18,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 
 import de.neuland.jade4j.exceptions.JadeException;
 import fi.foyt.fni.forum.ForumController;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.jade.JadeController;
@@ -49,6 +50,9 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
   private ForumController forumController;
 
   @Inject
+  private IllusionEventController illusionEventController;
+
+  @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
 
   @Inject
@@ -76,11 +80,14 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
       topicPages[i] = i;
     }
     
+    IllusionEventParticipant topicAuthorParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, topic.getAuthor());
+    
     templateModelBuilder
       .put("topicId", topic.getId())
       .put("topicSubject", topic.getSubject())
       .put("topicAuthorId", topic.getAuthor().getId())
       .put("topicAuthorName", topic.getAuthor().getFullName())
+      .put("topicAuthorParticipantId", topicAuthorParticipant != null ? topicAuthorParticipant.getId() : null)
       .put("topicCreated", topic.getCreated())
       .put("topicPages", topicPages)
       .put("topicPage", topicPage);
@@ -97,7 +104,7 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
       forumController.updatePostViews(post, post.getViews() + 1);
     }
 
-    templateModelBuilder.put("posts", toPostModel(posts));
+    templateModelBuilder.put("posts", toPostModel(illusionEvent, posts));
     
     try {
       Map<String, Object> templateModel = templateModelBuilder.build(sessionController.getLocale());
@@ -136,20 +143,22 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
     return contentsHtml;
   }
   
-  private List<PostModel> toPostModel(List<ForumPost> posts) {
+  private List<PostModel> toPostModel(IllusionEvent event, List<ForumPost> posts) {
     List<PostModel> result = new ArrayList<>();
     
     for (ForumPost post : posts) {
-      result.add(toPostModel(post));
+      result.add(toPostModel(event, post));
     }
     
     return result;
   }
   
-  private PostModel toPostModel(ForumPost post) {
+  private PostModel toPostModel(IllusionEvent event, ForumPost post) {
     Long authorPosts = forumController.countPostsByAuthor(post.getAuthor());
+    IllusionEventParticipant topicAuthorParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, post.getAuthor());
     
     return new PostModel(post.getId(), post.getModified(), post.getCreated(), post.getAuthor().getId(), 
+        topicAuthorParticipant != null ? topicAuthorParticipant.getId() : null,
         post.getAuthor().getFullName(), authorPosts.intValue(), post.getContent());
   }
 
@@ -158,12 +167,13 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
 
   public class PostModel {
     
-    public PostModel(long id, Date modified, Date created, Long authorId, String authorName, int authorPosts, String content) {
+    public PostModel(long id, Date modified, Date created, Long authorId, Long authorParticipantId, String authorName, int authorPosts, String content) {
       super();
       this.id = id;
       this.modified = modified;
       this.created = created;
       this.authorId = authorId;
+      this.authorParticipantId = authorParticipantId;
       this.authorName = authorName;
       this.authorPosts = authorPosts;
       this.content = content;
@@ -184,6 +194,10 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
     public Long getAuthorId() {
       return authorId;
     }
+    
+    public Long getAuthorParticipantId() {
+      return authorParticipantId;
+    }
 
     public String getAuthorName() {
       return authorName;
@@ -201,6 +215,7 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
     private Date modified;
     private Date created;
     private Long authorId;
+    private Long authorParticipantId;
     private String authorName;
     private int authorPosts;
     private String content;

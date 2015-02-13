@@ -65,7 +65,7 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
 	  
 	  Integer size = NumberUtils.createInteger(request.getParameter("size"));
     if (size == null) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Size parameters is mandatory");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Size parameters is mandatory");
       return;
     }
 	  

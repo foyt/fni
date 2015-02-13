@@ -70,6 +70,7 @@ public class IllusionTemplateModelBuilderFactory {
       String eventUrl = getEventUrl(illusionEvent);
 
       model.put("eventUrl", eventUrl);
+      model.put("eventUrlName", illusionEvent.getUrlName());
       model.put("eventName", illusionEvent.getName());
       model.put("eventDescription", illusionEvent.getDescription());
 
