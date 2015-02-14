@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.i18n.ExternalLocales;
+import fi.foyt.fni.jade.JadeLocaleHelper;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.users.User;
@@ -59,7 +60,7 @@ public class IllusionTemplateModelBuilderFactory {
       String siteUrl = systemSettingsController.getSiteUrl(false, true);
       model.put("siteUrl", siteUrl);
       model.put("contextPath", systemSettingsController.getSiteContextPath());
-
+      
       breadcrumbs.add(new Breadcrumb(BreadcrumbType.ENVIRONMENT, siteUrl, ExternalLocales.getText(locale, "illusion.breadcrumbs.forgeAndIllusion")));
       breadcrumbs.add(new Breadcrumb(BreadcrumbType.ENVIRONMENT, siteUrl + "/illusion", ExternalLocales.getText(locale, "illusion.breadcrumbs.events")));
 
@@ -99,14 +100,16 @@ public class IllusionTemplateModelBuilderFactory {
       return this;
     }
 
+    @Deprecated
     public IllusionTemplateModelBuilder addLocale(String key) {
       localeKeys.add(key);
       return this;
     }
 
+    @Deprecated
     public IllusionTemplateModelBuilder addLocales(String... keys) {
       for (String key : keys) {
-        localeKeys.add(key);
+        addLocale(key);
       }
 
       return this;
@@ -141,6 +144,7 @@ public class IllusionTemplateModelBuilderFactory {
       result.put("pages", pages);
       result.put("adminPages", adminPages);
       result.put("locales", locales);
+      result.put("locale", new JadeLocaleHelper(locale));
       
       return result;
     }
