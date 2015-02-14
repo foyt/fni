@@ -1052,6 +1052,33 @@ public class IllusionRestServices {
   }
   
   /**
+   * Finds forum post event
+   * 
+   * @param eventId event id
+   * @param postId post id to be updated
+   * @return Response
+   */
+  @GET
+  @Path("/events/{EVENTID:[0-9]*}/forumPosts/{POSTID:[0-9]*}")
+  @Security (
+    allowService = false,
+    scopes = { OAuthScopes.ILLUSION_UPDATE_FORUM_POST }
+  )
+  public Response findForumPost(@PathParam ("EVENTID") Long eventId, @PathParam ("POSTID") Long postId) {
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+    
+    fi.foyt.fni.persistence.model.forum.ForumPost post = forumController.findForumPostById(postId);
+    if ((post == null) || (!post.getTopic().getId().equals(event.getForumTopic().getId()))) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+    
+    return Response.ok(createRestModel(post)).build();
+  }
+  
+  /**
    * Updates forum post event
    * 
    * @param eventId event id
