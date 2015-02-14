@@ -17,7 +17,7 @@ public class ExternalLocales {
   }
   
   public static String getText(Locale locale, String key, Object... params) {
-    return MessageFormat.format(getText(locale, key), params);
+    return (new MessageFormat(getText(locale, key), locale)).format(params);
   }
   
   public static String getText(Locale locale, String key, Collection<?> params) {
