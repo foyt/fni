@@ -89,14 +89,10 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
       .put("topicAuthorName", topic.getAuthor().getFullName())
       .put("topicAuthorParticipantId", topicAuthorParticipant != null ? topicAuthorParticipant.getId() : null)
       .put("topicCreated", topic.getCreated())
+      .put("topicModified", topic.getModified())
       .put("topicPages", topicPages)
       .put("topicPage", topicPage);
-    
-    templateModelBuilder
-      .addLocale("illusion.forum.title")
-      .addLocale("illusion.forum.authorPosts")
-      .addLocale("illusion.forum.postReply");
-    
+
     List<ForumPost> posts = forumController.listPostsByTopic(topic, topicPage * POST_PER_PAGE, POST_PER_PAGE);
 
     forumController.updateTopicViews(topic, topic.getViews() + 1);
