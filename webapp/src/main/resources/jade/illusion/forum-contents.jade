@@ -13,7 +13,7 @@ div.grid_16.tight
           p= locale.text('illusion.forum.title')
         div.illusion-forum-posts
           for post in posts
-            div.illusion-forum-post
+            div.illusion-forum-post(data-post-id=post.id)
               div.illusion-forum-post-author-info
                 div.illusion-forum-post-author-image-container
                   img(src=contextPath + "/illusion/eventAvatar/" + eventUrlName + "/" + post.authorParticipantId + "?size=80")
@@ -24,15 +24,22 @@ div.grid_16.tight
               div.illusion-forum-post-content-container
                 div.illusion-forum-post-content
                   !=post.content
+                div.illusion-forum-post-content-editor(style="display: none")
+                  !=post.content
+                button.illusion-forum-post-content-save(style="display: none")
+                  p= locale.text('illusion.forum.saveButton')
                 div.illusion-forum-post-footer
                   div.illusion-forum-post-edit-container
                     a.illusion-forum-post-edit(href="javascript:void(null)")
                       p= locale.text('illusion.forum.editPost')
                   div.illusion-forum-post-dates-container
-                    div.illusion-forum-post-sent
+                    div.illusion-forum-post-sent(data-locale=locale.unformatted('illusion.forum.postSent'))
                       p= locale.text('illusion.forum.postSent', post.created)
-                    div.illusion-forum-post-sent
-                      p= locale.text('illusion.forum.postModified', post.modified)
+                    if post.created != post.modified
+                      div.illusion-forum-post-modified(data-locale=locale.unformatted('illusion.forum.postModified'))
+                        p= locale.text('illusion.forum.postModified', post.modified)
+                    else
+                      div.illusion-forum-post-modified(data-locale=locale.unformatted('illusion.forum.postModified'))
         textarea.illusion-forum-post-editor
         button.illusion-forum-post-reply
           p= locale.text('illusion.forum.postReply')
