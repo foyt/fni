@@ -23,6 +23,10 @@ public class ExternalLocales {
   public static String getText(Locale locale, String key, Collection<?> params) {
     return getText(locale, key, params.toArray());
   }
+
+  public static String getUnformatted(Locale locale, String key) {
+    return getResourceBundle(locale).getString(key);
+  }
   
   private static ResourceBundle getResourceBundle(Locale locale) {
     if (!bundles.containsKey(locale)) {

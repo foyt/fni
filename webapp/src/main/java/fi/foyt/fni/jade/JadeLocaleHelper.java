@@ -14,6 +14,17 @@ public class JadeLocaleHelper {
     return ExternalLocales.getText(locale, key, params);
   }
   
-  private Locale locale;
+  public String unformatted(String key) {
+    return ExternalLocales.getUnformatted(locale, key);
+  }
   
+  public String language() {
+    return locale.getLanguage();
+  }
+
+  public String locale() {
+    return locale.toString();
+  }
+  
+  private Locale locale;
 }
