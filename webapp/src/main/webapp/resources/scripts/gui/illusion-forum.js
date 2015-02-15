@@ -13,7 +13,7 @@
            { name: 'insert',      items : [ 'Image','SpecialChar' ] },
            { name: 'tools',       items : [ 'Maximize' ] }
          ],
-         contentsCss: ['//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/contents.css', CONTEXTPATH + '/forum/ckcontents.css' ]
+         contentsCss: ['//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/contents.css', CONTEXTPATH + '/theme/css/illusion-event-forum-editor.css' ]
       });
     },
     

@@ -1,22 +1,9 @@
+@import "illusion-event-forum-post-content";
 @import "vars";
 @import "compass";
 @import "styles";
 
 $border-color: rgb(71, 176, 176);
-
-/* Watch */
-
-/**
-.illusion-forum-watch-link, .illusion-forum-stop-watching-link {
-  color: $default-color;
-  font-family: $default-font;
-  font-size: 12px;
-  text-decoration: none;
-  text-transform: uppercase;
-  float: right;
-  margin-top: 6px; 
-}
-**/
 
 /* Pages */
 
@@ -69,11 +56,7 @@ $border-color: rgb(71, 176, 176);
 }
 
 .illusion-forum-post-content {
-  color: $default-color;
-  font-family: $default-font;
-  width: 800px;
-  font-size: 13px;
-  line-height: 1.6em;
+  @include illusion-forum-post-content
 }
 
 .illusion-forum-post-content p {
