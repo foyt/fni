@@ -10,7 +10,7 @@ div.grid_16.tight
             a(href=eventUrl + "/forum" + (topicPageNum != 0 ? "?page=" + topicPageNum : ""), class=topicPageNum == topicPage ? "illusion-forum-selected-page" : "")
               =topicPageNum + 1
         h3
-          p= locale.text('illusion.forum.title')
+          = locale.text('illusion.forum.title')
         div.illusion-forum-posts
           for post in posts
             div.illusion-forum-post(data-post-id=post.id)
@@ -20,26 +20,26 @@ div.grid_16.tight
                 div.illusion-forum-post-author-name
                   =post.authorName
                 div.illusion-forum-post-author-posts
-                  p= locale.text('illusion.forum.authorPostCount', post.authorPosts)
+                  = locale.text('illusion.forum.authorPostCount', post.authorPosts)
               div.illusion-forum-post-content-container
                 div.illusion-forum-post-content
                   !=post.content
                 div.illusion-forum-post-content-editor(style="display: none")
                   !=post.content
                 button.illusion-forum-post-content-save(style="display: none")
-                  p= locale.text('illusion.forum.saveButton')
+                  = locale.text('illusion.forum.saveButton')
                 div.illusion-forum-post-footer
                   div.illusion-forum-post-edit-container
                     a.illusion-forum-post-edit(href="javascript:void(null)")
-                      p= locale.text('illusion.forum.editPost')
+                      = locale.text('illusion.forum.editPost')
                   div.illusion-forum-post-dates-container
                     div.illusion-forum-post-sent(data-locale=locale.unformatted('illusion.forum.postSent'))
-                      p= locale.text('illusion.forum.postSent', post.created)
+                      = locale.text('illusion.forum.postSent', post.created)
                     if post.created != post.modified
                       div.illusion-forum-post-modified(data-locale=locale.unformatted('illusion.forum.postModified'))
-                        p= locale.text('illusion.forum.postModified', post.modified)
+                        = locale.text('illusion.forum.postModified', post.modified)
                     else
                       div.illusion-forum-post-modified(data-locale=locale.unformatted('illusion.forum.postModified'))
         textarea.illusion-forum-post-editor
         button.illusion-forum-post-reply
-          p= locale.text('illusion.forum.postReply')
+          = locale.text('illusion.forum.postReply')
