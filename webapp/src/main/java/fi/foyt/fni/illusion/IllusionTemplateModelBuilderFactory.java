@@ -22,7 +22,7 @@ public class IllusionTemplateModelBuilderFactory {
 
   @Inject
   private UserController userController;
-  
+
   @Inject
   private SystemSettingsController systemSettingsController;
 
@@ -60,7 +60,6 @@ public class IllusionTemplateModelBuilderFactory {
       String siteUrl = systemSettingsController.getSiteUrl(false, true);
       model.put("siteUrl", siteUrl);
       model.put("contextPath", systemSettingsController.getSiteContextPath());
-      
       breadcrumbs.add(new Breadcrumb(BreadcrumbType.ENVIRONMENT, siteUrl, ExternalLocales.getText(locale, "illusion.breadcrumbs.forgeAndIllusion")));
       breadcrumbs.add(new Breadcrumb(BreadcrumbType.ENVIRONMENT, siteUrl + "/illusion", ExternalLocales.getText(locale, "illusion.breadcrumbs.events")));
 
@@ -252,8 +251,7 @@ public class IllusionTemplateModelBuilderFactory {
 
   }
 
-  @SuppressWarnings ("unused")
-  private class UserInfo {
+  public class UserInfo {
 
     public UserInfo(Long id, String displayName, String firstName, String lastName, Participant participant) {
       super();
@@ -291,8 +289,7 @@ public class IllusionTemplateModelBuilderFactory {
     private Participant participant;
   }
 
-  @SuppressWarnings ("unused")
-  private class Participant {
+  public class Participant {
 
     public Participant(Long id, String role) {
       super();
