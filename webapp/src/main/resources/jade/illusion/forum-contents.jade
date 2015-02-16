@@ -24,14 +24,16 @@ div.grid_16.tight
               div.illusion-forum-post-content-container
                 div.illusion-forum-post-content
                   !=post.content
-                div.illusion-forum-post-content-editor(style="display: none")
-                  !=post.content
-                button.illusion-forum-post-content-save(style="display: none")
-                  = locale.text('illusion.forum.saveButton')
+                if post.authorId == user.id
+                  div.illusion-forum-post-content-editor(style="display: none")
+                    !=post.content
+                  button.illusion-forum-post-content-save(style="display: none")
+                    = locale.text('illusion.forum.saveButton')
                 div.illusion-forum-post-footer
-                  div.illusion-forum-post-edit-container
-                    a.illusion-forum-post-edit(href="javascript:void(null)")
-                      = locale.text('illusion.forum.editPost')
+                  if post.authorId == user.id
+                    div.illusion-forum-post-edit-container
+                      a.illusion-forum-post-edit(href="javascript:void(null)")
+                        = locale.text('illusion.forum.editPost')
                   div.illusion-forum-post-dates-container
                     div.illusion-forum-post-sent(data-locale=locale.unformatted('illusion.forum.postSent'))
                       = locale.text('illusion.forum.postSent', post.created)

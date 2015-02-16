@@ -1114,6 +1114,10 @@ public class IllusionRestServices {
       return Response.status(Status.FORBIDDEN).build();
     }
     
+    if (!post.getAuthor().getId().equals(user.getId())) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
     forumController.updateForumPostContent(post, entity.getContent());
     
     return Response.noContent().build();
