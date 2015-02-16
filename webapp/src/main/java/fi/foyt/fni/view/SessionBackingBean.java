@@ -29,6 +29,23 @@ import fi.foyt.fni.users.UserController;
 @Stateful
 public class SessionBackingBean {
   
+  // From java.text.MessageFormat
+  private static final String[] DATE_TIME_MODIFIER_KEYWORDS = {
+    "",
+    "short",
+    "medium",
+    "long",
+    "full"
+  };
+
+  private static final int[] DATE_TIME_MODIFIERS = {
+    DateFormat.DEFAULT,
+    DateFormat.SHORT,
+    DateFormat.MEDIUM,
+    DateFormat.LONG,
+    DateFormat.FULL,
+  };
+  
   @Inject
   private Logger logger;
 
@@ -43,14 +60,17 @@ public class SessionBackingBean {
   
   @PostConstruct
   public void init() {
-    Map<String, String> dateFormatMap = new HashMap<>();
+    Map<String, String> dateFormats = new HashMap<>();
+    Map<String, String> timeFormats = new HashMap<>();
 
-    dateFormatMap.put("long", getDateFormat(DateFormat.LONG));
-    dateFormatMap.put("medium", getDateFormat(DateFormat.MEDIUM));
-    dateFormatMap.put("short", getDateFormat(DateFormat.SHORT));
-    
+    for (int i = 0, l = DATE_TIME_MODIFIER_KEYWORDS.length; i < l; i++) {
+      dateFormats.put(DATE_TIME_MODIFIER_KEYWORDS[i], getDateFormat(DATE_TIME_MODIFIERS[i]));
+      timeFormats.put(DATE_TIME_MODIFIER_KEYWORDS[i], getTimeFormat(DATE_TIME_MODIFIERS[i]));
+    }
+
     try {
-      dateFormats = new ObjectMapper().writeValueAsString(dateFormatMap);
+      this.dateFormats = new ObjectMapper().writeValueAsString(dateFormats);
+      this.timeFormats = new ObjectMapper().writeValueAsString(timeFormats);
     } catch (IOException e) {
       logger.log(Level.SEVERE, "Could not serialize date formatters", e);
     }
@@ -59,6 +79,10 @@ public class SessionBackingBean {
   
   private String getDateFormat(int style) {
     return ((SimpleDateFormat) DateFormat.getDateInstance(style, getLocale())).toPattern();
+  }
+  
+  private String getTimeFormat(int style) {
+    return ((SimpleDateFormat) DateFormat.getTimeInstance(style, getLocale())).toPattern();
   }
   
 	public boolean isLoggedIn() {
@@ -86,6 +110,10 @@ public class SessionBackingBean {
     return dateFormats;
   }
 	
+	public String getTimeFormats() {
+    return timeFormats;
+  }
+	
 	public void changeLocale(String str) throws IOException {
 	  Locale locale = LocaleUtils.toLocale(str);
 	  sessionController.setLocale(locale);
@@ -105,4 +133,5 @@ public class SessionBackingBean {
 	}
 	
 	private String dateFormats;
+	private String timeFormats;
 }

@@ -8,34 +8,43 @@
       params.push(arguments[i]);
     }
     
-    var formatters = {
-      date: function (pattern, value) {
-        var pattern = DATE_FORMATS[pattern[2]]||DATE_FORMATS['medium'];
-        
-        if (!$.isFunction(moment)) {
-          console.warning("Cannot format date, moment.js is not loaded");
-          return null;
-        }
+    var formatDateTime = function (formatString, value) {
+      if (!$.isFunction(moment)) {
+        console.warning("Cannot format date, moment.js is not loaded");
+        return null;
+      }
 
-        moment.locale(LOCALE);
-        var momentValue = moment(value);
-        
-        if (!$.isFunction(momentValue.formatWithJDF)) {
-          console.warning("Cannot format date, moment-jdateformatparser is not loaded");
-          return null;
-        }
-        
-        // Workaround for https://github.com/MadMG/moment-jdateformatparser/issues/7
-        var fixed = pattern.replace(/\'/g, $.proxy(function(match) {
-          return (this.end = !!!this.end) ? '[' : ']';
-        }, {}));
-        
-        return momentValue.formatWithJDF(fixed);
+      moment.locale(LOCALE);
+      var momentValue = moment(value);
+      
+      if (!$.isFunction(momentValue.formatWithJDF)) {
+        console.warning("Cannot format date, moment-jdateformatparser is not loaded");
+        return null;
+      }
+      
+      // Workaround for https://github.com/MadMG/moment-jdateformatparser/issues/7
+      var fixed = formatString.replace(/\'/g, $.proxy(function(match) {
+        return (this.end = !!!this.end) ? '[' : ']';
+      }, {}));
+      
+      return momentValue.formatWithJDF(fixed);
+    };
+    
+    var formatters = {
+      date: function (options, value) {
+        var formatString = DATE_FORMATS[options[2]||''];
+        return formatDateTime(formatString, value);
+      },
+      time: function (options, value) {
+        var formatString = TIME_FORMATS[options[2]||''];
+        return formatDateTime(formatString, value);
       }
     };
     
     return pattern.replace(/{[0-9, a-z]*}/g, function(match){
-      var result = match.replace(/ /g, '').substring(1, match.length - 3).split(',');
+      var result = match.replace(/ /g, '');
+      result = result.substring(1, result.length - 1).split(',');
+      
       var index = parseInt(result[0]);
       var value = '';
       
