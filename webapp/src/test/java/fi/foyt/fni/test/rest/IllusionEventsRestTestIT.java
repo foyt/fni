@@ -31,8 +31,10 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet(id = "posts", before = "illusion-event-oai-posts-setup.sql", after = "illusion-event-oai-posts-teardown.sql"),
   @DefineSqlSet(id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql"),
   @DefineSqlSet(id = "event", before = { "illusion-event-open-setup.sql" }, after = { "illusion-event-open-teardown.sql"}),
+  @DefineSqlSet(id = "event-unpublished", before = { "illusion-event-open-unpublished-setup.sql" }, after = { "illusion-event-open-unpublished-teardown.sql"}),
   @DefineSqlSet(id = "event-participant", before = {"illusion-event-open-participant-setup.sql" }, after = {"illusion-event-open-participant-teardown.sql"}),
   @DefineSqlSet(id = "event-forum", before = { "illusion-event-open-forum-setup.sql" }, after = {"illusion-event-open-forum-teardown.sql"}),
+  @DefineSqlSet(id = "event-forum-visible", before = { "illusion-event-open-forum-visible-setup.sql" }, after = {"illusion-event-open-forum-visible-teardown.sql"}),
   @DefineSqlSet(id = "event-forum-posts", before = { "illusion-event-open-forum-posts-setup.sql" }, after = {"illusion-event-open-forum-posts-teardown.sql"})
 })
 public class IllusionEventsRestTestIT extends AbstractRestTest {
@@ -487,8 +489,9 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     deleteIllusionEventByUrl(urlName);
     deleteIllusionFolderByUser("servicetest@foyt.fi");
   }
-
+  
   @Test
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-unpublished", "event-participant" })
   public void testFindEventParticipantUnauthorized() {
     givenJson()
       .get("/illusion/events/1/participants/1")
@@ -704,7 +707,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   }
   
   @Test
-  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum"})
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-visible"})
   public void testListPostsEmpty() {
     givenJson("access-token")
       .get("/illusion/events/{EVENTID}/forumPosts", 1)
@@ -713,7 +716,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   }
   
   @Test
-  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-posts"})
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-visible", "event-forum-posts"})
   public void testListPosts() {
     givenJson("access-token")
       .get("/illusion/events/{EVENTID}/forumPosts", 1)
@@ -737,7 +740,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   }
   
   @Test
-  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-posts"})
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-visible", "event-forum-posts"})
   public void testUpdatePost() {
     givenJson("access-token")
       .get("/illusion/events/{EVENTID}/forumPosts", 1)
@@ -765,7 +768,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   }
   
   @Test
-  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-posts"})
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-visible", "event-forum-posts"})
   public void testDeletePost() {
     givenJson("access-token")
       .get("/illusion/events/{EVENTID}/forumPosts", 1)
