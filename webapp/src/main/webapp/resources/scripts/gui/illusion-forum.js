@@ -94,9 +94,10 @@
                     new Date(Date.parse(post.created))));
               
               this.element.find('.illusion-forum-post-modified')
-                .html(formatJavaLocale($('.unformatted-locales').attr('data-post-modified'), 
-                  new Date(Date.parse(post.modified))));
-      
+                .html(post.created != post.modified ? 
+                  formatJavaLocale($('.unformatted-locales').attr('data-post-modified'), 
+                    new Date(Date.parse(post.modified))) : '');
+              
               this.element.find('.illusion-forum-post-content').html(post.content);
               this.element.removeClass('illusion-forum-post-loading');
               
