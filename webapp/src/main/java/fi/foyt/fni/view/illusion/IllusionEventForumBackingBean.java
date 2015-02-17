@@ -35,14 +35,9 @@ import fi.foyt.fni.session.SessionController;
 @Join(path = "/illusion/event/{urlName}/forum", to = "/illusion/event-forum.jsf")
 public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingBean {
 
-  private static final int POST_PER_PAGE = 3;
-
   @Parameter
   private String urlName;
   
-  @Parameter
-  private Integer page;
-
   @Inject
   private Logger logger;
 
@@ -72,13 +67,6 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
     if (topic == null) {
       return "/error/not-found.jsf";
     }
-
-    int topicPage = page != null ? page : 0;
-    int pageCount = (int) Math.round((float) Math.ceil(new Double(forumController.countPostsByTopic(topic)) / POST_PER_PAGE));
-    int[] topicPages = new int[pageCount];
-    for (int i = 0; i < pageCount; i++) {
-      topicPages[i] = i;
-    }
     
     IllusionEventParticipant topicAuthorParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, topic.getAuthor());
     
@@ -89,12 +77,9 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
       .put("topicAuthorName", topic.getAuthor().getFullName())
       .put("topicAuthorParticipantId", topicAuthorParticipant != null ? topicAuthorParticipant.getId() : null)
       .put("topicCreated", topic.getCreated())
-      .put("topicModified", topic.getModified())
-      .put("topicPages", topicPages)
-      .put("topicPage", topicPage);
+      .put("topicModified", topic.getModified());
 
-    List<ForumPost> posts = forumController.listPostsByTopic(topic, topicPage * POST_PER_PAGE, POST_PER_PAGE);
-
+    List<ForumPost> posts = forumController.listPostsByTopic(topic);
     forumController.updateTopicViews(topic, topic.getViews() + 1);
     for (ForumPost post : posts) {
       forumController.updatePostViews(post, post.getViews() + 1);
@@ -121,14 +106,6 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
 
   public void setUrlName(@SecurityContext String urlName) {
     this.urlName = urlName;
-  }
-  
-  public Integer getPage() {
-    return page;
-  }
-  
-  public void setPage(Integer page) {
-    this.page = page;
   }
   
   public String getHeadHtml() {

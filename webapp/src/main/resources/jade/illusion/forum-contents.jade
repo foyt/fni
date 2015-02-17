@@ -5,28 +5,18 @@ div.grid_16.tight
   .illusion-content-panel.grid_16.tight
     .grid_16
       div.illusion-event-sub-panel
-        div.illusion-forum-pages
-          for topicPageNum in topicPages
-            a(href=eventUrl + "/forum" + (topicPageNum != 0 ? "?page=" + topicPageNum : ""), class=topicPageNum == topicPage ? "illusion-forum-selected-page" : "")
-              =topicPageNum + 1
         h3
           = locale.text('illusion.forum.title')
         div.illusion-forum-posts
           for post in posts
-            div.illusion-forum-post(data-post-id=post.id)
+            div(data-post-id=post.id,class="illusion-forum-post illusion-forum-post-pending")
               div.illusion-forum-post-author-info
                 div.illusion-forum-post-author-image-container
-                  img(src=contextPath + "/illusion/eventAvatar/" + eventUrlName + "/" + post.authorParticipantId + "?size=80")
                 div.illusion-forum-post-author-name
-                  =post.authorName
-                div.illusion-forum-post-author-posts
-                  = locale.text('illusion.forum.authorPostCount', post.authorPosts)
               div.illusion-forum-post-content-container
                 div.illusion-forum-post-content
-                  !=post.content
                 if post.authorId == user.id
                   div.illusion-forum-post-content-editor(style="display: none")
-                    !=post.content
                   button.illusion-forum-post-content-save(style="display: none")
                     = locale.text('illusion.forum.saveButton')
                 div.illusion-forum-post-footer
@@ -35,13 +25,11 @@ div.grid_16.tight
                       a.illusion-forum-post-edit(href="javascript:void(null)")
                         = locale.text('illusion.forum.editPost')
                   div.illusion-forum-post-dates-container
-                    div.illusion-forum-post-sent(data-locale=locale.unformatted('illusion.forum.postSent'))
-                      = locale.text('illusion.forum.postSent', post.created)
-                    if post.created != post.modified
-                      div.illusion-forum-post-modified(data-locale=locale.unformatted('illusion.forum.postModified'))
-                        = locale.text('illusion.forum.postModified', post.modified)
-                    else
-                      div.illusion-forum-post-modified(data-locale=locale.unformatted('illusion.forum.postModified'))
+                    div.illusion-forum-post-sent
+                    div.illusion-forum-post-modified       
         textarea.illusion-forum-post-editor
         button.illusion-forum-post-reply
           = locale.text('illusion.forum.postReply')
+div(style="display: none",class="unformatted-locales",data-post-modified=locale.unformatted('illusion.forum.postModified'),data-post-sent=locale.unformatted('illusion.forum.postSent'))
+
+

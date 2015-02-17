@@ -5,32 +5,27 @@
 
 $border-color: rgb(71, 176, 176);
 
-/* Pages */
-
-.illusion-forum-pages {
-  float: right;
-}
-
-.illusion-forum-pages a {
-  color: $default-color;
-  font-family: $default-font;
-  font-size: 10px;
-  text-decoration: none;
-  text-transform: uppercase;
-  margin-left: 4px;
-}
-
-.illusion-forum-pages a.illusion-forum-selected-page {
-  text-decoration: underline;
-  font-weight: bold;
-}
-
 /* Posts */
 
 .illusion-forum-post {
   padding-top: 22px;
   padding-bottom: 27px;
   border-top: 1px solid $border-color;
+}
+
+.illusion-forum-post-loading,
+.illusion-forum-post-pending {
+  padding: 0;
+  border: none;
+  min-height: 200px;
+  background: url('#' + '{resource["novus:gfx/layout/loader-bw.gif"]}') no-repeat center center;
+}
+
+.illusion-forum-post-loading, .illusion-forum-post-pending {
+  .illusion-forum-post-author-info,
+  .illusion-forum-post-content-container {
+    display: none;  
+  }
 }
 
 .illusion-forum-post:nth-of-type(1) {
