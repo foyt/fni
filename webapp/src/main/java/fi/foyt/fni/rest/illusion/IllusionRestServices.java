@@ -1101,7 +1101,7 @@ public class IllusionRestServices {
     
     IllusionEventPageVisibility forumVisibility = illusionEventPageController.getPageVisibility(event, "FORUM");
     if (forumVisibility != IllusionEventPageVisibility.VISIBLE) {
-      if (sessionController.isLoggedIn()) {
+      if (!sessionController.isLoggedIn()) {
         return Response.status(Status.UNAUTHORIZED).build();
       }
       
