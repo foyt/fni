@@ -573,6 +573,37 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   }
   
   @Test
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-unpublished" })
+  public void testListParticipantsUnauthorized() throws Exception {
+    givenJson("access-token")
+      .get("/illusion/events/1/participants")
+      .then()
+      .statusCode(403);
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "service-client", "illusion-basic", "event" })
+  public void testListParticipantsEmpty() throws Exception {
+    givenJson(createServiceToken())
+      .get("/illusion/events/1/participants")
+      .then()
+      .statusCode(204);
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "service-client", "illusion-basic", "event", "event-participant" })
+  public void testListParticipants() throws Exception {
+    givenJson(createServiceToken())
+      .get("/illusion/events/1/participants")
+      .then()
+      .statusCode(200)
+      .body("id.size", is(1))
+      .body("id[0]", is(1))
+      .body("role[0]", is("PARTICIPANT"))
+      .body("userId[0]", is(2));
+  }
+  
+  @Test
   @SqlSets({"basic-users", "service-client", "illusion-basic", "event", "event-participant" })
   public void testCreateParticipant() throws Exception {
     String token = createServiceToken();
