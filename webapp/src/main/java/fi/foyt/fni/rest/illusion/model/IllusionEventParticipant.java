@@ -7,11 +7,12 @@ public class IllusionEventParticipant {
   public IllusionEventParticipant() {
   }
 
-  public IllusionEventParticipant(Long id, Long userId, IllusionEventParticipantRole role) {
+  public IllusionEventParticipant(Long id, Long userId, IllusionEventParticipantRole role, String displayName) {
     super();
     this.id = id;
     this.userId = userId;
     this.role = role;
+    this.displayName = displayName;
   }
 
   /**
@@ -52,8 +53,22 @@ public class IllusionEventParticipant {
   public void setUserId(Long userId) {
     this.userId = userId;
   }
+  
+  /**
+   * Returns participant's display name. Defaults to users nickname / full name if nulled when creating a participant
+   * 
+   * @return participant's display name. Defaults to users nickname / full name if nulled when creating a participant
+   */
+  public String getDisplayName() {
+    return displayName;
+  }
+  
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
+  }
 
   private Long id;
   private Long userId;
   private IllusionEventParticipantRole role;
+  private String displayName;
 }

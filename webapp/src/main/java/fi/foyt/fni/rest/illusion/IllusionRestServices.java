@@ -422,7 +422,12 @@ public class IllusionRestServices {
       return Response.status(Status.BAD_REQUEST).entity("User is already a participant in this event").build();
     }
     
-    IllusionEventParticipant participant = illusionEventController.createIllusionEventParticipant(user, event, entity.getRole());
+    IllusionEventParticipant participant = null;
+    if (entity.getDisplayName() == null) {
+      participant = illusionEventController.createIllusionEventParticipant(user, event, entity.getDisplayName(), entity.getRole());
+    } else {
+      participant = illusionEventController.createIllusionEventParticipant(user, event, entity.getRole());
+    }
     
     if ((accessToken == null) || (accessToken.getClient().getType() != OAuthClientType.SERVICE)) {
       if (sessionController.isLoggedIn()) {
@@ -478,6 +483,59 @@ public class IllusionRestServices {
 
     return Response.ok(createRestModel(participant)).build();
   }
+
+  /**
+   * Lists event participants
+   * 
+   * @param eventId event id 
+   * @param userId filter results by user id
+   * @return Response
+   * @responseType java.util.List<fi.foyt.fni.rest.illusion.model.IllusionEventParticipant>
+   */
+  @Path("/events/{EVENTID:[0-9]*}/participants/")
+  @GET
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_FIND_EVENT_PARTICIPANT }
+  )
+  public Response listEventParticipants(@PathParam ("EVENTID") Long eventId, @QueryParam ("userId") Long userId) {
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!event.getPublished()) {
+      if ((accessToken == null) || (accessToken.getClient().getType() != OAuthClientType.SERVICE)) {
+        if (sessionController.isLoggedIn()) {
+          if (!isLoggedUserEventOrganizer(event)) {
+            return Response.status(Status.FORBIDDEN).build();
+          }
+        } else {
+          return Response.status(Status.UNAUTHORIZED).build();
+        }
+      }
+    }
+    
+    List<IllusionEventParticipant> result = null;
+    
+    if (userId != null) {
+      User user = userController.findUserById(userId);
+      if (user != null) {
+        IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
+        if (participant != null) {
+          result = Arrays.asList(participant);
+        }
+      }
+    } else {
+      result = illusionEventController.listIllusionEventParticipantsByEvent(event);
+    }
+    
+    if (result == null || (result.isEmpty())) {
+      return Response.noContent().build();
+    }
+    
+    return Response.ok(createRestModel(result.toArray(new IllusionEventParticipant[0]))).build();
+  }
   
   /**
    * Updates an event participant
@@ -520,6 +578,7 @@ public class IllusionRestServices {
     } 
     
     illusionEventController.updateIllusionEventParticipantRole(participant, entity.getRole());
+    illusionEventController.updateIllusionEventParticipantCharacterName(participant, entity.getDisplayName());
     
     return Response.noContent().build();
   }
@@ -1013,7 +1072,7 @@ public class IllusionRestServices {
   }
   
   /**
-   * Lists Illusion event forum posts
+   * Lists forum event post
    * 
    * @param eventId event id
    * @return Response
@@ -1024,7 +1083,7 @@ public class IllusionRestServices {
     allowService = false,
     scopes = { OAuthScopes.ILLUSION_LIST_FORUM_POSTS }
   )
-  public Response createForumPost(@PathParam ("EVENTID") Long eventId) {
+  public Response listForumPosts(@PathParam ("EVENTID") Long eventId) {
     IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
     if (event == null) {
       return Response.status(Status.NOT_FOUND).build(); 
@@ -1052,7 +1111,7 @@ public class IllusionRestServices {
   }
   
   /**
-   * Finds forum post event
+   * Finds forum event post
    * 
    * @param eventId event id
    * @param postId post id to be updated
@@ -1227,9 +1286,19 @@ public class IllusionRestServices {
         illusionEvent.getSignUpFee(), signUpFeeCurrency, illusionEvent.getLocation(), illusionEvent.getAgeLimit(), illusionEvent.getBeginnerFriendly(),
         illusionEvent.getImageUrl(), typeId, signUpStartDate, signUpEndDate, illusionEvent.getDomain(), start, end, genreIds);
   }
+  
+  private List<fi.foyt.fni.rest.illusion.model.IllusionEventParticipant> createRestModel(fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant... participants) {
+    List<fi.foyt.fni.rest.illusion.model.IllusionEventParticipant> result = new ArrayList<>();
+    
+    for (fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant participant : participants) {
+      result.add(createRestModel(participant));
+    }
+    
+    return result;
+  }
 
   private fi.foyt.fni.rest.illusion.model.IllusionEventParticipant createRestModel(IllusionEventParticipant participant) {
-    return new fi.foyt.fni.rest.illusion.model.IllusionEventParticipant(participant.getId(), participant.getUser().getId(), participant.getRole());
+    return new fi.foyt.fni.rest.illusion.model.IllusionEventParticipant(participant.getId(), participant.getUser().getId(), participant.getRole(), participant.getCharacterName());
   }
   
   private DateTime getDateAsDateTime(Date date) {
