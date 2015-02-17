@@ -5,14 +5,19 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 public class IllusionEventParticipant {
   
   public IllusionEventParticipant() {
-  }
-
-  public IllusionEventParticipant(Long id, Long userId, IllusionEventParticipantRole role, String displayName) {
     super();
+  }
+  
+  public IllusionEventParticipant(Long id, Long userId, IllusionEventParticipantRole role, String displayName) {
+    this();
     this.id = id;
     this.userId = userId;
     this.role = role;
     this.displayName = displayName;
+  }
+
+  public IllusionEventParticipant(Long id, Long userId, IllusionEventParticipantRole role) {
+    this(id, userId, role, null);
   }
 
   /**
