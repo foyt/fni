@@ -27,9 +27,10 @@ div.grid_16.tight
                   div.illusion-forum-post-dates-container
                     div.illusion-forum-post-sent
                     div.illusion-forum-post-modified       
-        textarea.illusion-forum-post-editor
-        button.illusion-forum-post-reply
-          = locale.text('illusion.forum.postReply')
+        if user
+          textarea.illusion-forum-post-editor
+          button.illusion-forum-post-reply
+            = locale.text('illusion.forum.postReply')
 div(style="display: none",class="unformatted-locales",data-post-modified=locale.unformatted('illusion.forum.postModified'),data-post-sent=locale.unformatted('illusion.forum.postSent'))
 
 
