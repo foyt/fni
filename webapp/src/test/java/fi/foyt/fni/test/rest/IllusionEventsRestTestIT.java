@@ -772,6 +772,80 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   
   @Test
   @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-visible", "event-forum-posts"})
+  public void testFindPost() throws OAuthSystemException, OAuthProblemException {
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts/{ID}", 1, 20100)
+      .then()
+      .statusCode(200)
+      .body("id", is(20100))
+      .body("topicId", is(20000))
+      .body("content", is("message #1"))
+      .body("modified", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("created", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("authorId", is(2))
+      .body("views", is(0));
+  }
+
+  @Test
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-posts"})
+  public void testFindPostUnauthorized() throws OAuthSystemException, OAuthProblemException {
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts/{ID}", 1, 20100)
+      .then()
+      .statusCode(403);
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-visible", "event-forum-posts"})
+  public void testFindPostNotFound() throws OAuthSystemException, OAuthProblemException {
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts/{ID}", 1, 10100)
+      .then()
+      .statusCode(404);
+    
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts/{ID}", -1, 20100)
+      .then()
+      .statusCode(404);
+    
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts/{ID}", -1, -1)
+      .then()
+      .statusCode(404);
+    
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts/{ID}", "abc", 20100)
+      .then()
+      .statusCode(404);
+    
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts/{ID}", "abc", "abc")
+      .then()
+      .statusCode(404);
+
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts/{ID}", "~", 20100)
+      .then()
+      .statusCode(404);
+
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts/{ID}", "~", "~")
+      .then()
+      .statusCode(404);
+
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts/{ID}", "%", 20100)
+      .then()
+      .statusCode(404);
+
+    givenJson("access-token")
+      .get("/illusion/events/{EVENTID}/forumPosts/{ID}", "%", "%")
+      .then()
+      .statusCode(404); 
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-visible", "event-forum-posts"})
   public void testUpdatePost() {
     givenJson("access-token")
       .get("/illusion/events/{EVENTID}/forumPosts", 1)
