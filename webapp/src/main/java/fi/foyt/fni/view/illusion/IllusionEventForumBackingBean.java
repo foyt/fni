@@ -20,12 +20,15 @@ import de.neuland.jade4j.exceptions.JadeException;
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
+import fi.foyt.fni.illusion.IllusionEventPageController;
+import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.jade.JadeController;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
 
@@ -48,6 +51,9 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
   private IllusionEventController illusionEventController;
 
   @Inject
+  private IllusionEventPageController illusionEventPageController;
+
+  @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
 
   @Inject
@@ -60,6 +66,23 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.FORUM);
     illusionEventNavigationController.setEventUrlName(getUrlName());
+    
+    if (!illusionEvent.getPublished()) {
+      if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
+        return "/error/access-denied.jsf";
+      }
+    }
+    
+    IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, IllusionEventPage.Static.FORUM.toString());
+    if (visibility == IllusionEventPageVisibility.HIDDEN) {
+      return "/error/not-found.jsf";
+    }    
+    
+    if (visibility != IllusionEventPageVisibility.VISIBLE) {
+      if (participant == null) {
+        return "/error/access-denied.jsf";
+      }
+    }
 
     IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.FORUM);
 
