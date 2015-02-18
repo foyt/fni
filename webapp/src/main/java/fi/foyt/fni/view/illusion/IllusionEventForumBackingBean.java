@@ -24,6 +24,7 @@ import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.jade.JadeController;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -62,25 +63,32 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
   @Inject
   private SessionController sessionController;
 
+  @Inject
+  private NavigationController navigationController;
+
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.FORUM);
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
     if (!illusionEvent.getPublished()) {
-      if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
-        return "/error/access-denied.jsf";
+      if (participant == null) {
+        return navigationController.requireLogin(navigationController.accessDenied());
+      }
+      
+      if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
+        return navigationController.accessDenied();
       }
     }
     
     IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, IllusionEventPage.Static.FORUM.toString());
     if (visibility == IllusionEventPageVisibility.HIDDEN) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }    
     
     if (visibility != IllusionEventPageVisibility.VISIBLE) {
       if (participant == null) {
-        return "/error/access-denied.jsf";
+        return navigationController.requireLogin(navigationController.accessDenied());
       }
     }
 
@@ -88,7 +96,7 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
 
     ForumTopic topic = illusionEvent.getForumTopic();
     if (topic == null) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
     
     IllusionEventParticipant topicAuthorParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, topic.getAuthor());
@@ -116,7 +124,7 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
       contentsHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/forum-contents", templateModel);
     } catch (JadeException | IOException e) {
       logger.log(Level.SEVERE, "Could not parse jade template", e);
-      return "/error/internal-error.jsf";
+      return navigationController.internalError();
     }
 
     return null;
