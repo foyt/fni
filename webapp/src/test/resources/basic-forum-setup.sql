@@ -1,15 +1,10 @@
 insert into 
-  ForumCategory (id, name)
-values 
-  (1, 'Category');
-  
-insert into 
   Forum (id, allowTopicCreation, name, description, urlName, category_id)
 values 
-  (1, true, 'Empty Forum', 'Topicless forum', 'empty_forum', 1),
-  (2, true, 'Single topic Forum', 'Single topic forum', '1_topic_forum', 1),
-  (3, true, 'Five topic Forum', 'Five topic forum', '5_topic_forum', 1),
-  (4, false, 'Immutable Forum', 'No topic creation allowed Forum', 'immutable', 1);
+  (2, true, 'Empty Forum', 'Topicless forum', 'empty_forum', 1),
+  (3, true, 'Single topic Forum', 'Single topic forum', '1_topic_forum', 1),
+  (4, true, 'Five topic Forum', 'Five topic forum', '5_topic_forum', 1),
+  (5, false, 'Immutable Forum', 'No topic creation allowed Forum', 'immutable', 1);
   
 insert into 
   ForumMessage (id, created, modified, views, author_id)
@@ -28,16 +23,16 @@ values
 insert into 
   ForumTopic (id, forum_id, urlName, subject) 
 values 
-  (1, 2, 'single_topic', 'Topic of single topic forum'),
-  (2, 3, 'topic1of5', 'Topic 1 of 5 topic forum'),
-  (3, 3, 'topic2of5', 'Topic 2 of 5 topic forum'),
-  (4, 3, 'topic3of5', 'Topic 3 of 5 topic forum'),
-  (5, 3, 'topic4of5', 'Topic 4 of 5 topic forum'),
-  (6, 3, 'topic5of5', 'Topic 5 of 5 topic forum'),
-  (7, 4, 'immutable_topic', 'Topic of immutable Forum topic'),
-  (8, 4, 'testbook_1', 'Fat hag dwarves quickly zap jinx mob'),
-  (9, 4, 'testbook_2', 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг'),
-  (10, 4, 'pangram_fi', 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.');
+  (1, 3, 'single_topic', 'Topic of single topic forum'),
+  (2, 4, 'topic1of5', 'Topic 1 of 5 topic forum'),
+  (3, 4, 'topic2of5', 'Topic 2 of 5 topic forum'),
+  (4, 4, 'topic3of5', 'Topic 3 of 5 topic forum'),
+  (5, 4, 'topic4of5', 'Topic 4 of 5 topic forum'),
+  (6, 4, 'topic5of5', 'Topic 5 of 5 topic forum'),
+  (7, 5, 'immutable_topic', 'Topic of immutable Forum topic'),
+  (8, 5, 'testbook_1', 'Fat hag dwarves quickly zap jinx mob'),
+  (9, 5, 'testbook_2', 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг'),
+  (10, 5, 'pangram_fi', 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.');
  
 insert into 
   ForumMessage (id, created, modified, views, author_id)
