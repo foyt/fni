@@ -788,7 +788,7 @@
                   <keystore>${it.keystore}</keystore>
                   <dname>cn=${it.host}, ou=None, L=Test, ST=Test, o=Test, c=TE</dname>
                   <storepass>${it.keystorepass}</storepass>
-                  <alias>fnici</alias>
+                  <alias>${it.host}</alias>
                   <keyalg>RSA</keyalg>
                   <keysize>2048</keysize>
                 </configuration>
@@ -801,7 +801,7 @@
                 </goals>
                 <configuration>
                   <keystore>${it.keystore}</keystore>
-                  <alias>fnici</alias>
+                  <alias>${it.host}</alias>
                   <file>${project.build.directory}/fnici.crt</file>
                   <storepass>${it.keystorepass}</storepass>
                 </configuration>
@@ -829,7 +829,7 @@
                 </goals>
                 <configuration>
                   <keystore>${it.truststore}</keystore>
-                  <alias>fnici</alias>
+                  <alias>${it.host}</alias>
                   <file>${project.build.directory}/fnici.crt</file>
                   <storepass>${it.truststorepass}</storepass>
                   <noprompt>true</noprompt>
@@ -946,7 +946,7 @@
                       <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
                       <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
-                      <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="fnici")</command>
+                      <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
                       <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
                     </commands>
@@ -1243,7 +1243,7 @@
                   <keystore>${it.keystore}</keystore>
                   <dname>cn=${it.host}, ou=None, L=Test, ST=Test, o=Test, c=TE</dname>
                   <storepass>${it.keystorepass}</storepass>
-                  <alias>fnici</alias>
+                  <alias>${it.host}</alias>
                   <keyalg>RSA</keyalg>
                   <keysize>2048</keysize>
                 </configuration>
@@ -1256,7 +1256,7 @@
                 </goals>
                 <configuration>
                   <keystore>${it.keystore}</keystore>
-                  <alias>fnici</alias>
+                  <alias>${it.host}</alias>
                   <file>${project.build.directory}/fnici.crt</file>
                   <storepass>${it.keystorepass}</storepass>
                 </configuration>
@@ -1284,7 +1284,7 @@
                 </goals>
                 <configuration>
                   <keystore>${it.truststore}</keystore>
-                  <alias>fnici</alias>
+                  <alias>${it.host}</alias>
                   <file>${project.build.directory}/fnici.crt</file>
                   <storepass>${it.truststorepass}</storepass>
                   <noprompt>true</noprompt>
@@ -1401,7 +1401,7 @@
                       <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
                       <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
-                      <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="fnici")</command>
+                      <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
                       <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
                     </commands>
@@ -1701,7 +1701,7 @@
                   <keystore>${it.keystore}</keystore>
                   <dname>cn=${it.host}, ou=None, L=Test, ST=Test, o=Test, c=TE</dname>
                   <storepass>${it.keystorepass}</storepass>
-                  <alias>fnici</alias>
+                  <alias>${it.host}</alias>
                   <keyalg>RSA</keyalg>
                   <keysize>2048</keysize>
                 </configuration>
@@ -1714,7 +1714,7 @@
                 </goals>
                 <configuration>
                   <keystore>${it.keystore}</keystore>
-                  <alias>fnici</alias>
+                  <alias>${it.host}</alias>
                   <file>${project.build.directory}/fnici.crt</file>
                   <storepass>${it.keystorepass}</storepass>
                 </configuration>
@@ -1742,7 +1742,7 @@
                 </goals>
                 <configuration>
                   <keystore>${it.truststore}</keystore>
-                  <alias>fnici</alias>
+                  <alias>${it.host}</alias>
                   <file>${project.build.directory}/fnici.crt</file>
                   <storepass>${it.truststorepass}</storepass>
                   <noprompt>true</noprompt>
@@ -1859,7 +1859,7 @@
                       <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
                       <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
-                      <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="fnici")</command>
+                      <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
                       <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
                     </commands>
