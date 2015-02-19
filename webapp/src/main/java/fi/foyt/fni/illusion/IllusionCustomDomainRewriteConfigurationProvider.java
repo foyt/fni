@@ -67,6 +67,7 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
     addDomainRule(configuration, siteHost, "/illusion/event-manage-templates.jsf", "manage-templates");
     addDomainRule(configuration, siteHost, "/illusion/event-groups.jsf", "groups");
     addDomainRule(configuration, siteHost, "/illusion/event-materials.jsf", "materials");
+    addDomainRule(configuration, siteHost, "/illusion/event-forum.jsf", "event-forum");
     addDomainRule(configuration, siteHost, "/illusion/event-participants.jsf", "participants");
     addDomainRule(configuration, siteHost, "/illusion/event-payment.jsf", "payment");
     addDomainRule(configuration, siteHost, "/illusion/event-settings.jsf", "settings");
