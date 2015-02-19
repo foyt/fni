@@ -83,7 +83,7 @@ public class IllusionEventPageController {
     }
     
     pages.add(new IllusionEventPage("MATERIALS", "materials", eventUrl + "/materials", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.materials"), "MATERIALS", false, false, true, true, getPageVisibility(illusionEvent, "MATERIALS")));
-    pages.add(new IllusionEventPage("FORUM", "forum", eventUrl + "/forum", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.forum"), "FORUM", false, false, true, false, getPageVisibility(illusionEvent, "FORUM")));
+    pages.add(new IllusionEventPage("FORUM", "event-forum", eventUrl + "/event-forum", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.forum"), "FORUM", false, false, true, false, getPageVisibility(illusionEvent, "FORUM")));
 
     return pages;
   }

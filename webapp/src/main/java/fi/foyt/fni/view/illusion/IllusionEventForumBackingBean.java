@@ -37,7 +37,7 @@ import fi.foyt.fni.session.SessionController;
 @RequestScoped
 @Named
 @Stateful
-@Join(path = "/illusion/event/{urlName}/forum", to = "/illusion/event-forum.jsf")
+@Join(path = "/illusion/event/{urlName}/event-forum", to = "/illusion/event-forum.jsf")
 public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingBean {
 
   @Parameter
@@ -94,7 +94,7 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
     }
 
     IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.FORUM)        
-      .addBreadcrumb(illusionEvent, "/forum", ExternalLocales.getText(sessionController.getLocale(), "illusion.breadcrumbs.forum"));
+      .addBreadcrumb(illusionEvent, "/event-forum", ExternalLocales.getText(sessionController.getLocale(), "illusion.breadcrumbs.forum"));
 
     ForumTopic topic = illusionEvent.getForumTopic();
     if (topic == null) {
