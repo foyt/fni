@@ -18,6 +18,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 
 import de.neuland.jade4j.exceptions.JadeException;
 import fi.foyt.fni.forum.ForumController;
+import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionEventPageController;
@@ -92,7 +93,8 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
       }
     }
 
-    IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.FORUM);
+    IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.FORUM)        
+      .addBreadcrumb(illusionEvent, "/forum", ExternalLocales.getText(sessionController.getLocale(), "illusion.breadcrumbs.forum"));
 
     ForumTopic topic = illusionEvent.getForumTopic();
     if (topic == null) {
