@@ -84,7 +84,7 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
     
     IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, IllusionEventPage.Static.FORUM.toString());
     if (visibility == IllusionEventPageVisibility.HIDDEN) {
-      return navigationController.notFound();
+      return navigationController.accessDenied();
     }    
     
     if (visibility != IllusionEventPageVisibility.VISIBLE) {
@@ -98,7 +98,7 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
 
     ForumTopic topic = illusionEvent.getForumTopic();
     if (topic == null) {
-      return navigationController.notFound();
+      return navigationController.internalError();
     }
     
     IllusionEventParticipant topicAuthorParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, topic.getAuthor());
