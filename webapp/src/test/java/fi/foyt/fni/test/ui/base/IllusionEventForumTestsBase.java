@@ -23,6 +23,7 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet(id = "event-forum-participants", before = { "illusion-event-open-forum-participants-setup.sql" }, after = {"illusion-event-open-forum-participants-teardown.sql"}),
   @DefineSqlSet(id = "event-forum-visible", before = { "illusion-event-open-forum-visible-setup.sql" }, after = {"illusion-event-open-forum-visible-teardown.sql"}),
   @DefineSqlSet(id = "event-forum-posts", before = { "illusion-event-open-forum-posts-setup.sql" }, after = {"illusion-event-open-forum-posts-teardown.sql"}),
+  @DefineSqlSet(id = "event-forum-organizer-posts", before = { "illusion-event-open-forum-organizer-posts-setup.sql" }, after = {"illusion-event-open-forum-organizer-posts-teardown.sql"}),
   @DefineSqlSet(id = "event-custom", before = { "illusion-event-open-custom-setup.sql" }, after = {"illusion-event-open-custom-teardown.sql"})
 })
 public class IllusionEventForumTestsBase extends AbstractIllusionUITest {
@@ -150,4 +151,20 @@ public class IllusionEventForumTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/event-forum");
     testTitle("Illusion - Open Event");
   }
+  
+  @Test
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-organizer", "event-forum", "event-forum-visible", "event-forum-posts", "event-forum-organizer-posts"})
+  public void testMayModifyPost() throws Exception {
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/event-forum");
+    testTitle("Illusion - Open Event");
+    scrollWindowBy(0, 300);
+    waitForSelectorNotPresent(".illusion-forum-post-pending");
+    assertSelectorCount(".illusion-forum-post", 4);
+    assertSelectorPresent(".illusion-forum-post[data-post-id=\"20100\"] .illusion-forum-post-edit");
+    assertSelectorPresent(".illusion-forum-post[data-post-id=\"20101\"] .illusion-forum-post-edit");
+    assertSelectorNotPresent(".illusion-forum-post[data-post-id=\"20102\"] .illusion-forum-post-edit");
+    assertSelectorNotPresent(".illusion-forum-post[data-post-id=\"20103\"] .illusion-forum-post-edit");
+  }
+  
 }

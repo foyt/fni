@@ -11,10 +11,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -81,6 +83,21 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
 
   protected void waitForSelectorVisible(String selector) {
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(selector)));
+  }
+
+  protected void waitForSelectorNotPresent(final String selector) {
+    
+    new WebDriverWait(getWebDriver(), 60).until(
+      new ExpectedCondition<List<WebElement>>() {
+        
+        @Override
+        public List<WebElement> apply(WebDriver driver) {
+          List<WebElement> elements = driver.findElements(By.cssSelector(selector));
+          return elements.size() > 0 ? elements : null;
+        }
+        
+      }
+    );
   }
   
   protected WebElement findElementBySelector(String selector) {
@@ -223,6 +240,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     WebElement selectedOption = new Select(findElementBySelector(selector)).getFirstSelectedOption();
     assertNotNull(selectedOption);
     assertEquals(value, selectedOption.getAttribute("value"));
+  }
+
+  protected void scrollWindowBy(int x, int y) {
+    ((JavascriptExecutor) getWebDriver()).executeScript(String.format("window.scrollBy(%d, %d)",  x, y), "");
   }
   
   protected void takeScreenshot() throws WebDriverException, IOException {
