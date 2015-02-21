@@ -587,7 +587,7 @@ public class IllusionRestServices {
     } 
     
     illusionEventController.updateIllusionEventParticipantRole(participant, entity.getRole());
-    illusionEventController.updateIllusionEventParticipantCharacterName(participant, entity.getDisplayName());
+    illusionEventController.updateIllusionEventParticipantDisplayName(participant, entity.getDisplayName());
     
     return Response.noContent().build();
   }
@@ -1346,7 +1346,7 @@ public class IllusionRestServices {
   }
 
   private fi.foyt.fni.rest.illusion.model.IllusionEventParticipant createRestModel(IllusionEventParticipant participant) {
-    return new fi.foyt.fni.rest.illusion.model.IllusionEventParticipant(participant.getId(), participant.getUser().getId(), participant.getRole(), participant.getCharacterName());
+    return new fi.foyt.fni.rest.illusion.model.IllusionEventParticipant(participant.getId(), participant.getUser().getId(), participant.getRole(), participant.getDisplayName());
   }
   
   private DateTime getDateAsDateTime(Date date) {

@@ -1,7 +1,7 @@
 insert into 
-  Forum (id, allowTopicCreation, name, description, urlName, category_id)
+  Forum (allowTopicCreation, name, description, urlName, category_id)
 values 
-  (5, true, 'With Special Characters', 'Forum with special characters in urlname', 'with-special.characters', 1);
+  (true, 'With Special Characters', 'Forum with special characters in urlname', 'with-special.characters', 1);
   
 insert into 
   ForumMessage (id, created, modified, views, author_id)
@@ -11,7 +11,7 @@ values
 insert into 
   ForumTopic (id, forum_id, urlName, subject) 
 values 
-  (27, 5, 'with-special.characters', 'Topic for testing url names with special characters');
+  (27, (select id from Forum where urlName = 'with-special.characters'), 'with-special.characters', 'Topic for testing url names with special characters');
   
 insert into 
   ForumMessage (id, created, modified, views, author_id)

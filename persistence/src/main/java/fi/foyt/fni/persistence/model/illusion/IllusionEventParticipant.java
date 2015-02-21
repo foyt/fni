@@ -18,12 +18,12 @@ public class IllusionEventParticipant {
     return id;
   }
   
-  public String getCharacterName() {
-    return characterName;
+  public String getDisplayName() {
+    return displayName;
   }
   
-  public void setCharacterName(String characterName) {
-    this.characterName = characterName;
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
   }
   
   public IllusionEventParticipantRole getRole() {
@@ -54,7 +54,7 @@ public class IllusionEventParticipant {
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
   
-  private String characterName;
+  private String displayName;
 
   @ManyToOne
   private User user;

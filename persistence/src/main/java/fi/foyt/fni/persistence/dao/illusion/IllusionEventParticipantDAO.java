@@ -20,11 +20,11 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionEventParticipant create(User user, IllusionEvent event, String characterName, IllusionEventParticipantRole role) {
+	public IllusionEventParticipant create(User user, IllusionEvent event, String displayName, IllusionEventParticipantRole role) {
 		IllusionEventParticipant illusionEventParticipant = new IllusionEventParticipant();
 
     illusionEventParticipant.setEvent(event);
-    illusionEventParticipant.setCharacterName(characterName);
+    illusionEventParticipant.setDisplayName(displayName);
     illusionEventParticipant.setRole(role);
     illusionEventParticipant.setUser(user);
 
@@ -138,8 +138,8 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
 		return persist(illusionEventParticipant);
 	}
 
-  public IllusionEventParticipant updateCharacterName(IllusionEventParticipant illusionEventParticipant, String characterName) {
-    illusionEventParticipant.setCharacterName(characterName);
+  public IllusionEventParticipant updateDisplayName(IllusionEventParticipant illusionEventParticipant, String displayName) {
+    illusionEventParticipant.setDisplayName(displayName);
     return persist(illusionEventParticipant);
   }
 

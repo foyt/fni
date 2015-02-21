@@ -380,11 +380,11 @@ public class IllusionEventController {
   
   /* IllusionEventParticipant */
   
-  public IllusionEventParticipant createIllusionEventParticipant(User user, IllusionEvent event, String characterName, IllusionEventParticipantRole role) {
-    IllusionEventParticipant member = illusionEventParticipantDAO.create(user, event, characterName, role);
-    illusionParticipantAddedEvent.fire(new IllusionParticipantAddedEvent(member.getId()));
+  public IllusionEventParticipant createIllusionEventParticipant(User user, IllusionEvent event, String displayName, IllusionEventParticipantRole role) {
+    IllusionEventParticipant participant = illusionEventParticipantDAO.create(user, event, displayName, role);
+    illusionParticipantAddedEvent.fire(new IllusionParticipantAddedEvent(participant.getId()));
     
-    return member;
+    return participant;
   }
   
   public IllusionEventParticipant createIllusionEventParticipant(User user, IllusionEvent event, IllusionEventParticipantRole role) {
@@ -411,8 +411,8 @@ public class IllusionEventController {
     return illusionEventParticipantDAO.countByEventAndRole(event, role);
   }
   
-  public IllusionEventParticipant updateIllusionEventParticipantCharacterName(IllusionEventParticipant participant, String characterName) {
-    return illusionEventParticipantDAO.updateCharacterName(participant, characterName);
+  public IllusionEventParticipant updateIllusionEventParticipantDisplayName(IllusionEventParticipant participant, String displayName) {
+    return illusionEventParticipantDAO.updateDisplayName(participant, displayName);
   }
 
   public IllusionEventParticipant updateIllusionEventParticipantRole(IllusionEventParticipant participant, IllusionEventParticipantRole role) {

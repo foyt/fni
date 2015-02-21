@@ -135,7 +135,7 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
     selectedParticipantId = participant.getId();
     selectedParticipantUserId = participant.getUser().getId();
     selectedParticipantName = getParticipantDisplayName(participant);
-    selectedParticipantCharacterName = participant.getCharacterName();
+    selectedParticipantDisplayName = participant.getDisplayName();
     selectedParticipantRole = participant.getRole();
   }
 
@@ -155,12 +155,12 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
     this.selectedParticipantName = selectedParticipantName;
   }
   
-  public String getSelectedParticipantCharacterName() {
-    return selectedParticipantCharacterName;
+  public void setSelectedParticipantDisplayName(String selectedParticipantDisplayName) {
+    this.selectedParticipantDisplayName = selectedParticipantDisplayName;
   }
   
-  public void setSelectedParticipantCharacterName(String selectedParticipantCharacterName) {
-    this.selectedParticipantCharacterName = selectedParticipantCharacterName;
+  public String getSelectedParticipantDisplayName() {
+    return selectedParticipantDisplayName;
   }
 
   public IllusionEventParticipantRole getSelectedParticipantRole() {
@@ -186,7 +186,7 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
   public String saveSelectedParticipant() {
     IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(selectedParticipantId);
     
-    illusionEventController.updateIllusionEventParticipantCharacterName(participant, selectedParticipantCharacterName);
+    illusionEventController.updateIllusionEventParticipantDisplayName(participant, selectedParticipantDisplayName);
     illusionEventController.updateIllusionEventParticipantRole(participant, selectedParticipantRole);
     
     return "/illusion/event-participants.jsf?faces-redirect=true&urlName=" + getUrlName();
@@ -204,7 +204,7 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
   private Long selectedParticipantId;
   private Long selectedParticipantUserId;
   private String selectedParticipantName;
-  private String selectedParticipantCharacterName;
+  private String selectedParticipantDisplayName;
   private IllusionEventParticipantRole selectedParticipantRole;
   private List<SelectItem> roleSelectItems;
 }
