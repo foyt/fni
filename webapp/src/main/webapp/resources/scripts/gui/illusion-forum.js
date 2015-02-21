@@ -82,7 +82,7 @@
           case 200:
             this._getParticipant(post.authorId, $.proxy(function (participant) {
               this.element.find('.illusion-forum-post-author-name')
-                .html(participant.displayName);
+                .html(participant.displayName||$('.unformatted-locales').attr('data-anonymous'));
               
               this.element.find('.illusion-forum-post-author-image-container img').remove();
               this.element.find('.illusion-forum-post-author-image-container').append(
