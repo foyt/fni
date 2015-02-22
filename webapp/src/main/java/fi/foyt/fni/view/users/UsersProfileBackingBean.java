@@ -25,6 +25,7 @@ import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
 import fi.foyt.fni.illusion.IllusionEventController;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
@@ -67,15 +68,18 @@ public class UsersProfileBackingBean {
   @Inject
 	private IllusionEventController illusionEventController;
 
+  @Inject
+  private NavigationController navigationController;
+
 	@RequestAction 
 	public String init() throws FileNotFoundException {
 		User user = userController.findUserById(getUserId());
 		if (user == null) {
-		  return "/error/not-found.jsf";
+		  return navigationController.notFound();
 		}
 		
 		if (user.getArchived()) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
 		}
 		
 		StringBuilder fullNameBuilder = new StringBuilder();

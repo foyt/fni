@@ -16,6 +16,7 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
 import fi.foyt.fni.forum.ForumController;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
@@ -45,6 +46,9 @@ public class ForumEditPostBackingBean {
 
   @Inject
   private ForumController forumController;
+
+  @Inject
+  private NavigationController navigationController;
   
   @RequestAction
   @Secure (Permission.FORUM_POST_MODIFY)
@@ -53,21 +57,21 @@ public class ForumEditPostBackingBean {
   public String init() throws FileNotFoundException {
     forum = forumController.findForumByUrlName(getForumUrlName());
     if (forum == null) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
     
     topic = forumController.findForumTopicByForumAndUrlName(forum, topicUrlName);
     if (topic == null) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
     
     ForumPost forumPost = forumController.findForumPostById(postId);
     if ((forumPost == null) || !forumPost.getTopic().getId().equals(topic.getId())) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
     
     if (!forumPost.getTopic().getForum().getId().equals(forum.getId())) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
     
     postContent = forumPost.getContent();

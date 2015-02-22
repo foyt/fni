@@ -12,6 +12,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
@@ -47,6 +48,9 @@ public class IllusionEventEditPageBackingBean extends AbstractIllusionEventBacki
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
 
+  @Inject
+  private NavigationController navigationController;
+
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.MANAGE_PAGES);
@@ -58,23 +62,23 @@ public class IllusionEventEditPageBackingBean extends AbstractIllusionEventBacki
       
       Material material = materialController.findMaterialById(documentId);
       if (!(material instanceof IllusionEventDocument)) {
-        return "/error/not-found.jsf";
+        return navigationController.notFound();
       }
       
       page = (IllusionEventDocument) material;
       if (page.getDocumentType() != IllusionEventDocumentType.PAGE) {
-        return "/error/not-found.jsf";
+        return navigationController.notFound();
       }      
     } else {
       if ("INDEX".equals(getPageId())) {
         page = illusionEventController.findByFolderAndDocumentType(illusionEvent.getFolder(), IllusionEventDocumentType.INDEX);
       } else {
-        return "/error/not-found.jsf";
+        return navigationController.notFound();
       }
     }
 
     if (page == null) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
     
     pageTitle = page.getTitle();

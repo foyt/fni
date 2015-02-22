@@ -12,6 +12,7 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
 import fi.foyt.fni.illusion.IllusionEventController;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
@@ -35,6 +36,9 @@ public class IllusionEventDoJoinBackingBean {
 
   @Inject
   private SessionController sessionController;
+
+  @Inject
+  private NavigationController navigationController;
   
   @RequestAction
   @Deferred
@@ -42,14 +46,14 @@ public class IllusionEventDoJoinBackingBean {
   public String init() {
     IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
     if (illusionEvent == null) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
     
     User loggedUser = sessionController.getLoggedUser();
     IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
     if (participant == null) {
       if (!illusionEvent.getPublished()) {
-        return "/error/access-denied.jsf";
+        return navigationController.accessDenied();
       }
       
       switch (illusionEvent.getJoinMode()) {
@@ -61,17 +65,17 @@ public class IllusionEventDoJoinBackingBean {
           illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PARTICIPANT);
           return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
         default:
-          return "/error/access-denied.jsf";
+          return navigationController.accessDenied();
       }      
     } else {
       if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER && !illusionEvent.getPublished()) {
-        return "/error/access-denied.jsf";
+        return navigationController.accessDenied();
       }
       
       switch (participant.getRole()) {
         case BANNED:
         case BOT:
-          return "/error/access-denied.jsf";
+          return navigationController.accessDenied();
         case INVITED:
           if (illusionEvent.getSignUpFee() == null) {
             illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);

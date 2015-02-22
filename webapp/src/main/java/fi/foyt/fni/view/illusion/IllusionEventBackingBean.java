@@ -28,6 +28,7 @@ import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.jade.JadeController;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
@@ -77,6 +78,9 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
 
   @Inject
   private SessionController sessionController;
+
+  @Inject
+  private NavigationController navigationController;
   
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
@@ -87,7 +91,7 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
       memberRole = participant.getRole();
       switch (memberRole) {
         case BOT:
-          return "/error/access-denied.jsf";
+          return navigationController.accessDenied();
         case BANNED:
         case PENDING_APPROVAL:
         case WAITING_PAYMENT:
@@ -103,7 +107,7 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
     
     if (!published) {
       if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
-        return "/error/access-denied.jsf";
+        return navigationController.accessDenied();
       }
     }
 
@@ -176,7 +180,7 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
       contentsHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/index-contents", templateModel);
     } catch (JadeException | IOException e) {
       logger.log(Level.SEVERE, "Could not parse jade template", e);
-      return "/error/internal-error.jsf";
+      return navigationController.internalError();
     }
 
     return null;

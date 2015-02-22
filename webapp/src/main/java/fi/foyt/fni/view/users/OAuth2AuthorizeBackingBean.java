@@ -23,6 +23,7 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.auth.OAuthController;
 import fi.foyt.fni.illusion.IllusionEventController;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.oauth.OAuthAuthorizationCode;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient;
 import fi.foyt.fni.persistence.model.users.User;
@@ -47,6 +48,9 @@ public class OAuth2AuthorizeBackingBean {
 
   @Inject
   private IllusionEventController illusionEventController;
+
+  @Inject
+  private NavigationController navigationController;
   
   @RequestAction
   public String init() {
@@ -54,7 +58,7 @@ public class OAuth2AuthorizeBackingBean {
       OAuthAuthzRequest oAuthRequest = new OAuthAuthzRequest(request);
       OAuthClient oAuthClient = oAuthController.findClientByClientId(oAuthRequest.getClientId());
       if (oAuthClient == null) {
-        return "/error/access-denied.jsf";
+        return navigationController.accessDenied();
       }
       
       setClientId(oAuthClient.getClientId());
@@ -65,7 +69,7 @@ public class OAuth2AuthorizeBackingBean {
         return "/users/oauth2-auto-authorize.jsf";
       }
     } catch (OAuthSystemException | OAuthProblemException e) {
-      return "/error/internal-error.jsf";
+      return navigationController.internalError();
     }
 
     return null;
@@ -74,12 +78,12 @@ public class OAuth2AuthorizeBackingBean {
   public String authorize() {
     User loggedUser = sessionController.getLoggedUser();
     if (loggedUser == null) {
-      return "/error/access-denied.jsf";
+      return navigationController.accessDenied();
     }
     
     OAuthClient client = oAuthController.findClientByClientId(getClientId());
     if (client == null) {
-      return "/error/access-denied.jsf";
+      return navigationController.accessDenied();
     }
     
     OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
@@ -91,7 +95,7 @@ public class OAuth2AuthorizeBackingBean {
           .setCode(authorizationCode.getCode());
       FacesContext.getCurrentInstance().getExternalContext().redirect(responseBuilder.buildQueryMessage().getLocationUri());
     } catch (IOException | OAuthSystemException e) {
-      return "/error/internal-error.jsf";
+      return navigationController.internalError();
     }
 
     return null;
@@ -100,7 +104,7 @@ public class OAuth2AuthorizeBackingBean {
   public String deny() {
     OAuthClient client = oAuthController.findClientByClientId(getClientId());
     if (client == null) {
-      return "/error/access-denied.jsf";
+      return navigationController.accessDenied();
     }
     
     try {
@@ -109,7 +113,7 @@ public class OAuth2AuthorizeBackingBean {
           .location(client.getRedirectUrl());
       FacesContext.getCurrentInstance().getExternalContext().redirect(responseBuilder.buildQueryMessage().getLocationUri());
     } catch (IOException | OAuthSystemException e) {
-      return "/error/internal-error.jsf";
+      return navigationController.internalError();
     }
 
     return null;

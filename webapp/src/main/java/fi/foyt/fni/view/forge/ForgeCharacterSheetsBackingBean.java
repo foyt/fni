@@ -14,6 +14,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
@@ -46,12 +47,15 @@ public class ForgeCharacterSheetsBackingBean {
 
   @Inject
 	private MaterialPermissionController materialPermissionController;
+
+  @Inject
+  private NavigationController navigationController;
 	
 	@RequestAction
 	@Deferred
 	public String load() throws FileNotFoundException {
 		if ((getOwnerId() == null)||(getUrlPath() == null)) {
-			return "/error/not-found.jsf";
+			return navigationController.notFound();
 		}
 		
 		String completePath = "/materials/" + getOwnerId() + "/" + getUrlPath();
@@ -59,13 +63,13 @@ public class ForgeCharacterSheetsBackingBean {
 		User loggedUser = sessionController.getLoggedUser();
 		
 		if (!(material instanceof CharacterSheet)) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
 		}
 
     CharacterSheet characterSheet = (CharacterSheet) material;
     
 		if (!materialPermissionController.hasAccessPermission(loggedUser, characterSheet)) {
-      return "/error/access-denied.jsf";
+      return navigationController.accessDenied();
 		}
 		
 		readOnly = !materialPermissionController.hasModifyPermission(loggedUser, material);
@@ -153,7 +157,7 @@ public class ForgeCharacterSheetsBackingBean {
 	    
 	    return "/forge/character-sheets.jsf?faces-redirect=true&ownerId=" + ownerId + "&urlPath=" + urlPath;
 	  } else {
-      return "/error/access-denied.jsf";
+      return navigationController.accessDenied();
 	  }
 	}
 	

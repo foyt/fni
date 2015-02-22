@@ -13,6 +13,7 @@ import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Folder;
@@ -44,22 +45,25 @@ public class ForgeImagesBackingBean {
 
   @Inject
   private SessionController sessionController;
+
+  @Inject
+  private NavigationController navigationController;
 	
 	@RequestAction
 	public String load() throws FileNotFoundException {
 		if ((getOwnerId() == null)||(getUrlPath() == null)) {
-			return "/error/not-found.jsf";
+			return navigationController.notFound();
 		}
 		
     String completePath = "/materials/" + getOwnerId() + "/" + getUrlPath();
     Material material = materialController.findMaterialByCompletePath(completePath);
 
 		if (!(material instanceof Image)) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
 		}
 
     if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
-      return "/error/access-denied.jsf";
+      return navigationController.accessDenied();
     }
 		
 		materialPath = material.getPath();

@@ -25,6 +25,7 @@ import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.jade.JadeController;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.MaterialTypeComparator;
@@ -74,22 +75,25 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
 
   @Inject
   private JadeController jadeController;
+
+  @Inject
+  private NavigationController navigationController;
   
   @SuppressWarnings("unchecked")
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     if (participant == null) {
-      return "/error/access-denied.jsf";
+      return navigationController.accessDenied();
     }
     
     if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
       if (!illusionEvent.getPublished()) {
-        return "/error/access-denied.jsf";
+        return navigationController.accessDenied();
       }
 
       IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, IllusionEventPage.Static.MATERIALS.name());
       if (visibility == IllusionEventPageVisibility.HIDDEN) {
-        return "/error/access-denied.jsf";
+        return navigationController.accessDenied();
       }
     }
 
@@ -162,7 +166,7 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
       contentsHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/materials-contents", tempalteModel);
     } catch (Exception e) {
       logger.log(Level.SEVERE, "Could not parse jade template", e);
-      return "/error/internal-error.jsf";
+      return navigationController.internalError();
     }
     
     return null;

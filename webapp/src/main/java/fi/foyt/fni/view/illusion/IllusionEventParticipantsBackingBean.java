@@ -17,6 +17,7 @@ import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
@@ -47,11 +48,14 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
 
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
+
+  @Inject
+  private NavigationController navigationController;
   
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
-      return "/error/access-denied.jsf";
+      return navigationController.accessDenied();
     }
 
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.PARTICIPANTS);

@@ -25,6 +25,7 @@ import javax.interceptor.InvocationContext;
 
 import org.apache.commons.lang3.StringUtils;
 
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.session.SessionController;
 
@@ -42,6 +43,9 @@ public class SecureInterceptor implements Serializable {
 
 	@Inject
 	private SessionController sessionController;
+
+  @Inject
+  private NavigationController navigationController;
 	
 	private String errorPage = null;
 	
@@ -61,14 +65,14 @@ public class SecureInterceptor implements Serializable {
           	return ic.proceed();
           }
 
-          errorPage = "/error/access-denied.jsf";
+          errorPage = navigationController.accessDenied();
         } catch (FileNotFoundException e) {
-          errorPage = "/error/not-found.jsf";
+          errorPage = navigationController.notFound();
         } catch (Exception e) {
-          errorPage = "/error/internal-error.jsf";
+          errorPage = navigationController.internalError();
         }
   		} else {
-        errorPage = "/error/access-denied.jsf";
+        errorPage = navigationController.accessDenied();
   		}
     }
 	  

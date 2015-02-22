@@ -7,6 +7,7 @@ import javax.ejb.EJBException;
 import javax.el.ELException;
 import javax.enterprise.inject.CreationException;
 import javax.faces.FacesException;
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.UnauthorizedException;
 
@@ -23,6 +25,9 @@ import fi.foyt.fni.security.UnauthorizedException;
 public class ErrorServlet extends HttpServlet {
 
   private static final long serialVersionUID = 8698828812384840114L;
+
+  @Inject
+  private NavigationController navigationController;
 
   @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -42,16 +47,16 @@ public class ErrorServlet extends HttpServlet {
           response.sendRedirect(response.encodeRedirectURL(redirectUrl));
           return;
         } else if (unwrappedException instanceof FileNotFoundException) {
-          request.getRequestDispatcher("/error/not-found.jsf").forward(request, response);
+          request.getRequestDispatcher(navigationController.notFound()).forward(request, response);
           return;
         } else if (unwrappedException instanceof ForbiddenException) {
-          request.getRequestDispatcher("/error/access-denied.jsf").forward(request, response);
+          request.getRequestDispatcher(navigationController.accessDenied()).forward(request, response);
           return;
         }
       }
     }
     
-    request.getRequestDispatcher("/error/internal-error.jsf").forward(request, response);
+    request.getRequestDispatcher(navigationController.internalError()).forward(request, response);
 	}
 
   private Throwable unwrapExtension(Throwable exception) {

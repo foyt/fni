@@ -12,6 +12,7 @@ import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
@@ -39,6 +40,9 @@ public class ForgeMaterialsBackingBean {
 
   @Inject
   private MaterialPermissionController materialPermissionController;
+
+  @Inject
+  private NavigationController navigationController;
 
   @PostConstruct
   public void init() {
@@ -214,7 +218,7 @@ public class ForgeMaterialsBackingBean {
 
     if (parentFolder != null) {
       if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
-        return "/error/access-denied.jsf";
+        return navigationController.accessDenied();
       }
     }
     
@@ -233,7 +237,7 @@ public class ForgeMaterialsBackingBean {
     
     if (parentFolder != null) {
       if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
-        return "/error/access-denied.jsf";
+        return navigationController.accessDenied();
       }
     }
     
@@ -251,7 +255,7 @@ public class ForgeMaterialsBackingBean {
     
     if (parentFolder != null) {
       if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
-        return "/error/access-denied.jsf";
+        return navigationController.accessDenied();
       }
     }
     

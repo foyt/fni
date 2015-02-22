@@ -16,6 +16,7 @@ import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Folder;
@@ -50,22 +51,25 @@ public class ForgeGoogleDriveBackingBean {
 
   @Inject
   private MaterialPermissionController materialPermissionController;
+
+  @Inject
+  private NavigationController navigationController;
 	
 	@RequestAction
 	public String load() {
 		if ((getOwnerId() == null)||(getUrlPath() == null)) {
-			return "/error/not-found.jsf";
+			return navigationController.notFound();
 		}
 		
     String completePath = "/materials/" + getOwnerId() + "/" + getUrlPath();
     Material material = materialController.findMaterialByCompletePath(completePath);
 
 		if (!(material instanceof GoogleDocument)) {
-		  return "/error/not-found.jsf";
+		  return navigationController.notFound();
 		}
 
 		if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
-      return "/error/access-denied.jsf";
+      return navigationController.accessDenied();
     }
     
 		GoogleDocument googleDocument = (GoogleDocument) material;
@@ -79,7 +83,7 @@ public class ForgeGoogleDriveBackingBean {
       googleDriveEditLink = materialController.getGoogleDocumentEditLink(googleDocument);
     } catch (IOException | GeneralSecurityException e) {
       logger.log(Level.SEVERE, "Failed to retrieve Google Drive edit link", e);
-      return "/error/internal-error.jsf";
+      return navigationController.internalError();
     }
 	  
 	  return null;

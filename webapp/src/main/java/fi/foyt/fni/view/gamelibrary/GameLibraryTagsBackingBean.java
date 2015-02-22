@@ -14,6 +14,7 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 
@@ -32,15 +33,18 @@ public class GameLibraryTagsBackingBean {
   @Inject
 	private GameLibraryTagController gameLibraryTagController;
 
+  @Inject
+  private NavigationController navigationController;
+
   @RequestAction
   public String load() {
     if (StringUtils.isBlank(tag)) {
-      return "/error/not-found.jsf"; 
+      return navigationController.notFound(); 
     }
     
     GameLibraryTag libraryTag = gameLibraryTagController.findTagByText(tag);
     if (libraryTag == null) {
-      return "/error/not-found.jsf"; 
+      return navigationController.notFound(); 
     }
     
     return null;

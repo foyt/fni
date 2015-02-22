@@ -15,6 +15,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Document;
@@ -47,12 +48,15 @@ public class ForgeDocumentsBackingBean {
 
   @Inject
 	private MaterialPermissionController materialPermissionController;
+
+  @Inject
+  private NavigationController navigationController;
 	
 	@RequestAction
 	@Deferred
 	public String load() throws FileNotFoundException {
 		if ((getOwnerId() == null)||(getUrlPath() == null)) {
-			return "/error/not-found.jsf";
+			return navigationController.notFound();
 		}
 		
 		String completePath = "/materials/" + getOwnerId() + "/" + getUrlPath();
@@ -60,11 +64,11 @@ public class ForgeDocumentsBackingBean {
 		User loggedUser = sessionController.getLoggedUser();
 		
 		if (!(material instanceof Document)) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
 		}
 		
 		if (!materialPermissionController.hasAccessPermission(loggedUser, material)) {
-      return "/error/access-denied.jsf";
+      return navigationController.accessDenied();
 		}
 		
 		readOnly = !materialPermissionController.hasModifyPermission(loggedUser, material);

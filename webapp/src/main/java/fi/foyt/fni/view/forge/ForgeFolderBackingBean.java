@@ -18,6 +18,7 @@ import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.MaterialTypeComparator;
@@ -56,6 +57,9 @@ public class ForgeFolderBackingBean extends AbstractForgeMaterialViewBackingBean
 
   @Inject
   private SessionController sessionController;
+
+  @Inject
+  private NavigationController navigationController;
   
   @PostConstruct
   public void init() {
@@ -68,22 +72,22 @@ public class ForgeFolderBackingBean extends AbstractForgeMaterialViewBackingBean
    if (ownerId != null && StringUtils.isNotBlank(urlName)) {
       User owner = userController.findUserById(getOwnerId());
       if (owner == null) {
-        return "/error/not-found.jsf";
+        return navigationController.notFound();
       }
 
       Material material = materialController.findByOwnerAndPath(owner, getUrlName());
       if (material == null) {
-        return "/error/not-found.jsf";
+        return navigationController.notFound();
       }
 
       if (!(material instanceof Folder)) {
-        return "/error/not-found.jsf";
+        return navigationController.notFound();
       }
 
       Folder folder = (Folder) material;
 
       if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), folder)) {
-        return "/error/access-denied.jsf";
+        return navigationController.accessDenied();
       }
 
       setFolderId(material.getId());
@@ -109,7 +113,7 @@ public class ForgeFolderBackingBean extends AbstractForgeMaterialViewBackingBean
       
       return null;
     } else {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
   }
 

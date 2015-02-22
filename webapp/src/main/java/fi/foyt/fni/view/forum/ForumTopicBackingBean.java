@@ -20,6 +20,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.forum.ForumController;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
@@ -58,6 +59,9 @@ public class ForumTopicBackingBean {
 	
 	@Inject
 	private SecurityController securityController;
+
+  @Inject
+  private NavigationController navigationController;
 	
 	@RequestAction
 	public String load() throws FileNotFoundException {
@@ -72,7 +76,7 @@ public class ForumTopicBackingBean {
 		
 		ForumTopic topic = forumController.findForumTopicByForumAndUrlName(forum, topicUrlName);
     if (topic == null) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
     
     topicId = topic.getId();

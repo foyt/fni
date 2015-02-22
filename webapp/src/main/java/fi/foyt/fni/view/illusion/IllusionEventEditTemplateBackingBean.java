@@ -11,6 +11,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventTemplate;
@@ -40,11 +41,14 @@ public class IllusionEventEditTemplateBackingBean extends AbstractIllusionEventB
 
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
+
+  @Inject
+  private NavigationController navigationController;
   
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     if (getTemplateId() == null) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
     
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.MANAGE_TEMPLATES);
@@ -52,11 +56,11 @@ public class IllusionEventEditTemplateBackingBean extends AbstractIllusionEventB
     
     IllusionEventTemplate template = illusionEventController.findEventTemplateById(getTemplateId());
     if (template == null) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
     
     if (!template.getEvent().getId().equals(illusionEvent.getId())) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
     
     templateName = template.getName();

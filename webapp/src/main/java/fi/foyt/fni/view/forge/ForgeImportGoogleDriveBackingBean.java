@@ -30,6 +30,7 @@ import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.Permission;
 
 import fi.foyt.fni.drive.DriveManager;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.GoogleDriveType;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
@@ -73,6 +74,9 @@ public class ForgeImportGoogleDriveBackingBean {
   
   @Inject
   private DriveManager driveManager;
+
+  @Inject
+  private NavigationController navigationController;
   
   @SuppressWarnings("unchecked")
   @RequestAction
@@ -86,10 +90,10 @@ public class ForgeImportGoogleDriveBackingBean {
       Folder parentFolder = parentFolderId != null ? materialController.findFolderById(parentFolderId) : null;
       if (parentFolder != null) {
         if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
-          return "/error/access-denied.jsf";
+          return navigationController.accessDenied();
         }
       } else {
-        return "/error/not-found.jsf";
+        return navigationController.notFound();
       }
     }
 

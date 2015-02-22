@@ -12,6 +12,7 @@ import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
@@ -32,16 +33,19 @@ public class AdminArchiveUserBackingBean {
   
   @Inject
   private UserController userController;
+
+  @Inject
+  private NavigationController navigationController;
   
 	@RequestAction
 	public String load() throws FileNotFoundException {
 	  if (getUserId() == null) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
 	  }
 	  
 	  User user = userController.findUserById(getUserId());
 	  if (user == null) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
 	  }
 	  
 	  userController.archiveUser(user);

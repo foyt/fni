@@ -21,6 +21,7 @@ import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.jade.JadeController;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
@@ -66,6 +67,9 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
 
   @Inject
   private SystemSettingsController systemSettingsController;
+
+  @Inject
+  private NavigationController navigationController;
   
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
@@ -80,23 +84,23 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
     }
     
     if ((material == null) || (material.getType() != MaterialType.ILLUSION_GROUP_DOCUMENT)) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
     
     IllusionEventDocument document = (IllusionEventDocument) material;
     if (document.getDocumentType() != IllusionEventDocumentType.PAGE) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
     
     if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
       if (!illusionEvent.getPublished()) {
-        return "/error/access-denied.jsf";
+        return navigationController.accessDenied();
       }
 
       IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, document.getId().toString());
       if (visibility != IllusionEventPageVisibility.VISIBLE) {
         if (visibility == IllusionEventPageVisibility.HIDDEN) {
-          return "/error/access-denied.jsf";
+          return navigationController.accessDenied();
         }
         
         if (visibility == IllusionEventPageVisibility.PARTICIPANTS) {
@@ -105,12 +109,12 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
             try {
               return "/users/login.jsf?faces-redirect=true&redirectUrl=" + URLEncoder.encode(redirectUrl, "UTF-8");
             } catch (UnsupportedEncodingException e) {
-              return "/error/internal-error.jsf";
+              return navigationController.internalError();
             }
           }
           
           if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.PARTICIPANT)) {
-            return "/error/access-denied.jsf";
+            return navigationController.accessDenied();
           }
         }
       }
@@ -130,7 +134,7 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
       contentsHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/page-contents", templateModel);
     } catch (JadeException | IOException e) {
       logger.log(Level.SEVERE, "Could not parse jade template", e);
-      return "/error/internal-error.jsf";
+      return navigationController.internalError();
     }
 
     return null;

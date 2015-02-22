@@ -12,6 +12,7 @@ import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionJadeTemplateLoader;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
@@ -40,11 +41,14 @@ public abstract class AbstractIllusionEventBackingBean {
   @Inject
   private IllusionTemplateModelBuilderFactory illusionTemplateModelBuilderFactory;
 
+  @Inject
+  private NavigationController navigationController;
+
   @RequestAction
   public String basicInit() {
     IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
     if (illusionEvent == null) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
     
     IllusionEventParticipant participant = null;

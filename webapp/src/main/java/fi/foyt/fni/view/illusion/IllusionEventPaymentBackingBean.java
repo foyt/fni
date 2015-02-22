@@ -26,6 +26,7 @@ import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionEventController;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
@@ -82,6 +83,9 @@ public class IllusionEventPaymentBackingBean {
   @Inject
   private PaytrailService paytrailService;
 
+  @Inject
+  private NavigationController navigationController;
+
   @PostConstruct
   @LoggedIn
   public void postConstruct() {
@@ -100,21 +104,21 @@ public class IllusionEventPaymentBackingBean {
   public String init() {
     IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
     if (illusionEvent == null) {
-      return "/error/not-found.jsf";
+      return navigationController.notFound();
     }
 
     if (illusionEvent.getSignUpFee() == null) {
-      return "/error/internal-error.jsf";
+      return navigationController.internalError();
     }
 
     User loggedUser = sessionController.getLoggedUser();
     IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
     if (participant == null) {
-      return "/error/access-denied.jsf";
+      return navigationController.accessDenied();
     }
     
     if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER && !illusionEvent.getPublished()) {
-      return "/error/access-denied.jsf";
+      return navigationController.accessDenied();
     }
 
     handlingFee = systemSettingsController.getDoubleSetting(SystemSettingKey.ILLUSION_GROUP_HANDLING_FEE);
@@ -129,7 +133,7 @@ public class IllusionEventPaymentBackingBean {
       case BANNED:
       case BOT:
       case PENDING_APPROVAL:
-        return "/error/access-denied.jsf";
+        return navigationController.accessDenied();
       case ORGANIZER:
       case PARTICIPANT:
         return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
@@ -138,7 +142,7 @@ public class IllusionEventPaymentBackingBean {
         return null;
     }
     
-    return "/error/internal-error.jsf";
+    return navigationController.internalError();
   }
   
   @RequestAction
