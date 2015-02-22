@@ -123,7 +123,6 @@ public abstract class AbstractIllusionEventBackingBean {
       if (participant != null) {
         if (participant.getRole() == IllusionEventParticipantRole.ORGANIZER) {
           modelBuilder
-            .addLocale("illusion.eventNavigation.administration")
             .addAdminPage(IllusionEventPage.Static.MANAGE_PAGES, "/manage-pages", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.pages"))
             .addAdminPage(IllusionEventPage.Static.PARTICIPANTS, "/participants", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.participants"))
             .addAdminPage(IllusionEventPage.Static.GROUPS, "/groups", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.groups"))
@@ -133,10 +132,6 @@ public abstract class AbstractIllusionEventBackingBean {
         
         modelBuilder.setUserInfo(sessionController.getLoggedUser(), participant);
       }
-      
-      modelBuilder.addLocale("illusion.logout");
-    } else {
-      modelBuilder.addLocale("illusion.login");
     }
     
     return modelBuilder

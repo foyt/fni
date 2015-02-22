@@ -136,10 +136,7 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
       .put("joinMode", joinMode.toString())
       .put("hasSignUpFee", hasSignUpFee)
       .put("signUpFee", signUpFee)
-      .put("ref", ref)
-      .addLocales("illusion.event.joinInfoFree", "illusion.event.joinInfoPrice", 
-          "illusion.event.joinButton", "illusion.event.requestToJoinButton",  "illusion.event.shareOnFacebook", 
-          "illusion.event.shareOnTwitter", "illusion.event.shareOnGooglePlus");
+      .put("ref", ref);
     
     if ("1".equals(illusionEventController.getSetting(illusionEvent, IllusionEventSettingKey.INDEX_INCLUDE_ALL_PAGES))) {
       List<IllusionEventPage> pages = participant != null ? 

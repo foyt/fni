@@ -36,7 +36,6 @@ public class IllusionTemplateModelBuilderFactory {
       model = new HashMap<>();
       pages = new ArrayList<>();
       adminPages = new ArrayList<>();
-      localeKeys = new ArrayList<>();
       breadcrumbs = new ArrayList<>();
     }
 
@@ -99,21 +98,6 @@ public class IllusionTemplateModelBuilderFactory {
       return this;
     }
 
-    @Deprecated
-    public IllusionTemplateModelBuilder addLocale(String key) {
-      localeKeys.add(key);
-      return this;
-    }
-
-    @Deprecated
-    public IllusionTemplateModelBuilder addLocales(String... keys) {
-      for (String key : keys) {
-        addLocale(key);
-      }
-
-      return this;
-    }
-
     public IllusionTemplateModelBuilder put(String key, Object value) {
       model.put(key, value);
       return this;
@@ -133,16 +117,10 @@ public class IllusionTemplateModelBuilderFactory {
 
     public Map<String, Object> build(Locale locale) {
       Map<String, Object> result = new HashMap<>(model);
-      Map<String, String> locales = new HashMap<>();
-
-      for (String localeKey : localeKeys) {
-        locales.put(localeKey, ExternalLocales.getText(locale, localeKey));
-      }
 
       result.put("breadcrumbs", breadcrumbs);
       result.put("pages", pages);
       result.put("adminPages", adminPages);
-      result.put("locales", locales);
       result.put("locale", new JadeLocaleHelper(locale));
       
       return result;
@@ -151,7 +129,6 @@ public class IllusionTemplateModelBuilderFactory {
     private Map<String, Object> model;
     private List<Page> pages;
     private List<AdminPage> adminPages;
-    private List<String> localeKeys;
     private List<Breadcrumb> breadcrumbs;
   }
   

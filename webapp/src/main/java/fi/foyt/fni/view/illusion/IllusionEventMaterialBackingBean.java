@@ -151,8 +151,7 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
         .addBreadcrumb(illusionEvent, "/materials/" + getMaterialPath(), material.getTitle())
         .put("materialTitle", material.getTitle())
         .put("materialUrl", materialUrl)
-        .put("materialEmbedType", materialEmbedType.toString())
-        .addLocales("illusion.eventMaterial.backLink", "illusion.eventMaterial.openInNewWindowLink");
+        .put("materialEmbedType", materialEmbedType.toString());
       
     try {
       Map<String, Object> templateModel = templateModelBuilder.build(sessionController.getLocale());
