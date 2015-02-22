@@ -6,7 +6,7 @@ div(class="grid_16 tight")
     div(class="grid_16 tight")
       div(class="illusion-event-sub-panel")
         h3
-          =locales['illusion.materials.title']
+          =locale.text('illusion.materials.title')
         div(class="illusion-list illusion-event-materials")
           for material in materials
             if material.viewable

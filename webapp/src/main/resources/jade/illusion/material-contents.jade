@@ -6,9 +6,9 @@ div.grid_16.tight
     div(class="grid_16 tight")
       .illusion-event-sub-panel
         a(class="illusion-event-material-back-link",href=eventUrl + "/materials")
-          =locales['illusion.eventMaterial.backLink']
+          =locale.text('illusion.eventMaterial.backLink')
         a(class="illusion-event-material-new-window-link",target="_blank",href=materialUrl)
-          =locales['illusion.eventMaterial.openInNewWindowLink']
+          =locale.text('illusion.eventMaterial.openInNewWindowLink')
         if materialEmbedType == 'IFRAME'
           iframe(class="illusion-event-material",src=materialUrl,seamless="seamless")
         if (materialEmbedType == 'IMG')||(materialEmbedType == 'SVG')
