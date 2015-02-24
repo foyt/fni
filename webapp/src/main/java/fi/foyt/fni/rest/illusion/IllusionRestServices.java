@@ -1,5 +1,7 @@
 package fi.foyt.fni.rest.illusion;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,9 +27,17 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.CellReference;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.joda.time.DateTime;
 
 import fi.foyt.fni.forum.ForumController;
+import fi.foyt.fni.illusion.CharacterSheetDatas;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventMaterialController;
 import fi.foyt.fni.illusion.IllusionEventPageController;
@@ -41,6 +51,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSe
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
+import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
@@ -1274,6 +1285,140 @@ public class IllusionRestServices {
     return Response.noContent().build();
   }
   
+  /**
+   * Returns character sheet data
+   * 
+   * @param eventId id of event
+   * @param characterSheetId id of character sheet
+   * @param format output format
+   * @return Response
+   */
+  @GET
+  @Path("/events/{EVENTID:[0-9]*}/characterSheets/{ID:[0-9]*}/data")
+  @Security (
+    allowService = false,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.ILLUSION_FIND_CHARACTER_SHEET_DATA }
+  )
+  public Response getCharacterSheetData(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long characterSheetId, DataOutputFormat format) {
+    if (format == null) {
+      return Response.status(Status.BAD_REQUEST).entity("format is required").build(); 
+    }
+    
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+    
+    if (!isLoggedUserEventOrganizer(event)) {
+      return Response.status(Status.FORBIDDEN).build(); 
+    }
+    
+    CharacterSheet characterSheet = materialController.findCharacterSheetById(characterSheetId);
+    
+    IllusionEventFolder sheetEventFolder = illusionEventMaterialController.getIllusionEventFolder(characterSheet);
+    if (sheetEventFolder != null) {
+      IllusionEvent sheetEvent = illusionEventController.findIllusionEventByFolder(sheetEventFolder);
+      if (sheetEvent == null || (!sheetEvent.getId().equals(event.getId()))) {
+        return Response.status(Status.NOT_FOUND).build();
+      }
+    } else {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    try {
+      switch (format) {
+        case XLS:
+          return Response.ok(getCharacterSheetDataAsXLS(characterSheet)).header("Content-Disposition", "attachment; filename=" + characterSheet.getUrlName() + ".xls").build();
+      }
+      
+      return Response.status(Status.BAD_REQUEST).entity("invalid format").build(); 
+    } catch (IOException e) {
+      return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+    }
+  }
+
+  private byte[] getCharacterSheetDataAsXLS(CharacterSheet characterSheet) throws JsonParseException, JsonMappingException, IOException {
+    Workbook workbook = new HSSFWorkbook();
+    try {
+      CharacterSheetDatas characterSheetDatas = materialController.getCharacterSheetDatas(characterSheet);
+
+      List<String> keys = new ArrayList<>(characterSheetDatas.getKeys());
+      Collections.sort(keys);
+
+      Sheet summarySheet = workbook.createSheet("Summary");
+      List<String> sheetNames = new ArrayList<>();
+      
+      for (Long participantId : characterSheetDatas.getParticipantIds()) {
+        IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
+        Sheet sheet = workbook.createSheet(userController.getUserPrimaryEmail(participant.getUser()));
+        sheetNames.add(sheet.getSheetName());
+        Row headerRow = sheet.createRow(0);
+
+        headerRow.createCell(0).setCellValue("Key");
+        headerRow.createCell(1).setCellValue("Value");
+
+        for (int i = 0, l = keys.size(); i < l; i++) {
+          String key = keys.get(i);
+
+          Row row = sheet.createRow(i + 1);
+          row.createCell(0).setCellValue(key);
+          switch (characterSheetDatas.getDataType(key)) {
+            case NUMBER:
+              Double doubleValue = characterSheetDatas.getDouble(key, participantId);
+              if (doubleValue != null) {
+                row.createCell(1).setCellValue(doubleValue);
+              }
+            break;
+            default:
+              String textValue = characterSheetDatas.getText(key, participantId);
+              row.createCell(1).setCellValue(textValue);
+            break;
+          }
+        }
+      }
+      
+      Row summaryHeaderRow = summarySheet.createRow(0);
+
+      summaryHeaderRow.createCell(0).setCellValue("Key");
+      summaryHeaderRow.createCell(1).setCellValue("Min");
+      summaryHeaderRow.createCell(2).setCellValue("Max");
+      summaryHeaderRow.createCell(3).setCellValue("Average");
+      
+      for (int i = 0, l = keys.size(); i < l; i++) {
+        String key = keys.get(i);
+
+        Row row = summarySheet.createRow(i + 1);
+        row.createCell(0).setCellValue(key);
+        
+        List<String> refs = new ArrayList<>();
+        for (String sheetName : sheetNames) {
+          CellReference reference = new CellReference(sheetName, i + 1, 1, false, false);
+          refs.add(reference.formatAsString());
+        }
+        
+        String cellRefs = StringUtils.join(refs.toArray(new String[0]), ',');
+        
+        row.createCell(1).setCellFormula("MIN(" + cellRefs + ")");
+        row.createCell(2).setCellFormula("MAX(" + cellRefs + ")");
+        row.createCell(3).setCellFormula("AVERAGE(" + cellRefs + ")");
+      }
+
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      try {
+        workbook.write(out);
+        out.flush();
+        return out.toByteArray();
+        
+      } finally {
+        out.close();
+      }
+
+    } finally {
+      workbook.close();
+    }
+  }
+  
   private List<IllusionEventMaterialParticipantSetting> createRestModel(fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting... participantSettings) {
     List<IllusionEventMaterialParticipantSetting> result = new ArrayList<>();
     
@@ -1371,4 +1516,9 @@ public class IllusionRestServices {
     return new ForumPost(forumPost.getId(), forumPost.getTopic().getId(), forumPost.getContent(), 
         new DateTime(forumPost.getModified().getTime()), new DateTime(forumPost.getCreated().getTime()), forumPost.getAuthor().getId(), forumPost.getViews()); 
   }
+  
+  private enum DataOutputFormat {
+    XLS
+  }
+  
 }

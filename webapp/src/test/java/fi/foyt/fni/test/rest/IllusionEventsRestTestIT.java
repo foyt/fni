@@ -38,8 +38,7 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet(id = "event-forum-posts", before = { "illusion-event-open-forum-posts-setup.sql" }, after = {"illusion-event-open-forum-posts-teardown.sql"})
 })
 public class IllusionEventsRestTestIT extends AbstractRestTest {
-  
-  
+
   @Test
   @SqlSets({"basic-users", "events"})
   public void testGroupListUnauthorized() {
@@ -894,6 +893,25 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .statusCode(200)
       .body("id.size()", is(1))
       .body("id[0]", is(20101));
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant" })
+  public void testCharacterSheetDataUnauthorized() throws Exception {
+    givenJson()
+      .get("/illusion/events/{EVENTID}/characterSheets/{ID}/data", 1, 1)
+      .then()
+      .statusCode(401);
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant" })
+  public void testCharacterSheetDataAccessDenied() throws Exception {
+    givenJson("access-token")
+      .queryParam("format", "XLS")
+      .get("/illusion/events/{EVENTID}/characterSheets/{ID}/data", 1, 1)
+      .then()
+      .statusCode(403);
   }
   
 }

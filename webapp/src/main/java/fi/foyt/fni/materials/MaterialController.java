@@ -44,6 +44,8 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
 import org.apache.xpath.XPathAPI;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.hibernate.search.jpa.FullTextEntityManager;
@@ -66,6 +68,7 @@ import fi.foyt.fni.auth.DropboxAuthenticationStrategy;
 import fi.foyt.fni.coops.CoOpsSessionController;
 import fi.foyt.fni.drive.DriveManager;
 import fi.foyt.fni.drive.SystemGoogleDriveCredentials;
+import fi.foyt.fni.illusion.CharacterSheetDatas;
 import fi.foyt.fni.materials.operations.MaterialCopy;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
@@ -105,7 +108,9 @@ import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.common.Tag;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.materials.Binary;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
@@ -1893,6 +1898,24 @@ public class MaterialController {
     }
     
     return null;
+  }
+ 
+  public CharacterSheetDatas getCharacterSheetDatas(CharacterSheet characterSheet) throws JsonParseException, JsonMappingException, IOException {
+    CharacterSheetDatas result = new CharacterSheetDatas();
+    
+    for (IllusionEventMaterialParticipantSetting setting : illusionEventMaterialParticipantSettingDAO.listByMaterial(characterSheet)) {
+      if (setting.getKey().equals(IllusionEventMaterialParticipantSettingKey.CHARACTER_SHEET_DATA) && setting.getParticipant().getRole() == IllusionEventParticipantRole.PARTICIPANT) {
+        Map<String, String> sheetData = new ObjectMapper().readValue(setting.getValue(), new TypeReference<Map<String, String>>(){});
+        for (String key : sheetData.keySet()) {
+          String value = sheetData.get(key);
+          if (StringUtils.isNotBlank(value)) {
+            result.setValue(key, setting.getParticipant().getId(), value);
+          }
+        }
+      }    
+    }
+    
+    return result;
   }
   
 }
