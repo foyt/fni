@@ -10,12 +10,14 @@ div(class="grid_16 tight")
         div(class="illusion-list illusion-event-materials")
           for material in materials
             if material.viewable
-              a(href=eventUrl + '/materials/' + material.path, class="illusion-event-material illusion-list-item")
+              a(href=eventUrl + '/materials/' + material.path, class="illusion-event-material illusion-list-item",data-id=material.id)
                 span
                   =material.title
                 img(src=contextPath + "/theme/gfx/icons/48x48/forge/icon-" + material.icon + ".png")
+                if material.type == 'CHARACTER_SHEET' && user.participant.role == 'ORGANIZER'
+                  img(src=contextPath + "/theme/gfx/icons/22x22/illusion/export-spreadsheet.png",class="export-character-sheet-xls")                  
             else 
-              a(href=siteUrl + material.downloadUrl, class="illusion-event-material illusion-list-item")
+              a(href=siteUrl + material.downloadUrl, class="illusion-event-material illusion-list-item",data-id=material.id)
                 span
                   =material.title
                 img(src=contextPath + "/theme/gfx/icons/48x48/forge/icon-" + material.icon + ".png")

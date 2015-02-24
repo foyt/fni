@@ -12,15 +12,6 @@
     </h:outputFormat>
   </ui:define>
   
-  <ui:define name="view-scripts">
-  </ui:define>
-  
-  <ui:define name="view-stylesheets">
-    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
-    <h:outputStylesheet library="novus" name="css/illusion-event-materials.css"/>
-  </ui:define>  
-  
   <ui:define name="view-custom-head">
     <h:outputText value="#{illusionEventMaterialsBackingBean.headHtml}" escape="false"/>
   </ui:define>
@@ -28,6 +19,7 @@
   <ui:define name="grid-content">
     <ui:include src="/facelets/menu.xhtml" />
     <h:outputText value="#{illusionEventMaterialsBackingBean.contentsHtml}" escape="false"/>
+    <input type="hidden" value="#{illusionEventMaterialsBackingBean.id}" id="event-id"/>
   </ui:define>
 
 </ui:composition>
