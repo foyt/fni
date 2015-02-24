@@ -143,6 +143,10 @@
     <!-- CoOps -->
               
     <coops-spec.version>1.0.0</coops-spec.version> 
+    
+    <!-- POI -->
+    
+    <poi.version>3.11</poi.version>
   </properties>
 
   <dependencyManagement>
@@ -392,6 +396,14 @@
         <groupId>fi.foyt.coops</groupId>
         <artifactId>coops-spec</artifactId>
         <version>${coops-spec.version}</version>
+      </dependency>
+      
+      <!-- POI -->
+      
+      <dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi</artifactId>
+        <version>${poi.version}</version>
       </dependency>
 
     </dependencies>
