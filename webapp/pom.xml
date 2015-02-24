@@ -119,12 +119,6 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-search-analyzers</artifactId>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>commons-codec</artifactId>
-          <groupId>commons-codec</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
   
     <dependency>
@@ -208,7 +202,12 @@
       <artifactId>commons-collections</artifactId>
       <scope>provided</scope>
     </dependency> 
- 
+
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <scope>provided</scope>
+    </dependency> 
 
     <!-- Http components -->
 
@@ -222,12 +221,6 @@
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>commons-codec</artifactId>
-          <groupId>commons-codec</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     
     <!-- FnI -->
@@ -242,12 +235,6 @@
     <dependency>
       <groupId>fi.foyt.paytrail</groupId>
       <artifactId>paytrail-sdk</artifactId>
-      <exclusions>
-        <exclusion>
-          <artifactId>commons-codec</artifactId>
-          <groupId>commons-codec</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <!-- Scribe -->
@@ -280,12 +267,6 @@
     <dependency>
       <groupId>org.apache.oltu.oauth2</groupId>
       <artifactId>org.apache.oltu.oauth2.client</artifactId>
-      <exclusions>
-        <exclusion>
-          <artifactId>commons-codec</artifactId>
-          <groupId>commons-codec</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
@@ -414,12 +395,6 @@
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>commons-codec</artifactId>
-          <groupId>commons-codec</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
@@ -466,12 +441,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-    
-    <dependency>
-      <artifactId>commons-codec</artifactId>
-      <groupId>commons-codec</groupId>
-    </dependency>
-    
   </dependencies>
    
   <build>
