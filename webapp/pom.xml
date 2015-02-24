@@ -467,6 +467,11 @@
       </exclusions>
     </dependency>
     
+    <dependency>
+      <artifactId>commons-codec</artifactId>
+      <groupId>commons-codec</groupId>
+    </dependency>
+    
   </dependencies>
    
   <build>
