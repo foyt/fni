@@ -70,6 +70,18 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
     loginInternal("user@foyt.fi", "pass");
     testMayEditVectorImage("/forge/vectorimages/2/vectorimage-hyphen");
   }
+  
+  @Test
+  @SqlSets ({"basic-materials-users"})
+  public void textCreateSharedFolder() throws Exception {
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/forge/folders/2/folder");
+    clickSelector(".forge-new-material-menu");
+    clickSelector(".forge-new-new-vector-image");
+    assertVectorImageEditable();
+    executeSql("delete from VectorImage where id in (select id from Material where type='VECTOR_IMAGE' and parentFolder_id = 1)");
+    executeSql("delete from Material where type='VECTOR_IMAGE' and parentFolder_id = 1");
+  }
 
   private void testMayViewVectorImage(String path) {
     getWebDriver().get(getAppUrl() + path);
@@ -79,6 +91,10 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
 
   private void testMayEditVectorImage(String path) {
     getWebDriver().get(getAppUrl() + path);
+    assertVectorImageEditable();
+  }
+
+  private void assertVectorImageEditable() {
     assertEquals(1, getWebDriver().findElements(By.cssSelector(".forge-vector-image-container")).size());
     assertEquals(1, getWebDriver().findElements(By.cssSelector(".forge-vector-image-container .forge-vector-image-save")).size());
   }

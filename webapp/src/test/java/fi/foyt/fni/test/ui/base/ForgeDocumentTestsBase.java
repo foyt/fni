@@ -75,6 +75,22 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
     loginInternal("user@foyt.fi", "pass");
     testMayEditDocument("/forge/documents/2/document-hyphen");
   }
+  
+  @Test
+  @SqlSets ({"basic-materials-users"})
+  public void textCreateSharedFolder() throws Exception {
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/forge/folders/2/folder");
+    clickSelector(".forge-new-material-menu");
+    clickSelector(".forge-new-document");
+    assertDocumentEditable(true);
+    executeSql("delete from CoOpsSession where material_id in (select id from Material where type='DOCUMENT' and parentFolder_id = 1)");
+    executeSql("update MaterialRevision set checksum = 'DELETE' where id in (select id from DocumentRevision where document_id in (select id from Material where type='DOCUMENT' and parentFolder_id = 1))");
+    executeSql("delete from DocumentRevision where document_id in (select id from Material where type='DOCUMENT' and parentFolder_id = 1)");
+    executeSql("delete from MaterialRevision where checksum = 'DELETE'");
+    executeSql("delete from Document where id in (select id from Material where type='DOCUMENT' and parentFolder_id = 1)");
+    executeSql("delete from Material where type='DOCUMENT' and parentFolder_id = 1");
+  }
 
   private void testMayViewDocument(String documentPath) {
     testDocumentEditable(getWebDriver(), documentPath, false);
@@ -85,10 +101,12 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
   }
 
   protected void testDocumentEditable(RemoteWebDriver driver, String documentPath, boolean expect) {
-    driver.get(getAppUrl() + documentPath);
+    navigate(documentPath);
+    assertDocumentEditable(expect);
+  }
 
-    WebDriverWait wait = new WebDriverWait(driver, 120);
-
+  private void assertDocumentEditable(boolean expect) {
+    WebDriverWait wait = new WebDriverWait(getWebDriver(), 120);
     wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".cke_wysiwyg_frame")));
     wait.until(new ExpectedCondition<Boolean>() {
       @Override
@@ -104,9 +122,9 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
 
     });
 
-    driver.switchTo().frame(driver.findElement(By.cssSelector(".cke_wysiwyg_frame")));
+    getWebDriver().switchTo().frame(getWebDriver().findElement(By.cssSelector(".cke_wysiwyg_frame")));
 
-    assertEquals(expect ? "true" : "false", driver.findElement(By.cssSelector("body.cke_editable")).getAttribute("contenteditable"));
+    assertEquals(expect ? "true" : "false", getWebDriver().findElement(By.cssSelector("body.cke_editable")).getAttribute("contenteditable"));
   }
 
 }

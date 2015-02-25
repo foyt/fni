@@ -225,7 +225,7 @@ public class ForgeMaterialsBackingBean {
     String title = FacesUtils.getLocalizedValue("forge.index.untitledDocument");
     Document document = materialController.createDocument(parentFolder, title, loggedUser);
 
-    Long ownerId = document.getCreator().getId();
+    Long ownerId = parentFolder != null ? parentFolder.getCreator().getId() : document.getCreator().getId();
     String urlPath = document.getPath().substring(String.valueOf(ownerId).length() + 1);
     
     return String.format("/forge/documents.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
@@ -243,7 +243,7 @@ public class ForgeMaterialsBackingBean {
     
     String title = FacesUtils.getLocalizedValue("forge.index.untitledVectorImage");
     VectorImage vectorImage = materialController.createVectorImage(null, parentFolder, title, null, loggedUser);
-    Long ownerId = vectorImage.getCreator().getId();
+    Long ownerId = parentFolder != null ? parentFolder.getCreator().getId() : vectorImage.getCreator().getId();
     String urlPath = vectorImage.getPath().substring(String.valueOf(ownerId).length() + 1);
     
     return String.format("/forge/vectorimages.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
@@ -262,7 +262,7 @@ public class ForgeMaterialsBackingBean {
     String title = FacesUtils.getLocalizedValue("forge.index.untitledCharacterSheet");
     CharacterSheet characterSheet = materialController.createCharacterSheet(parentFolder, title, null, loggedUser, null, null);
 
-    Long ownerId = characterSheet.getCreator().getId();
+    Long ownerId = parentFolder != null ? parentFolder.getCreator().getId() : characterSheet.getCreator().getId();
     String urlPath = characterSheet.getPath().substring(String.valueOf(ownerId).length() + 1);
     
     return String.format("/forge/character-sheets.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
