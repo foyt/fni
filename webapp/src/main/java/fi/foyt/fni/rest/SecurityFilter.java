@@ -58,7 +58,7 @@ public class SecurityFilter implements ContainerRequestFilter {
         
         OAuthAccessToken accessToken = oAuthController.findAccessTokenByAccessToken(oAuthRequest.getAccessToken());
         if (accessToken == null) {
-          requestContext.abortWith(Response.status(Status.FORBIDDEN).build());
+          requestContext.abortWith(Response.status(Status.FORBIDDEN).entity("Invalid access token").build());
           return;
         }
         
@@ -68,11 +68,11 @@ public class SecurityFilter implements ContainerRequestFilter {
           sessionController.login(accessToken.getAuthorizationCode().getUser());
         } else {
           if (accessToken.getClient().getType() != OAuthClientType.SERVICE) {
-            requestContext.abortWith(Response.status(Status.FORBIDDEN).build());
+            requestContext.abortWith(Response.status(Status.FORBIDDEN).entity("Invalid access token, non-service token without authorization code").build());
             return;
           } else {
             if (!secure.allowService()) {
-              requestContext.abortWith(Response.status(Status.FORBIDDEN).build());
+              requestContext.abortWith(Response.status(Status.FORBIDDEN).entity("Endpoint is not allowed for service accounts").build());
               return;
             } else {
               return;
