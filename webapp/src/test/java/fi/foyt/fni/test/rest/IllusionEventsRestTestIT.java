@@ -33,9 +33,11 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet(id = "event", before = { "illusion-event-open-setup.sql" }, after = { "illusion-event-open-teardown.sql"}),
   @DefineSqlSet(id = "event-unpublished", before = { "illusion-event-open-unpublished-setup.sql" }, after = { "illusion-event-open-unpublished-teardown.sql"}),
   @DefineSqlSet(id = "event-participant", before = {"illusion-event-open-participant-setup.sql" }, after = {"illusion-event-open-participant-teardown.sql"}),
+  @DefineSqlSet(id = "event-organizer", before = {"illusion-event-open-organizer-setup.sql" }, after = {"illusion-event-open-organizer-teardown.sql"}),
   @DefineSqlSet(id = "event-forum", before = { "illusion-event-open-forum-setup.sql" }, after = {"illusion-event-open-forum-teardown.sql"}),
   @DefineSqlSet(id = "event-forum-visible", before = { "illusion-event-open-forum-visible-setup.sql" }, after = {"illusion-event-open-forum-visible-teardown.sql"}),
-  @DefineSqlSet(id = "event-forum-posts", before = { "illusion-event-open-forum-posts-setup.sql" }, after = {"illusion-event-open-forum-posts-teardown.sql"})
+  @DefineSqlSet(id = "event-forum-posts", before = { "illusion-event-open-forum-posts-setup.sql" }, after = {"illusion-event-open-forum-posts-teardown.sql"}),
+  @DefineSqlSet(id = "event-character-sheet", before = { "illusion-event-open-character-sheet-setup.sql" }, after = {"illusion-event-open-character-sheet-teardown.sql"})
 })
 public class IllusionEventsRestTestIT extends AbstractRestTest {
 
@@ -896,7 +898,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   }
   
   @Test
-  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant" })
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-character-sheet" })
   public void testCharacterSheetDataUnauthorized() throws Exception {
     givenJson()
       .get("/illusion/events/{EVENTID}/characterSheets/{ID}/data", 1, 1)
@@ -905,7 +907,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   }
   
   @Test
-  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant" })
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-character-sheet" })
   public void testCharacterSheetDataAccessDenied() throws Exception {
     givenJson("access-token")
       .queryParam("format", "XLS")
@@ -913,5 +915,17 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .then()
       .statusCode(403);
   }
+  
+  @Test
+  @SqlSets({"basic-users", "illusion-basic", "user-client", "event", "event-organizer", "event-character-sheet" })
+  public void testCharacterSheetData() throws Exception {
+    givenJson("admin-access-token")
+      .queryParam("format", "XLS")
+      .get("/illusion/events/{EVENTID}/characterSheets/{ID}/data", 1, 20060)
+      .then()
+      .statusCode(200);
+  }
+  
+  
   
 }

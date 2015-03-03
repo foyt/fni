@@ -1300,9 +1300,14 @@ public class IllusionRestServices {
     allowNotLogged = false,
     scopes = { OAuthScopes.ILLUSION_FIND_CHARACTER_SHEET_DATA }
   )
-  public Response getCharacterSheetData(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long characterSheetId, DataOutputFormat format) {
+  public Response getCharacterSheetData(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long characterSheetId, @QueryParam ("format") String format) {
     if (format == null) {
       return Response.status(Status.BAD_REQUEST).entity("format is required").build(); 
+    }
+    
+    DataOutputFormat outputFormat = DataOutputFormat.valueOf(format);
+    if (outputFormat == null) {
+      return Response.status(Status.BAD_REQUEST).entity("invalid format").build(); 
     }
     
     IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
@@ -1311,7 +1316,7 @@ public class IllusionRestServices {
     }
     
     if (!isLoggedUserEventOrganizer(event)) {
-      return Response.status(Status.FORBIDDEN).build(); 
+      return Response.status(Status.FORBIDDEN).entity("Only event organizers can export character sheet data").build(); 
     }
     
     CharacterSheet characterSheet = materialController.findCharacterSheetById(characterSheetId);
@@ -1327,7 +1332,7 @@ public class IllusionRestServices {
     }
     
     try {
-      switch (format) {
+      switch (outputFormat) {
         case XLS:
           return Response.ok(getCharacterSheetDataAsXLS(characterSheet)).header("Content-Disposition", "attachment; filename=" + characterSheet.getUrlName() + ".xls").build();
       }
