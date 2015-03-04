@@ -55,8 +55,6 @@ public class CharacterSheetWebSocket {
   @OnOpen
   @Transactional
   public void onOpen(final Session client, EndpointConfig endpointConfig, @PathParam("EVENTID") Long eventId, @PathParam("MATERIALID") Long materialId, @PathParam("PARTICIPANTID") Long participantId, @PathParam("KEY") String key) throws IOException {
-    // TODO: Security
-    
     synchronized (this) {
       Material material = materialController.findMaterialById(materialId);
       if (material == null) {
@@ -94,7 +92,7 @@ public class CharacterSheetWebSocket {
         client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new Message("load", objectMapper.writeValueAsString(new LoadMessageData(sheetData)))));
       }
       
-      addClient(eventId, materialId, client);
+      addClient(eventId, materialId, participant.getId(), client);
     }
   }
   
@@ -102,7 +100,7 @@ public class CharacterSheetWebSocket {
   @Transactional
   public void onClose(final Session session, CloseReason closeReason, @PathParam("EVENTID") Long eventId, @PathParam("MATERIALID") Long materialId, @PathParam("PARTICIPANTID") Long participantId, @PathParam("KEY") String key) {
     synchronized (this) {
-      removeClient(eventId, materialId);
+      removeClient(eventId, materialId, participantId);
     }
   }
 
@@ -159,8 +157,8 @@ public class CharacterSheetWebSocket {
             }
           }
           
-          for (Session otherClient : getOtherClients(client, eventId, materialId)) {
-            otherClient.getAsyncRemote().sendText(objectMapper.writeValueAsString(new Message("update", objectMapper.writeValueAsString(updateData))));
+          for (Session participantOtherClient : getParticipantOtherClients(client, eventId, materialId, participant.getId())) {
+            participantOtherClient.getAsyncRemote().sendText(objectMapper.writeValueAsString(new Message("update", objectMapper.writeValueAsString(updateData))));
           }
         break;
       }
@@ -173,45 +171,50 @@ public class CharacterSheetWebSocket {
     return new ObjectMapper().readValue(participantSetting.getValue(), new TypeReference<Map<String, String>>(){});
   }  
   
-  private String getSheetId(Long eventId, Long materialId) {
+  private String getClientId(Long eventId, Long materialId, Long participantId) {
     return new StringBuilder()
       .append(eventId)
       .append('-')
       .append(materialId)
+      .append('-')
+      .append(participantId)
       .toString();
   }
   
-  private void addClient(Long eventId, Long materialId, Session client) {
-    String sheetId = getSheetId(eventId, materialId);
+  private void addClient(Long eventId, Long materialId, Long participantId, Session client) {
+    String clientId = getClientId(eventId, materialId, participantId);
     
-    List<Session> clientList = clientMap.get(sheetId);
+    List<Session> clientList = clientMap.get(clientId);
     if (clientList == null) {
       clientList = new ArrayList<>();
     }
     
     clientList.add(client);
     
-    clientMap.put(sheetId, clientList);
+    clientMap.put(clientId, clientList);
   }
   
-  private List<Session> getClients(Long eventId, Long materialId) {
-    return clientMap.get(getSheetId(eventId, materialId));
+  private List<Session> getParticipantClients(Long eventId, Long materialId, Long participantId) {
+    return clientMap.get(getClientId(eventId, materialId, participantId));
   }
 
-  private List<Session> getOtherClients(Session client, Long eventId, Long materialId) {
+  private List<Session> getParticipantOtherClients(Session client, Long eventId, Long materialId, Long participantId) {
     List<Session> result = new ArrayList<>();
     
-    for (Session otherClient : getClients(eventId, materialId)) {
-      if (!otherClient.getId().equals(client)) {
-        result.add(otherClient);
+    List<Session> participantClients = getParticipantClients(eventId, materialId, participantId);
+    if (participantClients != null) {
+      for (Session otherClient : participantClients) {
+        if (!otherClient.getId().equals(client)) {
+          result.add(otherClient);
+        }
       }
     }
     
     return result;
   }
 
-  private void removeClient(Long eventId, Long materialId) {
-    clientMap.remove(getSheetId(eventId, materialId));
+  private void removeClient(Long eventId, Long materialId, Long participantId) {
+    clientMap.remove(getClientId(eventId, materialId, participantId));
   }
   
   @SuppressWarnings("unused")
