@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   
-  var illusionClient = new $.RestClient(CONTEXTPATH + '/rest/illusion/');
+  var illusionClient = new $.RestClient(CONTEXTPATH + '/rest/illusion/', {stringifyData: true});
 
   illusionClient.add('events');
   illusionClient.events.add('participants');
@@ -25,8 +25,13 @@
       });
     },
     
-    data: function () {
-      return this._editor.getData();
+    data: function (clearData) {
+      var result = this._editor.getData();
+      if (clearData === true) {
+        this._editor.setData('');
+      }
+      
+      return result;
     },
     
     _destroy : function() {
@@ -75,43 +80,13 @@
     },
     
     load: function (callback) {
-      this.element.addClass('illusion-forum-post-loading');
-      
-      illusionClient.events.forumPosts.read(this.options.eventId, this.id()).done($.proxy(function (post, textStatus, xhrObject){
-        switch (xhrObject.status) {
-          case 200:
-            this._getParticipant(post.authorId, $.proxy(function (participant) {
-              this.element.find('.illusion-forum-post-author-name')
-                .html(participant.displayName||$('.unformatted-locales').attr('data-anonymous'));
-              
-              this.element.find('.illusion-forum-post-author-image-container img').remove();
-              this.element.find('.illusion-forum-post-author-image-container').append(
-                $('<img>').attr('src', CONTEXTPATH + "/illusion/eventAvatar/" + this.options.eventUrlName + "/" + participant.id + "?size=80")
-              );
-              
-              this.element.find('.illusion-forum-post-sent')
-                .html(formatJavaLocale($('.unformatted-locales').attr('data-post-sent'), 
-                    new Date(Date.parse(post.created))));
-              
-              this.element.find('.illusion-forum-post-modified')
-                .html(post.created != post.modified ? 
-                  formatJavaLocale($('.unformatted-locales').attr('data-post-modified'), 
-                    new Date(Date.parse(post.modified))) : '');
-              
-              this.element.find('.illusion-forum-post-content').html(post.content);
-              this.element.removeClass('illusion-forum-post-loading');
-              
-              if ($.isFunction(callback)) {
-                callback();
-              }
-            }, this));
-          break;
-          default:
-            $('.notifications').notifications('notification', 'error', textStatus);
-          break;
-        }
-      }, this));
-      
+      this.element.removeClass('illusion-forum-post-pending').addClass('illusion-forum-post-loading');
+      // TODO: created, modified
+      $.ajax('event-forum/' + this.id(), {
+        success : $.proxy(function(data) {
+          $(this.element).html(data).removeClass('illusion-forum-post-loading');
+        }, this)
+      });
     },
     
     reload: function (callback) {
@@ -168,41 +143,79 @@
     }
   });
   
-  $(document).ready(function() {
-    var eventId = $('#event-id').val();
-    var eventUrlName = $('#event-url-name').val();
-    
-    $('.illusion-forum-post-editor').forumPostEditor();
-    $('.illusion-forum-post-reply').click(function (event) {
-      event.preventDefault();
+  $.widget("custom.forum", {
+    _create : function() {
+      $('.illusion-forum-post-editor').forumPostEditor();
+      $('.illusion-forum-post-reply').click($.proxy(function (event) {
+        event.preventDefault();
+        
+        var content = $('.illusion-forum-post-editor').forumPostEditor('data', true);
+        
+        illusionClient.events.forumPosts.create(this.options.eventId, {'content': content}).done(function (data, textStatus, xhrObject){
+          if (xhrObject.status !== 200) {
+            $('.notifications').notifications('notification', 'error', textStatus);
+          }
+        });
+      }, this));
       
-      $.ajax(CONTEXTPATH + '/rest/illusion/events/' + eventId + '/forumPosts/', {
-        type: 'POST',
-        contentType: "application/json",
-        dataType : "json",
-        data: JSON.stringify({
-          'content': $('.illusion-forum-post-editor').forumPostEditor('data')
-        }),
-        accepts: {
-          'json' : 'application/json'
-        },
-        success : function(data) {
-          window.location.reload(true);
-        }
+      $('.illusion-forum-post').forumPost({
+        eventId: this.options.eventId,
+        eventUrlName: this.options.eventUrlName
       });
-    });
-    
-    $('.illusion-forum-post').forumPost({
-      eventId: eventId,
-      eventUrlName: eventUrlName
-    });
 
-    $('.illusion-forum-post-pending').waypoint(function(direction) {
-      $(this).waypoint('destroy');
-      $(this).removeClass('illusion-forum-post-pending')
-      $(this).forumPost('load');
-    }, {
-      offset: '110%'
+      $('.illusion-forum-post-pending').waypoint(function(direction) {
+        $(this).waypoint('destroy');
+        $(this).removeClass('illusion-forum-post-pending')
+        $(this).forumPost('load');
+      }, {
+        offset: '110%'
+      });
+      
+      var socketUrl = (window.location.protocol == 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + CONTEXTPATH + '/ws/' + this.options.topicId;
+      this._webSocket = this._openWebSocket(socketUrl);
+      this._webSocket.onmessage = $.proxy(this._onWebSocketMessage, this);
+//      this._webSocket.onopen = $.proxy(this._onWebSocketOpen, this);
+      $(window).on('beforeunload', $.proxy(this._onWindowBeforeUnload, this));
+    },
+    
+    _onWebSocketMessage: function (event) {
+      var data = $.parseJSON(event.data);
+      
+      $('<div>')
+        .attr('data-post-id', data.postId)
+        .addClass("illusion-forum-post")
+        .appendTo($('.illusion-forum-posts'))
+        .forumPost({
+          eventId: this.options.eventId,
+          eventUrlName: this.options.eventUrlName
+        })
+        .forumPost('load');
+    },
+    
+    _onWindowBeforeUnload: function (event) {
+      this._webSocket.onclose = function () {};
+      this._webSocket.close();
+    },
+    
+    _openWebSocket: function (url) {
+      if ((typeof window.WebSocket) !== 'undefined') {
+        return new WebSocket(url);
+      } else if ((typeof window.MozWebSocket) !== 'undefined') {
+        return new MozWebSocket(url);
+      }
+      
+      return null;
+    },
+    
+    _destroy : function() {
+    }
+  });
+  
+  $(document).ready(function() {
+    $(document.body).forum({
+      eventId: $('#event-id').val(),
+      eventUrlName: $('#event-url-name').val(),
+      topicId: $('#topicId').val()
     });
   });
 

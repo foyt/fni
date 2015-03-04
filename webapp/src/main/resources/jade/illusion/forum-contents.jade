@@ -9,28 +9,11 @@ div.grid_16.tight
           = locale.text('illusion.forum.title')
         div.illusion-forum-posts
           for post in posts
-            div(data-post-id=post.id,class="illusion-forum-post illusion-forum-post-pending")
-              div.illusion-forum-post-author-info
-                div.illusion-forum-post-author-image-container
-                div.illusion-forum-post-author-name
-              div.illusion-forum-post-content-container
-                div.illusion-forum-post-content
-                if post.authorId == user.id
-                  div.illusion-forum-post-content-editor(style="display: none")
-                  button.illusion-forum-post-content-save(style="display: none")
-                    = locale.text('illusion.forum.saveButton')
-                div.illusion-forum-post-footer
-                  if post.authorId == user.id
-                    div.illusion-forum-post-edit-container
-                      a.illusion-forum-post-edit(href="javascript:void(null)")
-                        = locale.text('illusion.forum.editPost')
-                  div.illusion-forum-post-dates-container
-                    div.illusion-forum-post-sent
-                    div.illusion-forum-post-modified       
+            div(data-post-id=post.id,class="illusion-forum-post illusion-forum-post-pending")    
         if user
           textarea.illusion-forum-post-editor
           button.illusion-forum-post-reply
             = locale.text('illusion.forum.postReply')
 div(style="display: none",class="unformatted-locales",data-post-modified=locale.unformatted('illusion.forum.postModified'),data-post-sent=locale.unformatted('illusion.forum.postSent'),data-anonymous=locale.unformatted('illusion.forum.anonymous'))
-
+input(value=topicId,id='topicId',type="hidden")
 
