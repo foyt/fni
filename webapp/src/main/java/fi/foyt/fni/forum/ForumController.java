@@ -171,7 +171,7 @@ public class ForumController implements Serializable {
 		String localAddress = systemSettingsController.getSiteUrl(false, false);
 		String contextPath = systemSettingsController.getSiteContextPath();
 		
-		postCreatedEvent.fire(new ForumPostEvent(localAddress, contextPath, sessionController.getLocale(), forumPost.getId()));
+		postCreatedEvent.fire(new ForumPostEvent(localAddress, contextPath, sessionController.getLocale(), topic.getId(), forumPost.getId()));
 		return forumPost;
 	}
 
