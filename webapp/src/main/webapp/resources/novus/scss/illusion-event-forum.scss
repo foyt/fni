@@ -13,8 +13,11 @@ $border-color: rgb(71, 176, 176);
   border-top: 1px solid $border-color;
 }
 
-.illusion-forum-post-loading,
 .illusion-forum-post-pending {
+  display: none;
+}
+
+.illusion-forum-post-loading {
   padding: 0;
   border: none;
   min-height: 200px;
@@ -33,7 +36,7 @@ $border-color: rgb(71, 176, 176);
 }
 
 .illusion-forum-post-author-info {
-  display: table-cell;
+  display: inline-block;
   vertical-align: top;
   width: 120px;
   color: $default-color;
@@ -46,7 +49,7 @@ $border-color: rgb(71, 176, 176);
 }
 
 .illusion-forum-post-content-container {
-  display: table-cell;
+  display: inline-block;
   vertical-align: top;
 }
 
