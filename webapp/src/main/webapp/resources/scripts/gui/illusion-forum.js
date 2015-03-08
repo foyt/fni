@@ -25,13 +25,20 @@
       });
     },
     
-    data: function (clearData) {
-      var result = this._editor.getData();
-      if (clearData === true) {
-        this._editor.setData('');
+    data: function (data) {
+      if (data !== undefined) {
+        this._editor.setData(data);
+      } else {
+        return this._editor.getData();
       }
-      
-      return result;
+    },
+    
+    readOnly: function (readOnly) {
+      if (readOnly !== undefined) {
+        this._editor.setReadOnly(readOnly);
+      } else {
+        return this._editor.readOnly;
+      }
     },
     
     _destroy : function() {
@@ -141,10 +148,6 @@
         this.closeEditor();
         this.reload();
       }, this));
-    },
-    
-    _destroy : function() {
-      
     }
   });
   
@@ -154,12 +157,17 @@
       $('.illusion-forum-post-reply').click($.proxy(function (event) {
         event.preventDefault();
         
-        var content = $('.illusion-forum-post-editor').forumPostEditor('data', true);
+        var content = $('.illusion-forum-post-editor')
+          .forumPostEditor('readOnly', true)
+          .forumPostEditor('data');
         
         illusionClient.events.forumPosts.create(this.options.eventId, {'content': content}).done(function (data, textStatus, xhrObject){
           if (xhrObject.status !== 200) {
             $('.notifications').notifications('notification', 'error', textStatus);
           }
+          $('.illusion-forum-post-editor')
+            .forumPostEditor('data', '')
+            .forumPostEditor('readOnly', false);
         });
       }, this));
       
