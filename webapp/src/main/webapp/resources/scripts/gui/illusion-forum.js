@@ -45,8 +45,13 @@
     },
     
     _create : function() {
-      this.element.find('.illusion-forum-post-content-save').click($.proxy(this._onSaveClick, this));
-      this.element.find('.illusion-forum-post-edit').click($.proxy(this._onEditClick, this));
+      this.element.on('click', '.illusion-forum-post-content-save', $.proxy(this._onSaveClick, this));
+      this.element.on('click', '.illusion-forum-post-edit', $.proxy(this._onEditClick, this));
+    },
+    
+    _destroy: function() {
+      this.element.off('click', '.illusion-forum-post-content-save');
+      this.element.off('click', '.illusion-forum-post-edit');
     },
     
     id: function () {
@@ -81,7 +86,7 @@
     
     load: function (callback) {
       this.element.removeClass('illusion-forum-post-pending').addClass('illusion-forum-post-loading');
-      // TODO: created, modified
+
       $.ajax('event-forum/' + this.id(), {
         success : $.proxy(function(data) {
           $(this.element).html(data).removeClass('illusion-forum-post-loading');
@@ -162,19 +167,11 @@
         eventId: this.options.eventId,
         eventUrlName: this.options.eventUrlName
       });
-
-      $('.illusion-forum-post-pending').waypoint(function(direction) {
-        $(this).waypoint('destroy');
-        $(this).removeClass('illusion-forum-post-pending')
-        $(this).forumPost('load');
-      }, {
-        offset: '110%'
-      });
       
-      var socketUrl = (window.location.protocol == 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + CONTEXTPATH + '/ws/' + this.options.topicId;
+      $('.illusion-forum-post-pending').forumPost('load');
+      var socketUrl = (window.location.protocol == 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + CONTEXTPATH + '/ws/forum/' + this.options.topicId;
       this._webSocket = this._openWebSocket(socketUrl);
       this._webSocket.onmessage = $.proxy(this._onWebSocketMessage, this);
-//      this._webSocket.onopen = $.proxy(this._onWebSocketOpen, this);
       $(window).on('beforeunload', $.proxy(this._onWindowBeforeUnload, this));
     },
     
