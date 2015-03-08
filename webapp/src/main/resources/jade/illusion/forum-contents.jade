@@ -1,4 +1,5 @@
 include common
+include forum-common
 +view-header()
 +navigation()
 div.grid_16.tight
@@ -9,7 +10,8 @@ div.grid_16.tight
           = locale.text('illusion.forum.title')
         div.illusion-forum-posts
           for post in posts
-            div(data-post-id=post.id,class="illusion-forum-post illusion-forum-post-pending")    
+            div(data-post-id=post.id,class="illusion-forum-post")    
+              +post(post.id, post.content, post.authorId, post.authorParticipantId, post.created, post.modified)
         if user
           div.illusion-forum-post-editor-container
             textarea.illusion-forum-post-editor
