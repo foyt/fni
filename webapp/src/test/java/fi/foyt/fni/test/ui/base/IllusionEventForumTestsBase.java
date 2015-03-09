@@ -158,8 +158,6 @@ public class IllusionEventForumTestsBase extends AbstractIllusionUITest {
     loginInternal("user@foyt.fi", "pass");
     navigate("/illusion/event/openevent/event-forum");
     testTitle("Illusion - Open Event");
-    scrollWindowBy(0, 300);
-    waitForSelectorNotPresent(".illusion-forum-post-pending");
     assertSelectorCount(".illusion-forum-post", 4);
     assertSelectorPresent(".illusion-forum-post[data-post-id=\"20100\"] .illusion-forum-post-edit");
     assertSelectorPresent(".illusion-forum-post[data-post-id=\"20101\"] .illusion-forum-post-edit");

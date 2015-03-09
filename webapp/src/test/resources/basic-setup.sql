@@ -35,11 +35,12 @@ values
   (1, 'systemtoken', 5000000000, null, 1);
   
 insert into
-  ForumCategory (id, name)
+  ForumCategory (id, name, visible)
 values 
-  (1, 'Forum');
+  (1, 'Forum', true),
+  (2, 'Illusion', false);
  
 insert into 
   Forum (name, urlName, category_id, allowTopicCreation, description)
 values 
-  ('Illusion', 'illusion', 1, false, 'Illusion');
+  ('Illusion', 'illusion', 2, false, 'Illusion');
