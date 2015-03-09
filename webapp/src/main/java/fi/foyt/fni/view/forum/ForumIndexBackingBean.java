@@ -52,7 +52,7 @@ public class ForumIndexBackingBean {
 	public List<Forum> getForums() {
 		List<Forum> result = new ArrayList<>();
 		
-		for (ForumCategory forumCategory : forumController.listForumCategories()) {
+		for (ForumCategory forumCategory : forumController.listVisibleCategories()) {
 			result.addAll(forumController.listForumsByCategory(forumCategory));
 		}
 		

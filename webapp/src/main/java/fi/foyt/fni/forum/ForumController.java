@@ -86,8 +86,8 @@ public class ForumController implements Serializable {
 	
 	// Categories
 	
-	public List<ForumCategory> listForumCategories() {
-		return forumCategoryDAO.listAll();
+	public List<ForumCategory> listVisibleCategories() {
+		return forumCategoryDAO.listByVisible(Boolean.TRUE);
 	}
 	
 	// Forums

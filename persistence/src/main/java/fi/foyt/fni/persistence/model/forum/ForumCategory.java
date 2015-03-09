@@ -27,10 +27,21 @@ public class ForumCategory {
     this.name = name;
   }
   
+  public Boolean getVisible() {
+    return visible;
+  }
+  
+  public void setVisible(Boolean visible) {
+    this.visible = visible;
+  }
+  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
   
   @Column (nullable=false)
   private String name;
+
+  @Column (nullable=false)
+  private Boolean visible;
 }
