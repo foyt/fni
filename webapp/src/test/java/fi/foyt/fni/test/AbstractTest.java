@@ -351,6 +351,27 @@ public abstract class AbstractTest {
     
     return null;
   }
+  
+  protected Integer countForums() throws Exception, SQLException {
+    Connection connection = getConnection();
+    try {
+      connection.setAutoCommit(true);
+      PreparedStatement statement = connection.prepareStatement("select count(id) from Forum");
+      try {
+        statement.execute();
+        ResultSet resultSet = statement.getResultSet();
+        if (resultSet.next()) {
+          return resultSet.getInt(1);
+        }
+      } finally {
+        statement.close();
+      }
+    } finally {
+      connection.close();
+    }
+    
+    return null;
+  }
 
   protected void deleteUser(Long userId) throws Exception {
     executeSql("delete from DropboxFile where id in (select id from Material where creator_id = ?)", userId);
