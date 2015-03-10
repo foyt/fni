@@ -56,6 +56,10 @@ public class ForumBackingBean {
 		  return navigationController.notFound();
 		}
 		
+		if (!forum.getCategory().getVisible()) {
+      return navigationController.notFound();
+		}
+		
 		topics = forumController.listTopicsByForum(forum);
 		Collections.sort(topics, new Comparator<ForumTopic>() {
 			@Override

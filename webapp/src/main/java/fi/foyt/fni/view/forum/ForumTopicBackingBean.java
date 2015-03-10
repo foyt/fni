@@ -72,7 +72,11 @@ public class ForumTopicBackingBean {
 		forum = forumController.findForumByUrlName(getForumUrlName());
 		if (forum == null) {
 		  throw new FileNotFoundException();
-		}
+		}   
+		
+		if (!forum.getCategory().getVisible()) {
+      return navigationController.notFound();
+    }
 		
 		ForumTopic topic = forumController.findForumTopicByForumAndUrlName(forum, topicUrlName);
     if (topic == null) {
