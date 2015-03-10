@@ -165,4 +165,20 @@ public class IllusionEventForumTestsBase extends AbstractIllusionUITest {
     assertSelectorNotPresent(".illusion-forum-post[data-post-id=\"20103\"] .illusion-forum-post-edit");
   }
   
+  @Test
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-organizer", "event-forum", "event-forum-visible", "event-forum-posts", "event-forum-organizer-posts"})
+  public void testPost() throws Exception {
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/event-forum");
+    testTitle("Illusion - Open Event");
+    assertSelectorCount(".illusion-forum-post", 4);
+    waitForSelectorVisible(".illusion-forum-post-editor-container .cke_wysiwyg_frame");
+    switchFrame(".illusion-forum-post-editor-container .cke_wysiwyg_frame");
+    typeSelectorInputValue(".cke_editable", "post content");    
+    switchDefault();
+    clickSelector(".illusion-forum-post-reply");
+    waitForSelectorVisible(".illusion-forum-posts .illusion-forum-post:nth-child(5)");
+    assertSelectorTextIgnoreCase(".illusion-forum-posts .illusion-forum-post:nth-child(5) .illusion-forum-post-content p", "post content");
+  }
+  
 }

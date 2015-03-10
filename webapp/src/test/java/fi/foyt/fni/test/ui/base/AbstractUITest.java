@@ -245,6 +245,14 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void scrollWindowBy(int x, int y) {
     ((JavascriptExecutor) getWebDriver()).executeScript(String.format("window.scrollBy(%d, %d)",  x, y), "");
   }
+
+  protected void switchFrame(String selector) {
+    getWebDriver().switchTo().frame(findElementBySelector(selector));
+  }
+  
+  protected void switchDefault() {
+    getWebDriver().switchTo().defaultContent();
+  }
   
   protected void takeScreenshot() throws WebDriverException, IOException {
     takeScreenshot(new File("target", UUID.randomUUID().toString() + ".png"));
