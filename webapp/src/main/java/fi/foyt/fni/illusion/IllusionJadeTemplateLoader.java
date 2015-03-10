@@ -58,6 +58,10 @@ public class IllusionJadeTemplateLoader implements TemplateLoader {
       if (StringUtils.isNotBlank(eventUrl)) {
         IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(eventUrl);
         if (illusionEvent != null) {
+          if (StringUtils.endsWith(templateName, ".jade")) {
+            templateName = StringUtils.substring(templateName, 0, -5);
+          }
+           
           IllusionEventTemplate template = illusionEventController.findEventTemplate(illusionEvent, templateName);
           if (template != null) {
             return template;
