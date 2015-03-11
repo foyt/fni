@@ -62,7 +62,7 @@ public class ForumPostFollowerMailer {
       for (Long notifyUserId : notifyUserIds) {
         User user = userController.findUserById(notifyUserId);
         try {
-          notifyUser(event.getLocalAddress(), event.getContextPath(), forumPost, user);
+          notifyUser(forumPost, user);
         } catch (MessagingException e) {
           logger.log(Level.WARNING, "Could not send notification email", e);
         }
@@ -70,7 +70,7 @@ public class ForumPostFollowerMailer {
     }
   }
 
-  private void notifyUser(String localAddress, String contextPath, ForumPost forumPost, User user) throws MessagingException {
+  private void notifyUser(ForumPost forumPost, User user) throws MessagingException {
     Locale locale = Locale.getDefault();
     
     try {
@@ -84,8 +84,7 @@ public class ForumPostFollowerMailer {
     long pageCount = Math.round(Math.ceil(new Double(forumController.countPostsByTopic(topic)) / ForumTopicBackingBean.POST_PER_PAGE));
     
     String link = new StringBuilder()
-      .append(localAddress)
-      .append(contextPath)
+      .append(systemSettingsController.getSiteUrl(false, true))
       .append("/forum/")
       .append(topic.getForum().getUrlName())
       .append('/')

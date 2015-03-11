@@ -42,8 +42,6 @@ import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.forum.ForumTopicWatcher;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
@@ -73,17 +71,15 @@ public class ForumController implements Serializable {
 
   @Inject
   private ForumTopicWatcherDAO forumTopicWatcherDAO;
-
-  @Inject
-	private SessionController sessionController;
-
-  @Inject
-  private SystemSettingsController systemSettingsController;
   
 	@Inject
 	@ForumPostCreated
 	private Event<ForumPostEvent> postCreatedEvent;
-	
+
+  @Inject
+  @ForumPostModified
+  private Event<ForumPostEvent> postModifiedEvent;
+  
 	// Categories
 	
 	public List<ForumCategory> listVisibleCategories() {
@@ -168,10 +164,8 @@ public class ForumController implements Serializable {
 		Date now = new Date();
 		ForumPost forumPost = forumPostDAO.create(topic, author, now, now, content, 0l);
 		addTopicWatcher(author, topic);
-		String localAddress = systemSettingsController.getSiteUrl(false, false);
-		String contextPath = systemSettingsController.getSiteContextPath();
 		
-		postCreatedEvent.fire(new ForumPostEvent(localAddress, contextPath, sessionController.getLocale(), topic.getId(), forumPost.getId()));
+		postCreatedEvent.fire(new ForumPostEvent(topic.getId(), forumPost.getId()));
 		return forumPost;
 	}
 
@@ -229,7 +223,11 @@ public class ForumController implements Serializable {
 	}
 
   public ForumPost updateForumPostContent(ForumPost forumPost, String postContent) {
-    return forumPostDAO.updateModified(forumPostDAO.updateContent(forumPost, postContent), new Date());
+    try {
+      return forumPostDAO.updateModified(forumPostDAO.updateContent(forumPost, postContent), new Date());
+    } finally {
+      postModifiedEvent.fire(new ForumPostEvent(forumPost.getTopic().getId(), forumPost.getId()));
+    }
   }
 
 	public List<SearchResult<ForumTopic>> searchTopics(String text) {
