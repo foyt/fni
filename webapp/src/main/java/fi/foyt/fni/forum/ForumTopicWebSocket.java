@@ -49,13 +49,24 @@ public class ForumTopicWebSocket {
 
   public void onForumPostCreated(@Observes (during = TransactionPhase.AFTER_COMPLETION) @ForumPostCreated ForumPostEvent event) throws JsonGenerationException, JsonMappingException, IOException {
     Map<String, Object> data = new HashMap<>();
+    data.put("type", "created");
     data.put("postId", event.getForumPostId());
     String message = (new ObjectMapper()).writeValueAsString(data);
     
     for (Session client : getClients(event.getForumTopicId())) {
       client.getAsyncRemote().sendText(message);
     }
+  }
+
+  public void onForumPostModified(@Observes (during = TransactionPhase.AFTER_COMPLETION) @ForumPostModified ForumPostEvent event) throws JsonGenerationException, JsonMappingException, IOException {
+    Map<String, Object> data = new HashMap<>();
+    data.put("type", "modified");
+    data.put("postId", event.getForumPostId());
+    String message = (new ObjectMapper()).writeValueAsString(data);
     
+    for (Session client : getClients(event.getForumTopicId())) {
+      client.getAsyncRemote().sendText(message);
+    }
   }
   
   private void addClient(Long topicId, Session client) {
