@@ -11,7 +11,7 @@ div.grid_16.tight
         div.illusion-forum-posts
           for post in posts
             div(data-post-id=post.id,class="illusion-forum-post")    
-              +post(post.id, post.content, post.authorId, post.authorParticipantId, post.created, post.modified)
+              +post(post.id, post.content, post.authorId, post.authorParticipantId, post.authorName, post.created, post.modified)
         if user
           div.illusion-forum-post-editor-container
             textarea.illusion-forum-post-editor
