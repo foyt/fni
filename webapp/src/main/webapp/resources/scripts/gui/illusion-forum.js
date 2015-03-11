@@ -96,7 +96,9 @@
 
       $.ajax('event-forum/' + this.id(), {
         success : $.proxy(function(data) {
-          $(this.element).html(data).removeClass('illusion-forum-post-loading');
+          $(this.element).html(data) 
+            .removeClass('illusion-forum-post-loading')
+            .addClass('illusion-forum-post-visible');
         }, this)
       });
     },
@@ -221,6 +223,13 @@
       eventId: $('#event-id').val(),
       eventUrlName: $('#event-url-name').val(),
       topicId: $('#topicId').val()
+    });
+    
+    $('.illusion-forum-post').waypoint(function(direction) {
+      $(this).addClass('illusion-forum-post-visible');
+    }, {
+      offset: '90%',
+      triggerOnce: true 
     });
   });
 
