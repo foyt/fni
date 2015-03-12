@@ -235,6 +235,13 @@
       offset: '90%',
       triggerOnce: true 
     });
-  });
 
+    if (window.location.hash && window.location.hash.indexOf('#p') == 0) {
+      var postId = window.location.hash.substring(2);
+      $('html, body').animate({
+        scrollTop: $('.illusion-forum-post[data-post-id=' + postId + ']').offset().top
+      }, 3000);
+    }
+  });
+  
 }).call(this);
