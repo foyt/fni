@@ -12,7 +12,6 @@ import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import fi.foyt.fni.i18n.ExternalLocales;
@@ -25,7 +24,6 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.system.SystemSettingsController;
 
 @Dependent
 @Stateless
@@ -35,7 +33,7 @@ public class IllusionEventPageController {
   private Logger logger;
 
   @Inject
-  private SystemSettingsController systemSettingsController;
+  private IllusionEventController illusionEventController;
 
   @Inject
   private IllusionEventDocumentDAO illusionEventDocumentDAO;
@@ -63,13 +61,7 @@ public class IllusionEventPageController {
   
   public List<IllusionEventPage> listPages(IllusionEvent illusionEvent) {
     List<IllusionEventPage> pages = new ArrayList<>();
-    String eventUrl = null;
-    
-    if (StringUtils.isNotBlank(illusionEvent.getDomain())) {
-      eventUrl = systemSettingsController.getHostUrl(illusionEvent.getDomain(), false, true);
-    } else {
-      eventUrl = systemSettingsController.getSiteUrl(false, true) + "/illusion/event/" + illusionEvent.getUrlName();
-    }
+    String eventUrl = illusionEventController.getEventUrl(illusionEvent);
     
     IllusionEventDocument indexDocument = illusionEventDocumentDAO.findByParentFolderAndDocumentType(illusionEvent.getFolder(), IllusionEventDocumentType.INDEX);
     if (indexDocument != null) {

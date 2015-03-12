@@ -106,7 +106,21 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 
     return getSingleResult(entityManager.createQuery(criteria));
   }
+  
+  public IllusionEvent findByForumTopic(ForumTopic forumTopic) {
+    EntityManager entityManager = getEntityManager();
 
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<IllusionEvent> criteria = criteriaBuilder.createQuery(IllusionEvent.class);
+    Root<IllusionEvent> root = criteria.from(IllusionEvent.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(IllusionEvent_.forumTopic), forumTopic)
+    );
+
+    return getSingleResult(entityManager.createQuery(criteria));
+  }
+  
   public List<IllusionEvent> listByDomainNotNull() {
     EntityManager entityManager = getEntityManager();
 
@@ -292,5 +306,5 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     illusionEvent.setPublished(published);
     return persist(illusionEvent);
   }
-  
+
 }

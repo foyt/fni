@@ -187,6 +187,10 @@ public class IllusionEventController {
     return illusionEventDAO.findByUrlName(urlName);
   }
 
+  public IllusionEvent findEventByForumTopic(ForumTopic topic) {
+    return illusionEventDAO.findByForumTopic(topic);
+  }
+
   public List<IllusionEvent> listIllusionEvents() {
     return illusionEventDAO.listAll();
   }
@@ -322,6 +326,14 @@ public class IllusionEventController {
     illusionEventDAO.updateSignUpFee(illusionEvent, signUpFee);
     illusionEventDAO.updateSignUpFeeCurrency(illusionEvent, signUpFeeCurrency);
     return illusionEvent;
+  }
+  
+  public String getEventUrl(IllusionEvent event) {
+    if (StringUtils.isNotBlank(event.getDomain())) {
+      return systemSettingsController.getHostUrl(event.getDomain(), false, true);
+    } else {
+      return systemSettingsController.getSiteUrl(false, true) + "/illusion/event/" + event.getUrlName();
+    }
   }
   
   public void deleteIllusionEvent(IllusionEvent event) {

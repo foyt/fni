@@ -14,9 +14,11 @@ import javax.mail.MessagingException;
 import org.apache.commons.lang3.LocaleUtils;
 
 import fi.foyt.fni.i18n.ExternalLocales;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.forum.ForumTopicWatcher;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
@@ -40,6 +42,9 @@ public class ForumPostFollowerMailer {
   @Inject
   private ForumController forumController;
 
+  @Inject
+  private IllusionEventController illusionEventController;
+  
   @Inject
   private SystemSettingsController systemSettingsController;
   
@@ -81,19 +86,25 @@ public class ForumPostFollowerMailer {
     }
     
     ForumTopic topic = forumPost.getTopic();
-    long pageCount = Math.round(Math.ceil(new Double(forumController.countPostsByTopic(topic)) / ForumTopicBackingBean.POST_PER_PAGE));
+    IllusionEvent event = illusionEventController.findEventByForumTopic(topic);
+    String link = null;
     
-    String link = new StringBuilder()
-      .append(systemSettingsController.getSiteUrl(false, true))
-      .append("/forum/")
-      .append(topic.getForum().getUrlName())
-      .append('/')
-      .append(topic.getUrlName())
-      .append("?page=")
-      .append(pageCount - 1)
-      .append("#p")
-      .append(forumPost.getId())
-      .toString();
+    if (event == null) {
+      long pageCount = Math.round(Math.ceil(new Double(forumController.countPostsByTopic(topic)) / ForumTopicBackingBean.POST_PER_PAGE));
+      link = new StringBuilder()
+        .append(systemSettingsController.getSiteUrl(false, true))
+        .append("/forum/")
+        .append(topic.getForum().getUrlName())
+        .append('/')
+        .append(topic.getUrlName())
+        .append("?page=")
+        .append(pageCount - 1)
+        .append("#p")
+        .append(forumPost.getId())
+        .toString();
+    } else {
+      link = illusionEventController.getEventUrl(event) + "/event-forum";
+    }
     
     String userEmail = userController.getUserPrimaryEmail(user);
     String subject = ExternalLocales.getText(locale, "forum.mail.newPost.subject");
