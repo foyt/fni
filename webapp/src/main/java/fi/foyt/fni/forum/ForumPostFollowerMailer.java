@@ -103,7 +103,10 @@ public class ForumPostFollowerMailer {
         .append(forumPost.getId())
         .toString();
     } else {
-      link = illusionEventController.getEventUrl(event) + "/event-forum";
+      link = new StringBuilder(illusionEventController.getEventUrl(event))
+        .append("/event-forum#p")
+        .append(forumPost.getId())
+        .toString();
     }
     
     String userEmail = userController.getUserPrimaryEmail(user);
