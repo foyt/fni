@@ -187,9 +187,11 @@ public class UserController {
     for (Object[] resultRow : resultRows) {
       Float score = (Float) resultRow[0];
       UserEmail userEmail = (UserEmail) resultRow[1];
-      User user = userEmail.getUser();
-      if ((user != null) && (!user.getArchived())) {
-        result.add(new SearchResult<User>(user, user.getFullName(), "/profile/" + user.getId(), user.getFullName(), null, score));
+      if (userEmail != null) {
+        User user = userEmail.getUser();
+        if ((user != null) && (!user.getArchived())) {
+          result.add(new SearchResult<User>(user, user.getFullName(), "/profile/" + user.getId(), user.getFullName(), null, score));
+        }
       }
     }
 
