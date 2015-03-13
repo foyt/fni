@@ -1,13 +1,18 @@
 package fi.foyt.fni.view.illusion;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +21,8 @@ import javax.transaction.Transactional;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.queryParser.ParseException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.i18n.ExternalLocales;
@@ -31,6 +38,7 @@ import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
+import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.view.AbstractFileServlet;
 
 @WebServlet(urlPatterns = "/illusion/eventInvite/*", name = "illusion-eventinvite")
@@ -60,44 +68,72 @@ public class IllusionEventInviteServlet extends AbstractFileServlet {
   @Inject
   private Mailer mailer;
   
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	  String pathInfo = request.getPathInfo();
-    if (StringUtils.isBlank(pathInfo)) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
-      return;
-    }
-    
-    String[] pathItems = StringUtils.removeStart(pathInfo, "/").split("/");
-    if (pathItems.length != 1) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
-      return;
-    }
-    
-    String eventUrlName = pathItems[0];
-    if (StringUtils.isBlank(eventUrlName)) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException ,IOException {
+    String term = request.getParameter("term");
+    if (StringUtils.isBlank(term) || term.length() < 2) {
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
     
     if (!sessionController.isLoggedIn()) {
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      return;
+    }
+
+    IllusionEvent event = findEvent(request.getPathInfo());
+    if (event == null) {
+      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      return;
+    }
+    
+    if (!hasUserPermission(sessionController.getLoggedUser(), event)) {
+      response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+      return;
+    }
+    
+    try {
+      List<Map<String, String>> results = new ArrayList<>();
+      
+      for (SearchResult<User> searchResult : userController.searchUsers(term, 20)) {
+        String email = userController.getUserPrimaryEmail(searchResult.getEntity());
+        String name = userController.getUserDisplayNameWithMail(searchResult.getEntity());
+        
+        Map<String, String> result = new HashMap<String, String>();
+        result.put("value", email);
+        result.put("label", name);
+        
+        results.add(result);
+      }
+      
+      response.setContentType("application/json");
+      ServletOutputStream outputStream = response.getOutputStream();
+      (new ObjectMapper()).writeValue(outputStream, results);
+      outputStream.flush();
+      
+    } catch (ParseException e) {
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
+    }
+  };
+  
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	  if (!sessionController.isLoggedIn()) {
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
 
-    User loggedUser = sessionController.getLoggedUser();
-    IllusionEvent event = illusionEventController.findIllusionEventByUrlName(eventUrlName);
-    if (event == null) {
+	  IllusionEvent event = findEvent(request.getPathInfo());
+	  if (event == null) {
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
       return;
-    }
-    
-    IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, loggedUser);
-    if ((loggedParticipant == null)||(loggedParticipant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
+	  }
+	  
+	  if (!hasUserPermission(sessionController.getLoggedUser(), event)) {
       response.sendError(HttpServletResponse.SC_FORBIDDEN);
       return;
-    }
-
+	  }
+	  
     String mailSubject = request.getParameter("mailSubject");
     String mailContent = request.getParameter("mailContent");
     
@@ -139,6 +175,33 @@ public class IllusionEventInviteServlet extends AbstractFileServlet {
       }    
     }
 
+  }
+  
+  private IllusionEvent findEvent(String pathInfo) {
+    if (StringUtils.isBlank(pathInfo)) {
+      return null;
+    }
+    
+    String[] pathItems = StringUtils.removeStart(pathInfo, "/").split("/");
+    if (pathItems.length != 1) {
+      return null;
+    }
+    
+    String eventUrlName = pathItems[0];
+    if (StringUtils.isBlank(eventUrlName)) {
+      return null;
+    }
+    
+    return illusionEventController.findIllusionEventByUrlName(eventUrlName);
+  }
+  
+  private boolean hasUserPermission(User user, IllusionEvent event) {
+    IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
+    if (loggedParticipant == null) {
+      return false;
+    }
+    
+    return loggedParticipant.getRole() == IllusionEventParticipantRole.ORGANIZER;
   }
 
 }

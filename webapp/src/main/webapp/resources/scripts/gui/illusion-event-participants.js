@@ -145,7 +145,11 @@
             'delimiter': [',',' ',';'],
             'width': '100%',
             'minInputWidth': 160,
-            'pattern':/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/
+            'pattern':/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+            'autocomplete_url': CONTEXTPATH + '/illusion/eventInvite/' + $('input[name="eventUrlName"]').val(),
+            'autocomplete': {
+              'minLength': 2
+            }
           });
 
         } else {

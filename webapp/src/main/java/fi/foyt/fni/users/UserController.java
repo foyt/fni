@@ -295,6 +295,17 @@ public class UserController {
     return "<" + getUserPrimaryEmail(user) + ">";
   }
   
+  public String getUserDisplayNameWithMail(User user) {
+    String fullName = user.getFullName();
+    String email = getUserPrimaryEmail(user);
+    
+    if (StringUtils.isNotBlank(user.getFullName())) {
+      return String.format("%s <%s>", fullName, email);
+    } 
+    
+    return String.format("<%s>", email);
+  }
+  
 	/* Email */
 	
 	public UserEmail createUserEmail(User user, String email, Boolean primary) {
