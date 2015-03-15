@@ -5,6 +5,16 @@
 
 $border-color: rgb(71, 176, 176);
 
+.illusion-forum-watch-link, .illusion-forum-stop-watching-link {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 12px;
+  text-decoration: none;
+  text-transform: uppercase;
+  float: right;
+  margin-top: 6px; 
+}
+
 /* Posts */
 
 .illusion-forum-post {
