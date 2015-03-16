@@ -1,0 +1,1 @@
+delete from ForumTopicWatcher where topic_id in (20000);

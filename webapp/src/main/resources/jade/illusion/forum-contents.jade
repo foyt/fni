@@ -6,6 +6,17 @@ div.grid_16.tight
   .illusion-content-panel.grid_16.tight
     .grid_16
       div.illusion-event-sub-panel
+        if user
+          if followingTopic
+            a.illusion-forum-watch-link(href="javascript:void(null)", style="display: none")
+              = locale.text('illusion.forum.watchTopic')
+            a.illusion-forum-stop-watching-link(href="javascript:void(null)")
+              = locale.text('illusion.forum.stopWatchTopic')
+          else
+            a.illusion-forum-watch-link(href="javascript:void(null)")
+              = locale.text('illusion.forum.watchTopic')
+            a.illusion-forum-stop-watching-link(href="javascript:void(null)", style="display: none")
+              = locale.text('illusion.forum.stopWatchTopic')
         h3
           = locale.text('illusion.forum.title')
         div.illusion-forum-posts
@@ -17,4 +28,6 @@ div.grid_16.tight
             textarea.illusion-forum-post-editor
             button.illusion-forum-post-reply
               = locale.text('illusion.forum.postReply')
-input(value=topicId,id='topicId',type="hidden")
+input(value=topicId,id='topic-id',type="hidden")
+input(value=forumId,id='forum-id',type="hidden")
+input(value=user.id,id='logged-user-id',type="hidden")

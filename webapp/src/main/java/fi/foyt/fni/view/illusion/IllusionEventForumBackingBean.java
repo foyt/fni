@@ -104,13 +104,15 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
     IllusionEventParticipant topicAuthorParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, topic.getAuthor());
     
     templateModelBuilder
+      .put("forumId", topic.getForum().getId())
       .put("topicId", topic.getId())
       .put("topicSubject", topic.getSubject())
       .put("topicAuthorId", topic.getAuthor().getId())
       .put("topicAuthorName", topic.getAuthor().getFullName())
       .put("topicAuthorParticipantId", topicAuthorParticipant != null ? topicAuthorParticipant.getId() : null)
       .put("topicCreated", topic.getCreated())
-      .put("topicModified", topic.getModified());
+      .put("topicModified", topic.getModified())
+      .put("followingTopic", participant != null ? forumController.isWatchingTopic(participant.getUser(), topic) : false);
 
     List<ForumPost> posts = forumController.listPostsByTopic(topic);
     forumController.updateTopicViews(topic, topic.getViews() + 1);

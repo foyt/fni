@@ -1,11 +1,21 @@
 (function() {
   'use strict';
   
-  var illusionClient = new $.RestClient(CONTEXTPATH + '/rest/illusion/', {stringifyData: true});
-
-  illusionClient.add('events');
-  illusionClient.events.add('participants');
-  illusionClient.events.add('forumPosts');
+  function getIllusionClient(stringify) {
+    var illusionClient = new $.RestClient(CONTEXTPATH + '/rest/illusion/', {stringifyData: stringify === false ? false : true});
+    illusionClient.add('events');
+    illusionClient.events.add('participants');
+    illusionClient.events.add('forumPosts');
+    return illusionClient;
+  }
+  
+  function getForumClient(stringify) {
+    var forumClient = new $.RestClient(CONTEXTPATH + '/rest/forum/', {stringifyData: stringify === false ? false : true});
+    forumClient.add('forums');
+    forumClient.forums.add('topics');
+    forumClient.forums.topics.add('watchers');
+    return forumClient;
+  }
   
   var _PARTICIPANT_CACHE = {};
   
@@ -71,7 +81,7 @@
         return callback(cached);
       }
       
-      illusionClient.events.participants.read(this.options.eventId, {userId: userId}).done(function (data, textStatus, xhrObject){
+      getIllusionClient().events.participants.read(this.options.eventId, {userId: userId}).done(function (data, textStatus, xhrObject){
         switch (xhrObject.status) {
           case 200:
             if ($.isArray(data) && data.length == 1) {
@@ -113,7 +123,7 @@
     save: function (callback) {
       this.element.removeClass('illusion-forum-post-visible');
       var content = this.element.find('.illusion-forum-post-content-editor').forumPostEditor('data');
-      illusionClient.events.forumPosts.update(this.options.eventId, this.id(), {'content': content}).done(function (data, textStatus, xhrObject){
+      getIllusionClient().events.forumPosts.update(this.options.eventId, this.id(), {'content': content}).done(function (data, textStatus, xhrObject){
         if (xhrObject.status !== 204) {
           $('.notifications').notifications('notification', 'error', textStatus);
         }
@@ -160,7 +170,7 @@
           .forumPostEditor('readOnly', true)
           .forumPostEditor('data');
         
-        illusionClient.events.forumPosts.create(this.options.eventId, {'content': content}).done(function (data, textStatus, xhrObject){
+        getIllusionClient().events.forumPosts.create(this.options.eventId, {'content': content}).done(function (data, textStatus, xhrObject){
           if (xhrObject.status !== 200) {
             $('.notifications').notifications('notification', 'error', textStatus);
           }
@@ -174,6 +184,9 @@
         eventId: this.options.eventId,
         eventUrlName: this.options.eventUrlName
       });
+
+      $('.illusion-forum-watch-link').click($.proxy(this._onWatchLinkClick, this));
+      $('.illusion-forum-stop-watching-link').click($.proxy(this._onStopWatchingLinkClick, this));
       
       var socketUrl = (window.location.protocol == 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + CONTEXTPATH + '/ws/forum/' + this.options.topicId;
       this._webSocket = this._openWebSocket(socketUrl);
@@ -218,15 +231,55 @@
       return null;
     },
     
+    _onWatchLinkClick : function() {
+      getForumClient().forums.topics.watchers
+        .create(this.options.forumId, this.options.topicId, {
+          userId: this.options.userId
+        })
+        .done(function (data, textStatus, xhrObject){
+          if (xhrObject.status !== 200) {
+            $('.notifications').notifications('notification', 'error', textStatus);
+          } else {
+            $('.illusion-forum-watch-link').css('display', 'none');
+            $('.illusion-forum-stop-watching-link').css('display', 'block');      
+          }
+        });
+    },
+    
+    _onStopWatchingLinkClick : function() {
+      getForumClient(false).forums.topics.watchers
+        .read(this.options.forumId, this.options.topicId, {
+          userId: this.options.userId
+        })
+        .done($.proxy(function (watchers, watcherStatus, watcherXhr){
+          if (watcherXhr.status !== 200) {
+            $('.notifications').notifications('notification', 'error', watcherStatus);
+          } else {
+            if (watchers.length === 1) {
+              getForumClient().forums.topics.watchers.del(this.options.forumId, this.options.topicId, watchers[0].id).done(function (data, textStatus, xhrObject){
+                if (xhrObject.status !== 204) {
+                  $('.notifications').notifications('notification', 'error', textStatus);
+                } else {
+                  $('.illusion-forum-watch-link').css('display', 'block');
+                  $('.illusion-forum-stop-watching-link').css('display', 'none');      
+                }
+              });
+            }
+          }
+        }, this));
+    },
+    
     _destroy : function() {
     }
   });
   
   $(document).ready(function() {
     $(document.body).forum({
-      eventId: $('#event-id').val(),
+      eventId: parseInt($('#event-id').val()),
       eventUrlName: $('#event-url-name').val(),
-      topicId: $('#topicId').val()
+      forumId: parseInt($('#forum-id').val()),
+      topicId: parseInt($('#topic-id').val()),
+      userId: parseInt($('#logged-user-id').val())
     });
     
     $('.illusion-forum-post').waypoint(function(direction) {

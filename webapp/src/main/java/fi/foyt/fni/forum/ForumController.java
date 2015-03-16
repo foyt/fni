@@ -369,26 +369,42 @@ public class ForumController implements Serializable {
 	  
 	/* ForumTopicWatchers */
 
+  public ForumTopicWatcher createTopicWatcher(User user, ForumTopic forumTopic) {
+    return forumTopicWatcherDAO.create(forumTopic, user);
+  }
+
+  public ForumTopicWatcher findTopicWatcherById(Long id) {
+    return forumTopicWatcherDAO.findById(id);
+  }
+
+  public ForumTopicWatcher findTopicWatcherByUserAndTopic(User user, ForumTopic forumTopic) {
+    return forumTopicWatcherDAO.findByUserAndForumTopic(user, forumTopic);
+  }
+
   public List<ForumTopicWatcher> listForumTopicWatchers(ForumTopic forumTopic) {
     return forumTopicWatcherDAO.listByForumTopic(forumTopic);
   }
   
   public void addTopicWatcher(User user, ForumTopic forumTopic) {
     if (!isWatchingTopic(user, forumTopic)) {
-      forumTopicWatcherDAO.create(forumTopic, user);
+      createTopicWatcher(user, forumTopic);
     }
   }
   
   public void removeTopicWatcher(User user, ForumTopic forumTopic) {
-    ForumTopicWatcher topicWatcher = forumTopicWatcherDAO.findByUserAndForumTopic(user, forumTopic);
+    ForumTopicWatcher topicWatcher = findTopicWatcherByUserAndTopic(user, forumTopic);
     if (topicWatcher != null) {
-      forumTopicWatcherDAO.delete(topicWatcher);
+      deleteTopicWatcher(topicWatcher);
     }
   }
 
   public boolean isWatchingTopic(User user, ForumTopic forumTopic) {
-    ForumTopicWatcher topicWatcher = forumTopicWatcherDAO.findByUserAndForumTopic(user, forumTopic);
+    ForumTopicWatcher topicWatcher = findTopicWatcherByUserAndTopic(user, forumTopic);
     return topicWatcher != null;
+  }
+
+  public void deleteTopicWatcher(ForumTopicWatcher topicWatcher) {
+    forumTopicWatcherDAO.delete(topicWatcher);
   }
   
 	private String createUrlName(Forum forum, String subject) {
