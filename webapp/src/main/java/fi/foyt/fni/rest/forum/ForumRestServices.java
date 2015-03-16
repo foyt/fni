@@ -58,7 +58,7 @@ public class ForumRestServices {
    * @return Response
    * @responseType fi.foyt.fni.rest.forum.model.ForumTopicWatcher
    */
-  @Path("/forums/{FORUMID}/topics/{TOPICID}/watchers/")
+  @Path("/forums/{FORUMID:[0-9]*}/topics/{TOPICID:[0-9]*}/watchers/")
   @POST
   @Security (
     allowService = false,
@@ -108,7 +108,7 @@ public class ForumRestServices {
    * @return Response
    * @responseType fi.foyt.fni.rest.forum.model.ForumTopicWatcher
    */
-  @Path("/forums/{FORUMID}/topics/{TOPICID}/watchers/")
+  @Path("/forums/{FORUMID:[0-9]*}/topics/{TOPICID:[0-9]*}/watchers/")
   @GET
   @Security (
     allowService = false,
@@ -156,7 +156,7 @@ public class ForumRestServices {
    * @return Response
    * @responseType fi.foyt.fni.rest.forum.model.ForumTopicWatcher
    */
-  @Path("/forums/{FORUMID}/topics/{TOPICID}/watchers/{ID}")
+  @Path("/forums/{FORUMID:[0-9]*}/topics/{TOPICID:[0-9]*}/watchers/{ID:[0-9]*}")
   @DELETE
   @Security (
     allowService = false,
@@ -166,25 +166,25 @@ public class ForumRestServices {
   public Response deleteTopicWatcher(@PathParam ("FORUMID") Long forumId, @PathParam ("TOPICID") Long topicId, @PathParam ("ID") Long id) {
     Forum forum = forumController.findForumById(forumId);
     if (forum == null) {
-      return Response.status(Status.NOT_FOUND).build();
+      return Response.status(Status.NOT_FOUND).entity("Forum could not be found").build();
     }
     
     ForumTopic topic = forumController.findForumTopicById(topicId);
     if (topic == null) {
-      return Response.status(Status.NOT_FOUND).build();
+      return Response.status(Status.NOT_FOUND).entity("Topic could not be found").build();
     }
     
     if (!topic.getForum().getId().equals(forum.getId())) {
-      return Response.status(Status.NOT_FOUND).build();
+      return Response.status(Status.NOT_FOUND).entity("Topic could not be found from forum").build();
     }
     
     ForumTopicWatcher watcher = forumController.findTopicWatcherById(id);
     if (watcher == null) {
-      return Response.status(Status.NOT_FOUND).build();
+      return Response.status(Status.NOT_FOUND).entity("Watcher could not be found").build();
     }
     
     if (!watcher.getTopic().getId().equals(topic.getId())) {
-      return Response.status(Status.NOT_FOUND).build();
+      return Response.status(Status.NOT_FOUND).entity("Watcher could not be found from topic").build();
     }
     
     if (!sessionController.getLoggedUserId().equals(watcher.getUser().getId())) {
