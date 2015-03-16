@@ -2,11 +2,16 @@ package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+
+import javax.mail.MessagingException;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+
+import com.icegreen.greenmail.util.GreenMail;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -24,7 +29,8 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet(id = "event-forum-visible", before = { "illusion-event-open-forum-visible-setup.sql" }, after = {"illusion-event-open-forum-visible-teardown.sql"}),
   @DefineSqlSet(id = "event-forum-posts", before = { "illusion-event-open-forum-posts-setup.sql" }, after = {"illusion-event-open-forum-posts-teardown.sql"}),
   @DefineSqlSet(id = "event-forum-organizer-posts", before = { "illusion-event-open-forum-organizer-posts-setup.sql" }, after = {"illusion-event-open-forum-organizer-posts-teardown.sql"}),
-  @DefineSqlSet(id = "event-custom", before = { "illusion-event-open-custom-setup.sql" }, after = {"illusion-event-open-custom-teardown.sql"})
+  @DefineSqlSet(id = "event-forum-watchers", before = { "illusion-event-open-forum-watchers-setup.sql" }, after = {"illusion-event-open-forum-watchers-teardown.sql"}),
+  @DefineSqlSet(id = "event-custom", before = { "illusion-event-open-custom-setup.sql" }, after = {"illusion-event-open-custom-teardown.sql"}),
 })
 public class IllusionEventForumTestsBase extends AbstractIllusionUITest {
   
@@ -181,4 +187,118 @@ public class IllusionEventForumTestsBase extends AbstractIllusionUITest {
     assertSelectorTextIgnoreCase(".illusion-forum-posts .illusion-forum-post:nth-child(5) .illusion-forum-post-content p", "post content");
   }
   
+  @Test
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-organizer", "event-forum", "event-forum-visible", "event-forum-watchers"})
+  public void testWatchNotLogged() throws MessagingException, IOException {
+    navigate("/illusion/event/openevent/event-forum");
+    assertSelectorNotVisible(".illusion-forum-stop-watching-link");
+    assertSelectorNotVisible(".illusion-forum-watch-link");
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-organizer", "event-forum", "event-forum-visible", "event-forum-watchers"})
+  public void testNotification() throws MessagingException, IOException {
+    GreenMail greenMail = startSmtpServer();
+    try {
+      loginInternal("user@foyt.fi", "pass");
+      
+      navigate("/illusion/event/openevent/event-forum");
+      
+      waitForSelectorVisible(".illusion-forum-post-editor-container .cke_wysiwyg_frame");
+      switchFrame(".illusion-forum-post-editor-container .cke_wysiwyg_frame");
+      waitForSelectorVisible(".cke_editable");
+      typeSelectorInputValue(".cke_editable", "post content");    
+      switchDefault();
+      clickSelector(".illusion-forum-post-reply");
+      waitForSelectorVisible(".illusion-forum-posts .illusion-forum-post");
+      
+      assertEquals(1, greenMail.getReceivedMessages().length);
+      assertEquals("Notification about forum post", greenMail.getReceivedMessages()[0].getSubject());
+    } finally {
+      greenMail.stop();
+    } 
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-organizer", "event-forum", "event-forum-visible"})
+  public void testStartWatch() throws MessagingException, IOException {
+    GreenMail greenMail = startSmtpServer();
+    try {
+      acceptCookieDirective();
+      
+      loginInternal("user@foyt.fi", "pass");
+      navigate("/illusion/event/openevent/event-forum");
+      waitForSelectorVisible(".illusion-forum-watch-link");
+      
+      assertSelectorNotVisible(".illusion-forum-stop-watching-link");
+      assertSelectorVisible(".illusion-forum-watch-link");
+
+      clickSelector(".illusion-forum-watch-link");
+      waitForSelectorVisible(".illusion-forum-stop-watching-link");
+      
+      assertSelectorVisible(".illusion-forum-stop-watching-link");
+      assertSelectorNotVisible(".illusion-forum-watch-link");
+      
+      logout();
+      loginInternal("admin@foyt.fi", "pass");
+      navigate("/illusion/event/openevent/event-forum");
+      
+      waitForSelectorVisible(".illusion-forum-post-editor-container .cke_wysiwyg_frame");
+      switchFrame(".illusion-forum-post-editor-container .cke_wysiwyg_frame");
+      waitForSelectorVisible(".cke_editable");
+      typeSelectorInputValue(".cke_editable", "post content");    
+      switchDefault();
+      clickSelector(".illusion-forum-post-reply");
+      waitForSelectorVisible(".illusion-forum-posts .illusion-forum-post");
+      
+      assertEquals(1, greenMail.getReceivedMessages().length);
+      assertEquals("Notification about forum post", greenMail.getReceivedMessages()[0].getSubject());
+    } finally {
+      greenMail.stop();
+    } 
+  }
+  
+  @Test
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-organizer", "event-forum", "event-forum-visible"})
+  public void testStopWatch() throws MessagingException, IOException {
+    GreenMail greenMail = startSmtpServer();
+    try {
+      acceptCookieDirective();
+      
+      loginInternal("user@foyt.fi", "pass");
+      navigate("/illusion/event/openevent/event-forum");
+      waitForSelectorVisible(".illusion-forum-watch-link");
+      
+      assertSelectorNotVisible(".illusion-forum-stop-watching-link");
+      assertSelectorVisible(".illusion-forum-watch-link");
+
+      clickSelector(".illusion-forum-watch-link");
+      waitForSelectorVisible(".illusion-forum-stop-watching-link");
+      
+      assertSelectorVisible(".illusion-forum-stop-watching-link");
+      assertSelectorNotVisible(".illusion-forum-watch-link");
+
+      clickSelector(".illusion-forum-stop-watching-link");
+      waitForSelectorVisible(".illusion-forum-watch-link");
+      
+      assertSelectorNotVisible(".illusion-forum-stop-watching-link");
+      assertSelectorVisible(".illusion-forum-watch-link");
+      
+      logout();
+      loginInternal("admin@foyt.fi", "pass");
+      navigate("/illusion/event/openevent/event-forum");
+      
+      waitForSelectorVisible(".illusion-forum-post-editor-container .cke_wysiwyg_frame");
+      switchFrame(".illusion-forum-post-editor-container .cke_wysiwyg_frame");
+      waitForSelectorVisible(".cke_editable");
+      typeSelectorInputValue(".cke_editable", "post content");    
+      switchDefault();
+      clickSelector(".illusion-forum-post-reply");
+      waitForSelectorVisible(".illusion-forum-posts .illusion-forum-post");
+      
+      assertEquals(0, greenMail.getReceivedMessages().length);
+    } finally {
+      greenMail.stop();
+    } 
+  }
 }
