@@ -1,11 +1,13 @@
 package fi.foyt.fni.jsf;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
 import org.ocpsoft.rewrite.config.Configuration;
 import org.ocpsoft.rewrite.config.ConfigurationBuilder;
 import org.ocpsoft.rewrite.config.Direction;
 import org.ocpsoft.rewrite.context.EvaluationContext;
+import org.ocpsoft.rewrite.servlet.config.Domain;
 import org.ocpsoft.rewrite.servlet.config.HttpConfigurationProvider;
 import org.ocpsoft.rewrite.servlet.config.HttpOperation;
 import org.ocpsoft.rewrite.servlet.config.Path;
@@ -15,7 +17,12 @@ import org.ocpsoft.rewrite.servlet.config.Substitute;
 import org.ocpsoft.rewrite.servlet.config.rule.Join;
 import org.ocpsoft.rewrite.servlet.http.event.HttpServletRewrite;
 
+import fi.foyt.fni.system.SystemSettingsController;
+
 public class DefaultsRewriteConfigurationProvider extends HttpConfigurationProvider {
+  
+  @Inject
+  private SystemSettingsController systemSettingsController;
   
   @Override
   public Configuration getConfiguration(ServletContext context) {
@@ -29,14 +36,37 @@ public class DefaultsRewriteConfigurationProvider extends HttpConfigurationProvi
       .when(Direction.isInbound().and(Path.matches("/login")).and(Query.matches("{query}")))
       .perform(Redirect.temporary(context.getContextPath() + "/login/?{query}"));
     
+    String siteHost = systemSettingsController.getSiteHost();
+    
     configuration.addRule()
-      .when(Direction.isInbound().and(Path.matches("/logout")))
+      .when(
+        Direction.isInbound()
+          .and(Domain.matches(siteHost))
+          .and(Path.matches("/logout"))
+          .andNot(Query.parameterExists("redirectUrl"))
+      )
       .perform(new HttpOperation() {
          @Override
          public void performHttp(HttpServletRewrite event, EvaluationContext context) {
            event.getRequest().getSession().invalidate();
          }
-      }.and(Redirect.temporary(context.getContextPath() + "/")));
+      }
+      .and(Redirect.temporary(context.getContextPath() + "/")));
+    
+    configuration.addRule()
+      .when(
+        Direction.isInbound()
+          .and(Domain.matches(siteHost))
+          .and(Path.matches("/logout"))
+          .and(Query.matches("redirectUrl={redirectUrl}"))
+      )
+      .perform(new HttpOperation() {
+         @Override
+         public void performHttp(HttpServletRewrite event, EvaluationContext context) {
+           event.getRequest().getSession().invalidate();
+         }
+      }
+      .and(Redirect.temporary("{redirectUrl}")));
     
     configuration.addRule()
       .when(Path.matches("/theme/{file}"))

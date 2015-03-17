@@ -26,9 +26,12 @@ import org.ocpsoft.rewrite.param.Parameterized;
 import org.ocpsoft.rewrite.servlet.config.Domain;
 import org.ocpsoft.rewrite.servlet.config.HttpCondition;
 import org.ocpsoft.rewrite.servlet.config.HttpConfigurationProvider;
+import org.ocpsoft.rewrite.servlet.config.HttpOperation;
 import org.ocpsoft.rewrite.servlet.config.Path;
 import org.ocpsoft.rewrite.servlet.config.PathAndQuery;
 import org.ocpsoft.rewrite.servlet.config.Query;
+import org.ocpsoft.rewrite.servlet.config.Redirect;
+import org.ocpsoft.rewrite.servlet.config.Scheme;
 import org.ocpsoft.rewrite.servlet.config.Substitute;
 import org.ocpsoft.rewrite.servlet.http.event.HttpOutboundServletRewrite;
 import org.ocpsoft.rewrite.servlet.http.event.HttpServletRewrite;
@@ -96,6 +99,23 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
     addOutboundSiteRule(configuration, siteHost, siteUrl, "/gamelibrary/index.jsf", "/gamelibrary");
     addOutboundSiteRule(configuration, siteHost, siteUrl, "/forum/index.jsf", "/forum");
     addOutboundSiteRule(configuration, siteHost, siteUrl, "/about.jsf", "/about");
+    
+    configuration.addRule()
+      .when(
+        Direction.isInbound()
+          .andNot(Domain.matches(siteHost))
+          .and(Path.matches("/logout"))
+          .and(Scheme.matches("{scheme}"))
+          .and(Domain.matches("{domain}"))
+          .and(new ServerPortRule())
+      )
+      .perform(new HttpOperation() {
+         @Override
+         public void performHttp(HttpServletRewrite event, EvaluationContext context) {
+           event.getRequest().getSession().invalidate();
+         }
+      }
+      .and(Redirect.temporary(siteUrl + "/logout?redirectUrl={scheme}://{domain}:{port}" + context.getContextPath() + "/")));
     
     return configuration;
   }
@@ -312,6 +332,30 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
 
     private ParameterStore parameterStore;
     private String paramName;
+  }
+  
+  private class ServerPortRule extends HttpCondition implements Parameterized {
+    
+    @Override
+    public Set<String> getRequiredParameterNames() {
+      Set<String> result = new HashSet<>();
+      result.add("port");
+      return result;
+    }
+
+    @Override
+    public void setParameterStore(ParameterStore store) {
+      this.parameterStore = store;
+    }
+
+    @Override
+    public boolean evaluateHttp(HttpServletRewrite event, EvaluationContext context) {
+      ParameterValueStore parameterValueStore = (ParameterValueStore) context.get(ParameterValueStore.class);
+      parameterValueStore.submit(event, context, parameterStore.get("port"), String.valueOf(event.getAddress().getPort()));
+      return true;
+    }
+
+    private ParameterStore parameterStore;
   }
  
 }
