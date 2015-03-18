@@ -72,6 +72,16 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void logout() {
     logout(getWebDriver());
   }
+
+  protected void assertLoggedIn() {
+    assertSelectorNotVisible(".index-menu .menu-tools-login");
+    assertSelectorVisible(".index-menu .menu-tools-account-container");
+  }
+  
+  protected void assertNotLoggedIn() {
+    assertSelectorVisible(".index-menu .menu-tools-login");
+    assertSelectorNotVisible(".index-menu .menu-tools-account-container");
+  }
   
   protected void waitSelectorToBeClickable(String selector) {
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.elementToBeClickable(findElementBySelector(selector)));

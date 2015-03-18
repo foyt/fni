@@ -291,4 +291,26 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
     assertNotificationStartsWith("warning", "Event is not published");
   }
   
+  @Test
+  @SqlSets ("illusion-event-custom")
+  public void testCustomDomainLogoutMainSite() {
+    getWebDriver().get(getCustomEventUrl());
+    loginCustomEvent("admin@foyt.fi", "pass");
+    testTitle("Illusion - Open Event");
+    assertLoggedIn();
+    navigate("/");
+    assertEquals("Forge & Illusion", getWebDriver().getTitle());
+    assertLoggedIn();
+    getWebDriver().get(getCustomEventUrl());
+    testTitle("Illusion - Open Event");
+    assertLoggedIn();
+    clickSelector(".index-menu .menu-tools-account-container");
+    clickSelector(".menu-tools-account-logout a");
+    testTitle("Illusion - Open Event");
+    assertNotLoggedIn();
+    navigate("/");
+    assertEquals("Forge & Illusion", getWebDriver().getTitle());
+    assertNotLoggedIn();
+  }
+  
 }

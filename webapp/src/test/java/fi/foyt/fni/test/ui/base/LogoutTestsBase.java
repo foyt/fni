@@ -16,9 +16,10 @@ public class LogoutTestsBase extends AbstractUITest {
 
   @Test
   @SqlSets ("basic")
-  public void testTitle() {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    logout(getWebDriver());
+  public void testLogout() {
+    loginInternal("user@foyt.fi", "pass");
+    assertLoggedIn();
+    logout();
+    assertNotLoggedIn();
   }
-
 }
