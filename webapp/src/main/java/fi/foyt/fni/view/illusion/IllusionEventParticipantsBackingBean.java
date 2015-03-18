@@ -8,7 +8,6 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
@@ -26,7 +25,6 @@ import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
-import fi.foyt.fni.system.SystemSettingsController;
 
 @RequestScoped
 @Named
@@ -39,9 +37,6 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
 
   @Parameter
   private String urlName;
-
-  @Inject
-  private SystemSettingsController systemSettingsController;
 
   @Inject
   private IllusionEventController illusionEventController;
@@ -72,11 +67,7 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
     waitingPayment = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.WAITING_PAYMENT);
     invited = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.INVITED);
     
-    String eventUrl = systemSettingsController.getSiteUrl(false, true);
-    if (StringUtils.isNotBlank(eventUrl)) {
-      eventUrl += "/illusion/event/" + illusionEvent.getUrlName();
-    }
-    
+    String eventUrl = illusionEventController.getEventUrl(illusionEvent);
     this.joinUrl = eventUrl + "/dojoin?ref=inv";
     this.eventUrl = eventUrl + "?ref=inv";
     

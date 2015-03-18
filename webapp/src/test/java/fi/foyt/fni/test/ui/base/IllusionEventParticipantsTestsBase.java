@@ -1,7 +1,9 @@
 package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -162,6 +164,44 @@ public class IllusionEventParticipantsTestsBase extends AbstractIllusionUITest {
     clickSelector(".illusion-edit-participant-save");
     clickSelector(".illusion-event-participant[data-participant-id='1']");
     assertSelectorValue(".illusion-edit-participant-display-name", "Display Name");
+  }
+
+  @Test
+  @SqlSets ({"illusion-basic", "illusion-event", "illusion-event-organizer"})
+  public void testInviteDialogLinks() {
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/participants");
+    clickSelector(".illusion-event-participant-action-menu");
+    clickSelector(".illusion-invite-participants");
+    waitForSelectorVisible(".ui-widget-content textarea[name='mail-content']");
+    
+    String mailContent = findElementBySelector(".ui-widget-content textarea[name='mail-content']").getAttribute("value");
+    
+    String eventUrl = getAppUrl() + "/illusion/event/openevent";
+    String joinUrl = eventUrl + "/dojoin?ref=inv";
+    String indexUrl = eventUrl + "?ref=inv";
+
+    assertTrue("mail content did not contain join url", StringUtils.contains(mailContent, joinUrl));
+    assertTrue("mail content did not contain event url", StringUtils.contains(mailContent, indexUrl));
+  }
+  
+  @Test
+  @SqlSets ({"illusion-basic", "illusion-event", "illusion-event-organizer", "illusion-event-custom"})
+  public void testInviteDialogLinksCustomDomain() {
+    loginInternal("admin@foyt.fi", "pass");
+    getWebDriver().get(getCustomEventUrl() + "/participants");
+    clickSelector(".illusion-event-participant-action-menu");
+    clickSelector(".illusion-invite-participants");
+    waitForSelectorVisible(".ui-widget-content textarea[name='mail-content']");
+    
+    String mailContent = findElementBySelector(".ui-widget-content textarea[name='mail-content']").getAttribute("value");
+    
+    String eventUrl = getCustomEventUrl();
+    String joinUrl = eventUrl + "/dojoin?ref=inv";
+    String indexUrl = eventUrl + "?ref=inv";
+
+    assertTrue("mail content did not contain join url", StringUtils.contains(mailContent, joinUrl));
+    assertTrue("mail content did not contain event url", StringUtils.contains(mailContent, indexUrl));
   }
   
 }
