@@ -265,7 +265,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void scrollWindowBy(int x, int y) {
-    ((JavascriptExecutor) getWebDriver()).executeScript(String.format("window.scrollBy(%d, %d)",  x, y), "");
+    executeScript(String.format("window.scrollBy(%d, %d)",  x, y));
+  }
+  
+  protected void executeScript(String script) {
+    ((JavascriptExecutor) getWebDriver()).executeScript(script, "");
   }
 
   protected void switchFrame(String selector) {

@@ -26,5 +26,8 @@ public class AbstractIllusionUITest extends AbstractUITest {
     assertSelectorPresent(".menu-tools-account");
     assertSelectorNotPresent(".menu-tools-login");
   }
-  
+
+  protected void deleteIllusionTemplate(String eventUrlName, String templateName) throws Exception {
+    executeSql("delete from IllusionEventTemplate where event_id = (select id from IllusionEvent where urlName = ?) and name = ?", eventUrlName, templateName);
+  }
 }

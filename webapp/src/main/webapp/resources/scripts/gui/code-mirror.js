@@ -21,8 +21,12 @@
       }, this));
     },
     
-    value: function () {
-      return this._editor.getValue();
+    value: function (value) {
+      if (value !== undefined) {
+        this._editor.setValue(value);
+      } else {
+        return this._editor.getValue();
+      }
     },
     
     _destroy : function() {

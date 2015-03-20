@@ -130,4 +130,21 @@ public class IllusionEventManageTemplatesTestsBase extends AbstractIllusionUITes
     assertEquals(getCustomEventUrl() + "/manage-templates", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(7)").getAttribute("href"));
   }
   
+  @Test
+  @SqlSets ("event-organizer")
+  public void testIndexTemplate() throws Exception {
+    acceptCookieDirective();
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/manage-templates");
+    clickSelector(".new-template");
+    waitForSelectorVisible(".CodeMirror-code");
+    clearSelectorInput(".illusion-event-template-name");
+    typeSelectorInputValue(".illusion-event-template-name", "index-contents");
+    executeScript("$('textarea.illusion-event-template-editor').codeMirror('value', 'h1(id=\"test-header\")|header')");
+    clickSelector(".illusion-event-template-save");
+    navigate("/illusion/event/openevent");
+    assertSelectorPresent("#test-header");
+    deleteIllusionTemplate("openevent", "index-contents");
+  }
+
 }
