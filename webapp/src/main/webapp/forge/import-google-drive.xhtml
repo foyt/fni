@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['forge.googleDriveImport.pageTitle']}</ui:define>
   <ui:define name="view-stylesheets">
@@ -66,7 +70,7 @@
                 </h:panelGroup>
                 <h:panelGroup layout="block" styleClass="forge-import-google-drive-icon forge-import-google-drive-icon-#{forgeImportGoogleDriveBackingBean.getFileIcon(file)}"></h:panelGroup>
                 <h:panelGroup styleClass="forge-import-google-drive-file-name" rendered="#{file.mimeType ne 'application/vnd.google-apps.folder'}">#{file.title}</h:panelGroup>
-                <h:outputLink styleClass="forge-import-google-drive-folder-name" value="#{request.contextPath}/forge/import-google-drive/#{file.id}" rendered="#{file.mimeType eq 'application/vnd.google-apps.folder'}">#{file.title}</h:outputLink>
+                <a class="forge-import-google-drive-folder-name" jsf:outcome="/forge/import-google-drive.jsf?folderId=#{file.id}&amp;parentFolderId=#{forgeImportGoogleDriveBackingBean.parentFolderId}">#{file.title}</a>
               </h:panelGroup>
             </ui:repeat>
           </h:panelGroup>
