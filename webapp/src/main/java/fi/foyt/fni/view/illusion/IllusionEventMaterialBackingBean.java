@@ -18,6 +18,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 
 import de.neuland.jade4j.exceptions.JadeException;
 import fi.foyt.fni.i18n.ExternalLocales;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventMaterialController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionEventPageController;
@@ -34,10 +35,8 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
-import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
-import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
 
@@ -46,8 +45,6 @@ import fi.foyt.fni.session.SessionController;
 @Stateful
 @Join (path = "/illusion/event/{urlName}/materials/{materialPath}", to = "/illusion/event-material.jsf")
 @LoggedIn
-@Secure (value = Permission.ILLUSION_EVENT_ACCESS)
-@SecurityContext (context = "@urlName")
 public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBackingBean {
 
   @Inject
@@ -77,6 +74,9 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
 
   @Inject
   private IllusionEventMaterialController illusionEventMaterialController;
+  
+  @Inject
+  private IllusionEventController illusionEventController;
 
   @Inject
   private JadeController jadeController;
@@ -119,6 +119,14 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
       }
     }
 
+    if (participant.getRole() == IllusionEventParticipantRole.INVITED) {
+      illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
+    } else {
+      if ((participant.getRole() != IllusionEventParticipantRole.PARTICIPANT) && (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
+        return navigationController.accessDenied();
+      }
+    }
+    
     String contextPath =  httpServletRequest.getContextPath();
     String materialUrl = contextPath + "/materials/" + material.getPath();
     if (material.getType() == MaterialType.CHARACTER_SHEET) {

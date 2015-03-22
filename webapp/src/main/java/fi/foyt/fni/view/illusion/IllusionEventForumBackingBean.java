@@ -91,6 +91,14 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
       if (participant == null) {
         return navigationController.requireLogin(navigationController.accessDenied());
       }
+      
+      if (participant.getRole() == IllusionEventParticipantRole.INVITED) {
+        illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
+      } else {
+        if ((participant.getRole() != IllusionEventParticipantRole.PARTICIPANT) && (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
+          return navigationController.accessDenied();
+        }
+      }
     }
 
     IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.FORUM)        

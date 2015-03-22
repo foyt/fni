@@ -20,6 +20,7 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
 import fi.foyt.fni.i18n.ExternalLocales;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionEventPageVisibility;
@@ -36,10 +37,8 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
-import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
-import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
 
@@ -48,8 +47,6 @@ import fi.foyt.fni.session.SessionController;
 @Stateful
 @Join (path = "/illusion/event/{urlName}/materials", to = "/illusion/event-materials.jsf")
 @LoggedIn
-@Secure (value = Permission.ILLUSION_EVENT_ACCESS)
-@SecurityContext (context = "@urlName")
 public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBackingBean {
 
   @Inject
@@ -74,6 +71,9 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
   private IllusionEventPageController illusionEventPageController;
 
   @Inject
+  private IllusionEventController illusionEventController;
+
+  @Inject
   private JadeController jadeController;
 
   @Inject
@@ -93,6 +93,14 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
 
       IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, IllusionEventPage.Static.MATERIALS.name());
       if (visibility == IllusionEventPageVisibility.HIDDEN) {
+        return navigationController.accessDenied();
+      }
+    }
+    
+    if (participant.getRole() == IllusionEventParticipantRole.INVITED) {
+      illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
+    } else {
+      if ((participant.getRole() != IllusionEventParticipantRole.PARTICIPANT) && (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
         return navigationController.accessDenied();
       }
     }

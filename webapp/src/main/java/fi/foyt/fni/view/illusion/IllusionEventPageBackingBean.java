@@ -17,6 +17,7 @@ import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
 import de.neuland.jade4j.exceptions.JadeException;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
@@ -59,6 +60,9 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
 
+  @Inject
+  private IllusionEventController illusionEventController;
+  
   @Inject
   private SessionController sessionController;
 
@@ -113,8 +117,16 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
             }
           }
           
-          if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.PARTICIPANT)) {
+          if (participant == null) {
             return navigationController.accessDenied();
+          }
+          
+          if (participant.getRole() == IllusionEventParticipantRole.INVITED) {
+            illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
+          } else {
+            if ((participant.getRole() != IllusionEventParticipantRole.PARTICIPANT) && (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
+              return navigationController.accessDenied();
+            }
           }
         }
       }
