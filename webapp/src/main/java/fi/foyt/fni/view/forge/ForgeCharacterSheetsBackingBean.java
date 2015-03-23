@@ -81,6 +81,8 @@ public class ForgeCharacterSheetsBackingBean {
 		
 		folders = ForgeViewUtils.getParentList(material);
 		
+		materialController.markMaterialView(material, loggedUser);
+		
 		return null;
 	}
 	

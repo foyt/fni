@@ -110,7 +110,8 @@ public class ForgeFolderBackingBean extends AbstractForgeMaterialViewBackingBean
       setMaterials(materials);
 
       allowCharacterSheets = material.getType() == MaterialType.ILLUSION_GROUP_FOLDER;
-      
+      materialController.markMaterialView(material, sessionController.getLoggedUser());
+
       return null;
     } else {
       return navigationController.notFound();

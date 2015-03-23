@@ -1,6 +1,5 @@
 package fi.foyt.fni.view.forge;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Folder;
@@ -23,7 +23,6 @@ import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.security.ForbiddenException;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
@@ -53,24 +52,27 @@ public class ForgeVectorImagesBackingBean {
 
   @Inject
   private SessionController sessionController;
+
+  @Inject
+  private NavigationController navigationController;
 	
 	@RequestAction
-	public void load() throws FileNotFoundException {
+	public String load() {
 		if ((getOwnerId() == null)||(getUrlPath() == null)) {
-			throw new FileNotFoundException();
+			return navigationController.notFound();
 		}
 		
     String completePath = "/materials/" + getOwnerId() + "/" + getUrlPath();
     Material material = materialController.findMaterialByCompletePath(completePath);
 
 		if (!(material instanceof VectorImage)) {
-			throw new FileNotFoundException();
+		  return navigationController.notFound();
 		}
 		
 		User loggedUser = sessionController.getLoggedUser();
 
     if (!materialPermissionController.hasAccessPermission(loggedUser, material)) {
-      throw new ForbiddenException();
+      return navigationController.accessDenied();
     }
     
     readOnly = !materialPermissionController.hasModifyPermission(loggedUser, material);
@@ -81,7 +83,11 @@ public class ForgeVectorImagesBackingBean {
 		materialModified = vectorImage.getModified().getTime();
 		vectorImageTitle = vectorImage.getTitle();
 		vectorImageContent = vectorImage.getData();
-		folders = ForgeViewUtils.getParentList(vectorImage);
+		folders = ForgeViewUtils.getParentList(vectorImage);    
+		
+		materialController.markMaterialView(material, loggedUser);
+		
+		return null;
 	}
 	
 	public Long getOwnerId() {

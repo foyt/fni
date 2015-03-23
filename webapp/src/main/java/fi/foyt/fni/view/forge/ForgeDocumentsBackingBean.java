@@ -76,7 +76,9 @@ public class ForgeDocumentsBackingBean {
 		documentTitle = material.getTitle();
 		folders = ForgeViewUtils.getParentList(material);
 		documentReadOnlyLink = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + completePath;
-		
+
+    materialController.markMaterialView(material, loggedUser);
+    
 		return null;
 	}
 	

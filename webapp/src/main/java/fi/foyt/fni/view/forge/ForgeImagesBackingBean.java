@@ -70,7 +70,9 @@ public class ForgeImagesBackingBean {
 		materialId = material.getId();
 		imageTitle = material.getTitle();
 		folders = ForgeViewUtils.getParentList(material);
-		
+
+		materialController.markMaterialView(material, sessionController.getLoggedUser());
+
 		return null;
 	}
 	

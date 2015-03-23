@@ -1194,6 +1194,16 @@ public class MaterialController {
 
     return materials;
   }
+  
+  public void markMaterialView(Material material, User user) {
+    MaterialView materialView = materialViewDAO.findByMaterialAndUser(material, user);
+    if (materialView == null) {
+      materialViewDAO.create(material, user, 1, new Date());
+    } else {
+      materialViewDAO.updateCount(materialView, materialView.getCount() + 1); 
+      materialViewDAO.updateViewed(materialView, new Date());
+    }
+  }
 
   public List<Material> listModifiedMaterialsByUser(User user, Integer firstResult, Integer maxResults) {
     return materialDAO.listByModifierExcludingTypesSortByModified(user, Arrays.asList(new MaterialType[] { MaterialType.FOLDER }), firstResult, maxResults);

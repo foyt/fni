@@ -84,7 +84,10 @@ public class ForgeGoogleDriveBackingBean {
     } catch (IOException | GeneralSecurityException e) {
       logger.log(Level.SEVERE, "Failed to retrieve Google Drive edit link", e);
       return navigationController.internalError();
-    }
+    }    
+	  
+	  materialController.markMaterialView(material, sessionController.getLoggedUser());
+
 	  
 	  return null;
 	}
