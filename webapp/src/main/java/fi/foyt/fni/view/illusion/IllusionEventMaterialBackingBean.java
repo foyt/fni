@@ -112,6 +112,10 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
       return navigationController.notFound();
     }
     
+    if (participant.getRole() == IllusionEventParticipantRole.INVITED) {
+      illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
+    } 
+    
     if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
       User loggedUser = sessionController.getLoggedUser();
       if (!materialPermissionController.isPublic(loggedUser, material) && !materialPermissionController.hasAccessPermission(loggedUser, material)) {
@@ -119,14 +123,6 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
       }
     }
 
-    if (participant.getRole() == IllusionEventParticipantRole.INVITED) {
-      illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
-    } else {
-      if ((participant.getRole() != IllusionEventParticipantRole.PARTICIPANT) && (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
-        return navigationController.accessDenied();
-      }
-    }
-    
     String contextPath =  httpServletRequest.getContextPath();
     String materialUrl = contextPath + "/materials/" + material.getPath();
     if (material.getType() == MaterialType.CHARACTER_SHEET) {
