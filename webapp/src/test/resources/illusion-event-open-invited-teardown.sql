@@ -1,0 +1,1 @@
+delete from IllusionEventParticipant where user_id = 3 and event_id = 1;

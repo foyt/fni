@@ -24,6 +24,7 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet(id = "event-unpublished", before = { "illusion-event-open-unpublished-setup.sql" }, after = { "illusion-event-open-unpublished-teardown.sql"}),
   @DefineSqlSet(id = "event-participant", before = {"illusion-event-open-participant-setup.sql" }, after = {"illusion-event-open-participant-teardown.sql"}),
   @DefineSqlSet(id = "event-organizer", before = {"illusion-event-open-organizer-setup.sql" }, after = {"illusion-event-open-organizer-teardown.sql"}),
+  @DefineSqlSet(id = "event-invited", before = {"illusion-event-open-invited-setup.sql" }, after = {"illusion-event-open-invited-teardown.sql"}),
   @DefineSqlSet(id = "event-forum", before = { "illusion-event-open-forum-setup.sql" }, after = {"illusion-event-open-forum-teardown.sql"}),
   @DefineSqlSet(id = "event-forum-participants", before = { "illusion-event-open-forum-participants-setup.sql" }, after = {"illusion-event-open-forum-participants-teardown.sql"}),
   @DefineSqlSet(id = "event-forum-visible", before = { "illusion-event-open-forum-visible-setup.sql" }, after = {"illusion-event-open-forum-visible-teardown.sql"}),
@@ -79,6 +80,17 @@ public class IllusionEventForumTestsBase extends AbstractIllusionUITest {
     assertSelectorCount(".illusion-event-navigation>a", 2);
     assertSelectorCount(".illusion-event-navigation-item-active", 1);
     assertSelectorPresent(".illusion-event-navigation-admin-menu");
+    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "forum");
+  }
+  
+  @Test
+  @SqlSets({ "basic-users", "illusion-basic", "event", "event-invited", "event-forum", "event-forum-participants" })
+  public void testLoggedInInvited() throws Exception {
+    loginInternal("librarian@foyt.fi", "pass");
+    testTitle("/illusion/event/openevent/event-forum", "Illusion - Open Event");
+    assertSelectorCount(".illusion-event-navigation>a", 2);
+    assertSelectorCount(".illusion-event-navigation-item-active", 1);
+    assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
     assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "forum");
   }
   

@@ -15,49 +15,27 @@ import fi.foyt.fni.test.DefineSqlSets;
 import fi.foyt.fni.test.SqlSets;
 
 @DefineSqlSets ({
-  @DefineSqlSet (id = "illusion-open-page", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql"}, 
-    after = {"illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
-  ),
-  @DefineSqlSet (id = "illusion-open-page-participant", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql", "illusion-event-open-participant-setup.sql"}, 
-    after = {"illusion-event-open-participant-teardown.sql", "illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
-  ),
-  @DefineSqlSet (id = "illusion-open-page-organizer", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql", "illusion-event-open-organizer-setup.sql"}, 
-    after = {"illusion-event-open-organizer-teardown.sql", "illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
-  ),
-  @DefineSqlSet (id = "illusion-open-page-hidden", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql" }, 
-    after = {"illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
-  ),
-  @DefineSqlSet (id = "illusion-open-page-hidden-participant", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-participant-setup.sql"}, 
-    after = {"illusion-event-open-participant-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
-  ),
-  @DefineSqlSet (id = "illusion-open-page-organizer-custom", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-page-setup.sql", "illusion-event-open-page-participants-setup.sql", "illusion-event-open-organizer-setup.sql","illusion-event-open-custom-setup.sql"}, 
-    after = {"illusion-event-open-custom-teardown.sql","illusion-event-open-organizer-teardown.sql", "illusion-event-open-page-participants-teardown.sql", "illusion-event-open-page-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql", "basic-users-teardown.sql"}
-  ),
-  @DefineSqlSet (id = "illusion-event-unpublished", 
-    before = {"illusion-event-open-unpublished-setup.sql"}, 
-    after = {"illusion-event-open-unpublished-teardown.sql"}
-  ),
-  @DefineSqlSet (id = "illusion-event-unpublished", 
-    before = {"illusion-event-open-unpublished-setup.sql"}, 
-    after = {"illusion-event-open-unpublished-teardown.sql"}
-  )
+  @DefineSqlSet(id = "basic-users", before = "basic-users-setup.sql", after = "basic-users-teardown.sql"),
+  @DefineSqlSet(id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql"),
+  @DefineSqlSet(id = "event", before = { "illusion-event-open-setup.sql" }, after = { "illusion-event-open-teardown.sql"}),  
+  @DefineSqlSet(id = "event-participant", before = {"illusion-event-open-participant-setup.sql" }, after = {"illusion-event-open-participant-teardown.sql"}),
+  @DefineSqlSet(id = "event-unpublished", before = { "illusion-event-open-unpublished-setup.sql" }, after = { "illusion-event-open-unpublished-teardown.sql"}),
+  @DefineSqlSet(id = "event-organizer", before = {"illusion-event-open-organizer-setup.sql" }, after = {"illusion-event-open-organizer-teardown.sql"}),
+  @DefineSqlSet(id = "event-invited", before = {"illusion-event-open-invited-setup.sql" }, after = {"illusion-event-open-invited-teardown.sql"}),
+  @DefineSqlSet(id = "event-page", before = {"illusion-event-open-page-setup.sql"}, after = {"illusion-event-open-page-teardown.sql"}),
+  @DefineSqlSet(id = "event-page-participants", before = {"illusion-event-open-page-participants-setup.sql" }, after = {"illusion-event-open-page-participants-teardown.sql"}),
+  @DefineSqlSet(id = "event-custom", before = { "illusion-event-open-custom-setup.sql" }, after = {"illusion-event-open-custom-teardown.sql"})
 })
 public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   
   @Test
-  @SqlSets ("illusion-open-page")
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-page", "event-page-participants"})
   public void testLoginRequired() throws Exception {
     testLoginRequired("/illusion/event/openevent/pages/testpage");
   }
   
   @Test
-  @SqlSets ("illusion-open-page")
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-page", "event-page-participants"})
   public void testNotFound() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     testNotFound("/illusion/event/openevent/pages/testpage/");
@@ -74,14 +52,21 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("illusion-open-page-participant")
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-participant", "event-page", "event-page-participants"})
   public void testPageTitle() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     testTitle("/illusion/event/openevent/pages/testpage", "Open Event - Test Page");
   }
   
   @Test
-  @SqlSets ("illusion-open-page-participant")
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-invited", "event-page", "event-page-participants"})
+  public void testLoggedInInvited() throws Exception {
+    loginInternal("librarian@foyt.fi", "pass");
+    testTitle("/illusion/event/openevent/pages/testpage", "Open Event - Test Page");
+  }
+  
+  @Test
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-participant", "event-page", "event-page-participants"})
   public void testPageText() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     navigate("/illusion/event/openevent/pages/testpage");
@@ -89,7 +74,7 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("illusion-open-page-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-organizer", "event-page", "event-page-participants"})
   public void testCreatePage() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/manage-pages");
@@ -106,7 +91,7 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("illusion-open-page-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-organizer", "event-page", "event-page-participants"})
   public void testPagePermaLink() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/manage-pages");
@@ -140,42 +125,42 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
     executeSql("delete from Document where id in (select id from Material where parentFolder_id = ? and urlName = ?)", 20000, "changed");
     executeSql("delete from Material where parentFolder_id = ? and urlName = ?", 20000, "changed");
   }
-
+  
   @Test
-  @SqlSets ("illusion-open-page-hidden")
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-page"})
   public void testHiddenNotLoggedIn() throws UnsupportedEncodingException {
     testAccessDenied("/illusion/event/openevent/pages/testpage");
   }
   
   @Test
-  @SqlSets ("illusion-open-page-hidden")
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-page"})
   public void testHiddenLoggedIn() throws UnsupportedEncodingException {
     loginInternal("user@foyt.fi", "pass");
     testAccessDenied("/illusion/event/openevent/pages/testpage");
   }
   
   @Test
-  @SqlSets ("illusion-open-page-hidden-participant")
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-participant", "event-page"})
   public void testHiddenLoggedParticipant() throws UnsupportedEncodingException {
     loginInternal("user@foyt.fi", "pass");
     testAccessDenied("/illusion/event/openevent/pages/testpage");
   }
   
   @Test
-  @SqlSets ("illusion-open-page-participant")
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-participant", "event-page", "event-page-participants"})
   public void testVisibleForParticipantsNotLoggedIn() throws UnsupportedEncodingException {
     testLoginRequired("/illusion/event/openevent/pages/testpage");
   }
   
   @Test
-  @SqlSets ("illusion-open-page-participant")
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-participant", "event-page", "event-page-participants"})
   public void testVisibleForParticipantsLoggedIn() throws UnsupportedEncodingException {
     loginInternal("admin@foyt.fi", "pass");
     testAccessDenied("/illusion/event/openevent/pages/testpage");
   }
   
   @Test
-  @SqlSets ({"illusion-open-page-organizer-custom"})
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-organizer", "event-page", "event-page-participants", "event-custom"})
   public void testCustomDomain() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");
@@ -184,7 +169,7 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ({"illusion-open-page-organizer-custom"})
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-organizer", "event-page", "event-page-participants", "event-custom"})
   public void testCustomDomainLoginRedirect() {
     getWebDriver().get(getCustomEventUrl() + "/pages/testpage");
     waitForUrlMatches(".*/login.*");
@@ -193,7 +178,7 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ({"illusion-open-page-organizer-custom"})
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-organizer", "event-page", "event-page-participants", "event-custom"})
   public void testCustomDomainMenuItems() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");
@@ -219,7 +204,7 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ({"illusion-open-page-organizer-custom"})
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-organizer", "event-page", "event-page-participants", "event-custom"})
   public void testCustomDomainNavigationLinks() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");
@@ -233,7 +218,7 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ({"illusion-open-page-organizer", "illusion-event-unpublished"})
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-organizer", "event-page", "event-page-participants", "event-unpublished"})
   public void testUnpublishedAccessDenied() throws UnsupportedEncodingException {
     loginInternal("user@foyt.fi", "pass");
     testAccessDenied("/illusion/event/openevent/pages/testpage");
