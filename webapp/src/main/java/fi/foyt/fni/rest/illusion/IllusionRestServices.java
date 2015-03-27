@@ -37,11 +37,11 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.joda.time.DateTime;
 
 import fi.foyt.fni.forum.ForumController;
-import fi.foyt.fni.illusion.CharacterSheetDatas;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventMaterialController;
 import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionEventPageVisibility;
+import fi.foyt.fni.materials.CharacterSheetDatas;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.illusion.Genre;
@@ -1347,16 +1347,15 @@ public class IllusionRestServices {
     Workbook workbook = new HSSFWorkbook();
     try {
       CharacterSheetDatas characterSheetDatas = materialController.getCharacterSheetDatas(characterSheet);
-
       List<String> keys = new ArrayList<>(characterSheetDatas.getKeys());
       Collections.sort(keys);
 
       Sheet summarySheet = workbook.createSheet("Summary");
       List<String> sheetNames = new ArrayList<>();
       
-      for (Long participantId : characterSheetDatas.getParticipantIds()) {
-        IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
-        Sheet sheet = workbook.createSheet(userController.getUserPrimaryEmail(participant.getUser()));
+      for (Long userId : characterSheetDatas.getUserIds()) {
+        User user = userController.findUserById(userId);
+        Sheet sheet = workbook.createSheet(userController.getUserPrimaryEmail(user));
         sheetNames.add(sheet.getSheetName());
         Row headerRow = sheet.createRow(0);
 
@@ -1370,13 +1369,13 @@ public class IllusionRestServices {
           row.createCell(0).setCellValue(key);
           switch (characterSheetDatas.getDataType(key)) {
             case NUMBER:
-              Double doubleValue = characterSheetDatas.getDouble(key, participantId);
+              Double doubleValue = characterSheetDatas.getDouble(key, userId);
               if (doubleValue != null) {
                 row.createCell(1).setCellValue(doubleValue);
               }
             break;
             default:
-              String textValue = characterSheetDatas.getText(key, participantId);
+              String textValue = characterSheetDatas.getText(key, userId);
               row.createCell(1).setCellValue(textValue);
             break;
           }

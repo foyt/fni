@@ -1,4 +1,4 @@
-package fi.foyt.fni.illusion;
+package fi.foyt.fni.materials;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,32 +21,32 @@ public class CharacterSheetDatas {
     return keys;
   }
   
-  public Set<Long> getParticipantIds() {
+  public Set<Long> getUserIds() {
     return Collections.unmodifiableSet(values.keySet());
   }
   
-  public Object getValue(String key, Long participantId) {
+  public Object getValue(String key, Long userId) {
      switch (getDataType(key)) {
        case NUMBER:
-         return getDouble(key, participantId);
+         return getDouble(key, userId);
        default:
-         return getText(key, participantId);
+         return getText(key, userId);
      }
   } 
   
-  public String getText(String key, Long participantId) {
-    return getParticipantValues(participantId).get(key);
+  public String getText(String key, Long userId) {
+    return getUserValues(userId).get(key);
   }
   
-  public Double getDouble(String key, Long participantId) {
-    return NumberUtils.createDouble(getText(key, participantId));
+  public Double getDouble(String key, Long userId) {
+    return NumberUtils.createDouble(getText(key, userId));
   }
   
   public DataType getDataType(String key) {
     return dataTypes.get(key);
   }
   
-  public void setValue(String key, Long participantId, String value) {
+  public void setValue(String key, Long userId, String value) {
     if (!keys.contains(key)) {
       keys.add(key);
     }
@@ -60,15 +60,15 @@ public class CharacterSheetDatas {
       }
     }
     
-    getParticipantValues(participantId).put(key, value);
+    getUserValues(userId).put(key, value);
   }
   
-  private Map<String, String> getParticipantValues(Long participantId) {
-    if (!values.containsKey(participantId)) {
-      this.values.put(participantId, new HashMap<String, String>());
+  private Map<String, String> getUserValues(Long userId) {
+    if (!values.containsKey(userId)) {
+      this.values.put(userId, new HashMap<String, String>());
     }
     
-    return this.values.get(participantId);
+    return this.values.get(userId);
   }
   
   private Set<String> keys;
