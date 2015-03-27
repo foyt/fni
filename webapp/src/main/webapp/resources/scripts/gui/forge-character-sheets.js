@@ -11,6 +11,40 @@
     return decodeURIComponent(escape(window.atob( str )));
   }
   
+  function updateMeta() {
+    var contents = $('<div>').html($('.forge-chracter-sheet-editor-contents').codeMirror('value'));
+    var meta = {};
+    
+    contents.find('.i-field:not(.i-field-sum)').each(function (index, field) {
+      var tagName = $(field).prop("tagName").toLowerCase();
+      
+      meta[$(field).attr('name')] = {
+        type: (tagName == 'textarea' ? 'text' : $(field).attr('type')).toUpperCase()
+      };
+    });
+    
+    $('.forge-chracter-sheet-meta').val(JSON.stringify(meta));
+  }
+  
+  function updatePreview() {
+    var title = $('.forge-chracter-sheet-title').val();
+    var styles = $('.forge-chracter-sheet-editor-styles').codeMirror('value');
+    var contents = $('.forge-chracter-sheet-editor-contents').codeMirror('value');
+    var scripts = $('.forge-chracter-sheet-editor-scripts').codeMirror('value');
+    
+    dust.render("character-sheet", { 
+      "title": title,
+      "styles": styles,
+      "contents": contents,
+      "scripts": scripts,
+      "mode": "preview"
+    }, function(err, html) {
+      var previewFrame = $('.forge-chracter-sheet-editor-preview');
+      previewFrame.attr("src", 'data:text/html;base64,' + utf8_to_b64(html));
+    });
+  }
+  
+  
   $.widget("custom.codeMirror", {
     options: {
       lineNumbers: true,
@@ -43,31 +77,14 @@
   $(document).ready(function () {
     var previewTimeout = null;
     
-    function updatePreview(title, styles, contents, scripts) {
-      dust.render("character-sheet", { 
-        "title": title,
-        "styles": styles,
-        "contents": contents,
-        "scripts": scripts,
-        "mode": "preview"
-      }, function(err, html) {
-        var previewFrame = $('.forge-chracter-sheet-editor-preview');
-        previewFrame.attr("src", 'data:text/html;base64,' + utf8_to_b64(html));
-      });
-    }
-    
     function onChange() {
       if (previewTimeout) {
         clearTimeout(previewTimeout);  
       }
       
       previewTimeout = setTimeout(function () {
-        updatePreview(
-          $('.forge-chracter-sheet-title').val(), 
-          $('.forge-chracter-sheet-editor-styles').codeMirror('value'), 
-          $('.forge-chracter-sheet-editor-contents').codeMirror('value'), 
-          $('.forge-chracter-sheet-editor-scripts').codeMirror('value')
-        ); 
+        updatePreview();
+        updateMeta();
       }, updateTimeout);
     }
     
@@ -77,13 +94,6 @@
       $(this).css("height", scrollHeight);
     });
 
-    updatePreview(
-      $('.forge-chracter-sheet-title').val(), 
-      $('.forge-chracter-sheet-editor-styles').val(), 
-      $('.forge-chracter-sheet-editor-contents').val(),
-      $('.forge-chracter-sheet-editor-scripts').val()
-    ); 
-    
     $('textarea.forge-chracter-sheet-editor-contents')
       .codeMirror({
         mode: "text/html"
@@ -101,6 +111,9 @@
         mode: "text/javascript"
       })
       .on('change', onChange);
+    
+    updatePreview();
+    updateMeta();
   });
   
 }).call(this);

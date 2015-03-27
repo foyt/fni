@@ -1,13 +1,16 @@
 package fi.foyt.fni.view.forge;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
@@ -15,6 +18,7 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
 
 import fi.foyt.fni.jsf.NavigationController;
+import fi.foyt.fni.materials.CharacterSheetMeta;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
@@ -30,6 +34,9 @@ import fi.foyt.fni.session.SessionController;
 @Join (path = "/forge/character-sheets/{ownerId}/{urlPath}", to = "/forge/character-sheets.jsf")
 @LoggedIn
 public class ForgeCharacterSheetsBackingBean {
+  
+  @Inject
+  private Logger logger;
   
   @Parameter
   @Matches ("[0-9]{1,}")
@@ -53,7 +60,7 @@ public class ForgeCharacterSheetsBackingBean {
 	
 	@RequestAction
 	@Deferred
-	public String load() throws FileNotFoundException {
+	public String load() {
 		if ((getOwnerId() == null)||(getUrlPath() == null)) {
 			return navigationController.notFound();
 		}
@@ -78,6 +85,13 @@ public class ForgeCharacterSheetsBackingBean {
 		characterSheetContents = characterSheet.getContents();
 		characterSheetStyles = characterSheet.getStyles();
 		characterSheetScripts = characterSheet.getScripts();
+		
+		try {
+      setCharacterSheetMeta(new ObjectMapper().writeValueAsString(materialController.getCharacterSheetMeta(characterSheet)));
+    } catch (IOException e) {
+      logger.log(Level.SEVERE, "Could not marshal character sheet meta", e);
+      return navigationController.internalError();
+    }
 		
 		folders = ForgeViewUtils.getParentList(material);
 		
@@ -142,6 +156,14 @@ public class ForgeCharacterSheetsBackingBean {
     this.characterSheetStyles = characterSheetStyles;
   }
 	
+	public String getCharacterSheetMeta() {
+    return characterSheetMeta;
+  }
+	
+	public void setCharacterSheetMeta(String characterSheetMeta) {
+    this.characterSheetMeta = characterSheetMeta;
+  }
+	
 	public boolean isReadOnly() {
     return readOnly;
   }
@@ -157,6 +179,14 @@ public class ForgeCharacterSheetsBackingBean {
       String ownerId = characterSheet.getCreator().getId().toString();
 	    String urlPath = characterSheet.getPath().substring(ownerId.length() + 1);
 	    
+	    try {
+        CharacterSheetMeta meta = new ObjectMapper().readValue(getCharacterSheetMeta(), CharacterSheetMeta.class);
+        materialController.setCharacterSheetMeta(characterSheet, meta);
+      } catch (IOException e) {
+        logger.log(Level.SEVERE, "Could not unmarshal character sheet meta", e);
+        return navigationController.internalError();
+      }
+	    
 	    return "/forge/character-sheets.jsf?faces-redirect=true&ownerId=" + ownerId + "&urlPath=" + urlPath;
 	  } else {
       return navigationController.accessDenied();
@@ -168,6 +198,7 @@ public class ForgeCharacterSheetsBackingBean {
   private String characterSheetContents;
   private String characterSheetScripts;
 	private String characterSheetStyles;
+	private String characterSheetMeta;
 	private List<Folder> folders;
 	private boolean readOnly;
 }

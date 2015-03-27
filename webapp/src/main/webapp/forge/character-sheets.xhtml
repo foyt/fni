@@ -114,6 +114,7 @@
 	        </div>
 	        
 	        <h:commandButton rendered="#{!forgeCharacterSheetsBackingBean.readOnly}" styleClass="forge-chracter-sheet-save" action="#{forgeCharacterSheetsBackingBean.save}" value="#{locales['forge.characterSheets.saveButton']}"/>
+          <input type="hidden" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetMeta}" class="forge-chracter-sheet-meta"/>
 	      </div>
 	    </h:form>
     </div>
