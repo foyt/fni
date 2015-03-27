@@ -68,7 +68,6 @@ import fi.foyt.fni.auth.DropboxAuthenticationStrategy;
 import fi.foyt.fni.coops.CoOpsSessionController;
 import fi.foyt.fni.drive.DriveManager;
 import fi.foyt.fni.drive.SystemGoogleDriveCredentials;
-import fi.foyt.fni.illusion.CharacterSheetDatas;
 import fi.foyt.fni.materials.operations.MaterialCopy;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
@@ -77,6 +76,8 @@ import fi.foyt.fni.persistence.dao.illusion.IllusionEventMaterialParticipantSett
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
 import fi.foyt.fni.persistence.dao.materials.BinaryDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDAO;
+import fi.foyt.fni.persistence.dao.materials.CharacterSheetDataDAO;
+import fi.foyt.fni.persistence.dao.materials.CharacterSheetEntryDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentRevisionDAO;
 import fi.foyt.fni.persistence.dao.materials.DropboxFileDAO;
@@ -108,11 +109,11 @@ import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.common.Tag;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting;
-import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
-import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.materials.Binary;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
+import fi.foyt.fni.persistence.model.materials.CharacterSheetData;
+import fi.foyt.fni.persistence.model.materials.CharacterSheetEntry;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
@@ -244,6 +245,12 @@ public class MaterialController {
 
   @Inject
   private CharacterSheetDAO characterSheetDAO;
+  
+  @Inject
+  private CharacterSheetDataDAO characterSheetDataDAO;
+  
+  @Inject
+  private CharacterSheetEntryDAO characterSheetEntryDAO;
 
   @Inject
   private DropboxFolderDAO dropboxFolderDAO;
@@ -316,6 +323,99 @@ public class MaterialController {
     characterSheetDAO.updateModifier(characterSheet, modifier);
     characterSheetDAO.updateModified(characterSheet, new Date());
     return characterSheet;
+  }
+  
+  public Map<Long, Map<String, String>> getCharacterSheetData(CharacterSheet sheet) {
+    Map<Long, Map<String, String>> result = new HashMap<>();
+    
+    for (CharacterSheetEntry entry : characterSheetEntryDAO.listBySheet(sheet)) {
+      List<CharacterSheetData> datas = characterSheetDataDAO.listByEntry(entry);
+      for (CharacterSheetData data : datas) {
+        Map<String, String> userData = result.get(data.getUser().getId());
+        if (userData == null) {
+          userData = new HashMap<String, String>();
+          result.put(data.getUser().getId(), userData);
+        }
+        
+        String value = data.getValue();
+        userData.put(entry.getName(), value);
+      }
+    }
+    
+    return result;
+  }
+  
+  public Map<String, String> getUserCharacterSheetData(CharacterSheet sheet, User user) {
+    Map<String, String> result = new HashMap<>();
+    
+    for (CharacterSheetEntry entry : characterSheetEntryDAO.listBySheet(sheet)) {
+      CharacterSheetData data = characterSheetDataDAO.findByEntryAndUser(entry, user);
+      String value = data != null ? data.getValue() : null;
+      result.put(entry.getName(), value);
+    }
+    
+    return result;
+  }
+
+  public CharacterSheetDatas getCharacterSheetDatas(CharacterSheet characterSheet) throws JsonParseException, JsonMappingException, IOException {
+    CharacterSheetDatas result = new CharacterSheetDatas();
+    
+    Map<Long, Map<String, String>> sheetData = getCharacterSheetData(characterSheet);
+    for (Long userId : sheetData.keySet()) {
+      Map<String, String> values = sheetData.get(userId);
+      for (String key : values.keySet()) {
+        result.setValue(key, userId, values.get(key));
+      }
+    }
+    
+    return result;
+  }
+  
+  public String getUserCharacterSheetValue(CharacterSheet sheet, User user, String entryName) {
+    CharacterSheetEntry entry = characterSheetEntryDAO.findBySheetAndName(sheet, entryName);
+    if (entry == null) {
+      return null;
+    }
+    
+    CharacterSheetData data = characterSheetDataDAO.findByEntryAndUser(entry, user);
+    return data != null ? data.getValue() : null;
+  }
+  
+  public void setUserCharacterSheetValue(CharacterSheet sheet, User user, String entryName, String value) {
+    CharacterSheetEntry entry = characterSheetEntryDAO.findBySheetAndName(sheet, entryName);
+    if (entry != null) {
+      CharacterSheetData data = characterSheetDataDAO.findByEntryAndUser(entry, user);
+      if (data != null) {
+        characterSheetDataDAO.updateValue(data, value);
+      } else {
+        characterSheetDataDAO.create(entry, user, value);
+      }
+    } else {
+      logger.severe(String.format("Could not find entry %s from character sheet %d", entryName, sheet.getId()));
+    }
+  }
+  
+  public CharacterSheetMeta getCharacterSheetMeta(CharacterSheet sheet) {
+    CharacterSheetMeta result = new CharacterSheetMeta();
+    
+    for (CharacterSheetEntry entry : characterSheetEntryDAO.listBySheet(sheet)) {
+      result.put(entry.getName(), new CharacterSheetMetaField(entry.getType(), null));
+    }
+    
+    return result;
+  }
+  
+  public void setCharacterSheetMeta(CharacterSheet sheet, CharacterSheetMeta meta) {
+    for (String name : meta.keySet()) {
+      CharacterSheetMetaField field = meta.get(name);
+     
+      CharacterSheetEntry entry = characterSheetEntryDAO.findBySheetAndName(sheet, name);
+      if (entry == null) {
+        characterSheetEntryDAO.create(sheet, name, field.getType());
+      } else {
+        characterSheetEntryDAO.updateType(entry, field.getType());
+      }
+    }
   }
 
   /* Document */
@@ -1908,24 +2008,6 @@ public class MaterialController {
     }
     
     return null;
-  }
- 
-  public CharacterSheetDatas getCharacterSheetDatas(CharacterSheet characterSheet) throws JsonParseException, JsonMappingException, IOException {
-    CharacterSheetDatas result = new CharacterSheetDatas();
-    
-    for (IllusionEventMaterialParticipantSetting setting : illusionEventMaterialParticipantSettingDAO.listByMaterial(characterSheet)) {
-      if (setting.getKey().equals(IllusionEventMaterialParticipantSettingKey.CHARACTER_SHEET_DATA) && setting.getParticipant().getRole() == IllusionEventParticipantRole.PARTICIPANT) {
-        Map<String, String> sheetData = new ObjectMapper().readValue(setting.getValue(), new TypeReference<Map<String, String>>(){});
-        for (String key : sheetData.keySet()) {
-          String value = sheetData.get(key);
-          if (StringUtils.isNotBlank(value)) {
-            result.setValue(key, setting.getParticipant().getId(), value);
-          }
-        }
-      }    
-    }
-    
-    return result;
   }
   
 }
