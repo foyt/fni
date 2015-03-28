@@ -21,10 +21,7 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventMaterialController;
@@ -32,7 +29,7 @@ import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
-import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 
 @ServerEndpoint ("/ws/{EVENTID}/characterSheet/{MATERIALID}/{PARTICIPANTID}/{KEY}")
 public class CharacterSheetWebSocket {
@@ -56,8 +53,8 @@ public class CharacterSheetWebSocket {
   @Transactional
   public void onOpen(final Session client, EndpointConfig endpointConfig, @PathParam("EVENTID") Long eventId, @PathParam("MATERIALID") Long materialId, @PathParam("PARTICIPANTID") Long participantId, @PathParam("KEY") String key) throws IOException {
     synchronized (this) {
-      Material material = materialController.findMaterialById(materialId);
-      if (material == null) {
+      CharacterSheet sheet = materialController.findCharacterSheetById(materialId);
+      if (sheet == null) {
         client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Not Found"));
         return;
       }
@@ -79,15 +76,14 @@ public class CharacterSheetWebSocket {
         return;
       }
 
-      fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting webSocketKey = illusionEventMaterialController.findParticipantSettingByMaterialAndParticipantAndKey(material, participant, IllusionEventMaterialParticipantSettingKey.WEBSOCKET_KEY);
+      fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting webSocketKey = illusionEventMaterialController.findParticipantSettingByMaterialAndParticipantAndKey(sheet, participant, IllusionEventMaterialParticipantSettingKey.WEBSOCKET_KEY);
       if (webSocketKey == null || !webSocketKey.getValue().equals(key)) {
         client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Forbidden"));
         return;
       }
-
-      fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting participantSetting = illusionEventMaterialController.findParticipantSettingByMaterialAndParticipantAndKey(material, participant, IllusionEventMaterialParticipantSettingKey.CHARACTER_SHEET_DATA);
-      if (participantSetting != null) {
-        Map<String, String> sheetData = readSheetData(participantSetting);
+      
+      Map<String, String> sheetData = materialController.getUserCharacterSheetData(sheet, participant.getUser());
+      if (sheetData != null) {
         ObjectMapper objectMapper = new ObjectMapper();
         client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new Message("load", objectMapper.writeValueAsString(new LoadMessageData(sheetData)))));
       }
@@ -107,8 +103,8 @@ public class CharacterSheetWebSocket {
   @OnMessage
   @Transactional
   public void onMessage(Reader messageReader, Session client, @PathParam("EVENTID") Long eventId, @PathParam("MATERIALID") Long materialId, @PathParam("PARTICIPANTID") Long participantId, @PathParam("KEY") String key) throws IOException {
-    Material material = materialController.findMaterialById(materialId);
-    if (material == null) {
+    CharacterSheet sheet = materialController.findCharacterSheetById(materialId);
+    if (sheet == null) {
       client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Not Found"));
       return;
     }
@@ -130,13 +126,11 @@ public class CharacterSheetWebSocket {
       return;
     }
 
-    fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting webSocketKey = illusionEventMaterialController.findParticipantSettingByMaterialAndParticipantAndKey(material, participant, IllusionEventMaterialParticipantSettingKey.WEBSOCKET_KEY);
+    fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting webSocketKey = illusionEventMaterialController.findParticipantSettingByMaterialAndParticipantAndKey(sheet, participant, IllusionEventMaterialParticipantSettingKey.WEBSOCKET_KEY);
     if (webSocketKey == null || !webSocketKey.getValue().equals(key)) {
       client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Forbidden"));
       return;
     }
-    
-    fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting participantSetting = illusionEventMaterialController.findParticipantSettingByMaterialAndParticipantAndKey(material, participant, IllusionEventMaterialParticipantSettingKey.CHARACTER_SHEET_DATA);
     
     ObjectMapper objectMapper = new ObjectMapper();
     
@@ -146,15 +140,7 @@ public class CharacterSheetWebSocket {
         case "update":
           UpdateMessageData updateData = objectMapper.readValue(message.getData(), UpdateMessageData.class);
           if (StringUtils.isNotBlank(updateData.getKey())) {
-            if (participantSetting == null) {
-              Map<String, String> sheetData = new HashMap<>();
-              sheetData.put(updateData.getKey(), updateData.getValue());
-              illusionEventMaterialController.createParticipantSetting(material, participant, IllusionEventMaterialParticipantSettingKey.CHARACTER_SHEET_DATA, objectMapper.writeValueAsString(sheetData));
-            } else {
-              Map<String, String> sheetData = readSheetData(participantSetting);
-              sheetData.put(updateData.getKey(), updateData.getValue());
-              illusionEventMaterialController.updateParticipantSettingValue(participantSetting, objectMapper.writeValueAsString(sheetData));
-            }
+            materialController.setUserCharacterSheetValue(sheet, participant.getUser(), updateData.getKey(), updateData.getValue());
           }
           
           for (Session participantOtherClient : getParticipantOtherClients(client, eventId, materialId, participant.getId())) {
@@ -167,10 +153,6 @@ public class CharacterSheetWebSocket {
     }
   }
 
-  private Map<String, String> readSheetData(fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting participantSetting) throws IOException, JsonParseException, JsonMappingException {
-    return new ObjectMapper().readValue(participantSetting.getValue(), new TypeReference<Map<String, String>>(){});
-  }  
-  
   private String getClientId(Long eventId, Long materialId, Long participantId) {
     return new StringBuilder()
       .append(eventId)
