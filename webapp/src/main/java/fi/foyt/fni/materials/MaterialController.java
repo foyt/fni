@@ -1834,7 +1834,7 @@ public class MaterialController {
     htmlBuilder.append("<script type=\"text/javascript\" charset=\"utf8\" src=\"//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js\"></script>");
     htmlBuilder.append("<script type=\"text/javascript\" charset=\"utf8\" src=\"//cdnjs.cloudflare.com/ajax/libs/Base64/0.3.0/base64.min.js\"></script>");
     htmlBuilder.append("<link rel=\"StyleSheet\" href=\"//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/css/jquery-ui.min.css\"></link>");
-    htmlBuilder.append("<script type=\"text/javascript\" charset=\"utf8\" src=\"" + contextPath + "/uresources/illusion-character-sheet.js\"></script>");
+    htmlBuilder.append("<script type=\"text/javascript\" charset=\"utf8\" src=\"" + contextPath + "/scripts/gui/character-sheet.js\"></script>");
     
     if (StringUtils.isNotBlank(characterSheet.getTitle())) {
       htmlBuilder.append("<title>");

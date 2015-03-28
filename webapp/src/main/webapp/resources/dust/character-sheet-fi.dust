@@ -6,7 +6,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js" charset="utf8" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Base64/0.3.0/base64.min.js" charset="utf8" type="text/javascript"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/css/jquery-ui.min.css" rel="StyleSheet">
-    <script src="{@baseUrl/}/uresources/illusion-character-sheet.js" charset="utf8" type="text/javascript"></script>
+    <script src="{@baseUrl/}/scripts/gui/character-sheet.js" charset="utf8" type="text/javascript"></script>
     <title>{title}</title>
     <style type="text/css">{styles|s}</style>
     {@if cond="'{mode}' == 'preview'"}
