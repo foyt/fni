@@ -41,7 +41,7 @@ import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventMaterialController;
 import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionEventPageVisibility;
-import fi.foyt.fni.materials.CharacterSheetDatas;
+import fi.foyt.fni.materials.CharacterSheetData;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.illusion.Genre;
@@ -1346,14 +1346,13 @@ public class IllusionRestServices {
   private byte[] getCharacterSheetDataAsXLS(CharacterSheet characterSheet) throws JsonParseException, JsonMappingException, IOException {
     Workbook workbook = new HSSFWorkbook();
     try {
-      CharacterSheetDatas characterSheetDatas = materialController.getCharacterSheetDatas(characterSheet);
-      List<String> keys = new ArrayList<>(characterSheetDatas.getKeys());
-      Collections.sort(keys);
+      CharacterSheetData sheetData = materialController.getCharacterSheetData(characterSheet);
+      List<String> keys = sheetData.getSortedEntryNames();
 
       Sheet summarySheet = workbook.createSheet("Summary");
       List<String> sheetNames = new ArrayList<>();
       
-      for (Long userId : characterSheetDatas.getUserIds()) {
+      for (Long userId : sheetData.getUserIds()) {
         User user = userController.findUserById(userId);
         Sheet sheet = workbook.createSheet(userController.getUserPrimaryEmail(user));
         sheetNames.add(sheet.getSheetName());
@@ -1367,15 +1366,15 @@ public class IllusionRestServices {
 
           Row row = sheet.createRow(i + 1);
           row.createCell(0).setCellValue(key);
-          switch (characterSheetDatas.getDataType(key)) {
+          switch (sheetData.getDataType(key)) {
             case NUMBER:
-              Double doubleValue = characterSheetDatas.getDouble(key, userId);
+              Double doubleValue = sheetData.getDouble(key, userId);
               if (doubleValue != null) {
                 row.createCell(1).setCellValue(doubleValue);
               }
             break;
             default:
-              String textValue = characterSheetDatas.getText(key, userId);
+              String textValue = sheetData.getText(key, userId);
               row.createCell(1).setCellValue(textValue);
             break;
           }

@@ -44,8 +44,6 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
 import org.apache.xpath.XPathAPI;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.hibernate.search.jpa.FullTextEntityManager;
@@ -325,20 +323,13 @@ public class MaterialController {
     return characterSheet;
   }
   
-  public Map<Long, Map<String, String>> getCharacterSheetData(CharacterSheet sheet) {
-    Map<Long, Map<String, String>> result = new HashMap<>();
+  public fi.foyt.fni.materials.CharacterSheetData getCharacterSheetData(CharacterSheet sheet) {
+    fi.foyt.fni.materials.CharacterSheetData result = new fi.foyt.fni.materials.CharacterSheetData(getCharacterSheetMeta(sheet));
     
     for (CharacterSheetEntry entry : characterSheetEntryDAO.listBySheet(sheet)) {
       List<CharacterSheetData> datas = characterSheetDataDAO.listByEntry(entry);
       for (CharacterSheetData data : datas) {
-        Map<String, String> userData = result.get(data.getUser().getId());
-        if (userData == null) {
-          userData = new HashMap<String, String>();
-          result.put(data.getUser().getId(), userData);
-        }
-        
-        String value = data.getValue();
-        userData.put(entry.getName(), value);
+        result.setValue(entry.getName(), data.getUser().getId(), data.getValue());
       }
     }
     
@@ -352,20 +343,6 @@ public class MaterialController {
       CharacterSheetData data = characterSheetDataDAO.findByEntryAndUser(entry, user);
       String value = data != null ? data.getValue() : null;
       result.put(entry.getName(), value);
-    }
-    
-    return result;
-  }
-
-  public CharacterSheetDatas getCharacterSheetDatas(CharacterSheet characterSheet) throws JsonParseException, JsonMappingException, IOException {
-    CharacterSheetDatas result = new CharacterSheetDatas();
-    
-    Map<Long, Map<String, String>> sheetData = getCharacterSheetData(characterSheet);
-    for (Long userId : sheetData.keySet()) {
-      Map<String, String> values = sheetData.get(userId);
-      for (String key : values.keySet()) {
-        result.setValue(key, userId, values.get(key));
-      }
     }
     
     return result;
