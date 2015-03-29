@@ -147,6 +147,10 @@ public class CharacterSheetWebSocket {
             participantOtherClient.getAsyncRemote().sendText(objectMapper.writeValueAsString(new Message("update", objectMapper.writeValueAsString(updateData))));
           }
         break;
+        case "roll":
+          RollMessageData rollData = objectMapper.readValue(message.getData(), RollMessageData.class);
+          materialController.addCharacterSheetRoll(sheet, participant.getUser(), rollData.getLabel(), rollData.getRoll(), rollData.getResult());
+        break;
       }
     } catch (IOException e) {
       client.close(new CloseReason(CloseReason.CloseCodes.UNEXPECTED_CONDITION, "Internal Error"));
@@ -275,4 +279,35 @@ public class CharacterSheetWebSocket {
     private String value;
   }
   
+  @SuppressWarnings("unused")
+  private static class RollMessageData {
+    
+    public String getLabel() {
+      return label;
+    }
+    
+    public void setLabel(String label) {
+      this.label = label;
+    }
+    
+    public String getRoll() {
+      return roll;
+    }
+    
+    public void setRoll(String roll) {
+      this.roll = roll;
+    }
+    
+    public Integer getResult() {
+      return result;
+    }
+    
+    public void setResult(Integer result) {
+      this.result = result;
+    }
+    
+    private String label;
+    private String roll;
+    private Integer result;
+  }
 }

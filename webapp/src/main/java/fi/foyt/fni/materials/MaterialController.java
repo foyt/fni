@@ -76,6 +76,7 @@ import fi.foyt.fni.persistence.dao.materials.BinaryDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDataDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetEntryDAO;
+import fi.foyt.fni.persistence.dao.materials.CharacterSheetRollDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentRevisionDAO;
 import fi.foyt.fni.persistence.dao.materials.DropboxFileDAO;
@@ -112,6 +113,7 @@ import fi.foyt.fni.persistence.model.materials.Binary;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetData;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetEntry;
+import fi.foyt.fni.persistence.model.materials.CharacterSheetRoll;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
@@ -246,9 +248,12 @@ public class MaterialController {
   
   @Inject
   private CharacterSheetDataDAO characterSheetDataDAO;
-  
+
   @Inject
   private CharacterSheetEntryDAO characterSheetEntryDAO;
+
+  @Inject
+  private CharacterSheetRollDAO characterSheetRollDAO;
 
   @Inject
   private DropboxFolderDAO dropboxFolderDAO;
@@ -393,6 +398,10 @@ public class MaterialController {
         characterSheetEntryDAO.updateType(entry, field.getType());
       }
     }
+  }
+  
+  public CharacterSheetRoll addCharacterSheetRoll(CharacterSheet sheet, User user, String label, String roll, Integer result) {
+    return characterSheetRollDAO.create(sheet, user, label, roll, result);
   }
 
   /* Document */

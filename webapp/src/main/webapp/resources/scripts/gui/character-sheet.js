@@ -67,7 +67,7 @@
   
   $.widget("custom.illusionRoll", {
     _create : function() {
-      
+      this.element.click($.proxy(this._onClick, this));
     },
 
     fields: function() {
@@ -109,6 +109,15 @@
       return evil('Math.round(' + roll
         .replace(/([0-9]{1,})([\*]{0,1})(d)([0-9]{1,})/g, "($1*(1 + (Math.random()*($4 - 1))))")
         .replace(/(d)([0-9]{1,})/g, "(1 + (Math.random()*($2 - 1)))") + ')');
+    },
+    
+    _onClick: function () {
+      var roll = this.roll();
+      $(this.element).trigger("roll", {
+        result: roll[0],
+        roll: roll[1],
+        label: $(this.element).attr('title')
+      });
     }
   });
   
@@ -147,15 +156,7 @@
       
       // Initialize rolls
       
-      $(this.element).find('.i-roll')
-        .illusionRoll()
-        .click(function () {
-          var roll = $(this).illusionRoll('roll');
-          $(this).trigger("roll", {
-            result: roll[0],
-            roll: roll[1]
-          });
-        });
+      $(this.element).find('.i-roll').illusionRoll();
       
       if (!this.options.preview) {
         var socketUrl = (window.location.protocol == 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + this.options.contextPath + '/ws/' + this.options.eventId + '/characterSheet/' + this.options.materialId + '/' + this.options.participantId + '/' + this.options.key;
@@ -164,6 +165,8 @@
         this._webSocket.onopen = $.proxy(this._onWebSocketOpen, this);
         $(window).on('beforeunload', $.proxy(this._onWindowBeforeUnload, this));
       }
+      
+      $(this.element).on('roll', '.i-roll', $.proxy(this._onRoll, this));
     },
     
     load: function (sheetData) {
@@ -203,6 +206,19 @@
         });
         
         this._updateDataLinks(sheetData);
+      }
+    },
+    
+    _sendRoll: function (label, roll, result) {
+      if (!this.options.preview) {
+        this._webSocket.send(JSON.stringify({
+          type: 'roll',
+          data: { 
+            label: label, 
+            roll: roll,
+            result: result
+          }
+        }));
       }
     },
     
@@ -258,6 +274,10 @@
     _onWindowBeforeUnload: function (event) {
       this._webSocket.onclose = function () {};
       this._webSocket.close();
+    },
+    
+    _onRoll: function (event, data) {
+      this._sendRoll(data.label, data.roll, data.result);
     }
   });
   
