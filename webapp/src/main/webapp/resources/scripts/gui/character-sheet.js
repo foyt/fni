@@ -19,20 +19,10 @@
 
   $.widget("custom.illusionField", {
     options: {
-      sum: [],
+    
     },
     _create : function() {
-      if (this.options.sum.length > 0) {
-        $(this.element).attr('readOnly', 'readOnly');
-
-        $.each(this.options.sum, $.proxy(function (index, field) {
-          $(field).change($.proxy(function (event) {
-            this.updateSum();
-          }, this));
-        }, this));
-
-        this.updateSum();
-      } 
+      this.element.addClass('i-field i-field-initialized');
     },
     
     readOnly: function () {
@@ -42,15 +32,35 @@
     val: function (value) {
       if (value !== undefined) {
         $(this.element).val(value);
-        $('.i-field-sum').illusionField('updateSum');
+        $(this.element).trigger('change');
       } else {
         return $(this.element).val();
+      }
+    }
+  });
+
+  $.widget("custom.illusionSumField", {
+    _create : function() {
+      this._fields = $(this.element).attr('data-fields').split(',');
+      
+      this.element.addClass('i-field-sum i-field-sum-initialized');
+      
+      if (this._fields.length > 0) {
+        $(this.element).attr('readOnly', 'readOnly');
+
+        $.each(this._fields, $.proxy(function (index, field) {
+          $(field).change($.proxy(function (event) {
+            this.updateSum();
+          }, this));
+        }, this));
+
+        this.updateSum();
       }
     },
     
     updateSum: function () {
       var sum = 0;
-      $.each(this.options.sum, $.proxy(function (index, field) {
+      $.each(this._fields, $.proxy(function (index, field) {
         switch ($(field).attr('type')) {
           case 'number':
             sum += parseInt($(field).val());
@@ -128,18 +138,12 @@
     _create : function() {
       // Initialize fields
       
-      $(this.element).find('.i-field').each($.proxy(function (index, field) {
-        if ($(field).hasClass('i-field-sum')) {
-          $(field).illusionField({
-            sum: $(field).attr('data-fields').split(',')
-          });
-        } else {
-          $(field)
-            .illusionField()
-            .on('change', $.proxy(this._onIllusionFieldChange, this));   
-        }
-      }, this));    
+      $('.i-field')
+        .illusionField()
+        .on('change', $.proxy(this._onIllusionFieldChange, this)); 
       
+      $('.i-field-sum').illusionSumField();
+
       // Initialize progress bars
       
       $(this.element).find('.i-progressbar').each(function (index, field) {
@@ -172,18 +176,19 @@
     load: function (sheetData) {
       for (var key in sheetData) {
         var value = sheetData[key];
-        $('*[name="' + key + '"]').illusionField('val', value);
+        $('*[name="' + key + '"]').val(value);
       }
 
       if ($(this.element).find('.i-data-link').length > 0) {
         this._updateDataLinks(sheetData);
       }
       
-      
+      $('i-field-sum-initialized').illusionSumField('updateSum');
     },
     
     set: function (key, value) {
-      $('*[name="' + key + '"]').illusionField('val', value);
+      $('*[name="' + key + '"]').val(value);
+      $('i-field-sum-initialized').illusionSumField('updateSum');
     },
     
     _sendUpdate: function (key, value) {
@@ -199,7 +204,7 @@
       
       if ($(this.element).find('.i-data-link').length > 0) {
         var sheetData = {};
-        $(this.element).find('.i-field').each(function (index, field) {
+        $(this.element).find('.i-field-initialized').each(function (index, field) {
           if ($(field).illusionField('readOnly')) {
             sheetData[$(field).attr('name')] = $(field).val();
           }
