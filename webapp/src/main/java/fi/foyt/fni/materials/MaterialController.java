@@ -76,6 +76,7 @@ import fi.foyt.fni.persistence.dao.materials.BinaryDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDataDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetEntryDAO;
+import fi.foyt.fni.persistence.dao.materials.CharacterSheetRollLabelDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetRollDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentRevisionDAO;
@@ -113,6 +114,7 @@ import fi.foyt.fni.persistence.model.materials.Binary;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetData;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetEntry;
+import fi.foyt.fni.persistence.model.materials.CharacterSheetRollLabel;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetRoll;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.persistence.model.materials.Document;
@@ -251,6 +253,9 @@ public class MaterialController {
 
   @Inject
   private CharacterSheetEntryDAO characterSheetEntryDAO;
+
+  @Inject
+  private CharacterSheetRollLabelDAO characterSheetRollLabelDAO;
 
   @Inject
   private CharacterSheetRollDAO characterSheetRollDAO;
@@ -401,7 +406,12 @@ public class MaterialController {
   }
   
   public CharacterSheetRoll addCharacterSheetRoll(CharacterSheet sheet, User user, String label, String roll, Integer result) {
-    return characterSheetRollDAO.create(sheet, user, label, roll, result);
+    CharacterSheetRollLabel rollLabel = characterSheetRollLabelDAO.findBySheetAndLabel(sheet, label);
+    if (rollLabel == null) {
+      rollLabel = characterSheetRollLabelDAO.create(sheet, label);
+    }
+    
+    return characterSheetRollDAO.create(rollLabel, roll, user, new Date(), result);
   }
 
   /* Document */

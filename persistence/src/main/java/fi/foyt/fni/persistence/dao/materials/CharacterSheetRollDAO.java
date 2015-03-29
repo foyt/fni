@@ -1,5 +1,6 @@
 package fi.foyt.fni.persistence.dao.materials;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -8,8 +9,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetRoll;
+import fi.foyt.fni.persistence.model.materials.CharacterSheetRollLabel;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetRoll_;
 import fi.foyt.fni.persistence.model.users.User;
 
@@ -17,19 +18,20 @@ public class CharacterSheetRollDAO extends GenericDAO<CharacterSheetRoll> {
 
 	private static final long serialVersionUID = 1L;
 
-	public CharacterSheetRoll create(CharacterSheet sheet, User user, String label, String roll, Integer result) {
-    CharacterSheetRoll characterSheetData = new CharacterSheetRoll();
+	public CharacterSheetRoll create(CharacterSheetRollLabel label, String roll, User user, Date time, Integer result) {
+    CharacterSheetRoll characterSheetRollResult = new CharacterSheetRoll();
 
-    characterSheetData.setUser(user);
-    characterSheetData.setLabel(label);
-    characterSheetData.setResult(result);
-    characterSheetData.setRoll(roll);
-    characterSheetData.setSheet(sheet);
+    characterSheetRollResult.setUser(user);
+    characterSheetRollResult.setResult(result);
+    characterSheetRollResult.setLabel(label);
+    characterSheetRollResult.setRoll(roll);
+    characterSheetRollResult.setTime(time);
+    
 
-    return persist(characterSheetData);
+    return persist(characterSheetRollResult);
   }
 	
-  public List<CharacterSheetRoll> listBySheet(CharacterSheet sheet) {
+  public List<CharacterSheetRoll> listByLabel(CharacterSheetRollLabel label) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -38,14 +40,14 @@ public class CharacterSheetRollDAO extends GenericDAO<CharacterSheetRoll> {
     criteria.select(root);
     criteria.where(
       criteriaBuilder.and(
-        criteriaBuilder.equal(root.get(CharacterSheetRoll_.sheet), sheet)
+        criteriaBuilder.equal(root.get(CharacterSheetRoll_.label), label)
       )
     );
     
     return entityManager.createQuery(criteria).getResultList();
   }
-
-  public List<CharacterSheetRoll> listBySheetAndUser(CharacterSheet sheet, User user) {
+  
+  public List<CharacterSheetRoll> listByRollAndUser(CharacterSheetRollLabel label, User user) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -54,12 +56,12 @@ public class CharacterSheetRollDAO extends GenericDAO<CharacterSheetRoll> {
     criteria.select(root);
     criteria.where(
       criteriaBuilder.and(
-          criteriaBuilder.equal(root.get(CharacterSheetRoll_.sheet), sheet),
-          criteriaBuilder.equal(root.get(CharacterSheetRoll_.user), user)
+        criteriaBuilder.equal(root.get(CharacterSheetRoll_.label), label),
+        criteriaBuilder.equal(root.get(CharacterSheetRoll_.user), user)
       )
     );
     
     return entityManager.createQuery(criteria).getResultList();
   }
-
+  
 }
