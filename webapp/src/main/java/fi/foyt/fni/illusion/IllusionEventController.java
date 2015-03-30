@@ -198,7 +198,7 @@ public class IllusionEventController {
   public List<IllusionEvent> listPublishedEvents() {
     return illusionEventDAO.listByPublishedOrderByStartAndEnd(Boolean.TRUE);
   }
-
+  
   public List<IllusionEvent> listPublishedEventsByUserAndRole(User user, IllusionEventParticipantRole role) {
     return illusionEventParticipantDAO.listIllusionEventsByUserAndRole(user, role, Boolean.TRUE);
   }
@@ -211,6 +211,10 @@ public class IllusionEventController {
   public List<IllusionEvent> listPastIllusionEvents(int maxResults) {
     Date now = new Date();
     return illusionEventDAO.listByStartLTAndEndLTAndPublishedSortByEndAndStart(now, now, Boolean.TRUE, 0, maxResults);
+  }
+
+  public List<IllusionEvent> listEventsBetween(Date start, Date end, Boolean published) {
+    return illusionEventDAO.listByStartLTAndEndLTAndPublishedSortByEndAndStart(start, end, published, 0, Integer.MAX_VALUE);
   }
 
   public List<IllusionEvent> listIllusionEventsWithDomain() {

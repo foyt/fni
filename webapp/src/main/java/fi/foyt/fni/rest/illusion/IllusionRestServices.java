@@ -59,6 +59,7 @@ import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
 import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.rest.DateTimeParameter;
 import fi.foyt.fni.rest.Security;
 import fi.foyt.fni.rest.forum.model.ForumPost;
 import fi.foyt.fni.rest.illusion.model.IllusionEventGroup;
@@ -212,11 +213,22 @@ public class IllusionRestServices {
   @Path("/events")
   @GET
   @Security (
-    allowService = true,
+    allowNotLogged = true,
     scopes = { OAuthScopes.ILLUSION_LIST_EVENTS }
   )
-  public Response listEvents() {
-    List<IllusionEvent> events = illusionEventController.listIllusionEvents();
+  public Response listEvents(@QueryParam ("minTime") DateTimeParameter minTime, @QueryParam ("maxTime") DateTimeParameter maxTime) {
+    List<IllusionEvent> events = null;
+    
+    if ((minTime != null) && (maxTime != null)) {
+      if ((minTime == null) || (minTime == null)) {
+        return Response.status(Status.BAD_REQUEST).build();
+      }
+      
+      events = illusionEventController.listEventsBetween(minTime.getDateTime().toDate(), maxTime.getDateTime().toDate(), Boolean.TRUE);
+    } else {
+      events = illusionEventController.listPublishedEvents();
+    }
+     
     if (events.isEmpty()) {
       return Response.status(Status.NO_CONTENT).build();
     }
