@@ -210,6 +210,7 @@ public class IllusionEventForumTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-organizer", "event-forum", "event-forum-visible", "event-forum-watchers"})
   public void testNotification() throws MessagingException, IOException {
+    acceptCookieDirective();
     GreenMail greenMail = startSmtpServer();
     try {
       loginInternal("user@foyt.fi", "pass");
