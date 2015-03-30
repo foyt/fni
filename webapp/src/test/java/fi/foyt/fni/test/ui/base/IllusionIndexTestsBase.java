@@ -41,6 +41,13 @@ public class IllusionIndexTestsBase extends AbstractUITest {
   @SqlSets ("events")
   public void testListsNotLoggedIn() throws Exception {
     navigate("/illusion");
+    
+    assertSelectorPresent("a[href='#calendar']");
+    assertSelectorPresent("#calendar");
+    clickSelector("a[href='#calendar']");
+    waitForSelectorVisible(String.format(".calendar-view a.fc-event[href='/%s/illusion/event/upcoming_2']", getCtxPath()));
+    assertSelectorPresent(String.format(".calendar-view a.fc-event[href='/%s/illusion/event/upcoming_2']", getCtxPath()));
+    
     assertSelectorPresent("a[href='#upcoming']");
     assertSelectorPresent("#upcoming");
     clickSelector("a[href='#upcoming']");
@@ -64,6 +71,13 @@ public class IllusionIndexTestsBase extends AbstractUITest {
     loginInternal("user@foyt.fi", "pass");
     
     navigate("/illusion");
+    
+    assertSelectorPresent("a[href='#calendar']");
+    assertSelectorPresent("#calendar");
+    clickSelector("a[href='#calendar']");
+    waitForSelectorVisible(String.format(".calendar-view a.fc-event[href='/%s/illusion/event/upcoming_2']", getCtxPath()));
+    assertSelectorPresent(String.format(".calendar-view a.fc-event[href='/%s/illusion/event/upcoming_2']", getCtxPath()));
+    
     assertSelectorPresent("a[href='#upcoming']");
     assertSelectorPresent("#upcoming");
     clickSelector("a[href='#upcoming']");
