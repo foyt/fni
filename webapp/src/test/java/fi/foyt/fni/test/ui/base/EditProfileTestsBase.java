@@ -75,6 +75,8 @@ public class EditProfileTestsBase extends AbstractUITest {
 
   @Test
   public void testChangeInternalPasswordNoMatch() throws Exception {
+    acceptCookieDirective();
+    
     createUser(7l, "Password", "Change", "passchange@foyt.fi", "oldpass", "en", "GRAVATAR", "USER");
     try {
       loginInternal(getWebDriver(), "passchange@foyt.fi", "oldpass");

@@ -80,6 +80,7 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
     clickSelector(".forge-new-new-vector-image");
     assertVectorImageEditable();
     executeSql("delete from VectorImage where id in (select id from Material where type='VECTOR_IMAGE' and parentFolder_id = 1)");
+    executeSql("delete from MaterialView where material_id in (select id from Material where type='VECTOR_IMAGE' and parentFolder_id = 1)");
     executeSql("delete from Material where type='VECTOR_IMAGE' and parentFolder_id = 1");
   }
 

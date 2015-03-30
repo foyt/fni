@@ -89,6 +89,7 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
     executeSql("delete from DocumentRevision where document_id in (select id from Material where type='DOCUMENT' and parentFolder_id = 1)");
     executeSql("delete from MaterialRevision where checksum = 'DELETE'");
     executeSql("delete from Document where id in (select id from Material where type='DOCUMENT' and parentFolder_id = 1)");
+    executeSql("delete from MaterialView where material_id in (select id from Material where type='DOCUMENT' and parentFolder_id = 1)");
     executeSql("delete from Material where type='DOCUMENT' and parentFolder_id = 1");
   }
 

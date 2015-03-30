@@ -381,6 +381,7 @@ public abstract class AbstractTest {
     executeSql("delete from DropboxFolder where id in (select id from Material where creator_id = ?)", userId);
     executeSql("delete from DropboxRootFolder where id in (select id from Material where creator_id = ?)", userId);
     executeSql("delete from Folder where id in (select id from Material where creator_id = ?)", userId);
+    executeSql("delete from MaterialView where material_id in (select id from Material where creator_id = ?)", userId);
     executeSql("delete from Material where creator_id = ? and type = 'FOLDER'", userId);
     executeSql("delete from Material where creator_id = ?", userId);
     executeSql("delete from Address where user_id = ?", userId);

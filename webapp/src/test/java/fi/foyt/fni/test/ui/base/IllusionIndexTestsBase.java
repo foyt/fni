@@ -43,6 +43,7 @@ public class IllusionIndexTestsBase extends AbstractUITest {
     navigate("/illusion");
     assertSelectorPresent("a[href='#upcoming']");
     assertSelectorPresent("#upcoming");
+    clickSelector("a[href='#upcoming']");
     assertSelectorCount("#upcoming .illusion-index-event", 2);
     assertSelectorTextIgnoreCase("#upcoming .illusion-index-event:nth-of-type(1) .illusion-index-event-name", "Upcoming #1");
     assertSelectorTextIgnoreCase("#upcoming .illusion-index-event:nth-of-type(2) .illusion-index-event-name", "Upcoming #2");
@@ -65,6 +66,7 @@ public class IllusionIndexTestsBase extends AbstractUITest {
     navigate("/illusion");
     assertSelectorPresent("a[href='#upcoming']");
     assertSelectorPresent("#upcoming");
+    clickSelector("a[href='#upcoming']");
     assertSelectorCount("#upcoming .illusion-index-event", 2);
     assertSelectorTextIgnoreCase("#upcoming .illusion-index-event:nth-of-type(1) .illusion-index-event-name", "Upcoming #1");
     assertSelectorTextIgnoreCase("#upcoming .illusion-index-event:nth-of-type(2) .illusion-index-event-name", "Upcoming #2");
