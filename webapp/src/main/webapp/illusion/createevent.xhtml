@@ -11,6 +11,7 @@
   <ui:define name="view-scripts">
     <!-- View scripts -->
     
+    <h:outputScript name="scripts/gui/datetimepicker.js"></h:outputScript>
     <h:outputScript name="scripts/gui/illusion-create-event.js"></h:outputScript>
     <h:outputScript name="scripts/jquery-ui/i18n/datepicker-fi.js" rendered="#{sessionBackingBean.locale.language eq 'fi'}"></h:outputScript>
     <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.timepicker/1.3.7/jquery.timepicker.js"></script>
@@ -70,21 +71,19 @@
               <input type="text" class="illusion-create-event-location" jsf:value="#{illusionCreateEventBackingBean.location}"/>
             </h:panelGroup> 
 
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field event-start">
               <label>#{locales['illusion.createEvent.startTime']}</label>
               <input type="date" required="required" class="datepicker" placeholder="#{locales['illusion.createEvent.startDatePlaceholder']}" data-alt-field=".actual-start-date"/>
               <input type="time" class="timepicker" placeholder="#{locales['illusion.createEvent.startTimePlaceholder']}" data-alt-field=".actual-start-time"/>
-              <input type="hidden" class="actual-start-date" jsf:value="#{illusionCreateEventBackingBean.startDate}"/>
-              <input type="hidden" class="actual-start-time" jsf:value="#{illusionCreateEventBackingBean.startTime}"/>
+              <input type="hidden" class="actual-start" jsf:value="#{illusionCreateEventBackingBean.start}"/>
               <div class="timezone"></div>
             </h:panelGroup>
              
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field event-end">
               <label>#{locales['illusion.createEvent.endTime']}</label>
               <input type="date" required="required" class="datepicker" placeholder="#{locales['illusion.createEvent.endDatePlaceholder']}" data-alt-field=".actual-end-date"/>
               <input type="time" class="timepicker" placeholder="#{locales['illusion.createEvent.endTimePlaceholder']}" data-alt-field=".actual-end-time"/>
-              <input type="hidden" class="actual-end-date" jsf:value="#{illusionCreateEventBackingBean.endDate}"/>
-              <input type="hidden" class="actual-end-time" jsf:value="#{illusionCreateEventBackingBean.endTime}"/>
+              <input type="hidden" class="actual-end" jsf:value="#{illusionCreateEventBackingBean.end}"/>
               <div class="timezone"></div>
             </h:panelGroup> 
             

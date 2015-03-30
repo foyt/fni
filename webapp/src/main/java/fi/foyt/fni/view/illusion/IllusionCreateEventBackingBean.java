@@ -107,37 +107,21 @@ public class IllusionCreateEventBackingBean {
   public void setSignUpFeeCurrency(String signUpFeeCurrency) {
     this.signUpFeeCurrency = signUpFeeCurrency;
   }
-
-  public String getStartDate() {
-    return startDate;
+  
+  public String getStart() {
+    return start;
+  }
+  
+  public void setStart(String start) {
+    this.start = start;
   }
 
-  public void setStartDate(String startDate) {
-    this.startDate = startDate;
+  public String getEnd() {
+    return end;
   }
-
-  public String getStartTime() {
-    return startTime;
-  }
-
-  public void setStartTime(String startTime) {
-    this.startTime = startTime;
-  }
-
-  public String getEndDate() {
-    return endDate;
-  }
-
-  public void setEndDate(String endDate) {
-    this.endDate = endDate;
-  }
-
-  public String getEndTime() {
-    return endTime;
-  }
-
-  public void setEndTime(String endTime) {
-    this.endTime = endTime;
+  
+  public void setEnd(String end) {
+    this.end = end;
   }
   
   public Integer getAgeLimit() {
@@ -234,8 +218,8 @@ public class IllusionCreateEventBackingBean {
     
     User loggedUser = sessionController.getLoggedUser();
     Date now = new Date();
-    Date start = parseDate(getStartISODate());
-    Date end = parseDate(getEndISODate());
+    Date start = parseDate(getStart());
+    Date end = parseDate(getEnd());
 
     IllusionEvent event = illusionEventController.createIllusionEvent(loggedUser, sessionController.getLocale(), getLocation(), getName(), 
         getDescription(), getJoinMode(), now, signUpFee, signUpFeeCurrency, start, end, 
@@ -246,24 +230,6 @@ public class IllusionCreateEventBackingBean {
     illusionEventController.createIllusionEventParticipant(loggedUser, event, IllusionEventParticipantRole.ORGANIZER);
 
     return "/illusion/event.jsf?faces-redirect=true&urlName=" + event.getUrlName();
-  }
-  
-  private String getStartISODate() {
-    StringBuilder result = new StringBuilder(getStartDate());
-    if (StringUtils.isNotBlank(getStartTime())) {
-      result.append('T').append(getStartTime());
-    }
-    
-    return result.toString();
-  }
-  
-  private String getEndISODate() {
-    StringBuilder result = new StringBuilder(getEndDate());
-    if (StringUtils.isNotBlank(getEndTime())) {
-      result.append('T').append(getEndTime());
-    }
-    
-    return result.toString();
   }
 
   private Date parseDate(String iso) {
@@ -281,10 +247,8 @@ public class IllusionCreateEventBackingBean {
   private IllusionEventJoinMode joinMode;
   private Double signUpFee;
   private String signUpFeeCurrency;
-  private String startDate;
-  private String startTime;
-  private String endDate;
-  private String endTime;
+  private String start;
+  private String end;
   private Integer ageLimit;
   private String imageUrl;
   private Boolean beginnerFriendly;

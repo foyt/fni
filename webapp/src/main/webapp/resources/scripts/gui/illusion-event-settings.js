@@ -3,8 +3,10 @@
   
   $(document).ready(function() { 
     $('.timezone').html(jstz.determine().name());
+    $('.event-start').dateTimeField();
+    $('.event-end').dateTimeField();
     
-    $('.datepicker').each(function (index, element) {
+    $('.sign-up-start-date,.sign-up-end-date').each(function (index, element) {
       $(element)
         .attr('type', 'text')
         .datepicker({
@@ -23,24 +25,7 @@
         }
       });
     });
-    
-    $('.timepicker').each(function (index, element) {
-      $(element)
-        .attr('type', 'text')
-        .timepicker({
-          timeFormat: 'G:i'
-        })
-        .on("change", function (e, data) {
-          var time = $(this).timepicker('getTime');
-          $($(this).data('alt-field')).val(time ? time.toISOString().split('T')[1] : '');
-        });
-      
-      var time = $($(element).data('alt-field')).val();
-      if (time) {
-        $(element).timepicker('setTime', new Date(Date.parse("1970-01-01T" + time)));
-      }
-    });
-    
+
     $('.illusion-event-settings-genres input[type="checkbox"]').change(function () {
       var input = $(this).closest('.illusion-event-settings-genres').find('input[type="hidden"]');
       var inputVal = input.val();

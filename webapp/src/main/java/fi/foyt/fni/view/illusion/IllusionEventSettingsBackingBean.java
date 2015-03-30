@@ -67,10 +67,8 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     description = illusionEvent.getDescription();
     location = illusionEvent.getLocation();
     joinMode = illusionEvent.getJoinMode();
-    startDate = formatDate(illusionEvent.getStart());
-    startTime = formatTime(illusionEvent.getStart());
-    endDate = formatDate(illusionEvent.getEnd());
-    endTime = formatTime(illusionEvent.getEnd());
+    start = formatDateTime(illusionEvent.getStart());
+    end = formatDateTime(illusionEvent.getEnd());
     domain = illusionEvent.getDomain();
     ageLimit = illusionEvent.getAgeLimit();
     imageUrl = illusionEvent.getImageUrl();
@@ -145,36 +143,20 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     this.urlName = urlName;
   }
 
-  public String getStartDate() {
-    return startDate;
+  public String getStart() {
+    return start;
   }
-
-  public void setStartDate(String startDate) {
-    this.startDate = startDate;
+  
+  public void setStart(String start) {
+    this.start = start;
   }
-
-  public String getStartTime() {
-    return startTime;
+  
+  public String getEnd() {
+    return end;
   }
-
-  public void setStartTime(String startTime) {
-    this.startTime = startTime;
-  }
-
-  public String getEndDate() {
-    return endDate;
-  }
-
-  public void setEndDate(String endDate) {
-    this.endDate = endDate;
-  }
-
-  public String getEndTime() {
-    return endTime;
-  }
-
-  public void setEndTime(String endTime) {
-    this.endTime = endTime;
+  
+  public void setEnd(String end) {
+    this.end = end;
   }
 
   public String getDomain() {
@@ -255,8 +237,8 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     illusionEventController.updateIllusionEventName(illusionEvent, getName());
     illusionEventController.updateIllusionEventDescription(illusionEvent, getDescription());
     illusionEventController.updateIllusionEventJoinMode(illusionEvent, getJoinMode());
-    illusionEventController.updateIllusionEventStart(illusionEvent, parseDate(getStartISODate()));
-    illusionEventController.updateIllusionEventEnd(illusionEvent, parseDate(getEndISODate()));
+    illusionEventController.updateIllusionEventStart(illusionEvent, parseDate(getStart()));
+    illusionEventController.updateIllusionEventEnd(illusionEvent, parseDate(getEnd()));
     illusionEventController.updateIllusionEventLocation(illusionEvent, getLocation());
     illusionEventController.updateIllusionEventType(illusionEvent, illusionEventController.findTypeById(getTypeId()));
     illusionEventController.updateIllusionEventSignUpTimes(illusionEvent, parseDate(getSignUpStartDate()), parseDate(getSignUpEndDate()));
@@ -283,24 +265,6 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
 
     return "/illusion/event-settings.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
   }
-  
-  private String getStartISODate() {
-    StringBuilder result = new StringBuilder(getStartDate());
-    if (StringUtils.isNotBlank(getStartTime())) {
-      result.append('T').append(getStartTime());
-    }
-    
-    return result.toString();
-  }
-  
-  private String getEndISODate() {
-    StringBuilder result = new StringBuilder(getEndDate());
-    if (StringUtils.isNotBlank(getEndTime())) {
-      result.append('T').append(getEndTime());
-    }
-    
-    return result.toString();
-  }
 
   private String formatDate(Date time) {
     if (time == null) {
@@ -311,12 +275,12 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     return formatter.print(time.getTime());
   }
 
-  private String formatTime(Date time) {
+  private String formatDateTime(Date time) {
     if (time == null) {
       return null;
     }
 
-    DateTimeFormatter formatter = ISODateTimeFormat.timeNoMillis();
+    DateTimeFormatter formatter = ISODateTimeFormat.dateTimeNoMillis();
     return formatter.print(time.getTime());
   }
 
@@ -334,10 +298,8 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   private String description;
   private String location;
   private IllusionEventJoinMode joinMode;
-  private String startDate;
-  private String startTime;
-  private String endDate;
-  private String endTime;
+  private String start;
+  private String end;
   private String domain;
   private Integer ageLimit;
   private String imageUrl;
