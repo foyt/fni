@@ -2,6 +2,7 @@ package fi.foyt.fni.test.rest;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +10,8 @@ import java.util.Arrays;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Test;
 
 import com.jayway.restassured.response.Response;
@@ -27,6 +30,7 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet(id = "service-client", before = "rest-service-client-setup.sql", after = "rest-service-client-teardown.sql"),
   @DefineSqlSet(id = "user-client", before = "rest-user-client-setup.sql", after = "rest-user-client-teardown.sql"),
   @DefineSqlSet(id = "events", before = "illusion-event-oai-setup.sql", after = "illusion-event-oai-teardown.sql"),
+  @DefineSqlSet(id = "events-upcoming", before = "illusion-upcoming-events-setup.sql", after = "illusion-upcoming-events-teardown.sql"),
   @DefineSqlSet(id = "groups", before = "illusion-event-oai-groups-setup.sql", after = "illusion-event-oai-groups-teardown.sql"),
   @DefineSqlSet(id = "posts", before = "illusion-event-oai-posts-setup.sql", after = "illusion-event-oai-posts-teardown.sql"),
   @DefineSqlSet(id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql"),
@@ -83,26 +87,17 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   }
 
   @Test
-  public void testEventListUnauthorized() {
-    givenJson()
-      .get("/illusion/events/")
-      .then()
-      .statusCode(401);
-  }
-
-  @Test
-  @SqlSets({"basic-users","service-client"})
   public void testEventListEmpty() throws OAuthSystemException, OAuthProblemException {
-    givenJson(createServiceToken())
+    givenJson()
       .get("/illusion/events/")
       .then()
       .statusCode(204);
   }
 
   @Test
-  @SqlSets({"basic-users","service-client", "events"})
+  @SqlSets({"basic-users", "events"})
   public void testEventList() throws OAuthSystemException, OAuthProblemException {
-    givenJson(createServiceToken())
+    givenJson()
       .get("/illusion/events/")
       .then()
       .statusCode(200)
@@ -169,6 +164,38 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("start[2]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
       .body("end[2]", is(new DateTime(2010, 1, 2, 0, 0, 0, 0).toString()))
       .body("genreIds[2].size()", is(0));
+  }
+     
+  @Test
+  @SqlSets({"basic-users", "events-upcoming"})
+  public void testEventListByDates() {
+    DateTime startTime = new DateTime();
+    DateTime endTime = new DateTime();
+    endTime.plusDays(3);
+    
+    DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
+    DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
+    
+    Response response = givenJson()
+      .queryParam("minTime", formatter.print(startTime))
+      .queryParam("maxTime", formatter.print(endTime))
+      .get("/illusion/events/");
+    
+    response.then().statusCode(200);
+    
+    int count = response.body().jsonPath().getInt("id.size()");
+    assertTrue(count == 1);
+    
+    for (int i = 0; i < count - 1; i++) {
+      String startPath = String.format("start[%s]", i);
+      String endPath = String.format("end[%s]", i);
+      
+      DateTime eventStart = parser.parseDateTime(response.body().jsonPath().getString(startPath));
+      DateTime eventEnd = parser.parseDateTime(response.body().jsonPath().getString(endPath));
+      
+      assertTrue(String.format("eventStart (%s) should before filter range end (%s)", eventStart, endTime), eventStart.isBefore(endTime));
+      assertTrue(String.format("eventEnd (%s) should before filter range start (%s)", eventEnd, startTime), eventEnd.isBefore(startTime));
+    }
   }
 
   @Test
