@@ -214,9 +214,9 @@ public class IllusionEventController {
   }
 
   public List<IllusionEvent> listEventsBetween(Date start, Date end, Boolean published) {
-    return illusionEventDAO.listByStartLTAndEndLTAndPublishedSortByEndAndStart(start, end, published, 0, Integer.MAX_VALUE);
+    return illusionEventDAO.listByStartLEAndGEAndPublishedSortByEndAndStart(end, start, Boolean.TRUE);
   }
-
+  
   public List<IllusionEvent> listIllusionEventsWithDomain() {
     return illusionEventDAO.listByDomainNotNull();
   }

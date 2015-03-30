@@ -197,7 +197,32 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 
     return query.getResultList();
   }
+   
+  public List<IllusionEvent> listByStartLEAndGEAndPublishedSortByEndAndStart(Date start, Date end, Boolean published) {
+    EntityManager entityManager = getEntityManager();
 
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<IllusionEvent> criteria = criteriaBuilder.createQuery(IllusionEvent.class);
+    Root<IllusionEvent> root = criteria.from(IllusionEvent.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.and(
+        criteriaBuilder.lessThanOrEqualTo(root.get(IllusionEvent_.start), start),
+        criteriaBuilder.greaterThanOrEqualTo(root.get(IllusionEvent_.end), end),
+        criteriaBuilder.equal(root.get(IllusionEvent_.published), published)
+      )
+    );
+    
+    TypedQuery<IllusionEvent> query = entityManager.createQuery(criteria);
+    
+    criteria.orderBy(
+      criteriaBuilder.desc(root.get(IllusionEvent_.start)), 
+      criteriaBuilder.desc(root.get(IllusionEvent_.end))
+    );
+
+    return query.getResultList();
+  }
+  
   public List<IllusionEvent> listByPublishedOrderByStartAndEnd(Boolean published) {
     EntityManager entityManager = getEntityManager();
 
