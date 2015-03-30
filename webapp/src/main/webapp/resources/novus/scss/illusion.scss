@@ -134,3 +134,19 @@ h3 {
   padding: 15px;
   color: $title-color;
 }
+
+/* FullCalendar */
+
+.fc-toolbar .fc-left h2 {
+  font-family: $default-font;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.calendar-view .fc-button {
+  background: #000;
+  color: #fff;
+  font-family: $default-font;
+  font-weight: normal;
+  text-shadow: none;
+}

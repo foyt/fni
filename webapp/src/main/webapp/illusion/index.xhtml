@@ -10,12 +10,20 @@
   <ui:define name="page-title">#{locales['illusion.index.pageTitle']}</ui:define>
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.3.1/fullcalendar.min.css"/>
+    
     <h:outputStylesheet library="novus" name="css/fonts.css"/>
     <h:outputStylesheet library="novus" name="css/menu.css"/>
     <h:outputStylesheet library="novus" name="css/illusion.css"/>
   </ui:define>
   
   <ui:define name="view-scripts">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.3.1/fullcalendar.min.js"></script>
+    <ui:fragment rendered="#{sessionBackingBean.locale.language ne 'en'}">
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.3.1/lang/#{sessionBackingBean.locale.language}.js"></script>
+    </ui:fragment>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.rest/1.0.2/jquery.rest.min.js"></script>
     <h:outputScript name="scripts/gui/illusion-index.js"></h:outputScript>
   </ui:define>
 
@@ -55,10 +63,14 @@
       
         <div id="tabs">
 					<ul>
+            <li><a href="#calendar">#{locales['illusion.index.calendar']}</a></li>
             <li jsf:rendered="#{!illusionIndexBackingBean.upcomingEvents.isEmpty()}"><a href="#upcoming">#{locales['illusion.index.upcomingEvents']}</a></li>
             <li jsf:rendered="#{!illusionIndexBackingBean.pastEvents.isEmpty()}"><a href="#pastevents">#{locales['illusion.index.pastEventsTitle']}</a></li>
             <li jsf:rendered="#{!illusionIndexBackingBean.unpublished.isEmpty()}"><a href="#unpublished">#{locales['illusion.index.unpublishedEvents']}</a></li>
 					</ul>
+          <div id="calendar">
+            <div class="calendar-view"></div>
+          </div>
 					<div id="upcoming" jsf:rendered="#{!illusionIndexBackingBean.upcomingEvents.isEmpty()}">
 					  <h3>#{locales['illusion.index.upcomingEvents']}</h3>
 					  
