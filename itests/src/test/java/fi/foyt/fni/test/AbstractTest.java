@@ -1,5 +1,9 @@
 package fi.foyt.fni.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -12,10 +16,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -23,7 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -42,13 +43,13 @@ public abstract class AbstractTest {
   @After
   public void flushCache() throws ClientProtocolException, IOException {
     HttpGet get = new HttpGet(getAppUrl() + "/rest/system/jpa/cache/flush");
-    DefaultHttpClient client = new DefaultHttpClient();
+    CloseableHttpClient client = HttpClientBuilder.create().build();
     try {
       get.addHeader("Authorization", "Bearer systemtoken");
       HttpResponse response = client.execute(get);
       assertEquals(200, response.getStatusLine().getStatusCode());
     } finally {
-      client.getConnectionManager().shutdown();
+      client.close();
     }
   }
 
@@ -56,7 +57,7 @@ public abstract class AbstractTest {
   public void sqlSetup() throws Exception {
     List<String> sqlFiles = new ArrayList<>();
     
-    Method method = getClass().getMethod(testName.getMethodName(), new Class<?>[] {});
+    Method method = getTestMethod();
     SqlBefore sqlBefore = method.getAnnotation(SqlBefore.class);
     if (sqlBefore != null) {
       for (String sqlFile : sqlBefore.value()) {
@@ -89,7 +90,7 @@ public abstract class AbstractTest {
   public void sqlTearDown() throws Exception {
     List<String> sqlFiles = new ArrayList<>();
     
-    Method method = getClass().getMethod(testName.getMethodName(), new Class<?>[] {});
+    Method method = getTestMethod();
     SqlAfter sqlAfter = method.getAnnotation(SqlAfter.class);
     if (sqlAfter != null) {
       for (String sqlFile : sqlAfter.value()) {
@@ -119,6 +120,16 @@ public abstract class AbstractTest {
     for (String sqlFile : sqlFiles) {
       executeSqlFile(sqlFile);
     }
+  }
+
+  private Method getTestMethod() throws NoSuchMethodException {
+    String methodName = testName.getMethodName();
+    int parameterizedIndex = methodName.indexOf("[");
+    if (parameterizedIndex != -1) {
+      methodName = methodName.substring(0, parameterizedIndex);
+    }
+    
+    return getClass().getMethod(methodName, new Class<?>[] {});
   }
   
   private SqlSet getSqlSet(Method method, String id) {
