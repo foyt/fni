@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -115,7 +114,15 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void assertSelectorTextIgnoreCase(String selector, String text) {
-    assertEquals(StringUtils.lowerCase(text), StringUtils.lowerCase((findElementBySelector(selector)).getText()));
+    assertEquals(toLowerCase(text), toLowerCase((findElementBySelector(selector)).getText()));
+  }
+  
+  private String toLowerCase(String text) {
+    if (text == null) {
+      return text;
+    }
+    
+    return text.toLowerCase();
   }
 
   protected void waitForUrlMatches(String regex) {
