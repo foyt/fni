@@ -59,7 +59,6 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     capabilities.setCapability("capture-html", true);
     capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
     capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"));
-    capabilities.setCapability("selenium-version", "2.42.0");
 
     return new RemoteWebDriver(new URL(String.format("http://%s:%s@%s:%s/wd/hub", getSauceUsername(), getSauceAccessKey(), getSauceHost(), getSaucePort())), capabilities);
   }
