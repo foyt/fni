@@ -2,6 +2,9 @@ language: java
 jdk:
 - openjdk7
 before_install:
+- openssl aes-256-cbc -K $encrypted_594de081de2f_key -iv $encrypted_594de081de2f_iv
+  -in travis-encrypted.tar.enc -out travis-encrypted.tar -d
+- tar xvf travis-encrypted.tar
 - unset GEM_PATH
 branches:
   only:
@@ -15,6 +18,9 @@ env:
   - secure: KkF+t8d5G3GLxPyN2if9e9yGU9IFJgyuP2D1ovZ6t0Yc+EhYb1YmvARtIe06nB02XBs256NrEyTAvFIUcAY7uWKSssfiw9gll5DhCIMWXv/PN9ssAkTZC2XYAZtZSCmmlRJQ3Nrp6Y3aBiBB+BEghM0kZl80Rki9S5iIfUB+a9w=
 addons:
   sauce_connect: true
+  hosts:
+  - test.forgeandillusion.net
+script: mvn test verify -Ptravis
 after_success:
 - python travis/m2conf.py
 - mvn deploy --settings ~/.m2/mySettings.xml
