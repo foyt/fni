@@ -6,17 +6,15 @@ before_install:
 branches:
   only:
   - devel
+  - BUG-118_sauce
 env:
   global:
   - secure: nSldmFh+YCDB2zErXTzy2wkTnw7QLDGYR53apjR7N033WyotFHM8suiVUkFN1OCw1b7qTk2FnikJ5+5KbiI5wxm+4v07Qc0MQtBAV7bdeE1efLgdp335L2/DETSEY+Hiz6WQThmMOYooM1Z0qn3UO80fGiGD9FMkShbmQKuGUe4=
   - secure: DgqS4PrNEmnOblJNe+qeSGsiOtVb5qMgEtTrMD1Y+FdOyWER/orgMOGDWy/xtbbS1dbaCmATOdRxsvXJqRrPaNZLcWZ8e+9d/L3XWYmoBRaGDiH1eVjUUibK79xOUyrBChLCEOkgfuIKHr3nkiPfDWRb5a6CsNn0cbPu56+8j64=
+  - secure: YaxIKyBR97Lj/di1a5Ksw4r4QoOQ+IGt1ohRzI7eZOCDisrzLq7ZpFJYR1bgULoCteEj458gyIXKyb5mc8Q9/CHgfj8/0Pa18vv49QB26mW+8QPCSFJq0A1vDDqosMC2pGElkwfN+U12M8oJ8Lf+2Tikyzqnp27F6WXlGJ4bcg4=
+  - secure: KkF+t8d5G3GLxPyN2if9e9yGU9IFJgyuP2D1ovZ6t0Yc+EhYb1YmvARtIe06nB02XBs256NrEyTAvFIUcAY7uWKSssfiw9gll5DhCIMWXv/PN9ssAkTZC2XYAZtZSCmmlRJQ3Nrp6Y3aBiBB+BEghM0kZl80Rki9S5iIfUB+a9w=
+addons:
+  sauce_connect: true
 after_success:
 - python travis/m2conf.py
 - mvn deploy --settings ~/.m2/mySettings.xml
-notifications:
-  webhooks:
-    urls:
-    - http://build.staging.fi/travis.php
-    on_success: always
-    on_failure: never
-    on_start: false
