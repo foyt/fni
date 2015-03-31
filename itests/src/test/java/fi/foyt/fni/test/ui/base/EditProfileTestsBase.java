@@ -59,6 +59,8 @@ public class EditProfileTestsBase extends AbstractUITest {
   
   @Test
   public void testChangeInternalPasswordRequired() throws Exception {
+    acceptCookieDirective();
+    
     createUser(7l, "Password", "Change", "passchange@foyt.fi", "oldpass", "en", "GRAVATAR", "USER");
     try {
       loginInternal(getWebDriver(), "passchange@foyt.fi", "oldpass");
@@ -97,6 +99,8 @@ public class EditProfileTestsBase extends AbstractUITest {
   
   @Test
   public void testChangeInternalPassword() throws Exception {
+    acceptCookieDirective();
+    
     createUser(7l, "Password", "Change", "passchange@foyt.fi", "oldpass", "en", "GRAVATAR", "USER");
     try {
       loginInternal(getWebDriver(), "passchange@foyt.fi", "oldpass");
