@@ -60,7 +60,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
     capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"));
 
-    return new RemoteWebDriver(new URL(String.format("http://%s:%s@%s:%s/wd/hub", getSauceUsername(), getSauceAccessKey(), getSauceHost(), getSaucePort())), capabilities);
+    return new RemoteWebDriver(new URL(String.format("http://%s:%s@ondemand.saucelabs.com:80/wd/hub", getSauceUsername(), getSauceAccessKey())), capabilities);
   }
   
   protected void loginInternal(String email, String password) {
