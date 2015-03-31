@@ -237,6 +237,10 @@ public abstract class AbstractTest {
     return System.getProperty("it.sauce.accessKey");
   }
 
+  protected String getSauceTunnelId() {
+    return System.getProperty("it.sauce.tunnelId");
+  }
+
   protected Connection getConnection() throws Exception {
     String username = System.getProperty("it.jdbc.username");
     String password = System.getProperty("it.jdbc.password");

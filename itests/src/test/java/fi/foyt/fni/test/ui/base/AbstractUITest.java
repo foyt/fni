@@ -59,7 +59,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     capabilities.setCapability("capture-html", true);
     capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
     capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"));
-
+    
+    if (getSauceTunnelId() != null) {
+      capabilities.setCapability("tunnel-identifier", getSauceTunnelId());
+    }
+    
     return new RemoteWebDriver(new URL(String.format("http://%s:%s@ondemand.saucelabs.com:80/wd/hub", getSauceUsername(), getSauceAccessKey())), capabilities);
   }
   

@@ -1665,6 +1665,7 @@
                 <it.dropbox.password>${it.dropbox.password}</it.dropbox.password>
                 <it.sauce.username>${env.SAUCE_USERNAME}</it.sauce.username>
                 <it.sauce.accessKey>${env.SAUCE_ACCESS_KEY}</it.sauce.accessKey>
+                <it.sauce.tunnelId>${env.TRAVIS_JOB_NUMBER}</it.sauce.tunnelId>
               </systemPropertyVariables>
             </configuration>
             <executions>
