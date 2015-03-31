@@ -1982,33 +1982,6 @@
               </execution>
             </executions>
           </plugin>
-          
-          <plugin>
-            <groupId>com.saucelabs.maven.plugin</groupId>
-            <artifactId>sauce-connect-plugin</artifactId>
-            <version>2.1.13</version>
-            <configuration>
-              <sauceUsername>${it.sauce.username}</sauceUsername>
-              <sauceAccessKey>${it.sauce.accessKey}</sauceAccessKey>
-              <quietMode>true</quietMode>
-            </configuration>
-            <executions>
-              <execution>
-                <id>start-sauceconnct</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>start-sauceconnect</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>stop-sauceconnect</id>
-                  <phase>post-integration-test</phase>
-                  <goals>
-                    <goal>stop-sauceconnect</goal>
-                  </goals>
-              </execution>
-            </executions>
-          </plugin>
                     
           <plugin>
             <groupId>org.sonatype.plugins</groupId>
