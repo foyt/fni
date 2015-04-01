@@ -70,6 +70,31 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void loginInternal(String email, String password) {
     loginInternal(getWebDriver(), email, password);
   }
+
+  protected void loginFacebook() {
+    acceptCookieDirective();
+    navigate("/login/", true);
+    waitForSelectorVisible(".user-login-external-facebook");
+    clickSelector(".user-login-external-facebook");
+    waitForSelectorVisible("*[name='login']");
+    typeSelectorInputValue("#email", getFacebookUsername());
+    typeSelectorInputValue("#pass", getFacebookPassword());
+    clickSelector("*[name='login']");
+    assertLoggedIn();
+  }
+
+  protected void loginGoogle() {
+    acceptCookieDirective();
+    navigate("/login/", true);
+    waitForSelectorVisible(".user-login-external-google");
+    clickSelector(".user-login-external-google");
+    waitForSelectorVisible("*[name='signIn']");
+    typeSelectorInputValue("*[name='Email']", getGoogleUsername());
+    typeSelectorInputValue("*[name='Passwd']", getGooglePassword());
+    clickSelector("*[name='signIn']");
+    waitForUrlMatches("^" + getAppUrl() + ".*");
+    assertLoggedIn();
+  }
   
   protected void logout() {
     logout(getWebDriver());
@@ -240,10 +265,15 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     getWebDriver().findElementByCssSelector(selector).click();
   }
   
+  protected void waitAndClick(String selector) {
+    waitSelectorToBeClickable(selector);
+    clickSelector(selector);
+  }
+  
   protected void sendKeysSelector(String selector, String keysToSend) {
     getWebDriver().findElementByCssSelector(selector).sendKeys(keysToSend);
   }
-
+  
   protected void testNotFound(String path) {
     testNotFound(getWebDriver(), path);
   }
