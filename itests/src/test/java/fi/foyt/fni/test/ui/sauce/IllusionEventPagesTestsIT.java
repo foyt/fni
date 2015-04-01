@@ -38,6 +38,12 @@ public class IllusionEventPagesTestsIT extends IllusionEventPagesTestsBase {
     setWebDriver(createSauceWebDriver(browser, version, platform));
   }
   
+  @Override
+  public void testPagePermaLink() throws Exception {
+    // TODO: Re-enable test. Currently disabled because test depends on 
+    // websockets and sauce connect does not support them
+  }
+  
   @After
   public void tearDown() {
     getWebDriver().quit();
