@@ -37,21 +37,21 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testNotFound() throws Exception {
-    loginGoogle(getWebDriver());
+    loginGoogle();
     testNotFound(getWebDriver(), "/forge/import-google-drive?parentFolderId=12345");
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testLoggedInWithGoogle() throws Exception {
-    loginGoogle(getWebDriver());
+    loginGoogle();
     testTitle(getWebDriver(), "/forge/import-google-drive", "Forge - Import From Google Drive");
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testLoggedInWithFacebook() throws Exception {
-    loginFacebook(getWebDriver());
+    loginFacebook();
     getWebDriver().get(getAppUrl() + "/forge/import-google-drive");
     assertEquals("Sign in - Google Accounts", getWebDriver().getTitle());
     sleep(500);
@@ -64,7 +64,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testImportMaterial() throws Exception {
-    loginGoogle(getWebDriver());
+    loginGoogle();
     getWebDriver().get(getAppUrl() + "/forge/import-google-drive");
     getWebDriver().findElement(By.cssSelector(".forge-import-google-drive-check-container input[type=\"checkbox\"]")).click();
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.elementToBeClickable(By.cssSelector(".forge-import-google-drive-button")));
@@ -77,7 +77,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testImportMaterialIntoFolder() throws Exception {
-    loginGoogle(getWebDriver());
+    loginGoogle();
     getWebDriver().get(getAppUrl() + "/forge/");
     getWebDriver().findElement(By.cssSelector(".forge-new-material-menu")).click();
     getWebDriver().findElement(By.cssSelector(".forge-new-material-menu .forge-new-material-folder")).click();

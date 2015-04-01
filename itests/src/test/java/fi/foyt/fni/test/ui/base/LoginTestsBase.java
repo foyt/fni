@@ -52,13 +52,13 @@ public class LoginTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic")
   public void testFacebook() {
-    loginFacebook(getWebDriver());
+    loginFacebook();
   }
 
   @Test
   @SqlSets ("basic")
   public void testGoogle() {
-    loginGoogle(getWebDriver());
+    loginGoogle();
   }
 
   @Test

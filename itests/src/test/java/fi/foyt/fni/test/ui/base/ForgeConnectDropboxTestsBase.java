@@ -38,11 +38,11 @@ public class ForgeConnectDropboxTestsBase extends AbstractUITest {
   public void testConnect() {
     acceptCookieDirective(getWebDriver());
 
-    loginGoogle(getWebDriver());
-    getWebDriver().get(getAppUrl() + "/forge/");
-    getWebDriver().findElement(By.cssSelector(".forge-import-material-menu")).click();
-    getWebDriver().findElement(By.cssSelector(".forge-import-material-menu .forge-connect-dropbox")).click();
-
+    loginGoogle();
+    navigate("/forge/");
+    waitAndClick(".forge-import-material-menu");
+    waitAndClick(".forge-import-material-menu .forge-connect-dropbox");
+    
     waitForUrlMatches(getWebDriver(), "^https://www.dropbox.com/1/oauth/authorize.*");
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.visibilityOfElementLocated(By.id("login-content")));
     getWebDriver().findElement(By.cssSelector("#login-content input[type=\"email\"]")).click();
