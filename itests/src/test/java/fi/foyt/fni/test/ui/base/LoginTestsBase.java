@@ -73,6 +73,8 @@ public class LoginTestsBase extends AbstractUITest {
 
   @Test
   public void testRegisterPasswordMismatch() {
+    acceptCookieDirective();
+    
     getWebDriver().get(getAppUrl(true) + "/login/");
     
     getWebDriver().findElement(By.cssSelector(".user-register-first-name")).sendKeys("Ärri");
