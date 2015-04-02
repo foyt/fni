@@ -8,17 +8,19 @@
     
 
     $('.sign-up-start-date,.sign-up-end-date').each(function(index, element) {
-      $(element).attr('type', 'text').datepicker({
-        altField : $(element).data('alt-field'),
-        altFormat : $.datepicker.ISO_8601
-      });
+      $(element).attr('type', 'text').datepicker();
       var date = $($(element).data('alt-field')).val();
       if (date) {
         $(element).datepicker('setDate', new Date(Date.parse(date)));
       }
+      
       $(element).change(function() {
-        if (!$(element).val()) {
-          $($(element).data('alt-field')).val('');
+        if (!$(this).val()) {
+          $($(this).data('alt-field')).val('');
+        } else {
+          var date = $(this).datepicker('getDate');
+          date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+          $($(this).data('alt-field')).val(date.toISOString().split('T')[0]);
         }
       });
     });
