@@ -67,6 +67,7 @@ public class ForgeFolderTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testOpenShareDialog() {
+    acceptCookieDirective();
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     navigate(FOLDER);
     waitForSelectorVisible(".forge-material[data-material-id=\"4\"] .forge-material-icon");
