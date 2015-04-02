@@ -3,3 +3,5 @@ compile.sh
 /.settings
 /.project
 /target/
+/google-drive-service-privatekey.p12
+/travis-encrypted.tar
