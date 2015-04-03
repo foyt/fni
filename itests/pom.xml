@@ -204,6 +204,11 @@
           <version>${h2.version}</version>
           <scope>test</scope>
         </dependency>
+
+        <dependency>
+          <groupId>fi.foyt.fni</groupId>
+          <artifactId>persistence</artifactId>
+        </dependency>
       </dependencies>
       <build>
         <plugins>
