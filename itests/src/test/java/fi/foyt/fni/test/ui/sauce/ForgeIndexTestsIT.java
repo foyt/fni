@@ -43,16 +43,6 @@ public class ForgeIndexTestsIT extends ForgeIndexTestsBase {
     getWebDriver().quit();
   }
   
-  @Override
-  public void testRemoveDialogLongText() {
-    if (!"safari".equals(browser)) {
-      super.testRemoveDialogLongText();
-    } else {
-      // FIXME: Test depends on moveToElement, which is not implemented
-      // on Safari WebDriver.
-    }
-  }
-  
   private String platform;
   private String browser;
   private String version;  
