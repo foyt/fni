@@ -71,7 +71,7 @@ public class SecurityFilter implements ContainerRequestFilter {
             requestContext.abortWith(Response.status(Status.FORBIDDEN).entity("Invalid access token, non-service token without authorization code").build());
             return;
           } else {
-            if (!secure.allowService()) {
+            if ((!secure.allowService()) && (!secure.allowNotLogged())) {
               requestContext.abortWith(Response.status(Status.FORBIDDEN).entity("Endpoint is not allowed for service accounts").build());
               return;
             } else {
