@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import com.saucelabs.common.SauceOnDemandAuthentication;
@@ -13,6 +14,7 @@ import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
 import fi.foyt.fni.test.ui.base.IllusionEventManageTemplatesTestsBase;
 
+@RunWith (Parameterized.class)
 public class IllusionEventManageTemplatesTestsIT extends IllusionEventManageTemplatesTestsBase {
 
   public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(getSauceUsername(), getSauceAccessKey());
