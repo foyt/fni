@@ -2,6 +2,9 @@ package fi.foyt.fni.rest.illusion;
 
 public enum OAuthScopes {
   
+  ILLUSION_LIST_GENRES,
+  ILLUSION_LIST_TYPES,
+  
   ILLUSION_LIST_EVENTS,
   ILLUSION_FIND_EVENT,
   ILLUSION_CREATE_EVENT,
