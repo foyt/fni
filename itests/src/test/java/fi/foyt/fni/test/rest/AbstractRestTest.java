@@ -3,6 +3,7 @@ package fi.foyt.fni.test.rest;
 import static com.jayway.restassured.RestAssured.given;
 import static org.junit.Assert.assertNotNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.config.ObjectMapperConfig;
 import com.jayway.restassured.config.RestAssuredConfig;
+import com.jayway.restassured.config.SSLConfig;
 import com.jayway.restassured.mapper.factory.Jackson2ObjectMapperFactory;
 import com.jayway.restassured.specification.RequestSpecification;
 
@@ -46,6 +48,13 @@ public class AbstractRestTest extends AbstractTest {
         }
       })
     );
+    
+    String trustStore = System.getProperty("javax.net.ssl.trustStore");
+    String trustStorePassword = System.getProperty("javax.net.ssl.trustStorePassword");
+    
+    if (StringUtils.isNotBlank(trustStore) && StringUtils.isNotBlank(trustStorePassword)) {
+      RestAssured.config.sslConfig(new SSLConfig().keystore(trustStore, trustStorePassword));
+    }
   }
 
   protected RequestSpecification givenPlain(String accessToken) {
