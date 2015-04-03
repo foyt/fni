@@ -47,7 +47,22 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
   }
   
   @Override
+  public void testStartWatch() throws MessagingException, IOException {
+    // TODO: Test disabled because it depends on websocket support (currently not supported by sauce connect)
+  }
+  
+  @Override
   public void testStopWatch() throws MessagingException, IOException {
+    // TODO: Test disabled because it depends on websocket support (currently not supported by sauce connect)
+  }
+  
+  @Override
+  public void testPost() throws Exception {
+    // TODO: Test disabled because it depends on websocket support (currently not supported by sauce connect)
+  }
+  
+  @Override
+  public void testNotification() throws MessagingException, IOException {
     // TODO: Test disabled because it depends on websocket support (currently not supported by sauce connect)
   }
   
