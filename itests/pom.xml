@@ -1672,6 +1672,8 @@
                 <it.sauce.username>${env.SAUCE_USERNAME}</it.sauce.username>
                 <it.sauce.accessKey>${env.SAUCE_ACCESS_KEY}</it.sauce.accessKey>
                 <it.sauce.tunnelId>${env.TRAVIS_JOB_NUMBER}</it.sauce.tunnelId>
+                <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
+                <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
               </systemPropertyVariables>
             </configuration>
             <executions>
