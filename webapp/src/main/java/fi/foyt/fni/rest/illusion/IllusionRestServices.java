@@ -102,6 +102,52 @@ public class IllusionRestServices {
   private OAuthAccessToken accessToken;
   
   /**
+   * Lists genres
+   * 
+   * @return Response
+   * @responseType java.util.List<fi.foyt.fni.rest.illusion.model.Genre>
+   */
+  @Path("/genres")
+  @GET
+  @Security (
+    allowNotLogged = true,
+    scopes = { OAuthScopes.ILLUSION_LIST_GENRES }
+  )
+  public Response listGenres() {
+    List<Genre> genres = illusionEventController.listGenres();
+     
+    if (genres.isEmpty()) {
+      return Response.status(Status.NO_CONTENT).build();
+    }
+    
+    return Response.ok(createRestModel(genres.toArray(new Genre[0])))
+        .build();
+  }
+  
+  /**
+   * Lists types
+   * 
+   * @return Response
+   * @responseType java.util.List<fi.foyt.fni.rest.illusion.model.EventType>
+   */
+  @Path("/types")
+  @GET
+  @Security (
+    allowNotLogged = true,
+    scopes = { OAuthScopes.ILLUSION_LIST_TYPES }
+  )
+  public Response listTtypes() {
+    List<IllusionEventType> types = illusionEventController.listTypes();
+     
+    if (types.isEmpty()) {
+      return Response.status(Status.NO_CONTENT).build();
+    }
+    
+    return Response.ok(createRestModel(types.toArray(new IllusionEventType[0])))
+        .build();
+  }
+  
+  /**
    * Creates new event
    * 
    * @param entity payload
@@ -140,6 +186,10 @@ public class IllusionRestServices {
       return Response.status(Status.BAD_REQUEST).entity("type could not be found").build();
     }
     
+    if (entity.getJoinMode() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("joinMode could not be found").build();
+    }
+    
     User user = null;
     if (!sessionController.isLoggedIn()) {
       if (accessToken == null) {
@@ -169,14 +219,20 @@ public class IllusionRestServices {
       signUpFeeCurrency = Currency.getInstance(entity.getSignUpFeeCurrency());
     }
     
-    List<Genre> genres = new ArrayList<>(entity.getGenreIds().size());
-    for (Long genreId : entity.getGenreIds()) {
-      Genre genre = illusionEventController.findGenreById(genreId);
-      if (genre == null) {
-        return Response.status(Status.INTERNAL_SERVER_ERROR).entity(String.format("Genre #%d could not be found", genreId)).build();
+    List<Genre> genres = null;
+
+    if (entity.getGenreIds() != null) {
+      genres = new ArrayList<>(entity.getGenreIds().size());
+      for (Long genreId : entity.getGenreIds()) {
+        Genre genre = illusionEventController.findGenreById(genreId);
+        if (genre == null) {
+          return Response.status(Status.INTERNAL_SERVER_ERROR).entity(String.format("Genre #%d could not be found", genreId)).build();
+        }
+        
+        genres.add(genre);
       }
-      
-      genres.add(genre);
+    } else {
+      genres = Collections.emptyList();
     }
     
     Date start = entity.getStart().toDate();
@@ -189,7 +245,7 @@ public class IllusionRestServices {
         start, end, entity.getAgeLimit(), entity.getBeginnerFriendly(), entity.getImageUrl(), 
         type, signUpStartDate, signUpEndDate, genres);
     
-    if (entity.getPublished()) {
+    if ((entity.getPublished() != null) && (entity.getPublished())) {
       illusionEventController.publishEvent(event);
     }
 
@@ -1525,6 +1581,34 @@ public class IllusionRestServices {
     }
     
     return result.toArray(new ForumPost[0]);
+  }
+  
+  private fi.foyt.fni.rest.illusion.model.Genre[] createRestModel(fi.foyt.fni.persistence.model.illusion.Genre... genres) {
+    List<fi.foyt.fni.rest.illusion.model.Genre> result = new ArrayList<>();
+    
+    for (fi.foyt.fni.persistence.model.illusion.Genre genre : genres) {
+      result.add(createRestModel(genre));
+    }
+    
+    return result.toArray(new fi.foyt.fni.rest.illusion.model.Genre[0]);
+  }
+  
+  private fi.foyt.fni.rest.illusion.model.Genre createRestModel(fi.foyt.fni.persistence.model.illusion.Genre genre) {
+    return new fi.foyt.fni.rest.illusion.model.Genre(genre.getId(), genre.getName());
+  }
+  
+  private fi.foyt.fni.rest.illusion.model.EventType[] createRestModel(fi.foyt.fni.persistence.model.illusion.IllusionEventType... types) {
+    List<fi.foyt.fni.rest.illusion.model.EventType> result = new ArrayList<>();
+    
+    for (fi.foyt.fni.persistence.model.illusion.IllusionEventType type : types) {
+      result.add(createRestModel(type));
+    }
+    
+    return result.toArray(new fi.foyt.fni.rest.illusion.model.EventType[0]);
+  }
+  
+  private fi.foyt.fni.rest.illusion.model.EventType createRestModel(fi.foyt.fni.persistence.model.illusion.IllusionEventType type) {
+    return new fi.foyt.fni.rest.illusion.model.EventType(type.getId(), type.getName());
   }
   
   private ForumPost createRestModel(fi.foyt.fni.persistence.model.forum.ForumPost forumPost) {
