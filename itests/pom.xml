@@ -1644,7 +1644,7 @@
                 <include>fi/foyt/fni/test/ui/sauce/**/*IT.java</include>
               </includes>
               <excludes>
-                <exclude>**/Illusion*IT.java</exclude>
+                <exclude>**/IllusionEventForumTestsIT.java</exclude>
               </excludes>
               <systemPropertyVariables>
                 <jboss.home>${wildfly.home}</jboss.home>
