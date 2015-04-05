@@ -1641,7 +1641,8 @@
             <configuration>
               <includes>
                 <include>fi/foyt/fni/test/rest/**/*IT.java</include>
-                <include>fi/foyt/fni/test/ui/sauce/**/*IT.java</include>
+                <!-- 
+                <include>fi/foyt/fni/test/ui/sauce/**/*IT.java</include> -->
               </includes>
               <systemPropertyVariables>
                 <jboss.home>${wildfly.home}</jboss.home>
