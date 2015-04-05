@@ -361,6 +361,10 @@ public class IllusionEventController {
       illusionEventGenreDAO.delete(genre);
     }
     
+    if (event.getForumTopic() != null) {
+      forumController.deleteTopic(event.getForumTopic());
+    }
+    
     illusionEventDAO.delete(event);
   }
   

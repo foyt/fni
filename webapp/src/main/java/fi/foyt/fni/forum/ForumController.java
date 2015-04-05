@@ -133,6 +133,18 @@ public class ForumController implements Serializable {
 	public List<ForumTopic> listTopicsByForum(Forum forum) {
 		return forumTopicDAO.listByForum(forum);
 	}	
+
+  public void deleteTopic(ForumTopic forumTopic) {
+    for (ForumTopicWatcher watcher : listForumTopicWatchers(forumTopic)) {
+      deleteTopicWatcher(watcher);
+    }
+    
+    for (ForumPost post : listPostsByTopic(forumTopic)) {
+      deletePost(post);
+    }
+    
+    forumTopicDAO.delete(forumTopic);
+  }
 	
 	public List<ForumTopic> listLatestForumTopicsByForum(Forum forum, int maxForumTopics) {
 		return forumPostDAO.listTopicsByForumSortByCreated(forum, 0, maxForumTopics);
