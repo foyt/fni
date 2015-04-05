@@ -83,9 +83,15 @@ public class UserRestServices {
     allowService = true,
     scopes = { OAuthScopes.USERS_CREATE }
   )
-  public Response createUser(fi.foyt.fni.rest.users.model.User entity, @QueryParam ("generateCredentials") @DefaultValue ("TRUE") Boolean generateCredentials, @QueryParam ("sendCredentials") @DefaultValue ("TRUE") Boolean sendCredentials) {
+  public Response createUser(fi.foyt.fni.rest.users.model.User entity, @QueryParam ("generateCredentials") @DefaultValue ("TRUE") Boolean generateCredentials, @QueryParam ("sendCredentials") @DefaultValue ("TRUE") Boolean sendCredentials, @QueryParam ("password") String password) {
     if (entity.getEmails() == null || entity.getEmails().isEmpty()) {
       return Response.status(Response.Status.BAD_REQUEST).entity("Email address is required").build();
+    }
+    
+    if (!generateCredentials) {
+      if (StringUtils.isBlank(password)) {
+        return Response.status(Response.Status.BAD_REQUEST).entity("password is required when generateCredentials is set to false").build();
+      }
     }
     
     Locale locale = null;
@@ -117,24 +123,27 @@ public class UserRestServices {
       userController.createUserEmail(user, email, Boolean.FALSE);
     }
     
+    String unencryptedPassword = null;
     if (generateCredentials) {
-      String generatedPassword = RandomStringUtils.randomAlphanumeric(8);
-      InternalAuth internalAuth = authenticationController.createInternalAuth(user, DigestUtils.md5Hex(generatedPassword));
-      // TODO: verification
-      authenticationController.verifyInternalAuth(internalAuth);
-      
-      if (sendCredentials) {
-        String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
-        String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
-        String subject = ExternalLocales.getText(locale, "rest.users.generatedPasswordEmailSubject");
-        String content = ExternalLocales.getText(locale, "rest.users.generatedPasswordEmailContent", generatedPassword);
-        try {
-          mailer.sendMail(fromMail, fromName, userController.getUserPrimaryEmail(user), userController.getUserDisplayName(user), subject, content, "text/plain");
-        } catch (MessagingException e) {
-          logger.log(Level.SEVERE, "Could not deliver email", e);
-        }
+      unencryptedPassword = RandomStringUtils.randomAlphanumeric(8);
+    } else {
+      unencryptedPassword = password;
+    }
+    
+    InternalAuth internalAuth = authenticationController.createInternalAuth(user, DigestUtils.md5Hex(unencryptedPassword));
+    // TODO: verification
+    authenticationController.verifyInternalAuth(internalAuth);
+    
+    if (sendCredentials) {
+      String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
+      String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
+      String subject = ExternalLocales.getText(locale, "rest.users.generatedPasswordEmailSubject");
+      String content = ExternalLocales.getText(locale, "rest.users.generatedPasswordEmailContent", unencryptedPassword);
+      try {
+        mailer.sendMail(fromMail, fromName, userController.getUserPrimaryEmail(user), userController.getUserDisplayName(user), subject, content, "text/plain");
+      } catch (MessagingException e) {
+        logger.log(Level.SEVERE, "Could not deliver email", e);
       }
-      
     }
     
     return Response.ok(createRestModel(user)).build();

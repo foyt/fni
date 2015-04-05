@@ -41,6 +41,7 @@ public class UsersRestTestsIT extends AbstractRestTest {
       
       givenJson(createServiceToken())
         .queryParam("generateCredentials", "false")
+        .queryParam("password", "pass")
         .body(user)
         .post("/users/users")
         .then()
@@ -48,7 +49,7 @@ public class UsersRestTestsIT extends AbstractRestTest {
       
       deleteUser(user.getEmails().get(0));
       
-      assertEquals(0, greenMail.getReceivedMessages().length);
+      assertEquals(1, greenMail.getReceivedMessages().length);
     } finally {
       greenMail.stop();
     } 
