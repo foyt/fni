@@ -1643,11 +1643,10 @@
                 <include>fi/foyt/fni/test/rest/**/*IT.java</include>
                 <!-- 
                 <include>fi/foyt/fni/test/ui/sauce/**/*IT.java</include>
- -->
+ -->     <!-- 
                 <include>fi/foyt/fni/test/ui/sauce/IllusionCreateEventTestsIT.java</include>
-                <!-- 
+           
                 <include>fi/foyt/fni/test/ui/sauce/IllusionEventEditTemplateTestsIT.java</include>
-                <include>fi/foyt/fni/test/ui/sauce/IllusionEventForumTestsIT.java</include>
                 <include>fi/foyt/fni/test/ui/sauce/IllusionEventGroupsTestsIT.java</include>
                 <include>fi/foyt/fni/test/ui/sauce/IllusionEventIndexTestsIT.java</include>
                 <include>fi/foyt/fni/test/ui/sauce/IllusionEventManageTemplatesTestsIT.java</include>
@@ -1657,6 +1656,7 @@
                 <include>fi/foyt/fni/test/ui/sauce/IllusionEventParticipantsTestsIT.java</include>
                 <include>fi/foyt/fni/test/ui/sauce/IllusionEventSettingsTestsIT.java</include>
                 <include>fi/foyt/fni/test/ui/sauce/IllusionIndexTestsIT.java</include> -->
+                <include>fi/foyt/fni/test/ui/sauce/IllusionEventForumTestsIT.java</include>
               </includes>
               <systemPropertyVariables>
                 <jboss.home>${wildfly.home}</jboss.home>
