@@ -1641,9 +1641,11 @@
             <configuration>
               <includes>
                 <include>fi/foyt/fni/test/rest/**/*IT.java</include>
-                <!-- 
-                <include>fi/foyt/fni/test/ui/sauce/**/*IT.java</include> -->
+                <include>fi/foyt/fni/test/ui/sauce/**/*IT.java</include>
               </includes>
+              <excludes>
+                <exclude>**/Illusion*IT.java</exclude>
+              </excludes>
               <systemPropertyVariables>
                 <jboss.home>${wildfly.home}</jboss.home>
                 <module.path>${wildfly.home}/modules</module.path>
