@@ -1644,11 +1644,11 @@
                 <!-- 
                 <include>fi/foyt/fni/test/ui/sauce/**/*IT.java</include>
  -->     <!-- 
-                <include>fi/foyt/fni/test/ui/sauce/IllusionCreateEventTestsIT.java</include>
+                <include>fi/foyt/fni/test/ui/sauce/IllusionCreateEventTestsIT.java</include>-->
            
-                <include>fi/foyt/fni/test/ui/sauce/IllusionEventEditTemplateTestsIT.java</include>-->
-                <include>fi/foyt/fni/test/ui/sauce/IllusionEventGroupsTestsIT.java</include> 
+                <include>fi/foyt/fni/test/ui/sauce/IllusionEventEditTemplateTestsIT.java</include>
                 <!-- 
+                <include>fi/foyt/fni/test/ui/sauce/IllusionEventGroupsTestsIT.java</include> 
                 <include>fi/foyt/fni/test/ui/sauce/IllusionEventIndexTestsIT.java</include>
                 <include>fi/foyt/fni/test/ui/sauce/IllusionEventManageTemplatesTestsIT.java</include>
                 <include>fi/foyt/fni/test/ui/sauce/IllusionEventMaterialsTestsIT.java</include>
