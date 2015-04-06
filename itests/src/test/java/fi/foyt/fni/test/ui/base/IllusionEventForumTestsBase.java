@@ -197,10 +197,12 @@ public class IllusionEventForumTestsBase extends AbstractIllusionUITest {
     clickSelector(".illusion-forum-post-reply");
     waitForSelectorVisible(".illusion-forum-posts .illusion-forum-post:nth-child(5)");
     assertSelectorTextIgnoreCase(".illusion-forum-posts .illusion-forum-post:nth-child(5) .illusion-forum-post-content p", "post content");
+    clickSelector(".illusion-forum-stop-watching-link");
+    waitForSelectorVisible(".illusion-forum-watch-link");
   }
   
   @Test
-  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-organizer", "event-forum", "event-forum-visible", "event-forum-watchers"})
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-organizer", "event-forum", "event-forum-visible" })
   public void testWatchNotLogged() throws MessagingException, IOException {
     navigate("/illusion/event/openevent/event-forum");
     assertSelectorNotVisible(".illusion-forum-stop-watching-link");
@@ -227,6 +229,9 @@ public class IllusionEventForumTestsBase extends AbstractIllusionUITest {
       
       assertEquals(1, greenMail.getReceivedMessages().length);
       assertEquals("Notification about forum post", greenMail.getReceivedMessages()[0].getSubject());
+
+      clickSelector(".illusion-forum-stop-watching-link");
+      waitForSelectorVisible(".illusion-forum-watch-link");
     } finally {
       greenMail.stop();
     } 
@@ -266,6 +271,13 @@ public class IllusionEventForumTestsBase extends AbstractIllusionUITest {
       
       assertEquals(1, greenMail.getReceivedMessages().length);
       assertEquals("Notification about forum post", greenMail.getReceivedMessages()[0].getSubject());
+      clickSelector(".illusion-forum-stop-watching-link");
+      waitForSelectorVisible(".illusion-forum-watch-link");
+
+      logout();
+      loginInternal("user@foyt.fi", "pass");
+      clickSelector(".illusion-forum-stop-watching-link");
+      waitForSelectorVisible(".illusion-forum-watch-link");
     } finally {
       greenMail.stop();
     } 
@@ -310,6 +322,9 @@ public class IllusionEventForumTestsBase extends AbstractIllusionUITest {
       waitForSelectorVisible(".illusion-forum-posts .illusion-forum-post");
       
       assertEquals(0, greenMail.getReceivedMessages().length);
+      
+      clickSelector(".illusion-forum-stop-watching-link");
+      waitForSelectorVisible(".illusion-forum-watch-link");
     } finally {
       greenMail.stop();
     } 

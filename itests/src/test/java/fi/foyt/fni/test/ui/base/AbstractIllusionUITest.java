@@ -1,20 +1,10 @@
 package fi.foyt.fni.test.ui.base;
 
-import static org.junit.Assert.assertEquals;
-
-import java.sql.SQLException;
-
-import org.junit.After;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class AbstractIllusionUITest extends AbstractUITest {
 
   private static final String CUSTOM_EVENT_HOST = "custom-test.forgeandillusion.net";
-  
-  @After
-  public void noMailWatchers() throws SQLException, Exception {
-    assertEquals(new Integer(0), countForumTopicWatchers());
-  }
   
   protected String getCustomEventUrl() {
     return "http://" + CUSTOM_EVENT_HOST + ':' + getPortHttp() + '/' + getCtxPath();

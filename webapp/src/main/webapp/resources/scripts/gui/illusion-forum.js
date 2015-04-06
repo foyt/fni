@@ -173,7 +173,11 @@
         getIllusionClient().events.forumPosts.create(this.options.eventId, {'content': content}).done(function (data, textStatus, xhrObject){
           if (xhrObject.status !== 200) {
             $('.notifications').notifications('notification', 'error', textStatus);
+          } else {
+            $('.illusion-forum-watch-link').css('display', 'none');
+            $('.illusion-forum-stop-watching-link').css('display', 'block');      
           }
+          
           $('.illusion-forum-post-editor')
             .forumPostEditor('data', '')
             .forumPostEditor('readOnly', false);
