@@ -131,6 +131,11 @@ public abstract class AbstractTest {
     
     return getClass().getMethod(methodName, new Class<?>[] {});
   }
+
+  @After
+  public void dataClean() throws Exception {
+    assertEquals("ForumTopicWatchers not properly cleaned", Integer.valueOf(0), countForumTopicWatchers());
+  }
   
   private SqlSet getSqlSet(Method method, String id) {
     DefineSqlSets defineSqlSets = method.getDeclaringClass().getAnnotation(DefineSqlSets.class);
@@ -421,10 +426,13 @@ public abstract class AbstractTest {
   }
 
   protected void deleteIllusionEventByUrl(String urlName) throws Exception {
+    executeSql("delete from ForumTopicWatcher where topic_id = (select forumTopic_id from IllusionEvent where urlName = ?)", urlName);
+    executeSql("update ForumTopic set urlName = 'DELETE' where id = (select forumTopic_id from IllusionEvent where urlName = ?)", urlName);
     executeSql("delete from IllusionEventGenre where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
     executeSql("delete from IllusionEventParticipant where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
     executeSql("update Material set type = 'DELETE' where id in (select folder_id from IllusionEvent where urlName = ?) or parentFolder_id in (select folder_id from IllusionEvent where urlName = ?)", urlName, urlName);
     executeSql("delete from IllusionEvent where urlName = ?", urlName);
+    executeSql("delete from ForumTopic where urlName = 'DELETE'");
     executeSql("update Material set parentFolder_id = null where id in (select id from Material where type = 'DELETE')");
     executeSql("delete from IllusionEventDocument where id in (select id from Material where type = 'DELETE')");
     executeSql("delete from IllusionEventFolder where id in (select id from Material where type = 'DELETE')");

@@ -276,6 +276,8 @@ public class IllusionEventForumTestsBase extends AbstractIllusionUITest {
 
       logout();
       loginInternal("user@foyt.fi", "pass");
+      navigate("/illusion/event/openevent/event-forum");
+
       clickSelector(".illusion-forum-stop-watching-link");
       waitForSelectorVisible(".illusion-forum-watch-link");
     } finally {
