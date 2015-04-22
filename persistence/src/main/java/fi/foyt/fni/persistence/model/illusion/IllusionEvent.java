@@ -115,6 +115,14 @@ public class IllusionEvent {
     this.signUpFeeCurrency = signUpFeeCurrency;
   }
   
+  public String getSignUpFeeText() {
+    return signUpFeeText;
+  }
+  
+  public void setSignUpFeeText(String signUpFeeText) {
+    this.signUpFeeText = signUpFeeText;
+  }
+  
   public String getLocation() {
     return location;
   }
@@ -250,6 +258,8 @@ public class IllusionEvent {
   private Double signUpFee;
   
   private Currency signUpFeeCurrency; 
+  
+  private String signUpFeeText;
   
   private String location;
   
