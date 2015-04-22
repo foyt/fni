@@ -1,6 +1,7 @@
 package fi.foyt.fni.view.illusion;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 
@@ -77,7 +78,9 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     signUpEndDate = formatDate(illusionEvent.getSignUpEndDate());
     typeId = illusionEvent.getType() != null ? illusionEvent.getType().getId() : null;
     genreIds = new ArrayList<Long>();
-    
+    signUpFeeCurrency = illusionEvent.getSignUpFeeCurrency() != null ? illusionEvent.getSignUpFeeCurrency().getCurrencyCode() : null;
+    signUpFeeText = illusionEvent.getSignUpFeeText();
+
     List<IllusionEventGenre> eventGenres = illusionEventController.listIllusionEventGenres(illusionEvent);
     for (IllusionEventGenre eventGenre : eventGenres) {
       genreIds.add(eventGenre.getGenre().getId());
@@ -230,9 +233,32 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   public List<SelectItem> getTypeSelectItems() {
     return typeSelectItems;
   }
+  
+  public String getSignUpFeeCurrency() {
+    return signUpFeeCurrency;
+  }
+  
+  public void setSignUpFeeCurrency(String signUpFeeCurrency) {
+    this.signUpFeeCurrency = signUpFeeCurrency;
+  }
+  
+  public String getSignUpFeeText() {
+    return signUpFeeText;
+  }
+  
+  public void setSignUpFeeText(String signUpFeeText) {
+    this.signUpFeeText = signUpFeeText;
+  }
 
   public String save() throws Exception {
     IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
+    
+    String signUpFeeText = getSignUpFeeText();
+    Currency signUpFeeCurrency = null;
+
+    if (StringUtils.isNotBlank(signUpFeeText)) {
+      signUpFeeCurrency = Currency.getInstance(getSignUpFeeCurrency());
+    }
     
     illusionEventController.updateIllusionEventName(illusionEvent, getName());
     illusionEventController.updateIllusionEventDescription(illusionEvent, getDescription());
@@ -245,6 +271,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     illusionEventController.updateIllusionEventAgeLimit(illusionEvent, getAgeLimit());
     illusionEventController.updateIllusionEventBeginnerFriendly(illusionEvent, getBeginnerFriendly());
     illusionEventController.updateIllusionEventImageUrl(illusionEvent, getImageUrl());
+    illusionEventController.updateEventSignUpFee(illusionEvent, signUpFeeText, illusionEvent.getSignUpFee(), signUpFeeCurrency);
     
     if (StringUtils.isNotBlank(getDomain()) && !illusionEventController.isEventAllowedDomain(getDomain())) {
       FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.customDomainInvalid"));
@@ -308,6 +335,8 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   private String signUpEndDate;
   private List<Genre> genres;
   private Long typeId;
+  private String signUpFeeCurrency;
+  private String signUpFeeText;
   private List<Long> genreIds;
   private List<SelectItem> typeSelectItems;
 }

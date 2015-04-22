@@ -71,6 +71,31 @@ h3 {
   margin-bottom: 8px;
 }
 
+.illusion-event-settings-sign-up-fee-info {
+  display: inline-block;
+  font-size: 11px;
+  font-family: $default-font;
+  margin-left: 2px;
+  vertical-align: middle;
+}
+
+.illusion-event-settings-sign-up-fee-info:before {
+  content: '(';  
+}
+
+.illusion-event-settings-sign-up-fee-info:after {
+  content: ')';  
+}
+
+.illusion-event-settings-field input[type="text"].illusion-event-settings-sign-up-fee {
+  width: 235px;
+}
+
+.illusion-event-settings-field select.illusion-event-settings-sign-up-fee-currency {
+  width: 60px;
+  margin-left: 5px;
+}
+
 .illusion-event-settings-field input.datepicker {
   width: 170px;
   margin-left: -5px;

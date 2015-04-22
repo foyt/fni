@@ -326,8 +326,9 @@ public class IllusionEventController {
     return illusionEventDAO.updateDomain(illusionEvent, StringUtils.isNotBlank(domain) ? domain : null);
   }
 
-  public IllusionEvent updateEventSignUpFee(IllusionEvent illusionEvent, Double signUpFee, Currency signUpFeeCurrency) {
+  public IllusionEvent updateEventSignUpFee(IllusionEvent illusionEvent, String signUpFeeText, Double signUpFee, Currency signUpFeeCurrency) {
     illusionEventDAO.updateSignUpFee(illusionEvent, signUpFee);
+    illusionEventDAO.updateSignUpFeeText(illusionEvent, signUpFeeText);
     illusionEventDAO.updateSignUpFeeCurrency(illusionEvent, signUpFeeCurrency);
     return illusionEvent;
   }

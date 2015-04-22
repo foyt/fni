@@ -98,6 +98,15 @@
 	                <f:selectItems value="#{illusionEventSettingsBackingBean.typeSelectItems}"/>
 	              </h:selectOneMenu>
 	            </h:panelGroup>
+            
+              <h:panelGroup layout="block" styleClass="illusion-event-settings-field" >
+                <h:outputLabel value="#{locales['illusion.eventSettings.signUpFeeLabel']}" />
+                <input class="illusion-event-settings-sign-up-fee" type="text" jsf:value="#{illusionEventSettingsBackingBean.signUpFeeText}" pattern="[0-9]{1,}(\s{0,1}\-\s{0,1}[0-9]{1,}){0,1}"/>
+                <h:selectOneMenu styleClass="illusion-event-settings-sign-up-fee-currency" value="#{illusionEventSettingsBackingBean.signUpFeeCurrency}">
+                  <f:selectItem itemValue="EUR" itemLabel="EUR"/>
+                </h:selectOneMenu>
+                <div class="illusion-event-settings-sign-up-fee-info">#{locales['illusion.eventSettings.signUpFeeHelp']}</div>
+              </h:panelGroup>
                
               <h:panelGroup layout="block" styleClass="illusion-event-settings-field">
                 <h:outputLabel value="#{locales['illusion.eventSettings.descriptionLabel']}" />

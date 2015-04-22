@@ -252,7 +252,12 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     illusionEvent.setJoinMode(joinMode);
     return persist(illusionEvent);
   }
-  
+
+  public IllusionEvent updateSignUpFeeText(IllusionEvent illusionEvent, String signUpFeeText) {
+    illusionEvent.setSignUpFeeText(signUpFeeText);
+    return persist(illusionEvent);
+  }
+
   public IllusionEvent updateSignUpFee(IllusionEvent illusionEvent, Double signUpFee) {
     illusionEvent.setSignUpFee(signUpFee);
     return persist(illusionEvent);
