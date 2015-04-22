@@ -268,7 +268,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   @SqlSets({"basic-users","service-client", "illusion-basic"})
   public void testEventCreate() throws Exception {
     IllusionEvent event = new IllusionEvent(null, Boolean.TRUE, "Test Event", "Event for testing", null, null, null, IllusionEventJoinMode.OPEN, 
-        null, null, "Twilight zone", 16, Boolean.TRUE, null, 1l, null, null, null, new DateTime(2015, 6, 7, 0, 0, 0, 0), new DateTime(2015, 6, 7, 0, 0, 0, 0), new ArrayList<Long>());
+        null, null, null, "Twilight zone", 16, Boolean.TRUE, null, 1l, null, null, null, new DateTime(2015, 6, 7, 0, 0, 0, 0), new DateTime(2015, 6, 7, 0, 0, 0, 0), new ArrayList<Long>());
     
     Response response = givenJson(createServiceToken())
       .body(event)
@@ -311,7 +311,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     String token = createServiceToken();
     
     IllusionEvent event = new IllusionEvent(null, Boolean.FALSE, "To be published", "Event to be published", null, null, null, IllusionEventJoinMode.OPEN, 
-        null, null, "Location", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
+        null, null, null, "Location", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
         null, new DateTime(2015, 6, 7, 8, 9, 0, 0), new DateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
     
     Response createResponse = givenJson(token)
@@ -354,7 +354,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     String token = createServiceToken();
     
     IllusionEvent event = new IllusionEvent(null, Boolean.TRUE, "To be published", "Event to be published", null, null, null, IllusionEventJoinMode.OPEN, 
-        null, null, "Location", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
+        null, null, null, "Location", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
         null, new DateTime(2015, 6, 7, 8, 9, 0, 0), new DateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
     
     Response createResponse = givenJson(token)
@@ -397,7 +397,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     String token = createServiceToken();
     
     IllusionEvent createEvent = new IllusionEvent(null, Boolean.TRUE, "To be modified", "Event to be modified", null, null, null, IllusionEventJoinMode.OPEN, 
-        null, null, "Unmodified location", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
+        null, null, null, "Unmodified location", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
         null, new DateTime(2015, 6, 7, 8, 9, 0, 0), new DateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
     
     Response createResponse = givenJson(token)
@@ -432,7 +432,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     Long id = createResponse.body().jsonPath().getLong("id");
     
     IllusionEvent updateEvent = new IllusionEvent(id, Boolean.TRUE, "Changed", "Changed description", null, null, null, IllusionEventJoinMode.APPROVE, 
-        5.30, "EUR", "Central Park", 18, Boolean.FALSE, "http://www.fake.com/image.png", 2l, 
+        null, 5.30, "EUR", "Central Park", 18, Boolean.FALSE, "http://www.fake.com/image.png", 2l, 
         new DateTime(2020, 6, 7, 0, 0, 0, 0), new DateTime(2020, 7, 8, 0, 0, 0, 0), "www.customized.com", 
         new DateTime(2020, 9, 7, 0, 0, 0, 0), new DateTime(2020, 10, 8, 0, 0, 0, 0), Arrays.asList(2l));
     
@@ -480,7 +480,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   @SqlSets({"basic-users", "service-client", "illusion-basic"})
   public void testEventCreateWithDatesAndTimes() throws Exception {
     IllusionEvent event = new IllusionEvent(null, Boolean.TRUE, "Test Event", "Event for testing", null, null, null, IllusionEventJoinMode.OPEN, 
-        null, null, "Twilight zone", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
+        null, null, null, "Twilight zone", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
         null, new DateTime(2015, 6, 7, 8, 9, 0, 0), new DateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
     
     Response response = givenJson(createServiceToken())

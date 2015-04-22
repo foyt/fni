@@ -12,7 +12,7 @@ public class IllusionEvent {
   }
   
   public IllusionEvent(Long id, Boolean published, String name, String description, DateTime created, String urlName, String xmppRoom, IllusionEventJoinMode joinMode,
-      Double signUpFee, String signUpFeeCurrency, String location, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, Long typeId,
+      String signUpFeeText, Double signUpFee, String signUpFeeCurrency, String location, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, Long typeId,
       DateTime signUpStartDate, DateTime signUpEndDate, String domain, DateTime start, DateTime end, List<Long> genreIds) {
     this.id = id;
     this.published = published;
@@ -22,6 +22,7 @@ public class IllusionEvent {
     this.urlName = urlName;
     this.xmppRoom = xmppRoom;
     this.joinMode = joinMode;
+    this.signUpFeeText = signUpFeeText;
     this.signUpFee = signUpFee;
     this.signUpFeeCurrency = signUpFeeCurrency;
     this.location = location;
@@ -141,6 +142,19 @@ public class IllusionEvent {
 
   public void setJoinMode(IllusionEventJoinMode joinMode) {
     this.joinMode = joinMode;
+  }
+  
+  /**
+   * Returns event's sign-up fee free text
+   * 
+   * @return event's sign-up fee free text
+   */
+  public String getSignUpFeeText() {
+    return signUpFeeText;
+  }
+  
+  public void setSignUpFeeText(String signUpFeeText) {
+    this.signUpFeeText = signUpFeeText;
   }
 
   /**
@@ -322,6 +336,7 @@ public class IllusionEvent {
   private String urlName;
   private String xmppRoom;
   private IllusionEventJoinMode joinMode;
+  private String signUpFeeText;
   private Double signUpFee;
   private String signUpFeeCurrency;
   private String location;

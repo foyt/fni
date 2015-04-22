@@ -241,8 +241,8 @@ public class IllusionRestServices {
     Date signUpEndDate = toDate(entity.getSignUpEndDate());
     
     IllusionEvent event = illusionEventController.createIllusionEvent(user, sessionController.getLocale(), entity.getLocation(), 
-        entity.getName(), entity.getDescription(), entity.getJoinMode(), new Date(), signUpFee, signUpFeeCurrency, 
-        start, end, entity.getAgeLimit(), entity.getBeginnerFriendly(), entity.getImageUrl(), 
+        entity.getName(), entity.getDescription(), entity.getJoinMode(), new Date(), signUpFee, entity.getSignUpFeeText(), 
+        signUpFeeCurrency, start, end, entity.getAgeLimit(), entity.getBeginnerFriendly(), entity.getImageUrl(), 
         type, signUpStartDate, signUpEndDate, genres);
     
     if ((entity.getPublished() != null) && (entity.getPublished())) {
@@ -394,12 +394,13 @@ public class IllusionRestServices {
     
     Double signUpFee = entity.getSignUpFee();
     Currency signUpFeeCurrency = null;
+    String signUpFeeText = entity.getSignUpFeeText();
 
     if (signUpFee != null && signUpFee <= 0) {
       signUpFee = null;
     }
 
-    if (signUpFee != null) {
+    if ((signUpFee != null) || (StringUtils.isNotBlank(signUpFeeText))) {
       signUpFeeCurrency = Currency.getInstance(entity.getSignUpFeeCurrency());
     }
     
@@ -426,7 +427,7 @@ public class IllusionRestServices {
     illusionEventController.updateIllusionEventImageUrl(event, entity.getImageUrl());
     illusionEventController.updateEventGenres(event, genres);
     illusionEventController.updateEventDomain(event, entity.getDomain());
-    illusionEventController.updateEventSignUpFee(event, signUpFee, signUpFeeCurrency);
+    illusionEventController.updateEventSignUpFee(event, signUpFeeText, signUpFee, signUpFeeCurrency);
     illusionEventController.updatePublished(event, entity.getPublished());
     
     return Response.noContent().build();
@@ -1534,6 +1535,7 @@ public class IllusionRestServices {
     Long typeId = illusionEvent.getType() != null ? illusionEvent.getType().getId() : null;
     DateTime signUpStartDate = getDateAsDateTime(illusionEvent.getSignUpStartDate());
     DateTime signUpEndDate = getDateAsDateTime(illusionEvent.getSignUpEndDate());
+    String signUpFeeText = illusionEvent.getSignUpFeeText();
     
     List<IllusionEventGenre> genres = illusionEventController.listIllusionEventGenres(illusionEvent);
     
@@ -1546,7 +1548,7 @@ public class IllusionRestServices {
     DateTime end = new DateTime(illusionEvent.getEnd().getTime());
     
     return new fi.foyt.fni.rest.illusion.model.IllusionEvent(illusionEvent.getId(), illusionEvent.getPublished(), illusionEvent.getName(), illusionEvent.getDescription(), 
-        getDateAsDateTime(illusionEvent.getCreated()), illusionEvent.getUrlName(), illusionEvent.getXmppRoom(), illusionEvent.getJoinMode(), 
+        getDateAsDateTime(illusionEvent.getCreated()), illusionEvent.getUrlName(), illusionEvent.getXmppRoom(), illusionEvent.getJoinMode(), signUpFeeText,
         illusionEvent.getSignUpFee(), signUpFeeCurrency, illusionEvent.getLocation(), illusionEvent.getAgeLimit(), illusionEvent.getBeginnerFriendly(),
         illusionEvent.getImageUrl(), typeId, signUpStartDate, signUpEndDate, illusionEvent.getDomain(), start, end, genreIds);
   }
