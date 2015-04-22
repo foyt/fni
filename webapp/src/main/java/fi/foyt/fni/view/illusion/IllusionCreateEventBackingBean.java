@@ -204,16 +204,17 @@ public class IllusionCreateEventBackingBean {
     }
 
     Double signUpFee = getSignUpFee();
+    String signUpFeeText = getSignUpFeeText();
     Currency signUpFeeCurrency = null;
 
     if (signUpFee != null && signUpFee <= 0) {
       signUpFee = null;
     }
 
-    if (signUpFee != null) {
+    if ((signUpFee != null) || (StringUtils.isNotBlank(signUpFeeText))) {
       signUpFeeCurrency = Currency.getInstance(getSignUpFeeCurrency());
     }
-
+    
     IllusionEventType type = illusionEventController.findTypeById(getTypeId());
     Date signUpStartDate = parseDate(getSignUpStartDate());
     Date signUpEndDate = parseDate(getSignUpEndDate());
@@ -231,7 +232,7 @@ public class IllusionCreateEventBackingBean {
     Date end = parseDate(getEnd());
 
     IllusionEvent event = illusionEventController.createIllusionEvent(loggedUser, sessionController.getLocale(), getLocation(), getName(), 
-        getDescription(), getJoinMode(), now, signUpFee, getSignUpFeeText(), signUpFeeCurrency, start, end, 
+        getDescription(), getJoinMode(), now, signUpFee, signUpFeeText, signUpFeeCurrency, start, end, 
         getAgeLimit(), getBeginnerFriendly(), getImageUrl(), type, signUpStartDate, signUpEndDate, genres);
 
     // Add organizer
