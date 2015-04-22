@@ -62,6 +62,11 @@ public class SecurityFilter implements ContainerRequestFilter {
           return;
         }
         
+        if ((System.currentTimeMillis() / 1000l) > accessToken.getExpires()) {
+          requestContext.abortWith(Response.status(Status.FORBIDDEN).entity("Token expired").build());
+          return;
+        } 
+        
         ResteasyProviderFactory.pushContext(OAuthAccessToken.class, accessToken);
 
         if (accessToken.getAuthorizationCode() != null) {
