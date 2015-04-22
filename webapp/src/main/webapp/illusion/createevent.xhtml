@@ -103,14 +103,15 @@
               </h:selectOneMenu>
             </h:panelGroup>
             
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field illusion-create-event-sign-up-fee-field" style="display: none">
+            <h:panelGroup layout="block" styleClass="illusion-create-event-field illusion-create-event-sign-up-fee-field" >
               <h:outputLabel value="#{locales['illusion.createEvent.signUpFeeLabel']}" />
-              <input type="number" min="0" step="0.01" jsf:value="#{illusionCreateEventBackingBean.signUpFee}"/>
-              <h:selectOneMenu value="#{illusionCreateEventBackingBean.signUpFeeCurrency}">
+              <input class="illusion-create-event-sign-up-fee" type="text" jsf:value="#{illusionCreateEventBackingBean.signUpFeeText}" pattern="[0-9]{1,}(\s{0,1}\-\s{0,1}[0-9]{1,}){0,1}"/>
+              <h:selectOneMenu styleClass="illusion-create-event-sign-up-fee-currency" value="#{illusionCreateEventBackingBean.signUpFeeCurrency}">
                 <f:selectItem itemValue="EUR" itemLabel="EUR"/>
               </h:selectOneMenu>
+              <div class="illusion-create-event-sign-up-fee-info">#{locales['illusion.createEvent.signUpFeeHelp']}</div>
             </h:panelGroup>
-             
+            
             <h:panelGroup layout="block" styleClass="illusion-create-event-field">
               <h:outputLabel value="#{locales['illusion.createEvent.descriptionLabel']}" />
               <h:inputTextarea styleClass="illusion-create-event-description" id="description" value="#{illusionCreateEventBackingBean.description}"/>

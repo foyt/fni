@@ -71,6 +71,15 @@ h3 {
   margin-bottom: 8px;
 }
 
+.illusion-create-event-field input[type="text"].illusion-create-event-sign-up-fee {
+  width: 235px;
+}
+
+.illusion-create-event-field select.illusion-create-event-sign-up-fee-currency {
+  width: 60px;
+  margin-left: 5px;
+}
+
 .illusion-create-event-field textarea {
   height: 120px;
   width: 300px;
@@ -108,7 +117,7 @@ h3 {
   margin-bottom: 8px;
 }
 
-.timezone {
+.timezone, .illusion-create-event-sign-up-fee-info {
   display: inline-block;
   font-size: 11px;
   font-family: $default-font;
@@ -116,11 +125,11 @@ h3 {
   vertical-align: middle;
 }
 
-.timezone:before {
+.timezone:before, .illusion-create-event-sign-up-fee-info:before {
   content: '(';  
 }
 
-.timezone:after {
+.timezone:after, .illusion-create-event-sign-up-fee-info:after {
   content: ')';  
 }
 

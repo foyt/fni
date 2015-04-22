@@ -50,6 +50,7 @@ public class IllusionCreateEventBackingBean {
   public void init() {
     signUpFee = null;
     signUpFeeCurrency = systemSettingsController.getDefaultCurrency().getCurrencyCode();
+    signUpFeeText = null;
 
     List<IllusionEventType> eventTypes = illusionEventController.listTypes();
     typeSelectItems = new ArrayList<>(eventTypes.size());
@@ -106,6 +107,14 @@ public class IllusionCreateEventBackingBean {
 
   public void setSignUpFeeCurrency(String signUpFeeCurrency) {
     this.signUpFeeCurrency = signUpFeeCurrency;
+  }
+  
+  public String getSignUpFeeText() {
+    return signUpFeeText;
+  }
+  
+  public void setSignUpFeeText(String signUpFeeText) {
+    this.signUpFeeText = signUpFeeText;
   }
   
   public String getStart() {
@@ -222,7 +231,7 @@ public class IllusionCreateEventBackingBean {
     Date end = parseDate(getEnd());
 
     IllusionEvent event = illusionEventController.createIllusionEvent(loggedUser, sessionController.getLocale(), getLocation(), getName(), 
-        getDescription(), getJoinMode(), now, signUpFee, signUpFeeCurrency, start, end, 
+        getDescription(), getJoinMode(), now, signUpFee, getSignUpFeeText(), signUpFeeCurrency, start, end, 
         getAgeLimit(), getBeginnerFriendly(), getImageUrl(), type, signUpStartDate, signUpEndDate, genres);
 
     // Add organizer
@@ -247,6 +256,7 @@ public class IllusionCreateEventBackingBean {
   private IllusionEventJoinMode joinMode;
   private Double signUpFee;
   private String signUpFeeCurrency;
+  private String signUpFeeText;
   private String start;
   private String end;
   private Integer ageLimit;
