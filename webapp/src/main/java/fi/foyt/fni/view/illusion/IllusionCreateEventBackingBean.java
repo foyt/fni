@@ -19,6 +19,7 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.ocpsoft.rewrite.annotation.Join;
 
 import fi.foyt.fni.illusion.IllusionEventController;
+import fi.foyt.fni.larpkalenteri.UnsupportedTypeException;
 import fi.foyt.fni.persistence.model.illusion.Genre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
@@ -59,7 +60,7 @@ public class IllusionCreateEventBackingBean {
     }
 
     genres = illusionEventController.listGenres();
-}
+  }
 
   public String getName() {
     return name;
@@ -83,6 +84,22 @@ public class IllusionCreateEventBackingBean {
   
   public void setLocation(String location) {
     this.location = location;
+  }
+  
+  public Double getLocationLat() {
+    return locationLat;
+  }
+  
+  public void setLocationLat(Double locationLat) {
+    this.locationLat = locationLat;
+  }
+  
+  public Double getLocationLon() {
+    return locationLon;
+  }
+  
+  public void setLocationLon(Double locationLon) {
+    this.locationLon = locationLon;
   }
   
   public IllusionEventJoinMode getJoinMode() {
@@ -157,6 +174,14 @@ public class IllusionCreateEventBackingBean {
     this.beginnerFriendly = beginnerFriendly;
   }
 
+  public Boolean getLarpKalenteriSync() {
+    return larpKalenteriSync;
+  }
+  
+  public void setLarpKalenteriSync(Boolean larpKalenteriSync) {
+    this.larpKalenteriSync = larpKalenteriSync;
+  }
+
   public String getSignUpStartDate() {
     return signUpStartDate;
   }
@@ -218,7 +243,6 @@ public class IllusionCreateEventBackingBean {
     IllusionEventType type = illusionEventController.findTypeById(getTypeId());
     Date signUpStartDate = parseDate(getSignUpStartDate());
     Date signUpEndDate = parseDate(getSignUpEndDate());
-    
     List<Genre> genres = new ArrayList<>();
     
     for (Long genreId : genreIds) {
@@ -238,6 +262,14 @@ public class IllusionCreateEventBackingBean {
     // Add organizer
     
     illusionEventController.createIllusionEventParticipant(loggedUser, event, IllusionEventParticipantRole.ORGANIZER);
+    
+    if (getLarpKalenteriSync()) {
+      try {
+        illusionEventController.updateLarpKalenteriEvent(event, getLocationLat(), getLocationLon());
+      } catch (UnsupportedTypeException e) {
+        FacesUtils.addPostRedirectMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.createEvent.eventTypeNotSynchronizableToLarpKalenteri", type.getName()));
+      }
+    }
 
     return "/illusion/event.jsf?faces-redirect=true&urlName=" + event.getUrlName();
   }
@@ -254,6 +286,8 @@ public class IllusionCreateEventBackingBean {
   private String name;
   private String description;
   private String location;
+  private Double locationLat;
+  private Double locationLon;
   private IllusionEventJoinMode joinMode;
   private Double signUpFee;
   private String signUpFeeCurrency;
@@ -263,6 +297,7 @@ public class IllusionCreateEventBackingBean {
   private Integer ageLimit;
   private String imageUrl;
   private Boolean beginnerFriendly;
+  private Boolean larpKalenteriSync;
   private String signUpStartDate;
   private String signUpEndDate;
   private List<Genre> genres;

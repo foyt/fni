@@ -1,5 +1,6 @@
 package fi.foyt.fni.illusion;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
@@ -8,18 +9,26 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import fi.foyt.fni.auth.OAuthController;
 import fi.foyt.fni.chat.ChatCredentialsController;
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.i18n.ExternalLocales;
+import fi.foyt.fni.larpkalenteri.AVIResolver;
+import fi.foyt.fni.larpkalenteri.AVIResolver.AVIProperties;
+import fi.foyt.fni.larpkalenteri.LarpKalenteriClient;
+import fi.foyt.fni.larpkalenteri.LarpKalenteriEventMissingException;
+import fi.foyt.fni.larpkalenteri.UnsupportedTypeException;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.dao.illusion.GenreDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventDAO;
@@ -72,7 +81,10 @@ import fi.foyt.fni.utils.servlet.RequestUtils;
 public class IllusionEventController {
   
   private static final String ILLUSION_FOLDER_TITLE = "Illusion";
-  
+
+  @Inject
+  private Logger logger;
+
   @Inject
   private IllusionEventDAO illusionEventDAO;
 
@@ -135,6 +147,9 @@ public class IllusionEventController {
 
   @Inject
   private UserController userController;
+
+  @Inject
+  private LarpKalenteriClient larpKalenteriClient;
 
   @Inject
   private Event<IllusionParticipantAddedEvent> illusionParticipantAddedEvent;
@@ -594,7 +609,7 @@ public class IllusionEventController {
   
   /* Settings */
   
-  public synchronized String getSetting(IllusionEvent event, IllusionEventSettingKey key) {
+  public String getSetting(IllusionEvent event, IllusionEventSettingKey key) {
     IllusionEventSetting eventSetting = illusionEventSettingDAO.findByEventAndKey(event, key);
     if (eventSetting != null) {
       return eventSetting.getValue();
@@ -603,7 +618,7 @@ public class IllusionEventController {
     return null;
   }
   
-  public synchronized void setSetting(IllusionEvent event, IllusionEventSettingKey key, String value) {
+  public void setSetting(IllusionEvent event, IllusionEventSettingKey key, String value) {
     IllusionEventSetting eventSetting = illusionEventSettingDAO.findByEventAndKey(event, key);
     if (eventSetting != null) {
       illusionEventSettingDAO.updateValue(eventSetting, value);
@@ -675,5 +690,123 @@ public class IllusionEventController {
 
   public IllusionEventGroupMember findGroupMemberByGroupAndParticipant(IllusionEventGroup group, IllusionEventParticipant participant) {
     return illusionEventParticipantGroupMemberDAO.findByGroupAndParticipant(group, participant);
+  }
+  
+  /* Larp-kalenteri */
+
+  public void updateLarpKalenteriEvent(IllusionEvent illusionEvent, Double locationLat, Double locationLon) throws IOException, UnsupportedTypeException, LarpKalenteriEventMissingException {
+    Long larpKalenteriId = NumberUtils.createLong(getSetting(illusionEvent, IllusionEventSettingKey.LARP_KALENTERI_ID));
+    List<IllusionEventParticipant> organizers = listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.ORGANIZER);
+    if (organizers.isEmpty()) {
+      logger.warning(String.format("Event #%d does not have an organizer", illusionEvent.getId()));
+    } else {
+      String larpKalenteriType = larpKalenteriClient.translateType(illusionEvent.getType());
+      List<IllusionEventGenre> eventGenres = listIllusionEventGenres(illusionEvent);
+      List<Genre> genres = new ArrayList<>(eventGenres.size());
+      for (IllusionEventGenre eventGenre : eventGenres) {
+        genres.add(eventGenre.getGenre());
+      }
+      
+      if (StringUtils.isBlank(larpKalenteriType)) {
+        throw new UnsupportedTypeException();
+      }
+      
+      if (larpKalenteriId == null) {
+        createLarpKalenteriEvent(illusionEvent, larpKalenteriType, genres, organizers.get(0).getUser(), locationLat, locationLon);
+      } else {
+        updateLarpKalenteriEvent(illusionEvent, larpKalenteriId, larpKalenteriType, genres, organizers.get(0).getUser(), locationLat, locationLon);
+      }
+    }
+  }
+  
+  private fi.foyt.fni.larpkalenteri.Event createLarpKalenteriEvent(IllusionEvent event, String larpKalenteriType, List<Genre> genres, User organizer, Double locationLat, Double locationLon) throws IOException {
+    String password = RandomStringUtils.randomAlphabetic(5);
+    String organizerName = userController.getUserDisplayName(organizer);
+    String organizerEmail = userController.getUserPrimaryEmail(organizer);
+    AVIProperties aviProperties = locationLat != null && locationLon != null ? new AVIResolver().query(locationLat, locationLon) : null;
+    Long locationDropDown = larpKalenteriClient.translateAVI(aviProperties);
+    
+    fi.foyt.fni.larpkalenteri.Event larpKalenteriEvent = larpKalenteriClient.createEvent(
+        event.getName(), 
+        larpKalenteriType, 
+        event.getStart(), 
+        event.getEnd(), 
+        null, 
+        event.getSignUpStartDate(), 
+        event.getSignUpEndDate(), 
+        locationDropDown, 
+        event.getLocation(), 
+        event.getImageUrl(), 
+        larpKalenteriClient.translateGenres(genres),
+        event.getSignUpFeeText(), 
+        event.getAgeLimit(), 
+        event.getBeginnerFriendly(), 
+        null, 
+        event.getDescription(), 
+        organizerName, 
+        organizerEmail, 
+        getEventUrl(event), 
+        null, 
+        fi.foyt.fni.larpkalenteri.Event.Status.PENDING, 
+        password, 
+        false, 
+        event.getJoinMode() == IllusionEventJoinMode.INVITE_ONLY, 
+        false, 
+        event.getId());
+    
+    setSetting(event, IllusionEventSettingKey.LARP_KALENTERI_ID, String.valueOf(larpKalenteriEvent.getId()));
+    
+    return larpKalenteriEvent;
+  }
+  
+  private fi.foyt.fni.larpkalenteri.Event updateLarpKalenteriEvent(IllusionEvent event, Long larpKalenteriId, String larpKalenteriType, List<Genre> genres, User organizer, Double locationLat, Double locationLon) throws IOException, LarpKalenteriEventMissingException {
+    fi.foyt.fni.larpkalenteri.Event larpKalenteriEvent = larpKalenteriClient.findEvent(larpKalenteriId);
+    if (larpKalenteriEvent == null) {
+      throw new LarpKalenteriEventMissingException();
+    } else {
+      String organizerName = userController.getUserDisplayName(organizer);
+      String organizerEmail = userController.getUserPrimaryEmail(organizer);
+      Long locationDropDown = larpKalenteriEvent.getLocationDropDown();
+      
+      if (locationLat != null && locationLon != null) {
+        if (!StringUtils.equals(larpKalenteriEvent.getLocation(), event.getLocation())) {
+          AVIProperties aviProperties = new AVIResolver().query(locationLat, locationLon);
+          locationDropDown = larpKalenteriClient.translateAVI(aviProperties);
+        }
+      }
+      
+      larpKalenteriEvent = larpKalenteriClient.updateEvent(
+          larpKalenteriId,
+          event.getName(), 
+          larpKalenteriType, 
+          event.getStart(), 
+          event.getEnd(), 
+          larpKalenteriEvent.getTextDate(), 
+          event.getSignUpStartDate(), 
+          event.getSignUpEndDate(), 
+          locationDropDown,
+          event.getLocation(), 
+          event.getImageUrl(), 
+          larpKalenteriClient.translateGenres(genres),
+          event.getSignUpFeeText(), 
+          event.getAgeLimit(), 
+          event.getBeginnerFriendly(), 
+          larpKalenteriEvent.getStoryDescription(), 
+          event.getDescription(), 
+          organizerName, 
+          organizerEmail, 
+          getEventUrl(event), 
+          larpKalenteriEvent.getLink2(), 
+          event.getPublished() ? fi.foyt.fni.larpkalenteri.Event.Status.ACTIVE : fi.foyt.fni.larpkalenteri.Event.Status.PENDING, 
+          larpKalenteriEvent.getPassword(), 
+          larpKalenteriEvent.getEventFull(), 
+          event.getJoinMode() == IllusionEventJoinMode.INVITE_ONLY, 
+          larpKalenteriEvent.getLanguageFree(), 
+          event.getId());
+      
+      setSetting(event, IllusionEventSettingKey.LARP_KALENTERI_ID, String.valueOf(larpKalenteriEvent.getId()));
+      
+      return larpKalenteriEvent;
+    }
   }
 }

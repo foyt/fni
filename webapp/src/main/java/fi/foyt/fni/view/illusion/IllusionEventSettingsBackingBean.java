@@ -1,12 +1,16 @@
 package fi.foyt.fni.view.illusion;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -20,12 +24,15 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.jsf.NavigationController;
+import fi.foyt.fni.larpkalenteri.LarpKalenteriEventMissingException;
+import fi.foyt.fni.larpkalenteri.UnsupportedTypeException;
 import fi.foyt.fni.persistence.model.illusion.Genre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventGenre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
@@ -41,16 +48,19 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Secure(value = Permission.ILLUSION_EVENT_MANAGE)
 @SecurityContext(context = "@urlName")
 public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBackingBean {
-
+  
   @Parameter
   private String urlName;
+
+  @Inject
+  private Logger logger;
 
   @Inject
   private IllusionEventController illusionEventController;
 
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
-
+  
   @Inject
   private NavigationController navigationController;
 
@@ -80,6 +90,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     genreIds = new ArrayList<Long>();
     signUpFeeCurrency = illusionEvent.getSignUpFeeCurrency() != null ? illusionEvent.getSignUpFeeCurrency().getCurrencyCode() : null;
     signUpFeeText = illusionEvent.getSignUpFeeText();
+    larpKalenteriSync = StringUtils.isNotBlank(illusionEventController.getSetting(illusionEvent, IllusionEventSettingKey.LARP_KALENTERI_ID));
 
     List<IllusionEventGenre> eventGenres = illusionEventController.listIllusionEventGenres(illusionEvent);
     for (IllusionEventGenre eventGenre : eventGenres) {
@@ -127,6 +138,22 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
 
   public void setLocation(String location) {
     this.location = location;
+  }
+  
+  public Double getLocationLat() {
+    return locationLat;
+  }
+  
+  public void setLocationLat(Double locationLat) {
+    this.locationLat = locationLat;
+  }
+  
+  public Double getLocationLon() {
+    return locationLon;
+  }
+  
+  public void setLocationLon(Double locationLon) {
+    this.locationLon = locationLon;
   }
 
   public IllusionEventJoinMode getJoinMode() {
@@ -194,6 +221,14 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     this.beginnerFriendly = beginnerFriendly;
   }
   
+  public Boolean getLarpKalenteriSync() {
+    return larpKalenteriSync;
+  }
+  
+  public void setLarpKalenteriSync(Boolean larpKalenteriSync) {
+    this.larpKalenteriSync = larpKalenteriSync;
+  }
+  
   public String getSignUpStartDate() {
     return signUpStartDate;
   }
@@ -251,6 +286,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   }
 
   public String save() throws Exception {
+    IllusionEventType type = illusionEventController.findTypeById(getTypeId());
     IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
     
     String signUpFeeText = getSignUpFeeText();
@@ -266,7 +302,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     illusionEventController.updateIllusionEventStart(illusionEvent, parseDate(getStart()));
     illusionEventController.updateIllusionEventEnd(illusionEvent, parseDate(getEnd()));
     illusionEventController.updateIllusionEventLocation(illusionEvent, getLocation());
-    illusionEventController.updateIllusionEventType(illusionEvent, illusionEventController.findTypeById(getTypeId()));
+    illusionEventController.updateIllusionEventType(illusionEvent, type);
     illusionEventController.updateIllusionEventSignUpTimes(illusionEvent, parseDate(getSignUpStartDate()), parseDate(getSignUpEndDate()));
     illusionEventController.updateIllusionEventAgeLimit(illusionEvent, getAgeLimit());
     illusionEventController.updateIllusionEventBeginnerFriendly(illusionEvent, getBeginnerFriendly());
@@ -289,7 +325,21 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     
     illusionEventController.updateEventGenres(illusionEvent, genres);
     illusionEventController.updatePublished(illusionEvent, getPublished());
-
+    
+    if (getLarpKalenteriSync()) {
+      try {
+        illusionEventController.updateLarpKalenteriEvent(illusionEvent, getLocationLat(), getLocationLon());
+      } catch (IOException e) {
+        logger.log(Level.SEVERE, "Failed to synchronize event into Larp-kalenteri", e);
+      } catch (LarpKalenteriEventMissingException e) {
+        FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.eventRemovedFromLarpKalenteri", type.getName()));
+      } catch (UnsupportedTypeException e) {
+        FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.eventTypeNotSynchronizableToLarpKalenteri", type.getName()));
+      }
+    } else {
+      illusionEventController.setSetting(illusionEvent, IllusionEventSettingKey.LARP_KALENTERI_ID, null);
+    }
+    
     return "/illusion/event-settings.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
   }
 
@@ -324,6 +374,8 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   private String name;
   private String description;
   private String location;
+  private Double locationLat;
+  private Double locationLon;
   private IllusionEventJoinMode joinMode;
   private String start;
   private String end;
@@ -331,6 +383,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   private Integer ageLimit;
   private String imageUrl;
   private Boolean beginnerFriendly;
+  private Boolean larpKalenteriSync;
   private String signUpStartDate;
   private String signUpEndDate;
   private List<Genre> genres;

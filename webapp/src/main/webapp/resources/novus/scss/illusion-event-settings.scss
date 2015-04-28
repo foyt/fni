@@ -58,7 +58,16 @@ h3 {
 .illusion-event-settings-field-hint {
   font-size: 11px;
   color: #aaa;
+}
+
+div.illusion-event-settings-field-hint {
   margin-left: 150px;
+}
+
+span.illusion-event-settings-field-hint {
+  display: inline-block;
+  vertical-align: top;
+  padding-top: 7px;
 }
 
 .illusion-event-settings-field input[type="text"], 

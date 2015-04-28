@@ -39,6 +39,13 @@
       
       input.val(genres.join('&'));
     });
+    
+    $(".illusion-create-event-location")
+      .geocomplete()
+      .bind("geocode:result", function(event, result){
+        $('.location-lat').val(result.geometry.location.lat());
+        $('.location-lon').val(result.geometry.location.lng());
+      });
   });
 
 }).call(this);

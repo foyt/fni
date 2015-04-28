@@ -51,6 +51,13 @@
         $('.illusion-event-settings-genres input[value="' + genreIds[i] + '"]').attr('checked', 'checked');
       }
     }
+    
+    $(".illusion-event-settings-location")
+      .geocomplete()
+      .bind("geocode:result", function(event, result){
+        $('.location-lat').val(result.geometry.location.lat());
+        $('.location-lon').val(result.geometry.location.lng());
+      });
   });
   
   $(document).on('click', '.illusion-remove-event', function (event) {

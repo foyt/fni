@@ -117,7 +117,7 @@ h3 {
   margin-bottom: 8px;
 }
 
-.timezone, .illusion-create-event-sign-up-fee-info {
+.timezone, .illusion-create-event-sign-up-fee-info, .illusion-create-event-larp-kalenteri-info {
   display: inline-block;
   font-size: 11px;
   font-family: $default-font;
@@ -125,12 +125,16 @@ h3 {
   vertical-align: middle;
 }
 
-.timezone:before, .illusion-create-event-sign-up-fee-info:before {
+.timezone:before .illusion-create-event-sign-up-fee-info:before {
   content: '(';  
 }
 
 .timezone:after, .illusion-create-event-sign-up-fee-info:after {
   content: ')';  
+}
+
+.illusion-create-event-larp-kalenteri-info {
+  padding-top: 5px;
 }
 
 .illusion-create-event-field input.sign-up-start-date {
