@@ -6,5 +6,7 @@ public enum IllusionEventSettingKey {
   
   INDEX_INCLUDE_ALL_PAGES,
   
-  PAGE_SETTINGS
+  PAGE_SETTINGS,
+  
+  LARP_KALENTERI_ID
 }
