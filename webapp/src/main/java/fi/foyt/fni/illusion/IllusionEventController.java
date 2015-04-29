@@ -621,9 +621,15 @@ public class IllusionEventController {
   public void setSetting(IllusionEvent event, IllusionEventSettingKey key, String value) {
     IllusionEventSetting eventSetting = illusionEventSettingDAO.findByEventAndKey(event, key);
     if (eventSetting != null) {
-      illusionEventSettingDAO.updateValue(eventSetting, value);
+      if (value == null) {
+        illusionEventSettingDAO.delete(eventSetting);
+      } else {
+        illusionEventSettingDAO.updateValue(eventSetting, value);
+      }
     } else {
-      illusionEventSettingDAO.create(event, key, value);
+      if (value != null) {
+        illusionEventSettingDAO.create(event, key, value);
+      }
     }
   }
 
