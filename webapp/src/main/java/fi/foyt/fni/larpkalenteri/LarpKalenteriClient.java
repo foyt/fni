@@ -267,11 +267,6 @@ public class LarpKalenteriClient {
     }
     
     String data = marshalEntity(payload);
-
-    System.out.println("--- putting ---");
-    System.out.println(data);
-    System.out.println("--- putting ---");
-    
     DefaultHttpClient client = new DefaultHttpClient();
     HttpPut httpPut = new HttpPut(url);
     httpPut.setHeader("Content-Type", "application/json; charset=UTF-8");
@@ -313,9 +308,6 @@ public class LarpKalenteriClient {
       
       expires = System.currentTimeMillis() + (response.getExpiresIn() * 1000);
       accessToken = response.getAccessToken();
-    } else {
-      System.out.println("expires: " + new Date(expires));
-      System.out.println("now: " + new Date(System.currentTimeMillis()));
     }
 
     return accessToken;
