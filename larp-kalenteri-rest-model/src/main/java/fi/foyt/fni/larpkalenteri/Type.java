@@ -1,5 +1,6 @@
 package fi.foyt.fni.larpkalenteri;
 
+
 import java.util.Map;
 
 public class Type {

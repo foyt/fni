@@ -198,6 +198,7 @@
 
   <modules>
     <module>rest-model</module>
+    <module>larp-kalenteri-rest-model</module>
     <module>webapp</module>
     <module>bom</module>
     <module>persistence</module>

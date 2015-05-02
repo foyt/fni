@@ -235,6 +235,11 @@
       <artifactId>rest-model</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>fi.foyt.fni</groupId>
+      <artifactId>larp-kalenteri-rest-model</artifactId>
+    </dependency>
+
     <!-- Paytrail -->
 
     <dependency>
