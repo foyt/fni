@@ -31,7 +31,7 @@ values
   (6, 4, 'topic5of5', 'Topic 5 of 5 topic forum'),
   (7, 5, 'immutable_topic', 'Topic of immutable Forum topic'),
   (8, 5, 'testbook_1', 'Fat hag dwarves quickly zap jinx mob'),
-  (9, 5, 'testbook_2', 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг'),
+  (9, 5, 'with-special.characters', 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг'),
   (10, 5, 'pangram_fi', 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.');
  
 insert into 

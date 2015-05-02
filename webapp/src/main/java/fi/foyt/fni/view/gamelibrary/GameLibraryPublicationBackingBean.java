@@ -1,7 +1,5 @@
 package fi.foyt.fni.view.gamelibrary;
 
-import java.io.FileNotFoundException;
-
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -28,7 +26,7 @@ import fi.foyt.fni.session.SessionController;
 public class GameLibraryPublicationBackingBean {
   
   @Parameter
-  @Matches ("[a-zA-Z0-9_]{1,}")
+  @Matches ("[a-zA-Z0-9_.-]{1,}")
   private String urlName;
   
   @Inject
@@ -41,7 +39,7 @@ public class GameLibraryPublicationBackingBean {
   private NavigationController navigationController;
   
   @RequestAction
-  public String init() throws FileNotFoundException {
+  public String init() {
     publication = publicationController.findPublicationByUrlName(getUrlName());
     if (publication == null) {
       return navigationController.notFound();
