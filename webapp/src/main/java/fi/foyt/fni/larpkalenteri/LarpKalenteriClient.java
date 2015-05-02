@@ -222,6 +222,7 @@ public class LarpKalenteriClient {
     } 
   }
   
+  @SuppressWarnings("unchecked")
   private <T> T doPostRequest(String url, T payload) throws IOException {
     String accessToken;
     try {
@@ -231,6 +232,7 @@ public class LarpKalenteriClient {
     }
     
     String data = marshalEntity(payload);
+    
     DefaultHttpClient client = new DefaultHttpClient();
     HttpPost httpPost = new HttpPost(url);
     httpPost.setHeader("Content-Type", "application/json; charset=UTF-8");
@@ -247,7 +249,7 @@ public class LarpKalenteriClient {
       if (status == 204) {
         return null;
       } else if (status == 200) {
-        return unmarshalEntity(entity.getContent(), new TypeReference<T>(){});
+        return (T) unmarshalEntity(entity.getContent(), payload.getClass());
       }
       
       throw new IOException(String.format("Server returned error code %d", status));
