@@ -1,6 +1,5 @@
 package fi.foyt.fni.view.gamelibrary;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +12,7 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.gamelibrary.OrderController;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
@@ -30,6 +30,9 @@ public class GameLibraryOrderManamentBackingBean {
 
   @Inject
   private OrderController orderController;
+
+  @Inject
+  private NavigationController navigationController;
   
   @PostConstruct
   public void init() {
@@ -88,18 +91,18 @@ public class GameLibraryOrderManamentBackingBean {
     return result;
   }
 
-  public String moveToCanceled(Long orderId) throws FileNotFoundException {
+  public String moveToCanceled(Long orderId) {
     Order order = orderController.findOrderById(orderId);
     if (order != null) {
       orderController.updateOrderAsCanceled(order);
     } else {
-      throw new FileNotFoundException();
+      return navigationController.notFound();
     }
     
     return "/gamelibrary/ordermanagement.jsf?faces-redirect=true";
   }
 
-  public String moveToPaid(Long orderId) throws FileNotFoundException {
+  public String moveToPaid(Long orderId) {
     Order order = orderController.findOrderById(orderId);
     if (order != null) {
       if (order.getDeliveryAddress() == null) {
@@ -108,29 +111,29 @@ public class GameLibraryOrderManamentBackingBean {
         orderController.updateOrderAsWaitingForDelivery(order);
       }
     } else {
-      throw new FileNotFoundException();
+      return navigationController.notFound();
     }
     
     return "/gamelibrary/ordermanagement.jsf?faces-redirect=true";
   }
 
-  public String moveToShipped(Long orderId) throws FileNotFoundException {
+  public String moveToShipped(Long orderId) {
     Order order = orderController.findOrderById(orderId);
     if (order != null) {
       orderController.updateOrderAsShipped(order);
     } else {
-      throw new FileNotFoundException();
+      return navigationController.notFound();
     }
 
     return "/gamelibrary/ordermanagement.jsf?faces-redirect=true";
   }
 
-  public String moveToDelivered(Long orderId) throws FileNotFoundException {
+  public String moveToDelivered(Long orderId) {
     Order order = orderController.findOrderById(orderId);
     if (order != null) {
       orderController.updateOrderAsDelivered(order);
     } else {
-      throw new FileNotFoundException();
+      return navigationController.notFound();
     }
 
     return "/gamelibrary/ordermanagement.jsf?faces-redirect=true";
