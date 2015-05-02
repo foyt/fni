@@ -26,6 +26,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -505,8 +506,12 @@ public abstract class AbstractTest {
     return greenMail;
   }
   
+  protected DateTime getDate(int year, int monthOfYear, int dayOfMonth, DateTimeZone zone) {
+    return new DateTime(year, monthOfYear, dayOfMonth, 0, 0, 0, 0, zone);
+  }
+  
   protected DateTime getDate(int year, int monthOfYear, int dayOfMonth) {
-    return new DateTime(year, monthOfYear, dayOfMonth, 0, 0, 0, 0);
+    return getDate(year, monthOfYear, dayOfMonth, DateTimeZone.getDefault());
   }
 
   private class SqlSet {
