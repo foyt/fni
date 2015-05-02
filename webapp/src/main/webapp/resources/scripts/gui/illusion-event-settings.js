@@ -53,7 +53,9 @@
     }
     
     $(".illusion-event-settings-location")
-      .geocomplete()
+      .geocomplete({
+        blur: true
+      })
       .bind("geocode:result", function(event, result){
         $('.location-lat').val(result.geometry.location.lat());
         $('.location-lon').val(result.geometry.location.lng());
