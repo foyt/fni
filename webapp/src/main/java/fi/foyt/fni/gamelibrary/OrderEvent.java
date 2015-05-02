@@ -2,7 +2,7 @@ package fi.foyt.fni.gamelibrary;
 
 import java.util.Locale;
 
-public class OrderEvent {
+public abstract class OrderEvent {
 	
 	public OrderEvent(Locale locale, Long orderId) {
 		this.locale = locale;

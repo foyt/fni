@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
@@ -12,8 +13,7 @@ import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.gamelibrary.OrderController;
-import fi.foyt.fni.gamelibrary.OrderEvent;
-import fi.foyt.fni.gamelibrary.OrderPaid;
+import fi.foyt.fni.gamelibrary.OrderPaidEvent;
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
@@ -25,6 +25,7 @@ import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
 
+@ApplicationScoped
 public class OrderStatusChangeListener {
 	
 	@Inject
@@ -45,7 +46,7 @@ public class OrderStatusChangeListener {
   @Inject
 	private SystemSettingsController systemSettingsController;
 	
-	public void onOrderPaid(@Observes @OrderPaid OrderEvent event) {
+	public void onOrderPaid(@Observes OrderPaidEvent event) {
 		if (event.getOrderId() != null) {
   		Order order = orderController.findOrderById(event.getOrderId()); 
   		if (order != null) {

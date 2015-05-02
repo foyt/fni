@@ -35,28 +35,22 @@ public class OrderController implements Serializable {
 	private PublicationController publicationController;
 
 	@Inject
-	@OrderCreated
-	private Event<OrderEvent> orderCreatedEvent;
+	private Event<OrderCreatedEvent> orderCreatedEvent;
 	
 	@Inject
-	@OrderPaid
-	private Event<OrderEvent> orderPaidEvent;
+	private Event<OrderPaidEvent> orderPaidEvent;
 
 	@Inject
-	@OrderWaitingForDelivery
-	private Event<OrderEvent> orderWaitingForDeliveryEvent;
+	private Event<OrderWaitingForDeliveryEvent> orderWaitingForDeliveryEvent;
 
 	@Inject
-	@OrderCanceled
-	private Event<OrderEvent> orderCanceledEvent;
+	private Event<OrderCanceledEvent> orderCanceledEvent;
 
   @Inject
-  @OrderShipped
-  private Event<OrderEvent> orderShippedEvent;
+  private Event<OrderShippedEvent> orderShippedEvent;
 
   @Inject
-  @OrderDelivered
-  private Event<OrderEvent> orderDeliveredEvent;
+  private Event<OrderDeliveredEvent> orderDeliveredEvent;
   
 	@Inject
 	private OrderDAO orderDAO;
@@ -69,7 +63,7 @@ public class OrderController implements Serializable {
 	public Order createOrder(User customer, String accessKey, String customerCompany, String customerEmail, String customerFirstName, String customerLastName, String customerMobile, String customerPhone, OrderStatus orderStatus, OrderType type, Double shippingCosts, String notes, Address deliveryAddress) {
 		Date now = new Date();
 		Order order = orderDAO.create(customer, accessKey, customerCompany, customerEmail, customerFirstName, customerLastName, customerMobile, customerPhone, orderStatus, type, shippingCosts, notes, deliveryAddress, now, null, null, null, null);
-		orderCreatedEvent.fire(new OrderEvent(sessionController.getLocale(), order.getId()));
+		orderCreatedEvent.fire(new OrderCreatedEvent(sessionController.getLocale(), order.getId()));
 		return order;
 	}
 
@@ -88,21 +82,21 @@ public class OrderController implements Serializable {
 	public Order updateOrderAsPaid(Order order) {
 		Date now = new Date();
 		order = orderDAO.updateOrderStatus(orderDAO.updatePaid(order, now), OrderStatus.PAID);
-		orderPaidEvent.fire(new OrderEvent(sessionController.getLocale(), order.getId()));
+		orderPaidEvent.fire(new OrderPaidEvent(sessionController.getLocale(), order.getId()));
 		return order;
 	}
 
 	public Order updateOrderAsWaitingForDelivery(Order order) {
 		Date now = new Date();
 		order = orderDAO.updateOrderStatus(orderDAO.updatePaid(order, now), OrderStatus.WAITING_FOR_DELIVERY);
-		orderWaitingForDeliveryEvent.fire(new OrderEvent(sessionController.getLocale(), order.getId()));
+		orderWaitingForDeliveryEvent.fire(new OrderWaitingForDeliveryEvent(sessionController.getLocale(), order.getId()));
 		return order;
 	}
 	
 	public Order updateOrderAsCanceled(Order order) {
 		Date now = new Date();
 		order = orderDAO.updateOrderStatus(orderDAO.updateCanceled(order, now), OrderStatus.CANCELED);
-		orderCanceledEvent.fire(new OrderEvent(sessionController.getLocale(), order.getId()));
+		orderCanceledEvent.fire(new OrderCanceledEvent(sessionController.getLocale(), order.getId()));
 		return order;
 	}
 
@@ -118,14 +112,14 @@ public class OrderController implements Serializable {
       }
     }
     
-    orderShippedEvent.fire(new OrderEvent(sessionController.getLocale(), order.getId()));
+    orderShippedEvent.fire(new OrderShippedEvent(sessionController.getLocale(), order.getId()));
     return order;
   }
 
   public Order updateOrderAsDelivered(Order order) {
     Date now = new Date();
     order = orderDAO.updateOrderStatus(orderDAO.updateDelivered(order, now), OrderStatus.DELIVERED);
-    orderDeliveredEvent.fire(new OrderEvent(sessionController.getLocale(), order.getId()));
+    orderDeliveredEvent.fire(new OrderDeliveredEvent(sessionController.getLocale(), order.getId()));
     return order;
   }
 	

@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
@@ -14,17 +15,21 @@ import javax.mail.MessagingException;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.i18n.ExternalLocales;
+import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderType;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.system.SystemSettingsController;
-import fi.foyt.fni.utils.mail.MailUtils;
 
+@ApplicationScoped
 public class OrderMailer {
 	
 	@Inject
 	private Logger logger;
+
+  @Inject
+	private Mailer mailer;
 	
 	@Inject
 	private OrderController orderController;
@@ -32,7 +37,7 @@ public class OrderMailer {
 	@Inject
 	private SystemSettingsController systemSettingsController;
 	
-	public void onOrderShipped(@Observes @OrderShipped OrderEvent event) {
+	public void onOrderShipped(@Observes OrderShippedEvent event) {
 	  if (event.getOrderId() != null) {
       Order order = orderController.findOrderById(event.getOrderId()); 
       if (order != null) {
@@ -96,12 +101,7 @@ public class OrderMailer {
           String subject = getLocalizedValue(locale, "gamelibrary.mail.shipped.subject");
           String content = contentBuilder.toString();
           
-          try {
-            notifyShopOwner("Fwd: " + subject, content);
-          } catch (MessagingException e) {
-            logger.severe("Failed to notify shop owner of mail payment");
-          }
-          
+          notifyShopOwner("Fwd: " + subject, content);
           notifyCustomer(customerName, customerEmail, subject, content);
         }
       } else {
@@ -112,7 +112,7 @@ public class OrderMailer {
     }
 	}
 
-	public void onOrderWaitingForDelivery(@Observes @OrderWaitingForDelivery OrderEvent event) {
+	public void onOrderWaitingForDelivery(@Observes OrderWaitingForDeliveryEvent event) {
 		if (event.getOrderId() != null) {
   		Order order = orderController.findOrderById(event.getOrderId()); 
   		if (order != null) {
@@ -176,12 +176,7 @@ public class OrderMailer {
     	    String subject = getLocalizedValue(locale, "gamelibrary.mail.waitingForDelivery.subject");
     		  String content = contentBuilder.toString();
     	    
-    		  try {
-            notifyShopOwner("Fwd: " + subject, content);
-          } catch (MessagingException e) {
-            logger.severe("Failed to notify shop owner of mail payment");
-          }
-    		  
+          notifyShopOwner("Fwd: " + subject, content);
     			notifyCustomer(customerName, customerEmail, subject, content);
         }
   		} else {
@@ -195,21 +190,25 @@ public class OrderMailer {
   private void notifyCustomer(String customerName, String customerEmail, String subject, String content) {
     String fromName = systemSettingsController.getSetting(SystemSettingKey.GAMELIBRARY_ORDERMAILER_NAME);
     String fromMail = systemSettingsController.getSetting(SystemSettingKey.GAMELIBRARY_ORDERMAILER_MAIL);
-
+    
     try {
-    	MailUtils.sendMail(fromMail, fromName, customerEmail, customerName, subject, content, "text/plain");
+      mailer.sendMail(fromMail, fromName, customerEmail, customerName, subject, content, "text/plain");
     } catch (MessagingException e) {
     	logger.log(Level.SEVERE, "Failed to send email to customer", e);
     }
   }
   
-  private void notifyShopOwner(String subject, String content) throws MessagingException {
+  private void notifyShopOwner(String subject, String content) {
     String shopOwnerName = systemSettingsController.getSetting(SystemSettingKey.GAMELIBRARY_SHOP_OWNER_NAME);
     String shopOwnerEmail = systemSettingsController.getSetting(SystemSettingKey.GAMELIBRARY_SHOP_OWNER_MAIL);
     String fromName = systemSettingsController.getSetting(SystemSettingKey.GAMELIBRARY_ORDERMAILER_NAME);
     String fromMail = systemSettingsController.getSetting(SystemSettingKey.GAMELIBRARY_ORDERMAILER_MAIL);
-
-    MailUtils.sendMail(fromMail, fromName, shopOwnerEmail, shopOwnerName, subject, content, "text/plain");
+    
+    try {
+      mailer.sendMail(fromMail, fromName, shopOwnerEmail, shopOwnerName, subject, content, "text/plain");
+    } catch (MessagingException e) {
+      logger.log(Level.SEVERE, "Failed to send email to shop owner", e);
+    }
   }
 
 	private String getLocalizedValue(Locale locale, String key, Object... params) {
