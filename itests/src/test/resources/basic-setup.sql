@@ -22,7 +22,10 @@ values
   (9, 'GAMELIBRARY_SHOP_OWNER_MAIL', 'bogus.shop-owner@foyt.fi'),
   (10, 'SYSTEM_MAILER_NAME', 'Bogus System Mailer'),
   (12, 'SYSTEM_MAILER_MAIL', 'bogus.system-mailer@foyt.fi'),
-  (13, 'SYSTEM_USER_EMAIL', 'admin@foyt.fi');
+  (13, 'SYSTEM_USER_EMAIL', 'admin@foyt.fi'),
+  (14, 'LARP_KALENTERI_URL', 'http://test.forgeandillusion.net:9080'),
+  (15, 'LARP_KALENTERI_CLIENT_ID', 'client-id'),
+  (16, 'LARP_KALENTERI_CLIENT_SECRET', 'client-secret');
   
 insert into 
   OAuthClient (id, clientId, clientSecret, name, type, redirectUrl)

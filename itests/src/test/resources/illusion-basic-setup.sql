@@ -5,5 +5,5 @@ values
 insert into Folder (id) values (10000);
 insert into IllusionFolder (id) values (10000);
 
-insert into Genre (id, name) values (1, 'Genre #1'), (2, 'Genre #2'), (3, 'Genre #3'), (4, 'Genre #4');
-insert into IllusionEventType (id, name) values (1, 'Type #1'), (2, 'Type #2');
+insert into Genre (id, name) values (1, 'Fantasia'), (2, 'Sci-fi'), (3, 'Cyberpunk'), (4, 'Steampunk');
+insert into IllusionEventType (id, name) values (1, 'Larpit'), (2, 'Pöytäroolipelit');

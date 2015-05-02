@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -120,6 +121,19 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
 
   protected void waitForSelectorVisible(String selector) {
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(selector)));
+  }
+
+  protected void waitForInputValueNotBlank(final String selector) {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        List<WebElement> elements = driver.findElements(By.cssSelector(selector));
+        if (elements.size() > 0) {
+          return StringUtils.isNotBlank(elements.get(0).getAttribute("value"));
+        }
+        
+        return false;
+      }
+    });
   }
 
   protected void waitForSelectorNotPresent(final String selector) {

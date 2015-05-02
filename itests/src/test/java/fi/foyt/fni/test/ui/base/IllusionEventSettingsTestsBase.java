@@ -1,39 +1,58 @@
 package fi.foyt.fni.test.ui.base;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.put;
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
+
+import fi.foyt.fni.larpkalenteri.Event;
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
 import fi.foyt.fni.test.SqlSets;
 
 @DefineSqlSets ({
-  @DefineSqlSet (id = "event-basic", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql"},
-    after = {"illusion-event-open-teardown.sql", "illusion-basic-teardown.sql", "basic-users-teardown.sql"}
-  ),
-  @DefineSqlSet (id = "event-organizer", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-organizer-setup.sql"},
-    after = { "illusion-event-open-organizer-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql", "basic-users-teardown.sql"}
-  ),
-  @DefineSqlSet (id = "event-custom", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-custom-setup.sql", "illusion-event-open-organizer-setup.sql" },
-    after = { "illusion-event-open-organizer-teardown.sql", "illusion-event-open-custom-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql", "basic-users-teardown.sql"}
-  )
+  @DefineSqlSet (id = "basic-users", before = { "basic-users-setup.sql" }, after = { "basic-users-teardown.sql"  }),
+  @DefineSqlSet (id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql"),
+  @DefineSqlSet (id = "illusion-event", before = {"illusion-event-open-setup.sql"}, after = {"illusion-event-open-teardown.sql"} ),
+  @DefineSqlSet (id = "illusion-event-organizer", before = {"illusion-event-open-organizer-setup.sql"}, after = {"illusion-event-open-organizer-teardown.sql"} ),
+  @DefineSqlSet (id = "illusion-event-custom", before = {"illusion-event-open-custom-setup.sql"}, after = {"illusion-event-open-custom-teardown.sql"} ),
+  @DefineSqlSet (id = "illusion-event-unpublished", before = {"illusion-event-open-unpublished-setup.sql"}, after = {"illusion-event-open-unpublished-teardown.sql"} ),
+  @DefineSqlSet (id = "illusion-larp-kalenteri", before = {"illusion-event-open-larp-kalenteri-setup.sql"}, after = {"illusion-event-open-larp-kalenteri-teardown.sql"} )
 })
 public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   
+  @Rule
+  public WireMockRule wireMockRule = new WireMockRule(9080);
+  
   @Test
-  @SqlSets ("event-basic")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event"})
   public void testLoginRequired() throws Exception {
     testLoginRequired("/illusion/event/openevent/settings");
   }
   
   @Test
-  @SqlSets ("event-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testNotFound() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     testNotFound("/illusion/event/openevent/settings/");
@@ -47,21 +66,21 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("event-basic")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event"})
   public void testAccessDenied() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     testAccessDenied("/illusion/event/openevent/settings");
   }
   
   @Test
-  @SqlSets ("event-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testAccessDeniedParticipant() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     testAccessDenied("/illusion/event/openevent/settings");
   }
   
   @Test
-  @SqlSets ("event-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testLoggedInOrganizer() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
     testTitle("/illusion/event/openevent/settings", "Event Settings");
@@ -73,7 +92,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("event-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testDates() throws Exception {
     acceptCookieDirective(getWebDriver());
     
@@ -115,7 +134,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("event-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testLocation() throws Exception {
     acceptCookieDirective(getWebDriver());
     loginInternal("admin@foyt.fi", "pass");
@@ -127,7 +146,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("event-custom")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer", "illusion-event-custom"})
   public void testCustomDomain() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");
@@ -136,7 +155,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("event-custom")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer", "illusion-event-custom"})
   public void testCustomDomainLoginRedirect() {
     getWebDriver().get(getCustomEventUrl() + "/settings");
     waitForUrlMatches(".*/login.*");
@@ -145,7 +164,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("event-custom")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer", "illusion-event-custom"})
   public void testCustomDomainMenuItems() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");
@@ -171,7 +190,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("event-custom")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer", "illusion-event-custom"})
   public void testCustomDomainNavigationLinks() {
     getWebDriver().get(getCustomEventUrl());
     loginCustomEvent("admin@foyt.fi", "pass");
@@ -184,7 +203,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("event-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testDomain() throws Exception {
     acceptCookieDirective(getWebDriver());
     loginInternal("admin@foyt.fi", "pass");
@@ -198,7 +217,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
 
   @Test
-  @SqlSets ("event-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventSignUpDates() throws Exception {
     acceptCookieDirective(getWebDriver());
     loginInternal("admin@foyt.fi", "pass");
@@ -215,7 +234,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ("event-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventImageUrl() throws Exception {
     acceptCookieDirective(getWebDriver());
     loginInternal("admin@foyt.fi", "pass");
@@ -229,7 +248,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
 
   @Test
-  @SqlSets ("event-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventBeginnerFriendly() throws Exception {
     acceptCookieDirective(getWebDriver());
     loginInternal("admin@foyt.fi", "pass");
@@ -242,7 +261,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
 
   @Test
-  @SqlSets ("event-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventAgeLimit() throws Exception {
     acceptCookieDirective(getWebDriver());
     loginInternal("admin@foyt.fi", "pass");
@@ -256,7 +275,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
 
   @Test
-  @SqlSets ("event-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventType() throws Exception {
     acceptCookieDirective(getWebDriver());
     loginInternal("admin@foyt.fi", "pass");
@@ -269,7 +288,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
 
   @Test
-  @SqlSets ("event-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventGenres() throws Exception {
     acceptCookieDirective(getWebDriver());
     loginInternal("admin@foyt.fi", "pass");
@@ -286,7 +305,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
 
   @Test
-  @SqlSets ("event-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventPublished() throws Exception {
     acceptCookieDirective(getWebDriver());
     loginInternal("admin@foyt.fi", "pass");
@@ -306,7 +325,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   }
 
   @Test
-  @SqlSets ("event-organizer")
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventDelete() throws Exception {
     acceptCookieDirective(getWebDriver());
     loginInternal("admin@foyt.fi", "pass");
@@ -317,5 +336,885 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     clickSelector(".ui-dialog .remove-button");
     waitForUrlNotMatches(".*/illusion/event/openevent/settings");
     testNotFound("/illusion/event/openevent");
+  }
+
+  @Test
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer", "illusion-larp-kalenteri"})
+  public void testEventLarpKalenteriUpdate() throws Exception {
+    stubLarpKalenteriAccessToken();
+    stubLarpKalenteriTypes();
+    stubLarpKalenteriGenres();
+
+    String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .setSerializationInclusion(Include.NON_NULL))
+      .writeValueAsString(new Event(12345l, 
+        "Open Event", "2", 
+        getDate(2010, 1, 1), 
+        getDate(2010, 1, 2), 
+        null, 
+        null, 
+        null, 
+        8l, 
+        "", 
+        "", 
+        new ArrayList<String>(), 
+        "", 
+        null, 
+        false, 
+        null, 
+        "Event for automatic testing (Open)", 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+        null, 
+        Event.Status.ACTIVE, 
+        null, 
+        false, 
+        false, 
+        false, 
+        1l));
+    
+    stubFor(get(urlEqualTo("/rest/events/12345"))
+        .willReturn(aResponse()
+          .withStatus(200)
+          .withHeader("Content-Type", "application/json")
+          .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
+              .registerModule(new JodaModule())
+              .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+              .writeValueAsString(new Event(12345l, 
+                "Open Event", "2", 
+                getDate(2010, 1, 1), 
+                getDate(2010, 1, 2), 
+                null, 
+                null, 
+                null, 
+                8l, 
+                "", 
+                "", 
+                new ArrayList<String>(), 
+                "", 
+                null, 
+                false, 
+                null, 
+                "Event for automatic testing (Open)", 
+                "Test Admin", 
+                "admin@foyt.fi", 
+                "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+                null, 
+                Event.Status.ACTIVE, 
+                null, 
+                false, 
+                false, 
+                false, 
+                1l)))));
+
+    stubFor(put(urlEqualTo("/rest/events/12345"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withHeader("Content-Type", "application/json")
+        .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
+            .registerModule(new JodaModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .writeValueAsString(new Event(12345l, 
+              "Open Event", "2", 
+              getDate(2010, 1, 1), 
+              getDate(2010, 1, 2), 
+              null, 
+              null, 
+              null, 
+              8l, 
+              "", 
+              "", 
+              new ArrayList<String>(), 
+              "", 
+              null, 
+              false, 
+              null, 
+              "Event for automatic testing (Open)", 
+              "Test Admin", 
+              "admin@foyt.fi", 
+              "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+              null, 
+              Event.Status.ACTIVE, 
+              null, 
+              false, 
+              false, 
+              false, 
+              1l)))));
+    
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    
+    verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))
+      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+    );
+
+    assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
+  }
+  
+  @Test
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer", "illusion-larp-kalenteri"})
+  public void testEventLarpKalenteriUpdateGenres() throws Exception {
+    stubLarpKalenteriAccessToken();
+    stubLarpKalenteriTypes();
+    stubLarpKalenteriGenres();
+
+    String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .setSerializationInclusion(Include.NON_NULL))
+      .writeValueAsString(new Event(12345l, 
+        "Open Event", "2", 
+        getDate(2010, 1, 1), 
+        getDate(2010, 1, 2), 
+        null, 
+        null, 
+        null, 
+        8l, 
+        "", 
+        "", 
+        Arrays.asList("fantasy", "cyberpunk"), 
+        "", 
+        null, 
+        false, 
+        null, 
+        "Event for automatic testing (Open)", 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+        null, 
+        Event.Status.ACTIVE, 
+        null, 
+        false, 
+        false, 
+        false, 
+        1l));
+    
+    stubFor(get(urlEqualTo("/rest/events/12345"))
+        .willReturn(aResponse()
+          .withStatus(200)
+          .withHeader("Content-Type", "application/json")
+          .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
+              .registerModule(new JodaModule())
+              .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+              .writeValueAsString(new Event(12345l, 
+                "Open Event", "2", 
+                getDate(2010, 1, 1), 
+                getDate(2010, 1, 2), 
+                null, 
+                null, 
+                null, 
+                8l, 
+                "", 
+                "", 
+                new ArrayList<String>(), 
+                "", 
+                null, 
+                false, 
+                null, 
+                "Event for automatic testing (Open)", 
+                "Test Admin", 
+                "admin@foyt.fi", 
+                "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+                null, 
+                Event.Status.ACTIVE, 
+                null, 
+                false, 
+                false, 
+                false, 
+                1l)))));
+
+    stubFor(put(urlEqualTo("/rest/events/12345"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withHeader("Content-Type", "application/json")
+        .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
+            .registerModule(new JodaModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .writeValueAsString(new Event(12345l, 
+              "Open Event", "2", 
+              getDate(2010, 1, 1), 
+              getDate(2010, 1, 2), 
+              null, 
+              null, 
+              null, 
+              8l, 
+              "", 
+              "", 
+              Arrays.asList("fantasy", "cyberpunk"), 
+              "", 
+              null, 
+              false, 
+              null, 
+              "Event for automatic testing (Open)", 
+              "Test Admin", 
+              "admin@foyt.fi", 
+              "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+              null, 
+              Event.Status.ACTIVE, 
+              null, 
+              false, 
+              false, 
+              false, 
+              1l)))));
+    
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    clickSelector(".illusion-event-settings-genre input[value='1']");
+    clickSelector(".illusion-event-settings-genre input[value='3']");
+    
+    clickSelector(".illusion-event-settings-save");    
+
+    navigate("/illusion/event/openevent/settings");
+    
+    verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))
+      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+    );
+
+    assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
+  }
+
+  @Test
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer", "illusion-larp-kalenteri"})
+  public void testEventLarpKalenteriUpdateLocation() throws Exception {
+    stubLarpKalenteriAccessToken();
+    stubLarpKalenteriTypes();
+    stubLarpKalenteriGenres();
+
+    String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .setSerializationInclusion(Include.NON_NULL))
+      .writeValueAsString(new Event(12345l, 
+        "Open Event", "2", 
+        getDate(2010, 1, 1), 
+        getDate(2010, 1, 2), 
+        null, 
+        null, 
+        null, 
+        2l, 
+        "Otakaari 24, 02150 Espoo, Finland", 
+        "", 
+        new ArrayList<String>(), 
+        "", 
+        null, 
+        false, 
+        null, 
+        "Event for automatic testing (Open)", 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+        null, 
+        Event.Status.ACTIVE, 
+        null, 
+        false, 
+        false, 
+        false, 
+        1l));
+    
+    stubFor(get(urlEqualTo("/rest/events/12345"))
+        .willReturn(aResponse()
+          .withStatus(200)
+          .withHeader("Content-Type", "application/json")
+          .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
+              .registerModule(new JodaModule())
+              .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+              .writeValueAsString(new Event(12345l, 
+                "Open Event", "2", 
+                getDate(2010, 1, 1), 
+                getDate(2010, 1, 2), 
+                null, 
+                null, 
+                null, 
+                8l, 
+                "", 
+                "", 
+                new ArrayList<String>(), 
+                "", 
+                null, 
+                false, 
+                null, 
+                "Event for automatic testing (Open)", 
+                "Test Admin", 
+                "admin@foyt.fi", 
+                "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+                null, 
+                Event.Status.ACTIVE, 
+                null, 
+                false, 
+                false, 
+                false, 
+                1l)))));
+
+    stubFor(put(urlEqualTo("/rest/events/12345"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withHeader("Content-Type", "application/json")
+        .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
+            .registerModule(new JodaModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .writeValueAsString(new Event(12345l, 
+              "Open Event", "2", 
+              getDate(2010, 1, 1), 
+              getDate(2010, 1, 2), 
+              null, 
+              null, 
+              null, 
+              2l, 
+              "Otakaari 24, 02150 Espoo, Finland", 
+              "", 
+              new ArrayList<String>(), 
+              "", 
+              null, 
+              false, 
+              null, 
+              "Event for automatic testing (Open)", 
+              "Test Admin", 
+              "admin@foyt.fi", 
+              "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+              null, 
+              Event.Status.ACTIVE, 
+              null, 
+              false, 
+              false, 
+              false, 
+              1l)))));
+    
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    typeSelectorInputValue(".illusion-event-settings-location", "Otakaari 24, 02150 Espoo, Finland");
+    clickSelector(".illusion-event-settings-image-url");
+    waitForInputValueNotBlank(".location-lat");
+    
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    
+    verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))
+      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+    );
+
+    assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
+  }
+
+  @Test
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
+  public void testEventLarpKalenteriCreate() throws Exception {
+    stubLarpKalenteriAccessToken();
+    stubLarpKalenteriTypes();
+    stubLarpKalenteriGenres();
+
+    String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .setSerializationInclusion(Include.NON_NULL))
+      .writeValueAsString(new Event(null, 
+        "Open Event", "2", 
+        getDate(2010, 1, 1), 
+        getDate(2010, 1, 2), 
+        null, 
+        null, 
+        null, 
+        8l, 
+        "", 
+        "", 
+        new ArrayList<String>(), 
+        "", 
+        null, 
+        false, 
+        null, 
+        "Event for automatic testing (Open)", 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+        null, 
+        Event.Status.ACTIVE, 
+        null, 
+        false, 
+        false, 
+        false, 
+        1l));
+
+    String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper())
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .writeValueAsString(new Event(123l, 
+        "Open Event", "2", 
+        getDate(2010, 1, 1), 
+        getDate(2010, 1, 2), 
+        null, 
+        null, 
+        null, 
+        8l, 
+        "", 
+        "", 
+        new ArrayList<String>(), 
+        "", 
+        null, 
+        false, 
+        null, 
+        "Event for automatic testing (Open)", 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+        null, 
+        Event.Status.ACTIVE, 
+        null, 
+        false, 
+        false, 
+        false, 
+        1l));
+
+    stubFor(post(urlEqualTo("/rest/events/"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withHeader("Content-Type", "application/json")
+        .withBody(responseBody)));
+    
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    
+    clickSelector(".illusion-create-event-larp-kalenteri");
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    
+    verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
+      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+    );
+
+    assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
+  }
+  
+  @Test
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
+  public void testEventLarpKalenteriCreateGenres() throws Exception {
+    stubLarpKalenteriAccessToken();
+    stubLarpKalenteriTypes();
+    stubLarpKalenteriGenres();
+
+    String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .setSerializationInclusion(Include.NON_NULL))
+      .writeValueAsString(new Event(null, 
+        "Open Event", "2", 
+        getDate(2010, 1, 1), 
+        getDate(2010, 1, 2), 
+        null, 
+        null, 
+        null, 
+        8l, 
+        "", 
+        "", 
+        Arrays.asList("fantasy", "cyberpunk"), 
+        "", 
+        null, 
+        false, 
+        null, 
+        "Event for automatic testing (Open)", 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+        null, 
+        Event.Status.ACTIVE, 
+        null, 
+        false, 
+        false, 
+        false, 
+        1l));
+
+    String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper())
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .writeValueAsString(new Event(123l, 
+        "Open Event", "2", 
+        getDate(2010, 1, 1), 
+        getDate(2010, 1, 2), 
+        null, 
+        null, 
+        null, 
+        8l, 
+        "", 
+        "", 
+        Arrays.asList("fantasy", "cyberpunk"), 
+        "", 
+        null, 
+        false, 
+        null, 
+        "Event for automatic testing (Open)", 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+        null, 
+        Event.Status.ACTIVE, 
+        null, 
+        false, 
+        false, 
+        false, 
+        1l));
+
+    stubFor(post(urlEqualTo("/rest/events/"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withHeader("Content-Type", "application/json")
+        .withBody(responseBody)));
+    
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    
+    clickSelector(".illusion-event-settings-genre input[value='1']");
+    clickSelector(".illusion-event-settings-genre input[value='3']");
+    clickSelector(".illusion-create-event-larp-kalenteri");
+    
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    
+    verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
+      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+    );
+
+    assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
+  }
+  
+  @Test
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
+  public void testEventLarpKalenteriCreateLocation() throws Exception {
+    stubLarpKalenteriAccessToken();
+    stubLarpKalenteriTypes();
+    stubLarpKalenteriGenres();
+
+    String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .setSerializationInclusion(Include.NON_NULL))
+      .writeValueAsString(new Event(null, 
+        "Open Event", "2", 
+        getDate(2010, 1, 1), 
+        getDate(2010, 1, 2), 
+        null, 
+        null, 
+        null, 
+        2l, 
+        "Otakaari 24, 02150 Espoo, Finland", 
+        "", 
+        new ArrayList<String>(), 
+        "", 
+        null, 
+        false, 
+        null, 
+        "Event for automatic testing (Open)", 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+        null, 
+        Event.Status.ACTIVE, 
+        null, 
+        false, 
+        false, 
+        false, 
+        1l));
+
+    String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper())
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .writeValueAsString(new Event(123l, 
+        "Open Event", "2", 
+        getDate(2010, 1, 1), 
+        getDate(2010, 1, 2), 
+        null, 
+        null, 
+        null, 
+        2l, 
+        "Otakaari 24, 02150 Espoo, Finland", 
+        "", 
+        new ArrayList<String>(), 
+        "", 
+        null, 
+        false, 
+        null, 
+        "Event for automatic testing (Open)", 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+        null, 
+        Event.Status.ACTIVE, 
+        null, 
+        false, 
+        false, 
+        false, 
+        1l));
+
+    stubFor(post(urlEqualTo("/rest/events/"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withHeader("Content-Type", "application/json")
+        .withBody(responseBody)));
+    
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    typeSelectorInputValue(".illusion-event-settings-location", "Otakaari 24, 02150 Espoo, Finland");
+    clickSelector(".illusion-create-event-larp-kalenteri");
+    waitForInputValueNotBlank(".location-lat");
+    
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    
+    verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
+      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+    );
+
+    assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
+  }
+
+  @Test
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-unpublished", "illusion-event-organizer", "illusion-larp-kalenteri"})
+  public void testEventLarpKalenteriUpdatePublish() throws Exception {
+    stubLarpKalenteriAccessToken();
+    stubLarpKalenteriTypes();
+    stubLarpKalenteriGenres();
+
+    String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .setSerializationInclusion(Include.NON_NULL))
+      .writeValueAsString(new Event(12345l, 
+        "Open Event", "2", 
+        getDate(2010, 1, 1), 
+        getDate(2010, 1, 2), 
+        null, 
+        null, 
+        null, 
+        8l, 
+        "", 
+        "", 
+        new ArrayList<String>(), 
+        "", 
+        null, 
+        false, 
+        null, 
+        "Event for automatic testing (Open)", 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+        null, 
+        Event.Status.ACTIVE, 
+        null, 
+        false, 
+        false, 
+        false, 
+        1l));
+    
+    stubFor(get(urlEqualTo("/rest/events/12345"))
+        .willReturn(aResponse()
+          .withStatus(200)
+          .withHeader("Content-Type", "application/json")
+          .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
+              .registerModule(new JodaModule())
+              .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+              .writeValueAsString(new Event(12345l, 
+                "Open Event", "2", 
+                getDate(2010, 1, 1), 
+                getDate(2010, 1, 2), 
+                null, 
+                null, 
+                null, 
+                8l, 
+                "", 
+                "", 
+                new ArrayList<String>(), 
+                "", 
+                null, 
+                false, 
+                null, 
+                "Event for automatic testing (Open)", 
+                "Test Admin", 
+                "admin@foyt.fi", 
+                "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+                null, 
+                Event.Status.PENDING, 
+                null, 
+                false, 
+                false, 
+                false, 
+                1l)))));
+
+    stubFor(put(urlEqualTo("/rest/events/12345"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withHeader("Content-Type", "application/json")
+        .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
+            .registerModule(new JodaModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .writeValueAsString(new Event(12345l, 
+              "Open Event", "2", 
+              getDate(2010, 1, 1), 
+              getDate(2010, 1, 2), 
+              null, 
+              null, 
+              null, 
+              8l, 
+              "", 
+              "", 
+              new ArrayList<String>(), 
+              "", 
+              null, 
+              false, 
+              null, 
+              "Event for automatic testing (Open)", 
+              "Test Admin", 
+              "admin@foyt.fi", 
+              "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+              null, 
+              Event.Status.ACTIVE, 
+              null, 
+              false, 
+              false, 
+              false, 
+              1l)))));
+    
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    
+    clickSelector(".illusion-event-settings-published");
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    
+    verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))
+      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+    );
+
+    assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
+  }
+
+  @Test
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer", "illusion-larp-kalenteri"})
+  public void testEventLarpKalenteriUpdateUnpublish() throws Exception {
+    stubLarpKalenteriAccessToken();
+    stubLarpKalenteriTypes();
+    stubLarpKalenteriGenres();
+
+    String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .setSerializationInclusion(Include.NON_NULL))
+      .writeValueAsString(new Event(12345l, 
+        "Open Event", "2", 
+        getDate(2010, 1, 1), 
+        getDate(2010, 1, 2), 
+        null, 
+        null, 
+        null, 
+        8l, 
+        "", 
+        "", 
+        new ArrayList<String>(), 
+        "", 
+        null, 
+        false, 
+        null, 
+        "Event for automatic testing (Open)", 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+        null, 
+        Event.Status.PENDING, 
+        null, 
+        false, 
+        false, 
+        false, 
+        1l));
+    
+    stubFor(get(urlEqualTo("/rest/events/12345"))
+        .willReturn(aResponse()
+          .withStatus(200)
+          .withHeader("Content-Type", "application/json")
+          .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
+              .registerModule(new JodaModule())
+              .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+              .writeValueAsString(new Event(12345l, 
+                "Open Event", "2", 
+                getDate(2010, 1, 1), 
+                getDate(2010, 1, 2), 
+                null, 
+                null, 
+                null, 
+                8l, 
+                "", 
+                "", 
+                new ArrayList<String>(), 
+                "", 
+                null, 
+                false, 
+                null, 
+                "Event for automatic testing (Open)", 
+                "Test Admin", 
+                "admin@foyt.fi", 
+                "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+                null, 
+                Event.Status.ACTIVE, 
+                null, 
+                false, 
+                false, 
+                false, 
+                1l)))));
+
+    stubFor(put(urlEqualTo("/rest/events/12345"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withHeader("Content-Type", "application/json")
+        .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
+            .registerModule(new JodaModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .writeValueAsString(new Event(12345l, 
+              "Open Event", "2", 
+              getDate(2010, 1, 1), 
+              getDate(2010, 1, 2), 
+              null, 
+              null, 
+              null, 
+              8l, 
+              "", 
+              "", 
+              new ArrayList<String>(), 
+              "", 
+              null, 
+              false, 
+              null, 
+              "Event for automatic testing (Open)", 
+              "Test Admin", 
+              "admin@foyt.fi", 
+              "http://test.forgeandillusion.net:8080/fnici/illusion/event/openevent", 
+              null, 
+              Event.Status.PENDING, 
+              null, 
+              false, 
+              false, 
+              false, 
+              1l)))));
+    
+    acceptCookieDirective(getWebDriver());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/settings");
+    
+    clickSelector(".illusion-event-settings-published");
+    clickSelector(".illusion-event-settings-save");
+    navigate("/illusion/event/openevent/settings");
+    
+    verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))
+      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+    );
+
+    assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
   }
 }

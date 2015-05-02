@@ -25,6 +25,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -430,6 +431,7 @@ public abstract class AbstractTest {
     executeSql("update ForumTopic set urlName = 'DELETE' where id = (select forumTopic_id from IllusionEvent where urlName = ?)", urlName);
     executeSql("delete from IllusionEventGenre where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
     executeSql("delete from IllusionEventParticipant where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
+    executeSql("delete from IllusionEventSetting where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
     executeSql("update Material set type = 'DELETE' where id in (select folder_id from IllusionEvent where urlName = ?) or parentFolder_id in (select folder_id from IllusionEvent where urlName = ?)", urlName, urlName);
     executeSql("delete from IllusionEvent where urlName = ?", urlName);
     executeSql("delete from ForumTopic where urlName = 'DELETE'");
@@ -501,6 +503,10 @@ public abstract class AbstractTest {
     GreenMail greenMail = new GreenMail(new ServerSetup(getSmtpPort(), "localhost", ServerSetup.PROTOCOL_SMTP));
     greenMail.start();
     return greenMail;
+  }
+  
+  protected DateTime getDate(int year, int monthOfYear, int dayOfMonth) {
+    return new DateTime(year, monthOfYear, dayOfMonth, 0, 0, 0, 0);
   }
 
   private class SqlSet {

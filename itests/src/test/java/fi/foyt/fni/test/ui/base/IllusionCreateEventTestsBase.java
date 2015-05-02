@@ -1,9 +1,27 @@
 package fi.foyt.fni.test.ui.base;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.verify;
+
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
+
+import fi.foyt.fni.larpkalenteri.Event;
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
 import fi.foyt.fni.test.SqlSets;
@@ -11,8 +29,11 @@ import fi.foyt.fni.test.SqlSets;
 @DefineSqlSets({
   @DefineSqlSet (id = "illusion-basic", before = { "basic-users-setup.sql","illusion-basic-setup.sql"}, after = {"illusion-basic-teardown.sql","basic-users-teardown.sql"}),
 })
-public class IllusionCreateEventTestsBase extends AbstractUITest {
+public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
 
+  @Rule
+  public WireMockRule wireMockRule = new WireMockRule(9080);
+  
   @Test
   public void testLoginRedirect() throws UnsupportedEncodingException {
     testLoginRequired("/illusion/createevent");
@@ -338,4 +359,359 @@ public class IllusionCreateEventTestsBase extends AbstractUITest {
     deleteIllusionEventByUrl(name);
     deleteIllusionFolderByUser("admin@foyt.fi");
   }
+  
+  @Test
+  @SqlSets ("illusion-basic")
+  public void testEventLarpKalenteriCreate() throws Exception {
+    stubLarpKalenteriAccessToken();
+    stubLarpKalenteriTypes();
+    stubLarpKalenteriGenres();
+    
+    acceptCookieDirective();
+    loginInternal("admin@foyt.fi", "pass");
+
+    String name = "name";
+    String urlName = "name";
+    String description = "description";
+    
+    String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .setSerializationInclusion(Include.NON_NULL))
+      .writeValueAsString(new Event(null, 
+        name, 
+        "2", 
+        getDate(2030, 10, 20), 
+        getDate(2030, 10, 20), 
+        null, 
+        null, 
+        null, 
+        8l, 
+        "", 
+        "", 
+        new ArrayList<String>(), 
+        "", 
+        null, 
+        false, 
+        null, 
+        description, 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/" + urlName, 
+        null, 
+        Event.Status.PENDING, 
+        null, 
+        false, 
+        false, 
+        false, 
+        null));
+    
+    String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper()
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .setSerializationInclusion(Include.NON_NULL))
+      .writeValueAsString(new Event(234l, 
+        name, 
+        "2", 
+        getDate(2030, 10, 20), 
+        getDate(2030, 10, 20), 
+        null, 
+        null, 
+        null, 
+        8l, 
+        "", 
+        "", 
+        new ArrayList<String>(), 
+        "", 
+        null, 
+        false, 
+        null, 
+        description, 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/" + urlName, 
+        null, 
+        Event.Status.PENDING, 
+        null, 
+        false, 
+        false, 
+        false, 
+        1l));
+
+    stubFor(post(urlEqualTo("/rest/events/"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withHeader("Content-Type", "application/json")
+        .withBody(responseBody)));
+    
+    navigate("/illusion/createevent");
+    
+    findElementBySelector(".illusion-create-event-name").sendKeys(name);
+    findElementBySelector(".illusion-create-event-description").sendKeys(description);
+    typeSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
+    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", "10/20/2030");
+    clickSelector(".illusion-create-event-larp-kalenteri");
+    
+    waitSelectorToBeClickable(".illusion-create-event-save");
+    findElementBySelector(".illusion-create-event-save").click();
+
+    waitForUrlMatches(".*/illusion/event/" + urlName);
+    testTitle("Illusion - name");
+    
+    assertSelectorTextIgnoreCase(".view-header-description-title", name);
+    assertSelectorTextIgnoreCase(".view-header-description-text", description);
+    assertSelectorPresent(".illusion-event-navigation-admin-menu");
+    
+    waitForNotification();
+    assertNotificationStartsWith("warning", "Event is not published");
+    
+    verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
+      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+    );
+    
+    navigate(String.format("/illusion/event/%s/settings", urlName));
+    assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
+    
+    deleteIllusionEventByUrl(urlName);
+    deleteIllusionFolderByUser("admin@foyt.fi"); 
+  }
+  
+  @Test
+  @SqlSets ("illusion-basic")
+  public void testEventLarpKalenteriCreateGenres() throws Exception {
+    stubLarpKalenteriAccessToken();
+    stubLarpKalenteriTypes();
+    stubLarpKalenteriGenres();
+    
+    acceptCookieDirective();
+    loginInternal("admin@foyt.fi", "pass");
+
+    String name = "name";
+    String urlName = "name";
+    String description = "description";
+    
+    String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .setSerializationInclusion(Include.NON_NULL))
+      .writeValueAsString(new Event(null, 
+        name, 
+        "2", 
+        getDate(2030, 10, 20), 
+        getDate(2030, 10, 20), 
+        null, 
+        null, 
+        null, 
+        8l, 
+        "", 
+        "", 
+        Arrays.asList("fantasy", "cyberpunk"),
+        "", 
+        null, 
+        false, 
+        null, 
+        description, 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/" + urlName, 
+        null, 
+        Event.Status.PENDING, 
+        null, 
+        false, 
+        false, 
+        false, 
+        null));
+    
+    String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper()
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .setSerializationInclusion(Include.NON_NULL))
+      .writeValueAsString(new Event(234l, 
+        name, 
+        "2", 
+        getDate(2030, 10, 20), 
+        getDate(2030, 10, 20), 
+        null, 
+        null, 
+        null, 
+        8l, 
+        "", 
+        "", 
+        Arrays.asList("fantasy", "cyberpunk"),
+        "", 
+        null, 
+        false, 
+        null, 
+        description, 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/" + urlName, 
+        null, 
+        Event.Status.PENDING, 
+        null, 
+        false, 
+        false, 
+        false, 
+        1l));
+
+    stubFor(post(urlEqualTo("/rest/events/"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withHeader("Content-Type", "application/json")
+        .withBody(responseBody)));
+    
+    navigate("/illusion/createevent");
+    
+    findElementBySelector(".illusion-create-event-name").sendKeys(name);
+    findElementBySelector(".illusion-create-event-description").sendKeys(description);
+    typeSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
+    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", "10/20/2030");
+    clickSelector(".illusion-create-event-genre input[value='1']");
+    clickSelector(".illusion-create-event-genre input[value='3']");
+    clickSelector(".illusion-create-event-larp-kalenteri");
+    
+    waitSelectorToBeClickable(".illusion-create-event-save");
+    findElementBySelector(".illusion-create-event-save").click();
+
+    waitForUrlMatches(".*/illusion/event/" + urlName);
+    testTitle("Illusion - name");
+    
+    assertSelectorTextIgnoreCase(".view-header-description-title", name);
+    assertSelectorTextIgnoreCase(".view-header-description-text", description);
+    assertSelectorPresent(".illusion-event-navigation-admin-menu");
+    
+    waitForNotification();
+    assertNotificationStartsWith("warning", "Event is not published");
+    
+    verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
+      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+    );
+    
+    navigate(String.format("/illusion/event/%s/settings", urlName));
+    assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
+    
+    deleteIllusionEventByUrl(urlName);
+    deleteIllusionFolderByUser("admin@foyt.fi"); 
+  }
+
+  
+  @Test
+  @SqlSets ("illusion-basic")
+  public void testEventLarpKalenteriCreateLocation() throws Exception {
+    stubLarpKalenteriAccessToken();
+    stubLarpKalenteriTypes();
+    stubLarpKalenteriGenres();
+    
+    acceptCookieDirective();
+    loginInternal("admin@foyt.fi", "pass");
+
+    String name = "name";
+    String urlName = "name";
+    String description = "description";
+    
+    String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .setSerializationInclusion(Include.NON_NULL))
+      .writeValueAsString(new Event(null, 
+        name, 
+        "2", 
+        getDate(2030, 10, 20), 
+        getDate(2030, 10, 20), 
+        null, 
+        null, 
+        null, 
+        2l, 
+        "Otakaari 24, 02150 Espoo, Finland", 
+        "", 
+        new ArrayList<String>(),
+        "", 
+        null, 
+        false, 
+        null, 
+        description, 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/" + urlName, 
+        null, 
+        Event.Status.PENDING, 
+        null, 
+        false, 
+        false, 
+        false, 
+        null));
+    
+    String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper()
+      .registerModule(new JodaModule())
+      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .setSerializationInclusion(Include.NON_NULL))
+      .writeValueAsString(new Event(234l, 
+        name, 
+        "2", 
+        getDate(2030, 10, 20), 
+        getDate(2030, 10, 20), 
+        null, 
+        null, 
+        null, 
+        2l, 
+        "Otakaari 24, 02150 Espoo, Finland", 
+        "", 
+        new ArrayList<String>(),
+        "", 
+        null, 
+        false, 
+        null, 
+        description, 
+        "Test Admin", 
+        "admin@foyt.fi", 
+        "http://test.forgeandillusion.net:8080/fnici/illusion/event/" + urlName, 
+        null, 
+        Event.Status.PENDING, 
+        null, 
+        false, 
+        false, 
+        false, 
+        1l));
+
+    stubFor(post(urlEqualTo("/rest/events/"))
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withHeader("Content-Type", "application/json")
+        .withBody(responseBody)));
+    
+    navigate("/illusion/createevent");
+    
+    findElementBySelector(".illusion-create-event-name").sendKeys(name);
+    findElementBySelector(".illusion-create-event-description").sendKeys(description);
+    typeSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
+    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", "10/20/2030");
+    typeSelectorInputValue(".illusion-create-event-location", "Otakaari 24, 02150 Espoo, Finland");
+    clickSelector(".illusion-create-event-larp-kalenteri");
+    
+    waitForInputValueNotBlank(".location-lat");
+    
+    waitSelectorToBeClickable(".illusion-create-event-save");
+    findElementBySelector(".illusion-create-event-save").click();
+
+    waitForUrlMatches(".*/illusion/event/" + urlName);
+    testTitle("Illusion - name");
+    
+    assertSelectorTextIgnoreCase(".view-header-description-title", name);
+    assertSelectorTextIgnoreCase(".view-header-description-text", description);
+    assertSelectorPresent(".illusion-event-navigation-admin-menu");
+    
+    waitForNotification();
+    assertNotificationStartsWith("warning", "Event is not published");
+    
+    verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
+      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+    );
+    
+    navigate(String.format("/illusion/event/%s/settings", urlName));
+    assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
+    
+    deleteIllusionEventByUrl(urlName);
+    deleteIllusionFolderByUser("admin@foyt.fi"); 
+  }
+
 }

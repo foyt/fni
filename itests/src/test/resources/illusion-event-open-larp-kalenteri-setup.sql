@@ -1,0 +1,1 @@
+insert into IllusionEventSetting (id, event_id, settingKey, value) values (1, 1, 'LARP_KALENTERI_ID', '12345');

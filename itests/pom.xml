@@ -23,6 +23,11 @@
     <!-- REST Assured -->
     
     <restassured.version>2.4.0</restassured.version>  
+    
+    <!-- WireMock -->
+    
+    <wiremock.version>1.55</wiremock.version>
+    
   </properties>
 
   <dependencies>
@@ -38,6 +43,12 @@
     <dependency>
       <groupId>fi.foyt.fni</groupId>
       <artifactId>rest-model</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>fi.foyt.fni</groupId>
+      <artifactId>larp-kalenteri-rest-model</artifactId>
       <scope>test</scope>
     </dependency>
     
@@ -147,6 +158,13 @@
           <groupId>org.apache.httpcomponents</groupId>
         </exclusion>
       </exclusions>
+    </dependency>    
+
+    <dependency>
+      <groupId>com.github.tomakehurst</groupId>
+      <artifactId>wiremock</artifactId>
+      <version>${wiremock.version}</version>
+      <scope>test</scope>
     </dependency>
     
     <dependency>
