@@ -39,7 +39,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   private static final int UML_COMMENTS = 0;
 
   private static final String BYSARUS_ID = "2";
-  private static final String BYSARUS_PATH = "/gamelibrary/testbook_2";
+  private static final String BYSARUS_PATH = "/gamelibrary/with-special.characters";
   private static final boolean BYSARUS_PURCHASABLE = false;
   private static final String BYSARUS_LICENSE = "http://www.example.com/custom/license";
   private static final String BYSARUS_PAGES = "200";
@@ -49,7 +49,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   private static final String BYSARUS_TITLE = "Эх, чужак, общий съём цен шляп (юфть) – вдрызг";
   private static final String[] BYSARUS_AUTHOR_NAMES = new String[] { "Test Guest", "Test User" };
   private static final Long[] BYSARUS_AUTHOR_IDS = new Long[] { 1l, 2l };
-  private static final String BYSARUS_COMMENT_URL = "immutable/testbook_2";
+  private static final String BYSARUS_COMMENT_URL = "immutable/with-special.characters";
   private static final int BYSARUS_COMMENTS = 1;
 
   private static final String SIMPLE_ID = "1";

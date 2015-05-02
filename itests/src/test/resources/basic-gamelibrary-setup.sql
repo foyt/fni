@@ -2,7 +2,7 @@ insert into
   Publication (id, license, name, published, urlName, creator_id, defaultImage_id, forumTopic_id, modifier_id, language_id, price, weight, depth, height, width, created, modified, description, authorsShare)
 values 
   (1, 'http://creativecommons.org/licenses/by-sa/3.0', 'Fat hag dwarves quickly zap jinx mob', true, 'testbook_1', 2, null, 8, 2, (select id from Language where iso2 = 'en'), 10, 1,2,3,4, PARSEDATETIME('1 1 2012', 'd M yyyy'), PARSEDATETIME('1 1 2012', 'd M yyyy'), 'Fat hag dwarves quickly zap jinx mob', 0),  
-  (2, 'http://www.example.com/custom/license', 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг', true, 'testbook_2', 2, null, 9, 2, (select id from Language where iso2 = 'en'), 10, 1,2,3,4, PARSEDATETIME('1 1 2013', 'd M yyyy'), PARSEDATETIME('1 1 2013', 'd M yyyy'), 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг', 0),
+  (2, 'http://www.example.com/custom/license', 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг', true, 'with-special.characters', 2, null, 9, 2, (select id from Language where iso2 = 'en'), 10, 1,2,3,4, PARSEDATETIME('1 1 2013', 'd M yyyy'), PARSEDATETIME('1 1 2013', 'd M yyyy'), 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг', 0),
   (3, 'http://creativecommons.org/licenses/by-nc/3.0', 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.', true, 'pangram_fi', 2, null, 10, 2, (select id from Language where iso2 = 'fi'), 7.5, 10, 10, 10, 10, PARSEDATETIME('1 1 2014', 'd M yyyy'), PARSEDATETIME('1 1 2014', 'd M yyyy'), 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.', 0);
 
 insert into 
