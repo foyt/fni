@@ -13,7 +13,7 @@ before_install:
 - unset GEM_PATH
 branches:
   only:
-  - FTR-220_larp_kalenteri
+  - BUG-265_ordermails
   - devel
 env:
   global:
