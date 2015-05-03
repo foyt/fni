@@ -30,14 +30,11 @@ h4 a {
   color: $default-color;
 }
 
-.panel {
+.index-box {
   background-color: $panel-background-color;
   padding-top: 10px;
   padding-left:26px;
   padding-right: 26px;
-  @include box-sizing(border-box);
-  height: 100%;
-  position: relative;
   padding-bottom: 26px;
 }
 

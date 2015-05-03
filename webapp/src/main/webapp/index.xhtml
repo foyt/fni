@@ -61,147 +61,138 @@
     <!-- Publications and Forum -->
     
     <div class="flex-grid">
-      <div class="flex-grid-cell-12">
-        <div class="panel">
-          <h3>
-            <a jsf:outcome="/gamelibrary/index.jsf">#{locales['index.gameLibaryPublications']}</a>
-          </h3>
-          
-          <div class="flex-grid">
-            <ui:repeat var="publication" value="#{indexViewBackingBean.latestGameLibraryPublications}">
-              <div class="flex-grid-cell-8">
-                <div class="publication-image">
-                  <a class="publication-image-link" href="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
-                    <img jsf:value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=200"/>
-                  </a>
-                </div>
-  
-                <h4>
-                  <a jsf:outcome="/gamelibrary/publication.jsf?faces-redirect=true&amp;urlName=#{publication.urlName}">#{publication.name}</a>
-                </h4>
-                
-                <div class="tags">
-                  <ui:repeat var="tag" value="#{indexViewBackingBean.getPublicationTags(publication)}">
-                    <a class="tag" jsf:outcome="/gamelibrary/taglist.jsf?faces-redirect=true&amp;tag=#{tag.text}">#{tag.text}</a>
-                  </ui:repeat>
-                </div>
-                
-                <div class="publication-description">#{publication.descriptionPlainAbbr}</div>
+      <div class="flex-grid-cell-12 index-box">
+        <h3>
+          <a jsf:outcome="/gamelibrary/index.jsf">#{locales['index.gameLibaryPublications']}</a>
+        </h3>
+        
+        <div class="flex-grid">
+          <ui:repeat var="publication" value="#{indexViewBackingBean.latestGameLibraryPublications}">
+            <div class="flex-grid-cell-8">
+              <div class="publication-image">
+                <a class="publication-image-link" href="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
+                  <img jsf:value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=200"/>
+                </a>
               </div>
-            </ui:repeat>
-          </div>
+
+              <h4>
+                <a jsf:outcome="/gamelibrary/publication.jsf?faces-redirect=true&amp;urlName=#{publication.urlName}">#{publication.name}</a>
+              </h4>
+              
+              <div class="tags">
+                <ui:repeat var="tag" value="#{indexViewBackingBean.getPublicationTags(publication)}">
+                  <a class="tag" jsf:outcome="/gamelibrary/taglist.jsf?faces-redirect=true&amp;tag=#{tag.text}">#{tag.text}</a>
+                </ui:repeat>
+              </div>
+              
+              <div class="publication-description">#{publication.descriptionPlainAbbr}</div>
+            </div>
+          </ui:repeat>
+        </div>
           
-          <div class="more-container"> 
-            <a jsf:outcome="/gamelibrary/index.jsf" class="more-link">#{locales['index.gameLibraryMoreLink']}</a>
-          </div>
+        <div class="more-container"> 
+          <a jsf:outcome="/gamelibrary/index.jsf" class="more-link">#{locales['index.gameLibraryMoreLink']}</a>
         </div>
       </div>
       
-      <div class="flex-grid-cell-4">
-        <div class="panel">
-          <h3>
-            <a jsf:outcome="/illusion/index.jsf">#{locales['index.illusionUpcomingEvents']}</a>
-          </h3>
-          
-          <div class="flex-grid">
-            <div class="flex-grid-cell-16">
-              <div class="index-illusion-no-events" jsf:rendered="#{indexViewBackingBean.illusionEvents.isEmpty()}">#{locales['index.illusionNoUpcomingEvents']}</div>
-              
-              <ui:repeat var="event" value="#{indexViewBackingBean.illusionEvents}">
-                <div class="index-illusion-event">
-                  <div class="index-illusion-event-title">
-                    <h:link outcome="/illusion/event.jsf?urlName=#{event.urlName}" value="#{event.name}"/>
-                  </div>
-                  <div class="index-illusion-event-date">
-                    <h:outputFormat value="#{locales['index.illusionEventDateRange']}" rendered="#{event.endDate ne null}">
-                      <f:param value="#{event.startDate}"/>
-                      <f:param value="#{event.endDate}"/>
-                    </h:outputFormat>
-                    <h:outputFormat value="#{locales['index.illusionEventDateSingle']}" rendered="#{event.endDate eq null}">
-                      <f:param value="#{event.startDate}"/>
-                    </h:outputFormat>
-                  </div>
-                  <div class="index-illusion-event-desc" title="#{event.description}">#{event.description.length() > 200 ? event.description.substring(0, 200).concat('...') : event.description}</div>
+      <div class="flex-grid-cell-4 index-box">
+        <h3>
+          <a jsf:outcome="/illusion/index.jsf">#{locales['index.illusionUpcomingEvents']}</a>
+        </h3>
+        
+        <div class="flex-grid">
+          <div class="flex-grid-cell-16">
+            <div class="index-illusion-no-events" jsf:rendered="#{indexViewBackingBean.illusionEvents.isEmpty()}">#{locales['index.illusionNoUpcomingEvents']}</div>
+            
+            <ui:repeat var="event" value="#{indexViewBackingBean.illusionEvents}">
+              <div class="index-illusion-event">
+                <div class="index-illusion-event-title">
+                  <h:link outcome="/illusion/event.jsf?urlName=#{event.urlName}" value="#{event.name}"/>
                 </div>
-              </ui:repeat>  
-                        
-              <div class="more-container">
-                <a jsf:outcome="/illusion/index.jsf" class="more-link">#{locales['index.illusionEventsMoreLink']}</a>
-              </div>  
-            </div>
+                <div class="index-illusion-event-date">
+                  <h:outputFormat value="#{locales['index.illusionEventDateRange']}" rendered="#{event.endDate ne null}">
+                    <f:param value="#{event.startDate}"/>
+                    <f:param value="#{event.endDate}"/>
+                  </h:outputFormat>
+                  <h:outputFormat value="#{locales['index.illusionEventDateSingle']}" rendered="#{event.endDate eq null}">
+                    <f:param value="#{event.startDate}"/>
+                  </h:outputFormat>
+                </div>
+                <div class="index-illusion-event-desc" title="#{event.description}">#{event.description.length() > 200 ? event.description.substring(0, 200).concat('...') : event.description}</div>
+              </div>
+            </ui:repeat>  
           </div>
-                    
         </div>
+                        
+        <div class="more-container">
+          <a jsf:outcome="/illusion/index.jsf" class="more-link">#{locales['index.illusionEventsMoreLink']}</a>
+        </div> 
       </div>
     </div>
     
     <!-- Blog and forum -->
     
     <div class="flex-grid">
-      <div class="flex-grid-cell-12">
-        <div class="panel">
-          <h3>
-            <a href="http://loki.pelilauta.fi/wordpress/">#{locales['index.blog']}</a>
-          </h3>
-          
-          <ui:repeat var="blogEntry" value="#{indexViewBackingBean.latestBlogEntries}">
-            <div class="blog-entry">
-              <div class="blog-entry-date">
-                <h:outputFormat value="#{blogEntry.created}">
-                  <f:convertDateTime type="date"/>
-                </h:outputFormat>
-              </div>
-              
-              <div class="blog-entry-title-container">
-                <a class="blog-entry-title" href="#{blogEntry.link}">#{blogEntry.title}</a>
-                <span class="blog-entry-author">#{blogEntry.authorName}</span>
-              </div>
-              
-              <div class="tags">
-                <ui:repeat var="blogEntryTag" value="#{indexViewBackingBean.getBlogEntryTags(blogEntry)}">
-                  <a class="tag" href="javascript:void(null)">#{blogEntryTag.text}</a>
-                </ui:repeat>
-              </div>
-              
-              <div class="blog-entry-content">
-                <h:outputText value="#{blogEntry.summary}" escape="false"/>
-              </div>
-              
-              <div class="blog-entry-more-container">
-                <a class="blog-entry-more" href="#{blogEntry.link}">#{locales['index.blogMore']}</a>
-              </div>
-            </div>
-          </ui:repeat>  
+      <div class="flex-grid-cell-12 index-box">
+        <h3>
+          <a href="http://loki.pelilauta.fi/wordpress/">#{locales['index.blog']}</a>
+        </h3>
         
-          <div class="more-container">
-            <a class="more-link" href="http://loki.pelilauta.fi/wordpress/">#{locales['index.blogMoreLink']}</a>
+        <ui:repeat var="blogEntry" value="#{indexViewBackingBean.latestBlogEntries}">
+          <div class="blog-entry">
+            <div class="blog-entry-date">
+              <h:outputFormat value="#{blogEntry.created}">
+                <f:convertDateTime type="date"/>
+              </h:outputFormat>
+            </div>
+            
+            <div class="blog-entry-title-container">
+              <a class="blog-entry-title" href="#{blogEntry.link}">#{blogEntry.title}</a>
+              <span class="blog-entry-author">#{blogEntry.authorName}</span>
+            </div>
+            
+            <div class="tags">
+              <ui:repeat var="blogEntryTag" value="#{indexViewBackingBean.getBlogEntryTags(blogEntry)}">
+                <a class="tag" href="javascript:void(null)">#{blogEntryTag.text}</a>
+              </ui:repeat>
+            </div>
+            
+            <div class="blog-entry-content">
+              <h:outputText value="#{blogEntry.summary}" escape="false"/>
+            </div>
+            
+            <div class="blog-entry-more-container">
+              <a class="blog-entry-more" href="#{blogEntry.link}">#{locales['index.blogMore']}</a>
+            </div>
           </div>
+        </ui:repeat> 
+        
+        <div class="more-container">
+          <a class="more-link" href="http://loki.pelilauta.fi/wordpress/">#{locales['index.blogMoreLink']}</a>
         </div>
       </div>
       
-      <div class="flex-grid-cell-4">
-        <div class="panel">
-          <h3>
-            <a jsf:outcome="/forum/index.jsf">#{locales['index.forumTopics']}</a>
-          </h3>
+      <div class="flex-grid-cell-4 index-box">
+        <h3>
+          <a jsf:outcome="/forum/index.jsf">#{locales['index.forumTopics']}</a>
+        </h3>
 
-          <ui:repeat var="forumTopic" value="#{indexViewBackingBean.latestForumTopics}">
-            <div class="forum-topic">
-              <div class="forum-topic-subject">
-                <a jsf:outcome="/forum/topic.jsf?faces-redirect&amp;forumUrlName=#{forumTopic.forum.urlName}&amp;topicUrlName=#{forumTopic.urlName}">#{forumTopic.subject}</a>
-              </div>
-              <div class="forum-topic-author">
-                <span class="forum-topic-author-prefix">#{locales['index.forumAuthor']}</span>
-                <a class="forum-topic-author-link" jsf:outcome="/users/profile.jsf?faces-redirect=true&amp;userId=#{forumTopic.author.id}">#{forumTopic.author.fullName}</a>
-              </div>
+        <ui:repeat var="forumTopic" value="#{indexViewBackingBean.latestForumTopics}">
+          <div class="forum-topic">
+            <div class="forum-topic-subject">
+              <a jsf:outcome="/forum/topic.jsf?faces-redirect&amp;forumUrlName=#{forumTopic.forum.urlName}&amp;topicUrlName=#{forumTopic.urlName}">#{forumTopic.subject}</a>
             </div>
-          </ui:repeat>
-          
-          <div class="more-container">
-            <a class="more-link" jsf:outcome="/forum/index.jsf">#{locales['index.forumMoreLink']}</a>
+            <div class="forum-topic-author">
+              <span class="forum-topic-author-prefix">#{locales['index.forumAuthor']}</span>
+              <a class="forum-topic-author-link" jsf:outcome="/users/profile.jsf?faces-redirect=true&amp;userId=#{forumTopic.author.id}">#{forumTopic.author.fullName}</a>
+            </div>
           </div>
-        </div>
-      </div>      
+        </ui:repeat>
+          
+        <div class="more-container">
+          <a class="more-link" jsf:outcome="/forum/index.jsf">#{locales['index.forumMoreLink']}</a>
+        </div> 
+      </div>  
     </div>
     
   </ui:define>
