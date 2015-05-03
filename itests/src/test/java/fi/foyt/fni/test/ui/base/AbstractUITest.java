@@ -58,7 +58,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     capabilities.setCapability("build", getProjectVersion());
     capabilities.setCapability("video-upload-on-pass", false);
     capabilities.setCapability("capture-html", true);
-    capabilities.setCapability("timeZone", "Etc/UTC");
+    capabilities.setCapability("timeZone", "GMT+0");
     capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
     capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"));
     
