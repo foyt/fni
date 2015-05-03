@@ -1,0 +1,52 @@
+@import "vars";
+@import "compass";
+
+.flex-grid-container {
+  width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+  @include box-sizing(border-box);
+}
+
+.flex-grid {
+  display: flex;
+}
+
+.flex-grid .no-margin-top {
+  margin-top: 0px;
+}
+
+.flex-grid .no-margin-bottom {
+  margin-bottom: 0px;
+}
+
+.flex-grid .no-margin-left {
+  margin-left: 0px;
+}
+
+.flex-grid .no-margin-right {
+  margin-right: 0px;
+}
+
+@for $i from 1 through $grid-columns {
+  .flex-grid-cell-#{$i} { 
+    flex: 0 0 calc(#{100% / $grid-columns * $i} - #{$grid-margin / 2});
+    margin-left: $grid-margin / 2;
+    margin-right: $grid-margin / 2;
+    margin-top: $grid-margin / 2;
+    margin-bottom: $grid-margin / 2;
+  }
+
+  .flex-grid-cell-#{$i}:first-of-type { 
+    margin-left: 0px;
+  }
+  
+  .flex-grid-cell-#{$i}:last-of-type { 
+    margin-right: 0px;
+  }
+  
+  .flex-grid-cell-#{$i}:first-of-type:last-of-type { 
+    flex: 0 0 #{100% / $grid-columns * $i};
+  }
+
+}
