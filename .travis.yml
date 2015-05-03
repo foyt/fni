@@ -11,6 +11,7 @@ before_install:
   -in travis-encrypted.tar.enc -out travis-encrypted.tar -d
 - tar xvf travis-encrypted.tar
 - unset GEM_PATH
+script: mvn -Dexec.args="-Duser.timezone=UTC"
 branches:
   only:
   - BUG-265_ordermails
