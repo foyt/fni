@@ -11,7 +11,6 @@ before_install:
   -in travis-encrypted.tar.enc -out travis-encrypted.tar -d
 - tar xvf travis-encrypted.tar
 - unset GEM_PATH
-script: mvn -Dexec.args="-Duser.timezone=UTC"
 branches:
   only:
   - BUG-265_ordermails
@@ -24,7 +23,7 @@ env:
   - secure: WUWchzcdGrC6aifA9DuztFPpJLjrns/4ymIzHmjIjLWVXvXGEYnNhbgbH76hW5wFl89Ve8YMvHBcF50P++sRD1HwHSF6naDoiASpmHxAKBnyKJvdxgo06DMygMqlrg8zwEk0Ilh1nF9m5KGEEYLggxQLZEi2dXMANPZs3wR5qOY=
 addons:
   sauce_connect: true
-script: mvn test verify -Ptravis
+script: mvn test verify -Ptravis -Dexec.args="-Duser.timezone=UTC"
 after_success:
 - python travis/m2conf.py
 - mvn deploy --settings ~/.m2/mySettings.xml
