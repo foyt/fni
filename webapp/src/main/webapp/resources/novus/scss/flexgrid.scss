@@ -35,6 +35,8 @@
     margin-right: $grid-margin / 2;
     margin-top: $grid-margin / 2;
     margin-bottom: $grid-margin / 2;
+    position: relative;
+    @include box-sizing(border-box);
   }
 
   .flex-grid-cell-#{$i}:first-of-type { 
