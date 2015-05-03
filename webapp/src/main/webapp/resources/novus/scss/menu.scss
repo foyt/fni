@@ -24,6 +24,10 @@ $menu-z-index: 9999;
   position: relative;
 }
 
+.flex-grid .menu-logo {
+  left: 10px;
+}
+
 .menu-logo-text,
 .menu-logo-shadow {
   font-size: 15px;
@@ -37,6 +41,11 @@ $menu-z-index: 9999;
 
 .menu-logo-text { 
   color: $menu-text-color;
+  text-decoration: none;
+  position: absolute;
+  top: 0px;  
+  left: 0px;
+  right: 0px;
 }
 
 .menu-logo-shadow {
@@ -109,6 +118,11 @@ $menu-z-index: 9999;
 
 .menu-tools-container {
   text-align: right;
+  position: relative;
+}
+
+.flex-grid .menu-tools-container {
+  right: 10px;
 }
 
 .menu-tools-container * {
