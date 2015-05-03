@@ -43,6 +43,8 @@ $menu-z-index: 9999;
   color: transparent;
   position: absolute;
   top: 0px;  
+  left: 0px;
+  right: 0px;
   text-shadow: 0px 0px 10px $menu-logo-shadow-color;
 }
 
@@ -63,12 +65,44 @@ $menu-z-index: 9999;
 
 @media screen and (max-width: $grid-width-desktop) {
   .menu-navigation-container a, .menu-navigation-container span {
-    width: 20%;
   }
   
   .menu-tools-search {
-    margin-right: 8px;
   }
+  
+  .menu-logo {
+    text-align: center;
+  }
+  
+  .menu-tools-container {
+    height: 0px;
+  }
+  
+  .menu-tools-login {
+    position: absolute;
+    left: 18px;
+    top: 0px;
+  }
+  
+  .menu-tools-locale {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+  }
+  
+  .menu-tools-locale-list {
+    right: 18px;
+    top: 24px;
+  }
+  
+  .menu-navigation-container {
+    text-align: center;
+  }
+  
+  .menu-tools-search-container, .menu-tools-search {
+    display: none !important;
+  }
+  
 }
 
 /* Tools */

@@ -8,7 +8,7 @@
 
   <h:panelGroup layout="block" styleClass="grid_16 tight index-menu"> 
     <h:link outcome="/index.jsf">
-      <h:panelGroup layout="block" styleClass="grid_3 hide_on_mobile menu-logo">
+      <h:panelGroup layout="block" styleClass="grid_3 menu-logo">
         <h:panelGroup layout="block" styleClass="menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
         <h:panelGroup layout="block" styleClass="menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
         <h:panelGroup layout="block" styleClass="menu-logo-shadow">#{locales['menu.logoText']}</h:panelGroup>
@@ -44,12 +44,12 @@
     </h:panelGroup>
     
     <h:panelGroup layout="block" styleClass="grid_5 menu-tools-container">
-      <h:panelGroup layout="block" styleClass="menu-tools-locale-container">
-        <h:outputLink value="javascript:void(null)" styleClass="menu-tools-locale">
+      <div class="menu-tools-locale-container">
+        <a href="javascript:void(null)" class="menu-tools-locale">
           <h:outputFormat value="#{locales['menu.toolLocale']}">
             <f:param value="#{sessionBackingBean.locale.language}"/>
           </h:outputFormat>
-        </h:outputLink>
+        </a>
         
         <h:form>
           <ul class="menu-tools-locale-list" style="display: none">
@@ -66,7 +66,7 @@
             </li>
           </ul>
         </h:form>
-      </h:panelGroup>
+      </div>
       
       <h:link outcome="/users/login.jsf?redirectUrl=#{sessionBackingBean.requestPath}" styleClass="menu-tools-login" rendered="#{not sessionBackingBean.loggedIn}">#{locales['menu.toolLogin']}</h:link>
       
