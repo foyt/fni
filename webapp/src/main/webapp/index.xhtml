@@ -9,6 +9,10 @@
 
   <ui:define name="page-title">#{locales['index.title']}</ui:define>
   
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+      
   <ui:define name="view-scripts">
     <!-- jQuery Magnific-Popup  -->
   
@@ -37,174 +41,168 @@
     
     <!-- Banner -->
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight hide_on_mobile index-banner">
-      <h:graphicImage library="novus" name="gfx/layout/banner.jpg" />
-    </h:panelGroup>
+    <div class="flex-grid">
+      <div class="flex-grid-cell-16 no-margin-top no-margin-bottom">
+        <h:graphicImage library="novus" name="gfx/layout/banner.jpg" styleClass="banner"/>
+      </div>
+    </div>
     
     <!-- Description -->
-    
-    <h:panelGroup layout="block" styleClass="grid_16 tight index-description">
-      <p class="index-description-title">#{locales['index.descriptionTitle']}</p>
-      <p class="index-description-text">#{locales['index.descriptionText']}</p>
-    </h:panelGroup>
 
+    <div class="flex-grid">
+      <div class="flex-grid-cell-16 no-margin-top">
+        <div class="description-panel">
+          <p class="description-title">#{locales['index.descriptionTitle']}</p>
+          <p class="description-text">#{locales['index.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
+    
     <!-- Publications and Forum -->
-   
-    <h:panelGroup layout="block" styleClass="grid_16 tight index-row">
-      <h:panelGroup layout="block" styleClass="grid_12 tight index-publications">
-        <h:panelGroup layout="block" styleClass="index-publications-panel">
+    
+    <div class="flex-grid">
+      <div class="flex-grid-cell-12">
+        <div class="panel">
           <h3>
-            <h:link outcome="/gamelibrary/index.jsf">
-              #{locales['index.gameLibaryPublications']}
-            </h:link>
+            <a jsf:outcome="/gamelibrary/index.jsf">#{locales['index.gameLibaryPublications']}</a>
           </h3>
-        
-          <h:panelGroup layout="block" styleClass="index-publications">
+          
+          <div class="flex-grid">
             <ui:repeat var="publication" value="#{indexViewBackingBean.latestGameLibraryPublications}">
-              <h:panelGroup layout="block" styleClass="grid_6 tight index-publication">
-                <h:panelGroup layout="block" styleClass="index-publication-image" rendered="#{publication.defaultImage ne null}">
-                  <h:outputLink styleClass="index-publication-image-link" value="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
-                    <h:graphicImage value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=200"/>
-                  </h:outputLink>
-                </h:panelGroup>     
-                
+              <div class="flex-grid-cell-8">
+                <div class="publication-image">
+                  <a class="publication-image-link" href="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
+                    <img jsf:value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=200"/>
+                  </a>
+                </div>
+  
                 <h4>
-                  <h:outputLink value="#{request.contextPath}/gamelibrary/#{publication.urlName}">#{publication.name}</h:outputLink>
+                  <a jsf:outcome="/gamelibrary/publication.jsf?faces-redirect=true&amp;urlName=#{publication.urlName}">#{publication.name}</a>
                 </h4>
                 
-                <h:panelGroup layout="block" styleClass="index-publication-tags">
+                <div class="tags">
                   <ui:repeat var="tag" value="#{indexViewBackingBean.getPublicationTags(publication)}">
-                    <h:panelGroup styleClass="index-publication-tag">
-                      <h:link outcome="/gamelibrary/taglist.jsf" value="#{tag.text}">
-                        <f:param name="tag" value="#{tag.text}"/>
-                      </h:link>
-                    </h:panelGroup>
+                    <a class="tag" jsf:outcome="/gamelibrary/taglist.jsf?faces-redirect=true&amp;tag=#{tag.text}">#{tag.text}</a>
                   </ui:repeat>
-                </h:panelGroup>
-                
-                <h:panelGroup layout="block" styleClass="index-publication-description">
-                  #{publication.descriptionPlainAbbr}
-                </h:panelGroup>
-                
-              </h:panelGroup>
-            </ui:repeat>
-          </h:panelGroup> 
-          
-          <h:panelGroup layout="block" styleClass="index-gamelibrary-more-container">
-            <h:link value="#{locales['index.gameLibraryMoreLink']}" outcome="/gamelibrary/index.jsf"  styleClass="index-gamelibrary-more"/>
-          </h:panelGroup>
-        </h:panelGroup>
-      </h:panelGroup>
-          
-      <div class="grid_4 omega index-illusion-events-container">
-        <div class="index-illusion-events-panel">
-          <h3>
-            <h:link outcome="/illusion/index.jsf">#{locales['index.illusionUpcomingEvents']}</h:link>
-          </h3>
-          
-          <div class="index-illusion-events">
-            <div class="index-illusion-no-events" jsf:rendered="#{indexViewBackingBean.illusionEvents.isEmpty()}">#{locales['index.illusionNoUpcomingEvents']}</div>
-            <ui:repeat var="event" value="#{indexViewBackingBean.illusionEvents}">
-	            <div class="index-illusion-event">
-	              <div class="index-illusion-event-title">
-	                <h:link outcome="/illusion/event.jsf?urlName=#{event.urlName}" value="#{event.name}"/>
-	              </div>
-	              <div class="index-illusion-event-date">
-                  <h:outputFormat value="#{locales['index.illusionEventDateRange']}" rendered="#{event.endDate ne null}">
-                    <f:param value="#{event.startDate}"/>
-                    <f:param value="#{event.endDate}"/>
-                  </h:outputFormat>
-                  <h:outputFormat value="#{locales['index.illusionEventDateSingle']}" rendered="#{event.endDate eq null}">
-                    <f:param value="#{event.startDate}"/>
-                  </h:outputFormat>
                 </div>
-                <div class="index-illusion-event-desc" title="#{event.description}">#{event.description.length() > 200 ? event.description.substring(0, 200).concat('...') : event.description}</div>
-	            </div>
+                
+                <div class="publication-description">#{publication.descriptionPlainAbbr}</div>
+              </div>
             </ui:repeat>
           </div>
           
-          <div class="index-illusion-events-more-container">
-            <h:link value="#{locales['index.illusionEventsMoreLink']}" outcome="/illusion/index.jsf"  styleClass="index-illusion-events-more"/>
-          </div>          
+          <div class="more-container"> 
+            <a jsf:outcome="/gamelibrary/index.jsf" class="more-link">#{locales['index.gameLibraryMoreLink']}</a>
+          </div>
         </div>
       </div>
-    </h:panelGroup>
+      
+      <div class="flex-grid-cell-4">
+        <div class="panel">
+          <h3>
+            <a jsf:outcome="/illusion/index.jsf">#{locales['index.illusionUpcomingEvents']}</a>
+          </h3>
+          
+          <div class="flex-grid">
+            <div class="flex-grid-cell-16">
+              <div class="index-illusion-no-events" jsf:rendered="#{indexViewBackingBean.illusionEvents.isEmpty()}">#{locales['index.illusionNoUpcomingEvents']}</div>
+              
+              <ui:repeat var="event" value="#{indexViewBackingBean.illusionEvents}">
+                <div class="index-illusion-event">
+                  <div class="index-illusion-event-title">
+                    <h:link outcome="/illusion/event.jsf?urlName=#{event.urlName}" value="#{event.name}"/>
+                  </div>
+                  <div class="index-illusion-event-date">
+                    <h:outputFormat value="#{locales['index.illusionEventDateRange']}" rendered="#{event.endDate ne null}">
+                      <f:param value="#{event.startDate}"/>
+                      <f:param value="#{event.endDate}"/>
+                    </h:outputFormat>
+                    <h:outputFormat value="#{locales['index.illusionEventDateSingle']}" rendered="#{event.endDate eq null}">
+                      <f:param value="#{event.startDate}"/>
+                    </h:outputFormat>
+                  </div>
+                  <div class="index-illusion-event-desc" title="#{event.description}">#{event.description.length() > 200 ? event.description.substring(0, 200).concat('...') : event.description}</div>
+                </div>
+              </ui:repeat>  
+                        
+              <div class="more-container">
+                <a jsf:outcome="/illusion/index.jsf" class="more-link">#{locales['index.illusionEventsMoreLink']}</a>
+              </div>  
+            </div>
+          </div>
+                    
+        </div>
+      </div>
+    </div>
     
-    <!-- Blog -->
+    <!-- Blog and forum -->
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight index-row">
-	    <h:panelGroup layout="block" styleClass="grid_12 tight index-blog">
-	      <h:panelGroup layout="block" styleClass="index-blog-panel">
-	        <h3>
-	          <h:outputLink value="http://loki.pelilauta.fi/wordpress/">#{locales['index.blog']}</h:outputLink>
-	        </h3>
-	        
-	        <h:panelGroup layout="block" styleClass="index-blog-entries">
-	          <ui:repeat var="blogEntry" value="#{indexViewBackingBean.latestBlogEntries}">
-	            <h:panelGroup layout="block" styleClass="index-blog-entry">
-	              <h:panelGroup layout="block" styleClass="index-blog-entry-date">
-	                <h:outputFormat value="#{blogEntry.created}">
-	                  <f:convertDateTime type="date"/>
-	                </h:outputFormat>
-	              </h:panelGroup>
-	              
-	              <h:panelGroup layout="block" styleClass="index-blog-entry-title-container">
-	                <h:outputLink styleClass="index-blog-entry-title" value="#{blogEntry.link}">#{blogEntry.title}</h:outputLink>
-	                <h:panelGroup styleClass="index-blog-entry-author">#{blogEntry.authorName}</h:panelGroup>
-	              </h:panelGroup>
-	
-	              <h:panelGroup layout="block" styleClass="index-blog-entry-tags">
-	                <ui:repeat var="blogEntryTag" value="#{indexViewBackingBean.getBlogEntryTags(blogEntry)}">
-	                  <h:outputText value="#{blogEntryTag.text}" styleClass="index-blog-entry-tag"/>
-	                </ui:repeat>
-	              </h:panelGroup>
-	              
-	              <h:panelGroup layout="block" styleClass="index-blog-entry-content">
-	                <h:outputText value="#{blogEntry.summary}" escape="false"/>
-	              </h:panelGroup>
-	              
-	              <h:panelGroup layout="block" styleClass="index-blog-entry-more-container">
-	                <h:outputLink styleClass="index-blog-entry-more" value="#{blogEntry.link}">#{locales['index.blogMore']}</h:outputLink>
-	              </h:panelGroup>
-	            </h:panelGroup>
-	          </ui:repeat>         
-	        </h:panelGroup>
-	        
-	        <h:panelGroup layout="block" styleClass="index-blog-more-container">
-	          <h:outputLink value="http://loki.pelilauta.fi/wordpress/" styleClass="index-blog-more">#{locales['index.blogMoreLink']}</h:outputLink>
-	        </h:panelGroup>     
-	      </h:panelGroup>
-	          
-	    </h:panelGroup>
-	    
-	    <h:panelGroup layout="block" styleClass="grid_4 omega index-forum">
-	      <h:panelGroup layout="block" styleClass="index-forum-panel">
-	        <h3>
-	          <h:link outcome="/forum/index.jsf">
-	            #{locales['index.forumTopics']}
-	          </h:link>
-	        </h3>
-	        
-	        <h:panelGroup layout="block" styleClass="index-forum-topics">
-	          <ui:repeat var="forumTopic" value="#{indexViewBackingBean.latestForumTopics}">
-	            <h:panelGroup layout="block" styleClass="index-forum-topic">
-	              <h:panelGroup layout="block" styleClass="index-forum-topic-subject">
-	                <h:outputLink value="#{request.contextPath}/forum/#{forumTopic.forum.urlName}/#{forumTopic.urlName}">#{forumTopic.subject}</h:outputLink>
-	              </h:panelGroup>
-	              <h:panelGroup layout="block" styleClass="index-forum-topic-author">
-	                <h:panelGroup styleClass="index-forum-topic-author-prefix">#{locales['index.forumAuthor']}</h:panelGroup>
-	                <h:outputLink styleClass="index-forum-topic-author-link" value="#{request.contextPath}/profile/#{forumTopic.author.id}">#{forumTopic.author.fullName}</h:outputLink>
-	              </h:panelGroup>
-	            </h:panelGroup>
-	          </ui:repeat>
-	        </h:panelGroup>
-	        
-	        <h:panelGroup layout="block" styleClass="index-forum-more-container">
-	          <h:link value="#{locales['index.forumMoreLink']}" outcome="/forum/index.jsf"  styleClass="index-forum-more"/>
-	        </h:panelGroup>          
-	      </h:panelGroup>
-	    </h:panelGroup>
-	  </h:panelGroup>
+    <div class="flex-grid">
+      <div class="flex-grid-cell-12">
+        <div class="panel">
+          <h3>
+            <a href="http://loki.pelilauta.fi/wordpress/">#{locales['index.blog']}</a>
+          </h3>
+          
+          <ui:repeat var="blogEntry" value="#{indexViewBackingBean.latestBlogEntries}">
+            <div class="blog-entry">
+              <div class="blog-entry-date">
+                <h:outputFormat value="#{blogEntry.created}">
+                  <f:convertDateTime type="date"/>
+                </h:outputFormat>
+              </div>
+              
+              <div class="blog-entry-title-container">
+                <a class="blog-entry-title" href="#{blogEntry.link}">#{blogEntry.title}</a>
+                <span class="blog-entry-author">#{blogEntry.authorName}</span>
+              </div>
+              
+              <div class="tags">
+                <ui:repeat var="blogEntryTag" value="#{indexViewBackingBean.getBlogEntryTags(blogEntry)}">
+                  <a class="tag" href="javascript:void(null)">#{blogEntryTag.text}</a>
+                </ui:repeat>
+              </div>
+              
+              <div class="blog-entry-content">
+                <h:outputText value="#{blogEntry.summary}" escape="false"/>
+              </div>
+              
+              <div class="blog-entry-more-container">
+                <a class="blog-entry-more" href="#{blogEntry.link}">#{locales['index.blogMore']}</a>
+              </div>
+            </div>
+          </ui:repeat>  
+        
+          <div class="more-container">
+            <a class="more-link" href="http://loki.pelilauta.fi/wordpress/">#{locales['index.blogMoreLink']}</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex-grid-cell-4">
+        <div class="panel">
+          <h3>
+            <a jsf:outcome="/forum/index.jsf">#{locales['index.forumTopics']}</a>
+          </h3>
+
+          <ui:repeat var="forumTopic" value="#{indexViewBackingBean.latestForumTopics}">
+            <div class="forum-topic">
+              <div class="forum-topic-subject">
+                <a jsf:outcome="/forum/topic.jsf?faces-redirect&amp;forumUrlName=#{forumTopic.forum.urlName}&amp;topicUrlName=#{forumTopic.urlName}">#{forumTopic.subject}</a>
+              </div>
+              <div class="forum-topic-author">
+                <span class="forum-topic-author-prefix">#{locales['index.forumAuthor']}</span>
+                <a class="forum-topic-author-link" jsf:outcome="/users/profile.jsf?faces-redirect=true&amp;userId=#{forumTopic.author.id}">#{forumTopic.author.fullName}</a>
+              </div>
+            </div>
+          </ui:repeat>
+          
+          <div class="more-container">
+            <a class="more-link" jsf:outcome="/forum/index.jsf">#{locales['index.forumMoreLink']}</a>
+          </div>
+        </div>
+      </div>      
+    </div>
     
   </ui:define>
   

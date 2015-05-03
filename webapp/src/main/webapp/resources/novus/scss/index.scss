@@ -9,6 +9,8 @@ $description-color: #ADD6F0;
 h3 {
   @include header-3;
   color: $title-color;
+  margin-top: 23px;
+  margin-bottom: 39px;
 }
 
 h3 a {
@@ -16,28 +18,77 @@ h3 a {
   color: $title-color;
 }
 
+h4 {
+  @include header-2;
+  padding-top: 43px;
+  padding-bottom: 13px;
+  padding-right: 20px;
+}
+
+h4 a {
+  text-decoration: none;
+  color: $default-color;
+}
+
+.panel {
+  background-color: $panel-background-color;
+  padding-top: 10px;
+  padding-left:26px;
+  padding-right: 26px;
+  @include box-sizing(border-box);
+  height: 100%;
+  position: relative;
+  padding-bottom: 26px;
+}
+
+.tag {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 10px;
+  text-transform: uppercase;
+  padding-right: 13px;
+  text-decoration: none;
+}
+
+.more-container {
+  position: absolute;
+  bottom: 10px;
+  right: 26px;
+}
+
+.more-link {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: bold;
+}
+  
 /* Banner */
 
-.index-banner img {
+img.banner {
   vertical-align: top;
 }
 
 /* Description */
 
-.index-description {
+.description-panel {
   background: #000;
+  @include box-sizing(border-box);
+  height: 100%;
+  position: relative;
+  padding-top: 26px;
 }
 
-.index-description-title {
+.description-title {
   margin-left: 39px;
-  margin-top: 26px;
   font-size: 26px;
   text-transform: uppercase;
   font-family: $title-font;
   color: $description-color;
 }
 
-.index-description-text {
+.description-text {
   margin-left: 39px;
   margin-top: 12px;
   margin-bottom: 26px;
@@ -47,92 +98,9 @@ h3 a {
   color: $description-color;
 }
 
-.index-publications-panel, 
-.index-illusion-events-panel,
-.index-forum-panel,
-.index-blog-panel {
-  background-color: $panel-background-color;
-  padding-top: 10px;
-  padding-left:26px;
-}
+/* Publications */
 
-.index-illusion-no-events {
-  font-family: $default-font;
-  color: $default-color;
-  font-size: 14px;
-}
-
-.index-publications-panel {
-  display: table;
-  padding-bottom: 10px;
-}
-
-.index-row h3 {
-  margin-top: 23px;
-  margin-bottom: 39px;
-}
-
-.index-row {
-  margin-top: 10px;  
-}
-
-.index-publication {
-  max-width: 347px;
-}
-
-@media screen and (min-width: $grid-width-desktop) {
-  .index-row {
-    position: relative;
-  }
-  
-  .index-illusion-events-container,
-  .index-forum {
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    bottom: 0px;
-  }
-  
-  .index-illusion-events-panel,
-  .index-forum-panel {
-    @include box-sizing(border-box);
-    height: 100%;
-  }  
-  
-  .index-illusion-events-more-container,
-  .index-forum-more-container {
-    bottom: 10px;
-    position: absolute;
-    right: 0;
-  }
-  
-}
-
-.index-row h4 {
-  @include header-2;
-  padding-top: 43px;
-  padding-bottom: 13px;
-  padding-right: 20px;
-}
-
-.index-row h4 a {
-  text-decoration: none;
-  color: $default-color;
-}
-
-.index-publication-tag {
-  font-family: $default-font;
-  font-size: 10px;
-  text-transform: uppercase;
-  padding-right: 13px;
-}
-
-.index-publication-tag a {
-  color: $default-color;
-  text-decoration: none;
-}
-
-.index-publication-description {
+.publication-description {
   font-family: $default-font;
   color: $default-color;
   margin-top: 10px;
@@ -140,38 +108,12 @@ h3 a {
   padding-right: 20px;  
 }
 
-.index-gamelibrary-more-container, .index-forum-more-container, .index-illusion-events-more-container {
-  margin-right: 25px;
-  float: right;
-}
+/* Events */
 
-@media screen and (max-width: $grid-width-desktop) {
-  
-  .index-publications-panel {
-    position: relative;
-  }
-  
-  .index-gamelibrary-more-container {
-    position: absolute;
-    right: 0px;
-    bottom: 0px;
-  }
-}
-
-.index-gamelibrary-more, .index-forum-more, .index-illusion-events-more {
+.index-illusion-no-events {
   font-family: $default-font;
   color: $default-color;
-  font-size: 16px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.index-forum-topic {
-  margin-bottom: 25px;
-}
-
-.index-forum-topic:last-child {
-  margin-bottom: 0px;
+  font-size: 14px;
 }
 
 .index-illusion-event-title {
@@ -181,15 +123,7 @@ h3 a {
   margin-bottom: 10px;
 }
 
-.index-forum-topic-subject {
-  font-family: $default-font;
-  font-weight: bold;
-  font-size: 16px;
-  margin-bottom: 5px;
-}
-
-.index-illusion-event-title a,
-.index-forum-topic-subject a {
+.index-illusion-event-title a {
   color: $default-color;
   text-decoration: none;
 }
@@ -213,56 +147,37 @@ h3 a {
   padding-right: 20px;
 }
 
-.index-forum-topic-author {
-  font-family: $default-font;
-  color: $default-color;
-  text-transform: uppercase;
-  font-size: 10px;
-}
-
-.index-forum-topic-author-link {
-  font-family: $default-font;
-  padding-left: 4px;
-  text-decoration: none;  
-}
-
 /* Blog */
 
-.index-blog h3 {
-  margin-top: 23px;
-  margin-bottom: 39px;
-}
-
-.index-blog-panel {
-  padding-bottom: 25px;
-  padding-right: 25px;
-}
-
-.index-blog-entry {
+.blog-entry {
   margin-bottom: 45px;
 }
 
-.index-blog-entry:last-child {
+.blog-entry:last-child {
   margin-bottom: 0px;
 }
 
-.index-blog-entry-date {
+.blog-entry-date {
   @include header-6;
   font-weight: bold;
   margin-bottom: 12px;
 }
 
-.index-blog-entry-title {
+.blog-entry-title-container {
+  margin-bottom: 13px;
+}
+
+.blog-entry-title {
   @include header-2;
 }
 
-.index-blog-entry-author:before {
+.blog-entry-author:before {
   content: '-';
   padding-left: 5px;
   padding-right: 5px;
 }
 
-.index-blog-entry-author {
+.blog-entry-author {
   font-family: $default-font;
   color: $default-color;
   font-size: 16px;
@@ -270,11 +185,11 @@ h3 a {
   font-weight: bold;
 }
 
-.index-blog-entry-tags {
+.blog-entry-tags {
   margin-top: 21px;
 }
 
-.index-blog-entry-tag {
+.blog-entry-tag {
   font-family: $default-font;
   color: $default-color;
   font-size: 10px;
@@ -283,18 +198,18 @@ h3 a {
   text-decoration: none;
 }
 
-.index-blog-entry-content {
+.blog-entry-content {
   font-family: $default-font;
   color: $default-color;
   font-size: 13px;
   margin-top: 20px;
 }
 
-.index-blog-entry-more-container {
+.blog-entry-more-container {
   margin-top: 16px;
 }
 
-.index-blog-entry-more {
+.blog-entry-more {
   font-family: $default-font;
   color: $default-color;
   font-style: italic;
@@ -303,15 +218,45 @@ h3 a {
   text-decoration: none;
 }
 
-.index-blog-more-container {
-  float: right;
+/* Forum */
+
+.forum-topic {
+  margin-bottom: 25px;
 }
 
-.index-blog-more {
+.forum-topic:last-child {
+  margin-bottom: 0px;
+}
+
+.index-illusion-event-title {
+  font-family: $default-font;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.forum-topic-subject {
+  font-family: $default-font;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+
+.forum-topic-author {
   font-family: $default-font;
   color: $default-color;
-  font-size: 16px;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.forum-topic-author-link {
+  font-family: $default-font;
+  padding-left: 4px;
+  text-decoration: none;  
+}
+
+.forum-topic-subject a {
+  color: $default-color;
   text-decoration: none;
-  font-weight: bold;
-  font-style: italic;
 }

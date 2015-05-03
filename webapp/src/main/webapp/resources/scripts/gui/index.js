@@ -2,7 +2,7 @@
   'use strict';
   
   $(document).ready(function () {
-    $('.index-publication-image-link').magnificPopup({ 
+    $('.publication-image-link').magnificPopup({ 
       type: 'image'
     });
   });

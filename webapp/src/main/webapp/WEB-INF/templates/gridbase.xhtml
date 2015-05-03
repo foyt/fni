@@ -28,8 +28,10 @@
       <h:outputStylesheet library="novus" name="css/common.css"/>
       <h:outputStylesheet library="novus" name="css/menu.css"/>
       <h:outputStylesheet library="novus" name="css/fonts.css"/>
-      <h:outputStylesheet library="novus" name="css/grid.css"/>
-      
+      <ui:insert name="grid-css">
+        <h:outputStylesheet library="novus" name="css/grid.css"/>
+      </ui:insert>
+
       <!-- Global Variables -->
       
       <script type="text/javascript">
@@ -86,7 +88,7 @@
       </div>
 
       <ui:insert name="body-content">
-        <h:panelGroup layout="block" styleClass="container_16">
+        <h:panelGroup layout="block" styleClass="container_16 flex-grid-container">
           <ui:insert name="grid-content"/>
         </h:panelGroup> 
       </ui:insert>
