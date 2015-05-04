@@ -30,6 +30,7 @@
     
     <!-- View styles -->
     
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/index.css"/>
   </ui:define>
 
@@ -41,16 +42,16 @@
     
     <!-- Banner -->
     
-    <div class="flex-grid">
-      <div class="flex-grid-cell-16 no-margin-top no-margin-bottom">
+    <div class="flex-row">
+      <div class="flex-cell-16 no-margin-top no-margin-bottom">
         <h:graphicImage library="novus" name="gfx/layout/banner.jpg" styleClass="banner"/>
       </div>
     </div>
     
     <!-- Description -->
 
-    <div class="flex-grid">
-      <div class="flex-grid-cell-16 no-margin-top">
+    <div class="flex-row">
+      <div class="flex-cell-16 no-margin-top">
         <div class="description-panel">
           <p class="description-title">#{locales['index.descriptionTitle']}</p>
           <p class="description-text">#{locales['index.descriptionText']}</p>
@@ -60,15 +61,15 @@
     
     <!-- Publications and Forum -->
     
-    <div class="flex-grid">
-      <div class="flex-grid-cell-12 index-box">
+    <div class="flex-row">
+      <div class="flex-cell-12 index-box">
         <h3>
           <a jsf:outcome="/gamelibrary/index.jsf">#{locales['index.gameLibaryPublications']}</a>
         </h3>
         
-        <div class="flex-grid">
+        <div class="flex-row">
           <ui:repeat var="publication" value="#{indexViewBackingBean.latestGameLibraryPublications}">
-            <div class="flex-grid-cell-8">
+            <div class="flex-cell-8">
               <div class="publication-image">
                 <a class="publication-image-link" href="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
                   <img jsf:value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=200"/>
@@ -95,13 +96,13 @@
         </div>
       </div>
       
-      <div class="flex-grid-cell-4 index-box">
+      <div class="flex-cell-4 index-box">
         <h3>
           <a jsf:outcome="/illusion/index.jsf">#{locales['index.illusionUpcomingEvents']}</a>
         </h3>
         
-        <div class="flex-grid">
-          <div class="flex-grid-cell-16">
+        <div class="flex-row">
+          <div class="flex-cell-16">
             <div class="index-illusion-no-events" jsf:rendered="#{indexViewBackingBean.illusionEvents.isEmpty()}">#{locales['index.illusionNoUpcomingEvents']}</div>
             
             <ui:repeat var="event" value="#{indexViewBackingBean.illusionEvents}">
@@ -132,8 +133,8 @@
     
     <!-- Blog and forum -->
     
-    <div class="flex-grid">
-      <div class="flex-grid-cell-12 index-box">
+    <div class="flex-row">
+      <div class="flex-cell-12 index-box">
         <h3>
           <a href="http://loki.pelilauta.fi/wordpress/">#{locales['index.blog']}</a>
         </h3>
@@ -172,7 +173,7 @@
         </div>
       </div>
       
-      <div class="flex-grid-cell-4 index-box">
+      <div class="flex-cell-4 index-box">
         <h3>
           <a jsf:outcome="/forum/index.jsf">#{locales['index.forumTopics']}</a>
         </h3>

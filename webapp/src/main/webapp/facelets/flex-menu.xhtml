@@ -7,8 +7,8 @@
   
   <h:outputScript name="scripts/gui/menu.js" target="head"/>
   
-  <div class="flex-grid index-menu"> 
-    <div class="flex-grid-cell-3 no-margin-top no-margin-bottom">
+  <div class="flex-row index-menu"> 
+    <div class="flex-cell-3 no-margin-top no-margin-bottom">
       <div class="menu-logo">
         <div class="menu-logo-shadow">#{locales['menu.logoText']}</div>
         <div class="menu-logo-shadow">#{locales['menu.logoText']}</div>
@@ -18,7 +18,7 @@
       </div>
     </div>
     
-    <h:panelGroup layout="block" styleClass="menu-navigation-container flex-grid-cell-8 no-margin-top no-margin-bottom">
+    <h:panelGroup layout="block" styleClass="menu-navigation-container flex-cell-8 no-margin-top no-margin-bottom">
       <h:link outcome="/forge/index.jsf">#{locales['menu.menuForge']}</h:link>
       <h:link outcome="/illusion/index.jsf">#{locales['menu.menuIllusion']}</h:link>
       <h:link outcome="/gamelibrary/index.jsf">#{locales['menu.menuGameLibrary']}</h:link>
@@ -41,7 +41,7 @@
       </h:panelGroup>
     </h:panelGroup>
     
-    <h:panelGroup layout="block" styleClass="menu-tools-container flex-grid-cell-5 no-margin-top no-margin-bottom">
+    <h:panelGroup layout="block" styleClass="menu-tools-container flex-cell-5 no-margin-top no-margin-bottom">
       <div class="menu-tools-locale-container">
         <a href="javascript:void(null)" class="menu-tools-locale">
           <h:outputFormat value="#{locales['menu.toolLocale']}">

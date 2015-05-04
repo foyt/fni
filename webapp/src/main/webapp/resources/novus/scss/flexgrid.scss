@@ -1,15 +1,16 @@
 @import "vars";
 @import "compass";
 
-.flex-grid-container {
+.flex-grid {
   width: $grid-width-desktop;
   margin-left: auto;
   margin-right: auto;
-  @include box-sizing(border-box);
 }
 
-.flex-grid {
+.flex-row {
   @include display-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .flex-grid .no-margin-top {
@@ -29,7 +30,7 @@
 }
 
 @for $i from 1 through $grid-columns {
-  .flex-grid-cell-#{$i} { 
+  .flex-cell-#{$i} { 
     @include flex(0 0 calc(#{100% / $grid-columns * $i} - #{$grid-margin / 2}));
     margin-left: $grid-margin / 2;
     margin-right: $grid-margin / 2;
@@ -39,15 +40,15 @@
     @include box-sizing(border-box);
   }
 
-  .flex-grid-cell-#{$i}:first-of-type { 
+  .flex-cell-#{$i}:first-of-type { 
     margin-left: 0px;
   }
   
-  .flex-grid-cell-#{$i}:last-of-type { 
+  .flex-cell-#{$i}:last-of-type { 
     margin-right: 0px;
   }
   
-  .flex-grid-cell-#{$i}:first-of-type:last-of-type { 
+  .flex-cell-#{$i}:first-of-type:last-of-type { 
     @include flex(0 0 #{100% / $grid-columns * $i});
   }
 

@@ -26,7 +26,6 @@
       <!-- Generic Styles -->
       
       <h:outputStylesheet library="novus" name="css/common.css"/>
-      <h:outputStylesheet library="novus" name="css/menu.css"/>
       <h:outputStylesheet library="novus" name="css/fonts.css"/>
       <ui:insert name="grid-css">
         <h:outputStylesheet library="novus" name="css/grid.css"/>
@@ -88,19 +87,19 @@
       </div>
 
       <ui:insert name="body-content">
-        <h:panelGroup layout="block" styleClass="container_16 flex-grid-container">
+        <h:panelGroup layout="block" styleClass="container_16 flex-grid">
           <ui:insert name="grid-content"/>
         </h:panelGroup> 
       </ui:insert>
 
       <ui:insert name="footer">
         <footer class="hide_on_mobile">
-          <div class="flex-grid-container">
-            <div class="container_16 flex-grid">
-              <div class="grid_8 flex-grid-cell-8 no-margin-top no-margin-bottom">
+          <div class="flex-grid">
+            <div class="container_16 flex-row">
+              <div class="grid_8 flex-cell-8 no-margin-top no-margin-bottom">
                 <div class="footer-logo-oo"></div>
               </div>
-              <div class="grid_8 flex-grid-cell-8 no-margin-top no-margin-bottom">
+              <div class="grid_8 flex-cell-8 no-margin-top no-margin-bottom">
                 <div class="footer-logo-foyt"></div>
               </div>
             </div>
