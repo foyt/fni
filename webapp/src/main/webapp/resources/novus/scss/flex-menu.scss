@@ -1,0 +1,215 @@
+@import "compass";
+@import "vars";
+@import "styles";
+
+/* Logo */
+
+$menu-background-color: #000;
+$menu-text-color: #fff;
+$menu-background-color-hover: #fff;
+$menu-text-color-hover: #000;
+$menu-logo-shadow-color: rgba(255, 255, 255, 0.7);
+$menu-logo-font: "Bebas Neue",sans-serif;
+$search-box-width: 67px;
+$search-box-width-focus: 175px; 
+$nav-item-count: 5;
+$nav-item-width: (460px - ($grid-margin * 2)) / $nav-item-count;
+$menu-z-index: 9999;
+
+.index-menu {
+  background: $menu-background-color;
+}
+
+.menu-logo {
+  font-size: 15px;
+  white-space: nowrap;
+  padding-left: 5px;
+  font-family: $menu-logo-font;
+  letter-spacing: 1.7px;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+  display: block;
+  text-shadow: #fff 0 0 10px; 
+  height: 15px;
+}
+
+.menu-logo:after {
+  content: attr(data-text);
+  font-size: 15px;
+  white-space: nowrap;
+  font-family: $menu-logo-font;
+  letter-spacing: 1.7px;
+  font-weight: bold;
+  color: transparent;
+  text-decoration: none;
+  display: block;
+  text-shadow: #fff 0 0 10px; 
+  margin-top: -200%;
+}
+
+/* Navigation */
+
+.menu-navigation-container a, .menu-navigation-container span {
+  color: $menu-text-color;
+  white-space: nowrap;
+  font-size: 13px;
+  font-family: $default-font;
+  text-decoration: none;
+}
+
+/* Tools */
+
+.menu-tools-container {
+  text-align: right;
+}
+
+.flex-grid .menu-tools-container {
+  right: 10px;
+}
+
+.menu-tools-container * {
+  text-align: left;
+}
+
+.menu-tools-container a {
+  color: $menu-text-color;
+  white-space: nowrap;
+  font-size: 13px;
+  font-family: $default-font;
+  text-decoration: none;
+  display: inline-block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.menu-tools-search-container {
+  display: inline-block;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 7px;
+}
+
+.menu-tools-container input[type="text"]{
+  width: $search-box-width;
+  font-size: 11px;
+  vertical-align: top;
+}
+
+.menu-tools-container input[type="text"]:focus {
+  position: relative;
+  width: $search-box-width-focus;
+  margin-left: $search-box-width - $search-box-width-focus;
+  display: inline-block;
+}
+
+.menu-tools-search-loading {
+  background: url('#' + '{resource["novus:gfx/layout/loader-bw.gif"]}') no-repeat center center;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 1px;  
+  right: 1px;
+}
+
+.menu-tools-search-container {
+  display: inline-block;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 7px;
+  position: relative;
+}
+
+.menu-tools-search-result {
+  position: absolute;
+  background: #000;
+  color: #fff;
+  width: 300px;
+  right: 0px;
+  margin-right: -8px;
+  z-index: 9999;
+}
+
+.menu-tools-search-result h4 {
+  @include header-5;
+  color: $menu-text-color;
+  padding: 8px;
+}
+
+.menu-tools-search-result a {
+  width: 100%;
+  @include box-sizing(border-box);
+  padding: 8px;
+}
+
+.menu-tools-search-result a:hover {
+  color:$menu-text-color-hover;
+  background: $menu-background-color-hover;
+}
+
+.menu-tools-search-no-result {
+  font-family: $default-font;
+  padding: 8px;
+  font-size: 13px;
+}
+
+.menu-tools-locale-container, .menu-tools-account-container, .menu-about-container {
+  display: inline-block;
+}
+
+.menu-tools-locale, .menu-tools-login, .menu-tools-logout, .menu-tools-search, .menu-tools-account {
+  text-transform: uppercase;
+}
+
+.menu-tools-locale-list, .menu-tools-account-list, .menu-about-list {
+  position: absolute;
+  background: $menu-background-color;
+  font-family: $default-font;
+  margin-left: -8px;
+  list-style: none;
+  z-index: $menu-z-index;
+}
+
+.menu-tools-locale-list li a, .menu-tools-account-list li a, .menu-about-list a {
+  color: $menu-text-color;
+  padding: 8px;
+  font-size: 13px;
+  width: 100%;
+  @include box-sizing(border-box);
+}
+
+.menu-tools-locale-list li a:hover, .menu-tools-account-list li a:hover, .menu-about-list a:hover {
+  color:$menu-text-color-hover;
+  background: $menu-background-color-hover;
+}
+
+.menu-tools-locale, .menu-tools-account, .menu-tools-login {
+  margin-right: 20px;
+}
+
+.menu-about-container {
+  width: $nav-item-width;
+  text-align: center;
+}
+
+.menu-about-container>a {
+  width: auto;
+}
+
+.menu-about-list a {
+  text-align: left;
+}
+
+@media screen and (max-width: 959px) {
+  .menu-tools-locale-container {
+    position: absolute;
+    right: 20px;
+    top: 0px;
+  }
+  
+  .menu-tools-login {
+    position: absolute;
+    left: 20px;
+    top: 0px;
+  }
+}

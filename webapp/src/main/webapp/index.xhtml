@@ -42,8 +42,8 @@
     
     <!-- Banner -->
     
-    <div class="flex-row">
-      <div class="flex-cell-16 no-margin-top no-margin-bottom">
+    <div class="flex-row md-flex-hide sm-flex-hide">
+      <div class="flex-cell-full no-margin-top no-margin-bottom">
         <h:graphicImage library="novus" name="gfx/layout/banner.jpg" styleClass="banner"/>
       </div>
     </div>
@@ -51,7 +51,7 @@
     <!-- Description -->
 
     <div class="flex-row">
-      <div class="flex-cell-16 no-margin-top">
+      <div class="flex-cell-full no-margin-top">
         <div class="description-panel">
           <p class="description-title">#{locales['index.descriptionTitle']}</p>
           <p class="description-text">#{locales['index.descriptionText']}</p>
@@ -62,14 +62,14 @@
     <!-- Publications and Forum -->
     
     <div class="flex-row">
-      <div class="flex-cell-12 index-box">
+      <div class="index-box lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
         <h3>
           <a jsf:outcome="/gamelibrary/index.jsf">#{locales['index.gameLibaryPublications']}</a>
         </h3>
         
         <div class="flex-row">
           <ui:repeat var="publication" value="#{indexViewBackingBean.latestGameLibraryPublications}">
-            <div class="flex-cell-8">
+            <div class="lg-flex-cell-8 md-flex-cell-12 sm-flex-cell-16">
               <div class="publication-image">
                 <a class="publication-image-link" href="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
                   <img jsf:value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=200"/>
@@ -96,7 +96,7 @@
         </div>
       </div>
       
-      <div class="flex-cell-4 index-box">
+      <div class="index-box lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-full">
         <h3>
           <a jsf:outcome="/illusion/index.jsf">#{locales['index.illusionUpcomingEvents']}</a>
         </h3>
@@ -134,7 +134,7 @@
     <!-- Blog and forum -->
     
     <div class="flex-row">
-      <div class="flex-cell-12 index-box">
+      <div class="flex-cell-first index-box lg-flex-cell-12 md-flex-cell-12 sm-flex-cell-full">
         <h3>
           <a href="http://loki.pelilauta.fi/wordpress/">#{locales['index.blog']}</a>
         </h3>
@@ -173,7 +173,7 @@
         </div>
       </div>
       
-      <div class="flex-cell-4 index-box">
+      <div class="flex-cell-last index-box lg-flex-cell-4 md-flex-cell-4 sm-flex-cell-full">
         <h3>
           <a jsf:outcome="/forum/index.jsf">#{locales['index.forumTopics']}</a>
         </h3>
