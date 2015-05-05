@@ -13,7 +13,7 @@ before_install:
 - unset GEM_PATH
 branches:
   only:
-  - BUG-265_ordermails
+  - FTR-266_frontpagemobile
   - devel
 env:
   global:
