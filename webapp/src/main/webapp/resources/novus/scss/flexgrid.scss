@@ -2,7 +2,8 @@
 @import "compass";
 
 .flex-grid {
-  width: $grid-width-desktop;
+  @include box-sizing(border-box);
+  max-width: $grid-width-desktop;
   margin-left: auto;
   margin-right: auto;
 }
@@ -29,27 +30,66 @@
   margin-right: 0px;
 }
 
-@for $i from 1 through $grid-columns {
-  .flex-cell-#{$i} { 
-    @include flex(0 0 calc(#{100% / $grid-columns * $i} - #{$grid-margin / 2}));
-    margin-left: $grid-margin / 2;
-    margin-right: $grid-margin / 2;
-    margin-top: $grid-margin / 2;
-    margin-bottom: $grid-margin / 2;
-    position: relative;
-    @include box-sizing(border-box);
-  }
+.flex-center {
+  text-align: center;
+}
 
-  .flex-cell-#{$i}:first-of-type { 
-    margin-left: 0px;
+@mixin screen-modifier ($name, $prefix) {
+  @for $i from 1 through $grid-columns {
+    .#{$prefix}flex-cell-#{$i} {
+      @include flex(0 0 calc(#{100% / $grid-columns * $i} - #{$grid-margin}));
+      @include box-sizing(border-box);
+      margin: #{$grid-margin / 2};
+      
+      &.#{$prefix}flex-cell-first {
+        @include flex(0 0 calc(#{100% / $grid-columns * $i} - #{$grid-margin / 2}));
+        margin-left: 0px;
+      } 
+      
+      &.#{$prefix}flex-cell-last {
+        @include flex(0 0 calc(#{100% / $grid-columns * $i} - #{$grid-margin / 2}));
+        margin-right: 0px;
+      } 
+    }
+    
+    .#{$prefix}flex-order-#{$i} {
+      order: $i;
+    }
   }
   
-  .flex-cell-#{$i}:last-of-type { 
+  .#{$prefix}flex-cell-full {
+    @include flex(0 0 100%);
+    @include box-sizing(border-box);
+    margin-left: 0px;
     margin-right: 0px;
   }
   
-  .flex-cell-#{$i}:first-of-type:last-of-type { 
-    @include flex(0 0 #{100% / $grid-columns * $i});
+  .#{$prefix}flex-hide {
+    display: none !important;
   }
-
+  
+  .#{$prefix}flex-center {
+    text-align: center;
+  }
+  
+  .#{$prefix}flex-row {
+    @include display-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 }
+
+@include screen-modifier("Default", '');
+
+@media screen and (max-width: 767px) {
+  @include screen-modifier("Small", 'sm-');
+}
+
+@media screen and (min-width: 768px) and (max-width: 959px) {
+  @include screen-modifier("Medium", 'md-');
+}
+
+@media screen and (min-width: 960px) {
+  @include screen-modifier("Large", 'lg-');
+}
+
