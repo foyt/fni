@@ -10,32 +10,23 @@ public class MenuTestsBase extends AbstractUITest {
 
   @Test
   public void testItems() {
-    getWebDriver().get(getAppUrl() + "/");
-
-    WebElement logoLink = getWebDriver().findElement(By.cssSelector(".index-menu>a:first-child"));
-    WebElement forgeMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(1)"));
-    WebElement illusionMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(2)"));
-    WebElement gameLibraryMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(3)"));
-    WebElement forumMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(4)"));
-
-    assertEquals("Forge", forgeMenuLink.getText());
-    assertEquals("Illusion", illusionMenuLink.getText());
-    assertEquals("Game Library", gameLibraryMenuLink.getText());
-    assertEquals("Forum", forumMenuLink.getText());
-
-    assertEquals(getAppUrl() + "/", stripLinkJSessionId(logoLink.getAttribute("href")));
-    assertEquals(getAppUrl() + "/forge/", stripLinkJSessionId(forgeMenuLink.getAttribute("href")));
-    assertEquals(getAppUrl() + "/illusion/", stripLinkJSessionId(illusionMenuLink.getAttribute("href")));
-    assertEquals(getAppUrl() + "/gamelibrary/", stripLinkJSessionId(gameLibraryMenuLink.getAttribute("href")));
-    assertEquals(getAppUrl() + "/forum/", stripLinkJSessionId(forumMenuLink.getAttribute("href")));
+    navigate("/");
+    assertSelectorVisible(String.format("a[href='/%s/']", getCtxPath()));
+    assertSelectorVisible(String.format("a[href='/%s/forge/']", getCtxPath()));
+    assertSelectorVisible(String.format("a[href='/%s/illusion/']", getCtxPath()));
+    assertSelectorVisible(String.format("a[href='/%s/gamelibrary/']", getCtxPath()));
+    assertSelectorVisible(String.format("a[href='/%s/forum/']", getCtxPath()));
+    assertSelectorTextIgnoreCase(String.format("a[href='/%s/forge/']", getCtxPath()), "Forge");
+    assertSelectorTextIgnoreCase(String.format("a[href='/%s/illusion/']", getCtxPath()), "Illusion");
+    assertSelectorTextIgnoreCase(String.format("a[href='/%s/gamelibrary/']", getCtxPath()), "Game Library");
+    assertSelectorTextIgnoreCase(String.format("a[href='/%s/forum/']", getCtxPath()), "Forum");
   }
 
   @Test
-  public void testAbout() throws Exception {
-    getWebDriver().get(getAppUrl());
+  public void testAbout() throws Exception {navigate("/");
 
-    WebElement aboutMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>div.menu-about-container>a"));
-    WebElement aboutMenuList = getWebDriver().findElement(By.cssSelector(".menu-about-list"));
+    WebElement aboutMenuLink = findElementBySelector("a.menu-about");
+    WebElement aboutMenuList = findElementBySelector(".menu-about-list");
 
     assertEquals("About", aboutMenuLink.getText());
 
@@ -89,7 +80,7 @@ public class MenuTestsBase extends AbstractUITest {
     assertEquals(getAppUrl() + "/about#acknowledgements", stripLinkJSessionId(aboutMenuAcknowledgements.getAttribute("href")));
 
     // Click somewhere else and the menu list should disappear
-    getWebDriver().findElement(By.cssSelector(".index-banner")).click();
+    clickSelector(".menu-tools-locale-container");
     assertEquals(false, aboutMenuList.isDisplayed());
 
     // Click link again and the menu list should reappear
@@ -124,7 +115,7 @@ public class MenuTestsBase extends AbstractUITest {
     assertEquals("English", enItem.getText());
 
     // Click somewhere else and the menu list should disappear
-    getWebDriver().findElement(By.cssSelector(".index-banner")).click();
+    clickSelector(".menu-about-container");
     assertEquals(false, localeMenuList.isDisplayed());
 
     // Click link again and the menu list should reappear
