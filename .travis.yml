@@ -13,7 +13,7 @@ before_install:
 - unset GEM_PATH
 branches:
   only:
-  - BUG-268_gl_mobile
+  - FTR-269_mf_login
   - devel
 env:
   global:
