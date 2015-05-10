@@ -21,7 +21,7 @@ h3 {
   width: 100%;
   padding: 40px;
   background: #fff;
-  @include single-box-shadow(rgb(200, 200, 200), 0px, 0px, 10px, 1px);
+  @include single-box-shadow(0px, 0px, 10px, 1px, rgb(200, 200, 200));
   border: 2px dashed #aaa;
   position: relative;
   margin-top: 20px;
