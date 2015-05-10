@@ -186,6 +186,7 @@ $header-text-color-hover: #000;
   margin-top: 8px;
   @include box-sizing(border-box); 
   width: 100%;
+  z-index: 9999;
 }
 
 .view-header-search-result a {
