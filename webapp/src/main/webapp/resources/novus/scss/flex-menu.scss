@@ -79,14 +79,10 @@ $menu-z-index: 9999;
   font-family: $default-font;
   text-decoration: none;
   display: inline-block;
-  padding-top: 5px;
-  padding-bottom: 5px;
 }
 
 .menu-tools-search-container {
   display: inline-block;
-  margin-top: 5px;
-  margin-bottom: 5px;
   margin-right: 7px;
 }
 
@@ -114,10 +110,7 @@ $menu-z-index: 9999;
 
 .menu-tools-search-container {
   display: inline-block;
-  margin-top: 5px;
-  margin-bottom: 5px;
   margin-right: 7px;
-  position: relative;
 }
 
 .menu-tools-search-result {
@@ -125,9 +118,8 @@ $menu-z-index: 9999;
   background: #000;
   color: #fff;
   width: 300px;
-  right: 0px;
-  margin-right: -8px;
   z-index: 9999;
+  margin-left: -225px;
 }
 
 .menu-tools-search-result h4 {
@@ -157,6 +149,10 @@ $menu-z-index: 9999;
   display: inline-block;
 }
 
+.menu-tools-locale-container, .menu-tools-account-container, .menu-tools-login {
+  margin-right: 10px;
+}
+
 .menu-tools-locale, .menu-tools-login, .menu-tools-logout, .menu-tools-search, .menu-tools-account {
   text-transform: uppercase;
 }
@@ -183,10 +179,6 @@ $menu-z-index: 9999;
   background: $menu-background-color-hover;
 }
 
-.menu-tools-locale, .menu-tools-account, .menu-tools-login {
-  margin-right: 20px;
-}
-
 .menu-about-container {
   width: $nav-item-width;
   text-align: center;
@@ -201,15 +193,47 @@ $menu-z-index: 9999;
 }
 
 @media screen and (max-width: 959px) {
+  .menu-logo {
+    width: 120px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
   .menu-tools-locale-container {
     position: absolute;
     right: 20px;
     top: 0px;
   }
   
-  .menu-tools-login {
+  .menu-tools-login, .menu-tools-account-container {
     position: absolute;
     left: 20px;
     top: 0px;
+  }
+  
+  .menu-tools-locale-list {
+    right: 0px;
+  }
+  
+  .menu-tools-search-container {
+    width: calc(100% - 70px);
+    margin-right: 20px;
+  }
+  
+  input[type="text"].menu-tools-search-text:focus,
+  input[type="text"].menu-tools-search-text {
+    position: relative;
+    width: 100%;
+    margin-left: 0px;
+    display: inline-block;
+  }
+  
+  .menu-tools-search-result {
+    margin-left: 0px;
+  }
+  
+  .menu-tools-search {
+    width: 45px;
+    text-align: center;
   }
 }
