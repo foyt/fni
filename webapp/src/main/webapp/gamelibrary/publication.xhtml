@@ -11,6 +11,10 @@
     </h:outputFormat>  
   </ui:define>
   
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+  
   <ui:define name="view-scripts">
     <!-- jQuery Magnific-Popup  -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/jquery.magnific-popup.min.js"></script>
@@ -27,7 +31,7 @@
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/magnific-popup.min.css"/>
 
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary-common.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary.css"/>
   </ui:define>
@@ -39,74 +43,75 @@
   <ui:define name="grid-content">
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/index.jsf">#{locales['gamelibrary.publication.navigationIndex']}</h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.publication.navigationGameLibrary']}</h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:outputLink value="#{request.contextPath}/gamelibrary/#{gameLibraryPublicationBackingBean.publication.urlName}">#{gameLibraryPublicationBackingBean.publication.name}</h:outputLink>
-        </h:panelGroup>
-      </h:panelGroup>
-  
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">
-          <h:outputFormat value="#{locales['gamelibrary.publication.descriptionTitle']}">
-            <f:param value="#{gameLibraryPublicationBackingBean.publication.name}"/>
-          </h:outputFormat>  
-        </p>
-        <p class="view-header-description-text">#{locales['gamelibrary.publication.descriptionText']}</p>
-      </h:panelGroup>
-      
-      <!-- Search -->
-      
-      <h:panelGroup layout="block" styleClass="gamelibrary-search-container">
-        <input type="text" class="gamelibrary-search" placeholder="#{locales['gamelibrary.publication.searchPlaceHolder']}"/>
-        <h:panelGroup layout="block" styleClass="gamelibrary-search-loading" style="display: none"/>
-        <h:panelGroup layout="block" styleClass="gamelibrary-search-result" style="display: none"/>
-      </h:panelGroup>
-    </h:panelGroup>
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <span class="view-header-navigation-item">
+              <h:link outcome="/index.jsf">#{locales['gamelibrary.publication.navigationIndex']}</h:link>
+            </span>
+            <span class="view-header-navigation-separator"/>
+            <span class="view-header-navigation-item">
+              <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.publication.navigationGameLibrary']}</h:link>
+            </span>
+            <span class="view-header-navigation-separator"/>
+            <span class="view-header-navigation-item">
+              <h:outputLink value="#{request.contextPath}/gamelibrary/#{gameLibraryPublicationBackingBean.publication.urlName}">#{gameLibraryPublicationBackingBean.publication.name}</h:outputLink>
+            </span>
+          </div>
+        </div>
+
+        <!-- Description -->
+    
+        <div class="view-header-description">
+          <p class="view-header-description-title">
+            <h:outputFormat value="#{locales['gamelibrary.publication.descriptionTitle']}">
+              <f:param value="#{gameLibraryPublicationBackingBean.publication.name}"/>
+            </h:outputFormat>
+          </p>
+          <p class="view-header-description-text">#{locales['gamelibrary.publication.descriptionText']}</p>
+        </div>
+            
+        <!-- Search -->
+        
+        <div class="view-header-search-container">
+          <input type="text" class="view-header-search" placeholder="#{locales['gamelibrary.publication.searchPlaceHolder']}"/>
+          <div class="view-header-search-loading" style="display: none"/>
+          <div class="view-header-search-result" style="display: none"/>
+        </div>
+      </div>
+    </div>
 
     <!-- Content -->
 
-    <h:panelGroup layout="block" styleClass="grid_16 tight gamelibrary-publications">
-    
-      <!-- Products -->
-
-      <h:panelGroup layout="block" styleClass="grid_12 tight">
+    <div class="flex-row">
+      <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full sm-flex-cell-first flex-overflow-hidden"> 
         <ui:include src="/facelets/gamelibrarypublication.xhtml">
           <ui:param name="publication" value="#{gameLibraryPublicationBackingBean.publication}"/>
         </ui:include> 
-      </h:panelGroup>
+      </div>
       
-      <!-- Shopping cart -->
+      <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-full flex-overflow-hidden"> 
+        <!-- Shopping cart -->
+        <div class="flex-row">
+          <div class="flex-cell-full index-box">
+            <ui:include src="/facelets/gamelibraryminishoppingcart.xhtml" />
+          </div>
+        </div>
 
-      <h:panelGroup layout="block" styleClass="grid_4 omega">
-        <h:panelGroup layout="block" styleClass="gamelibrary-cart-panel">
-          <ui:include src="/facelets/gamelibraryminishoppingcart.xhtml" />
-        </h:panelGroup>
-      </h:panelGroup>
-      
-      <!-- Categories -->
+        <!-- Categories -->
 
-      <h:panelGroup layout="block" styleClass="grid_4 omega">
-        <h:panelGroup layout="block" styleClass="gamelibrary-categories-panel">
-          <ui:include src="/facelets/gamelibrarycategories.xhtml" />
-        </h:panelGroup>
-      </h:panelGroup>
-      
-    </h:panelGroup>
+        <div class="flex-row sm-flex-hide">
+          <div class="flex-cell-full index-box">
+            <ui:include src="/facelets/gamelibrarycategories.xhtml" />
+          </div>
+        </div>
+      </div>       
+    </div>
 
   </ui:define>
 
