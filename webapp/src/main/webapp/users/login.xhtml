@@ -6,6 +6,10 @@
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['users.login.pageTitle']}</ui:define>
+  
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
  
   <ui:define name="view-scripts">
     <!-- View scripts -->
@@ -21,7 +25,7 @@
     
     <!-- View styles -->
     
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/users-login.css"/>
     
   </ui:define>
@@ -30,113 +34,116 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
-    
-    <!-- Header -->
-    
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+    <ui:include src="/facelets/flex-menu.xhtml" />
 
-      <!-- Navigation -->
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <span class="view-header-navigation-item">
+              <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['users.login.navigationIndex']}</h:link>
+            </span>
+            <span class="view-header-navigation-separator"/>
+            <span class="view-header-navigation-item">
+              <h:link styleClass="view-header-navigation-item" outcome="/users/login.jsf">#{locales['users.login.navigationLogin']}</h:link>
+            </span>
+          </div>
+        </div>
+
+        <!-- Description -->
+    
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['users.login.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['users.login.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex-row">
+      <div class="lg-flex-cell-8 lg-flex-cell-first md-flex-cell-8 md-flex-cell-first sm-flex-cell-full index-box"> 
+        <h3>#{locales['users.login.loginTitle']}</h3>
       
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['users.login.navigationIndex']}</h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:link styleClass="view-header-navigation-item" outcome="/users/login.jsf">#{locales['users.login.navigationLogin']}</h:link>
-      </h:panelGroup>
-        
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['users.login.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['users.login.descriptionText']}</p>
-      </h:panelGroup>
-    </h:panelGroup>
-    
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="grid_8 alpha slim-right">
-        <h:panelGroup layout="block" styleClass="user-login-login-panel">
-          <h3>#{locales['users.login.loginTitle']}</h3>
-        
-          <h:form styleClass="user-login-form">
-            <h:panelGroup layout="block">
-              <h:panelGroup layout="block" styleClass="user-login-field">
-                <h:outputLabel value="#{locales['users.login.loginEmailTitle']}" />
-                <h:inputText styleClass="user-login-email" value="#{loginBackingBean.loginEmail}" id="email" required="true" requiredMessage="#{locales['users.login.loginEmailRequired']}"/>
-              </h:panelGroup>  
-              
-              <h:panelGroup layout="block" styleClass="user-login-field">
-                <h:outputLabel value="#{locales['users.login.loginPasswordTitle']}" />
-                <h:inputSecret styleClass="user-login-password" value="#{loginBackingBean.loginPassword}" id="password"/>
-              </h:panelGroup>
-        
-              <h:panelGroup layout="block" styleClass="user-login-field">
-                <h:commandButton styleClass="user-login-button" action="#{loginBackingBean.login}" value="#{locales['users.login.loginButton']}" />
-              </h:panelGroup>
-            </h:panelGroup>
-          </h:form>
-          
-          <h:panelGroup styleClass="users-login-forgot">
-            <h:form>
-              <h:outputLink styleClass="users-login-forgot-password-link" value="javascript:void(null);">#{locales['users.login.forgotPasswordLink']}</h:outputLink>
-              <h:inputHidden id="users-login-forgot-password-email" value="#{loginBackingBean.forgotPasswordEmail}" />     
-              <h:commandLink styleClass="users-login-forgot-password-send" action="#{loginBackingBean.forgotPassword}" style="display:none"/>
-            </h:form>
-          </h:panelGroup>
-
-          <h:panelGroup layout="block" styleClass="user-login-external">
-            <h4>#{locales['users.login.externalLoginTitle']}</h4>
-            <h:link outcome="/users/login.jsf" styleClass="user-login-external-facebook">
-              <f:param name="loginMethod" value="FACEBOOK"/>
-              <h:graphicImage library="novus" name="/gfx/icons/48x48/users/login-facebook.png"/>
-              <h:panelGroup styleClass="user-login-external-label">#{locales['users.login.loginWithFacebook']}</h:panelGroup>
-            </h:link>
+        <h:form styleClass="user-login-form">
+          <h:panelGroup layout="block">
+            <h:panelGroup layout="block" styleClass="user-login-field">
+              <h:outputLabel value="#{locales['users.login.loginEmailTitle']}" />
+              <h:inputText styleClass="user-login-email" value="#{loginBackingBean.loginEmail}" id="email" required="true" requiredMessage="#{locales['users.login.loginEmailRequired']}"/>
+            </h:panelGroup>  
             
-            <h:link outcome="/users/login.jsf" styleClass="user-login-external-google">
-              <f:param name="loginMethod" value="GOOGLE"/>
-              <h:graphicImage library="novus" name="/gfx/icons/48x48/users/login-google.png"/>
-              <h:panelGroup styleClass="user-login-external-label">#{locales['users.login.loginWithGoogle']}</h:panelGroup>
-            </h:link>
+            <h:panelGroup layout="block" styleClass="user-login-field">
+              <h:outputLabel value="#{locales['users.login.loginPasswordTitle']}" />
+              <h:inputSecret styleClass="user-login-password" value="#{loginBackingBean.loginPassword}" id="password"/>
+            </h:panelGroup>
+      
+            <h:panelGroup layout="block" styleClass="user-login-field">
+              <h:commandButton styleClass="user-login-button" action="#{loginBackingBean.login}" value="#{locales['users.login.loginButton']}" />
+            </h:panelGroup>
           </h:panelGroup>
-          
-        </h:panelGroup>
-      </h:panelGroup>
-      <h:panelGroup layout="block" styleClass="grid_8 omega slim-left">
-        <h:panelGroup layout="block" styleClass="user-login-register-panel">
-          <h3>#{locales['users.login.registerTitle']}</h3>
-          
+        </h:form>
+        
+        <h:panelGroup styleClass="users-login-forgot">
           <h:form>
-            <h:panelGroup layout="block" styleClass="user-login-field">
-              <h:outputLabel value="#{locales['users.login.registerFirstNameTitle']}"/>
-              <h:inputText styleClass="user-register-first-name" value="#{loginBackingBean.registerFirstName}" required="true" requiredMessage="#{locales['users.login.registerFirstNameRequired']}"/>
-            </h:panelGroup>
-          
-            <h:panelGroup layout="block" styleClass="user-login-field">
-              <h:outputLabel value="#{locales['users.login.registerLastNameTitle']}"/>
-              <h:inputText styleClass="user-register-last-name" value="#{loginBackingBean.registerLastName}" required="true" requiredMessage="#{locales['users.login.registerLastNameRequired']}"/>
-            </h:panelGroup>
-
-            <h:panelGroup layout="block" styleClass="user-login-field">
-              <h:outputLabel value="#{locales['users.login.registerEmailTitle']}"/>
-              <h:inputText styleClass="user-register-email" value="#{loginBackingBean.registerEmail}" required="true" requiredMessage="#{locales['users.login.registerEmailRequired']}"/>
-            </h:panelGroup>
-
-            <h:panelGroup layout="block" styleClass="user-login-field">
-              <h:outputLabel value="#{locales['users.login.registerPasswordTitle']}"/>
-              <h:inputSecret styleClass="user-register-password1" id="password1" value="#{loginBackingBean.registerPassword1}" />
-            </h:panelGroup>
-
-            <h:panelGroup layout="block" styleClass="user-login-field">
-              <h:outputLabel value="#{locales['users.login.registerPassword2Title']}"/>
-              <h:inputSecret styleClass="user-register-password2" id="password2" value="#{loginBackingBean.registerPassword2}" />
-            </h:panelGroup>
-
-            <h:panelGroup layout="block" styleClass="user-login-field">
-              <h:commandButton styleClass="user-register-button" action="#{loginBackingBean.register}" value="#{locales['users.login.registerButton']}" />
-            </h:panelGroup>
-            </h:form>  
+            <h:outputLink styleClass="users-login-forgot-password-link" value="javascript:void(null);">#{locales['users.login.forgotPasswordLink']}</h:outputLink>
+            <h:inputHidden id="users-login-forgot-password-email" value="#{loginBackingBean.forgotPasswordEmail}" />     
+            <h:commandLink styleClass="users-login-forgot-password-send" action="#{loginBackingBean.forgotPassword}" style="display:none"/>
+          </h:form>
         </h:panelGroup>
-      </h:panelGroup>
-    </h:panelGroup>
+
+        <h:panelGroup layout="block" styleClass="user-login-external">
+          <h4>#{locales['users.login.externalLoginTitle']}</h4>
+          <h:link outcome="/users/login.jsf" styleClass="user-login-external-facebook">
+            <f:param name="loginMethod" value="FACEBOOK"/>
+            <h:graphicImage library="novus" name="/gfx/icons/48x48/users/login-facebook.png"/>
+            <h:panelGroup styleClass="user-login-external-label">#{locales['users.login.loginWithFacebook']}</h:panelGroup>
+          </h:link>
+          
+          <h:link outcome="/users/login.jsf" styleClass="user-login-external-google">
+            <f:param name="loginMethod" value="GOOGLE"/>
+            <h:graphicImage library="novus" name="/gfx/icons/48x48/users/login-google.png"/>
+            <h:panelGroup styleClass="user-login-external-label">#{locales['users.login.loginWithGoogle']}</h:panelGroup>
+          </h:link>
+        </h:panelGroup>
+              
+      </div>
+      
+      <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-8 md-flex-cell-last sm-flex-cell-full index-box"> 
+        <h3>#{locales['users.login.registerTitle']}</h3>
+        
+        <h:form>
+          <h:panelGroup layout="block" styleClass="user-login-field">
+            <h:outputLabel value="#{locales['users.login.registerFirstNameTitle']}"/>
+            <h:inputText styleClass="user-register-first-name" value="#{loginBackingBean.registerFirstName}" required="true" requiredMessage="#{locales['users.login.registerFirstNameRequired']}"/>
+          </h:panelGroup>
+        
+          <h:panelGroup layout="block" styleClass="user-login-field">
+            <h:outputLabel value="#{locales['users.login.registerLastNameTitle']}"/>
+            <h:inputText styleClass="user-register-last-name" value="#{loginBackingBean.registerLastName}" required="true" requiredMessage="#{locales['users.login.registerLastNameRequired']}"/>
+          </h:panelGroup>
+
+          <h:panelGroup layout="block" styleClass="user-login-field">
+            <h:outputLabel value="#{locales['users.login.registerEmailTitle']}"/>
+            <h:inputText styleClass="user-register-email" value="#{loginBackingBean.registerEmail}" required="true" requiredMessage="#{locales['users.login.registerEmailRequired']}"/>
+          </h:panelGroup>
+
+          <h:panelGroup layout="block" styleClass="user-login-field">
+            <h:outputLabel value="#{locales['users.login.registerPasswordTitle']}"/>
+            <h:inputSecret styleClass="user-register-password1" id="password1" value="#{loginBackingBean.registerPassword1}" />
+          </h:panelGroup>
+
+          <h:panelGroup layout="block" styleClass="user-login-field">
+            <h:outputLabel value="#{locales['users.login.registerPassword2Title']}"/>
+            <h:inputSecret styleClass="user-register-password2" id="password2" value="#{loginBackingBean.registerPassword2}" />
+          </h:panelGroup>
+
+          <h:panelGroup layout="block" styleClass="user-login-field">
+            <h:commandButton styleClass="user-register-button" action="#{loginBackingBean.register}" value="#{locales['users.login.registerButton']}" />
+          </h:panelGroup>
+          </h:form>  
+      </div>
+    </div>    
+    
   </ui:define>
 
 </ui:composition>

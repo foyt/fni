@@ -238,6 +238,10 @@ footer {
 
 /* jQuery ui */
 
+.ui-dialog {
+  max-width: 95%;
+}
+
 .ui-widget {
   font-family: $default-font;
   font-size: 12px;
