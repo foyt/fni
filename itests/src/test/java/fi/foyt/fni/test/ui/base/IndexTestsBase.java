@@ -36,14 +36,19 @@ public class IndexTestsBase extends AbstractUITest {
   public void testTexts() {
     getWebDriver().get(getAppUrl() + "/");
 
-    assertEquals("Forge & Illusion is an open platform built for roleplaying and roleplayers.", getWebDriver().findElement(By.cssSelector("p.description-title")).getText());
-    assertEquals("LATEST GAME LIBRARY PUBLICATIONS", getWebDriver().findElement(By.cssSelector(".publications-panel>h3>a")).getText());
-    assertEquals("LATEST FORUM TOPICS", getWebDriver().findElement(By.cssSelector(".index-forum-panel>h3>a")).getText());
-    assertEquals("NEWS", getWebDriver().findElement(By.cssSelector(".index-blog-panel>h3>a")).getText());
+    assertEquals("WHAT IS THE FORGE & ILLUSION", getWebDriver().findElement(By.cssSelector("p.description-title")).getText());
+    assertEquals("Forge & Illusion is an open platform built for roleplaying and roleplayers.", getWebDriver().findElement(By.cssSelector("p.description-text")).getText());
+        
+    
+    assertEquals("LATEST GAME LIBRARY PUBLICATIONS", findElementBySelector(String.format("h3 a[href='/%s/gamelibrary/']", getCtxPath())).getText());
+    assertEquals("LATEST FORUM TOPICS", findElementBySelector(String.format("h3 a[href='/%s/forum/']", getCtxPath())).getText());
+    assertEquals("NEWS", findElementBySelector("h3 a[href='http://loki.pelilauta.fi/wordpress/']").getText());
+    assertEquals("UPCOMING EVENTS", findElementBySelector(String.format("h3 a[href='/%s/illusion/']", getCtxPath())).getText());
 
-    assertEquals("More >>", getWebDriver().findElement(By.cssSelector(".index-gamelibrary-more")).getText());
-    assertEquals("More >>", getWebDriver().findElement(By.cssSelector("a.index-forum-more")).getText());
-    assertEquals("More >>", getWebDriver().findElement(By.cssSelector("a.index-blog-more")).getText());
+    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/%s/gamelibrary/']", getCtxPath())).getText());
+    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/%s/forum/']", getCtxPath())).getText());
+    assertEquals("More >>", findElementBySelector("a.more-link[href='http://loki.pelilauta.fi/wordpress/']").getText());
+    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/%s/illusion/']", getCtxPath())).getText());
   }
 
   @Test
