@@ -10,8 +10,8 @@
 
 .flex-row {
   @include display-flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  @include flex-direction(row);
+  @include flex-wrap(wrap);
 }
 
 .flex-grid .no-margin-top {
@@ -67,7 +67,7 @@
     
   @for $i from 0 through $grid-columns {
     .#{$prefix}flex-order-#{$i} {
-      order: $i;
+      @include order($i);
     }
   }
 
@@ -98,8 +98,8 @@
   
   .#{$prefix}flex-row {
     @include display-flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    @include flex-direction(row);
+    @include flex-wrap(wrap);
   }
 }
 
