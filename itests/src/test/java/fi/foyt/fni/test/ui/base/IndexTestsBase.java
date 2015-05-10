@@ -36,8 +36,8 @@ public class IndexTestsBase extends AbstractUITest {
   public void testTexts() {
     getWebDriver().get(getAppUrl() + "/");
 
-    assertEquals("Forge & Illusion is an open platform built for roleplaying and roleplayers.", getWebDriver().findElement(By.cssSelector("p.index-description-text")).getText());
-    assertEquals("LATEST GAME LIBRARY PUBLICATIONS", getWebDriver().findElement(By.cssSelector(".index-publications-panel>h3>a")).getText());
+    assertEquals("Forge & Illusion is an open platform built for roleplaying and roleplayers.", getWebDriver().findElement(By.cssSelector("p.description-title")).getText());
+    assertEquals("LATEST GAME LIBRARY PUBLICATIONS", getWebDriver().findElement(By.cssSelector(".publications-panel>h3>a")).getText());
     assertEquals("LATEST FORUM TOPICS", getWebDriver().findElement(By.cssSelector(".index-forum-panel>h3>a")).getText());
     assertEquals("NEWS", getWebDriver().findElement(By.cssSelector(".index-blog-panel>h3>a")).getText());
 
