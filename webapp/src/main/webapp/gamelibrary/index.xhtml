@@ -7,6 +7,10 @@
 
   <ui:define name="page-title">#{locales['gamelibrary.index.pageTitle']}</ui:define>
   
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+  
   <ui:define name="view-scripts">
     <!-- jQuery Magnific-Popup  -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/jquery.magnific-popup.min.js"></script>
@@ -23,7 +27,7 @@
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/magnific-popup.min.css"/>
 
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary-common.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary.css"/>
   </ui:define>
@@ -32,75 +36,80 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/index.jsf">#{locales['gamelibrary.index.navigationIndex']}</h:link>
+    <h:panelGroup layout="block" styleClass="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <h:panelGroup layout="block" styleClass="view-header-navigation">
+            <h:panelGroup styleClass="view-header-navigation-item">
+              <h:link outcome="/index.jsf">#{locales['gamelibrary.index.navigationIndex']}</h:link>
+            </h:panelGroup>
+            <h:panelGroup styleClass="view-header-navigation-separator"/>
+            <h:panelGroup styleClass="view-header-navigation-item">
+              <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.index.navigationGameLibrary']}</h:link>
+            </h:panelGroup>
+            <h:panelGroup styleClass="view-header-navigation-separator"/>
+            <h:panelGroup styleClass="view-header-navigation-item">
+              <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.index.navigationMostRecent']}</h:link>
+            </h:panelGroup>
+          </h:panelGroup>
+        </div>
+    
+        <!-- Description -->
+    
+        <h:panelGroup layout="block" styleClass="view-header-description">
+          <h:link rendered="#{sessionBackingBean.loggedIn}" styleClass="sm-flex-hide gamelibrary-propose-game-link" outcome="/gamelibrary/proposegame.jsf" value="#{locales['gamelibrary.index.proposeGameLink']}"/>
+          <h:link rendered="#{!sessionBackingBean.loggedIn}" styleClass="sm-flex-hide gamelibrary-propose-game-link" outcome="/users/login.jsf" value="#{locales['gamelibrary.index.loginToProposeGameLink']}">
+            <f:param name="redirectUrl" value="#{request.contextPath}/gamelibrary/proposegame/"/>
+          </h:link>
+          <p class="view-header-description-title">#{locales['gamelibrary.index.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['gamelibrary.index.descriptionText']}</p>
         </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.index.navigationGameLibrary']}</h:link>
+        
+        <!-- Search -->
+        
+        <h:panelGroup layout="block" styleClass="view-header-search-container">
+          <input type="text" class="view-header-search" placeholder="#{locales['gamelibrary.index.searchPlaceHolder']}"/>
+          <h:panelGroup layout="block" styleClass="view-header-search-loading" style="display: none"/>
+          <h:panelGroup layout="block" styleClass="view-header-search-result" style="display: none"/>
         </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.index.navigationMostRecent']}</h:link>
-        </h:panelGroup>
-      </h:panelGroup>
-  
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <h:link rendered="#{sessionBackingBean.loggedIn}" styleClass="gamelibrary-propose-game-link" outcome="/gamelibrary/proposegame.jsf" value="#{locales['gamelibrary.index.proposeGameLink']}"/>
-        <h:link rendered="#{!sessionBackingBean.loggedIn}" styleClass="gamelibrary-propose-game-link" outcome="/users/login.jsf" value="#{locales['gamelibrary.index.loginToProposeGameLink']}">
-          <f:param name="redirectUrl" value="#{request.contextPath}/gamelibrary/proposegame/"/>
-        </h:link>
-        <p class="view-header-description-title">#{locales['gamelibrary.index.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['gamelibrary.index.descriptionText']}</p>
-      </h:panelGroup>
-      
-      <!-- Search -->
-      
-      <h:panelGroup layout="block" styleClass="gamelibrary-search-container">
-        <input type="text" class="gamelibrary-search" placeholder="#{locales['gamelibrary.index.searchPlaceHolder']}"/>
-        <h:panelGroup layout="block" styleClass="gamelibrary-search-loading" style="display: none"/>
-        <h:panelGroup layout="block" styleClass="gamelibrary-search-result" style="display: none"/>
-      </h:panelGroup>
+      </div>
     </h:panelGroup>
 
     <!-- Content -->
-
-    <h:panelGroup layout="block" styleClass="grid_16 tight gamelibrary-publications">
+    
+    <div class="flex-row">
     
       <!-- Products -->
 
-      <h:panelGroup layout="block" styleClass="grid_12 tight">
+      <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full sm-flex-cell-first flex-overflow-hidden"> 
         <ui:include src="/facelets/gamelibrarypublications.xhtml">
           <ui:param name="publications" value="#{gameLibraryIndexBackingBean.publications}"/>
         </ui:include> 
-      </h:panelGroup>
-      
-      <!-- Shopping cart -->
+      </div>
 
-      <h:panelGroup layout="block" styleClass="grid_4 omega">
-        <h:panelGroup layout="block" styleClass="gamelibrary-cart-panel">
-          <ui:include src="/facelets/gamelibraryminishoppingcart.xhtml" />
-        </h:panelGroup>
-      </h:panelGroup>
-      
-      <!-- Categories -->
+      <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-full flex-overflow-hidden"> 
+        <!-- Shopping cart -->
+        <div class="flex-row">
+          <div class="flex-cell-full index-box">
+            <ui:include src="/facelets/gamelibraryminishoppingcart.xhtml" />
+          </div>
+        </div>
 
-      <h:panelGroup layout="block" styleClass="grid_4 omega">
-        <h:panelGroup layout="block" styleClass="gamelibrary-categories-panel">
-          <ui:include src="/facelets/gamelibrarycategories.xhtml" />
-        </h:panelGroup>
-      </h:panelGroup>
-      
-    </h:panelGroup>
+        <!-- Categories -->
 
+        <div class="flex-row sm-flex-hide">
+          <div class="flex-cell-full index-box">
+            <ui:include src="/facelets/gamelibrarycategories.xhtml" />
+          </div>
+        </div>
+      </div> 
+
+    </div>
+    
   </ui:define>
 
 </ui:composition>

@@ -2,13 +2,13 @@
   'use strict';
   
   function search() {
-    var input = $('.gamelibrary-search');
+    var input = $('.view-header-search');
     
     var query = $.trim(input.val());
     if (query) {
       if (input.data('searching') != true) {
         input.data('searching', true);
-        $('.gamelibrary-search-loading').show();
+        $('.view-header-search-loading').show();
         $.ajax({
           url : CONTEXTPATH + "/search/",
           data : {
@@ -17,11 +17,11 @@
           },
           success : function(data) {
             input.data('searching', false);
-            $('.gamelibrary-search-loading').hide();
+            $('.view-header-search-loading').hide();
             
             dust.render("gamelibrary-search", data, function(err, html) {
               if (!err) {
-                $('.gamelibrary-search-result').show().html(html);
+                $('.view-header-search-result').show().html(html);
               } else {
                 // TODO: Proper error handling...
                 alert(err);
@@ -35,18 +35,18 @@
         });
       }
     } else {
-      $('.gamelibrary-search-result').hide();
+      $('.view-header-search-result').hide();
     }
   }
 
-  $(document).on('keyup', '.gamelibrary-search', function (event) {
+  $(document).on('keyup', '.view-header-search', function (event) {
     search();
   });
   
   $(document).on('mouseup', function (event) {
     var target = event.target;
-    if ($(target).closest('.gamelibrary-search-container').length == 0) {
-      $('.gamelibrary-search-result').hide(); 
+    if ($(target).closest('.view-header-search-container').length == 0) {
+      $('.view-header-search-result').hide(); 
     }
   });
 

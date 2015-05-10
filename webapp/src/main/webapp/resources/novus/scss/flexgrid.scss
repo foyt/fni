@@ -30,8 +30,20 @@
   margin-right: 0px;
 }
 
+.flex-left {
+  text-align: left;
+}
+
 .flex-center {
   text-align: center;
+}
+
+.flex-right {
+  text-align: right;
+}
+
+.flex-overflow-hidden {
+  overflow: hidden;
 }
 
 @mixin screen-modifier ($name, $prefix) {
@@ -49,27 +61,39 @@
       &.#{$prefix}flex-cell-last {
         @include flex(0 0 calc(#{100% / $grid-columns * $i} - #{$grid-margin / 2}));
         margin-right: 0px;
-      } 
+      }
     }
+  }
     
+  @for $i from 0 through $grid-columns {
     .#{$prefix}flex-order-#{$i} {
       order: $i;
     }
   }
-  
+
   .#{$prefix}flex-cell-full {
     @include flex(0 0 100%);
     @include box-sizing(border-box);
     margin-left: 0px;
     margin-right: 0px;
+    margin-top: #{$grid-margin / 2};
+    margin-bottom: #{$grid-margin / 2};
   }
   
   .#{$prefix}flex-hide {
     display: none !important;
   }
   
+  .#{$prefix}flex-left {
+    text-align: left;
+  }
+  
   .#{$prefix}flex-center {
     text-align: center;
+  }
+  
+  .#{$prefix}flex-right {
+    text-align: right;
   }
   
   .#{$prefix}flex-row {
