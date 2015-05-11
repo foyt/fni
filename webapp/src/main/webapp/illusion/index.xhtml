@@ -8,12 +8,17 @@
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['illusion.index.pageTitle']}</ui:define>
+   
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+  
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
     <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.3.1/fullcalendar.min.css"/>
     
     <h:outputStylesheet library="novus" name="css/fonts.css"/>
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/illusion.css"/>
   </ui:define>
   
@@ -31,196 +36,268 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
+
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <span class="view-header-navigation-item">
+              <h:link outcome="/index.jsf">#{locales['illusion.index.navigationIndex']}</h:link>
+            </span>
+            <span class="view-header-navigation-separator"/>
+            <span class="view-header-navigation-item">
+              <h:link outcome="/illusion/index.jsf">#{locales['illusion.index.navigationIllusion']}</h:link>
+            </span>
+          </div>
+        </div>
+
+        <!-- Description -->
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/index.jsf">#{locales['illusion.index.navigationIndex']}</h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/index.jsf">#{locales['illusion.index.navigationIllusion']}</h:link>
-        </h:panelGroup>
-      </h:panelGroup>
-  
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['illusion.index.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['illusion.index.descriptionText']}</p>
-      </h:panelGroup>
-    </h:panelGroup>
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['illusion.index.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['illusion.index.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
 
     <!-- Content -->
 
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="illusion-index-panel">
-
+    <div class="flex-row">
+      <div class="flex-cell-full index-box"> 
         <h:link rendered="#{sessionBackingBean.loggedIn}" styleClass="illusion-index-create-event-link" outcome="/illusion/createevent.jsf" value="#{locales['illusion.index.createEvent']}"/>
-      
-        <div id="tabs">
-					<ul>
-            <li><a href="#calendar">#{locales['illusion.index.calendar']}</a></li>
-            <li jsf:rendered="#{!illusionIndexBackingBean.upcomingEvents.isEmpty()}"><a href="#upcoming">#{locales['illusion.index.upcomingEvents']}</a></li>
-            <li jsf:rendered="#{!illusionIndexBackingBean.pastEvents.isEmpty()}"><a href="#pastevents">#{locales['illusion.index.pastEventsTitle']}</a></li>
-            <li jsf:rendered="#{!illusionIndexBackingBean.unpublished.isEmpty()}"><a href="#unpublished">#{locales['illusion.index.unpublishedEvents']}</a></li>
-					</ul>
-          <div id="calendar">
-            <div class="calendar-view"></div>
-          </div>
-					<div id="upcoming" jsf:rendered="#{!illusionIndexBackingBean.upcomingEvents.isEmpty()}">
-					  <h3>#{locales['illusion.index.upcomingEvents']}</h3>
-					  
-					  <ui:repeat var="event" value="#{illusionIndexBackingBean.upcomingEvents}">
-	            <div class="illusion-index-event">
-	              <div class="index-illusion-event-date">
-	                <h:outputFormat rendered="#{event.endDate == null}" value="#{locales['illusion.index.illusionEventTime']}">
-	                  <f:param value="#{event.startTime != null ? 1 : 0}"/>  
-	                  <f:param value="#{event.startDate}"/>
-	                  <f:param value="#{event.startTime}"/>
-	                </h:outputFormat>
-	                
-	                <h:outputFormat rendered="#{event.endDate != null}" value="#{locales['illusion.index.illusionEventTimeRange']}">
-	                  <f:param value="#{event.startTime != null ? 1 : 0}"/>  
-	                  <f:param value="#{event.endTime != null ? 1 : 0}"/>  
-	                  <f:param value="#{event.startDate}"/>
-	                  <f:param value="#{event.startTime}"/>
-	                  <f:param value="#{event.endDate}"/>
-	                  <f:param value="#{event.endTime}"/>  
-	                </h:outputFormat>
-	              </div>
-	              
-	              <div class="index-illusion-event-location">#{event.location}</div>
-	              
-	              <h:link outcome="/illusion/event.jsf" styleClass="illusion-index-event-name" value="#{event.name}">
-	                <f:param name="urlName" value="#{event.urlName}"/>
-	              </h:link>
-	              
-	              <div class="illusion-index-event-description">#{event.description}</div>
-	              <h4>#{locales['illusion.index.eventOrganizers']}</h4>
-	              
-	              <ui:repeat var="organizer" value="#{event.organizers}">
-	                <div class="illusion-index-event-organizer">
-	                  <img class="illusion-index-event-organizer-image" src="#{request.contextPath}/illusion/eventAvatar/#{event.urlName}/#{organizer.participantId}?size=20"/> 
-	                  <h:link styleClass="illusion-index-event-organizer-name" outcome="/users/profile.jsf?userId=#{organizer.userId}">#{organizer.name}</h:link>
-	                </div>
-	              </ui:repeat>
-	              
-	              <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'INVITED'}">#{locales['illusion.index.roleInvited']}</div>
-	              <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'ORGANIZER'}">#{locales['illusion.index.roleOrganizer']}</div>
-	              <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'PARTICIPANT'}">#{locales['illusion.index.roleParticipant']}</div>
-	              <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'BANNED'}">#{locales['illusion.index.roleBanned']}</div>
-	              <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'PENDING_APPROVAL'}">#{locales['illusion.index.rolePendingApproval']}</div>
-	              <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'WAITING_PAYMENT'}">#{locales['illusion.index.roleWaitingPayment']}</div>
-	              
-	            </div>
-	          </ui:repeat>
-					</div>
-					      
-      		<div id="pastevents" jsf:rendered="#{!illusionIndexBackingBean.pastEvents.isEmpty()}">
-					  <h3>#{locales['illusion.index.pastEventsTitle']}</h3>
-          
-	          <ui:repeat var="event" value="#{illusionIndexBackingBean.pastEvents}">
-	            <div class="illusion-index-event">
-	              <div class="index-illusion-event-date">
-	                <h:outputFormat rendered="#{event.endDate == null}" value="#{locales['illusion.index.illusionEventTime']}">
-	                  <f:param value="#{event.startTime != null ? 1 : 0}"/>  
-	                  <f:param value="#{event.startDate}"/>
-	                  <f:param value="#{event.startTime}"/>
-	                </h:outputFormat>
-	
-	                <h:outputFormat rendered="#{event.endDate != null}" value="#{locales['illusion.index.illusionEventTimeRange']}">
-	                  <f:param value="#{event.startTime != null ? 1 : 0}"/>  
-	                  <f:param value="#{event.endTime != null ? 1 : 0}"/>  
-	                  <f:param value="#{event.startDate}"/>
-	                  <f:param value="#{event.startTime}"/>
-	                  <f:param value="#{event.endDate}"/>
-	                  <f:param value="#{event.endTime}"/>  
-	                </h:outputFormat>
-	              </div>
-	              
-	              <div class="index-illusion-event-location">#{event.location}</div>
-	              
-	              <h:link outcome="/illusion/event.jsf" styleClass="illusion-index-event-name" value="#{event.name}">
-	                <f:param name="urlName" value="#{event.urlName}"/>
-	              </h:link>
-	              <div class="illusion-index-event-description">#{event.description}</div>
-	              
-	              <h4>#{locales['illusion.index.eventOrganizers']}</h4>
-	              
-	              <ui:repeat var="organizer" value="#{event.organizers}">
-	                <div class="illusion-index-event-organizer">
-	                  <img class="illusion-index-event-organizer-image" src="#{request.contextPath}/illusion/eventAvatar/#{event.urlName}/#{organizer.participantId}?size=20"/> 
-	                  <h:link styleClass="illusion-index-event-organizer-name" outcome="/users/profile.jsf?userId=#{organizer.userId}">#{organizer.name}</h:link>
-	                </div>
-	              </ui:repeat>
-	              
-	              <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'INVITED'}">#{locales['illusion.index.roleInvited']}</div>
-	              <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'ORGANIZER'}">#{locales['illusion.index.roleOrganizer']}</div>
-	              <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'PARTICIPANT'}">#{locales['illusion.index.roleParticipant']}</div>
-	              <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'BANNED'}">#{locales['illusion.index.roleBanned']}</div>
-	              <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'PENDING_APPROVAL'}">#{locales['illusion.index.rolePendingApproval']}</div>
-	              <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'WAITING_PAYMENT'}">#{locales['illusion.index.roleWaitingPayment']}</div>
-	
-	            </div>
-	          </ui:repeat>
-					</div>
-					
-          <div id="unpublished" jsf:rendered="#{!illusionIndexBackingBean.unpublished.isEmpty()}">
-            <h3>#{locales['illusion.index.unpublishedEvents']}</h3>
-            
-            <ui:repeat var="event" value="#{illusionIndexBackingBean.unpublished}">
-              <div class="illusion-index-event">
-                <div class="index-illusion-event-date">
-                  <h:outputFormat rendered="#{event.endDate == null}" value="#{locales['illusion.index.illusionEventTime']}">
-                    <f:param value="#{event.startTime != null ? 1 : 0}"/>  
-                    <f:param value="#{event.startDate}"/>
-                    <f:param value="#{event.startTime}"/>
-                  </h:outputFormat>
-                  
-                  <h:outputFormat rendered="#{event.endDate != null}" value="#{locales['illusion.index.illusionEventTimeRange']}">
-                    <f:param value="#{event.startTime != null ? 1 : 0}"/>  
-                    <f:param value="#{event.endTime != null ? 1 : 0}"/>  
-                    <f:param value="#{event.startDate}"/>
-                    <f:param value="#{event.startTime}"/>
-                    <f:param value="#{event.endDate}"/>
-                    <f:param value="#{event.endTime}"/>  
-                  </h:outputFormat>
+
+        <div class="flex-row">
+          <div class="flex-cell-full no-margin-top"> 
+            <div id="tabs">
+    					<ul>
+                <li><a href="#calendar">#{locales['illusion.index.calendar']}</a></li>
+                <li jsf:rendered="#{!illusionIndexBackingBean.upcomingEvents.isEmpty()}"><a href="#upcoming">#{locales['illusion.index.upcomingEvents']}</a></li>
+                <li jsf:rendered="#{!illusionIndexBackingBean.pastEvents.isEmpty()}"><a href="#pastevents">#{locales['illusion.index.pastEventsTitle']}</a></li>
+                <li jsf:rendered="#{!illusionIndexBackingBean.unpublished.isEmpty()}"><a href="#unpublished">#{locales['illusion.index.unpublishedEvents']}</a></li>
+    					</ul>
+              
+              <div id="calendar" class="flex-row">
+                <div class="flex-cell-full"> 
+                  <h3>#{locales['illusion.index.calendar']}</h3>
+                </div>
+              
+                <div class="flex-cell-full"> 
+                  <div class="calendar-view"></div>
+                </div>
+              </div>
+              
+    					<div class="flex-row" id="upcoming" jsf:rendered="#{!illusionIndexBackingBean.upcomingEvents.isEmpty()}">
+                <div class="flex-cell-full"> 
+    					    <h3>#{locales['illusion.index.upcomingEvents']}</h3>
+    					  </div>
+                
+    					  <ui:repeat var="event" value="#{illusionIndexBackingBean.upcomingEvents}">
+                  <div class="flex-cell-full illusion-index-event"> 
+      	            <div class="flex-row">
+                      <div class="flex-cell-8 flex-cell-first"> 
+                        <h:link outcome="/illusion/event.jsf" styleClass="illusion-index-event-name" value="#{event.name}">
+                          <f:param name="urlName" value="#{event.urlName}"/>
+                        </h:link>
+                      </div>
+                      <div class="flex-cell-8 flex-cell-last flex-right">
+                        <div class="index-illusion-event-date">
+                          <h:outputFormat rendered="#{event.endDate == null}" value="#{locales['illusion.index.illusionEventTime']}">
+                            <f:param value="#{event.startTime != null ? 1 : 0}"/>  
+                            <f:param value="#{event.startDate}"/>
+                            <f:param value="#{event.startTime}"/>
+                          </h:outputFormat>
+                          
+                          <h:outputFormat rendered="#{event.endDate != null}" value="#{locales['illusion.index.illusionEventTimeRange']}">
+                            <f:param value="#{event.startTime != null ? 1 : 0}"/>  
+                            <f:param value="#{event.endTime != null ? 1 : 0}"/>  
+                            <f:param value="#{event.startDate}"/>
+                            <f:param value="#{event.startTime}"/>
+                            <f:param value="#{event.endDate}"/>
+                            <f:param value="#{event.endTime}"/>  
+                          </h:outputFormat>
+                        </div> 
+                        <div class="index-illusion-event-location">#{event.location}</div>
+                      </div>
+                    </div>
+                    
+                    <div class="flex-row">
+                      <div class="flex-cell-full"> 
+                        <div class="illusion-index-event-description">#{event.description}</div>
+                      </div>
+                    </div>
+                    
+                    <div class="flex-row">
+                      <div class="flex-cell-full"> 
+                        <h4>#{locales['illusion.index.eventOrganizers']}</h4>
+                      </div>
+                    </div>
+                    
+                    <ui:repeat var="organizer" value="#{event.organizers}">
+                      <div class="flex-row">
+                        <div class="flex-cell-full"> 
+                          <div class="illusion-index-event-organizer">
+                            <img class="illusion-index-event-organizer-image" src="#{request.contextPath}/illusion/eventAvatar/#{event.urlName}/#{organizer.participantId}?size=20"/> 
+                            <h:link styleClass="illusion-index-event-organizer-name" outcome="/users/profile.jsf?userId=#{organizer.userId}">#{organizer.name}</h:link>
+                          </div>
+                        </div>
+                      </div>
+                    </ui:repeat>
+                    
+                    <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'INVITED'}"><div>#{locales['illusion.index.roleInvited']}</div></div>
+    	              <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'ORGANIZER'}"><div>#{locales['illusion.index.roleOrganizer']}</div></div>
+    	              <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'PARTICIPANT'}"><div>#{locales['illusion.index.roleParticipant']}</div></div>
+    	              <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'BANNED'}"><div>#{locales['illusion.index.roleBanned']}</div></div>
+    	              <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'PENDING_APPROVAL'}"><div>#{locales['illusion.index.rolePendingApproval']}</div></div>
+    	              <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'WAITING_PAYMENT'}"><div>#{locales['illusion.index.roleWaitingPayment']}</div></div>
+                    
+                  </div> 
+    	          </ui:repeat>
+    					</div>
+              
+              <div id="pastevents" class="flex-row" jsf:rendered="#{!illusionIndexBackingBean.pastEvents.isEmpty()}">
+                <div class="flex-cell-full"> 
+                  <h3>#{locales['illusion.index.pastEventsTitle']}</h3>
                 </div>
                 
-                <div class="index-illusion-event-location">#{event.location}</div>
-                
-                <h:link outcome="/illusion/event.jsf" styleClass="illusion-index-event-name" value="#{event.name}">
-                  <f:param name="urlName" value="#{event.urlName}"/>
-                </h:link>
-                
-                <div class="illusion-index-event-description">#{event.description}</div>
-                <h4>#{locales['illusion.index.eventOrganizers']}</h4>
-                
-                <ui:repeat var="organizer" value="#{event.organizers}">
-                  <div class="illusion-index-event-organizer">
-                    <img class="illusion-index-event-organizer-image" src="#{request.contextPath}/illusion/eventAvatar/#{event.urlName}/#{organizer.participantId}?size=20"/> 
-                    <h:link styleClass="illusion-index-event-organizer-name" outcome="/users/profile.jsf?userId=#{organizer.userId}">#{organizer.name}</h:link>
-                  </div>
+                <ui:repeat var="event" value="#{illusionIndexBackingBean.pastEvents}">
+                  <div class="flex-cell-full illusion-index-event"> 
+                    <div class="flex-row">
+                      <div class="flex-cell-8 flex-cell-first"> 
+                        <h:link outcome="/illusion/event.jsf" styleClass="illusion-index-event-name" value="#{event.name}">
+                          <f:param name="urlName" value="#{event.urlName}"/>
+                        </h:link>
+                      </div>
+                      <div class="flex-cell-8 flex-cell-last flex-right">
+                        <div class="index-illusion-event-date">
+                          <h:outputFormat rendered="#{event.endDate == null}" value="#{locales['illusion.index.illusionEventTime']}">
+                            <f:param value="#{event.startTime != null ? 1 : 0}"/>  
+                            <f:param value="#{event.startDate}"/>
+                            <f:param value="#{event.startTime}"/>
+                          </h:outputFormat>
+                          
+                          <h:outputFormat rendered="#{event.endDate != null}" value="#{locales['illusion.index.illusionEventTimeRange']}">
+                            <f:param value="#{event.startTime != null ? 1 : 0}"/>  
+                            <f:param value="#{event.endTime != null ? 1 : 0}"/>  
+                            <f:param value="#{event.startDate}"/>
+                            <f:param value="#{event.startTime}"/>
+                            <f:param value="#{event.endDate}"/>
+                            <f:param value="#{event.endTime}"/>  
+                          </h:outputFormat>
+                        </div> 
+                        <div class="index-illusion-event-location">#{event.location}</div>
+                      </div>
+                    </div>
+                    
+                    <div class="flex-row">
+                      <div class="flex-cell-full"> 
+                        <div class="illusion-index-event-description">#{event.description}</div>
+                      </div>
+                    </div>
+                    
+                    <div class="flex-row">
+                      <div class="flex-cell-full"> 
+                        <h4>#{locales['illusion.index.eventOrganizers']}</h4>
+                      </div>
+                    </div>
+                    
+                    <ui:repeat var="organizer" value="#{event.organizers}">
+                      <div class="flex-row">
+                        <div class="flex-cell-full"> 
+                          <div class="illusion-index-event-organizer">
+                            <img class="illusion-index-event-organizer-image" src="#{request.contextPath}/illusion/eventAvatar/#{event.urlName}/#{organizer.participantId}?size=20"/> 
+                            <h:link styleClass="illusion-index-event-organizer-name" outcome="/users/profile.jsf?userId=#{organizer.userId}">#{organizer.name}</h:link>
+                          </div>
+                        </div>
+                      </div>
+                    </ui:repeat>
+                    
+                    <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'INVITED'}"><div>#{locales['illusion.index.roleInvited']}</div></div>
+                    <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'ORGANIZER'}"><div>#{locales['illusion.index.roleOrganizer']}</div></div>
+                    <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'PARTICIPANT'}"><div>#{locales['illusion.index.roleParticipant']}</div></div>
+                    <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'BANNED'}"><div>#{locales['illusion.index.roleBanned']}</div></div>
+                    <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'PENDING_APPROVAL'}"><div>#{locales['illusion.index.rolePendingApproval']}</div></div>
+                    <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'WAITING_PAYMENT'}"><div>#{locales['illusion.index.roleWaitingPayment']}</div></div>
+                    
+                  </div> 
                 </ui:repeat>
-                
-                <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'INVITED'}">#{locales['illusion.index.roleInvited']}</div>
-                <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'ORGANIZER'}">#{locales['illusion.index.roleOrganizer']}</div>
-                <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'PARTICIPANT'}">#{locales['illusion.index.roleParticipant']}</div>
-                <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'BANNED'}">#{locales['illusion.index.roleBanned']}</div>
-                <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'PENDING_APPROVAL'}">#{locales['illusion.index.rolePendingApproval']}</div>
-                <div class="index-illusion-event-role" jsf:rendered="#{event.role eq 'WAITING_PAYMENT'}">#{locales['illusion.index.roleWaitingPayment']}</div>
-                
               </div>
-            </ui:repeat>
-          </div>
-				</div>
 
-      </h:panelGroup>  
-    </h:panelGroup>
+              <div id="unpublished" class="flex-row" jsf:rendered="#{!illusionIndexBackingBean.unpublished.isEmpty()}">
+                <div class="flex-cell-full"> 
+                  <h3>#{locales['illusion.index.pastEventsTitle']}</h3>
+                </div>
+                
+                <ui:repeat var="event" value="#{illusionIndexBackingBean.unpublished}">
+                  <div class="flex-cell-full illusion-index-event"> 
+                    <div class="flex-row">
+                      <div class="flex-cell-8 flex-cell-first"> 
+                        <h:link outcome="/illusion/event.jsf" styleClass="illusion-index-event-name" value="#{event.name}">
+                          <f:param name="urlName" value="#{event.urlName}"/>
+                        </h:link>
+                      </div>
+                      <div class="flex-cell-8 flex-cell-last flex-right">
+                        <div class="index-illusion-event-date">
+                          <h:outputFormat rendered="#{event.endDate == null}" value="#{locales['illusion.index.illusionEventTime']}">
+                            <f:param value="#{event.startTime != null ? 1 : 0}"/>  
+                            <f:param value="#{event.startDate}"/>
+                            <f:param value="#{event.startTime}"/>
+                          </h:outputFormat>
+                          
+                          <h:outputFormat rendered="#{event.endDate != null}" value="#{locales['illusion.index.illusionEventTimeRange']}">
+                            <f:param value="#{event.startTime != null ? 1 : 0}"/>  
+                            <f:param value="#{event.endTime != null ? 1 : 0}"/>  
+                            <f:param value="#{event.startDate}"/>
+                            <f:param value="#{event.startTime}"/>
+                            <f:param value="#{event.endDate}"/>
+                            <f:param value="#{event.endTime}"/>  
+                          </h:outputFormat>
+                        </div> 
+                        <div class="index-illusion-event-location">#{event.location}</div>
+                      </div>
+                    </div>
+                    
+                    <div class="flex-row">
+                      <div class="flex-cell-full"> 
+                        <div class="illusion-index-event-description">#{event.description}</div>
+                      </div>
+                    </div>
+                    
+                    <div class="flex-row">
+                      <div class="flex-cell-full"> 
+                        <h4>#{locales['illusion.index.eventOrganizers']}</h4>
+                      </div>
+                    </div>
+                    
+                    <ui:repeat var="organizer" value="#{event.organizers}">
+                      <div class="flex-row">
+                        <div class="flex-cell-full"> 
+                          <div class="illusion-index-event-organizer">
+                            <img class="illusion-index-event-organizer-image" src="#{request.contextPath}/illusion/eventAvatar/#{event.urlName}/#{organizer.participantId}?size=20"/> 
+                            <h:link styleClass="illusion-index-event-organizer-name" outcome="/users/profile.jsf?userId=#{organizer.userId}">#{organizer.name}</h:link>
+                          </div>
+                        </div>
+                      </div>
+                    </ui:repeat>
+                    
+                    <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'INVITED'}"><div>#{locales['illusion.index.roleInvited']}</div></div>
+                    <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'ORGANIZER'}"><div>#{locales['illusion.index.roleOrganizer']}</div></div>
+                    <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'PARTICIPANT'}"><div>#{locales['illusion.index.roleParticipant']}</div></div>
+                    <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'BANNED'}"><div>#{locales['illusion.index.roleBanned']}</div></div>
+                    <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'PENDING_APPROVAL'}"><div>#{locales['illusion.index.rolePendingApproval']}</div></div>
+                    <div class="flex-row index-illusion-event-role" jsf:rendered="#{event.role eq 'WAITING_PAYMENT'}"><div>#{locales['illusion.index.roleWaitingPayment']}</div></div>
+                    
+                  </div> 
+                </ui:repeat>
+              </div>
+            </div>
+
+  				</div>
+        </div>
+      </div>
+    </div>
     
   </ui:define>
 
