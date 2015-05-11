@@ -24,9 +24,9 @@ public class UsersVerifyTestsBase extends AbstractUITest {
     try {
       getWebDriver().get(getAppUrl() + "/login");
 
-      getWebDriver().findElement(By.cssSelector(".user-login-login-panel input[type='text']")).sendKeys(USER_EMAIL);
-      getWebDriver().findElement(By.cssSelector(".user-login-login-panel input[type='password']")).sendKeys("pass");
-      getWebDriver().findElement(By.cssSelector(".user-login-login-panel input[type='submit']")).click();
+      getWebDriver().findElement(By.cssSelector(".user-login-email")).sendKeys(USER_EMAIL);
+      getWebDriver().findElement(By.cssSelector(".user-login-password")).sendKeys("pass");
+      getWebDriver().findElement(By.cssSelector(".user-login-button")).click();
 
       waitForNotification(getWebDriver());
       assertNotification(getWebDriver(), "warning", "You Have Not Confirmed Your E-email Address");
