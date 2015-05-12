@@ -4,12 +4,26 @@
 
 .illusion-event-page-content {
   padding: 1in;
+  @include box-sizing(border-box);
+  @include html-default-styles;
 }
 
 .illusion-event-page-content *:first-child {
   margin-top: 0px;
 }
 
-.illusion-event-page-content {
-  @include html-default-styles;
+@media screen and (max-width: 959px) {
+  
+  .illusion-event-page-content {
+    max-width:100%;
+    padding-top: 40px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  
+  .illusion-event-page-content img {
+    max-width:100%;
+    height: auto !important;
+  }  
 }

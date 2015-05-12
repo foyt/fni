@@ -12,10 +12,14 @@
       <f:param value="#{illusionEventPageBackingBean.pageTitle}"/>
     </h:outputFormat>
   </ui:define>
+  
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
    
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-page.css"/>
   </ui:define>  
@@ -25,7 +29,7 @@
   </ui:define>
   
   <ui:define name="grid-content">
-    <ui:include src="/facelets/menu.xhtml"/>
+    <ui:include src="/facelets/flex-menu.xhtml" />
     <h:outputText value="#{illusionEventPageBackingBean.contentsHtml}" escape="false"/>
   </ui:define>
 
