@@ -1,14 +1,17 @@
 include common
 +view-header()
 +navigation()
-div.grid_16.tight
-  .illusion-content-panel.grid_16.tight
-    div(class="grid_16 tight")
-      .illusion-event-sub-panel
+div.flex-row
+  div.flex-cell-full.index-box.no-margin-top.no-margin-bottom
+    div.flex-row
+      div.flex-cell-8.flex-cell-first
         a(class="illusion-event-material-back-link",href=eventUrl + "/materials")
           =locale.text('illusion.eventMaterial.backLink')
+      div.flex-cell-8.flex-cell-last.flex-cell-right
         a(class="illusion-event-material-new-window-link",target="_blank",href=materialUrl)
           =locale.text('illusion.eventMaterial.openInNewWindowLink')
+    div.flex-row
+      div.flex-cell-full
         if materialEmbedType == 'IFRAME'
           iframe(class="illusion-event-material",src=materialUrl,seamless="seamless")
         if (materialEmbedType == 'IMG')||(materialEmbedType == 'SVG')
