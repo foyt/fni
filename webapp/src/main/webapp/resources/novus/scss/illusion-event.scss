@@ -2,18 +2,12 @@
 @import "compass";
 @import "styles";
 
-/* Panels */ 
-
-.illusion-event-panel {
-  @include generic-panel;
-  position: relative;
-  background: #fff;
-}
-
 /* Index */
 
 .illusion-event-index-text {
   padding: 1in;
+  @include box-sizing(border-box);
+  @include html-default-styles;
 }
 
 .illusion-event-index-text *:first-child {
@@ -21,21 +15,13 @@
 }
 
 .illusion-event-index-text {
-  @include html-default-styles;
 }
-
-.social-likes-container {
-  text-align: right;
-}
-
-/* Buttons */
 
 .illusion-event-join {
-  /**
-  top: 40px;
-  right: 40px;**/
-  float: right;
-  text-align: right;
+  position: absolute;
+  right: 20px;
+  top: 30px;
+  text-align: center;
 }
 
 .illusion-event-join-info {
@@ -44,8 +30,8 @@
   font-weight: bold;
   font-size: 16px;
   text-transform: uppercase;   
-  margin-bottom: 12px;
-  margin-top: -70px;
+  margin-top: 5px;
+  display: block;
 }
 
 .illusion-event-join-button {
@@ -59,4 +45,51 @@
   border: 0px;
   border-radius: 15px;
   cursor: pointer;
+  display: block;
+}
+
+.social-likes-container {
+  text-align: right;
+}
+
+@media screen and (max-width: 361px) {
+  
+  .social-likes-container {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 959px) {
+  
+  .illusion-event-join {
+    top: 20px;
+    left: 20px;
+    right: 20px;
+  }
+  
+  .illusion-event-join-button {
+    position: absolute;
+    top:0px;
+    right: 0px;
+  }
+  
+  .illusion-event-join-info {
+    position: absolute;
+    top:0px;
+    left: 0px;
+    margin-top: 10px;
+  }
+  
+  .illusion-event-index-text {
+    max-width:100%;
+    padding-top: 40px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  
+  .illusion-event-index-text img {
+    max-width:100%;
+    height: auto !important;
+  }  
 }

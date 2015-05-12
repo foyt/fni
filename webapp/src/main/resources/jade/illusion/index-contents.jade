@@ -1,31 +1,29 @@
 include common
 +view-header()
 +navigation()
-if (!user) && ((joinMode == 'OPEN')||(joinMode == 'APPROVE'))
-  div.illusion-event-join
-    if hasSignUpFee
-      div.illusion-event-join-info
-        = locale.text('illusion.event.joinInfoPrice')
-    else
-      div.illusion-event-join-info
-        = locale.text('illusion.event.joinInfoFree')
-    if (joinMode == 'OPEN')||(ref == 'inv')
-      a(class="illusion-event-join-button",href=eventUrl + "/dojoin")
-        = locale.text('illusion.event.joinButton')
-    if (joinMode == 'APPROVE')&&(ref != 'inv')
-      a(class="illusion-event-join-button",href=eventUrl + "/dojoin")
-        = locale.text('illusion.event.requestToJoinButton')   
-div.grid_16.tight
-  .illusion-content-panel.grid_16.tight
-    .grid_16
-      .illusion-event-sub-panel
-        .illusion-event-index-text
-          !={indexText}
-        .social-likes-container
-          .social-likes.social-likes_visible(data-counters='no')
-            div.facebook(title= locale.text('illusion.event.shareOnFacebook'))
-              | Facebook
-            div.twitter(title= locale.text('illusion.event.shareOnTwitter'))
-              | Twitter
-            div.plusone(title= locale.text('illusion.event.shareOnGooglePlus'))
-              | Google Plus
+div.flex-row
+  div.flex-cell-full.index-box.no-margin-top.no-margin-bottom
+    .illusion-event-index-text
+      !={indexText}
+    if (!user) && ((joinMode == 'OPEN')||(joinMode == 'APPROVE'))
+      div.illusion-event-join
+        if (joinMode == 'OPEN')||(ref == 'inv')
+          a(class="illusion-event-join-button",href=eventUrl + "/dojoin")
+            = locale.text('illusion.event.joinButton')
+        if (joinMode == 'APPROVE')&&(ref != 'inv')
+          a(class="illusion-event-join-button",href=eventUrl + "/dojoin")
+            = locale.text('illusion.event.requestToJoinButton')
+        if hasSignUpFee
+          div.illusion-event-join-info
+            = locale.text('illusion.event.joinInfoPrice')
+        else
+          div.illusion-event-join-info
+            = locale.text('illusion.event.joinInfoFree')
+    .social-likes-container
+      .social-likes.social-likes_visible(data-counters='no')
+        div.facebook(title= locale.text('illusion.event.shareOnFacebook'))
+          | Facebook
+        div.twitter(title= locale.text('illusion.event.shareOnTwitter'))
+          | Twitter
+        div.plusone(title= locale.text('illusion.event.shareOnGooglePlus'))
+          | Google Plus

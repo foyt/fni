@@ -1,6 +1,6 @@
 mixin navigation()
-  div(class="grid_16 tight")
-    div(class="illusion-event-navigation")
+  div.flex-row
+    div.flex-cell-full.illusion-event-navigation.no-margin-bottom
       for page in pages
         if page.id == currentPageId
           a(class="illusion-event-navigation-item illusion-event-navigation-item-active",href=page.url)
