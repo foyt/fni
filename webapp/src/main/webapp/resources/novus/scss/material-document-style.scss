@@ -1,5 +1,5 @@
 body {
-  width: 159.2mm;
+  max-width: 159.2mm;
   margin-left: auto;
   margin-right: auto;
   padding: 1in;
@@ -11,4 +11,11 @@ body {
 
 body *:first-child {
   margin-top: 0px;
+}
+
+@media screen and (max-width: 134mm) {
+  body {
+    padding: 0px;
+    box-shadow: none;
+  }
 }

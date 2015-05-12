@@ -1885,7 +1885,7 @@ public class MaterialController {
   private FileData getDocumentData(String contextPath, Document document) throws UnsupportedEncodingException {
     String bodyContent = document.getData();
     String title = document.getTitle();
-    String styleSheet = contextPath + "/uresources/material-document-style.css";
+    String styleSheet = contextPath + "/theme/css/material-document-style.css";
     String htmlContent = MessageFormat.format(DOCUMENT_TEMPLATE, title, styleSheet, bodyContent);
     return new FileData(null, document.getUrlName(), htmlContent.getBytes("UTF-8"), "text/html", document.getModified());
   }
