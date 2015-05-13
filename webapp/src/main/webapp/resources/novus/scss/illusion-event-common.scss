@@ -152,62 +152,44 @@ h4>a{
   padding-top: 10px;
 }
 
-/* List */
-
-.illusion-list {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  margin-left: -8px;
-  margin-right: -8px;
-}
-
-.illusion-list-item {
-  width: 100%;
-  padding: 8px;
-  cursor: pointer;
-  display: block;
-  font-size: 14px;
-  text-decoration: none;
-  text-transform: uppercase;
-  color: $default-color;
-  font-family: $default-font;
-  @include box-sizing(border-box);
-}
-
-.illusion-list-item>a{
-  text-decoration: none;
-  color: $default-color;
-}
-
-.illusion-list-item-actions {
-  display: block;
-}
-
-.illusion-list-item-actions>a {
-  text-decoration: none;
-  text-transform: uppercase;
+.illusion-list-header-row {
+  font-weight: bold;
   font-size: 12px;
-  margin-right: 8px;
+  text-decoration: none;
+  text-transform: uppercase;
   color: $default-color;
   font-family: $default-font;
 }
 
-.illusion-list-item img {
-  float: right;
-  vertical-align: top;
-  margin-left: 8px;
-  max-height: 20px;
+.illusion-list-row {
+  font-size: 12px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: $default-color;
+  font-family: $default-font;
 }
 
-.illusion-list-item:hover {
+.illusion-list-row img {
+  max-height: 20px;
+  vertical-align: top;
+}
+
+.illusion-list-row:hover {
   background: $list-selected-background;
   color: $list-selected-color;
+  margin: -2px -8px;
+  padding: 2px 8px;
 }
 
-.illusion-list-item:hover a{
+.illusion-list-row a {
+  color: $default-color;
+  text-decoration: none;
+  margin-right: 8px;
+}
+
+.illusion-list-row:hover a{
   color: $list-selected-color;
 }
-
 
 @media screen and (max-width: 361px) {
   
