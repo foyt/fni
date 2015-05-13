@@ -11,19 +11,16 @@ $border-color: rgb(71, 176, 176);
   font-size: 12px;
   text-decoration: none;
   text-transform: uppercase;
-  float: right;
-  margin-top: 6px; 
 }
 
 /* Posts */
 
 .illusion-forum-post {
-  padding-top: 22px;
-  padding-bottom: 27px;
   border-top: 1px solid $border-color;
   transition: 0.5s ease;
   opacity: 0;
   margin-left: -50px;
+  position: relative;
 }
 
 .illusion-forum-post-visible {
@@ -39,26 +36,16 @@ $border-color: rgb(71, 176, 176);
   border-top: 0px;
 }
 
-.illusion-forum-post-author-info {
-  display: inline-block;
-  vertical-align: top;
-  width: 120px;
+.illusion-forum-post-author-name {
   color: $default-color;
   font-family: $default-font;
   font-size: 10px;
 }
 
-.illusion-forum-post-author-image-container {
-  padding-top: 3px;
-}
-
-.illusion-forum-post-content-container {
-  display: inline-block;
-  vertical-align: top;
-}
-
 .illusion-forum-post-content {
-  @include illusion-forum-post-content
+  @include illusion-forum-post-content;
+  vertical-align: top;
+  min-height: 91px;
 }
 
 .illusion-forum-post-content p {
@@ -76,20 +63,6 @@ $border-color: rgb(71, 176, 176);
 
 .illusion-forum-post-content i, .illusion-forum-post-content em {
   font-style: italic;
-}
-
-.illusion-forum-post-footer {
-  clear: both;
-  padding-top: 13px;
-}
-
-.illusion-forum-post-edit-container {
-  float: right;
-}
-
-.illusion-forum-post-dates-container {
-  float: left;
-  vertical-align: top;
 }
 
 .illusion-forum-post-sent, .illusion-forum-post-modified {
@@ -133,4 +106,17 @@ $border-color: rgb(71, 176, 176);
   border-radius: 5px;
   cursor: pointer;
   margin-top: 20px;
+}
+
+.illusion-forum-post-content-save {
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 361px) {
+  
+  .illusion-forum-post-edit {
+    position: absolute; 
+    right: 0px;
+    top: 10px; 
+  }
 }

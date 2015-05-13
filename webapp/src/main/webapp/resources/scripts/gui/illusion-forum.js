@@ -135,21 +135,31 @@
     },
     
     edit: function () {
-      this.element.find('.illusion-forum-post-content, .illusion-forum-post-footer').hide();
-      this.element.find('.illusion-forum-post-content-save').show();
-      this.element.find('.illusion-forum-post-content-editor')
+      var editor = $('<div>')
+        .addClass('illusion-forum-post-content-editor')
         .html(this.element.find('.illusion-forum-post-content').html())
         .show()
         .forumPostEditor();
+      
+      this.element.find('.illusion-forum-post-content, .illusion-forum-post-footer').hide();
+      this.element.find('.illusion-forum-post-content-save')
+        .before(editor)  
+        .show();
     },
     
     closeEditor: function () {
       this.element.find('.illusion-forum-post-content-save').hide();
-      this.element.find('.illusion-forum-post-content-editor').forumPostEditor('destroy').hide();
+      this.element.find('.illusion-forum-post-content-editor').remove();
       this.element.find('.illusion-forum-post-content, .illusion-forum-post-footer').show();
+      this.element.find('.illusion-forum-post-edit')
+        .removeAttr('disabled')
+        .prop('disabled', false);
     },
     
     _onEditClick: function () {
+      this.element.find('.illusion-forum-post-edit')
+        .attr('disabled', 'disabled')
+        .prop('disabled', true);
       this.edit();
     },
     

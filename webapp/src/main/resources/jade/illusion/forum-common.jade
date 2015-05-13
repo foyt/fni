@@ -1,24 +1,29 @@
 mixin post(postId, postContent, postAuthorId, postAuthorParticipantId, postAuthorName, postCreated, postModified)
-  div.illusion-forum-post-author-info
-    div.illusion-forum-post-author-image-container
-      img(src=contextPath + "/illusion/eventAvatar/" + eventUrlName + "/" + postAuthorParticipantId + "?size=80")
-    div.illusion-forum-post-author-name
-      != postAuthorName
-  div.illusion-forum-post-content-container
-    div.illusion-forum-post-content
-      != postContent
-    if postAuthorId == user.id
-      div.illusion-forum-post-content-editor(style="display: none")
-      button.illusion-forum-post-content-save(style="display: none")
-        = locale.text('illusion.forum.saveButton')
-    div.illusion-forum-post-footer
-      if postAuthorId == user.id
-        div.illusion-forum-post-edit-container
-          a.illusion-forum-post-edit(href="javascript:void(null)")
-            = locale.text('illusion.forum.editPost')
-      div.illusion-forum-post-dates-container
-        div.illusion-forum-post-sent
-          = locale.text('illusion.forum.postSent', postCreated)
-        if postCreated != postModified
-          div.illusion-forum-post-modified
-            = locale.text('illusion.forum.postModified', postModified)
+  div.flex-row
+    div.flex-cell-full 
+      div.flex-row
+        div(class="lg-flex-cell-2 lg-flex-cell-first md-flex-cell-2 md-flex-cell-first sm-flex-cell-full flex-cell-first")
+          div.illusion-forum-post-author-image-container
+            img(src=contextPath + "/illusion/eventAvatar/" + eventUrlName + "/" + postAuthorParticipantId + "?size=80")
+          div.illusion-forum-post-author-name
+            != postAuthorName
+        div(class="lg-flex-cell-14 lg-flex-cell-last md-flex-cell-14 md-flex-cell-last sm-flex-cell-full")
+          div.flex-row
+            div.flex-cell-full.no-margin-top.no-margin-bottom
+              div.illusion-forum-post-content
+                != postContent
+              if postAuthorId == user.id
+                button.illusion-forum-post-content-save(style="display: none")
+                  = locale.text('illusion.forum.saveButton')
+          div.flex-row
+            div(class="lg-flex-cell-10 lg-flex-cell-first md-flex-cell-10 md-flex-cell-first sm-flex-cell-full no-margin-top no-margin-bottom")
+              div.illusion-forum-post-sent
+                = locale.text('illusion.forum.postSent', postCreated)
+              if postCreated != postModified
+                div.illusion-forum-post-modified
+                  = locale.text('illusion.forum.postModified', postModified)
+            div(class="lg-flex-cell-6 lg-flex-cell-first md-flex-cell-6 md-flex-cell-last sm-flex-cell-full lg-flex-right md-flex-right no-margin-top no-margin-bottom")
+              if postAuthorId == user.id
+                div.illusion-forum-post-edit-container
+                  a.illusion-forum-post-edit(href="javascript:void(null)")
+                    = locale.text('illusion.forum.editPost')            

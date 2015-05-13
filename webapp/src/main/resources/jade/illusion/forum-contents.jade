@@ -2,10 +2,13 @@ include common
 include forum-common
 +view-header()
 +navigation()
-div.grid_16.tight
-  .illusion-content-panel.grid_16.tight
-    .grid_16
-      div.illusion-event-sub-panel
+div.flex-row
+  div.flex-cell-full.index-box.no-margin-top.no-margin-bottom
+    div.flex-row
+      div.flex-cell-8.flex-cell-first
+        h3
+          = locale.text('illusion.forum.title')
+      div.flex-cell-8.flex-right.flex-cell-last
         if user
           if followingTopic
             a.illusion-forum-watch-link(href="javascript:void(null)", style="display: none")
@@ -17,12 +20,14 @@ div.grid_16.tight
               = locale.text('illusion.forum.watchTopic')
             a.illusion-forum-stop-watching-link(href="javascript:void(null)", style="display: none")
               = locale.text('illusion.forum.stopWatchTopic')
-        h3
-          = locale.text('illusion.forum.title')
+    div.flex-row
+      div.flex-cell-full
         div.illusion-forum-posts
           for post in posts
             div(data-post-id=post.id,class="illusion-forum-post")    
               +post(post.id, post.content, post.authorId, post.authorParticipantId, post.authorName, post.created, post.modified)
+    div.flex-row
+      div.flex-cell-full
         if user
           div.illusion-forum-post-editor-container
             textarea.illusion-forum-post-editor
