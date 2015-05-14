@@ -2,6 +2,17 @@
 @import "compass";
 @import "styles";
 
+.index-box {
+  background-color: $panel-background-color;
+  padding: 20px;
+  position: relative;
+}
+
+h3 {
+  @include header-2;
+  margin-bottom: 10px;
+}
+
 .illusion-event-manage-templates {
   margin-top: 20px;
 }

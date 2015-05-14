@@ -15,10 +15,14 @@
   <ui:define name="view-scripts">
     <h:outputScript name="scripts/gui/illusion-manage-templates.js"/>
   </ui:define>
+
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
   
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-manage-templates.css"/>
   </ui:define>  
@@ -26,81 +30,77 @@
   <ui:define name="grid-content">
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['illusion.manageTemplates.navigationIndex']}</h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:link styleClass="view-header-navigation-item" outcome="/illusion/index.jsf">#{locales['illusion.manageTemplates.navigationIllusion']}</h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:link styleClass="view-header-navigation-item" outcome="/illusion/event.jsf">
-          <f:param name="urlName" value="#{illusionEventManageTemplatesBackingBean.urlName}"/>
-          <h:outputText value="#{illusionEventManageTemplatesBackingBean.name}" />
-        </h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:link styleClass="view-header-navigation-item" outcome="/illusion/event-manage-templates.jsf">
-          <f:param name="urlName" value="#{illusionEventManageTemplatesBackingBean.urlName}"/>
-          <h:outputText value="#{locales['illusion.manageTemplates.navigationManageTemplates']}" />
-        </h:link>
-      </h:panelGroup>
-        
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{illusionEventManageTemplatesBackingBean.name}</p>
-        <p class="view-header-description-text">#{illusionEventManageTemplatesBackingBean.description}</p>
-      </h:panelGroup>
-    </h:panelGroup>
-  
-    <div class="grid_16 tight">
-      <ui:include src="/facelets/illusionnavigation.xhtml"/>
-    </div>
-
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <div class="illusion-content-panel grid_16 tight">
-        <div class="grid_16">
-          <div class="illusion-event-sub-panel">
-            <h:form>
-              <h:commandButton styleClass="new-template" value="#{locales['illusion.manageTemplates.newTemplate']}" action="#{illusionEventManageTemplatesBackingBean.newTemplate}" />
-              <input type="hidden" jsf:value="#{illusionEventManageTemplatesBackingBean.templateName}" class="jsfActionTemplateName"/>
-              <h:commandLink styleClass="jsfActionDeleteTemplate" action="#{illusionEventManageTemplatesBackingBean.deleteTemplate()}" />
-            </h:form>
-
-            <h3>#{locales['illusion.manageTemplates.templatesListTitle']}</h3>
-
-            <table class="illusion-table illusion-event-manage-templates">
-              <thead>
-                <tr>
-                  <th width="936">#{locales['illusion.manageTemplates.templateListTitleHeader']}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <ui:repeat var="template" value="#{illusionEventManageTemplatesBackingBean.templates}">
-                  <tr>
-                    <td>
-                      <div>
-                        <div>#{template.name}</div>
-                        <span class="illusion-list-item-actions">
-                          <h:link outcome="/illusion/event-edit-template.jsf" value="#{locales['illusion.manageTemplates.editTemplate']}">
-                            <f:param name="urlName" value="#{illusionEventNavigationBackingBean.eventUrlName}"/>
-                            <f:param name="templateId" value="#{template.id}"/>
-                          </h:link>
-                          <a class="illusion-remove-template" href="javascript:void(null)" data-event-id="#{illusionEventManageTemplatesBackingBean.id}" data-template-name="#{template.name}">#{locales['illusion.manageTemplates.deleteTemplate']}</a>
-                        </span>
-                      </div>
-                    </td>  
-                  </tr>  
-                </ui:repeat>          
-              </tbody>
-            </table>
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['illusion.manageTemplates.navigationIndex']}</h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/illusion/index.jsf">#{locales['illusion.manageTemplates.navigationIllusion']}</h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/illusion/event.jsf">
+              <f:param name="urlName" value="#{illusionEventManageTemplatesBackingBean.urlName}"/>
+              <h:outputText value="#{illusionEventManageTemplatesBackingBean.name}" />
+            </h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/illusion/event-manage-templates.jsf">
+              <f:param name="urlName" value="#{illusionEventManageTemplatesBackingBean.urlName}"/>
+              <h:outputText value="#{locales['illusion.manageTemplates.navigationManageTemplates']}" />
+            </h:link>
           </div>
         </div>
 
-      </div>      
-    </h:panelGroup>
+        <!-- Description -->
+    
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{illusionEventManageTemplatesBackingBean.name}</p>
+          <p class="view-header-description-text">#{illusionEventManageTemplatesBackingBean.description}</p>
+        </div>
+      </div>
+    </div>
+  
+    <ui:include src="/facelets/illusionnavigation.xhtml"/>
+    
+    <div class="flex-row">
+      <div class="flex-cell-full index-box no-margin-top">
+        <h:form>
+          <h:commandButton styleClass="new-template" value="#{locales['illusion.manageTemplates.newTemplate']}" action="#{illusionEventManageTemplatesBackingBean.newTemplate}" />
+          <input type="hidden" jsf:value="#{illusionEventManageTemplatesBackingBean.templateName}" class="jsfActionTemplateName"/>
+          <h:commandLink styleClass="jsfActionDeleteTemplate" action="#{illusionEventManageTemplatesBackingBean.deleteTemplate()}" />
+        </h:form>        
+        
+        <h3>#{locales['illusion.manageTemplates.templatesListTitle']}</h3>
+        
+        <div class="flex-row">
+          <div class="flex-cell-full">
+            <h4>#{locales['illusion.manageTemplates.templateListTitleHeader']}</h4>
+          </div>
+        </div>
+        
+        <div class="illusion-list">
+          <ui:repeat var="template" value="#{illusionEventManageTemplatesBackingBean.templates}">
+            <div class="flex-row illusion-list-row">
+              <div class="flex-cell-14 flex-cell-first">
+                <div>#{template.name}</div>
+                <div>
+                  <h:link outcome="/illusion/event-edit-template.jsf" value="#{locales['illusion.manageTemplates.editTemplate']}">
+                    <f:param name="urlName" value="#{illusionEventNavigationBackingBean.eventUrlName}"/>
+                    <f:param name="templateId" value="#{template.id}"/>
+                  </h:link>
+                  <a class="illusion-remove-template" href="javascript:void(null)" data-event-id="#{illusionEventManageTemplatesBackingBean.id}" data-template-name="#{template.name}">#{locales['illusion.manageTemplates.deleteTemplate']}</a>
+                </div>
+              </div>
+            </div>
+          </ui:repeat>
+        </div>
+        
+      </div>
+    </div>
+
 
   </ui:define>
 
