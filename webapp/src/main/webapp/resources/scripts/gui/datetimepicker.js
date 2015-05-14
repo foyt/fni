@@ -36,12 +36,12 @@
       this._updateValue();
     },
     dateTime: function () {
-      var date = this.element.find('.datepicker').datepicker('getDate');
+      var date = this._date.datepicker('getDate');
       if (!date) {
         return null;
       }
       
-      var time = this.element.find('.timepicker').timepicker('getTime', date);
+      var time = this._time.timepicker('getTime', date);
       if (time) {
         return time;
       }
