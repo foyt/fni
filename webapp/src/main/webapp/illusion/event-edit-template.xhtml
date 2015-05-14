@@ -12,7 +12,11 @@
       <f:param value="#{illusionEventEditTemplateBackingBean.templateName}"/>
     </h:outputFormat>
   </ui:define>
-  
+
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+    
   <ui:define name="view-scripts">
     <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.6.0/codemirror.min.js"></script>
     <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.6.0/addon/hint/show-hint.min.js"></script>
@@ -40,7 +44,7 @@
     <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.6.0/addon/fold/foldgutter.min.css"></link>
     
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-edit-template.css"/>
   </ui:define>  
@@ -48,60 +52,61 @@
   <ui:define name="grid-content">
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
-
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['illusion.editTemplate.navigationIndex']}</h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:link styleClass="view-header-navigation-item" outcome="/illusion/index.jsf">#{locales['illusion.editTemplate.navigationIllusion']}</h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:link styleClass="view-header-navigation-item" outcome="/illusion/event.jsf">
-          <f:param name="urlName" value="#{illusionEventEditTemplateBackingBean.urlName}"/>
-          <h:outputText value="#{illusionEventEditTemplateBackingBean.name}" />
-        </h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:link styleClass="view-header-navigation-item" outcome="/illusion/event-manage-templates.jsf">
-          <f:param name="urlName" value="#{illusionEventEditTemplateBackingBean.urlName}"/>
-          <h:outputFormat value="#{locales['illusion.editTemplate.navigationManageTemplates']}"/>
-        </h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:link styleClass="view-header-navigation-item" outcome="/illusion/event-edit-template.jsf">
-          <f:param name="urlName" value="#{illusionEventEditTemplateBackingBean.urlName}"/>
-          <f:param name="templateId" value="#{illusionEventEditTemplateBackingBean.id}"/>
-          <h:outputFormat value="#{locales['illusion.editTemplate.navigationEditTemplate']}"/>
-        </h:link>
-      </h:panelGroup>
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{illusionEventEditTemplateBackingBean.name}</p>
-        <p class="view-header-description-text">#{illusionEventEditTemplateBackingBean.description}</p>
-      </h:panelGroup>
-    </h:panelGroup>
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <div class="grid_16 tight">
-      <ui:include src="/facelets/illusionnavigation.xhtml"/>
-    </div>
-
-    <div class="grid_16 tight">
-      <div class="illusion-content-panel grid_16 tight">
-        <div class="grid_16 tight">
-          <div class="illusion-event-sub-panel">
-            <h3>
-              <h:outputFormat value="#{locales['illusion.editTemplate.editorTitle']}">
-                <f:param value="#{illusionEventEditTemplateBackingBean.templateName}"/>
-              </h:outputFormat>
-            </h3>
-
-            <h:form>
-              <input required="required" type="text" jsf:value="#{illusionEventEditTemplateBackingBean.templateName}" class="illusion-event-template-name"/>
-		          <textarea jsf:value="#{illusionEventEditTemplateBackingBean.templateData}" class="illusion-event-template-editor"/>
-              <h:commandButton action="#{illusionEventEditTemplateBackingBean.save}" class="illusion-event-template-save" value="#{locales['illusion.editTemplate.save']}" />
-		        </h:form>
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['illusion.editTemplate.navigationIndex']}</h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/illusion/index.jsf">#{locales['illusion.editTemplate.navigationIllusion']}</h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/illusion/event.jsf">
+              <f:param name="urlName" value="#{illusionEventEditTemplateBackingBean.urlName}"/>
+              <h:outputText value="#{illusionEventEditTemplateBackingBean.name}" />
+            </h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/illusion/event-manage-templates.jsf">
+              <f:param name="urlName" value="#{illusionEventEditTemplateBackingBean.urlName}"/>
+              <h:outputFormat value="#{locales['illusion.editTemplate.navigationManageTemplates']}"/>
+            </h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/illusion/event-edit-template.jsf">
+              <f:param name="urlName" value="#{illusionEventEditTemplateBackingBean.urlName}"/>
+              <f:param name="templateId" value="#{illusionEventEditTemplateBackingBean.id}"/>
+              <h:outputFormat value="#{locales['illusion.editTemplate.navigationEditTemplate']}"/>
+            </h:link>
           </div>
         </div>
-      </div>      
+
+        <!-- Description -->
+    
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{illusionEventEditTemplateBackingBean.name}</p>
+          <p class="view-header-description-text">#{illusionEventEditTemplateBackingBean.description}</p>
+        </div>
+      </div>
+    </div>
+
+    <ui:include src="/facelets/illusionnavigation.xhtml"/>
+
+    <div class="flex-row">
+      <div class="flex-cell-full index-box no-margin-top">
+        <h3>
+          <h:outputFormat value="#{locales['illusion.editTemplate.editorTitle']}">
+            <f:param value="#{illusionEventEditTemplateBackingBean.templateName}"/>
+          </h:outputFormat>
+        </h3>
+      
+        <h:form>
+          <input required="required" type="text" jsf:value="#{illusionEventEditTemplateBackingBean.templateName}" class="illusion-event-template-name"/>
+          <textarea jsf:value="#{illusionEventEditTemplateBackingBean.templateData}" class="illusion-event-template-editor"/>
+          <h:commandButton action="#{illusionEventEditTemplateBackingBean.save}" class="illusion-event-template-save" value="#{locales['illusion.editTemplate.save']}" />
+        </h:form>
+      </div>
     </div>
 
   </ui:define>
