@@ -12,9 +12,15 @@ $menu-active-background: rgba(250, 250, 250, 1);
 
 .index-box {
   background-color: $panel-background-color;
-  padding: 20px;
+  padding: 10px;
   position: relative;
   max-width: 100%;
+  @include box-sizing(border-box);
+}
+
+.index-panel {
+  background-color: #fff;
+  padding: 10px;
   @include box-sizing(border-box);
 }
 

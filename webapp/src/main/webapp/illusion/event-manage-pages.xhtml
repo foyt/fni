@@ -75,54 +75,55 @@
     
     <div class="flex-row">
       <div class="flex-cell-full index-box no-margin-top">
-        <div class="flex-row">
-          <div class="flex-cell-8 flex-cell-first">
-            <h3>#{locales['illusion.managePages.pagesListTitle']}</h3>
+        <div class="index-panel">
+          <div class="flex-row">
+            <div class="flex-cell-8 flex-cell-first">
+              <h3>#{locales['illusion.managePages.pagesListTitle']}</h3>
+            </div>
+            <div class="flex-cell-8 flex-cell-last">
+              <h:form>
+                <h:commandButton styleClass="illusion-event-manage-pages-new-page" value="#{locales['illusion.managePages.newPage']}" action="#{illusionEventManagePagesBackingBean.newPage}" />
+                <input type="hidden" class="jsfActionPageId" jsf:value="#{illusionEventManagePagesBackingBean.pageId}"/>
+                <input type="hidden" class="jsfActionPageVisibility" jsf:value="#{illusionEventManagePagesBackingBean.pageVisibility}"/>
+                <h:commandLink styleClass="jsfActionChangeVisibility" action="#{illusionEventManagePagesBackingBean.changePageVisibility()}" />
+              </h:form>
+            </div>
           </div>
-          <div class="flex-cell-8 flex-cell-last">
-            <h:form>
-              <h:commandButton styleClass="illusion-event-manage-pages-new-page" value="#{locales['illusion.managePages.newPage']}" action="#{illusionEventManagePagesBackingBean.newPage}" />
-              <input type="hidden" class="jsfActionPageId" jsf:value="#{illusionEventManagePagesBackingBean.pageId}"/>
-              <input type="hidden" class="jsfActionPageVisibility" jsf:value="#{illusionEventManagePagesBackingBean.pageVisibility}"/>
-              <h:commandLink styleClass="jsfActionChangeVisibility" action="#{illusionEventManagePagesBackingBean.changePageVisibility()}" />
-            </h:form>
+          
+          <div class="flex-row illusion-list-header-row">
+            <div class="lg-flex-cell-10 md-flex-cell-10 sm-flex-cell-11 flex-cell-first">#{locales['illusion.managePages.pageListTitleHeader']}</div>
+            <div class="lg-flex-cell-4 md-flex-cell-4 sm-flex-cell-5">#{locales['illusion.managePages.pageListVisibilityHeader']}</div>
+            <div class="flex-cell-2 flex-cell-last flex-right sm-flex-hide"></div>
           </div>
-        </div>
-        
-        <div class="flex-row illusion-list-header-row">
-          <div class="flex-cell-10 flex-cell-first">#{locales['illusion.managePages.pageListTitleHeader']}</div>
-          <div class="flex-cell-4">#{locales['illusion.managePages.pageListVisibilityHeader']}</div>
-          <div class="flex-cell-2 flex-cell-last"></div>
-        </div>
-        
-        <ui:repeat var="page" value="#{illusionEventManagePagesBackingBean.pages}">
-          <div class="flex-row illusion-list-row">
-            <div class="flex-cell-10 flex-cell-first">
-              <div><a href="#{page.url}">#{page.title}</a></div>
-              <div>
-                <h:link rendered="#{page.editable}" outcome="/illusion/event-edit-page.jsf" value="#{locales['illusion.managePages.editPage']}">
-                  <f:param name="urlName" value="#{illusionEventNavigationBackingBean.eventUrlName}"/>
-                  <f:param name="pageId" value="#{page.id}"/>
-                </h:link>
-                <ui:fragment rendered="#{page.deletable}">
-                  <a class="illusion-remove-page" href="javascript:void(null)" data-event-id="#{illusionEventManagePagesBackingBean.id}" data-page-id="#{page.id}" data-page-title="#{page.title}">#{locales['illusion.managePages.deletePage']}</a>
-                </ui:fragment>
-                <ui:fragment rendered="#{page.visibilityChangeable}">
-                  <a class="illusion-change-visibility" href="javascript:void(null)" data-page-id="#{page.id}" data-page-title="#{page.title}" data-page-visibility="#{page.visibility}" data-page-requires-user="#{page.requiresUser}">#{locales['illusion.managePages.changeVisibility']}</a>
-                </ui:fragment>
+          
+          <ui:repeat var="page" value="#{illusionEventManagePagesBackingBean.pages}">
+            <div class="flex-row illusion-list-row">
+              <div class="lg-flex-cell-10 md-flex-cell-10 sm-flex-cell-11 flex-cell-first">
+                <div><a href="#{page.url}">#{page.title}</a></div>
+                <div>
+                  <h:link rendered="#{page.editable}" outcome="/illusion/event-edit-page.jsf" value="#{locales['illusion.managePages.editPage']}">
+                    <f:param name="urlName" value="#{illusionEventNavigationBackingBean.eventUrlName}"/>
+                    <f:param name="pageId" value="#{page.id}"/>
+                  </h:link>
+                  <ui:fragment rendered="#{page.deletable}">
+                    <a class="illusion-remove-page" href="javascript:void(null)" data-event-id="#{illusionEventManagePagesBackingBean.id}" data-page-id="#{page.id}" data-page-title="#{page.title}">#{locales['illusion.managePages.deletePage']}</a>
+                  </ui:fragment>
+                  <ui:fragment rendered="#{page.visibilityChangeable}">
+                    <a class="illusion-change-visibility" href="javascript:void(null)" data-page-id="#{page.id}" data-page-title="#{page.title}" data-page-visibility="#{page.visibility}" data-page-requires-user="#{page.requiresUser}">#{locales['illusion.managePages.changeVisibility']}</a>
+                  </ui:fragment>
+                </div>
+              </div>
+              <div class="lg-flex-cell-4 md-flex-cell-4 sm-flex-cell-5">
+                <h:outputText rendered="#{page.visibility eq 'HIDDEN'}" value="#{locales['illusion.managePages.visibilityHidden']}"/>
+                <h:outputText rendered="#{page.visibility eq 'VISIBLE'}" value="#{locales['illusion.managePages.visibilityVisible']}"/>
+                <h:outputText rendered="#{page.visibility eq 'PARTICIPANTS'}" value="#{locales['illusion.managePages.visibilityParticipants']}"/>
+              </div>
+              <div class="flex-cell-2 flex-cell-last flex-right sm-flex-hide">
+                <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-document.png"/> 
               </div>
             </div>
-            <div class="flex-cell-4">
-              <h:outputText rendered="#{page.visibility eq 'HIDDEN'}" value="#{locales['illusion.managePages.visibilityHidden']}"/>
-              <h:outputText rendered="#{page.visibility eq 'VISIBLE'}" value="#{locales['illusion.managePages.visibilityVisible']}"/>
-              <h:outputText rendered="#{page.visibility eq 'PARTICIPANTS'}" value="#{locales['illusion.managePages.visibilityParticipants']}"/>
-            </div>
-            <div class="flex-cell-2 flex-cell-last flex-right">
-              <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-document.png"/> 
-            </div>
-          </div>
-        </ui:repeat> 
-        
+          </ui:repeat> 
+        </div>
       </div>
     </div>
 
