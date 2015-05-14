@@ -33,26 +33,24 @@ h3 {
   font-size: 13px;
   font-family: $default-font;
   font-weight: bold;
-  width: 150px;
+  width: 100%;
   display: inline-block;
   vertical-align: top;
-  margin-bottom: 4px;
-  margin-top: 4px;
 }
 
-.illusion-event-settings-field input[type="checkbox"] {
-  margin-top: 5px;
-  vertical-align: top;
-} 
+.datepicker, .timepicker {
+  width: 100%; 
+}
 
-.illusion-event-settings-genres {
-  margin-top: -25px;
-  margin-left: 150px;
+.illusion-event-settings-genre label {
+  display: inline-block;
+  width: auto;
 }
 
 .illusion-event-settings-genre {
-  width: 180px;  
   white-space: nowrap;
+  display: inline-block;
+  min-width: 130px;
 }
 
 .illusion-event-settings-field-hint {
@@ -60,24 +58,14 @@ h3 {
   color: #aaa;
 }
 
-div.illusion-event-settings-field-hint {
-  margin-left: 150px;
-}
-
-span.illusion-event-settings-field-hint {
-  display: inline-block;
-  vertical-align: top;
-  padding-top: 7px;
-}
-
 .illusion-event-settings-field input[type="text"], 
 .illusion-event-settings-field input[type="number"], 
 .illusion-event-settings-field select {
-  width: 300px;
   font-size: 14px;
   font-family: $default-font;
   @include box-sizing(border-box);
   margin-bottom: 8px;
+  width: 100%;
 }
 
 .illusion-event-settings-sign-up-fee-info {
@@ -95,48 +83,19 @@ span.illusion-event-settings-field-hint {
 .illusion-event-settings-sign-up-fee-info:after {
   content: ')';  
 }
-
-.illusion-event-settings-field input[type="text"].illusion-event-settings-sign-up-fee {
-  width: 235px;
-}
-
-.illusion-event-settings-field select.illusion-event-settings-sign-up-fee-currency {
-  width: 60px;
-  margin-left: 5px;
-}
-
-.illusion-event-settings-field input.datepicker {
-  width: 170px;
-  margin-left: -5px;
-  padding: 1px;
-  font-size: 14px;
-  font-family: $default-font;
-  margin-bottom: 8px;
-}
-
-.illusion-event-settings-field input.timepicker {
-  width: 121px;
-  margin-left: 5px;
-  padding: 1px;
-  font-size: 14px;
-  font-family: $default-font;
-  margin-bottom: 8px;
-}
-
 .illusion-event-settings-field textarea {
   height: 120px;
-  width: 300px;
   font-size: 14px;
   font-family: $default-font;
   @include box-sizing(border-box);
   margin-bottom: 8px;
+  width: 100%;  
 }
 
 .timezone {
   display: inline-block;
   font-size: 11px;
   font-family: $default-font;
-  margin-left: 2px;
   vertical-align: middle;
 }
 
@@ -146,15 +105,6 @@ span.illusion-event-settings-field-hint {
 
 .timezone:after {
   content: ')';  
-}
-
-.illusion-event-settings-field input.sign-up-start-date {
-  width: 146px;
-}
-
-.illusion-event-settings-field input.sign-up-end-date {
-  margin-left: 5px;
-  width: 145px;
 }
 
 .illusion-remove-event {
