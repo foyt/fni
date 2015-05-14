@@ -21,6 +21,7 @@ $menu-active-background: rgba(250, 250, 250, 1);
 .index-panel {
   background-color: #fff;
   padding: 10px;
+  min-height: 100%;
   @include box-sizing(border-box);
 }
 

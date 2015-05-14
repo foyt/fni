@@ -112,7 +112,7 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     }
   }
   
-  public void saveGroup() {
+  public String saveGroup() {
     IllusionEventGroup group = illusionEventController.findGroupById(selectedGroupId);
     List<IllusionEventGroupMember> currentMembers = illusionEventController.listGroupMembers(group);
     Set<Long> addParticipantIds = new HashSet<>();
@@ -145,8 +145,11 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     
     illusionEventController.updateGroupName(group, getSelectedGroupName());
     groups = illusionEventController.listGroups(group.getEvent());
+    
+    return "/illusion/event-groups.jsf?faces-redirect=true&urlName=" + getUrlName();
   }
-private List<IllusionEventGroup> groups;
+  
+  private List<IllusionEventGroup> groups;
   private List<IllusionEventParticipant> participants;
   private Long selectedGroupId;
   private List<IllusionEventGroupMember> members;

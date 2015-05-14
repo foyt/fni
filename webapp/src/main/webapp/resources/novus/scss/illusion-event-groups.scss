@@ -4,16 +4,12 @@
 
 $selected-background-color: rgba(71, 176, 176, 1);
 
+h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;  
+}
+
 /* Panels */ 
-
-.illusion-event-groups {
-  margin-top: 20px;
-  height: 520px;
-}
-
-.illusion-event-group-editor {
-  height: 564px;
-}
 
 .illusion-event-group-editor p {
   color: $default-color;
