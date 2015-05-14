@@ -7,6 +7,10 @@
   template="/WEB-INF/templates/gridbase.xhtml">
   
   <ui:define name="page-title">#{locales['illusion.createEvent.pageTitle']}</ui:define>
+  
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
  
   <ui:define name="view-scripts">
     <!-- View scripts -->
@@ -23,7 +27,7 @@
   <ui:define name="view-stylesheets">
     <!-- View styles -->
     
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-create-event.css"/>
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
     <link rel="StyleSheet" href="//cdn.jsdelivr.net/jquery.timepicker/1.3.7/jquery.timepicker.css"/>
@@ -33,145 +37,216 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
-
-    <!-- Header -->
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['illusion.createEvent.navigationIndex']}</h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/illusion/index.jsf">#{locales['illusion.createEvent.navigationIllusion']}</h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/illusion/createevent.jsf">#{locales['illusion.createEvent.navigationCreateEvent']}</h:link>
+          </div>
+        </div>
 
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['illusion.createEvent.navigationIndex']}</h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:link styleClass="view-header-navigation-item" outcome="/illusion/index.jsf">#{locales['illusion.createEvent.navigationIllusion']}</h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:link styleClass="view-header-navigation-item" outcome="/illusion/createevent.jsf">#{locales['illusion.createEvent.navigationCreateEvent']}</h:link>
-      </h:panelGroup>
-        
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">
-          <span>#{locales['illusion.createEvent.descriptionTitle']}</span>
-        </p>
-        <p class="view-header-description-text">#{locales['illusion.createEvent.descriptionText']}</p>
-      </h:panelGroup>
-    </h:panelGroup>
+        <!-- Description -->
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="grid_16 alpha slim-right">
-        <h:panelGroup layout="block" styleClass="illusion-create-event-panel">
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['illusion.createEvent.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['illusion.createEvent.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
+    
+    <h:form>
+      <div class="flex-row">
+        <div class="flex-cell-full index-box">
           <h3>#{locales['illusion.createEvent.createEventTitle']}</h3>
-          <h:form>
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+          
+          <div class="flex-row illusion-create-event-field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['illusion.createEvent.nameLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
               <input type="text" class="illusion-create-event-name" autocomplete="off" jsf:value="#{illusionCreateEventBackingBean.name}" required="required"/>
-            </h:panelGroup> 
-                        
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
+            </div>
+           </div>
+           
+           <div class="flex-row illusion-create-event-field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['illusion.createEvent.locationLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
               <input type="text" class="illusion-create-event-location" jsf:value="#{illusionCreateEventBackingBean.location}"/>
               <input type="hidden" class="location-lat" jsf:value="#{illusionCreateEventBackingBean.locationLat}"/>
               <input type="hidden" class="location-lon" jsf:value="#{illusionCreateEventBackingBean.locationLon}"/>
-            </h:panelGroup> 
-
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field event-start">
-              <label>#{locales['illusion.createEvent.startTime']}</label>
-              <input type="date" required="required" class="datepicker" placeholder="#{locales['illusion.createEvent.startDatePlaceholder']}" data-alt-field=".actual-start-date"/>
-              <input type="time" class="timepicker" placeholder="#{locales['illusion.createEvent.startTimePlaceholder']}" data-alt-field=".actual-start-time"/>
-              <input type="hidden" class="actual-start" jsf:value="#{illusionCreateEventBackingBean.start}"/>
-              <div class="timezone"></div>
-            </h:panelGroup>
-             
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field event-end">
-              <label>#{locales['illusion.createEvent.endTime']}</label>
-              <input type="date" required="required" class="datepicker" placeholder="#{locales['illusion.createEvent.endDatePlaceholder']}" data-alt-field=".actual-end-date"/>
-              <input type="time" class="timepicker" placeholder="#{locales['illusion.createEvent.endTimePlaceholder']}" data-alt-field=".actual-end-time"/>
+            </div>
+           </div>
+           
+           <div class="flex-row illusion-create-event-field event-start">
+             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+               <label>#{locales['illusion.createEvent.startTime']}</label>
+             </div>
+             <div class="lg-flex-cell-3 md-flex-cell-4 sm-flex-cell-full">
+               <input type="date" required="required" class="datepicker" placeholder="#{locales['illusion.createEvent.startDatePlaceholder']}" data-alt-field=".actual-start-date"/>
+             </div>
+             <div class="lg-flex-cell-3 lg-flex-cell-last md-flex-cell-4 sm-flex-cell-full">  
+               <input type="time" class="timepicker" placeholder="#{locales['illusion.createEvent.startTimePlaceholder']}" data-alt-field=".actual-start-time"/>
+             </div> 
+             <div class="lg-flex-cell-2 lg-flex-cell-last lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-full">  
+               <div class="timezone"></div>
+             </div>  
+             <input type="hidden" class="actual-start" jsf:value="#{illusionCreateEventBackingBean.start}"/>             
+           </div> 
+           
+           <div class="flex-row illusion-create-event-field event-end">
+             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+               <label>#{locales['illusion.createEvent.endTime']}</label>
+             </div>
+             <div class="lg-flex-cell-3 md-flex-cell-4 sm-flex-cell-full">
+               <input type="date" required="required" class="datepicker" placeholder="#{locales['illusion.createEvent.endDatePlaceholder']}" data-alt-field=".actual-end-date"/>
+             </div>
+             <div class="lg-flex-cell-3 lg-flex-cell-last md-flex-cell-4 sm-flex-cell-full">  
+               <input type="time" class="timepicker" placeholder="#{locales['illusion.createEvent.endTimePlaceholder']}" data-alt-field=".actual-end-time"/>
+             </div> 
+             <div class="lg-flex-cell-2 lg-flex-cell-last lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-full">  
+               <div class="timezone"></div>
+             </div>  
               <input type="hidden" class="actual-end" jsf:value="#{illusionCreateEventBackingBean.end}"/>
-              <div class="timezone"></div>
-            </h:panelGroup> 
+           </div> 
+
+           <div class="flex-row illusion-create-event-field">
+             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+               <label>#{locales['illusion.createEvent.joining']}</label>
+             </div>
+             <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+               <h:selectOneMenu value="#{illusionCreateEventBackingBean.joinMode}">
+                 <f:selectItem itemValue="OPEN" itemLabel="#{locales['illusion.createEvent.joiningPublic']}"/>
+                 <f:selectItem itemValue="APPROVE" itemLabel="#{locales['illusion.createEvent.joiningApprove']}"/>
+                 <f:selectItem itemValue="INVITE_ONLY" itemLabel="#{locales['illusion.createEvent.joiningInviteOnly']}"/>
+               </h:selectOneMenu>
+             </div>
+           </div>
+           
+           <div class="flex-row illusion-create-event-field">
+             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+               <label>#{locales['illusion.createEvent.typeLabel']}</label>
+             </div>
+             <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+               <h:selectOneMenu styleClass="illusion-create-event-type" value="#{illusionCreateEventBackingBean.typeId}">
+                 <f:selectItems value="#{illusionCreateEventBackingBean.typeSelectItems}"/>
+               </h:selectOneMenu>
+             </div>
+           </div>
+           
+           <div class="flex-row illusion-create-event-field">
+             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+               <h:outputLabel value="#{locales['illusion.createEvent.signUpFeeLabel']}" />
+             </div>
+             <div class="lg-flex-cell-4 md-flex-cell-2 sm-flex-cell-12 sm-flex-cell-first">
+               <input class="illusion-create-event-sign-up-fee" type="text" jsf:value="#{illusionCreateEventBackingBean.signUpFeeText}" pattern="[0-9]{1,}(\s{0,1}\-\s{0,1}[0-9]{1,}){0,1}"/>
+             </div>
+             <div class="lg-flex-cell-2 lg-flex-cell-last md-flex-cell-2 sm-flex-cell-4 sm-flex-cell-last">  
+               <h:selectOneMenu styleClass="illusion-create-event-sign-up-fee-currency" value="#{illusionCreateEventBackingBean.signUpFeeCurrency}">
+                 <f:selectItem itemValue="EUR" itemLabel="EUR"/>
+               </h:selectOneMenu>
+             </div> 
+             <div class="lg-flex-cell-7 lg-flex-cell-last lg-flex-cell-last md-flex-cell-6 md-flex-cell-last sm-flex-cell-full">  
+               <div class="illusion-create-event-sign-up-fee-info">#{locales['illusion.createEvent.signUpFeeHelp']}</div>
+             </div>              
+           </div>
+           
+           <div class="flex-row illusion-create-event-field">
+             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+               <h:outputLabel value="#{locales['illusion.createEvent.descriptionLabel']}" />
+             </div>
+             <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+               <h:inputTextarea styleClass="illusion-create-event-description" id="description" value="#{illusionCreateEventBackingBean.description}"/>
+             </div>
+           </div>
             
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
-              <label>#{locales['illusion.createEvent.joining']}</label>
-              <h:selectOneMenu value="#{illusionCreateEventBackingBean.joinMode}">
-                <f:selectItem itemValue="OPEN" itemLabel="#{locales['illusion.createEvent.joiningPublic']}"/>
-                <f:selectItem itemValue="APPROVE" itemLabel="#{locales['illusion.createEvent.joiningApprove']}"/>
-                <f:selectItem itemValue="INVITE_ONLY" itemLabel="#{locales['illusion.createEvent.joiningInviteOnly']}"/>
-              </h:selectOneMenu>
-            </h:panelGroup> 
-            
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
-              <label>#{locales['illusion.createEvent.typeLabel']}</label>
-              <h:selectOneMenu styleClass="illusion-create-event-type" value="#{illusionCreateEventBackingBean.typeId}">
-                <f:selectItems value="#{illusionCreateEventBackingBean.typeSelectItems}"/>
-              </h:selectOneMenu>
-            </h:panelGroup>
-            
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field illusion-create-event-sign-up-fee-field" >
-              <h:outputLabel value="#{locales['illusion.createEvent.signUpFeeLabel']}" />
-              <input class="illusion-create-event-sign-up-fee" type="text" jsf:value="#{illusionCreateEventBackingBean.signUpFeeText}" pattern="[0-9]{1,}(\s{0,1}\-\s{0,1}[0-9]{1,}){0,1}"/>
-              <h:selectOneMenu styleClass="illusion-create-event-sign-up-fee-currency" value="#{illusionCreateEventBackingBean.signUpFeeCurrency}">
-                <f:selectItem itemValue="EUR" itemLabel="EUR"/>
-              </h:selectOneMenu>
-              <div class="illusion-create-event-sign-up-fee-info">#{locales['illusion.createEvent.signUpFeeHelp']}</div>
-            </h:panelGroup>
-            
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
-              <h:outputLabel value="#{locales['illusion.createEvent.descriptionLabel']}" />
-              <h:inputTextarea styleClass="illusion-create-event-description" id="description" value="#{illusionCreateEventBackingBean.description}"/>
-            </h:panelGroup>  
-            
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
-              <h:outputLabel value="#{locales['illusion.createEvent.ageLimit']}" />
-              <input type="number" class="illusion-create-event-age-limit" jsf:value="#{illusionCreateEventBackingBean.ageLimit}"/>
-            </h:panelGroup>  
-            
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
-              <h:outputLabel value="#{locales['illusion.createEvent.imageUrlLabel']}" />
-              <input type="text" class="illusion-create-event-image-url" jsf:value="#{illusionCreateEventBackingBean.imageUrl}"/>
-            </h:panelGroup> 
-            
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
-              <label>#{locales['illusion.createEvent.signUpTimeLabel']}</label>
-              <input type="date" class="datepicker sign-up-start-date" placeholder="#{locales['illusion.createEvent.signUpTimeStartPlaceholder']}" data-alt-field=".actual-sign-up-start-date"/>
-              <input type="date" class="datepicker sign-up-end-date" placeholder="#{locales['illusion.createEvent.signUpTimeEndPlaceholder']}" data-alt-field=".actual-sign-up-end-date"/>
-              <input type="hidden" class="actual-sign-up-start-date" jsf:value="#{illusionCreateEventBackingBean.signUpStartDate}"/>
-              <input type="hidden" class="actual-sign-up-end-date" jsf:value="#{illusionCreateEventBackingBean.signUpEndDate}"/>
-            </h:panelGroup>
-            
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
-              <h:outputLabel value="#{locales['illusion.createEvent.beginnerFriendlyLabel']}" />
-              <input type="checkbox" class="illusion-create-event-beginner-friendly" jsf:value="#{illusionCreateEventBackingBean.beginnerFriendly}"/>
-            </h:panelGroup> 
-            
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
-              <label>#{locales['illusion.createEvent.genreLabel']}</label>
-              <div class="illusion-create-event-genres">
-                <ui:repeat var="genre" value="#{illusionCreateEventBackingBean.genres}">
-                  <span class="illusion-create-event-genre">
-                    <input type="checkbox" name="genre" value="#{genre.id}"/>
-                    <label>#{genre.name}</label>
-                  </span>
-                </ui:repeat>
+           <div class="flex-row illusion-create-event-field">
+             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+               <h:outputLabel value="#{locales['illusion.createEvent.ageLimit']}" />
+             </div>
+             <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+               <input type="number" class="illusion-create-event-age-limit" jsf:value="#{illusionCreateEventBackingBean.ageLimit}"/>
+             </div>
+           </div>
+           
+           <div class="flex-row illusion-create-event-field">
+             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+               <h:outputLabel value="#{locales['illusion.createEvent.imageUrlLabel']}" />
+             </div>
+             <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+               <input type="text" class="illusion-create-event-image-url" jsf:value="#{illusionCreateEventBackingBean.imageUrl}"/>
+             </div>
+           </div>
+
+           <div class="flex-row illusion-create-event-field event-end">
+             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+               <label>#{locales['illusion.createEvent.signUpTimeLabel']}</label>
+             </div>
+             <div class="lg-flex-cell-3 md-flex-cell-4 sm-flex-cell-full">
+               <input type="date" class="datepicker sign-up-start-date" placeholder="#{locales['illusion.createEvent.signUpTimeStartPlaceholder']}" data-alt-field=".actual-sign-up-start-date"/>
+             </div>
+             <div class="lg-flex-cell-3 lg-flex-cell-last md-flex-cell-4 sm-flex-cell-full">  
+               <input type="date" class="datepicker sign-up-end-date" placeholder="#{locales['illusion.createEvent.signUpTimeEndPlaceholder']}" data-alt-field=".actual-sign-up-end-date"/>
+             </div> 
+             <input type="hidden" class="actual-sign-up-start-date" jsf:value="#{illusionCreateEventBackingBean.signUpStartDate}"/>
+             <input type="hidden" class="actual-sign-up-end-date" jsf:value="#{illusionCreateEventBackingBean.signUpEndDate}"/>
+           </div>            
+           
+           <div class="flex-row illusion-create-event-field">
+             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+               <h:outputLabel value="#{locales['illusion.createEvent.beginnerFriendlyLabel']}" />
+             </div>
+             <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+               <input type="checkbox" class="illusion-create-event-beginner-friendly" jsf:value="#{illusionCreateEventBackingBean.beginnerFriendly}"/>
+             </div>
+           </div>
+           
+           <div class="flex-row illusion-create-event-field">
+             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+               <label>#{locales['illusion.createEvent.genreLabel']}</label>
+             </div>
+             <div class="lg-flex-cell-13 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+               <div class="illusion-create-event-genres">
+                 <ui:repeat var="genre" value="#{illusionCreateEventBackingBean.genres}">
+                   <span class="illusion-create-event-genre">
+                     <input type="checkbox" name="genre" value="#{genre.id}"/>
+                     <label>#{genre.name}</label>
+                   </span>
+                 </ui:repeat>
                 
-                <input type="hidden" jsf:value="#{illusionCreateEventBackingBean.genreIds}" jsf:converter="fi.foyt.fni.jsf.LongListConverter"/>
-              </div>
-            </h:panelGroup> 
-            
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
-              <h:outputLabel value="#{locales['illusion.createEvent.larpKalenteriLabel']}" />
-              <input type="checkbox" class="illusion-create-event-larp-kalenteri" jsf:value="#{illusionCreateEventBackingBean.larpKalenteriSync}"/>
-              <div class="illusion-create-event-larp-kalenteri-info">#{locales['illusion.createEvent.larpKalenteriHint']}</div>
-            </h:panelGroup> 
-            
-            <h:panelGroup layout="block" styleClass="illusion-create-event-field">
-              <h:commandButton id="save" styleClass="illusion-create-event-save" value="#{locales['illusion.createEvent.saveButton']}" action="#{illusionCreateEventBackingBean.save}"/>
-            </h:panelGroup>
-          </h:form>
-        </h:panelGroup>
-      </h:panelGroup>
-    </h:panelGroup>
+                 <input type="hidden" jsf:value="#{illusionCreateEventBackingBean.genreIds}" jsf:converter="fi.foyt.fni.jsf.LongListConverter"/>
+               </div>
+             </div>
+           </div>
+           
+           <div class="flex-row illusion-create-event-field">
+             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+               <h:outputLabel value="#{locales['illusion.createEvent.larpKalenteriLabel']}" />
+             </div>
+             <div class="lg-flex-cell-13 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+               <input type="checkbox" class="illusion-create-event-larp-kalenteri" jsf:value="#{illusionCreateEventBackingBean.larpKalenteriSync}"/>
+               <div class="illusion-create-event-larp-kalenteri-info">#{locales['illusion.createEvent.larpKalenteriHint']}</div>
+             </div>
+           </div>
+
+           <div class="flex-row illusion-create-event-field">
+             <div class="flex-full">
+               <h:commandButton id="save" styleClass="illusion-create-event-save" value="#{locales['illusion.createEvent.saveButton']}" action="#{illusionCreateEventBackingBean.save}"/>
+             </div>
+           </div>           
+           
+        </div>
+      </div>  
+    </h:form>  
   </ui:define>
 
 </ui:composition>

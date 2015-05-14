@@ -2,148 +2,68 @@
 @import "compass";
 @import "styles";
 
-/* Panel */ 
-
-.illusion-create-event-panel {
-  @include generic-panel;
-}
-
 /* Generic */
+
+.index-box {
+  background-color: $panel-background-color;
+  padding: 20px;
+  position: relative;
+}
 
 h3 {
   @include header-2;
   margin-bottom: 10px;
 }
 
-/* Header */
-
-.view-header-description-title a {
-  font-size: 16px;
-  font-family: $default-font;
-  color: $header-text-color;
-  padding-left: 20px;
-  font-style: italic;
-  font-weight: bold;
-  text-decoration: none;
-  text-transform: none;
-}
-
-.view-header-description-title a:after {
-  content: '>>';
-  padding-left: 8px;
-}
-
 /* Forms */
+
+.illusion-create-event-field input[type="text"], 
+.illusion-create-event-field input[type="number"], 
+.illusion-create-event-field textarea, 
+.illusion-create-event-field select {
+  font-size: 14px;
+  font-family: $default-font;
+  width: 100%; 
+  @include box-sizing(border-box);
+}
+
+.illusion-create-event-field textarea {
+  height: 120px;
+}
+
 
 .illusion-create-event-field label {
   font-size: 13px;
   font-family: $default-font;
   font-weight: bold;
-  width: 150px;
-  display: inline-block;
-  vertical-align: top;
-  margin-bottom: 4px;
-  margin-top: 4px;
 }
 
-.illusion-create-event-field input[type="checkbox"] {
-  margin-top: 5px;
-  vertical-align: top;
-} 
-
-.illusion-create-event-genres {
-  margin-top: -25px;
-  margin-left: 150px;
+.illusion-create-event-genre label {
+  display: inline-block;
+  width: auto;
 }
 
 .illusion-create-event-genre {
-  width: 180px;  
   white-space: nowrap;
-}
-
-.illusion-create-event-field input[type="text"], 
-.illusion-create-event-field input[type="number"], 
-.illusion-create-event-field select {
-  width: 300px;
-  font-size: 14px;
-  font-family: $default-font;
-  @include box-sizing(border-box);
-  margin-bottom: 8px;
-}
-
-.illusion-create-event-field input[type="text"].illusion-create-event-sign-up-fee {
-  width: 235px;
-}
-
-.illusion-create-event-field select.illusion-create-event-sign-up-fee-currency {
-  width: 60px;
-  margin-left: 5px;
-}
-
-.illusion-create-event-field textarea {
-  height: 120px;
-  width: 300px;
-  font-size: 14px;
-  font-family: $default-font;
-  @include box-sizing(border-box);
-  margin-bottom: 8px;
-}
-
-.illusion-create-event-sign-up-fee-field  input[type="number"] {
-  width: 232px;
-}
-
-.illusion-create-event-sign-up-fee-field select {
-  width: 60px;
-  margin-left: 8px;
-}
-
-.illusion-create-event-field input.datepicker {
-  width: 170px;
-  margin-left: -5px;
-  padding: 1px;
-  font-size: 14px;
-  font-family: $default-font;
-  margin-left: -4px;
-  margin-bottom: 8px;
-}
-
-.illusion-create-event-field input.timepicker {
-  width: 121px;
-  margin-left: 5px;
-  padding: 1px;
-  font-size: 14px;
-  font-family: $default-font;
-  margin-bottom: 8px;
-}
-
-.timezone, .illusion-create-event-sign-up-fee-info, .illusion-create-event-larp-kalenteri-info {
   display: inline-block;
+  min-width: 130px;
+}
+
+.illusion-create-event-larp-kalenteri-info,
+.illusion-create-event-sign-up-fee-info,
+.timezone {
+  display: inline;
   font-size: 11px;
   font-family: $default-font;
   margin-left: 2px;
-  vertical-align: middle;
 }
 
-.timezone:before .illusion-create-event-sign-up-fee-info:before {
+.timezone:before, .illusion-create-event-sign-up-fee-info:before {
   content: '(';  
 }
 
 .timezone:after, .illusion-create-event-sign-up-fee-info:after {
   content: ')';  
-}
-
-.illusion-create-event-larp-kalenteri-info {
-  padding-top: 5px;
-}
-
-.illusion-create-event-field input.sign-up-start-date {
-  width: 146px;
-}
-
-.illusion-create-event-field input.sign-up-end-date {
-  margin-left: 5px;
-  width: 145px;
 }
 
 .illusion-create-event-save {
