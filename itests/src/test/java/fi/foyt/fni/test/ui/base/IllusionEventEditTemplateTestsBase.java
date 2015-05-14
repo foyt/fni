@@ -3,9 +3,6 @@ package fi.foyt.fni.test.ui.base;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
 import fi.foyt.fni.test.SqlSets;
@@ -106,23 +103,7 @@ public class IllusionEventEditTemplateTestsBase extends AbstractIllusionUITest {
     loginCustomEvent("admin@foyt.fi", "pass");
     getWebDriver().get(getCustomEventUrl() + "/edit-template?templateId=1");
     testTitle("Open Event - Edit Template dummy");
-
-    WebElement logoLink = getWebDriver().findElement(By.cssSelector(".index-menu>a:first-child"));
-    WebElement forgeMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(1)"));
-    WebElement illusionMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(2)"));
-    WebElement gameLibraryMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(3)"));
-    WebElement forumMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-navigation-container>a:nth-child(4)"));
-
-    assertEquals("Forge", forgeMenuLink.getText());
-    assertEquals("Illusion", illusionMenuLink.getText());
-    assertEquals("Game Library", gameLibraryMenuLink.getText());
-    assertEquals("Forum", forumMenuLink.getText());
-
-    assertEquals(getAppUrl() + "/", stripLinkJSessionId(logoLink.getAttribute("href")));
-    assertEquals(getAppUrl() + "/forge", stripLinkJSessionId(forgeMenuLink.getAttribute("href")));
-    assertEquals(getAppUrl() + "/illusion", stripLinkJSessionId(illusionMenuLink.getAttribute("href")));
-    assertEquals(getAppUrl() + "/gamelibrary", stripLinkJSessionId(gameLibraryMenuLink.getAttribute("href")));
-    assertEquals(getAppUrl() + "/forum", stripLinkJSessionId(forumMenuLink.getAttribute("href")));
+    assertMenuItems();
   }
   
   @Test

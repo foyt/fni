@@ -33,6 +33,19 @@ public class AbstractIllusionUITest extends AbstractUITest {
     assertSelectorNotPresent(".menu-tools-login");
   }
 
+  protected void assertMenuItems() {
+    assertSelectorVisible(String.format("a[href='%s/']", getAppUrl()));
+    assertSelectorVisible(String.format("a[href='%s/forge']", getAppUrl()));
+    assertSelectorVisible(String.format("a[href='%s/illusion']", getAppUrl()));
+    assertSelectorVisible(String.format("a[href='%s/gamelibrary']", getAppUrl()));
+    assertSelectorVisible(String.format("a[href='%s/forum']", getAppUrl()));
+    
+    assertSelectorTextIgnoreCase(String.format("a[href='%s/forge']", getAppUrl()), "Forge");
+    assertSelectorTextIgnoreCase(String.format("a[href='%s/illusion']", getAppUrl()), "Illusion");
+    assertSelectorTextIgnoreCase(String.format("a[href='%s/gamelibrary']", getAppUrl()), "Game Library");
+    assertSelectorTextIgnoreCase(String.format("a[href='%s/forum']", getAppUrl()), "Forum");
+  }
+  
   protected void deleteIllusionTemplate(String eventUrlName, String templateName) throws Exception {
     executeSql("delete from IllusionEventTemplate where event_id = (select id from IllusionEvent where urlName = ?) and name = ?", eventUrlName, templateName);
   }
