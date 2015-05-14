@@ -12,6 +12,10 @@
     </h:outputFormat>
   </ui:define>
   
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+  
   <ui:define name="view-scripts">
     <h:outputScript name="scripts/jquery.tagsinput/jquery.tagsinput.js"/>
     <h:outputScript name="scripts/gui/illusion-event-participants.js"/>
@@ -19,7 +23,7 @@
   
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="scripts" name="jquery.tagsinput/jquery.tagsinput.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-participants.css"/>
@@ -28,52 +32,54 @@
   <ui:define name="grid-content">
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/index.jsf">#{locales['illusion.eventParticipants.navigationIndex']}</h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/index.jsf">#{locales['illusion.eventParticipants.navigationIllusion']}</h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/event.jsf">
-            <f:param name="urlName" value="#{illusionEventParticipantsBackingBean.urlName}"/>
-            <h:outputText value="#{illusionEventParticipantsBackingBean.name}" />
-          </h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/illusion/event-participants.jsf">
-            <f:param name="urlName" value="#{illusionEventParticipantsBackingBean.urlName}"/>
-            <h:outputText value="#{locales['illusion.eventParticipants.navigationParticipants']}" />
-          </h:link>
-        </h:panelGroup>
-      </h:panelGroup>
-  
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{illusionEventParticipantsBackingBean.name}</p>
-        <p class="view-header-description-text">#{illusionEventParticipantsBackingBean.description}</p>
-      </h:panelGroup>
-    </h:panelGroup>
-    
-    <div class="grid_16 tight">
-      <ui:include src="/facelets/illusionnavigation.xhtml"/>
-    </div>
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <span class="view-header-navigation-item">
+              <h:link outcome="/index.jsf">#{locales['illusion.eventParticipants.navigationIndex']}</h:link>
+            </span>
+            <span class="view-header-navigation-separator"/>
+            <span class="view-header-navigation-item">
+              <h:link outcome="/illusion/index.jsf">#{locales['illusion.eventParticipants.navigationIllusion']}</h:link>
+            </span>
+            <span class="view-header-navigation-separator"/>
+            <span class="view-header-navigation-item">
+              <h:link outcome="/illusion/event.jsf">
+                <f:param name="urlName" value="#{illusionEventParticipantsBackingBean.urlName}"/>
+                <h:outputText value="#{illusionEventParticipantsBackingBean.name}" />
+              </h:link>
+            </span>
+            <span class="view-header-navigation-separator"/>
+            <span class="view-header-navigation-item">
+              <h:link outcome="/illusion/event-participants.jsf">
+                <f:param name="urlName" value="#{illusionEventParticipantsBackingBean.urlName}"/>
+                <h:outputText value="#{locales['illusion.eventParticipants.navigationParticipants']}" />
+              </h:link>
+            </span>
+          </div>
+        </div>
 
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <div class="illusion-content-panel grid_16 tight">
-        <h:panelGroup layout="block" styleClass="grid_8 narrow-right">
-          <h:panelGroup layout="block" styleClass="illusion-event-sub-panel">
-            <h:panelGroup layout="block" styleClass="illusion-event-participants">
+        <!-- Description -->
+    
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{illusionEventParticipantsBackingBean.name}</p>
+          <p class="view-header-description-text">#{illusionEventParticipantsBackingBean.description}</p>
+        </div>
+      </div>
+    </div>
+    
+    <ui:include src="/facelets/illusionnavigation.xhtml"/>
+    
+    <div class="flex-row">
+      <div class="flex-cell-full index-box no-margin-top">
+        <div class="flex-row">
+          <div class="lg-flex-cell-8 lg-flex-cell-first md-flex-cell-8 md-flex-cell-first sm-flex-cell-full">
+            <div class="index-panel">
               <h:form> 
                 <div class="illusion-event-participant-action-menu">
                   <label>#{locales['illusion.eventParticipants.actionsMenu']}</label>
@@ -87,10 +93,17 @@
                   <h3>#{locales['illusion.eventParticipants.participantsListTitle']}</h3>
                   <div class="illusion-list">
                     <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.participants}">
-                      <h:commandLink p:data-participant-id="#{participant.id}" action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
-                        <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
-                        <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
-                      </h:commandLink>
+                      <div class="flex-row illusion-list-row">
+                        <div class="flex-cell-14 flex-cell-first">
+                          <h:commandLink p:data-participant-id="#{participant.id}" action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
+                            <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
+                          </h:commandLink>
+                        </div>
+                        
+                        <div class="flex-cell-2 flex-right flex-cell-last">
+                          <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
+                        </div>
+                      </div>
                     </ui:repeat>
                   </div>
                 </ui:fragment>
@@ -99,10 +112,17 @@
                   <h3>#{locales['illusion.eventParticipants.organizersListTitle']}</h3>
                   <div class="illusion-list">
                     <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.organizers}">
-                      <h:commandLink p:data-participant-id="#{participant.id}" action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
-                        <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
-                        <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
-                      </h:commandLink>
+                      <div class="flex-row illusion-list-row">
+                        <div class="flex-cell-14 flex-cell-first">
+                          <h:commandLink p:data-participant-id="#{participant.id}" action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
+                            <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
+                          </h:commandLink>
+                        </div>
+                        
+                        <div class="flex-cell-2 flex-right flex-cell-last">
+                          <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
+                        </div>
+                      </div>
                     </ui:repeat>
                   </div>
                 </ui:fragment>
@@ -111,10 +131,17 @@
                   <h3>#{locales['illusion.eventParticipants.approvalPendingListTitle']}</h3>
                   <div class="illusion-list">
                     <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.approvalPending}">
-                      <h:commandLink p:data-participant-id="#{participant.id}" action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
-                        <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
-                        <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
-                      </h:commandLink>
+                      <div class="flex-row illusion-list-row">
+                        <div class="flex-cell-14 flex-cell-first">
+                          <h:commandLink p:data-participant-id="#{participant.id}" action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
+                            <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
+                          </h:commandLink>
+                        </div>
+                        
+                        <div class="flex-cell-2 flex-right flex-cell-last">
+                          <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
+                        </div>
+                      </div>
                     </ui:repeat>
                   </div>
                 </ui:fragment>
@@ -123,10 +150,17 @@
                   <h3>#{locales['illusion.eventParticipants.waitingPaymentListTitle']}</h3>
                   <div class="illusion-list">
                     <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.waitingPayment}">
-                      <h:commandLink p:data-participant-id="#{participant.id}" action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
-                        <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
-                        <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
-                      </h:commandLink>
+                      <div class="flex-row illusion-list-row">
+                        <div class="flex-cell-14 flex-cell-first">
+                          <h:commandLink p:data-participant-id="#{participant.id}" action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
+                            <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
+                          </h:commandLink>
+                        </div>
+                        
+                        <div class="flex-cell-2 flex-right flex-cell-last">
+                          <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
+                        </div>
+                      </div>
                     </ui:repeat>
                   </div>
                 </ui:fragment>
@@ -135,10 +169,17 @@
                   <h3>#{locales['illusion.eventParticipants.bannedListTitle']}</h3>
                   <div class="illusion-list">
                     <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.banned}">
-                      <h:commandLink p:data-participant-id="#{participant.id}" action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
-                        <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
-                        <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
-                      </h:commandLink>
+                      <div class="flex-row illusion-list-row">
+                        <div class="flex-cell-14 flex-cell-first">
+                          <h:commandLink p:data-participant-id="#{participant.id}" action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
+                            <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
+                          </h:commandLink>
+                        </div>
+                        
+                        <div class="flex-cell-2 flex-right flex-cell-last">
+                          <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
+                        </div>
+                      </div>
                     </ui:repeat>
                   </div>
                 </ui:fragment>
@@ -147,55 +188,69 @@
                   <h3>#{locales['illusion.eventParticipants.invitedListTitle']}</h3>
                   <div class="illusion-list">
                     <ui:repeat var="participant" value="#{illusionEventParticipantsBackingBean.invited}">
-                      <h:commandLink p:data-participant-id="#{participant.id}" action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
-                        <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
-                        <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
-                      </h:commandLink>
+                      <div class="flex-row illusion-list-row">
+                        <div class="flex-cell-14 flex-cell-first">
+                          <h:commandLink p:data-participant-id="#{participant.id}" action="#{illusionEventParticipantsBackingBean.selectParticipant(participant)}" styleClass="illusion-event-participant illusion-list-item">
+                            <span>#{illusionEventParticipantsBackingBean.getParticipantDisplayName(participant)}</span>
+                          </h:commandLink>
+                        </div>
+                        
+                        <div class="flex-cell-2 flex-right flex-cell-last">
+                          <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{participant.id}?size=20"/> 
+                        </div>
+                      </div>
                     </ui:repeat>
                   </div>
                 </ui:fragment>
                 
-              </h:form>            
-            </h:panelGroup>
-          </h:panelGroup>
-        </h:panelGroup>    
-      
-        <h:panelGroup layout="block" styleClass="grid_8 narrow-left">
-          <h:panelGroup layout="block" styleClass="illusion-event-sub-panel">
-            <h:form>
-              <h:panelGroup layout="block" styleClass="illusion-edit-participant-avatar"> 
-                <img src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{illusionEventParticipantsBackingBean.selectedParticipantId}?size=128"/> 
-              </h:panelGroup>
+              </h:form>    
+            </div>
+          </div>
+            
+          <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-8 md-flex-cell-last sm-flex-cell-full">
+            <div class="index-panel">
+              <h:form>
+                <div class="flex-row">
+                  <div class="flex-cell-12 flex-cell-first">
+                    <h3>#{illusionEventParticipantsBackingBean.selectedParticipantName}</h3>
               
-              <h3>#{illusionEventParticipantsBackingBean.selectedParticipantName}</h3>
-              
-              <h:panelGroup layout="block" styleClass="illusion-edit-participant-field">
-                <h:outputLabel value="#{locales['illusion.eventParticipants.editParticipantDisplayNameLabel']}" />
-                <h:inputText value="#{illusionEventParticipantsBackingBean.selectedParticipantDisplayName}" styleClass="illusion-edit-participant-display-name"/>
-              </h:panelGroup>
-              
-              <h:panelGroup layout="block" styleClass="illusion-edit-participant-field">
-                <h:outputLabel value="#{locales['illusion.eventParticipants.editParticipantRoleLabel']}" />
-                <h:selectOneMenu value="#{illusionEventParticipantsBackingBean.selectedParticipantRole}" styleClass="illusion-edit-participant-role">
-                  <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleParticipant']}" itemValue="PARTICIPANT" itemDisabled="#{illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId}"/>
-                  <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleWaitingPayment']}" itemValue="WAITING_PAYMENT" itemDisabled="#{(illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId)}"/>
-                  <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleApprovalPending']}" itemValue="PENDING_APPROVAL" itemDisabled="#{(illusionEventParticipantsBackingBean.eventJoinMode ne 'APPROVE') or (illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId)}"/>
-                  <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleBanned']}" itemValue="BANNED" itemDisabled="#{illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId}"/>
-                  <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleOrganizer']}" itemValue="ORGANIZER"/>
-                </h:selectOneMenu>
-              </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="illusion-edit-participant-field">
+                      <h:outputLabel value="#{locales['illusion.eventParticipants.editParticipantDisplayNameLabel']}" />
+                      <h:inputText value="#{illusionEventParticipantsBackingBean.selectedParticipantDisplayName}" styleClass="illusion-edit-participant-display-name"/>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup layout="block" styleClass="illusion-edit-participant-field">
+                      <h:outputLabel value="#{locales['illusion.eventParticipants.editParticipantRoleLabel']}" />
+                      <h:selectOneMenu value="#{illusionEventParticipantsBackingBean.selectedParticipantRole}" styleClass="illusion-edit-participant-role">
+                        <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleParticipant']}" itemValue="PARTICIPANT" itemDisabled="#{illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId}"/>
+                        <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleWaitingPayment']}" itemValue="WAITING_PAYMENT" itemDisabled="#{(illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId)}"/>
+                        <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleApprovalPending']}" itemValue="PENDING_APPROVAL" itemDisabled="#{(illusionEventParticipantsBackingBean.eventJoinMode ne 'APPROVE') or (illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId)}"/>
+                        <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleBanned']}" itemValue="BANNED" itemDisabled="#{illusionEventParticipantsBackingBean.selectedParticipantRole eq 'ORGANIZER' and sessionBackingBean.loggedUser.id eq illusionEventParticipantsBackingBean.selectedParticipantUserId}"/>
+                        <f:selectItem itemLabel="#{locales['illusion.eventParticipants.editParticipantRoleOrganizer']}" itemValue="ORGANIZER"/>
+                      </h:selectOneMenu>
+                    </h:panelGroup>
+                  </div>                
   
-              <h:inputHidden value="#{illusionEventParticipantsBackingBean.selectedParticipantUserId}" />
-              <h:inputHidden value="#{illusionEventParticipantsBackingBean.selectedParticipantId}" />
-              <h:inputHidden value="#{illusionEventParticipantsBackingBean.selectedParticipantName}" />
-  
-              <h:commandButton action="#{illusionEventParticipantsBackingBean.saveSelectedParticipant}" styleClass="illusion-edit-participant-save" value="Save" />
-            </h:form>
-          </h:panelGroup>
-        </h:panelGroup>      
+                  <div class="flex-cell-4 flex-cell-last flex-right">
+                    <img class="illusion-edit-participant-avatar" src="#{request.contextPath}/illusion/eventAvatar/#{illusionEventParticipantsBackingBean.urlName}/#{illusionEventParticipantsBackingBean.selectedParticipantId}?size=128"/> 
+                  </div>
+
+                  <div class="flex-cell-full">
+                    <h:inputHidden value="#{illusionEventParticipantsBackingBean.selectedParticipantUserId}" />
+                    <h:inputHidden value="#{illusionEventParticipantsBackingBean.selectedParticipantId}" />
+                    <h:inputHidden value="#{illusionEventParticipantsBackingBean.selectedParticipantName}" />
+        
+                    <h:commandButton action="#{illusionEventParticipantsBackingBean.saveSelectedParticipant}" styleClass="illusion-edit-participant-save" value="Save" />
+                  </div>
+                </div>
+    
+              </h:form>
+            </div>
+                                
+          </div>
+        </div>
       </div>
-           
-    </h:panelGroup>
+    </div>
     
     <input type="hidden" name="eventUrlName" value="#{illusionEventParticipantsBackingBean.urlName}"/>
     <input type="hidden" name="eventId" value="#{illusionEventParticipantsBackingBean.id}"/>
