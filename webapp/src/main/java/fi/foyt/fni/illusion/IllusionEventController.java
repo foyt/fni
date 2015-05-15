@@ -753,7 +753,7 @@ public class IllusionEventController {
         organizerEmail, 
         getEventUrl(event), 
         null, 
-        fi.foyt.fni.larpkalenteri.Event.Status.PENDING, 
+        event.getPublished() ? fi.foyt.fni.larpkalenteri.Event.Status.ACTIVE : fi.foyt.fni.larpkalenteri.Event.Status.PENDING, 
         password, 
         false, 
         event.getJoinMode() == IllusionEventJoinMode.INVITE_ONLY, 
