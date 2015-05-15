@@ -52,14 +52,14 @@ public class IllusionIndexTestsBase extends AbstractUITest {
     assertSelectorPresent("#upcoming");
     clickSelector("a[href='#upcoming']");
     assertSelectorCount("#upcoming .illusion-index-event", 2);
-    assertSelectorTextIgnoreCase("#upcoming .illusion-index-event:nth-of-type(1) .illusion-index-event-name", "Upcoming #1");
-    assertSelectorTextIgnoreCase("#upcoming .illusion-index-event:nth-of-type(2) .illusion-index-event-name", "Upcoming #2");
+    assertSelectorTextIgnoreCase("#upcoming .illusion-index-event:nth-of-type(2) .illusion-index-event-name", "Upcoming #1");
+    assertSelectorTextIgnoreCase("#upcoming .illusion-index-event:nth-of-type(3) .illusion-index-event-name", "Upcoming #2");
     
     assertSelectorPresent("a[href='#pastevents']");
     clickSelector("a[href='#pastevents']");
     assertSelectorPresent("#pastevents");
     assertSelectorCount("#pastevents .illusion-index-event", 1);
-    assertSelectorTextIgnoreCase("#pastevents .illusion-index-event:nth-of-type(1) .illusion-index-event-name", "Open Event");
+    assertSelectorTextIgnoreCase("#pastevents .illusion-index-event:nth-of-type(2) .illusion-index-event-name", "Open Event");
 
     assertSelectorNotPresent("a[href='#unpublished']");
     assertSelectorNotPresent("#unpublished");
@@ -82,20 +82,20 @@ public class IllusionIndexTestsBase extends AbstractUITest {
     assertSelectorPresent("#upcoming");
     clickSelector("a[href='#upcoming']");
     assertSelectorCount("#upcoming .illusion-index-event", 2);
-    assertSelectorTextIgnoreCase("#upcoming .illusion-index-event:nth-of-type(1) .illusion-index-event-name", "Upcoming #1");
-    assertSelectorTextIgnoreCase("#upcoming .illusion-index-event:nth-of-type(2) .illusion-index-event-name", "Upcoming #2");
+    assertSelectorTextIgnoreCase("#upcoming .illusion-index-event:nth-of-type(2) .illusion-index-event-name", "Upcoming #1");
+    assertSelectorTextIgnoreCase("#upcoming .illusion-index-event:nth-of-type(3) .illusion-index-event-name", "Upcoming #2");
     
     assertSelectorPresent("a[href='#pastevents']");
     clickSelector("a[href='#pastevents']");
     assertSelectorPresent("#pastevents");
     assertSelectorCount("#pastevents .illusion-index-event", 1);
-    assertSelectorTextIgnoreCase("#pastevents .illusion-index-event:nth-of-type(1) .illusion-index-event-name", "Open Event");
+    assertSelectorTextIgnoreCase("#pastevents .illusion-index-event:nth-of-type(2) .illusion-index-event-name", "Open Event");
 
     assertSelectorPresent("a[href='#unpublished']");
     clickSelector("a[href='#unpublished']");
     assertSelectorPresent("#unpublished");
     assertSelectorCount("#unpublished .illusion-index-event", 1);
-    assertSelectorTextIgnoreCase("#unpublished .illusion-index-event:nth-of-type(1) .illusion-index-event-name", "Upcoming unpublished");
+    assertSelectorTextIgnoreCase("#unpublished .illusion-index-event:nth-of-type(2) .illusion-index-event-name", "Upcoming unpublished");
   }
   
 }

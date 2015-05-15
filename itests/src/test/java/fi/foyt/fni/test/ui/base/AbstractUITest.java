@@ -90,10 +90,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     navigate("/login/", true);
     waitForSelectorVisible(".user-login-external-google");
     clickSelector(".user-login-external-google");
-    waitForSelectorVisible("*[name='signIn']");
-    typeSelectorInputValue("*[name='Email']", getGoogleUsername());
-    typeSelectorInputValue("*[name='Passwd']", getGooglePassword());
-    clickSelector("*[name='signIn']");
+    waitForSelectorVisible("#Email");
+    typeSelectorInputValue("#Email", getGoogleUsername());
+    waitForSelectorVisible("#Passwd");
+    typeSelectorInputValue("#Passwd", getGooglePassword());
+    clickSelector("#signIn");
     waitForUrlMatches("^" + getAppUrl() + ".*");
     assertLoggedIn();
   }
