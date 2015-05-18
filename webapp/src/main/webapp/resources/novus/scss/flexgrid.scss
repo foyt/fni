@@ -94,6 +94,18 @@
   
   .#{$prefix}flex-right {
     text-align: right;
+  }  
+  
+  .#{$prefix}flex-align-items-top {
+    align-items: top;
+  }  
+  
+  .#{$prefix}flex-align-items-center {
+    align-items: center;
+  }
+    
+  .#{$prefix}flex-align-items-bottom {
+    align-items: bottom;
   }
   
   .#{$prefix}flex-row {

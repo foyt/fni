@@ -1,7 +1,6 @@
 package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -98,10 +97,11 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/pangram_fi");
     getWebDriver().findElement(By.cssSelector(".gamelibrary-publication-action-add-to-cart")).click();
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/cart/");
-    getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-items-inner-container tr:first-child .gamelibrary-cart-action-inc-count")).click();
+    
+    findElementsBySelector(".gamelibrary-cart-item .gamelibrary-cart-action-inc-count").get(0).click();
     
     new WebDriverWait(getWebDriver(), 60)
-      .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector(".gamelibrary-cart-items-inner-container table tr:first-child td:first-child"), "2"));
+      .until(ExpectedConditions.textToBePresentInElement(findElementsBySelector(".gamelibrary-cart-item div:first-child").get(0), "2"));
     
     getWebDriver().findElement(By.id("cart-form:payerFirstName")).sendKeys(firstName);
     getWebDriver().findElement(By.id("cart-form:payerLastName")).sendKeys(lastName);
@@ -153,14 +153,16 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.cssSelector(".gamelibrary-publication-action-add-to-cart")).click();
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/cart/");
     
-    assertEquals("EUR17.50", getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-summary-total-field .gamelibrary-cart-summary-value")).getText());
-    assertNotEquals("true", getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).getAttribute("disabled"));
-    getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-items table tr:nth-child(1) .gamelibrary-cart-action-remove")).click();
-    assertEquals("EUR7.50", getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-summary-total-field .gamelibrary-cart-summary-value")).getText());
-    assertNotEquals("true", getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).getAttribute("disabled"));
-    getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-items table tr:nth-child(1) .gamelibrary-cart-action-remove")).click();
-    assertEquals("EUR0.00", getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-summary-total-field .gamelibrary-cart-summary-value")).getText());
-    assertEquals("true", getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).getAttribute("disabled"));
+    assertSelectorTextIgnoreCase(".gamelibrary-cart-summary-field-total-value", "EUR17.50");
+    assertSelectorClickable(".gamelibrary-cart-submit");
+    
+    findElementsBySelector(".gamelibrary-cart-item .gamelibrary-cart-action-remove").get(0).click();
+    assertSelectorTextIgnoreCase(".gamelibrary-cart-summary-field-total-value", "EUR7.50");
+    assertSelectorClickable(".gamelibrary-cart-submit");
+
+    findElementsBySelector(".gamelibrary-cart-item .gamelibrary-cart-action-remove").get(0).click();
+    assertSelectorTextIgnoreCase(".gamelibrary-cart-summary-field-total-value", "EUR0.00");
+    assertSelectorNotClickable(".gamelibrary-cart-submit");
   }
 
   @Test

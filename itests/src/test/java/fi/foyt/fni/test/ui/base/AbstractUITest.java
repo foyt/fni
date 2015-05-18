@@ -2,6 +2,7 @@ package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -156,6 +157,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected WebElement findElementBySelector(String selector) {
     return getWebDriver().findElementByCssSelector(selector);
   }
+  
+  protected List<WebElement> findElementsBySelector(String selector) {
+    return getWebDriver().findElementsByCssSelector(selector);
+  }
 
   protected void assertSelectorTextIgnoreCase(String selector, String text) {
     assertEquals(toLowerCase(text), toLowerCase((findElementBySelector(selector)).getText()));
@@ -255,6 +260,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   
   protected void assertSelectorClickable(String selector) {
     assertNotNull(ExpectedConditions.elementToBeClickable(findElementBySelector(selector)).apply(getWebDriver()));
+  }
+  
+  protected void assertSelectorNotClickable(String selector) {
+    assertNull(ExpectedConditions.elementToBeClickable(findElementBySelector(selector)).apply(getWebDriver()));
   }
   
   protected void assertSelectorCount(String selector, int expected) {

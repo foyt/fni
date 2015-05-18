@@ -4,35 +4,69 @@
 
 $information-text-color: rgb(255, 255, 255);
 $information-background-color: darken($panel-background-color, 80%);
-$header-background-color: #000;
-$header-text-color: #fff;
 
-/* Generic */
-
-.gamelibrary-cart-panel h3 {
-  @include header-3;
-  color: $title-color;
+.index-box {
+  background-color: $panel-background-color;
+  padding: 20px;
 }
 
-/* Panels */
-
-.gamelibrary-cart-panel {
-  @include generic-panel;
+h3 {
+  @include header-2;
 }
 
-/* Actions */
+h3 a {
+  color: $default-color;
+  text-decoration: none;
+}
 
-.gamelibrary-cart-actions {
-  width: 62px;
+.view-header-description-title {
+  line-height: 16px; 
+  padding-bottom: 10px;
+}
+
+.gamelibrary-cart-back-link {
+  font-size: 16px;
+  font-family: $default-font;
+  color: $header-text-color;
+  padding-left: 20px;
+  font-style: italic;
+  font-weight: bold;
+  text-decoration: none;
+  text-transform: none;
+}
+
+.gamelibrary-cart-back-link:after {
+  content: '>>';
+  padding-left: 8px;
+}
+
+.gamelibrary-cart-information {
+  color: $information-text-color;
+  background-color: $information-background-color;
+  text-align: center;
+  font-size: 12px;
+  font-family: $default-font;
+  font-weight: bold;
+  font-style: italic;
+  padding: 5px;
+}
+
+.gamelibrary-cart-empty-message {
+  font-family: $default-font;
+  font-size: 14px;
 }
 
 .gamelibrary-cart-action {
   display: inline-block;
   vertical-align: top;
-  margin-left: 4px;
+  margin-right: 4px;
   background: #eee;
   border-radius: 2px;
   border: 1px solid #999;
+}
+
+.gamelibrary-cart-action:last-child {
+  margin-right: 0px;
 }
 
 span.gamelibrary-cart-action {
@@ -66,161 +100,44 @@ span.gamelibrary-cart-action {
   background-size: 12px;
 }
 
-/* Header */
-
-.gamelibrary-cart-back-link {
-  font-size: 16px;
-  font-family: $default-font;
-  color: $header-text-color;
-  padding-left: 20px;
-  font-style: italic;
-  font-weight: bold;
-  text-decoration: none;
-  text-transform: none;
-}
-
-.gamelibrary-cart-back-link:after {
-  content: '>>';
-  padding-left: 8px;
-}
-
-/* Info */
-
-.gamelibrary-cart-information {
-  color: $information-text-color;
-  background-color: $information-background-color;
-  text-align: center;
-  font-size: 12px;
-  font-family: $default-font;
-  font-weight: bold;
-  font-style: italic;
-  padding: 5px;
-  margin-bottom: 40px;
-}
-
-/* Items */
-
-.gamelibrary-cart-items {
-  margin-bottom: 46px;
-}
-
-.gamelibrary-cart-empty-message {
-  font-family: $default-font;
-  font-size: 14px;
-  margin-top: 20px;
-}
-
-.gamelibrary-cart-items-inner-container table {
-  width: 100%;
-}
-
-.gamelibrary-cart-items-inner-container th, .gamelibrary-cart-items-inner-container td {
+.gamelibrary-cart-item-labels, .gamelibrary-cart-item, .gamelibrary-cart-summary-field {
   font-family: $default-font;
   font-size: 10px;
   text-transform: uppercase;
-  padding-top: 5px;
-  padding-bottom: 5px;
+}
+
+.gamelibrary-cart-item-labels, .gamelibrary-cart-item {
   border-bottom: 1px solid #aaa;
 }
 
-.gamelibrary-cart-item-count {
-  width: 157px;
-}
-
-.gamelibrary-cart-items-inner-container td input {
-  width: 40px;
-}
-
-.gamelibrary-cart-item-name {
-  min-width: 250px;
-}
-
-.gamelibrary-cart-item-price {
-  width: 123px;
-}
-
-/* Payer */
-
-.gamelibrary-cart-payer-fields {
-  margin-top: 20px;
-}
-
-.gamelibrary-cart-payer-field {
-  margin-bottom: 9px;
-}
-
-.gamelibrary-cart-payer-field label {
-  width: 130px;
-  display: inline-block;
+.gamelibrary-cart-delivery-method,
+.gamelibrary-cart-field label {
   font-size: 13px;
   font-family: $default-font;
   font-weight: bold;
 }
 
-.gamelibrary-cart-payer-field input, .gamelibrary-cart-payer-field select {
-  width: 260px;
+.gamelibrary-cart-field input[type="text"], 
+.gamelibrary-cart-field input[type="number"], 
+.gamelibrary-cart-field textarea, 
+.gamelibrary-cart-field select {
   font-size: 14px;
   font-family: $default-font;
+  width: 100%; 
   @include box-sizing(border-box);
 }
 
-.gamelibrary-cart-delivery h4 {
-  font-size: 13px;
-  font-family: $default-font;
-  font-weight: bold;
+.gamelibrary-cart-field textarea {
+  height: 120px;
 }
 
-.gamelibrary-cart-delivery-method {
-  margin-top: 20px; 
-}
-
-.gamelibrary-cart-delivery-method label {
-  margin-left: 8px; 
-  font-size: 13px;
-  font-family: $default-font;
-  font-style: italic;
-}
-
-.gamelibrary-cart-notes {
-  margin-top: 13px;
-}
-
-.gamelibrary-cart-notes h4 {
-  width: 120px;
-  display: inline-block;
-  font-size: 13px;
-  font-family: $default-font;
-  font-weight: bold; 
-  vertical-align: top;
-  margin-top: 8px;
-}
-
-.gamelibrary-cart-notes textarea {
-  width: 260px;
-  height: 96px;
-  font-size: 14px;
-  @include box-sizing(border-box);
-}
-
-/* Summary */
-
-.gamelibrary-cart-summary-field label {
-  width: 220px;
-  display: inline-block;
-}
-
-.gamelibrary-cart-summary-field label, .gamelibrary-cart-summary-value {
-  font-family: $default-font;
-  font-size: 10px;
-  text-transform: uppercase;
-}
-
-.gamelibrary-cart-summary-total-field {
+.gamelibrary-cart-summary-field-total {
   border-top: 1px solid black;
   border-bottom: 1px solid black;
-  margin-top: 10px;
-  padding-top: 9px;
-  padding-bottom: 9px;
+  margin-top: 5px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  margin-bottom: 25px;
 }
 
 /* Submit */
@@ -235,7 +152,6 @@ span.gamelibrary-cart-action {
   color: #fff;
   border: 0px;
   border-radius: 15px;
-  margin-top: 35px;
   cursor: pointer;
 }
 
