@@ -80,46 +80,61 @@ public class OrderController implements Serializable {
 	}
 
 	public Order updateOrderAsPaid(Order order) {
-		Date now = new Date();
-		order = orderDAO.updateOrderStatus(orderDAO.updatePaid(order, now), OrderStatus.PAID);
-		orderPaidEvent.fire(new OrderPaidEvent(sessionController.getLocale(), order.getId()));
+	  if (order.getOrderStatus() != OrderStatus.PAID) {
+		  Date now = new Date();
+  		order = orderDAO.updateOrderStatus(orderDAO.updatePaid(order, now), OrderStatus.PAID);
+  		orderPaidEvent.fire(new OrderPaidEvent(sessionController.getLocale(), order.getId()));
+	  }
+	  
 		return order;
 	}
 
 	public Order updateOrderAsWaitingForDelivery(Order order) {
-		Date now = new Date();
-		order = orderDAO.updateOrderStatus(orderDAO.updatePaid(order, now), OrderStatus.WAITING_FOR_DELIVERY);
-		orderWaitingForDeliveryEvent.fire(new OrderWaitingForDeliveryEvent(sessionController.getLocale(), order.getId()));
+    if (order.getOrderStatus() != OrderStatus.WAITING_FOR_DELIVERY) {
+		  Date now = new Date();
+  		order = orderDAO.updateOrderStatus(orderDAO.updatePaid(order, now), OrderStatus.WAITING_FOR_DELIVERY);
+	  	orderWaitingForDeliveryEvent.fire(new OrderWaitingForDeliveryEvent(sessionController.getLocale(), order.getId()));
+    }
+    
 		return order;
 	}
 	
 	public Order updateOrderAsCanceled(Order order) {
-		Date now = new Date();
-		order = orderDAO.updateOrderStatus(orderDAO.updateCanceled(order, now), OrderStatus.CANCELED);
-		orderCanceledEvent.fire(new OrderCanceledEvent(sessionController.getLocale(), order.getId()));
+	  if (order.getOrderStatus() != OrderStatus.CANCELED) {
+  		Date now = new Date();
+  		order = orderDAO.updateOrderStatus(orderDAO.updateCanceled(order, now), OrderStatus.CANCELED);
+  		orderCanceledEvent.fire(new OrderCanceledEvent(sessionController.getLocale(), order.getId()));
+	  }
+	  
 		return order;
 	}
 
   public Order updateOrderAsShipped(Order order) {
-    Date now = new Date();
-    order = orderDAO.updateOrderStatus(orderDAO.updateShipped(order, now), OrderStatus.SHIPPED);
-    
-    List<OrderItem> orderItems = orderItemDAO.listByOrder(order);
-    for (OrderItem orderItem : orderItems) {
-      if (orderItem.getPublication() instanceof BookPublication) {
-        BookPublication bookPublication = (BookPublication) orderItem.getPublication();
-        publicationController.incBookPublicationPrintCount(bookPublication);
+    if (order.getOrderStatus() != OrderStatus.SHIPPED) {
+      Date now = new Date();
+      order = orderDAO.updateOrderStatus(orderDAO.updateShipped(order, now), OrderStatus.SHIPPED);
+      
+      List<OrderItem> orderItems = orderItemDAO.listByOrder(order);
+      for (OrderItem orderItem : orderItems) {
+        if (orderItem.getPublication() instanceof BookPublication) {
+          BookPublication bookPublication = (BookPublication) orderItem.getPublication();
+          publicationController.incBookPublicationPrintCount(bookPublication);
+        }
       }
+      
+      orderShippedEvent.fire(new OrderShippedEvent(sessionController.getLocale(), order.getId()));
     }
     
-    orderShippedEvent.fire(new OrderShippedEvent(sessionController.getLocale(), order.getId()));
     return order;
   }
 
   public Order updateOrderAsDelivered(Order order) {
-    Date now = new Date();
-    order = orderDAO.updateOrderStatus(orderDAO.updateDelivered(order, now), OrderStatus.DELIVERED);
-    orderDeliveredEvent.fire(new OrderDeliveredEvent(sessionController.getLocale(), order.getId()));
+    if (order.getOrderStatus() != OrderStatus.DELIVERED) {
+      Date now = new Date();
+      order = orderDAO.updateOrderStatus(orderDAO.updateDelivered(order, now), OrderStatus.DELIVERED);
+      orderDeliveredEvent.fire(new OrderDeliveredEvent(sessionController.getLocale(), order.getId()));
+    }
+    
     return order;
   }
 	
