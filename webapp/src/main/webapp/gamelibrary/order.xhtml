@@ -3,12 +3,17 @@
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['gamelibrary.order.pageTitle']}</ui:define>
+    
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
   
   <ui:define name="view-stylesheets">
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary-common.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary-order.css"/>
   </ui:define>
@@ -17,188 +22,259 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <!-- Header -->
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['gamelibrary.order.navigationIndex']}</h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.order.navigationGameLibrary']}</h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:outputLink styleClass="view-header-navigation-item" value="#{request.contextPath}/gamelibrary/order/#{gameLibraryOrderBackingBean.orderId}">#{locales['gamelibrary.order.navigationOrder']}</h:outputLink>
+          </div>
+        </div>
+
+        <!-- Description -->
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/index.jsf">#{locales['gamelibrary.order.navigationIndex']}</h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.order.navigationGameLibrary']}</h:link>
-        </h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:outputLink value="#{request.contextPath}/gamelibrary/order/#{gameLibraryOrderBackingBean.orderId}">#{locales['gamelibrary.order.navigationOrder']}</h:outputLink>
-        </h:panelGroup>
-      </h:panelGroup>
-  
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['gamelibrary.order.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['gamelibrary.order.descriptionText']}</p>
-      </h:panelGroup>
-    </h:panelGroup>
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['gamelibrary.order.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['gamelibrary.order.descriptionText']}</p>
+        </div>
+      </div>
+    </div>   
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="gamelibrary-order-panel">
-      
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-id">
-          <h:outputFormat value="#{locales['gamelibrary.order.orderIdLabel']}">
-            <f:param value="#{gameLibraryOrderBackingBean.orderId}"/>
-          </h:outputFormat>
-        </h:panelGroup>
- 
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-status gamelibrary-order-status-#{gameLibraryOrderBackingBean.orderStatus}">
-          <h:outputFormat value="#{locales['gamelibrary.order.statusLabel']}">
-            <f:param value="#{gameLibraryOrderBackingBean.orderStatusText}"/>
-          </h:outputFormat>
-        </h:panelGroup>
- 
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-customer">
-          <h3>#{locales['gamelibrary.order.customerTitle']}</h3>
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field gamelibrary-order-customer-company" rendered="#{!empty(gameLibraryOrderBackingBean.customerCompany)}">#{gameLibraryOrderBackingBean.customerCompany}</h:panelGroup>  
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field gamelibrary-order-customer-name">#{gameLibraryOrderBackingBean.customerFirstName} #{gameLibraryOrderBackingBean.customerLastName}</h:panelGroup>  
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field gamelibrary-order-customer-email">#{gameLibraryOrderBackingBean.customerEmail}</h:panelGroup>  
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field gamelibrary-order-customer-mobile" rendered="#{!empty(gameLibraryOrderBackingBean.customerMobile)}">#{gameLibraryOrderBackingBean.customerMobile}</h:panelGroup> 
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-customer-field gamelibrary-order-customer-phone" rendered="#{!empty(gameLibraryOrderBackingBean.customerPhone)}">#{gameLibraryOrderBackingBean.customerPhone}</h:panelGroup> 
-        </h:panelGroup>
-       
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address">
-          <h3>#{locales['gamelibrary.order.deliveryAddressTitle']}</h3>
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field gamelibrary-order-delivery-address-street">#{gameLibraryOrderBackingBean.deliveryAddress.street1} #{gameLibraryOrderBackingBean.deliveryAddress.street2}</h:panelGroup>
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field gamelibrary-order-delivery-address-postal-code">#{gameLibraryOrderBackingBean.deliveryAddress.postalCode} #{gameLibraryOrderBackingBean.deliveryAddress.city}</h:panelGroup> 
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-delivery-address-field gamelibrary-order-delivery-address-country">#{gameLibraryOrderBackingBean.deliveryAddress.country.name}</h:panelGroup>       
-        </h:panelGroup>
+    <div class="flex-row">
+      <div class="flex-cell-full index-box">
+        <div class="flex-row">
+          <div class="lg-flex-cell-4 lg-flex-cell-first md-flex-cell-4 md-flex-cell-first sm-flex-cell-8 sm-flex-cell-first">
+            <h1 class="gamelibrary-order-id">
+              <h:outputFormat value="#{locales['gamelibrary.order.orderIdLabel']}">
+                <f:param value="#{gameLibraryOrderBackingBean.orderId}"/>
+              </h:outputFormat>
+            </h1>
+          </div>
+        
+          <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-8 sm-flex-cell-last ">
+            <h1 class="gamelibrary-order-status">
+              <h:outputFormat value="#{locales['gamelibrary.order.statusLabel']}">
+                <f:param value="#{gameLibraryOrderBackingBean.orderStatusText}"/>
+              </h:outputFormat>
+            </h1>
+          </div>
+        </div>
+        
+        <div class="flex-row">
+          <div class="flex-cell-full">
+            <h3>#{locales['gamelibrary.order.customerTitle']}</h3>
+          </div>
+        </div>
+
+        <div class="flex-row gamelibrary-order-customer-field gamelibrary-order-customer-company" jsf:rendered="#{!empty(gameLibraryOrderBackingBean.customerCompany)}">
+          <div class="flex-cell-full no-margin-top no-margin-bottom">
+            #{gameLibraryOrderBackingBean.customerCompany}
+          </div>
+        </div>
+
+        <div class="flex-row gamelibrary-order-customer-field gamelibrary-order-customer-name">
+          <div class="flex-cell-full no-margin-top no-margin-bottom">
+            #{gameLibraryOrderBackingBean.customerFirstName} #{gameLibraryOrderBackingBean.customerLastName}
+          </div>
+        </div>
+
+        <div class="flex-row gamelibrary-order-customer-field gamelibrary-order-customer-email">
+          <div class="flex-cell-full no-margin-top no-margin-bottom">
+            #{gameLibraryOrderBackingBean.customerEmail}
+          </div>
+        </div>
+
+        <div class="flex-row gamelibrary-order-customer-field gamelibrary-order-customer-mobile" jsf:rendered="#{!empty(gameLibraryOrderBackingBean.customerMobile)}">
+          <div class="flex-cell-full no-margin-top no-margin-bottom">
+            #{gameLibraryOrderBackingBean.customerMobile} 
+          </div>
+        </div>
+
+        <div class="flex-row gamelibrary-order-customer-field gamelibrary-order-customer-phone" jsf:rendered="#{!empty(gameLibraryOrderBackingBean.customerPhone)}">
+          <div class="flex-cell-full no-margin-top no-margin-bottom">
+            #{gameLibraryOrderBackingBean.customerPhone}
+          </div>
+        </div>
+                
+        <div class="flex-row">
+          <div class="flex-cell-full">
+            <h3>#{locales['gamelibrary.order.deliveryAddressTitle']}</h3>
+          </div>
+        </div>
+
+        <div class="flex-row gamelibrary-order-delivery-address-field gamelibrary-order-delivery-address-street">
+          <div class="flex-cell-full no-margin-top no-margin-bottom">
+            #{gameLibraryOrderBackingBean.deliveryAddress.street1} #{gameLibraryOrderBackingBean.deliveryAddress.street2}
+          </div>
+        </div>
+        
+        <div class="flex-row gamelibrary-order-delivery-address-field gamelibrary-order-delivery-address-postal-code">
+          <div class="flex-cell-full no-margin-top no-margin-bottom">
+            #{gameLibraryOrderBackingBean.deliveryAddress.postalCode} #{gameLibraryOrderBackingBean.deliveryAddress.city}
+          </div>
+        </div>
+        
+        <div class="flex-row gamelibrary-order-delivery-address-field gamelibrary-order-delivery-address-country">
+          <div class="flex-cell-full no-margin-top no-margin-bottom">
+            #{gameLibraryOrderBackingBean.deliveryAddress.country.name}
+          </div>
+        </div>
                
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-items">
-          <h3>#{locales['gamelibrary.order.itemsTitle']}</h3>
-          
-          <h:dataTable value="#{gameLibraryOrderBackingBean.orderItems}" var="orderItem">
-            <h:column>
-              <f:facet name="header">#{locales['gamelibrary.order.itemNameLabel']}</f:facet>
+        <div class="flex-row">
+          <div class="flex-cell-full">
+            <h3>#{locales['gamelibrary.order.itemsTitle']}</h3>
+          </div>
+        </div>
+        
+        <div class="flex-row gamelibrary-order-item-labels">
+          <div class="lg-flex-cell-6 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first flex-cell-6 sm-flex-cell-first">
+            <label>#{locales['gamelibrary.order.itemNameLabel']}</label>
+          </div>            
+          <div class="lg-flex-cell-5 md-flex-cell-5 sm-flex-cell-5">
+            <label>#{locales['gamelibrary.order.itemUnitPriceLabel']}</label>
+          </div>            
+          <div class="lg-flex-cell-5 lg-flex-cell-last md-flex-cell-5 md-flex-cell-last sm-flex-cell-5 sm-flex-cell-last">
+            <label>#{locales['gamelibrary.order.itemTotalPriceLabel']}</label>
+          </div>            
+        </div>
+        
+        <ui:repeat var="orderItem" value="#{gameLibraryOrderBackingBean.orderItems}">
+          <div class="flex-row gamelibrary-order-item">
+            <div class="lg-flex-cell-6 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first flex-cell-6 sm-flex-cell-first">
               <h:outputText value="#{orderItem.count} x #{orderItem.name}"/>
-            </h:column>
-            
-            <h:column>
-              <f:facet name="header">#{locales['gamelibrary.order.itemUnitPriceLabel']}</f:facet>
+            </div>            
+            <div class="lg-flex-cell-5 md-flex-cell-5 sm-flex-cell-5">
               <h:outputText value="#{orderItem.unitPrice}" >
                 <f:convertNumber currencyCode="EUR" type="currency" />
               </h:outputText>
-            </h:column>
-            
-            <h:column>
-              <f:facet name="header">#{locales['gamelibrary.order.itemTotalPriceLabel']}</f:facet>
+            </div>            
+            <div class="lg-flex-cell-5 lg-flex-cell-last md-flex-cell-5 md-flex-cell-last sm-flex-cell-5 sm-flex-cell-last">
               <h:outputText value="#{orderItem.unitPrice * orderItem.count}">
                 <f:convertNumber currencyCode="EUR" type="currency" />
               </h:outputText>
-            </h:column>
-          </h:dataTable>
-          
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-total-container">
-            <h:outputLabel value="#{locales['gamelibrary.order.totalLabel']}" />
-            <h:panelGroup layout="block" styleClass="gamelibrary-order-total">
-              <h:outputText value="#{gameLibraryOrderBackingBean.orderTotal}">
-                <f:convertNumber currencyCode="EUR" type="currency" />
-              </h:outputText>
-            </h:panelGroup>          
-          </h:panelGroup>    
-          
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-tax-container">
-            <h:outputLabel rendered="#{gameLibraryOrderBackingBean.vatRegistered}">
+            </div>     
+          </div>
+        </ui:repeat>
+        
+        <div class="flex-row gamelibrary-order-total-label">
+          <div class="flex-cell-full no-margin-top no-margin-bottom">
+            <label>#{locales['gamelibrary.order.totalLabel']}</label>
+          </div>            
+        </div>
+        
+        <div class="flex-row gamelibrary-order-total">
+          <div class="flex-cell-full no-margin-top">
+            <h:outputText value="#{gameLibraryOrderBackingBean.orderTotal}">
+              <f:convertNumber currencyCode="EUR" type="currency" />
+            </h:outputText>
+          </div>            
+        </div>
+        
+        <div class="flex-row gamelibrary-order-tax-label">
+          <div class="flex-cell-full no-margin-bottom">
+            <label jsf:rendered="#{gameLibraryOrderBackingBean.vatRegistered}">
               <h:outputFormat value="#{locales['gamelibrary.order.taxLabel']}">
                 <f:param value="#{gameLibraryOrderBackingBean.vatPercent}"/>
               </h:outputFormat>
-            </h:outputLabel>
-            <h:outputLabel rendered="#{!orderBackingBean.vatRegistered}">#{locales['gamelibrary.cart.summaryNotVatRegistered']}</h:outputLabel>
-            <h:panelGroup layout="block" styleClass="gamelibrary-order-tax">
-              <h:outputText value="#{gameLibraryOrderBackingBean.taxAmount}">
-                <f:convertNumber currencyCode="EUR" type="currency" />
-              </h:outputText>
-            </h:panelGroup>          
-          </h:panelGroup>       
-          
-        </h:panelGroup>
-       
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-notes" rendered="#{!empty(gameLibraryOrderBackingBean.notes)}">
-          <h3>#{locales['gamelibrary.order.notesTitle']}</h3>
-          <p>#{gameLibraryOrderBackingBean.notes}</p>
-        </h:panelGroup>
-       
-        <h:panelGroup layout="block" styleClass="gamelibrary-order-history">
-          <h3>#{locales['gamelibrary.order.historyTitle']}</h3>
-          
-          <h:panelGroup layout="block" styleClass="gamelibrary-order-history-events">
-            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event">
-              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
-                <h:outputText value="#{gameLibraryOrderBackingBean.created}">
-                  <f:convertDateTime type="both"/>
-                </h:outputText>
-              </h:panelGroup>          
-              
-              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-name">
-                #{locales['gamelibrary.order.historyEventLabelCreated']}
-              </h:panelGroup>
-            </h:panelGroup>
+            </label>
             
-            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{gameLibraryOrderBackingBean.canceled ne null}">
-              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
-                <h:outputText value="#{gameLibraryOrderBackingBean.canceled}">
-                  <f:convertDateTime type="both"/>
-                </h:outputText>
-              </h:panelGroup>          
-              
-              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-name">
-                #{locales['gamelibrary.order.historyEventLabelCanceled']}
-              </h:panelGroup>
-            </h:panelGroup>
-            
-            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{gameLibraryOrderBackingBean.paid ne null}">
-              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
-                <h:outputText value="#{gameLibraryOrderBackingBean.paid}">
-                  <f:convertDateTime type="both"/>
-                </h:outputText>
-              </h:panelGroup>          
-              
-              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-name">
-                #{locales['gamelibrary.order.historyEventLabelPaid']}
-              </h:panelGroup>
-            </h:panelGroup>
-            
-            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{gameLibraryOrderBackingBean.shipped ne null}">
-              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
-                <h:outputText value="#{gameLibraryOrderBackingBean.shipped}">
-                  <f:convertDateTime type="both"/>
-                </h:outputText>
-              </h:panelGroup>          
-              
-              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-name">
-                #{locales['gamelibrary.order.historyEventLabelShipped']}
-              </h:panelGroup>
-            </h:panelGroup>       
-            
-            <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event" rendered="#{gameLibraryOrderBackingBean.delivered ne null}">
-              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-date">
-                <h:outputText value="#{gameLibraryOrderBackingBean.delivered}">
-                  <f:convertDateTime type="both"/>
-                </h:outputText>
-              </h:panelGroup>          
-              
-              <h:panelGroup layout="block" styleClass="gamelibrary-order-history-event-name">
-                #{locales['gamelibrary.order.historyEventLabelDelivered']}
-              </h:panelGroup>
-            </h:panelGroup>
-          </h:panelGroup>
-        </h:panelGroup>
-      </h:panelGroup>
-    </h:panelGroup>
-    
+            <label jsf:rendered="#{!orderBackingBean.vatRegistered}">
+              #{locales['gamelibrary.cart.summaryNotVatRegistered']}
+            </label>
+          </div>            
+        </div>
+        
+        <div class="flex-row gamelibrary-order-tax-amount">
+          <div class="flex-cell-full no-margin-top no-margin-bottom">
+            <h:outputText value="#{gameLibraryOrderBackingBean.taxAmount}">
+              <f:convertNumber currencyCode="EUR" type="currency" />
+            </h:outputText>
+          </div>            
+        </div>
+                 
+        <div class="flex-row" jsf:rendered="#{!empty(gameLibraryOrderBackingBean.notes)}"> 
+          <div class="flex-cell-full">
+            <h3>#{locales['gamelibrary.order.notesTitle']}</h3>
+          </div>
+        </div>
+        
+        <div class="flex-row gamelibrary-order-notes" jsf:rendered="#{!empty(gameLibraryOrderBackingBean.notes)}">
+          <div class="flex-cell-full">
+            <p>#{gameLibraryOrderBackingBean.notes}</p>
+          </div>
+        </div>
+
+        <div class="flex-row gamelibrary-order-history-label"> 
+          <div class="flex-cell-full">
+            <h3>#{locales['gamelibrary.order.historyTitle']}</h3>
+          </div>
+        </div>
+        
+        <div class="flex-row gamelibrary-order-history-event gamelibrary-order-created-history-event">
+          <div class="lg-flex-cell-6 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-8 sm-flex-cell-first">
+            <h:outputText value="#{gameLibraryOrderBackingBean.created}">
+              <f:convertDateTime type="both"/>
+            </h:outputText>
+          </div>           
+          <div class="lg-flex-cell-10 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-8 sm-flex-cell-last">
+            #{locales['gamelibrary.order.historyEventLabelCreated']}
+          </div>     
+        </div>
+        
+        <div class="flex-row gamelibrary-order-history-event" jsf:rendered="#{gameLibraryOrderBackingBean.canceled ne null}">
+          <div class="lg-flex-cell-6 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-8 sm-flex-cell-first">
+            <h:outputText value="#{gameLibraryOrderBackingBean.canceled}">
+              <f:convertDateTime type="both"/>
+            </h:outputText>
+          </div>           
+          <div class="lg-flex-cell-10 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-8 sm-flex-cell-last">
+            #{locales['gamelibrary.order.historyEventLabelCanceled']}
+          </div>     
+        </div>
+        
+        <div class="flex-row gamelibrary-order-history-event" jsf:rendered="#{gameLibraryOrderBackingBean.paid ne null}">
+          <div class="lg-flex-cell-6 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-8 sm-flex-cell-first">
+            <h:outputText value="#{gameLibraryOrderBackingBean.paid}">
+              <f:convertDateTime type="both"/>
+            </h:outputText>
+          </div>           
+          <div class="lg-flex-cell-10 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-8 sm-flex-cell-last">
+            #{locales['gamelibrary.order.historyEventLabelPaid']}
+          </div>     
+        </div>
+        
+        <div class="flex-row gamelibrary-order-history-event" jsf:rendered="#{gameLibraryOrderBackingBean.shipped ne null}">
+          <div class="lg-flex-cell-6 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-8 sm-flex-cell-first">
+            <h:outputText value="#{gameLibraryOrderBackingBean.shipped}">
+              <f:convertDateTime type="both"/>
+            </h:outputText>
+          </div>           
+          <div class="lg-flex-cell-10 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-8 sm-flex-cell-last">
+            #{locales['gamelibrary.order.historyEventLabelShipped']}
+          </div>     
+        </div>
+        
+        <div class="flex-row gamelibrary-order-history-event" jsf:rendered="#{gameLibraryOrderBackingBean.delivered ne null}">
+          <div class="lg-flex-cell-6 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-8 sm-flex-cell-first">
+            <h:outputText value="#{gameLibraryOrderBackingBean.delivered}">
+              <f:convertDateTime type="both"/>
+            </h:outputText>
+          </div>           
+          <div class="lg-flex-cell-10 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-8 sm-flex-cell-last">
+            #{locales['gamelibrary.order.historyEventLabelDelivered']}
+          </div>     
+        </div>
+
+      </div>
+    </div>
+        
   </ui:define>
 
 </ui:composition>

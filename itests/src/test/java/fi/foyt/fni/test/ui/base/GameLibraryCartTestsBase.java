@@ -69,13 +69,14 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
 
     assertEquals(notes, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-notes p")).getText());
 
-    assertEquals("1 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-items tbody tr td:nth-child(1)")).getText());
-    assertEquals("EUR10.00", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-items tbody tr td:nth-child(2)")).getText());
-    assertEquals("EUR10.00", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-items tbody tr td:nth-child(3)")).getText());
-    assertEquals("EUR10.00", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-total")).getText());
-
-    assertEquals("TAX (0% - NOT VAT REGISTERED)", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-tax-container label")).getText());
-    assertEquals("EUR0.00", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-tax")).getText());
+    assertSelectorCount(".gamelibrary-order-item", 1);
+    
+    assertEquals("1 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", findElementsBySelector(".gamelibrary-order-item div:nth-child(1)").get(0).getText());
+    assertEquals("EUR10.00", findElementsBySelector(".gamelibrary-order-item div:nth-child(2)").get(0).getText());
+    assertEquals("EUR10.00", findElementsBySelector(".gamelibrary-order-item div:nth-child(3)").get(0).getText());
+    assertSelectorTextIgnoreCase(".gamelibrary-order-total div", "EUR10.00");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-tax-label label", "TAX (0% - NOT VAT REGISTERED)");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-tax-amount div", "EUR0.00");
   }
 
   @Test
@@ -128,18 +129,18 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
 
     assertEquals(notes, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-notes p")).getText());
 
-    assertEquals("2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-items tbody tr:nth-child(1) td:nth-child(1)")).getText());
-    assertEquals("EUR10.00", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-items tbody tr:nth-child(1) td:nth-child(2)")).getText());
-    assertEquals("EUR20.00", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-items tbody tr:nth-child(1) td:nth-child(3)")).getText());
+    assertSelectorCount(".gamelibrary-order-item", 2);
+    
+    assertEquals("2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", findElementsBySelector(".gamelibrary-order-item div:nth-child(1)").get(0).getText());
+    assertEquals("EUR10.00", findElementsBySelector(".gamelibrary-order-item div:nth-child(2)").get(0).getText());
+    assertEquals("EUR20.00", findElementsBySelector(".gamelibrary-order-item div:nth-child(3)").get(0).getText());
+    assertEquals("1 X BEOWULF POHTI ZULUJA JA ÅNGSTRÖM-YKSIKKÖÄ KATSELLESSAAN Q-STONE- JA CMX-YHTYEITÄ VIDEOLTA.", findElementsBySelector(".gamelibrary-order-item div:nth-child(1)").get(1).getText());
+    assertEquals("EUR7.50", findElementsBySelector(".gamelibrary-order-item div:nth-child(2)").get(1).getText());
+    assertEquals("EUR7.50", findElementsBySelector(".gamelibrary-order-item div:nth-child(3)").get(1).getText());
 
-    assertEquals("1 X BEOWULF POHTI ZULUJA JA ÅNGSTRÖM-YKSIKKÖÄ KATSELLESSAAN Q-STONE- JA CMX-YHTYEITÄ VIDEOLTA.",
-        getWebDriver().findElement(By.cssSelector(".gamelibrary-order-items tbody tr:nth-child(2) td:nth-child(1)")).getText());
-    assertEquals("EUR7.50", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-items tbody tr:nth-child(2) td:nth-child(2)")).getText());
-    assertEquals("EUR7.50", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-items tbody tr:nth-child(2) td:nth-child(3)")).getText());
-
-    assertEquals("EUR27.50", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-total")).getText());
-    assertEquals("TAX (0% - NOT VAT REGISTERED)", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-tax-container label")).getText());
-    assertEquals("EUR0.00", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-tax")).getText());
+    assertSelectorTextIgnoreCase(".gamelibrary-order-total div", "EUR27.50");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-tax-label label", "TAX (0% - NOT VAT REGISTERED)");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-tax-amount div", "EUR0.00");
   }
 
   @Test

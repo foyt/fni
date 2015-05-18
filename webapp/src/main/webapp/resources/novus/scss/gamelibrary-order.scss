@@ -6,125 +6,53 @@ $header-background-color: #000;
 $header-text-color: #fff;
 $entry-color: #313133;
 
-/* Generic */
-
-.gamelibrary-order-panel h3 {
-  @include header-3;
-  color: $title-color;
-  margin-bottom: 18px;
+.index-box {
+  background-color: $panel-background-color;
+  padding: 20px;
 }
 
-/* Panels */
-
-.gamelibrary-order-panel {
-  @include generic-panel;
-}
-
-/* Status */
-
-.gamelibrary-order-id, .gamelibrary-order-status {
+h1 {
   font-family: $default-font;
   font-size: 16px;
   font-style: italic;
   font-weight: bold;  
   display: inline-block;
-  margin-bottom: 63px;
+  margin-bottom: 33px;
 }
 
-/* Order Id */
-
-.gamelibrary-order-id {
-  width: 156px;
+h3 {
+  @include header-3;
+  color: $title-color;
+  margin-top: 13px;
+  margin-bottom: 13px;
 }
 
-/* Customer / Delivery Fields */
-
-.gamelibrary-order-customer-field, .gamelibrary-order-delivery-address-field {
+.gamelibrary-order-customer-field, .gamelibrary-order-delivery-address-field, .gamelibrary-order-notes {
   font-family: $default-font;
   color: $entry-color;
   font-size: 13px;
 }
 
-/* Sections */
-
-.gamelibrary-order-customer, .gamelibrary-order-delivery-address , .gamelibrary-order-items, .gamelibrary-order-notes {
-  margin-bottom: 30px;
-}
-
-/* Items */
-
-.gamelibrary-order-items td, .gamelibrary-order-items th {
-  font-family: $default-font;
-  color: $entry-color;
-  font-size: 13px;
+.gamelibrary-order-item-labels, .gamelibrary-order-item, .gamelibrary-order-history-event {
   border-bottom: 1px solid #000;
-  padding-top: 6px;
-  padding-bottom: 6px;
   text-transform: uppercase;
-}
-
-.gamelibrary-order-items td:first-child {
-  width: 220px;
-}
-
-.gamelibrary-order-items table {
-  width: 100%;
-  margin-bottom: 30px;
-}
-
-.gamelibrary-order-total-container {
-  margin-bottom: 10px;
-}
-
-.gamelibrary-order-tax-container label,
-.gamelibrary-order-total-container label {
-  text-transform: uppercase; 
-}
-
-.gamelibrary-order-tax-container label, .gamelibrary-order-tax-container div,
-.gamelibrary-order-total-container label, .gamelibrary-order-total-container div {
   font-family: $default-font;
   color: $entry-color;
   font-size: 13px;
 }
 
-/* Notes */
-
-.gamelibrary-order-notes {
-  font-family: $default-font;
-  color: $entry-color;
-  font-size: 13px;
-}
-
-/* History */
-
-.gamelibrary-order-history-events {
-  display: table;
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.gamelibrary-order-history-event {
-  font-family: $default-font;
-  color: $entry-color;
-  font-size: 13px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  display: table-row;
-}
-
-.gamelibrary-order-history-event-date, .gamelibrary-order-history-event-name {
-  display: table-cell;
-  border-bottom: 1px solid #000;
+.gamelibrary-order-created-history-event {
   border-top: 1px solid #000;
-  padding-top: 6px;
-  padding-bottom: 6px;
+}
+
+.gamelibrary-order-total-label {
+  margin-top: 30px;
+}
+
+.gamelibrary-order-total, .gamelibrary-order-tax-amount,
+.gamelibrary-order-total-label, .gamelibrary-order-tax-label {
   font-family: $default-font;
   color: $entry-color;
   font-size: 13px;
   text-transform: uppercase;
-}
-
-.gamelibrary-order-history-event-date {
-  width: 200px;
 }

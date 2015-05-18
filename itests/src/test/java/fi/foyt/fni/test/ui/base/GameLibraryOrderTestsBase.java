@@ -93,13 +93,14 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
 
     assertEquals(notes, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-notes p")).getText());
 
-    assertEquals("10 X TEST BOOK #1", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-items tbody tr td:nth-child(1)")).getText());
-    assertEquals("EUR10.00", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-items tbody tr td:nth-child(2)")).getText());
-    assertEquals("EUR100.00", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-items tbody tr td:nth-child(3)")).getText());
-    assertEquals("EUR100.00", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-total")).getText());
-
-    assertEquals("TAX (0% - NOT VAT REGISTERED)", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-tax-container label")).getText());
-    assertEquals("EUR0.00", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-tax")).getText());
+    assertSelectorCount(".gamelibrary-order-item", 1);
+    
+    assertEquals("10 X TEST BOOK #1", findElementsBySelector(".gamelibrary-order-item div:nth-child(1)").get(0).getText());
+    assertEquals("EUR10.00", findElementsBySelector(".gamelibrary-order-item div:nth-child(2)").get(0).getText());
+    assertEquals("EUR100.00", findElementsBySelector(".gamelibrary-order-item div:nth-child(3)").get(0).getText());
+    assertSelectorTextIgnoreCase(".gamelibrary-order-total div", "EUR100.00");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-tax-label label", "TAX (0% - NOT VAT REGISTERED)");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-tax-amount div", "EUR0.00");
   }
 
 }
