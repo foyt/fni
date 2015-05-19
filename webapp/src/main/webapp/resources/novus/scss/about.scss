@@ -17,12 +17,13 @@ h3 {
   padding-bottom: 10px;
 }
 
-.about-panel {
+.index-box {
   background-color: $panel-background-color;
-  padding-left: 40px;
-  padding-top: 40px;
-  padding-right: 140px;
-  padding-bottom: 40px;
+  padding: 20px;
+}
+
+.banner {
+  vertical-align: top;
 }
 
 .history-image {
@@ -32,7 +33,7 @@ h3 {
   margin-bottom: 10px;
 }
 
-.about-panel p {
+.index-box p {
   display: block;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -41,10 +42,10 @@ h3 {
   font-size: 14px;
 }
 
-.about-panel ul {
+.index-box ul {
   padding-left: 20px;
 }
 
-.about-panel ul li {
+.index-box ul li {
   list-style: circle;
 }

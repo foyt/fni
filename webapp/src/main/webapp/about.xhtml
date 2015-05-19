@@ -3,8 +3,13 @@
   xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['about.pageTitle']}</ui:define>
+  
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+
   <ui:define name="view-stylesheets">
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/about.css"/>
   </ui:define>
 
@@ -12,16 +17,18 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
     <!-- Banner -->
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight hide_on_mobile">
-      <h:graphicImage library="novus" name="gfx/layout/banner.jpg" />
-    </h:panelGroup>
+    <div class="flex-row md-flex-hide sm-flex-hide">
+      <div class="flex-cell-full no-margin-top no-margin-bottom">
+        <h:graphicImage library="novus" name="gfx/layout/banner.jpg" styleClass="banner"/>
+      </div>
+    </div>
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="about-panel">
+    <div class="flex-row index-box">
+      <div class="lg-flex-cell-12 md-flex-cell-12 sm-flex-cell-full no-margin-top">
         <h2>#{locales['about.title']}</h2>
         <p>#{locales['about.aboutText']}</p>
 
@@ -110,9 +117,9 @@
         <h3 id="acknowledgements">#{locales['about.acknowledgementsTitle']}</h3>
         <p><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.acknowledgementsText1'])}" escape="false"/></p>
         <p><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.acknowledgementsText2'])}" escape="false"/></p>
-        
-      </h:panelGroup>
-    </h:panelGroup>
+      </div>    
+    </div>
+    
   </ui:define>
 
 </ui:composition>
