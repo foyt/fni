@@ -4,25 +4,13 @@
   function checkLicense() {
     var creativeCommons = $('.gamelibrary-propose-game-license-select').val() == 'CREATIVE_COMMONS';
     if (creativeCommons) {
-      $('.gamelibrary-propose-game-form-section-cc').css({
-        display: 'block'
-      });
-      
-      $('.gamelibrary-propose-game-form-section-otherlicense').css({
-        display: 'none'
-      });
-      
+      $('.gamelibrary-propose-game-form-section-cc').show();
+      $('.gamelibrary-propose-game-form-section-otherlicense').hide();
       $('.gamelibrary-propose-game-form-section-cc input').attr('required', 'required');
       $('.gamelibrary-propose-game-form-section-otherlicense input').removeAttr('required');
     } else {
-      $('.gamelibrary-propose-game-form-section-cc').css({
-        display: 'none'
-      });
-      
-      $('.gamelibrary-propose-game-form-section-otherlicense').css({
-        display: 'block'
-      });
-      
+      $('.gamelibrary-propose-game-form-section-cc').hide();
+      $('.gamelibrary-propose-game-form-section-otherlicense').show();
       $('.gamelibrary-propose-game-form-section-cc input').removeAttr('required');
       $('.gamelibrary-propose-game-form-section-otherlicense input').attr('required', 'required');
     }
@@ -40,7 +28,8 @@
         source: existingTags
       },
       'defaultText': $('.gamelibrary-propose-game-form-tags').data('help-text'),
-      width: '290px'
+      width: '100%',
+      height: '120px'
     });
     
     $('input[type="file"]').each(function (index, fileInput) {

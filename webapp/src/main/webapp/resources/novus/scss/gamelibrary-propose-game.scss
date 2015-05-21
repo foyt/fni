@@ -2,64 +2,51 @@
 @import "compass";
 @import "styles";
 
-/* Generic */
-
-.gamelibrary-propose-game-panel h3 {
-  @include header-3;
-  color: $title-color;
-  margin-bottom: 18px;
-}
-
-/* Panels */
-
-.gamelibrary-propose-game-panel {
-  @include generic-panel;
-}
-
-/* Fields */
-
-.gamelibrary-propose-game-form-section {
-  margin-bottom: 9px;
-  color: $default-color;
-  font-family: $default-font;
-  font-size: 12px;
-}
-
-.gamelibrary-propose-game-form-section>label {
-  color: $default-color;
-  font-family: $default-font;
-  font-size: 14px;
-  text-transform: uppercase;
-  margin-top: 8px;
-  margin-bottom: 4px;
-  display: block;
-}
-
 .gamelibrary-propose-game-form-section input[type="text"], 
-.gamelibrary-propose-game-form-section input[type="number"],
-.gamelibrary-propose-game-form-section select {
-  width: 300px;
+.gamelibrary-propose-game-form-section input[type="number"], 
+.gamelibrary-propose-game-form-section input[type="file"], 
+.gamelibrary-propose-game-form-section textarea, 
+.gamelibrary-propose-game-form-section select,
+.gamelibrary-propose-game-form-section .tagsinput {
+  font-size: 14px;
   font-family: $default-font;
+  width: 100%; 
   @include box-sizing(border-box);
 }
 
 .gamelibrary-propose-game-form-section textarea {
-  width: 300px;
-  height: 96px;
-  @include box-sizing(border-box);
+  height: 120px;
 }
 
-.gamelibrary-propose-game-form-section-cc table label {
+.gamelibrary-propose-game-form-section label {
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+}
+
+.gamelibrary-propose-game-form-section-cc td label {
   margin-left: 8px;
   margin-right: 8px;
-  display: inline-block;
-  width: auto;
+  font-weight: normal;
+  text-transform: uppercase;
 }
 
-/* Submit */
+.info {
+  display: inline;
+  font-size: 11px;
+  font-family: $default-font;
+  margin-left: 2px;
+}
+
+.info:before {
+  content: '(';
+}
+
+.info:after {
+  content: ')';
+}
 
 .gamelibrary-propose-game-send {  
-  margin-top: 20px;
   color: $default-color;
   font-family: $title-font;
   font-size: 16px;
@@ -78,7 +65,24 @@
   cursor: default;
 }
 
-/* tagsinput */
+.upload-field-file {
+  margin-top: 5px;
+}
+
+.upload-field-file-progress {
+  height: 20px;
+}
+
+.upload-field-file-name {
+  margin-top: -20px;
+  color: $default-color;
+  font-family: $default-font;
+  text-align: center;
+  font-size: 12px;
+  padding-top: 2px;
+  height: 18px;
+  overflow: hidden;
+}
 
 div.tagsinput span.tag {
   background: #000;
@@ -89,25 +93,4 @@ div.tagsinput span.tag {
 
 div.tagsinput span.tag a {
   color: #fff;
-}
-
-/* uploadfield */
-
-.upload-field-file {
-  margin-top: 8px;
-  position: absolute;
-  margin-top: -22px;
-  margin-left: 220px;
-}
-
-.upload-field-file-progress {
-  width: 300px;
-  height: 20px;
-}
-
-.upload-field-file-name {
-  width: 300px;
-  text-align: center;
-  margin-top: -19px;
-  height: 20px;
 }
