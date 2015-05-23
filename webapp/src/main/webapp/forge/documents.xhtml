@@ -4,11 +4,15 @@
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" 
   template="/WEB-INF/templates/gridbase.xhtml">
+  
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
 
   <ui:define name="page-title">#{locales['forge.index.pageTitle']}</ui:define>
   <ui:define name="view-stylesheets">
     <h:outputStylesheet library="novus" name="css/fonts.css"/>
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/forge-document.css"/>
   </ui:define>
   
@@ -50,67 +54,64 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <!-- Header -->
-    
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-  
-      <ui:include src="/facelets/forgenavigation.xhtml">    
-        <ui:param name="folders" value="#{forgeDocumentsBackingBean.folders}"/>
-      </ui:include>
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <ui:include src="/facelets/forgenavigation.xhtml">    
+          <ui:param name="folders" value="#{forgeDocumentsBackingBean.folders}"/>
+        </ui:include>
       
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['forge.documents.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['forge.documents.descriptionText']}</p>
-      </h:panelGroup>
-    </h:panelGroup>
-
-    <!-- Editor -->
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['forge.documents.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['forge.documents.descriptionText']}</p>
+        </div>
+      </div>
+    </div> 
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="forge-document-panel">
-        <h2 data-old-value="#{forgeDocumentsBackingBean.documentTitle}">
-          <ui:fragment rendered="#{!forgeDocumentsBackingBean.readOnly}">
-            <input required="required" class="forge-ckdocument-title" value="#{forgeDocumentsBackingBean.documentTitle}"/>
-          </ui:fragment>
-          <h:outputFormat value="#{locales['forge.documents.titleReadOnly']}" rendered="#{forgeDocumentsBackingBean.readOnly}">
-            <f:param value="#{forgeDocumentsBackingBean.documentTitle}"/>
-          </h:outputFormat>
-        </h2>
+    <div class="flex-row">
+      <div class="flex-cell-full index-box">
     
-        <h:panelGroup styleClass="forge-ckdocument-editor-status">
-          <h:panelGroup styleClass="forge-ckdocument-editor-status-loading">
-            #{locales['forge.documents.statusLoading']}
-          </h:panelGroup>
-          <h:panelGroup styleClass="forge-ckdocument-editor-status-loaded" style="display: none">
-            #{locales['forge.documents.statusLoaded']}
-          </h:panelGroup>
-          <h:panelGroup styleClass="forge-ckdocument-editor-status-unsaved" style="display: none">
-            #{locales['forge.documents.statusUnsaved']}
-          </h:panelGroup>
-          <h:panelGroup styleClass="forge-ckdocument-editor-status-saving" style="display: none">
-            #{locales['forge.documents.statusSaving']}
-          </h:panelGroup>
-          <h:panelGroup styleClass="forge-ckdocument-editor-status-saved" style="display: none">
-            #{locales['forge.documents.statusSaved']}
-          </h:panelGroup>
-        </h:panelGroup>
+        <div class="flex-row flex-align-items-center">
+          <div class="flex-cell-14 flex-cell-first">
+            <h2 data-old-value="#{forgeDocumentsBackingBean.documentTitle}">
+              <ui:fragment rendered="#{!forgeDocumentsBackingBean.readOnly}">
+                <input required="required" class="forge-ckdocument-title" value="#{forgeDocumentsBackingBean.documentTitle}"/>
+              </ui:fragment>
+              <h:outputFormat value="#{locales['forge.documents.titleReadOnly']}" rendered="#{forgeDocumentsBackingBean.readOnly}">
+                <f:param value="#{forgeDocumentsBackingBean.documentTitle}"/>
+              </h:outputFormat>
+            </h2>
+          </div>
+          
+          <div class="flex-cell-2 flex-cell-last flex-right">
+            <span class="forge-ckdocument-editor-status">
+              <span class="forge-ckdocument-editor-status-loading">#{locales['forge.documents.statusLoading']}</span>
+              <span class="forge-ckdocument-editor-status-loaded" style="display: none">#{locales['forge.documents.statusLoaded']}</span>
+              <span class="forge-ckdocument-editor-status-unsaved" style="display: none">#{locales['forge.documents.statusUnsaved']}</span>
+              <span class="forge-ckdocument-editor-status-saving" style="display: none">#{locales['forge.documents.statusSaving']}</span>
+              <span class="forge-ckdocument-editor-status-saved" style="display: none">#{locales['forge.documents.statusSaved']}</span>
+            </span>
+          </div>          
+        </div>
         
-        <h:panelGroup layout="block" styleClass="forge-document-readonly-link-container">
-          <h:outputLink target="_blank" value="#{forgeDocumentsBackingBean.documentReadOnlyLink}">#{locales['forge.documents.publicLink']}</h:outputLink>
-        </h:panelGroup>
-
-        <div class="collaborators"></div>
+        <div class="flex-row flex-align-items-bottom">
+          <div class="flex-cell-8 flex-cell-first forge-document-readonly-link-container">
+            <h:outputLink target="_blank" value="#{forgeDocumentsBackingBean.documentReadOnlyLink}">#{locales['forge.documents.publicLink']}</h:outputLink>
+          </div>
+          <div class="flex-cell-8 flex-cell-last flex-right">
+            <div class="collaborators"></div>
+          </div>
+        </div>
         
-        <h:panelGroup layout="block" styleClass="forge-ckdocument-editor-container">
-          <textarea class="forge-ckdocument-editor" name="cke">#{locales['forge.documents.contentLoading']}</textarea>
-        </h:panelGroup>
-      </h:panelGroup>
-    </h:panelGroup>
+        <div class="flex-row">
+          <div class="flex-cell-full forge-ckdocument-editor-container">
+            <textarea class="forge-ckdocument-editor" name="cke">#{locales['forge.documents.contentLoading']}</textarea>
+          </div>
+        </div>
+        
+      </div>
+    </div>
     
   </ui:define>
 

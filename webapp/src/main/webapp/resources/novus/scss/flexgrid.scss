@@ -115,7 +115,7 @@
   }  
   
   .#{$prefix}flex-align-items-top {
-    align-items: top;
+    align-items: flex-start;
   }  
   
   .#{$prefix}flex-align-items-center {
@@ -123,7 +123,7 @@
   }
     
   .#{$prefix}flex-align-items-bottom {
-    align-items: bottom;
+    align-items: flex-end;
   }
   
   .#{$prefix}flex-row {

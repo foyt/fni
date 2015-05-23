@@ -6,14 +6,15 @@
 
 $hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
 
-/* Generic */
+.index-box {
+  background-color: $panel-background-color;
+  padding: 20px;
+}
 
 h2 {
   @include header-2;
-  padding-top: 20px;
-  margin-right: 120px;
-  margin-left: -6px;
-  padding-bottom: 10px;
+  width: 100%;
+  @include box-sizing(border-box);
 }
 
 h2 input {
@@ -22,7 +23,6 @@ h2 input {
   border: 1px solid transparent;
   width: 100%;
   @include box-sizing(border-box);
-  padding-left: 4px;
   font-family: $default-font;
 }
 
@@ -36,39 +36,20 @@ h2 input:focus {
   border: 1px inset #eee;
 }
 
-.forge-document-readonly-link-container {
-  padding-bottom: 10px;
-}
-
-.forge-document-readonly-link-container>a{
-  @include header-5;
-}
-
-.forge-document-panel {
-  background-color: $panel-background-color;
-  padding: 20px;
-  position: relative;
-}
-
 .forge-ckdocument-editor-status { 
   @include header-5;
   color: $title-color;
-  position: absolute;
-  right: 20px;
-  margin-top: -40px;
 }
+
+.forge-document-readonly-link-container a {
+  @include header-5;
+}
+
 
 .collaborators {
-  position: absolute;
-  right: 20px;
-  margin-top: -42px;
-  width: 500px;
+  width: 100%;
+  @include box-sizing(border-box);
   overflow-y: scroll;
-}
-
-.collaborator {
-  float: right;
-  margin-left: 4px;
 }
 
 .collaborators img {
