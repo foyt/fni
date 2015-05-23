@@ -22,7 +22,7 @@
         
         <div class="flex-row" jsf:rendered="#{forgeMaterialListsBackingBean.materialsOpen}"> 
           <ui:repeat var="material" value="#{materials}">
-            <div class="flex-cell12-4">
+            <div class="lg-flex-cell12-4 md-flex-cell12-4 sm-flex-cell-full">
               <ui:include src="/facelets/forgematerial.xhtml">
                 <ui:param name="material" value="#{material}" />
               </ui:include>
@@ -31,12 +31,34 @@
         </div>
         
         <div class="flex-row"> 
-          <div class="flex-cell12-4 flex-cell12-first">  
+          <div class="lg-flex-cell12-4 lg-flex-cell12-first md-flex-cell12-4 md-flex-cell12-first sm-flex-cell-full">  
             <div class="flex-row forge-list-header-row"> 
-              <div class="flex-cell-13 flex-cell-first">  
+              <div class="flex-cell-12 flex-cell-first">  
+                <h2>#{locales['forge.index.starredListTitle']}</h2>
+              </div>
+              <div class="flex-cell-4 flex-cell-last flex-right">  
+                <h:commandLink action="#{forgeMaterialListsBackingBean.closeStarredList}" value="#{locales['forge.index.starredClose']}" style="#{forgeMaterialListsBackingBean.starredOpen ? '' : 'display: none'}" />
+                <h:commandLink action="#{forgeMaterialListsBackingBean.openStarredList}" value="#{locales['forge.index.starredOpen']}" style="#{!forgeMaterialListsBackingBean.starredOpen ? '' : 'display: none'}" />
+              </div>
+            </div>
+            
+            <div class="flex-row" jsf:rendered="#{forgeMaterialListsBackingBean.starredOpen}"> 
+              <div class="flex-cell-full">
+                <ui:repeat var="material" value="#{starredMaterials}">
+                  <ui:include src="/facelets/forgematerial.xhtml">
+                    <ui:param name="material" value="#{material}" />
+                  </ui:include>
+                </ui:repeat>
+              </div>
+            </div>
+          </div>
+        
+          <div class="lg-flex-cell12-4 md-flex-cell12-4 sm-flex-cell-full">  
+            <div class="flex-row forge-list-header-row"> 
+              <div class="flex-cell-12 flex-cell-first">  
                 <h2>#{locales['forge.index.lastViewedListTitle']}</h2>
               </div>
-              <div class="flex-cell-3 flex-cell-last flex-right">  
+              <div class="flex-cell-4 flex-cell-last flex-right">  
                 <h:commandLink action="#{forgeMaterialListsBackingBean.closeLastViewedList}" value="#{locales['forge.index.lastViewedClose']}"
                   style="#{forgeMaterialListsBackingBean.lastViewedOpen ? '' : 'display: none'}" />
                 <h:commandLink action="#{forgeMaterialListsBackingBean.openLastViewedList}" value="#{locales['forge.index.lastViewedOpen']}"
@@ -55,12 +77,12 @@
             </div>
           </div>
 
-          <div class="flex-cell12-4">
+          <div class="lg-flex-cell12-4  lg-flex-cell12-last md-flex-cell12-4 md-flex-cell12-last sm-flex-cell-full">  
             <div class="flex-row forge-list-header-row"> 
-              <div class="flex-cell-13 flex-cell-first">  
+              <div class="flex-cell-12 flex-cell-first">  
                 <h2>#{locales['forge.index.lastEditedListTitle']}</h2>
               </div>
-              <div class="flex-cell-3 flex-cell-last flex-right">  
+              <div class="flex-cell-4 flex-cell-last flex-right">  
                 <h:commandLink action="#{forgeMaterialListsBackingBean.closeLastEditedList}" value="#{locales['forge.index.lastEditedClose']}"
                   style="#{forgeMaterialListsBackingBean.lastEditedOpen ? '' : 'display: none'}" />
                 <h:commandLink action="#{forgeMaterialListsBackingBean.openLastEditedList}" value="#{locales['forge.index.lastEditedOpen']}"
@@ -71,28 +93,6 @@
             <div class="flex-row" jsf:rendered="#{forgeMaterialListsBackingBean.lastEditedOpen}"> 
               <div class="flex-cell-full">
                 <ui:repeat var="material" value="#{lastEditedMaterials}">
-                  <ui:include src="/facelets/forgematerial.xhtml">
-                    <ui:param name="material" value="#{material}" />
-                  </ui:include>
-                </ui:repeat>
-              </div>
-            </div>
-          </div>
-          
-          <div class="flex-cell12-4 flex-cell12-last">
-            <div class="flex-row forge-list-header-row"> 
-              <div class="flex-cell-13 flex-cell-first">  
-                <h2>#{locales['forge.index.starredListTitle']}</h2>
-              </div>
-              <div class="flex-cell-3 flex-cell-last flex-right">  
-                <h:commandLink action="#{forgeMaterialListsBackingBean.closeStarredList}" value="#{locales['forge.index.starredClose']}" style="#{forgeMaterialListsBackingBean.starredOpen ? '' : 'display: none'}" />
-                <h:commandLink action="#{forgeMaterialListsBackingBean.openStarredList}" value="#{locales['forge.index.starredOpen']}" style="#{!forgeMaterialListsBackingBean.starredOpen ? '' : 'display: none'}" />
-              </div>
-            </div>
-            
-            <div class="flex-row" jsf:rendered="#{forgeMaterialListsBackingBean.starredOpen}"> 
-              <div class="flex-cell-full">
-                <ui:repeat var="material" value="#{starredMaterials}">
                   <ui:include src="/facelets/forgematerial.xhtml">
                     <ui:param name="material" value="#{material}" />
                   </ui:include>
