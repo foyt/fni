@@ -24,6 +24,8 @@ h2 input {
   width: 100%;
   @include box-sizing(border-box);
   font-family: $default-font;
+  padding-left: 4px;
+  margin-left: -4px;
 }
 
 h2 input:hover {
@@ -44,7 +46,6 @@ h2 input:focus {
 .forge-document-readonly-link-container a {
   @include header-5;
 }
-
 
 .collaborators {
   width: 100%;

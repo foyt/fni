@@ -2,11 +2,20 @@
 @import "compass";
 @import "styles";
 
+.index-box {
+  background-color: $panel-background-color;
+  padding: 20px;
+}
+
+.forge-vector-image-container iframe {
+  @include box-sizing(border-box);
+  width: 100%;
+  border: none;
+  height: 600px;
+}
+
 h2 {
   @include header-2;
-  padding-top: 20px;
-  padding-left: 16px;
-  padding-right: 20px;
 }
 
 h2 input {
@@ -16,6 +25,7 @@ h2 input {
   width: 100%;
   @include box-sizing(border-box);
   padding-left: 4px;
+  margin-left: -4px;
   font-family: $default-font;
 }
 
@@ -27,20 +37,6 @@ h2 input:hover {
 h2 input:focus {
   background: #fff;
   border: 1px inset #eee;
-}
-
-.forge-vector-image-panel {
-  background-color: $panel-background-color;
-}
-
-.forge-vector-image-container {
-  margin: 20px;
-}
-
-.forge-vector-image-container iframe {
-  width: 100%;
-  border: none;
-  height: 600px;
 }
 
 .forge-vector-image-save {

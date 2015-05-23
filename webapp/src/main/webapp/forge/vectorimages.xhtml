@@ -7,9 +7,14 @@
       <f:param value="#{forgeVectorImagesBackingBean.vectorImageTitle}"/>
     </h:outputFormat>
   </ui:define>
+  
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+  
   <ui:define name="view-stylesheets">
     <h:outputStylesheet library="novus" name="css/fonts.css"/>
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/forge-vector-images.css"/>
   </ui:define>
   
@@ -22,50 +27,52 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <!-- Header -->
-    
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-  
-      <ui:include src="/facelets/forgenavigation.xhtml">    
-        <ui:param name="folders" value="#{forgeVectorImagesBackingBean.folders}"/>
-      </ui:include>
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <ui:include src="/facelets/forgenavigation.xhtml">    
+          <ui:param name="folders" value="#{forgeVectorImagesBackingBean.folders}"/>
+        </ui:include>
       
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['forge.vectorImages.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['forge.vectorImages.descriptionText']}</p>
-      </h:panelGroup>
-    </h:panelGroup>
-
-    <!-- Vector Image -->
-
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="forge-vector-image-panel">
-        <h:form>
-          <h2>
-            <h:inputText value="#{forgeVectorImagesBackingBean.vectorImageTitle}" rendered="#{!forgeVectorImagesBackingBean.readOnly}"/>
-            <h:outputFormat value="#{locales['forge.vectorImages.titleReadOnly']}" rendered="#{forgeVectorImagesBackingBean.readOnly}">
-              <f:param value="#{forgeVectorImagesBackingBean.vectorImageTitle}"/>
-            </h:outputFormat>
-          </h2>
-          
-          <h:panelGroup layout="block" styleClass="forge-vector-image-container">
-            <iframe src="#{request.contextPath}/uresources/svg-edit/svg-editor.html?lang=#{sessionBackingBean.locale.language}" data-content="#{forgeVectorImagesBackingBean.vectorImageContent}"></iframe>
-            <ui:fragment rendered="#{!forgeVectorImagesBackingBean.readOnly}">
-              <input type="submit" class="forge-vector-image-save" value="#{locales['forge.vectorImages.save']}"/>
-            </ui:fragment>
-          </h:panelGroup>
-          
-          <h:inputHidden value="#{forgeVectorImagesBackingBean.materialModified}"/>
-          <h:inputHidden id="image-content" value="#{forgeVectorImagesBackingBean.vectorImageContent}" />
-          <h:commandButton id="save" style="display: none" action="#{forgeVectorImagesBackingBean.save}"/>
-        </h:form>
-      </h:panelGroup>
-    </h:panelGroup>
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['forge.vectorImages.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['forge.vectorImages.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
+    
+    <h:form>
+      <div class="flex-row">
+        <div class="flex-cell-full index-box">
+          <div class="flex-row flex-align-items-center">
+            <div class="flex-cell-full">
+              <h2>
+                <h:inputText value="#{forgeVectorImagesBackingBean.vectorImageTitle}" rendered="#{!forgeVectorImagesBackingBean.readOnly}"/>
+                <h:outputFormat value="#{locales['forge.vectorImages.titleReadOnly']}" rendered="#{forgeVectorImagesBackingBean.readOnly}">
+                  <f:param value="#{forgeVectorImagesBackingBean.vectorImageTitle}"/>
+                </h:outputFormat>
+              </h2>
+            </div>
+          </div>
+      
+          <div class="flex-row">
+            <div class="flex-cell-full forge-vector-image-container">
+              <iframe src="#{request.contextPath}/uresources/svg-edit/svg-editor.html?lang=#{sessionBackingBean.locale.language}" data-content="#{forgeVectorImagesBackingBean.vectorImageContent}"></iframe>
+              <ui:fragment rendered="#{!forgeVectorImagesBackingBean.readOnly}">
+                <input type="submit" class="forge-vector-image-save" value="#{locales['forge.vectorImages.save']}"/>
+              </ui:fragment>
+              
+              <h:inputHidden value="#{forgeVectorImagesBackingBean.materialModified}"/>
+              <h:inputHidden id="image-content" value="#{forgeVectorImagesBackingBean.vectorImageContent}" />
+              <h:commandButton id="save" style="display: none" action="#{forgeVectorImagesBackingBean.save}"/>
+              
+            </div>
+          </div>
+ 
+        </div>
+      </div>    
+    </h:form>
     
   </ui:define>
 
