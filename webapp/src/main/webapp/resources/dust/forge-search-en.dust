@@ -3,5 +3,5 @@
     <a href="{link}">{name}</a>
   {/FORGE} 
 {:else}
-  <div class="forge-search-no-result">No materials found</div>
+  <div class="view-header-search-no-result forge-search-no-result">No materials found</div>
 {/FORGE}

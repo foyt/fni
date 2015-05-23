@@ -1,55 +1,60 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html">
 
-  <h:panelGroup layout="block" styleClass="grid_16 tight">
-    <h:form>
-      <!-- Buttons -->
-
-      <h:panelGroup layout="block" styleClass="grid_8 alpha slim-right">
-        <h:panelGroup layout="block" styleClass="forge-button-panel">
-          <h:panelGroup layout="block" styleClass="forge-menu forge-new-material-menu">
-            <a href="javascript:void(null)">#{locales['forge.index.newMaterialMenu']}</a>
-            <h:panelGroup layout="block" styleClass="forge-menu-help">#{locales['forge.index.newMaterialMenuHelp']}</h:panelGroup>
-            <h:panelGroup layout="block" styleClass="forge-menu-items">
-              <h:commandLink styleClass="forge-new-document" action="#{forgeMaterialsBackingBean.createNewDocument(folderId)}">#{locales['forge.index.newMaterialDocumentMenu']}</h:commandLink>
-              <h:commandLink styleClass="forge-new-new-vector-image" action="#{forgeMaterialsBackingBean.createNewVectorImage(folderId)}">#{locales['forge.index.newMaterialVectorImageMenu']}</h:commandLink>
-              <h:commandLink styleClass="forge-new-character-sheet" rendered="#{allowCharacterSheets}" action="#{forgeMaterialsBackingBean.createNewCharacterSheet(folderId)}">#{locales['forge.index.newMaterialCreateCharacterSheetMenu']}</h:commandLink>
-              <a class="forge-new-material-folder" href="javascript:void(null)" data-parent-folder-id="#{folderId}">#{locales['forge.index.newMaterialCreateFolderMenu']}</a>
+  <h:form>
+    <div class="flex-row">
+      <div class="flex-cell-8 flex-cell-first index-box">
+        <div class="flex-row">
+          <div class="flex-cell-9 flex-cell-first">
+            <h:panelGroup layout="block" styleClass="forge-menu forge-new-material-menu">
+              <a href="javascript:void(null)">#{locales['forge.index.newMaterialMenu']}</a>
+              <h:panelGroup layout="block" styleClass="forge-menu-items">
+                <h:commandLink styleClass="forge-new-document" action="#{forgeMaterialsBackingBean.createNewDocument(folderId)}">#{locales['forge.index.newMaterialDocumentMenu']}</h:commandLink>
+                <h:commandLink styleClass="forge-new-new-vector-image" action="#{forgeMaterialsBackingBean.createNewVectorImage(folderId)}">#{locales['forge.index.newMaterialVectorImageMenu']}</h:commandLink>
+                <h:commandLink styleClass="forge-new-character-sheet" rendered="#{allowCharacterSheets}" action="#{forgeMaterialsBackingBean.createNewCharacterSheet(folderId)}">#{locales['forge.index.newMaterialCreateCharacterSheetMenu']}</h:commandLink>
+                <a class="forge-new-material-folder" href="javascript:void(null)" data-parent-folder-id="#{folderId}">#{locales['forge.index.newMaterialCreateFolderMenu']}</a>
+              </h:panelGroup>
             </h:panelGroup>
-          </h:panelGroup>
-        </h:panelGroup>
-      </h:panelGroup>
-
-      <h:panelGroup layout="block" styleClass="grid_8 omega slim-left">
-        <h:panelGroup layout="block" styleClass="forge-button-panel">
-          <h:panelGroup layout="block" styleClass="forge-menu forge-import-material-menu">
-            <a href="javascript:void(null)">#{locales['forge.index.importMaterialMenu']}</a>
-            <h:panelGroup layout="block" styleClass="forge-menu-help">#{locales['forge.index.importMaterialMenuHelp']}</h:panelGroup>
-            <h:panelGroup layout="block" styleClass="forge-menu-items">
-              <h:link styleClass="forge-upload" outcome="/forge/upload.jsf" rendered="#{folderId ne null}">
+          </div>
+          <div class="flex-cell-7 flex-cell-last">
+            <h:panelGroup layout="block" styleClass="forge-menu-help">#{locales['forge.index.newMaterialMenuHelp']}</h:panelGroup>
+          </div>
+        </div>
+      </div>
+      <div class="flex-cell-8 flex-cell-last index-box">
+        <div class="flex-row">
+          <div class="flex-cell-9 flex-cell-first">
+            <div class="forge-menu forge-import-material-menu">
+              <a href="javascript:void(null)">#{locales['forge.index.importMaterialMenu']}</a>
+              <div class="forge-menu-items">
+                <h:link styleClass="forge-upload" outcome="/forge/upload.jsf" rendered="#{folderId ne null}">
                   #{locales['forge.index.importMaterialUploadMenu']}
                   <f:param name="parentFolderId" value="#{folderId}" />
-              </h:link>
-
-              <h:link styleClass="forge-upload" outcome="/forge/upload.jsf" rendered="#{folderId eq null}">
+                </h:link>
+      
+                <h:link styleClass="forge-upload" outcome="/forge/upload.jsf" rendered="#{folderId eq null}">
                   #{locales['forge.index.importMaterialUploadMenu']}
                 </h:link>
-
-              <h:link styleClass="forge-import-google-drive" outcome="/forge/import-google-drive.jsf" rendered="#{folderId ne null}">
-                <f:param name="parentFolderId" value="#{folderId}" />
+      
+                <h:link styleClass="forge-import-google-drive" outcome="/forge/import-google-drive.jsf" rendered="#{folderId ne null}">
+                  <f:param name="parentFolderId" value="#{folderId}" />
                   #{locales['forge.index.importMaterialGoogleDocumentsMenu']}
                 </h:link>
-
-              <h:link styleClass="forge-import-google-drive" outcome="/forge/import-google-drive.jsf" rendered="#{folderId eq null}">
+      
+                <h:link styleClass="forge-import-google-drive" outcome="/forge/import-google-drive.jsf" rendered="#{folderId eq null}">
                   #{locales['forge.index.importMaterialGoogleDocumentsMenu']}
                 </h:link>
-
-              <h:link styleClass="forge-connect-dropbox" rendered="#{!dropboxLinked}" outcome="/forge/connect-dropbox.jsf">#{locales['forge.index.importMaterialConnectDropboxMenu']}</h:link>
-            </h:panelGroup>
-          </h:panelGroup>
-        </h:panelGroup>
-      </h:panelGroup>
-    </h:form>
-  </h:panelGroup>
-
+      
+                <h:link styleClass="forge-connect-dropbox" rendered="#{!dropboxLinked}" outcome="/forge/connect-dropbox.jsf">#{locales['forge.index.importMaterialConnectDropboxMenu']}</h:link>
+              </div>
+            </div>
+          </div>
+          <div class="flex-cell-7 flex-cell-last">
+            <h:panelGroup layout="block" styleClass="forge-menu-help">#{locales['forge.index.importMaterialMenuHelp']}</h:panelGroup>
+          </div>
+        </div>
+      </div>
+    </div>
+  </h:form>
+  
 </ui:composition>

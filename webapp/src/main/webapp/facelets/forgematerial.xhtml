@@ -1,96 +1,128 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" 
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
   xmlns:h="http://java.sun.com/jsf/html">
-  
-  <div class="forge-material" data-material-id="#{material.id}"> 
-    <h:panelGroup layout="block" styleClass="forge-material-icon"> 
-      <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
-    </h:panelGroup>
 
-    <h:panelGroup layout="block" styleClass="forge-material-info">
-      <h:panelGroup layout="block" styleClass="forge-material-title-container">
-        <h:outputLink styleClass="forge-material-title" value="#{request.contextPath}/forge/#{forgeMaterialsBackingBean.getMaterialViewer(material)}/#{material.path}" title="#{material.title}">
-          <h:outputText value="#{material.title.length() gt 30 ? material.title.substring(0, 27).concat('...') : material.title}"/>
-        </h:outputLink>
+  <div class="flex-row flex-align-items-center forge-material" data-material-id="#{material.id}">  
+    <div class="flex-cell-3 flex-cell-first">
+      <h:panelGroup layout="block" styleClass="forge-material-icon"> 
+        <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-#{forgeMaterialsBackingBean.getMaterialIcon(material.type)}.png"/> 
+      </h:panelGroup>
+    </div>
+    <div class="flex-cell-12 flex-cell-last forge-material-info">
+      <div class="flex-row">
+        <div class="flex-cell-full no-margin-top no-margin-bottom">
+          <div class="flex-row forge-material-title-container">
+            <div class="flex-cell-full no-margin-top no-margin-bottom">
+              <h:outputLink styleClass="forge-material-title" value="#{request.contextPath}/forge/#{forgeMaterialsBackingBean.getMaterialViewer(material)}/#{material.path}" title="#{material.title}">
+                <h:outputText value="#{material.title.length() gt 30 ? material.title.substring(0, 27).concat('...') : material.title}"/>
+              </h:outputLink>
+              <h:commandLink action="#{forgeMaterialsBackingBean.starMaterial(material.id)}" styleClass="forge-material-star" style="#{!forgeMaterialsBackingBean.isStarred(material.id) ? '' : 'display: none'}"/>
+              <h:commandLink action="#{forgeMaterialsBackingBean.unstarMaterial(material.id)}" styleClass="forge-material-star forge-material-starred" rendered="#{forgeMaterialsBackingBean.isStarred(material.id)}" style="#{forgeMaterialsBackingBean.isStarred(material.id) ? '' : 'display: none'}"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex-row">
+        <div class="flex-cell-full forge-material-date-container no-margin-top no-margin-bottom">
+          <h:panelGroup styleClass="forge-material-date">
+            <h:outputFormat value="#{material.modified}">
+              <f:convertDateTime type="date"/>
+            </h:outputFormat>
+          </h:panelGroup>
+        </div>
+      </div>
+      
+      <div class="flex-row">
+        <div class="flex-cell-full forge-material-creator-container no-margin-top no-margin-bottom">
+          <h:outputLink styleClass="forge-material-creator" value="#{request.contextPath}/profile/#{material.creator.id}">
+            #{material.creator.fullName}
+          </h:outputLink>
+        </div>
+      </div>
+
+    </div>
+      
+    <div class="flex-cell-full no-margin-top no-margin-bottom">
+      <div class="forge-material-actions">
+
+        <div class="flex-row flex-align-items-center forge-material-action-edit" jsf:rendered="#{forgeMaterialsBackingBean.getMaterialEditable(material)}">
+          <div class="flex-cell-3 flex-cell-first flex-right no-margin-top">
+            <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-edit.png"/> 
+          </div>
+          <div class="flex-cell-13 flex-cell-last no-margin-top">
+            <h:outputLink value="#{request.contextPath}/forge/#{forgeMaterialsBackingBean.getMaterialViewer(material)}/#{material.path}">#{locales['forge.index.materialEditLink']}</h:outputLink>
+          </div>
+        </div>
         
-        <h:commandLink action="#{forgeMaterialsBackingBean.starMaterial(material.id)}" styleClass="forge-material-star" style="#{!forgeMaterialsBackingBean.isStarred(material.id) ? '' : 'display: none'}"/>
-        <h:commandLink action="#{forgeMaterialsBackingBean.unstarMaterial(material.id)}" styleClass="forge-material-star forge-material-starred" rendered="#{forgeMaterialsBackingBean.isStarred(material.id)}" style="#{forgeMaterialsBackingBean.isStarred(material.id) ? '' : 'display: none'}"/>
-      </h:panelGroup>
+        <div class="flex-row flex-align-items-center forge-material-action-view" jsf:rendered="#{forgeMaterialsBackingBean.getMaterialEditable(material)}">
+          <div class="flex-cell-3 flex-cell-first flex-right no-margin-top">
+            <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-view.png"/> 
+          </div>
+          <div class="flex-cell-13 flex-cell-last no-margin-top">
+            <h:outputLink value="#{request.contextPath}/forge/#{forgeMaterialsBackingBean.getMaterialViewer(material)}/#{material.path}">#{locales['forge.index.materialViewLink']}</h:outputLink>
+          </div>
+        </div>
+        
+        <div class="flex-row flex-align-items-center forge-material-action-download" jsf:rendered="#{forgeMaterialsBackingBean.getMaterialDownloadable(material)}">
+          <div class="flex-cell-3 flex-cell-first flex-right no-margin-top">
+            <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-download.png"/>
+          </div>
+          <div class="flex-cell-13 flex-cell-last no-margin-top">
+            <h:outputLink value="#{request.contextPath}/materials/#{material.path}?download=true">#{locales['forge.index.materialDownloadLink']}</h:outputLink>
+          </div>
+        </div>
+        
+        <div class="flex-row flex-align-items-center forge-material-action-delete" jsf:rendered="#{forgeMaterialsBackingBean.getMaterialDeletable(material)}">
+          <div class="flex-cell-3 flex-cell-first flex-right no-margin-top">
+            <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-delete.png"/>
+          </div>
+          <div class="flex-cell-13 flex-cell-last no-margin-top">
+            <a href="javascript:void(null)" data-material-id="#{material.id}">#{locales['forge.index.materialDeleteLink']}</a>
+          </div>
+        </div>
+        
+        <div class="flex-row flex-align-items-center forge-material-action-print-pdf" jsf:rendered="#{forgeMaterialsBackingBean.getMaterialPrintableAsPdf(material)}">
+          <div class="flex-cell-3 flex-cell-first flex-right no-margin-top">
+            <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-print-pdf.png"/>
+          </div>
+          <div class="flex-cell-13 flex-cell-last no-margin-top">
+            <a href="javascript:void(null)" data-material-id="#{material.id}">#{locales['forge.index.materialPrintPdfLink']}</a>
+          </div>
+        </div>
+        
+        <div class="flex-row flex-align-items-center forge-material-action-move" jsf:rendered="#{forgeMaterialsBackingBean.getMaterialMovable(material)}">
+          <div class="flex-cell-3 flex-cell-first flex-right no-margin-top">
+            <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-move.png"/>
+          </div>
+          <div class="flex-cell-13 flex-cell-last no-margin-top">
+            <a href="javascript:void(null)" data-material-id="#{material.id}">#{locales['forge.index.materialMoveLink']}</a>
+          </div>
+        </div>
+        
+        <div class="flex-row flex-align-items-center forge-material-action-share" jsf:rendered="#{forgeMaterialsBackingBean.getMaterialShareable(material)}">
+          <div class="flex-cell-3 flex-cell-first flex-right no-margin-top">
+            <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-share.png"/>
+          </div>
+          <div class="flex-cell-13 flex-cell-last no-margin-top">
+            <a href="javascript:void(null)" data-material-id="#{material.id}">#{locales['forge.index.materialShareLink']}</a>
+          </div>
+        </div>
+        
+        <div class="flex-row flex-align-items-center forge-material-action-copy" jsf:rendered="#{forgeMaterialsBackingBean.getMaterialCopyable(material)}">
+          <div class="flex-cell-3 flex-cell-first flex-right no-margin-top">
+            <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-copy.png"/>
+          </div>
+          <div class="flex-cell-13 flex-cell-last no-margin-top">
+            <a href="javascript:void(null)" data-material-id="#{material.id}" data-allowed-targets="#{forgeMaterialsBackingBean.getMaterialCopyTargets(material.type)}">#{locales['forge.index.materialCopyLink']}</a>
+          </div>
+        </div>
       
-      <h:panelGroup layout="block" styleClass="forge-material-date-container">
-        <h:panelGroup styleClass="forge-material-date">
-          <h:outputFormat value="#{material.modified}">
-            <f:convertDateTime type="date"/>
-          </h:outputFormat>
-        </h:panelGroup>
-      </h:panelGroup>
+      </div>
+    </div>
       
-      <h:panelGroup layout="block" styleClass="forge-material-creator-container">
-        <h:outputLink styleClass="forge-material-creator" value="#{request.contextPath}/profile/#{material.creator.id}">
-          #{material.creator.fullName}
-        </h:outputLink>
-      </h:panelGroup>
-    </h:panelGroup>
-    
-    <h:panelGroup layout="block" styleClass="forge-material-actions">
-      <h:panelGroup layout="block" styleClass="forge-material-action-edit" rendered="#{forgeMaterialsBackingBean.getMaterialEditable(material)}">
-        <h:outputLink value="#{request.contextPath}/forge/#{forgeMaterialsBackingBean.getMaterialViewer(material)}/#{material.path}">
-          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-edit.png"/> 
-          <h:outputLabel value="#{locales['forge.index.materialEditLink']}" />
-        </h:outputLink>
-      </h:panelGroup>
-      
-      <h:panelGroup layout="block" styleClass="forge-material-action-view" rendered="#{!forgeMaterialsBackingBean.getMaterialEditable(material)}">
-        <h:outputLink value="#{request.contextPath}/forge/#{forgeMaterialsBackingBean.getMaterialViewer(material)}/#{material.path}">
-          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-view.png"/> 
-          <h:outputLabel value="#{locales['forge.index.materialViewLink']}" />
-        </h:outputLink>
-      </h:panelGroup>
-      
-      <h:panelGroup layout="block" styleClass="forge-material-action-download" rendered="#{forgeMaterialsBackingBean.getMaterialDownloadable(material)}">
-        <h:outputLink value="#{request.contextPath}/materials/#{material.path}?download=true">
-          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-download.png"/> 
-          <h:outputLabel value="#{locales['forge.index.materialDownloadLink']}" />
-        </h:outputLink>
-      </h:panelGroup>
-
-      <h:panelGroup layout="block" styleClass="forge-material-action-delete" rendered="#{forgeMaterialsBackingBean.getMaterialDeletable(material)}">
-        <a href="javascript:void(null)" data-material-id="#{material.id}">
-          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-delete.png"/>
-          <h:outputLabel value="#{locales['forge.index.materialDeleteLink']}" />
-        </a>
-      </h:panelGroup>
-
-      <h:panelGroup layout="block" styleClass="forge-material-action-print-pdf" rendered="#{forgeMaterialsBackingBean.getMaterialPrintableAsPdf(material)}">
-        <a href="javascript:void(null)" data-material-id="#{material.id}">
-          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-print-pdf.png"/>
-          <h:outputLabel value="#{locales['forge.index.materialPrintPdfLink']}" />
-        </a>
-      </h:panelGroup>
-
-      <h:panelGroup layout="block" styleClass="forge-material-action-move" rendered="#{forgeMaterialsBackingBean.getMaterialMovable(material)}">
-        <a href="javascript:void(null)" data-material-id="#{material.id}">
-          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-move.png"/>
-          <h:outputLabel value="#{locales['forge.index.materialMoveLink']}" />
-        </a>
-      </h:panelGroup>
-
-      <h:panelGroup layout="block" styleClass="forge-material-action-share" rendered="#{forgeMaterialsBackingBean.getMaterialShareable(material)}">
-        <a href="javascript:void(null)" data-material-id="#{material.id}">
-          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-share.png"/>
-          <h:outputLabel value="#{locales['forge.index.materialShareLink']}" />
-        </a>
-      </h:panelGroup>
-
-      <h:panelGroup layout="block" styleClass="forge-material-action-copy" rendered="#{forgeMaterialsBackingBean.getMaterialCopyable(material)}">
-        <a href="javascript:void(null)" data-material-id="#{material.id}" data-allowed-targets="#{forgeMaterialsBackingBean.getMaterialCopyTargets(material.type)}">
-          <h:graphicImage library="novus" name="/gfx/icons/16x16/forge/material-action-copy.png"/>
-          <h:outputLabel value="#{locales['forge.index.materialCopyLink']}" />
-        </a>
-      </h:panelGroup>
-    </h:panelGroup>
-    
   </div>
   
 </ui:composition>

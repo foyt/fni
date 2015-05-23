@@ -1,96 +1,116 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
   xmlns:h="http://java.sun.com/jsf/html">
 
-      
-  <h:panelGroup layout="block" styleClass="grid_16 tight">
-    <h:form>
-      <h:panelGroup layout="block" styleClass="forge-material-panel">
-
-        <h:panelGroup layout="block" styleClass="forge-material-list-set">
-          <h:panelGroup layout="block" styleClass="grid_16 tight">
-            <h:panelGroup layout="block" styleClass="forge-material-list forge-materials-list">
-              <h:panelGroup layout="block" styleClass="forge-material-list-title">
-                <h2>#{locales['forge.index.materialListTitle']}</h2>
-                <h:commandLink action="#{forgeMaterialListsBackingBean.closeMaterialsList}" value="#{locales['forge.index.materialListClose']}"
-                  style="#{forgeMaterialListsBackingBean.materialsOpen ? '' : 'display: none'}" />
-                <h:commandLink action="#{forgeMaterialListsBackingBean.openMaterialsList}" value="#{locales['forge.index.materialListOpen']}"
-                  style="#{!forgeMaterialListsBackingBean.materialsOpen ? '' : 'display: none'}" />
-              </h:panelGroup>
-              <h:panelGroup layout="block" styleClass="forge-materials-container" style="#{forgeMaterialListsBackingBean.materialsOpen ? '' : 'display: none'}">
-                <ui:repeat var="material" value="#{materials}">
-                  <ui:include src="/facelets/forgematerial.xhtml">
-                    <ui:param name="material" value="#{material}" />
-                  </ui:include>
-                </ui:repeat>
-              </h:panelGroup>
-            </h:panelGroup>
-          </h:panelGroup>
-        </h:panelGroup>
-
-        <h:panelGroup layout="block" styleClass="forge-material-list-set">
-          <h:panelGroup layout="block" styleClass="grid_5 tight">
-            <h:panelGroup layout="block" styleClass="forge-material-list forge-last-viewed-list">
-              <h:panelGroup layout="block" styleClass="forge-material-list-title">
+  <h:form>
+    <div class="flex-row">
+      <div class="flex-cell-full index-box">
+        <div class="flex-row forge-list-header-row"> 
+          <div class="flex-cell-13 flex-cell-first">  
+            <h2>#{locales['forge.index.materialListTitle']}</h2>
+          </div>
+          <div class="flex-cell-3 flex-cell-last flex-right">  
+            <h:commandLink action="#{forgeMaterialListsBackingBean.closeMaterialsList}" value="#{locales['forge.index.materialListClose']}"
+              style="#{forgeMaterialListsBackingBean.materialsOpen ? '' : 'display: none'}" />
+            <h:commandLink action="#{forgeMaterialListsBackingBean.openMaterialsList}" value="#{locales['forge.index.materialListOpen']}"
+              style="#{!forgeMaterialListsBackingBean.materialsOpen ? '' : 'display: none'}" />
+          </div>
+        </div>
+        
+        <div class="flex-row" jsf:rendered="#{forgeMaterialListsBackingBean.materialsOpen}"> 
+          <ui:repeat var="material" value="#{materials}">
+            <div class="flex-cell12-4">
+              <ui:include src="/facelets/forgematerial.xhtml">
+                <ui:param name="material" value="#{material}" />
+              </ui:include>
+            </div>
+          </ui:repeat>
+        </div>
+        
+        <div class="flex-row"> 
+          <div class="flex-cell12-4 flex-cell12-first">  
+            <div class="flex-row forge-list-header-row"> 
+              <div class="flex-cell-13 flex-cell-first">  
                 <h2>#{locales['forge.index.lastViewedListTitle']}</h2>
+              </div>
+              <div class="flex-cell-3 flex-cell-last flex-right">  
                 <h:commandLink action="#{forgeMaterialListsBackingBean.closeLastViewedList}" value="#{locales['forge.index.lastViewedClose']}"
                   style="#{forgeMaterialListsBackingBean.lastViewedOpen ? '' : 'display: none'}" />
                 <h:commandLink action="#{forgeMaterialListsBackingBean.openLastViewedList}" value="#{locales['forge.index.lastViewedOpen']}"
                   style="#{!forgeMaterialListsBackingBean.lastViewedOpen ? '' : 'display: none'}" />
-              </h:panelGroup>
-              <h:panelGroup layout="block" styleClass="forge-materials-container" rendered="#{forgeMaterialListsBackingBean.lastViewedOpen}">
+              </div>
+            </div>
+            
+            <div class="flex-row" jsf:rendered="#{forgeMaterialListsBackingBean.lastViewedOpen}"> 
+              <div class="flex-cell-full">
                 <ui:repeat var="material" value="#{lastViewedMaterials}">
                   <ui:include src="/facelets/forgematerial.xhtml">
                     <ui:param name="material" value="#{material}" />
                   </ui:include>
                 </ui:repeat>
-              </h:panelGroup>
-            </h:panelGroup>
-          </h:panelGroup>
-        
-          <h:panelGroup layout="block" styleClass="grid_5 tight">
-            <h:panelGroup layout="block" styleClass="forge-material-list forge-last-edited-list">
-              <h:panelGroup layout="block" styleClass="forge-material-list-title">
+              </div>
+            </div>
+          </div>
+
+          <div class="flex-cell12-4">
+            <div class="flex-row forge-list-header-row"> 
+              <div class="flex-cell-13 flex-cell-first">  
                 <h2>#{locales['forge.index.lastEditedListTitle']}</h2>
+              </div>
+              <div class="flex-cell-3 flex-cell-last flex-right">  
                 <h:commandLink action="#{forgeMaterialListsBackingBean.closeLastEditedList}" value="#{locales['forge.index.lastEditedClose']}"
                   style="#{forgeMaterialListsBackingBean.lastEditedOpen ? '' : 'display: none'}" />
                 <h:commandLink action="#{forgeMaterialListsBackingBean.openLastEditedList}" value="#{locales['forge.index.lastEditedOpen']}"
                   style="#{!forgeMaterialListsBackingBean.lastEditedOpen ? '' : 'display: none'}" />
-              </h:panelGroup>
-              <h:panelGroup layout="block" styleClass="forge-materials-container" rendered="#{forgeMaterialListsBackingBean.lastEditedOpen}">
+              </div>
+            </div>
+            
+            <div class="flex-row" jsf:rendered="#{forgeMaterialListsBackingBean.lastEditedOpen}"> 
+              <div class="flex-cell-full">
                 <ui:repeat var="material" value="#{lastEditedMaterials}">
                   <ui:include src="/facelets/forgematerial.xhtml">
                     <ui:param name="material" value="#{material}" />
                   </ui:include>
                 </ui:repeat>
-              </h:panelGroup>
-            </h:panelGroup>
-          </h:panelGroup>
-
-          <h:panelGroup layout="block" styleClass="grid_5 tight">
-            <h:panelGroup layout="block" styleClass="forge-material-list forge-starred-list">
-              <h:panelGroup layout="block" styleClass="forge-material-list-title">
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex-cell12-4 flex-cell12-last">
+            <div class="flex-row forge-list-header-row"> 
+              <div class="flex-cell-13 flex-cell-first">  
                 <h2>#{locales['forge.index.starredListTitle']}</h2>
+              </div>
+              <div class="flex-cell-3 flex-cell-last flex-right">  
                 <h:commandLink action="#{forgeMaterialListsBackingBean.closeStarredList}" value="#{locales['forge.index.starredClose']}" style="#{forgeMaterialListsBackingBean.starredOpen ? '' : 'display: none'}" />
                 <h:commandLink action="#{forgeMaterialListsBackingBean.openStarredList}" value="#{locales['forge.index.starredOpen']}" style="#{!forgeMaterialListsBackingBean.starredOpen ? '' : 'display: none'}" />
-              </h:panelGroup>
-              <h:panelGroup layout="block" styleClass="forge-materials-container" rendered="#{forgeMaterialListsBackingBean.starredOpen}">
+              </div>
+            </div>
+            
+            <div class="flex-row" jsf:rendered="#{forgeMaterialListsBackingBean.starredOpen}"> 
+              <div class="flex-cell-full">
                 <ui:repeat var="material" value="#{starredMaterials}">
                   <ui:include src="/facelets/forgematerial.xhtml">
                     <ui:param name="material" value="#{material}" />
                   </ui:include>
                 </ui:repeat>
-              </h:panelGroup>
-            </h:panelGroup>
-          </h:panelGroup>
-        </h:panelGroup>
-      </h:panelGroup>
-
-      <h:inputHidden value="#{materialsOpen}" />
-      <h:inputHidden value="#{lastViewedOpen}" />
-      <h:inputHidden value="#{lastEditedOpen}" />
-      <h:inputHidden value="#{starredOpen}" />
-    </h:form>
-  </h:panelGroup>
+              </div>
+            </div>
+          </div>
+        </div> 
+        
+                
+      </div>
+    </div>
+    
+    <h:inputHidden value="#{materialsOpen}" />
+    <h:inputHidden value="#{lastViewedOpen}" />
+    <h:inputHidden value="#{lastEditedOpen}" />
+    <h:inputHidden value="#{starredOpen}" />
+  </h:form>
 
   <h:panelGroup layout="block" id="forge-action-form-container" style="display: none">
     <h:form>
