@@ -39,59 +39,79 @@
     .on('fileuploadadd', function (e, data) {
       if (data.files && data.files.length == 1) {
         var file = data.files[0];
-        data.context = $('<div class="forge-upload-file-container">');
-        var fileElement = $('<div class="forge-upload-file">').appendTo(data.context);
 
-        $('<div class="forge-upload-file-name">').text(file.name).appendTo(fileElement);
-        $('<div class="forge-upload-file-type">').text(file.type).appendTo(fileElement);
-        $('<div class="forge-upload-file-size">').text(getHumanReadableFileSize(file.size)).appendTo(fileElement);
-        $('<div class="forge-upload-file-remove">').appendTo(fileElement);
+        var fileCell = $('<div>')
+          .addClass('flex-cell-full forge-upload-file-container')
+          .data('data', data);
+        var fileRow = $('<div>').addClass('flex-row').append(fileCell);
         
-        data.context.data(data);
-        data.context.appendTo('.forge-upload-files');
+        var infoCell = $('<div>')
+          .addClass('flex-cell-12 flex-cell-first forge-upload-file');
         
-        $('<div class="forge-upload-file-progress">').appendTo(fileElement).progressbar({
+        var previewCell = $('<div>')
+          .addClass('flex-cell-4 flex-cell-last flex-right forge-upload-file-preview');
+        
+        $('<div class="forge-upload-file-name">').text(file.name).appendTo(infoCell);
+        $('<div class="forge-upload-file-type">').text(file.type).appendTo(infoCell);
+        $('<div class="forge-upload-file-size">').text(getHumanReadableFileSize(file.size)).appendTo(infoCell);
+        $('<div class="forge-upload-file-remove">').appendTo(infoCell);
+        $('<div class="forge-upload-file-progress">').appendTo(infoCell).progressbar({
           value: 0
         });
-       
+        
+        fileCell.append($('<div>') 
+            .addClass('flex-row')
+            .append(infoCell)
+            .append(previewCell));
+        
+        data.context = fileRow.appendTo('.forge-upload-files');
+        
         updateFileCount();
+        
+        data.process();
       }
     })
     .on('fileuploadprocessalways', function (e, data) {
-      var file = data.files[0];
-      var node = $(data.context);
-      if (file.preview) {
-        $(file.preview).addClass("forge-upload-file-preview");
-        node.prepend(file.preview);
-      } else {
-        switch (file.type) {
-          case 'application/pdf':
-            node.prepend('<div class="forge-upload-file-icon-pdf"/>');
-          break;
-          case 'image/svg+xml':
-            node.prepend('<div class="forge-upload-file-icon-svg"/>');
-          break;
-          default:
-            node.prepend('<div class="forge-upload-file-icon-file"/>');
-          break;
+      if (data.files && data.files.length == 1) {
+        var file = data.files[0];
+        
+        if (file.preview) {
+          data.context.find('.forge-upload-file-preview').append($('<img>').attr('src', file.preview.toDataURL()));
+        } else {
+          switch (file.type) {
+            case 'application/pdf':
+              data.context.find('.forge-upload-file-preview').append('<div class="forge-upload-file-icon-pdf"/>');
+            break;
+            case 'image/svg+xml':
+              data.context.find('.forge-upload-file-preview').append('<div class="forge-upload-file-icon-svg"/>');
+            break;
+            default:
+              data.context.find('.forge-upload-file-preview').append('<div class="forge-upload-file-icon-file"/>');
+            break;
+          }
         }
       }
+      
     })
     .on('fileuploadprogress', function (e, data) {
       var progress = parseInt(data.loaded / data.total * 100, 10);
-      $(data.context[0]).find('.forge-upload-file-progress').progressbar({
+      data.context.find('.forge-upload-file-progress').progressbar({
         value: progress
       });
     });
     
     function submitNextFile() {
-      var nextFile = $('.forge-upload-file-container');
+      var nextFile = $('.forge-upload-files .forge-upload-file-container');
       if (nextFile.length > 0) {
-        $(nextFile[0]).data().submit().always(function () {
+        nextFile = nextFile.first();
+        var data = nextFile.data('data');
+        data.submit().always($.proxy(function () {
           $(this).remove();
           updateFileCount();
           submitNextFile();
-        });
+        }, nextFile));
+      } else {
+        $('.upload-done-action').click();
       }
     }
     

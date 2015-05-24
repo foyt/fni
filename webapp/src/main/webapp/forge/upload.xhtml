@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['forge.upload.pageTitle']}</ui:define>
+  
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+  
   <ui:define name="view-stylesheets">
     <!-- jQuery UI -->
     
@@ -10,21 +19,19 @@
     
     <!-- View Styles -->
 
-    <h:outputStylesheet library="novus" name="css/fonts.css" />
-    <h:outputStylesheet library="novus" name="css/menu.css" />
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/forge-upload.css" />
   </ui:define>
 
   <ui:define name="view-scripts">
     <!-- jquery.fileupload -->
 
-    <script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script>
-    <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
-
-    <h:outputScript name="scripts/jquery.fileupload/jquery.iframe-transport.js" />
-    <h:outputScript name="scripts/jquery.fileupload/jquery.fileupload.js" />
-    <h:outputScript name="scripts/jquery.fileupload/jquery.fileupload-process.js"/>
-    <h:outputScript name="scripts/jquery.fileupload/jquery.fileupload-image.js"/>
+    <h:outputScript name="scripts/canvas-to-blob/canvas-to-blob.min.js"/>
+    <h:outputScript name="scripts/load-image/load-image.all.min.js" />
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.fileupload.min.js"/>
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.iframe-transport.min.js"/>
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.fileupload-process.min.js"/>
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.fileupload-image.min.js"/>
 
     <!-- View scripts -->
 
@@ -32,59 +39,76 @@
   </ui:define>
 
   <ui:define name="grid-content">
-
-    <!-- Menu -->
-
-    <ui:include src="/facelets/menu.xhtml" />
-
-    <!-- Header -->
-
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-
-      <ui:include src="/facelets/forgenavigation.xhtml">    
-        <ui:param name="folders" value="#{forgeUploadBackingBean.folders}"/>
-      </ui:include>
-
-      <!-- Description -->
-
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['forge.upload.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['forge.upload.descriptionText']}</p>
-      </h:panelGroup>
-    </h:panelGroup>
-
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="forge-upload-panel">
-        
-        <h2>#{locales['forge.upload.uploadTitle']}</h2>
+  
+    <ui:include src="/facelets/flex-menu.xhtml" />
+    
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <ui:include src="/facelets/forgenavigation.xhtml">    
+          <ui:param name="folders" value="#{forgeUploadBackingBean.folders}"/>
+        </ui:include>
       
-        <h:panelGroup layout="block" styleClass="forge-upload-field">
-          <input id="forge-upload-field-button" type="file" name="files" multiple="multiple"/>
-          <h:panelGroup layout="block" styleClass="forge-upload-field-info">#{locales['forge.upload.uploadInfo']}</h:panelGroup>
-        </h:panelGroup>
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['forge.upload.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['forge.upload.descriptionText']}</p>
+        </div>
+      </div>
+    </div> 
+    
+    <div class="flex-row">
+      <div class="flex-cell-full index-box">
+        <div class="flex-row">
+          <div class="flex-cell-full">
+            <h2>#{locales['forge.upload.uploadTitle']}</h2>
+          </div>
+        </div>
         
-        <h:panelGroup layout="block" styleClass="forge-upload-options">
-          <h3>#{locales['forge.upload.optionsTitle']}</h3>
+        <div class="flex-row">
+          <div class="flex-cell-full forge-upload-field">
+            <input id="forge-upload-field-button" type="file" name="files" multiple="multiple"/>
+            <h:panelGroup layout="block" styleClass="forge-upload-field-info">#{locales['forge.upload.uploadInfo']}</h:panelGroup>
+          </div>
+        </div>
         
-          <h:panelGroup layout="block" styleClass="forge-upload-option">
+        <div class="flex-row">
+          <div class="flex-cell-full">
+            <h3>#{locales['forge.upload.optionsTitle']}</h3>
+          </div>
+        </div>
+  
+        <div class="flex-row forge-upload-options">
+          <div class="flex-cell-full forge-upload-option">
             <input type="checkbox" name="convert" checked="checked"/> 
             <label>#{locales['forge.upload.convertLabel']}</label>
-          </h:panelGroup>
-        </h:panelGroup>
+          </div>
+        </div>
         
-        <h3>#{locales['forge.upload.filesTitle']}</h3>
+        <div class="flex-row">
+          <div class="flex-cell-full forge-upload-files">
+            <h3>#{locales['forge.upload.filesTitle']}</h3>
+          </div>
+        </div>
         
-        <h:panelGroup layout="block" styleClass="forge-upload-files">
-        </h:panelGroup>
+        <div class="flex-row forge-upload-no-files">
+          <div class="flex-cell-full">
+            #{locales['forge.upload.noFiles']}
+          </div>
+        </div>
         
-        <h:panelGroup layout="block" styleClass="forge-upload-no-files">#{locales['forge.upload.noFiles']}</h:panelGroup>
-        
-        <button class="forge-upload-upload-button" disabled="disabled">#{locales['forge.upload.uploadButton']}</button>
-        
+        <div class="flex-row">
+          <div class="flex-cell-full">
+            <button class="forge-upload-upload-button" disabled="disabled">#{locales['forge.upload.uploadButton']}</button>
+          </div>
+        </div>
+    
         <input type="hidden" value="#{forgeUploadBackingBean.parentFolderId}" name="parentFolderId"/>
-      </h:panelGroup>
-    </h:panelGroup>
+        
+        <h:form>
+          <h:commandButton action="#{forgeUploadBackingBean.uploadDone}" styleClass="upload-done-action" style="display: none"/>
+        </h:form>
+        
+      </div>
+    </div>
 
   </ui:define>
 
