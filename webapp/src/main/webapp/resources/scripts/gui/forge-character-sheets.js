@@ -1,4 +1,4 @@
-(function() {
+  (function() {
   'use strict';
   
   var updateTimeout = 300;
@@ -12,6 +12,10 @@
   }
   
   function updateMeta() {
+    if ($('.forge-chracter-sheet-read-only').val() == 'true') {
+      return;
+    }
+    
     var contents = $('<div>').html($('.forge-chracter-sheet-editor-contents').codeMirror('value'));
     var meta = {};
     
@@ -27,10 +31,11 @@
   }
   
   function updatePreview() {
+    var readOnly = $('.forge-chracter-sheet-read-only').val() == 'true';
     var title = $('.forge-chracter-sheet-title').val();
-    var styles = $('.forge-chracter-sheet-editor-styles').codeMirror('value');
-    var contents = $('.forge-chracter-sheet-editor-contents').codeMirror('value');
-    var scripts = $('.forge-chracter-sheet-editor-scripts').codeMirror('value');
+    var styles = readOnly ? $('.forge-chracter-sheet-editor-styles').val() : $('.forge-chracter-sheet-editor-styles').codeMirror('value');
+    var contents = readOnly ? $('.forge-chracter-sheet-editor-contents').val() : $('.forge-chracter-sheet-editor-contents').codeMirror('value');
+    var scripts = readOnly ? $('.forge-chracter-sheet-editor-scripts').val() : $('.forge-chracter-sheet-editor-scripts').codeMirror('value');
     
     dust.render("character-sheet", { 
       "title": title,

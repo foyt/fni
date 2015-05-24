@@ -12,13 +12,18 @@
       <f:param value="#{forgeCharacterSheetsBackingBean.characterSheetTitle}"/>
     </h:outputFormat>
   </ui:define>
+  
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+  
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.6.0/codemirror.min.css"></link>
     <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.6.0/addon/hint/show-hint.min.css"></link>
     <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.6.0/addon/fold/foldgutter.min.css"></link>
     
     <h:outputStylesheet library="novus" name="css/fonts.css"/>
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/forge-character-sheets.css"/>
     <style type="text/css">
     .CodeMirror {border-top: 1px solid #888; border-bottom: 1px solid #888;}
@@ -46,78 +51,107 @@
   </ui:define>
 
   <ui:define name="grid-content">
-
-    <!-- Menu -->
-
-    <ui:include src="/facelets/menu.xhtml" />
-    
-    <!-- Header -->
-    
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
   
-      <ui:include src="/facelets/forgenavigation.xhtml">    
+    <ui:include src="/facelets/flex-menu.xhtml" />
+    
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <ui:include src="/facelets/forgenavigation.xhtml">    
         <ui:param name="folders" value="#{forgeCharacterSheetsBackingBean.folders}"/>
-      </ui:include>
+        </ui:include>
       
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['forge.characterSheets.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['forge.characterSheets.descriptionText']}</p>
-        <br/>
-        <p class="view-header-description-text">#{locales['forge.characterSheets.descriptionInstructionsText']} <a target="_blank" href="#{locales['forge.characterSheets.descriptionInstructionsUrl']}">#{locales['forge.characterSheets.descriptionInstructionsUrl']}</a></p>
-      </h:panelGroup>
-    </h:panelGroup>
-
-    <!-- Editor -->
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['forge.characterSheets.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['forge.characterSheets.descriptionText']}</p>
+          <br/>
+          <p class="view-header-description-text">#{locales['forge.characterSheets.descriptionInstructionsText']} <a target="_blank" href="#{locales['forge.characterSheets.descriptionInstructionsUrl']}">#{locales['forge.characterSheets.descriptionInstructionsUrl']}</a></p>
+        </div>
+      </div>
+    </div> 
     
-    <div class="grid_16 tight">
-      <h:form>
-	      <div class="forge-chracter-sheets-panel">
-	        <h2>
-	          <input type="text" class="forge-chracter-sheet-title" required="required" jsf:rendered="#{!forgeCharacterSheetsBackingBean.readOnly}" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetTitle}"/>
-            <h:outputFormat value="#{locales['forge.characterSheets.titleReadOnly']}" rendered="#{forgeCharacterSheetsBackingBean.readOnly}">
-              <f:param value="#{forgeCharacterSheetsBackingBean.characterSheetTitle}"/>
-            </h:outputFormat>
-	        </h2>
-	        
-	        <div class="forge-character-sheet-editor">
-	          <div class="forge-character-sheet-editor-row" jsf:rendered="#{!forgeCharacterSheetsBackingBean.readOnly}">
-	            <div class="forge-character-sheet-editor-cell forge-character-sheet-editor-cell-full">
-	              <h3>#{locales['forge.characterSheets.contentsTitle']}</h3>
-	              <textarea class="forge-chracter-sheet-editor-contents" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetContents}"></textarea>
-	            </div>
-	          </div>
-	
-	          <div class="forge-character-sheet-editor-row" jsf:rendered="#{!forgeCharacterSheetsBackingBean.readOnly}">
-	            <div class="forge-chracter-sheet-editor-cell forge-character-sheet-editor-cell-half">
-	              <h3>#{locales['forge.characterSheets.stylesTitle']}</h3>
-	              <textarea class="forge-chracter-sheet-editor-styles" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetStyles}"></textarea>
-	            </div>
-	            <div class="forge-character-sheet-editor-cell forge-character-sheet-editor-cell-half">
-	              <h3>#{locales['forge.characterSheets.scriptsTitle']}</h3>
-	              <textarea class="forge-chracter-sheet-editor-scripts" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetScripts}"></textarea>
-	            </div>
-	          </div>
-	          
-	          <input type="hidden" class="forge-chracter-sheet-editor-contents" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetContents}" jsf:rendered="#{forgeCharacterSheetsBackingBean.readOnly}"/>
-            <input type="hidden" class="forge-chracter-sheet-editor-styles" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetStyles}" jsf:rendered="#{forgeCharacterSheetsBackingBean.readOnly}"/>
-            <input type="hidden" class="forge-chracter-sheet-editor-scripts" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetScripts}" jsf:rendered="#{forgeCharacterSheetsBackingBean.readOnly}"/>
-	          
-	          <div class="forge-character-sheet-editor-row">
-	            <div class="forge-chracter-sheet-editor-cell forge-character-sheet-editor-cell-full">
-	              <h3 jsf:rendered="#{!forgeCharacterSheetsBackingBean.readOnly}">#{locales['forge.characterSheets.previewTitle']}</h3>
-	              <iframe class="forge-chracter-sheet-editor-preview" seamless="seamless" name="preview-frame"></iframe>
-	            </div>
-	          </div>          
-	        </div>
-	        
-	        <h:commandButton rendered="#{!forgeCharacterSheetsBackingBean.readOnly}" styleClass="forge-chracter-sheet-save" action="#{forgeCharacterSheetsBackingBean.save}" value="#{locales['forge.characterSheets.saveButton']}"/>
-          <input type="hidden" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetMeta}" class="forge-chracter-sheet-meta"/>
-	      </div>
-	    </h:form>
-    </div>
+    <h:form>
+      <div class="flex-row">
+        <div class="flex-cell-full index-box">
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <h2>
+                <input type="text" class="forge-chracter-sheet-title" required="required" jsf:rendered="#{!forgeCharacterSheetsBackingBean.readOnly}" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetTitle}"/>
+                <h:outputFormat value="#{locales['forge.characterSheets.titleReadOnly']}" rendered="#{forgeCharacterSheetsBackingBean.readOnly}">
+                  <f:param value="#{forgeCharacterSheetsBackingBean.characterSheetTitle}"/>
+                </h:outputFormat>
+              </h2>
+            </div>
+          </div>
+          
+          <div class="flex-row" jsf:rendered="#{!forgeCharacterSheetsBackingBean.readOnly}">
+            <div class="flex-cell-full">
+              <h3>#{locales['forge.characterSheets.contentsTitle']}</h3>
+            </div>
+          </div>
+          
+          <div class="flex-row" jsf:rendered="#{!forgeCharacterSheetsBackingBean.readOnly}">
+            <div class="flex-cell-full">
+              <textarea class="forge-chracter-sheet-editor-contents" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetContents}"></textarea>
+            </div>
+          </div>
+          
+          <div class="flex-row" jsf:rendered="#{!forgeCharacterSheetsBackingBean.readOnly}">
+            <div class="lg-flex-cell-8 lg-flex-cell-first md-flex-cell-8 md-flex-cell-first sm-flex-cell-full">
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <h3>#{locales['forge.characterSheets.stylesTitle']}</h3>
+                </div>
+              </div>
+              
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <textarea class="forge-chracter-sheet-editor-styles" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetStyles}"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-8 md-flex-cell-last sm-flex-cell-full">
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <h3>#{locales['forge.characterSheets.scriptsTitle']}</h3>
+                </div>
+              </div>
+  
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <textarea class="forge-chracter-sheet-editor-scripts" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetScripts}"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex-row" jsf:rendered="#{!forgeCharacterSheetsBackingBean.readOnly}">
+            <div class="flex-cell-full">
+              <h3>#{locales['forge.characterSheets.previewTitle']}</h3>
+            </div>
+          </div>
+          
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <iframe class="forge-chracter-sheet-editor-preview" seamless="seamless" name="preview-frame"></iframe>
+            </div>
+          </div>
+      
+          <div class="flex-row" jsf:rendered="#{!forgeCharacterSheetsBackingBean.readOnly}">
+            <div class="flex-cell-full">
+              <h:commandButton styleClass="forge-chracter-sheet-save" action="#{forgeCharacterSheetsBackingBean.save}" value="#{locales['forge.characterSheets.saveButton']}"/>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+
+      <input type="hidden" value="#{forgeCharacterSheetsBackingBean.readOnly}" class="forge-chracter-sheet-read-only"/>
+      <input type="hidden" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetMeta}" class="forge-chracter-sheet-meta"/>
+      <input type="hidden" class="forge-chracter-sheet-editor-contents" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetContents}" jsf:rendered="#{forgeCharacterSheetsBackingBean.readOnly}"/>
+      <input type="hidden" class="forge-chracter-sheet-editor-styles" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetStyles}" jsf:rendered="#{forgeCharacterSheetsBackingBean.readOnly}"/>
+      <input type="hidden" class="forge-chracter-sheet-editor-scripts" jsf:value="#{forgeCharacterSheetsBackingBean.characterSheetScripts}" jsf:rendered="#{forgeCharacterSheetsBackingBean.readOnly}"/>
+    </h:form>
     
   </ui:define>
 
