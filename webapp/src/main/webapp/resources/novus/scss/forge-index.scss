@@ -11,11 +11,6 @@ $menu-button-background-hover: darken($menu-button-background, 10%);
 $menu-button-padding: 25px;
 $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
 
-.index-box {
-  background-color: $panel-background-color;
-  padding: 20px;
-}
-
 .forge-list-header-row {
   border-bottom: 5px solid #47b0b0;
 }

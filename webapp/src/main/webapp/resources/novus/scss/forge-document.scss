@@ -6,11 +6,6 @@
 
 $hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
 
-.index-box {
-  background-color: $panel-background-color;
-  padding: 20px;
-}
-
 h2 {
   @include header-2;
   width: 100%;

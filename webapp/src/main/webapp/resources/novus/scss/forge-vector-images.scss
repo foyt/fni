@@ -2,11 +2,6 @@
 @import "compass";
 @import "styles";
 
-.index-box {
-  background-color: $panel-background-color;
-  padding: 20px;
-}
-
 .forge-vector-image-container iframe {
   @include box-sizing(border-box);
   width: 100%;

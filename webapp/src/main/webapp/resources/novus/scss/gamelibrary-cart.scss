@@ -5,11 +5,6 @@
 $information-text-color: rgb(255, 255, 255);
 $information-background-color: darken($panel-background-color, 80%);
 
-.index-box {
-  background-color: $panel-background-color;
-  padding: 20px;
-}
-
 h3 {
   @include header-2;
 }
