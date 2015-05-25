@@ -7,10 +7,13 @@
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['forge.googleDriveImport.pageTitle']}</ui:define>
+  
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+  
   <ui:define name="view-stylesheets">
-    <!-- View Styles -->
-
-    <h:outputStylesheet library="novus" name="css/menu.css" />
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/forge-import-google-drive.css" />
   </ui:define>
 
@@ -22,66 +25,75 @@
 
   <ui:define name="grid-content">
 
-    <!-- Menu -->
+    <ui:include src="/facelets/flex-menu.xhtml" />
+    
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <ui:include src="/facelets/forgenavigation.xhtml">    
+          <ui:param name="folders" value="#{forgeImportGoogleDriveBackingBean.folders}"/>
+        </ui:include>
+      
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['forge.googleDriveImport.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['forge.googleDriveImport.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
+    
+    <h:form>
+      <div class="flex-row">
+        <div class="flex-cell-full index-box">
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <h2>#{locales['forge.googleDriveImport.googleDriveTitle']}</h2>
+            </div>
+          </div>  
 
-    <ui:include src="/facelets/menu.xhtml" />
+          <div class="flex-row">
+            <div class="flex-cell-full">
+            
+              <div class="flex-row flex-align-items-center forge-import-google-drive-field" jsf:rendered="#{!forgeImportGoogleDriveBackingBean.root}">
+                <div class="lg-flex-cell-1 lg-flex-cell-first md-flex-cell-1 md-flex-cell-first sm-flex-cell-3 sm-flex-cell-first forge-import-google-drive-check-container">
+                  <input type="checkbox" disabled="disabled"/>
+                  <div class="forge-import-google-drive-icon forge-import-google-drive-icon-folder"/>
+                </div>
 
-    <!-- Header -->
-
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-
-      <ui:include src="/facelets/forgenavigation.xhtml">
-      </ui:include>
-
-      <!-- Description -->
-
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['forge.googleDriveImport.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['forge.googleDriveImport.descriptionText']}</p>
-      </h:panelGroup>
-    </h:panelGroup>
-
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="forge-import-google-drive-panel">
-        
-        <h2>#{locales['forge.googleDriveImport.googleDriveTitle']}</h2>
-
-        <h:form>
-          <h:panelGroup layout="block" styleClass="forge-import-google-drive">
-            <h:panelGroup layout="block" styleClass="forge-import-google-drive-field" rendered="#{!forgeImportGoogleDriveBackingBean.root}">
-              <h:panelGroup layout="block" styleClass="forge-import-google-drive-check-container">
-                <input type="checkbox" disabled="disabled"/>
-              </h:panelGroup>
-              <h:panelGroup layout="block" styleClass="forge-import-google-drive-icon forge-import-google-drive-icon-folder"></h:panelGroup>
-              <h:outputLink styleClass="forge-import-google-drive-folder-name" value="#{request.contextPath}/forge/import-google-drive">#{locales['forge.googleDriveImport.rootFolder']}</h:outputLink>
-            </h:panelGroup>
+                <div class="lg-flex-cell-15 lg-flex-cell-last md-flex-cell-15 md-flex-cell-last sm-flex-cell-13 sm-flex-cell-last">
+                  <a class="forge-import-google-drive-folder-name" jsf:outcome="/forge/import-google-drive.jsf?parentFolderId=#{forgeImportGoogleDriveBackingBean.parentFolderId}">#{locales['forge.googleDriveImport.rootFolder']}</a>
+                </div>                
+              </div>
+                          
+              <ui:repeat var="file" value="#{forgeImportGoogleDriveBackingBean.files}">
+                <div class="flex-row flex-align-items-center forge-import-google-drive-field">
+                  <div class="lg-flex-cell-1 lg-flex-cell-first md-flex-cell-1 md-flex-cell-first sm-flex-cell-3 sm-flex-cell-first forge-import-google-drive-check-container">
+                    <ui:fragment rendered="#{file.mimeType ne 'application/vnd.google-apps.folder'}"> 
+                      <input type="checkbox" value="#{file.id}"/>
+                    </ui:fragment>
+                    <input type="checkbox" disabled="disabled" jsf:rendered="#{file.mimeType eq 'application/vnd.google-apps.folder'}"/>
+                    <div class="forge-import-google-drive-icon forge-import-google-drive-icon-#{forgeImportGoogleDriveBackingBean.getFileIcon(file)}"/>
+                  </div>
+  
+                  <div class="lg-flex-cell-15 lg-flex-cell-last md-flex-cell-15 md-flex-cell-last sm-flex-cell-13 sm-flex-cell-last">
+                    <span class="forge-import-google-drive-file-name" jsf:rendered="#{file.mimeType ne 'application/vnd.google-apps.folder'}">#{file.title}</span>
+                    <a class="forge-import-google-drive-folder-name" jsf:rendered="#{file.mimeType eq 'application/vnd.google-apps.folder'}" jsf:outcome="/forge/import-google-drive.jsf?folderId=#{file.id}&amp;parentFolderId=#{forgeImportGoogleDriveBackingBean.parentFolderId}">#{file.title}</a>
+                  </div>                
+                </div>
+              </ui:repeat>
+            
+            </div>
+          </div>  
           
-            <ui:repeat var="file" value="#{forgeImportGoogleDriveBackingBean.files}">
-              <h:panelGroup layout="block" styleClass="forge-import-google-drive-field">
-                <h:panelGroup layout="block" styleClass="forge-import-google-drive-check-container">
-                  <ui:fragment rendered="#{file.mimeType ne 'application/vnd.google-apps.folder'}">
-                    <input type="checkbox" value="#{file.id}"/>
-                  </ui:fragment>
-                  <ui:fragment rendered="#{file.mimeType eq 'application/vnd.google-apps.folder'}">
-                    <input type="checkbox" disabled="disabled"/>
-                  </ui:fragment>
-                </h:panelGroup>
-                <h:panelGroup layout="block" styleClass="forge-import-google-drive-icon forge-import-google-drive-icon-#{forgeImportGoogleDriveBackingBean.getFileIcon(file)}"></h:panelGroup>
-                <h:panelGroup styleClass="forge-import-google-drive-file-name" rendered="#{file.mimeType ne 'application/vnd.google-apps.folder'}">#{file.title}</h:panelGroup>
-                <a class="forge-import-google-drive-folder-name" jsf:outcome="/forge/import-google-drive.jsf?folderId=#{file.id}&amp;parentFolderId=#{forgeImportGoogleDriveBackingBean.parentFolderId}">#{file.title}</a>
-              </h:panelGroup>
-            </ui:repeat>
-          </h:panelGroup>
-          
-          <button disabled="disabled" class="forge-import-google-drive-button">#{locales['forge.googleDriveImport.importButton']}</button>
-          <h:commandButton style="display: none" id="import-button" action="#{forgeImportGoogleDriveBackingBean.importFiles}" />
-          <h:inputHidden id="import-entry-ids" value="#{forgeImportGoogleDriveBackingBean.importEntryIds}" converter="fi.foyt.fni.jsf.StringListConverter"/>
-        </h:form>
-        
-      </h:panelGroup>
-    </h:panelGroup>
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <button disabled="disabled" class="forge-import-google-drive-button" jsf:action="#{forgeImportGoogleDriveBackingBean.importFiles}">#{locales['forge.googleDriveImport.importButton']}</button>
+            </div>
+          </div>          
+        </div>
+      </div>
 
+      <h:inputHidden id="import-entry-ids" value="#{forgeImportGoogleDriveBackingBean.importEntryIds}" converter="fi.foyt.fni.jsf.StringListConverter"/>
+    </h:form>
+    
   </ui:define>
 
 </ui:composition>

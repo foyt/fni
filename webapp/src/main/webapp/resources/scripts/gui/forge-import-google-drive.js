@@ -7,22 +7,14 @@
     } else {
       $('.forge-import-google-drive-button').attr('disabled', 'disabled');
     }
-  });
-  
-  $(document).on('click','.forge-import-google-drive-button', function (event) {
-    event.preventDefault();
-    
-    var selected = new Array();
-    
-    $('.forge-import-google-drive-check-container input:checked').each(function (index, input) {
-      selected.push($(input).val());
-    });
     
     var form = $(this).closest('form');
     var prefix = form.attr('name');
-
+    var selected = $.map($('.forge-import-google-drive-check-container input:checked'), function (input) {
+      return $(input).val();
+    });
+    
     $('input[name="' + prefix + ':import-entry-ids' + '"]').val(selected.join('&'));
-    $('input[name="' + prefix + ':import-button' + '"]').click();
   });
 
 }).call(this);

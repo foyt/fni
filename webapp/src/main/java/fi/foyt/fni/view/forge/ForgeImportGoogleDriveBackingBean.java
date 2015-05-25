@@ -95,6 +95,11 @@ public class ForgeImportGoogleDriveBackingBean {
       } else {
         return navigationController.notFound();
       }
+      
+      folders = ForgeViewUtils.getParentList(parentFolder);
+      folders.add(parentFolder);
+    } else {
+      folders = Collections.emptyList();
     }
 
     if (AuthUtils.isExpired(userToken) || !AuthUtils.isGrantedScope(userToken, REQUIRED_SCOPE)) {
@@ -217,6 +222,10 @@ public class ForgeImportGoogleDriveBackingBean {
     this.parentFolderId = parentFolderId;
   }
 	
+	public List<Folder> getFolders() {
+    return folders;
+  }
+	
 	public String getFileIcon(File file) {
 	  switch (file.getMimeType()) {
 	    case "application/vnd.google-apps.folder":
@@ -237,6 +246,7 @@ public class ForgeImportGoogleDriveBackingBean {
 	private boolean root;
   private List<File> files;
   private List<String> importEntryIds;
+  private List<Folder> folders;
   
   private class MimeTypeComparator implements Comparator<File> {
     
