@@ -56,7 +56,7 @@ public class ForgeConnectDropboxTestsBase extends AbstractUITest {
     assertEquals("Forge", getWebDriver().getTitle());
     waitForNotification(getWebDriver());
     assertNotificationStartsWith(getWebDriver(), "info", "Dropbox folder is connected");
-    assertEquals(1, getWebDriver().findElements(By.cssSelector(".forge-materials-list a[title=\"Dropbox\"]")).size());
+    assertEquals(2, getWebDriver().findElements(By.cssSelector(".forge-material-title[title=\"Dropbox\"]")).size());
   }
   
 }

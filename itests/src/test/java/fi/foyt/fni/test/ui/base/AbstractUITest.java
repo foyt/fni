@@ -92,8 +92,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     waitForSelectorVisible(".user-login-external-google");
     clickSelector(".user-login-external-google");
     waitForSelectorVisible("#Email");
+    waitAndClick("#Email");
     typeSelectorInputValue("#Email", getGoogleUsername());
     waitForSelectorVisible("#Passwd");
+    waitAndClick("#Passwd");
     typeSelectorInputValue("#Passwd", getGooglePassword());
     clickSelector("#signIn");
     waitForUrlMatches("^" + getAppUrl() + ".*");

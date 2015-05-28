@@ -42,20 +42,20 @@ public class ForgeUploadTestsBase extends AbstractUITest {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     
     getWebDriver().get(getAppUrl() + "/forge/upload");
-    List<WebElement> breadcrumbs = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item a"));
+    List<WebElement> breadcrumbs = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item"));
     assertEquals(2, breadcrumbs.size());
     assertEquals(getAppUrl() + "/", breadcrumbs.get(0).getAttribute("href"));
     assertEquals(getAppUrl() + "/forge/", breadcrumbs.get(1).getAttribute("href"));
     
     getWebDriver().get(getAppUrl() + "/forge/upload?parentFolderId=1");
-    breadcrumbs = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item a"));
+    breadcrumbs = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item"));
     assertEquals(3, breadcrumbs.size());
     assertEquals(getAppUrl() + "/", breadcrumbs.get(0).getAttribute("href"));
     assertEquals(getAppUrl() + "/forge/", breadcrumbs.get(1).getAttribute("href"));
     assertEquals(getAppUrl() + "/forge/folders/2/folder", breadcrumbs.get(2).getAttribute("href"));
     
     getWebDriver().get(getAppUrl() + "/forge/upload?parentFolderId=2");
-    breadcrumbs = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item a"));
+    breadcrumbs = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item"));
     assertEquals(4, breadcrumbs.size());
     assertEquals(getAppUrl() + "/", breadcrumbs.get(0).getAttribute("href"));
     assertEquals(getAppUrl() + "/forge/", breadcrumbs.get(1).getAttribute("href"));

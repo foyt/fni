@@ -71,7 +71,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.cssSelector(".forge-import-google-drive-button")).click();
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.titleIs("Forge"));
     assertEquals("Forge", getWebDriver().getTitle());
-    assertEquals(1, getWebDriver().findElements(By.cssSelector(".forge-materials-list a[title=\"How to get started with Drive\"]")).size());
+    assertEquals(2, getWebDriver().findElements(By.cssSelector(".forge-material-title[title=\"How to get started with Drive\"]")).size());
   }
 
   @Test
@@ -92,7 +92,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.cssSelector(".forge-import-google-drive-button")).click();
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.titleIs("Forge"));
     assertTrue(getWebDriver().getCurrentUrl(), getWebDriver().getCurrentUrl().matches(".*/forge/folders/[0-9]{1,}/test_folder"));
-    assertEquals(1, getWebDriver().findElements(By.cssSelector(".forge-materials-list a[title=\"How to get started with Drive\"]")).size());
+    assertEquals(2, getWebDriver().findElements(By.cssSelector(".forge-material-title[title=\"How to get started with Drive\"]")).size());
   }
 
 }
