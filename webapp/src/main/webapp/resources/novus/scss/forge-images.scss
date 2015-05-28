@@ -3,25 +3,27 @@
 @import "styles";
 
 $border-width: 3px;
+$padding: 5px;
 
 h2 {
   @include header-2;
   color: $title-color;
-  padding-top: 20px;
-  padding-left: 20px;
-}
-
-.forge-image-panel {
-  background-color: $panel-background-color;
 }
 
 .forge-image-container {
-  text-align: center;
+  width: 100%;
 }
 
 .forge-image-container img {
   vertical-align: top;
-  margin: 20px;
   border: $border-width solid #000;
-  max-width: 920px - ($border-width * 2);   
+  padding: $padding;
+  max-width: 100%;
+  @include box-sizing(border-box);
+}
+
+@media screen and (min-width: $grid-width-desktop) {
+  .forge-image-container img {
+    max-width: ($grid-width-desktop - 40px) - (($padding + $border-width) * 2) - ($grid-margin * 2);   
+  }
 }
