@@ -1488,7 +1488,7 @@ public class MaterialController {
       case CHARACTER_SHEET:
         return "character-sheet";
       case BOOK_LAYOUT:
-        return "book-publisher";
+        return "book-layout";
     }
 
     return null;

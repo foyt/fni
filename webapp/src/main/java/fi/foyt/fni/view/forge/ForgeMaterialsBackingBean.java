@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
+import fi.foyt.fni.persistence.model.materials.BookLayout;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Folder;
@@ -247,6 +248,25 @@ public class ForgeMaterialsBackingBean {
     String urlPath = vectorImage.getPath().substring(String.valueOf(ownerId).length() + 1);
     
     return String.format("/forge/vectorimages.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
+  }
+
+  public String createNewBookLayout(Long folderId) {
+    User loggedUser = sessionController.getLoggedUser();
+    Folder parentFolder = folderId != null ? materialController.findFolderById(folderId) : null;
+
+    if (parentFolder != null) {
+      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
+        return navigationController.accessDenied();
+      }
+    }
+    
+    String title = FacesUtils.getLocalizedValue("forge.index.untitledBookLayout");
+    BookLayout bookLayout = materialController.createBookLayout(parentFolder, title, loggedUser);
+
+    Long ownerId = parentFolder != null ? parentFolder.getCreator().getId() : bookLayout.getCreator().getId();
+    String urlPath = bookLayout.getPath().substring(String.valueOf(ownerId).length() + 1);
+    
+    return String.format("/forge/book-publisher.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
   }
   
   public String createNewCharacterSheet(Long folderId) throws IOException {
