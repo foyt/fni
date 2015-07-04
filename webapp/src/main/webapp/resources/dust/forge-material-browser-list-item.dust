@@ -1,0 +1,12 @@
+<div class="forge-material-browser-list-item" data-id="{id}" data-type="{materialType}">
+  <div class="forge-material-browser-list-item-icon forge-material-browser-list-item-icon-{materialType|lowerCase}"></div>
+  <div class="forge-material-browser-list-item-info">
+    <div class="forge-material-browser-list-item-title-container">
+      <span class="forge-material-browser-list-item-title">{title}</span>
+      <div class="forge-material-browser-list-date-container">
+        <span class="forge-material-browser-list-modified">{modified}</span>
+      </div>
+      <div class="forge-material-browser-list-creator">{creator}</div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<div title="Browse Material" data-cancel-button="Cancel">
+  <div class="forge-material-browser-dialog">
+    <p>Choose a material</p>
+    <div class="forge-material-browser-list">
+      {>"forge-material-browser-list"/}
+    </div>
+  </div>
+</div>

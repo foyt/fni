@@ -1,0 +1,137 @@
+$selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
+
+/* Material browser */
+
+.forge-material-browser p {
+  font-style: italic;
+  font-size: 14px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.forge-material-browser-list {
+  overflow: auto;
+  overflow-y: scroll;
+  height: 450px;
+}
+
+.forge-material-browser-list-item {
+  clear: both;
+  margin-bottom: 8px;
+  padding: 8px;
+  cursor: pointer;
+  height: 48px;
+}
+
+.forge-material-browser-list-item-selected,
+.forge-material-browser-list-item:hover {
+  background-color: $selected-background-color;
+}
+
+.forge-material-browser-list-item.forge-material-browser-list-item-disabled {
+  background-color: #ddd;
+  cursor: default;
+  opacity: 0.75;
+}
+
+.forge-material-browser-list-item-icon {
+  width: 48px;
+  height: 48px;
+  display: block;
+  float: left;
+  @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-file.png"]}'));
+
+  &.forge-material-browser-list-item-icon-parent {
+    @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/folder-go-up.png"]}'));
+  }
+  
+  &.forge-material-browser-list-item-icon-folder {
+    @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-folder.png"]}'));
+  }
+  
+  &.forge-material-browser-list-item-icon-document {
+    @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-document.png"]}'));
+  }
+  
+  &.forge-material-browser-list-item-icon-image {
+    @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-image.png"]}'));
+  }
+  
+  &.forge-material-browser-list-item-icon-pdf {
+    @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-pdf.png"]}'));
+  }
+  
+  &.forge-material-browser-list-item-icon-vector_image {
+    @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-vector-image.png"]}'));
+  }
+  
+  &.forge-material-browser-list-item-icon-google_document {
+    @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-google-drive.png"]}'));
+  }
+  
+  &.forge-material-browser-list-item-icon-dropbox_root_folder {
+    @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-dropbox.png"]}'));
+  }
+  
+  &.forge-material-browser-list-item-icon-illusion_folder {
+    @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-illusion-group-folder.png"]}'));
+  }
+  
+  &.forge-material-browser-list-item-icon-character_sheet {
+    @include background-image(url('#' + '{resource["novus:gfx/icons/48x48/forge/icon-character-sheet.png"]}'));
+  }
+}
+
+.forge-material-browser-list-item-info {
+  padding-left: 8px;
+  margin-left: 48px;
+}
+
+.forge-material-browser-list-item-title,
+.forge-material-browser-list-modified,
+.forge-material-browser-list-creator {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 12px;
+  display: block;
+  background-image: none;
+  display: block;
+}
+
+.forge-material-browser-list-item-title {
+  font-weight: bold;
+}
+
+.forge-material-browser-list-modified {
+  font-size: 10px;
+}
+
+.forge-material-browser-parents {
+  border: 1px inset #aaa;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+
+.forge-material-browser-parent {
+  display: inline-block;
+  margin-right: 8px;
+  color: $default-color;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-family: $default-font;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.forge-material-browser-parent:after {
+  padding-left: 8px;
+  content: '>>';
+}
+
+.forge-material-browser-parent:last-child {
+  color: $title-color;
+}
+
+.forge-material-browser-parent:last-child:after {
+  content: '';
+}

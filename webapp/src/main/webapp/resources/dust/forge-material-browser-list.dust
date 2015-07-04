@@ -1,0 +1,9 @@
+<div class="forge-material-browser-parents">
+  {#parents}
+    <div data-parent-id="{id}" class="forge-material-browser-parent" data-parent-type="{materialType}">{title}</div>
+  {/parents}
+</div>
+
+{#folders}
+  {>"forge-material-browser-list-item"/}
+{/folders}

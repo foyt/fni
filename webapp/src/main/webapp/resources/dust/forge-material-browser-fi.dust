@@ -1,0 +1,8 @@
+<div title="Valitse materiaali" data-cancel-button="Peruuta">
+  <div class="forge-material-browser-dialog">
+    <p>Valitse materiaali</p>
+    <div class="forge-material-browser-list">
+      {>"forge-material-browser-list"/}
+    </div>
+  </div>
+</div>
