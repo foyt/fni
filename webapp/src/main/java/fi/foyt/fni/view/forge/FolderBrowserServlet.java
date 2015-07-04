@@ -58,8 +58,13 @@ public class FolderBrowserServlet extends HttpServlet {
 		Long folderId = NumberUtils.createLong(request.getParameter("parent"));
 		if (folderId != null) {
 			parentFolder = materialController.findFolderById(folderId);
+			if (parentFolder == null) {
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        return;
+			}
+			
 			if (!materialPermissionController.hasAccessPermission(loggedUser, parentFolder)) {
-				response.sendError(HttpServletResponse.SC_FORBIDDEN);
+				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 				return;
 			}
 		}
