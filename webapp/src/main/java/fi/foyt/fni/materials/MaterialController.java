@@ -73,6 +73,7 @@ import fi.foyt.fni.persistence.dao.illusion.IllusionEventDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventMaterialParticipantSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
 import fi.foyt.fni.persistence.dao.materials.BinaryDAO;
+import fi.foyt.fni.persistence.dao.materials.BookLayoutDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDataDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetEntryDAO;
@@ -111,6 +112,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.materials.Binary;
+import fi.foyt.fni.persistence.model.materials.BookLayout;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetData;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetEntry;
@@ -181,6 +183,9 @@ public class MaterialController {
 
   @Inject
   private MaterialDAO materialDAO;
+
+  @Inject
+  private BookLayoutDAO bookLayoutDAO;
 
   @Inject
   private FolderDAO folderDAO;
@@ -412,6 +417,31 @@ public class MaterialController {
     }
     
     return characterSheetRollDAO.create(rollLabel, roll, user, new Date(), result);
+  }
+  
+  /* Book Layout */
+  
+  public BookLayout createBookLayout(Folder parentFolder, String title, User creator) {
+    String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())));    
+    return createBookLayout(parentFolder, urlName, title, "", null, creator);
+  }
+
+  public BookLayout createBookLayout(Folder parentFolder, String urlName, String title, String data, Language language, User creator) {
+    Date now = new Date();
+    return bookLayoutDAO.create(creator, now, creator, now, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
+  }
+
+  public BookLayout findBookLayout(Long id) {
+    return bookLayoutDAO.findById(id);
+  }
+  
+  public BookLayout updateBookLayout(BookLayout bookLayout, User modifier, String data, String styles, String fonts) {
+    bookLayout = bookLayoutDAO.updateData(bookLayout, data);
+    bookLayout = bookLayoutDAO.updateStyles(bookLayout, styles);
+    bookLayout = bookLayoutDAO.updateFonts(bookLayout, fonts);
+    bookLayout = bookLayoutDAO.updateModified(bookLayout, new Date());
+    bookLayout = bookLayoutDAO.updateModifier(bookLayout, modifier);
+    return bookLayout;
   }
 
   /* Document */
@@ -1418,6 +1448,8 @@ public class MaterialController {
         return "documents";
       case CHARACTER_SHEET:
         return "character-sheets";
+      case BOOK_LAYOUT:
+        return "book-publisher";
     }
   
     return "todo";
@@ -1455,6 +1487,8 @@ public class MaterialController {
         return "document";
       case CHARACTER_SHEET:
         return "character-sheet";
+      case BOOK_LAYOUT:
+        return "book-publisher";
     }
 
     return null;
@@ -1836,6 +1870,7 @@ public class MaterialController {
       case FOLDER:
       case ILLUSION_FOLDER:
       case ILLUSION_GROUP_FOLDER:
+      case BOOK_LAYOUT:
       break;
     }
     
