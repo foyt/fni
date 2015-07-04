@@ -23,6 +23,7 @@ public enum SystemSettingKey {
 	GOOGLE_APIKEY,
 	GOOGLE_APISECRET,
 	GOOGLE_CALLBACKURL,
+	GOOGLE_PUBLIC_API_KEY,
 	
 	/* Yahoo */
 	
