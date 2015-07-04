@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
+  
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+
+  <ui:define name="page-title">#{locales['forge.bookPublisher.pageTitle']}</ui:define>
+  <ui:define name="view-stylesheets">
+    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
+    <h:outputStylesheet library="novus" name="css/forge-book-publisher.css"/>
+  </ui:define>
+  
+  <ui:define name="view-scripts">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.rest/1.0.2/jquery.rest.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.5/waypoints.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"></script> 
+    <h:outputScript name="scripts/gui/google-font-picker.js"/>
+    <h:outputScript name="scripts/gui/forge-material-browser.js"/>
+    <h:outputScript name="scripts/gui/forge-book-publisher.js"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/flex-menu.xhtml" />
+    
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <ui:include src="/facelets/forgenavigation.xhtml">    
+          <ui:param name="folders" value="#{forgeBookPublisherBackingBean.folders}"/>
+        </ui:include>
+      
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['forge.bookPublisher.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['forge.bookPublisher.descriptionText']}</p>
+        </div>
+      </div>
+    </div> 
+    
+    <h:form>
+      <div class="flex-row">
+        <div class="flex-cell-full index-box">
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <div class="book-publisher" 
+                    data-save-button-tooltip="#{locales['forge.bookPublisher.saveButtonTooltip']}"
+                    data-import-button-tooltip="#{locales['forge.bookPublisher.importButtonTooltip']}"
+                    data-styles-button-tooltip="#{locales['forge.bookPublisher.stylesButtonTooltip']}"
+                    data-change-paragraph-style-button-tooltip="#{locales['forge.bookPublisher.changeParagraphStyleButtonTooltip']}"
+                    data-change-parahraph-float-button-tooltip="#{locales['forge.bookPublisher.changeParagraphFloatButtonTooltip']}"
+                    data-move-paragraph-button-tooltip="#{locales['forge.bookPublisher.moveParagraphButtonTooltip']}">
+                  </div>
+                </div>          
+              </div>
+            </div>
+                      
+          </div>
+        </div>
+      </div>
+      
+      <input type="submit" jsf:action="#{forgeBookPublisherBackingBean.save}" class="book-layout-save" value="#{locales['forge.bookPublisher.saveButton']}"/>
+      <input type="hidden" jsf:value="#{forgeBookPublisherBackingBean.data}" class="book-layout-data"/>
+      <input type="hidden" jsf:value="#{forgeBookPublisherBackingBean.styles}" class="book-layout-styles"/>
+      <input type="hidden" jsf:value="#{forgeBookPublisherBackingBean.fonts}" class="book-layout-fonts"/>
+      <input type="hidden" value="#{forgeBookPublisherBackingBean.googlePublicApiKey}" class="google-api-public-key"/>
+    </h:form>
+    
+  </ui:define>
+
+</ui:composition>

@@ -1,0 +1,105 @@
+<div class="forge-publisher-style-dialog-style" data-rules="{rules|js}" data-selector="{selector}">
+
+  <input type="text" name="name" class="forge-publisher-style-dialog-style-name" value="{name}"/>
+  
+  <div class="forge-publisher-style-dialog-style-settings">
+    
+    <div class="forge-publisher-style-dialog-style-setting-font">
+      <label>Font</label>
+      <span class="forge-publisher-style-dialog-style-setting-editor">
+        <span>
+          <input value="12" type="number" min="1" step="any" name="font-size" data-unit="pt"/>
+        </span>
+        <span>pt</span>
+        <span>
+          <select name="font-family">
+            {#fonts}
+              <option value="{name|s}">{name|s}</option>
+            {/fonts}
+          </select>
+        </span>
+        <span class="forge-publisher-style-dialog-style-setting-font-actions">
+          <a class="forge-publisher-style-dialog-style-setting-font-action forge-publisher-style-dialog-style-setting-font-action-add" href="javascript:void(null)">
+            <span class="fa fa-plus"></span>
+          </a>
+          
+          <a class="forge-publisher-style-dialog-style-setting-font-action forge-publisher-style-dialog-style-setting-font-action-remove" href="javascript:void(null)">
+            <span class="fa fa-trash-o"></span>
+          </a>
+        </span>
+      </span>
+    </div>
+    
+    <div>
+      <label>Font styles</label>
+      <span class="forge-publisher-style-dialog-style-setting-editor">
+        <input type="checkbox" name="bold" value="1" data-style="font-weight" data-on="bold" data-off="normal"/>
+        <label>Bold</label>
+        <input type="checkbox" name="italic" value="1" data-style="font-style" data-on="italic" data-off="normal"/>
+        <label>Italic</label>
+        <input type="checkbox" name="underline" value="1" data-style="text-decoration" data-on="underline" data-off="none" data-mutually-exclusive="strikethrough"/>
+        <label>Underline</label>
+        <input type="checkbox" name="strikethrough" value="1" data-style="text-decoration" data-on="line-through" data-off="none" data-mutually-exclusive="underline"/>
+        <label>Strikethrough</label>
+        <input type="checkbox" name="all-caps" value="1" data-style="text-transform" data-on="uppercase" data-off="none" data-mutually-exclusive="small-caps"/>
+        <label>All caps</label>
+        <input type="checkbox" name="small-caps" value="1" data-style="font-variant" data-on="small-caps" data-off="normal" data-mutually-exclusive="all-caps"/>
+        <label>Small caps</label>
+      </span>
+    </div>
+    
+    <div>
+      <label>Text color</label>
+      <span class="forge-publisher-style-dialog-style-setting-editor">
+        <input type="color" name="color" value="#000"/>
+      </span>
+    </div>
+    
+    <div>
+      <label>Background color</label>
+      <span class="forge-publisher-style-dialog-style-setting-editor">
+        <input type="color" name="background-color" value=""/>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-style-dialog-style-setting-paddings">
+      <label>Paddings</label>
+      <span class="forge-publisher-style-dialog-style-setting-editor">
+        <input type="number" value="0" step="any" name="padding-top" data-unit="pt" min="0"/>
+        <span>top</span>
+        <input type="number" value="0" step="any" name="padding-right" data-unit="pt" min="0"/>
+        <span>right</span>
+        <input type="number" value="0" step="any" name="padding-bottom" data-unit="pt" min="0"/>
+        <span>bottom</span>
+        <input type="number" value="0" step="any" name="padding-left" data-unit="pt" min="0"/>
+        <span>left</span>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-style-dialog-style-setting-margins">
+      <label>Margins</label>
+      <span class="forge-publisher-style-dialog-style-setting-editor">
+        <input type="number" value="0" step="any" name="margin-top" data-unit="pt" min="0"/>
+        <span>top</span>
+        <input type="number" value="0" step="any" name="margin-right" data-unit="pt" min="0"/>
+        <span>right</span>
+        <input type="number" value="0" step="any" name="margin-bottom" data-unit="pt" min="0"/>
+        <span>bottom</span>
+        <input type="number" value="0" step="any" name="margin-left" data-unit="pt" min="0"/>
+        <span>left</span>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-style-dialog-style-preview-container">
+      <div class="forge-publisher-style-dialog-style-preview-inner-container">
+        <div class="forge-publisher-style-dialog-style-preview">
+          <div class="forge-publisher-style-dialog-style-preview-margin"/>
+          <div class="forge-publisher-style-dialog-style-preview-padding"/>
+          <span class="forge-publisher-style-dialog-style-preview-text">The quick brown fox jumps over the lazy dog</span>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+</div>

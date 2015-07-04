@@ -1,0 +1,9 @@
+<div title="Edit Styles" data-apply-button="Apply" data-cancel-button="Cancel">
+  <div class="forge-publisher-dialog forge-publisher-style-dialog">
+    <div class="forge-publisher-style-dialog-styles">
+      {#styles}
+        {>"forge-publisher-style-dialog-style"/}
+      {/styles}
+    </div>
+  </div>
+</div>

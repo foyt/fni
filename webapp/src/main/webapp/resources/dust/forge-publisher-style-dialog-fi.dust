@@ -1,0 +1,9 @@
+<div title="Muokkaa tyylejä" data-apply-button="Käytä" data-cancel-button="Peruuta">
+  <div class="forge-publisher-dialog forge-publisher-style-dialog">
+    <div class="forge-publisher-style-dialog-styles">
+      {#styles}
+        {>"forge-publisher-style-dialog-style"/}
+      {/styles}
+    </div>
+  </div>
+</div>

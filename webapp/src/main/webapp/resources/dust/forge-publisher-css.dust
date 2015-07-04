@@ -1,0 +1,6 @@
+{#fonts}
+@import url({url|s});
+{/fonts}
+{#styles}
+  {>"forge-publisher-css-rule"/}
+{/styles}

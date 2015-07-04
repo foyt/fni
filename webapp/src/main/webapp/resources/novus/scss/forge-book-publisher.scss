@@ -1,0 +1,390 @@
+@charset "utf-8";
+@import "//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css";
+@import "vars";
+@import "compass";
+@import "styles";
+@import "forge-material-browser";
+
+$hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
+
+.book-layout-save {
+  display: none;
+}
+  
+.book-publisher {
+  border: 0px;
+  width: 100%;
+  @include box-sizing(border-box);
+  @include html-default-styles;
+  
+  .forge-book-publisher-tools {
+    position: absolute;
+    width: 32px;
+  }
+  
+  .forge-book-publisher-tool {
+    height: 32px;
+    width: 32px;
+    background: #000;
+    border-radius: 6px;
+    color: #fff;
+    display: inline-block;
+    cursor: pointer;
+    margin-bottom: 10px;
+    opacity: 0.75;
+  }
+  
+  .forge-book-publisher-tool:hover {
+    opacity: 1;
+  }
+  
+  .forge-book-publisher-tool .fa {
+    vertical-align: top;
+    width: 16px;
+    height: 16px;
+    padding: 8px; 
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  .forge-book-publisher-tool-items {
+    position: absolute;
+    right: 45px;
+  }
+    
+  .forge-book-publisher-tool-items a {
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    opacity: 0.75;
+    display: block;
+    
+    &.text {
+      text-transform: uppercase;
+      white-space: nowrap;
+      font-size: 12px;
+      padding: 10px;
+    }
+
+    &.fa {
+      height: 32px;
+      width: 32px;
+      vertical-align: top;
+      width: 16px;
+      height: 16px;
+      padding: 8px; 
+      font-size: 16px;
+      text-align: center;
+    }
+  }
+
+  .forge-book-publisher-tool-items a:first-child {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+  
+  .forge-book-publisher-tool-items a:last-child {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+   
+  .forge-book-publisher-tool-items a:hover {
+    opacity: 1;
+  }
+  
+  .forge-book-publisher-tool-items:after {
+    border-color: transparent transparent transparent #000;
+    border-style: solid;
+    border-width: 7px;
+    color: transparent;
+    content: ".";
+    height: 0;
+    position: absolute;
+    right: -14px;
+    top: calc(50% - 7px);
+    width: 0;
+    opacity: 0.75;    
+  }
+
+  .forge-book-publisher-page {
+    box-sizing: border-box;
+    height: 297mm;
+    width: 210mm;
+    margin-left: auto;
+    margin-right: auto;
+    background: #fff;
+    padding: 4em;
+    page-break-after: always;
+    position: relative;
+    
+  }
+
+  .forge-book-publisher-page:last-child {
+    page-break-after: avoid;
+  }
+   
+  .forge-book-publisher-page {
+    outline: 1px solid rgba(200, 200, 200, 0.3);
+    margin-top: 40px;
+    
+    .forge-book-publisher-selected:not(img) {
+      position: relative;
+    }
+    
+    .forge-book-publisher-selected:not(img):after {
+      content: '.';
+      color: transparent;
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      box-shadow: 0px 0px 3px 3px rgba(128,128,128, 0.3);
+      @include box-sizing(border-box);
+    }
+    
+    ol.forge-book-publisher-selected:not(img):after,
+    ul.forge-book-publisher-selected:not(img):after {
+      left: -25px;
+    }
+    
+    img.forge-book-publisher-selected {
+      box-shadow: 0px 0px 3px 3px rgba(128,128,128, 0.3);
+    }
+  } 
+  
+  .forge-book-publisher-page:hover {
+    outline-color: rgba(200, 200, 0, 0.3);
+  }
+  
+  .forge-book-publisher-page:before {
+    content: attr(data-type);
+    display: block;
+    position: absolute;
+    background: #0a4;
+    padding: 10px;
+    color: #fff;
+    right: 0px;
+    top: 0px;
+  }
+  
+  .forge-book-publisher-page:nth-child(even) {
+    box-shadow: -10px 0px 5px #888888;
+  }
+  
+  .forge-book-publisher-page:nth-child(odd) {
+    box-shadow: 10px 0px 5px #888888; 
+  } 
+}
+
+.forge-publisher-style-add-font-dialog {
+  
+  h4 {
+    font-weight: bold;
+    font-family: $default-font;
+    margin-bottom: 2px;
+  }
+  
+  input {
+    @include box-sizing(border-box);
+    width: 100%;
+  }
+  
+  section {
+    margin-bottom: 10px;
+  }
+
+  section:last-child {
+    margin-bottom: 0;
+  }
+  
+}
+ 
+.forge-publisher-style-dialog {
+  
+  .forge-publisher-style-dialog-style {
+    margin-bottom: 10px;
+  }
+  
+  .forge-publisher-style-dialog-style-name {
+    @include header-3;
+    color: #000;
+    cursor: pointer;
+    width: 100%;
+    border: 0px;
+  }
+  
+  .forge-publisher-style-dialog-style-name:after {
+    content: '▼';
+    float: right;
+    font-size: 16px;     
+    margin-top: 4px;
+  }
+  
+  .forge-publisher-style-dialog-style-settings {
+    overflow: hidden;
+    max-height: 0px;
+    @include transition-property(max-height);
+    @include transition-duration(0.6s);
+    @include transition-delay(0s);
+    
+    .forge-publisher-style-dialog-style-setting-paddings,  .forge-publisher-style-dialog-style-setting-margins {
+      .forge-publisher-style-dialog-style-setting-editor {
+        input { 
+          width: 10%;
+        }
+      
+        span { 
+          margin-left: 4px;
+          margin-right: 4px;
+        }
+    
+        span:before {
+          content: '('; 
+        }
+    
+        span:after {
+          content: ')'; 
+        }
+      }
+    }
+  }
+  
+  .forge-publisher-style-dialog-style-active {
+    .forge-publisher-style-dialog-style-settings {
+      max-height: 237px;
+    }
+    
+    .forge-publisher-style-dialog-style-name {
+      color: $title-color;
+    }
+  }
+  
+  .forge-publisher-style-dialog-style-setting-editor {
+    display: inline-block;
+    width: 80%;
+  }
+  
+  .forge-publisher-style-dialog-style-setting-editor input[type="checkbox"] {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+  
+  .forge-publisher-style-dialog-style-setting-editor input[type="checkbox"]:first-child {
+    margin-left: 0px;
+  }
+  
+  .forge-publisher-style-dialog-style-setting-editor label {
+    font-weight: bold;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    display: inline-block;
+  }
+  
+  .forge-publisher-style-dialog-style-settings>div>label {
+    width: 20%;
+    font-weight: bold;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    display: inline-block;
+  }
+
+  .forge-publisher-style-dialog-style-preview {
+    position: relative;
+  }
+  
+  .forge-publisher-style-dialog-style-setting-font-action {
+    margin-left: 10px;
+  }
+  
+  .forge-publisher-style-dialog-style-preview-text {
+    position: relative;
+  }
+  
+  .forge-publisher-style-dialog-style-preview-padding {
+    position: absolute;
+    border-color: rgba(128, 128, 128, 0.5);
+    border-style: dotted;
+    border-width: 1px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+  }
+  
+  .forge-publisher-style-dialog-style-preview-margin {
+    position: absolute;
+    border-color: rgba(128, 128, 128, 0.5);
+    border-style: dashed;
+    border-width: 1px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+  }
+ 
+  .forge-publisher-style-dialog-style-preview-container {
+    overflow: auto;
+    border: 1px solid #000;
+    margin-top: 5px;
+    @include box-sizing(border-box);
+    align-items: center;
+    @include display-flex;
+    height: 75px;
+  }
+  
+  .forge-publisher-style-dialog-style-preview-inner-container {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  input[name="font-size"] {
+    width: 40px;
+    margin-right: 2px;
+  }
+  
+  select[name="font-family"] {
+    margin-left: 5px;
+  }
+}
+
+/* Spectrum */
+
+.sp-replacer {
+  border: 1px solid #000;
+  padding: 1px;
+  background: #fff;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  
+  &.sp-active, 
+  &:hover {
+    border: 1px solid #000;
+  }
+  
+  .sp-dd {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-right: 3px;
+    padding-left: 0px;
+    height: 10px;
+    line-height: 10px;
+  }
+  
+  .sp-preview {
+    height: 14px;
+    
+    .sp-preview-inner {
+      background-size: contain;
+    }
+  }
+}
+
+.sp-container {
+  border: 1px solid #000;
+  background: #fff;
+}
+
