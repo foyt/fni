@@ -433,29 +433,37 @@
         }, {
           offset: '10px'
         });
+
+      var bookToolGroup = $('<div>')
+        .addClass('forge-book-publisher-tool-group')
+        .appendTo(tools);
+      
+      var blockToolGroup = $('<div>')
+        .addClass('forge-book-publisher-tool-group')
+        .appendTo(tools);
       
       $('<a>') 
         .addClass('forge-book-publisher-tool')
         .attr('title', this.options.locales['save-button-tooltip'])
         .click($.proxy(this._onSaveClick, this))
         .append($('<span>').addClass('fa fa-save'))
-        .appendTo(tools);
+        .appendTo(bookToolGroup);
             
       $('<a>') 
         .addClass('forge-book-publisher-tool')
         .attr('title', this.options.locales['import-button-tooltip'])
         .click($.proxy(this._onImportClick, this))
         .append($('<span>').addClass('fa fa-plus'))
-        .appendTo(tools);
+        .appendTo(bookToolGroup);
       
       $('<a>') 
         .addClass('forge-book-publisher-tool')
          .attr('title', this.options.locales['styles-button-tooltip'])
         .click($.proxy(this._onStyleClick, this))
         .append($('<span>').addClass('fa fa-font'))
-        .appendTo(tools);
+        .appendTo(bookToolGroup);
       
-      this._createToolButton("styles", this.options.locales['change-paragraph-style-button-tooltip'], { 
+      this._createToolButton("styles", blockToolGroup, this.options.locales['change-block-style-button-tooltip'], { 
         icon: 'fa fa-header',
         items: $.map(this._styles, function (style) {
           return {
@@ -469,7 +477,7 @@
         })
       });
       
-      this._createToolButton("floats", this.options.locales['change-parahraph-float-button-tooltip'], {
+      this._createToolButton("floats", blockToolGroup, this.options.locales['change-block-float-button-tooltip'], {
         icon: 'fa fa-align-left',
         items: [{
           icon: 'fa fa-align-justify',
@@ -486,7 +494,7 @@
         }]
       });
       
-      this._createToolButton("move", this.options.locales['move-paragraph-button-tooltip'], {
+      this._createToolButton("move", blockToolGroup, this.options.locales['move-block-button-tooltip'], {
         icon: 'fa fa-arrows',
         items: [{
           icon: 'fa fa-arrow-up',
@@ -500,7 +508,7 @@
       });
     },
     
-    _createToolButton: function (toolId, tooltip, toolOptions) {
+    _createToolButton: function (toolId, toolGroup, tooltip, toolOptions) {
       var tools = this.element.find('.forge-book-publisher-tools');
       
       var menuItems = $('<div>')
@@ -981,9 +989,9 @@
           'save-button-tooltip': $('.book-publisher').attr('data-save-button-tooltip'),
           'import-button-tooltip': $('.book-publisher').attr('data-import-button-tooltip'),
           'styles-button-tooltip': $('.book-publisher').attr('data-styles-button-tooltip'),
-          'change-paragraph-style-button-tooltip': $('.book-publisher').attr('data-change-paragraph-style-button-tooltip'),
-          'change-parahraph-float-button-tooltip': $('.book-publisher').attr('data-change-parahraph-float-button-tooltip'),
-          'move-paragraph-button-tooltip': $('.book-publisher').attr('data-move-paragraph-button-tooltip')
+          'change-block-style-button-tooltip': $('.book-publisher').attr('data-change-block-style-button-tooltip'),
+          'change-block-float-button-tooltip': $('.book-publisher').attr('data-change-block-float-button-tooltip'),
+          'move-block-button-tooltip': $('.book-publisher').attr('data-move-block-button-tooltip')
         }
       })
       .on("save", function (event, data) {
