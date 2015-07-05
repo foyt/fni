@@ -204,28 +204,33 @@ $hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
 .forge-publisher-style-dialog {
   
   .forge-publisher-style-dialog-style {
-    margin-bottom: 10px;
+    position: relative;
+
+    &:after {
+      content: '▸';
+      position: absolute;
+      font-size: 21px;     
+      right: 2px;
+      top: 0px;
+      height: 16px;
+    }
   }
   
   .forge-publisher-style-dialog-style-name {
-    @include header-3;
+    @include header-4;
     color: #000;
     cursor: pointer;
-    width: 100%;
-    border: 0px;
-  }
-  
-  .forge-publisher-style-dialog-style-name:after {
-    content: '▼';
-    float: right;
-    font-size: 16px;     
-    margin-top: 4px;
+    width: calc(100% - 24px);
+    border-style: solid;
+    border-width: 1px;
+    border-color: transparent;
+    margin-bottom: 10px;
   }
   
   .forge-publisher-style-dialog-style-settings {
     overflow: hidden;
-    max-height: 0px;
-    @include transition-property(max-height);
+    height: 0px;
+    @include transition-property(height);
     @include transition-duration(0.6s);
     @include transition-delay(0s);
     
@@ -253,11 +258,23 @@ $hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
   
   .forge-publisher-style-dialog-style-active {
     .forge-publisher-style-dialog-style-settings {
-      max-height: 237px;
+      height: 239px;
     }
     
     .forge-publisher-style-dialog-style-name {
       color: $title-color;
+      border-color: #eee;
+      padding-left: 3px;
+      padding-top: 1px;
+      padding-bottom: 1px;
+      margin-left: -3px;
+      margin-bottom: 8px;
+    }
+    
+    &:after {
+      content: '▾';
+      color: $title-color;
+      right: 0px;
     }
   }
   
