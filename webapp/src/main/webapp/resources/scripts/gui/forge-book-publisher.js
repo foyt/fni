@@ -207,6 +207,7 @@
     data: function (val) {
       if (val) {
         this.element.find('.forge-book-publisher-pages').html(val);
+        this._toolsWaypoint[0].context.refresh();
       } else {
         var cloned = $('<pre>').html( this.element.find('.forge-book-publisher-pages').html() );
 
@@ -413,22 +414,25 @@
     _createTools: function () {
       var tools = $('<div>')
         .addClass('forge-book-publisher-tools')
-        .appendTo(this.element)
-        .waypoint(function(direction) {
+        .appendTo(this.element);
+      
+      this._toolsWaypoint = tools.waypoint({
+        handler: function(direction) {
           if (direction == 'up') {
-            $(this).css({
+            $(this.element).css({
               'position': 'absolute',
               'top': 'initial'
             });
           } else {
-            $(this).css({
+            $(this.element).css({
               'position': 'fixed',
               'top': '10px'
             });
           }
-        }, {
-          offset: '10px'
-        });
+        }
+      }, {
+        offset: '10px'
+      });
 
       var bookToolGroup = $('<div>')
         .addClass('forge-book-publisher-tool-group forge-book-publisher-tool-group-book')
