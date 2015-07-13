@@ -1,0 +1,9 @@
+<div title="Edit Page Types" data-apply-button="Apply" data-cancel-button="Cancel">
+  <div class="forge-publisher-dialog forge-publisher-page-types-dialog">
+    <div class="forge-publisher-page-types-dialog-types">
+      {#types}
+        {>"forge/book-publisher/page-types-dialog-type"/}
+      {/types}
+    </div>
+  </div>
+</div>

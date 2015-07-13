@@ -1,0 +1,8 @@
+<div class="forge-publisher-page-types-dialog-type">
+
+  <input type="text" name="name" class="forge-publisher-page-types-dialog-type-name" value="{name}"/>
+  
+  <div class="forge-publisher-page-types-dialog-type-settings">
+  </div>
+  
+</div>
