@@ -3,6 +3,173 @@
   <input type="text" name="name" class="forge-publisher-page-types-dialog-type-name" value="{name}"/>
   
   <div class="forge-publisher-page-types-dialog-type-settings">
+  
+    <!-- Header -->
+    
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Show header</label>
+      <input type="checkbox" name="header:show"/>
+    </div>    
+    
+    <div class="forge-publisher-page-types-dialog-type-setting-font">
+      <label>Font</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <span>
+          <input value="12" type="number" min="1" step="any" name="header:font-size" data-unit="pt"/>
+        </span>
+        <span>pt</span>
+        <span>
+          <select name="header:font-family">
+            {#fonts}
+              <option value="{name|s}">{name|s}</option>
+            {/fonts}
+          </select>
+        </span>
+        <span class="forge-publisher-page-types-dialog-type-setting-font-actions">
+          <a class="forge-publisher-page-types-dialog-type-setting-font-action forge-publisher-page-types-dialog-type-setting-font-action-add" href="javascript:void(null)">
+            <span class="fa fa-plus"></span>
+          </a>
+          
+          <a class="forge-publisher-page-types-dialog-type-setting-font-action forge-publisher-page-types-dialog-type-setting-font-action-remove" href="javascript:void(null)">
+            <span class="fa fa-trash-o"></span>
+          </a>
+        </span>
+      </span>
+    </div>
+    
+    <div>
+      <label>Align</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <select name="header:text-align">
+          <option value="left">Left</option>
+          <option value="center">Center</option>
+          <option value="right">Right</option>
+        </select>
+      </span>
+    </div>
+    
+    <div>
+      <label>Font styles</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <input type="checkbox" name="header:bold" value="1" data-style="font-weight" data-on="bold" data-off="normal"/>
+        <label>Bold</label>
+        <input type="checkbox" name="header:italic" value="1" data-style="font-style" data-on="italic" data-off="normal"/>
+        <label>Italic</label>
+        <input type="checkbox" name="header:underline" value="1" data-style="text-decoration" data-on="underline" data-off="none" data-mutually-exclusive="strikethrough"/>
+        <label>Underline</label>
+        <input type="checkbox" name="header:strikethrough" value="1" data-style="text-decoration" data-on="line-through" data-off="none" data-mutually-exclusive="underline"/>
+        <label>Strikethrough</label>
+        <input type="checkbox" name="header:all-caps" value="1" data-style="text-transform" data-on="uppercase" data-off="none" data-mutually-exclusive="small-caps"/>
+        <label>All caps</label>
+        <input type="checkbox" name="header:small-caps" value="1" data-style="font-variant" data-on="small-caps" data-off="normal" data-mutually-exclusive="all-caps"/>
+        <label>Small caps</label>
+      </span>
+    </div>
+    
+    <div>
+      <label>Text color</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <input type="color" name="header:color" value="#000"/>
+      </span>
+    </div>
+    
+    <div>
+      <label>Background color</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <input type="color" name="header:background-color" value=""/>
+      </span>
+    </div>
+    
+    <div>
+      <label>Text</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <textarea name="header:text"></textarea>
+      </span>
+    </div>
+    
+    <!-- Footer -->
+    
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Show footer</label>
+      <input type="checkbox" name="footer:show"/>
+    </div>    
+    
+    <div class="forge-publisher-page-types-dialog-type-setting-font">
+      <label>Font</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <span>
+          <input value="12" type="number" min="1" step="any" name="footer:font-size" data-unit="pt"/>
+        </span>
+        <span>pt</span>
+        <span>
+          <select name="footer:font-family">
+            {#fonts}
+              <option value="{name|s}">{name|s}</option>
+            {/fonts}
+          </select>
+        </span>
+        <span class="forge-publisher-page-types-dialog-type-setting-font-actions">
+          <a class="forge-publisher-page-types-dialog-type-setting-font-action forge-publisher-page-types-dialog-type-setting-font-action-add" href="javascript:void(null)">
+            <span class="fa fa-plus"></span>
+          </a>
+          
+          <a class="forge-publisher-page-types-dialog-type-setting-font-action forge-publisher-page-types-dialog-type-setting-font-action-remove" href="javascript:void(null)">
+            <span class="fa fa-trash-o"></span>
+          </a>
+        </span>
+      </span>
+    </div>
+    
+    <div>
+      <label>Align</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <select name="footer:text-align">
+          <option value="left">Left</option>
+          <option value="center">Center</option>
+          <option value="right">Right</option>
+        </select>
+      </span>
+    </div>
+    
+    <div>
+      <label>Font styles</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <input type="checkbox" name="footer:bold" value="1" data-style="font-weight" data-on="bold" data-off="normal"/>
+        <label>Bold</label>
+        <input type="checkbox" name="footer:italic" value="1" data-style="font-style" data-on="italic" data-off="normal"/>
+        <label>Italic</label>
+        <input type="checkbox" name="footer:underline" value="1" data-style="text-decoration" data-on="underline" data-off="none" data-mutually-exclusive="strikethrough"/>
+        <label>Underline</label>
+        <input type="checkbox" name="footer:strikethrough" value="1" data-style="text-decoration" data-on="line-through" data-off="none" data-mutually-exclusive="underline"/>
+        <label>Strikethrough</label>
+        <input type="checkbox" name="footer:all-caps" value="1" data-style="text-transform" data-on="uppercase" data-off="none" data-mutually-exclusive="small-caps"/>
+        <label>All caps</label>
+        <input type="checkbox" name="footer:small-caps" value="1" data-style="font-variant" data-on="small-caps" data-off="normal" data-mutually-exclusive="all-caps"/>
+        <label>Small caps</label>
+      </span>
+    </div>
+    
+    <div>
+      <label>Text color</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <input type="color" name="footer:color" value="#000"/>
+      </span>
+    </div>
+    
+    <div>
+      <label>Background color</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <input type="color" name="footer:background-color" value=""/>
+      </span>
+    </div>
+    
+    <div>
+      <label>Text</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <textarea name="footer:text"></textarea>
+      </span>
+    </div>
+
   </div>
   
 </div>

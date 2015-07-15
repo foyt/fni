@@ -747,7 +747,8 @@
     _onPageTypesClick: function (event) {
       $("<div>") 
         .bookPublisherPageTypesDialog({
-          types: this.pageTypes()
+          pageTypes: this.pageTypes(),
+          fonts: this.fonts()
         })
         .on("applyTypes", $.proxy(function (event, data) {
           this.pageTypes(data.types);
@@ -1121,12 +1122,22 @@
     _create : function() {
       this._dialog = null;
       dust.render("forge/book-publisher/page-types-dialog", {
-        types: this.options.types
+        types: this.options.pageTypes,
+        fonts: this.options.fonts
       }, $.proxy(function(err, html) {
         if (err) {
           $('.notifications').notifications('notification', 'error', err);
         } else {
           this._dialog = $(html);
+
+          this._dialog.find('input[type="color"]')
+            .attr('type', 'text')
+            .spectrum({
+              preferredFormat: "rgb",
+              allowEmpty: true,
+              hideAfterPaletteSelect: true,
+              showButtons: false
+            });
           
           this._dialog.find('.forge-publisher-page-types-dialog-type').first().addClass('forge-publisher-page-types-dialog-type-active');
           this._dialog.find('.forge-publisher-page-types-dialog-type-name').click(function (event) {
@@ -1176,6 +1187,7 @@
       this._dialog.find('*').remove();
       this.destroy();
     }
+    
   });
   
   $(document).ready(function () {
@@ -1199,8 +1211,8 @@
         $('.book-layout-save')[0].click();
       });
     
-    $('.book-publisher').bookPublisher('fonts', $('.book-layout-fonts').val());
-    $('.book-publisher').bookPublisher('styles', $('.book-layout-styles').val());
+    // $('.book-publisher').bookPublisher('fonts', $('.book-layout-fonts').val());
+    // $('.book-publisher').bookPublisher('styles', $('.book-layout-styles').val());
     $('.book-publisher').bookPublisher('data', $('.book-layout-data').val());
   });
   

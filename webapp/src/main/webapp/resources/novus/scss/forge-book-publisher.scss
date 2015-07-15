@@ -247,7 +247,7 @@ $hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
   
   .forge-publisher-page-types-dialog-type-active {
     .forge-publisher-page-types-dialog-type-settings {
-      height: 239px;
+      height: 386px;
     }
     
     .forge-publisher-page-types-dialog-type-name {
@@ -267,6 +267,53 @@ $hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
     }
   }
   
+  .forge-publisher-page-types-dialog-type-setting-editor {
+    display: inline-block;
+    width: 80%;
+  }
+  
+  .forge-publisher-page-types-dialog-type-setting-editor input[type="checkbox"] {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+  
+  .forge-publisher-page-types-dialog-type-setting-editor input[type="checkbox"]:first-child {
+    margin-left: 0px;
+  }
+  
+  .forge-publisher-page-types-dialog-type-setting-editor label {
+    font-weight: bold;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    display: inline-block;
+  }
+  
+  .forge-publisher-page-types-dialog-type-settings>div>label {
+    width: 20%;
+    font-weight: bold;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    display: inline-block;
+    vertical-align: top;
+  }
+  
+  textarea {
+    width: 475px;
+    height: 50px;
+    margin-top: 2px;
+    margin-bottom: 5px;
+  }
+  
+  input[name="header:font-size"] {
+    width: 40px;
+    margin-right: 2px;
+  }
+  
+  select[name="header:font-family"] {
+    margin-left: 5px;
+  }
 }
  
 .forge-publisher-style-dialog {
