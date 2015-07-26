@@ -1,0 +1,16 @@
+<div title="Edit Styles" data-apply-button="Apply" data-cancel-button="Cancel" data-empty-tab-label="Untitled" class="forge-publisher-styles-dialog">
+  <ul>
+    {#styles}
+    <li><a href="#style-tab-{$idx}">{name}</a></li>
+    {/styles}
+    <li><a href="#style-tab-new">...</a></li>
+  </ul>
+  {#styles}
+    <div id="style-tab-{$idx}">
+      {>"forge/book-publisher/styles-dialog-style"/}
+    </div>
+  {/styles}
+  <div id="style-tab-new">
+    {>"forge/book-publisher/styles-dialog-style"/}
+  </div>
+</div>

@@ -75,7 +75,79 @@
         return this.value * 0.75;
       }
     }
+  });
+  
+
+  $.widget("custom.bookPublisherDialog", {
+    options: {
+      templateName: null,
+      templateOptions: {}
+    },
     
+    _create : function() {
+      this.dialogElement = null;
+      
+      dust.render(this.options.templateName, this.options.templateOptions, $.proxy(function (err, html) {
+        if (err) {
+          $('.notifications').notifications('notification', 'error', err);
+        } else {
+          this.dialogElement = $(html);
+          this.element.trigger("beforeDialogOpen");
+          
+          this.dialogElement.find('input[type="color"]')
+            .attr({
+              'type': 'text',
+              'data-original-type': 'color'
+            })
+            .spectrum();
+          
+          this.dialogElement.on("change","input,select,textarea", $.proxy(this._onFormFieldChange, this));
+          
+          var buttons = $.map(this.options.dialogButtons, $.proxy(function (dialogButton) {
+            return {
+              'require-valid': dialogButton['require-valid']||false, 
+              'text': this.dialogElement.attr(dialogButton['text-attribute']),
+              'click': $.proxy(dialogButton['click'], this)
+            };
+          }, this));
+          
+          this.dialogElement
+            .addClass('forge-publisher-dialog')
+            .dialog({
+              modal: true,
+              width: this.options.dialogWidth,
+              buttons: buttons
+            });
+          
+          this.element.trigger("afterDialogOpen");
+        }
+      }, this));
+    },
+    
+    _close: function () {
+      this.dialogElement.find('input[data-original-type="color"]').spectrum('destroy').remove();
+      this.dialogElement.dialog('close').remove();
+      this.destroy();
+    },
+    
+    _onFormFieldChange: function (event) {
+      var valid = event.target.checkValidity();
+      
+      var buttons = $.map(this.dialogElement.dialog("option", "buttons"), function (button) {
+        if (button['require-valid'] == true) {
+          if (valid) {
+            delete button['disabled'];
+          } else {
+            button['disabled'] = true;
+          }
+        }
+        
+        return button;
+      });
+      
+      this.dialogElement.dialog("option", "buttons", buttons);
+    }
+  
   });
   
   $.widget("custom.bookPublisher", {
@@ -96,17 +168,18 @@
         "selector":"p",
         "rules":{
           'font-family': 'Tinos',
-          'margin-top': '17.9167px',
-          'margin-bottom': '17.9167px'  
+          'font-size': '12pt',
+          'margin-top': '14pt',
+          'margin-bottom': '14pt'          
         }
       }, {
         "name":"Otsikko 1",
         "selector":"h1",
         "rules":{
           'font-family': 'Tinos',
-          'font-size': '32px',  
-          'margin-top': '21.4333px',  
-          'margin-bottom': '21.4333px',  
+          'font-size': '24pt',  
+          'margin-top': '18pt',  
+          'margin-bottom': '18pt',  
           'font-weight': 'bold'
         }
       }, {
@@ -114,9 +187,9 @@
         "selector":"h2",
         "rules":{
           'font-family': 'Tinos',
-          'font-size': '24px',  
-          'margin-top': '18px',  
-          'margin-bottom': '18px',  
+          'font-size': '22pt',  
+          'margin-top': '16pt',  
+          'margin-bottom': '16pt',  
           'font-weight': 'bold'
         }
       }, {
@@ -124,9 +197,9 @@
         "selector":"h3",
         "rules":{
           'font-family': 'Tinos',
-          'font-size': '18.7167px', 
-          'margin-top': '15.5333px',
-          'margin-bottom': '15.5333px',  
+          'font-size': '20pt', 
+          'margin-top': '14pt',
+          'margin-bottom': '14pt',  
           'font-weight': 'bold'
         }
       }, {
@@ -134,8 +207,9 @@
         "selector":"h4",
         "rules":{
           'font-family': 'Tinos',
-          'margin-top': '18px',
-          'margin-bottom': '17.9167px',  
+          'font-size': '18pt',
+          'margin-top': '12pt',
+          'margin-bottom': '12pt',  
           'font-weight': 'bold'
         }
       }, {
@@ -143,9 +217,9 @@
         "selector":"h5",
         "rules":{
           'font-family': 'Tinos',
-          'font-size': '13.2833px',  
-          'margin-top': '24px',  
-          'margin-bottom': '24px',  
+          'font-size': '16pt',  
+          'margin-top': '10pt',  
+          'margin-bottom': '10pt',  
           'font-weight': 'bold'
         }
       }, {
@@ -153,9 +227,9 @@
         "selector":"h6",
         "rules":{
           'font-family': 'Tinos',
-          'font-size': '13px',
-          'margin-top': '20.0333px',
-          'margin-bottom': '20.0333px',  
+          'font-size': '14pt',
+          'margin-top': '8pt',
+          'margin-bottom': '8pt',  
           'font-weight': 'bold'
         }
       }, {
@@ -163,7 +237,8 @@
         "selector":"ul",
         "rules":{
           'font-family': 'Tinos',
-          'margin-left':'40px',
+          'font-size': '12pt',
+          'margin-left':'30pt',
           'list-style-type': 'disc'
         }
       }, {
@@ -171,7 +246,8 @@
         "selector":"ol",
         "rules":{  
           'font-family': 'Tinos',
-          'margin-left':'40px',
+          'font-size': '12pt',
+          'margin-left':'30pt',
           'list-style-type': 'decimal'
         }
       }],
@@ -181,16 +257,24 @@
       
       pageTypes: [{
         id: "contents",
-        name: "Contents"
+        name: "Contents",
+        header: {},
+        footer: {}
       }, {
         id: "table-of-contents",
-        name: "Table of contents"
+        name: "Table of contents",
+        header: {},
+        footer: {}
       }, {
         id: "front-cover",
-        name: "Front cover"
+        name: "Front cover",
+        header: {},
+        footer: {}
       }, {
         id: "back-cover",
-        name: "Back cover"
+        name: "Back cover",
+        header: {},
+        footer: {}
       }]
 
     },
@@ -298,6 +382,34 @@
       } else {
         return this._fonts;
       }
+    },
+    
+    addFont: function (name, url) {
+      WebFont.load({
+        custom: {
+          families: [name],
+          urls: [url]
+        }
+      });
+      
+      this._fonts.push({
+        name: name,
+        url: url
+      });
+      
+      $(this.element).trigger("fontsChanged", {
+        fonts: this.fonts()
+      });
+    },
+        
+    removeFont: function (name) {
+      this._fonts = $.grep(this._fonts, function(font, index) {
+        return font.name != name;
+      });
+
+      $(this.element).trigger("fontsChanged", {
+        fonts: this.fonts()
+      });
     },
     
     pageTypes: function (val) {
@@ -668,7 +780,7 @@
     },
     
     _createCss: function (callback) {
-      dust.render("forge-publisher-css", {
+      dust.render("forge/book-publisher/css", {
         styles: this.styles()
       }, $.proxy(function(err, css) {
         if (err) {
@@ -734,13 +846,12 @@
     
     _onStyleClick: function (event) {
       $("<div>") 
-        .bookPublisherStyleDialog({
+        .bookPublisherStylesDialog({
           fonts: this.fonts(),
           styles: this.styles()
         })
         .on("applyStyles", $.proxy(function (event, data) {
           this.styles(data.styles);
-          this.fonts(data.fonts);
         }, this));
     },
     
@@ -814,135 +925,154 @@
         'data-disabled': data.page.length ? 'false' : 'true'
       }); 
     }
-    
   });
   
-  $.widget("custom.bookPublisherStyleDialog", {
-    _create : function() {
-      this._fonts = this.options.fonts;
-      
-      this._dialog = null;
-      dust.render("forge-publisher-style-dialog", {
-        fonts: this._fonts,
-        styles: this.options.styles
-      }, $.proxy(function(err, html) {
-        if (err) {
-          $('.notifications').notifications('notification', 'error', err);
-        } else {
-          this._dialog = $(html);
-          
-          this._dialog.find('.forge-publisher-style-dialog-style-setting-editor input').change($.proxy(this._onStyleInputChange, this));
-          this._dialog.find('.forge-publisher-style-dialog-style-setting-editor select').change($.proxy(this._onStyleSelectChange, this));
-          this._dialog.find('.forge-publisher-style-dialog-style-setting-font-action-add').click($.proxy(this._onFontAddClick, this));
-          this._dialog.find('.forge-publisher-style-dialog-style-setting-font-action-remove').click($.proxy(this._onFontRemoveClick, this));
-          
-          this._dialog.find('.forge-publisher-style-dialog-style').each($.proxy(function (index, style) {
-            var rules = $.parseJSON($(style).attr('data-rules'));
-            
-            $.each(rules, function (key, value) {
-              var input = $(style).find('input[name="' + key + '"]');
-              if (input.length) {
-                if (input.attr('data-unit')) {
-                  input.val((new LengthUnitConverter(value)).to(input.attr('data-unit')));
-                } else {
-                  input.attr('value', value);
-                }
-              } else {
-                $(style).find('input[data-style="' + key + '"][data-on="' + value + '"]').prop('checked', true);
-                $(style).find('select[name="' + key + '"]').val(value);
-              }
-            });
-
-            this._refreshPreview(style);
-          }, this));
-
-          this._dialog.find('input[type="color"]')
-            .attr('type', 'text')
-            .spectrum({
-              preferredFormat: "rgb",
-              allowEmpty: true,
-              hideAfterPaletteSelect: true,
-              showButtons: false
-            });
-          
-          this._dialog.find('.forge-publisher-style-dialog-style').first().addClass('forge-publisher-style-dialog-style-active');
-          this._dialog.find('.forge-publisher-style-dialog-style-name').click(function (event) {
-            $(this).closest('.forge-publisher-style-dialog-styles')
-              .find('.forge-publisher-style-dialog-style')
-              .removeClass('forge-publisher-style-dialog-style-active');
-            $(this)
-              .closest('.forge-publisher-style-dialog-style')
-              .addClass('forge-publisher-style-dialog-style-active');
+  $.widget("custom.bookPublisherStylesDialog", $.custom.bookPublisherDialog, {
+    options: {
+      dialogWidth: 650,
+      dialogButtons: [{
+        'require-valid': true,
+        'text-attribute': 'data-apply-button',
+        'click': function () {
+          this.element.trigger("applyStyles", {
+            styles: this.styles()
           });
           
-          this._dialog.dialog({
-            modal: true,
-            width: 650,
-            buttons : [ {
-              'text' : this._dialog.attr('data-apply-button'),
-              'class': 'apply-button',
-              'click' : $.proxy(function(event) {
-                this.element.trigger("applyStyles", {
-                  styles: this.styles(),
-                  fonts: this.fonts()
-                });
-
-                this._close();
-              }, this)
-            }, {
-              'text' : this._dialog.attr('data-cancel-button'),
-              'class': 'cancel-button',
-              'click' : $.proxy(function(event) {
-                this._close();
-              }, this)
-            } ]
-          });
+          this._close(); 
         }
+      }, {
+        'text-attribute': 'data-cancel-button',
+        'click' : function() {
+          this._close();
+        }
+      }],
+      templateName: "forge/book-publisher/styles-dialog"
+    },
+        
+    _create : function() {
+      this.option("templateOptions", {
+        fonts: this.options.fonts,
+        styles: this.options.styles
+      });
+      
+      this.element.on("beforeDialogOpen", $.proxy(function (event) {
+        this.dialogElement.find('ul').parent()
+        .tabs({ 
+          beforeActivate: $.proxy(function (event, ui) {
+            
+            this.dialogElement.find('.forge-publisher-style-dialog-style').each($.proxy(function (index, style) {
+              var rulesAttr = $(style).attr('data-rules');
+              if (rulesAttr) {
+                var rules = $.parseJSON(rulesAttr);
+                
+                $.each(rules, $.proxy(function (key, value) {
+                  var input = $(style).find('input[name="' + key + '"]');
+                  if (input.length) {
+                    if (input.attr('data-unit')) {
+                      input.val((new LengthUnitConverter(value)).to(input.attr('data-unit')));
+                    } else {
+                      input.attr('value', value);
+                    }
+                  } else {
+                    $(style).find('input[data-style="' + key + '"][data-on="' + value + '"]').prop('checked', true);
+                    $(style).find('select[name="' + key + '"]').val(value);
+                  }
+                }, this));
+                
+                this._refreshPreview(style);
+              }
+            }, this));
+            
+            var href = $(ui.newTab).find('a').attr("href");
+            
+            if (href == '#style-tab-new') {
+              event.preventDefault();
+              event.stopPropagation();
+              
+              var newIndex = $(ui.newTab).closest('ul').find('li').index(ui.newTab);
+              var newId = 'style-tab-' + newIndex;
+              var selector = '.style-' + newIndex;
+              
+              var label = $('<li>').append(
+                $('<a>').attr({
+                  'href': '#' + newId
+                }).text(this.dialogElement.attr('data-empty-tab-label'))
+              );
+              
+              var panel = $('<div>')
+                .attr('id', newId)
+                .html($(ui.newPanel).html());
+             
+              panel.find('.sp-replacer').remove();
+              panel.find('input[data-original-type="color"]').spectrum();
+              
+              $(ui.newPanel).before(panel);
+              $(ui.newTab).before(label);
+              
+              panel.find('.forge-publisher-style-dialog-style').attr({
+                'data-selector': selector,
+                'data-rules': '{}'
+              });
+              
+              $(event.target).tabs("refresh");
+              $(event.target).tabs("option", "active", newIndex);
+            }
+          }, this)
+        });
+
+        this.dialogElement.on("change", '.forge-publisher-style-dialog-style-name', $.proxy(this._onNameChange, this));
+        this.dialogElement.on("change", 'input', $.proxy(this._onInputChange, this));
+        this.dialogElement.on("change", 'select', $.proxy(this._onSelectChange, this));
+        this.dialogElement.on("click", '.forge-publisher-style-dialog-style-setting-font-action-add', $.proxy(this._onAddFontClick, this));
+        this.dialogElement.on("click", '.forge-publisher-style-dialog-style-setting-font-action-remove', $.proxy(this._onRemoveFontClick, this));
       }, this));
+      
+      this._super();
     },
     
     styles: function () {
-      return $.map(this._dialog.find('.forge-publisher-style-dialog-style'), function (style) {
+      return $.map(this.dialogElement.find('.ui-tabs-panel:not([id="style-tab-new"]) .forge-publisher-style-dialog-style'), function (style) {
         return {
           name: $(style).find('input[name="name"]').val(),
           selector: $(style).attr('data-selector'),
-          rules: $.parseJSON($(style).attr('data-rules'))
+          rules: $.parseJSON($(style).attr('data-rules')||'{}')
         }
       });
     },
     
-    fonts: function () {
-      return this._fonts;
+    _onAddFontClick: function (event) {
+      $('<div>')
+        .bookPublisherAddFontDialog()
+        .on("addFont", $.proxy(function (event, data) {
+          $('.book-publisher').bookPublisher('addFont', data.name, data.url);
+
+          $.each(this.dialogElement.find('select[name="font-family"]'), function (index, select) {
+            $(select).append($('<option>').attr('value', data.name).text(data.name));
+          });
+        }, this));
     },
     
-    addFont: function (name, url) {
-      WebFont.load({
-        custom: {
-          families: [name],
-          urls: [url]
-        }
-      });
+    _onRemoveFontClick: function (event) {
+      var name = $(event.target)
+        .closest('.forge-publisher-style-dialog-style-setting-font')
+        .find('select[name="font-family"]').val();
       
-      this._fonts.push({
-        name: name,
-        url: url
-      });
-      
-      $.each($(this._dialog).find('select[name="font-family"]'), function (index, select) {
-        $(select).append($('<option>').attr('value', name).text(name));
-      });
+      $('<div>')
+        .bookPublisherRemoveFontDialog({
+          name: name
+        })
+        .on("removeFont", $.proxy(function (event, data) {
+          $('.book-publisher').bookPublisher('removeFont', data.name);
+          this.dialogElement.find('select[name="font-family"] option[value="' + name + '"]').remove();
+        }, this));
     },
     
-    removeFont: function (name) {
-      this._fonts = $.grep(this._fonts, function(font, index) {
-        return font.name != name;
-      });
-      
-      $(this._dialog).find('select[name="font-family"] option[value="' + name + '"]').remove();
-      $(this._dialog).find('select[name="font-family"]').trigger('change');
+    _onNameChange: function (event) {
+      this.dialogElement.find('.ui-tabs-active a')
+        .text($(event.target).val()||this.dialogElement.attr('data-empty-tab-label'));
     },
     
-    _onStyleInputChange: function (event) {
+    _onInputChange: function (event) {
       var input = $(event.target);
       var style = $(input).closest('.forge-publisher-style-dialog-style');
       
@@ -963,112 +1093,15 @@
         this._updateRule(style, input.attr('name'), input.val() + (input.attr('data-unit')||''));
       }
     },
-
-    _onStyleSelectChange: function (event) {
+    
+    _onSelectChange: function (event) {
       var select = $(event.target);
       var style = $(select).closest('.forge-publisher-style-dialog-style');
       this._updateRule(style, select.attr('name'), select.val() + (select.attr('data-unit')||''));
     },
     
-    _onFontAddClick: function (event) {
-      var style = $(event.target).closest('.forge-publisher-style-dialog-style');
-      this._openAddFontDialog($.proxy(function (data) {
-        this.addFont(data.name, data.url);
-        style.find('select[name="font-family"]')
-          .val(data.name)
-          .trigger('change');
-      }, this));
-    },
-    
-    _onFontRemoveClick: function (event) {
-      var style = $(event.target).closest('.forge-publisher-style-dialog-style');
-      var name = style.find('select[name="font-family"]').val();
-      
-      this._confirmFontRemoval(name, $.proxy(function (data) {
-        this.removeFont(data.name);
-        style.find('select[name="font-family"]').trigger('change');
-      }, this));
-    },
-    
-    _openAddFontDialog: function (callback) {
-      dust.render("forge-publisher-style-add-font-dialog", {
-      }, $.proxy(function(err, html) {
-        if (err) {
-          $('.notifications').notifications('notification', 'error', err);
-        } else {
-          var dialog = $(html);
-          
-          dialog.find('input[name="google-fonts-search"]').googleFontPicker({
-            apiKey: $('.google-api-public-key').val(),            
-            minLength: 3,
-            select: function( event, ui ) {
-              $(this).val('');
-              dialog.find('input[name="name"]').val(ui.item.label);
-              dialog.find('input[name="url"]').val(ui.item.value);
-            }
-          });
-          
-          dialog.dialog({
-            modal : true,
-            width : 500,
-            buttons : [ {
-              'text' : dialog.attr('data-add-button'),
-              'class': 'select-button',
-              'click' : function(event) {
-                callback({
-                  name: $(this).find('input[name="name"]').val(),
-                  url: $(this).find('input[name="url"]').val()
-                });
-                
-                $(this).dialog('close');
-              }
-            }, {
-              'text' : dialog.attr('data-cancel-button'),
-              'class': 'cancel-button',
-              'click' : function(event) {
-                $(this).dialog('close');
-              }
-            } ]
-          });
-        }
-      }, this));
-    },
-    
-    _confirmFontRemoval: function (name, callback) {
-      dust.render("forge-publisher-style-remove-font-dialog", {
-        name: name
-      }, $.proxy(function(err, html) {
-        if (err) {
-          $('.notifications').notifications('notification', 'error', err);
-        } else {
-          var dialog = $(html);
-          dialog.dialog({
-            modal : true,
-            width : 500,
-            buttons : [ {
-              'text' : dialog.attr('data-remove-button'),
-              'class': 'remove-button',
-              'click' : function(event) {
-                callback({
-                  name: name,
-                });
-                
-                $(this).dialog('close');
-              }
-            }, {
-              'text' : dialog.attr('data-cancel-button'),
-              'class': 'cancel-button',
-              'click' : function(event) {
-                $(this).dialog('close');
-              }
-            } ]
-          });
-        }
-      }, this));
-    },
-    
     _refreshPreview: function (style) {
-      var rules = $.parseJSON($(style).attr('data-rules'));
+      var rules = $.parseJSON($(style).attr('data-rules')||'{}');
       var previewStyles = {};
       var marginStyles = {};
       var paddingStyles = {};
@@ -1105,87 +1138,298 @@
     },
     
     _updateRule: function (style, rule, value) {
-      var rules = $.parseJSON($(style).attr('data-rules'));
+      var rules = $.parseJSON($(style).attr('data-rules')||'{}');
       rules[rule] = value;
       $(style).attr('data-rules', JSON.stringify(rules));
       this._refreshPreview(style);
-    },
-    
-    _close: function () {
-      this._dialog.dialog('close');
-      this._dialog.find('*').remove();
-      this.destroy();
     }
+    
   });
   
-  $.widget("custom.bookPublisherPageTypesDialog", {
+  $.widget("custom.bookPublisherAddFontDialog", $.custom.bookPublisherDialog, {
+    options: {
+      dialogWidth: 500,
+      dialogButtons: [{
+        'require-valid': true,
+        'text-attribute': 'data-add-button',
+        'click': function () {
+          this.element.trigger("addFont", {
+            name: $(this.dialogElement).find('input[name="name"]').val(),
+            url: $(this.dialogElement).find('input[name="url"]').val()
+          });
+
+          this._close(); 
+        }
+      }, {
+        'text-attribute': 'data-cancel-button',
+        'click' : function() {
+          this._close();
+        }
+      }],
+      templateName: "forge/book-publisher/add-font-dialog"
+    },
+        
     _create : function() {
-      this._dialog = null;
-      dust.render("forge/book-publisher/page-types-dialog", {
+      this.element.on("beforeDialogOpen", $.proxy(function (event) {
+        this.dialogElement.find('input[name="google-fonts-search"]').googleFontPicker({
+          apiKey: $('.google-api-public-key').val(),            
+          minLength: 3,
+          select: $.proxy(function(event, ui ) {
+            event.preventDefault();
+            event.stopPropagation();
+            $(event.target).val('');
+            this.dialogElement.find('input[name="name"]').val(ui.item.label);
+            this.dialogElement.find('input[name="url"]').val(ui.item.value);
+          }, this)
+        });
+      }, this));
+      
+      this._super();
+    }
+    
+  });
+  
+  $.widget("custom.bookPublisherRemoveFontDialog", $.custom.bookPublisherDialog, {
+    options: {
+      dialogWidth: 500,
+      dialogButtons: [{
+        'require-valid': true,
+        'text-attribute': 'data-remove-button',
+        'click': function () {
+          this.element.trigger("removeFont", {
+            name: this.options.name
+          });
+
+          this._close(); 
+        }
+      }, {
+        'text-attribute': 'data-cancel-button',
+        'click' : function() {
+          this._close();
+        }
+      }],
+      templateName: "forge/book-publisher/remove-font-dialog"
+    },
+    
+    _create : function() {
+      this.option("templateOptions", {
+        name: this.options.name
+      });
+      
+      this._super();
+    }
+    
+  });
+  
+  $.widget("custom.bookPublisherPageTypesDialog", $.custom.bookPublisherDialog, {
+    
+    options: {
+      dialogWidth: 650,
+      dialogButtons: [{
+        'require-valid': true,
+        'text-attribute': 'data-apply-button',
+        'click': function () {
+          this.element.trigger("applyTypes", {
+            types: this.types()
+          });
+
+          this._close(); 
+        }
+      }, {
+        'text-attribute': 'data-cancel-button',
+        'click' : function() {
+          this._close();
+        }
+      }],
+      templateName: "forge/book-publisher/page-types-dialog"
+    },
+    
+    _create : function() {
+
+      this.option("templateOptions", {
         types: this.options.pageTypes,
         fonts: this.options.fonts
-      }, $.proxy(function(err, html) {
-        if (err) {
-          $('.notifications').notifications('notification', 'error', err);
-        } else {
-          this._dialog = $(html);
-
-          this._dialog.find('input[type="color"]')
-            .attr('type', 'text')
-            .spectrum({
-              preferredFormat: "rgb",
-              allowEmpty: true,
-              hideAfterPaletteSelect: true,
-              showButtons: false
-            });
-          
-          this._dialog.find('.forge-publisher-page-types-dialog-type').first().addClass('forge-publisher-page-types-dialog-type-active');
-          this._dialog.find('.forge-publisher-page-types-dialog-type-name').click(function (event) {
-            $(this).closest('.forge-publisher-page-types-dialog-types')
-              .find('.forge-publisher-page-types-dialog-type')
-              .removeClass('forge-publisher-page-types-dialog-type-active');
-            $(this)
-              .closest('.forge-publisher-page-types-dialog-type')
-              .addClass('forge-publisher-page-types-dialog-type-active');
+      });
+      
+      this.element.on("beforeDialogOpen", $.proxy(function (event) {
+        $.each(this.dialogElement.find('.forge-publisher-page-types-dialog-type'), $.proxy(function (index, type) {
+          $.each(['header', 'footer'], $.proxy(function (groupIndex, group) {
+            var rulesAttr = $(type).attr('data-' + group + '-rules');
+            if (rulesAttr) {
+              var rules = $.parseJSON(rulesAttr);
+              
+              $.each(rules, $.proxy(function (key, value) {
+                var input = $(type).find('input[name="' + group + ':' + key + '"]');
+                if (input.length) {
+                  if (input.attr('data-unit')) {
+                    input.val((new LengthUnitConverter(value)).to(input.attr('data-unit')));
+                  } else {
+                    input.attr('value', value);
+                  }
+                } else {
+                  $(type).find('input[data-style="' + key + '"][data-on="' + value + '"][name^="' + group + ':"]').prop('checked', true);
+                  $(type).find('select[name="' + group + ':' + key + '"]').val(value);
+                }
+              }, this));
+              
+              $(type).find('textarea[name="' + group + ':text"]').css(rules);
+            }
+          }, this));
+        }, this));
+        
+        autosize(this.dialogElement.find('textarea'));
+        autosize.update(this.dialogElement.find('textarea'));
+        
+        this.dialogElement.find('ul').parent()
+          .tabs({
+            beforeActivate: $.proxy(function (event, ui) {
+              var href = $(ui.newTab).find('a').attr("href");
+              
+              if (href == '#type-tab-new') {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                var newIndex = $(ui.newTab).closest('ul').find('li').index(ui.newTab);
+                var newId = 'type-tab-' + newIndex;
+                
+                var label = $('<li>').append(
+                  $('<a>').attr({
+                    'href': '#' + newId
+                  }).text(this.dialogElement.attr('data-empty-tab-label'))
+                );
+                
+                var panel = $('<div>')
+                  .attr('id', newId)
+                  .html($(ui.newPanel).html());
+                
+                panel.find('.sp-replacer').remove();
+                panel.find('input[data-original-type="color"]').spectrum();
+                
+                $(ui.newPanel).before(panel);
+                $(ui.newTab).before(label);
+                
+                $(event.target).tabs("refresh");
+                
+                $(event.target).tabs("option", "active", newIndex);
+              }
+            }, this)
           });
-          
-          this._dialog.dialog({
-            modal: true,
-            width: 650,
-            buttons : [ {
-              'text' : this._dialog.attr('data-apply-button'),
-              'class': 'apply-button',
-              'click' : $.proxy(function(event) {
-                this.element.trigger("applyTypes", {
-                  types: this.types()
-                });
 
-                this._close();
-              }, this)
-            }, {
-              'text' : this._dialog.attr('data-cancel-button'),
-              'class': 'cancel-button',
-              'click' : $.proxy(function(event) {
-                this._close();
-              }, this)
-            } ]
-          });
-        }
+        this.dialogElement.on("change", '.forge-publisher-page-types-dialog-type-name', $.proxy(this._onNameChange, this));
+        this.dialogElement.on("change", 'input', $.proxy(this._onInputChange, this));
+        this.dialogElement.on("change", 'select', $.proxy(this._onSelectChange, this));
+        this.dialogElement.on("click", '.forge-publisher-page-types-dialog-type-setting-font-action-add', $.proxy(this._onAddFontClick, this));
+        this.dialogElement.on("click", '.forge-publisher-page-types-dialog-type-setting-font-action-remove', $.proxy(this._onRemoveFontClick, this));
+        
       }, this));
+      
+      this._super();
     },
     
     types: function () {
-      return $.map(this._dialog.find('.forge-publisher-page-types-dialog-type'), function (type) {
+      return $.map(this.dialogElement.find('.ui-tabs-panel:not([id="type-tab-new"]) .forge-publisher-page-types-dialog-type'), function (type) {
+        var headerRules = $(type).attr('data-header-rules');
+        var footerRules = $(type).attr('data-footer-rules');
+        
         return {
-          name: $(type).find('input[name="name"]').val()
+          name: $(type).find('input[name="name"]').val(),
+          header: {
+            show: $(type).find('input[name="header:show"]').prop('checked'),
+            text: $(type).find('textarea[name="header:text"]').val(),
+            rules: headerRules ? $.parseJSON(headerRules) : {}
+          }, 
+          footer: {
+            show: $(type).find('input[name="footer:show"]').prop('checked'),
+            text: $(type).find('textarea[name="footer:text"]').val(),
+            rules: footerRules ? $.parseJSON(footerRules) : {}
+          }
         }
       });
     },
+
+    _updateRule: function (type, group, rule, value) {
+      var rulesAttr = $(type).attr('data-' + group + '-rules');
+      var rules = rulesAttr ? $.parseJSON(rulesAttr) : {};
+      rules[rule] = value;
+      $(type).attr('data-' + group + '-rules', JSON.stringify(rules));
+      type.find('textarea[name="' + group + ':text"]').css(rules);
+      autosize.update(this.dialogElement.find('textarea'));
+    },
     
-    _close: function () {
-      this._dialog.dialog('close');
-      this._dialog.find('*').remove();
-      this.destroy();
+    _onNameChange: function (event) {
+      this.dialogElement.find('.ui-tabs-active a')
+        .text($(event.target).val()||this.dialogElement.attr('data-empty-tab-label'));
+    },
+    
+    _onAddFontClick: function (event) {
+      $('<div>')
+        .bookPublisherAddFontDialog()
+        .on("addFont", $.proxy(function (event, data) {
+          $('.book-publisher').bookPublisher('addFont', data.name, data.url);
+
+          $.each(this.dialogElement.find('select[name*="font-family"]'), function (index, select) {
+            $(select).append($('<option>').attr('value', data.name).text(data.name));
+          });
+        }, this));
+    },
+    
+    _onRemoveFontClick: function (event) {
+      var name = $(event.target)
+        .closest('.forge-publisher-page-types-dialog-type-setting-font')
+        .find('select[name*="font-family"]').val();
+      
+      $('<div>')
+        .bookPublisherRemoveFontDialog({
+          name: name
+        })
+        .on("removeFont", $.proxy(function (event, data) {
+          $('.book-publisher').bookPublisher('removeFont', data.name);
+          this.dialogElement.find('select[name*="font-family"] option[value="' + name + '"]').remove();
+        }, this));
+    },
+
+    _onInputChange: function (event) {
+      var input = $(event.target);
+      var type = input.closest('.forge-publisher-page-types-dialog-type');
+      var name = input.attr('name');
+      if (name.indexOf(':')) {
+        var nameParts = name.split(':');
+        
+        if (input.attr('type') == 'checkbox') {
+          if (nameParts[1] == 'show') {
+            if (input.prop('checked')) {
+              type.find('textarea[name="' + nameParts[0] + ':text"]').removeAttr('disabled');
+            } else {
+              type.find('textarea[name="' + nameParts[0] + ':text"]').attr('disabled', 'disabled');
+            }
+          } else {
+            var mutuallyExculusive = input.attr('data-mutually-exclusive');
+            if (mutuallyExculusive && input.prop('checked')) {
+              var mutuallyExculusiveInput = type.find('input[name="' + mutuallyExculusive + '"]');
+              if (mutuallyExculusiveInput.prop('checked')) {
+                mutuallyExculusiveInput
+                  .prop('checked', false)
+                  .trigger('change');
+              }
+            }
+            
+            var value = input.attr(input.prop('checked') ? 'data-on' : 'data-off');
+            this._updateRule(type, nameParts[0], input.attr('data-style'), value);
+          }
+        } else {
+          this._updateRule(type, nameParts[0], nameParts[1], input.val() + (input.attr('data-unit')||''));
+        }
+      }
+    },
+    
+    _onSelectChange: function (event) {
+      var select = $(event.target);
+      var name = select.attr('name');
+      if (name.indexOf(':')) {
+        var nameParts = name.split(':');
+        var type = select.closest('.forge-publisher-page-types-dialog-type');
+        this._updateRule(type, nameParts[0], nameParts[1], select.val() + (select.attr('data-unit')||''));
+      }
     }
     
   });
@@ -1211,9 +1455,21 @@
         $('.book-layout-save')[0].click();
       });
     
-    // $('.book-publisher').bookPublisher('fonts', $('.book-layout-fonts').val());
-    // $('.book-publisher').bookPublisher('styles', $('.book-layout-styles').val());
-    $('.book-publisher').bookPublisher('data', $('.book-layout-data').val());
+    var fonts = $('.book-layout-fonts').val();
+    var styles = $('.book-layout-styles').val();
+    var data = $('.book-layout-data').val();
+    
+    if (fonts) {
+      $('.book-publisher').bookPublisher('fonts', fonts);
+    }
+    
+    if (styles) {
+      $('.book-publisher').bookPublisher('styles', styles);
+    }
+    
+    if (data) {
+      $('.book-publisher').bookPublisher('data', data);
+    }
   });
   
 }).call(this);

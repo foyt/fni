@@ -1,11 +1,11 @@
 <div class="forge-publisher-style-dialog-style" data-rules="{rules|js}" data-selector="{selector}">
 
-  <input type="text" name="name" class="forge-publisher-style-dialog-style-name" value="{name}"/>
+  <input type="text" name="name" class="forge-publisher-style-dialog-style-name" value="{name}" placeholder="Enter the name of the style" required="required"/>
   
   <div class="forge-publisher-style-dialog-style-settings">
     
-    <div class="forge-publisher-style-dialog-style-setting-font">
-      <label>Kirjaisin</label>
+    <div class="forge-publisher-style-dialog-style-setting forge-publisher-style-dialog-style-setting-font">
+      <label>Font</label>
       <span class="forge-publisher-style-dialog-style-setting-editor">
         <span>
           <input value="12" type="number" min="1" step="any" name="font-size" data-unit="pt"/>
@@ -30,40 +30,40 @@
       </span>
     </div>
     
-    <div>
-      <label>Kirjaisintyylit</label>
+    <div class="forge-publisher-style-dialog-style-setting">
+      <label>Font styles</label>
       <span class="forge-publisher-style-dialog-style-setting-editor">
         <input type="checkbox" name="bold" value="1" data-style="font-weight" data-on="bold" data-off="normal"/>
-        <label>Lihavoitu</label>
+        <label>Bold</label>
         <input type="checkbox" name="italic" value="1" data-style="font-style" data-on="italic" data-off="normal"/>
-        <label>Kursivoitu</label>
+        <label>Italic</label>
         <input type="checkbox" name="underline" value="1" data-style="text-decoration" data-on="underline" data-off="none" data-mutually-exclusive="strikethrough"/>
-        <label>alleviivattu</label>
+        <label>Underline</label>
         <input type="checkbox" name="strikethrough" value="1" data-style="text-decoration" data-on="line-through" data-off="none" data-mutually-exclusive="underline"/>
-        <label>Yliviivattu</label>
+        <label>Strikethrough</label>
         <input type="checkbox" name="all-caps" value="1" data-style="text-transform" data-on="uppercase" data-off="none" data-mutually-exclusive="small-caps"/>
-        <label>Suurin kirjaimin</label>
+        <label>All caps</label>
         <input type="checkbox" name="small-caps" value="1" data-style="font-variant" data-on="small-caps" data-off="normal" data-mutually-exclusive="all-caps"/>
-        <label>Kapiteelein</label>
+        <label>Small caps</label>
       </span>
     </div>
     
-    <div>
-      <label>Tekstin väri</label>
+    <div class="forge-publisher-style-dialog-style-setting">
+      <label>Text color</label>
       <span class="forge-publisher-style-dialog-style-setting-editor">
-        <input type="color" name="color" value="#000"/>
+        <input type="color" name="color" value="#000" data-preferred-format="rgb" data-allow-empty="true" data-hide-after-palette-select="true" data-show-buttons="false"/>
       </span>
     </div>
     
-    <div>
-      <label>Taustan väri</label>
+    <div class="forge-publisher-style-dialog-style-setting">
+      <label>Background color</label>
       <span class="forge-publisher-style-dialog-style-setting-editor">
-        <input type="color" name="background-color" value=""/>
+        <input type="color" name="background-color" value="" data-preferred-format="rgb" data-allow-empty="true" data-hide-after-palette-select="true" data-show-buttons="false"/>
       </span>
     </div>
     
-    <div class="forge-publisher-style-dialog-style-setting-paddings">
-      <label>Sisennys</label>
+    <div class="forge-publisher-style-dialog-style-setting forge-publisher-style-dialog-style-setting-paddings">
+      <label>Paddings</label>
       <span class="forge-publisher-style-dialog-style-setting-editor">
         <input type="number" value="0" step="any" name="padding-top" data-unit="pt" min="0"/>
         <span>top</span>
@@ -76,8 +76,8 @@
       </span>
     </div>
     
-    <div class="forge-publisher-style-dialog-style-setting-margins">
-      <label>Marginaali</label>
+    <div class="forge-publisher-style-dialog-style-setting forge-publisher-style-dialog-style-setting-margins">
+      <label>Margins</label>
       <span class="forge-publisher-style-dialog-style-setting-editor">
         <input type="number" value="0" step="any" name="margin-top" data-unit="pt" min="0"/>
         <span>top</span>
@@ -95,7 +95,7 @@
         <div class="forge-publisher-style-dialog-style-preview">
           <div class="forge-publisher-style-dialog-style-preview-margin"/>
           <div class="forge-publisher-style-dialog-style-preview-padding"/>
-          <span class="forge-publisher-style-dialog-style-preview-text">Wieniläinen sioux'ta puhuva ökyzombie diggaa Åsan roquefort-tacoja</span>
+          <span class="forge-publisher-style-dialog-style-preview-text">The quick brown fox jumps over the lazy dog</span>
         </div>
       </div>
     </div>

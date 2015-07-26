@@ -1,0 +1,23 @@
+<div title="Lisää kirjaisinlaji" data-add-button="Lisää" data-cancel-button="Peruuta" class="forge-publisher-add-font-dialog">
+  <section>
+    <h4>Hae Google Fonts palvelusta</h4>
+      
+    <div>
+      <input type="text" placeholder="Search Google Fonts" name="google-fonts-search"/>
+    </div>
+  </section>
+  
+  <section>
+    <h4>Lisää manuaalisesti</h4>
+
+    <div>
+      <label>Nimi</label>
+      <input type="text" name="name" required="required"/>
+    </div>
+
+    <div>
+      <label>URL-osoite</label>
+      <input type="text" name="url" required="required"/>
+    </div>
+  </section>
+</div>

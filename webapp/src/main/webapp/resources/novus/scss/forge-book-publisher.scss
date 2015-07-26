@@ -188,168 +188,169 @@ $hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
   } 
 }
 
-.forge-publisher-style-add-font-dialog {
-  
-  h4 {
-    font-weight: bold;
-    font-family: $default-font;
-    margin-bottom: 2px;
-  }
-  
-  input {
-    @include box-sizing(border-box);
-    width: 100%;
-  }
-  
-  section {
-    margin-bottom: 10px;
-  }
+/* Dialogs */
 
-  section:last-child {
-    margin-bottom: 0;
-  }
-  
-}
+.forge-publisher-dialog {
 
-.forge-publisher-page-types-dialog {
+  /* Tabs */
   
-  .forge-publisher-page-types-dialog-type {
-    position: relative;
-
-    &:after {
-      content: '▸';
-      position: absolute;
-      font-size: 21px;     
-      right: 2px;
-      top: 0px;
-      height: 16px;
+  .ui-tabs {
+    border: 0px;
+    background: none;
+    padding-top: 0px;
+  
+    .ui-tabs-nav {
+      border: 0px;
+      background: none;
+      padding-top: 0px;
     }
   }
   
-  .forge-publisher-page-types-dialog-type-name {
-    @include header-4;
-    color: #000;
-    cursor: pointer;
-    width: calc(100% - 24px);
-    border-style: solid;
-    border-width: 1px;
-    border-color: transparent;
-    margin-bottom: 10px;
-  }
+  /* Spectrum */
   
-  .forge-publisher-page-types-dialog-type-settings {
-    overflow: hidden;
-    height: 0px;
-    @include transition-property(height);
-    @include transition-duration(0.6s);
-    @include transition-delay(0s);
-  }
-  
-  .forge-publisher-page-types-dialog-type-active {
-    .forge-publisher-page-types-dialog-type-settings {
-      height: 386px;
+  .sp-replacer {
+    border: 1px solid #000;
+    padding: 1px;
+    background: #fff;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    
+    &.sp-active, 
+    &:hover {
+      border: 1px solid #000;
     }
     
-    .forge-publisher-page-types-dialog-type-name {
-      color: $title-color;
+    .sp-dd {
+      padding-top: 3px;
+      padding-bottom: 3px;
+      padding-right: 3px;
+      padding-left: 0px;
+      height: 10px;
+      line-height: 10px;
+    }
+    
+    .sp-preview {
+      height: 14px;
+      
+      .sp-preview-inner {
+        background-size: contain;
+      }
+    }
+  }
+  
+  .sp-container {
+    border: 1px solid #000;
+    background: #fff;
+  }
+  
+  /* Add font dialog */
+  
+  &.forge-publisher-add-font-dialog {
+    
+    h4 {
+      font-weight: bold;
+      font-family: $default-font;
+      margin-bottom: 2px;
+    }
+  
+    input {
+      @include box-sizing(border-box);
+      width: 100%;
+    }
+  
+    section {
+      margin-bottom: 10px;
+    }
+
+    section:last-child {
+      margin-bottom: 0;
+    }
+  
+  }
+  
+   /* Styles dialog */
+  
+  &.forge-publisher-styles-dialog {
+    &.ui-dialog-content {
+      padding-top: 3px;
+      padding-left: 1px;
+      padding-right: 1px;
+    }
+    
+    .forge-publisher-style-dialog-style-setting-editor {
+      display: inline-block;
+      width: 80%;
+    }
+    
+    .forge-publisher-style-dialog-style-name {
+      font-family: $default-font;
+      font-size: 14px;
+      color: #000;
+      width: 100%;
+      border-style: solid;
+      border-width: 1px;
+      margin-bottom: 10px;
       border-color: #eee;
       padding-left: 3px;
-      padding-top: 1px;
-      padding-bottom: 1px;
+      padding-top: 3px;
+      padding-bottom: 3px;
       margin-left: -3px;
       margin-bottom: 8px;
     }
     
-    &:after {
-      content: '▾';
-      color: $title-color;
-      right: 0px;
+    .forge-publisher-style-dialog-style-setting-editor input[type="checkbox"] {
+      margin-left: 5px;
+      margin-right: 5px;
+      margin-top: 3px;
+      margin-bottom: 3px;
     }
-  }
-  
-  .forge-publisher-page-types-dialog-type-setting-editor {
-    display: inline-block;
-    width: 80%;
-  }
-  
-  .forge-publisher-page-types-dialog-type-setting-editor input[type="checkbox"] {
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-top: 3px;
-    margin-bottom: 3px;
-  }
-  
-  .forge-publisher-page-types-dialog-type-setting-editor input[type="checkbox"]:first-child {
-    margin-left: 0px;
-  }
-  
-  .forge-publisher-page-types-dialog-type-setting-editor label {
-    font-weight: bold;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    display: inline-block;
-  }
-  
-  .forge-publisher-page-types-dialog-type-settings>div>label {
-    width: 20%;
-    font-weight: bold;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    display: inline-block;
-    vertical-align: top;
-  }
-  
-  textarea {
-    width: 475px;
-    height: 50px;
-    margin-top: 2px;
-    margin-bottom: 5px;
-  }
-  
-  input[name="header:font-size"] {
-    width: 40px;
-    margin-right: 2px;
-  }
-  
-  select[name="header:font-family"] {
-    margin-left: 5px;
-  }
-}
- 
-.forge-publisher-style-dialog {
-  
-  .forge-publisher-style-dialog-style {
-    position: relative;
-
-    &:after {
-      content: '▸';
-      position: absolute;
-      font-size: 21px;     
-      right: 2px;
-      top: 0px;
-      height: 16px;
-    }
-  }
-  
-  .forge-publisher-style-dialog-style-name {
-    @include header-4;
-    color: #000;
-    cursor: pointer;
-    width: calc(100% - 24px);
-    border-style: solid;
-    border-width: 1px;
-    border-color: transparent;
-    margin-bottom: 10px;
-  }
-  
-  .forge-publisher-style-dialog-style-settings {
-    overflow: hidden;
-    height: 0px;
-    @include transition-property(height);
-    @include transition-duration(0.6s);
-    @include transition-delay(0s);
     
-    .forge-publisher-style-dialog-style-setting-paddings,  .forge-publisher-style-dialog-style-setting-margins {
+    .forge-publisher-style-dialog-style-setting-editor input[type="checkbox"]:first-child {
+      margin-left: 0px;
+    }
+    
+    .forge-publisher-style-dialog-style-setting-editor label {
+      font-weight: bold;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      display: inline-block;
+    }
+    
+    .forge-publisher-style-dialog-style-settings>div>label {
+      width: 20%;
+      font-weight: bold;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      display: inline-block;
+      vertical-align: top;
+    }
+    
+    textarea {
+      width: 475px;
+      margin-top: 2px;
+      margin-bottom: 5px;
+      @include box-sizing(border-box);
+      resize: none;
+    }
+    
+    input[type="number"] {
+      height: 14px;
+    }
+    
+    input[name*="font-size"] {
+      width: 40px;
+      margin-right: 2px;
+    }
+    
+    select[name*="font-family"] {
+      margin-left: 5px;
+    }
+    
+    .forge-publisher-style-dialog-style-setting-font-action {
+      margin-left: 10px;
+    }
+  
+    .forge-publisher-style-dialog-style-setting-paddings, .forge-publisher-style-dialog-style-setting-margins {
       .forge-publisher-style-dialog-style-setting-editor {
         input { 
           width: 10%;
@@ -369,154 +370,157 @@ $hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
         }
       }
     }
+    
+    .forge-publisher-style-dialog-style-preview-container {
+      overflow: auto;
+      border: 1px solid #000;
+      margin-top: 5px;
+      @include box-sizing(border-box);
+      align-items: center;
+      @include display-flex;
+      height: 75px;
+      
+      .forge-publisher-style-dialog-style-preview-inner-container {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .forge-publisher-style-dialog-style-preview {
+        position: relative;
+    
+        .forge-publisher-style-dialog-style-preview-text {
+          position: relative;
+        }
+        
+        .forge-publisher-style-dialog-style-preview-padding {
+          position: absolute;
+          border-color: rgba(128, 128, 128, 0.5);
+          border-style: dotted;
+          border-width: 1px;
+          top: 0px;
+          left: 0px;
+          right: 0px;
+          bottom: 0px;
+        }
+        
+        .forge-publisher-style-dialog-style-preview-margin {
+          position: absolute;
+          border-color: rgba(128, 128, 128, 0.5);
+          border-style: dashed;
+          border-width: 1px;
+          top: 0px;
+          left: 0px;
+          right: 0px;
+          bottom: 0px;
+        }
+      }
+    }
+  
   }
   
-  .forge-publisher-style-dialog-style-active {
-    .forge-publisher-style-dialog-style-settings {
-      height: 239px;
+  /* Types dialog */
+  
+  &.forge-publisher-page-types-dialog {
+    
+    &.ui-dialog-content {
+      padding-top: 3px;
+      padding-left: 1px;
+      padding-right: 1px;
     }
     
-    .forge-publisher-style-dialog-style-name {
-      color: $title-color;
+    .forge-publisher-page-types-dialog-type-setting-editor {
+      display: inline-block;
+      width: 80%;
+    }
+    
+    .forge-publisher-page-types-dialog-type-name {
+      font-family: $default-font;
+      font-size: 14px;
+      color: #000;
+      width: 100%;
+      border-style: solid;
+      border-width: 1px;
+      margin-bottom: 10px;
       border-color: #eee;
       padding-left: 3px;
-      padding-top: 1px;
-      padding-bottom: 1px;
+      padding-top: 3px;
+      padding-bottom: 3px;
       margin-left: -3px;
       margin-bottom: 8px;
     }
     
-    &:after {
-      content: '▾';
-      color: $title-color;
-      right: 0px;
+    .forge-publisher-page-types-dialog-type-setting-editor input[type="checkbox"] {
+      margin-left: 5px;
+      margin-right: 5px;
+      margin-top: 3px;
+      margin-bottom: 3px;
     }
-  }
-  
-  .forge-publisher-style-dialog-style-setting-editor {
-    display: inline-block;
-    width: 80%;
-  }
-  
-  .forge-publisher-style-dialog-style-setting-editor input[type="checkbox"] {
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-top: 3px;
-    margin-bottom: 3px;
-  }
-  
-  .forge-publisher-style-dialog-style-setting-editor input[type="checkbox"]:first-child {
-    margin-left: 0px;
-  }
-  
-  .forge-publisher-style-dialog-style-setting-editor label {
-    font-weight: bold;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    display: inline-block;
-  }
-  
-  .forge-publisher-style-dialog-style-settings>div>label {
-    width: 20%;
-    font-weight: bold;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    display: inline-block;
-  }
-
-  .forge-publisher-style-dialog-style-preview {
-    position: relative;
-  }
-  
-  .forge-publisher-style-dialog-style-setting-font-action {
-    margin-left: 10px;
-  }
-  
-  .forge-publisher-style-dialog-style-preview-text {
-    position: relative;
-  }
-  
-  .forge-publisher-style-dialog-style-preview-padding {
-    position: absolute;
-    border-color: rgba(128, 128, 128, 0.5);
-    border-style: dotted;
-    border-width: 1px;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-  }
-  
-  .forge-publisher-style-dialog-style-preview-margin {
-    position: absolute;
-    border-color: rgba(128, 128, 128, 0.5);
-    border-style: dashed;
-    border-width: 1px;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-  }
- 
-  .forge-publisher-style-dialog-style-preview-container {
-    overflow: auto;
-    border: 1px solid #000;
-    margin-top: 5px;
-    @include box-sizing(border-box);
-    align-items: center;
-    @include display-flex;
-    height: 75px;
-  }
-  
-  .forge-publisher-style-dialog-style-preview-inner-container {
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  input[name="font-size"] {
-    width: 40px;
-    margin-right: 2px;
-  }
-  
-  select[name="font-family"] {
-    margin-left: 5px;
-  }
-}
-
-/* Spectrum */
-
-.sp-replacer {
-  border: 1px solid #000;
-  padding: 1px;
-  background: #fff;
-  margin-top: 1px;
-  margin-bottom: 1px;
-  
-  &.sp-active, 
-  &:hover {
-    border: 1px solid #000;
-  }
-  
-  .sp-dd {
-    padding-top: 3px;
-    padding-bottom: 3px;
-    padding-right: 3px;
-    padding-left: 0px;
-    height: 10px;
-    line-height: 10px;
-  }
-  
-  .sp-preview {
-    height: 14px;
     
-    .sp-preview-inner {
-      background-size: contain;
+    .forge-publisher-page-types-dialog-type-setting-editor input[type="checkbox"]:first-child {
+      margin-left: 0px;
+    }
+    
+    .forge-publisher-page-types-dialog-type-setting-editor label {
+      font-weight: bold;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      display: inline-block;
+    }
+    
+    .forge-publisher-page-types-dialog-type-settings>div>label {
+      width: 20%;
+      font-weight: bold;
+      padding-top: 3px;
+      padding-bottom: 3px;
+      display: inline-block;
+      vertical-align: top;
+    }
+    
+    textarea {
+      width: 475px;
+      margin-top: 2px;
+      margin-bottom: 5px;
+      @include box-sizing(border-box);
+      resize: none;
+    }
+    
+    input[type="number"] {
+      height: 14px;
+    }
+    
+    input[name*="font-size"] {
+      width: 40px;
+      margin-right: 2px;
+    }
+    
+    select[name*="font-family"] {
+      margin-left: 5px;
+    }
+    
+    .forge-publisher-page-types-dialog-type-setting-font-action {
+      margin-left: 10px;
+    }
+  
+    .forge-publisher-page-types-dialog-type-setting-paddings {
+      .forge-publisher-page-types-dialog-type-setting-editor {
+        input { 
+          width: 10%;
+        }
+      
+        span { 
+          margin-left: 4px;
+          margin-right: 4px;
+        }
+    
+        span:before {
+          content: '('; 
+        }
+    
+        span:after {
+          content: ')'; 
+        }
+      }
     }
   }
 }
-
-.sp-container {
-  border: 1px solid #000;
-  background: #fff;
-}
-
+  

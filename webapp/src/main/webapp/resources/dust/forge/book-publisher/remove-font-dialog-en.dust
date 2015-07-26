@@ -1,0 +1,5 @@
+<div title="Remove font" data-remove-button="Remove" data-cancel-button="Cancel" class="forge-publisher-remove-font-dialog">
+  <p>
+    Do you really wish to remove font '{name}'?
+  </p>
+</div>
