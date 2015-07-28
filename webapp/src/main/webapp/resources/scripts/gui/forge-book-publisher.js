@@ -256,6 +256,7 @@
       
       pageTypes: [{
         name: "Contents",
+        numberedPage: true,
         header: {},
         footer: {
           text: '[[PAGE]]',
@@ -266,14 +267,17 @@
         }
       }, {
         name: "Table of contents",
+        numberedPage: true,
         header: {},
         footer: {}
       }, {
         name: "Front cover",
+        numberedPage: false,
         header: {},
         footer: {}
       }, {
         name: "Back cover",
+        numberedPage: false,
         header: {},
         footer: {}
       }]
@@ -452,6 +456,7 @@
         .append($('<footer>'))
         .appendTo(this.element.find('.forge-book-publisher-pages'));
       
+      this._updatePageNumbers();
       this._updateHeadersAndFooters(page);
       
       return page;
@@ -539,6 +544,20 @@
       });
     },
     
+    _updatePageNumbers: function () {
+      this.element.find($.map(this.pageTypes(), function (pageType) {
+        return !pageType.numberedPage ? "section[data-type='" + pageType.name + "']" : null;
+      }).join(',')).each(function (index, page) {
+        $(page).removeAttr('data-page-number');
+      });
+      
+      this.element.find($.map(this.pageTypes(), function (pageType) {
+        return pageType.numberedPage ? "section[data-type='" + pageType.name + "']" : null;
+      }).join(',')).each(function (index, page) {
+        $(page).attr('data-page-number', index + 1);
+      });
+    },
+    
     _importMaterial: function (id) {
       this._documentClient.documents.read(id).done($.proxy(function (document, message, xhr){
         if (xhr.status !== 200) {
@@ -551,6 +570,8 @@
     
     _changePageType: function (page, type) {
       $(page).attr('data-type', type);
+      this._updatePageNumbers();
+      this._updateHeadersAndFooters(page);
     },
     
     _changePageElementStyle: function (element, elementName, className) {
@@ -943,6 +964,7 @@
         };
       }));
       
+      this._updatePageNumbers();
       this._updateHeadersAndFooters(this.element.find('section'));
     },
 
@@ -1365,6 +1387,7 @@
         
         return {
           name: $(type).find('input[name="name"]').val(),
+          numberedPage: $(type).find('input[name="numbered-page"]').prop('checked'),
           header: {
             text: $(type).find('textarea[name="header:text"]').val(),
             rules: headerRules ? $.parseJSON(headerRules) : {}

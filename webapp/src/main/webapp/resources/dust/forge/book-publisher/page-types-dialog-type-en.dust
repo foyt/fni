@@ -4,6 +4,15 @@
   
   <div class="forge-publisher-page-types-dialog-type-settings">
   
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Numbered page</label>
+      {#numberedPage}
+        <input type="checkbox" name="numbered-page" value="1" checked="checked"/>
+      {:else}
+        <input type="checkbox" name="numbered-page" value="1"/>
+      {/numberedPage}
+    </div>
+  
     <!-- Header -->
     
     <div class="forge-publisher-page-types-dialog-type-setting">
