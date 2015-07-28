@@ -9,9 +9,9 @@
     <div class="forge-publisher-page-types-dialog-type-setting">
       <label>Show header</label>
       {#header.show}
-        <input type="checkbox" name="header:show" checked="checked"/>
+        <input type="checkbox" name="header:show" checked="checked" value="1" data-style="display" data-on="block" data-off="none"/>
       {:else}
-        <input type="checkbox" name="header:show"/>
+        <input type="checkbox" name="header:show" data-style="display" data-on="block" data-off="none"/>
       {/header.show}
     </div>    
     
@@ -114,9 +114,9 @@
     <div class="forge-publisher-page-types-dialog-type-setting">
       <label>Show footer</label>
       {#footer.show}
-        <input type="checkbox" name="footer:show" checked="checked"/>
+        <input type="checkbox" name="footer:show" checked="checked" data-style="display" data-on="block" data-off="none"/>
       {:else}
-        <input type="checkbox" name="footer:show"/>
+        <input type="checkbox" name="footer:show" data-style="display" data-on="block" data-off="none"/>
       {/footer.show}
     </div>    
     

@@ -77,7 +77,6 @@
     }
   });
   
-
   $.widget("custom.bookPublisherDialog", {
     options: {
       templateName: null,
@@ -253,25 +252,27 @@
       }],
       
       blockTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'div', 'img'],
-      defaultPageType: 'contents',
+      defaultPageType: 'Contents',
       
       pageTypes: [{
-        id: "contents",
         name: "Contents",
         header: {},
-        footer: {}
+        footer: {
+          text: '[[PAGE]]',
+          rules: {
+            'display': 'block',
+            'text-align': 'center'
+          }
+        }
       }, {
-        id: "table-of-contents",
         name: "Table of contents",
         header: {},
         footer: {}
       }, {
-        id: "front-cover",
         name: "Front cover",
         header: {},
         footer: {}
       }, {
-        id: "back-cover",
         name: "Back cover",
         header: {},
         footer: {}
@@ -443,12 +444,17 @@
     },
 
     addPage: function () {
-      return $('<section>')
+      var page = $('<section>')
         .attr('data-type', this.options.defaultPageType)
         .addClass('forge-book-publisher-page')
         .append($('<header>'))
+        .append($('<main>'))
         .append($('<footer>'))
         .appendTo(this.element.find('.forge-book-publisher-pages'));
+      
+      this._updateHeadersAndFooters(page);
+      
+      return page;
     },
     
     appendBlock: function (html) {
@@ -465,11 +471,11 @@
         lastPage = this.addPage();
       }
       
-      lastPage.find('footer').before(block);
+      lastPage.find('main').append(block);
     },
     
     _measurePageContentHeight: function (page) {
-      var children = page.children();
+      var children = page.find('main').children();
       
       var result = 0;
       for (var i = 0, l = children.length; i < l; i++) {
@@ -505,6 +511,32 @@
       tempPage.remove();
       
       return height;
+    },
+    
+    _updateHeadersAndFooters: function (pages) {
+      var typeMap = {};
+
+      $.each(this.pageTypes(), function (index, pageType) {
+        typeMap[pageType.name] = pageType;
+      });
+      
+      $(pages).each(function (index, section) {
+        var pageType = typeMap[$(section).attr('data-type')];
+        var header = $(section).find('header');
+        var footer = $(section).find('footer');
+        
+        header
+          .css(pageType.header.rules||{})
+          .text(pageType.header.text||'');
+         
+        footer
+          .css(pageType.footer.rules||{})
+          .text(pageType.footer.text||'');
+        
+        $(section).find('main').css({
+          height: 'calc(100% - ' + (footer.outerHeight(true) + header.outerHeight(true)) + 'px)'
+        });
+      });
     },
     
     _importMaterial: function (id) {
@@ -648,7 +680,6 @@
         icon: 'fa fa-bookmark',
         items: $.map(this._pageTypes, function (pageType) {
           return {
-            pageType: pageType.id,
             name: pageType.name,
             action: 'changePageType'
           };
@@ -770,7 +801,7 @@
               this._movePageElement(element, item.direction);
             break;
             case 'changePageType':
-              this._changePageType(this.element.find('.forge-book-publisher-page-selected'), item.pageType);
+              this._changePageType(this.element.find('.forge-book-publisher-page-selected'), item.name);
             break;
           }
         }, this));
@@ -907,11 +938,12 @@
     _onPageTypesChanged: function (event, data) {
       this._createToolButtonItems("change-page-type", $.map(data.pageTypes, function (pageType) {
         return {
-          pageType: pageType.id,
           name: pageType.name,
           action: 'changePageType'
         };
       }));
+      
+      this._updateHeadersAndFooters(this.element.find('section'));
     },
 
     _onBlockSelect: function (event, data) {
@@ -1334,12 +1366,10 @@
         return {
           name: $(type).find('input[name="name"]').val(),
           header: {
-            show: $(type).find('input[name="header:show"]').prop('checked'),
             text: $(type).find('textarea[name="header:text"]').val(),
             rules: headerRules ? $.parseJSON(headerRules) : {}
           }, 
           footer: {
-            show: $(type).find('input[name="footer:show"]').prop('checked'),
             text: $(type).find('textarea[name="footer:text"]').val(),
             rules: footerRules ? $.parseJSON(footerRules) : {}
           }
@@ -1352,8 +1382,20 @@
       var rules = rulesAttr ? $.parseJSON(rulesAttr) : {};
       rules[rule] = value;
       $(type).attr('data-' + group + '-rules', JSON.stringify(rules));
-      type.find('textarea[name="' + group + ':text"]').css(rules);
-      autosize.update(this.dialogElement.find('textarea'));
+      
+      var disabled = rules['display'] == 'none';
+      delete rules['display'];
+      
+      var textarea = type.find('textarea[name="' + group + ':text"]');
+      
+      textarea.css(rules);
+      if (disabled) {
+        textarea.attr('disabled', 'disabled');
+      } else {
+        textarea.removeAttr('disabled');
+      }
+      
+      autosize.update(textarea);
     },
     
     _onNameChange: function (event) {
