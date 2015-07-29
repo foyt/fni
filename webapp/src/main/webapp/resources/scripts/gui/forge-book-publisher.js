@@ -525,23 +525,27 @@
         typeMap[pageType.name] = pageType;
       });
       
-      $(pages).each(function (index, section) {
-        var pageType = typeMap[$(section).attr('data-type')];
-        var header = $(section).find('header');
-        var footer = $(section).find('footer');
+      $(pages).each($.proxy(function (index, page) {
+        var pageType = typeMap[$(page).attr('data-type')];
+        var header = $(page).find('header');
+        var footer = $(page).find('footer');
         
         header
           .css(pageType.header.rules||{})
-          .text(pageType.header.text||'');
+          .text(this._processHeaderFooterText(page, pageType.header.text||''));
          
         footer
           .css(pageType.footer.rules||{})
-          .text(pageType.footer.text||'');
+          .text(this._processHeaderFooterText(page, pageType.footer.text||''));
         
-        $(section).find('main').css({
+        $(page).find('main').css({
           height: 'calc(100% - ' + (footer.outerHeight(true) + header.outerHeight(true)) + 'px)'
         });
-      });
+      }, this));
+    },
+    
+    _processHeaderFooterText: function (page, text) {
+      return text.replace('[[PAGE]]', $(page).attr('data-page-number'));
     },
     
     _updatePageNumbers: function () {
