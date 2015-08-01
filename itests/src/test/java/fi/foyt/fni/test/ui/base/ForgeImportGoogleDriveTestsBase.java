@@ -54,11 +54,22 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     loginFacebook();
     getWebDriver().get(getAppUrl() + "/forge/import-google-drive");
     assertEquals("Sign in - Google Accounts", getWebDriver().getTitle());
-    sleep(500);
-    getWebDriver().findElement(By.name("Email")).sendKeys(getGoogleUsername());
-    getWebDriver().findElement(By.name("Passwd")).sendKeys(getGooglePassword());
-    getWebDriver().findElement(By.name("signIn")).click();
-    testTitle(getWebDriver(), "/forge/import-google-drive", "Forge - Import From Google Drive");
+    
+    waitForSelectorVisible("#Email");
+    waitAndClick("#Email");
+    typeSelectorInputValue("#Email", getGoogleUsername());
+    
+    if (findElementsBySelector("#Passwd").isEmpty()) {
+      clickSelector("#next");
+    }
+    
+    waitForSelectorVisible("#Passwd");
+    waitAndClick("#Passwd");
+    typeSelectorInputValue("#Passwd", getGooglePassword());
+    clickSelector("#signIn");
+    
+    waitForUrlMatches("^" + getAppUrl() + ".*");
+    assertTitle("Forge - Import From Google Drive");
   }
 
   @Test

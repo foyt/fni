@@ -83,6 +83,7 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
     executeSql("delete from DocumentRevision where document_id in (select id from Material where parentFolder_id = ? and urlName = ?)", 20000, "new_page");
     executeSql("delete from MaterialRevision where checksum = ?", "DELETE");
     executeSql("delete from IllusionEventDocument where id in (select id from Material where parentFolder_id = ? and urlName = ?)", 20000, "new_page");
+    executeSql("delete from CoopsSession where material_id in (select id from Material where parentFolder_id = ? and urlName = ?)", 20000, "new_page");
     executeSql("delete from Document where id in (select id from Material where parentFolder_id = ? and urlName = ?)", 20000, "new_page");
     executeSql("delete from Material where parentFolder_id = ? and urlName = ?", 20000, "new_page");
   }

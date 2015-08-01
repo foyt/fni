@@ -124,6 +124,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     
     waitSelectorToBeClickable(".illusion-event-settings-save");
     clickSelector(".illusion-event-settings-save");
+    waitForPageLoad();
     
     assertSelectorValue("input[data-alt-field='.actual-start-date']", startDate);
     assertSelectorValue("input[data-alt-field='.actual-start-time']", startTime);
@@ -140,6 +141,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     String location = "Test place";
     typeSelectorInputValue(".illusion-event-settings-location", location);
     clickSelector(".illusion-event-settings-save");
+    waitForPageLoad();
+    
     assertSelectorValue(".illusion-event-settings-location", location);
   }
   
@@ -193,6 +196,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     String location = "Test place";
     typeSelectorInputValue(".illusion-event-settings-domain", location);
     clickSelector(".illusion-event-settings-save");
+    waitForPageLoad();
+    
     assertSelectorValue(".illusion-event-settings-domain", location);
     getWebDriver().get(getCustomEventUrl());
     testTitle("Illusion - Open Event");
@@ -210,6 +215,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     typeSelectorInputValue(".sign-up-start-date", signUpStartDate);
     typeSelectorInputValue(".sign-up-end-date", signUpEndDate);
     clickSelector(".illusion-event-settings-save");
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     assertSelectorValue(".sign-up-start-date", signUpStartDate);
     assertSelectorValue(".sign-up-end-date", signUpEndDate);
@@ -225,6 +232,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
 
     typeSelectorInputValue(".illusion-event-settings-image-url", imageUrl);
     clickSelector(".illusion-event-settings-save");
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     assertSelectorValue(".illusion-event-settings-image-url", imageUrl);
   }
@@ -238,6 +247,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     
     clickSelector(".illusion-event-settings-beginner-friendly");
     clickSelector(".illusion-event-settings-save");
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     assertSelectorPresent(".illusion-event-settings-beginner-friendly:checked");
   }
@@ -252,6 +263,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
 
     typeSelectorInputValue(".illusion-event-settings-age-limit", ageLimit);
     clickSelector(".illusion-event-settings-save");
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     assertSelectorValue(".illusion-event-settings-age-limit", ageLimit);
   }
@@ -265,6 +278,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
 
     selectSelectBoxByValue(".illusion-event-settings-type", "2");
     clickSelector(".illusion-event-settings-save");
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     assertSelectBoxValue(".illusion-event-settings-type", "2");
   }
@@ -279,6 +294,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     clickSelector(".illusion-event-settings-genre input[value='1']");
     clickSelector(".illusion-event-settings-genre input[value='3']");
     clickSelector(".illusion-event-settings-save");
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     assertSelectorPresent(".illusion-event-settings-genre input[value='1']:checked");
     assertSelectorNotPresent(".illusion-event-settings-genre input[value='2']:checked");
@@ -297,11 +314,15 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     
     clickSelector(".illusion-event-settings-published");
     clickSelector(".illusion-event-settings-save");
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     assertSelectorNotPresent(".illusion-event-settings-published:checked");
     
     clickSelector(".illusion-event-settings-published");
     clickSelector(".illusion-event-settings-save");
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     assertSelectorPresent(".illusion-event-settings-published:checked");
   }
@@ -431,6 +452,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     
     clickSelector(".illusion-event-settings-save");
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     
     verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))
@@ -553,7 +576,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     clickSelector(".illusion-event-settings-genre input[value='3']");
     
     clickSelector(".illusion-event-settings-save");    
-
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     
     verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))
@@ -676,7 +700,9 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     clickSelector(".illusion-event-settings-image-url");
     waitForInputValueNotBlank(".location-lat");
     
-    clickSelector(".illusion-event-settings-save");
+    clickSelector(".illusion-event-settings-save");  
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     
     verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))
@@ -765,7 +791,9 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     
     clickSelector(".illusion-create-event-larp-kalenteri");
-    clickSelector(".illusion-event-settings-save");
+    clickSelector(".illusion-event-settings-save");  
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     
     verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
@@ -857,7 +885,9 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     clickSelector(".illusion-event-settings-genre input[value='3']");
     clickSelector(".illusion-create-event-larp-kalenteri");
     
-    clickSelector(".illusion-event-settings-save");
+    clickSelector(".illusion-event-settings-save");  
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     
     verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
@@ -948,7 +978,9 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     clickSelector(".illusion-create-event-larp-kalenteri");
     waitForInputValueNotBlank(".location-lat");
     
-    clickSelector(".illusion-event-settings-save");
+    clickSelector(".illusion-event-settings-save");  
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     
     verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
@@ -1069,7 +1101,9 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     
     clickSelector(".illusion-event-settings-published");
-    clickSelector(".illusion-event-settings-save");
+    clickSelector(".illusion-event-settings-save");  
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     
     verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))
@@ -1190,7 +1224,9 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     
     clickSelector(".illusion-event-settings-published");
-    clickSelector(".illusion-event-settings-save");
+    clickSelector(".illusion-event-settings-save");  
+    waitForPageLoad();
+    
     navigate("/illusion/event/openevent/settings");
     
     verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))

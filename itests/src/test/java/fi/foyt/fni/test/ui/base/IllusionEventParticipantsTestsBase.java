@@ -127,10 +127,16 @@ public class IllusionEventParticipantsTestsBase extends AbstractIllusionUITest {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/participants");
     clickSelector(".illusion-event-participant[data-participant-id='1']");
+    waitForPageLoad();
+    
     assertSelectorValue(".illusion-edit-participant-role", "PARTICIPANT");
     selectSelectBoxByValue(".illusion-edit-participant-role", "BANNED");
     clickSelector(".illusion-edit-participant-save");
+    waitForPageLoad();
+    
     clickSelector(".illusion-event-participant[data-participant-id='1']");
+    waitForPageLoad();
+    
     assertSelectorValue(".illusion-edit-participant-role", "BANNED");
   }
 
@@ -140,10 +146,16 @@ public class IllusionEventParticipantsTestsBase extends AbstractIllusionUITest {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/participants");
     clickSelector(".illusion-event-participant[data-participant-id='1']");
+    waitForPageLoad();
+    
     assertSelectorValue(".illusion-edit-participant-display-name", "");
     typeSelectorInputValue(".illusion-edit-participant-display-name", "Display Name");
     clickSelector(".illusion-edit-participant-save");
+    waitForPageLoad();
+    
     clickSelector(".illusion-event-participant[data-participant-id='1']");
+    waitForPageLoad();
+    
     assertSelectorValue(".illusion-edit-participant-display-name", "Display Name");
   }
 

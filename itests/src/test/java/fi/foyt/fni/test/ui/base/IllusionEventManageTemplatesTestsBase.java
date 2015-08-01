@@ -123,7 +123,9 @@ public class IllusionEventManageTemplatesTestsBase extends AbstractIllusionUITes
     typeSelectorInputValue(".illusion-event-template-name", "index-contents");
     executeScript("$('textarea.illusion-event-template-editor').codeMirror('value', 'h1(id=\"test-header\")|header')");
     clickSelector(".illusion-event-template-save");
+    waitForPageLoad();
     navigate("/illusion/event/openevent");
+    waitForSelectorPresent("#test-header");
     assertSelectorPresent("#test-header");
     deleteIllusionTemplate("openevent", "index-contents");
   }

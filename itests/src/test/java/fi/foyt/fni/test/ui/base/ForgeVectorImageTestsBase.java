@@ -96,8 +96,10 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
   }
 
   private void assertVectorImageEditable() {
-    assertEquals(1, getWebDriver().findElements(By.cssSelector(".forge-vector-image-container")).size());
-    assertEquals(1, getWebDriver().findElements(By.cssSelector(".forge-vector-image-container .forge-vector-image-save")).size());
+    waitForSelectorVisible(".forge-vector-image-container");
+    assertSelectorVisible(".forge-vector-image-container");
+    waitForSelectorVisible(".forge-vector-image-container .forge-vector-image-save");
+    assertSelectorVisible(".forge-vector-image-container .forge-vector-image-save");
   }
 
 }

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -36,14 +35,14 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     String addressPostalCode = "12345";
     String addressPostalOffice = "Town of Test";
     String notes = "This is an automated test order";
-
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
-    getWebDriver().manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/testbook_1");
-
-    getWebDriver().findElement(By.cssSelector(".gamelibrary-publication-action-add-to-cart")).click();
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/cart/");
     
+    acceptCookieDirective();
+    
+    navigate("/gamelibrary/testbook_1", true);
+    waitAndClick(".gamelibrary-publication-action-add-to-cart");
+    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 1);
+    navigate("/gamelibrary/cart/");
+
     getWebDriver().findElement(By.id("cart-form:payerFirstName")).sendKeys(firstName);
     getWebDriver().findElement(By.id("cart-form:payerLastName")).sendKeys(lastName);
     getWebDriver().findElement(By.id("cart-form:payerEmail")).sendKeys(email);
@@ -90,20 +89,20 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     String addressPostalCode = "12345";
     String addressPostalOffice = "Mäkkylä";
     String notes = "Tämä on automaattinen testitilaus";
+    
+    acceptCookieDirective();
 
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
-    getWebDriver().manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/testbook_1");
-    getWebDriver().findElement(By.cssSelector(".gamelibrary-publication-action-add-to-cart")).click();
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/pangram_fi");
-    getWebDriver().findElement(By.cssSelector(".gamelibrary-publication-action-add-to-cart")).click();
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/cart/");
+    navigate("/gamelibrary/testbook_1", true);
+    waitAndClick(".gamelibrary-publication-action-add-to-cart");
+    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 1);
+    navigate("/gamelibrary/pangram_fi", true);
+    waitAndClick(".gamelibrary-publication-action-add-to-cart");
+    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 2);
+    navigate("/gamelibrary/cart/");
     
-    findElementsBySelector(".gamelibrary-cart-item .gamelibrary-cart-action-inc-count").get(0).click();
-    
-    new WebDriverWait(getWebDriver(), 60)
-      .until(ExpectedConditions.textToBePresentInElement(findElementsBySelector(".gamelibrary-cart-item div:first-child").get(0), "2"));
-    
+    waitAndClick(String.format(".gamelibrary-cart-item[data-item-index='%d'] .gamelibrary-cart-action-inc-count", 0));
+    waitForSelectorText(String.format(".gamelibrary-cart-item[data-item-index='%d'] div:first-child", 0), "2");
+
     getWebDriver().findElement(By.id("cart-form:payerFirstName")).sendKeys(firstName);
     getWebDriver().findElement(By.id("cart-form:payerLastName")).sendKeys(lastName);
     getWebDriver().findElement(By.id("cart-form:payerEmail")).sendKeys(email);
@@ -146,22 +145,27 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testCartDelete() throws Exception {
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
-    getWebDriver().manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/testbook_1");
-    getWebDriver().findElement(By.cssSelector(".gamelibrary-publication-action-add-to-cart")).click();
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/pangram_fi");
-    getWebDriver().findElement(By.cssSelector(".gamelibrary-publication-action-add-to-cart")).click();
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/cart/");
+    acceptCookieDirective();
+    
+    navigate("/gamelibrary/testbook_1", true);
+    waitAndClick(".gamelibrary-publication-action-add-to-cart");
+    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 1);
+    navigate("/gamelibrary/pangram_fi", true);
+    waitAndClick(".gamelibrary-publication-action-add-to-cart");
+    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 2);
+    navigate("/gamelibrary/cart/");
     
     assertSelectorTextIgnoreCase(".gamelibrary-cart-summary-field-total-value", "EUR17.50");
     assertSelectorClickable(".gamelibrary-cart-submit");
     
     findElementsBySelector(".gamelibrary-cart-item .gamelibrary-cart-action-remove").get(0).click();
+    waitForPageLoad();
     assertSelectorTextIgnoreCase(".gamelibrary-cart-summary-field-total-value", "EUR7.50");
     assertSelectorClickable(".gamelibrary-cart-submit");
 
     findElementsBySelector(".gamelibrary-cart-item .gamelibrary-cart-action-remove").get(0).click();
+    waitForPageLoad();
+
     assertSelectorTextIgnoreCase(".gamelibrary-cart-summary-field-total-value", "EUR0.00");
     assertSelectorNotClickable(".gamelibrary-cart-submit");
   }
@@ -183,14 +187,14 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     createUser(userId, firstName, lastName, email, password, "en_US", "GRAVATAR", "USER");
     try {
       try {
-        getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
-        getWebDriver().manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
-        loginInternal(getWebDriver(), email, password);
+        acceptCookieDirective();
+        loginInternal(email, password);
+        
+        navigate("/gamelibrary/testbook_1", true);
+        waitAndClick(".gamelibrary-publication-action-add-to-cart");
+        waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 1);
+        navigate("/gamelibrary/cart/");
 
-        getWebDriver().get(getAppUrl(true) + "/gamelibrary/testbook_1");
-        getWebDriver().findElement(By.cssSelector(".gamelibrary-publication-action-add-to-cart")).click();
-
-        getWebDriver().get(getAppUrl(true) + "/gamelibrary/cart/");
         assertEquals(firstName, getWebDriver().findElement(By.id("cart-form:payerFirstName")).getAttribute("value"));
         assertEquals(lastName, getWebDriver().findElement(By.id("cart-form:payerLastName")).getAttribute("value"));
         assertEquals(email, getWebDriver().findElement(By.id("cart-form:payerEmail")).getAttribute("value"));
@@ -239,16 +243,16 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
   }
 
   private void acceptPaytrailPayment(RemoteWebDriver driver) {
-    getWebDriver().findElement(By.cssSelector("form[action=\"https://kultaraha.op.fi/cgi-bin/krcgi\"] input[type=\"submit\"]")).click();
-
+    waitAndClick("input[value=\"Osuuspankki\"]");
     waitForUrl(getWebDriver(), "https://kultaraha.op.fi/cgi-bin/krcgi");
 
-    getWebDriver().findElement(By.name("id")).sendKeys("123456");
-    getWebDriver().findElement(By.name("pw")).sendKeys("7890");
-    getWebDriver().findElement(By.name("ktunn")).click();
-    getWebDriver().findElement(By.name("avainluku")).sendKeys("1234");
-    getWebDriver().findElement(By.name("avainl")).click();
-    getWebDriver().findElement(By.id("Toiminto")).click();
+    waitAndSendKeys("*[name='id']", "123456");
+    waitAndSendKeys("*[name='pw']", "7890");
+    waitAndClick("*[name='ktunn']");
+
+    waitAndSendKeys("*[name='avainluku']", "1234");
+    waitAndClick("*[name='avainl']");
+    waitAndClick("#Toiminto");
   }
 
 }

@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -94,6 +95,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     waitForSelectorVisible("#Email");
     waitAndClick("#Email");
     typeSelectorInputValue("#Email", getGoogleUsername());
+    
+    if (findElementsBySelector("#Passwd").isEmpty()) {
+      clickSelector("#next");
+    }
+    
     waitForSelectorVisible("#Passwd");
     waitAndClick("#Passwd");
     typeSelectorInputValue("#Passwd", getGooglePassword());
@@ -116,8 +122,17 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     assertSelectorNotVisible(".index-menu .menu-tools-account-container");
   }
   
-  protected void waitSelectorToBeClickable(String selector) {
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.elementToBeClickable(findElementBySelector(selector)));
+  protected void waitSelectorToBeClickable(final String selector) {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        List<WebElement> elements = driver.findElements(By.cssSelector(selector));
+        if (elements.size() > 0) {
+          return ExpectedConditions.elementToBeClickable(elements.get(0)).apply(driver) != null;
+        }
+        
+        return false;
+      }
+    });
   }
   
   protected void waitForElementVisible(WebElement element) {
@@ -140,7 +155,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
       }
     });
   }
-
+  
   protected void waitForSelectorNotPresent(final String selector) {
     
     new WebDriverWait(getWebDriver(), 60).until(
@@ -154,6 +169,26 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
         
       }
     );
+  }
+  
+  protected void waitForSelectorPresent(final String selector) {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        return findElementsBySelector(selector).size() > 0;
+      }
+    });
+  }
+  
+  protected void waitForSelectorCount(final String selector, final int count) {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        try {
+          return findElementsBySelector(selector).size() == count;
+        } catch (StaleElementReferenceException e) {
+          return false;
+        }
+      }
+    });
   }
   
   protected WebElement findElementBySelector(String selector) {
@@ -191,10 +226,14 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void waitForSelectorText(final String selector, final String text, final boolean ignoreCase) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
-        if (ignoreCase) {
-          return text.equalsIgnoreCase(driver.findElement(By.cssSelector(selector)).getText());
-        } else {
-          return text.equals(driver.findElement(By.cssSelector(selector)).getText());
+        try {
+          if (ignoreCase) {
+            return text.equalsIgnoreCase(driver.findElement(By.cssSelector(selector)).getText());
+          } else {
+            return text.equals(driver.findElement(By.cssSelector(selector)).getText());
+          }
+        } catch (StaleElementReferenceException e) {
+          return false;
         }
       }
     }); 
@@ -296,7 +335,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     waitSelectorToBeClickable(selector);
     clickSelector(selector);
   }
-  
+
+  protected void waitAndSendKeys(String selector, String keysToSend) {
+    waitForSelectorVisible(selector);
+    sendKeysSelector(selector, keysToSend);
+  }
+
   protected void sendKeysSelector(String selector, String keysToSend) {
     getWebDriver().findElementByCssSelector(selector).sendKeys(keysToSend);
   }
@@ -337,6 +381,14 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   
   protected void executeScript(String script) {
     ((JavascriptExecutor) getWebDriver()).executeScript(script, "");
+  }
+  
+  protected void waitForPageLoad() {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
+      }
+    });
   }
 
   protected void switchFrame(String selector) {
