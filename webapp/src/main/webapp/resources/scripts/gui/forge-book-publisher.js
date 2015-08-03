@@ -311,13 +311,15 @@
     },
     
     data: function (val) {
-      if (val) {
+      if (val !== undefined) {
         this.element.find('.forge-book-publisher-pages').html(val);
         this._toolsWaypoint[0].context.refresh();
       } else {
         var cloned = $('<pre>').html( this.element.find('.forge-book-publisher-pages').html() );
 
         cloned.find('.forge-book-publisher-block-selected').removeClass('forge-book-publisher-block-selected');
+        cloned.find('*[contenteditable]').removeAttr('contenteditable');
+        cloned.find('*[spellcheck]').removeAttr('spellcheck');
         
         var result = cloned.html();
         
@@ -356,7 +358,7 @@
         });
         
         $(this.element).trigger("stylesChanged", {
-          styles: val
+          styles: this._styles
         });
       } else {
         return $.map(this._styles, function (style) {
@@ -382,7 +384,7 @@
         }
         
         $(this.element).trigger("fontsChanged", {
-          fonts: val
+          fonts: this._fonts
         });
       } else {
         return this._fonts;
@@ -442,7 +444,7 @@
         .html(data)
         .children()
         .each($.proxy(function (index, child) {
-          $(child).css('page-break-after', '')
+          $(child).css('page-break-after', '');
           this.appendBlock(child.outerHTML);
         }, this));
     },
@@ -852,7 +854,12 @@
         .find('.forge-book-publisher-block-selected')
         .removeClass('forge-book-publisher-block-selected');
       
-      $(block).addClass('forge-book-publisher-block-selected');
+      $(block)
+        .attr({
+          'contenteditable':'true',
+          'spellcheck':'false'
+        })
+        .addClass('forge-book-publisher-block-selected');
       
       this.element.trigger("blockSelect", {
         block: block
@@ -877,8 +884,13 @@
         return '.forge-book-publisher-page ' + blockTag; 
       }).join(','), page);
 
-      this._selectBlock(block);
-      this._selectPage(page);
+      if (!block.hasClass('forge-book-publisher-block-selected')) {
+        this._selectBlock(block);
+      }
+      
+      if (!page.hasClass('forge-book-publisher-page-selected')) {
+        this._selectPage(page);
+      }
     },
     
     _onSaveClick: function () {
