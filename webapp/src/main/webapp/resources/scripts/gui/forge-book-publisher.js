@@ -289,8 +289,9 @@
       this.styles(this.options.styles);
       this.pageTypes(this.options.pageTypes);
       
-      this._documentClient = new $.RestClient(CONTEXTPATH + '/rest/material/');
-      this._documentClient.add("documents");
+      this._materialClient = new $.RestClient(CONTEXTPATH + '/rest/material/');
+      this._materialClient.add("documents");
+      this._materialClient.add("images");
       
       this._styleSheet = $('<style>').attr({ 'type': 'text/css' }).appendTo(document.head);
       
@@ -586,14 +587,30 @@
       });
     },
     
-    _importMaterial: function (id) {
-      this._documentClient.documents.read(id).done($.proxy(function (document, message, xhr){
-        if (xhr.status !== 200) {
-          $('.notifications').notifications('notification', 'error', message);
-        } else {
-          this.appendHtml(document.data);
-        }
-      }, this));
+    _importMaterial: function (type, id) {
+      switch (type) {
+        case 'IMAGE':
+          this._materialClient.images.read(id).done($.proxy(function (image, message, xhr){
+            if (xhr.status !== 200) {
+              $('.notifications').notifications('notification', 'error', message);
+            } else {
+              this.appendHtml($('<img>').attr({
+                'src': CONTEXTPATH + '/materials/' + image.path
+              }));
+            }
+          }, this));
+        break;
+        case 'DOCUMENT':
+          this._materialClient.documents.read(id).done($.proxy(function (document, message, xhr){
+            if (xhr.status !== 200) {
+              $('.notifications').notifications('notification', 'error', message);
+            } else {
+              this.appendHtml(document.data);
+            }
+          }, this));
+        break;
+      }
+      
     },
     
     _changePageType: function (page, type) {
@@ -943,11 +960,11 @@
     _onImportClick: function (event) {
       $(document)
         .forgeMaterialBrowser({
-          types: ['FOLDER', 'DOCUMENT']
+          types: ['FOLDER', 'DOCUMENT', 'IMAGE']
         })
         .on('materialSelect', $.proxy(function (event, data) {
           $(document).off('materialSelect');
-          this._importMaterial(data.id);
+          this._importMaterial(data.type, data.id);
         }, this));
     },
     
