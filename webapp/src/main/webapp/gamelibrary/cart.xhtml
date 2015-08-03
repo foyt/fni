@@ -92,8 +92,8 @@
 
           </div>
           
-          <ui:repeat var="cartItem" value="#{gameLibraryShoppingCartBackingBean.shoppingCartItems}">
-            <div class="flex-row gamelibrary-cart-item lg-flex-align-items-center md-flex-align-items-center sm-flex-align-items-top"> 
+          <ui:repeat var="cartItem" value="#{gameLibraryShoppingCartBackingBean.shoppingCartItems}" varStatus="vs">
+            <div class="flex-row gamelibrary-cart-item lg-flex-align-items-center md-flex-align-items-center sm-flex-align-items-top" data-item-index="#{vs.index}"> 
               <div class="lg-flex-cell-2 lg-flex-cell-first md-flex-cell-2 md-flex-cell-first sm-flex-cell-2 sm-flex-cell-first">
                 <h:outputText value="#{cartItem.count}" />
               </div>
