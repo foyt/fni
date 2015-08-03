@@ -74,6 +74,7 @@
       </div>
       
       <input type="submit" jsf:action="#{forgeBookPublisherBackingBean.save}" class="book-layout-save" value="#{locales['forge.bookPublisher.saveButton']}"/>
+      <input type="hidden" jsf:value="#{forgeBookPublisherBackingBean.materialId}"/>
       <input type="hidden" jsf:value="#{forgeBookPublisherBackingBean.data}" class="book-layout-data"/>
       <input type="hidden" jsf:value="#{forgeBookPublisherBackingBean.styles}" class="book-layout-styles"/>
       <input type="hidden" jsf:value="#{forgeBookPublisherBackingBean.fonts}" class="book-layout-fonts"/>

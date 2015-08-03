@@ -13,6 +13,7 @@ import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 import org.ocpsoft.rewrite.faces.annotation.Deferred;
+import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
 import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
@@ -62,6 +63,7 @@ public class ForgeBookPublisherBackingBean {
 
   @RequestAction
   @Deferred
+  @IgnorePostback
   public String load() {
     if ((getOwnerId() == null) || (getUrlPath() == null)) {
       return navigationController.notFound();
@@ -78,7 +80,6 @@ public class ForgeBookPublisherBackingBean {
     if (!materialPermissionController.hasAccessPermission(loggedUser, material)) {
       return navigationController.accessDenied();
     }
-    
     
     materialId = material.getId();
     title = material.getTitle();
@@ -111,6 +112,10 @@ public class ForgeBookPublisherBackingBean {
 
   public Long getMaterialId() {
     return materialId;
+  }
+  
+  public void setMaterialId(Long materialId) {
+    this.materialId = materialId;
   }
 
   public List<Folder> getFolders() {
@@ -151,8 +156,16 @@ public class ForgeBookPublisherBackingBean {
   
   public String save() {
     BookLayout bookLayout = materialController.findBookLayout(getMaterialId());
+    
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), bookLayout)) {
+      return navigationController.accessDenied();
+    }
+    
     materialController.updateBookLayout(bookLayout, sessionController.getLoggedUser(), getData(), getStyles(), getFonts());
-    return null;
+    Folder parentFolder = bookLayout.getParentFolder();
+    Long ownerId = parentFolder != null ? parentFolder.getCreator().getId() : bookLayout.getCreator().getId();
+    String urlPath = bookLayout.getPath().substring(String.valueOf(ownerId).length() + 1);
+    return String.format("/forge/book-publisher.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
   }
   
   private Long materialId;
