@@ -150,9 +150,9 @@ public class MaterialRestServices {
     Long modifierId = entity.getModifier() != null ? entity.getModifier().getId() : null;
     Long parentFolderId = entity.getParentFolder() != null ? entity.getParentFolder().getId() : null;
     
-    return new fi.foyt.fni.rest.material.model.Document(entity.getId(), entity.getType(), entity.getUrlName(), entity.getTitle(), 
-        entity.getPublicity(), languageId, entity.getModified(), entity.getCreated(), creatorId, modifierId, parentFolderId, 
-        entity.getData());
+    return new fi.foyt.fni.rest.material.model.Document(entity.getId(), entity.getType(), entity.getUrlName(), 
+        entity.getPath(), entity.getTitle(), entity.getPublicity(), languageId, entity.getModified(), 
+        entity.getCreated(), creatorId, modifierId, parentFolderId, entity.getData());
   }
   
   private fi.foyt.fni.rest.material.model.Image createRestModel(fi.foyt.fni.persistence.model.materials.Image entity) {
@@ -161,8 +161,8 @@ public class MaterialRestServices {
     Long modifierId = entity.getModifier() != null ? entity.getModifier().getId() : null;
     Long parentFolderId = entity.getParentFolder() != null ? entity.getParentFolder().getId() : null;
     
-    return new fi.foyt.fni.rest.material.model.Image(entity.getId(), entity.getType(), entity.getUrlName(), entity.getTitle(), 
-        entity.getPublicity(), languageId, entity.getModified(), entity.getCreated(), creatorId, modifierId, parentFolderId);
+    return new fi.foyt.fni.rest.material.model.Image(entity.getId(), entity.getType(), entity.getUrlName(), entity.getPath(), 
+        entity.getTitle(), entity.getPublicity(), languageId, entity.getModified(), entity.getCreated(), creatorId, modifierId, parentFolderId);
   }
 
 }

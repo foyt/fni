@@ -10,11 +10,12 @@ public class Material {
   public Material() {
   }
   
-  public Material(Long id, MaterialType type, String urlName, String title, MaterialPublicity publicity, Long languageId, Date modified, Date created,
+  public Material(Long id, MaterialType type, String urlName, String path, String title, MaterialPublicity publicity, Long languageId, Date modified, Date created,
       Long creatorId, Long modifierId, Long parentFolderId) {
     super();
     this.id = id;
     this.type = type;
+    this.path = path;
     this.urlName = urlName;
     this.title = title;
     this.publicity = publicity;
@@ -48,6 +49,14 @@ public class Material {
 
   public void setUrlName(String urlName) {
     this.urlName = urlName;
+  }
+  
+  public String getPath() {
+    return path;
+  }
+  
+  public void setPath(String path) {
+    this.path = path;
   }
 
   public String getTitle() {
@@ -119,6 +128,8 @@ public class Material {
   private MaterialType type;
 
   private String urlName;
+  
+  private String path;
 
   private String title;
 
