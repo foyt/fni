@@ -312,7 +312,17 @@
     
     data: function (val) {
       if (val !== undefined) {
-        this.element.find('.forge-book-publisher-pages').html(val);
+        var parsed = $(val);
+        
+        parsed.find('img').each(function (imageIndex, image) {
+          $(image)
+            .attr('data-original', $(image).attr('src'))
+            .removeAttr('src')
+            .lazyload();
+        });
+        
+        this.element.find('.forge-book-publisher-pages').empty().append(parsed);
+        
         this._toolsWaypoint[0].context.refresh();
       } else {
         var cloned = $('<pre>').html( this.element.find('.forge-book-publisher-pages').html() );
@@ -320,6 +330,11 @@
         cloned.find('.forge-book-publisher-block-selected').removeClass('forge-book-publisher-block-selected');
         cloned.find('*[contenteditable]').removeAttr('contenteditable');
         cloned.find('*[spellcheck]').removeAttr('spellcheck');
+        cloned.find('img[data-original]').each(function (imageIndex, image) {
+          $(image)
+            .attr('src', $(image).attr('data-original'))
+            .removeAttr('data-original');
+        });
         
         var result = cloned.html();
         
@@ -445,6 +460,13 @@
         .children()
         .each($.proxy(function (index, child) {
           $(child).css('page-break-after', '');
+          $(child).find('img').each(function (imageIndex, image) {
+            $(image)
+              .attr('data-original', $(image).attr('src'))
+              .removeAttr('src')
+              .lazyload();
+          });
+          
           this.appendBlock(child.outerHTML);
         }, this));
     },
