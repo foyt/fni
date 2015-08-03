@@ -627,9 +627,14 @@
       this.element.trigger("blockStyleChange");
     },
     
-    _changePageElementFloat: function (element, float) {
-      element.css('float', float);
-      this.element.trigger("blockFloatChange");
+    _changeBlockAlign: function (element, align) {
+      if (element.prop('tagName').toLowerCase() == 'img') {
+        element.css('float', align);
+      } else {
+        element.css('text-align', align);
+      }
+      
+      this.element.trigger("blockAlignChange");
     },
     
     _movePageElement: function (element, direction) {
@@ -758,16 +763,16 @@
         icon: 'fa fa-align-left',
         items: [{
           icon: 'fa fa-align-justify',
-          action: 'changeFloat',
-          float: 'none'
+          action: 'changeAlign',
+          align: ''
         }, {
           icon: 'fa fa-align-left',
-          action: 'changeFloat',
-          float: 'left'
+          action: 'changeAlign',
+          align: 'left'
         }, {
           icon: 'fa fa-align-right',
-          action: 'changeFloat',
-          float: 'right'
+          action: 'changeAlign',
+          align: 'right'
         }]
       });
       
@@ -855,8 +860,8 @@
             case 'changeStyle':
               this._changePageElementStyle(element, item.element, item.className);
             break;
-            case 'changeFloat':
-              this._changePageElementFloat(element, item.float);
+            case 'changeAlign':
+              this._changeBlockAlign(element, item.align);
             break;
             case 'move':
               this._movePageElement(element, item.direction);
