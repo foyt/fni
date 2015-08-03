@@ -99,8 +99,14 @@
       });
     },
     
+    _destroy: function () {
+      this._dialog
+        .dialog('close')
+        .dialog('destroy')
+        .remove();
+    },
+    
     _close: function () {
-      this._dialog.dialog('close');
       this.destroy();
     },
     

@@ -958,24 +958,25 @@
     },
 
     _onImportClick: function (event) {
-      $(document)
+      var browser = $('<div>')
         .forgeMaterialBrowser({
           types: ['FOLDER', 'DOCUMENT', 'IMAGE']
         })
         .on('materialSelect', $.proxy(function (event, data) {
-          $(document).off('materialSelect');
           this._importMaterial(data.type, data.id);
+          browser.forgeMaterialBrowser('destroy').remove();
         }, this));
     },
     
     _onStyleClick: function (event) {
-      $("<div>") 
+      var dialog = $("<div>") 
         .bookPublisherStylesDialog({
           fonts: this.fonts(),
           styles: this.styles()
         })
         .on("applyStyles", $.proxy(function (event, data) {
           this.styles(data.styles);
+          dialog.bookPublisherStylesDialog('destroy').remove();
         }, this));
     },
     
