@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Document;
+import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
 import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.users.User;
@@ -82,12 +83,61 @@ public class MaterialRestServices {
     
     return Response.ok(createRestModel(document)).build();
   }
+  
+  @GET
+  @Path ("/images/{ID:[0-9]*}")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_FIND_IMAGE }
+  )
+  public Response findImage(@PathParam ("ID") Long imageId) {
+    Image image = materialController.findImageById(imageId);
+    if (image == null) {
+      return Response.status(Status.NOT_FOUND).entity("Not Found").build();
+    }
+    
+    User user = null;
+    if (!sessionController.isLoggedIn()) {
+      if (accessToken.getClient().getType() != OAuthClientType.SERVICE) {
+        return Response.status(Status.FORBIDDEN).entity(String.format("Invalid client type %s", accessToken.getClient().getType().toString())).build();
+      }
+      
+      user = accessToken.getClient().getServiceUser();
+      if (user == null) {
+        return Response.status(Status.FORBIDDEN).entity("Client does not have an service user").build();
+      }
+    } else {
+      user = sessionController.getLoggedUser();
+    }
+    
+    if (!materialPermissionController.hasAccessPermission(user, image)) {
+      if (user == null) {
+        return Response.status(Status.UNAUTHORIZED).build();
+      } else {
+        return Response.status(Status.FORBIDDEN).build();
+      }
+    }
+    
+    return Response.ok(createRestModel(image)).build();
+  }
 
   @SuppressWarnings("unused")
   private List<fi.foyt.fni.rest.material.model.Document> createRestModel(fi.foyt.fni.persistence.model.materials.Document... entities) {
     List<fi.foyt.fni.rest.material.model.Document> result = new ArrayList<>();
     
     for (fi.foyt.fni.persistence.model.materials.Document entity : entities) {
+      result.add(createRestModel(entity));
+    }
+    
+    return result;
+  }
+  
+  @SuppressWarnings("unused")
+  private List<fi.foyt.fni.rest.material.model.Image> createRestModel(fi.foyt.fni.persistence.model.materials.Image... entities) {
+    List<fi.foyt.fni.rest.material.model.Image> result = new ArrayList<>();
+    
+    for (fi.foyt.fni.persistence.model.materials.Image entity : entities) {
       result.add(createRestModel(entity));
     }
     
@@ -103,6 +153,16 @@ public class MaterialRestServices {
     return new fi.foyt.fni.rest.material.model.Document(entity.getId(), entity.getType(), entity.getUrlName(), entity.getTitle(), 
         entity.getPublicity(), languageId, entity.getModified(), entity.getCreated(), creatorId, modifierId, parentFolderId, 
         entity.getData());
+  }
+  
+  private fi.foyt.fni.rest.material.model.Image createRestModel(fi.foyt.fni.persistence.model.materials.Image entity) {
+    Long languageId = entity.getLanguage() != null ? entity.getLanguage().getId() : null;
+    Long creatorId = entity.getCreator() != null ? entity.getCreator().getId() : null;
+    Long modifierId = entity.getModifier() != null ? entity.getModifier().getId() : null;
+    Long parentFolderId = entity.getParentFolder() != null ? entity.getParentFolder().getId() : null;
+    
+    return new fi.foyt.fni.rest.material.model.Image(entity.getId(), entity.getType(), entity.getUrlName(), entity.getTitle(), 
+        entity.getPublicity(), languageId, entity.getModified(), entity.getCreated(), creatorId, modifierId, parentFolderId);
   }
 
 }
