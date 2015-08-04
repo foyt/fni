@@ -456,6 +456,8 @@
     },
     
     appendHtml: function (data) {
+      var elements = [];
+      
       $('<pre>')
         .html(data)
         .children()
@@ -468,8 +470,10 @@
               .lazyload();
           });
           
-          this.appendBlock(child.outerHTML);
+          elements.push(this.appendBlock(child.outerHTML)[0]);
         }, this));
+      
+      return $(elements);
     },
 
     addPage: function () {
@@ -502,6 +506,8 @@
       }
       
       lastPage.find('main').append(block);
+      
+      return block;
     },
     
     _measurePageContentHeight: function (page) {
@@ -730,14 +736,18 @@
         .click($.proxy(this._onSaveClick, this))
         .append($('<span>').addClass('fa fa-save'))
         .appendTo(bookToolGroup);
-            
-      $('<a>') 
-        .addClass('forge-book-publisher-tool')
-        .attr('title', this.options.locales['import-button-tooltip'])
-        .click($.proxy(this._onImportClick, this))
-        .append($('<span>').addClass('fa fa-plus'))
-        .appendTo(bookToolGroup);
       
+      this._createToolButton("add-contents", bookToolGroup, this.options.locales['add-contents-button-tooltip'], { 
+        icon: 'fa fa-plus',
+        items: [{
+          name: this.options.locales['import-button'],
+          action: 'importMaterial'
+        }, {
+          name: this.options.locales['add-blank-block-button'],
+          action: 'addBlankBlock'
+        }]
+      });
+            
       $('<a>') 
         .addClass('forge-book-publisher-tool')
         .attr('title', this.options.locales['styles-button-tooltip'])
@@ -886,6 +896,23 @@
             case 'changePageType':
               this._changePageType(this.element.find('.forge-book-publisher-page-selected'), item.name);
             break;
+            case 'importMaterial':
+              var browser = $('<div>')
+                .forgeMaterialBrowser({
+                  types: ['FOLDER', 'DOCUMENT', 'IMAGE']
+                })
+                .on('materialSelect', $.proxy(function (event, data) {
+                  this._importMaterial(data.type, data.id);
+                  browser.forgeMaterialBrowser('destroy').remove();
+                }, this));
+            break;
+            case 'addBlankBlock':
+              var block = this.appendHtml($('<p>').html('&nbsp;'));
+              var page = $(block).closest('.forge-book-publisher-page');
+              
+              this._selectPage(page);
+              this._selectBlock(block);
+            break;
           }
         }, this));
         
@@ -917,6 +944,10 @@
         })
         .addClass('forge-book-publisher-block-selected');
       
+      if ($.isFunction(block[0].focus)) {
+        block[0].focus();
+      }
+       
       this.element.trigger("blockSelect", {
         block: block||[]
       });
@@ -955,17 +986,6 @@
         "styles": this.styles(),
         "fonts": this.fonts()
       });
-    },
-
-    _onImportClick: function (event) {
-      var browser = $('<div>')
-        .forgeMaterialBrowser({
-          types: ['FOLDER', 'DOCUMENT', 'IMAGE']
-        })
-        .on('materialSelect', $.proxy(function (event, data) {
-          this._importMaterial(data.type, data.id);
-          browser.forgeMaterialBrowser('destroy').remove();
-        }, this));
     },
     
     _onStyleClick: function (event) {
@@ -1583,7 +1603,9 @@
       .bookPublisher({
         locales: {
           'save-button-tooltip': $('.book-publisher').attr('data-save-button-tooltip'),
-          'import-button-tooltip': $('.book-publisher').attr('data-import-button-tooltip'),
+          'add-contents-button-tooltip': $('.book-publisher').attr('data-add-contents-button-tooltip'),
+          'import-button': $('.book-publisher').attr('data-import-button'),
+          'add-blank-block-button': $('.book-publisher').attr('data-add-blank-block-button'),
           'styles-button-tooltip': $('.book-publisher').attr('data-styles-button-tooltip'),
           'page-types-button-tooltip': $('.book-publisher').attr('data-page-types-button-tooltip'),
           'change-page-type-button-tooltip': $('.book-publisher').attr('data-change-page-type-button-tooltip'),
