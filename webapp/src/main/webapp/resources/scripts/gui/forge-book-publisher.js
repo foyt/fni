@@ -562,15 +562,20 @@
         var footer = $(page).find('footer');
         
         header
-          .css(pageType.header.rules||{})
+          .removeAttr('style')
+          .css($.extend({display: 'none'}, pageType.header.rules||{}))
           .text(this._processHeaderFooterText(page, pageType.header.text||''));
          
         footer
-          .css(pageType.footer.rules||{})
+          .removeAttr('style')
+          .css($.extend({display: 'none'}, pageType.footer.rules||{}))
           .text(this._processHeaderFooterText(page, pageType.footer.text||''));
+
+        var headerHeight = header.is(':visible') ? header.outerHeight(true) : 0;
+        var footerHeight = footer.is(':visible') ? footer.outerHeight(true) : 0;
         
         $(page).find('main').css({
-          height: 'calc(100% - ' + (footer.outerHeight(true) + header.outerHeight(true)) + 'px)'
+          height: 'calc(100% - ' + (headerHeight + footerHeight) + 'px)'
         });
       }, this));
     },
@@ -1560,26 +1565,18 @@
         var nameParts = name.split(':');
         
         if (input.attr('type') == 'checkbox') {
-          if (nameParts[1] == 'show') {
-            if (input.prop('checked')) {
-              type.find('textarea[name="' + nameParts[0] + ':text"]').removeAttr('disabled');
-            } else {
-              type.find('textarea[name="' + nameParts[0] + ':text"]').attr('disabled', 'disabled');
+          var mutuallyExculusive = input.attr('data-mutually-exclusive');
+          if (mutuallyExculusive && input.prop('checked')) {
+            var mutuallyExculusiveInput = type.find('input[name="' + mutuallyExculusive + '"]');
+            if (mutuallyExculusiveInput.prop('checked')) {
+              mutuallyExculusiveInput
+                .prop('checked', false)
+                .trigger('change');
             }
-          } else {
-            var mutuallyExculusive = input.attr('data-mutually-exclusive');
-            if (mutuallyExculusive && input.prop('checked')) {
-              var mutuallyExculusiveInput = type.find('input[name="' + mutuallyExculusive + '"]');
-              if (mutuallyExculusiveInput.prop('checked')) {
-                mutuallyExculusiveInput
-                  .prop('checked', false)
-                  .trigger('change');
-              }
-            }
-            
-            var value = input.attr(input.prop('checked') ? 'data-on' : 'data-off');
-            this._updateRule(type, nameParts[0], input.attr('data-style'), value);
           }
+          
+          var value = input.attr(input.prop('checked') ? 'data-on' : 'data-off');
+          this._updateRule(type, nameParts[0], input.attr('data-style'), value);
         } else {
           this._updateRule(type, nameParts[0], nameParts[1], input.val() + (input.attr('data-unit')||''));
         }
