@@ -12,8 +12,6 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
-import org.ocpsoft.rewrite.faces.annotation.Deferred;
-import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
 import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
@@ -62,8 +60,6 @@ public class ForgeBookPublisherBackingBean {
   private NavigationController navigationController;
 
   @RequestAction
-  @Deferred
-  @IgnorePostback
   public String load() {
     if ((getOwnerId() == null) || (getUrlPath() == null)) {
       return navigationController.notFound();
