@@ -336,10 +336,8 @@
             .attr('src', $(image).attr('data-original'))
             .removeAttr('data-original');
         });
-        
-        var result = cloned.html();
-        
-        return result;
+
+        return cloned.html();
       }
     },
     
@@ -949,7 +947,7 @@
         })
         .addClass('forge-book-publisher-block-selected');
       
-      if ($.isFunction(block[0].focus)) {
+      if (block && block.length && $.isFunction(block[0].focus)) {
         block[0].focus();
       }
        
