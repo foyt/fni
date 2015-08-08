@@ -791,6 +791,9 @@
           name: this.options.locales['import-button'],
           action: 'importMaterial'
         }, {
+          name: this.options.locales['add-blank-page-button'],
+          action: 'addBlankPage'
+        }, {
           name: this.options.locales['add-blank-block-button'],
           action: 'addBlankBlock'
         }]
@@ -960,6 +963,10 @@
                   this._importMaterial(data.type, data.id);
                   browser.forgeMaterialBrowser('destroy').remove();
                 }, this));
+            break;
+            case 'addBlankPage':
+              var page = this.addPage();
+              this._selectPage(page);
             break;
             case 'addBlankBlock':
               var block = this.appendHtml($('<p>').html('&nbsp;'));
@@ -1650,22 +1657,30 @@
   });
   
   $(document).ready(function () {
+    var locales = {};
+    var localeKeys = [
+      'save-button-tooltip',
+      'add-contents-button-tooltip',
+      'import-button',
+      'add-blank-block-button',
+      'add-blank-page-button',
+      'auto-layout-button-tooltip',
+      'styles-button-tooltip',
+      'page-types-button-tooltip',
+      'change-page-type-button-tooltip',
+      'change-block-style-button-tooltip',
+      'change-block-float-button-tooltip',
+      'move-block-button-tooltip',
+      'remove-block-button-tooltip'
+    ];
+    
+    $.each(localeKeys, $.proxy(function (index, localeKey) {
+      locales[localeKey] = this.attr('data-' + localeKey);
+    }, $('.book-publisher')));
+    
     $('.book-publisher')
       .bookPublisher({
-        locales: {
-          'save-button-tooltip': $('.book-publisher').attr('data-save-button-tooltip'),
-          'add-contents-button-tooltip': $('.book-publisher').attr('data-add-contents-button-tooltip'),
-          'import-button': $('.book-publisher').attr('data-import-button'),
-          'add-blank-block-button': $('.book-publisher').attr('data-add-blank-block-button'),
-          'auto-layout-button-tooltip': $('.book-publisher').attr('data-auto-layout-button-tooltip'),
-          'styles-button-tooltip': $('.book-publisher').attr('data-styles-button-tooltip'),
-          'page-types-button-tooltip': $('.book-publisher').attr('data-page-types-button-tooltip'),
-          'change-page-type-button-tooltip': $('.book-publisher').attr('data-change-page-type-button-tooltip'),
-          'change-block-style-button-tooltip': $('.book-publisher').attr('data-change-block-style-button-tooltip'),
-          'change-block-float-button-tooltip': $('.book-publisher').attr('data-change-block-float-button-tooltip'),
-          'move-block-button-tooltip': $('.book-publisher').attr('data-move-block-button-tooltip'),
-          'remove-block-button-tooltip': $('.book-publisher').attr('data-remove-block-button-tooltip') 
-        }
+        locales: locales
       })
       .on("save", function (event, data) {
         $('.book-layout-fonts').val(JSON.stringify(data.fonts));
