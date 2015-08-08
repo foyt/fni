@@ -494,22 +494,42 @@
       var lastPage = this.element 
         .find('section')
         .last();
-      
-      var pageHeight = lastPage.height();
-      var blockHeight = this._measureBlockOuterHeight(block, true);
-      var pageContentHeight = this._measurePageContentHeight(lastPage);
-      
-      if ((pageContentHeight + blockHeight) >= pageHeight) {
-        lastPage = this.addPage();
-      }
-      
+
       lastPage.find('main').append(block);
       
       return block;
     },
     
+    autoLayout: function () {
+      var pages = this.element.find('.forge-book-publisher-page');
+      var currentPage = pages.splice(0, 1);
+      var remainingHeight = $(currentPage).find('main').height();
+      var blockElements = this.element.find('.forge-book-publisher-page>main>*');
+      var tempPage = $('<section>')
+        .addClass('forge-book-publisher-page')
+        .css({
+          'opacity': 0
+        })
+        .append(blockElements)
+        .appendTo(this.element);
+      
+      blockElements.each($.proxy(function (index, block) {
+        var blockHeight = this._measureBlockOuterHeight(block, true, false);
+        if (remainingHeight >= blockHeight) {
+          remainingHeight -= blockHeight;
+          $(currentPage).find('main').append(block);
+        } else {
+          currentPage = pages.length ? pages.splice(0, 1) : this.addPage();
+          $(currentPage).find('main').append(block);
+          remainingHeight = $(currentPage).find('main').height() - blockHeight;
+        }
+      }, this));
+      
+      tempPage.remove();
+    },
+    
     _measurePageContentHeight: function (page) {
-      var children = page.find('main').children();
+      var children = $(page).find('main').children();
       
       var result = 0;
       for (var i = 0, l = children.length; i < l; i++) {
@@ -519,17 +539,21 @@
       return result;
     },
     
-    _measureBlockOuterHeight: function (block, includeMargin) {
-      var tempPage = $('<section>')
-        .addClass('forge-book-publisher-page')
-        .css({
-          'opacity': 0
-        })
-        .append(block)
-        .appendTo(this.element);
+    _measureBlockOuterHeight: function (block, includeMargin, useTempPage) {
+      var tempPage = null;
       
-      var height = block.outerHeight(includeMargin);
-      var imgs = block.find('img');
+      if (useTempPage) {
+        tempPage = $('<section>')
+          .addClass('forge-book-publisher-page')
+          .css({
+            'opacity': 0
+          })
+          .append(block)
+          .appendTo(this.element);
+      }
+      
+      var height = $(block).outerHeight(includeMargin);
+      var imgs = $(block).find('img');
       
       if (imgs.length) {
         for (var i = 0, l = imgs.length; i < l; i++) {
@@ -542,7 +566,9 @@
         }
       }
       
-      tempPage.remove();
+      if (useTempPage) {
+        tempPage.remove();
+      }
       
       return height;
     },
@@ -750,6 +776,13 @@
           action: 'addBlankBlock'
         }]
       });
+      
+      $('<a>') 
+        .addClass('forge-book-publisher-tool')
+        .attr('title', this.options.locales['auto-layout-button-tooltip'])
+        .click($.proxy(this._onAutoLayoutClick, this))
+        .append($('<span>').addClass('fa fa-magic'))
+        .appendTo(bookToolGroup);
             
       $('<a>') 
         .addClass('forge-book-publisher-tool')
@@ -989,6 +1022,10 @@
         "styles": this.styles(),
         "fonts": this.fonts()
       });
+    },
+    
+    _onAutoLayoutClick: function (event) {
+      this.autoLayout();
     },
     
     _onStyleClick: function (event) {
@@ -1601,6 +1638,7 @@
           'add-contents-button-tooltip': $('.book-publisher').attr('data-add-contents-button-tooltip'),
           'import-button': $('.book-publisher').attr('data-import-button'),
           'add-blank-block-button': $('.book-publisher').attr('data-add-blank-block-button'),
+          'auto-layout-button-tooltip': $('.book-publisher').attr('data-auto-layout-button-tooltip'),
           'styles-button-tooltip': $('.book-publisher').attr('data-styles-button-tooltip'),
           'page-types-button-tooltip': $('.book-publisher').attr('data-page-types-button-tooltip'),
           'change-page-type-button-tooltip': $('.book-publisher').attr('data-change-page-type-button-tooltip'),
