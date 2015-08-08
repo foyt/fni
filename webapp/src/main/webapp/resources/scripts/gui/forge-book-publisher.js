@@ -699,7 +699,7 @@
           } else {
             var previousPage = element.closest('.forge-book-publisher-page').prev();
             if (previousPage) {
-              previousPage.append(element);
+              previousPage.find('main').append(element);
               this.element.trigger("blockMove");
             }
           }
@@ -712,7 +712,7 @@
           } else {
             var nextPage = element.closest('.forge-book-publisher-page').next();
             if (nextPage) {
-              nextPage.prepend(element);
+              nextPage.find('main').prepend(element);
               this.element.trigger("blockMove");
             }
           }
