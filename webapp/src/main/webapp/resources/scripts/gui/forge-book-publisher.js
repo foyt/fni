@@ -511,7 +511,7 @@
           'opacity': 0
         })
         .append(blockElements)
-        .appendTo(this.element);
+        .appendTo(this.element.find('.forge-book-publisher-pages'));
       
       blockElements.each($.proxy(function (index, block) {
         var blockHeight = this._measureBlockOuterHeight(block, true, false);
@@ -549,7 +549,7 @@
             'opacity': 0
           })
           .append(block)
-          .appendTo(this.element);
+          .appendTo(this.element.find('.forge-book-publisher-pages'));
       }
       
       var height = $(block).outerHeight(includeMargin);
