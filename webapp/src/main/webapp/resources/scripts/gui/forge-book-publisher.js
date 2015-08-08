@@ -503,6 +503,7 @@
       
       this._updatePageNumbers();
       this._updateHeadersAndFooters(page);
+      this._toolsWaypoint[0].context.refresh();
       
       return page;
     },
