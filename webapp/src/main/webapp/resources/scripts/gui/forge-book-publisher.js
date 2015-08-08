@@ -328,6 +328,7 @@
       } else {
         var cloned = $('<pre>').html( this.element.find('.forge-book-publisher-pages').html() );
 
+        cloned.find('.forge-book-publisher-page-selected').removeClass('forge-book-publisher-page-selected');
         cloned.find('.forge-book-publisher-block-selected').removeClass('forge-book-publisher-block-selected');
         cloned.find('*[contenteditable]').removeAttr('contenteditable');
         cloned.find('*[spellcheck]').removeAttr('spellcheck');
@@ -454,6 +455,16 @@
     },
     
     appendHtml: function (data) {
+      var afterBlock = $(this.element).find('.forge-book-publisher-block-selected');
+      var page = null;
+      
+      if (!afterBlock.length) {
+        page = this.element.find('.forge-book-publisher-page-selected'); 
+        if (!page.length) {
+          page = this.element.find('section').last();
+        }
+      }
+      
       var elements = [];
       
       $('<pre>')
@@ -468,7 +479,14 @@
               .lazyload();
           });
           
-          elements.push(this.appendBlock(child.outerHTML)[0]);
+          if (afterBlock.length) {
+            var element = this.appendBlockAfter(child.outerHTML, afterBlock);
+            elements.push(element[0]);
+            afterBlock = element;
+          } else {
+            elements.push(this.appendBlock(child.outerHTML, page)[0]);
+          }
+          
         }, this));
       
       return $(elements);
@@ -489,14 +507,15 @@
       return page;
     },
     
-    appendBlock: function (html) {
+    appendBlockAfter: function (html, after) {
       var block = $(html);
-      var lastPage = this.element 
-        .find('section')
-        .last();
-
-      lastPage.find('main').append(block);
-      
+      $(after).after(block);
+      return block;
+    },
+    
+    appendBlock: function (html, page) {
+      var block = $(html);
+      $(page).find('main').append(block);
       return block;
     },
     
