@@ -493,14 +493,31 @@
     },
 
     addPage: function () {
-      var page = $('<section>')
-        .attr('data-type', this.options.defaultPageType)
-        .addClass('forge-book-publisher-page')
-        .append($('<header>'))
-        .append($('<main>'))
-        .append($('<footer>'))
+      var page = this._createPage(this.options.defaultPageType)
         .appendTo(this.element.find('.forge-book-publisher-pages'));
+
+      this._updatePageNumbers();
+      this._updateHeadersAndFooters(page);
+      this._toolsWaypoint[0].context.refresh();
       
+      return page;
+    },
+
+    addPageBefore: function (refPage) {
+      var page = this._createPage(this.options.defaultPageType);
+      refPage.before(page);
+
+      this._updatePageNumbers();
+      this._updateHeadersAndFooters(page);
+      this._toolsWaypoint[0].context.refresh();
+      
+      return page;
+    },
+
+    addPageAfter: function (refPage) {
+      var page = this._createPage(this.options.defaultPageType);
+      refPage.after(page);
+
       this._updatePageNumbers();
       this._updateHeadersAndFooters(page);
       this._toolsWaypoint[0].context.refresh();
@@ -546,6 +563,15 @@
       }, this));
       
       tempPage.remove();
+    },
+    
+    _createPage: function (type) {
+      return $('<section>')
+        .attr('data-type', type)
+        .addClass('forge-book-publisher-page')
+        .append($('<header>'))
+        .append($('<main>'))
+        .append($('<footer>'));
     },
     
     _measurePageContentHeight: function (page) {
@@ -966,8 +992,31 @@
                 }, this));
             break;
             case 'addBlankPage':
-              var page = this.addPage();
-              this._selectPage(page);
+              $('<div/>')
+                .bookPublisherAddPageDialog({
+                  pageSelected: this.element.find('.forge-book-publisher-page-selected').length != 0
+                })
+                .on("addPage", $.proxy(function (event, data) {
+                  switch (data.position) {
+                    case 'last':
+                      this.addPage();
+                    break;
+                    case 'first':
+                      var firstPage = this.element.find('.forge-book-publisher-page').first();
+                      if (!firstPage.length) {
+                        this.addPage();
+                      } else {
+                        this.addPageBefore(firstPage);
+                      }
+                    break;
+                    case 'before-selected':
+                      this.addPageBefore(this.element.find('.forge-book-publisher-page-selected'));
+                    break;
+                    case 'after-selected':
+                      this.addPageAfter(this.element.find('.forge-book-publisher-page-selected'));
+                    break;
+                  }
+                }, this));
             break;
             case 'addBlankBlock':
               var block = this.appendHtml($('<p>').html('&nbsp;'));
@@ -1434,6 +1483,38 @@
     _create : function() {
       this.option("templateOptions", {
         name: this.options.name
+      });
+      
+      this._super();
+    }
+    
+  });
+  
+  $.widget("custom.bookPublisherAddPageDialog", $.custom.bookPublisherDialog, {
+    options: {
+      dialogWidth: 500,
+      dialogButtons: [{
+        'require-valid': true,
+        'text-attribute': 'data-add-button',
+        'click': function () {
+          this.element.trigger("addPage", {
+            position: this.dialogElement.find('input[name="position"]:checked').val()
+          });
+          
+          this._close(); 
+        }
+      }, {
+        'text-attribute': 'data-cancel-button',
+        'click' : function() {
+          this._close();
+        }
+      }],
+      templateName: "forge/book-publisher/add-page-dialog"
+    },
+    
+    _create : function() {
+      this.option("templateOptions", {
+        pageSelected: this.options.pageSelected
       });
       
       this._super();

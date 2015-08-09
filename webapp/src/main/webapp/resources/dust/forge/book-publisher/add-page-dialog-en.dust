@@ -1,0 +1,24 @@
+<div title="Add page" data-add-button="Add" data-cancel-button="Cancel" class="forge-publisher-add-page-dialog">
+  <p>
+    Where do you want the new page to be added?
+  </p>
+  <div>
+    {#pageSelected}
+    <div>
+      <input type="radio" name="position" value="after-selected" checked="checked"/> <label>After the selected page</label>
+    </div>
+
+    <div>
+      <input type="radio" name="position" value="before-selected" /> <label>Before the selected page</label>
+    </div>
+    {/pageSelected}
+    
+    <div>
+      <input type="radio" name="position" value="first" /> <label>As a first page</label>
+    </div>
+    
+    <div>
+      <input type="radio" name="position" value="last" /> <label>As a last page</label>
+    </div>
+  </div>
+</div>

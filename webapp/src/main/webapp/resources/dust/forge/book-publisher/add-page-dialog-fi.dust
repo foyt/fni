@@ -1,0 +1,24 @@
+<div title="Lisää sivu" data-add-button="Lisää" data-cancel-button="Peruuta" class="forge-publisher-add-page-dialog">
+  <p> 
+    Mihin haluat sijoittaa lisättävän sivun?
+  </p>
+  <div>
+    {#pageSelected}
+    <div>
+      <input type="radio" name="position" value="after-selected" checked="checked"/> <label>Valitun sivun jälkeen</label>
+    </div>
+
+    <div>
+      <input type="radio" name="position" value="before-selected" /> <label>Ennen valittua sivua</label>
+    </div>
+    {/pageSelected}
+    
+    <div>
+      <input type="radio" name="position" value="first" /> <label>Ensimmäiseksi sivuksi</label>
+    </div>
+    
+    <div>
+      <input type="radio" name="position" value="last" /> <label>Viimeiseksi sivuksi</label>
+    </div>
+  </div>
+</div>

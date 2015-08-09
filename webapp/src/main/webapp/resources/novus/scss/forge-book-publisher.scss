@@ -504,5 +504,17 @@ $hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
       }
     }
   }
+  
+  &.forge-publisher-add-page-dialog {
+    p {
+      font-style: italic;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+    
+    label {
+      margin-left: 5px;
+    }
+  }
 }
   
