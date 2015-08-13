@@ -435,12 +435,24 @@ public class MaterialController {
     return bookLayoutDAO.findById(id);
   }
   
-  public BookLayout updateBookLayout(BookLayout bookLayout, User modifier, String data, String styles, String fonts) {
+  public BookLayout updateBookLayout(BookLayout bookLayout, User modifier, String title, String data, String styles, String fonts) {
+    if (!StringUtils.equals(title, bookLayout.getTitle())) {
+      String oldUrlName = bookLayout.getUrlName();
+      String newUrlName = getUniqueMaterialUrlName(bookLayout.getCreator(), bookLayout.getParentFolder(), bookLayout, title);
+      materialDAO.updateTitle(bookLayout, title, modifier);
+      
+      if (!StringUtils.equals(newUrlName, oldUrlName)) {
+        materialDAO.updateUrlName(bookLayout, newUrlName, modifier);
+      }
+    }
+    
     bookLayout = bookLayoutDAO.updateData(bookLayout, data);
     bookLayout = bookLayoutDAO.updateStyles(bookLayout, styles);
     bookLayout = bookLayoutDAO.updateFonts(bookLayout, fonts);
     bookLayout = bookLayoutDAO.updateModified(bookLayout, new Date());
     bookLayout = bookLayoutDAO.updateModifier(bookLayout, modifier);
+    
+    
     return bookLayout;
   }
 

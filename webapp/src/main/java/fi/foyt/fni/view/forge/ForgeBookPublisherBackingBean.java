@@ -122,6 +122,10 @@ public class ForgeBookPublisherBackingBean {
     return title;
   }
 
+  public void setTitle(String title) {
+    this.title = title;
+  }
+  
   public String getData() {
     return data;
   }
@@ -157,7 +161,7 @@ public class ForgeBookPublisherBackingBean {
       return navigationController.accessDenied();
     }
     
-    materialController.updateBookLayout(bookLayout, sessionController.getLoggedUser(), getData(), getStyles(), getFonts());
+    materialController.updateBookLayout(bookLayout, sessionController.getLoggedUser(), getTitle(), getData(), getStyles(), getFonts());
     Folder parentFolder = bookLayout.getParentFolder();
     Long ownerId = parentFolder != null ? parentFolder.getCreator().getId() : bookLayout.getCreator().getId();
     String urlPath = bookLayout.getPath().substring(String.valueOf(ownerId).length() + 1);

@@ -10,6 +10,31 @@ $hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
 .book-layout-save {
   display: none;
 }
+
+h2.title {
+  @include header-2;
+}
+
+h2.title input {
+  color: $title-color;
+  background: none;
+  border: 1px solid transparent;
+  width: 100%;
+  @include box-sizing(border-box);
+  padding-left: 4px;
+  margin-left: -4px;
+  font-family: $default-font;
+}
+
+h2.title input:hover {
+  background: #fff;
+  border: 1px dotted #eee;
+}
+
+h2.title input:focus {
+  background: #fff;
+  border: 1px inset #eee;
+}
   
 .book-publisher {
   border: 0px;
