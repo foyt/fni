@@ -1,0 +1,228 @@
+<div class="forge-publisher-page-types-dialog-type" data-header-rules="{header.rules|js}" data-footer-rules="{footer.rules|js}">
+
+  <input type="text" name="name" class="forge-publisher-page-types-dialog-type-name" value="{name}" placeholder="Syötä sivutyypin nimi" required="required"/>
+  
+  <div class="forge-publisher-page-types-dialog-type-settings">
+  
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Numeroitu sivu</label>
+      {#numberedPage}
+        <input type="checkbox" name="numbered-page" value="1" checked="checked"/>
+      {:else}
+        <input type="checkbox" name="numbered-page" value="1"/>
+      {/numberedPage}
+    </div>
+  
+    <!-- Header -->
+    
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Näytä ylätunniste</label>
+      {#header.show}
+        <input type="checkbox" name="header:show" checked="checked" value="1" data-style="display" data-on="block" data-off="none"/>
+      {:else}
+        <input type="checkbox" name="header:show" data-style="display" data-on="block" data-off="none"/>
+      {/header.show}
+    </div>    
+    
+    <div class="forge-publisher-page-types-dialog-type-setting forge-publisher-page-types-dialog-type-setting-font">
+      <label>Kirjaisin</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <span>
+          <input value="12" type="number" min="1" step="any" name="header:font-size" data-unit="pt"/>
+        </span>
+        <span>pt</span>
+        <span>
+          <select name="header:font-family">
+            {#fonts}
+              <option value="{name|s}">{name|s}</option>
+            {/fonts}
+          </select>
+        </span>
+        <span class="forge-publisher-page-types-dialog-type-setting-font-actions">
+          <a class="forge-publisher-page-types-dialog-type-setting-font-action forge-publisher-page-types-dialog-type-setting-font-action-add" href="javascript:void(null)">
+            <span class="fa fa-plus"></span>
+          </a>
+          
+          <a class="forge-publisher-page-types-dialog-type-setting-font-action forge-publisher-page-types-dialog-type-setting-font-action-remove" href="javascript:void(null)">
+            <span class="fa fa-trash-o"></span>
+          </a>
+        </span>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Asettelu</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <select name="header:text-align">
+          <option value="left">Vasen</option>
+          <option value="center">Keskitetty</option>
+          <option value="right">Oikea</option>
+        </select>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Tyylit</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <input type="checkbox" name="header:bold" value="1" data-style="font-weight" data-on="bold" data-off="normal"/>
+        <label>Lihavoitu</label>
+        <input type="checkbox" name="header:italic" value="1" data-style="font-style" data-on="italic" data-off="normal"/>
+        <label>Kursivoitu</label>
+        <input type="checkbox" name="header:underline" value="1" data-style="text-decoration" data-on="underline" data-off="none" data-mutually-exclusive="header:strikethrough"/>
+        <label>Alleviivattu</label>
+        <input type="checkbox" name="header:strikethrough" value="1" data-style="text-decoration" data-on="line-through" data-off="none" data-mutually-exclusive="header:underline"/>
+        <label>Yliviivattu</label>
+        <input type="checkbox" name="header:all-caps" value="1" data-style="text-transform" data-on="uppercase" data-off="none" data-mutually-exclusive="header:small-caps"/>
+        <label>Isot kirjaimet</label>
+        <input type="checkbox" name="header:small-caps" value="1" data-style="font-variant" data-on="small-caps" data-off="normal" data-mutually-exclusive="header:all-caps"/>
+        <label>Kapiteelit</label>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Tekstin väri</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <input type="color" name="header:color" value="#000" data-preferred-format="rgb" data-allow-empty="true" data-hide-after-palette-select="true" data-show-buttons="false"/>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Taustaväri</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <input type="color" name="header:background-color" value="" data-preferred-format="rgb" data-allow-empty="true" data-hide-after-palette-select="true" data-show-buttons="false"/>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-page-types-dialog-type-setting forge-publisher-page-types-dialog-type-setting-paddings">
+      <label>Sisennys</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <input type="number" value="0" step="any" name="header:padding-top" data-unit="pt" min="0"/>
+        <span>ylä</span>
+        <input type="number" value="0" step="any" name="header:padding-right" data-unit="pt" min="0"/>
+        <span>oikea</span>
+        <input type="number" value="0" step="any" name="header:padding-bottom" data-unit="pt" min="0"/>
+        <span>ala</span>
+        <input type="number" value="0" step="any" name="header:padding-left" data-unit="pt" min="0"/>
+        <span>vasen</span>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Teksti</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        {#header.show}
+          <textarea rows="1" name="header:text">{header.text}</textarea>
+        {:else}
+          <textarea rows="1" name="header:text" checked="checked">{header.text}</textarea>
+        {/header.show}
+      </span>
+    </div>
+    
+    <!-- Footer -->
+    
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Näytä alatunniste</label>
+      {#footer.show}
+        <input type="checkbox" name="footer:show" checked="checked" data-style="display" data-on="block" data-off="none"/>
+      {:else}
+        <input type="checkbox" name="footer:show" data-style="display" data-on="block" data-off="none"/>
+      {/footer.show}
+    </div>    
+    
+    <div class="forge-publisher-page-types-dialog-type-setting forge-publisher-page-types-dialog-type-setting-font">
+      <label>Kirjaisin</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <span>
+          <input value="12" type="number" min="1" step="any" name="footer:font-size" data-unit="pt"/>
+        </span>
+        <span>pt</span>
+        <span>
+          <select name="footer:font-family">
+            {#fonts}
+              <option value="{name|s}">{name|s}</option>
+            {/fonts}
+          </select>
+        </span>
+        <span class="forge-publisher-page-types-dialog-type-setting-font-actions">
+          <a class="forge-publisher-page-types-dialog-type-setting-font-action forge-publisher-page-types-dialog-type-setting-font-action-add" href="javascript:void(null)">
+            <span class="fa fa-plus"></span>
+          </a>
+          
+          <a class="forge-publisher-page-types-dialog-type-setting-font-action forge-publisher-page-types-dialog-type-setting-font-action-remove" href="javascript:void(null)">
+            <span class="fa fa-trash-o"></span>
+          </a>
+        </span>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Asettelu</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <select name="footer:text-align">
+          <option value="left">Vasen</option>
+          <option value="center">Keskitetty</option>
+          <option value="right">Oikea</option>
+        </select>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Tyylit</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <input type="checkbox" name="footer:bold" value="1" data-style="font-weight" data-on="bold" data-off="normal"/>
+        <label>Lihavoitu</label>
+        <input type="checkbox" name="footer:italic" value="1" data-style="font-style" data-on="italic" data-off="normal"/>
+        <label>Kursivoitu</label>
+        <input type="checkbox" name="footer:underline" value="1" data-style="text-decoration" data-on="underline" data-off="none" data-mutually-exclusive="strikethrough"/>
+        <label>Alleviivattu</label>
+        <input type="checkbox" name="footer:strikethrough" value="1" data-style="text-decoration" data-on="line-through" data-off="none" data-mutually-exclusive="underline"/>
+        <label>Yliviivattu</label>
+        <input type="checkbox" name="footer:all-caps" value="1" data-style="text-transform" data-on="uppercase" data-off="none" data-mutually-exclusive="small-caps"/>
+        <label>Isot kirjaimet</label>
+        <input type="checkbox" name="footer:small-caps" value="1" data-style="font-variant" data-on="small-caps" data-off="normal" data-mutually-exclusive="all-caps"/>
+        <label>Kapiteelit</label>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Tekstin väri</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <input type="color" name="footer:color" value="#000" data-preferred-format="rgb" data-allow-empty="true" data-hide-after-palette-select="true" data-show-buttons="false"/>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Taustaväri</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <input type="color" name="footer:background-color" value="" data-preferred-format="rgb" data-allow-empty="true" data-hide-after-palette-select="true" data-show-buttons="false"/>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-page-types-dialog-type-setting forge-publisher-page-types-dialog-type-setting-paddings">
+      <label>Sisennys</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        <input type="number" value="0" step="any" name="footer:padding-top" data-unit="pt" min="0"/>
+        <span>ylä</span>
+        <input type="number" value="0" step="any" name="footer:padding-right" data-unit="pt" min="0"/>
+        <span>oikea</span>
+        <input type="number" value="0" step="any" name="footer:padding-bottom" data-unit="pt" min="0"/>
+        <span>ala</span>
+        <input type="number" value="0" step="any" name="footer:padding-left" data-unit="pt" min="0"/>
+        <span>vasen</span>
+      </span>
+    </div>
+    
+    <div class="forge-publisher-page-types-dialog-type-setting">
+      <label>Teksti</label>
+      <span class="forge-publisher-page-types-dialog-type-setting-editor">
+        {#footer.show}
+          <textarea rows="1" name="footer:text">{footer.text}</textarea>
+        {:else}
+          <textarea rows="1" name="footer:text" checked="checked">{footer.text}</textarea>
+        {/footer.show}
+      </span>
+    </div>
+
+  </div>
+  
+</div>
