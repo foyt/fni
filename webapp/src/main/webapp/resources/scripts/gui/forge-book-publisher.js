@@ -582,9 +582,11 @@
     },
     
     _scrollToElement: function (element) {
-      $('html, body').animate({
-        scrollTop: $(element).offset().top - this.options.scrollOffset
-      }, this.options.scrollDuration);
+      if ($(element).length) {
+        $('html, body').animate({
+          scrollTop: $(element).offset().top - this.options.scrollOffset
+        }, this.options.scrollDuration);
+      }
     },
     
     _createPage: function (type) {
@@ -699,7 +701,7 @@
             } else {
               callback($('<img>').attr({
                 'src': CONTEXTPATH + '/materials/' + image.path
-              }).html());
+              }));
             }
           }, this));
         break;
