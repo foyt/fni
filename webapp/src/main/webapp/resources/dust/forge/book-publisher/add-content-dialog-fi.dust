@@ -1,0 +1,27 @@
+<div title="Lisää sisältöä" data-add-button="Lisää" data-cancel-button="Cancel" class="forge-publisher-add-content-dialog">
+  <p>
+    Mihin haluat uuden sisällön sijoittaa?
+  </p>
+  <div>
+    {#blockSelected}
+    <div>
+      <input type="radio" name="position" value="after-selection" checked="checked"/> <label>Valitun lohkon jälkeen</label>
+    </div>
+
+    <div>
+      <input type="radio" name="position" value="before-selection" /> <label>Ennen valittua lohkoa</label>
+    </div>
+    {/blockSelected}
+    {#pageSelected}
+    <div>
+      <input type="radio" name="position" value="page-top" /> <label>Valitun sivun alkuun</label>
+    </div>
+    {/pageSelected}
+    <div>
+      <input type="radio" name="position" value="beginning" /> <label>Kirjan alkuun</label>
+    </div>
+    <div>
+      <input type="radio" name="position" value="bottom" /> <label>Kirjan loppuun</label>
+    </div>
+  </div>
+</div>

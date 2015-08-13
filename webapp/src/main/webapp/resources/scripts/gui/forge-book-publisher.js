@@ -151,6 +151,8 @@
   
   $.widget("custom.bookPublisher", {
     options: {
+      scrollDuration: 1000,
+      scrollOffset: 100,
       fonts: [{
         "name": "Tinos",
         "url": "http://fonts.googleapis.com/css?family=Tinos:400,400italic,700,700italic"
@@ -454,42 +456,29 @@
       }
     },
     
-    appendHtml: function (data) {
-      var afterBlock = $(this.element).find('.forge-book-publisher-block-selected');
-      var page = null;
-      
-      if (!afterBlock.length) {
-        page = this.element.find('.forge-book-publisher-page-selected'); 
-        if (!page.length) {
-          page = this.element.find('section').last();
-        }
-      }
-      
-      var elements = [];
-      
-      $('<pre>')
-        .html(data)
-        .children()
-        .each($.proxy(function (index, child) {
-          $(child).css('page-break-after', '');
-          $(child).find('img').each(function (imageIndex, image) {
-            $(image)
-              .attr('data-original', $(image).attr('src'))
-              .removeAttr('src')
-              .lazyload();
-          });
-          
-          if (afterBlock.length) {
-            var element = this.appendBlockAfter(child.outerHTML, afterBlock);
-            elements.push(element[0]);
-            afterBlock = element;
-          } else {
-            elements.push(this.appendBlock(child.outerHTML, page)[0]);
-          }
-          
-        }, this));
-      
-      return $(elements);
+    insertHtmlBefore: function (data, block) {
+      var elements = this._parseHtml(data);
+      $(block).before(elements);
+      return elements;
+    },
+
+    insertHtmlAfter: function (data, block) {
+      var elements = this._parseHtml(data);
+      $(block).after(elements);
+      return elements;
+    },
+
+    appendHtmlToPage: function (data, page) {
+      var elements = this._parseHtml(data);
+      $(page).find('main').append(elements);
+      return elements;
+    },
+
+    prependHtmlToPage: function (data, page) {
+      var elements = this._parseHtml(data);
+      $(page).find('main').prepend(elements);
+      this._scrollToElement(elements);
+      return elements;
     },
 
     addPage: function () {
@@ -537,6 +526,12 @@
       return block;
     },
     
+    selectBlock: function (block) {
+      var page = $(block).closest('.forge-book-publisher-page');
+      this._selectPage(page);
+      this._selectBlock(block);
+    },
+    
     autoLayout: function () {
       var pages = this.element.find('.forge-book-publisher-page');
       var currentPage = pages.splice(0, 1);
@@ -563,6 +558,33 @@
       }, this));
       
       tempPage.remove();
+    },
+    
+    _parseHtml: function (data) {
+      var elements = [];
+      
+      $('<pre>')
+        .html(data)
+        .children()
+        .each($.proxy(function (index, child) {
+          $(child).css('page-break-after', '');
+          $(child).find('img').each(function (imageIndex, image) {
+            $(image)
+              .attr('data-original', $(image).attr('src'))
+              .removeAttr('src')
+              .lazyload();
+          });
+          
+          elements.push(child);
+        }, this));
+      
+      return $(elements);
+    },
+    
+    _scrollToElement: function (element) {
+      $('html, body').animate({
+        scrollTop: $(element).offset().top - this.options.scrollOffset
+      }, this.options.scrollDuration);
     },
     
     _createPage: function (type) {
@@ -1019,11 +1041,36 @@
                 }, this));
             break;
             case 'addBlankBlock':
-              var block = this.appendHtml($('<p>').html('&nbsp;'));
-              var page = $(block).closest('.forge-book-publisher-page');
-              
-              this._selectPage(page);
-              this._selectBlock(block);
+              $('<div/>')
+                .bookPublisherAddContentDialog({
+                  pageSelected: this.element.find('.forge-book-publisher-page-selected').length != 0,
+                  blockSelected: $(this.element).find('.forge-book-publisher-block-selected').length > 0
+                })
+                .on("addContent", $.proxy(function (event, data) {
+                  var block = null;
+                  var content = $('<p>').html('&nbsp;');
+                  
+                  switch (data.position) {
+                    case 'after-selection':
+                      block = this.insertHtmlAfter(content, $(this.element).find('.forge-book-publisher-block-selected'));
+                    break;
+                    case 'before-selection':
+                      block = this.insertHtmlBefore(content, $(this.element).find('.forge-book-publisher-block-selected'));
+                    break;
+                    case 'page-top':
+                      block = this.prependHtmlToPage(content, this.element.find('.forge-book-publisher-page-selected'));
+                    break;
+                    case 'beginning':
+                      block = this.prependHtmlToPage(content, this.element.find('section').first());
+                    break;
+                    case 'bottom':
+                      block = this.appendHtmlToPage(content, this.element.find('section').last());
+                    break;
+                  }
+
+                  this._scrollToElement(block);
+                  this.selectBlock(block);
+                }, this));
             break;
           }
         }, this));
@@ -1515,6 +1562,38 @@
     _create : function() {
       this.option("templateOptions", {
         pageSelected: this.options.pageSelected
+      });
+      
+      this._super();
+    }
+    
+  });
+  
+  $.widget("custom.bookPublisherAddContentDialog", $.custom.bookPublisherDialog, {
+    options: {
+      dialogWidth: 500,
+      dialogButtons: [{
+        'require-valid': true,
+        'text-attribute': 'data-add-button',
+        'click': function () {
+          this.element.trigger("addContent", {
+            position: this.dialogElement.find('input[name="position"]:checked').val()
+          });
+          
+          this._close(); 
+        }
+      }, {
+        'text-attribute': 'data-cancel-button',
+        'click' : function() {
+          this._close();
+        }
+      }],
+      templateName: "forge/book-publisher/add-content-dialog"
+    },
+    
+    _create : function() {
+      this.option("templateOptions", {
+        blockSelected: this.options.blockSelected
       });
       
       this._super();

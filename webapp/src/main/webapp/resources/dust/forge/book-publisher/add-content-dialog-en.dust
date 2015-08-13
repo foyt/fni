@@ -1,0 +1,27 @@
+<div title="Add content" data-add-button="Add" data-cancel-button="Cancel" class="forge-publisher-add-content-dialog">
+  <p>
+    Where do you want the new content to be added?
+  </p>
+  <div>
+    {#blockSelected}
+    <div>
+      <input type="radio" name="position" value="after-selection" checked="checked"/> <label>After the selection</label>
+    </div>
+
+    <div>
+      <input type="radio" name="position" value="before-selection" /> <label>Before the selection</label>
+    </div>
+    {/blockSelected}
+    {#pageSelected}
+    <div>
+      <input type="radio" name="position" value="page-top" /> <label>Top of the page</label>
+    </div>
+    {/pageSelected}
+    <div>
+      <input type="radio" name="position" value="beginning" /> <label>Beginning of the book</label>
+    </div>
+    <div>
+      <input type="radio" name="position" value="bottom" /> <label>End of the book</label>
+    </div>
+  </div>
+</div>
