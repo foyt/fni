@@ -690,16 +690,16 @@
       });
     },
     
-    _importMaterial: function (type, id) {
+    _loadContent: function (type, id, callback) {
       switch (type) {
         case 'IMAGE':
           this._materialClient.images.read(id).done($.proxy(function (image, message, xhr){
             if (xhr.status !== 200) {
               $('.notifications').notifications('notification', 'error', message);
             } else {
-              this.appendHtml($('<img>').attr({
+              callback($('<img>').attr({
                 'src': CONTEXTPATH + '/materials/' + image.path
-              }));
+              }).html());
             }
           }, this));
         break;
@@ -708,7 +708,7 @@
             if (xhr.status !== 200) {
               $('.notifications').notifications('notification', 'error', message);
             } else {
-              this.appendHtml(document.data);
+              callback(document.data);
             }
           }, this));
         break;
@@ -1008,9 +1008,38 @@
                 .forgeMaterialBrowser({
                   types: ['FOLDER', 'DOCUMENT', 'IMAGE']
                 })
-                .on('materialSelect', $.proxy(function (event, data) {
-                  this._importMaterial(data.type, data.id);
-                  browser.forgeMaterialBrowser('destroy').remove();
+                .on('materialSelect', $.proxy(function (event, materialSelectData) {
+                  $('<div/>')
+                    .bookPublisherAddContentDialog({
+                      pageSelected: this.element.find('.forge-book-publisher-page-selected').length > 0,
+                      blockSelected: this.element.find('.forge-book-publisher-block-selected').length > 0
+                    })
+                    .on("addContent", $.proxy(function (event, addContentData) {
+                      this._loadContent(materialSelectData.type, materialSelectData.id, $.proxy(function (content) {
+                        var block = null;
+                        
+                        switch (addContentData.position) {
+                          case 'after-selection':
+                            block = this.insertHtmlAfter(content, this.element.find('.forge-book-publisher-block-selected')).first();
+                          break;
+                          case 'before-selection':
+                            block = this.insertHtmlBefore(content, this.element.find('.forge-book-publisher-block-selected')).first();
+                          break;
+                          case 'page-top':
+                            block = this.prependHtmlToPage(content, this.element.find('.forge-book-publisher-page-selected')).first();
+                          break;
+                          case 'beginning':
+                            block = this.prependHtmlToPage(content, this.element.find('section').first()).first();
+                          break;
+                          case 'bottom':
+                            block = this.appendHtmlToPage(content, this.element.find('section').last()).first();
+                          break;
+                        }
+    
+                        this._scrollToElement(block);
+                        this.selectBlock(block);
+                      }, this));
+                    }, this));
                 }, this));
             break;
             case 'addBlankPage':
@@ -1593,6 +1622,7 @@
     
     _create : function() {
       this.option("templateOptions", {
+        pageSelected: this.options.pageSelected,
         blockSelected: this.options.blockSelected
       });
       
