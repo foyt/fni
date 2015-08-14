@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-
+  
   var LengthUnitConverter = function(length) {
     this.init(length);
   }
@@ -751,12 +751,36 @@
     
     _changeBlockAlign: function (element, align) {
       if (element.prop('tagName').toLowerCase() == 'img') {
-        element.css('float', align);
+        element.css({
+          'float': '',
+          'display': align ? 'block' : '',
+          'margin-left': align == 'center' || align == 'right' ? 'auto' : '',
+          'margin-right': align == 'center' || align == 'left' ? 'auto' : '',
+          'text-align':''
+        });          
       } else {
-        element.css('text-align', align);
+        element.css({
+          'float': '',
+          'display': '',
+          'margin-left': '',
+          'margin-right': '',
+          'text-align': align
+        });  
       }
-      
+
       this.element.trigger("blockAlignChange");
+    },
+    
+    _changeBlockFloat: function (element, float) {
+      element.css({
+        'float': float,
+        'display': '',
+        'margin-left': '',
+        'margin-right': '',
+        'text-align':''
+      });  
+
+      this.element.trigger("blockFloatChange");
     },
     
     _movePageElement: function (element, direction) {
@@ -898,17 +922,29 @@
       this._createToolButton("floats", blockToolGroup, this.options.locales['change-block-float-button-tooltip'], {
         icon: 'fa fa-align-left',
         items: [{
-          icon: 'fa fa-align-justify',
+          name: this.options.locales['align-left-button'],
           action: 'changeAlign',
           align: ''
         }, {
-          icon: 'fa fa-align-left',
-          action: 'changeAlign',
-          align: 'left'
+          name: this.options.locales['float-left-button'],
+          action: 'changeFloat',
+          float: 'left'
         }, {
-          icon: 'fa fa-align-right',
+          name: this.options.locales['align-right-button'],
           action: 'changeAlign',
           align: 'right'
+        }, {
+          name: this.options.locales['float-right-button'],
+          action: 'changeFloat',
+          float: 'right'
+        }, {
+          name: this.options.locales['align-center-button'],
+          action: 'changeAlign',
+          align: 'center'
+        }, {
+          name: this.options.locales['align-justify-button'],
+          action: 'changeAlign',
+          align: 'justify'
         }]
       });
       
@@ -998,6 +1034,9 @@
             break;
             case 'changeAlign':
               this._changeBlockAlign(element, item.align);
+            break;
+            case 'changeFloat':
+              this._changeBlockFloat(element, item.float);
             break;
             case 'move':
               this._movePageElement(element, item.direction);
@@ -1863,6 +1902,12 @@
       'change-page-type-button-tooltip',
       'change-block-style-button-tooltip',
       'change-block-float-button-tooltip',
+      'align-left-button',
+      'align-right-button',
+      'align-center-button',
+      'align-justify-button',
+      'float-left-button',
+      'float-right-button',
       'move-block-button-tooltip',
       'remove-block-button-tooltip'
     ];
