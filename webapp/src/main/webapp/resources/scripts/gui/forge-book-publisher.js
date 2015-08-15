@@ -307,6 +307,8 @@
       this.element.on("stylesChanged", $.proxy(this._onStylesChanged, this));
       this.element.on("fontsChanged", $.proxy(this._onFontsChanged, this));
       this.element.on("pageTypesChanged", $.proxy(this._onPageTypesChanged, this));
+      this.element.on("pageRemove", $.proxy(this._onPageRemove, this));
+      this.element.on("pageMove", $.proxy(this._onPageMove, this));
       this.element.on("blockSelect", $.proxy(this._onBlockSelect, this));
       this.element.on("pageSelect", $.proxy(this._onPageSelect, this));
       
@@ -530,6 +532,11 @@
       var page = $(block).closest('.forge-book-publisher-page');
       this._selectPage(page);
       this._selectBlock(block);
+    },
+    
+    selectPage: function (page) {
+      this._selectPage(page);
+      this._selectBlock(null);
     },
     
     autoLayout: function () {
@@ -777,30 +784,30 @@
       this.element.trigger("blockFloatChange");
     },
     
-    _movePageElement: function (element, direction) {
+    _moveBlock: function (block, direction) {
       switch (direction) {
         case 'up':
-          var previousBlock = element.prev();
+          var previousBlock = block.prev();
           if (previousBlock.length) {
-            previousBlock.before(element);
+            previousBlock.before(block);
             this.element.trigger("blockMove");
           } else {
-            var previousPage = element.closest('.forge-book-publisher-page').prev();
+            var previousPage = block.closest('.forge-book-publisher-page').prev();
             if (previousPage) {
-              previousPage.find('main').append(element);
+              previousPage.find('main').append(block);
               this.element.trigger("blockMove");
             }
           }
         break;
         case 'down':
-          var nextBlock = element.next();
+          var nextBlock = block.next();
           if (nextBlock.length) {
-            nextBlock.after(element);
+            nextBlock.after(block);
             this.element.trigger("blockMove");
           } else {
-            var nextPage = element.closest('.forge-book-publisher-page').next();
+            var nextPage = block.closest('.forge-book-publisher-page').next();
             if (nextPage) {
-              nextPage.find('main').prepend(element);
+              nextPage.find('main').prepend(block);
               this.element.trigger("blockMove");
             }
           }
@@ -811,6 +818,30 @@
     _removeBlock: function (element) {
       $(element).remove();
       this.element.trigger("blockRemoved");
+    },
+    
+    _movePage: function (page, direction) {
+      switch (direction) {
+        case 'up':
+          var previousPage = page.prev('.forge-book-publisher-page');
+          if (previousPage.length) {
+            previousPage.before(page);
+            this.element.trigger("pageMove");
+          }
+        break;
+        case 'down':
+          var nextPage = page.next('.forge-book-publisher-page');
+          if (nextPage.length) {
+            nextPage.after(page);
+            this.element.trigger("pageMove");
+          }
+        break;
+      }
+    },
+        
+    _removePage: function (page) {
+      $(page).remove();
+      this.element.trigger("pageRemove");
     },
     
     _createTools: function () {
@@ -899,6 +930,26 @@
         })
       });
       
+      this._createToolButton("move-page", pageToolGroup, this.options.locales['move-page-button-tooltip'], {
+        icon: 'fa fa-arrows',
+        items: [{
+          icon: 'fa fa-arrow-up',
+          action: 'movePage',
+          direction: 'up'
+        }, {
+          icon: 'fa fa-arrow-down',
+          action: 'movePage',
+          direction: 'down'
+        }]
+      });
+      
+      $('<a>') 
+        .addClass('forge-book-publisher-tool')
+        .attr('title', this.options.locales['remove-page-button-tooltip'])
+        .click($.proxy(this._onRemovePageClick, this))
+        .append($('<span>').addClass('fa fa-trash'))
+        .appendTo(pageToolGroup);
+      
       this._createToolButton("styles", blockToolGroup, this.options.locales['change-block-style-button-tooltip'], { 
         icon: 'fa fa-header',
         items: $.map(this._styles, function (style) {
@@ -951,15 +1002,15 @@
         }]
       });
       
-      this._createToolButton("move", blockToolGroup, this.options.locales['move-block-button-tooltip'], {
+      this._createToolButton("move-block", blockToolGroup, this.options.locales['move-block-button-tooltip'], {
         icon: 'fa fa-arrows',
         items: [{
           icon: 'fa fa-arrow-up',
-          action: 'move',
+          action: 'moveBlock',
           direction: 'up'
         }, {
           icon: 'fa fa-arrow-down',
-          action: 'move',
+          action: 'moveBlock',
           direction: 'down'
         }]
       });
@@ -1041,8 +1092,11 @@
             case 'changeFloat':
               this._changeBlockFloat(element, item.float);
             break;
-            case 'move':
-              this._movePageElement(element, item.direction);
+            case 'moveBlock':
+              this._moveBlock(element, item.direction);
+            break;
+            case 'movePage':
+              this._movePage(this.element.find('.forge-book-publisher-page-selected'), item.direction);
             break;
             case 'changePageType':
               this._changePageType(this.element.find('.forge-book-publisher-page-selected'), item.name);
@@ -1190,10 +1244,12 @@
         .find('.forge-book-publisher-page-selected')
         .removeClass('forge-book-publisher-page-selected');
       
-      page.addClass('forge-book-publisher-page-selected');
+      if (page) {
+        page.addClass('forge-book-publisher-page-selected');
+      }
       
       this.element.trigger("pageSelect", {
-        page: page
+        page: page||[]
       });
     },
     
@@ -1250,7 +1306,12 @@
     _onRemoveBlockClick: function (event) {
       var element = $(this.element).find('.forge-book-publisher-block-selected');
       this._removeBlock(element);
-      this._selectBlock(null);
+      this.selectBlock(null);
+    },
+    
+    _onRemovePageClick: function (event) {
+      this._removePage($(this.element).find('.forge-book-publisher-page-selected'));
+      this.selectPage(null);
     },
     
     _onStylesChanged: function (event, data) {
@@ -1301,6 +1362,18 @@
       
       this._updatePageNumbers();
       this._updateHeadersAndFooters(this.element.find('section'));
+    },
+    
+    _onPageRemove: function (event, data) {
+      this._updatePageNumbers();
+      this._updateHeadersAndFooters(this.element.find('section'));
+      this._toolsWaypoint[0].context.refresh();
+    },
+    
+    _onPageMove: function (event, data) {
+      this._updatePageNumbers();
+      this._updateHeadersAndFooters(this.element.find('section'));
+      this._toolsWaypoint[0].context.refresh();
     },
 
     _onBlockSelect: function (event, data) {
@@ -1902,6 +1975,8 @@
       'auto-layout-button-tooltip',
       'styles-button-tooltip',
       'page-types-button-tooltip',
+      'move-page-button-tooltip',
+      'remove-page-button-tooltip',
       'change-page-type-button-tooltip',
       'change-block-style-button-tooltip',
       'change-block-align-button-tooltip',
