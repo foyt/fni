@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.search.annotations.Indexed;
 
@@ -40,6 +41,14 @@ public class BookLayout extends Material {
     this.fonts = fonts;
   }
   
+  public Boolean getTemplate() {
+    return template;
+  }
+  
+  public void setTemplate(Boolean template) {
+    this.template = template;
+  }
+  
   @Column 
   @Lob
   private String data;
@@ -51,4 +60,8 @@ public class BookLayout extends Material {
   @Column 
   @Lob
   private String fonts;
+  
+  @Column (nullable = false)
+  @NotNull
+  private Boolean template;
 }

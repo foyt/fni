@@ -13,8 +13,9 @@ public class BookLayoutDAO extends GenericDAO<BookLayout> {
 
 	private static final long serialVersionUID = 1L;
 
-	public BookLayout create(User creator, Date created, User modifier, Date modified, Language language, Folder parentFolder,  String urlName, String title, String data, MaterialPublicity publicity) {
+	public BookLayout create(User creator, Date created, User modifier, Date modified, Language language, Folder parentFolder,  String urlName, String title, String data, MaterialPublicity publicity, Boolean template) {
     BookLayout bookLayout = new BookLayout();
+    
     bookLayout.setCreated(created);
     bookLayout.setCreator(creator);
     bookLayout.setData(data);
@@ -25,6 +26,7 @@ public class BookLayoutDAO extends GenericDAO<BookLayout> {
     bookLayout.setPublicity(publicity);
     bookLayout.setTitle(title);
     bookLayout.setUrlName(urlName);
+    bookLayout.setTemplate(template);
 
     return persist(bookLayout);
   }
@@ -52,6 +54,11 @@ public class BookLayoutDAO extends GenericDAO<BookLayout> {
 
   public BookLayout updateFonts(BookLayout bookLayout, String fonts) {
     bookLayout.setFonts(fonts);
+    return persist(bookLayout);
+  }
+
+  public BookLayout updateTemplate(BookLayout bookLayout, Boolean template) {
+    bookLayout.setTemplate(template);
     return persist(bookLayout);
   }
 

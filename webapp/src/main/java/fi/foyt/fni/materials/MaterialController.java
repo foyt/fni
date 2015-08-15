@@ -428,7 +428,7 @@ public class MaterialController {
 
   public BookLayout createBookLayout(Folder parentFolder, String urlName, String title, String data, Language language, User creator) {
     Date now = new Date();
-    return bookLayoutDAO.create(creator, now, creator, now, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE);
+    return bookLayoutDAO.create(creator, now, creator, now, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE, Boolean.FALSE);
   }
 
   public BookLayout findBookLayout(Long id) {
