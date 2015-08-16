@@ -73,7 +73,7 @@ import fi.foyt.fni.persistence.dao.illusion.IllusionEventDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventMaterialParticipantSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
 import fi.foyt.fni.persistence.dao.materials.BinaryDAO;
-import fi.foyt.fni.persistence.dao.materials.BookLayoutDAO;
+import fi.foyt.fni.persistence.dao.materials.BookDesignDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDataDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetEntryDAO;
@@ -112,7 +112,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.materials.Binary;
-import fi.foyt.fni.persistence.model.materials.BookLayout;
+import fi.foyt.fni.persistence.model.materials.BookDesign;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetData;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetEntry;
@@ -185,7 +185,7 @@ public class MaterialController {
   private MaterialDAO materialDAO;
 
   @Inject
-  private BookLayoutDAO bookLayoutDAO;
+  private BookDesignDAO bookDesignDAO;
 
   @Inject
   private FolderDAO folderDAO;
@@ -421,39 +421,39 @@ public class MaterialController {
   
   /* Book Layout */
   
-  public BookLayout createBookLayout(Folder parentFolder, String title, User creator) {
+  public BookDesign createBookDesign(Folder parentFolder, String title, User creator) {
     String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())));    
-    return createBookLayout(parentFolder, urlName, title, "", null, creator);
+    return createBookDesign(parentFolder, urlName, title, "", null, creator);
   }
 
-  public BookLayout createBookLayout(Folder parentFolder, String urlName, String title, String data, Language language, User creator) {
+  public BookDesign createBookDesign(Folder parentFolder, String urlName, String title, String data, Language language, User creator) {
     Date now = new Date();
-    return bookLayoutDAO.create(creator, now, creator, now, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE, Boolean.FALSE);
+    return bookDesignDAO.create(creator, now, creator, now, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE, Boolean.FALSE);
   }
 
-  public BookLayout findBookLayout(Long id) {
-    return bookLayoutDAO.findById(id);
+  public BookDesign findBookDesign(Long id) {
+    return bookDesignDAO.findById(id);
   }
   
-  public BookLayout updateBookLayout(BookLayout bookLayout, User modifier, String title, String data, String styles, String fonts) {
-    if (!StringUtils.equals(title, bookLayout.getTitle())) {
-      String oldUrlName = bookLayout.getUrlName();
-      String newUrlName = getUniqueMaterialUrlName(bookLayout.getCreator(), bookLayout.getParentFolder(), bookLayout, title);
-      materialDAO.updateTitle(bookLayout, title, modifier);
+  public BookDesign updateBookDesign(BookDesign bookDesign, User modifier, String title, String data, String styles, String fonts) {
+    if (!StringUtils.equals(title, bookDesign.getTitle())) {
+      String oldUrlName = bookDesign.getUrlName();
+      String newUrlName = getUniqueMaterialUrlName(bookDesign.getCreator(), bookDesign.getParentFolder(), bookDesign, title);
+      materialDAO.updateTitle(bookDesign, title, modifier);
       
       if (!StringUtils.equals(newUrlName, oldUrlName)) {
-        materialDAO.updateUrlName(bookLayout, newUrlName, modifier);
+        materialDAO.updateUrlName(bookDesign, newUrlName, modifier);
       }
     }
     
-    bookLayout = bookLayoutDAO.updateData(bookLayout, data);
-    bookLayout = bookLayoutDAO.updateStyles(bookLayout, styles);
-    bookLayout = bookLayoutDAO.updateFonts(bookLayout, fonts);
-    bookLayout = bookLayoutDAO.updateModified(bookLayout, new Date());
-    bookLayout = bookLayoutDAO.updateModifier(bookLayout, modifier);
+    bookDesign = bookDesignDAO.updateData(bookDesign, data);
+    bookDesign = bookDesignDAO.updateStyles(bookDesign, styles);
+    bookDesign = bookDesignDAO.updateFonts(bookDesign, fonts);
+    bookDesign = bookDesignDAO.updateModified(bookDesign, new Date());
+    bookDesign = bookDesignDAO.updateModifier(bookDesign, modifier);
     
     
-    return bookLayout;
+    return bookDesign;
   }
 
   /* Document */

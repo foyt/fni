@@ -16,7 +16,7 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.model.materials.BookLayout;
+import fi.foyt.fni.persistence.model.materials.BookDesign;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
@@ -69,7 +69,7 @@ public class ForgeBookPublisherBackingBean {
     Material material = materialController.findMaterialByCompletePath(completePath);
     User loggedUser = sessionController.getLoggedUser();
 
-    if (!(material instanceof BookLayout)) {
+    if (!(material instanceof BookDesign)) {
       return navigationController.notFound();
     }
 
@@ -79,9 +79,9 @@ public class ForgeBookPublisherBackingBean {
     
     materialId = material.getId();
     title = material.getTitle();
-    data = ((BookLayout) material).getData();
-    styles = ((BookLayout) material).getStyles();
-    fonts = ((BookLayout) material).getFonts();
+    data = ((BookDesign) material).getData();
+    styles = ((BookDesign) material).getStyles();
+    fonts = ((BookDesign) material).getFonts();
     folders = ForgeViewUtils.getParentList(material);
     googlePublicApiKey = systemSettingsController.getSetting(SystemSettingKey.GOOGLE_PUBLIC_API_KEY);
     
@@ -155,16 +155,16 @@ public class ForgeBookPublisherBackingBean {
   }
   
   public String save() {
-    BookLayout bookLayout = materialController.findBookLayout(getMaterialId());
+    BookDesign bookDesign = materialController.findBookDesign(getMaterialId());
     
-    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), bookLayout)) {
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), bookDesign)) {
       return navigationController.accessDenied();
     }
     
-    materialController.updateBookLayout(bookLayout, sessionController.getLoggedUser(), getTitle(), getData(), getStyles(), getFonts());
-    Folder parentFolder = bookLayout.getParentFolder();
-    Long ownerId = parentFolder != null ? parentFolder.getCreator().getId() : bookLayout.getCreator().getId();
-    String urlPath = bookLayout.getPath().substring(String.valueOf(ownerId).length() + 1);
+    materialController.updateBookDesign(bookDesign, sessionController.getLoggedUser(), getTitle(), getData(), getStyles(), getFonts());
+    Folder parentFolder = bookDesign.getParentFolder();
+    Long ownerId = parentFolder != null ? parentFolder.getCreator().getId() : bookDesign.getCreator().getId();
+    String urlPath = bookDesign.getPath().substring(String.valueOf(ownerId).length() + 1);
     return String.format("/forge/book-publisher.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
   }
   

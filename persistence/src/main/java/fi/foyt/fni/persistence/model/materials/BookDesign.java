@@ -11,9 +11,9 @@ import org.hibernate.search.annotations.Indexed;
 @Entity
 @PrimaryKeyJoinColumn (name="id")
 @Indexed
-public class BookLayout extends Material {
+public class BookDesign extends Material {
   
-  public BookLayout() {
+  public BookDesign() {
     setType(MaterialType.BOOK_LAYOUT);
   }
   
