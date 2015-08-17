@@ -40,6 +40,9 @@ public class ForgeBookDesignsBackingBean {
   @Parameter
   @Matches("[a-zA-Z0-9_/.\\-:,]{1,}")
   private String urlPath;
+  
+  @Parameter
+  private Boolean useTemplate;
 
   @SuppressWarnings("unused")
   @Inject
@@ -106,7 +109,15 @@ public class ForgeBookDesignsBackingBean {
   public void setUrlPath(String urlPath) {
     this.urlPath = urlPath;
   }
-
+  
+  public Boolean getUseTemplate() {
+    return useTemplate;
+  }
+  
+  public void setUseTemplate(Boolean useTemplate) {
+    this.useTemplate = useTemplate;
+  }
+  
   public Long getMaterialId() {
     return materialId;
   }
