@@ -530,6 +530,23 @@ h2.title input:focus {
     }
   }
   
+  &.forge-designer-publish-template-dialog {
+    
+    label {
+      display: block;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    
+    input {
+      width: 100%;
+      @include box-sizing(border-box);
+      font-family: $default-font;
+      margin-top: 5px;
+    }
+    
+  }
+  
   &.forge-designer-add-page-dialog, 
   &.forge-designer-add-content-dialog {
     p {

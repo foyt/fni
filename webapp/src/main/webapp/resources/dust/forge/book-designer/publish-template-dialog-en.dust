@@ -1,0 +1,13 @@
+<div title="Publish template" data-publish-button="Publish" data-cancel-button="Cancel" class="forge-designer-publish-template-dialog">
+  <p> 
+    Publish your book design for others to use as a template. 
+    By publishing the design as template you give others a change to use it as a baseline for their own books.
+  </p>
+  <p><br/> 
+    Note that published template will be a <b>copy</b> of the design file.
+  </p>
+  <div>
+    <label>Template name</label>
+    <input type="text" required="required" name="name"/>
+  </div>
+</div>

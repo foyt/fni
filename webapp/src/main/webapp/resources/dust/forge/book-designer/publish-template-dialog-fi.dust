@@ -1,0 +1,13 @@
+<div title="Julkaise muotti" data-publish-button="Julkaise" data-cancel-button="Peruuta" class="forge-designer-publish-template-dialog">
+  <p> 
+    Julkaise kirjasuunnitelma kirjamuottina muiden käyttöön. 
+    Julkaisemalla suunnitelman annat muille mahdollisuuden käyttää muottia lähtökohtana omien kirjojensa tekoon
+  </p>
+  <p><br/>
+    Huomaa, että julkaistava muotti on <b>kopio</b> suunnitelmasta.
+  </p>
+  <div>
+    <label>Kirjamuotin nimi</label>
+    <input type="text" required="required" name="name"/>
+  </div>
+</div>

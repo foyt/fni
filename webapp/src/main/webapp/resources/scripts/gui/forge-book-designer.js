@@ -884,6 +884,13 @@
         .click($.proxy(this._onSaveClick, this))
         .append($('<span>').addClass('fa fa-save'))
         .appendTo(bookToolGroup);
+
+      $('<a>') 
+        .addClass('forge-book-designer-tool')
+        .attr('title', this.options.locales['publish-button-tooltip'])
+        .click($.proxy(this._onPublishClick, this))
+        .append($('<span>').addClass('fa fa-globe'))
+        .appendTo(bookToolGroup);
       
       this._createToolButton("add-contents", bookToolGroup, this.options.locales['add-contents-button-tooltip'], { 
         icon: 'fa fa-plus',
@@ -1276,6 +1283,21 @@
       });
     },
     
+    _onPublishClick: function () {
+      var dialog = $("<div>") 
+        .bookDesignerPublishTemplateDialog({})
+        .on("publish", $.proxy(function (event, data) {
+          dialog.bookDesignerStylesDialog('destroy').remove();
+
+          $(this.element).trigger("publishTemplate", {
+            "templateName": data.name,
+            "data": this.data(),
+            "styles": this.styles(),
+            "fonts": this.fonts()
+          });
+        }, this));
+    },
+    
     _onAutoLayoutClick: function (event) {
       this.autoLayout();
     },
@@ -1604,6 +1626,34 @@
       rules[rule] = value;
       $(style).attr('data-rules', JSON.stringify(rules));
       this._refreshPreview(style);
+    }
+    
+  });
+  
+  $.widget("custom.bookDesignerPublishTemplateDialog", $.custom.bookDesignerDialog, {
+    options: {
+      dialogWidth: 500,
+      dialogButtons: [{
+        'require-valid': true,
+        'text-attribute': 'data-publish-button',
+        'click': function () {
+          this.element.trigger("publish", {
+            name: $(this.dialogElement).find('input[name="name"]').val()
+          });
+
+          this._close(); 
+        }
+      }, {
+        'text-attribute': 'data-cancel-button',
+        'click' : function() {
+          this._close();
+        }
+      }],
+      templateName: "forge/book-designer/publish-template-dialog"
+    },
+        
+    _create : function() {
+      this._super();
     }
     
   });
@@ -1968,6 +2018,7 @@
     var locales = {};
     var localeKeys = [
       'save-button-tooltip',
+      'publish-button-tooltip',
       'add-contents-button-tooltip',
       'import-button',
       'add-blank-block-button',
@@ -2006,6 +2057,13 @@
         $('.book-design-styles').val(JSON.stringify(data.styles));
         $('.book-design-data').val(data.data);
         $('.book-design-save')[0].click();
+      })
+      .on("publishTemplate", function (event, data) {
+        $('.book-design-template-name').val(data.templateName);
+        $('.book-design-fonts').val(JSON.stringify(data.fonts));
+        $('.book-design-styles').val(JSON.stringify(data.styles));
+        $('.book-design-data').val(data.data);
+        $('.book-design-publish-template')[0].click();
       });
     
     var fonts = $('.book-design-fonts').val();

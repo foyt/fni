@@ -14,7 +14,7 @@ import org.hibernate.search.annotations.Indexed;
 public class BookDesign extends Material {
   
   public BookDesign() {
-    setType(MaterialType.BOOK_LAYOUT);
+    setType(MaterialType.BOOK_DESIGN);
   }
   
   public String getData() {

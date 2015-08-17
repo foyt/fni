@@ -452,7 +452,13 @@ public class MaterialController {
     bookDesign = bookDesignDAO.updateModified(bookDesign, new Date());
     bookDesign = bookDesignDAO.updateModifier(bookDesign, modifier);
     
-    
+    return bookDesign;
+  }
+  
+  public BookDesign updateBookDesignTemplate(BookDesign bookDesign, User modifier, Boolean template) {
+    bookDesign = bookDesignDAO.updateModified(bookDesign, new Date());
+    bookDesign = bookDesignDAO.updateModifier(bookDesign, modifier);
+    bookDesignDAO.updateTemplate(bookDesign, template);
     return bookDesign;
   }
 
@@ -1460,7 +1466,7 @@ public class MaterialController {
         return "documents";
       case CHARACTER_SHEET:
         return "character-sheets";
-      case BOOK_LAYOUT:
+      case BOOK_DESIGN:
         return "book-designs";
     }
   
@@ -1499,7 +1505,7 @@ public class MaterialController {
         return "document";
       case CHARACTER_SHEET:
         return "character-sheet";
-      case BOOK_LAYOUT:
+      case BOOK_DESIGN:
         return "book-design";
     }
 
@@ -1882,7 +1888,7 @@ public class MaterialController {
       case FOLDER:
       case ILLUSION_FOLDER:
       case ILLUSION_GROUP_FOLDER:
-      case BOOK_LAYOUT:
+      case BOOK_DESIGN:
       break;
     }
     
