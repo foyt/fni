@@ -1287,7 +1287,7 @@
       var dialog = $("<div>") 
         .bookDesignerPublishTemplateDialog({})
         .on("publish", $.proxy(function (event, data) {
-          dialog.bookDesignerStylesDialog('destroy').remove();
+          dialog.bookDesignerPublishTemplateDialog('destroy').remove();
 
           $(this.element).trigger("publishTemplate", {
             "templateName": data.name,
