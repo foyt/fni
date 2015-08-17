@@ -1,4 +1,4 @@
-<div title="Add page" data-add-button="Add" data-cancel-button="Cancel" class="forge-publisher-add-page-dialog">
+<div title="Add page" data-add-button="Add" data-cancel-button="Cancel" class="forge-designer-add-page-dialog">
   <p>
     Where do you want the new page to be added?
   </p>

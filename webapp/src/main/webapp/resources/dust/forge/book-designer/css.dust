@@ -2,5 +2,5 @@
 @import url({url|s});
 {/fonts}
 {#styles}
-  {>"forge/book-publisher/css-rule"/}
+  {>"forge/book-designer/css-rule"/}
 {/styles}

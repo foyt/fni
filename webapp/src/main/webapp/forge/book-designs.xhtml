@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
+  
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+
+  <ui:define name="page-title">
+    <h:outputFormat value="#{locales['forge.bookDesigns.pageTitle']}">
+      <f:param value="#{forgeBookDesignsBackingBean.title}" />
+    </h:outputFormat>
+  </ui:define>
+  <ui:define name="view-stylesheets">
+    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
+    <h:outputStylesheet library="novus" name="css/forge-book-designer.css"/>
+  </ui:define>
+  
+  <ui:define name="view-scripts">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.rest/1.0.2/jquery.rest.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spectrum/1.7.0/spectrum.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery_lazyload/1.9.5/jquery.lazyload.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"></script> 
+    <h:outputScript name="scripts/autosize/autosize.min.js"/>
+    <h:outputScript name="scripts/jquery.waypoints/jquery.waypoints.min.js"/>
+    <h:outputScript name="scripts/gui/google-font-picker.js"/>
+    <h:outputScript name="scripts/gui/forge-material-browser.js"/>
+    <h:outputScript name="scripts/gui/forge-book-designer.js"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/flex-menu.xhtml" />
+    
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <ui:include src="/facelets/forgenavigation.xhtml">    
+          <ui:param name="folders" value="#{forgeBookDesignsBackingBean.folders}"/>
+        </ui:include>
+      
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['forge.bookDesigns.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['forge.bookDesigns.descriptionText']}</p>
+        </div>
+      </div>
+    </div> 
+    
+    <h:form>
+      <div class="flex-row">
+        <div class="flex-cell-full index-box">
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <h2 class="title">
+                <input type="text" required="required" jsf:value="#{forgeBookDesignsBackingBean.title}"/>
+              </h2>
+            </div>
+          </div>
+          
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <div class="book-designer" 
+                    data-save-button-tooltip="#{locales['forge.bookDesigns.saveButtonTooltip']}"
+                    data-add-contents-button-tooltip="#{locales['forge.bookDesigns.addContentsButtonTooltip']}"
+                    data-import-button="#{locales['forge.bookDesigns.importButton']}"
+                    data-add-blank-block-button="#{locales['forge.bookDesigns.addBlankBlockButton']}"
+                    data-add-blank-page-button="#{locales['forge.bookDesigns.addBlankPageButton']}"
+                    data-auto-layout-button-tooltip="#{locales['forge.bookDesigns.autoLayoutButtonTooltip']}"
+                    data-styles-button-tooltip="#{locales['forge.bookDesigns.stylesButtonTooltip']}"
+                    data-page-types-button-tooltip="#{locales['forge.bookDesigns.pageTypesButtonTooltip']}"
+                    data-change-page-type-button-tooltip="#{locales['forge.bookDesigns.changePageTypeButtonTooltip']}"
+                    data-move-page-button-tooltip="#{locales['forge.bookDesigns.movePageButtonTooltip']}"
+                    data-remove-page-button-tooltip="#{locales['forge.bookDesigns.removePageButtonTooltip']}"
+                    data-change-block-style-button-tooltip="#{locales['forge.bookDesigns.changeBlockStyleButtonTooltip']}"
+                    data-change-block-align-button-tooltip="#{locales['forge.bookDesigns.changeBlockAlignButtonTooltip']}"
+                    data-align-left="#{locales['forge.bookDesigns.alignLeft']}"
+                    data-align-right="#{locales['forge.bookDesigns.alignRight']}"
+                    data-align-center="#{locales['forge.bookDesigns.alignCenter']}"
+                    data-align-justify="#{locales['forge.bookDesigns.alignJustify']}"
+                    data-change-block-float-button-tooltip="#{locales['forge.bookDesigns.changeBlockFloatButtonTooltip']}"
+                    data-float-none="#{locales['forge.bookDesigns.floatNone']}"
+                    data-float-left="#{locales['forge.bookDesigns.floatLeft']}"
+                    data-float-right="#{locales['forge.bookDesigns.floatRight']}"
+                    data-move-block-button-tooltip="#{locales['forge.bookDesigns.moveBlockButtonTooltip']}"
+                    data-remove-block-button-tooltip="#{locales['forge.bookDesigns.removeBlockButtonTooltip']}"/>
+                </div>          
+              </div>
+            </div>
+                      
+          </div>
+        </div>
+      </div>
+      
+      <input type="submit" jsf:action="#{forgeBookDesignsBackingBean.save}" class="book-design-save" value="#{locales['forge.bookDesigns.saveButton']}"/>
+      <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.materialId}"/>
+      <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.data}" class="book-design-data"/>
+      <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.styles}" class="book-design-styles"/>
+      <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.fonts}" class="book-design-fonts"/>
+      <input type="hidden" value="#{forgeBookDesignsBackingBean.googlePublicApiKey}" class="google-api-public-key"/>
+    </h:form>
+    
+  </ui:define>
+
+</ui:composition>

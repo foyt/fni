@@ -77,7 +77,7 @@
     }
   });
   
-  $.widget("custom.bookPublisherDialog", {
+  $.widget("custom.bookDesignerDialog", {
     options: {
       templateName: null,
       templateOptions: {}
@@ -111,7 +111,7 @@
           }, this));
           
           this.dialogElement
-            .addClass('forge-publisher-dialog')
+            .addClass('forge-designer-dialog')
             .dialog({
               modal: true,
               width: this.options.dialogWidth,
@@ -149,7 +149,7 @@
   
   });
   
-  $.widget("custom.bookPublisher", {
+  $.widget("custom.bookDesigner", {
     options: {
       scrollDuration: 1000,
       scrollOffset: 100,
@@ -300,10 +300,10 @@
       this._createTools();
       
       $('<article>')
-        .addClass('forge-book-publisher-pages')
+        .addClass('forge-book-designer-pages')
         .appendTo(this.element);
       
-      this.element.on("click", '.forge-book-publisher-page', $.proxy(this._onPageClick, this));
+      this.element.on("click", '.forge-book-designer-page', $.proxy(this._onPageClick, this));
       this.element.on("stylesChanged", $.proxy(this._onStylesChanged, this));
       this.element.on("fontsChanged", $.proxy(this._onFontsChanged, this));
       this.element.on("pageTypesChanged", $.proxy(this._onPageTypesChanged, this));
@@ -326,14 +326,14 @@
             .lazyload();
         });
         
-        this.element.find('.forge-book-publisher-pages').empty().append(parsed);
+        this.element.find('.forge-book-designer-pages').empty().append(parsed);
         
         this._toolsWaypoint[0].context.refresh();
       } else {
-        var cloned = $('<pre>').html( this.element.find('.forge-book-publisher-pages').html() );
+        var cloned = $('<pre>').html( this.element.find('.forge-book-designer-pages').html() );
 
-        cloned.find('.forge-book-publisher-page-selected').removeClass('forge-book-publisher-page-selected');
-        cloned.find('.forge-book-publisher-block-selected').removeClass('forge-book-publisher-block-selected');
+        cloned.find('.forge-book-designer-page-selected').removeClass('forge-book-designer-page-selected');
+        cloned.find('.forge-book-designer-block-selected').removeClass('forge-book-designer-block-selected');
         cloned.find('*[contenteditable]').removeAttr('contenteditable');
         cloned.find('*[spellcheck]').removeAttr('spellcheck');
         cloned.find('img[data-original]').each(function (imageIndex, image) {
@@ -485,7 +485,7 @@
 
     addPage: function () {
       var page = this._createPage(this.options.defaultPageType)
-        .appendTo(this.element.find('.forge-book-publisher-pages'));
+        .appendTo(this.element.find('.forge-book-designer-pages'));
 
       this._updatePageNumbers();
       this._updateHeadersAndFooters(page);
@@ -529,7 +529,7 @@
     },
     
     selectBlock: function (block) {
-      var page = $(block).closest('.forge-book-publisher-page');
+      var page = $(block).closest('.forge-book-designer-page');
       this._selectPage(page);
       this._selectBlock(block);
     },
@@ -540,17 +540,17 @@
     },
     
     autoLayout: function () {
-      var pages = this.element.find('.forge-book-publisher-page');
+      var pages = this.element.find('.forge-book-designer-page');
       var currentPage = pages.splice(0, 1);
       var remainingHeight = $(currentPage).find('main').height();
-      var blockElements = this.element.find('.forge-book-publisher-page>main>*');
+      var blockElements = this.element.find('.forge-book-designer-page>main>*');
       var tempPage = $('<section>')
-        .addClass('forge-book-publisher-page')
+        .addClass('forge-book-designer-page')
         .css({
           'opacity': 0
         })
         .append(blockElements)
-        .appendTo(this.element.find('.forge-book-publisher-pages'));
+        .appendTo(this.element.find('.forge-book-designer-pages'));
       
       blockElements.each($.proxy(function (index, block) {
         var blockHeight = this._measureBlockOuterHeight(block, true, false);
@@ -599,7 +599,7 @@
     _createPage: function (type) {
       return $('<section>')
         .attr('data-type', type)
-        .addClass('forge-book-publisher-page')
+        .addClass('forge-book-designer-page')
         .append($('<header>'))
         .append($('<main>'))
         .append($('<footer>'));
@@ -621,12 +621,12 @@
       
       if (useTempPage) {
         tempPage = $('<section>')
-          .addClass('forge-book-publisher-page')
+          .addClass('forge-book-designer-page')
           .css({
             'opacity': 0
           })
           .append(block)
-          .appendTo(this.element.find('.forge-book-publisher-pages'));
+          .appendTo(this.element.find('.forge-book-designer-pages'));
       }
       
       var height = $(block).outerHeight(includeMargin);
@@ -792,7 +792,7 @@
             previousBlock.before(block);
             this.element.trigger("blockMove");
           } else {
-            var previousPage = block.closest('.forge-book-publisher-page').prev();
+            var previousPage = block.closest('.forge-book-designer-page').prev();
             if (previousPage) {
               previousPage.find('main').append(block);
               this.element.trigger("blockMove");
@@ -805,7 +805,7 @@
             nextBlock.after(block);
             this.element.trigger("blockMove");
           } else {
-            var nextPage = block.closest('.forge-book-publisher-page').next();
+            var nextPage = block.closest('.forge-book-designer-page').next();
             if (nextPage) {
               nextPage.find('main').prepend(block);
               this.element.trigger("blockMove");
@@ -823,14 +823,14 @@
     _movePage: function (page, direction) {
       switch (direction) {
         case 'up':
-          var previousPage = page.prev('.forge-book-publisher-page');
+          var previousPage = page.prev('.forge-book-designer-page');
           if (previousPage.length) {
             previousPage.before(page);
             this.element.trigger("pageMove");
           }
         break;
         case 'down':
-          var nextPage = page.next('.forge-book-publisher-page');
+          var nextPage = page.next('.forge-book-designer-page');
           if (nextPage.length) {
             nextPage.after(page);
             this.element.trigger("pageMove");
@@ -846,7 +846,7 @@
     
     _createTools: function () {
       var tools = $('<div>')
-        .addClass('forge-book-publisher-tools')
+        .addClass('forge-book-designer-tools')
         .appendTo(this.element);
       
       this._toolsWaypoint = tools.waypoint({
@@ -867,19 +867,19 @@
       });
 
       var bookToolGroup = $('<div>')
-        .addClass('forge-book-publisher-tool-group forge-book-publisher-tool-group-book')
+        .addClass('forge-book-designer-tool-group forge-book-designer-tool-group-book')
         .appendTo(tools);
       
       var pageToolGroup = $('<div>')
-        .addClass('forge-book-publisher-tool-group forge-book-publisher-tool-group-page')
+        .addClass('forge-book-designer-tool-group forge-book-designer-tool-group-page')
         .appendTo(tools);
       
       var blockToolGroup = $('<div>')
-        .addClass('forge-book-publisher-tool-group forge-book-publisher-tool-group-block')
+        .addClass('forge-book-designer-tool-group forge-book-designer-tool-group-block')
         .appendTo(tools);
       
       $('<a>') 
-        .addClass('forge-book-publisher-tool')
+        .addClass('forge-book-designer-tool')
         .attr('title', this.options.locales['save-button-tooltip'])
         .click($.proxy(this._onSaveClick, this))
         .append($('<span>').addClass('fa fa-save'))
@@ -900,21 +900,21 @@
       });
       
       $('<a>') 
-        .addClass('forge-book-publisher-tool')
+        .addClass('forge-book-designer-tool')
         .attr('title', this.options.locales['auto-layout-button-tooltip'])
         .click($.proxy(this._onAutoLayoutClick, this))
         .append($('<span>').addClass('fa fa-magic'))
         .appendTo(bookToolGroup);
             
       $('<a>') 
-        .addClass('forge-book-publisher-tool')
+        .addClass('forge-book-designer-tool')
         .attr('title', this.options.locales['styles-button-tooltip'])
         .click($.proxy(this._onStyleClick, this))
         .append($('<span>').addClass('fa fa-font'))
         .appendTo(bookToolGroup);
       
       $('<a>') 
-        .addClass('forge-book-publisher-tool')
+        .addClass('forge-book-designer-tool')
         .attr('title', this.options.locales['page-types-button-tooltip'])
         .click($.proxy(this._onPageTypesClick, this))
         .append($('<span>').addClass('fa fa-bookmark-o'))
@@ -944,7 +944,7 @@
       });
       
       $('<a>') 
-        .addClass('forge-book-publisher-tool')
+        .addClass('forge-book-designer-tool')
         .attr('title', this.options.locales['remove-page-button-tooltip'])
         .click($.proxy(this._onRemovePageClick, this))
         .append($('<span>').addClass('fa fa-trash'))
@@ -1016,45 +1016,45 @@
       });
       
       $('<a>') 
-        .addClass('forge-book-publisher-tool')
+        .addClass('forge-book-designer-tool')
         .attr('title', this.options.locales['remove-block-button-tooltip'])
         .click($.proxy(this._onRemoveBlockClick, this))
         .append($('<span>').addClass('fa fa-trash'))
         .appendTo(blockToolGroup);
       
-      blockToolGroup.find('.forge-book-publisher-tool').attr({
+      blockToolGroup.find('.forge-book-designer-tool').attr({
         'data-disabled': 'true'
       });
 
-      pageToolGroup.find('.forge-book-publisher-tool').attr({
+      pageToolGroup.find('.forge-book-designer-tool').attr({
         'data-disabled': 'true'
       });
     },
     
     _createToolButton: function (toolId, toolGroup, tooltip, toolOptions) {
       var menuItems = $('<div>')
-        .addClass('forge-book-publisher-tool-items forge-book-publisher-tool-items-text')
-        .addClass('forge-book-publisher-tool-items-' + toolId)
+        .addClass('forge-book-designer-tool-items forge-book-designer-tool-items-text')
+        .addClass('forge-book-designer-tool-items-' + toolId)
         .appendTo(toolGroup)
         .hide();
       
       this._createToolButtonItems(toolId, toolOptions.items);
      
       var menuButton = $('<div>')
-        .addClass('forge-book-publisher-tool')
+        .addClass('forge-book-designer-tool')
         .attr('title', tooltip)
         .append($('<span>').addClass(toolOptions.icon))
         .appendTo(toolGroup);
       
       $(window).click(function () {
-        $('.forge-book-publisher-tool-items').hide();
+        $('.forge-book-designer-tool-items').hide();
       });
       
       menuButton.click(function (event) {
         event.stopPropagation();
         
         if ($(this).attr('data-disabled') != 'true') {
-          $('.forge-book-publisher-tool-items').hide();
+          $('.forge-book-designer-tool-items').hide();
           menuItems.show();
           menuItems.css({
             'margin-top': ((-menuItems.height() / 2) + ($(this).height() / 2)) + 'px'
@@ -1064,7 +1064,7 @@
     },
     
     _createToolButtonItems: function (toolId, items) {
-      var menuItems = this.element.find('.forge-book-publisher-tool-items-' + toolId).empty();
+      var menuItems = this.element.find('.forge-book-designer-tool-items-' + toolId).empty();
       
       $.each(items, $.proxy(function (itemIndex, item) {
         var menuItem = $('<a>').addClass('text').attr({ 'href': '#' });
@@ -1080,7 +1080,7 @@
         $(menuItem).on('click', $.proxy(function (event) {
           event.preventDefault();
           
-          var element = $(this.element).find('.forge-book-publisher-block-selected');
+          var element = $(this.element).find('.forge-book-designer-block-selected');
          
           switch (item.action) {
             case 'changeStyle':
@@ -1096,10 +1096,10 @@
               this._moveBlock(element, item.direction);
             break;
             case 'movePage':
-              this._movePage(this.element.find('.forge-book-publisher-page-selected'), item.direction);
+              this._movePage(this.element.find('.forge-book-designer-page-selected'), item.direction);
             break;
             case 'changePageType':
-              this._changePageType(this.element.find('.forge-book-publisher-page-selected'), item.name);
+              this._changePageType(this.element.find('.forge-book-designer-page-selected'), item.name);
             break;
             case 'importMaterial':
               var browser = $('<div>')
@@ -1108,9 +1108,9 @@
                 })
                 .on('materialSelect', $.proxy(function (event, materialSelectData) {
                   $('<div/>')
-                    .bookPublisherAddContentDialog({
-                      pageSelected: this.element.find('.forge-book-publisher-page-selected').length > 0,
-                      blockSelected: this.element.find('.forge-book-publisher-block-selected').length > 0
+                    .bookDesignerAddContentDialog({
+                      pageSelected: this.element.find('.forge-book-designer-page-selected').length > 0,
+                      blockSelected: this.element.find('.forge-book-designer-block-selected').length > 0
                     })
                     .on("addContent", $.proxy(function (event, addContentData) {
                       this._loadContent(materialSelectData.type, materialSelectData.id, $.proxy(function (content) {
@@ -1118,13 +1118,13 @@
                         
                         switch (addContentData.position) {
                           case 'after-selection':
-                            block = this.insertHtmlAfter(content, this.element.find('.forge-book-publisher-block-selected')).first();
+                            block = this.insertHtmlAfter(content, this.element.find('.forge-book-designer-block-selected')).first();
                           break;
                           case 'before-selection':
-                            block = this.insertHtmlBefore(content, this.element.find('.forge-book-publisher-block-selected')).first();
+                            block = this.insertHtmlBefore(content, this.element.find('.forge-book-designer-block-selected')).first();
                           break;
                           case 'page-top':
-                            block = this.prependHtmlToPage(content, this.element.find('.forge-book-publisher-page-selected')).first();
+                            block = this.prependHtmlToPage(content, this.element.find('.forge-book-designer-page-selected')).first();
                           break;
                           case 'beginning':
                             block = this.prependHtmlToPage(content, this.element.find('section').first()).first();
@@ -1142,8 +1142,8 @@
             break;
             case 'addBlankPage':
               $('<div/>')
-                .bookPublisherAddPageDialog({
-                  pageSelected: this.element.find('.forge-book-publisher-page-selected').length != 0
+                .bookDesignerAddPageDialog({
+                  pageSelected: this.element.find('.forge-book-designer-page-selected').length != 0
                 })
                 .on("addPage", $.proxy(function (event, data) {
                   switch (data.position) {
@@ -1151,7 +1151,7 @@
                       this.addPage();
                     break;
                     case 'first':
-                      var firstPage = this.element.find('.forge-book-publisher-page').first();
+                      var firstPage = this.element.find('.forge-book-designer-page').first();
                       if (!firstPage.length) {
                         this.addPage();
                       } else {
@@ -1159,19 +1159,19 @@
                       }
                     break;
                     case 'before-selected':
-                      this.addPageBefore(this.element.find('.forge-book-publisher-page-selected'));
+                      this.addPageBefore(this.element.find('.forge-book-designer-page-selected'));
                     break;
                     case 'after-selected':
-                      this.addPageAfter(this.element.find('.forge-book-publisher-page-selected'));
+                      this.addPageAfter(this.element.find('.forge-book-designer-page-selected'));
                     break;
                   }
                 }, this));
             break;
             case 'addBlankBlock':
               $('<div/>')
-                .bookPublisherAddContentDialog({
-                  pageSelected: this.element.find('.forge-book-publisher-page-selected').length != 0,
-                  blockSelected: $(this.element).find('.forge-book-publisher-block-selected').length > 0
+                .bookDesignerAddContentDialog({
+                  pageSelected: this.element.find('.forge-book-designer-page-selected').length != 0,
+                  blockSelected: $(this.element).find('.forge-book-designer-block-selected').length > 0
                 })
                 .on("addContent", $.proxy(function (event, data) {
                   var block = null;
@@ -1179,13 +1179,13 @@
                   
                   switch (data.position) {
                     case 'after-selection':
-                      block = this.insertHtmlAfter(content, $(this.element).find('.forge-book-publisher-block-selected'));
+                      block = this.insertHtmlAfter(content, $(this.element).find('.forge-book-designer-block-selected'));
                     break;
                     case 'before-selection':
-                      block = this.insertHtmlBefore(content, $(this.element).find('.forge-book-publisher-block-selected'));
+                      block = this.insertHtmlBefore(content, $(this.element).find('.forge-book-designer-block-selected'));
                     break;
                     case 'page-top':
-                      block = this.prependHtmlToPage(content, this.element.find('.forge-book-publisher-page-selected'));
+                      block = this.prependHtmlToPage(content, this.element.find('.forge-book-designer-page-selected'));
                     break;
                     case 'beginning':
                       block = this.prependHtmlToPage(content, this.element.find('section').first());
@@ -1207,7 +1207,7 @@
     },
     
     _createCss: function (callback) {
-      dust.render("forge/book-publisher/css", {
+      dust.render("forge/book-designer/css", {
         styles: this.styles()
       }, $.proxy(function(err, css) {
         if (err) {
@@ -1220,15 +1220,15 @@
     
     _selectBlock: function (block) {
       this.element
-        .find('.forge-book-publisher-block-selected')
-        .removeClass('forge-book-publisher-block-selected');
+        .find('.forge-book-designer-block-selected')
+        .removeClass('forge-book-designer-block-selected');
       
       $(block)
         .attr({
           'contenteditable':'true',
           'spellcheck':'false'
         })
-        .addClass('forge-book-publisher-block-selected');
+        .addClass('forge-book-designer-block-selected');
       
       if (block && block.length && $.isFunction(block[0].focus)) {
         block[0].focus();
@@ -1241,11 +1241,11 @@
     
     _selectPage: function (page) {
       this.element
-        .find('.forge-book-publisher-page-selected')
-        .removeClass('forge-book-publisher-page-selected');
+        .find('.forge-book-designer-page-selected')
+        .removeClass('forge-book-designer-page-selected');
       
       if (page) {
-        page.addClass('forge-book-publisher-page-selected');
+        page.addClass('forge-book-designer-page-selected');
       }
       
       this.element.trigger("pageSelect", {
@@ -1254,16 +1254,16 @@
     },
     
     _onPageClick: function (event) {
-      var page = $(event.target).closest('.forge-book-publisher-page');
+      var page = $(event.target).closest('.forge-book-designer-page');
       var block = $(event.target).closest($.map(this.options.blockTags, function (blockTag) {
-        return '.forge-book-publisher-page ' + blockTag; 
+        return '.forge-book-designer-page ' + blockTag; 
       }).join(','), page);
 
-      if (!block.hasClass('forge-book-publisher-block-selected')) {
+      if (!block.hasClass('forge-book-designer-block-selected')) {
         this._selectBlock(block);
       }
       
-      if (!page.hasClass('forge-book-publisher-page-selected')) {
+      if (!page.hasClass('forge-book-designer-page-selected')) {
         this._selectPage(page);
       }
     },
@@ -1282,19 +1282,19 @@
     
     _onStyleClick: function (event) {
       var dialog = $("<div>") 
-        .bookPublisherStylesDialog({
+        .bookDesignerStylesDialog({
           fonts: this.fonts(),
           styles: this.styles()
         })
         .on("applyStyles", $.proxy(function (event, data) {
           this.styles(data.styles);
-          dialog.bookPublisherStylesDialog('destroy').remove();
+          dialog.bookDesignerStylesDialog('destroy').remove();
         }, this));
     },
     
     _onPageTypesClick: function (event) {
       $("<div>") 
-        .bookPublisherPageTypesDialog({
+        .bookDesignerPageTypesDialog({
           pageTypes: this.pageTypes(),
           fonts: this.fonts()
         })
@@ -1304,13 +1304,13 @@
     }, 
     
     _onRemoveBlockClick: function (event) {
-      var element = $(this.element).find('.forge-book-publisher-block-selected');
+      var element = $(this.element).find('.forge-book-designer-block-selected');
       this._removeBlock(element);
       this.selectBlock(null);
     },
     
     _onRemovePageClick: function (event) {
-      this._removePage($(this.element).find('.forge-book-publisher-page-selected'));
+      this._removePage($(this.element).find('.forge-book-designer-page-selected'));
       this.selectPage(null);
     },
     
@@ -1377,19 +1377,19 @@
     },
 
     _onBlockSelect: function (event, data) {
-      this.element.find('.forge-book-publisher-tool-group-block .forge-book-publisher-tool').attr({
+      this.element.find('.forge-book-designer-tool-group-block .forge-book-designer-tool').attr({
         'data-disabled': data.block.length ? 'false' : 'true'
       });
     },
     
     _onPageSelect: function (event, data) {
-      this.element.find('.forge-book-publisher-tool-group-page .forge-book-publisher-tool').attr({
+      this.element.find('.forge-book-designer-tool-group-page .forge-book-designer-tool').attr({
         'data-disabled': data.page.length ? 'false' : 'true'
       }); 
     }
   });
   
-  $.widget("custom.bookPublisherStylesDialog", $.custom.bookPublisherDialog, {
+  $.widget("custom.bookDesignerStylesDialog", $.custom.bookDesignerDialog, {
     options: {
       dialogWidth: 650,
       dialogButtons: [{
@@ -1408,7 +1408,7 @@
           this._close();
         }
       }],
-      templateName: "forge/book-publisher/styles-dialog"
+      templateName: "forge/book-designer/styles-dialog"
     },
         
     _create : function() {
@@ -1422,7 +1422,7 @@
         .tabs({ 
           beforeActivate: $.proxy(function (event, ui) {
             
-            this.dialogElement.find('.forge-publisher-style-dialog-style').each($.proxy(function (index, style) {
+            this.dialogElement.find('.forge-designer-style-dialog-style').each($.proxy(function (index, style) {
               var rulesAttr = $(style).attr('data-rules');
               if (rulesAttr) {
                 var rules = $.parseJSON(rulesAttr);
@@ -1471,7 +1471,7 @@
               $(ui.newPanel).before(panel);
               $(ui.newTab).before(label);
               
-              panel.find('.forge-publisher-style-dialog-style').attr({
+              panel.find('.forge-designer-style-dialog-style').attr({
                 'data-selector': selector,
                 'data-rules': '{}'
               });
@@ -1482,18 +1482,18 @@
           }, this)
         });
 
-        this.dialogElement.on("change", '.forge-publisher-style-dialog-style-name', $.proxy(this._onNameChange, this));
+        this.dialogElement.on("change", '.forge-designer-style-dialog-style-name', $.proxy(this._onNameChange, this));
         this.dialogElement.on("change", 'input', $.proxy(this._onInputChange, this));
         this.dialogElement.on("change", 'select', $.proxy(this._onSelectChange, this));
-        this.dialogElement.on("click", '.forge-publisher-style-dialog-style-setting-font-action-add', $.proxy(this._onAddFontClick, this));
-        this.dialogElement.on("click", '.forge-publisher-style-dialog-style-setting-font-action-remove', $.proxy(this._onRemoveFontClick, this));
+        this.dialogElement.on("click", '.forge-designer-style-dialog-style-setting-font-action-add', $.proxy(this._onAddFontClick, this));
+        this.dialogElement.on("click", '.forge-designer-style-dialog-style-setting-font-action-remove', $.proxy(this._onRemoveFontClick, this));
       }, this));
       
       this._super();
     },
     
     styles: function () {
-      return $.map(this.dialogElement.find('.ui-tabs-panel:not([id="style-tab-new"]) .forge-publisher-style-dialog-style'), function (style) {
+      return $.map(this.dialogElement.find('.ui-tabs-panel:not([id="style-tab-new"]) .forge-designer-style-dialog-style'), function (style) {
         return {
           name: $(style).find('input[name="name"]').val(),
           selector: $(style).attr('data-selector'),
@@ -1504,9 +1504,9 @@
     
     _onAddFontClick: function (event) {
       $('<div>')
-        .bookPublisherAddFontDialog()
+        .bookDesignerAddFontDialog()
         .on("addFont", $.proxy(function (event, data) {
-          $('.book-publisher').bookPublisher('addFont', data.name, data.url);
+          $('.book-designer').bookDesigner('addFont', data.name, data.url);
 
           $.each(this.dialogElement.find('select[name="font-family"]'), function (index, select) {
             $(select).append($('<option>').attr('value', data.name).text(data.name));
@@ -1516,15 +1516,15 @@
     
     _onRemoveFontClick: function (event) {
       var name = $(event.target)
-        .closest('.forge-publisher-style-dialog-style-setting-font')
+        .closest('.forge-designer-style-dialog-style-setting-font')
         .find('select[name="font-family"]').val();
       
       $('<div>')
-        .bookPublisherRemoveFontDialog({
+        .bookDesignerRemoveFontDialog({
           name: name
         })
         .on("removeFont", $.proxy(function (event, data) {
-          $('.book-publisher').bookPublisher('removeFont', data.name);
+          $('.book-designer').bookDesigner('removeFont', data.name);
           this.dialogElement.find('select[name="font-family"] option[value="' + name + '"]').remove();
         }, this));
     },
@@ -1536,7 +1536,7 @@
     
     _onInputChange: function (event) {
       var input = $(event.target);
-      var style = $(input).closest('.forge-publisher-style-dialog-style');
+      var style = $(input).closest('.forge-designer-style-dialog-style');
       
       if (input.attr('type') == 'checkbox') {
         var mutuallyExculusive = input.attr('data-mutually-exclusive');
@@ -1558,7 +1558,7 @@
     
     _onSelectChange: function (event) {
       var select = $(event.target);
-      var style = $(select).closest('.forge-publisher-style-dialog-style');
+      var style = $(select).closest('.forge-designer-style-dialog-style');
       this._updateRule(style, select.attr('name'), select.val() + (select.attr('data-unit')||''));
     },
     
@@ -1594,9 +1594,9 @@
         }
       });
 
-      $(style).find('.forge-publisher-style-dialog-style-preview-margin').css(marginStyles);
-      $(style).find('.forge-publisher-style-dialog-style-preview-padding').css(paddingStyles);
-      $(style).find('.forge-publisher-style-dialog-style-preview').css(previewStyles);
+      $(style).find('.forge-designer-style-dialog-style-preview-margin').css(marginStyles);
+      $(style).find('.forge-designer-style-dialog-style-preview-padding').css(paddingStyles);
+      $(style).find('.forge-designer-style-dialog-style-preview').css(previewStyles);
     },
     
     _updateRule: function (style, rule, value) {
@@ -1608,7 +1608,7 @@
     
   });
   
-  $.widget("custom.bookPublisherAddFontDialog", $.custom.bookPublisherDialog, {
+  $.widget("custom.bookDesignerAddFontDialog", $.custom.bookDesignerDialog, {
     options: {
       dialogWidth: 500,
       dialogButtons: [{
@@ -1628,7 +1628,7 @@
           this._close();
         }
       }],
-      templateName: "forge/book-publisher/add-font-dialog"
+      templateName: "forge/book-designer/add-font-dialog"
     },
         
     _create : function() {
@@ -1651,7 +1651,7 @@
     
   });
   
-  $.widget("custom.bookPublisherRemoveFontDialog", $.custom.bookPublisherDialog, {
+  $.widget("custom.bookDesignerRemoveFontDialog", $.custom.bookDesignerDialog, {
     options: {
       dialogWidth: 500,
       dialogButtons: [{
@@ -1670,7 +1670,7 @@
           this._close();
         }
       }],
-      templateName: "forge/book-publisher/remove-font-dialog"
+      templateName: "forge/book-designer/remove-font-dialog"
     },
     
     _create : function() {
@@ -1683,7 +1683,7 @@
     
   });
   
-  $.widget("custom.bookPublisherAddPageDialog", $.custom.bookPublisherDialog, {
+  $.widget("custom.bookDesignerAddPageDialog", $.custom.bookDesignerDialog, {
     options: {
       dialogWidth: 500,
       dialogButtons: [{
@@ -1702,7 +1702,7 @@
           this._close();
         }
       }],
-      templateName: "forge/book-publisher/add-page-dialog"
+      templateName: "forge/book-designer/add-page-dialog"
     },
     
     _create : function() {
@@ -1715,7 +1715,7 @@
     
   });
   
-  $.widget("custom.bookPublisherAddContentDialog", $.custom.bookPublisherDialog, {
+  $.widget("custom.bookDesignerAddContentDialog", $.custom.bookDesignerDialog, {
     options: {
       dialogWidth: 500,
       dialogButtons: [{
@@ -1734,7 +1734,7 @@
           this._close();
         }
       }],
-      templateName: "forge/book-publisher/add-content-dialog"
+      templateName: "forge/book-designer/add-content-dialog"
     },
     
     _create : function() {
@@ -1748,7 +1748,7 @@
     
   });
   
-  $.widget("custom.bookPublisherPageTypesDialog", $.custom.bookPublisherDialog, {
+  $.widget("custom.bookDesignerPageTypesDialog", $.custom.bookDesignerDialog, {
     
     options: {
       dialogWidth: 650,
@@ -1768,7 +1768,7 @@
           this._close();
         }
       }],
-      templateName: "forge/book-publisher/page-types-dialog"
+      templateName: "forge/book-designer/page-types-dialog"
     },
     
     _create : function() {
@@ -1779,7 +1779,7 @@
       });
       
       this.element.on("beforeDialogOpen", $.proxy(function (event) {
-        $.each(this.dialogElement.find('.forge-publisher-page-types-dialog-type'), $.proxy(function (index, type) {
+        $.each(this.dialogElement.find('.forge-designer-page-types-dialog-type'), $.proxy(function (index, type) {
           $.each(['header', 'footer'], $.proxy(function (groupIndex, group) {
             var rulesAttr = $(type).attr('data-' + group + '-rules');
             if (rulesAttr) {
@@ -1842,11 +1842,11 @@
             }, this)
           });
 
-        this.dialogElement.on("change", '.forge-publisher-page-types-dialog-type-name', $.proxy(this._onNameChange, this));
+        this.dialogElement.on("change", '.forge-designer-page-types-dialog-type-name', $.proxy(this._onNameChange, this));
         this.dialogElement.on("change", 'input', $.proxy(this._onInputChange, this));
         this.dialogElement.on("change", 'select', $.proxy(this._onSelectChange, this));
-        this.dialogElement.on("click", '.forge-publisher-page-types-dialog-type-setting-font-action-add', $.proxy(this._onAddFontClick, this));
-        this.dialogElement.on("click", '.forge-publisher-page-types-dialog-type-setting-font-action-remove', $.proxy(this._onRemoveFontClick, this));
+        this.dialogElement.on("click", '.forge-designer-page-types-dialog-type-setting-font-action-add', $.proxy(this._onAddFontClick, this));
+        this.dialogElement.on("click", '.forge-designer-page-types-dialog-type-setting-font-action-remove', $.proxy(this._onRemoveFontClick, this));
         
       }, this));
       
@@ -1854,7 +1854,7 @@
     },
     
     types: function () {
-      return $.map(this.dialogElement.find('.ui-tabs-panel:not([id="type-tab-new"]) .forge-publisher-page-types-dialog-type'), function (type) {
+      return $.map(this.dialogElement.find('.ui-tabs-panel:not([id="type-tab-new"]) .forge-designer-page-types-dialog-type'), function (type) {
         var headerRules = $(type).attr('data-header-rules');
         var footerRules = $(type).attr('data-footer-rules');
         
@@ -1901,9 +1901,9 @@
     
     _onAddFontClick: function (event) {
       $('<div>')
-        .bookPublisherAddFontDialog()
+        .bookDesignerAddFontDialog()
         .on("addFont", $.proxy(function (event, data) {
-          $('.book-publisher').bookPublisher('addFont', data.name, data.url);
+          $('.book-designer').bookDesigner('addFont', data.name, data.url);
 
           $.each(this.dialogElement.find('select[name*="font-family"]'), function (index, select) {
             $(select).append($('<option>').attr('value', data.name).text(data.name));
@@ -1913,22 +1913,22 @@
     
     _onRemoveFontClick: function (event) {
       var name = $(event.target)
-        .closest('.forge-publisher-page-types-dialog-type-setting-font')
+        .closest('.forge-designer-page-types-dialog-type-setting-font')
         .find('select[name*="font-family"]').val();
       
       $('<div>')
-        .bookPublisherRemoveFontDialog({
+        .bookDesignerRemoveFontDialog({
           name: name
         })
         .on("removeFont", $.proxy(function (event, data) {
-          $('.book-publisher').bookPublisher('removeFont', data.name);
+          $('.book-designer').bookDesigner('removeFont', data.name);
           this.dialogElement.find('select[name*="font-family"] option[value="' + name + '"]').remove();
         }, this));
     },
 
     _onInputChange: function (event) {
       var input = $(event.target);
-      var type = input.closest('.forge-publisher-page-types-dialog-type');
+      var type = input.closest('.forge-designer-page-types-dialog-type');
       var name = input.attr('name');
       if (name.indexOf(':')) {
         var nameParts = name.split(':');
@@ -1957,7 +1957,7 @@
       var name = select.attr('name');
       if (name.indexOf(':')) {
         var nameParts = name.split(':');
-        var type = select.closest('.forge-publisher-page-types-dialog-type');
+        var type = select.closest('.forge-designer-page-types-dialog-type');
         this._updateRule(type, nameParts[0], nameParts[1], select.val() + (select.attr('data-unit')||''));
       }
     }
@@ -1995,33 +1995,33 @@
     
     $.each(localeKeys, $.proxy(function (index, localeKey) {
       locales[localeKey] = this.attr('data-' + localeKey);
-    }, $('.book-publisher')));
+    }, $('.book-designer')));
     
-    $('.book-publisher')
-      .bookPublisher({
+    $('.book-designer')
+      .bookDesigner({
         locales: locales
       })
       .on("save", function (event, data) {
-        $('.book-layout-fonts').val(JSON.stringify(data.fonts));
-        $('.book-layout-styles').val(JSON.stringify(data.styles));
-        $('.book-layout-data').val(data.data);
-        $('.book-layout-save')[0].click();
+        $('.book-design-fonts').val(JSON.stringify(data.fonts));
+        $('.book-design-styles').val(JSON.stringify(data.styles));
+        $('.book-design-data').val(data.data);
+        $('.book-design-save')[0].click();
       });
     
-    var fonts = $('.book-layout-fonts').val();
-    var styles = $('.book-layout-styles').val();
-    var data = $('.book-layout-data').val();
+    var fonts = $('.book-design-fonts').val();
+    var styles = $('.book-design-styles').val();
+    var data = $('.book-design-data').val();
     
     if (fonts) {
-      $('.book-publisher').bookPublisher('fonts', fonts);
+      $('.book-designer').bookDesigner('fonts', fonts);
     }
     
     if (styles) {
-      $('.book-publisher').bookPublisher('styles', styles);
+      $('.book-designer').bookDesigner('styles', styles);
     }
     
     if (data) {
-      $('.book-publisher').bookPublisher('data', data);
+      $('.book-designer').bookDesigner('data', data);
     }
   });
   

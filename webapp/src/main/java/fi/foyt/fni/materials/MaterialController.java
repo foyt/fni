@@ -1461,7 +1461,7 @@ public class MaterialController {
       case CHARACTER_SHEET:
         return "character-sheets";
       case BOOK_LAYOUT:
-        return "book-publisher";
+        return "book-designs";
     }
   
     return "todo";
@@ -1500,7 +1500,7 @@ public class MaterialController {
       case CHARACTER_SHEET:
         return "character-sheet";
       case BOOK_LAYOUT:
-        return "book-layout";
+        return "book-design";
     }
 
     return null;

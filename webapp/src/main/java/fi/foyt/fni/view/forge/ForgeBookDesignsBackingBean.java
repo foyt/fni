@@ -28,9 +28,9 @@ import fi.foyt.fni.system.SystemSettingsController;
 @RequestScoped
 @Named
 @Stateful
-@Join(path = "/forge/book-publisher/{ownerId}/{urlPath}", to = "/forge/book-publisher.jsf")
+@Join(path = "/forge/book-designs/{ownerId}/{urlPath}", to = "/forge/book-designs.jsf")
 @LoggedIn
-public class ForgeBookPublisherBackingBean {
+public class ForgeBookDesignsBackingBean {
   
   @Parameter
   @Matches("[0-9]{1,}")
@@ -165,7 +165,7 @@ public class ForgeBookPublisherBackingBean {
     Folder parentFolder = bookDesign.getParentFolder();
     Long ownerId = parentFolder != null ? parentFolder.getCreator().getId() : bookDesign.getCreator().getId();
     String urlPath = bookDesign.getPath().substring(String.valueOf(ownerId).length() + 1);
-    return String.format("/forge/book-publisher.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
+    return String.format("/forge/book-designs.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
   }
   
   private Long materialId;

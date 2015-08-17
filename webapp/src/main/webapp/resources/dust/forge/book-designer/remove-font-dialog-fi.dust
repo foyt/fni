@@ -1,0 +1,5 @@
+<div title="Poista kirjaisinlaji" data-remove-button="Poista" data-cancel-button="Peruuta" class="forge-designer-remove-font-dialog">
+  <p>
+    Oletko varma, että haluat poistaa kirjaisinlajin '{name}'?
+  </p>
+</div>

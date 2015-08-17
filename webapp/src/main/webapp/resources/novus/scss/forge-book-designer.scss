@@ -7,7 +7,7 @@
 
 $hover-background: lighten(rgba(71, 176, 176, 0.90), 30%);
 
-.book-layout-save {
+.book-design-save {
   display: none;
 }
 
@@ -36,18 +36,18 @@ h2.title input:focus {
   border: 1px inset #eee;
 }
   
-.book-publisher {
+.book-designer {
   border: 0px;
   width: 100%;
   @include box-sizing(border-box);
   @include html-default-styles;
   
-  .forge-book-publisher-tools {
+  .forge-book-designer-tools {
     position: absolute;
     width: 32px;
   }
   
-  .forge-book-publisher-tool {
+  .forge-book-designer-tool {
     height: 32px;
     width: 32px;
     background: #000;
@@ -65,15 +65,15 @@ h2.title input:focus {
     }
   }
   
-  .forge-book-publisher-tool-group {
+  .forge-book-designer-tool-group {
     margin-bottom: 5px;
   }
   
-  .forge-book-publisher-tool:hover {
+  .forge-book-designer-tool:hover {
     opacity: 1;
   }
   
-  .forge-book-publisher-tool .fa {
+  .forge-book-designer-tool .fa {
     vertical-align: top;
     width: 16px;
     height: 16px;
@@ -82,12 +82,12 @@ h2.title input:focus {
     text-align: center;
   }
   
-  .forge-book-publisher-tool-items {
+  .forge-book-designer-tool-items {
     position: absolute;
     right: 45px;
   }
     
-  .forge-book-publisher-tool-items a {
+  .forge-book-designer-tool-items a {
     background: #000;
     color: #fff;
     cursor: pointer;
@@ -114,21 +114,21 @@ h2.title input:focus {
     }
   }
 
-  .forge-book-publisher-tool-items a:first-child {
+  .forge-book-designer-tool-items a:first-child {
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
   }
   
-  .forge-book-publisher-tool-items a:last-child {
+  .forge-book-designer-tool-items a:last-child {
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
   }
    
-  .forge-book-publisher-tool-items a:hover {
+  .forge-book-designer-tool-items a:hover {
     opacity: 1;
   }
   
-  .forge-book-publisher-tool-items:after {
+  .forge-book-designer-tool-items:after {
     border-color: transparent transparent transparent #000;
     border-style: solid;
     border-width: 7px;
@@ -142,7 +142,7 @@ h2.title input:focus {
     opacity: 0.75;    
   }
 
-  .forge-book-publisher-page {
+  .forge-book-designer-page {
     box-sizing: border-box;
     height: 297mm;
     width: 210mm;
@@ -155,15 +155,15 @@ h2.title input:focus {
     
   }
 
-  .forge-book-publisher-page:last-child {
+  .forge-book-designer-page:last-child {
     page-break-after: avoid;
   }
    
-  .forge-book-publisher-page {
+  .forge-book-designer-page {
     outline: 1px solid rgba(200, 200, 200, 0.3);
     margin-top: 40px;
     
-    .forge-book-publisher-block-selected {
+    .forge-book-designer-block-selected {
       outline-width: 1px;
       outline-color: #000;
       outline-style: dotted;
@@ -171,11 +171,11 @@ h2.title input:focus {
     }
   } 
   
-  .forge-book-publisher-page-selected {
+  .forge-book-designer-page-selected {
     outline-color: rgba(200, 0, 0, 0.6);
   }
   
-  .forge-book-publisher-page:before {
+  .forge-book-designer-page:before {
     content: attr(data-type);
     display: block;
     position: absolute;
@@ -186,18 +186,18 @@ h2.title input:focus {
     top: 0px;
   }
   
-  .forge-book-publisher-page:nth-child(even) {
+  .forge-book-designer-page:nth-child(even) {
     box-shadow: -10px 0px 5px #888888;
   }
   
-  .forge-book-publisher-page:nth-child(odd) {
+  .forge-book-designer-page:nth-child(odd) {
     box-shadow: 10px 0px 5px #888888; 
   } 
 }
 
 /* Dialogs */
 
-.forge-publisher-dialog {
+.forge-designer-dialog {
 
   /* Tabs */
   
@@ -252,7 +252,7 @@ h2.title input:focus {
   
   /* Add font dialog */
   
-  &.forge-publisher-add-font-dialog {
+  &.forge-designer-add-font-dialog {
     
     h4 {
       font-weight: bold;
@@ -277,19 +277,19 @@ h2.title input:focus {
   
    /* Styles dialog */
   
-  &.forge-publisher-styles-dialog {
+  &.forge-designer-styles-dialog {
     &.ui-dialog-content {
       padding-top: 3px;
       padding-left: 1px;
       padding-right: 1px;
     }
     
-    .forge-publisher-style-dialog-style-setting-editor {
+    .forge-designer-style-dialog-style-setting-editor {
       display: inline-block;
       width: 80%;
     }
     
-    .forge-publisher-style-dialog-style-name {
+    .forge-designer-style-dialog-style-name {
       font-family: $default-font;
       font-size: 14px;
       color: #000;
@@ -305,25 +305,25 @@ h2.title input:focus {
       margin-bottom: 8px;
     }
     
-    .forge-publisher-style-dialog-style-setting-editor input[type="checkbox"] {
+    .forge-designer-style-dialog-style-setting-editor input[type="checkbox"] {
       margin-left: 5px;
       margin-right: 5px;
       margin-top: 3px;
       margin-bottom: 3px;
     }
     
-    .forge-publisher-style-dialog-style-setting-editor input[type="checkbox"]:first-child {
+    .forge-designer-style-dialog-style-setting-editor input[type="checkbox"]:first-child {
       margin-left: 0px;
     }
     
-    .forge-publisher-style-dialog-style-setting-editor label {
+    .forge-designer-style-dialog-style-setting-editor label {
       font-weight: bold;
       padding-top: 3px;
       padding-bottom: 3px;
       display: inline-block;
     }
     
-    .forge-publisher-style-dialog-style-settings>div>label {
+    .forge-designer-style-dialog-style-settings>div>label {
       width: 20%;
       font-weight: bold;
       padding-top: 3px;
@@ -353,12 +353,12 @@ h2.title input:focus {
       margin-left: 5px;
     }
     
-    .forge-publisher-style-dialog-style-setting-font-action {
+    .forge-designer-style-dialog-style-setting-font-action {
       margin-left: 10px;
     }
   
-    .forge-publisher-style-dialog-style-setting-paddings, .forge-publisher-style-dialog-style-setting-margins {
-      .forge-publisher-style-dialog-style-setting-editor {
+    .forge-designer-style-dialog-style-setting-paddings, .forge-designer-style-dialog-style-setting-margins {
+      .forge-designer-style-dialog-style-setting-editor {
         input { 
           width: 10%;
         }
@@ -378,7 +378,7 @@ h2.title input:focus {
       }
     }
     
-    .forge-publisher-style-dialog-style-preview-container {
+    .forge-designer-style-dialog-style-preview-container {
       overflow: auto;
       border: 1px solid #000;
       margin-top: 5px;
@@ -387,19 +387,19 @@ h2.title input:focus {
       @include display-flex;
       height: 75px;
       
-      .forge-publisher-style-dialog-style-preview-inner-container {
+      .forge-designer-style-dialog-style-preview-inner-container {
         margin-left: auto;
         margin-right: auto;
       }
       
-      .forge-publisher-style-dialog-style-preview {
+      .forge-designer-style-dialog-style-preview {
         position: relative;
     
-        .forge-publisher-style-dialog-style-preview-text {
+        .forge-designer-style-dialog-style-preview-text {
           position: relative;
         }
         
-        .forge-publisher-style-dialog-style-preview-padding {
+        .forge-designer-style-dialog-style-preview-padding {
           position: absolute;
           border-color: rgba(128, 128, 128, 0.5);
           border-style: dotted;
@@ -410,7 +410,7 @@ h2.title input:focus {
           bottom: 0px;
         }
         
-        .forge-publisher-style-dialog-style-preview-margin {
+        .forge-designer-style-dialog-style-preview-margin {
           position: absolute;
           border-color: rgba(128, 128, 128, 0.5);
           border-style: dashed;
@@ -427,7 +427,7 @@ h2.title input:focus {
   
   /* Types dialog */
   
-  &.forge-publisher-page-types-dialog {
+  &.forge-designer-page-types-dialog {
     
     &.ui-dialog-content {
       padding-top: 3px;
@@ -435,12 +435,12 @@ h2.title input:focus {
       padding-right: 1px;
     }
     
-    .forge-publisher-page-types-dialog-type-setting-editor {
+    .forge-designer-page-types-dialog-type-setting-editor {
       display: inline-block;
       width: 80%;
     }
     
-    .forge-publisher-page-types-dialog-type-name {
+    .forge-designer-page-types-dialog-type-name {
       font-family: $default-font;
       font-size: 14px;
       color: #000;
@@ -456,25 +456,25 @@ h2.title input:focus {
       margin-bottom: 8px;
     }
     
-    .forge-publisher-page-types-dialog-type-setting-editor input[type="checkbox"] {
+    .forge-designer-page-types-dialog-type-setting-editor input[type="checkbox"] {
       margin-left: 5px;
       margin-right: 5px;
       margin-top: 3px;
       margin-bottom: 3px;
     }
     
-    .forge-publisher-page-types-dialog-type-setting-editor input[type="checkbox"]:first-child {
+    .forge-designer-page-types-dialog-type-setting-editor input[type="checkbox"]:first-child {
       margin-left: 0px;
     }
     
-    .forge-publisher-page-types-dialog-type-setting-editor label {
+    .forge-designer-page-types-dialog-type-setting-editor label {
       font-weight: bold;
       padding-top: 3px;
       padding-bottom: 3px;
       display: inline-block;
     }
     
-    .forge-publisher-page-types-dialog-type-settings>div>label {
+    .forge-designer-page-types-dialog-type-settings>div>label {
       width: 20%;
       font-weight: bold;
       padding-top: 3px;
@@ -504,12 +504,12 @@ h2.title input:focus {
       margin-left: 5px;
     }
     
-    .forge-publisher-page-types-dialog-type-setting-font-action {
+    .forge-designer-page-types-dialog-type-setting-font-action {
       margin-left: 10px;
     }
   
-    .forge-publisher-page-types-dialog-type-setting-paddings {
-      .forge-publisher-page-types-dialog-type-setting-editor {
+    .forge-designer-page-types-dialog-type-setting-paddings {
+      .forge-designer-page-types-dialog-type-setting-editor {
         input { 
           width: 10%;
         }
@@ -530,8 +530,8 @@ h2.title input:focus {
     }
   }
   
-  &.forge-publisher-add-page-dialog, 
-  &.forge-publisher-add-content-dialog {
+  &.forge-designer-add-page-dialog, 
+  &.forge-designer-add-content-dialog {
     p {
       font-style: italic;
       margin-top: 5px;

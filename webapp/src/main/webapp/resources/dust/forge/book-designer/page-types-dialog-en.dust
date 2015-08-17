@@ -1,0 +1,16 @@
+<div title="Edit Page Types" data-apply-button="Apply" data-cancel-button="Cancel" data-empty-tab-label="Untitled" class="forge-designer-page-types-dialog">
+  <ul>
+    {#types}
+    <li><a href="#type-tab-{$idx}">{name}</a></li>
+    {/types}
+    <li><a href="#type-tab-new">...</a></li>
+  </ul>
+  {#types}
+    <div id="type-tab-{$idx}">
+      {>"forge/book-designer/page-types-dialog-type"/}
+    </div>
+  {/types}
+  <div id="type-tab-new">
+    {>"forge/book-designer/page-types-dialog-type"/}
+  </div>
+</div>

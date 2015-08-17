@@ -1,4 +1,4 @@
-<div title="Add content" data-add-button="Add" data-cancel-button="Cancel" class="forge-publisher-add-content-dialog">
+<div title="Add content" data-add-button="Add" data-cancel-button="Cancel" class="forge-designer-add-content-dialog">
   <p>
     Where do you want the new content to be added?
   </p>

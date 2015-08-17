@@ -11,7 +11,7 @@
               <h:panelGroup layout="block" styleClass="forge-menu-items">
                 <h:commandLink styleClass="forge-new-document" action="#{forgeMaterialsBackingBean.createNewDocument(folderId)}">#{locales['forge.index.newMaterialDocumentMenu']}</h:commandLink>
                 <h:commandLink styleClass="forge-new-new-vector-image" action="#{forgeMaterialsBackingBean.createNewVectorImage(folderId)}">#{locales['forge.index.newMaterialVectorImageMenu']}</h:commandLink>
-                <h:commandLink styleClass="forge-new-book-layout" action="#{forgeMaterialsBackingBean.createNewBookDesign(folderId)}">#{locales['forge.index.newMaterialBookDesign']}</h:commandLink>
+                <h:commandLink styleClass="forge-new-book-design" action="#{forgeMaterialsBackingBean.createNewBookDesign(folderId)}">#{locales['forge.index.newMaterialBookDesign']}</h:commandLink>
                 <h:commandLink styleClass="forge-new-character-sheet" rendered="#{allowCharacterSheets}" action="#{forgeMaterialsBackingBean.createNewCharacterSheet(folderId)}">#{locales['forge.index.newMaterialCreateCharacterSheetMenu']}</h:commandLink>
                 <a class="forge-new-material-folder" href="javascript:void(null)" data-parent-folder-id="#{folderId}">#{locales['forge.index.newMaterialCreateFolderMenu']}</a>
               </h:panelGroup>

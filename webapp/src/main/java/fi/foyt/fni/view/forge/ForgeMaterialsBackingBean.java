@@ -266,7 +266,7 @@ public class ForgeMaterialsBackingBean {
     Long ownerId = parentFolder != null ? parentFolder.getCreator().getId() : bookDesign.getCreator().getId();
     String urlPath = bookDesign.getPath().substring(String.valueOf(ownerId).length() + 1);
     
-    return String.format("/forge/book-publisher.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
+    return String.format("/forge/book-designs.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
   }
   
   public String createNewCharacterSheet(Long folderId) throws IOException {
