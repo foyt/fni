@@ -17,6 +17,7 @@ import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.BookDesign;
+import fi.foyt.fni.persistence.model.materials.BookTemplate;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
@@ -196,15 +197,16 @@ public class ForgeBookDesignsBackingBean {
       return navigationController.accessDenied();
     }
     
-    BookDesign bookTemplate = materialController.copyMaterial(bookDesign, bookDesign.getParentFolder(), loggedUser);
-    materialController.updateBookDesign(bookTemplate, loggedUser, getTemplateName(), getData(), getStyles(), getFonts());
-    materialController.updateBookDesignTemplate(bookTemplate, loggedUser, Boolean.TRUE);
+    String urlName = materialController.getUniqueMaterialUrlName(loggedUser, bookDesign.getParentFolder(), null, getTemplateName());    
+    
+    BookTemplate bookTemplate = materialController.createBookTemplate(bookDesign.getParentFolder(), urlName, getTemplateName(), getData(), getStyles(), getFonts(), null, loggedUser);
     materialController.updateMaterialPublicity(bookTemplate, MaterialPublicity.PUBLIC, loggedUser);
 
     Folder parentFolder = bookTemplate.getParentFolder();
     Long ownerId = parentFolder != null ? parentFolder.getCreator().getId() : bookTemplate.getCreator().getId();
     String urlPath = bookTemplate.getPath().substring(String.valueOf(ownerId).length() + 1);
-    return String.format("/forge/book-designs.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
+
+    return String.format("/forge/book-templates.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
   }
   
   private Long materialId;

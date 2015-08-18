@@ -32,8 +32,9 @@ public class BookDesignCopy implements MaterialCopy<BookDesign> {
         urlName,
         original.getTitle(),
         original.getData(),
-        original.getPublicity(),
-        original.getTemplate());
+        original.getStyles(),
+        original.getFonts(),
+        original.getPublicity());
   }
   
   @Override

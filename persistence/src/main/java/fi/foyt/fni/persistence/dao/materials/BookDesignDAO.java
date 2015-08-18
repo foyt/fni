@@ -13,12 +13,16 @@ public class BookDesignDAO extends GenericDAO<BookDesign> {
 
 	private static final long serialVersionUID = 1L;
 
-	public BookDesign create(User creator, Date created, User modifier, Date modified, Language language, Folder parentFolder,  String urlName, String title, String data, MaterialPublicity publicity, Boolean template) {
+	public BookDesign create(User creator, Date created, User modifier, Date modified, Language language, 
+	    Folder parentFolder,  String urlName, String title, String data, 
+	    String styles, String fonts, MaterialPublicity publicity) {
+	  
     BookDesign bookDesign = new BookDesign();
-    
     bookDesign.setCreated(created);
     bookDesign.setCreator(creator);
     bookDesign.setData(data);
+    bookDesign.setStyles(styles);
+    bookDesign.setFonts(fonts);
     bookDesign.setLanguage(language);
     bookDesign.setModified(modified);
     bookDesign.setModifier(modifier);
@@ -26,7 +30,6 @@ public class BookDesignDAO extends GenericDAO<BookDesign> {
     bookDesign.setPublicity(publicity);
     bookDesign.setTitle(title);
     bookDesign.setUrlName(urlName);
-    bookDesign.setTemplate(template);
 
     return persist(bookDesign);
   }
@@ -54,11 +57,6 @@ public class BookDesignDAO extends GenericDAO<BookDesign> {
 
   public BookDesign updateFonts(BookDesign bookDesign, String fonts) {
     bookDesign.setFonts(fonts);
-    return persist(bookDesign);
-  }
-
-  public BookDesign updateTemplate(BookDesign bookDesign, Boolean template) {
-    bookDesign.setTemplate(template);
     return persist(bookDesign);
   }
 

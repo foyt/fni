@@ -74,6 +74,7 @@ import fi.foyt.fni.persistence.dao.illusion.IllusionEventMaterialParticipantSett
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
 import fi.foyt.fni.persistence.dao.materials.BinaryDAO;
 import fi.foyt.fni.persistence.dao.materials.BookDesignDAO;
+import fi.foyt.fni.persistence.dao.materials.BookTemplateDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDataDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetEntryDAO;
@@ -113,6 +114,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSe
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.materials.Binary;
 import fi.foyt.fni.persistence.model.materials.BookDesign;
+import fi.foyt.fni.persistence.model.materials.BookTemplate;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetData;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetEntry;
@@ -186,6 +188,9 @@ public class MaterialController {
 
   @Inject
   private BookDesignDAO bookDesignDAO;
+
+  @Inject
+  private BookTemplateDAO bookTemplateDAO;
 
   @Inject
   private FolderDAO folderDAO;
@@ -423,12 +428,12 @@ public class MaterialController {
   
   public BookDesign createBookDesign(Folder parentFolder, String title, User creator) {
     String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())));    
-    return createBookDesign(parentFolder, urlName, title, "", null, creator);
+    return createBookDesign(parentFolder, urlName, title, "", null, null, null, creator);
   }
 
-  public BookDesign createBookDesign(Folder parentFolder, String urlName, String title, String data, Language language, User creator) {
+  public BookDesign createBookDesign(Folder parentFolder, String urlName, String title, String data, String styles, String fonts, Language language, User creator) {
     Date now = new Date();
-    return bookDesignDAO.create(creator, now, creator, now, language, parentFolder, urlName, title, data, MaterialPublicity.PRIVATE, Boolean.FALSE);
+    return bookDesignDAO.create(creator, now, creator, now, language, parentFolder, urlName, title, data, styles, fonts, MaterialPublicity.PRIVATE);
   }
 
   public BookDesign findBookDesign(Long id) {
@@ -455,11 +460,17 @@ public class MaterialController {
     return bookDesign;
   }
   
-  public BookDesign updateBookDesignTemplate(BookDesign bookDesign, User modifier, Boolean template) {
-    bookDesign = bookDesignDAO.updateModified(bookDesign, new Date());
-    bookDesign = bookDesignDAO.updateModifier(bookDesign, modifier);
-    bookDesignDAO.updateTemplate(bookDesign, template);
-    return bookDesign;
+  /* Book Templates */
+  
+  public BookTemplate createBookTemplate(Folder parentFolder, String title, User creator) {
+    String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())));    
+    return createBookTemplate(parentFolder, urlName, title, "", null, null, null, creator);
+  }
+
+  public BookTemplate createBookTemplate(Folder parentFolder, String urlName, String title, String data, 
+      String styles, String fonts, Language language, User creator) {
+    Date now = new Date();
+    return bookTemplateDAO.create(creator, now, creator, now, language, parentFolder, urlName, title, data, styles, fonts, MaterialPublicity.PRIVATE);
   }
 
   /* Document */
@@ -1468,6 +1479,8 @@ public class MaterialController {
         return "character-sheets";
       case BOOK_DESIGN:
         return "book-designs";
+      case BOOK_TEMPLATE:
+        return "book-templates";
     }
   
     return "todo";
@@ -1507,6 +1520,8 @@ public class MaterialController {
         return "character-sheet";
       case BOOK_DESIGN:
         return "book-design";
+      case BOOK_TEMPLATE:
+        return "book-template";
     }
 
     return null;
@@ -1889,6 +1904,7 @@ public class MaterialController {
       case ILLUSION_FOLDER:
       case ILLUSION_GROUP_FOLDER:
       case BOOK_DESIGN:
+      case BOOK_TEMPLATE:
       break;
     }
     

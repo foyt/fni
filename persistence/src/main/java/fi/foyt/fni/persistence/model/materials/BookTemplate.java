@@ -10,10 +10,10 @@ import org.hibernate.search.annotations.Indexed;
 @Entity
 @PrimaryKeyJoinColumn (name="id")
 @Indexed
-public class BookDesign extends Material {
+public class BookTemplate extends Material {
   
-  public BookDesign() {
-    setType(MaterialType.BOOK_DESIGN);
+  public BookTemplate() {
+    setType(MaterialType.BOOK_TEMPLATE);
   }
   
   public String getData() {
