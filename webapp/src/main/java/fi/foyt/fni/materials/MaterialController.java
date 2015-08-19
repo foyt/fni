@@ -464,13 +464,22 @@ public class MaterialController {
   
   public BookTemplate createBookTemplate(Folder parentFolder, String title, User creator) {
     String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())));    
-    return createBookTemplate(parentFolder, urlName, title, "", null, null, null, creator);
+    return createBookTemplate(parentFolder, urlName, title, "", null, null, null, null, null, creator);
   }
 
   public BookTemplate createBookTemplate(Folder parentFolder, String urlName, String title, String data, 
-      String styles, String fonts, Language language, User creator) {
+      String styles, String fonts, String description, String iconUrl, Language language, User creator) {
     Date now = new Date();
-    return bookTemplateDAO.create(creator, now, creator, now, language, parentFolder, urlName, title, data, styles, fonts, MaterialPublicity.PRIVATE);
+    return bookTemplateDAO.create(creator, now, creator, now, language, parentFolder, urlName, title, data, styles, fonts, 
+        description, iconUrl, MaterialPublicity.PRIVATE);
+  }
+
+  public BookTemplate findBookTemplate(Long id) {
+    return bookTemplateDAO.findById(id);
+  }
+  
+  public List<BookTemplate> listPublicBookTemplates() {
+    return bookTemplateDAO.listByPublicity(MaterialPublicity.PUBLIC);
   }
 
   /* Document */
@@ -1385,6 +1394,10 @@ public class MaterialController {
       return (List<Material>) CollectionUtils.union(materialDAO.listByRootFolderAndTypesAndCreator(types, user),
           materialDAO.listByRootFolderAndUserAndTypesAndRoles(user, types, roles));
     }
+  }
+  
+  public List<Material> listMaterialsByTypeAndPublicity(MaterialType type, MaterialPublicity publicity) {
+    return materialDAO.listByTypeAndPublicity(type, publicity);
   }
 
   public String getUniqueMaterialUrlName(User owner, Folder parentFolder, Material material, String title) {

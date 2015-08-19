@@ -103,8 +103,10 @@
       
       <input type="submit" jsf:action="#{forgeBookDesignsBackingBean.save}" class="book-design-save" value="#{locales['forge.bookDesigns.saveButton']}"/>
       <input type="submit" jsf:action="#{forgeBookDesignsBackingBean.publishTemplate}" class="book-design-publish-template"/>
+      <input type="submit" jsf:action="#{forgeBookDesignsBackingBean.applyTemplate}" class="book-design-apply-template"/>
       <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.materialId}"/>
       <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.templateName}" class="book-design-template-name"/>
+      <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.templateId}" class="book-design-template-id"/>
       <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.data}" class="book-design-data"/>
       <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.styles}" class="book-design-styles"/>
       <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.fonts}" class="book-design-fonts"/>

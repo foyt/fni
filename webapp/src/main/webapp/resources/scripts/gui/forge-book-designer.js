@@ -79,6 +79,7 @@
   
   $.widget("custom.bookDesignerDialog", {
     options: {
+      closable: true,
       templateName: null,
       templateOptions: {}
     },
@@ -112,11 +113,11 @@
           
           this.dialogElement
             .addClass('forge-designer-dialog')
-            .dialog({
+            .dialog($.extend({
               modal: true,
-              width: this.options.dialogWidth,
+              dialogClass: this.options.closable ? "" : "no-close",
               buttons: buttons
-            });
+            }, this.options.dialogOptions||{}));
           
           this.element.trigger("afterDialogOpen");
         }
@@ -1413,7 +1414,9 @@
   
   $.widget("custom.bookDesignerStylesDialog", $.custom.bookDesignerDialog, {
     options: {
-      dialogWidth: 650,
+      dialogOptions: {
+        width: 650
+      },
       dialogButtons: [{
         'require-valid': true,
         'text-attribute': 'data-apply-button',
@@ -1632,7 +1635,9 @@
   
   $.widget("custom.bookDesignerPublishTemplateDialog", $.custom.bookDesignerDialog, {
     options: {
-      dialogWidth: 500,
+      dialogOptions: {
+        width: 500
+      },
       dialogButtons: [{
         'require-valid': true,
         'text-attribute': 'data-publish-button',
@@ -1660,7 +1665,9 @@
   
   $.widget("custom.bookDesignerAddFontDialog", $.custom.bookDesignerDialog, {
     options: {
-      dialogWidth: 500,
+      dialogOptions: {
+        width: 500
+      },
       dialogButtons: [{
         'require-valid': true,
         'text-attribute': 'data-add-button',
@@ -1703,7 +1710,9 @@
   
   $.widget("custom.bookDesignerRemoveFontDialog", $.custom.bookDesignerDialog, {
     options: {
-      dialogWidth: 500,
+      dialogOptions: {
+        width: 500
+      },
       dialogButtons: [{
         'require-valid': true,
         'text-attribute': 'data-remove-button',
@@ -1735,7 +1744,9 @@
   
   $.widget("custom.bookDesignerAddPageDialog", $.custom.bookDesignerDialog, {
     options: {
-      dialogWidth: 500,
+      dialogOptions: {
+        width: 500
+      },
       dialogButtons: [{
         'require-valid': true,
         'text-attribute': 'data-add-button',
@@ -1767,7 +1778,9 @@
   
   $.widget("custom.bookDesignerAddContentDialog", $.custom.bookDesignerDialog, {
     options: {
-      dialogWidth: 500,
+      dialogOptions: {
+        width: 500
+      },
       dialogButtons: [{
         'require-valid': true,
         'text-attribute': 'data-add-button',
@@ -1801,7 +1814,9 @@
   $.widget("custom.bookDesignerPageTypesDialog", $.custom.bookDesignerDialog, {
     
     options: {
-      dialogWidth: 650,
+      dialogOptions: {
+        width: 650
+      },
       dialogButtons: [{
         'require-valid': true,
         'text-attribute': 'data-apply-button',
@@ -2013,73 +2028,123 @@
     }
     
   });
+
+  $.widget("custom.bookDesignerChooseTemplateDialog", $.custom.bookDesignerDialog, {
+    options: {
+      closable: false,
+      dialogOptions: {
+        closeOnEscape: false,
+        width: 500
+      },
+      dialogButtons: [],
+      templateName: "forge/book-designer/choose-template-dialog"
+    },
+        
+    _create : function() {
+      this._super();
+      
+      this.element.on("beforeDialogOpen", $.proxy(function (event) {
+        this.dialogElement.on("click", '.forge-designer-select-template-dialog-template', $.proxy(function (event) {
+          this.element.trigger("choose", {
+            id: $(event.target).attr('data-id')
+          });
+        }, this));
+      }, this));
+    }
+    
+  });
+  
   
   $(document).ready(function () {
-    var locales = {};
-    var localeKeys = [
-      'save-button-tooltip',
-      'publish-button-tooltip',
-      'add-contents-button-tooltip',
-      'import-button',
-      'add-blank-block-button',
-      'add-blank-page-button',
-      'auto-layout-button-tooltip',
-      'styles-button-tooltip',
-      'page-types-button-tooltip',
-      'move-page-button-tooltip',
-      'remove-page-button-tooltip',
-      'change-page-type-button-tooltip',
-      'change-block-style-button-tooltip',
-      'change-block-align-button-tooltip',
-      'change-block-align-button-tooltip',
-      'align-left',
-      'align-right',
-      'align-center',
-      'align-justify',
-      'change-block-float-button-tooltip',
-      'float-none',
-      'float-left',
-      'float-right',
-      'move-block-button-tooltip',
-      'remove-block-button-tooltip'
-    ];
-    
-    $.each(localeKeys, $.proxy(function (index, localeKey) {
-      locales[localeKey] = this.attr('data-' + localeKey);
-    }, $('.book-designer')));
-    
-    $('.book-designer')
-      .bookDesigner({
-        locales: locales
-      })
-      .on("save", function (event, data) {
-        $('.book-design-fonts').val(JSON.stringify(data.fonts));
-        $('.book-design-styles').val(JSON.stringify(data.styles));
-        $('.book-design-data').val(data.data);
-        $('.book-design-save')[0].click();
-      })
-      .on("publishTemplate", function (event, data) {
-        $('.book-design-template-name').val(data.templateName);
-        $('.book-design-fonts').val(JSON.stringify(data.fonts));
-        $('.book-design-styles').val(JSON.stringify(data.styles));
-        $('.book-design-data').val(data.data);
-        $('.book-design-publish-template')[0].click();
+    if ($('.book-use-template').val() == 'true') {
+      var materialClient = new $.RestClient(CONTEXTPATH + '/rest/material/');
+      materialClient.add("bookTemplates");
+      
+      materialClient.bookTemplates.read({
+        'publicity': 'PUBLIC'
+      }).done(function (templates, message, xhr){
+        if (xhr.status !== 200) {
+          $('.notifications').notifications('notification', 'error', message);
+        } else {
+          $('<div/>')
+            .bookDesignerChooseTemplateDialog({
+              templateOptions: {
+                templates: templates
+              }
+            })
+            .on("choose", $.proxy(function (event, data) {
+              $('.book-design-template-id').val(data.id);
+              $('.book-design-apply-template')[0].click();
+            }, this));
+        }
       });
-    
-    var fonts = $('.book-design-fonts').val();
-    var styles = $('.book-design-styles').val();
-    var data = $('.book-design-data').val();
-    
-    if (fonts) {
-      $('.book-designer').bookDesigner('fonts', fonts);
-    }
-    
-    if (styles) {
-      $('.book-designer').bookDesigner('styles', styles);
-    }
-    
-    if (data) {
-      $('.book-designer').bookDesigner('data', data);
+    } else {
+      var locales = {};
+      var localeKeys = [
+        'save-button-tooltip',
+        'publish-button-tooltip',
+        'add-contents-button-tooltip',
+        'import-button',
+        'add-blank-block-button',
+        'add-blank-page-button',
+        'auto-layout-button-tooltip',
+        'styles-button-tooltip',
+        'page-types-button-tooltip',
+        'move-page-button-tooltip',
+        'remove-page-button-tooltip',
+        'change-page-type-button-tooltip',
+        'change-block-style-button-tooltip',
+        'change-block-align-button-tooltip',
+        'change-block-align-button-tooltip',
+        'align-left',
+        'align-right',
+        'align-center',
+        'align-justify',
+        'change-block-float-button-tooltip',
+        'float-none',
+        'float-left',
+        'float-right',
+        'move-block-button-tooltip',
+        'remove-block-button-tooltip'
+      ];
+      
+      $.each(localeKeys, $.proxy(function (index, localeKey) {
+        locales[localeKey] = this.attr('data-' + localeKey);
+      }, $('.book-designer')));
+      
+      $('.book-designer')
+        .bookDesigner({
+          locales: locales
+        })
+        .on("save", function (event, data) {
+          $('.book-design-fonts').val(JSON.stringify(data.fonts));
+          $('.book-design-styles').val(JSON.stringify(data.styles));
+          $('.book-design-data').val(data.data);
+          $('.book-design-save')[0].click();
+        })
+        .on("publishTemplate", function (event, data) {
+          $('.book-design-template-name').val(data.templateName);
+          $('.book-design-fonts').val(JSON.stringify(data.fonts));
+          $('.book-design-styles').val(JSON.stringify(data.styles));
+          $('.book-design-data').val(data.data);
+          $('.book-design-publish-template')[0].click();
+        });
+      
+      var fonts = $('.book-design-fonts').val();
+      var styles = $('.book-design-styles').val();
+      var data = $('.book-design-data').val();
+      
+      if (fonts) {
+        $('.book-designer').bookDesigner('fonts', fonts);
+      }
+      
+      if (styles) {
+        $('.book-designer').bookDesigner('styles', styles);
+      }
+      
+      if (data) {
+        $('.book-designer').bookDesigner('data', data);
+      }
     }
   });
   

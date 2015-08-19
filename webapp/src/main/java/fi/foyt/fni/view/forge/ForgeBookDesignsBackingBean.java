@@ -134,6 +134,14 @@ public class ForgeBookDesignsBackingBean {
   public void setTemplateName(String templateName) {
     this.templateName = templateName;
   }
+  
+  public Long getTemplateId() {
+    return templateId;
+  }
+  
+  public void setTemplateId(Long templateId) {
+    this.templateId = templateId;
+  }
 
   public List<Folder> getFolders() {
     return folders;
@@ -198,8 +206,10 @@ public class ForgeBookDesignsBackingBean {
     }
     
     String urlName = materialController.getUniqueMaterialUrlName(loggedUser, bookDesign.getParentFolder(), null, getTemplateName());    
+    String description = "";
+    String iconUrl = "about:blank";
     
-    BookTemplate bookTemplate = materialController.createBookTemplate(bookDesign.getParentFolder(), urlName, getTemplateName(), getData(), getStyles(), getFonts(), null, loggedUser);
+    BookTemplate bookTemplate = materialController.createBookTemplate(bookDesign.getParentFolder(), urlName, getTemplateName(), getData(), getStyles(), getFonts(), description, iconUrl, null, loggedUser);
     materialController.updateMaterialPublicity(bookTemplate, MaterialPublicity.PUBLIC, loggedUser);
 
     Folder parentFolder = bookTemplate.getParentFolder();
@@ -209,8 +219,28 @@ public class ForgeBookDesignsBackingBean {
     return String.format("/forge/book-templates.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
   }
   
+  public String applyTemplate() {
+    User loggedUser = sessionController.getLoggedUser();
+    BookDesign bookDesign = materialController.findBookDesign(getMaterialId());
+    
+    if (!materialPermissionController.hasModifyPermission(loggedUser, bookDesign)) {
+      return navigationController.accessDenied();
+    }
+    
+    BookTemplate bookTemplate = materialController.findBookTemplate(getTemplateId());
+    
+    materialController.updateBookDesign(bookDesign, sessionController.getLoggedUser(), bookDesign.getTitle(), bookTemplate.getData(), bookTemplate.getStyles(), bookTemplate.getFonts());
+    Folder parentFolder = bookDesign.getParentFolder();
+    
+    Long ownerId = parentFolder != null ? parentFolder.getCreator().getId() : bookDesign.getCreator().getId();
+    String urlPath = bookDesign.getPath().substring(String.valueOf(ownerId).length() + 1);
+    return String.format("/forge/book-designs.jsf?faces-redirect=true&ownerId=%d&urlPath=%s", ownerId, urlPath);
+  }
+  
   private Long materialId;
   private String templateName;
+  private Long templateId;
+  
   private List<Folder> folders;
   private String title;
   private String data;

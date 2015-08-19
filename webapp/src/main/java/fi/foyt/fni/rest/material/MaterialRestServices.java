@@ -11,6 +11,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
+import fi.foyt.fni.persistence.model.materials.BookTemplate;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
@@ -46,6 +48,23 @@ public class MaterialRestServices {
   @Context
   private OAuthAccessToken accessToken;
   
+  @GET
+  @Path ("/bookTemplates/")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_LIST_BOOK_TEMPLATES }
+  )
+  public Response listBookTemplates(@QueryParam ("publicity") String publicity) {
+    switch (publicity) {
+      case "PUBLIC":
+        List<BookTemplate> bookTemplates = materialController.listPublicBookTemplates();
+        return Response.ok(createRestModel(bookTemplates.toArray(new BookTemplate[0]))).build();
+      default:
+        return Response.status(Status.BAD_REQUEST).entity(String.format("Publicity %s is not supported", publicity)).build();
+    }
+  }
+
   @GET
   @Path ("/documents/{ID:[0-9]*}")
   @Security (
@@ -121,6 +140,16 @@ public class MaterialRestServices {
     
     return Response.ok(createRestModel(image)).build();
   }
+  
+  private List<fi.foyt.fni.rest.material.model.BookTemplate> createRestModel(fi.foyt.fni.persistence.model.materials.BookTemplate... entities) {
+    List<fi.foyt.fni.rest.material.model.BookTemplate> result = new ArrayList<>();
+    
+    for (fi.foyt.fni.persistence.model.materials.BookTemplate entity : entities) {
+      result.add(createRestModel(entity));
+    }
+    
+    return result;
+  }
 
   @SuppressWarnings("unused")
   private List<fi.foyt.fni.rest.material.model.Document> createRestModel(fi.foyt.fni.persistence.model.materials.Document... entities) {
@@ -142,6 +171,18 @@ public class MaterialRestServices {
     }
     
     return result;
+  }
+  
+  private fi.foyt.fni.rest.material.model.BookTemplate createRestModel(fi.foyt.fni.persistence.model.materials.BookTemplate entity) {
+    Long languageId = entity.getLanguage() != null ? entity.getLanguage().getId() : null;
+    Long creatorId = entity.getCreator() != null ? entity.getCreator().getId() : null;
+    Long modifierId = entity.getModifier() != null ? entity.getModifier().getId() : null;
+    Long parentFolderId = entity.getParentFolder() != null ? entity.getParentFolder().getId() : null;
+    
+    return new fi.foyt.fni.rest.material.model.BookTemplate(entity.getId(), entity.getType(), entity.getUrlName(), 
+        entity.getPath(), entity.getTitle(), entity.getPublicity(), languageId, entity.getModified(), 
+        entity.getCreated(), creatorId, modifierId, parentFolderId, entity.getData(), entity.getStyles(), 
+        entity.getFonts(), entity.getIconUrl(), entity.getDescription());
   }
   
   private fi.foyt.fni.rest.material.model.Document createRestModel(fi.foyt.fni.persistence.model.materials.Document entity) {

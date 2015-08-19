@@ -1,0 +1,16 @@
+<div title="Valitse muotti" class="forge-designer-select-template-dialog">
+  <p>
+    Valitse käytettävä muotti.
+  </p>
+  <div class="templates">
+    {#templates}
+      <div class="template" data-id="{id}">
+        <div class="image-container">
+          <img src="{iconUrl}"/>
+        </div>
+        <label>{title}</label>
+        <p>{description}</p>
+      </div>
+    {/templates}
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<div title="Choose a template" class="forge-designer-select-template-dialog">
+  <p>
+    Choose a book template
+  </p>
+  <div class="forge-designer-select-template-dialog-templates">
+    {#templates}
+      <div class="forge-designer-select-template-dialog-template" data-id="{id}">
+        <img src="{iconUrl}"/>
+        <label>{title}</label>
+        <p>{description}</p>
+      </div>
+    {/templates}
+  </div>
+</div>

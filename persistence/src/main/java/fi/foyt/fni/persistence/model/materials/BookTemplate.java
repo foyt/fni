@@ -40,6 +40,22 @@ public class BookTemplate extends Material {
     this.fonts = fonts;
   }
   
+  public String getIconUrl() {
+    return iconUrl;
+  }
+  
+  public void setIconUrl(String iconUrl) {
+    this.iconUrl = iconUrl;
+  }
+  
+  public String getDescription() {
+    return description;
+  }
+  
+  public void setDescription(String description) {
+    this.description = description;
+  }
+  
   @Column 
   @Lob
   private String data;
@@ -51,4 +67,9 @@ public class BookTemplate extends Material {
   @Column 
   @Lob
   private String fonts;
+  
+  @Lob
+  private String description;
+  
+  private String iconUrl;
 }
