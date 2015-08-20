@@ -34,6 +34,7 @@ public class BookDesignCopy implements MaterialCopy<BookDesign> {
         original.getData(),
         original.getStyles(),
         original.getFonts(),
+        original.getPageTypes(),
         original.getPublicity());
   }
   

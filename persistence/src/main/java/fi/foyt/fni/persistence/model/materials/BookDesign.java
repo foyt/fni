@@ -40,6 +40,14 @@ public class BookDesign extends Material {
     this.fonts = fonts;
   }
   
+  public String getPageTypes() {
+    return pageTypes;
+  }
+  
+  public void setPageTypes(String pageTypes) {
+    this.pageTypes = pageTypes;
+  }
+  
   @Column 
   @Lob
   private String data;
@@ -51,4 +59,8 @@ public class BookDesign extends Material {
   @Column 
   @Lob
   private String fonts;
+
+  @Column 
+  @Lob
+  private String pageTypes;
 }

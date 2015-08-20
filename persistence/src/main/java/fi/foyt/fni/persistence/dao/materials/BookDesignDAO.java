@@ -15,7 +15,7 @@ public class BookDesignDAO extends GenericDAO<BookDesign> {
 
 	public BookDesign create(User creator, Date created, User modifier, Date modified, Language language, 
 	    Folder parentFolder,  String urlName, String title, String data, 
-	    String styles, String fonts, MaterialPublicity publicity) {
+	    String styles, String fonts, String pageTypes, MaterialPublicity publicity) {
 	  
     BookDesign bookDesign = new BookDesign();
     bookDesign.setCreated(created);
@@ -23,6 +23,7 @@ public class BookDesignDAO extends GenericDAO<BookDesign> {
     bookDesign.setData(data);
     bookDesign.setStyles(styles);
     bookDesign.setFonts(fonts);
+    bookDesign.setPageTypes(pageTypes);
     bookDesign.setLanguage(language);
     bookDesign.setModified(modified);
     bookDesign.setModifier(modifier);
@@ -57,6 +58,11 @@ public class BookDesignDAO extends GenericDAO<BookDesign> {
 
   public BookDesign updateFonts(BookDesign bookDesign, String fonts) {
     bookDesign.setFonts(fonts);
+    return persist(bookDesign);
+  }
+
+  public BookDesign updatePageTypes(BookDesign bookDesign, String pageTypes) {
+    bookDesign.setPageTypes(pageTypes);
     return persist(bookDesign);
   }
 

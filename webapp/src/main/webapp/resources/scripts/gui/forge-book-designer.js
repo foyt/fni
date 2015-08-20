@@ -1298,7 +1298,8 @@
       $(this.element).trigger("save", {
         "data": this.data(),
         "styles": this.styles(),
-        "fonts": this.fonts()
+        "fonts": this.fonts(),
+        "pageTypes": this.pageTypes()
       });
     },
     
@@ -1312,7 +1313,8 @@
             "templateName": data.name,
             "data": this.data(),
             "styles": this.styles(),
-            "fonts": this.fonts()
+            "fonts": this.fonts(),
+            "pageTypes": this.pageTypes()
           });
         }, this));
     },
@@ -2150,6 +2152,7 @@
         .on("save", function (event, data) {
           $('.book-design-fonts').val(JSON.stringify(data.fonts));
           $('.book-design-styles').val(JSON.stringify(data.styles));
+          $('.book-design-page-types').val(JSON.stringify(data.pageTypes));
           $('.book-design-data').val(data.data);
           $('.book-design-save')[0].click();
         })
@@ -2157,6 +2160,7 @@
           $('.book-design-template-name').val(data.templateName);
           $('.book-design-fonts').val(JSON.stringify(data.fonts));
           $('.book-design-styles').val(JSON.stringify(data.styles));
+          $('.book-design-page-types').val(JSON.stringify(data.pageTypes));
           $('.book-design-data').val(data.data);
           $('.book-design-publish-template')[0].click();
         });
@@ -2164,6 +2168,7 @@
       var fonts = $('.book-design-fonts').val();
       var styles = $('.book-design-styles').val();
       var data = $('.book-design-data').val();
+      var pageTypes = $('.book-design-page-types').val();
       
       if (fonts) {
         $('.book-designer').bookDesigner('fonts', fonts);
@@ -2175,6 +2180,10 @@
       
       if (data) {
         $('.book-designer').bookDesigner('data', data);
+      }
+      
+      if (pageTypes) {
+        $('.book-designer').bookDesigner('pageTypes', pageTypes);
       }
     }
   });

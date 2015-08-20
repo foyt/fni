@@ -56,6 +56,14 @@ public class BookTemplate extends Material {
     this.description = description;
   }
   
+  public String getPageTypes() {
+    return pageTypes;
+  }
+  
+  public void setPageTypes(String pageTypes) {
+    this.pageTypes = pageTypes;
+  }
+  
   @Column 
   @Lob
   private String data;
@@ -67,6 +75,10 @@ public class BookTemplate extends Material {
   @Column 
   @Lob
   private String fonts;
+
+  @Column 
+  @Lob
+  private String pageTypes;
   
   @Lob
   private String description;

@@ -428,19 +428,19 @@ public class MaterialController {
   
   public BookDesign createBookDesign(Folder parentFolder, String title, User creator) {
     String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())));    
-    return createBookDesign(parentFolder, urlName, title, "", null, null, null, creator);
+    return createBookDesign(parentFolder, urlName, title, "", null, null, null, null, creator);
   }
 
-  public BookDesign createBookDesign(Folder parentFolder, String urlName, String title, String data, String styles, String fonts, Language language, User creator) {
+  public BookDesign createBookDesign(Folder parentFolder, String urlName, String title, String data, String styles, String fonts, String pageTypes, Language language, User creator) {
     Date now = new Date();
-    return bookDesignDAO.create(creator, now, creator, now, language, parentFolder, urlName, title, data, styles, fonts, MaterialPublicity.PRIVATE);
+    return bookDesignDAO.create(creator, now, creator, now, language, parentFolder, urlName, title, data, styles, fonts, pageTypes, MaterialPublicity.PRIVATE);
   }
 
   public BookDesign findBookDesign(Long id) {
     return bookDesignDAO.findById(id);
   }
   
-  public BookDesign updateBookDesign(BookDesign bookDesign, User modifier, String title, String data, String styles, String fonts) {
+  public BookDesign updateBookDesign(BookDesign bookDesign, User modifier, String title, String data, String styles, String fonts, String pageTypes) {
     if (!StringUtils.equals(title, bookDesign.getTitle())) {
       String oldUrlName = bookDesign.getUrlName();
       String newUrlName = getUniqueMaterialUrlName(bookDesign.getCreator(), bookDesign.getParentFolder(), bookDesign, title);
@@ -454,6 +454,7 @@ public class MaterialController {
     bookDesign = bookDesignDAO.updateData(bookDesign, data);
     bookDesign = bookDesignDAO.updateStyles(bookDesign, styles);
     bookDesign = bookDesignDAO.updateFonts(bookDesign, fonts);
+    bookDesign = bookDesignDAO.updatePageTypes(bookDesign, pageTypes);
     bookDesign = bookDesignDAO.updateModified(bookDesign, new Date());
     bookDesign = bookDesignDAO.updateModifier(bookDesign, modifier);
     
@@ -464,14 +465,14 @@ public class MaterialController {
   
   public BookTemplate createBookTemplate(Folder parentFolder, String title, User creator) {
     String urlName = getUniqueMaterialUrlName(creator, parentFolder, null, DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())));    
-    return createBookTemplate(parentFolder, urlName, title, "", null, null, null, null, null, creator);
+    return createBookTemplate(parentFolder, urlName, title, "", null, null, null, null, null, null, creator);
   }
 
   public BookTemplate createBookTemplate(Folder parentFolder, String urlName, String title, String data, 
-      String styles, String fonts, String description, String iconUrl, Language language, User creator) {
+      String styles, String fonts, String description, String pageTypes, String iconUrl, Language language, User creator) {
     Date now = new Date();
     return bookTemplateDAO.create(creator, now, creator, now, language, parentFolder, urlName, title, data, styles, fonts, 
-        description, iconUrl, MaterialPublicity.PRIVATE);
+        pageTypes, description, iconUrl, MaterialPublicity.PRIVATE);
   }
 
   public BookTemplate findBookTemplate(Long id) {

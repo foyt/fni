@@ -22,7 +22,7 @@ public class BookTemplateDAO extends GenericDAO<BookTemplate> {
 
 	public BookTemplate create(User creator, Date created, User modifier, Date modified, 
 	    Language language, Folder parentFolder, String urlName, String title, String data, 
-	    String styles, String fonts, String description, String iconUrl, MaterialPublicity publicity) {
+	    String styles, String fonts, String pageTypes, String description, String iconUrl, MaterialPublicity publicity) {
     BookTemplate bookTemplate = new BookTemplate();
     
     bookTemplate.setCreated(created);
@@ -30,6 +30,7 @@ public class BookTemplateDAO extends GenericDAO<BookTemplate> {
     bookTemplate.setData(data);
     bookTemplate.setStyles(styles);
     bookTemplate.setFonts(fonts);
+    bookTemplate.setPageTypes(pageTypes);
     bookTemplate.setIconUrl(iconUrl);
     bookTemplate.setDescription(description);
     bookTemplate.setLanguage(language);
@@ -81,6 +82,11 @@ public class BookTemplateDAO extends GenericDAO<BookTemplate> {
 
   public BookTemplate updateFonts(BookTemplate bookTemplate, String fonts) {
     bookTemplate.setFonts(fonts);
+    return persist(bookTemplate);
+  }
+
+  public BookTemplate updatePageTypes(BookTemplate bookTemplate, String pageTypes) {
+    bookTemplate.setPageTypes(pageTypes);
     return persist(bookTemplate);
   }
 

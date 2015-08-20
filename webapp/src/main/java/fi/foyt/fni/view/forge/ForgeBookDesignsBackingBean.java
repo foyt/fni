@@ -87,6 +87,7 @@ public class ForgeBookDesignsBackingBean {
     data = ((BookDesign) material).getData();
     styles = ((BookDesign) material).getStyles();
     fonts = ((BookDesign) material).getFonts();
+    pageTypes = ((BookDesign) material).getPageTypes();
     folders = ForgeViewUtils.getParentList(material);
     googlePublicApiKey = systemSettingsController.getSetting(SystemSettingKey.GOOGLE_PUBLIC_API_KEY);
     
@@ -179,6 +180,14 @@ public class ForgeBookDesignsBackingBean {
     this.fonts = fonts;
   }
   
+  public String getPageTypes() {
+    return pageTypes;
+  }
+  
+  public void setPageTypes(String pageTypes) {
+    this.pageTypes = pageTypes;
+  }
+  
   public String getGooglePublicApiKey() {
     return googlePublicApiKey;
   }
@@ -190,7 +199,7 @@ public class ForgeBookDesignsBackingBean {
       return navigationController.accessDenied();
     }
     
-    materialController.updateBookDesign(bookDesign, sessionController.getLoggedUser(), getTitle(), getData(), getStyles(), getFonts());
+    materialController.updateBookDesign(bookDesign, sessionController.getLoggedUser(), getTitle(), getData(), getStyles(), getFonts(), getPageTypes());
     Folder parentFolder = bookDesign.getParentFolder();
     Long ownerId = parentFolder != null ? parentFolder.getCreator().getId() : bookDesign.getCreator().getId();
     String urlPath = bookDesign.getPath().substring(String.valueOf(ownerId).length() + 1);
@@ -209,7 +218,7 @@ public class ForgeBookDesignsBackingBean {
     String description = "";
     String iconUrl = "about:blank";
     
-    BookTemplate bookTemplate = materialController.createBookTemplate(bookDesign.getParentFolder(), urlName, getTemplateName(), getData(), getStyles(), getFonts(), description, iconUrl, null, loggedUser);
+    BookTemplate bookTemplate = materialController.createBookTemplate(bookDesign.getParentFolder(), urlName, getTemplateName(), getData(), getStyles(), getFonts(), getPageTypes(), description, iconUrl, null, loggedUser);
     materialController.updateMaterialPublicity(bookTemplate, MaterialPublicity.PUBLIC, loggedUser);
 
     Folder parentFolder = bookTemplate.getParentFolder();
@@ -229,7 +238,7 @@ public class ForgeBookDesignsBackingBean {
     
     BookTemplate bookTemplate = materialController.findBookTemplate(getTemplateId());
     
-    materialController.updateBookDesign(bookDesign, sessionController.getLoggedUser(), bookDesign.getTitle(), bookTemplate.getData(), bookTemplate.getStyles(), bookTemplate.getFonts());
+    materialController.updateBookDesign(bookDesign, sessionController.getLoggedUser(), bookDesign.getTitle(), bookTemplate.getData(), bookTemplate.getStyles(), bookTemplate.getFonts(), bookTemplate.getPageTypes());
     Folder parentFolder = bookDesign.getParentFolder();
     
     Long ownerId = parentFolder != null ? parentFolder.getCreator().getId() : bookDesign.getCreator().getId();
@@ -246,5 +255,6 @@ public class ForgeBookDesignsBackingBean {
   private String data;
   private String styles;
   private String fonts;
+  private String pageTypes;
   private String googlePublicApiKey;
 }
