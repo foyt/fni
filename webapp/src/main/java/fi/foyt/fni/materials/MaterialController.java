@@ -1395,10 +1395,6 @@ public class MaterialController {
           materialDAO.listByRootFolderAndUserAndTypesAndRoles(user, types, roles));
     }
   }
-  
-  public List<Material> listMaterialsByTypeAndPublicity(MaterialType type, MaterialPublicity publicity) {
-    return materialDAO.listByTypeAndPublicity(type, publicity);
-  }
 
   public String getUniqueMaterialUrlName(User owner, Folder parentFolder, Material material, String title) {
     String urlName = RequestUtils.createUrlName(title);
