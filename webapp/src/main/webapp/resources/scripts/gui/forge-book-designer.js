@@ -485,8 +485,8 @@
     _createPage: function (type) {
       return $('<section>')
         .attr({
-          'data-type-id': type.id,
-          'data-type-name': type.name
+          'data-type-id': type ? type.id : 'error',
+          'data-type-name': type ? type.name : 'Error'
         })
         .addClass('forge-book-designer-page')
         .append($('<header>'))
@@ -548,25 +548,27 @@
       
       $(pages).each($.proxy(function (index, page) {
         var pageType = typeMap[$(page).attr('data-type-id')];
-        var header = $(page).find('header');
-        var footer = $(page).find('footer');
-        
-        header
-          .removeAttr('style')
-          .css($.extend({display: 'none'}, pageType.header.rules||{}))
-          .text(this._processHeaderFooterText(page, pageType.header.text||''));
-         
-        footer
-          .removeAttr('style')
-          .css($.extend({display: 'none'}, pageType.footer.rules||{}))
-          .text(this._processHeaderFooterText(page, pageType.footer.text||''));
-
-        var headerHeight = header.is(':visible') ? header.outerHeight(true) : 0;
-        var footerHeight = footer.is(':visible') ? footer.outerHeight(true) : 0;
-        
-        $(page).find('main').css({
-          height: 'calc(100% - ' + (headerHeight + footerHeight) + 'px)'
-        });
+        if (pageType) {
+          var header = $(page).find('header');
+          var footer = $(page).find('footer');
+          
+          header
+            .removeAttr('style')
+            .css($.extend({display: 'none'}, pageType.header.rules||{}))
+            .text(this._processHeaderFooterText(page, pageType.header.text||''));
+           
+          footer
+            .removeAttr('style')
+            .css($.extend({display: 'none'}, pageType.footer.rules||{}))
+            .text(this._processHeaderFooterText(page, pageType.footer.text||''));
+  
+          var headerHeight = header.is(':visible') ? header.outerHeight(true) : 0;
+          var footerHeight = footer.is(':visible') ? footer.outerHeight(true) : 0;
+          
+          $(page).find('main').css({
+            height: 'calc(100% - ' + (headerHeight + footerHeight) + 'px)'
+          });
+        }
       }, this));
     },
     
