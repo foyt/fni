@@ -1,4 +1,4 @@
-<div class="forge-designer-page-types-dialog-type" data-header-rules="{header.rules|js}" data-footer-rules="{footer.rules|js}">
+<div class="forge-designer-page-types-dialog-type" data-page-type-id="{id}" data-header-rules="{header.rules|js}" data-footer-rules="{footer.rules|js}">
 
   <input type="text" name="name" class="forge-designer-page-types-dialog-type-name" value="{name}" placeholder="Syötä sivutyypin nimi" required="required"/>
   

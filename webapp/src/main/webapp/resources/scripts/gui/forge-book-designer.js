@@ -77,6 +77,10 @@
     }
   });
   
+  function generateUUID(prefix) {
+    return prefix + (new Date().getTime().toString(16)) + '-' + (Math.floor((Math.random() * 1000000000) + 1000000000).toString(16));
+  }
+  
   $.widget("custom.bookDesignerDialog", {
     options: {
       closable: true,
@@ -255,7 +259,6 @@
       }],
       
       blockTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'div', 'img'],
-      defaultPageType: 'Contents',
       
       pageTypes: [{
         name: "Contents",
@@ -284,7 +287,6 @@
         header: {},
         footer: {}
       }]
-
     },
     
     _create : function() {
@@ -449,10 +451,18 @@
           } else {
             this._pageTypes = val;
           }
+          
+          this._pageTypes = $.map(this._pageTypes, function (pageType) {
+            if (!pageType.id) {
+              pageType.id = generateUUID('pt-');
+            }
+            
+            return pageType;
+          });
         }
         
         $(this.element).trigger("pageTypesChanged", {
-          pageTypes: val
+          pageTypes: this._pageTypes
         });
       } else {
         return this._pageTypes;
@@ -485,7 +495,7 @@
     },
 
     addPage: function () {
-      var page = this._createPage(this.options.defaultPageType)
+      var page = this._createPage(this.pageTypes()[0])
         .appendTo(this.element.find('.forge-book-designer-pages'));
 
       this._updatePageNumbers();
@@ -496,7 +506,7 @@
     },
 
     addPageBefore: function (refPage) {
-      var page = this._createPage(this.options.defaultPageType);
+      var page = this._createPage(this.pageTypes()[0]);
       refPage.before(page);
 
       this._updatePageNumbers();
@@ -507,7 +517,7 @@
     },
 
     addPageAfter: function (refPage) {
-      var page = this._createPage(this.options.defaultPageType);
+      var page = this._createPage(this.pageTypes()[0]);
       refPage.after(page);
 
       this._updatePageNumbers();
@@ -599,7 +609,10 @@
     
     _createPage: function (type) {
       return $('<section>')
-        .attr('data-type', type)
+        .attr({
+          'data-type-id': type.id,
+          'data-type-name': type.name
+        })
         .addClass('forge-book-designer-page')
         .append($('<header>'))
         .append($('<main>'))
@@ -655,11 +668,11 @@
       var typeMap = {};
 
       $.each(this.pageTypes(), function (index, pageType) {
-        typeMap[pageType.name] = pageType;
+        typeMap[pageType.id] = pageType;
       });
       
       $(pages).each($.proxy(function (index, page) {
-        var pageType = typeMap[$(page).attr('data-type')];
+        var pageType = typeMap[$(page).attr('data-type-id')];
         var header = $(page).find('header');
         var footer = $(page).find('footer');
         
@@ -688,13 +701,13 @@
     
     _updatePageNumbers: function () {
       this.element.find($.map(this.pageTypes(), function (pageType) {
-        return !pageType.numberedPage ? "section[data-type='" + pageType.name + "']" : null;
+        return !pageType.numberedPage ? "section[data-type-id='" + pageType.id + "']" : null;
       }).join(',')).each(function (index, page) {
         $(page).removeAttr('data-page-number');
       });
       
       this.element.find($.map(this.pageTypes(), function (pageType) {
-        return pageType.numberedPage ? "section[data-type='" + pageType.name + "']" : null;
+        return pageType.numberedPage ? "section[data-type-id='" + pageType.id + "']" : null;
       }).join(',')).each(function (index, page) {
         $(page).attr('data-page-number', index + 1);
       });
@@ -726,8 +739,12 @@
       
     },
     
-    _changePageType: function (page, type) {
-      $(page).attr('data-type', type);
+    _changePageType: function (page, typeId, typeName) {
+      $(page).attr({
+        'data-type-id': typeId,
+        'data-type-name': typeName
+      });
+      
       this._updatePageNumbers();
       this._updateHeadersAndFooters(page);
     },
@@ -933,7 +950,8 @@
         items: $.map(this._pageTypes, function (pageType) {
           return {
             name: pageType.name,
-            action: 'changePageType'
+            action: 'changePageType',
+            id: pageType.id
           };
         })
       });
@@ -1107,7 +1125,7 @@
               this._movePage(this.element.find('.forge-book-designer-page-selected'), item.direction);
             break;
             case 'changePageType':
-              this._changePageType(this.element.find('.forge-book-designer-page-selected'), item.name);
+              this._changePageType(this.element.find('.forge-book-designer-page-selected'), item.id, item.name);
             break;
             case 'importMaterial':
               var browser = $('<div>')
@@ -1379,12 +1397,24 @@
       this._createToolButtonItems("change-page-type", $.map(data.pageTypes, function (pageType) {
         return {
           name: pageType.name,
-          action: 'changePageType'
+          action: 'changePageType',
+          id: pageType.id
         };
       }));
+
+      var typeMap = {};
+      $.each(data.pageTypes, function (index, pageType) {
+        typeMap[pageType.id] = pageType;
+      });
       
+      var pages = this.element.find('section');
+      pages.each(function (index, page) {
+        var pageType = typeMap[$(page).attr('data-type-id')];
+        $(page).attr('data-type-name', pageType.name);
+      });
+
       this._updatePageNumbers();
-      this._updateHeadersAndFooters(this.element.find('section'));
+      this._updateHeadersAndFooters(pages);
     },
     
     _onPageRemove: function (event, data) {
@@ -1924,6 +1954,7 @@
         var footerRules = $(type).attr('data-footer-rules');
         
         return {
+          id: $(type).attr('data-page-type-id'),
           name: $(type).find('input[name="name"]').val(),
           numberedPage: $(type).find('input[name="numbered-page"]').prop('checked'),
           header: {
@@ -2044,7 +2075,7 @@
       this._super();
       
       this.element.on("beforeDialogOpen", $.proxy(function (event) {
-        this.dialogElement.on("click", '.forge-designer-select-template-dialog-template', $.proxy(function (event) {
+        this.dialogElement.on("click", '.template', $.proxy(function (event) {
           this.element.trigger("choose", {
             id: $(event.target).attr('data-id')
           });

@@ -178,7 +178,7 @@ h2.title input:focus {
   }
   
   .forge-book-designer-page:before {
-    content: attr(data-type);
+    content: attr(data-type-name);
     display: block;
     position: absolute;
     background: #0a4;
