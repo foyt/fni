@@ -1,3 +1,0 @@
-.forge-book-designer-pages {selector} {
-  {@iterate obj=rules}{key|s}:{value|s};{/iterate}
-}

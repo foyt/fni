@@ -552,15 +552,8 @@
           var header = $(page).find('header');
           var footer = $(page).find('footer');
           
-          header
-            .removeAttr('style')
-            .css($.extend({display: 'none'}, pageType.header.rules||{}))
-            .text(this._processHeaderFooterText(page, pageType.header.text||''));
-           
-          footer
-            .removeAttr('style')
-            .css($.extend({display: 'none'}, pageType.footer.rules||{}))
-            .text(this._processHeaderFooterText(page, pageType.footer.text||''));
+          header.text(this._processHeaderFooterText(page, pageType.header.text||''));
+          footer.text(this._processHeaderFooterText(page, pageType.footer.text||''));
   
           var headerHeight = header.is(':visible') ? header.outerHeight(true) : 0;
           var footerHeight = footer.is(':visible') ? footer.outerHeight(true) : 0;
@@ -1111,7 +1104,8 @@
     
     _createCss: function (callback) {
       dust.render("forge/book-designer/css", {
-        styles: this.styles()
+        styles: this.styles(),
+        pageTypes: this.pageTypes()
       }, $.proxy(function(err, css) {
         if (err) {
           $('.notifications').notifications('notification', 'error', err);
@@ -1237,18 +1231,20 @@
     _onStylesChanged: function (event, data) {
       this._createCss($.proxy(function (css) {
         $(this._styleSheet).text(css);
-      }, this));
       
-      this._createToolButtonItems("styles", $.map(data.styles, function (style) {
-        return {
-          name: style.name,
-          action: 'changeStyle',
-          selector: style.selector,
-          rules: style.rules,
-          element: style._element,
-          className: style._className
-        };
-      }));
+        this._createToolButtonItems("styles", $.map(data.styles, function (style) {
+          return {
+            name: style.name,
+            action: 'changeStyle',
+            selector: style.selector,
+            rules: style.rules,
+            element: style._element,
+            className: style._className
+          };
+        }));
+
+        this._updateHeadersAndFooters(this.element.find('section'));
+      }, this));
     },
     
     _onFontsChanged: function (event, data) {
@@ -1266,34 +1262,35 @@
           urls: urls
         }
       });
-      
-      this._createCss($.proxy(function (css) {
-        $(this._styleSheet).text(css);
-      }, this));
     }, 
     
     _onPageTypesChanged: function (event, data) {
-      this._createToolButtonItems("change-page-type", $.map(data.pageTypes, function (pageType) {
-        return {
-          name: pageType.name,
-          action: 'changePageType',
-          id: pageType.id
-        };
-      }));
-
-      var typeMap = {};
-      $.each(data.pageTypes, function (index, pageType) {
-        typeMap[pageType.id] = pageType;
-      });
+      this._createCss($.proxy(function (css) {
+        $(this._styleSheet).text(css);
       
-      var pages = this.element.find('section');
-      pages.each(function (index, page) {
-        var pageType = typeMap[$(page).attr('data-type-id')];
-        $(page).attr('data-type-name', pageType.name);
-      });
-
-      this._updatePageNumbers();
-      this._updateHeadersAndFooters(pages);
+        this._createToolButtonItems("change-page-type", $.map(data.pageTypes, function (pageType) {
+          return {
+            name: pageType.name,
+            action: 'changePageType',
+            id: pageType.id
+          };
+        }));
+  
+        var typeMap = {};
+        $.each(data.pageTypes, function (index, pageType) {
+          typeMap[pageType.id] = pageType;
+        });
+        
+        var pages = this.element.find('section');
+        pages.each(function (index, page) {
+          var pageType = typeMap[$(page).attr('data-type-id')];
+          $(page).attr('data-type-name', pageType.name);
+        });
+  
+        this._updatePageNumbers();
+        this._updateHeadersAndFooters(pages);      
+        
+      }, this));
     },
     
     _onPageRemove: function (event, data) {

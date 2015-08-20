@@ -1,6 +1,17 @@
-{#fonts}
-@import url({url|s});
-{/fonts}
+{#pageTypes}
+  {#header}
+    .forge-book-designer-page[data-type-id="{id}"] header {
+      {@iterate obj=rules}{key|s}:{value|s};{/iterate}
+    }
+  {/header}
+  {#footer}
+    .forge-book-designer-page[data-type-id="{id}"] footer {
+      {@iterate obj=rules}{key|s}:{value|s};{/iterate}
+    }
+  {/footer}
+{/pageTypes}
 {#styles}
-  {>"forge/book-designer/css-rule"/}
+  .forge-book-designer-pages {selector} {
+    {@iterate obj=rules}{key|s}:{value|s};{/iterate}
+  }
 {/styles}
