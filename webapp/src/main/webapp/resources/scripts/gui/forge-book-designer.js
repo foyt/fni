@@ -158,14 +158,18 @@
     options: {
       scrollDuration: 1000,
       scrollOffset: 100,
-      blockTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'div', 'img']
+      blockTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'div', 'img'],
+      styles: [],
+      pageTypes: [],
+      fonts: [],
+      data: ''
     },
     
     _create : function() {
-      this._styles = [];
-      this._pageTypes = [];
-      this._fonts = [];
-      
+      this.styles(this.options.styles);
+      this.pageTypes(this.options.pageTypes);
+      this.fonts(this.options.fonts);
+
       this._materialClient = new $.RestClient(CONTEXTPATH + '/rest/material/');
       this._materialClient.add("documents");
       this._materialClient.add("images");
@@ -178,16 +182,22 @@
         .addClass('forge-book-designer-pages')
         .appendTo(this.element);
       
-      this.element.on("click", '.forge-book-designer-page', $.proxy(this._onPageClick, this));
-      this.element.on("stylesChanged", $.proxy(this._onStylesChanged, this));
-      this.element.on("fontsChanged", $.proxy(this._onFontsChanged, this));
-      this.element.on("pageTypesChanged", $.proxy(this._onPageTypesChanged, this));
-      this.element.on("pageRemove", $.proxy(this._onPageRemove, this));
-      this.element.on("pageMove", $.proxy(this._onPageMove, this));
-      this.element.on("blockSelect", $.proxy(this._onBlockSelect, this));
-      this.element.on("pageSelect", $.proxy(this._onPageSelect, this));
-      
-      this.addPage();
+      this._refreshCss($.proxy(function () {
+        this.addPage();
+        this.data(this.options.data);
+
+        this._updatePageNumbers();
+        this._updateHeadersAndFooters(this.element.find('section'));
+
+        this.element.on("click", '.forge-book-designer-page', $.proxy(this._onPageClick, this));
+        this.element.on("stylesChanged", $.proxy(this._onStylesChanged, this));
+        this.element.on("fontsChanged", $.proxy(this._onFontsChanged, this));
+        this.element.on("pageTypesChanged", $.proxy(this._onPageTypesChanged, this));
+        this.element.on("pageRemove", $.proxy(this._onPageRemove, this));
+        this.element.on("pageMove", $.proxy(this._onPageMove, this));
+        this.element.on("blockSelect", $.proxy(this._onBlockSelect, this));
+        this.element.on("pageSelect", $.proxy(this._onPageSelect, this));
+      }, this));
     },
     
     data: function (val) {
@@ -276,6 +286,17 @@
             this._fonts = val;
           }
         }
+        
+        WebFont.load({
+          custom: {
+            families: $.map(this._fonts, function (font) {
+              return font.name;
+            }),
+            urls: $.map(this._fonts, function (font) {
+              return font.url;
+            })
+          }
+        });
         
         $(this.element).trigger("fontsChanged", {
           fonts: this._fonts
@@ -1112,6 +1133,15 @@
       }, this));
     },
     
+    _refreshCss: function (callback) {
+      this._createCss($.proxy(function (css) {
+        $(this._styleSheet).text(css);
+        if ($.isFunction(callback)) {
+          callback();
+        }
+      }, this));
+    },
+    
     _selectBlock: function (block) {
       this.element
         .find('.forge-book-designer-block-selected')
@@ -1226,9 +1256,7 @@
     },
     
     _onStylesChanged: function (event, data) {
-      this._createCss($.proxy(function (css) {
-        $(this._styleSheet).text(css);
-      
+      this._refreshCss($.proxy(function () {
         this._createToolButtonItems("styles", $.map(data.styles, function (style) {
           return {
             name: style.name,
@@ -1262,9 +1290,7 @@
     }, 
     
     _onPageTypesChanged: function (event, data) {
-      this._createCss($.proxy(function (css) {
-        $(this._styleSheet).text(css);
-      
+      this._refreshCss($.proxy(function () {
         this._createToolButtonItems("change-page-type", $.map(data.pageTypes, function (pageType) {
           return {
             name: pageType.name,
@@ -2063,9 +2089,18 @@
         locales[localeKey] = this.attr('data-' + localeKey);
       }, $('.book-designer')));
       
+      var fonts = $('.book-design-fonts').val();
+      var styles = $('.book-design-styles').val();
+      var data = $('.book-design-data').val();
+      var pageTypes = $('.book-design-page-types').val();
+      
       $('.book-designer')
         .bookDesigner({
-          locales: locales
+          locales: locales,
+          fonts: fonts,
+          styles: styles,
+          pageTypes: pageTypes,
+          data: data
         })
         .on("save", function (event, data) {
           $('.book-design-fonts').val(JSON.stringify(data.fonts));
@@ -2082,27 +2117,6 @@
           $('.book-design-data').val(data.data);
           $('.book-design-publish-template')[0].click();
         });
-      
-      var fonts = $('.book-design-fonts').val();
-      var styles = $('.book-design-styles').val();
-      var data = $('.book-design-data').val();
-      var pageTypes = $('.book-design-page-types').val();
-      
-      if (fonts) {
-        $('.book-designer').bookDesigner('fonts', fonts);
-      }
-      
-      if (styles) {
-        $('.book-designer').bookDesigner('styles', styles);
-      }
-      
-      if (data) {
-        $('.book-designer').bookDesigner('data', data);
-      }
-      
-      if (pageTypes) {
-        $('.book-designer').bookDesigner('pageTypes', pageTypes);
-      }
     }
   });
   
