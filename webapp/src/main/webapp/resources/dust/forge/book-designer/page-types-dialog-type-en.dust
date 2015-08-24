@@ -13,6 +13,41 @@
       {/numberedPage}
     </div>
   
+    <div class="forge-designer-page-types-dialog-type-setting">
+      <label>Background image</label>
+      <input type="url" name="background-image"/>
+    </div>
+  
+    <div class="forge-designer-page-types-dialog-type-setting">
+      <label>Background repeat</label>
+      <select name="background-repeat">
+        <option value="no-repeat">Does not repeat</option>
+        <option value="repeat-x">Repeats horizontally</option>
+        <option value="repeat-y">Repeats vertically</option>
+        <option value="repeat">Repeats both ways</option>
+      </select>
+    </div>
+  
+    <div class="forge-designer-page-types-dialog-type-setting">
+      <label>Background position</label>
+      <select name="background-position">
+        <option value="top left">Top Left</option>
+        <option value="top center">Top Center</option>
+        <option value="top right">Top Right</option>
+        <option value="center left">Center Left</option>
+        <option value="center center">Center</option>
+        <option value="center right">Center Right</option>
+        <option value="bottom left">Bottom Left</option>
+        <option value="bottom center">Bottom Center</option>
+        <option value="bottom right">Bottom Right</option>
+      </select>
+    </div>
+  
+    <div class="forge-designer-page-types-dialog-type-setting">
+      <label>Background size</label>
+      <input type="background-size" name="background-size"/>
+    </div>
+  
     <!-- Header -->
     
     <div class="forge-designer-page-types-dialog-type-setting">

@@ -158,16 +158,13 @@
     options: {
       scrollDuration: 1000,
       scrollOffset: 100,
-      blockTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'div', 'img'],
-      fonts: [],
-      styles: [],
-      pageTypes: []
+      blockTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'div', 'img']
     },
     
     _create : function() {
-      this.fonts(this.options.fonts);
-      this.styles(this.options.styles);
-      this.pageTypes(this.options.pageTypes);
+      this._styles = [];
+      this._pageTypes = [];
+      this._fonts = [];
       
       this._materialClient = new $.RestClient(CONTEXTPATH + '/rest/material/');
       this._materialClient.add("documents");
@@ -1751,6 +1748,27 @@
       
       this.element.on("beforeDialogOpen", $.proxy(function (event) {
         $.each(this.dialogElement.find('.forge-designer-page-types-dialog-type'), $.proxy(function (index, type) {
+          var pageRulesAttr = $(type).attr('data-page-rules');
+          if (pageRulesAttr) {
+            var pageRules = $.parseJSON(pageRulesAttr);
+            
+            $.each(pageRules, $.proxy(function (key, value) {
+              var input = $(type).find('input[name="' + key + '"]');
+              if (input.length) {
+                if (input.attr('type') == 'url') {
+                  input.val(value.replace(/(url\()(.*)(\))/, "$2"));
+                } else if (input.attr('data-unit')) {
+                  input.val((new LengthUnitConverter(value)).to(input.attr('data-unit')));
+                } else {
+                  input.attr('value', value);
+                }
+              } else {
+                $(type).find('input[data-style="' + key + '"][data-on="' + value + '"]').prop('checked', true);
+                $(type).find('select[name="' + key + '"]').val(value);
+              }
+            }, this));
+          }
+          
           $.each(['header', 'footer'], $.proxy(function (groupIndex, group) {
             var rulesAttr = $(type).attr('data-' + group + '-rules');
             if (rulesAttr) {
@@ -1826,6 +1844,7 @@
     
     types: function () {
       return $.map(this.dialogElement.find('.ui-tabs-panel:not([id="type-tab-new"]) .forge-designer-page-types-dialog-type'), function (type) {
+        var pageRules = $(type).attr('data-page-rules');
         var headerRules = $(type).attr('data-header-rules');
         var footerRules = $(type).attr('data-footer-rules');
         
@@ -1833,6 +1852,7 @@
           id: $(type).attr('data-page-type-id'),
           name: $(type).find('input[name="name"]').val(),
           numberedPage: $(type).find('input[name="numbered-page"]').prop('checked'),
+          pageRules: pageRules ? $.parseJSON(pageRules) : {},
           header: {
             text: $(type).find('textarea[name="header:text"]').val(),
             rules: headerRules ? $.parseJSON(headerRules) : {}
@@ -1845,7 +1865,14 @@
       });
     },
 
-    _updateRule: function (type, group, rule, value) {
+    _updatePageRule: function (type, rule, value) {
+      var rulesAttr = $(type).attr('data-page-rules');
+      var rules = rulesAttr ? $.parseJSON(rulesAttr) : {};
+      rules[rule] = value;
+      $(type).attr('data-page-rules', JSON.stringify(rules));
+    },
+
+    _updateGroupRule: function (type, group, rule, value) {
       var rulesAttr = $(type).attr('data-' + group + '-rules');
       var rules = rulesAttr ? $.parseJSON(rulesAttr) : {};
       rules[rule] = value;
@@ -1902,24 +1929,37 @@
       var input = $(event.target);
       var type = input.closest('.forge-designer-page-types-dialog-type');
       var name = input.attr('name');
-      if (name.indexOf(':')) {
-        var nameParts = name.split(':');
+      var grouped = name.indexOf(':') > -1;
+      var nameParts = name.split(':');
         
-        if (input.attr('type') == 'checkbox') {
-          var mutuallyExculusive = input.attr('data-mutually-exclusive');
-          if (mutuallyExculusive && input.prop('checked')) {
-            var mutuallyExculusiveInput = type.find('input[name="' + mutuallyExculusive + '"]');
-            if (mutuallyExculusiveInput.prop('checked')) {
-              mutuallyExculusiveInput
-                .prop('checked', false)
-                .trigger('change');
-            }
+      if (input.attr('type') == 'checkbox') {
+        var mutuallyExculusive = input.attr('data-mutually-exclusive');
+        if (mutuallyExculusive && input.prop('checked')) {
+          var mutuallyExculusiveInput = type.find('input[name="' + mutuallyExculusive + '"]');
+          if (mutuallyExculusiveInput.prop('checked')) {
+            mutuallyExculusiveInput
+              .prop('checked', false)
+              .trigger('change');
           }
-          
-          var value = input.attr(input.prop('checked') ? 'data-on' : 'data-off');
-          this._updateRule(type, nameParts[0], input.attr('data-style'), value);
+        }
+        
+        var value = input.attr(input.prop('checked') ? 'data-on' : 'data-off');
+        if (grouped) {
+          this._updateGroupRule(type, nameParts[0], input.attr('data-style'), value);
         } else {
-          this._updateRule(type, nameParts[0], nameParts[1], input.val() + (input.attr('data-unit')||''));
+          this._updatePageRule(type, input.attr('data-style'), value);
+        }
+      } if (input.attr('type') == 'url') { 
+        if (grouped) {
+          this._updateGroupRule(type, nameParts[0], nameParts[1], 'url(' + input.val() + ')');
+        } else {
+          this._updatePageRule(type, name, 'url(' + input.val() + ')');
+        }
+      } else {
+        if (grouped) {
+          this._updateGroupRule(type, nameParts[0], nameParts[1], input.val() + (input.attr('data-unit')||''));
+        } else {
+          this._updatePageRule(type, name, input.val() + (input.attr('data-unit')||''));
         }
       }
     },
@@ -1927,10 +1967,14 @@
     _onSelectChange: function (event) {
       var select = $(event.target);
       var name = select.attr('name');
-      if (name.indexOf(':')) {
-        var nameParts = name.split(':');
-        var type = select.closest('.forge-designer-page-types-dialog-type');
-        this._updateRule(type, nameParts[0], nameParts[1], select.val() + (select.attr('data-unit')||''));
+      var grouped = name.indexOf(':') > -1;
+      var nameParts = name.split(':');
+      var type = select.closest('.forge-designer-page-types-dialog-type');
+      
+      if (grouped) {
+        this._updateGroupRule(type, nameParts[0], nameParts[1], select.val() + (select.attr('data-unit')||''));
+      } else {
+        this._updatePageRule(type, nameParts[0], select.val() + (select.attr('data-unit')||''));
       }
     }
     

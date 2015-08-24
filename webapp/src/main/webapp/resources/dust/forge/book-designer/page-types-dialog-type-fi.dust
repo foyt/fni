@@ -1,4 +1,4 @@
-<div class="forge-designer-page-types-dialog-type" data-page-type-id="{id}" data-header-rules="{header.rules|js}" data-footer-rules="{footer.rules|js}">
+<div class="forge-designer-page-types-dialog-type" data-page-type-id="{id}" data-page-rules="{pageRules|js}" data-header-rules="{header.rules|js}" data-footer-rules="{footer.rules|js}">
 
   <input type="text" name="name" class="forge-designer-page-types-dialog-type-name" value="{name}" placeholder="Syötä sivutyypin nimi" required="required"/>
   
@@ -11,6 +11,41 @@
       {:else}
         <input type="checkbox" name="numbered-page" value="1"/>
       {/numberedPage}
+    </div>
+  
+    <div class="forge-designer-page-types-dialog-type-setting">
+      <label>Taustakuva</label>
+      <input type="url" name="background-image"/>
+    </div>
+  
+    <div class="forge-designer-page-types-dialog-type-setting">
+      <label>Taustakuvan toistuvuus</label>
+      <select name="background-repeat">
+        <option value="no-repeat">Ei toistu</option>
+        <option value="repeat-x">Vaakasuunnassa</option>
+        <option value="repeat-y">Pystysuunnassa</option>
+        <option value="repeat">Toistuu</option>
+      </select>
+    </div>
+  
+    <div class="forge-designer-page-types-dialog-type-setting">
+      <label>Taustakuvan asettelu</label>
+      <select name="background-position">
+        <option value="top left">Ylhäällä vasemmalla</option>
+        <option value="top center">Ylhäällä keskellä</option>
+        <option value="top right">Ylhäällä oikealla</option>
+        <option value="center left">Keskellä vasemmalla</option>
+        <option value="center center">Keskellä</option>
+        <option value="center right">Keskellä oikealla</option>
+        <option value="bottom left">Alhaalla vasemmalla</option>
+        <option value="bottom center">Alhaalla keskellä</option>
+        <option value="bottom right">Alhaalla oikealla</option>
+      </select>
+    </div>
+  
+    <div class="forge-designer-page-types-dialog-type-setting">
+      <label>Taustakuvan koko</label>
+      <input type="background-size" name="background-size"/>
     </div>
   
     <!-- Header -->

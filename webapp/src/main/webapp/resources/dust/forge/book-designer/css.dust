@@ -1,4 +1,8 @@
 {#pageTypes}
+  .forge-book-designer-page[data-type-id="{id}"] {
+    {@iterate obj=pageRules}{key|s}:{value|s};{/iterate}
+  }
+    
   {#header}
     .forge-book-designer-page[data-type-id="{id}"] header {
       {@iterate obj=rules}{key|s}:{value|s};{/iterate}
