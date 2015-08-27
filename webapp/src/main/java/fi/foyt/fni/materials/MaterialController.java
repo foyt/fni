@@ -469,6 +469,10 @@ public class MaterialController {
     Map<String, String> options = new HashMap<>();
     options.put("pageSize", "A4");
     options.put("imageQuality", "100");
+    options.put("marginTop", "0mm");
+    options.put("marginLeft", "0mm");
+    options.put("marginRight", "0mm");
+    options.put("marginBottom", "0mm");
     
     return pdfServiceClient.getURLAsPdf(url, options);
   }
