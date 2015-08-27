@@ -12,6 +12,20 @@
         <input type="checkbox" name="numbered-page" value="1"/>
       {/numberedPage}
     </div>
+    
+    <div class="forge-designer-page-types-dialog-type-setting forge-designer-page-types-dialog-type-setting-margins">
+      <label>Margins</label>
+      <span class="forge-designer-page-types-dialog-type-setting-editor">
+        <input type="text" name="padding-top"/>
+        <span>top</span>
+        <input type="text" name="padding-right"/>
+        <span>right</span>
+        <input type="text" name="padding-bottom"/>
+        <span>bottom</span>
+        <input type="text" name="padding-left"/>
+        <span>left</span>
+      </span>
+    </div>
   
     <div class="forge-designer-page-types-dialog-type-setting">
       <label>Background image</label>

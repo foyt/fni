@@ -151,7 +151,6 @@ h2.title input:focus {
     margin-left: auto;
     margin-right: auto;
     background: #fff;
-    padding: 4em;
     page-break-after: always;
     position: relative;
     
@@ -516,7 +515,8 @@ h2.title input:focus {
         margin-left: 10px;
       }
     
-      .forge-designer-page-types-dialog-type-setting-paddings {
+      .forge-designer-page-types-dialog-type-setting-paddings, 
+      .forge-designer-page-types-dialog-type-setting-margins {
         .forge-designer-page-types-dialog-type-setting-editor {
           input { 
             width: 10%;
