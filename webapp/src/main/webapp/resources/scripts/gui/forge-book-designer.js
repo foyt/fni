@@ -798,12 +798,12 @@
         .append($('<span>').addClass('fa fa-print'))
         .appendTo(bookToolGroup);
 
-      $('<a>') 
-        .addClass('forge-book-designer-tool')
-        .attr('title', this.options.locales['publish-button-tooltip'])
-        .click($.proxy(this._onPublishClick, this))
-        .append($('<span>').addClass('fa fa-globe'))
-        .appendTo(bookToolGroup);
+//      $('<a>') 
+//        .addClass('forge-book-designer-tool')
+//        .attr('title', this.options.locales['publish-button-tooltip'])
+//        .click($.proxy(this._onPublishClick, this))
+//        .append($('<span>').addClass('fa fa-globe'))
+//        .appendTo(bookToolGroup);
       
       this._createToolButton("add-contents", bookToolGroup, this.options.locales['add-contents-button-tooltip'], { 
         icon: 'fa fa-plus',
