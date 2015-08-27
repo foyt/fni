@@ -70,6 +70,7 @@
                 <div class="flex-cell-full">
                   <div class="book-designer" 
                     data-save-button-tooltip="#{locales['forge.bookDesigns.saveButtonTooltip']}"
+                    data-print-button-tooltip="#{locales['forge.bookDesigns.printButtonTooltip']}"
                     data-publish-button-tooltip="#{locales['forge.bookDesigns.publishButtonTooltip']}"
                     data-add-contents-button-tooltip="#{locales['forge.bookDesigns.addContentsButtonTooltip']}"
                     data-import-button="#{locales['forge.bookDesigns.importButton']}"
@@ -104,7 +105,7 @@
       <input type="submit" jsf:action="#{forgeBookDesignsBackingBean.save}" class="book-design-save" value="#{locales['forge.bookDesigns.saveButton']}"/>
       <input type="submit" jsf:action="#{forgeBookDesignsBackingBean.publishTemplate}" class="book-design-publish-template"/>
       <input type="submit" jsf:action="#{forgeBookDesignsBackingBean.applyTemplate}" class="book-design-apply-template"/>
-      <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.materialId}"/>
+      <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.materialId}" class="book-design-id"/>
       <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.templateName}" class="book-design-template-name"/>
       <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.templateId}" class="book-design-template-id"/>
       <input type="hidden" jsf:value="#{forgeBookDesignsBackingBean.data}" class="book-design-data"/>

@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  
+
   var LengthUnitConverter = function(length) {
     this.init(length);
   }
@@ -790,6 +790,13 @@
         .click($.proxy(this._onSaveClick, this))
         .append($('<span>').addClass('fa fa-save'))
         .appendTo(bookToolGroup);
+      
+      $('<a>') 
+        .addClass('forge-book-designer-tool')
+        .attr('title', this.options.locales['print-button-tooltip'])
+        .click($.proxy(this._onPrintClick, this))
+        .append($('<span>').addClass('fa fa-print'))
+        .appendTo(bookToolGroup);
 
       $('<a>') 
         .addClass('forge-book-designer-tool')
@@ -1199,6 +1206,10 @@
         "fonts": this.fonts(),
         "pageTypes": this.pageTypes()
       });
+    },
+    
+    _onPrintClick: function () {
+      $(this.element).trigger("print", { });
     },
     
     _onPublishClick: function () {
@@ -2059,6 +2070,7 @@
       var locales = {};
       var localeKeys = [
         'save-button-tooltip',
+        'print-button-tooltip',
         'publish-button-tooltip',
         'add-contents-button-tooltip',
         'import-button',
@@ -2108,6 +2120,9 @@
           $('.book-design-page-types').val(JSON.stringify(data.pageTypes));
           $('.book-design-data').val(data.data);
           $('.book-design-save')[0].click();
+        })
+        .on("print", function (event, data) {
+          window.location = CONTEXTPATH + '/forge/bookDesignPdf/' + $('.book-design-id').val();
         })
         .on("publishTemplate", function (event, data) {
           $('.book-design-template-name').val(data.templateName);
