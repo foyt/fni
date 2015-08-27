@@ -218,7 +218,9 @@ public class ForgeBookDesignsBackingBean {
     String description = "";
     String iconUrl = "about:blank";
     
-    BookTemplate bookTemplate = materialController.createBookTemplate(bookDesign.getParentFolder(), urlName, getTemplateName(), getData(), getStyles(), getFonts(), getPageTypes(), description, iconUrl, null, loggedUser);
+    BookTemplate bookTemplate = materialController.createBookTemplate(bookDesign.getParentFolder(), urlName, getTemplateName(), getData(),
+        getStyles(), getFonts(), description, getPageTypes(), iconUrl, null, loggedUser);
+        
     materialController.updateMaterialPublicity(bookTemplate, MaterialPublicity.PUBLIC, loggedUser);
 
     Folder parentFolder = bookTemplate.getParentFolder();
