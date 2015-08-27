@@ -12,7 +12,13 @@ public enum SystemSettingKey {
 	PIWIK_URL,
   PIWIK_SITEID,
 	USERVOICE_CLIENT_KEY,
+	
+	/* Pdf Service */
 
+	PDF_SERVICE_URL,
+	PDF_SERVICE_SECRET,
+	PDF_SERVICE_CALLBACK_SECRET,
+	
 	/* Guest */
 	
 	GUEST_USERNAME,

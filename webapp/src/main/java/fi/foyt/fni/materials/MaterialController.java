@@ -78,8 +78,8 @@ import fi.foyt.fni.persistence.dao.materials.BookTemplateDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetDataDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetEntryDAO;
-import fi.foyt.fni.persistence.dao.materials.CharacterSheetRollLabelDAO;
 import fi.foyt.fni.persistence.dao.materials.CharacterSheetRollDAO;
+import fi.foyt.fni.persistence.dao.materials.CharacterSheetRollLabelDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.DocumentRevisionDAO;
 import fi.foyt.fni.persistence.dao.materials.DropboxFileDAO;
@@ -118,8 +118,8 @@ import fi.foyt.fni.persistence.model.materials.BookTemplate;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetData;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetEntry;
-import fi.foyt.fni.persistence.model.materials.CharacterSheetRollLabel;
 import fi.foyt.fni.persistence.model.materials.CharacterSheetRoll;
+import fi.foyt.fni.persistence.model.materials.CharacterSheetRollLabel;
 import fi.foyt.fni.persistence.model.materials.CoOpsSession;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.DocumentRevision;
@@ -311,6 +311,9 @@ public class MaterialController {
   
   @Inject
   private DropboxAuthenticationStrategy dropboxAuthenticationStrategy;
+  
+  @Inject
+  private PdfServiceClient pdfServiceClient;
 
   @Any
   @Inject
@@ -459,6 +462,15 @@ public class MaterialController {
     bookDesign = bookDesignDAO.updateModifier(bookDesign, modifier);
     
     return bookDesign;
+  }
+
+  public TypedData printBookDesignAsPdf(User user, BookDesign bookDesign) {
+    String url = String.format("%s/forge/bookDesignData/%d?secret=%s", systemSettingsController.getSiteUrl(false, true), bookDesign.getId(), systemSettingsController.getSetting(SystemSettingKey.PDF_SERVICE_CALLBACK_SECRET));
+    Map<String, String> options = new HashMap<>();
+    options.put("pageSize", "A4");
+    options.put("imageQuality", "100");
+    
+    return pdfServiceClient.getURLAsPdf(url, options);
   }
   
   /* Book Templates */
@@ -1908,17 +1920,23 @@ public class MaterialController {
         return getBinaryMaterialData((Binary) material);
       case CHARACTER_SHEET:
         return getCharacterSheetMaterialData(contextPath, (CharacterSheet) material);
+      case BOOK_DESIGN:
+        return getBookDesignData((BookDesign) material);
       case DROPBOX_FOLDER:
       case DROPBOX_ROOT_FOLDER:
       case FOLDER:
       case ILLUSION_FOLDER:
       case ILLUSION_GROUP_FOLDER:
-      case BOOK_DESIGN:
       case BOOK_TEMPLATE:
       break;
     }
     
     return null;
+  }
+
+  private FileData getBookDesignData(BookDesign bookDesign) throws IOException {
+    String html = new BookDesignRenderer(bookDesign).toHtml();
+    return new FileData(null, bookDesign.getUrlName(), html.getBytes("UTF-8"), "text/html", bookDesign.getModified());
   }
 
   private FileData getCharacterSheetMaterialData(String contextPath, CharacterSheet characterSheet) throws UnsupportedEncodingException {
