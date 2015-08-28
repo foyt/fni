@@ -1,5 +1,12 @@
 <div class="forge-designer-style-dialog-style" data-rules="{rules|js}" data-selector="{selector}">
 
+  {?removable}
+    <button class="forge-designer-style-dialog-delete-style">Delete</button>
+  {:else}
+    <button class="forge-designer-style-dialog-delete-style" disabled="disabled">Delete</button>
+  {/removable}
+  
+  <button class="forge-designer-style-dialog-restore-style" style="display: none">Restore</button>
   <input type="text" name="name" class="forge-designer-style-dialog-style-name" value="{name}" placeholder="Enter the name of the style" required="required"/>
   
   <div class="forge-designer-style-dialog-style-settings">

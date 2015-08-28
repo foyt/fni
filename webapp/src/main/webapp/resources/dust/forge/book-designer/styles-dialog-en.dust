@@ -11,6 +11,6 @@
     </div>
   {/styles}
   <div id="style-tab-new">
-    {>"forge/book-designer/styles-dialog-style"/}
+    {>"forge/book-designer/styles-dialog-style" removable="true"/}
   </div>
 </div>

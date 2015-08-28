@@ -203,23 +203,28 @@ h2.title input:focus {
   &.no-close .ui-dialog-titlebar-close {
     display: none;
   }
+
+  /* Tabs */
+  
+  .ui-tabs {
+    .ui-tabs-nav {
+      li.tab-to-be-removed {
+        background: #700;
+  
+        &.ui-tabs-active {
+          background: #a00;
+        }
+      
+        a {
+          text-decoration: line-through;
+          color: #fff;
+        }
+      }
+    }
+  }
   
   .forge-designer-dialog {
   
-    /* Tabs */
-    
-    .ui-tabs {
-      border: 0px;
-      background: none;
-      padding-top: 0px;
-    
-      .ui-tabs-nav {
-        border: 0px;
-        background: none;
-        padding-top: 0px;
-      }
-    }
-    
     /* Spectrum */
     
     .sp-replacer {
@@ -296,11 +301,32 @@ h2.title input:focus {
         width: 80%;
       }
       
+      .forge-designer-style-dialog-delete-style, .forge-designer-style-dialog-restore-style {
+        color: $default-color;
+        font-family: $title-font;
+        font-size: 14px;
+        text-transform: uppercase;
+        padding: 8px;
+        background: #f00;
+        color: #fff;
+        border: 0px;
+        border-radius: 5px;
+        cursor: pointer;
+        position: absolute;
+        right: 5px;
+
+        float: right;
+        &:disabled {
+          background: #999;
+          cursor: default; 
+        }
+      }
+      
       .forge-designer-style-dialog-style-name {
         font-family: $default-font;
         font-size: 14px;
         color: #000;
-        width: 100%;
+        width: 90%;
         border-style: solid;
         border-width: 1px;
         margin-bottom: 10px;
@@ -447,11 +473,32 @@ h2.title input:focus {
         width: 80%;
       }
       
+      .forge-designer-page-types-dialog-delete-type, .forge-designer-page-types-dialog-restore-type {
+        color: $default-color;
+        font-family: $title-font;
+        font-size: 14px;
+        text-transform: uppercase;
+        padding: 8px;
+        background: #f00;
+        color: #fff;
+        border: 0px;
+        border-radius: 5px;
+        cursor: pointer;
+        position: absolute;
+        right: 5px;
+
+        float: right;
+        &:disabled {
+          background: #999;
+          cursor: default; 
+        }
+      }
+      
       .forge-designer-page-types-dialog-type-name {
         font-family: $default-font;
         font-size: 14px;
         color: #000;
-        width: 100%;
+        width: 90%;
         border-style: solid;
         border-width: 1px;
         margin-bottom: 10px;

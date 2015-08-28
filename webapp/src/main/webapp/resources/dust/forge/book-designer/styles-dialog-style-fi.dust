@@ -1,5 +1,12 @@
 <div class="forge-designer-style-dialog-style" data-rules="{rules|js}" data-selector="{selector}">
 
+  {?removable}
+    <button class="forge-designer-style-dialog-delete-style">Poista</button>
+  {:else}
+    <button class="forge-designer-style-dialog-delete-style" disabled="disabled">Poista</button>
+  {/removable}
+  
+  <button class="forge-designer-style-dialog-restore-style" style="display: none">Palauta</button>
   <input type="text" name="name" class="forge-designer-style-dialog-style-name" value="{name}" placeholder="Syötä tyylin nimi" required="required"/>
   
   <div class="forge-designer-style-dialog-style-settings">

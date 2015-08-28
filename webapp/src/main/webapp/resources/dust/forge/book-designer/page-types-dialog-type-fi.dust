@@ -1,5 +1,7 @@
 <div class="forge-designer-page-types-dialog-type" data-page-type-id="{id}" data-page-rules="{pageRules|js}" data-header-rules="{header.rules|js}" data-footer-rules="{footer.rules|js}">
 
+  <button class="forge-designer-page-types-dialog-delete-type">Poista</button>
+  <button class="forge-designer-page-types-dialog-restore-type" style="display: none">Palauta</button>
   <input type="text" name="name" class="forge-designer-page-types-dialog-type-name" value="{name}" placeholder="Syötä sivutyypin nimi" required="required"/>
   
   <div class="forge-designer-page-types-dialog-type-settings">

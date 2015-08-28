@@ -1318,7 +1318,14 @@
         var pages = this.element.find('section');
         pages.each(function (index, page) {
           var pageType = typeMap[$(page).attr('data-type-id')];
-          $(page).attr('data-type-name', pageType.name);
+          if (!pageType) {
+            $(page).attr({
+              'data-type-id': data.pageTypes[0].id,
+              'data-type-name': data.pageTypes[0].name
+            });
+          } else {
+            $(page).attr('data-type-name', pageType.name);
+          }
         });
   
         this._updatePageNumbers();
@@ -1379,7 +1386,11 @@
     _create : function() {
       this.option("templateOptions", {
         fonts: this.options.fonts,
-        styles: this.options.styles
+        styles: $.map(this.options.styles, function (style) {
+          return $.extend(style, {
+            removable: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ol', 'ul'].indexOf(style.selector) == -1
+          });
+        })
       });
       
       this.element.on("beforeDialogOpen", $.proxy(function (event) {
@@ -1452,13 +1463,15 @@
         this.dialogElement.on("change", 'select', $.proxy(this._onSelectChange, this));
         this.dialogElement.on("click", '.forge-designer-style-dialog-style-setting-font-action-add', $.proxy(this._onAddFontClick, this));
         this.dialogElement.on("click", '.forge-designer-style-dialog-style-setting-font-action-remove', $.proxy(this._onRemoveFontClick, this));
+        this.dialogElement.on("click", '.forge-designer-style-dialog-delete-style', $.proxy(this._onDeleteClick, this));
+        this.dialogElement.on("click", '.forge-designer-style-dialog-restore-style', $.proxy(this._onRestoreClick, this));
       }, this));
       
       this._super();
     },
     
     styles: function () {
-      return $.map(this.dialogElement.find('.ui-tabs-panel:not([id="style-tab-new"]) .forge-designer-style-dialog-style'), function (style) {
+      return $.map(this.dialogElement.find('.ui-tabs-panel:not([id="style-tab-new"]) .forge-designer-style-dialog-style:not([data-removed="true"])'), function (style) {
         return {
           name: $(style).find('input[name="name"]').val(),
           selector: $(style).attr('data-selector'),
@@ -1497,6 +1510,26 @@
     _onNameChange: function (event) {
       this.dialogElement.find('.ui-tabs-active a')
         .text($(event.target).val()||this.dialogElement.attr('data-empty-tab-label'));
+    },
+    
+    _onDeleteClick: function (event) {
+      var style = $(event.target).closest('.forge-designer-style-dialog-style');
+      style.find('.forge-designer-style-dialog-delete-style').hide();
+      style.find('.forge-designer-style-dialog-restore-style').show();
+      style.attr('data-removed', 'true');
+      
+      this.dialogElement.find('.ui-tabs-active')
+        .addClass('tab-to-be-removed');
+    },
+    
+    _onRestoreClick: function (event) {
+      var style = $(event.target).closest('.forge-designer-style-dialog-style');
+      style.find('.forge-designer-style-dialog-delete-style').show();
+      style.find('.forge-designer-style-dialog-restore-style').hide();
+      style.removeAttr('data-removed');
+      
+      this.dialogElement.find('.ui-tabs-active')
+        .removeClass('tab-to-be-removed');
     },
     
     _onInputChange: function (event) {
@@ -1864,15 +1897,21 @@
                 $(event.target).tabs("refresh");
                 
                 $(event.target).tabs("option", "active", newIndex);
+              } else {
+                this._checkDeleteState($(ui.newPanel).find('.forge-designer-page-types-dialog-type'));
               }
             }, this)
           });
 
+        this._checkDeleteState(this.dialogElement.find('.forge-designer-page-types-dialog-type').first());
+        
         this.dialogElement.on("change", '.forge-designer-page-types-dialog-type-name', $.proxy(this._onNameChange, this));
         this.dialogElement.on("change", 'input', $.proxy(this._onInputChange, this));
         this.dialogElement.on("change", 'select', $.proxy(this._onSelectChange, this));
         this.dialogElement.on("click", '.forge-designer-page-types-dialog-type-setting-font-action-add', $.proxy(this._onAddFontClick, this));
         this.dialogElement.on("click", '.forge-designer-page-types-dialog-type-setting-font-action-remove', $.proxy(this._onRemoveFontClick, this));
+        this.dialogElement.on("click", '.forge-designer-page-types-dialog-delete-type', $.proxy(this._onDeleteClick, this));
+        this.dialogElement.on("click", '.forge-designer-page-types-dialog-restore-type', $.proxy(this._onRestoreClick, this));
         
       }, this));
       
@@ -1880,7 +1919,7 @@
     },
     
     types: function () {
-      return $.map(this.dialogElement.find('.ui-tabs-panel:not([id="type-tab-new"]) .forge-designer-page-types-dialog-type'), function (type) {
+      return $.map(this.dialogElement.find('.ui-tabs-panel:not([id="type-tab-new"]) .forge-designer-page-types-dialog-type:not([data-removed="true"])'), function (type) {
         var pageRules = $(type).attr('data-page-rules');
         var headerRules = $(type).attr('data-header-rules');
         var footerRules = $(type).attr('data-footer-rules');
@@ -1928,6 +1967,37 @@
       }
       
       autosize.update(textarea);
+    },
+    
+    _checkDeleteState: function (type) {
+      var typeCount = this.dialogElement.find('.ui-tabs-nav li:not(.tab-to-be-removed) a:not([href="#type-tab-new"])').length;
+      if (typeCount <= 1) {
+        $(type).find('.forge-designer-page-types-dialog-delete-type').attr('disabled', 'disabled');
+      } else {
+        $(type).find('.forge-designer-page-types-dialog-delete-type').removeAttr('disabled');
+      }
+    },
+    
+    _onDeleteClick: function (event) {
+      var type = $(event.target).closest('.forge-designer-page-types-dialog-type');
+      type.find('.forge-designer-page-types-dialog-delete-type').hide();
+      type.find('.forge-designer-page-types-dialog-restore-type').show();
+      type.attr('data-removed', 'true');
+      
+      this.dialogElement.find('.ui-tabs-active')
+        .addClass('tab-to-be-removed');
+    },
+    
+    _onRestoreClick: function (event) {
+      var type = $(event.target).closest('.forge-designer-page-types-dialog-type');
+      type.find('.forge-designer-page-types-dialog-delete-type').show();
+      type.find('.forge-designer-page-types-dialog-restore-type').hide();
+      type.removeAttr('data-removed');
+      
+      this.dialogElement.find('.ui-tabs-active')
+        .removeClass('tab-to-be-removed');
+      
+      this._checkDeleteState(type);
     },
     
     _onNameChange: function (event) {
