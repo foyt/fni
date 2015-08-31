@@ -5,6 +5,8 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -24,7 +26,7 @@ public class BookDesignRenderer {
   public String toHtml() throws JsonParseException, JsonMappingException, IOException {
     String bodyContent = bookDesign.getData();
     String title = bookDesign.getTitle();
-    String styles = getBookDesignStyles(bookDesign);
+    String styles = getBookDesignStyles();
     return MessageFormat.format(HTML_TEMPLATE, title, styles, bodyContent);
   }
   
@@ -36,46 +38,82 @@ public class BookDesignRenderer {
       result.append(';');
     }
   }
-
-  private String getBookDesignStyles(BookDesign bookDesign) throws JsonParseException, JsonMappingException, IOException {
+  
+  public String getFontsCss() throws JsonParseException, JsonMappingException, IOException {
     StringBuilder result = new StringBuilder();
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    List<BookDesignFont> fonts = objectMapper.readValue(bookDesign.getFonts(), new TypeReference<List<BookDesignFont>>() { });
-    List<BookDesignStyle> styles = objectMapper.readValue(bookDesign.getStyles(), new TypeReference<List<BookDesignStyle>>() { });
-    List<BookDesignPageType> pageTypes = objectMapper.readValue(bookDesign.getPageTypes(), new TypeReference<List<BookDesignPageType>>() { });
+    List<BookDesignFont> fonts = null;
     
-    for (BookDesignFont font : fonts) {
-      result.append(String.format("@import url(%s);", font.getUrl()));
+    if (StringUtils.isNotBlank(bookDesign.getFonts())) {
+      fonts = objectMapper.readValue(bookDesign.getFonts(), new TypeReference<List<BookDesignFont>>() { });
+    }
+
+    
+    if (fonts != null) {
+      for (BookDesignFont font : fonts) {
+        result.append(String.format("@import url(%s);", font.getUrl()));
+      }
     }
     
+    return result.toString();
+  }
+  
+  public String getStylesCss() throws JsonParseException, JsonMappingException, IOException {
+    StringBuilder result = new StringBuilder();
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    List<BookDesignStyle> styles = null;
+    List<BookDesignPageType> pageTypes = null;
+    
+    if (StringUtils.isNotBlank(bookDesign.getStyles())) {
+      styles = objectMapper.readValue(bookDesign.getStyles(), new TypeReference<List<BookDesignStyle>>() { });
+    }
+    
+    if (StringUtils.isNotBlank(bookDesign.getPageTypes())) {
+      pageTypes = objectMapper.readValue(bookDesign.getPageTypes(), new TypeReference<List<BookDesignPageType>>() { });
+    }
+    
+    if (pageTypes != null) {
+      for (BookDesignPageType pageType : pageTypes) {
+        Map<String, String> pageRules = pageType.getPageRules();
+        Map<String, String> headerRules = pageType.getHeader().getRules();
+        Map<String, String> footerRules = pageType.getFooter().getRules();
+        
+        result.append(String.format(".forge-book-designer-page[data-type-id=\"%s\"] {", pageType.getId()));
+        printStyleRules(result, pageRules);
+        result.append("}");
+  
+        result.append(String.format(".forge-book-designer-page[data-type-id=\"%s\"] header {", pageType.getId()));
+        printStyleRules(result, headerRules);
+        result.append("}");
+  
+        result.append(String.format(".forge-book-designer-page[data-type-id=\"%s\"] footer {", pageType.getId()));
+        printStyleRules(result, footerRules);
+        result.append("}");
+      }
+    }
+    
+    if (styles != null) {
+      for (BookDesignStyle style : styles) {
+        result.append(String.format(".forge-book-designer-pages %s {", style.getSelector()));
+        printStyleRules(result, style.getRules());
+        result.append("}");
+      }
+    }
+    
+    return result.toString();
+  }
+
+  private String getBookDesignStyles() throws JsonParseException, JsonMappingException, IOException {
+    StringBuilder result = new StringBuilder();
+
+    result.append(getFontsCss());
     result.append(PAGE_STYLES);
+    result.append(getStylesCss());
     
-    for (BookDesignPageType pageType : pageTypes) {
-      Map<String, String> pageRules = pageType.getPageRules();
-      Map<String, String> headerRules = pageType.getHeader().getRules();
-      Map<String, String> footerRules = pageType.getFooter().getRules();
-      
-      result.append(String.format(".forge-book-designer-page[data-type-id=\"%s\"] {", pageType.getId()));
-      printStyleRules(result, pageRules);
-      result.append("}");
-
-      result.append(String.format(".forge-book-designer-page[data-type-id=\"%s\"] header {", pageType.getId()));
-      printStyleRules(result, headerRules);
-      result.append("}");
-
-      result.append(String.format(".forge-book-designer-page[data-type-id=\"%s\"] footer {", pageType.getId()));
-      printStyleRules(result, footerRules);
-      result.append("}");
-    }
-
-    for (BookDesignStyle style : styles) {
-      result.append(String.format(".forge-book-designer-pages %s {", style.getSelector()));
-      printStyleRules(result, style.getRules());
-      result.append("}");
-    }
-
     return result.toString();
   }
 
