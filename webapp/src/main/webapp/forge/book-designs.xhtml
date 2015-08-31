@@ -59,7 +59,10 @@
           <div class="flex-row">
             <div class="flex-cell-full">
               <h2 class="title">
-                <input type="text" required="required" jsf:value="#{forgeBookDesignsBackingBean.title}"/>
+                <input type="text" required="required" jsf:value="#{forgeBookDesignsBackingBean.title}" jsf:rendered="#{!forgeBookDesignsBackingBean.readOnly}"/>
+                <h:outputFormat value="#{locales['forge.bookDesigns.titleReadOnly']}" rendered="#{forgeBookDesignsBackingBean.readOnly}">
+                  <f:param value="#{forgeBookDesignsBackingBean.title}"/>
+                </h:outputFormat>
               </h2>
             </div>
           </div>
@@ -93,8 +96,15 @@
                     data-float-left="#{locales['forge.bookDesigns.floatLeft']}"
                     data-float-right="#{locales['forge.bookDesigns.floatRight']}"
                     data-move-block-button-tooltip="#{locales['forge.bookDesigns.moveBlockButtonTooltip']}"
-                    data-remove-block-button-tooltip="#{locales['forge.bookDesigns.removeBlockButtonTooltip']}"/>
+                    data-remove-block-button-tooltip="#{locales['forge.bookDesigns.removeBlockButtonTooltip']}"
+                    jsf:rendered="#{!forgeBookDesignsBackingBean.readOnly}"/>
                 </div>          
+                
+                <div class="book-design-read-only" jsf:rendered="#{forgeBookDesignsBackingBean.readOnly}">
+                  <article class="forge-book-designer-pages">
+                    <h:outputFormat value="#{forgeBookDesignsBackingBean.data}" escape="false"/>
+                  </article>
+                </div>
               </div>
             </div>
                       

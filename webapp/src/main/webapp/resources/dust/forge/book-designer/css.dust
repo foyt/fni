@@ -1,3 +1,6 @@
+{#fonts}
+@import url({url});
+{/fonts}
 {#pageTypes}
   .forge-book-designer-page[data-type-id="{id}"] {
     {@iterate obj=pageRules}{key|s}:{value|s};{/iterate}

@@ -2167,41 +2167,63 @@
         'remove-block-button-tooltip'
       ];
       
-      $.each(localeKeys, $.proxy(function (index, localeKey) {
-        locales[localeKey] = this.attr('data-' + localeKey);
-      }, $('.book-designer')));
-      
-      var fonts = $('.book-design-fonts').val();
-      var styles = $('.book-design-styles').val();
-      var data = $('.book-design-data').val();
-      var pageTypes = $('.book-design-page-types').val();
-      
-      $('.book-designer')
-        .bookDesigner({
-          locales: locales,
-          fonts: fonts,
-          styles: styles,
-          pageTypes: pageTypes,
-          data: data
-        })
-        .on("save", function (event, data) {
-          $('.book-design-fonts').val(JSON.stringify(data.fonts));
-          $('.book-design-styles').val(JSON.stringify(data.styles));
-          $('.book-design-page-types').val(JSON.stringify(data.pageTypes));
-          $('.book-design-data').val(data.data);
-          $('.book-design-save')[0].click();
-        })
-        .on("print", function (event, data) {
-          window.location = CONTEXTPATH + '/forge/bookDesignPdf/' + $('.book-design-id').val();
-        })
-        .on("publishTemplate", function (event, data) {
-          $('.book-design-template-name').val(data.templateName);
-          $('.book-design-fonts').val(JSON.stringify(data.fonts));
-          $('.book-design-styles').val(JSON.stringify(data.styles));
-          $('.book-design-page-types').val(JSON.stringify(data.pageTypes));
-          $('.book-design-data').val(data.data);
-          $('.book-design-publish-template')[0].click();
+      if ($('.book-designer').length) {
+        $.each(localeKeys, $.proxy(function (index, localeKey) {
+          locales[localeKey] = this.attr('data-' + localeKey);
+        }, $('.book-designer')));
+        
+        var fonts = $('.book-design-fonts').val();
+        var styles = $('.book-design-styles').val();
+        var data = $('.book-design-data').val();
+        var pageTypes = $('.book-design-page-types').val();
+        
+        $('.book-designer')
+          .bookDesigner({
+            locales: locales,
+            fonts: fonts,
+            styles: styles,
+            pageTypes: pageTypes,
+            data: data
+          })
+          .on("save", function (event, data) {
+            $('.book-design-fonts').val(JSON.stringify(data.fonts));
+            $('.book-design-styles').val(JSON.stringify(data.styles));
+            $('.book-design-page-types').val(JSON.stringify(data.pageTypes));
+            $('.book-design-data').val(data.data);
+            $('.book-design-save')[0].click();
+          })
+          .on("print", function (event, data) {
+            window.location = CONTEXTPATH + '/forge/bookDesignPdf/' + $('.book-design-id').val();
+          })
+          .on("publishTemplate", function (event, data) {
+            $('.book-design-template-name').val(data.templateName);
+            $('.book-design-fonts').val(JSON.stringify(data.fonts));
+            $('.book-design-styles').val(JSON.stringify(data.styles));
+            $('.book-design-page-types').val(JSON.stringify(data.pageTypes));
+            $('.book-design-data').val(data.data);
+            $('.book-design-publish-template')[0].click();
+          });
+      } else {
+        var fonts = $('.book-design-fonts').val();
+        var styles = $('.book-design-styles').val();
+        var pageTypes = $('.book-design-page-types').val();
+        
+        dust.render("forge/book-designer/css", {
+          fonts: fonts ? $.parseJSON(fonts) : [],
+          styles: styles ? $.parseJSON(styles) : [],
+          pageTypes: pageTypes ? $.parseJSON(pageTypes) : []
+        }, function(err, css) {
+          if (err) {
+            $('.notifications').notifications('notification', 'error', err);
+          } else {
+            $('<style>')
+              .attr({ 'type': 'text/css' })
+              .text(css)
+              .appendTo(document.head);
+          }
         });
+        
+      }
     }
   });
   

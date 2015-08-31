@@ -84,13 +84,14 @@ public class ForgeBookDesignsBackingBean {
     
     materialId = material.getId();
     title = material.getTitle();
+    folders = ForgeViewUtils.getParentList(material);
+
+    readOnly = !materialPermissionController.hasModifyPermission(loggedUser, material);
     data = ((BookDesign) material).getData();
     styles = ((BookDesign) material).getStyles();
     fonts = ((BookDesign) material).getFonts();
     pageTypes = ((BookDesign) material).getPageTypes();
-    folders = ForgeViewUtils.getParentList(material);
     googlePublicApiKey = systemSettingsController.getSetting(SystemSettingKey.GOOGLE_PUBLIC_API_KEY);
-    
     materialController.markMaterialView(material, loggedUser);
     
     return null;
@@ -142,6 +143,14 @@ public class ForgeBookDesignsBackingBean {
   
   public void setTemplateId(Long templateId) {
     this.templateId = templateId;
+  }
+  
+  public Boolean getReadOnly() {
+    return readOnly;
+  }
+  
+  public void setReadOnly(Boolean readOnly) {
+    this.readOnly = readOnly;
   }
 
   public List<Folder> getFolders() {
@@ -251,7 +260,7 @@ public class ForgeBookDesignsBackingBean {
   private Long materialId;
   private String templateName;
   private Long templateId;
-  
+  private Boolean readOnly;
   private List<Folder> folders;
   private String title;
   private String data;

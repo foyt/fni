@@ -37,6 +37,21 @@ h2.title input:focus {
   background: #fff;
   border: 1px inset #eee;
 }
+
+.book-design-read-only {
+  
+  margin-left: auto;
+  margin-right: auto;
+  
+  .forge-book-designer-page {
+    box-sizing: border-box;
+    height: 297mm;
+    width: 210mm;
+    outline: 1px solid rgba(200, 200, 200, 0.3);
+    margin-top: 40px;
+    background: #fff;
+  } 
+}
   
 .book-designer {
   border: 0px;
