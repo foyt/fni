@@ -282,6 +282,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void assertSelectorPresent(String selector) {
     assertTrue("Element not present '" + selector + "'", getWebDriver().findElementsByCssSelector(selector).size() > 0);
   }
+  
+  protected void assertSelectorEnabled(String selector) {
+    List<WebElement> elements = getWebDriver().findElementsByCssSelector(selector);
+    assertTrue("Element not present '" + selector + "'", elements.size() > 0);
+    assertTrue("Element not enabled '" + selector + "'", elements.get(0).isEnabled());
+  }
 
   protected void assertSelectorNotPresent(String selector) {
     assertTrue("Element present '" + selector + "'", getWebDriver().findElementsByCssSelector(selector).size() == 0);
