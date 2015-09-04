@@ -575,9 +575,10 @@
   
           var headerHeight = header.is(':visible') ? header.outerHeight(true) : 0;
           var footerHeight = footer.is(':visible') ? footer.outerHeight(true) : 0;
+          var pageHeight = $(page).height();
           
           $(page).find('main').css({
-            height: 'calc(100% - ' + (headerHeight + footerHeight) + 'px)'
+            height: (pageHeight - (headerHeight + footerHeight)) + 'px'
           });
         }
       }, this));
