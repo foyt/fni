@@ -36,7 +36,7 @@ public class PdfServiceClient {
     serviceUrl = systemSettingsController.getSetting(SystemSettingKey.PDF_SERVICE_URL);
   }
   
-  public TypedData getURLAsPdf(String url, Map<String, String> options) {
+  public TypedData getURLAsPdf(String url, Map<String, Object> options) {
     try {
       DefaultHttpClient client = new DefaultHttpClient();
       HttpPost httpPost = new HttpPost(serviceUrl + "/pdf");
@@ -76,7 +76,7 @@ public class PdfServiceClient {
   @SuppressWarnings("unused")
   private static class PdfRequest {
 
-    public PdfRequest(String url, Map<String, String> options) {
+    public PdfRequest(String url, Map<String, Object> options) {
       super();
       this.url = url;
       this.options = options;
@@ -90,16 +90,16 @@ public class PdfServiceClient {
       this.url = url;
     }
 
-    public Map<String, String> getOptions() {
+    public Map<String, Object> getOptions() {
       return options;
     }
 
-    public void setOptions(Map<String, String> options) {
+    public void setOptions(Map<String, Object> options) {
       this.options = options;
     }
 
     private String url;
-    private Map<String, String> options;
+    private Map<String, Object> options;
   }
 
 }
