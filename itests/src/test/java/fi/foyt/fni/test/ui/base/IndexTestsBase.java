@@ -34,20 +34,20 @@ public class IndexTestsBase extends AbstractUITest {
 
   @Test
   public void testTexts() {
-    getWebDriver().get(getAppUrl() + "/");
-
+    navigate("/");
+    
     assertEquals("WHAT IS THE FORGE & ILLUSION", getWebDriver().findElement(By.cssSelector("p.description-title")).getText());
     assertEquals("Forge & Illusion is an open platform built for roleplaying and roleplayers.", getWebDriver().findElement(By.cssSelector("p.description-text")).getText());
         
     
     assertEquals("LATEST GAME LIBRARY PUBLICATIONS", findElementBySelector(String.format("h3 a[href='/%s/gamelibrary/']", getCtxPath())).getText());
     assertEquals("LATEST FORUM TOPICS", findElementBySelector(String.format("h3 a[href='/%s/forum/']", getCtxPath())).getText());
-    assertEquals("NEWS", findElementBySelector("h3 a[href='http://loki.pelilauta.fi/wordpress/']").getText());
+    assertEquals("NEWS", findElementBySelector(String.format("h3 a[href='/%s/news/archive/0/0']", getCtxPath())).getText());
     assertEquals("UPCOMING EVENTS", findElementBySelector(String.format("h3 a[href='/%s/illusion/']", getCtxPath())).getText());
 
     assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/%s/gamelibrary/']", getCtxPath())).getText());
     assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/%s/forum/']", getCtxPath())).getText());
-    assertEquals("More >>", findElementBySelector("a.more-link[href='http://loki.pelilauta.fi/wordpress/']").getText());
+    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/%s/news/archive/0/0']", getCtxPath())).getText());
     assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/%s/illusion/']", getCtxPath())).getText());
   }
 
