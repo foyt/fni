@@ -3,7 +3,9 @@ package fi.foyt.fni.blog;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -16,6 +18,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.joda.time.DateTime;
 
 import com.sun.syndication.feed.synd.SyndCategory;
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -57,7 +60,32 @@ public class BlogController {
 	public List<BlogEntry> listBlogEntries(int maxEntries) {
 		return blogEntryDAO.listAllSortByCreated(0, maxEntries);
 	}
-	
+
+  public List<BlogEntry> listBlogEntriesByYearAndMonth(Integer year, Integer month) {
+    GregorianCalendar calendar = new GregorianCalendar();
+    calendar.set(year, month, 0, 0, 0, 0);
+    Date after = calendar.getTime();
+    calendar.add(Calendar.MONTH, 1);
+    Date before = calendar.getTime();
+    return listBlogEntriesByCreatedBetween(after, before);
+  }
+
+  public List<BlogEntry> listBlogEntriesByCreatedBetween(Date after, Date before) {
+    return blogEntryDAO.listByCreatedGreaterOrEqualAndCreatedLessOrEqualSortByCreated(after, before);
+  }
+  
+  public DateTime getFirstBlogDate() {
+    return new DateTime(blogEntryDAO.minBlogDate().getTime());
+  }
+  
+  public DateTime getLastBlogDate() {
+    return new DateTime(blogEntryDAO.maxBlogDate().getTime());
+  }
+
+  public Long countBlogEntriesByCreatedBetween(Date after, Date before) {
+    return blogEntryDAO.countByCreatedGreaterOrEqualAndCreatedLessOrEqualSortByCreated(after, before);
+  }
+  
 	/* BlogTags */
 	
 	public List<BlogTag> listBlogEntryTags(BlogEntry entry) {

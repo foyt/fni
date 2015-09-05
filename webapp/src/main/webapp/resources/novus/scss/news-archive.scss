@@ -1,0 +1,94 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+h3 {
+  @include header-3;
+  color: $title-color;
+  margin-bottom: 39px;
+}
+
+.tag {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 10px;
+  text-transform: uppercase;
+  padding-right: 13px;
+  text-decoration: none;
+}
+
+.blog-entry {
+  margin-bottom: 45px;
+}
+
+.blog-entry-date {
+  @include header-6;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.blog-entry-title-container {
+  margin-bottom: 13px;
+}
+
+.blog-entry-title {
+  @include header-2;
+}
+
+.blog-entry-author:before {
+  content: '-';
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.blog-entry-author {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.blog-entry-tags {
+  margin-top: 21px;
+}
+
+.blog-entry-tag {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 10px;
+  text-transform: uppercase;
+  padding-right: 13px;
+  text-decoration: none;
+}
+
+.blog-entry-content {
+  font-family: $default-font;
+  color: $default-color;
+  font-size: 13px;
+  margin-top: 20px;
+}
+
+.blog-entry-more-container {
+  margin-top: 16px;
+}
+
+.blog-entry-more {
+  font-family: $default-font;
+  color: $default-color;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.news-archive-month {
+  font-family: $default-font;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.news-archive-month a {
+  color: $default-color;
+  text-decoration: none;
+}

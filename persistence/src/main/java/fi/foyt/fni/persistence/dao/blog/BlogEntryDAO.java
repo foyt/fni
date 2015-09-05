@@ -10,8 +10,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.GenericDAO;
-import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogCategory;
+import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogEntry_;
 import fi.foyt.fni.persistence.model.users.User;
 
@@ -82,6 +82,64 @@ public class BlogEntryDAO extends GenericDAO<BlogEntry> {
     
     return query.getResultList();
 	}
+
+  public List<BlogEntry> listByCreatedGreaterOrEqualAndCreatedLessOrEqualSortByCreated(Date greater, Date less) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<BlogEntry> criteria = criteriaBuilder.createQuery(BlogEntry.class);
+    Root<BlogEntry> root = criteria.from(BlogEntry.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.and(
+        criteriaBuilder.greaterThanOrEqualTo(root.get(BlogEntry_.created), greater),
+        criteriaBuilder.lessThanOrEqualTo(root.get(BlogEntry_.created), less)
+      )
+    );
+    
+    criteria.orderBy(criteriaBuilder.desc(root.get(BlogEntry_.created)));
+    
+    return entityManager.createQuery(criteria).getResultList();
+  }
+  
+  public Date minBlogDate() {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Date> criteria = criteriaBuilder.createQuery(Date.class);
+    Root<BlogEntry> root = criteria.from(BlogEntry.class);
+    criteria.select(criteriaBuilder.least(root.get(BlogEntry_.created)));
+    
+    return entityManager.createQuery(criteria).getSingleResult();
+  }
+
+  public Date maxBlogDate() {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Date> criteria = criteriaBuilder.createQuery(Date.class);
+    Root<BlogEntry> root = criteria.from(BlogEntry.class);
+    criteria.select(criteriaBuilder.greatest(root.get(BlogEntry_.created)));
+    
+    return entityManager.createQuery(criteria).getSingleResult();
+  }
+  
+  public Long countByCreatedGreaterOrEqualAndCreatedLessOrEqualSortByCreated(Date greater, Date less) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Long> criteria = criteriaBuilder.createQuery(Long.class);
+    Root<BlogEntry> root = criteria.from(BlogEntry.class);
+    criteria.select(criteriaBuilder.count(root));
+    criteria.where(
+      criteriaBuilder.and(
+        criteriaBuilder.greaterThanOrEqualTo(root.get(BlogEntry_.created), greater),
+        criteriaBuilder.lessThanOrEqualTo(root.get(BlogEntry_.created), less)
+      )
+    );
+    
+    return entityManager.createQuery(criteria).getSingleResult();
+  }
 
 	public BlogEntry updateAuthorName(BlogEntry blogEntry, String authorName) {
 		blogEntry.setAuthorName(authorName);

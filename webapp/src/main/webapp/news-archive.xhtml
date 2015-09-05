@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['newsArchive.title']}</ui:define>
+  
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+      
+  <ui:define name="view-scripts">
+  </ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <!-- View styles -->
+    
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
+    <h:outputStylesheet library="novus" name="css/news-archive.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/flex-menu.xhtml" />
+    
+    <!-- Description -->
+
+    <div class="flex-row view-header">
+      <div class="flex-cell-full no-margin-top">
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['newsArchice.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['newsArchice.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex-row">
+      <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-full md-flex-order-1 sm-flex-cell-full sm-flex-order-1 index-box">
+        <div class="lg-flex-cell-full">
+          <h3>#{locales['newsArchive.title']}</h3>
+        </div>
+
+        <div class="lg-flex-cell-full">
+          <div class="blog-no-entries" jsf:rendered="#{empty newsViewBackingBean.blogEntries}">#{locales['newsArchive.noEntries']}</div>
+        
+          <ui:repeat var="blogEntry" value="#{newsViewBackingBean.blogEntries}">
+            <div class="flex-row">
+              <div class="lg-flex-cell-full">
+                <div class="blog-entry">
+                  <div class="blog-entry-date">
+                    <h:outputFormat value="#{blogEntry.created}">
+                      <f:convertDateTime type="date"/>
+                    </h:outputFormat>
+                  </div>
+                  
+                  <div class="blog-entry-title-container">
+                    <a class="blog-entry-title" href="#{blogEntry.link}">#{blogEntry.title}</a>
+                    <span class="blog-entry-author">#{blogEntry.authorName}</span>
+                  </div>
+                  
+                  <div class="tags">
+                    <ui:repeat var="blogEntryTag" value="#{newsArchiveViewBackingBean.getBlogEntryTags(blogEntry)}">
+                      <a class="tag" href="javascript:void(null)">#{blogEntryTag.text}</a>
+                    </ui:repeat>
+                  </div>
+                  
+                  <div class="blog-entry-content">
+                    <h:outputText value="#{blogEntry.summary}" escape="false"/>
+                  </div>
+                  
+                  <div class="blog-entry-more-container">
+                    <a class="blog-entry-more" href="#{blogEntry.link}">#{locales['newsArchive.moreLink']}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ui:repeat>
+        </div>
+      </div>
+      
+      <div class="index-box lg-flex-cell-4 lg-flex-cell-last md-flex-cell-full sm-flex-cell-full">
+        <div class="flex-row">
+          <div class="lg-flex-cell-full">
+            <h3>#{locales['newsArchive.archiveLabel']}</h3>
+          </div>
+        </div>
+        
+        <ui:repeat var="month" value="#{newsViewBackingBean.months}">
+          <div class="flex-row">
+            <div class="lg-flex-cell-full no-margin-top no-margin-bottom news-archive-month">
+              <a jsf:outcome="/news-archive.jsf?year=#{month.year}&amp;month=#{month.month}">
+                <h:outputFormat value="#{locales['newsArchive.monthArchiveLabel']}">
+                  <f:param value="#{month.date}"/>
+                  <f:param value="#{month.postCount}"/>
+                </h:outputFormat>
+              </a>
+            </div>
+          </div>
+        </ui:repeat>
+      </div>
+    </div>
+    
+  </ui:define>
+  
+</ui:composition>
