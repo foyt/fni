@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.time.DateUtils;
+import org.joda.time.DateTime;
 import org.ocpsoft.rewrite.annotation.Join;
 
 import fi.foyt.fni.blog.BlogController;
@@ -63,6 +64,10 @@ public class IndexViewBackingBean {
 		latestGameLibraryPublications = publicationController.listRecentPublications(MAX_GAME_LIBRARY_PUBLICATIONS);
 		latestForumTopics = forumController.listLatestForumTopics(MAX_FORUM_TOPICS);
 		illusionEvents = createEventPojos(illusionEventController.listNextIllusionEvents(MAX_ILLUSION_EVENTS));
+	
+    DateTime lastPostDate = blogController.getLastBlogDate();
+    newsArchiveMonth = lastPostDate.getMonthOfYear();
+    newsArchiveYear = lastPostDate.getYear();
 	}
 	
 	public List<BlogEntry> getLatestBlogEntries() {
@@ -100,6 +105,14 @@ public class IndexViewBackingBean {
     return illusionEvents;
   }
 	
+	public int getNewsArchiveMonth() {
+    return newsArchiveMonth;
+  }
+	
+	public int getNewsArchiveYear() {
+    return newsArchiveYear;
+  }
+	
 	private List<Event> createEventPojos(List<IllusionEvent> illusionEvents) {
 	  List<Event> result = new ArrayList<>();
 	  
@@ -126,6 +139,8 @@ public class IndexViewBackingBean {
 	private List<Publication> latestGameLibraryPublications;
 	private List<ForumTopic> latestForumTopics;
 	private List<Event> illusionEvents;
+	private int newsArchiveYear;
+	private int newsArchiveMonth;
 	
   public class Event {
     

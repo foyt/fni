@@ -168,7 +168,7 @@
         </ui:repeat> 
         
         <div class="more-container">
-          <a class="more-link" href="http://loki.pelilauta.fi/wordpress/">#{locales['index.blogMoreLink']}</a>
+          <a class="more-link" jsf:outcome="/news-archive.jsf?year=#{indexViewBackingBean.newsArchiveYear}&amp;month=#{indexViewBackingBean.newsArchiveMonth}">#{locales['index.blogMoreLink']}</a>
         </div>
       </div>
       
