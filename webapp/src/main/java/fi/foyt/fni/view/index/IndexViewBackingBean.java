@@ -66,8 +66,10 @@ public class IndexViewBackingBean {
 		illusionEvents = createEventPojos(illusionEventController.listNextIllusionEvents(MAX_ILLUSION_EVENTS));
 	
     DateTime lastPostDate = blogController.getLastBlogDate();
-    newsArchiveMonth = lastPostDate.getMonthOfYear();
-    newsArchiveYear = lastPostDate.getYear();
+    if (lastPostDate != null) {
+      newsArchiveMonth = lastPostDate.getMonthOfYear();
+      newsArchiveYear = lastPostDate.getYear();
+    }
 	}
 	
 	public List<BlogEntry> getLatestBlogEntries() {

@@ -40,17 +40,18 @@ public class NewsViewBackingBean {
 		
 		DateTime firstDate = blogController.getFirstBlogDate();
 		DateTime lastDate = blogController.getLastBlogDate();
-		DateTime currentMonth = new DateTime(lastDate.getYear(), lastDate.getMonthOfYear(), 1, 0, 0, 0, 0);
-		
-		while (currentMonth.isAfter(firstDate)) {
-		  int postCount = blogController.countBlogEntriesByCreatedBetween(currentMonth.toDate(), currentMonth.plusMonths(1).toDate()).intValue();
-		  if (postCount > 0) {
-	      months.add(new Month(currentMonth, postCount));
-		  }
-		  
-		  currentMonth = currentMonth.minusMonths(1);
+		if (firstDate != null && lastDate != null) {
+		  DateTime currentMonth = new DateTime(lastDate.getYear(), lastDate.getMonthOfYear(), 1, 0, 0, 0, 0);
+  		
+  		while (currentMonth.isAfter(firstDate)) {
+  		  int postCount = blogController.countBlogEntriesByCreatedBetween(currentMonth.toDate(), currentMonth.plusMonths(1).toDate()).intValue();
+  		  if (postCount > 0) {
+  	      months.add(new Month(currentMonth, postCount));
+  		  }
+  		  
+  		  currentMonth = currentMonth.minusMonths(1);
+  		}
 		}
-		
 	}
 	
 	public Integer getYear() {

@@ -75,11 +75,13 @@ public class BlogController {
   }
   
   public DateTime getFirstBlogDate() {
-    return new DateTime(blogEntryDAO.minBlogDate().getTime());
+    Date date = blogEntryDAO.minBlogDate();
+    return date != null ? new DateTime(date.getTime()) : null;
   }
   
   public DateTime getLastBlogDate() {
-    return new DateTime(blogEntryDAO.maxBlogDate().getTime());
+    Date date = blogEntryDAO.maxBlogDate();
+    return date != null ? new DateTime(date.getTime()) : null;
   }
 
   public Long countBlogEntriesByCreatedBetween(Date after, Date before) {
