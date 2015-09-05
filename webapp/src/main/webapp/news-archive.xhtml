@@ -65,7 +65,9 @@
                   </div>
                   
                   <div class="tags">
-                    <ui:repeat var="blogEntryTag" value="#{newsArchiveViewBackingBean.getBlogEntryTags(blogEntry)}">
+                    <a class="tag category-tag" href="javascript:void(null)">#{blogEntry.category.tag.text}</a>
+                      
+                    <ui:repeat var="blogEntryTag" value="#{newsViewBackingBean.getBlogEntryTags(blogEntry)}">
                       <a class="tag" href="javascript:void(null)">#{blogEntryTag.text}</a>
                     </ui:repeat>
                   </div>

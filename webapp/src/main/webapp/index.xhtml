@@ -152,6 +152,7 @@
             </div>
             
             <div class="tags">
+              <a class="tag category-tag" href="javascript:void(null)">#{blogEntry.category.tag.text}</a>
               <ui:repeat var="blogEntryTag" value="#{indexViewBackingBean.getBlogEntryTags(blogEntry)}">
                 <a class="tag" href="javascript:void(null)">#{blogEntryTag.text}</a>
               </ui:repeat>

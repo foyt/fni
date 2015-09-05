@@ -10,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -59,6 +60,14 @@ public class BlogCategory {
 		this.syncUrl = syncUrl;
 	}
   
+  public BlogTag getTag() {
+    return tag;
+  }
+  
+  public void setTag(BlogTag tag) {
+    this.tag = tag;
+  }
+  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
@@ -77,4 +86,7 @@ public class BlogCategory {
   @Column (nullable=false)
   @Enumerated (EnumType.STRING)
   private BlogCategorySync sync;
+  
+  @ManyToOne (optional = false)
+  private BlogTag tag;
 }
