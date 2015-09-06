@@ -27,6 +27,7 @@ import fi.foyt.fni.utils.servlet.RequestUtils;
 public class MaterialsServlet extends HttpServlet {
   
 	private static final long serialVersionUID = -5739692573670665390L;
+  private static final long DEFAULT_EXPIRE_TIME = 1000 * 60 * 60;
 
 	@Inject
 	private Logger logger;
@@ -54,6 +55,14 @@ public class MaterialsServlet extends HttpServlet {
 			return;
     }
 
+    String eTag = createETag(material);
+    long lastModified = material.getModified().getTime();
+    if (!RequestUtils.isModifiedSince(request, lastModified, eTag)) {
+      response.setHeader("ETag", eTag);
+      response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+      return;
+    }
+    
     FileData data;
     try {
       data = materialController.getMaterialData(request.getContextPath(), sessionController.getLoggedUser(), material);
@@ -72,6 +81,10 @@ public class MaterialsServlet extends HttpServlet {
 		  response.setHeader("content-disposition", "attachment; filename=" + data.getFileName());
     }
 		
+    response.setHeader("ETag", eTag);
+    response.setDateHeader("Last-Modified", lastModified);
+    response.setDateHeader("Expires", System.currentTimeMillis() + DEFAULT_EXPIRE_TIME);
+
 		response.setContentType(data.getContentType());
 		if (data.getData() != null) {
   		ServletOutputStream outputStream = response.getOutputStream();
@@ -82,5 +95,9 @@ public class MaterialsServlet extends HttpServlet {
   		}
 		}
 	}
+
+  private String createETag(Material material) {
+    return String.valueOf(material.getModified().getTime());
+  }
 	
 }
