@@ -5,7 +5,9 @@
   <div class="templates">
     {#templates}
       <div class="template" data-id="{id}">
-        <img src="{iconUrl}"/>
+        <div class="image-container">
+          <img src="{iconUrl}"/>
+        </div>
         <label>{title}</label>
         <p>{description}</p>
       </div>

@@ -2104,8 +2104,9 @@
       
       this.element.on("beforeDialogOpen", $.proxy(function (event) {
         this.dialogElement.on("click", '.template', $.proxy(function (event) {
+          var template = $(event.target).closest('.template');
           this.element.trigger("choose", {
-            id: $(event.target).attr('data-id')
+            id: $(template).attr('data-id')
           });
         }, this));
       }, this));
