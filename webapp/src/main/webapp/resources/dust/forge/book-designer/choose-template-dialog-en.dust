@@ -2,9 +2,9 @@
   <p>
     Choose a book template
   </p>
-  <div class="forge-designer-select-template-dialog-templates">
+  <div class="templates">
     {#templates}
-      <div class="forge-designer-select-template-dialog-template" data-id="{id}">
+      <div class="template" data-id="{id}">
         <img src="{iconUrl}"/>
         <label>{title}</label>
         <p>{description}</p>
