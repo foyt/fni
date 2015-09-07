@@ -28,7 +28,7 @@ public class ForumIndexTestsBase extends AbstractUITest {
   @SqlSets ({"basic-users", "forum-basic", "illusion-basic", "event", "event-forum"})
   public void testVisibleCategories() throws SQLException, Exception {
     navigate("/forum/");
-    assertSelectorCount(".forum-view-forum", 4);
+    assertSelectorCount(".forum", 4);
     assertEquals(5, countForums().intValue());
   }
 
