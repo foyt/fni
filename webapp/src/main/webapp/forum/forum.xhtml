@@ -99,9 +99,9 @@
   
             <div class="flex-row">
               <div class="flex-cell-full topics">
-                <ui:repeat var="topic" value="#{forumBackingBean.topics}">
+                <ui:repeat var="topic" value="#{forumBackingBean.topics}" varStatus="topicVs">
                   <div class="flex-row">
-                    <div class="flex-cell-full topic">
+                    <div class="flex-cell-full topic" data-topic-index="#{topicVs.index}">
                       <div class="flex-row">
                         <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
                           <h5>

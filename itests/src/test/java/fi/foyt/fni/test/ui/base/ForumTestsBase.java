@@ -1,7 +1,6 @@
 package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -30,17 +29,17 @@ public class ForumTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users", "forum-basic"})
   public void testAnonymous() {
-    getWebDriver().get(getAppUrl() + "/forum/1_topic_forum");
-    assertTrue(getWebDriver().findElement(By.cssSelector(".forum-new-topic-login-container .forum-new-topic-login-link")).isDisplayed());
-    assertEquals("LOGIN TO CREATE NEW TOPIC", getWebDriver().findElement(By.cssSelector(".forum-new-topic-login-container .forum-new-topic-login-link")).getText());
+    navigate("/forum/1_topic_forum");
+    assertSelectorVisible(".forum-new-topic-login-link");
+    assertSelectorTextIgnoreCase(".forum-new-topic-login-link", "LOGIN TO CREATE NEW TOPIC");
   }
 
   @Test
   @SqlSets ({"basic-users", "forum-basic"})
   public void testLoggedIn() {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    getWebDriver().get(getAppUrl() + "/forum/1_topic_forum");
-    assertTrue(getWebDriver().findElement(By.cssSelector(".forum-view-new-topic-container .forum-view-new-topic-link")).isDisplayed());
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/forum/1_topic_forum");
+    assertSelectorVisible(".forum-view-new-topic-link");
   }
 
   @Test
@@ -63,5 +62,27 @@ public class ForumTestsBase extends AbstractUITest {
     testNotFound("/forum/illusion");
   }
 
-
+  @Test
+  @SqlSets ({"basic-users", "forum-basic"})
+  public void testForumLink() {
+    navigate("/forum/1_topic_forum");
+    assertSelectorTextIgnoreCase("h3 a", "Single topic Forum");
+    assertEquals(String.format("%s/forum/1_topic_forum", getAppUrl()), findElementBySelector("h3 a").getAttribute("href"));
+  }
+  
+  @Test
+  @SqlSets ({"basic-users", "forum-basic"})
+  public void testTopicLink() {
+    navigate("/forum/1_topic_forum");
+    assertSelectorTextIgnoreCase("*[data-topic-index=\"0\"] h5 a", "Topic of single topic forum");
+    assertEquals(String.format("%s/forum/1_topic_forum/single_topic", getAppUrl()), findElementBySelector("*[data-topic-index=\"0\"] h5 a").getAttribute("href"));
+  }
+  
+  @Test
+  @SqlSets ({"basic-users", "forum-basic"})
+  public void testAuthorLink() {
+    navigate("/forum/");
+    assertSelectorTextIgnoreCase("*[data-topic-index=\"0\"] .topic-start-info a", "Test Guest");
+    assertEquals(String.format("%s/profile/1", getAppUrl()), findElementBySelector("*[data-topic-index=\"0\"] .topic-start-info a").getAttribute("href"));
+  }
 }
