@@ -1,0 +1,76 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+$topic-border-color: rgb(71, 176, 176);
+
+.index-box {
+  padding-top: 45px;
+  padding-left: 36px;
+  padding-right: 36px;
+  padding-bottom: 45px;
+}
+
+h3 {
+  @include header-2;
+  
+  a {
+    color: $default-color;
+    text-decoration: none;
+  }
+}
+
+h5 {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 16px;
+  font-weight: bold;
+  
+  a {
+    color: $default-color;
+    text-decoration: none;
+  }
+}
+
+.forum {
+  margin-top: 50px;
+
+  .forum-topic-count,
+  .forum-last-message,
+  .topic-post-count, 
+  .topic-last-message {
+    color: $default-color;
+    font-family: $default-font;
+    font-size: 13px;
+    font-weight: bold;
+  }
+    
+  .more-link {
+    color: $default-color;
+    font-family: $default-font;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .topic {
+    
+    border-bottom: 1px solid $topic-border-color;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    
+    .topic-start-info {
+      color: $default-color;
+      font-family: $default-font;
+      text-transform: uppercase; 
+      font-size: 10px;
+      
+      a {
+        text-decoration: none;
+        margin-left: 4px;
+        margin-right: 4px;
+      }
+    }
+  }
+}
