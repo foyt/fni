@@ -4,164 +4,73 @@
 
 $topic-border-color: rgb(71, 176, 176);
 
-/* Panels*/
-
-.forum-panel {
-  @include generic-panel;
+.index-box {
+  padding-top: 19px + 26px;
+  padding-left: 20px + 16px;
+  padding-right: 20px + 16px;
+  padding-bottom: 45px;
 }
 
-/* Forums */
-
-.forum-view-forum {
-  margin-top: 50px;
-}
-
-.forum-view-forum:first-child {
-  margin-top: 0px;
-}
-
-.forum-view-forum-name {
+h3 {
   @include header-2;
-  margin-top: 26px;
-  margin-left: 16px;
+  
+  a {
+    color: $default-color;
+    text-decoration: none;
+  }
 }
 
-.forum-view-forum-name a {
-  text-decoration: none;
+h5 {
   color: $default-color;
-}
-
-.forum-view-forum-description {
+  font-family: $default-font;
   font-size: 16px;
-  font-family: $default-font;
-  color: $default-color;
   font-weight: bold;
-  margin-top: 10px;
-  margin-bottom: 24px;
-  margin-left: 16px;
-  margin-right: 250px;
+  
+  a {
+    color: $default-color;
+    text-decoration: none;
+  }
 }
 
-.forum-view-forum-activity-container {
-  float: right;
-  text-align: right;
-  margin-top: -58px;
-}
+.forum {
+  margin-top: 50px;
 
-.forum-view-forum-topic-count, .forum-view-forum-last-message-date {
-  font-size: 13px;
-  font-family: $default-font;
-  color: $default-color;
-  font-weight: bold;
-}
-
-.forum-view-forum-topic {
-  display: table;
-  border-bottom: 1px solid $topic-border-color;
-}
-
-.forum-view-forum-topic:last-child {
-  border-bottom: none;
-}
-
-.forum-view-forum-topic-name {
-  font-size: 16px;
-  font-family: $default-font;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.forum-view-forum-topic-name a {
-  text-decoration: none;
-  color: $default-color;
-}
-
-.forum-view-forum-topic-name-container, .forum-view-forum-topic-activity-container {
-  padding: 15px;
-  display: table-cell;
-}
-
-.forum-view-forum-topic-name-container {
-  width: 672px;
-}
-
-.forum-view-forum-topic-activity-container {
-  width: 248px;
-}
-
-.forum-view-forum-topic-label, .forum-view-forum-topic-created {
-  font-size: 10px;
-  font-family: $default-font;
-  color: $default-color;
-  text-transform: uppercase;
-  padding-right: 4px;
-}
-
-.forum-view-forum-topic-author {
-  text-decoration: none;
-  font-size: 10px;
-  font-family: $default-font;
-  color: #00f;
-  text-transform: uppercase;
-  padding-right: 4px;
-}
-
-.forum-view-forum-topic-post-count, .forum-view-forum-topic-last-message-date {
-  font-size: 13px;
-  font-family: $default-font;
-  color: $default-color;
-  font-weight: bold;
-}
-
-.forum-index-more-topics {
-  font-size: 16px;
-  font-family: $default-font;
-  color: $default-color;
-  font-style: italic;
-  text-decoration: none;
-  font-weight: bold;
-  margin-left: 16px;
-}
-
-.forum-new-topic-login-container, .forum-view-new-topic-container {
-  margin-left: 16px;
-}
-
-.forum-view-new-topic-link, .forum-new-topic-login-link {
-  color: $default-color;
-  font-family: $default-font;
-  font-size: 12px;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-.forum-view-new-topic-editor-container label {
-  font-family: $default-font;
-  color: $default-color;
-  font-weight: bold;
-  font-size: 13px;
-  padding-bottom: 4px;
-  padding-top: 5px;
-  display: block;
-}
-
-.forum-view-new-topic-editor-container input[type="text"] {
-  width: 260px;
-  font-size: 14px;
-  font-family: $default-font;
-  @include box-sizing(border-box);
-}
-
-.forum-view-new-topic-editor-container input[type="submit"] {
-  color: $default-color;
-  font-family: $title-font;
-  font-size: 14px;
-  text-transform: uppercase;
-  padding: 8px;
-  background: #000;
-  color: #fff;
-  border: 0px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
+  .forum-topic-count,
+  .forum-last-message,
+  .topic-post-count, 
+  .topic-last-message {
+    color: $default-color;
+    font-family: $default-font;
+    font-size: 13px;
+    font-weight: bold;
+  }
+    
+  .more-link {
+    color: $default-color;
+    font-family: $default-font;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .topic {
+    
+    border-bottom: 1px solid $topic-border-color;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    
+    .topic-start-info {
+      color: $default-color;
+      font-family: $default-font;
+      text-transform: uppercase; 
+      font-size: 10px;
+      
+      a {
+        text-decoration: none;
+        margin-left: 4px;
+        margin-right: 4px;
+      }
+    }
+  }
 }

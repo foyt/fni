@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['forum.index.pageTitle']}</ui:define>
+  
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+  
   <ui:define name="view-stylesheets">
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/forum.css" />
   </ui:define>
 
@@ -12,98 +21,124 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">
-          #{locales['forum.index.navItemIndex']}
-        </h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:link styleClass="view-header-navigation-item" outcome="/forum/index.jsf">
-          #{locales['forum.index.navItemForum']}
-        </h:link>
-      </h:panelGroup>
-  
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['forum.index.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['forum.index.descriptionText']}</p>
-      </h:panelGroup>
-    </h:panelGroup>
     
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['forum.index.navItemIndex']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/forum/index.jsf">#{locales['forum.index.navItemForum']}</a>
+          </div>
+        </div>
 
-    <!-- Forums -->
-
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="forum-panel">
+        <!-- Description -->
+    
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['forum.index.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['forum.index.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex-row">
+      <div class="flex-cell-full index-box">
+        
         <ui:repeat var="forum" value="#{forumIndexBackingBean.forums}">
-          <h:panelGroup layout="block" styleClass="forum-view-forum">
-            
-            <h:panelGroup layout="block" styleClass="forum-view-forum-name">
-              <h:outputLink value="#{request.contextPath}/forum/#{forum.urlName}">#{forum.name}</h:outputLink>
-            </h:panelGroup> 
-            
-            <h:panelGroup layout="block" styleClass="forum-view-forum-description">#{forum.description}</h:panelGroup>   
-
-            <h:panelGroup layout="block" styleClass="forum-view-forum-activity-container">
-              <h:panelGroup layout="block" styleClass="forum-view-forum-topic-count">
-                <h:outputFormat value="#{locales['forum.index.forumTotalTopics']}">
-                  <f:param value="#{forumIndexBackingBean.getForumTopicCount(forum)}"/>
-                </h:outputFormat>
-              </h:panelGroup>
-              <h:panelGroup layout="block" styleClass="forum-view-forum-last-message-date">
-                <h:outputFormat value="#{locales['forum.index.forumLastMessage']}">
-                  <f:param value="#{forumIndexBackingBean.getForumLastMessageDate(forum) }"/>
-                </h:outputFormat>
-              </h:panelGroup>
-            </h:panelGroup>  
-            
-            <h:panelGroup layout="block" styleClass="forum-view-forum-topics">
-              <ui:repeat var="topic" value="#{forumIndexBackingBean.getTopics(forum)}">
-                <h:panelGroup layout="block" styleClass="forum-view-forum-topic">
-                  <h:panelGroup layout="block" styleClass="forum-view-forum-topic-name-container">
-                    <h:panelGroup layout="block" styleClass="forum-view-forum-topic-name">
-                      <h:outputLink value="#{request.contextPath}/forum/#{topic.fullPath}">#{topic.subject}</h:outputLink>
-                    </h:panelGroup>
-                    <h:panelGroup layout="block" styleClass="forum-view-forum-topic-info">
-                      <h:panelGroup styleClass="forum-view-forum-topic-label">#{locales['forum.index.topicStartedBy']}</h:panelGroup>
-                      <h:outputLink styleClass="forum-view-forum-topic-author" value="#{request.contextPath}/profile/#{topic.author.id}">#{topic.author.fullName}</h:outputLink>
-                      <h:panelGroup styleClass="forum-view-forum-topic-created">
-                        <h:outputText value="#{topic.created}">
-                          <f:convertDateTime type="date"/>
-                        </h:outputText>
-                      </h:panelGroup>
-                    </h:panelGroup>
-                  </h:panelGroup>
-                  
-                  <h:panelGroup layout="block" styleClass="forum-view-forum-topic-activity-container">
-                    <h:panelGroup layout="block" styleClass="forum-view-forum-topic-post-count">
-                      <h:outputFormat value="#{locales['forum.index.topicTotalPosts']}">
-                        <f:param value="#{forumIndexBackingBean.getTopicPostCount(topic)}"/>
-                      </h:outputFormat>
-                    </h:panelGroup>
-                    <h:panelGroup layout="block" styleClass="forum-view-forum-topic-last-message-date">
-                      <h:outputFormat value="#{locales['forum.index.topicLastMessage']}">
-                        <f:param value="#{forumIndexBackingBean.getTopicLastMessageDate(topic)}"/>
-                      </h:outputFormat>
-                    </h:panelGroup>
-                  </h:panelGroup>                  
-                  
-                </h:panelGroup>
-              </ui:repeat>
-            </h:panelGroup>
-  
-          </h:panelGroup>
-
-          <h:outputLink styleClass="forum-index-more-topics" value="#{request.contextPath}/forum/#{forum.urlName}">#{locales['forum.index.moreTopics']}</h:outputLink>
-
+          <div class="flex-row">
+            <div class="flex-cell-full forum">
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <h3>
+                    <a jsf:outcome="/forum/forum.jsf?forumUrlName=#{forum.urlName}">#{forum.name}</a>
+                  </h3>
+                </div>
+              </div>  
+              
+              <div class="flex-row">
+                <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full no-margin-bottom">
+                  <h5>
+                    #{forum.description}
+                  </h5>
+                </div>  
+                
+                <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full no-margin-bottom forum-topic-count">
+                  <h:outputFormat value="#{locales['forum.index.forumTotalTopics']}">
+                    <f:param value="#{forumIndexBackingBean.getForumTopicCount(forum)}"/>
+                  </h:outputFormat>
+                </div>  
+              </div>
+              
+              <div class="flex-row">
+                <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-hide">
+                
+                </div>
+              
+                <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full no-margin-top forum-last-message">
+                  <h:outputFormat value="#{locales['forum.index.forumLastMessage']}">
+                    <f:param value="#{forumIndexBackingBean.getForumLastMessageDate(forum) }"/>
+                  </h:outputFormat>
+                </div>  
+              </div>
+    
+              <div class="flex-row">
+                <div class="flex-cell-full topics">
+                  <ui:repeat var="topic" value="#{forumIndexBackingBean.getTopics(forum)}">
+                    <div class="flex-row">
+                      <div class="flex-cell-full topic">
+                        <div class="flex-row">
+                          <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
+                            <h5>
+                              <a jsf:outcome="/forum/topic.jsf?forumUrlName={#{forum.urlName}}&amp;topicUrlName=#{topic.urlName}">#{topic.subject}</a>
+                            </h5>
+                          </div>
+                        
+                          <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full topic-post-count">
+                            <h:outputFormat value="#{locales['forum.index.topicTotalPosts']}">
+                              <f:param value="#{forumIndexBackingBean.getTopicPostCount(topic)}"/>
+                            </h:outputFormat>
+                          </div>  
+                        </div>
+                        
+                        <div class="flex-row">
+                          <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full sm-flex-order-2 topic-start-info">
+                            <span>#{locales['forum.index.topicStartedBy']}</span>
+                            <a jsf:outcome="/users/profile.jsf?userId=#{topic.author.id}">#{topic.author.fullName}</a>
+                            <span>
+                              <h:outputText value="#{topic.created}">
+                                <f:convertDateTime type="date"/>
+                              </h:outputText>
+                            </span>
+                          </div>
+                        
+                          <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full no-margin-top no-margin-bottom topic-last-message">
+                            <h:outputFormat value="#{locales['forum.index.topicLastMessage']}">
+                              <f:param value="#{forumIndexBackingBean.getTopicLastMessageDate(topic)}"/>
+                            </h:outputFormat>
+                          </div>  
+                        </div>
+                      </div>
+                    </div>
+                  </ui:repeat> 
+                </div>
+              </div>
+              
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <a class="more-link" jsf:outcome="/forum/forum.jsf?forumUrlName=#{forum.urlName}">#{locales['forum.index.moreTopics']}</a>
+                </div>
+              </div>      
+            </div>
+          </div>   
+        
         </ui:repeat>
-      </h:panelGroup>
-    </h:panelGroup>
+        
+      </div>
+    </div>
 
   </ui:define>
 
