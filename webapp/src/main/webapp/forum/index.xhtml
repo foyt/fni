@@ -48,9 +48,9 @@
     <div class="flex-row">
       <div class="flex-cell-full index-box">
         
-        <ui:repeat var="forum" value="#{forumIndexBackingBean.forums}">
+        <ui:repeat var="forum" value="#{forumIndexBackingBean.forums}" varStatus="forumVs">
           <div class="flex-row">
-            <div class="flex-cell-full forum">
+            <div class="flex-cell-full forum" data-forum-index="#{forumVs.index}">
               <div class="flex-row">
                 <div class="flex-cell-full">
                   <h3>
@@ -87,13 +87,13 @@
     
               <div class="flex-row">
                 <div class="flex-cell-full topics">
-                  <ui:repeat var="topic" value="#{forumIndexBackingBean.getTopics(forum)}">
+                  <ui:repeat var="topic" value="#{forumIndexBackingBean.getTopics(forum)}" varStatus="topicVs">
                     <div class="flex-row">
-                      <div class="flex-cell-full topic">
+                      <div class="flex-cell-full topic" data-topic-index="#{topicVs.index}">
                         <div class="flex-row">
                           <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
                             <h5>
-                              <a jsf:outcome="/forum/topic.jsf?forumUrlName={#{forum.urlName}}&amp;topicUrlName=#{topic.urlName}">#{topic.subject}</a>
+                              <a jsf:outcome="/forum/topic.jsf?forumUrlName=#{forum.urlName}&amp;topicUrlName=#{topic.urlName}">#{topic.subject}</a>
                             </h5>
                           </div>
                         
