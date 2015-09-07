@@ -5,9 +5,9 @@
 $topic-border-color: rgb(71, 176, 176);
 
 .index-box {
-  padding-top: 19px + 26px;
-  padding-left: 20px + 16px;
-  padding-right: 20px + 16px;
+  padding-top: 45px;
+  padding-left: 36px;
+  padding-right: 36px;
   padding-bottom: 45px;
 }
 
@@ -73,4 +73,42 @@ h5 {
       }
     }
   }
+}
+
+.forum-new-topic-login-link,
+.forum-view-new-topic-link { 
+  color: $default-color;
+  font-family: $default-font;
+  text-transform: uppercase; 
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.forum-view-new-topic-editor-container {
+  label {
+    color: $default-color;
+    font-family: $default-font;
+    text-transform: uppercase; 
+    font-size: 12px;
+  }
+  
+  input[type="text"] {
+    width: 100%;
+    @include box-sizing(border-box);   
+  }
+  
+  input[type="submit"] {
+    color: $default-color;
+    font-family: $title-font;
+    font-size: 14px;
+    text-transform: uppercase;
+    padding: 8px;
+    background: #000;
+    color: #fff;
+    border: 0px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
 }
