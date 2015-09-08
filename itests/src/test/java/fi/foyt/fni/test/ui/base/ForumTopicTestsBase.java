@@ -1,10 +1,8 @@
 package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -23,28 +21,35 @@ public class ForumTopicTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users", "forum-basic"})
   public void testTexts() {
-    getWebDriver().get(getAppUrl() + "/forum/5_topic_forum/topic5of5");
-    assertEquals("FIVE TOPIC FORUM", getWebDriver().findElement(By.cssSelector(".view-header-description-title")).getText());
-    assertEquals("TOPIC 5 OF 5 TOPIC FORUM", getWebDriver().findElement(By.cssSelector(".forum-topic-panel h3")).getText());
-    assertEquals("STARTED AT JAN 1, 2010 BY", getWebDriver().findElement(By.cssSelector(".forum-topic-panel .forum-topic-info-created")).getText());
-    assertEquals("TEST GUEST", getWebDriver().findElement(By.cssSelector(".forum-topic-panel a")).getText());
-    assertEquals(getAppUrl() + "/profile/1", getWebDriver().findElement(By.cssSelector(".forum-topic-panel a")).getAttribute("href"));
+    navigate("/forum/5_topic_forum/topic5of5");
+    assertSelectorTextIgnoreCase(".view-header-description-title", "FIVE TOPIC FORUM");
+    assertSelectorTextIgnoreCase("h4", "TOPIC 5 OF 5 TOPIC FORUM");
+    assertSelectorTextIgnoreCase(".forum-topic-created-info span", "STARTED AT JAN 1, 2010 BY");
+    assertSelectorTextIgnoreCase(".forum-topic-created-info a", "TEST GUEST");
+    assertSelectorLink(".forum-topic-created-info a", String.format("%s/profile/1", getAppUrl()));
   }
 
+  private void assertSelectorLink(String selector, String link) {
+    assertEquals(link, findElementBySelector(selector).getAttribute("href"));
+  }
+  
   @Test
   @SqlSets ({"basic-users", "forum-basic"})
   public void testAnonymous() {
-    getWebDriver().get(getAppUrl() + "/forum/5_topic_forum/topic5of5");
-    assertTrue(getWebDriver().findElement(By.cssSelector(".forum-topic-reply-login-container .forum-topic-reply-login-link")).isDisplayed());
-    assertEquals("LOGIN TO POST A REPLY", getWebDriver().findElement(By.cssSelector(".forum-topic-reply-login-container .forum-topic-reply-login-link")).getText());
+    navigate("/forum/5_topic_forum/topic5of5");
+    assertSelectorNotVisible(".forum-topic-post-editor-container");
+    assertSelectorVisible(".forum-topic-reply-login-link");
+    assertSelectorTextIgnoreCase(".forum-topic-reply-login-link", "LOGIN TO POST A REPLY");
   }
 
   @Test
   @SqlSets ({"basic-users", "forum-basic"})
   public void testLoggedIn() {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    getWebDriver().get(getAppUrl() + "/forum/5_topic_forum/topic5of5");
-    assertTrue(getWebDriver().findElement(By.cssSelector(".forum-topic-panel form")).isDisplayed());
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/forum/5_topic_forum/topic5of5");
+    assertSelectorVisible(".forum-topic-post-editor-container");
+    waitForSelectorVisible(".forum-topic-post-editor-container .cke_wysiwyg_frame");
+    assertSelectorVisible(".forum-topic-post-editor-container .cke_wysiwyg_frame");
   }
 
   @Test
