@@ -4,39 +4,26 @@
 
 $border-color: rgb(71, 176, 176);
 
-/* Generic */
+.index-box {
+  padding-top: 36px;
+  padding-left: 36px;
+  padding-right: 36px;
+  padding-bottom: 36px;
+}
 
-h3 {
+h4 {
   @include header-3;
   color: $title-color;
 }
 
-/* Panels*/
-
-.forum-topic-panel {
-  @include generic-panel;
-}
-
-/* Topic info */
-
-.forum-topic-info {
-  height: 24px;
-}
-
 .forum-topic-created-info {
-  float: left;
-}
-
-.forum-topic-created-info span, .forum-topic-created-info a {
-  color: $default-color;
   font-family: $default-font;
   font-size: 10px;
-  text-decoration: none;
   text-transform: uppercase;
-}
-
-.forum-topic-created-info a {
-  color: blue;
+  
+  a {
+    text-decoration: none;
+  }
 }
 
 .forum-topic-watch-link, .forum-topic-stop-watching-link {
@@ -45,125 +32,66 @@ h3 {
   font-size: 12px;
   text-decoration: none;
   text-transform: uppercase;
-  float: right;
-  margin-top: 6px; 
 }
-
-/* Pages */
 
 .forum-topic-pages {
-  float: right;
+  a {
+    color: $default-color;
+    font-family: $default-font;
+    font-size: 14px;
+    text-decoration: none;
+    text-transform: uppercase;
+    margin-left: 4px;
+    
+    &:first-child {
+      margin-left: 0px;
+    }
+    
+    &.forum-topic-selected-page {
+      font-weight: bold;
+    }
+  }
 }
 
-.forum-topic-pages a {
-  color: $default-color;
-  font-family: $default-font;
-  font-size: 10px;
-  text-decoration: none;
-  text-transform: uppercase;
-  margin-left: 4px;
-}
-
-.forum-topic-pages a.forum-topic-selected-page {
-  text-decoration: underline;
-  font-weight: bold;
-}
-
-/* Posts */
-
-.forum-topic-post {
-  padding-top: 22px;
-  padding-bottom: 27px;
+.post {
+  
   border-top: 1px solid $border-color;
+  
+  .post-content {
+    color: $default-color;
+    font-family: $default-font;
+    font-size: 13px;
+    line-height: 1.6em;
+    min-height: 78px;
+  }
+  
+  .forum-topic-post-edit {
+    color: $default-color;
+    font-family: $default-font;
+    font-size: 10px;
+    text-transform: uppercase; 
+    text-decoration: none;
+  }
+  
+  .forum-topic-post-sent, .forum-topic-post-modified {
+    color: $default-color;
+    font-family: $default-font;
+    font-size: 10px;
+    text-transform: uppercase; 
+  }
+  
+  .post-author-info {
+    color: $default-color;
+    font-family: $default-font;
+    font-size: 10px;
+    
+    a { 
+      text-decoration: none;
+    }
+  }
 }
 
-.forum-topic-post-author-info {
-  display: table-cell;
-  vertical-align: top;
-  width: 120px;
-  color: $default-color;
-  font-family: $default-font;
-  font-size: 10px;
-}
-
-.forum-topic-post-author-image-container {
-  padding-top: 3px;
-}
-
-.forum-topic-post-content-container {
-  display: table-cell;
-  vertical-align: top;
-}
-
-.forum-topic-post-content {
-  color: $default-color;
-  font-family: $default-font;
-  width: 800px;
-  font-size: 13px;
-  line-height: 1.6em;
-}
-
-.forum-topic-post-content p {
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-
-.forum-topic-post-content p:first-child {
-  margin-top: 0;
-}
-
-.forum-topic-post-content b, .forum-topic-post-content strong {
-  font-weight: bold;
-}
-
-.forum-topic-post-content i, .forum-topic-post-content em {
-  font-style: italic;
-}
-
-.forum-topic-post-footer {
-  clear: both;
-  padding-top: 13px;
-}
-
-.forum-topic-post-edit-container {
-  float: right;
-}
-
-.forum-topic-post-dates-container {
-  float: left;
-  vertical-align: top;
-}
-
-.forum-topic-post-sent, .forum-topic-post-modified {
-  color: $default-color;
-  font-family: $default-font;
-  font-size: 10px;
-  text-transform: uppercase;
-}
-
-.forum-topic-post-edit {
-  color: $default-color;
-  font-family: $default-font;
-  font-size: 10px;
-  text-transform: uppercase; 
-  text-decoration: none;
-}
-
-/* Reply */
-
-.forum-topic-reply-login-container {
-  margin-top: 20px;
-}
-
-.forum-topic-reply-login-link {
-  color: $default-color;
-  font-family: $default-font;
-  font-size: 12px;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-.forum-topic-post-send-container input[type="submit"] {
+input[type="submit"] {
   color: $default-color;
   font-family: $title-font;
   font-size: 14px;

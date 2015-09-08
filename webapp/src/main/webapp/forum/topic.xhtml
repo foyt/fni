@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['forum.forum.pageTitle']}</ui:define>
   <ui:define name="view-stylesheets">
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/forum-topic.css" />
+  </ui:define>
+    
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
   </ui:define>
   
   <ui:define name="view-scripts">
@@ -22,139 +31,162 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">
-          #{locales['forum.topic.navItemIndex']}
-        </h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:link styleClass="view-header-navigation-item" outcome="/forum/index.jsf">
-          #{locales['forum.topic.navItemForum']}
-        </h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:outputLink styleClass="view-header-navigation-item" value="#{request.contextPath}/forum/#{forumTopicBackingBean.forum.urlName}">
-          #{forumTopicBackingBean.forum.name}
-        </h:outputLink>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:outputLink styleClass="view-header-navigation-item" value="#{request.contextPath}/forum/#{forumTopicBackingBean.forum.urlName}/#{forumTopicBackingBean.topicUrlName}">
-          #{forumTopicBackingBean.topicSubject}
-        </h:outputLink>
-      </h:panelGroup>
-  
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{forumTopicBackingBean.forum.name}</p>
-        <p class="view-header-description-text">#{forumTopicBackingBean.forum.description}</p>
-      </h:panelGroup>
-    </h:panelGroup>
-    
-    <!-- Posts -->
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['forum.topic.navItemIndex']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/forum/index.jsf">#{locales['forum.topic.navItemForum']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/forum/forum.jsf?forumUrlName=#{forumTopicBackingBean.forumUrlName}">#{forumTopicBackingBean.forum.name}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/forum/topic.jsf?forumUrlName=#{forumTopicBackingBean.forumUrlName}&amp;topicUrlName=#{forumTopicBackingBean.topicUrlName}">#{forumTopicBackingBean.topicSubject}</a>
+          </div>
+        </div>
 
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="forum-topic-panel">
-        <h:form rendered="#{sessionBackingBean.loggedIn}"> 
-          <h:commandLink rendered="#{!forumTopicBackingBean.watchingTopic}" styleClass="forum-topic-watch-link" value="#{locales['forum.topic.watchTopic']}" action="#{forumTopicBackingBean.watchTopic}" />
-          <h:commandLink rendered="#{forumTopicBackingBean.watchingTopic}" styleClass="forum-topic-stop-watching-link" value="#{locales['forum.topic.stopWatchTopic']}" action="#{forumTopicBackingBean.stopWatchingTopic}" />
-        </h:form>
-        
-        <h3>#{forumTopicBackingBean.topicSubject}</h3>
-        <h:panelGroup layout="block" styleClass="forum-topic-info">
+        <!-- Description -->
+    
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{forumTopicBackingBean.forum.name}</p>
+          <p class="view-header-description-text">#{forumTopicBackingBean.forum.description}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-row">
+      <div class="flex-cell-full index-box">
+        <div class="flex-row">
+          <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full no-margin-top no-margin-bottom">
+            <h4>#{forumTopicBackingBean.topicSubject}</h4>
+          </div>  
           
-          <h:panelGroup layout="block" styleClass="forum-topic-created-info">
-            <h:panelGroup styleClass="forum-topic-info-created">
+          <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full no-margin-top no-margin-bottom forum-topic-count">
+            <h:form rendered="#{sessionBackingBean.loggedIn}"> 
+              <h:commandLink rendered="#{!forumTopicBackingBean.watchingTopic}" styleClass="forum-topic-watch-link" value="#{locales['forum.topic.watchTopic']}" action="#{forumTopicBackingBean.watchTopic}" />
+              <h:commandLink rendered="#{forumTopicBackingBean.watchingTopic}" styleClass="forum-topic-stop-watching-link" value="#{locales['forum.topic.stopWatchTopic']}" action="#{forumTopicBackingBean.stopWatchingTopic}" />
+            </h:form>
+          </div>  
+        </div>
+        
+        <div class="flex-row forum-topic-info">
+          <div class="lg-flex-cell-8 lg-flex-cell-first md-flex-cell-8 md-flex-cell-first sm-flex-cell-full no-margin-bottom forum-topic-created-info">
+            <span>
               <h:outputFormat value="#{locales['forum.topic.infoStarted']}">
                 <f:param value="#{forumTopicBackingBean.topicCreated}"/>
               </h:outputFormat>
-            </h:panelGroup>  
-            <h:outputLink value="#{request.contextPath}/profile/#{forumTopicBackingBean.topicAuthorId}">
+            </span>
+            <a jsf:outcome="/users/profile.jsf?userId=#{forumTopicBackingBean.topicAuthorId}">
               #{forumTopicBackingBean.topicAuthorName}
-            </h:outputLink>
-          </h:panelGroup>
+            </a>
+          </div>  
           
-          <h:panelGroup layout="block" styleClass="forum-topic-pages">
+          <div class="lg-flex-cell-8 lg-flex-cell-last lg-flex-right md-flex-cell-8 md-flex-cell-last md-flex-right sm-flex-cell-full no-margin-bottom forum-topic-pages">
             <ui:repeat var="page" value="#{forumTopicBackingBean.pages}">
-              <h:outputLink value="?page=#{page}" styleClass="forum-topic-selected-page" rendered="#{page eq forumTopicBackingBean.page}">
-                #{page + 1}
-              </h:outputLink>
-  
-              <h:outputLink value="?page=#{page}" rendered="#{page ne forumTopicBackingBean.page}">
-                #{page + 1}
-              </h:outputLink>
+              <a href="?page=#{page}" class="#{page eq forumTopicBackingBean.page ? 'forum-topic-selected-page' : ''}">#{page + 1}</a>
             </ui:repeat>
-          </h:panelGroup>    
-        </h:panelGroup>
+          </div>  
+        </div>
         
-        <h:panelGroup layout="block" styleClass="forum-topic-posts">
-          <ui:repeat var="post" value="#{forumTopicBackingBean.posts}">
-            <h:panelGroup layout="block" styleClass="forum-topic-post">
-              <h:panelGroup layout="block" styleClass="forum-topic-post-author-info">
-                <h:panelGroup layout="block" styleClass="forum-topic-post-author-image-container">
-                  <h:graphicImage value="/users/profileImages/#{post.author.id}?width=80&amp;height=80" />
-                </h:panelGroup>
-                <h:panelGroup layout="block" styleClass="forum-topic-post-author-name">
-                  #{post.author.fullName}
-                </h:panelGroup>
-                <h:panelGroup layout="block" styleClass="forum-topic-post-author-posts">
-                  <h:outputFormat value="#{locales['forum.topic.authorPostCount']}">
-                    <f:param value="#{forumTopicBackingBean.getAuthorPostCount(post.author)}"/> 
-                  </h:outputFormat>
-                </h:panelGroup>
-              </h:panelGroup>      
-              
-              <h:panelGroup layout="block" styleClass="forum-topic-post-content-container">
-                <h:panelGroup layout="block" styleClass="forum-topic-post-content">
-                  <h:outputText value="#{post.content}" escape="false"/>
-                </h:panelGroup>
-                          
-                <h:panelGroup layout="block" styleClass="forum-topic-post-footer">
-                  <h:panelGroup layout="block" styleClass="forum-topic-post-edit-container">
-                    <h:outputLink styleClass="forum-topic-post-edit" value="#{request.contextPath}/forum/#{post.topic.forum.urlName}/#{post.topic.urlName}/edit/#{post.id}" rendered="#{forumTopicBackingBean.getMayModifyPost(post)}">
-                      #{locales['forum.topic.editPost']}
-                    </h:outputLink>
-                  </h:panelGroup>
+        <div class="flex-row">
+          <div class="flex-cell-full">
+            <ui:repeat var="post" value="#{forumTopicBackingBean.posts}">
+              <div class="flex-row">
+                <div class="flex-cell-full no-margin-top post">
 
-                  <h:panelGroup layout="block" styleClass="forum-topic-post-dates-container">
-                    <h:panelGroup layout="block" styleClass="forum-topic-post-sent">
-                      <h:outputFormat value="#{locales['forum.topic.postSent']}">
-                        <f:param value="#{post.created}"/> 
-                      </h:outputFormat>
-                    </h:panelGroup>         
+                  <div class="flex-row">
+                    <div class="lg-flex-cell-2 lg-flex-cell-first md-flex-cell-2 md-flex-cell-first sm-flex-cell-full post-author-info">
+                      <div class="flex-row sm-flex-hide">
+                        <div class="flex-cell-full no-margin-bottom">
+                          <h:graphicImage value="/users/profileImages/#{post.author.id}?width=80&amp;height=80" />
+                        </div>
+                      </div>
+                      <div class="flex-row">
+                        <div class="flex-cell-full no-margin-top no-margin-bottom">
+                          <a jsf:outcome="/users/profile.jsf?userId=#{post.author.id}">#{post.author.fullName}</a>
+                        </div>
+                      </div>
+                      <div class="flex-row sm-flex-hide">
+                        <div class="flex-cell-full no-margin-top no-margin-bottom">
+                          <h:outputFormat value="#{locales['forum.topic.authorPostCount']}">
+                            <f:param value="#{forumTopicBackingBean.getAuthorPostCount(post.author)}"/> 
+                          </h:outputFormat>
+                        </div>
+                      </div>
+                    </div>
+    
+                    <div class="lg-flex-cell-14 lg-flex-cell-last md-flex-cell-14 md-flex-cell-last sm-flex-cell-full no-margin-top no-margin-bottom">
+                      <div class="flex-row">
+                        <div class="flex-cell-full post-content">
+                          <h:outputText value="#{post.content}" escape="false"/>
+                        </div>
+                      </div>
+                      
+                      <div class="flex-row">
+                        <div class="flex-cell-full">
+                          <div class="flex-row">
+                            <div class="flex-cell-14 flex-cell-first no-margin-top no-margin-bottom forum-topic-post-sent">
+                              <h:outputFormat value="#{locales['forum.topic.postSent']}">
+                                <f:param value="#{post.created}"/> 
+                              </h:outputFormat>
+                            </div>
+                            <div class="flex-cell-2 flex-cell-last lg-flex-right no-margin-top no-margin-bottom">
+                              <a class="forum-topic-post-edit" jsf:outcome="/forum/editpost.jsf?forumUrlName=#{post.topic.forum.urlName}&amp;topicUrlName=#{post.topic.urlName}&amp;postId=#{post.id}" jsf:rendered="#{forumTopicBackingBean.getMayModifyPost(post)}">
+                                #{locales['forum.topic.editPost']}
+                              </a>
+                            </div>
+                          </div>     
+                          
+                          <div class="flex-row">
+                            <div class="flex-cell-14 flex-cell-first first no-margin-top no-margin-bottom forum-topic-post-modified">
+                              <h:outputFormat value="#{locales['forum.topic.postModified']}">
+                                <f:param value="#{post.modified}"/> 
+                              </h:outputFormat>
+                            </div>
+                            <div class="flex-cell-2 flex-cell-last no-margin-top no-margin-bottom">
+                            </div>
+                          </div>  
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   
-                    <h:panelGroup layout="block" styleClass="forum-topic-post-modified" rendered="#{post.modified ne post.created}">
-                      <h:outputFormat value="#{locales['forum.topic.postModified']}">
-                        <f:param value="#{post.modified}"/> 
-                      </h:outputFormat>
-                    </h:panelGroup>
-                  </h:panelGroup>
-                </h:panelGroup> 
-              </h:panelGroup>
-            </h:panelGroup>
-          </ui:repeat>  
-        </h:panelGroup>
+                </div>
+              </div>
+            </ui:repeat>         
+          </div>
+        </div>
         
-        <h:panelGroup rendered="#{sessionBackingBean.loggedIn}">
-          <h:form>
-            <h:panelGroup layout="block" styleClass="forum-topic-post-editor-container">
-              <h:inputTextarea value="#{forumTopicBackingBean.reply}" class="forum-topic-post-editor"/>
-            </h:panelGroup>
-            
-            <h:panelGroup layout="block" styleClass="forum-topic-post-send-container">
-              <h:commandButton value="#{locales['forum.topic.replyButton']}" action="#{forumTopicBackingBean.postReply}" />
-            </h:panelGroup>
-          </h:form>
-        </h:panelGroup>
+        <div class="flex-row" jsf:rendered="#{sessionBackingBean.loggedIn}">
+          <div class="flex-cell-full">
+            <h:form>
+              <div class="flex-row">
+                <div class="flex-cell-full forum-topic-post-editor-container">
+                  <textarea jsf:value="#{forumTopicBackingBean.reply}" class="forum-topic-post-editor"></textarea>
+                </div>
+              </div>
+              
+              <div class="flex-row">
+                <div class="flex-cell-full forum-topic-post-send-container">
+                  <h:commandButton value="#{locales['forum.topic.replyButton']}" action="#{forumTopicBackingBean.postReply}" />
+                </div>
+              </div>
+            </h:form>
+          </div>
+        </div>
         
-        <h:panelGroup layout="block" styleClass="forum-topic-reply-login-container" rendered="#{!sessionBackingBean.loggedIn}">
-          <h:outputLink styleClass="forum-topic-reply-login-link" value="#{request.contextPath}/login?redirectUrl=#{request.contextPath}/forum/#{forumTopicBackingBean.forumUrlName}/#{forumTopicBackingBean.topicUrlName}">#{locales['forum.topic.replyLoginRequired']}</h:outputLink>
-        </h:panelGroup>
+        <div class="flex-row" jsf:rendered="#{!sessionBackingBean.loggedIn}">
+          <div class="flex-cell-full">
+            <a class="forum-topic-reply-login-link" jsf:outcome="/users/login.jsf?redirectUrl=#{request.contextPath}/forum/#{forumTopicBackingBean.forumUrlName}/#{forumTopicBackingBean.topicUrlName}">#{locales['forum.topic.replyLoginRequired']}}</a>
+          </div>
+        </div>
         
-      </h:panelGroup>
-    </h:panelGroup>
+      </div>
+    </div>
 
   </ui:define>
 
