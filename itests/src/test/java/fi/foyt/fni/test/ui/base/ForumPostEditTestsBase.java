@@ -1,9 +1,6 @@
 package fi.foyt.fni.test.ui.base;
 
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -41,15 +38,17 @@ public class ForumPostEditTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("forum-basic")
   public void testAdmin() throws Exception {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
-    getWebDriver().get(getAppUrl() + TEST_POST);
-    assertTrue(getWebDriver().findElement(By.cssSelector(".forum-edit-post-panel")).isDisplayed());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate(TEST_POST);
+    waitForSelectorVisible(".cke_wysiwyg_frame");
+    assertSelectorVisible(".cke_wysiwyg_frame");
+    assertSelectorEnabled("input[type=\"submit\"]");
   }
 
   @Test
   @SqlSets ("forum-basic")
   public void testNotFound() throws Exception {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
+    loginInternal("admin@foyt.fi", "pass");
     testNotFound(getWebDriver(), "/forum/q/single_topic/edit/8");
     testNotFound(getWebDriver(), "/forum/1_topic_forum/q/edit/8");
     testNotFound(getWebDriver(), "/forum//single_topic/edit/8");
@@ -63,7 +62,7 @@ public class ForumPostEditTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("forum-special-characters")
   public void testWithSpecialCharacters() throws Exception {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
+    loginInternal("admin@foyt.fi", "pass");
     navigate("/forum/with-special.characters/with-special.characters/edit/28");
     assertTitle("Edit Reply");
   }
