@@ -3,54 +3,63 @@
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['error.notFound.title']}</ui:define>
+    
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
     
   <ui:define name="metadata">
     <f:event type="preRenderView" listener="#{errorNotFoundBackingBean.preRenderListener}"/>
   </ui:define>
   
   <ui:define name="view-stylesheets">
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/error.css"/>
   </ui:define>
 
   <ui:define name="grid-content">
-
+  
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <!-- Header -->
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['error.notFound.navigationIndex']}</a>
+          </div>
+        </div>
+
+        <!-- Description -->
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">
-          <h:link outcome="/index.jsf">#{locales['error.notFound.navigationIndex']}</h:link>
-        </h:panelGroup>
-      </h:panelGroup>
-  
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
+        <div class="view-header-description">
         <p class="view-header-description-title">#{locales['error.notFound.descriptionTitle']}</p>
         <p class="view-header-description-text">#{locales['error.notFound.descriptionText']}</p>
-      </h:panelGroup>
-    </h:panelGroup>
+        </div>
+      </div>
+    </div>  
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="error-panel">
-        <h:panelGroup layout="block" styleClass="error-image-container">
-          <h:graphicImage library="novus" name="/gfx/layout/error-404.png"/> 
-        </h:panelGroup>    
-        <h:panelGroup layout="block" styleClass="error-hint">#{locales['error.notFound.hint']}</h:panelGroup>
-        <h:link styleClass="error-back-to-index" outcome="/index.jsf">#{locales['error.notFound.backToIndex']}</h:link> 
-      </h:panelGroup>
-    </h:panelGroup>
-    
+    <div class="flex-row">
+      <div class="flex-cell-full index-box">
+        <div class="flex-row">
+          <div class="lg-flex-cell-8 lg-flex-cell-first md-flex-cell-8 md-flex-cell-first sm-flex-cell-full">
+            <p class="error-hint">#{locales['error.notFound.hint']}</p>
+            <a class="error-back-to-index" jsf:outcome="/index.jsf">#{locales['error.notFound.backToIndex']}</a>
+          </div>
+          <div class="lg-flex-cell-8 lg-flex-cell-last lg-flex-right md-flex-cell-8 md-flex-cell-last md-flex-right sm-flex-cell-full sm-flex-center">
+            <h:graphicImage library="novus" name="/gfx/layout/error-404.png"/> 
+          </div>
+        </div>
+      </div>
+    </div>  
+
   </ui:define>
 
 </ui:composition>

@@ -2,48 +2,31 @@
 @import "compass";
 @import "styles";
 
-/* General */
-
-h2 {
-  @include header-2;
-}
-
-/* Panels */
-
-.error-panel {
-  @include generic-panel;
-  min-height: 500px;
-}
-
-.error-image-container img {
-  float: right;
+.index-box {
+  min-height: 600px;
 }
 
 .error-hint {
-  position: absolute;
   font-size: 16px;
   font-family: $default-font;
   color: $default-color;
   font-style: italic;
   text-decoration: none;
   font-weight: bold;
-  margin-top: 20px;
-  margin-right: 20px;
-}
 
-.error-hint:before {
-  content: '"';
-}
-
-.error-hint:after {
-  content: '"';
+  &:before {
+    content: '"';
+  }
+  
+  &:after {
+    content: '"';
+  }
 }
 
 .error-back-to-index {
-  margin-top: 60px;
+  padding-top: 20px;
   @include header-2;
   text-decoration: none;
   color: $default-color;
   display: block;
 }
-
