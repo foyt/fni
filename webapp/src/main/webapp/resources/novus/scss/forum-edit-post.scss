@@ -2,23 +2,13 @@
 @import "compass";
 @import "styles";
 
-$border-color: rgb(71, 176, 176);
-
-/* Generic */
-
 h3 {
   @include header-3;
   color: $title-color;
   margin-bottom: 19px;
 }
 
-/* Panels*/
-
-.forum-edit-post-panel {
-  @include generic-panel;
-}
-
-.forum-post-send-container input[type="submit"] {
+input[type="submit"] {
   color: $default-color;
   font-family: $title-font;
   font-size: 14px;
