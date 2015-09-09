@@ -4,13 +4,6 @@
 
 $border-color: rgb(71, 176, 176);
 
-.index-box {
-  padding-top: 36px;
-  padding-left: 36px;
-  padding-right: 36px;
-  padding-bottom: 36px;
-}
-
 h4 {
   @include header-3;
   color: $title-color;
@@ -26,7 +19,9 @@ h4 {
   }
 }
 
-.forum-topic-watch-link, .forum-topic-stop-watching-link {
+.forum-topic-reply-login-link, 
+.forum-topic-watch-link, 
+.forum-topic-stop-watching-link {
   color: $default-color;
   font-family: $default-font;
   font-size: 12px;

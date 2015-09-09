@@ -4,13 +4,6 @@
 
 $topic-border-color: rgb(71, 176, 176);
 
-.index-box {
-  padding-top: 45px;
-  padding-left: 36px;
-  padding-right: 36px;
-  padding-bottom: 45px;
-}
-
 h3 {
   @include header-2;
   
@@ -33,8 +26,6 @@ h5 {
 }
 
 .forum {
-  margin-top: 50px;
-
   .forum-topic-count,
   .forum-last-message,
   .topic-post-count, 
