@@ -64,38 +64,43 @@
         <div class="flex-row">
           <div class="flex-cell-full forum">
             <div class="flex-row">
-              <div class="flex-cell-full">
-                <h3>
-                  <a jsf:outcome="/forum/forum.jsf?forumUrlName=#{forumBackingBean.forum.urlName}">#{forumBackingBean.forum.name}</a>
-                </h3>
-              </div>
+              <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-full">
+                <div class="flex-row">
+                  <div class="flex-cell-full">
+                    <h3>
+                      <a jsf:outcome="/forum/forum.jsf?forumUrlName=#{forumBackingBean.forum.urlName}">#{forumBackingBean.forum.name}</a>
+                    </h3>
+                  </div>
+                </div>
+              
+                <div class="flex-row">
+                  <div class="flex-cell-full">
+                    <h5>
+                      #{forumBackingBean.forum.description}
+                    </h5>
+                  </div>
+                </div>
+                
+              </div> 
+              
+              <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full no-margin-bottom">
+                <div class="flex-row">
+                  <div class="flex-cell-full forum-topic-count">
+                    <h:outputFormat value="#{locales['forum.forum.forumTotalTopics']}">
+                      <f:param value="#{forumBackingBean.topicCount}"/>
+                    </h:outputFormat>
+                  </div>
+                </div>
+              
+                <div class="flex-row">
+                  <div class="flex-cell-full forum-last-message">
+                    <h:outputFormat value="#{locales['forum.forum.forumLastMessage']}" rendered="#{forumBackingBean.lastMessageDate ne null}">
+                      <f:param value="#{forumBackingBean.lastMessageDate}"/>
+                    </h:outputFormat>
+                  </div>
+                </div>
+              </div> 
             </div>  
-            
-            <div class="flex-row">
-              <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full no-margin-bottom">
-                <h5>
-                  #{forumBackingBean.forum.description}
-                </h5>
-              </div>  
-              
-              <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full no-margin-bottom forum-topic-count">
-                <h:outputFormat value="#{locales['forum.forum.forumTotalTopics']}">
-                  <f:param value="#{forumBackingBean.topicCount}"/>
-                </h:outputFormat>
-              </div>  
-            </div>
-            
-            <div class="flex-row">
-              <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-hide">
-              
-              </div>
-            
-              <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full no-margin-top forum-last-message">
-                <h:outputFormat value="#{locales['forum.forum.forumLastMessage']}">
-                  <f:param value="#{forumBackingBean.lastMessageDate}"/>
-                </h:outputFormat>
-              </div>  
-            </div>
   
             <div class="flex-row">
               <div class="flex-cell-full topics">
