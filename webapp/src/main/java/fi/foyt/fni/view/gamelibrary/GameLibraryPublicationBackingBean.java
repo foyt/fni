@@ -18,6 +18,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.users.Role;
 import fi.foyt.fni.security.UnauthorizedException;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.system.SystemSettingsController;
 
 @RequestScoped
 @Named
@@ -37,6 +38,9 @@ public class GameLibraryPublicationBackingBean {
 
   @Inject
   private NavigationController navigationController;
+
+  @Inject
+  private SystemSettingsController systemSettingsController;
   
   @RequestAction
   public String init() {
@@ -63,6 +67,11 @@ public class GameLibraryPublicationBackingBean {
       metaDescription = "";
     }
     
+    metaTitle = publication.getName();
+    metaUrl = String.format("%s/gamelibrary/%s", systemSettingsController.getSiteUrl(true, true), publication.getUrlName());
+    metaImage = String.format("%s/gamelibrary/publicationImages/%d", systemSettingsController.getSiteUrl(true, true), publication.getDefaultImage().getId());
+    metaLocale = publication.getLanguage() != null ? publication.getLanguage().getLocale().toString() : "";
+    
     return null;
   }
   
@@ -82,6 +91,26 @@ public class GameLibraryPublicationBackingBean {
     return metaDescription;
   }
 	
+	public String getMetaImage() {
+    return metaImage;
+  }
+	
+	public String getMetaLocale() {
+    return metaLocale;
+  }
+	
+	public String getMetaTitle() {
+    return metaTitle;
+  }
+	
+	public String getMetaUrl() {
+    return metaUrl;
+  }
+	
 	private Publication publication;
 	private String metaDescription;
+	private String metaTitle;
+	private String metaUrl;
+	private String metaImage;
+	private String metaLocale;
 }
