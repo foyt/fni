@@ -5,17 +5,23 @@ div.flex-row
   div.flex-cell-full.index-box.no-margin-top.no-margin-bottom
     h3
       =locale.text('illusion.materials.title')
-    div(class="illusion-list illusion-event-materials")
-      for material in materials
-        if material.viewable
-          a(href=eventUrl + '/materials/' + material.path, class="illusion-event-material illusion-list-item",data-id=material.id)
-            span
-              =material.title
-            img(src=contextPath + "/theme/gfx/icons/48x48/forge/icon-" + material.icon + ".png")
-              if material.type == 'CHARACTER_SHEET' && user.participant.role == 'ORGANIZER'
-                img(src=contextPath + "/theme/gfx/icons/22x22/illusion/export-spreadsheet.png",class="export-character-sheet-xls")                  
-              else 
-                a(href=siteUrl + material.downloadUrl, class="illusion-event-material illusion-list-item",data-id=material.id)
-                  span
+            
+    div(class="flex-row")
+      div(class="flex-cell-full")
+        div(class="illusion-list illusion-event-materials")
+          for material in materials
+            div(class="flex-row illusion-list-row flex-align-items-center illusion-event-material",data-id=material.id)
+              div(class="lg-flex-cell-15 lg-flex-cell-first md-flex-cell-14 md-flex-cell-first sm-flex-cell-12 sm-flex-cell-first")
+                if material.viewable
+                  a(href=eventUrl + '/materials/' + material.path, class= illusion-list-item")
                     =material.title
-                  img(src=contextPath + "/theme/gfx/icons/48x48/forge/icon-" + material.icon + ".png")
+                else
+                  a(href=siteUrl + material.downloadUrl, class="illusion-list-item")
+                    =material.title
+              div(class="lg-flex-cell-1 lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-4 sm-flex-cell-last")
+                div(class="flex-row")
+                  div(class="flex-cell-8 flex-cell-8 flex-cell-8 flex-cell-first flex-right no-margin-top no-margin-bottom")
+                    if material.type == 'CHARACTER_SHEET' && user.participant.role == 'ORGANIZER'
+                      img(src=contextPath + "/theme/gfx/icons/22x22/illusion/export-spreadsheet.png",class="export-character-sheet-xls")                  
+                  div(class="flex-cell-8 flex-cell-8 flex-cell-8 flex-cell-last flex-right no-margin-top no-margin-bottom")
+                    img(src=contextPath + "/theme/gfx/icons/48x48/forge/icon-" + material.icon + ".png")
