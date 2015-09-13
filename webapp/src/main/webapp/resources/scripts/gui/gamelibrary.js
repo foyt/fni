@@ -78,7 +78,22 @@
           facebook: {
             enabled: true,
             load_sdk: false
-          }
+          },
+          pinterest: {
+            enabled: false
+          },
+          reddit: {
+            enabled: false
+          },
+          linkedin: {
+            enabled: false
+          },
+          whatsapp: {
+            enabled: false
+          },
+          email: {
+            enabled: false
+          },
         }
       });
       
