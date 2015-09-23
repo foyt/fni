@@ -7,10 +7,15 @@
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['users.editProfile.pageTitle']}</ui:define>
+
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+
   <ui:define name="view-scripts">
     <!-- CKEditor -->
   
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.2/ckeditor.js"/>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.4.5/ckeditor.js"/>
   
     <!-- md5 -->
     
@@ -28,7 +33,7 @@
 
     <!-- View styles -->
     
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/users-editprofile.css"/>
     
   </ui:define>
@@ -37,112 +42,187 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
-
-    <!-- Header -->
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['users.editProfile.navigationIndex']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/users/login.jsf">#{locales['users.editProfile.navigationEditProfile']}</a>
+          </div>
+        </div>
 
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['users.editProfile.navigationIndex']}</h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:link styleClass="view-header-navigation-item" outcome="/users/login.jsf">#{locales['users.editProfile.navigationEditProfile']}</h:link>
-      </h:panelGroup>
-        
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">
-          <span>#{locales['users.editProfile.descriptionTitle']}</span>
-          <h:outputLink value="#{request.contextPath}/profile/#{sessionBackingBean.loggedUser.id}">#{locales['users.editProfile.viewProfileLink']}</h:outputLink>
-        </p>
-        <p class="view-header-description-text">#{locales['users.editProfile.descriptionText']}</p>
-      </h:panelGroup>
-    </h:panelGroup>
+        <!-- Description -->
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="grid_16 tight">
-        <h:panelGroup layout="block" styleClass="user-editprofile-panel">
-          <h3>#{locales['users.editProfile.editProfileTitle']}</h3>
+        <div class="view-header-description">
+          <p class="view-header-description-title">
+            <span>#{locales['users.editProfile.descriptionTitle']}</span>
+            <a jsf:outcome="/users/profile.jsf?userId=#{sessionBackingBean.loggedUser.id}">#{locales['users.editProfile.viewProfileLink']}</a>
+          </p>
+          <p class="view-header-description-text">#{locales['users.editProfile.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
 
-          <h:form>
-            <h:panelGroup layout="block" styleClass="users-editprofile-image-container">
-              <h:panelGroup layout="block" styleClass="users-editprofile-image-inner-container">
-                <h:graphicImage value="/users/profileImages/#{sessionBackingBean.loggedUser.id}?width=140&amp;height=140&amp;s=#{sessionBackingBean.loggedUser.profileImageSource}" />
-                <a href="javascript:void(null)" class="users-editprofile-image-change" data-user-id="#{sessionBackingBean.loggedUser.id}">#{locales['users.editProfile.uploadProfileImage']}</a>
-              </h:panelGroup>  
-            </h:panelGroup>
-            
-            <h:panelGroup layout="block" styleClass="users-editprofile-field">
-              <h:outputLabel value="#{locales['users.editProfile.firstNameLabel']}" />
-              <input type="text" required="required" jsf:value="#{editProfileBackingBean.firstName}" jsf:required="true" jsf:requiredMessage="#{locales['users.editProfile.firstNameRequired']}" data-requiredmessage="#{locales['users.editProfile.firstNameRequired']}"/>
-            </h:panelGroup>  
-            
-            <h:panelGroup layout="block" styleClass="users-editprofile-field">
-              <h:outputLabel value="#{locales['users.editProfile.lastNameLabel']}" />
-              <input type="text" required="required" jsf:value="#{editProfileBackingBean.lastName}" jsf:required="true" jsf:requiredMessage="#{locales['users.editProfile.lastNameRequired']}" data-requiredmessage="#{locales['users.editProfile.lastNameRequired']}"/>
-            </h:panelGroup>  
-            
-            <h:panelGroup layout="block" styleClass="users-editprofile-field">
-              <h:outputLabel value="#{locales['users.editProfile.nicknameLabel']}" />
-              <h:inputText value="#{editProfileBackingBean.nickname}"/>
-            </h:panelGroup>  
-            
-            <h:panelGroup layout="block" styleClass="users-editprofile-field">
-              <h:outputLabel value="#{locales['users.editProfile.profileImageSource']}" />
-              <h:selectOneRadio layout="pageDirection" styleClass="users-editprofile-image-source" value="#{editProfileBackingBean.profileImageSource}">
-                <f:selectItem itemLabel="#{locales['users.editProfile.profileImageSourceGravatar']}" itemValue="GRAVATAR"/>
-                <f:selectItem itemLabel="#{locales['users.editProfile.profileImageSourceFni']}" itemValue="FNI" itemDisabled="#{!editProfileBackingBean.hasFniProfileImage}"/>
-                <f:ajax execute="@form" render="@form"/>
-              </h:selectOneRadio>
-            </h:panelGroup>  
-            
-            <h3>#{locales['users.editProfile.contactInfoTitle']}</h3> 
-            
-            <h:panelGroup layout="block" styleClass="users-editprofile-field">
-              <h:outputLabel value="#{locales['users.editProfile.contactInfoFieldHomePage']}" />
-              <h:inputText value="#{editProfileBackingBean.contactInfoFieldHomePage}"/>
-            </h:panelGroup>  
-            
-            <h:panelGroup layout="block" styleClass="users-editprofile-field">
-              <h:outputLabel value="#{locales['users.editProfile.contactInfoFieldBlog']}" />
-              <h:inputText value="#{editProfileBackingBean.contactInfoFieldBlog}"/>
-            </h:panelGroup>   
-            
-            <h:panelGroup layout="block" styleClass="users-editprofile-field">
-              <h:outputLabel value="#{locales['users.editProfile.contactInfoFieldFacebook']}" />
-              <h:inputText value="#{editProfileBackingBean.contactInfoFieldFacebook}"/>
-            </h:panelGroup>   
-            
-            <h:panelGroup layout="block" styleClass="users-editprofile-field">
-              <h:outputLabel value="#{locales['users.editProfile.contactInfoFieldTwitter']}" />
-              <h:inputText value="#{editProfileBackingBean.contactInfoFieldTwitter}"/>
-            </h:panelGroup>   
-            
-            <h:panelGroup layout="block" styleClass="users-editprofile-field">
-              <h:outputLabel value="#{locales['users.editProfile.contactInfoFieldLinkedIn']}" />
-              <h:inputText value="#{editProfileBackingBean.contactInfoFieldLinkedIn}"/>
-            </h:panelGroup>   
-            
-            <h:panelGroup layout="block" styleClass="users-editprofile-field">
-              <h:outputLabel value="#{locales['users.editProfile.contactInfoFieldGooglePlus']}" />
-              <h:inputText value="#{editProfileBackingBean.contactInfoFieldGooglePlus}"/>
-            </h:panelGroup>  
-            
-            <h3>#{locales['users.editProfile.authenticationSourcesTitle']}</h3>
+    <div class="flex-row">
+      <div class="flex-cell-full index-box">
+        <h:form>
         
-            <h:panelGroup layout="block" styleClass="users-editprofile-add-authentication-source" rendered="#{!editProfileBackingBean.addAuthenticationSourcesSelectItems.isEmpty()}">
-              <h:outputLabel value="#{locales['users.editProfile.addNewAuthenticationSourceLabel']}" />
-              <h:selectOneMenu>
-                <f:selectItem itemValue="#{locales['users.editProfile.authenticationSourceChoose']}"/>
-                <f:selectItems value="#{editProfileBackingBean.addAuthenticationSourcesSelectItems}"/>
-              </h:selectOneMenu>
-            </h:panelGroup>
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <h3>#{locales['users.editProfile.editProfileTitle']}</h3>
+            </div>
+          </div>
         
-            <h:panelGroup style="display: none" styleClass="users-editprofile-enable-authsource-container users-editprofile-enable-internal-authsource-container"> 
-
+          <div class="flex-row">
+            <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
+              <div class="flex-row field">
+                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                  <label>#{locales['users.editProfile.firstNameLabel']}</label>
+                </div>
+                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                  <input type="text" required="required" jsf:value="#{editProfileBackingBean.firstName}" jsf:required="true" jsf:requiredMessage="#{locales['users.editProfile.firstNameRequired']}" data-requiredmessage="#{locales['users.editProfile.firstNameRequired']}"/>
+                </div>
+              </div>
+              
+              <div class="flex-row field">
+                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                  <label>#{locales['users.editProfile.lastNameLabel']}</label>
+                </div>
+                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                  <input type="text" required="required" jsf:value="#{editProfileBackingBean.lastName}" jsf:required="true" jsf:requiredMessage="#{locales['users.editProfile.lastNameRequired']}" data-requiredmessage="#{locales['users.editProfile.lastNameRequired']}"/>
+                </div>
+              </div>
+              
+              <div class="flex-row field">
+                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                  <label>#{locales['users.editProfile.nicknameLabel']}</label>
+                </div>
+                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                  <input type="text" jsf:value="#{editProfileBackingBean.nickname}"/>
+                </div>
+              </div>
+              
+              <div class="flex-row field">
+                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                  <label>#{locales['users.editProfile.profileImageSource']}</label>
+                </div>
+                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                  <h:selectOneRadio layout="pageDirection" styleClass="users-editprofile-image-source" value="#{editProfileBackingBean.profileImageSource}">
+                    <f:selectItem itemLabel="#{locales['users.editProfile.profileImageSourceGravatar']}" itemValue="GRAVATAR"/>
+                    <f:selectItem itemLabel="#{locales['users.editProfile.profileImageSourceFni']}" itemValue="FNI" itemDisabled="#{!editProfileBackingBean.hasFniProfileImage}"/>
+                    <f:ajax execute="@form" render="@form"/>
+                  </h:selectOneRadio>
+                </div>
+              </div>
+            
+            </div>
+            
+            <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full">
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <h:graphicImage value="/users/profileImages/#{sessionBackingBean.loggedUser.id}?width=140&amp;height=140&amp;s=#{sessionBackingBean.loggedUser.profileImageSource}" />
+                </div>
+                <div class="flex-cell-full">
+                  <a href="javascript:void(null)" class="users-editprofile-image-change" data-user-id="#{sessionBackingBean.loggedUser.id}">#{locales['users.editProfile.uploadProfileImage']}</a>
+                </div>
+              </div>
+            </div>
+            
+         </div>
+         
+         <div class="flex-row">
+           <div class="flex-cell-full">
+             <h3>#{locales['users.editProfile.contactInfoTitle']}</h3> 
+           </div>
+         </div>
+        
+          <div class="flex-row">
+            <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
+              <div class="flex-row field">
+                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                  <label>#{locales['users.editProfile.contactInfoFieldHomePage']}</label>
+                </div>
+                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                  <input type="text" jsf:value="#{editProfileBackingBean.contactInfoFieldHomePage}"/>
+                </div>
+              </div>
+              
+              <div class="flex-row field">
+                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                  <label>#{locales['users.editProfile.contactInfoFieldBlog']}</label>
+                </div>
+                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                  <input type="text" jsf:value="#{editProfileBackingBean.contactInfoFieldBlog}"/>
+                </div>
+              </div>
+              
+              <div class="flex-row field">
+                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                  <label>#{locales['users.editProfile.contactInfoFieldFacebook']}</label>
+                </div>
+                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                  <input type="text" jsf:value="#{editProfileBackingBean.contactInfoFieldFacebook}"/>
+                </div>
+              </div>
+              
+              <div class="flex-row field">
+                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                  <label>#{locales['users.editProfile.contactInfoFieldTwitter']}</label>
+                </div>
+                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                  <input type="text" jsf:value="#{editProfileBackingBean.contactInfoFieldTwitter}"/>
+                </div>
+              </div>
+              
+              <div class="flex-row field">
+                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                  <label>#{locales['users.editProfile.contactInfoFieldLinkedIn']}</label>
+                </div>
+                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                  <input type="text" jsf:value="#{editProfileBackingBean.contactInfoFieldLinkedIn}"/>
+                </div>
+              </div>
+              
+              <div class="flex-row field">
+                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                  <label>#{locales['users.editProfile.contactInfoFieldGooglePlus']}</label>
+                </div>
+                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                  <input type="text" jsf:value="#{editProfileBackingBean.contactInfoFieldGooglePlus}"/>
+                </div>
+              </div>
+            </div>
+          </div>
+            
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <h3>#{locales['users.editProfile.authenticationSourcesTitle']}</h3>
+            </div>
+          </div>
+        
+          <div class="flex-row">
+            <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
+              <div class="flex-row field users-editprofile-add-authentication-source" jsf:rendered="#{!editProfileBackingBean.addAuthenticationSourcesSelectItems.isEmpty()}">
+                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                  <label>#{locales['users.editProfile.addNewAuthenticationSourceLabel']}</label>
+                </div>
+                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                  <h:selectOneMenu>
+                    <f:selectItem itemValue="#{locales['users.editProfile.authenticationSourceChoose']}"/>
+                    <f:selectItems value="#{editProfileBackingBean.addAuthenticationSourcesSelectItems}"/>
+                  </h:selectOneMenu>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex-row users-editprofile-enable-authsource-container users-editprofile-enable-internal-authsource-container" style="display: none">
+            <div class="flex-cell-full">
               <h:panelGroup layout="block" styleClass="users-editprofile-field">
                 <h:outputLabel value="#{locales['users.editProfile.addInternalAuthenticationSourcePassword1']}" />
                 <h:inputSecret id="new-internal-auth-password1"/>
@@ -157,61 +237,102 @@
             
               <a class="users-editprofile-new-internal-auth-link" href="javascript:void(null)">#{locales['users.editProfile.addNewAuthenticationSourceLink']}</a>
               <h:commandLink styleClass="users-editprofile-new-internal-auth-link-cmd" action="#{editProfileBackingBean.addNewInternalAuthencationSource}"></h:commandLink>
-            </h:panelGroup>
-            <h:panelGroup style="display: none" styleClass="users-editprofile-enable-authsource-container users-editprofile-enable-facebook-authsource-container"> 
+            </div>
+          </div>
+          
+          <div class="flex-row users-editprofile-enable-authsource-container users-editprofile-enable-facebook-authsource-container" style="display: none">
+            <div class="flex-cell-full">
               <h:commandLink action="#{editProfileBackingBean.enableFacebookAuthSource}" styleClass="users-editprofile-enable-facebook-authsource">#{locales['users.editProfile.addNewAuthenticationSourceLink']}</h:commandLink>
-            </h:panelGroup>
-            <h:panelGroup style="display: none" styleClass="users-editprofile-enable-authsource-container users-editprofile-enable-google-authsource-container"> 
+            </div>
+          </div>
+          
+          <div class="flex-row users-editprofile-enable-authsource-container users-editprofile-enable-google-authsource-container" style="display: none">
+            <div class="flex-cell-full">
               <h:commandLink action="#{editProfileBackingBean.enableGoogleAuthSource}" styleClass="users-editprofile-enable-google-authsource">#{locales['users.editProfile.addNewAuthenticationSourceLink']}</h:commandLink>
-            </h:panelGroup>
-            <h:panelGroup style="display: none" styleClass="users-editprofile-enable-authsource-container users-editprofile-enable-yahoo-authsource-container"> 
-              <h:commandLink action="#{editProfileBackingBean.enableYahooAuthSource}" styleClass="users-editprofile-enable-yahoo-authsource">#{locales['users.editProfile.addNewAuthenticationSourceLink']}</h:commandLink>
-            </h:panelGroup>
+            </div>
+          </div>
             
-            <h:panelGroup layout="block" styleClass="users-editprofile-enabled-authentication-sources">
-              <h:outputLabel value="#{locales['users.editProfile.enabledAuthenticationSources']}" />
-              <ui:repeat var="userIdentifier" value="#{editProfileBackingBean.userIdentifiers}">
-                <h:panelGroup layout="block" styleClass="users-editprofile-enabled-authentication-source">
-                  <h:outputLabel value="#{editProfileBackingBean.getAuthenticationSourceName(userIdentifier.authSource)}" />
-                  <span>&lt;#{userIdentifier.sourceId}&gt;</span>
-                  <!-- 
-                  <h:commandLink styleClass="users-editprofile-authentication-source-remove" action="#{editProfileBackingBean.removeAuthenticationSource(userIdentifier.id)}">#{locales['users.editProfile.removeAuthenticationSource']}</h:commandLink>
-                   -->
-                  <h:outputLink styleClass="users-editprofile-authentication-source-change-password" value="javascript:void(null)" rendered="#{userIdentifier.authSource eq 'INTERNAL'}">#{locales['users.editProfile.changePasswordLink']}</h:outputLink>
-                  <h:panelGroup layout="block" styleClass="users-editprofile-authentication-source-change-password-container" rendered="#{userIdentifier.authSource eq 'INTERNAL'}" style="display: none">
-                    <h:panelGroup layout="block" styleClass="users-editprofile-field">
-                      <h:outputLabel value="#{locales['users.editProfile.changePasswordPassword1']}" />
-                      <input type="password" class="users-editprofile-authentication-source-change-password-password1"/>
-                    </h:panelGroup>  
-                    
-                    <h:panelGroup layout="block" styleClass="users-editprofile-field">
-                      <h:outputLabel value="#{locales['users.editProfile.changePasswordPassword2']}" />
-                      <input type="password" class="users-editprofile-authentication-source-change-password-password2"/>
-                    </h:panelGroup> 
-                    
-                    <h:commandButton action="#{editProfileBackingBean.changePassword}" value="#{locales['users.editProfile.changePasswordButton']}" />
-                  </h:panelGroup>
-                </h:panelGroup>
-              </ui:repeat>
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <label>#{locales['users.editProfile.enabledAuthenticationSources']}</label>
+            </div>
+          </div>
+          
+          <ui:repeat var="userIdentifier" value="#{editProfileBackingBean.userIdentifiers}">
+            <div class="flex-row users-editprofile-enabled-authentication-source">
+              <div class="flex-cell-full">
+                <div class="flex-row">
+                  <div class="flex-cell-full">
+                    <div class="flex-row">
+                      <div class="flex-cell-10 flex-cell-first">
+                        <label>#{editProfileBackingBean.getAuthenticationSourceName(userIdentifier.authSource)}</label>
+                        <span>&lt;#{userIdentifier.sourceId}&gt;</span>
+                      </div>
+                      
+                      <div class="flex-cell-6 flex-cell-last flex-right" jsf:rendered="#{userIdentifier.authSource eq 'INTERNAL'}">
+                        <a class="users-editprofile-authentication-source-change-password" jsf:value="javascript:void(null)">#{locales['users.editProfile.changePasswordLink']}</a>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>                
               
-              <h:inputHidden id="change-password1-encoded" value="#{editProfileBackingBean.changePassword1}"/>
-              <h:inputHidden id="change-password2-encoded" value="#{editProfileBackingBean.changePassword2}"/>
-            </h:panelGroup>
+                <div class="flex-row users-editprofile-authentication-source-change-password-container" jsf:rendered="#{userIdentifier.authSource eq 'INTERNAL'}" style="display: none">
+                  <div class="flex-cell-full">
+                    <div class="flex-row field">
+                      <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                        <label>#{locales['users.editProfile.changePasswordPassword2']}</label>
+                      </div>
+                      <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                        <input type="password" class="users-editprofile-authentication-source-change-password-password2"/>
+                      </div>
+                    </div>
+                    
+                    <div class="flex-row field">
+                      <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                        <label>#{locales['users.editProfile.changePasswordPassword1']}</label>
+                      </div>
+                      <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                        <input type="password" class="users-editprofile-authentication-source-change-password-password1"/>
+                      </div>
+                    </div>
+    
+                    <div class="flex-row">
+                      <div class="flex-cell-full">
+                        <h:commandButton action="#{editProfileBackingBean.changePassword}" value="#{locales['users.editProfile.changePasswordButton']}" />
+                      </div>
+                    </div>
+                  </div>
+                </div>                                
+              </div>
+            </div>
 
-            <h3>#{locales['users.editProfile.aboutTitle']}</h3>
-            <h:panelGroup layout="block" styleClass="users-editprofile-field">
-              <h:inputTextarea styleClass="about-editor" value="#{editProfileBackingBean.about}"/>
-            </h:panelGroup>  
-
-            <h:panelGroup layout="block" styleClass="users-editprofile-field">
+          </ui:repeat>
+          
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <h3>#{locales['users.editProfile.aboutTitle']}</h3>
+            </div>
+          </div>
+          
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <textarea class="about-editor" jsf:value="#{editProfileBackingBean.about}"></textarea>
+            </div>
+          </div>
+          
+          <div class="flex-row">
+            <div class="flex-cell-full">
               <h:commandButton action="#{editProfileBackingBean.save}" value="#{locales['users.editProfile.saveButton']}" />
-            </h:panelGroup>
-            
-            <input type="hidden" jsf:value="#{editProfileBackingBean.redirectUrl}"/>
-          </h:form>
-        </h:panelGroup>
-      </h:panelGroup>
-    </h:panelGroup>
+            </div>
+          </div>
+          
+          <h:inputHidden id="change-password1-encoded" value="#{editProfileBackingBean.changePassword1}"/>
+          <h:inputHidden id="change-password2-encoded" value="#{editProfileBackingBean.changePassword2}"/>
+        </h:form>
+      </div>
+    </div>
+
   </ui:define>
 
 </ui:composition>
