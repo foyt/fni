@@ -8,8 +8,12 @@
 
   <ui:define name="page-title">#{locales['users.oauth2authorize.pageTitle']}</ui:define>
   
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
+  
   <ui:define name="view-stylesheets">
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/users-oauth2-authorize.css"/>
   </ui:define>
 
@@ -17,43 +21,62 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
-    
-    <!-- Header -->
-    
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
+    <ui:include src="/facelets/flex-menu.xhtml" />
 
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['users.oauth2authorize.navigationIndex']}</h:link>
-      </h:panelGroup>
-        
-      <!-- Description -->
-  
-      <div class="view-header-description">
-        <p class="view-header-description-title">#{locales['users.oauth2authorize.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['users.oauth2authorize.descriptionText']}</p>
-      </div>
-    </h:panelGroup>
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <span class="view-header-navigation-item">
+              <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['users.oauth2authorize.navigationIndex']}</h:link>
+            </span>
+          </div>
+        </div>
+
+        <!-- Description -->
     
-    <div class="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="users-oauth2-authorize-panel">
-        <p>
-          <h:outputFormat value="#{locales['users.oauth2authorize.question']}">
-            <f:param value="#{oAuth2AuthorizeBackingBean.clientName}"/>
-          </h:outputFormat>
-        </p>
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['users.oauth2authorize.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['users.oauth2authorize.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex-row">
+      <div class="flex-cell-full index-box">
+        <div class="flex-row">
+          <div class="flex-cell-full flex-center question">
+            <p>
+              <h:outputFormat value="#{locales['users.oauth2authorize.question']}">
+                <f:param value="#{oAuth2AuthorizeBackingBean.clientName}"/>
+              </h:outputFormat>
+            </p>
+          </div>
+        </div>   
         
         <h:form>
-          <h:commandButton styleClass="users-oauth2-authorize-authorize-button" action="#{oAuth2AuthorizeBackingBean.authorize}" value="#{locales['users.oauth2authorize.authorize']}"/>
-          <h:commandButton styleClass="users-oauth2-authorize-deny-button" action="#{oAuth2AuthorizeBackingBean.deny}" value="#{locales['users.oauth2authorize.deny']}"/>
-        
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <div class="flex-row flex-justify-content-center">
+                <div class="flex-cell-4">
+                  <h:commandButton styleClass="users-oauth2-authorize-authorize-button" action="#{oAuth2AuthorizeBackingBean.authorize}" value="#{locales['users.oauth2authorize.authorize']}"/>
+                </div>
+                
+                <div class="flex-cell-4">
+                  <h:commandButton styleClass="users-oauth2-authorize-deny-button" action="#{oAuth2AuthorizeBackingBean.deny}" value="#{locales['users.oauth2authorize.deny']}"/>
+                </div>
+              </div>
+               
+            </div>
+          </div> 
+
           <input type="hidden" jsf:value="#{oAuth2AuthorizeBackingBean.clientId}"/>
           <input type="hidden" jsf:value="#{oAuth2AuthorizeBackingBean.requestType}"/>
-        </h:form>      
-      </h:panelGroup>
-    </div>
+        </h:form>   
+      </div>
+    </div> 
 
   </ui:define>
 

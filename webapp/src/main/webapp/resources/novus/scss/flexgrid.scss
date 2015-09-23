@@ -126,6 +126,26 @@
     align-items: flex-end;
   }
   
+  .#{$prefix}flex-justify-content-start {
+    @include justify-content(flex-start);
+  }
+  
+  .#{$prefix}flex-justify-content-end {
+    @include justify-content(flex-end);
+  }
+  
+  .#{$prefix}flex-justify-content-center {
+    @include justify-content(center);
+  }
+  
+  .#{$prefix}flex-justify-content-space-between {
+    @include justify-content(space-between);
+  }
+  
+  .#{$prefix}flex-justify-content-space-around {
+    @include justify-content(space-around);
+  }
+  
   .#{$prefix}flex-row {
     @include display-flex;
     @include flex-direction(row);
