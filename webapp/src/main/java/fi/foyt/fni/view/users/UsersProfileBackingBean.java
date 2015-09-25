@@ -279,6 +279,14 @@ public class UsersProfileBackingBean {
 	public List<Event> getOrganizerInEvents() {
     return organizerInEvents;
   }
+	
+  public String replaceDescriptionLineBreaks(String description) {
+    if (StringUtils.isNotBlank(description)) {
+      return description.replace("\n", "<br/>");  
+    }
+    
+    return null;
+  }
 
   private List<Event> createEventPojos(List<IllusionEvent> illusionEvents) {
     List<Event> result = new ArrayList<>();
