@@ -3,16 +3,21 @@
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['users.verification.pageTitle']}</ui:define>
+
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
  
   <ui:define name="view-stylesheets">
   
     <!-- View styles -->
     
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
-    <h:outputStylesheet library="novus" name="css/users-verify.css"/>
+     <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
+     <h:outputStylesheet library="novus" name="css/users-verify.css"/>
     
   </ui:define>
 
@@ -20,13 +25,14 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="user-verify-panel">
+    <div class="flex-row">
+      <div class="flex-cell-full index-box user-verify-panel">
         #{locales['users.verification.verificationMessage']}
-      </h:panelGroup>
-    </h:panelGroup>
+      </div>
+    </div>
+    
   </ui:define>
 
 </ui:composition>
