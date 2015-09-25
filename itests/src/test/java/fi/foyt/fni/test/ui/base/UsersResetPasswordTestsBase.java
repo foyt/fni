@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 public class UsersResetPasswordTestsBase extends AbstractUITest {
 
@@ -15,11 +14,8 @@ public class UsersResetPasswordTestsBase extends AbstractUITest {
   @Test
   public void testInvalidKeyTest() {
     getWebDriver().get(getAppUrl() + "/users/resetpassword/bogus");
-
-    WebElement form = getWebDriver().findElement(By.cssSelector(".user-resetpassword-panel form"));
-    String formId = form.getAttribute("id");
-    getWebDriver().findElement(By.name(formId + ":password1")).sendKeys("qwe");
-    getWebDriver().findElement(By.name(formId + ":password2")).sendKeys("qwe");
+    sendKeysSelector(".password1", "qwe");
+    sendKeysSelector(".password2", "qwe");
     getWebDriver().findElement(By.cssSelector("input[type='submit']")).click();
 
     waitForNotification(getWebDriver());
@@ -38,10 +34,8 @@ public class UsersResetPasswordTestsBase extends AbstractUITest {
       executeSql("insert into PasswordResetKey (id, created, value, user_id) values (?, ?, ?, ?)", USER_ID, new Date(), key, USER_ID);
       try {
         getWebDriver().get(getAppUrl() + "/users/resetpassword/" + key);
-        WebElement form = getWebDriver().findElement(By.cssSelector(".user-resetpassword-panel form"));
-        String formId = form.getAttribute("id");
-        getWebDriver().findElement(By.name(formId + ":password1")).sendKeys("qwe");
-        getWebDriver().findElement(By.name(formId + ":password2")).sendKeys("qwe");
+        sendKeysSelector(".password1", "qwe");
+        sendKeysSelector(".password2", "qwe");
         getWebDriver().findElement(By.cssSelector("input[type='submit']")).click();
 
         loginInternal(getWebDriver(), USER_EMAIL, "qwe");
