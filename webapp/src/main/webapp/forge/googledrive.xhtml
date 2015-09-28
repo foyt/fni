@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">
     <h:outputFormat value="#{locales['forge.googleDrive.pageTitle']}">
       <f:param value="#{forgeGoogleDriveBackingBean.materialTitle}"/>
     </h:outputFormat></ui:define>
+  
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
+  </ui:define>
     
   <ui:define name="view-stylesheets">
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/forge-google-drive.css"/>
   </ui:define>
   
@@ -22,42 +31,48 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <!-- Header -->
-    
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-  
-      <ui:include src="/facelets/forgenavigation.xhtml">    
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <ui:include src="/facelets/forgenavigation.xhtml">    
         <ui:param name="folders" value="#{forgeGoogleDriveBackingBean.folders}"/>
-      </ui:include>
+        </ui:include>
+
+        <!-- Description -->
+    
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['forge.googleDrive.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['forge.googleDrive.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex-row">
+      <div class="flex-cell-full index-box">
+
+        <div class="flex-row">
+          <div class="flex-cell-full forge-google-drive-header-container">
+            <h2>#{forgeGoogleDriveBackingBean.materialTitle}</h2>
+          </div>
+        </div>
+        
+        <div class="flex-row">
+          <div class="flex-cell-full forge-google-drive-link-container">
+            <a target="_blank" href="#{forgeGoogleDriveBackingBean.googleDriveEditLink}">#{locales['forge.googleDrive.linkToGoogleDrive']}</a>
+          </div>
+        </div>
       
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['forge.googleDrive.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['forge.googleDrive.descriptionText']}</p>
-      </h:panelGroup>
-    </h:panelGroup>
-
-    <!-- Google Drive Viewer -->
-
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="forge-google-drive-panel">
-        <h:panelGroup layout="block" styleClass="forge-google-drive-link-container">
-          <a target="_blank" href="#{forgeGoogleDriveBackingBean.googleDriveEditLink}">#{locales['forge.googleDrive.linkToGoogleDrive']}</a>
-        </h:panelGroup>
-        <h:panelGroup layout="block" styleClass="forge-google-drive-header-container">
-          <h2>
-            #{forgeGoogleDriveBackingBean.materialTitle}
-          </h2>
-        </h:panelGroup>
-        <h:panelGroup layout="block" styleClass="forge-google-drive-container">
-          <iframe seamless="seamless" src="#{request.contextPath}/forge/gdrive/#{forgeGoogleDriveBackingBean.materialId}"></iframe>
-        </h:panelGroup>
-      </h:panelGroup>
-    </h:panelGroup>
+        <div class="flex-row">
+          <div class="flex-cell-full flex-center forge-google-drive-container">
+            <iframe seamless="seamless" src="#{request.contextPath}/forge/gdrive/#{forgeGoogleDriveBackingBean.materialId}"></iframe>
+          </div>
+        </div>
+      
+      </div>
+    </div>    
     
   </ui:define>
 
