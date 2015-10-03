@@ -21,7 +21,7 @@ env:
   - secure: TjZNKclYzXO4CaiJI0NsDAOTYbVXUjU7db/4Pgx00eNCQxJMEmdt3sdzt5r5bRQtB4rPWGKa9Ki4wfd+MMHAa987bjIwSTzBXiCG8+LJNutdCTDXk446dmgsAWWjF39Y4kfnagZ/qbxEiVb+9+ixfrLyNKhvVDE34y26ySrxdZg=
   - secure: WUWchzcdGrC6aifA9DuztFPpJLjrns/4ymIzHmjIjLWVXvXGEYnNhbgbH76hW5wFl89Ve8YMvHBcF50P++sRD1HwHSF6naDoiASpmHxAKBnyKJvdxgo06DMygMqlrg8zwEk0Ilh1nF9m5KGEEYLggxQLZEi2dXMANPZs3wR5qOY=
 addons:
-  sauce_connect: 
+  sauce_connect:
     tunnel_domains: test.forgeandillusion.net,custom-test.forgeandillusion.net
 script: mvn test verify -Ptravis -Dexec.args="-Duser.timezone=UTC"
 after_success:
