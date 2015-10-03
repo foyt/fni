@@ -202,7 +202,7 @@
         <it.port.https>8443</it.port.https>
         <it.smtp.port>3025</it.smtp.port>
         <it.host>test.forgeandillusion.net</it.host>
-        <it.ctx>fnici</it.ctx>
+        <it.ctx></it.ctx>
         <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
         <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE</it.jdbc.url>
         <it.jdbc.jndi>java:/jboss/datasources/fni</it.jdbc.jndi>
@@ -633,7 +633,7 @@
                   <protocol>http</protocol>
                   <host>${it.host}</host>
                   <port>${it.port.http}</port>
-                  <file>/${it.ctx}/rest/system/ping</file>
+                  <file>/rest/system/ping</file>
                   <maxcount>20</maxcount>
                   <timeout>10000</timeout>
                 </configuration>
@@ -658,7 +658,7 @@
         <it.port.https>8443</it.port.https>
         <it.smtp.port>3025</it.smtp.port>
         <it.host>test.forgeandillusion.net</it.host>
-        <it.ctx>fnici</it.ctx>
+        <it.ctx></it.ctx>
         <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
         <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE</it.jdbc.url>
         <it.jdbc.jndi>java:/jboss/datasources/fni</it.jdbc.jndi>
@@ -1085,7 +1085,7 @@
                   <protocol>http</protocol>
                   <host>${it.host}</host>
                   <port>${it.port.http}</port>
-                  <file>/${it.ctx}</file>
+                  <file>/rest/system/ping</file>
                   <maxcount>20</maxcount>
                   <timeout>10000</timeout>
                 </configuration>
@@ -1109,7 +1109,7 @@
         <it.port.http>8080</it.port.http>
         <it.port.https>8443</it.port.https>
         <it.host>test.forgeandillusion.net</it.host>
-        <it.ctx>fnici</it.ctx>
+        <it.ctx></it.ctx>
         <it.smtp.port>3025</it.smtp.port>
         <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
         <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE</it.jdbc.url>
@@ -1568,7 +1568,7 @@
                   <protocol>http</protocol>
                   <host>${it.host}</host>
                   <port>${it.port.http}</port>
-                  <file>/${it.ctx}</file>
+                  <file>/rest/system/ping</file>
                   <maxcount>20</maxcount>
                   <timeout>10000</timeout>
                 </configuration>
@@ -1592,7 +1592,7 @@
         <it.port.http>8080</it.port.http>
         <it.port.https>8443</it.port.https>
         <it.host>test.forgeandillusion.net</it.host>
-        <it.ctx>fnici</it.ctx>
+        <it.ctx></it.ctx>
         <it.smtp.port>3025</it.smtp.port>
         <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
         <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE</it.jdbc.url>
@@ -1645,7 +1645,7 @@
                 </goals>
                 <configuration>
                   <files>
-                    <file>src/test/resources/it.properties</file>
+                    <file>src/test/resources/it-travis.properties</file>
                   </files>
                 </configuration>
               </execution>
@@ -2025,7 +2025,7 @@
                   <protocol>http</protocol>
                   <host>${it.host}</host>
                   <port>${it.port.http}</port>
-                  <file>/${it.ctx}</file>
+                  <file>/rest/system/ping</file>
                   <maxcount>20</maxcount>
                   <timeout>10000</timeout>
                 </configuration>
