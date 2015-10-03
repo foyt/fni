@@ -40,15 +40,15 @@ public class IndexTestsBase extends AbstractUITest {
     assertEquals("Forge & Illusion is an open platform built for roleplaying and roleplayers.", getWebDriver().findElement(By.cssSelector("p.description-text")).getText());
         
     
-    assertEquals("LATEST GAME LIBRARY PUBLICATIONS", findElementBySelector(String.format("h3 a[href='/%s/gamelibrary/']", getCtxPath())).getText());
-    assertEquals("LATEST FORUM TOPICS", findElementBySelector(String.format("h3 a[href='/%s/forum/']", getCtxPath())).getText());
-    assertEquals("NEWS", findElementBySelector(String.format("h3 a[href='/%s/news/archive/0/0']", getCtxPath())).getText());
-    assertEquals("UPCOMING EVENTS", findElementBySelector(String.format("h3 a[href='/%s/illusion/']", getCtxPath())).getText());
+    assertEquals("LATEST GAME LIBRARY PUBLICATIONS", findElementBySelector(String.format("h3 a[href='/gamelibrary/']")).getText());
+    assertEquals("LATEST FORUM TOPICS", findElementBySelector(String.format("h3 a[href='/forum/']")).getText());
+    assertEquals("NEWS", findElementBySelector(String.format("h3 a[href='/news/archive/0/0']")).getText());
+    assertEquals("UPCOMING EVENTS", findElementBySelector(String.format("h3 a[href='/illusion/']")).getText());
 
-    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/%s/gamelibrary/']", getCtxPath())).getText());
-    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/%s/forum/']", getCtxPath())).getText());
-    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/%s/news/archive/0/0']", getCtxPath())).getText());
-    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/%s/illusion/']", getCtxPath())).getText());
+    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/gamelibrary/']")).getText());
+    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/forum/']")).getText());
+    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/news/archive/0/0']")).getText());
+    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/illusion/']")).getText());
   }
 
   @Test

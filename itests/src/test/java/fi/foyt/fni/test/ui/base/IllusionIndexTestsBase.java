@@ -45,8 +45,8 @@ public class IllusionIndexTestsBase extends AbstractUITest {
     assertSelectorPresent("a[href='#calendar']");
     assertSelectorPresent("#calendar");
     clickSelector("a[href='#calendar']");
-    waitForSelectorVisible(String.format(".calendar-view a.fc-event[href='/%s/illusion/event/upcoming_2']", getCtxPath()));
-    assertSelectorPresent(String.format(".calendar-view a.fc-event[href='/%s/illusion/event/upcoming_2']", getCtxPath()));
+    waitForSelectorVisible(String.format(".calendar-view a.fc-event[href='/illusion/event/upcoming_2']"));
+    assertSelectorPresent(String.format(".calendar-view a.fc-event[href='/illusion/event/upcoming_2']"));
     
     assertSelectorPresent("a[href='#upcoming']");
     assertSelectorPresent("#upcoming");
@@ -75,8 +75,8 @@ public class IllusionIndexTestsBase extends AbstractUITest {
     assertSelectorPresent("a[href='#calendar']");
     assertSelectorPresent("#calendar");
     clickSelector("a[href='#calendar']");
-    waitForSelectorVisible(String.format(".calendar-view a.fc-event[href='/%s/illusion/event/upcoming_2']", getCtxPath()));
-    assertSelectorPresent(String.format(".calendar-view a.fc-event[href='/%s/illusion/event/upcoming_2']", getCtxPath()));
+    waitForSelectorVisible(String.format(".calendar-view a.fc-event[href='/illusion/event/upcoming_2']"));
+    assertSelectorPresent(String.format(".calendar-view a.fc-event[href='/illusion/event/upcoming_2']"));
     
     assertSelectorPresent("a[href='#upcoming']");
     assertSelectorPresent("#upcoming");
