@@ -122,9 +122,9 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testProposeLinkNotLogged() throws UnsupportedEncodingException {
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
-    assertEquals("Login to propose a game to the Library", getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getText());
-    String redirectUrl = URLEncoder.encode('/' + getCtxPath() + "/gamelibrary/proposegame/", "UTF-8");
+    navigate("/gamelibrary/", true);
+    assertSelectorTextIgnoreCase(".gamelibrary-propose-game-link", "Login to propose a game to the Library");
+    String redirectUrl = URLEncoder.encode((getCtxPath() != null ? '/' + getCtxPath() : "") + "/gamelibrary/proposegame/", "UTF-8");
     assertEquals(getAppUrl(true) + "/login/?redirectUrl=" + redirectUrl, getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getAttribute("href"));
   }
   
@@ -233,13 +233,13 @@ public class GameLibraryListTestsBase extends AbstractUITest {
     assertEquals(getAppUrl(true) + "/forum/" + commentUrl, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-comments")).getAttribute("href"));
 
     assertShareButtonsHidden(getWebDriver(), publicationSelector);
-    getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button")).click();
+    clickSelector(publicationSelector + " .gamelibrary-publication-share-button");
     assertShareButtonsVisible(getWebDriver(), publicationSelector);
-    getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button")).click();
+    clickSelector(publicationSelector + " .gamelibrary-publication-share-button");
     assertShareButtonsHidden(getWebDriver(), publicationSelector);
-    getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button")).click();
+    clickSelector(publicationSelector + " .gamelibrary-publication-share-button");
     assertShareButtonsVisible(getWebDriver(), publicationSelector);
-    getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-description")).click();
+    clickSelector(publicationSelector + " .gamelibrary-publication-detail-number-of-pages");
     assertShareButtonsHidden(getWebDriver(), publicationSelector);
   }
 

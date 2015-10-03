@@ -13,7 +13,7 @@ public class AbstractIllusionUITest extends AbstractUITest {
   private static final String CUSTOM_EVENT_HOST = "custom-test.forgeandillusion.net";
   
   protected String getCustomEventUrl() {
-    return "http://" + CUSTOM_EVENT_HOST + ':' + getPortHttp() + '/' + getCtxPath();
+    return String.format("http://%s:%d%s", CUSTOM_EVENT_HOST, getPortHttp(), getCtxPath() != null ? "/" + getCtxPath() : "");
   }
 
   protected void loginCustomEvent(String email, String password) {

@@ -11,15 +11,15 @@ public class MenuTestsBase extends AbstractUITest {
   @Test
   public void testItems() {
     navigate("/");
-    assertSelectorVisible(String.format("a[href='/%s/']", getCtxPath()));
-    assertSelectorVisible(String.format("a[href='/%s/forge/']", getCtxPath()));
-    assertSelectorVisible(String.format("a[href='/%s/illusion/']", getCtxPath()));
-    assertSelectorVisible(String.format("a[href='/%s/gamelibrary/']", getCtxPath()));
-    assertSelectorVisible(String.format("a[href='/%s/forum/']", getCtxPath()));
-    assertSelectorTextIgnoreCase(String.format("a[href='/%s/forge/']", getCtxPath()), "Forge");
-    assertSelectorTextIgnoreCase(String.format("a[href='/%s/illusion/']", getCtxPath()), "Illusion");
-    assertSelectorTextIgnoreCase(String.format("a[href='/%s/gamelibrary/']", getCtxPath()), "Game Library");
-    assertSelectorTextIgnoreCase(String.format("a[href='/%s/forum/']", getCtxPath()), "Forum");
+    assertSelectorVisible(String.format("a[href='/']"));
+    assertSelectorVisible(String.format("a[href='/forge/']"));
+    assertSelectorVisible(String.format("a[href='/illusion/']"));
+    assertSelectorVisible(String.format("a[href='/gamelibrary/']"));
+    assertSelectorVisible(String.format("a[href='/forum/']"));
+    assertSelectorTextIgnoreCase(String.format("a[href='/forge/']"), "Forge");
+    assertSelectorTextIgnoreCase(String.format("a[href='/illusion/']"), "Illusion");
+    assertSelectorTextIgnoreCase(String.format("a[href='/gamelibrary/']"), "Game Library");
+    assertSelectorTextIgnoreCase(String.format("a[href='/forum/']"), "Forum");
   }
 
   @Test

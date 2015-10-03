@@ -157,7 +157,8 @@ public abstract class AbstractTest {
   }
 
   protected String getAppUrl(boolean secure) {
-    return (secure ? "https://" : "http://") + getHost() + ':' + (secure ? getPortHttps() : getPortHttp()) + '/' + getCtxPath();
+    String ctxPath = getCtxPath();
+    return String.format("%s%s:%d%s", secure ? "https://" : "http://", getHost(), secure ? getPortHttps() : getPortHttp(), ctxPath != null ? "/" + ctxPath : "");
   }
 
   protected String getHost() {

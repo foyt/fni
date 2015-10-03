@@ -35,7 +35,7 @@ public abstract class AbstractUITest extends AbstractTest {
     String appUrl = getAppUrl(secure);
     String ctxPath = getCtxPath();
     driver.get(appUrl + path);
-    String expectedUrl = getAppUrl(true) + "/login/?redirectUrl=" + URLEncoder.encode("/" + ctxPath + path, "UTF-8");
+    String expectedUrl = getAppUrl(true) + "/login/?redirectUrl=" + URLEncoder.encode(ctxPath != null ? "/" + ctxPath + path : path, "UTF-8");
     waitForUrlMatches(driver, "https://.*");
     assertEquals(expectedUrl, driver.getCurrentUrl());
   }

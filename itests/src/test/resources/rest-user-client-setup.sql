@@ -1,9 +1,9 @@
 insert into 
   OAuthClient (clientId, clientSecret, name, type, redirectUrl, serviceUser_id)
 values 
-  ('user-client-id', 'user-client-secret', 'test-user-client', 'USER', 'https://dev.forgeandillusion.net:8443/fnici/fake-redirect', null),
-  ('admin-client-id', 'admin-client-secret', 'test-admin-client', 'USER', 'https://dev.forgeandillusion.net:8443/fnici/fake-redirect', null),
-  ('guest-client-id', 'admin-guest-secret', 'test-guest-client', 'USER', 'https://dev.forgeandillusion.net:8443/fnici/fake-redirect', null);
+  ('user-client-id', 'user-client-secret', 'test-user-client', 'USER', 'https://dev.forgeandillusion.net:8443/fake-redirect', null),
+  ('admin-client-id', 'admin-client-secret', 'test-admin-client', 'USER', 'https://dev.forgeandillusion.net:8443/fake-redirect', null),
+  ('guest-client-id', 'admin-guest-secret', 'test-guest-client', 'USER', 'https://dev.forgeandillusion.net:8443/fake-redirect', null);
   
 insert into
   OAuthAuthorizationCode (user_id, client_id, code)
