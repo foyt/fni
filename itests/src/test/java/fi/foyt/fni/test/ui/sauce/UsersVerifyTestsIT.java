@@ -24,7 +24,7 @@ public class UsersVerifyTestsIT extends UsersVerifyTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public UsersVerifyTestsIT(String browser, String version, String platform) {

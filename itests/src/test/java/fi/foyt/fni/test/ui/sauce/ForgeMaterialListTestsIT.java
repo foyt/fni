@@ -24,7 +24,7 @@ public class ForgeMaterialListTestsIT extends ForgeMaterialListTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public ForgeMaterialListTestsIT(String browser, String version, String platform) {

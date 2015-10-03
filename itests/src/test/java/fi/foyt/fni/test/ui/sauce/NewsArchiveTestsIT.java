@@ -24,7 +24,7 @@ public class NewsArchiveTestsIT extends NewsArchiveTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public NewsArchiveTestsIT(String browser, String version, String platform) {

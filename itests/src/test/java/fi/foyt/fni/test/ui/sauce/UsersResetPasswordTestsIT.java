@@ -24,7 +24,7 @@ public class UsersResetPasswordTestsIT extends UsersResetPasswordTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public UsersResetPasswordTestsIT(String browser, String version, String platform) {

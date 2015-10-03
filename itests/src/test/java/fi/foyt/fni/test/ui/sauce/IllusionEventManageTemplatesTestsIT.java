@@ -24,7 +24,7 @@ public class IllusionEventManageTemplatesTestsIT extends IllusionEventManageTemp
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public IllusionEventManageTemplatesTestsIT(String browser, String version, String platform) {

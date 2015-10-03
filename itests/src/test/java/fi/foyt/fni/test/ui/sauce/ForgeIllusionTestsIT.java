@@ -23,7 +23,7 @@ public class ForgeIllusionTestsIT extends ForgeIllusionTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public ForgeIllusionTestsIT(String browser, String version, String platform) {

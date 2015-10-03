@@ -24,7 +24,7 @@ public class MenuTestsIT extends MenuTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public MenuTestsIT(String browser, String version, String platform) {

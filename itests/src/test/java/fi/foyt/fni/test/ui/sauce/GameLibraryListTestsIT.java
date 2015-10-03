@@ -24,7 +24,7 @@ public class GameLibraryListTestsIT extends GameLibraryListTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public GameLibraryListTestsIT(String browser, String version, String platform) {

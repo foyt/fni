@@ -24,7 +24,7 @@ public class IndexTestsIT extends IndexTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public IndexTestsIT(String browser, String version, String platform) {

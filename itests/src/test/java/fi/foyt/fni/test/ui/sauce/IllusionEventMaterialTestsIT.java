@@ -24,7 +24,7 @@ public class IllusionEventMaterialTestsIT extends IllusionEventMaterialTestsBase
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public IllusionEventMaterialTestsIT(String browser, String version, String platform) {

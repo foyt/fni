@@ -24,7 +24,7 @@ public class EditProfileTestsIT extends EditProfileTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public EditProfileTestsIT(String browser, String version, String platform) {

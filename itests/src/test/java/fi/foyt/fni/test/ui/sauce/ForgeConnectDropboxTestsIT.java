@@ -24,7 +24,7 @@ public class ForgeConnectDropboxTestsIT extends ForgeConnectDropboxTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public ForgeConnectDropboxTestsIT(String browser, String version, String platform) {

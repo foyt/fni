@@ -24,7 +24,7 @@ public class AboutTestsIT extends AboutTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public AboutTestsIT(String browser, String version, String platform) {

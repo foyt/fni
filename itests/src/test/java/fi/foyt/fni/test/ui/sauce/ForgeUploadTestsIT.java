@@ -24,7 +24,7 @@ public class ForgeUploadTestsIT extends ForgeUploadTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public ForgeUploadTestsIT(String browser, String version, String platform) {

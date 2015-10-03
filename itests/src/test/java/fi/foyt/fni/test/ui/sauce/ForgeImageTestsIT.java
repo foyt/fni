@@ -24,7 +24,7 @@ public class ForgeImageTestsIT extends ForgeImageTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public ForgeImageTestsIT(String browser, String version, String platform) {

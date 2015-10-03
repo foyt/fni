@@ -24,7 +24,7 @@ public class ForgeGoogleDriveTestsIT extends ForgeGoogleDriveTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public ForgeGoogleDriveTestsIT(String browser, String version, String platform) {

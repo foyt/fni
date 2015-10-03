@@ -24,7 +24,7 @@ public class ForgeBookDesignTestsIT extends ForgeBookDesignTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public ForgeBookDesignTestsIT(String browser, String version, String platform) {

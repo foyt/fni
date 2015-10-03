@@ -24,7 +24,7 @@ public class IllusionIndexTestsIT extends IllusionIndexTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public IllusionIndexTestsIT(String browser, String version, String platform) {

@@ -24,7 +24,7 @@ public class AdminDebugTimerResultsTestsIT extends AdminDebugTimerResultsTestsBa
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public AdminDebugTimerResultsTestsIT(String browser, String version, String platform) {

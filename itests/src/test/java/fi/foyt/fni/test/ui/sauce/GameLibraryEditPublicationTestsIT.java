@@ -24,7 +24,7 @@ public class GameLibraryEditPublicationTestsIT extends GameLibraryEditPublicatio
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public GameLibraryEditPublicationTestsIT(String browser, String version, String platform) {

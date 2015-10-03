@@ -1,16 +1,23 @@
 package fi.foyt.fni.test.ui.sauce;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class SauceLabsUtils {
 
-  public static List<String[]> getDefaultSauceBrowsers() {
-    return Arrays.asList(new String[][]{
-//      ((String[]) new String[] { "firefox", "36.0", "Windows 8.1" }),
-//      ((String[]) new String[] { "safari", "8.0", "OS X 10.10" }),
-      ((String[]) new String[] { "chrome", "41.0", "Linux" })
-    });
+  public static List<String[]> getSauceBrowsers() {
+    List<String[]> result = new ArrayList<>();
+    
+    String[] browsers = StringUtils.split(System.getProperty("it.browsers"), ",");
+    if (browsers != null) {
+      for (String browser : browsers) {
+        result.add(StringUtils.split(browser, ":"));
+      }
+    }
+    
+    return result;
   }
   
 }

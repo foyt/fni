@@ -24,7 +24,7 @@ public class IllusionEventGroupsTestsIT extends IllusionEventGroupsTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public IllusionEventGroupsTestsIT(String browser, String version, String platform) {

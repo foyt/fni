@@ -24,7 +24,7 @@ public class LogoutTestsIT extends LogoutTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public LogoutTestsIT(String browser, String version, String platform) {

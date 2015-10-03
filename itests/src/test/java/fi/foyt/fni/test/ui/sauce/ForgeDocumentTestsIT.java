@@ -24,7 +24,7 @@ public class ForgeDocumentTestsIT extends ForgeDocumentTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public ForgeDocumentTestsIT(String browser, String version, String platform) {

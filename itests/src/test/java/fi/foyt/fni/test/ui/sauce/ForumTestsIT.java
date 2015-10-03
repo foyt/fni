@@ -24,7 +24,7 @@ public class ForumTestsIT extends ForumTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public ForumTestsIT(String browser, String version, String platform) {

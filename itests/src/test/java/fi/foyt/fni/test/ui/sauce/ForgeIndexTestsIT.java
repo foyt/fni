@@ -24,7 +24,7 @@ public class ForgeIndexTestsIT extends ForgeIndexTestsBase {
 
   @Parameterized.Parameters
   public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getDefaultSauceBrowsers();
+    return SauceLabsUtils.getSauceBrowsers();
   }
 
   public ForgeIndexTestsIT(String browser, String version, String platform) {
