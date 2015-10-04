@@ -73,11 +73,11 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
   
   @Test
   @SqlSets ({"basic-materials-users"})
-  public void textCreateSharedFolder() throws Exception {
+  public void testCreateSharedFolder() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/forge/folders/2/folder");
-    clickSelector(".forge-new-material-menu");
-    clickSelector(".forge-new-new-vector-image");
+    waitAndClick(".forge-new-material-menu");
+    waitAndClick(".forge-new-new-vector-image");
     assertVectorImageEditable();
     executeSql("delete from VectorImage where id in (select id from Material where type='VECTOR_IMAGE' and parentFolder_id = 1)");
     executeSql("delete from MaterialView where material_id in (select id from Material where type='VECTOR_IMAGE' and parentFolder_id = 1)");
