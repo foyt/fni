@@ -74,6 +74,21 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void loginInternal(String email, String password) {
     loginInternal(getWebDriver(), email, password);
   }
+  
+  protected void loginInternal(RemoteWebDriver driver, String email, String password) {
+    String loginUrl = getAppUrl(true) + "/login/";
+    if (!StringUtils.startsWith(driver.getCurrentUrl(), loginUrl)) {
+      driver.get(loginUrl);
+    }
+
+    waitAndSendKeys(".user-login-email", email);
+    waitAndSendKeys(".user-login-password", password);
+    waitAndClick(".user-login-button");
+    waitForSelectorPresent(".menu-tools-account");
+
+    assertSelectorPresent(".menu-tools-account");
+    assertSelectorNotPresent(".menu-tools-login");
+  }
 
   protected void loginFacebook() {
     acceptCookieDirective();

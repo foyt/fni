@@ -40,21 +40,6 @@ public abstract class AbstractUITest extends AbstractTest {
     assertEquals(expectedUrl, driver.getCurrentUrl());
   }
   
-  protected void loginInternal(RemoteWebDriver driver, String email, String password) {
-    String loginUrl = getAppUrl(true) + "/login/";
-    if (!StringUtils.startsWith(driver.getCurrentUrl(), loginUrl)) {
-      driver.get(loginUrl);
-    }
-    
-    driver.findElement(By.cssSelector(".user-login-email")).sendKeys(email);
-    driver.findElement(By.cssSelector(".user-login-password")).sendKeys(password);
-    driver.findElement(By.cssSelector(".user-login-button")).click();
-    waitForUrlNotMatches(driver, ".*/login.*");
-
-    assertEquals(1, driver.findElements(By.cssSelector(".menu-tools-account")).size());
-    assertEquals(0, driver.findElements(By.cssSelector(".menu-tools-login")).size());
-  }
-  
   protected void sleep(long millis) {
     try {
       Thread.sleep(millis);
