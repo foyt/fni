@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  $(document).on('click', '.forge-menu>a', function () {
+  $(document).on('click', '.forge-menu,.forge-menu>a', function () {
     $(this).closest('.forge-menu')
       .addClass('forge-menu-open');
   });
