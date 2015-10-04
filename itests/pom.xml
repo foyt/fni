@@ -1590,6 +1590,7 @@
         <it.truststore>${project.build.directory}/fnici.truststore</it.truststore>
         <it.keystorepass>keystorepass</it.keystorepass>
         <it.truststorepass>truststorepass</it.truststorepass>
+        <it.browsers>chrome:45:Linux</it.browsers>
       </properties>
       
       <dependencies>
@@ -1678,6 +1679,7 @@
                 <it.sauce.tunnelId>${env.TRAVIS_JOB_NUMBER}</it.sauce.tunnelId>
                 <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
                 <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
+                <it.browsers>${it.browsers}</it.browsers>
               </systemPropertyVariables>
             </configuration>
             <executions>
@@ -1918,18 +1920,6 @@
                   </cargo.datasource.datasource.fnici>
                 </properties>    
               </configuration>
-
-              <deployables>
-                <deployable>
-                  <groupId>fi.foyt.fni</groupId>
-                  <artifactId>webapp</artifactId>
-                  <type>war</type>
-                  <properties>
-                    <context>${it.ctx}</context>
-                  </properties>
-                </deployable>
-              </deployables>
-
             </configuration>
             <executions>
               <execution>
@@ -1980,17 +1970,13 @@
               </execution>
               
               <execution>
-                <id>reload-wildfly</id>
+                <id>deploy-fni</id>
                 <phase>pre-integration-test</phase>
                 <goals>
-                  <goal>execute-commands</goal>
+                  <goal>deploy</goal>
                 </goals>
                 <configuration>
-                  <execute-commands>
-                    <commands>
-                      <command>:reload</command>
-                    </commands>
-                  </execute-commands>
+                  <filename>../../webapp/target/webapp-${project.version}.war</filename>
                 </configuration>
               </execution>
             </executions>
