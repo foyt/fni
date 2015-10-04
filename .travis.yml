@@ -23,6 +23,9 @@ env:
   matrix:
   - it.browsers="chrome:45:Linux"
   - it.browsers="safari:8.1:OS X 10.11"
+  - it.browsers="firefox:41.0:Windows 8"
+  - it.browsers="internet explorer:11.0:Windows 8.1"
+  - it.browsers="microsoftedge:20.10240:Windows 10"
 addons:
   sauce_connect:
     tunnel_domains: test.forgeandillusion.net,custom-test.forgeandillusion.net
