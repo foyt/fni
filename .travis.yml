@@ -29,7 +29,7 @@ env:
 addons:
   sauce_connect:
     tunnel_domains: test.forgeandillusion.net,custom-test.forgeandillusion.net
-script: mvn test verify -Ptravis -Dexec.args="-Duser.timezone=UTC" -Dit.browsers=$it_browsers
+script: mvn test verify -Ptravis -Dexec.args="-Duser.timezone=UTC" -Dit.browsers="$it_browsers"
 after_success:
 - python travis/m2conf.py
 - mvn deploy --settings ~/.m2/mySettings.xml
