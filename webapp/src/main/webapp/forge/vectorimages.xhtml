@@ -57,7 +57,7 @@
       
           <div class="flex-row">
             <div class="flex-cell-full forge-vector-image-container">
-              <iframe src="#{request.contextPath}/uresources/svg-edit/svg-editor.html?lang=#{sessionBackingBean.locale.language}" data-content="#{forgeVectorImagesBackingBean.vectorImageContent}"></iframe>
+              <iframe src="#{request.contextPath}/uresources/svg-edit/svg-editor.html?lang=#{sessionBackingBean.locale.language}&amp;noStorageOnLoad=true&amp;no_save_warning=true" data-content="#{forgeVectorImagesBackingBean.vectorImageContent}"></iframe>
               <ui:fragment rendered="#{!forgeVectorImagesBackingBean.readOnly}">
                 <input type="submit" class="forge-vector-image-save" value="#{locales['forge.vectorImages.save']}"/>
               </ui:fragment>
