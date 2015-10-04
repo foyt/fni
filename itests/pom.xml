@@ -1209,6 +1209,7 @@
                 <it.sauce.accessKey>${it.sauce.accessKey}</it.sauce.accessKey>
                 <it.sauce.host>${it.sauce.host}</it.sauce.host>
                 <it.sauce.port>${it.sauce.port}</it.sauce.port>
+                <it.sauce.tunnelId>${it.sauce.tunnelId}</it.sauce.tunnelId>
                 <it.browsers>${it.browsers}</it.browsers>
               </systemPropertyVariables>
             </configuration>
