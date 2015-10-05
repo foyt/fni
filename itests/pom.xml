@@ -540,18 +540,6 @@
                   </cargo.datasource.datasource.fnici>
                 </properties>    
               </configuration>
-
-              <deployables>
-                <deployable>
-                  <groupId>fi.foyt.fni</groupId>
-                  <artifactId>webapp</artifactId>
-                  <type>war</type>
-                  <properties>
-                    <context>${it.ctx}</context>
-                  </properties>
-                </deployable>
-              </deployables>
-
             </configuration>
             <executions>
               <execution>
@@ -602,17 +590,13 @@
               </execution>
               
               <execution>
-                <id>reload-wildfly</id>
+                <id>deploy-fni</id>
                 <phase>pre-integration-test</phase>
                 <goals>
-                  <goal>execute-commands</goal>
+                  <goal>deploy</goal>
                 </goals>
                 <configuration>
-                  <execute-commands>
-                    <commands>
-                      <command>:reload</command>
-                    </commands>
-                  </execute-commands>
+                  <filename>../../webapp/target/webapp-${project.version}.war</filename>
                 </configuration>
               </execution>
             </executions>
