@@ -585,8 +585,20 @@
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
                       <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
+                      <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                     </commands>
                   </execute-commands>
+                </configuration>
+              </execution>
+              
+              <execution>
+                <id>reload-wildfly</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>shutdown</goal>
+                </goals>
+                <configuration>
+                  <reload>true</reload>
                 </configuration>
               </execution>
               
@@ -979,17 +991,6 @@
                 </properties>    
               </configuration>
 
-              <deployables>
-                <deployable>
-                  <groupId>fi.foyt.fni</groupId>
-                  <artifactId>webapp</artifactId>
-                  <type>war</type>
-                  <properties>
-                    <context>${it.ctx}</context>
-                  </properties>
-                </deployable>
-              </deployables>
-
             </configuration>
             <executions>
               <execution>
@@ -1034,6 +1035,7 @@
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
                       <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
+                      <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                     </commands>
                   </execute-commands>
                 </configuration>
@@ -1043,14 +1045,21 @@
                 <id>reload-wildfly</id>
                 <phase>pre-integration-test</phase>
                 <goals>
-                  <goal>execute-commands</goal>
+                  <goal>shutdown</goal>
                 </goals>
                 <configuration>
-                  <execute-commands>
-                    <commands>
-                      <command>:reload</command>
-                    </commands>
-                  </execute-commands>
+                  <reload>true</reload>
+                </configuration>
+              </execution>
+              
+              <execution>
+                <id>deploy-fni</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>deploy</goal>
+                </goals>
+                <configuration>
+                  <filename>../../webapp/target/webapp-${project.version}.war</filename>
                 </configuration>
               </execution>
             </executions>
@@ -1094,6 +1103,7 @@
         <h2.version>1.4.177</h2.version>
         <it.port.http>8080</it.port.http>
         <it.port.https>8443</it.port.https>
+        <it.smtp.port>3025</it.smtp.port>
         <it.host>test.forgeandillusion.net</it.host>
         <it.ctx></it.ctx>
         <it.smtp.port>3025</it.smtp.port>
@@ -1481,8 +1491,20 @@
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
                       <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
+                      <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                     </commands>
                   </execute-commands>
+                </configuration>
+              </execution>
+              
+              <execution>
+                <id>reload-wildfly</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>shutdown</goal>
+                </goals>
+                <configuration>
+                  <reload>true</reload>
                 </configuration>
               </execution>
               
@@ -1498,7 +1520,7 @@
               </execution>
             </executions>
           </plugin>
-          <!-- 
+
           <plugin>
             <groupId>com.saucelabs.maven.plugin</groupId>
             <artifactId>sauce-connect-plugin</artifactId>
@@ -1525,7 +1547,7 @@
               </execution>
             </executions>
           </plugin>
-                   -->  
+
           <plugin>
             <groupId>org.sonatype.plugins</groupId>
             <artifactId>wait-maven-plugin</artifactId>
@@ -1564,6 +1586,7 @@
         <h2.version>1.4.177</h2.version>
         <it.port.http>8080</it.port.http>
         <it.port.https>8443</it.port.https>
+        <it.smtp.port>3025</it.smtp.port>
         <it.host>test.forgeandillusion.net</it.host>
         <it.ctx></it.ctx>
         <it.smtp.port>3025</it.smtp.port>
@@ -1951,8 +1974,20 @@
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
                       <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
+                      <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                     </commands>
                   </execute-commands>
+                </configuration>
+              </execution>
+              
+              <execution>
+                <id>reload-wildfly</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>shutdown</goal>
+                </goals>
+                <configuration>
+                  <reload>true</reload>
                 </configuration>
               </execution>
               
