@@ -599,6 +599,7 @@
                 </goals>
                 <configuration>
                   <reload>true</reload>
+                  <timeout>120</timeout>
                 </configuration>
               </execution>
               
@@ -1050,6 +1051,7 @@
                 </goals>
                 <configuration>
                   <reload>true</reload>
+                  <timeout>120</timeout>
                 </configuration>
               </execution>
               
@@ -1507,6 +1509,7 @@
                 </goals>
                 <configuration>
                   <reload>true</reload>
+                  <timeout>120</timeout>
                 </configuration>
               </execution>
               
@@ -1991,6 +1994,7 @@
                 </goals>
                 <configuration>
                   <reload>true</reload>
+                  <timeout>120</timeout>
                 </configuration>
               </execution>
               
