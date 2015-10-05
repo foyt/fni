@@ -599,7 +599,7 @@
                 </goals>
                 <configuration>
                   <reload>true</reload>
-                  <timeout>120</timeout>
+                  <timeout>600</timeout>
                 </configuration>
               </execution>
               
@@ -611,7 +611,7 @@
                 </goals>
                 <configuration>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
-                  <timeout>120</timeout>
+                  <timeout>600</timeout>
                 </configuration>
               </execution>
             </executions>
@@ -1051,7 +1051,7 @@
                 </goals>
                 <configuration>
                   <reload>true</reload>
-                  <timeout>120</timeout>
+                  <timeout>600</timeout>
                 </configuration>
               </execution>
               
@@ -1063,7 +1063,7 @@
                 </goals>
                 <configuration>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
-                  <timeout>120</timeout>
+                  <timeout>600</timeout>
                 </configuration>
               </execution>
             </executions>
@@ -1509,7 +1509,7 @@
                 </goals>
                 <configuration>
                   <reload>true</reload>
-                  <timeout>120</timeout>
+                  <timeout>600</timeout>
                 </configuration>
               </execution>
               
@@ -1521,7 +1521,7 @@
                 </goals>
                 <configuration>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
-                  <timeout>120</timeout>
+                  <timeout>600</timeout>
                 </configuration>
               </execution>
             </executions>
@@ -1994,7 +1994,7 @@
                 </goals>
                 <configuration>
                   <reload>true</reload>
-                  <timeout>120</timeout>
+                  <timeout>600</timeout>
                 </configuration>
               </execution>
               
@@ -2006,7 +2006,7 @@
                 </goals>
                 <configuration>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
-                  <timeout>120</timeout>
+                  <timeout>600</timeout>
                 </configuration>
               </execution>
             </executions>
