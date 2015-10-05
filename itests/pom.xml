@@ -404,7 +404,7 @@
             <version>1.4</version>
             <executions>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>keystoreclean</id>
                 <goals>
                   <goal>clean</goal>
@@ -414,7 +414,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>truststoreclean</id>
                 <goals>
                   <goal>clean</goal>
@@ -424,7 +424,7 @@
                 </configuration>
               </execution>
               <execution> 
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>genkey</id>
                 <goals>
                   <goal>generateKeyPair</goal>
@@ -439,7 +439,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>exportkey</id>
                 <goals>
                   <goal>exportCertificate</goal>
@@ -452,7 +452,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>importkey-keystore</id>
                 <goals>
                   <goal>importCertificate</goal>
@@ -467,7 +467,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>importkey-truststore</id>
                 <goals>
                   <goal>importCertificate</goal>
@@ -482,7 +482,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>importkey-jre-truststore</id>
                 <goals>
                   <goal>importKeystore</goal>
@@ -841,7 +841,7 @@
             <version>1.4</version>
             <executions>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>keystoreclean</id>
                 <goals>
                   <goal>clean</goal>
@@ -851,7 +851,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>truststoreclean</id>
                 <goals>
                   <goal>clean</goal>
@@ -861,7 +861,7 @@
                 </configuration>
               </execution>
               <execution> 
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>genkey</id>
                 <goals>
                   <goal>generateKeyPair</goal>
@@ -876,7 +876,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>exportkey</id>
                 <goals>
                   <goal>exportCertificate</goal>
@@ -889,7 +889,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>importkey-keystore</id>
                 <goals>
                   <goal>importCertificate</goal>
@@ -904,7 +904,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>importkey-truststore</id>
                 <goals>
                   <goal>importCertificate</goal>
@@ -919,7 +919,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>importkey-jre-truststore</id>
                 <goals>
                   <goal>importKeystore</goal>
@@ -1310,7 +1310,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>truststoreclean</id>
                 <goals>
                   <goal>clean</goal>
@@ -1770,7 +1770,7 @@
             <version>1.4</version>
             <executions>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>keystoreclean</id>
                 <goals>
                   <goal>clean</goal>
@@ -1780,7 +1780,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>truststoreclean</id>
                 <goals>
                   <goal>clean</goal>
@@ -1790,7 +1790,7 @@
                 </configuration>
               </execution>
               <execution> 
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>genkey</id>
                 <goals>
                   <goal>generateKeyPair</goal>
@@ -1805,7 +1805,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>exportkey</id>
                 <goals>
                   <goal>exportCertificate</goal>
@@ -1818,7 +1818,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>importkey-keystore</id>
                 <goals>
                   <goal>importCertificate</goal>
@@ -1833,7 +1833,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>importkey-truststore</id>
                 <goals>
                   <goal>importCertificate</goal>
@@ -1848,7 +1848,7 @@
                 </configuration>
               </execution>
               <execution>
-                <phase>generate-resources</phase>
+                <phase>pre-integration-test</phase>
                 <id>importkey-jre-truststore</id>
                 <goals>
                   <goal>importKeystore</goal>
