@@ -563,7 +563,7 @@
           <plugin>
             <groupId>org.wildfly.plugins</groupId>
             <artifactId>wildfly-maven-plugin</artifactId>
-            <version>1.0.1.Final</version>
+            <version>1.0.2.Final</version>
             <executions>
               <execution>
                 <id>configure-wildfly</id>
@@ -610,6 +610,7 @@
                 </goals>
                 <configuration>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
+                  <timeout>120</timeout>
                 </configuration>
               </execution>
             </executions>
@@ -1013,7 +1014,7 @@
           <plugin>
             <groupId>org.wildfly.plugins</groupId>
             <artifactId>wildfly-maven-plugin</artifactId>
-            <version>1.0.1.Final</version>
+            <version>1.0.2.Final</version>
             <executions>
               <execution>
                 <id>configure-wildfly</id>
@@ -1060,6 +1061,7 @@
                 </goals>
                 <configuration>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
+                  <timeout>120</timeout>
                 </configuration>
               </execution>
             </executions>
@@ -1516,6 +1518,7 @@
                 </goals>
                 <configuration>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
+                  <timeout>120</timeout>
                 </configuration>
               </execution>
             </executions>
@@ -1952,7 +1955,7 @@
           <plugin>
             <groupId>org.wildfly.plugins</groupId>
             <artifactId>wildfly-maven-plugin</artifactId>
-            <version>1.0.1.Final</version>
+            <version>1.0.2.Final</version>
             <executions>
               <execution>
                 <id>configure-wildfly</id>
@@ -1999,6 +2002,7 @@
                 </goals>
                 <configuration>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
+                  <timeout>120</timeout>
                 </configuration>
               </execution>
             </executions>
