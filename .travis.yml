@@ -28,11 +28,11 @@ env:
 #  - use_sc=true it_browsers="internet explorer:11.0:Windows 8.1"
 #  - use_sc=true it_browsers="microsoftedge:20.10240:Windows 10"
 before_script:
-- if [ $use_sc = true ]; then curl -sS https://saucelabs.com/downloads/sc-4.3.11-linux.tar.gz|tar -xzC /tmp/ fi;
-- if [ $use_sc = true ]; then /tmp/sc-4.3.11-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish --daemonize --pidfile /tmp/sc.pid fi;
+- if [ $use_sc = true ]; then curl -sS https://saucelabs.com/downloads/sc-4.3.11-linux.tar.gz|tar -xzC /tmp/; fi;
+- if [ $use_sc = true ]; then /tmp/sc-4.3.11-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish --daemonize --pidfile /tmp/sc.pid; fi;
 script: mvn test verify -P$it_profile -Dexec.args="-Duser.timezone=UTC" -Dit.properties.file=src/test/resources/it-travis.properties -Dit.browsers="$it_browsers"
 after_script:
-- if [ $use_sc = true ]; then kill `cat /tmp/sc.pid` fi;
+- if [ $use_sc = true ]; then kill `cat /tmp/sc.pid`; fi;
 after_success:
 - python travis/m2conf.py
 - mvn deploy --settings ~/.m2/mySettings.xml
