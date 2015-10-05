@@ -21,14 +21,15 @@ env:
   - secure: TjZNKclYzXO4CaiJI0NsDAOTYbVXUjU7db/4Pgx00eNCQxJMEmdt3sdzt5r5bRQtB4rPWGKa9Ki4wfd+MMHAa987bjIwSTzBXiCG8+LJNutdCTDXk446dmgsAWWjF39Y4kfnagZ/qbxEiVb+9+ixfrLyNKhvVDE34y26ySrxdZg=
   - secure: WUWchzcdGrC6aifA9DuztFPpJLjrns/4ymIzHmjIjLWVXvXGEYnNhbgbH76hW5wFl89Ve8YMvHBcF50P++sRD1HwHSF6naDoiASpmHxAKBnyKJvdxgo06DMygMqlrg8zwEk0Ilh1nF9m5KGEEYLggxQLZEi2dXMANPZs3wR5qOY=
   matrix:
-  - it_browsers="chrome:45:Linux"
-  - it_browsers="safari:8.1:OS X 10.11"
-  - it_browsers="firefox:41.0:Windows 8"
-  - it_browsers="internet explorer:11.0:Windows 8.1"
-  - it_browsers="microsoftedge:20.10240:Windows 10"
+  - it_profile=rest
+  - it_profile=travis it_browsers="chrome:45:Linux"
+#  - it_browsers="safari:8.1:OS X 10.11"
+#  - it_browsers="firefox:41.0:Windows 8"
+#  - it_browsers="internet explorer:11.0:Windows 8.1"
+#  - it_browsers="microsoftedge:20.10240:Windows 10"
 addons:
   sauce_connect: true
-script: mvn test verify -Ptravis -Dexec.args="-Duser.timezone=UTC" -Dit.browsers="$it_browsers"
+script: mvn test verify -P$it_profile -Dexec.args="-Duser.timezone=UTC" -Dit.browsers="$it_browsers"
 after_success:
 - python travis/m2conf.py
 - mvn deploy --settings ~/.m2/mySettings.xml
