@@ -29,7 +29,9 @@ env:
 #  - it_browsers="microsoftedge:20.10240:Windows 10"
 addons:
   sauce_connect: true
-script: mvn test verify -P$it_profile -Dexec.args="-Duser.timezone=UTC" -Dit.browsers="$it_browsers"
+script: mvn test verify -P$it_profile -Dexec.args="-Duser.timezone=UTC" -Dit.properties.file=src/test/resources/it-travis.properties -Dit.browsers="$it_browsers"
 after_success:
 - python travis/m2conf.py
 - mvn deploy --settings ~/.m2/mySettings.xml
+
+        
