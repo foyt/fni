@@ -213,6 +213,7 @@
         <it.truststore>${project.build.directory}/fnici.truststore</it.truststore>
         <it.keystorepass>keystorepass</it.keystorepass>
         <it.truststorepass>truststorepass</it.truststorepass>
+        <it.properties.file>src/test/resources/it.properties</it.properties.file>
       </properties>
       
       <dependencies>
@@ -255,7 +256,7 @@
                 </goals>
                 <configuration>
                   <files>
-                    <file>src/test/resources/it.properties</file>
+                    <file>${it.properties.file}</file>
                   </files>
                 </configuration>
               </execution>
@@ -653,6 +654,7 @@
         <it.truststore>${project.build.directory}/fnici.truststore</it.truststore>
         <it.keystorepass>keystorepass</it.keystorepass>
         <it.truststorepass>truststorepass</it.truststorepass>
+        <it.properties.file>src/test/resources/it.properties</it.properties.file>
       </properties>
       
       <dependencies>
@@ -695,7 +697,7 @@
                 </goals>
                 <configuration>
                   <files>
-                    <file>src/test/resources/it.properties</file>
+                    <file>${it.properties.file}</file>
                   </files>
                 </configuration>
               </execution>
@@ -1105,6 +1107,7 @@
         <it.truststore>${project.build.directory}/fnici.truststore</it.truststore>
         <it.keystorepass>keystorepass</it.keystorepass>
         <it.truststorepass>truststorepass</it.truststorepass>
+        <it.properties.file>src/test/resources/it.properties</it.properties.file>
         <it.browsers>chrome:45:Linux</it.browsers>
       </properties>
       
@@ -1146,9 +1149,8 @@
                   <goal>read-project-properties</goal>
                 </goals>
                 <configuration>
-                  
                   <files>
-                    <file>src/test/resources/it.properties</file>
+                    <file>${it.properties.file}</file>
                   </files>
                 </configuration>
               </execution>
@@ -1575,6 +1577,7 @@
         <it.truststore>${project.build.directory}/fnici.truststore</it.truststore>
         <it.keystorepass>keystorepass</it.keystorepass>
         <it.truststorepass>truststorepass</it.truststorepass>
+        <it.properties.file>src/test/resources/it-travis.properties</it.properties.file>
         <it.browsers>chrome:45:Linux</it.browsers>
       </properties>
       
@@ -1617,7 +1620,7 @@
                 </goals>
                 <configuration>
                   <files>
-                    <file>src/test/resources/it-travis.properties</file>
+                    <file>${it.properties.file}</file>
                   </files>
                 </configuration>
               </execution>
