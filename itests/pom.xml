@@ -509,7 +509,7 @@
                 <log>${project.basedir}/target/cargo.log</log>
                 <output>${project.basedir}/target/wildfly.log</output>
                 <zipUrlInstaller>
-                  <url>http://download.jboss.org/wildfly/8.1.0.Final/wildfly-8.1.0.Final.zip</url>
+                  <url>http://static.forgeandillusion.net/libs/wildfly/8.1.0.Final-custom/wildfly-8.1.0.Final.zip</url>
                   <downloadDir>${project.basedir}/.cargo/downloads</downloadDir>
                   <extractDir>${project.basedir}/.cargo/extracts</extractDir>
                 </zipUrlInstaller>
@@ -563,16 +563,16 @@
           <plugin>
             <groupId>org.wildfly.plugins</groupId>
             <artifactId>wildfly-maven-plugin</artifactId>
-            <version>1.1.0.Alpha4</version>
+            <version>1.0.2.Final</version>
             <executions>
               <execution>
-                <id>configure-wildfly</id>
+                <id>deploy-fni</id>
                 <phase>pre-integration-test</phase>
                 <goals>
-                  <goal>execute-commands</goal>
+                  <goal>deploy</goal>
                 </goals>
                 <configuration>
-                  <execute-commands>
+                  <before-deployment>
                     <batch>true</batch>
                     <commands>
                       <command>/system-property=fni-google-drive.keyFile:add(value="${it.googleDrive.keyFile}")</command>
@@ -584,34 +584,10 @@
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
-                      <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                     </commands>
-                  </execute-commands>
-                </configuration>
-              </execution>
-              
-              <execution>
-                <id>reload-wildfly</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>shutdown</goal>
-                </goals>
-                <configuration>
-                  <reload>true</reload>
-                  <timeout>600</timeout>
-                </configuration>
-              </execution>
-              
-              <execution>
-                <id>deploy-fni</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>deploy</goal>
-                </goals>
-                <configuration>
+                  </before-deployment>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
-                  <timeout>600</timeout>
                 </configuration>
               </execution>
             </executions>
@@ -960,7 +936,7 @@
                 <log>${project.basedir}/target/cargo.log</log>
                 <output>${project.basedir}/target/wildfly.log</output>
                 <zipUrlInstaller>
-                  <url>http://download.jboss.org/wildfly/8.1.0.Final/wildfly-8.1.0.Final.zip</url>
+                  <url>http://static.forgeandillusion.net/libs/wildfly/8.1.0.Final-custom/wildfly-8.1.0.Final.zip</url>
                   <downloadDir>${project.basedir}/.cargo/downloads</downloadDir>
                   <extractDir>${project.basedir}/.cargo/extracts</extractDir>
                 </zipUrlInstaller>
@@ -1015,16 +991,16 @@
           <plugin>
             <groupId>org.wildfly.plugins</groupId>
             <artifactId>wildfly-maven-plugin</artifactId>
-            <version>1.1.0.Alpha4</version>
+            <version>1.0.2.Final</version>
             <executions>
               <execution>
-                <id>configure-wildfly</id>
+                <id>deploy-fni</id>
                 <phase>pre-integration-test</phase>
                 <goals>
-                  <goal>execute-commands</goal>
+                  <goal>deploy</goal>
                 </goals>
                 <configuration>
-                  <execute-commands>
+                  <before-deployment>
                     <batch>true</batch>
                     <commands>
                       <command>/system-property=fni-google-drive.keyFile:add(value="${it.googleDrive.keyFile}")</command>
@@ -1036,34 +1012,10 @@
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
-                      <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                     </commands>
-                  </execute-commands>
-                </configuration>
-              </execution>
-              
-              <execution>
-                <id>reload-wildfly</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>shutdown</goal>
-                </goals>
-                <configuration>
-                  <reload>true</reload>
-                  <timeout>600</timeout>
-                </configuration>
-              </execution>
-              
-              <execution>
-                <id>deploy-fni</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>deploy</goal>
-                </goals>
-                <configuration>
+                  </before-deployment>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
-                  <timeout>600</timeout>
                 </configuration>
               </execution>
             </executions>
@@ -1419,7 +1371,7 @@
                 <log>${project.basedir}/target/cargo.log</log>
                 <output>${project.basedir}/target/wildfly.log</output>
                 <zipUrlInstaller>
-                  <url>http://download.jboss.org/wildfly/8.1.0.Final/wildfly-8.1.0.Final.zip</url>
+                  <url>http://static.forgeandillusion.net/libs/wildfly/8.1.0.Final-custom/wildfly-8.1.0.Final.zip</url>
                   <downloadDir>${project.basedir}/.cargo/downloads</downloadDir>
                   <extractDir>${project.basedir}/.cargo/extracts</extractDir>
                 </zipUrlInstaller>
@@ -1473,16 +1425,16 @@
           <plugin>
             <groupId>org.wildfly.plugins</groupId>
             <artifactId>wildfly-maven-plugin</artifactId>
-            <version>1.1.0.Alpha4</version>
+            <version>1.0.2.Final</version>
             <executions>
               <execution>
-                <id>configure-wildfly</id>
+                <id>deploy-fni</id>
                 <phase>pre-integration-test</phase>
                 <goals>
-                  <goal>execute-commands</goal>
+                  <goal>deploy</goal>
                 </goals>
                 <configuration>
-                  <execute-commands>
+                  <before-deployment>
                     <batch>true</batch>
                     <commands>
                       <command>/system-property=fni-google-drive.keyFile:add(value="${it.googleDrive.keyFile}")</command>
@@ -1494,34 +1446,10 @@
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
-                      <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                     </commands>
-                  </execute-commands>
-                </configuration>
-              </execution>
-              
-              <execution>
-                <id>reload-wildfly</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>shutdown</goal>
-                </goals>
-                <configuration>
-                  <reload>true</reload>
-                  <timeout>600</timeout>
-                </configuration>
-              </execution>
-              
-              <execution>
-                <id>deploy-fni</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>deploy</goal>
-                </goals>
-                <configuration>
+                  </before-deployment>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
-                  <timeout>600</timeout>
                 </configuration>
               </execution>
             </executions>
@@ -1904,7 +1832,7 @@
                 <log>${project.basedir}/target/cargo.log</log>
                 <output>${project.basedir}/target/wildfly.log</output>
                 <zipUrlInstaller>
-                  <url>http://download.jboss.org/wildfly/8.1.0.Final/wildfly-8.1.0.Final.zip</url>
+                  <url>http://static.forgeandillusion.net/libs/wildfly/8.1.0.Final-custom/wildfly-8.1.0.Final.zip</url>
                   <downloadDir>${project.basedir}/.cargo/downloads</downloadDir>
                   <extractDir>${project.basedir}/.cargo/extracts</extractDir>
                 </zipUrlInstaller>
@@ -1958,16 +1886,16 @@
           <plugin>
             <groupId>org.wildfly.plugins</groupId>
             <artifactId>wildfly-maven-plugin</artifactId>
-            <version>1.1.0.Alpha4</version>
+            <version>1.0.2.Final</version>
             <executions>
               <execution>
-                <id>configure-wildfly</id>
+                <id>deploy-fni</id>
                 <phase>pre-integration-test</phase>
                 <goals>
-                  <goal>execute-commands</goal>
+                  <goal>deploy</goal>
                 </goals>
                 <configuration>
-                  <execute-commands>
+                  <before-deployment>
                     <batch>true</batch>
                     <commands>
                       <command>/system-property=fni-google-drive.keyFile:add(value="${it.googleDrive.keyFile}")</command>
@@ -1979,34 +1907,10 @@
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
-                      <command>/socket-binding-group=standard-sockets/remote-destination-outbound-socket-binding=mail-smtp/:write-attribute(name=port,value=${it.smtp.port})</command>
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                     </commands>
-                  </execute-commands>
-                </configuration>
-              </execution>
-              
-              <execution>
-                <id>reload-wildfly</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>shutdown</goal>
-                </goals>
-                <configuration>
-                  <reload>true</reload>
-                  <timeout>600</timeout>
-                </configuration>
-              </execution>
-              
-              <execution>
-                <id>deploy-fni</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>deploy</goal>
-                </goals>
-                <configuration>
+                  </before-deployment>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
-                  <timeout>600</timeout>
                 </configuration>
               </execution>
             </executions>
