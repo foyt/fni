@@ -234,10 +234,13 @@ public class GameLibraryListTestsBase extends AbstractUITest {
 
     assertShareButtonsHidden(getWebDriver(), publicationSelector);
     clickSelector(publicationSelector + " .gamelibrary-publication-share-button");
+    clickSelector(publicationSelector + " .gamelibrary-publication-share-button label");
     assertShareButtonsVisible(getWebDriver(), publicationSelector);
     clickSelector(publicationSelector + " .gamelibrary-publication-share-button");
+    clickSelector(publicationSelector + " .gamelibrary-publication-share-button label");
     assertShareButtonsHidden(getWebDriver(), publicationSelector);
     clickSelector(publicationSelector + " .gamelibrary-publication-share-button");
+    clickSelector(publicationSelector + " .gamelibrary-publication-share-button label");
     assertShareButtonsVisible(getWebDriver(), publicationSelector);
     clickSelector(publicationSelector + " .gamelibrary-publication-detail-number-of-pages");
     assertShareButtonsHidden(getWebDriver(), publicationSelector);
