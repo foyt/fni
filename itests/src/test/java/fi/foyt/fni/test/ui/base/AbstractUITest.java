@@ -99,6 +99,8 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     typeSelectorInputValue("#email", getFacebookUsername());
     typeSelectorInputValue("#pass", getFacebookPassword());
     clickSelector("*[name='login']");
+    
+    waitForSelectorPresent(".menu-tools-account");
     assertLoggedIn();
   }
 
@@ -256,6 +258,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   
   protected void assertUrlMatches(String regex) {
     assertTrue("url '" + getWebDriver().getCurrentUrl() + "' does not match " + regex, getWebDriver().getCurrentUrl().matches(regex));
+  }
+
+  protected void waitTitle(String title) {
+    new WebDriverWait(getWebDriver(), 60)
+      .until(ExpectedConditions.titleIs(title));
   }
 
   protected void waitForNotification() {
