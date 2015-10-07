@@ -98,6 +98,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     waitForUrlMatches(getWebDriver(), ".*/forge/folders/[0-9]{1,}/test_folder");
     getWebDriver().findElement(By.cssSelector(".forge-import-material-menu")).click();
     getWebDriver().findElement(By.cssSelector(".forge-import-material-menu .forge-import-google-drive")).click();
+    waitForUrlMatches(".*\\/import-google-drive\\?parentFolderId=[0-9]{1,}.*");
     assertUrlMatches(".*\\/import-google-drive\\?parentFolderId=[0-9]{1,}.*");
     getWebDriver().findElement(By.cssSelector(".forge-import-google-drive-check-container input[type=\"checkbox\"]")).click();
     getWebDriver().findElement(By.cssSelector(".forge-import-google-drive-button")).click();
