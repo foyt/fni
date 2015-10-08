@@ -44,9 +44,10 @@ public class GameLibraryManageTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testAdmin() throws Exception {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/manage/");
-    assertEquals("Game Library - Management", getWebDriver().getTitle());
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/gamelibrary/manage/", true);
+    waitTitle("Game Library - Management");
+    assertTitle("Game Library - Management");
   }
 
 }
