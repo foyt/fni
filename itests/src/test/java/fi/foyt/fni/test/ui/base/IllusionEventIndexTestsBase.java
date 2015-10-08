@@ -288,8 +288,8 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
     getWebDriver().get(getCustomEventUrl());
     testTitle("Illusion - Open Event");
     assertLoggedIn();
-    clickSelector(".index-menu .menu-tools-account-container");
-    clickSelector(".menu-tools-account-logout a");
+    waitAndClick(".index-menu .menu-tools-account-container");
+    waitAndClick(".menu-tools-account-logout a");
     testTitle("Illusion - Open Event");
     assertNotLoggedIn();
     navigate("/");
