@@ -222,7 +222,9 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
         logout(getWebDriver());
         loginInternal(getWebDriver(), email, password);
 
-        getWebDriver().get(getAppUrl(true) + "/gamelibrary/cart/");
+        navigate("/gamelibrary/cart/", true);
+        waitForSelectorPresent("#cart-form:payerFirstName");
+
         assertEquals(firstName, getWebDriver().findElement(By.id("cart-form:payerFirstName")).getAttribute("value"));
         assertEquals(lastName, getWebDriver().findElement(By.id("cart-form:payerLastName")).getAttribute("value"));
         assertEquals(email, getWebDriver().findElement(By.id("cart-form:payerEmail")).getAttribute("value"));
