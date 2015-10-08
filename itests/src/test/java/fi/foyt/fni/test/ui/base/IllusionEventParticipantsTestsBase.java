@@ -76,6 +76,7 @@ public class IllusionEventParticipantsTestsBase extends AbstractIllusionUITest {
     clickSelector(".illusion-event-navigation-admin-menu");
     assertSelectorCount(".illusion-event-navigation-admin-menu .illusion-event-navigation-item.illusion-event-navigation-item-active", 1);
     assertSelectorPresent(".illusion-event-navigation-admin-menu");
+    waitForSelectorText(".illusion-event-navigation-admin-menu .illusion-event-navigation-item.illusion-event-navigation-item-active", "participants", true);
     assertSelectorTextIgnoreCase(".illusion-event-navigation-admin-menu .illusion-event-navigation-item.illusion-event-navigation-item-active", "participants");
   }
   
@@ -153,9 +154,10 @@ public class IllusionEventParticipantsTestsBase extends AbstractIllusionUITest {
     clickSelector(".illusion-edit-participant-save");
     waitForPageLoad();
     
-    clickSelector(".illusion-event-participant[data-participant-id='1']");
+    waitAndClick(".illusion-event-participant[data-participant-id='1']");
     waitForPageLoad();
     
+    waitForInputValueNotBlank(".illusion-edit-participant-display-name");
     assertSelectorValue(".illusion-edit-participant-display-name", "Display Name");
   }
 
@@ -164,8 +166,8 @@ public class IllusionEventParticipantsTestsBase extends AbstractIllusionUITest {
   public void testInviteDialogLinks() {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/participants");
-    clickSelector(".illusion-event-participant-action-menu");
-    clickSelector(".illusion-invite-participants");
+    waitAndClick(".illusion-event-participant-action-menu");
+    waitAndClick(".illusion-invite-participants");
     waitForSelectorVisible(".ui-widget-content textarea[name='mail-content']");
     
     String mailContent = findElementBySelector(".ui-widget-content textarea[name='mail-content']").getAttribute("value");
@@ -183,8 +185,8 @@ public class IllusionEventParticipantsTestsBase extends AbstractIllusionUITest {
   public void testInviteDialogLinksCustomDomain() {
     loginInternal("admin@foyt.fi", "pass");
     getWebDriver().get(getCustomEventUrl() + "/participants");
-    clickSelector(".illusion-event-participant-action-menu");
-    clickSelector(".illusion-invite-participants");
+    waitAndClick(".illusion-event-participant-action-menu");
+    waitAndClick(".illusion-invite-participants");
     waitForSelectorVisible(".ui-widget-content textarea[name='mail-content']");
     
     String mailContent = findElementBySelector(".ui-widget-content textarea[name='mail-content']").getAttribute("value");
