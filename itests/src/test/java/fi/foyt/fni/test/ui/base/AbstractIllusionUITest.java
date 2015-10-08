@@ -29,6 +29,7 @@ public class AbstractIllusionUITest extends AbstractUITest {
     clickSelector(".user-login-button");
     waitForUrlNotMatches(".*/login.*");
     
+    waitForSelectorVisible(".menu-tools-account");
     assertSelectorPresent(".menu-tools-account");
     assertSelectorNotPresent(".menu-tools-login");
   }

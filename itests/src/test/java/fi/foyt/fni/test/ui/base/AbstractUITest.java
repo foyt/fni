@@ -84,6 +84,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     waitAndSendKeys(".user-login-email", email);
     waitAndSendKeys(".user-login-password", password);
     waitAndClick(".user-login-button");
+    waitForUrlNotMatches(driver, ".*/login.*");
     waitForSelectorPresent(".menu-tools-account");
 
     assertSelectorPresent(".menu-tools-account");

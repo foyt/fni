@@ -9,6 +9,7 @@ import javax.mail.MessagingException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
+
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 
@@ -110,6 +111,7 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/open");
     assertSelectorClickable(".illusion-event-join-button");
     clickSelector(".illusion-event-join-button");
+    waitForUrlMatches(".*/login.*");
     assertLogin();
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     assertUrlMatches(".*/illusion/event/open");
@@ -127,6 +129,7 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
       navigate("/illusion/event/approve");
       assertSelectorClickable(".illusion-event-join-button");
       clickSelector(".illusion-event-join-button");
+      waitForUrlMatches(".*/login.*");
       assertLogin();
       loginInternal(getWebDriver(), "user@foyt.fi", "pass");
       assertUrlMatches(".*/illusion/event/approve.*");
@@ -248,8 +251,8 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
     
     assertSelectorClickable(".illusion-event-join-button");
     clickSelector(".illusion-event-join-button");
-    testTitle("Illusion - Open Event");
-    
+    waitTitle("Illusion - Open Event");
+
     assertSelectorCount(".illusion-event-navigation>a", 1);
     assertSelectorNotPresent(".illusion-event-join-button");
     assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
