@@ -1,5 +1,15 @@
 (function() {
   'use strict';
+
+  $(document).on('click', '.illusion-event-participant-action-menu', function () {
+    $(this).closest('.illusion-event-participant-action-menu')
+      .addClass('illusion-event-participant-action-menu-open');
+  });
+
+  $(document).on('mousedown',  function (event) {
+    $('.illusion-event-participant-action-menu-open')
+      .removeClass('illusion-event-participant-action-menu-open');
+  });
   
   $(document).ready(function() { 
     $.ajax(CONTEXTPATH + '/rest/illusion/events/' + $('input[name="eventId"]').val() + '/groups/', {
