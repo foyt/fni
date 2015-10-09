@@ -73,7 +73,7 @@ public class IllusionEventParticipantsTestsBase extends AbstractIllusionUITest {
     loginInternal("admin@foyt.fi", "pass");
     testTitle("/illusion/event/openevent/participants", "Illusion - Open Event");
     assertSelectorCount(".illusion-event-navigation-admin-menu.illusion-event-navigation-item-active", 1);
-    clickSelector(".illusion-event-navigation-admin-menu");
+    waitAndClick(".illusion-event-navigation-admin-menu");
     assertSelectorCount(".illusion-event-navigation-admin-menu .illusion-event-navigation-item.illusion-event-navigation-item-active", 1);
     assertSelectorPresent(".illusion-event-navigation-admin-menu");
     waitForSelectorText(".illusion-event-navigation-admin-menu .illusion-event-navigation-item.illusion-event-navigation-item-active", "participants", true);
@@ -121,7 +121,7 @@ public class IllusionEventParticipantsTestsBase extends AbstractIllusionUITest {
     assertEquals(getCustomEventUrl() + "/", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(5) a").getAttribute("href"));
     assertEquals(getCustomEventUrl() + "/participants", findElementBySelector(".view-header-navigation .view-header-navigation-item:nth-child(7) a").getAttribute("href"));
   }
-
+  
   @Test
   @SqlSets ({"illusion-basic", "illusion-event", "illusion-event-participant", "illusion-event-organizer"})
   public void testUpdateRole() {
@@ -154,13 +154,12 @@ public class IllusionEventParticipantsTestsBase extends AbstractIllusionUITest {
     clickSelector(".illusion-edit-participant-save");
     waitForPageLoad();
     
-    waitAndClick(".illusion-event-participant[data-participant-id='1']");
+    clickSelector(".illusion-event-participant[data-participant-id='1']");
     waitForPageLoad();
     
-    waitForInputValueNotBlank(".illusion-edit-participant-display-name");
     assertSelectorValue(".illusion-edit-participant-display-name", "Display Name");
   }
-
+  
   @Test
   @SqlSets ({"illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testInviteDialogLinks() {
