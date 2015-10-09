@@ -6,9 +6,10 @@
       .addClass('illusion-event-participant-action-menu-open');
   });
 
-  $(document).on('mousedown',  function (event) {
-    $('.illusion-event-participant-action-menu-open')
-      .removeClass('illusion-event-participant-action-menu-open');
+  $(document).on('click',  function (event) {
+    if ($(event.target).closest('.illusion-event-participant-action-menu-open').length == 0) {
+      $('.illusion-event-participant-action-menu-open').removeClass('illusion-event-participant-action-menu-open');
+    }
   });
   
   $(document).ready(function() { 
