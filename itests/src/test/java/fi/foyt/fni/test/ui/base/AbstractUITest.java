@@ -164,9 +164,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void waitForInputValueNotBlank(final String selector) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
-        List<WebElement> elements = driver.findElements(By.cssSelector(selector));
-        if (elements.size() > 0) {
-          return StringUtils.isNotBlank(elements.get(0).getAttribute("value"));
+        try {
+          List<WebElement> elements = driver.findElements(By.cssSelector(selector));
+          if (elements.size() > 0) {
+            return StringUtils.isNotBlank(elements.get(0).getAttribute("value"));
+          }
+        } catch (StaleElementReferenceException e) {
         }
         
         return false;
@@ -413,6 +416,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void waitForPageLoad() {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        return !((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
+      }
+    });
+    
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
         return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
