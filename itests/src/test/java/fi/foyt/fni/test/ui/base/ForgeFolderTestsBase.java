@@ -70,10 +70,8 @@ public class ForgeFolderTestsBase extends AbstractUITest {
     acceptCookieDirective();
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     navigate(FOLDER);
-    waitForSelectorVisible(".forge-material[data-material-id=\"4\"] .forge-material-icon");
-    clickSelector(".forge-material[data-material-id=\"4\"] .forge-material-icon");
-    waitSelectorToBeClickable(".forge-material[data-material-id=\"4\"] .forge-material-action-share a");
-    clickSelector(".forge-material[data-material-id=\"4\"] .forge-material-action-share a");
+    waitAndClick(".forge-material[data-material-id=\"4\"] .forge-material-icon");
+    waitAndClick(".forge-material[data-material-id=\"4\"] .forge-material-action-share a");
     waitForSelectorVisible(".forge-share-material-dialog");
     assertSelectorPresent(".forge-share-material-dialog");
   }
