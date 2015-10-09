@@ -110,6 +110,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   position: relative;
 }
 
+.forge-material-open,
 .forge-material:hover {
   background: $selected-background-color;
 }
@@ -132,6 +133,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   font-weight: bold;
 }
 
+.forge-material-open .forge-material-actions,
 .forge-material:hover .forge-material-actions {
   max-height: 180px;
   @include transition-property(max-height);
