@@ -115,15 +115,15 @@
   }  
   
   .#{$prefix}flex-align-items-top {
-    align-items: flex-start;
-  }  
+    @include align-items(flex-start);
+  }
   
   .#{$prefix}flex-align-items-center {
-    align-items: center;
+    @include align-items(center);
   }
     
   .#{$prefix}flex-align-items-bottom {
-    align-items: flex-end;
+    @include align-items(flex-end);
   }
   
   .#{$prefix}flex-justify-content-start {
