@@ -155,6 +155,8 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 2);
     navigate("/gamelibrary/cart/");
     
+    waitTitle("Forge & Illusion - Game Library");
+
     assertSelectorTextIgnoreCase(".gamelibrary-cart-summary-field-total-value", "EUR17.50");
     assertSelectorClickable(".gamelibrary-cart-submit");
     
@@ -195,6 +197,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
         waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 1);
         navigate("/gamelibrary/cart/");
 
+        waitTitle("Forge & Illusion - Game Library");
         assertEquals(firstName, getWebDriver().findElement(By.id("cart-form:payerFirstName")).getAttribute("value"));
         assertEquals(lastName, getWebDriver().findElement(By.id("cart-form:payerLastName")).getAttribute("value"));
         assertEquals(email, getWebDriver().findElement(By.id("cart-form:payerEmail")).getAttribute("value"));
