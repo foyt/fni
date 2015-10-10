@@ -228,8 +228,8 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
         loginInternal(getWebDriver(), email, password);
 
         navigate("/gamelibrary/cart/", true);
-        waitForSelectorPresent("#cart-form:payerFirstName");
-
+        waitTitle("Forge & Illusion - Game Library");
+        
         assertEquals(firstName, getWebDriver().findElement(By.id("cart-form:payerFirstName")).getAttribute("value"));
         assertEquals(lastName, getWebDriver().findElement(By.id("cart-form:payerLastName")).getAttribute("value"));
         assertEquals(email, getWebDriver().findElement(By.id("cart-form:payerEmail")).getAttribute("value"));
