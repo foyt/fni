@@ -49,17 +49,18 @@
 @mixin screen-modifier ($name, $prefix) {
   @for $i from 1 through $grid-columns {
     .#{$prefix}flex-cell-#{$i} {
-      @include flex(0 0 calc(#{100% / $grid-columns * $i} - #{$grid-margin}));
+      @include flex-basis(calc(#{100% / $grid-columns * $i} - #{$grid-margin}));
+      
       @include box-sizing(border-box);
       margin: #{$grid-margin / 2};
       
       &.#{$prefix}flex-cell-first {
-        @include flex(0 0 calc(#{100% / $grid-columns * $i} - #{$grid-margin / 2}));
+        @include flex-basis(calc(#{100% / $grid-columns * $i} - #{$grid-margin / 2}));
         margin-left: 0px;
       } 
       
       &.#{$prefix}flex-cell-last {
-        @include flex(0 0 calc(#{100% / $grid-columns * $i} - #{$grid-margin / 2}));
+        @include flex-basis(calc(#{100% / $grid-columns * $i} - #{$grid-margin / 2}));
         margin-right: 0px;
       }
     }
@@ -67,17 +68,17 @@
   
   @for $i from 1 through 12 {
     .#{$prefix}flex-cell12-#{$i} {
-      @include flex(0 0 calc(#{100% / 12 * $i} - #{$grid-margin}));
+      @include flex-basis(calc(#{100% / 12 * $i} - #{$grid-margin}));
       @include box-sizing(border-box);
       margin: #{$grid-margin / 2};
       
       &.#{$prefix}flex-cell12-first {
-        @include flex(0 0 calc(#{100% / 12 * $i} - #{$grid-margin / 2}));
+        @include flex-basis(calc(#{100% / 12 * $i} - #{$grid-margin / 2}));
         margin-left: 0px;
       } 
       
       &.#{$prefix}flex-cell12-last {
-        @include flex(0 0 calc(#{100% / 12 * $i} - #{$grid-margin / 2}));
+        @include flex-basis(calc(#{100% / 12 * $i} - #{$grid-margin / 2}));
         margin-right: 0px;
       }
     }
@@ -90,7 +91,7 @@
   }
 
   .#{$prefix}flex-cell-full {
-    @include flex(0 0 100%);
+    @include flex-basis(100%);
     @include box-sizing(border-box);
     margin-left: 0px;
     margin-right: 0px;
