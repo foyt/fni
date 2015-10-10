@@ -178,19 +178,21 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void waitForSelectorNotPresent(final String selector) {
-    
-    new WebDriverWait(getWebDriver(), 60).until(
-      new ExpectedCondition<List<WebElement>>() {
-        
-        @Override
-        public List<WebElement> apply(WebDriver driver) {
-          List<WebElement> elements = driver.findElements(By.cssSelector(selector));
-          return elements.size() > 0 ? elements : null;
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        try {
+          List<WebElement> elements = findElementsBySelector(selector);
+          if (elements.isEmpty()) {
+            return true;
+          }
+        } catch (StaleElementReferenceException e) {
         }
         
+        return false;
       }
-    );
+    });
   }
+  
   
   protected void waitForSelectorPresent(final String selector) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
