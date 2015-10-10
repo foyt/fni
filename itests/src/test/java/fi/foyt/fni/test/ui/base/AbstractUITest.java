@@ -20,6 +20,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -418,11 +419,15 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void waitForPageLoad() {
-    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
-      public Boolean apply(WebDriver driver) {
-        return !((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
-      }
-    });
+    try {
+      new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+        public Boolean apply(WebDriver driver) {
+          return !((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
+        }
+      });
+    } catch (TimeoutException e) {
+      
+    }
     
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
