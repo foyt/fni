@@ -251,6 +251,7 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
     getWebDriver().get(getCustomEventUrl());
     
     waitAndClick(".illusion-event-join-button");
+    waitForSelectorNotPresent(".illusion-event-join-button");
     waitTitle("Illusion - Open Event");
 
     assertSelectorCount(".illusion-event-navigation>a", 1);
@@ -290,6 +291,7 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
     assertLoggedIn();
     waitAndClick(".index-menu .menu-tools-account");
     waitAndClick(".menu-tools-account-logout a");
+    waitForSelectorNotPresent(".index-menu .menu-tools-account");
     testTitle("Illusion - Open Event");
     assertNotLoggedIn();
     navigate("/");
