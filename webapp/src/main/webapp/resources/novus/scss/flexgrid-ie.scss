@@ -40,19 +40,19 @@
   }
 }
 
-@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {  
+@media screen {  
   @include screen-modifier("Default", '');
 }
 
-@media screen and (max-width: 767px) and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+@media screen and (max-width: 767px) {
   @include screen-modifier("Small", 'sm-');
 }
 
-@media screen and (min-width: 768px) and (max-width: 959px) and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+@media screen and (min-width: 768px) and (max-width: 959px) {
   @include screen-modifier("Medium", 'md-');
 }
 
-@media screen and (min-width: 960px) and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+@media screen and (min-width: 960px) {
   @include screen-modifier("Large", 'lg-');
 }
 
