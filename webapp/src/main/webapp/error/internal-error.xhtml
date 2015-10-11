@@ -8,10 +8,6 @@
 
   <ui:define name="page-title">#{locales['error.internalError.title']}</ui:define>
     
-  <ui:define name="grid-css">
-    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
-  </ui:define>
-    
   <ui:define name="metadata">
     <f:event type="preRenderView" listener="#{errorInternalErrorBackingBean.preRenderListener}"/>
   </ui:define>
