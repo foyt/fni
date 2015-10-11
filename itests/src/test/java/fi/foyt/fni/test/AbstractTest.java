@@ -161,6 +161,10 @@ public abstract class AbstractTest {
     return String.format("%s%s:%d%s", secure ? "https://" : "http://", getHost(), secure ? getPortHttps() : getPortHttp(), ctxPath != null ? "/" + ctxPath : "");
   }
 
+  protected String getSeleniumVersion() {
+    return System.getProperty("it.selenium.version");
+  }
+
   protected String getHost() {
     return System.getProperty("it.host");
   }
