@@ -5,8 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -21,8 +19,8 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
   public void testEmptyCart() throws Exception {
     navigate("/gamelibrary/cart/", true);
     waitTitle("Forge & Illusion - Game Library");
-    assertEquals("Shopping Cart is Empty", getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-empty-message")).getText());
-    assertEquals("true", getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).getAttribute("disabled"));
+    assertSelectorTextIgnoreCase(".gamelibrary-cart-empty-message", "Shopping Cart is Empty");
+    assertSelectorTextIgnoreCase(".gamelibrary-cart-submit", "true");
   }
 
   @Test
@@ -56,25 +54,25 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).click();
 
     acceptPaytrailPayment(getWebDriver());
-
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.titleIs("Forge & Illusion - Game Library"));
-
-    assertEquals("Status: Paid, Waiting for Delivery", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-status")).getText());
-    assertEquals(firstName + " " + lastName, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-customer-name")).getText());
-    assertEquals(email, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-customer-email")).getText());
-    assertEquals(mobile, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-customer-mobile")).getText());
-
-    assertEquals(addressStreet, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-delivery-address-street")).getText());
-    assertEquals(addressPostalCode + " " + addressPostalOffice, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-delivery-address-postal-code")).getText());
-    assertEquals("Finland", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-delivery-address-country")).getText());
-
-    assertEquals(notes, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-notes p")).getText());
-
+    waitTitle("Forge & Illusion - Game Library");
+    waitForSelectorPresent(".gamelibrary-order-status");
+      
+    assertSelectorTextIgnoreCase(".gamelibrary-order-status", "Status: Paid, Waiting for Delivery");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-name", firstName + " " + lastName);
+    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-email", email);
+    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-mobile", mobile);
+  
+    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-street", addressStreet);
+    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-postal-code", addressPostalCode + " " + addressPostalOffice);
+    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-country", "Finland");
+    
+    assertSelectorTextIgnoreCase(".gamelibrary-order-notes p", notes);
     assertSelectorCount(".gamelibrary-order-item", 1);
     
-    assertEquals("1 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", findElementsBySelector(".gamelibrary-order-item div:nth-child(1)").get(0).getText());
-    assertEquals("EUR10.00", findElementsBySelector(".gamelibrary-order-item div:nth-child(2)").get(0).getText());
-    assertEquals("EUR10.00", findElementsBySelector(".gamelibrary-order-item div:nth-child(3)").get(0).getText());
+    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(1)", "1 X FAT HAG DWARVES QUICKLY ZAP JINX MOB");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(2)", "EUR10.00");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(3)", "EUR10.00");
+    
     assertSelectorTextIgnoreCase(".gamelibrary-order-total div", "EUR10.00");
     assertSelectorTextIgnoreCase(".gamelibrary-order-tax-label label", "TAX (0% - NOT VAT REGISTERED)");
     assertSelectorTextIgnoreCase(".gamelibrary-order-tax-amount div", "EUR0.00");
@@ -117,20 +115,19 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).click();
 
     acceptPaytrailPayment(getWebDriver());
+    waitTitle("Forge & Illusion - Game Library");
+    waitForSelectorPresent(".gamelibrary-order-status");
 
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.titleIs("Forge & Illusion - Game Library"));
+    assertSelectorTextIgnoreCase(".gamelibrary-order-status", "Status: Paid, Waiting for Delivery");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-name", firstName + " " + lastName);
+    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-email", email);
+    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-mobile", mobile);
 
-    assertEquals("Status: Paid, Waiting for Delivery", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-status")).getText());
-    assertEquals(firstName + " " + lastName, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-customer-name")).getText());
-    assertEquals(email, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-customer-email")).getText());
-    assertEquals(mobile, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-customer-mobile")).getText());
-
-    assertEquals(addressStreet, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-delivery-address-street")).getText());
-    assertEquals(addressPostalCode + " " + addressPostalOffice, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-delivery-address-postal-code")).getText());
-    assertEquals("Finland", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-delivery-address-country")).getText());
-
-    assertEquals(notes, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-notes p")).getText());
-
+    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-street", addressStreet);
+    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-postal-code", addressPostalCode + " " + addressPostalOffice);
+    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-country", "Finland");
+    
+    assertSelectorTextIgnoreCase(".gamelibrary-order-notes p", notes);
     assertSelectorCount(".gamelibrary-order-item", 2);
     
     assertEquals("2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", findElementsBySelector(".gamelibrary-order-item div:nth-child(1)").get(0).getText());
@@ -140,6 +137,13 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     assertEquals("EUR7.50", findElementsBySelector(".gamelibrary-order-item div:nth-child(2)").get(1).getText());
     assertEquals("EUR7.50", findElementsBySelector(".gamelibrary-order-item div:nth-child(3)").get(1).getText());
 
+    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(1)", "2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(2)", "EUR10.00");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(3)", "EUR20.00");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(1)", "1 X BEOWULF POHTI ZULUJA JA ÅNGSTRÖM-YKSIKKÖÄ KATSELLESSAAN Q-STONE- JA CMX-YHTYEITÄ VIDEOLTA.");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(2)", "EUR7.50");
+    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(3)", "EUR7.50");
+    
     assertSelectorTextIgnoreCase(".gamelibrary-order-total div", "EUR27.50");
     assertSelectorTextIgnoreCase(".gamelibrary-order-tax-label label", "TAX (0% - NOT VAT REGISTERED)");
     assertSelectorTextIgnoreCase(".gamelibrary-order-tax-amount div", "EUR0.00");
