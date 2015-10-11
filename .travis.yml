@@ -29,7 +29,7 @@ env:
   - goals=verify use_sc=true it_profile=travis it_browsers="microsoftedge:20.10240:Windows 10"
 before_script:
 - if [ $use_sc = true ]; then curl -sS https://saucelabs.com/downloads/sc-4.3.11-linux.tar.gz|tar -xzC /tmp/; fi;
-- if [ $use_sc = true ]; then /tmp/sc-4.3.11-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish --daemonize --pidfile /tmp/sc.pid; fi;
+- if [ $use_sc = true ]; then /tmp/sc-4.3.11-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish -D cdnjs.cloudflare.com --daemonize --pidfile /tmp/sc.pid; fi;
 script: mvn $goals -P$it_profile -Dexec.args="-Duser.timezone=UTC" -Dmaven.javadoc.skip=true -Dsource.skip=true -Dit.properties.file=src/test/resources/it-travis.properties -Dit.browsers="$it_browsers"
 after_script:
 - if [ $use_sc = true ]; then kill `cat /tmp/sc.pid`; fi;
