@@ -231,18 +231,15 @@ public class GameLibraryListTestsBase extends AbstractUITest {
 
     assertEquals("COMMENTS (" + comments + ")", getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-comments")).getText());
     assertEquals(getAppUrl(true) + "/forum/" + commentUrl, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-comments")).getAttribute("href"));
-
+    
     assertShareButtonsHidden(getWebDriver(), publicationSelector);
-    clickSelector(publicationSelector + " .gamelibrary-publication-share-button");
-    clickSelector(publicationSelector + " .gamelibrary-publication-share-button label");
+    waitAndClick(publicationSelector + " .gamelibrary-publication-share-button label");
     assertShareButtonsVisible(getWebDriver(), publicationSelector);
-    clickSelector(publicationSelector + " .gamelibrary-publication-share-button");
-    clickSelector(publicationSelector + " .gamelibrary-publication-share-button label");
+    waitAndClick(publicationSelector + " .gamelibrary-publication-share-button label");
     assertShareButtonsHidden(getWebDriver(), publicationSelector);
-    clickSelector(publicationSelector + " .gamelibrary-publication-share-button");
-    clickSelector(publicationSelector + " .gamelibrary-publication-share-button label");
+    waitAndClick(publicationSelector + " .gamelibrary-publication-share-button label");
     assertShareButtonsVisible(getWebDriver(), publicationSelector);
-    clickSelector(publicationSelector + " .gamelibrary-publication-detail-number-of-pages");
+    waitAndClick(publicationSelector + " .gamelibrary-publication-detail-number-of-pages");
     assertShareButtonsHidden(getWebDriver(), publicationSelector);
   }
 
@@ -254,10 +251,10 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   }
 
   private void assertShareButtonsVisible(RemoteWebDriver driver, String publicationSelector) {
-    new WebDriverWait(getWebDriver(), 10).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-twitter")));
-    assertTrue(getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-twitter")).isDisplayed());
-    assertTrue(getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-facebook")).isDisplayed());
-    assertTrue(getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-gplus")).isDisplayed());
+    waitForSelectorPresent(String.format("%s .gamelibrary-publication-share-button .entypo-twitter", publicationSelector));
+    assertSelectorVisible(String.format("%s .gamelibrary-publication-share-button .entypo-twitter", publicationSelector));
+    assertSelectorVisible(String.format("%s .gamelibrary-publication-share-button .entypo-facebook", publicationSelector));
+    assertSelectorVisible(String.format("%s .gamelibrary-publication-share-button .entypo-gplus", publicationSelector));
   }
 
 }
