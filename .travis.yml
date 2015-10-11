@@ -24,9 +24,9 @@ env:
 #  - use_sc=false it_profile=rest
 #  - use_sc=true it_profile=travis it_browsers="chrome:45:Linux"
   - use_sc=true it_profile=travis it_browsers="safari:8.1:OS X 10.11"
-  - use_sc=true it_profile=travis it_browsers="firefox:41.0:Windows 8"
+#  - use_sc=true it_profile=travis it_browsers="firefox:41.0:Windows 8"
   - use_sc=true it_profile=travis it_browsers="internet explorer:11.0:Windows 8.1"
-#  - use_sc=true it_profile=travis it_browsers="microsoftedge:20.10240:Windows 10"
+  - use_sc=true it_profile=travis it_browsers="microsoftedge:20.10240:Windows 10"
 before_script:
 - if [ $use_sc = true ]; then curl -sS https://saucelabs.com/downloads/sc-4.3.11-linux.tar.gz|tar -xzC /tmp/; fi;
 - if [ $use_sc = true ]; then /tmp/sc-4.3.11-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish --daemonize --pidfile /tmp/sc.pid; fi;
