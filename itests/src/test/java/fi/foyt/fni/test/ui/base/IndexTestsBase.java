@@ -6,7 +6,6 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import fi.foyt.fni.test.DefineSqlSet;
@@ -17,7 +16,8 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet (id = "upcoming-events", 
     before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-upcoming-events-setup.sql", "illusion-upcoming-unpublished-event-setup.sql"},
     after = {"illusion-upcoming-unpublished-event-teardown.sql", "illusion-upcoming-events-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
-  )
+  ),
+  @DefineSqlSet (id = "basic-gamelibrary", before = { "basic-users-setup.sql","basic-forum-setup.sql","basic-gamelibrary-setup.sql"}, after={"basic-gamelibrary-teardown.sql", "basic-forum-teardown.sql","basic-users-teardown.sql"}),
 })
 public class IndexTestsBase extends AbstractUITest {
 
@@ -35,32 +35,30 @@ public class IndexTestsBase extends AbstractUITest {
   @Test
   public void testTexts() {
     navigate("/");
-    
-    assertEquals("WHAT IS THE FORGE & ILLUSION", getWebDriver().findElement(By.cssSelector("p.description-title")).getText());
-    assertEquals("Forge & Illusion is an open platform built for roleplaying and roleplayers.", getWebDriver().findElement(By.cssSelector("p.description-text")).getText());
-        
-    
-    assertEquals("LATEST GAME LIBRARY PUBLICATIONS", findElementBySelector(String.format("h3 a[href='/gamelibrary/']")).getText());
-    assertEquals("LATEST FORUM TOPICS", findElementBySelector(String.format("h3 a[href='/forum/']")).getText());
-    assertEquals("NEWS", findElementBySelector(String.format("h3 a[href='/news/archive/0/0']")).getText());
-    assertEquals("UPCOMING EVENTS", findElementBySelector(String.format("h3 a[href='/illusion/']")).getText());
 
-    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/gamelibrary/']")).getText());
-    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/forum/']")).getText());
-    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/news/archive/0/0']")).getText());
-    assertEquals("More >>", findElementBySelector(String.format("a.more-link[href='/illusion/']")).getText());
+    assertSelectorTextIgnoreCase("p.description-title", "WHAT IS THE FORGE & ILLUSION");
+    assertSelectorTextIgnoreCase("p.description-text", "Forge & Illusion is an open platform built for roleplaying and roleplayers.");
+    assertSelectorTextIgnoreCase("h3 a[href='/gamelibrary/']", "LATEST GAME LIBRARY PUBLICATIONS");
+    assertSelectorTextIgnoreCase("h3 a[href='/forum/']", "LATEST FORUM TOPICS");
+    assertSelectorTextIgnoreCase("h3 a[href='/news/archive/0/0']", "NEWS");
+    assertSelectorTextIgnoreCase("h3 a[href='/illusion/']", "UPCOMING EVENTS");
+    
+    assertSelectorTextIgnoreCase("a.more-link[href='/gamelibrary/']", "More >>");
+    assertSelectorTextIgnoreCase("a.more-link[href='/forum/']", "More >>");
+    assertSelectorTextIgnoreCase("a.more-link[href='/news/archive/0/0']", "More >>");
+    assertSelectorTextIgnoreCase("a.more-link[href='/illusion/']", "More >>");
   }
 
   @Test
+  @SqlSets ("basic-gamelibrary")
   public void testPublicationTags() throws Exception {
     getWebDriver().get(getAppUrl());
-    List<WebElement> tagLinks = getWebDriver().findElements(By.cssSelector(".index-publication-tag a"));
+    List<WebElement> tagLinks = findElementsBySelector(".publications .tag");
     for (WebElement tagLink : tagLinks) {
       String tag = tagLink.getText().toLowerCase();
       assertEquals(getAppUrl() + "/gamelibrary/tags/" + URLEncoder.encode(tag, "UTF-8").replaceAll("\\+", "%20"), tagLink.getAttribute("href"));
     }
   }
-
 
   @Test
   public void testNoUpcomingEvents() throws Exception {
