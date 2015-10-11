@@ -152,9 +152,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void waitSelectorToBeClickable(final String selector) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
-        List<WebElement> elements = driver.findElements(By.cssSelector(selector));
-        if (elements.size() > 0) {
-          return ExpectedConditions.elementToBeClickable(elements.get(0)).apply(driver) != null;
+        try {
+          List<WebElement> elements = findElementsBySelector(selector);
+          if (elements.size() > 0) {
+            return ExpectedConditions.elementToBeClickable(elements.get(0)).apply(driver) != null;
+          }
+        } catch (StaleElementReferenceException e) {
         }
         
         return false;
