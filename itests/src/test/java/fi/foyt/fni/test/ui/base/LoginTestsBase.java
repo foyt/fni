@@ -63,6 +63,7 @@ public class LoginTestsBase extends AbstractUITest {
 
   @Test
   public void testRegisterMandatories() {
+    acceptCookieDirective();
     getWebDriver().get(getAppUrl(true) + "/login/");
     getWebDriver().findElement(By.cssSelector(".user-register-button")).submit();
     waitForNotification(getWebDriver());
