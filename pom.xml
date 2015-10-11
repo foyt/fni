@@ -65,9 +65,6 @@
 
     <hibernate-jpamodelgen.version>4.3.6.Final</hibernate-jpamodelgen.version>
     
-    <skip.javadocs>false</skip.javadocs>
-    <skip.source>false</skip.source>
-
     <!-- APIDocs -->
 
     <apidocs.apiVersion>1</apidocs.apiVersion>
@@ -138,9 +135,6 @@
             <goals>
               <goal>jar-no-fork</goal>
             </goals>
-            <configuration>
-              <skipSource>${skip.source}</skipSource>
-            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -155,9 +149,6 @@
             <goals>
               <goal>jar</goal>
             </goals>
-            <configuration>
-              <skip>${skip.javadocs}</skip>
-            </configuration>
           </execution>
 <!-- 
           <execution>
