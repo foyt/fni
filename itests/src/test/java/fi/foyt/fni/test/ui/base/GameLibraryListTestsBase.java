@@ -181,24 +181,24 @@ public class GameLibraryListTestsBase extends AbstractUITest {
       String numberOfPages, String[] authorNames, Long[] authorIds, String license, boolean purchasable, String commentUrl, int comments) {
 //    CreativeCommonsLicense creativeCommonsLicense = CreativeCommonsUtils.parseLicenseUrl(license);
 
-    assertEquals(title.toUpperCase(), getWebDriver().findElement(By.cssSelector(publicationSelector + " h3 a")).getText());
+    assertSelectorTextIgnoreCase(String.format("%s h3 a", publicationSelector), title);
     assertEquals(getAppUrl(true) + path, getWebDriver().findElement(By.cssSelector(publicationSelector + " h3 a")).getAttribute("href"));
 
     for (int i = 0, l = tags.length; i < l; i++) {
       String tag = tags[i];
-      assertEquals(tag.toUpperCase(), getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-tags a:nth-child(" + (i + 1) + ")")).getText());
+      assertSelectorTextIgnoreCase(String.format("%s .gamelibrary-publication-tags a:nth-child(%d)", publicationSelector, i + 1), tag);
     }
-
-    assertEquals(description, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-description")).getText());
+    
+    assertSelectorTextIgnoreCase(String.format("%s .gamelibrary-publication-description", publicationSelector), description);
 
     if (price != null) {
-      assertEquals(price, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-detail-price span")).getText());
+      assertSelectorTextIgnoreCase(String.format("%s .gamelibrary-publication-detail-price span", publicationSelector), price);
     }
 
-    assertEquals(numberOfPages, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-detail-number-of-pages span")).getText());
+    assertSelectorTextIgnoreCase(String.format("%s .gamelibrary-publication-detail-number-of-pages span", publicationSelector), numberOfPages);
 
     if (authorIds == null || authorNames == null) {
-      assertEquals(0, getWebDriver().findElements(By.cssSelector(publicationSelector + " .gamelibrary-publication-author")).size());
+      assertSelectorNotPresent(String.format("%s .gamelibrary-publication-author", publicationSelector));
     } else {
       List<WebElement> authorLinks = getWebDriver().findElements(By.cssSelector(publicationSelector + " .gamelibrary-publication-author"));
       assertEquals(authorIds.length, authorNames.length);
@@ -208,7 +208,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
         String authorName = authorNames[i];
         Long authorId = authorIds[i];
         WebElement authorLink = authorLinks.get(i);
-        assertEquals(authorLink.getText(), authorName.toUpperCase());
+        assertEquals(authorLink.getText().toUpperCase(), authorName.toUpperCase());
         assertEquals(authorLink.getAttribute("href"), getAppUrl(true) + "/profile/" + authorId);
       }
     }
@@ -216,7 +216,11 @@ public class GameLibraryListTestsBase extends AbstractUITest {
     assertEquals(getAppUrl(true) + "/gamelibrary/publicationFiles/" + publicationId, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-action-download-pdf"))
         .getAttribute("href"));
 
-    assertEquals(purchasable ? 1 : 0, getWebDriver().findElements(By.cssSelector(publicationSelector + " .gamelibrary-publication-action-add-to-cart")).size());
+    if (purchasable) {
+      assertSelectorPresent(String.format("%s .gamelibrary-publication-action-add-to-cart", publicationSelector));
+    } else {
+      assertSelectorNotPresent(String.format("%s .gamelibrary-publication-action-add-to-cart", publicationSelector));
+    }
 
 //  FIXME: cc license tests
 //    if (creativeCommonsLicense != null) {
@@ -229,7 +233,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
 //      assertEquals(license, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-detail-license a")).getAttribute("href"));
 //    }
 
-    assertEquals("COMMENTS (" + comments + ")", getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-comments")).getText());
+    assertSelectorTextIgnoreCase(String.format("%s .gamelibrary-publication-comments", publicationSelector), String.format("COMMENTS (%d)", comments));
     assertEquals(getAppUrl(true) + "/forum/" + commentUrl, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-comments")).getAttribute("href"));
     
     assertShareButtonsHidden(getWebDriver(), publicationSelector);
