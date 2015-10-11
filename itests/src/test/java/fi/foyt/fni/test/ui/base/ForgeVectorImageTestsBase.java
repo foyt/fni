@@ -1,9 +1,6 @@
 package fi.foyt.fni.test.ui.base;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -86,8 +83,8 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
 
   private void testMayViewVectorImage(String path) {
     getWebDriver().get(getAppUrl() + path);
-    assertEquals(1, getWebDriver().findElements(By.cssSelector(".forge-vector-image-container")).size());
-    assertEquals(0, getWebDriver().findElements(By.cssSelector(".forge-vector-image-container .forge-vector-image-save")).size());
+    assertSelectorPresent(".forge-vector-image-container");
+    assertSelectorNotPresent(".forge-vector-image-container .forge-vector-image-save");
   }
 
   private void testMayEditVectorImage(String path) {

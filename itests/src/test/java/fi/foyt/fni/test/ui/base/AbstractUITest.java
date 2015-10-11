@@ -12,12 +12,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
@@ -80,8 +83,13 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     String loginUrl = getAppUrl(true) + "/login/";
     if (!StringUtils.startsWith(driver.getCurrentUrl(), loginUrl)) {
       driver.get(loginUrl);
+    } 
+    
+    if (driver.manage().getCookieNamed("cookiesDirective") == null) {
+      driver.manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
+      driver.get(loginUrl);
     }
-
+    
     waitAndSendKeys(".user-login-email", email);
     waitAndSendKeys(".user-login-password", password);
     waitAndClick(".user-login-button");
@@ -220,7 +228,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected List<WebElement> findElementsBySelector(String selector) {
-    return getWebDriver().findElementsByCssSelector(selector);
+    try {
+      return getWebDriver().findElementsByCssSelector(selector);
+    } catch (NoSuchElementException e) {
+      return Collections.emptyList();
+    }
   }
 
   protected void assertSelectorTextIgnoreCase(String selector, String text) {
@@ -309,17 +321,17 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void assertSelectorPresent(String selector) {
-    assertTrue("Element not present '" + selector + "'", getWebDriver().findElementsByCssSelector(selector).size() > 0);
+    assertTrue("Element not present '" + selector + "'", findElementsBySelector(selector).size() > 0);
   }
   
   protected void assertSelectorEnabled(String selector) {
-    List<WebElement> elements = getWebDriver().findElementsByCssSelector(selector);
+    List<WebElement> elements = findElementsBySelector(selector);
     assertTrue("Element not present '" + selector + "'", elements.size() > 0);
     assertTrue("Element not enabled '" + selector + "'", elements.get(0).isEnabled());
   }
 
   protected void assertSelectorNotPresent(String selector) {
-    assertTrue("Element present '" + selector + "'", getWebDriver().findElementsByCssSelector(selector).size() == 0);
+    assertTrue("Element present '" + selector + "'", findElementsBySelector(selector).size() == 0);
   }
 
   protected void assertSelectorVisible(String selector) {
@@ -327,7 +339,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void assertSelectorNotVisible(String selector) {
-    if (getWebDriver().findElementsByCssSelector(selector).size() == 0) {
+    if (findElementsBySelector(selector).size() == 0) {
       return;
     }
     
@@ -343,7 +355,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void assertSelectorCount(String selector, int expected) {
-    assertEquals(expected, getWebDriver().findElementsByCssSelector(selector).size());
+    assertEquals(expected, findElementsBySelector(selector).size());
   }
 
   protected void assertSelectorValue(String selector, String expected) {
