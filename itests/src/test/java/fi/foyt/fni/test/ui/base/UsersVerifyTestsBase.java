@@ -20,6 +20,8 @@ public class UsersVerifyTestsBase extends AbstractUITest {
 
   @Test
   public void testCorrectKeyTest() throws Exception {
+    acceptCookieDirective();
+    
     createUser(USER_ID, "Reset", "Test", USER_EMAIL, "pass", "en_US", "GRAVATAR", "USER", false);
     try {
       getWebDriver().get(getAppUrl() + "/login");
