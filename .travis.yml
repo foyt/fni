@@ -11,6 +11,7 @@ before_install:
   -in travis-encrypted.tar.enc -out travis-encrypted.tar -d
 - tar xvf travis-encrypted.tar
 - unset GEM_PATH
+install: echo Skipping installation phase
 branches:
   except:
   - master
