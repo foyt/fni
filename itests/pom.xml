@@ -1077,6 +1077,8 @@
         <it.truststorepass>truststorepass</it.truststorepass>
         <it.properties.file>src/test/resources/it.properties</it.properties.file>
         <it.browsers>chrome:45:Linux</it.browsers>
+        <it.package></it.package>
+        <it.tests>fi/foyt/fni/test/ui/sauce/${it.package}/*IT.java</it.tests>
       </properties>
       
       <dependencies>
@@ -1131,7 +1133,7 @@
             <version>2.16</version>
             <configuration>
               <includes>
-                <include>fi/foyt/fni/test/ui/sauce/**/*IT.java</include>
+                <include>${it.tests}</include>
               </includes>
               <systemPropertyVariables>
                 <jboss.home>${wildfly.home}</jboss.home>
@@ -1539,6 +1541,8 @@
         <it.truststorepass>truststorepass</it.truststorepass>
         <it.properties.file>src/test/resources/it-travis.properties</it.properties.file>
         <it.browsers>chrome:45:Linux</it.browsers>
+        <it.package></it.package>
+        <it.tests>fi/foyt/fni/test/ui/sauce/${it.package}/*IT.java</it.tests>
       </properties>
       
       <dependencies>
@@ -1593,7 +1597,7 @@
             <version>2.16</version>
             <configuration>
               <includes>
-                <include>fi/foyt/fni/test/ui/sauce/**/*IT.java</include>
+                <include>${it.tests}</include>
               </includes>
               <systemPropertyVariables>
                 <jboss.home>${wildfly.home}</jboss.home>
