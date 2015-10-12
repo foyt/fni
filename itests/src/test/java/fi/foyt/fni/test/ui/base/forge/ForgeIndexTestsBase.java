@@ -29,14 +29,13 @@ public class ForgeIndexTestsBase extends AbstractUITest {
   public void testRemoveDialogLongText() {
     loginInternal("user@foyt.fi", "pass");
     navigate("/forge/");
-    waitAndClick(".forge-material[data-material-id=\"15\"] .forge-material-info");
+    waitAndClick(".forge-material[data-material-id=\"15\"] .forge-material-icon");
     waitAndClick(".forge-material-action-delete a[data-material-id=\"15\"]");
     waitForSelectorPresent(".forge-remove-material-dialog");
     assertSelectorTextIgnoreCase(".ui-dialog-title", "Remove 'Beowulf pohti zuluja ja ång...'?");
     assertSelectorTextIgnoreCase(".forge-remove-material-dialog p", "Do you really wish to remove 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.'");
   }
   
-
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testOpenShareDialog() {
