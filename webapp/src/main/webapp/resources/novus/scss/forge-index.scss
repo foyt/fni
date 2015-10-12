@@ -139,7 +139,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   @include transition-property(max-height);
   @include transition-duration(1s);
   @include transition-delay(0.5s);
-  @transition-timing-function (ease-in);
+  @include transition-timing-function (ease-in);
 }
 
 .forge-material-actions a {
