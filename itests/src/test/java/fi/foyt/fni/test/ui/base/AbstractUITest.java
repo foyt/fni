@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -332,6 +333,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     List<WebElement> elements = findElementsBySelector(selector);
     assertTrue("Element not present '" + selector + "'", elements.size() > 0);
     assertTrue("Element not enabled '" + selector + "'", elements.get(0).isEnabled());
+  }
+  
+  protected void assertSelectorDisabled(String selector) {
+    List<WebElement> elements = findElementsBySelector(selector);
+    assertTrue("Element not present '" + selector + "'", elements.size() > 0);
+    assertFalse("Element not disabled '" + selector + "'", elements.get(0).isEnabled());
   }
 
   protected void assertSelectorNotPresent(String selector) {

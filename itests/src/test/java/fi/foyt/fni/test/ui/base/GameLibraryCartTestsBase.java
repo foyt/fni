@@ -20,7 +20,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     navigate("/gamelibrary/cart/", true);
     waitTitle("Forge & Illusion - Game Library");
     assertSelectorTextIgnoreCase(".gamelibrary-cart-empty-message", "Shopping Cart is Empty");
-    assertSelectorTextIgnoreCase(".gamelibrary-cart-submit", "true");
+    assertSelectorDisabled(".gamelibrary-cart-submit");
   }
 
   @Test
