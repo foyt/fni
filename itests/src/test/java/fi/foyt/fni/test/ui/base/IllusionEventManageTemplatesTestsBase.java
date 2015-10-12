@@ -64,6 +64,7 @@ public class IllusionEventManageTemplatesTestsBase extends AbstractIllusionUITes
     testTitle("/illusion/event/openevent/manage-templates", "Open Event - Manage Templates");
     assertSelectorCount(".illusion-event-navigation-admin-menu.illusion-event-navigation-item-active", 1);
     clickSelector(".illusion-event-navigation-admin-menu");
+    waitForSelectorVisible(".illusion-event-navigation-admin-menu .illusion-event-navigation-menu-items");
     assertSelectorCount(".illusion-event-navigation-admin-menu .illusion-event-navigation-item.illusion-event-navigation-item-active", 1);
     assertSelectorPresent(".illusion-event-navigation-admin-menu");
     assertSelectorTextIgnoreCase(".illusion-event-navigation-admin-menu .illusion-event-navigation-item.illusion-event-navigation-item-active", "manage templates");

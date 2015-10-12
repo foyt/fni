@@ -73,6 +73,7 @@ public class IllusionEventEditTemplateTestsBase extends AbstractIllusionUITest {
     testTitle("/illusion/event/openevent/edit-template?templateId=1", "Open Event - Edit Template dummy");
     assertSelectorCount(".illusion-event-navigation-admin-menu.illusion-event-navigation-item-active", 1);
     clickSelector(".illusion-event-navigation-admin-menu");
+    waitForSelectorVisible(".illusion-event-navigation-admin-menu .illusion-event-navigation-menu-items");
     assertSelectorCount(".illusion-event-navigation-admin-menu .illusion-event-navigation-item.illusion-event-navigation-item-active", 1);
     assertSelectorPresent(".illusion-event-navigation-admin-menu");
     assertSelectorTextIgnoreCase(".illusion-event-navigation-admin-menu .illusion-event-navigation-item.illusion-event-navigation-item-active", "manage templates");
