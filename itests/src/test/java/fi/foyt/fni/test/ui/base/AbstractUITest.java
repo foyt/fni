@@ -404,7 +404,9 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void testNotFound(String path) {
-    testNotFound(getWebDriver(), path);
+    navigate(path);
+    waitTitle("Page Not Found!");
+    assertEquals("Page Not Found!", getWebDriver().getTitle());
   }
   
   protected void clearSelectorInput(String selector) {
