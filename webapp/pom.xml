@@ -445,6 +445,20 @@
                 
                 <pluginExecution>
                   <pluginExecutionFilter>
+                    <groupId>com.github.warmuuh</groupId>
+                    <artifactId>libsass-maven-plugin</artifactId>
+                    <versionRange>[0.1,)</versionRange>
+                    <goals>
+                      <goal>compile</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+                
+                <pluginExecution>
+                  <pluginExecutionFilter>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>keytool-maven-plugin</artifactId>
                     <versionRange>[1.4,)</versionRange>
@@ -482,26 +496,28 @@
     </pluginManagement>
     <plugins>
       <plugin>
-        <groupId>nl.geodienstencentrum.maven</groupId>
-        <artifactId>sass-maven-plugin</artifactId>
-        <version>2.5</version>
-        <executions>
-          <execution>
-            <id>sassProcessSource</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>update-stylesheets</goal>
-            </goals>
-            <inherited>false</inherited>
-            <configuration>
-              <useCompass>true</useCompass>
-              <sassSourceDirectory>${basedir}/src/main/webapp/resources/novus/scss/</sassSourceDirectory>
-              <destination>${project.build.directory}/${project.build.finalName}/resources/novus/css</destination>
-            </configuration>
-          </execution>
-        </executions>
+         <groupId>com.github.warmuuh</groupId>
+         <artifactId>libsass-maven-plugin</artifactId>
+         <version>0.1.6-libsass_3.2.4</version>
+         <executions>
+            <execution>
+               <id>sassProcessSource</id>
+               <phase>generate-resources</phase>
+               <goals>
+                  <goal>compile</goal>
+               </goals>
+            </execution>
+         </executions>
+         <configuration>
+            <inputPath>${basedir}/src/main/webapp/resources/novus/scss/</inputPath>
+            <includePath>${basedir}/../compass-mixins/</includePath>
+            <outputPath>${project.build.directory}/${project.build.finalName}/resources/novus/css</outputPath>
+            <outputStyle>compressed</outputStyle>
+            <generateSourceMap>false</generateSourceMap>
+            <omitSourceMapingURL>true</omitSourceMapingURL>
+         </configuration>
       </plugin>
-
+ 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
@@ -512,6 +528,12 @@
               <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.codehaus.jackson.jackson-core-asl, org.codehaus.jackson.jackson-mapper-asl, org.jboss.resteasy.resteasy-jackson2-provider, org.apache.httpcomponents, org.joda.time</Dependencies>
             </manifestEntries>
           </archive>
+          
+          <packagingExcludes>
+            resources/novus/scss/,
+            resources/novus/.sass-cache/,
+            resources/novus/config.rb
+          </packagingExcludes>
         </configuration>
       </plugin>
     </plugins>
