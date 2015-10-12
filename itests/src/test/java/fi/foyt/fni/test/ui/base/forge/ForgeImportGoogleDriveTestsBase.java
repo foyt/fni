@@ -97,12 +97,12 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.cssSelector(".forge-create-folder-dialog .forge-create-folder-name")).sendKeys("test folder");
     getWebDriver().findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
     waitForUrlMatches(getWebDriver(), ".*/forge/folders/[0-9]{1,}/test_folder");
-    getWebDriver().findElement(By.cssSelector(".forge-import-material-menu")).click();
-    getWebDriver().findElement(By.cssSelector(".forge-import-material-menu .forge-import-google-drive")).click();
+    waitAndClick(".forge-import-material-menu");
+    waitAndClick(".forge-import-material-menu .forge-import-google-drive");
     waitForUrlMatches(".*\\/import-google-drive\\?parentFolderId=[0-9]{1,}.*");
     assertUrlMatches(".*\\/import-google-drive\\?parentFolderId=[0-9]{1,}.*");
-    getWebDriver().findElement(By.cssSelector(".forge-import-google-drive-check-container input[type=\"checkbox\"]")).click();
-    getWebDriver().findElement(By.cssSelector(".forge-import-google-drive-button")).click();
+    waitAndClick(".forge-import-google-drive-check-container input[type=\"checkbox\"]");
+    waitAndClick(".forge-import-google-drive-button");
     waitTitle("Forge");
     assertTrue(getWebDriver().getCurrentUrl(), getWebDriver().getCurrentUrl().matches(".*/forge/folders/[0-9]{1,}/test_folder"));
     assertEquals(2, getWebDriver().findElements(By.cssSelector(".forge-material-title[title=\"How to get started with Drive\"]")).size());
