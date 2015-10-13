@@ -1,10 +1,10 @@
 package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,7 +24,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -450,13 +449,17 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
           return !((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
         }
       });
-    } catch (TimeoutException e) {
+    } catch (Exception e) {
       
     }
     
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
-        return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
+        try {
+          return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
+        } catch (Exception e) {
+          return false;
+        }
       }
     });
   }
