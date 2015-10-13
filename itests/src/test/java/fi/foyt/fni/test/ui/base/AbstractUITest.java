@@ -315,13 +315,19 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void testAccessDenied(String path) throws UnsupportedEncodingException {
     testAccessDenied(getWebDriver(), path);
   }
-  
+
   protected void testTitle(String view, String expectedTitle) {
-    testTitle(getWebDriver(), view, expectedTitle);
+    testTitle(view, expectedTitle, false);
+  }
+  
+  protected void testTitle(String view, String expectedTitle, boolean secure) {
+    navigate(view, secure);
+    waitTitle(expectedTitle);
+    assertTitle(expectedTitle);
   }
 
   protected void testTitle(String expected) {
-    assertEquals(expected, getWebDriver().getTitle());
+    assertTitle(expected);
   }
   
   protected void assertSelectorPresent(String selector) {

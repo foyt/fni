@@ -24,8 +24,8 @@ public class GameLibraryProposeGameTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testTitle() {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    testTitle(getWebDriver(), "/gamelibrary/proposegame/", "Forge & Illusion - Game Library");
+    loginInternal("user@foyt.fi", "pass");
+    testTitle("/gamelibrary/proposegame/", "Forge & Illusion - Game Library");
   }
   
   @Test

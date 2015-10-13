@@ -16,7 +16,7 @@ public class AdminDebugTimerResultsTestsBase extends AbstractUITest {
   @SqlSets ({"basic-users"})
   public void testTitle() throws Exception {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
-    testTitle(getWebDriver(), "/admin/debug-timer-results", "Debug Timer Results");
+    testTitle("/admin/debug-timer-results", "Debug Timer Results");
   }
 
   @Test

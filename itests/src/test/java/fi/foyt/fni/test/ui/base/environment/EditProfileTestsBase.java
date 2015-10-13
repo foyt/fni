@@ -19,7 +19,7 @@ public class EditProfileTestsBase extends AbstractUITest {
   @SqlSets ({"basic-users"})
   public void testTitle() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    testTitle(getWebDriver(), "/editprofile", "Edit Profile");
+    testTitle("/editprofile", "Edit Profile");
   }
 
   @Test

@@ -10,7 +10,7 @@ public abstract class AboutTestsBase extends AbstractUITest {
   
   @Test
   public void testTitle() throws IOException {
-    testTitle(getWebDriver(), "/about", "About Forge & Illusion");
+    testTitle("/about", "About Forge & Illusion");
   }
   
 }

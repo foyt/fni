@@ -41,7 +41,7 @@ public class LoginTestsBase extends AbstractUITest {
 
   @Test
   public void testTitle() {
-    testTitle(getWebDriver(), "/login", "Login", true);
+    testTitle("/login", "Login", true);
   }
 
   @Test

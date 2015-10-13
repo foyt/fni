@@ -30,13 +30,13 @@ public class UserProfileTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic")
   public void testTitle() {
-    testTitle(getWebDriver(), "/profile/1", "User Profile");
+    testTitle("/profile/1", "User Profile");
   }
   
   @Test
   @SqlSets ({"basic", "event-basic", "event", "event-organizer"})
   public void testWithOrganizedEvents() {
-    testTitle(getWebDriver(), "/profile/4", "User Profile");
+    testTitle("/profile/4", "User Profile");
     assertSelectorCount(".event", 1);
     assertSelectorTextIgnoreCase(".event h4 a", "Open Event");
   }

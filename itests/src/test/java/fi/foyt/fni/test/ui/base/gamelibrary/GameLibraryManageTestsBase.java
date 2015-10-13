@@ -18,7 +18,7 @@ public class GameLibraryManageTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testTitle() {
     loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
-    testTitle(getWebDriver(), "/gamelibrary/manage/", "Game Library - Management");
+    testTitle("/gamelibrary/manage/", "Game Library - Management");
   }
 
   @Test

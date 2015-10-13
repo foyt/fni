@@ -46,7 +46,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
   @SqlSets ({"basic-materials-users"})
   public void testLoggedInWithGoogle() throws Exception {
     loginGoogle();
-    testTitle(getWebDriver(), "/forge/import-google-drive", "Forge - Import From Google Drive");
+    testTitle("/forge/import-google-drive", "Forge - Import From Google Drive");
   }
 
   @Test

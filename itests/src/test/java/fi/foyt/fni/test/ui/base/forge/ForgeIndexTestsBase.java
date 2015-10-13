@@ -16,7 +16,7 @@ public class ForgeIndexTestsBase extends AbstractUITest {
   @SqlSets ({"basic-materials-users"})
   public void testTitle() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    testTitle(getWebDriver(), "/forge/", "Forge");
+    testTitle("/forge/", "Forge");
   }
 
   @Test

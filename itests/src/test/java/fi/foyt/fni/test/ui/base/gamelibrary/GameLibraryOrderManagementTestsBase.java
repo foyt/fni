@@ -29,14 +29,14 @@ public class GameLibraryOrderManagementTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testLibrarian() {
     loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
-    testTitle(getWebDriver(), "/gamelibrary/ordermanagement/", "Game Library - Order Management");
+    testTitle("/gamelibrary/ordermanagement/", "Game Library - Order Management");
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testAdmin() throws Exception {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
-    testTitle(getWebDriver(), "/gamelibrary/ordermanagement/", "Game Library - Order Management");
+    testTitle("/gamelibrary/ordermanagement/", "Game Library - Order Management");
   }
 
 }

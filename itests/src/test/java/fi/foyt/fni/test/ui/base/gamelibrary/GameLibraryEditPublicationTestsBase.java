@@ -41,14 +41,14 @@ public class GameLibraryEditPublicationTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testLibrarian() {
     loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
-    testTitle(getWebDriver(), TEST_URL, "Edit Publication: Fat hag dwarves quickly zap jinx mob");
+    testTitle(TEST_URL, "Edit Publication: Fat hag dwarves quickly zap jinx mob");
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testAdmin() throws Exception {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
-    testTitle(getWebDriver(), TEST_URL, "Edit Publication: Fat hag dwarves quickly zap jinx mob");
+    testTitle(TEST_URL, "Edit Publication: Fat hag dwarves quickly zap jinx mob");
   }
 
 }
