@@ -141,6 +141,10 @@ public abstract class AbstractTest {
   
   private SqlSet getSqlSet(Method method, String id) {
     DefineSqlSets defineSqlSets = method.getDeclaringClass().getAnnotation(DefineSqlSets.class);
+    if (defineSqlSets == null) {
+      defineSqlSets = method.getDeclaringClass().getSuperclass().getAnnotation(DefineSqlSets.class);
+    }
+    
     if (defineSqlSets != null) {
       for (DefineSqlSet defineSqlSet : defineSqlSets.value()) {
         if (defineSqlSet.id().equals(id)) {
