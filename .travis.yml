@@ -11,7 +11,7 @@ before_install:
   -in travis-encrypted.tar.enc -out travis-encrypted.tar -d
 - tar xvf travis-encrypted.tar
 - unset GEM_PATH
-install: echo Skipping installation phase
+install: true
 branches:
   except:
   - master
@@ -54,6 +54,7 @@ before_script:
 script: mvn $goals -P$it_profile -Dexec.args="-Duser.timezone=UTC" -Dmaven.javadoc.skip=true -Dsource.skip=true -Dit.properties.file=src/test/resources/it-travis.properties -Dit.package=$package -Dit.browsers="$it_browsers"
 after_script:
 - if [ $use_sc = true ]; then kill `cat /tmp/sc.pid`; fi;
+- if [ $use_sc = true ]; while kill -0 `cat /tmp/sc.pid`; do sleep 0.5; done; fi;
 after_success:
 - python travis/m2conf.py
 - mvn deploy --settings ~/.m2/mySettings.xml
