@@ -12,6 +12,7 @@ import org.junit.runners.Parameterized;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
+import fi.foyt.fni.test.SqlSets;
 import fi.foyt.fni.test.ui.base.forge.ForgeDocumentTestsBase;
 import fi.foyt.fni.test.ui.sauce.SauceLabsUtils;
 
@@ -45,6 +46,7 @@ public class ForgeDocumentTestsIT extends ForgeDocumentTestsBase {
   }
   
   @Override
+  @SqlSets ({"basic-materials-users"})
   public void testMayEdit() {
     if ("microsoftedge".equals(browser)) {
       // FIXME: Edge driver does not support frame switchTo
@@ -55,6 +57,7 @@ public class ForgeDocumentTestsIT extends ForgeDocumentTestsBase {
   }
   
   @Override
+  @SqlSets ({"basic-materials-users"})
   public void testWithHyphen() {
     if ("microsoftedge".equals(browser)) {
       // FIXME: Edge driver does not support frame switchTo
@@ -65,6 +68,7 @@ public class ForgeDocumentTestsIT extends ForgeDocumentTestsBase {
   }
   
   @Override
+  @SqlSets ({"basic-materials-users"})
   public void textCreateSharedFolder() throws Exception {
     if ("microsoftedge".equals(browser)) {
       // FIXME: Edge driver does not support frame switchTo
@@ -75,6 +79,7 @@ public class ForgeDocumentTestsIT extends ForgeDocumentTestsBase {
   }
   
   @Override
+  @SqlSets ({"basic-materials-users"})
   public void testMayView() {
     if ("microsoftedge".equals(browser)) {
       // FIXME: Edge driver does not support frame switchTo

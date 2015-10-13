@@ -64,7 +64,7 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testMayEdit() {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
+    loginInternal("admin@foyt.fi", "pass");
     testMayEditDocument(DOCUMENT_IN_ROOT);
     testMayEditDocument(DOCUMENT_IN_FOLDER);
     testMayEditDocument(DOCUMENT_IN_SUBFOLDER);

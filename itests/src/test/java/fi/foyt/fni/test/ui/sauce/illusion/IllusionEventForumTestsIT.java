@@ -15,6 +15,7 @@ import org.junit.runners.Parameterized;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
+import fi.foyt.fni.test.SqlSets;
 import fi.foyt.fni.test.ui.base.illusion.IllusionEventForumTestsBase;
 import fi.foyt.fni.test.ui.sauce.SauceLabsUtils;
 
@@ -48,6 +49,7 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
   }
   
   @Override
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-organizer", "event-forum", "event-forum-visible"})
   public void testStartWatch() throws MessagingException, IOException {
     if ("microsoftedge".equals(browser)) {
       // FIXME: Edge driver does not support frame switchTo
@@ -58,6 +60,7 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
   }
   
   @Override
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-organizer", "event-forum", "event-forum-visible"})
   public void testStopWatch() throws MessagingException, IOException {
     if ("microsoftedge".equals(browser)) {
       // FIXME: Edge driver does not support frame switchTo
@@ -68,6 +71,7 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
   }
   
   @Override
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-organizer", "event-forum", "event-forum-visible", "event-forum-posts", "event-forum-organizer-posts"})
   public void testPost() throws Exception {
     if ("microsoftedge".equals(browser)) {
       // FIXME: Edge driver does not support frame switchTo
@@ -78,6 +82,7 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
   }
   
   @Override
+  @SqlSets({"basic-users", "illusion-basic", "event", "event-participant", "event-organizer", "event-forum", "event-forum-visible", "event-forum-watchers"})
   public void testNotification() throws MessagingException, IOException {
     if ("microsoftedge".equals(browser)) {
       // FIXME: Edge driver does not support frame switchTo
