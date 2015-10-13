@@ -25,7 +25,7 @@ env:
   - goals=test verify use_sc=false it_profile=rest
   - goals=verify package=environment use_sc=true it_profile=travis it_browsers="chrome:45:Linux"
   - goals=verify package=forge use_sc=true it_profile=travis it_browsers="chrome:45:Linux"
-  - goals=verify package=illusionuse_sc=true it_profile=travis it_browsers="chrome:45:Linux"
+  - goals=verify package=illusion use_sc=true it_profile=travis it_browsers="chrome:45:Linux"
   - goals=verify package=gamelibrary use_sc=true it_profile=travis it_browsers="chrome:45:Linux"
   - goals=verify package=forum use_sc=true it_profile=travis it_browsers="chrome:45:Linux"
   - goals=verify package=environment use_sc=true it_profile=travis it_browsers="safari:8.1:OS X 10.11"
