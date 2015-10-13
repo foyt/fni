@@ -74,6 +74,16 @@ public class ForgeDocumentTestsIT extends ForgeDocumentTestsBase {
     super.textCreateSharedFolder();
   }
   
+  @Override
+  public void testMayView() {
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Edge driver does not support frame switchTo
+      return;
+    }
+    
+    super.testMayView();
+  }
+  
   private String platform;
   private String browser;
   private String version;  
