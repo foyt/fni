@@ -133,8 +133,9 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testProposeLinkLogged() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
-    assertEquals("Propose a game to the Library", getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getText());
+    navigate("/gamelibrary/", true);
+    waitForSelectorPresent(".gamelibrary-propose-game-link");
+    assertSelectorTextIgnoreCase(".gamelibrary-propose-game-link", "Propose a game to the Library");
     assertEquals(getAppUrl(true) + "/gamelibrary/proposegame/", getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getAttribute("href"));
   }
 
