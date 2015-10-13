@@ -49,22 +49,42 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
   
   @Override
   public void testStartWatch() throws MessagingException, IOException {
-    // TODO: Test disabled because it depends on websocket support (currently not supported by sauce connect)
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Edge driver does not support frame switchTo
+      return;
+    }
+    
+    super.testStartWatch();
   }
   
   @Override
   public void testStopWatch() throws MessagingException, IOException {
-    // TODO: Test disabled because it depends on websocket support (currently not supported by sauce connect)
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Edge driver does not support frame switchTo
+      return;
+    }
+    
+    super.testStopWatch();
   }
   
   @Override
   public void testPost() throws Exception {
-    // TODO: Test disabled because it depends on websocket support (currently not supported by sauce connect)
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Edge driver does not support frame switchTo
+      return;
+    }
+
+    super.testPost();
   }
   
   @Override
   public void testNotification() throws MessagingException, IOException {
-    // TODO: Test disabled because it depends on websocket support (currently not supported by sauce connect)
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Edge driver does not support frame switchTo
+      return;
+    }
+    
+    super.testNotification();
   }
   
   private String platform;
