@@ -9,14 +9,14 @@
       this._date = this.element.find('input[type="date"]')
         .attr('type', 'text')
         .datepicker()
-        .on('change', $.proxy(this._onDatePickerChange, this));
+        .on('change blur keyup', $.proxy(this._onDatePickerChange, this));
       
       this._time = this.element.find('input[type="time"]')
         .attr('type', 'text')
         .timepicker({
           timeFormat: 'G:i'
         })
-        .on('change', $.proxy(this._onTimePickerChange, this));
+        .on('change blur', $.proxy(this._onTimePickerChange, this));
       
       var value = this.element.find('input[type="hidden"]').val();
       if (value) {
