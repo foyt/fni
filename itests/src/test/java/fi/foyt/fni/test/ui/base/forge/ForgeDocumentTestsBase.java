@@ -102,7 +102,7 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
     testDocumentEditable(getWebDriver(), documentPath, true);
   }
 
-  protected void testDocumentEditable(RemoteWebDriver driver, String documentPath, boolean expect) {
+  private void testDocumentEditable(RemoteWebDriver driver, String documentPath, boolean expect) {
     navigate(documentPath);
     assertDocumentEditable(expect);
   }
@@ -123,9 +123,8 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
       }
 
     });
-
-    getWebDriver().switchTo().frame(getWebDriver().findElement(By.cssSelector(".cke_wysiwyg_frame")));
-
+    
+    switchFrame(".cke_wysiwyg_frame");
     assertEquals(expect ? "true" : "false", getWebDriver().findElement(By.cssSelector("body.cke_editable")).getAttribute("contenteditable"));
   }
 

@@ -12,11 +12,11 @@ import org.junit.runners.Parameterized;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
-import fi.foyt.fni.test.ui.base.illusion.IllusionEventParticipantsTestsBase;
+import fi.foyt.fni.test.ui.base.illusion.IllusionEventSettingsTestsBase;
 import fi.foyt.fni.test.ui.sauce.SauceLabsUtils;
 
 @RunWith (Parameterized.class)
-public class IllusionEventSettingsTestsIT extends IllusionEventParticipantsTestsBase {
+public class IllusionEventSettingsTestsIT extends IllusionEventSettingsTestsBase {
 
   public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(getSauceUsername(), getSauceAccessKey());
 

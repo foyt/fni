@@ -46,7 +46,32 @@ public class ForgeDocumentTestsIT extends ForgeDocumentTestsBase {
   
   @Override
   public void testMayEdit() {
-    // TODO: Test disabled because it depends on websocket support (currently not supported by sauce connect)
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Edge driver does not support frame switchTo
+      return;
+    }
+    
+    super.testMayEdit();
+  }
+  
+  @Override
+  public void testWithHyphen() {
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Edge driver does not support frame switchTo
+      return;
+    }
+    
+    super.testWithHyphen();
+  }
+  
+  @Override
+  public void textCreateSharedFolder() throws Exception {
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Edge driver does not support frame switchTo
+      return;
+    }
+    
+    super.textCreateSharedFolder();
   }
   
   private String platform;
