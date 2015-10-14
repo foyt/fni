@@ -1,14 +1,11 @@
 package fi.foyt.fni.test.ui.base.gamelibrary;
 
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
 import fi.foyt.fni.test.SqlSets;
 import fi.foyt.fni.test.ui.base.AbstractUITest;
-
-import static org.junit.Assert.assertEquals;
 
 @DefineSqlSets({
   @DefineSqlSet (id = "basic-gamelibrary", before = { "basic-users-setup.sql","basic-forum-setup.sql","basic-gamelibrary-setup.sql"}, after={"basic-gamelibrary-teardown.sql", "basic-forum-teardown.sql","basic-users-teardown.sql"}),
@@ -31,9 +28,9 @@ public class GameLibraryProposeGameTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testDesc() {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/proposegame/");
-    assertEquals("PROPOSE A GAME TO THE LIBRARY", getWebDriver().findElement(By.cssSelector(".view-header-description-title")).getText());
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/gamelibrary/proposegame/", true);
+    assertSelectorTextIgnoreCase("PROPOSE A GAME TO THE LIBRARY", ".view-header-description-title");
   }
 
 }
