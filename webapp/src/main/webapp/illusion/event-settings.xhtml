@@ -9,17 +9,19 @@
   <ui:define name="page-title">#{locales['illusion.eventSettings.pageTitle']}</ui:define>
  
   <ui:define name="view-scripts">
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/jquery-ui/1.11.2/ui/i18n/datepicker-fi.js" jsf:rendered="#{sessionBackingBean.locale.language eq 'fi'}"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.timepicker/1.3.7/jquery.timepicker.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places&amp;language=#{sessionBackingBean.locale.toString()}"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/geocomplete/1.6.5/jquery.geocomplete.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/webshim/1.15.10/minified/polyfiller.js"></script>
+
     <!-- View scripts -->
     
     <h:outputScript name="scripts/gui/datetimepicker.js"></h:outputScript>
     <h:outputScript name="scripts/gui/illusion-event-settings.js"></h:outputScript>
     <h:outputScript name="scripts/gui/illusion-common.js"></h:outputScript>
     
-    <script type="text/javascript" src="//static.forgeandillusion.net/libs/jquery-ui/1.11.2/ui/i18n/datepicker-fi.js" jsf:rendered="#{sessionBackingBean.locale.language eq 'fi'}"></script>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.timepicker/1.3.7/jquery.timepicker.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
-    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places&amp;language=#{sessionBackingBean.locale.toString()}"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/geocomplete/1.6.5/jquery.geocomplete.min.js"></script>
   </ui:define>
   
   <ui:define name="view-stylesheets">
