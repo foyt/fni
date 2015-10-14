@@ -60,6 +60,16 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
       // FIXME: Safari driver does not support typing into ckeditor
       return;
     }
+
+    if ("internet explorer".equals(browser)) {
+      // FIXME: Internet Explorer driver does not support typing into ckeditor
+      return;
+    }
+
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Internet Explorer driver does not support typing into ckeditor
+      return;
+    }
     
     super.testStartWatch();
   }
@@ -74,6 +84,16 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
 
     if ("safari".equals(browser)) {
       // FIXME: Safari driver does not support typing into ckeditor
+      return;
+    }
+
+    if ("internet explorer".equals(browser)) {
+      // FIXME: Internet Explorer driver does not support typing into ckeditor
+      return;
+    }
+
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Internet Explorer driver does not support typing into ckeditor
       return;
     }
     
@@ -92,6 +112,16 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
       // FIXME: Safari driver does not support typing into ckeditor
       return;
     }
+
+    if ("internet explorer".equals(browser)) {
+      // FIXME: Internet Explorer driver does not support typing into ckeditor
+      return;
+    }
+
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Internet Explorer driver does not support typing into ckeditor
+      return;
+    }
     
     super.testPost();
   }
@@ -106,6 +136,16 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
 
     if ("safari".equals(browser)) {
       // FIXME: Safari driver does not support typing into ckeditor
+      return;
+    }
+
+    if ("internet explorer".equals(browser)) {
+      // FIXME: Internet Explorer driver does not support typing into ckeditor
+      return;
+    }
+
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Internet Explorer driver does not support typing into ckeditor
       return;
     }
     
