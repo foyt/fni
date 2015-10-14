@@ -56,6 +56,11 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
       return;
     }
     
+    if ("safari".equals(browser)) {
+      // FIXME: Safari driver does not support typing into ckeditor
+      return;
+    }
+    
     super.testStartWatch();
   }
   
@@ -64,6 +69,11 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
   public void testStopWatch() throws MessagingException, IOException {
     if ("microsoftedge".equals(browser)) {
       // FIXME: Edge driver does not support frame switchTo
+      return;
+    }
+
+    if ("safari".equals(browser)) {
+      // FIXME: Safari driver does not support typing into ckeditor
       return;
     }
     
@@ -78,6 +88,11 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
       return;
     }
 
+    if ("safari".equals(browser)) {
+      // FIXME: Safari driver does not support typing into ckeditor
+      return;
+    }
+    
     super.testPost();
   }
   
@@ -86,6 +101,11 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
   public void testNotification() throws MessagingException, IOException {
     if ("microsoftedge".equals(browser)) {
       // FIXME: Edge driver does not support frame switchTo
+      return;
+    }
+
+    if ("safari".equals(browser)) {
+      // FIXME: Safari driver does not support typing into ckeditor
       return;
     }
     
