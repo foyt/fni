@@ -31,7 +31,7 @@ public class AdminReindexHibernateSearchTestsBase extends AbstractUITest {
   @SqlSets ({"basic-users"})
   public void testUnauthorized() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    testAccessDenied(getWebDriver(), "/admin/reindex-hibernate-search");
+    testAccessDenied("/admin/reindex-hibernate-search");
   }
   
 }

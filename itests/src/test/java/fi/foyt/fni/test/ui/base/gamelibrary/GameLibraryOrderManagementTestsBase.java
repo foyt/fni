@@ -22,7 +22,7 @@ public class GameLibraryOrderManagementTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testUnauthorized() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    testAccessDenied(getWebDriver(), "/gamelibrary/ordermanagement/", true);
+    testAccessDenied("/gamelibrary/ordermanagement/", true);
   }
 
   @Test

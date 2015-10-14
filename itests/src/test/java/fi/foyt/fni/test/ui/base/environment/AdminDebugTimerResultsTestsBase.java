@@ -29,7 +29,7 @@ public class AdminDebugTimerResultsTestsBase extends AbstractUITest {
   @SqlSets ({"basic-users"})
   public void testUnauthorized() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    testAccessDenied(getWebDriver(), "/admin/debug-timer-results");
+    testAccessDenied("/admin/debug-timer-results");
   }
 
 }

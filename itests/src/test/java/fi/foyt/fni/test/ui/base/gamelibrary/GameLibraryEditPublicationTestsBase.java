@@ -25,7 +25,7 @@ public class GameLibraryEditPublicationTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testUnauthorized() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    testAccessDenied(getWebDriver(), TEST_URL, true);
+    testAccessDenied(TEST_URL, true);
   }
 
   @Test

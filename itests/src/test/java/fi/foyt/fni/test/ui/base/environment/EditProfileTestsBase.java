@@ -31,7 +31,7 @@ public class EditProfileTestsBase extends AbstractUITest {
   @SqlSets ({"basic-users"})
   public void testGuest() throws Exception {
     loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
-    testAccessDenied(getWebDriver(), "/editprofile");
+    testAccessDenied("/editprofile");
   }
 
   @Test

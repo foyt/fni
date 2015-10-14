@@ -28,8 +28,8 @@ public class ForgeFolderTestsBase extends AbstractUITest {
   @SqlSets ({"basic-materials-users"})
   public void testForbidden() throws Exception {
     loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
-    testAccessDenied(getWebDriver(), FOLDER);
-    testAccessDenied(getWebDriver(), SUBFOLDER);
+    testAccessDenied(FOLDER);
+    testAccessDenied(SUBFOLDER);
   }
 
   @Test

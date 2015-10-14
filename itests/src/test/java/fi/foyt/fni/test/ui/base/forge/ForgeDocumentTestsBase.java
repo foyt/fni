@@ -35,9 +35,9 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
   @SqlSets ({"basic-materials-users"})
   public void testForbidden() throws Exception {
     loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
-    testAccessDenied(getWebDriver(), DOCUMENT_IN_ROOT);
-    testAccessDenied(getWebDriver(), DOCUMENT_IN_FOLDER);
-    testAccessDenied(getWebDriver(), DOCUMENT_IN_SUBFOLDER);
+    testAccessDenied(DOCUMENT_IN_ROOT);
+    testAccessDenied(DOCUMENT_IN_FOLDER);
+    testAccessDenied(DOCUMENT_IN_SUBFOLDER);
   }
 
   @Test

@@ -33,7 +33,7 @@ public class ForumPostEditTestsBase extends AbstractUITest {
   @SqlSets ("forum-basic")
   public void testUser() throws Exception {
     loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
-    testAccessDenied(getWebDriver(), TEST_POST);
+    testAccessDenied(TEST_POST);
   }
 
   @Test

@@ -26,7 +26,7 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testInvalidAccessKey() throws Exception {
-    testAccessDenied(getWebDriver(), "/gamelibrary/orders/1?key=invalid-access-key", true);
+    testAccessDenied("/gamelibrary/orders/1?key=invalid-access-key", true);
   }
 
   @Test
@@ -42,7 +42,7 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testAccessDenied() throws Exception {
     loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
-    testAccessDenied(getWebDriver(), "/gamelibrary/orders/1", true);
+    testAccessDenied("/gamelibrary/orders/1", true);
   }
 
   @Test

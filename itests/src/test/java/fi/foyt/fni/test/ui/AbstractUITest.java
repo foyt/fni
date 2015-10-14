@@ -62,15 +62,6 @@ public abstract class AbstractUITest extends AbstractTest {
     driver.manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
   }
   
-  protected void testAccessDenied(RemoteWebDriver driver, String view) {
-    testAccessDenied(driver, view, false);
-  }
-  
-  protected void testAccessDenied(RemoteWebDriver driver, String view, boolean secure) {
-    driver.get(getAppUrl(secure) + view);
-    assertEquals("Access Denied!", driver.getTitle());
-  }
-  
   protected void testNotFound(RemoteWebDriver driver, String view) {
     testNotFound(driver, view, false); 
   }

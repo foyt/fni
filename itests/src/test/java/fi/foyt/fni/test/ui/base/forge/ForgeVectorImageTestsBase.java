@@ -27,9 +27,9 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
   @SqlSets ({"basic-materials-users"})
   public void testForbidden() throws Exception {
     loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
-    testAccessDenied(getWebDriver(), VECTOR_IMAGE_IN_ROOT);
-    testAccessDenied(getWebDriver(), VECTOR_IMAGE_IN_FOLDER);
-    testAccessDenied(getWebDriver(), VECTOR_IMAGE_IN_SUBFOLDER);
+    testAccessDenied(VECTOR_IMAGE_IN_ROOT);
+    testAccessDenied(VECTOR_IMAGE_IN_FOLDER);
+    testAccessDenied(VECTOR_IMAGE_IN_SUBFOLDER);
   }
 
   @Test

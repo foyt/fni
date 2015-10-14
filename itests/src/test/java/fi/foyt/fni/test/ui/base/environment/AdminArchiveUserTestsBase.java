@@ -56,7 +56,7 @@ public class AdminArchiveUserTestsBase extends AbstractUITest {
   @SqlSets ({"basic-users"})
   public void testUnauthorized() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    testAccessDenied(getWebDriver(), "/admin/archive-user/" + USER_ID);
+    testAccessDenied("/admin/archive-user/" + USER_ID);
   }
   
 }
