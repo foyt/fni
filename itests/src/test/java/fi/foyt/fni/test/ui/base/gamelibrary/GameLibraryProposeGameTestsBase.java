@@ -30,6 +30,7 @@ public class GameLibraryProposeGameTestsBase extends AbstractUITest {
   public void testDesc() {
     loginInternal("user@foyt.fi", "pass");
     navigate("/gamelibrary/proposegame/", true);
+    waitTitle("Forge & Illusion - Game Library");
     assertSelectorTextIgnoreCase("PROPOSE A GAME TO THE LIBRARY", ".view-header-description-title");
   }
 
