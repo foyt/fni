@@ -1,6 +1,7 @@
 package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -410,6 +411,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
 
   protected void assertSelectorValue(String selector, String expected) {
     assertEquals(expected, findElementBySelector(selector).getAttribute("value"));
+  }
+
+  protected void assertSelectorValueNot(String selector, String expected) {
+    assertNotEquals(expected, findElementBySelector(selector).getAttribute("value"));
   }
 
   protected void assertTitle(String expected) {
