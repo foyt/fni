@@ -47,12 +47,6 @@ public abstract class AbstractUITest extends AbstractTest {
     }
   }
   
-  protected void logout(RemoteWebDriver driver) {
-    driver.get(getAppUrl() + "/logout");
-    assertEquals(0, driver.findElements(By.cssSelector(".menu-tools-account")).size());
-    assertEquals(1, driver.findElements(By.cssSelector(".menu-tools-login")).size());
-  }
-
   protected void acceptCookieDirective(RemoteWebDriver driver) {
     acceptCookieDirective(driver, false);
   }

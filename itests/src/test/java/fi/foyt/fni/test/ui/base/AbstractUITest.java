@@ -135,7 +135,9 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void logout() {
-    logout(getWebDriver());
+    navigate("/logout");
+    assertSelectorNotPresent(".menu-tools-account");
+    assertSelectorPresent(".menu-tools-login");
   }
 
   protected void assertLoggedIn() {

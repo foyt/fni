@@ -229,7 +229,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
         getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).click();
 
         acceptPaytrailPayment(getWebDriver());
-        logout(getWebDriver());
+        logout();
         loginInternal(getWebDriver(), email, password);
 
         navigate("/gamelibrary/cart/", true);

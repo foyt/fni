@@ -29,7 +29,7 @@ public class UsersResetPasswordTestsBase extends AbstractUITest {
     createUser(USER_ID, "Reset", "Test", USER_EMAIL, "pass", "en_US", "GRAVATAR", "USER");
     try {
       loginInternal(getWebDriver(), USER_EMAIL, "pass");
-      logout(getWebDriver());
+      logout();
 
       String key = UUID.randomUUID().toString();
 
