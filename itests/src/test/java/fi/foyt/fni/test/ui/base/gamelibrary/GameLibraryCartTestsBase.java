@@ -20,7 +20,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
   public void testEmptyCart() throws Exception {
     navigate("/gamelibrary/cart/", true);
     waitTitle("Forge & Illusion - Game Library");
-    assertSelectorTextIgnoreCase(".gamelibrary-cart-empty-message", "Shopping Cart is Empty");
+    assertSelectorText(".gamelibrary-cart-empty-message", "Shopping Cart is Empty", true, true);
     assertSelectorDisabled(".gamelibrary-cart-submit");
   }
 
@@ -103,7 +103,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     waitTitle("Forge & Illusion - Game Library");
     
     waitAndClick(String.format(".gamelibrary-cart-item[data-item-index='%d'] .gamelibrary-cart-action-inc-count", 0));
-    waitForSelectorText(String.format(".gamelibrary-cart-item[data-item-index='%d'] div:first-child", 0), "2");
+    waitForSelectorText(String.format(".gamelibrary-cart-item[data-item-index='%d'] div:first-child", 0), "2", true, true);
 
     getWebDriver().findElement(By.id("cart-form:payerFirstName")).sendKeys(firstName);
     getWebDriver().findElement(By.id("cart-form:payerLastName")).sendKeys(lastName);

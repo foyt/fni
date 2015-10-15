@@ -236,19 +236,34 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
       return Collections.emptyList();
     }
   }
-
-  protected void assertSelectorTextIgnoreCase(String selector, String text) {
-    assertEquals(toLowerCase(text), toLowerCase((findElementBySelector(selector)).getText()));
+  
+  protected void assertSelectorText(String selector, String text) {
+    assertSelectorText(selector, text, false, false);
   }
   
-  private String toLowerCase(String text) {
-    if (text == null) {
-      return text;
+  protected void assertSelectorText(String selector, String text, boolean ignoreCase) {
+    assertSelectorText(selector, text, ignoreCase, false);
+  }
+  
+  protected void assertSelectorText(String selector, String text, boolean ignoreCase, boolean trim) {
+    WebElement element = findElementBySelector(selector);
+    
+    String elementText = element.getText();
+    if (trim) {
+      elementText = StringUtils.trim(elementText);
     }
     
-    return text.toLowerCase();
+    if (ignoreCase) {
+      assertTrue(String.format("Expected %s but was %s", text, elementText), text.equalsIgnoreCase(elementText));
+    } else {
+      assertTrue(String.format("Expected %s but was %s", text, elementText), text.equals(elementText));
+    }
   }
 
+  protected void assertSelectorTextIgnoreCase(String selector, String text) {
+    assertSelectorText(selector, text, true);
+  }
+  
   protected void waitForUrlMatches(String regex) {
     waitForUrlMatches(getWebDriver(), regex);
   }
@@ -258,21 +273,34 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void waitForSelectorText(final String selector, final String text) {
-    waitForSelectorText(selector, text, false);
+    waitForSelectorText(selector, text, false, false);
+  }
+
+  protected void waitForSelectorText(final String selector, final String text, boolean ignoreCase) {
+    waitForSelectorText(selector, text, ignoreCase, false);
   }
   
-  protected void waitForSelectorText(final String selector, final String text, final boolean ignoreCase) {
+  protected void waitForSelectorText(final String selector, final String text, final boolean ignoreCase, final boolean trim) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
         try {
-          if (ignoreCase) {
-            return text.equalsIgnoreCase(driver.findElement(By.cssSelector(selector)).getText());
-          } else {
-            return text.equals(driver.findElement(By.cssSelector(selector)).getText());
+          WebElement element = findElementBySelector(selector);
+          if (element != null) {
+            String elementText = element.getText();
+            if (trim) {
+              elementText = StringUtils.trim(elementText);
+            }
+            
+            if (ignoreCase) {
+              return text.equalsIgnoreCase(elementText);
+            } else {
+              return text.equals(elementText);
+            }
           }
-        } catch (StaleElementReferenceException e) {
-          return false;
+        } catch (Exception e) {
         }
+        
+        return false;
       }
     }); 
   }
