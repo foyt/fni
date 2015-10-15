@@ -19,7 +19,8 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testAccessKey() throws Exception {
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/orders/1?key=bogus-access-key");
+    navigate("/gamelibrary/orders/1?key=bogus-access-key", true);
+    waitTitle("Forge & Illusion - Game Library");
     testOrderDetails(getWebDriver());
   }
 
@@ -41,31 +42,34 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testAccessDenied() throws Exception {
-    loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
+    loginInternal("guest@foyt.fi", "pass");
     testAccessDenied("/gamelibrary/orders/1", true);
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testUser() throws Exception {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/orders/1");
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/gamelibrary/orders/1", true);
+    waitTitle("Forge & Illusion - Game Library");
     testOrderDetails(getWebDriver());
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testLibrarian() throws Exception {
-    loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/orders/1");
+    loginInternal("librarian@foyt.fi", "pass");
+    navigate("/gamelibrary/orders/1", true);
+    waitTitle("Forge & Illusion - Game Library");
     testOrderDetails(getWebDriver());
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testAdmin() throws Exception {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/orders/1");
+    loginInternal("admin@foyt.fi", "pass");
+    navigate("/gamelibrary/orders/1", true);
+    waitTitle("Forge & Illusion - Game Library");
     testOrderDetails(getWebDriver());
   }
 

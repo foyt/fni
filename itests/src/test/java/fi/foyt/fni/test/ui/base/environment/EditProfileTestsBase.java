@@ -37,9 +37,9 @@ public class EditProfileTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users"})
   public void testUser() throws Exception {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    getWebDriver().get(getAppUrl() + "/editprofile");
-    assertEquals("Edit Profile", getWebDriver().getTitle());
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/editprofile");
+    testTitle("Edit Profile");
   }
 
   @Test

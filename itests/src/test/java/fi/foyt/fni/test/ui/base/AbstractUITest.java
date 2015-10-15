@@ -357,11 +357,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   
   protected void testTitle(String view, String expectedTitle, boolean secure) {
     navigate(view, secure);
-    waitTitle(expectedTitle);
-    assertTitle(expectedTitle);
+    testTitle(expectedTitle);
   }
 
   protected void testTitle(String expected) {
+    waitTitle(expected);
     assertTitle(expected);
   }
   
