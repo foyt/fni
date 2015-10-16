@@ -279,7 +279,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     findElementBySelector(".illusion-create-event-save").click();
     waitForUrlMatches(".*/illusion/event/" + name);
     navigate("/illusion/event/" + name + "/settings");
-    waitTitle("Create Event");
+    waitTitle("Event Settings");
     assertSelectorPresent(".illusion-event-settings-beginner-friendly:checked");
     deleteIllusionEventByUrl(name);
     deleteIllusionFolderByUser("admin@foyt.fi");
