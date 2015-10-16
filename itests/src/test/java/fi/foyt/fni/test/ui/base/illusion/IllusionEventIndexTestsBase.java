@@ -163,8 +163,7 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/open");
     assertSelectorClickable(".illusion-event-join-button");
     clickSelector(".illusion-event-join-button");
-    waitForUrlMatches(".*/illusion/event/open");
-    assertUrlMatches(".*/illusion/event/open");
+    waitForSelectorNotPresent(".illusion-event-join-button");
     assertSelectorCount(".illusion-event-navigation>a", 1);
     assertSelectorNotPresent(".illusion-event-join-button");
     assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
