@@ -65,19 +65,20 @@ public class LoginTestsBase extends AbstractUITest {
   @Test
   public void testRegisterMandatories() {
     acceptCookieDirective();
-    getWebDriver().get(getAppUrl(true) + "/login/");
-    getWebDriver().findElement(By.cssSelector(".user-register-button")).submit();
+    navigate("/login/", true);
+    waitTitle("Login");
+    clickSelector(".user-register-button");
     waitForNotification(getWebDriver());
-    assertEquals("First Name Is Required", getWebDriver().findElement(By.cssSelector(".notifications-container .notification-error:nth-child(1)")).getText());
-    assertEquals("Last Name Is Required", getWebDriver().findElement(By.cssSelector(".notifications-container .notification-error:nth-child(2)")).getText());
-    assertEquals("Email Is Required", getWebDriver().findElement(By.cssSelector(".notifications-container .notification-error:nth-child(3)")).getText());
+    assertSelectorText(".notifications-container .notification-error:nth-child(1)", "First Name Is Required", true, true);
+    assertSelectorText(".notifications-container .notification-error:nth-child(2)", "Last Name Is Required", true, true);
+    assertSelectorText(".notifications-container .notification-error:nth-child(3)", "Email Is Required", true, true);
   }
 
   @Test
   public void testRegisterPasswordMismatch() {
     acceptCookieDirective();
-    
-    getWebDriver().get(getAppUrl(true) + "/login/");
+    navigate("/login/", true);
+    waitTitle("Login");
     
     getWebDriver().findElement(By.cssSelector(".user-register-first-name")).sendKeys("Ärri");
     getWebDriver().findElement(By.cssSelector(".user-register-last-name")).sendKeys("Pörri");
@@ -120,18 +121,14 @@ public class LoginTestsBase extends AbstractUITest {
   
   @Test
   public void testResetPasswordIncorrectEmail() {
-    getWebDriver().get(getAppUrl(true) + "/login/");
-    
-    getWebDriver().findElement(By.cssSelector(".users-login-forgot-password-link")).click();
-
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".ui-dialog")));
-
-    assertEquals("Forgot password", getWebDriver().findElement(By.cssSelector(".ui-dialog-title")).getText());
-    assertEquals("Enter your email address to the field below and we will send you a password reset link", getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog p")).getText());
-    
-    getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog input[name=\"email\"]")).sendKeys("nonexisting@foyt.fi");
-    getWebDriver().findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
-
+    navigate("/login/", true);
+    waitTitle("Login");
+    clickSelector(".users-login-forgot-password-link");
+    waitForSelectorPresent(".ui-dialog");
+    assertSelectorText(".ui-dialog-title", "Forgot password", true, true);
+    assertSelectorText(".users-forgot-password-dialog p", "Enter your email address to the field below and we will send you a password reset link", true, true);
+    sendKeysSelector(".users-forgot-password-dialog input[name=\"email\"]", "nonexisting@foyt.fi");
+    clickSelector(".ui-dialog-buttonpane .ok-button");
     waitForNotification(getWebDriver());
     assertNotification(getWebDriver(), "warning", "User Could Not Be Found By Given E-mail");
   }
@@ -139,8 +136,9 @@ public class LoginTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic")
   public void testResetPasswordInvalidEmail() {
-    getWebDriver().get(getAppUrl(true) + "/login/");
-    
+    navigate("/login/", true);
+    waitTitle("Login");
+
     getWebDriver().findElement(By.cssSelector(".users-login-forgot-password-link")).click();
 
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".ui-dialog")));
@@ -160,7 +158,8 @@ public class LoginTestsBase extends AbstractUITest {
   public void testResetPassword() throws MessagingException {
     GreenMail greenMail = startSmtpServer();
     try {
-      getWebDriver().get(getAppUrl(true) + "/login/");
+      navigate("/login/", true);
+      waitTitle("Login");
       
       getWebDriver().findElement(By.cssSelector(".users-login-forgot-password-link")).click();
 
