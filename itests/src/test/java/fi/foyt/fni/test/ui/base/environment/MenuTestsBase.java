@@ -98,16 +98,15 @@ public class MenuTestsBase extends AbstractUITest {
   public void testLocaleMenu() {
     getWebDriver().get(getAppUrl());
 
-    WebElement localeMenuLink = getWebDriver().findElement(By.cssSelector(".index-menu .menu-tools-container .menu-tools-locale"));
     WebElement localeMenuList = getWebDriver().findElement(By.cssSelector(".menu-tools-locale-list"));
 
-    assertEquals("EN", localeMenuLink.getText());
+    assertSelectorText(".index-menu .menu-tools-container .menu-tools-locale", "EN", true, true);
 
     // Menu list should be hidden by default
     assertEquals(false, localeMenuList.isDisplayed());
 
     // Click menu should make the list appear
-    localeMenuLink.click();
+    clickSelector(".index-menu .menu-tools-container .menu-tools-locale");
     assertEquals(true, localeMenuList.isDisplayed());
 
     WebElement fiItem = getWebDriver().findElement(By.cssSelector(".menu-tools-locale-list>li:nth-child(1)>a"));
@@ -121,11 +120,11 @@ public class MenuTestsBase extends AbstractUITest {
     assertEquals(false, localeMenuList.isDisplayed());
 
     // Click link again and the menu list should reappear
-    localeMenuLink.click();
+    clickSelector(".index-menu .menu-tools-container .menu-tools-locale");
     assertEquals(true, localeMenuList.isDisplayed());
 
     // ... and stay visible after another click
-    localeMenuLink.click();
+    clickSelector(".index-menu .menu-tools-container .menu-tools-locale");
     assertEquals(true, localeMenuList.isDisplayed());
   }
 
