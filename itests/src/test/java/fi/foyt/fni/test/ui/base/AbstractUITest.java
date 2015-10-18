@@ -1,8 +1,8 @@
 package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -83,17 +83,16 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     String loginUrl = getAppUrl(true) + "/login/";
     if (!StringUtils.startsWith(driver.getCurrentUrl(), loginUrl)) {
       driver.get(loginUrl);
-    } 
-    
-    if (driver.manage().getCookieNamed("cookiesDirective") == null) {
+    }
+
+    if (!findElementsBySelector("#cookiesdirective").isEmpty()) {
       driver.manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
       driver.get(loginUrl);
     }
-    
+
     waitAndSendKeys(".user-login-email", email);
     waitAndSendKeys(".user-login-password", password);
     waitAndClick(".user-login-button");
-    waitForUrlNotMatches(driver, ".*/login.*");
     waitForSelectorPresent(".menu-tools-account");
 
     assertSelectorPresent(".menu-tools-account");
@@ -433,6 +432,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     getWebDriver().findElementByCssSelector(selector).click();
   }
   
+  protected void scrollWaitAndClick(String selector) {
+    scrollIntoView(selector);
+    waitSelectorToBeClickable(selector);
+    clickSelector(selector);
+  }
+  
   protected void waitAndClick(String selector) {
     waitSelectorToBeClickable(selector);
     clickSelector(selector);
@@ -481,6 +486,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
 
   protected void scrollWindowBy(int x, int y) {
     executeScript(String.format("window.scrollBy(%d, %d)",  x, y));
+  }
+  
+  protected void scrollIntoView(String selector) {
+    ((JavascriptExecutor) getWebDriver()).executeScript(String.format("document.querySelectorAll('%s').item(0).scrollIntoView(true);", selector));
   }
   
   protected void executeScript(String script) {
