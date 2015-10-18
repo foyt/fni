@@ -160,8 +160,7 @@ public class LoginTestsBase extends AbstractUITest {
     try {
       navigate("/login/", true);
       waitTitle("Login");
-      
-      getWebDriver().findElement(By.cssSelector(".users-login-forgot-password-link")).click();
+      waitAndClick(".users-login-forgot-password-link");
 
       new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".ui-dialog")));
 

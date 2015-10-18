@@ -14,6 +14,7 @@ import org.junit.runners.Parameterized;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
+import fi.foyt.fni.test.SqlSets;
 import fi.foyt.fni.test.ui.base.environment.LoginTestsBase;
 import fi.foyt.fni.test.ui.sauce.SauceLabsUtils;
 
@@ -57,6 +58,7 @@ public class LoginTestsIT extends LoginTestsBase {
   }
 
   @Override
+  @SqlSets ("basic")
   public void testResetPasswordInvalidEmail() {
     if ("microsoftedge".equals(browser)) {
       // FIXME: Edge window is too small for this test and the driver does not support window resize just yet
@@ -67,6 +69,7 @@ public class LoginTestsIT extends LoginTestsBase {
   }
   
   @Override
+  @SqlSets ("basic")
   public void testResetPassword() throws MessagingException {
     if ("microsoftedge".equals(browser)) {
       // FIXME: Edge window is too small for this test and the driver does not support window resize just yet
