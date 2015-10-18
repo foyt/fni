@@ -70,8 +70,8 @@ public class ForgeBookDesignTestsBase extends AbstractUITest {
   public void textCreateSharedFolder() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/forge/folders/2/folder");
-    clickSelector(".forge-new-material-menu");
-    clickSelector(".forge-new-book-design");
+    waitAndClick(".forge-new-material-menu");
+    waitAndClick(".forge-new-book-design");
     testMayEdit();
     executeSql("delete from BookDesign where id in (select id from Material where type='BOOK_DESIGN' and parentFolder_id = 1)");
     executeSql("delete from MaterialView where material_id in (select id from Material where type='BOOK_DESIGN' and parentFolder_id = 1)");
