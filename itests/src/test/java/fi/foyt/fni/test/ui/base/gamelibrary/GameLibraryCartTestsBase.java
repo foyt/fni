@@ -57,26 +57,26 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     acceptPaytrailPayment(getWebDriver());
     waitTitle("Forge & Illusion - Game Library");
     waitForSelectorPresent(".gamelibrary-order-status");
-      
-    assertSelectorTextIgnoreCase(".gamelibrary-order-status", "Status: Paid, Waiting for Delivery");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-name", firstName + " " + lastName);
-    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-email", email);
-    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-mobile", mobile);
-  
-    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-street", addressStreet);
-    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-postal-code", addressPostalCode + " " + addressPostalOffice);
-    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-country", "Finland");
     
-    assertSelectorTextIgnoreCase(".gamelibrary-order-notes p", notes);
+    assertSelectorText(".gamelibrary-order-status", "Status: Paid, Waiting for Delivery", true, true);
+    assertSelectorText(".gamelibrary-order-customer-name", firstName + " " + lastName, true, true);
+    assertSelectorText(".gamelibrary-order-customer-email", email, true, true);
+    assertSelectorText(".gamelibrary-order-customer-mobile", mobile, true, true);
+  
+    assertSelectorText(".gamelibrary-order-delivery-address-street", addressStreet, true, true);
+    assertSelectorText(".gamelibrary-order-delivery-address-postal-code", addressPostalCode + " " + addressPostalOffice, true, true);
+    assertSelectorText(".gamelibrary-order-delivery-address-country", "Finland", true, true);
+    
+    assertSelectorText(".gamelibrary-order-notes p", notes, true, true);
     assertSelectorCount(".gamelibrary-order-item", 1);
     
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(1)", "1 X FAT HAG DWARVES QUICKLY ZAP JINX MOB");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(2)", "EUR10.00");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(3)", "EUR10.00");
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(1)", "1 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", true, true);
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(2)", "EUR10.00", true, true);
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(3)", "EUR10.00", true, true);
     
-    assertSelectorTextIgnoreCase(".gamelibrary-order-total div", "EUR10.00");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-tax-label label", "TAX (0% - NOT VAT REGISTERED)");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-tax-amount div", "EUR0.00");
+    assertSelectorText(".gamelibrary-order-total div", "EUR10.00", true, true);
+    assertSelectorText(".gamelibrary-order-tax-label label", "TAX (0% - NOT VAT REGISTERED)", true, true);
+    assertSelectorText(".gamelibrary-order-tax-amount div", "EUR0.00", true, true);
   }
 
   @Test
@@ -164,18 +164,18 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     navigate("/gamelibrary/cart/", true);
     waitTitle("Forge & Illusion - Game Library");
 
-    assertSelectorTextIgnoreCase(".gamelibrary-cart-summary-field-total-value", "EUR17.50");
+    assertSelectorText(".gamelibrary-cart-summary-field-total-value", "EUR17.50", true, true);
     assertSelectorClickable(".gamelibrary-cart-submit");
     
     findElementsBySelector(".gamelibrary-cart-item .gamelibrary-cart-action-remove").get(0).click();
     waitForPageLoad();
-    assertSelectorTextIgnoreCase(".gamelibrary-cart-summary-field-total-value", "EUR7.50");
+    assertSelectorText(".gamelibrary-cart-summary-field-total-value", "EUR7.50", true, true);
     assertSelectorClickable(".gamelibrary-cart-submit");
 
     findElementsBySelector(".gamelibrary-cart-item .gamelibrary-cart-action-remove").get(0).click();
     waitForPageLoad();
 
-    assertSelectorTextIgnoreCase(".gamelibrary-cart-summary-field-total-value", "EUR0.00");
+    assertSelectorText(".gamelibrary-cart-summary-field-total-value", "EUR0.00", true, true);
     assertSelectorNotClickable(".gamelibrary-cart-submit");
   }
 
