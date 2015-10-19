@@ -12,6 +12,7 @@ import org.junit.runners.Parameterized;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
+import fi.foyt.fni.test.SqlSets;
 import fi.foyt.fni.test.ui.base.gamelibrary.GameLibraryCartTestsBase;
 import fi.foyt.fni.test.ui.sauce.SauceLabsUtils;
 
@@ -42,6 +43,28 @@ public class GameLibraryCartTestsIT extends GameLibraryCartTestsBase {
   @After
   public void tearDown() {
     getWebDriver().quit();
+  }
+  
+  @Override
+  @SqlSets ("basic-gamelibrary")
+  public void testMultiItemPurchase() throws Exception {
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Edge driver has some trouble handling unicode characters in sendKeys requests
+      return;
+    }
+  
+    super.testMultiItemPurchase();
+  }
+  
+  @Override
+  @SqlSets ("basic-gamelibrary")
+  public void testCartLoggedIn() throws Exception {
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Edge driver has some trouble handling unicode characters in sendKeys requests
+      return;
+    }
+    
+    super.testCartLoggedIn();
   }
   
   private String platform;
