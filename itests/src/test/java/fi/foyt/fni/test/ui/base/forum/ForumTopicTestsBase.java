@@ -23,10 +23,10 @@ public class ForumTopicTestsBase extends AbstractUITest {
   @SqlSets ({"basic-users", "forum-basic"})
   public void testTexts() {
     navigate("/forum/5_topic_forum/topic5of5");
-    assertSelectorTextIgnoreCase(".view-header-description-title", "FIVE TOPIC FORUM");
-    assertSelectorTextIgnoreCase("h4", "TOPIC 5 OF 5 TOPIC FORUM");
-    assertSelectorTextIgnoreCase(".forum-topic-created-info span", "STARTED AT JAN 1, 2010 BY");
-    assertSelectorTextIgnoreCase(".forum-topic-created-info a", "TEST GUEST");
+    assertSelectorText(".view-header-description-title", "FIVE TOPIC FORUM", true, true);
+    assertSelectorText("h4", "TOPIC 5 OF 5 TOPIC FORUM", true, true);
+    assertSelectorText(".forum-topic-created-info span", "STARTED AT JAN 1, 2010 BY", true, true);
+    assertSelectorText(".forum-topic-created-info a", "TEST GUEST", true, true);
     assertSelectorLink(".forum-topic-created-info a", String.format("%s/profile/1", getAppUrl()));
   }
 

@@ -3,7 +3,6 @@ package fi.foyt.fni.test.ui.base.forum;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -24,7 +23,7 @@ public class ForumTestsBase extends AbstractUITest {
   @SqlSets ({"basic-users", "forum-basic"})
   public void testTexts() {
     getWebDriver().get(getAppUrl() + "/forum/1_topic_forum");
-    assertEquals("SINGLE TOPIC FORUM", getWebDriver().findElement(By.cssSelector(".view-header-description-title")).getText());
+    assertSelectorText(".view-header-description-title", "SINGLE TOPIC FORUM", true, true);
   }
 
   @Test
