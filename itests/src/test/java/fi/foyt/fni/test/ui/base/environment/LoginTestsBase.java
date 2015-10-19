@@ -88,7 +88,7 @@ public class LoginTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.cssSelector(".user-register-button")).click();
     
     waitForNotification(getWebDriver());
-    assertNotification(getWebDriver(), "warning", "Passwords Do Not Match");
+    assertNotification("warning", "Passwords Do Not Match");
   }
 
   @Test
@@ -130,7 +130,7 @@ public class LoginTestsBase extends AbstractUITest {
     sendKeysSelector(".users-forgot-password-dialog input[name=\"email\"]", "nonexisting@foyt.fi");
     clickSelector(".ui-dialog-buttonpane .ok-button");
     waitForNotification(getWebDriver());
-    assertNotification(getWebDriver(), "warning", "User Could Not Be Found By Given E-mail");
+    assertNotification("warning", "User Could Not Be Found By Given E-mail");
   }
   
   @Test
@@ -150,7 +150,7 @@ public class LoginTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
     
     waitForNotification(getWebDriver());
-    assertNotification(getWebDriver(), "warning", "User Could Not Be Found By Given E-mail");
+    assertNotification("warning", "User Could Not Be Found By Given E-mail");
   }
   
   @Test

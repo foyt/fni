@@ -98,10 +98,6 @@ public abstract class AbstractUITest extends AbstractTest {
       .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".notifications .notification")));
   }
 
-  protected void assertNotification(RemoteWebDriver driver, String serverity, String text) {
-    assertEquals(StringUtils.lowerCase(text), StringUtils.lowerCase(driver.findElement(By.cssSelector(".notification-" + serverity)).getText()));
-  }
-
   protected void assertNotificationStartsWith(RemoteWebDriver driver, String serverity, String text) {
     assertTrue(StringUtils.startsWithIgnoreCase(driver.findElement(By.cssSelector(".notification-" + serverity)).getText(), text));
   }

@@ -21,7 +21,7 @@ public class UsersResetPasswordTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.cssSelector("input[type='submit']")).click();
 
     waitForNotification(getWebDriver());
-    assertNotification(getWebDriver(), "error", "Invalid Password Reset Key. Perhaps You Have Already Used This Reset Link.");
+    assertNotification("error", "Invalid Password Reset Key. Perhaps You Have Already Used This Reset Link.");
   }
 
   @Test
