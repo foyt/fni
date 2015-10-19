@@ -124,7 +124,9 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testProposeLinkNotLogged() throws UnsupportedEncodingException {
     navigate("/gamelibrary/", true);
-    assertSelectorTextIgnoreCase(".gamelibrary-propose-game-link", "Login to propose a game to the Library");
+    waitTitle("Forge & Illusion - Game Library");
+    waitForSelectorPresent(".gamelibrary-propose-game-link");
+    assertSelectorText(".gamelibrary-propose-game-link", "Login to propose a game to the Library", true, true);
     String redirectUrl = URLEncoder.encode((getCtxPath() != null ? '/' + getCtxPath() : "") + "/gamelibrary/proposegame/", "UTF-8");
     assertEquals(getAppUrl(true) + "/login/?redirectUrl=" + redirectUrl, getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getAttribute("href"));
   }
@@ -134,8 +136,9 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   public void testProposeLinkLogged() {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
     navigate("/gamelibrary/", true);
+    waitTitle("Forge & Illusion - Game Library");
     waitForSelectorPresent(".gamelibrary-propose-game-link");
-    assertSelectorTextIgnoreCase(".gamelibrary-propose-game-link", "Propose a game to the Library");
+    assertSelectorText(".gamelibrary-propose-game-link", "Propose a game to the Library", true, true);
     assertEquals(getAppUrl(true) + "/gamelibrary/proposegame/", getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getAttribute("href"));
   }
 
