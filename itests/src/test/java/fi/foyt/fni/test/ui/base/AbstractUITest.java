@@ -67,6 +67,9 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     capabilities.setCapability("capture-html", true);
     capabilities.setCapability("timeZone", "Universal");
     capabilities.setCapability("seleniumVersion", getSeleniumVersion());
+    capabilities.setCapability("commandTimeout", 600);
+    capabilities.setCapability("idleTimeout", 270);
+    
     
     if (getSauceTunnelId() != null) {
       capabilities.setCapability("tunnel-identifier", getSauceTunnelId());
@@ -444,6 +447,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void waitAndSendKeys(String selector, String keysToSend) {
+    waitForSelectorVisible(selector);
+    sendKeysSelector(selector, keysToSend);
+  }
+  
+  protected void scrollWaitAndType(String selector, String keysToSend) {
+    scrollIntoView(selector);
     waitForSelectorVisible(selector);
     sendKeysSelector(selector, keysToSend);
   }
