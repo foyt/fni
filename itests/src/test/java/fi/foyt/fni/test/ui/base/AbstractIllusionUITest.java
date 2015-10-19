@@ -6,6 +6,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class AbstractIllusionUITest extends AbstractUITest {
@@ -23,13 +24,18 @@ public class AbstractIllusionUITest extends AbstractUITest {
       findElementBySelector(".menu-tools-login").click();
     }
     
-    waitForSelectorVisible(".user-login-email");
-    typeSelectorInputValue(".user-login-email", email);
-    typeSelectorInputValue(".user-login-password", password);
-    clickSelector(".user-login-button");
-    waitForUrlNotMatches(".*/login.*");
+    waitForUrlMatches(".*/login.*");
+
+    if (!findElementsBySelector("#cookiesdirective").isEmpty()) {
+      driver.manage().addCookie(new Cookie("cookiesDirective", "1"));
+      driver.navigate().refresh();
+    }
     
-    waitForSelectorVisible(".menu-tools-account");
+    waitAndSendKeys(".user-login-email", email);
+    waitAndSendKeys(".user-login-password", password);
+    waitAndClick(".user-login-button");
+    waitForSelectorPresent(".menu-tools-account");
+    
     assertSelectorPresent(".menu-tools-account");
     assertSelectorNotPresent(".menu-tools-login");
   }
