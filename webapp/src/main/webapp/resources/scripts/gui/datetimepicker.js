@@ -6,12 +6,12 @@
       
     },
     _create : function() {
-      this._date = this.element.find('input[type="date"]')
+      this._date = this.element.find('input.datepicker')
         .attr('type', 'text')
         .datepicker()
         .on('change blur keyup', $.proxy(this._onDatePickerChange, this));
       
-      this._time = this.element.find('input[type="time"]')
+      this._time = this.element.find('input.timepicker')
         .attr('type', 'text')
         .timepicker({
           timeFormat: 'G:i'
@@ -35,6 +35,7 @@
     _onTimePickerChange: function () {
       this._updateValue();
     },
+    
     dateTime: function () {
       var date = this._date.datepicker('getDate');
       if (!date) {
