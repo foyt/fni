@@ -140,7 +140,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     acceptCookieDirective(getWebDriver());
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
-    String location = "Test place";
+    String location = "Test Valley District, United Kingdom";
     typeSelectorInputValue(".illusion-event-settings-location", location);
     clickSelector(".illusion-event-settings-save");
     waitForPageLoad();
