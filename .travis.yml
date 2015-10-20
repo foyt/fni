@@ -58,5 +58,6 @@ after_script:
 after_success:
 - if [ $TRAVIS_BRANCH = 'devel' ]; then python travis/m2conf.py; fi;
 - if [ $TRAVIS_BRANCH = 'devel' ]; then mvn deploy --settings ~/.m2/mySettings.xml; fi;
-
+after_failure:
+- cat itests/target/cargo/configurations/wildfly8x/log/server.log
         
