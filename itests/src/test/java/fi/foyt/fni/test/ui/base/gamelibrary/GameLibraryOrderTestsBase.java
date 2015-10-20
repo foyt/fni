@@ -1,9 +1,6 @@
 package fi.foyt.fni.test.ui.base.gamelibrary;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import fi.foyt.fni.test.DefineSqlSet;
@@ -85,27 +82,29 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
     String addressPostalCode = "12345";
     String notes = "This is a test order";
 
-    assertEquals("Status: Paid, Waiting for Delivery", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-status")).getText());
-    assertEquals(company, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-customer-company")).getText());
-    assertEquals(firstName + " " + lastName, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-customer-name")).getText());
-    assertEquals(email, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-customer-email")).getText());
-    assertEquals(mobile, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-customer-mobile")).getText());
-    assertEquals(phone, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-customer-phone")).getText());
+    assertSelectorText(".gamelibrary-order-status", "Status: Paid, Waiting for Delivery", true, true);
 
-    assertEquals(addressStreet, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-delivery-address-street")).getText());
-    assertEquals(addressPostalCode + " " + addressPostalOffice, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-delivery-address-postal-code")).getText());
-    assertEquals("Antarctica", getWebDriver().findElement(By.cssSelector(".gamelibrary-order-delivery-address-country")).getText());
+    assertSelectorText(".gamelibrary-order-customer-company", company, true, true);
+    assertSelectorText(".gamelibrary-order-customer-name", firstName + " " + lastName, true, true);
+    assertSelectorText(".gamelibrary-order-customer-email", email, true, true);
+    assertSelectorText(".gamelibrary-order-customer-mobile", mobile, true, true);
+    assertSelectorText(".gamelibrary-order-customer-phone", phone, true, true);
 
-    assertEquals(notes, getWebDriver().findElement(By.cssSelector(".gamelibrary-order-notes p")).getText());
+    assertSelectorText(".gamelibrary-order-delivery-address-street", addressStreet, true, true);
+    assertSelectorText(".gamelibrary-order-delivery-address-postal-code", addressPostalCode + " " + addressPostalOffice, true, true);
+    assertSelectorText(".gamelibrary-order-delivery-address-country", "Antarctica", true, true);
+        
+    assertSelectorText(".gamelibrary-order-notes p", notes, true, true);
 
     assertSelectorCount(".gamelibrary-order-item", 1);
     
-    assertEquals("10 X TEST BOOK #1", findElementsBySelector(".gamelibrary-order-item div:nth-child(1)").get(0).getText());
-    assertEquals("EUR10.00", findElementsBySelector(".gamelibrary-order-item div:nth-child(2)").get(0).getText());
-    assertEquals("EUR100.00", findElementsBySelector(".gamelibrary-order-item div:nth-child(3)").get(0).getText());
-    assertSelectorTextIgnoreCase(".gamelibrary-order-total div", "EUR100.00");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-tax-label label", "TAX (0% - NOT VAT REGISTERED)");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-tax-amount div", "EUR0.00");
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(1)", "10 X TEST BOOK #1", true, true);
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(2)", "EUR10.00", true, true);
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(3)", "EUR100.00", true, true);
+
+    assertSelectorText(".gamelibrary-order-total div", "EUR100.00", true, true);
+    assertSelectorText(".gamelibrary-order-tax-label label", "TAX (0% - NOT VAT REGISTERED)", true, true);
+    assertSelectorText(".gamelibrary-order-tax-amount div", "EUR0.00", true, true);
   }
 
 }
