@@ -1,4 +1,4 @@
-package fi.foyt.fni.test.ui.sauce.illusion;
+package fi.foyt.fni.test.ui.sauce.illusion2;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -12,11 +12,11 @@ import org.junit.runners.Parameterized;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
-import fi.foyt.fni.test.ui.base.illusion.IllusionEventSettingsTestsBase;
+import fi.foyt.fni.test.ui.base.illusion.IllusionEventParticipantsTestsBase;
 import fi.foyt.fni.test.ui.sauce.SauceLabsUtils;
 
 @RunWith (Parameterized.class)
-public class IllusionEventSettingsTestsIT extends IllusionEventSettingsTestsBase {
+public class IllusionEventParticipantsTestsIT extends IllusionEventParticipantsTestsBase {
 
   public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(getSauceUsername(), getSauceAccessKey());
 
@@ -28,7 +28,7 @@ public class IllusionEventSettingsTestsIT extends IllusionEventSettingsTestsBase
     return SauceLabsUtils.getSauceBrowsers();
   }
 
-  public IllusionEventSettingsTestsIT(String browser, String version, String platform) {
+  public IllusionEventParticipantsTestsIT(String browser, String version, String platform) {
     this.browser = browser;
     this.version = version;
     this.platform = platform;
