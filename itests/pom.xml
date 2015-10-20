@@ -1679,18 +1679,6 @@
                   <type>CREATE</type>
                 </configuration>
               </execution>
-              
-              <execution> 
-                <id>drop-db-after-test</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>export</goal>
-                </goals>
-                <configuration>
-                  <type>DROP</type>
-                  <force>true</force>
-                </configuration>
-              </execution>
             </executions>
           </plugin>
     
