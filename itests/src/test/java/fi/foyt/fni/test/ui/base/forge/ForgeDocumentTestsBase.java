@@ -113,12 +113,15 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
     wait.until(new ExpectedCondition<Boolean>() {
       @Override
       public Boolean apply(WebDriver webDriver) {
-        if (webDriver.findElement(By.cssSelector(".forge-ckdocument-editor-status-loaded")).isDisplayed())
-          return true;
-
-        if (webDriver.findElement(By.cssSelector(".forge-ckdocument-editor-status-saved")).isDisplayed())
-          return true;
-
+        try {
+          if (webDriver.findElement(By.cssSelector(".forge-ckdocument-editor-status-loaded")).isDisplayed())
+            return true;
+  
+          if (webDriver.findElement(By.cssSelector(".forge-ckdocument-editor-status-saved")).isDisplayed())
+            return true;
+        } catch (Exception e) {
+        }
+        
         return false;
       }
 
