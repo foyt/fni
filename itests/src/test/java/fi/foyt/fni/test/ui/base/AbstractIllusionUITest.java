@@ -22,10 +22,11 @@ public class AbstractIllusionUITest extends AbstractUITest {
     
     if (!driver.getCurrentUrl().matches(".*/login.*")) {
       findElementBySelector(".menu-tools-login").click();
+      waitForPageLoad();
     }
     
-    waitForUrlMatches(".*/login.*");
-
+    waitTitle("Login");
+    
     if (!findElementsBySelector("#cookiesdirective").isEmpty()) {
       driver.manage().addCookie(new Cookie("cookiesDirective", "1"));
       driver.navigate().refresh();
