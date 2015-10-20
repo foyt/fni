@@ -87,6 +87,8 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     if (!StringUtils.startsWith(driver.getCurrentUrl(), loginUrl)) {
       driver.get(loginUrl);
     }
+    
+    waitTitle("Login");
 
     if (!findElementsBySelector("#cookiesdirective").isEmpty()) {
       driver.manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
