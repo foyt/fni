@@ -68,8 +68,6 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     capabilities.setCapability("timeZone", "Universal");
     capabilities.setCapability("seleniumVersion", getSeleniumVersion());
     capabilities.setCapability("commandTimeout", 600);
-    capabilities.setCapability("idleTimeout", 270);
-    
     
     if (getSauceTunnelId() != null) {
       capabilities.setCapability("tunnel-identifier", getSauceTunnelId());
