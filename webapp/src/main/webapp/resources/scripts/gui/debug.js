@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   
-  var messges = [];
+  var messages = [];
   
   console.log = function (message) {
     messages.push(message);
