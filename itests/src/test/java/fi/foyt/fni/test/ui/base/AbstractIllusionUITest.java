@@ -25,7 +25,7 @@ public class AbstractIllusionUITest extends AbstractUITest {
       waitForPageLoad();
     }
     
-    waitTitle("Login");
+    waitForSelectorPresent(".user-login-email");
     
     if (!findElementsBySelector("#cookiesdirective").isEmpty()) {
       driver.manage().addCookie(new Cookie("cookiesDirective", "1"));
