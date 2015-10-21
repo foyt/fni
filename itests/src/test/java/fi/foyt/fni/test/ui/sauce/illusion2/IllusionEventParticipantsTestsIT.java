@@ -12,6 +12,7 @@ import org.junit.runners.Parameterized;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
+import fi.foyt.fni.test.SqlSets;
 import fi.foyt.fni.test.ui.base.illusion.IllusionEventParticipantsTestsBase;
 import fi.foyt.fni.test.ui.sauce.SauceLabsUtils;
 
@@ -42,6 +43,17 @@ public class IllusionEventParticipantsTestsIT extends IllusionEventParticipantsT
   @After
   public void tearDown() {
     getWebDriver().quit();
+  }
+  
+  @Override
+  @SqlSets ({"illusion-basic", "illusion-event", "illusion-event-participant", "illusion-event-organizer"})
+  public void testUpdateRole() {
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Microsoft edge driver does not support checking checkboxes
+      return;
+    }
+    
+    super.testUpdateRole();
   }
   
   private String platform;
