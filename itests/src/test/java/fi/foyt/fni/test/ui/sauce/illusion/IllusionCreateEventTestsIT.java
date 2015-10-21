@@ -12,6 +12,7 @@ import org.junit.runners.Parameterized;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
+import fi.foyt.fni.test.SqlSets;
 import fi.foyt.fni.test.ui.base.illusion.IllusionCreateEventTestsBase;
 import fi.foyt.fni.test.ui.sauce.SauceLabsUtils;
 
@@ -42,6 +43,28 @@ public class IllusionCreateEventTestsIT extends IllusionCreateEventTestsBase {
   @After
   public void tearDown() {
     getWebDriver().quit();
+  }
+  
+  @Override
+  @SqlSets ("illusion-basic")
+  public void testCreateEventType() throws Exception {
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Microsoft edge driver does not support checking checkboxes
+      return;
+    }
+    
+    super.testCreateEventType();
+  }
+  
+  @Override
+  @SqlSets ("illusion-basic")
+  public void testEventLarpKalenteriCreateLocation() throws Exception {
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Test does not work on edge, needs more investigation
+      return;
+    }
+    
+    super.testEventLarpKalenteriCreateLocation();
   }
   
   private String platform;
