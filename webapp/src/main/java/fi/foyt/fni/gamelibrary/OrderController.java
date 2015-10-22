@@ -1,11 +1,8 @@
 package fi.foyt.fni.gamelibrary;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
@@ -22,11 +19,7 @@ import fi.foyt.fni.persistence.model.users.Address;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 	
-@Dependent
-@Stateful
-public class OrderController implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class OrderController {
 
   @Inject
 	private SessionController sessionController;

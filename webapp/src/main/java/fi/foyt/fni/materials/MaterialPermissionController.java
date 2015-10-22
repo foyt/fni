@@ -2,8 +2,6 @@ package fi.foyt.fni.materials;
 
 import java.util.List;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.dao.materials.UserMaterialRoleDAO;
@@ -14,8 +12,6 @@ import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.users.UserController;
 
-@RequestScoped
-@Stateful
 public class MaterialPermissionController {
 	
 	@Inject

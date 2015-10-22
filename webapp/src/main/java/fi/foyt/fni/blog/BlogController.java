@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -36,8 +34,6 @@ import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogEntryTag;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
 
-@Stateful
-@Dependent
 public class BlogController {
 	
 	@Inject

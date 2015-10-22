@@ -2,8 +2,6 @@ package fi.foyt.fni.materials;
 
 import java.util.List;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.dao.materials.UserMaterialRoleDAO;
@@ -12,8 +10,6 @@ import fi.foyt.fni.persistence.model.materials.MaterialRole;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.users.User;
 
-@Dependent
-@Stateful
 public class MaterialUserController {
 	
 	@Inject

@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
@@ -49,8 +47,6 @@ import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.utils.search.SearchResultScoreComparator;
 
-@Dependent
-@Stateful
 public class UserController {
 	
 	@Inject
