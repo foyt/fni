@@ -7,9 +7,6 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,13 +20,12 @@ import org.scribe.oauth.OAuthService;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
+import fi.foyt.fni.persistence.model.oauth.OAuthClient;
 import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.rest.users.model.User;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.auth.OAuthUtils;
 
-@RequestScoped
-@Stateful
 public class IllusionInternalIAuthenticationStrategy extends OAuthAuthenticationStrategy {
 
 	@Inject
@@ -40,18 +36,6 @@ public class IllusionInternalIAuthenticationStrategy extends OAuthAuthentication
 
   @Inject
 	private IllusionEventController illusionEventController;
-	
-	@PostConstruct
-	public void init() {
-	  IllusionEvent illusionEvent = illusionEventController.findIllusionEventByDomain(request.getServerName());
-	  if ((illusionEvent != null) && (illusionEvent.getOAuthClient() != null)) {
-      clientId = illusionEvent.getOAuthClient().getClientId();
-      clientSecret = illusionEvent.getOAuthClient().getClientSecret();
-      redirectUrl = illusionEvent.getOAuthClient().getRedirectUrl();
-	  }
-	  
-	  siteUrl = systemSettingsController.getSiteUrl(true, true);
-	}
 
   @Override
   public AuthSource getAuthSource() {
@@ -60,17 +44,17 @@ public class IllusionInternalIAuthenticationStrategy extends OAuthAuthentication
 
   @Override
   protected String getApiKey() {
-  	return clientId;
+  	return getClientId();
   }
   
   @Override
   protected String getApiSecret() {
-  	return clientSecret;
+  	return getClientSecret();
   }
   
   @Override
   protected String getCallbackUrl() {
-    return redirectUrl;
+    return getRedirectUrl();
   }
   
   @Override
@@ -85,7 +69,7 @@ public class IllusionInternalIAuthenticationStrategy extends OAuthAuthentication
   
   @Override
   protected Api getApi() {
-    return new FnIApi20(siteUrl);
+    return new FnIApi20(systemSettingsController.getSiteUrl(true, true));
   }
   
   @Override
@@ -97,6 +81,8 @@ public class IllusionInternalIAuthenticationStrategy extends OAuthAuthentication
   protected UserToken handleLogin(Locale locale, OAuthService service, Token accessToken, String[] grantedScopes) throws MultipleEmailAccountsException,
   		EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException, ExternalLoginFailedException {
     try {
+      String siteUrl = systemSettingsController.getSiteUrl(true, true);
+      
       ObjectMapper objectMapper = new ObjectMapper();
       
       String response = OAuthUtils.doGetRequest(service, accessToken, new StringBuilder(siteUrl).append("/rest/users/users/me").toString()).getBody();
@@ -114,7 +100,43 @@ public class IllusionInternalIAuthenticationStrategy extends OAuthAuthentication
     } catch (IOException e) {
     	throw new ExternalLoginFailedException(e);
     }
-  };
+  }
+  
+  private OAuthClient getOAuthClient() {
+    IllusionEvent illusionEvent = illusionEventController.findIllusionEventByDomain(request.getServerName());
+    if ((illusionEvent != null) && (illusionEvent.getOAuthClient() != null)) {
+      return illusionEvent.getOAuthClient();
+    }
+    
+    return null;
+  }
+  
+  private String getClientId() {
+    OAuthClient client = getOAuthClient();
+    if (client != null) {
+      return client.getClientId();
+    }
+    
+    return null;
+  }
+  
+  private String getClientSecret() {
+    OAuthClient client = getOAuthClient();
+    if (client != null) {
+      return client.getClientSecret();
+    }
+    
+    return null;
+  }
+  
+  private String getRedirectUrl() {
+    OAuthClient client = getOAuthClient();
+    if (client != null) {
+      return client.getRedirectUrl();
+    }
+    
+    return null;
+  }
   
   @SuppressWarnings ("unused")
   @JsonIgnoreProperties (ignoreUnknown = true)
@@ -131,9 +153,4 @@ public class IllusionInternalIAuthenticationStrategy extends OAuthAuthentication
     @JsonProperty ("expires_in")
     private Integer expiresIn;
   }
-  
-  private String clientId;
-  private String clientSecret;
-  private String redirectUrl;
-  private String siteUrl;
 }

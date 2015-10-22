@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +22,6 @@ import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
 
-@RequestScoped
 public abstract class AuthenticationStrategy {
 	
 	@Inject
