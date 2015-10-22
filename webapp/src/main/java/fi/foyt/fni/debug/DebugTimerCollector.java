@@ -9,11 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 
 @RequestScoped
-@Stateful
 public class DebugTimerCollector {
   
   @PostConstruct
