@@ -510,7 +510,7 @@
                 <log>${project.basedir}/target/cargo.log</log>
                 <output>${project.basedir}/target/wildfly.log</output>
                 <zipUrlInstaller>
-                  <url>http://static.forgeandillusion.net/libs/wildfly/8.1.0.Final-custom/wildfly-8.1.0.Final.zip</url>
+                  <url>http://static.forgeandillusion.net/apps/wildfly/8.1.0.Final-custom/wildfly-8.1.0.Final.zip</url>
                   <downloadDir>${project.basedir}/.cargo/downloads</downloadDir>
                   <extractDir>${project.basedir}/.cargo/extracts</extractDir>
                 </zipUrlInstaller>
@@ -938,7 +938,7 @@
                 <log>${project.basedir}/target/cargo.log</log>
                 <output>${project.basedir}/target/wildfly.log</output>
                 <zipUrlInstaller>
-                  <url>http://static.forgeandillusion.net/libs/wildfly/8.1.0.Final-custom/wildfly-8.1.0.Final.zip</url>
+                  <url>http://static.forgeandillusion.net/apps/wildfly/8.1.0.Final-custom/wildfly-8.1.0.Final.zip</url>
                   <downloadDir>${project.basedir}/.cargo/downloads</downloadDir>
                   <extractDir>${project.basedir}/.cargo/extracts</extractDir>
                 </zipUrlInstaller>
@@ -1376,7 +1376,7 @@
                 <log>${project.basedir}/target/cargo.log</log>
                 <output>${project.basedir}/target/wildfly.log</output>
                 <zipUrlInstaller>
-                  <url>http://static.forgeandillusion.net/libs/wildfly/8.1.0.Final-custom/wildfly-8.1.0.Final.zip</url>
+                  <url>http://static.forgeandillusion.net/apps/wildfly/8.1.0.Final-custom/wildfly-8.1.0.Final.zip</url>
                   <downloadDir>${project.basedir}/.cargo/downloads</downloadDir>
                   <extractDir>${project.basedir}/.cargo/extracts</extractDir>
                 </zipUrlInstaller>
@@ -1828,7 +1828,7 @@
                 <log>${project.basedir}/target/cargo.log</log>
                 <output>${project.basedir}/target/wildfly.log</output>
                 <zipUrlInstaller>
-                  <url>http://static.forgeandillusion.net/libs/wildfly/8.1.0.Final-custom/wildfly-8.1.0.Final.zip</url>
+                  <url>http://static.forgeandillusion.net/apps/wildfly/8.1.0.Final-custom/wildfly-8.1.0.Final.zip</url>
                   <downloadDir>${project.basedir}/.cargo/downloads</downloadDir>
                   <extractDir>${project.basedir}/.cargo/extracts</extractDir>
                 </zipUrlInstaller>
