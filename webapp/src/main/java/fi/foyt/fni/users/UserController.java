@@ -1,5 +1,6 @@
 package fi.foyt.fni.users;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -47,9 +48,11 @@ import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.utils.search.SearchResultScoreComparator;
 
-public class UserController {
+public class UserController implements Serializable {
 	
-	@Inject
+  private static final long serialVersionUID = 4930659594976812669L;
+
+  @Inject
 	private UserDAO userDAO;
 
 	@Inject
