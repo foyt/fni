@@ -352,6 +352,8 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     findElementBySelector(".illusion-create-event-save").click();
     waitForUrlMatches(".*/illusion/event/" + name);
     navigate("/illusion/event/" + name + "/settings");
+    
+    waitForSelectorPresent(".illusion-event-settings-genres");
     assertSelectorPresent(".illusion-event-settings-genre input[value='1']:checked");
     assertSelectorNotPresent(".illusion-event-settings-genre input[value='2']:checked");
     assertSelectorPresent(".illusion-event-settings-genre input[value='3']:checked");
