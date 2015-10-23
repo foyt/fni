@@ -1,6 +1,5 @@
 package fi.foyt.fni.view.forge;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,7 @@ public class ForgeUploadBackingBean {
   private NavigationController navigationController;
 
 	@RequestAction
-	public void load() throws FileNotFoundException {
+	public String load() {
     folders = new ArrayList<>();
     if (parentFolderId != null) {
       Folder parentFolder = parentFolderId != null ? materialController.findFolderById(parentFolderId) : null;
@@ -66,9 +65,11 @@ public class ForgeUploadBackingBean {
           folder = folder.getParentFolder();
         };
       } else {
-        throw new FileNotFoundException();
+        return navigationController.notFound();
       }
     }
+    
+    return null;
 	}
 	
 	public Long getParentFolderId() {
