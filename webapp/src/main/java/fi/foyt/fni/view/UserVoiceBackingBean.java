@@ -1,4 +1,4 @@
-package fi.foyt.fni.feedback;
+package fi.foyt.fni.view;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;

@@ -1,4 +1,4 @@
-package fi.foyt.fni.monitoring;
+package fi.foyt.fni.view;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -7,6 +7,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
+
+import fi.foyt.fni.monitoring.BrowserMonitorController;
 
 @RequestScoped
 @Named
