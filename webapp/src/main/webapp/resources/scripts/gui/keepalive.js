@@ -3,7 +3,7 @@
   
   function ping() {
     setTimeout(function() {
-      $.get(CONTEXTPATH + '/rest/system/ping')
+      $.get(CONTEXTPATH + '/keepalive')
         .always(function() { 
           ping(); 
         });
