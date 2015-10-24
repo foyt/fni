@@ -14,7 +14,7 @@ import fi.foyt.fni.system.SystemSettingsController;
 @RequestScoped
 @Named
 @Stateful
-public class PiwikBackingBean {
+public class TrackingBackingBean {
 
 	@Inject
 	private SystemSettingsController systemSettingsController;
@@ -23,6 +23,13 @@ public class PiwikBackingBean {
 	public void init() {
 	  piwikUrl = systemSettingsController.getSetting(SystemSettingKey.PIWIK_URL);
 	  piwikSiteId = systemSettingsController.getSetting(SystemSettingKey.PIWIK_SITEID); 
+	  piwikEnabled = StringUtils.isNotBlank(piwikSiteId) && StringUtils.isNotBlank(piwikSiteId);
+	  googleAnalyticsId = systemSettingsController.getSetting(SystemSettingKey.GOOGLE_ANALYTICS_TRACKING_ID); 
+	  googleAnalyticsEnabled = StringUtils.isNotBlank(googleAnalyticsId);
+	}
+
+	public boolean getPiwikEnabled() {
+	  return piwikEnabled;
 	}
 	
 	public String getPiwikUrl() {
@@ -33,10 +40,17 @@ public class PiwikBackingBean {
     return piwikSiteId;
 	}
 	
-	public boolean getHasPiwikUrl() {
-		return StringUtils.isNotBlank(getPiwikUrl());
+	public boolean getGoogleAnalyticsEnabled() {
+	  return googleAnalyticsEnabled;
 	}
 	
+	public String getGoogleAnalyticsId() {
+    return googleAnalyticsId;
+  }
+
+  private boolean piwikEnabled;
 	private String piwikUrl;
 	private String piwikSiteId;
+	private boolean googleAnalyticsEnabled;
+	private String googleAnalyticsId;
 }
