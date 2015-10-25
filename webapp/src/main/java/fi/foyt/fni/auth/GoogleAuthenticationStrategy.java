@@ -9,7 +9,6 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import org.apache.commons.codec.net.URLCodec;
@@ -36,7 +35,6 @@ import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.auth.OAuthUtils;
 
-@Dependent
 public class GoogleAuthenticationStrategy extends OAuthAuthenticationStrategy {
 
 	@Inject

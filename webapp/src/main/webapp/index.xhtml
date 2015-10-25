@@ -8,10 +8,6 @@
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['index.title']}</ui:define>
-  
-  <ui:define name="grid-css">
-    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
-  </ui:define>
       
   <ui:define name="view-scripts">
     <!-- jQuery Magnific-Popup  -->
@@ -61,7 +57,7 @@
     <!-- Publications and Forum -->
     
     <div class="flex-row">
-      <div class="index-box lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
+      <div class="index-box lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full publications">
         <h3>
           <a jsf:outcome="/gamelibrary/index.jsf">#{locales['index.gameLibaryPublications']}</a>
         </h3>

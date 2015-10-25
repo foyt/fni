@@ -33,7 +33,7 @@ values
 insert into 
   OAuthClient (id, clientId, clientSecret, name, type, redirectUrl)
 values 
-  (1, 'it', 'pass', 'itest', 'SERVICE', 'https://dev.forgeandillusion.net:8443/fnici/fake-redirect');
+  (1, 'it', 'pass', 'itest', 'SERVICE', 'https://dev.forgeandillusion.net:8443/fake-redirect');
   
 insert into 
   OAuthAccessToken (id, accessToken, expires, authorizationCode_id, client_id)

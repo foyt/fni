@@ -7,10 +7,6 @@
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['gamelibrary.order.pageTitle']}</ui:define>
-    
-  <ui:define name="grid-css">
-    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
-  </ui:define>
   
   <ui:define name="view-stylesheets">
     <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
@@ -145,8 +141,8 @@
           </div>            
         </div>
         
-        <ui:repeat var="orderItem" value="#{gameLibraryOrderBackingBean.orderItems}">
-          <div class="flex-row gamelibrary-order-item">
+        <ui:repeat var="orderItem" value="#{gameLibraryOrderBackingBean.orderItems}" varStatus="vs">
+          <div class="flex-row gamelibrary-order-item" data-order-item-index="#{vs.index}">
             <div class="lg-flex-cell-6 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first flex-cell-6 sm-flex-cell-first">
               <h:outputText value="#{orderItem.count} x #{orderItem.name}"/>
             </div>            

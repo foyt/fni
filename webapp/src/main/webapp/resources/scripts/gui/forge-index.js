@@ -1,8 +1,24 @@
 (function() {
   'use strict';
 
-  $(document).ready(function () {
+  $(document).on('click', '.forge-menu,.forge-menu>a', function () {
+    $(this).closest('.forge-menu')
+      .addClass('forge-menu-open');
+  });
+  
+  $(document).on('click', '.forge-material-icon', function () {
+    $(this).closest('.forge-material')
+      .addClass('forge-material-open');
+  });
+
+  $(document).on('click',  function (event) {
+    if ($(event.target).closest('.forge-menu-open').length == 0) {
+      $('.forge-menu-open').removeClass('forge-menu-open');
+    }
     
+    if ($(event.target).closest('.forge-material-open').length == 0) {
+      $('.forge-material-open').removeClass('forge-material-open');
+    }
   });
   
   function search() {

@@ -20,14 +20,14 @@
        
       <!-- New Relic -->
       
-      <h:outputText rendered="#{newRelicBackingBean.enabled}" value="#{newRelicBackingBean.snippet}" escape="false"/>
+      <h:outputText rendered="#{browserMonitorBackingBean.enabled}" value="#{browserMonitorBackingBean.script}" escape="false"/>
       
       <!-- Generic Styles -->
       
       <h:outputStylesheet library="novus" name="css/common.css"/>
       <h:outputStylesheet library="novus" name="css/fonts.css"/>
       <ui:insert name="grid-css">
-        <h:outputStylesheet library="novus" name="css/grid.css"/>
+        <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
       </ui:insert>
 
       <!-- Global Variables -->
@@ -42,7 +42,8 @@
       <!-- jQuery -->
  
       <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-      
+      <h:outputScript name="scripts/gui/common.js"></h:outputScript>
+       
       <!-- jQuery UI -->
  
       <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
@@ -55,18 +56,30 @@
       
       <!-- Cookies Directive -->
       
-      <h:outputScript name="/scripts/cookiesdirective/jquery.cookiesdirective.js"></h:outputScript>
+      <script type="text/javascript" charset="utf8" src="//static.forgeandillusion.net/libs/jquery.cookiesdirective/2.0.1/jquery.cookiesdirective.js"></script>
       <h:outputScript name="/scripts/gui/cookiesdirective.js"></h:outputScript>
       
-      <!-- Piwik url -->
-      <ui:fragment rendered="#{piwikBackingBean.hasPiwikUrl}">
-        <script type="text/javascript" src="//#{piwikBackingBean.piwikUrl}/piwik.js"></script>
+      <!-- Piwik -->
+      <ui:fragment rendered="#{trackingBackingBean.piwikEnabled}">
+        <script type="text/javascript" src="//#{trackingBackingBean.piwikUrl}/piwik.js"></script>
         <script type="text/javascript" charset="utf8">
-          var PIWIK_BASEURL = "//#{piwikBackingBean.piwikUrl}/";
-          var PIWIK_SITEID = #{piwikBackingBean.piwikSiteId};
+          var PIWIK_BASEURL = "//#{trackingBackingBean.piwikUrl}/";
+          var PIWIK_SITEID = #{trackingBackingBean.piwikSiteId};
         </script>
       </ui:fragment>
 
+      <!-- Google Analytics -->
+      <ui:fragment rendered="#{trackingBackingBean.googleAnalyticsEnabled}">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+          ga('create', '#{trackingBackingBean.googleAnalyticsId}', 'auto');
+          ga('send', 'pageview');
+        </script>
+      </ui:fragment>
+      
       <h:outputScript name="/scripts/gui/notifications.js"></h:outputScript>
       <h:outputScript name="/scripts/gui/messages.js"></h:outputScript>
       <h:outputScript name="/scripts/gui/keepalive.js"></h:outputScript>

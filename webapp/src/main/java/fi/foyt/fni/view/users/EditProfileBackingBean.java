@@ -78,7 +78,6 @@ public class EditProfileBackingBean {
 		addAuthenticationSourcesSelectItems = new ArrayList<>();
 		
 		boolean hasGoogleAuthSource = false;
-		boolean hasYahooAuthSource = false;
 		boolean hasFacebookAuthSource = false;
 		boolean hasInternalAuthSource = false;
 		
@@ -89,9 +88,6 @@ public class EditProfileBackingBean {
         break;
 				case FACEBOOK:
 					hasFacebookAuthSource = true;
-				break;
-				case YAHOO:
-					hasYahooAuthSource = true;
 				break;
 				case INTERNAL:
 					hasInternalAuthSource = true;
@@ -107,10 +103,6 @@ public class EditProfileBackingBean {
 
 		if (!hasFacebookAuthSource) {
 			addAuthenticationSourcesSelectItems.add(new SelectItem(AuthSource.FACEBOOK, FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceFacebook")));
-		}
-
-		if (!hasYahooAuthSource) {
-			addAuthenticationSourcesSelectItems.add(new SelectItem(AuthSource.YAHOO, FacesUtils.getLocalizedValue("users.editProfile.authenticationSourceYahoo")));
 		}
 
 		if (!hasInternalAuthSource) {

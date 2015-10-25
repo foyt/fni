@@ -3,7 +3,6 @@ package fi.foyt.fni.gamelibrary;
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Observes;
 import javax.faces.context.FacesContext;
@@ -25,12 +24,14 @@ import fi.foyt.fni.session.Login;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.session.UserSessionEvent;
 import fi.foyt.fni.users.UserController;
+import java.io.Serializable;
 
-@Stateful
 @SessionScoped
-public class SessionShoppingCartController {
+public class SessionShoppingCartController implements Serializable {
 
-	@Inject
+  private static final long serialVersionUID = -6351448864132672857L;
+
+  @Inject
 	private SessionController sessionController;
 
 	@Inject

@@ -7,21 +7,18 @@
   template="/WEB-INF/templates/gridbase.xhtml">
   
   <ui:define name="page-title">#{locales['illusion.createEvent.pageTitle']}</ui:define>
-  
-  <ui:define name="grid-css">
-    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
-  </ui:define>
  
   <ui:define name="view-scripts">
     <!-- View scripts -->
     
     <h:outputScript name="scripts/gui/datetimepicker.js"></h:outputScript>
     <h:outputScript name="scripts/gui/illusion-create-event.js"></h:outputScript>
-    <h:outputScript name="scripts/jquery-ui/i18n/datepicker-fi.js" rendered="#{sessionBackingBean.locale.language eq 'fi'}"></h:outputScript>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/jquery-ui/1.11.2/ui/i18n/datepicker-fi.js" jsf:rendered="#{sessionBackingBean.locale.language eq 'fi'}"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.timepicker/1.3.7/jquery.timepicker.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places&amp;language=#{sessionBackingBean.locale.toString()}"></script>
-    <h:outputScript name="scripts/jquery.geocomplete/jquery.geocomplete.min.js"></h:outputScript>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/geocomplete/1.6.5/jquery.geocomplete.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/webshim/1.15.10/minified/polyfiller.js"></script>
   </ui:define>
   
   <ui:define name="view-stylesheets">
@@ -92,10 +89,10 @@
                <label>#{locales['illusion.createEvent.startTime']}</label>
              </div>
              <div class="lg-flex-cell-3 md-flex-cell-4 sm-flex-cell-full">
-               <input type="date" required="required" class="datepicker" placeholder="#{locales['illusion.createEvent.startDatePlaceholder']}" data-alt-field=".actual-start-date"/>
+               <input type="text" required="required" class="datepicker" placeholder="#{locales['illusion.createEvent.startDatePlaceholder']}" data-alt-field=".actual-start-date"/>
              </div>
              <div class="lg-flex-cell-3 lg-flex-cell-last md-flex-cell-4 sm-flex-cell-full">  
-               <input type="time" class="timepicker" placeholder="#{locales['illusion.createEvent.startTimePlaceholder']}" data-alt-field=".actual-start-time"/>
+               <input type="text" class="timepicker" placeholder="#{locales['illusion.createEvent.startTimePlaceholder']}" data-alt-field=".actual-start-time"/>
              </div> 
              <div class="lg-flex-cell-2 lg-flex-cell-last lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-full">  
                <div class="timezone"></div>
@@ -108,10 +105,10 @@
                <label>#{locales['illusion.createEvent.endTime']}</label>
              </div>
              <div class="lg-flex-cell-3 md-flex-cell-4 sm-flex-cell-full">
-               <input type="date" required="required" class="datepicker" placeholder="#{locales['illusion.createEvent.endDatePlaceholder']}" data-alt-field=".actual-end-date"/>
+               <input type="text" required="required" class="datepicker" placeholder="#{locales['illusion.createEvent.endDatePlaceholder']}" data-alt-field=".actual-end-date"/>
              </div>
              <div class="lg-flex-cell-3 lg-flex-cell-last md-flex-cell-4 sm-flex-cell-full">  
-               <input type="time" class="timepicker" placeholder="#{locales['illusion.createEvent.endTimePlaceholder']}" data-alt-field=".actual-end-time"/>
+               <input type="text" class="timepicker" placeholder="#{locales['illusion.createEvent.endTimePlaceholder']}" data-alt-field=".actual-end-time"/>
              </div> 
              <div class="lg-flex-cell-2 lg-flex-cell-last lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-full">  
                <div class="timezone"></div>
@@ -192,10 +189,10 @@
                <label>#{locales['illusion.createEvent.signUpTimeLabel']}</label>
              </div>
              <div class="lg-flex-cell-3 md-flex-cell-4 sm-flex-cell-full">
-               <input type="date" class="datepicker sign-up-start-date" placeholder="#{locales['illusion.createEvent.signUpTimeStartPlaceholder']}" data-alt-field=".actual-sign-up-start-date"/>
+               <input type="text" class="datepicker sign-up-start-date" placeholder="#{locales['illusion.createEvent.signUpTimeStartPlaceholder']}" data-alt-field=".actual-sign-up-start-date"/>
              </div>
              <div class="lg-flex-cell-3 lg-flex-cell-last md-flex-cell-4 sm-flex-cell-full">  
-               <input type="date" class="datepicker sign-up-end-date" placeholder="#{locales['illusion.createEvent.signUpTimeEndPlaceholder']}" data-alt-field=".actual-sign-up-end-date"/>
+               <input type="text" class="datepicker sign-up-end-date" placeholder="#{locales['illusion.createEvent.signUpTimeEndPlaceholder']}" data-alt-field=".actual-sign-up-end-date"/>
              </div> 
              <input type="hidden" class="actual-sign-up-start-date" jsf:value="#{illusionCreateEventBackingBean.signUpStartDate}"/>
              <input type="hidden" class="actual-sign-up-end-date" jsf:value="#{illusionCreateEventBackingBean.signUpEndDate}"/>

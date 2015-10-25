@@ -1,12 +1,10 @@
 package fi.foyt.fni.view.illusion;
 
-import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 
 import fi.foyt.fni.illusion.IllusionEventPage;
 
 @RequestScoped
-@Stateful
 public class IllusionEventNavigationController {
   
   public String getEventUrlName() {

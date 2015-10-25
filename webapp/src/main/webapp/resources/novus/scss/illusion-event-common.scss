@@ -62,10 +62,12 @@ $menu-active-background: rgba(250, 250, 250, 1);
   background: $menu-background;
 }
 
-.illusion-event-navigation-menu:hover {
+.illusion-event-navigation-menu:hover,
+.illusion-event-navigation-menu-open {
   background-color: $menu-active-background;
 }
 
+.illusion-event-navigation-menu-open .illusion-event-navigation-menu-items,
 .illusion-event-navigation-menu:hover .illusion-event-navigation-menu-items {
   display: block;
   background-color: $menu-active-background;
@@ -77,6 +79,7 @@ $menu-active-background: rgba(250, 250, 250, 1);
   margin-left: 8px;
 }
 
+.illusion-event-navigation-menu-open .illusion-event-navigation-menu-label,
 .illusion-event-navigation-menu:hover .illusion-event-navigation-menu-label {
   color: $title-color;
 }

@@ -227,7 +227,7 @@ public class IllusionCreateEventBackingBean {
       FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.createEvent.nameRequired"));
       return null;
     }
-
+     
     Double signUpFee = getSignUpFee();
     String signUpFeeText = getSignUpFeeText();
     Currency signUpFeeCurrency = null;
@@ -255,6 +255,16 @@ public class IllusionCreateEventBackingBean {
     Date start = parseDate(getStart());
     Date end = parseDate(getEnd());
 
+    if (start == null) {
+      FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.createEvent.startRequired"));
+      return null;
+    }
+
+    if (end == null) {
+      FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.createEvent.endRequired"));
+      return null;
+    }
+       
     IllusionEvent event = illusionEventController.createIllusionEvent(loggedUser, sessionController.getLocale(), getLocation(), getName(), 
         getDescription(), getJoinMode(), now, signUpFee, signUpFeeText, signUpFeeCurrency, start, end, 
         getAgeLimit(), getBeginnerFriendly(), getImageUrl(), type, signUpStartDate, signUpEndDate, genres);

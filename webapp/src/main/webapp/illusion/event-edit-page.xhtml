@@ -12,10 +12,6 @@
       <f:param value="#{illusionEventEditPageBackingBean.pageTitle}"/>
     </h:outputFormat>
   </ui:define>
-
-  <ui:define name="grid-css">
-    <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
-  </ui:define>
   
   <ui:define name="view-scripts">
     <!-- CKEditor -->
@@ -36,7 +32,7 @@
     
     <!-- DiffXmlJs -->
     
-    <h:outputScript name="scripts/diffxml-js/diffxml-js.js"/>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/diffxml-js/1.3.0/diffxml-js.js"></script>
     
     <!-- Collaborators -->
     
@@ -51,7 +47,9 @@
     <script type="text/javascript">
       var COOPS_SERVER_URL = CONTEXTPATH + '/rest/coops/document/#{illusionEventEditPageBackingBean.documentId}';
     </script>
+
     <h:outputScript name="scripts/gui/illusion-edit-page.js"/>
+    <h:outputScript name="scripts/gui/illusion-common.js"/>
   </ui:define>
    
   <ui:define name="view-stylesheets">

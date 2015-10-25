@@ -11,6 +11,7 @@ before_install:
   -in travis-encrypted.tar.enc -out travis-encrypted.tar -d
 - tar xvf travis-encrypted.tar
 - unset GEM_PATH
+install: true
 branches:
   except:
   - master
@@ -20,9 +21,48 @@ env:
   - secure: DgqS4PrNEmnOblJNe+qeSGsiOtVb5qMgEtTrMD1Y+FdOyWER/orgMOGDWy/xtbbS1dbaCmATOdRxsvXJqRrPaNZLcWZ8e+9d/L3XWYmoBRaGDiH1eVjUUibK79xOUyrBChLCEOkgfuIKHr3nkiPfDWRb5a6CsNn0cbPu56+8j64=
   - secure: TjZNKclYzXO4CaiJI0NsDAOTYbVXUjU7db/4Pgx00eNCQxJMEmdt3sdzt5r5bRQtB4rPWGKa9Ki4wfd+MMHAa987bjIwSTzBXiCG8+LJNutdCTDXk446dmgsAWWjF39Y4kfnagZ/qbxEiVb+9+ixfrLyNKhvVDE34y26ySrxdZg=
   - secure: WUWchzcdGrC6aifA9DuztFPpJLjrns/4ymIzHmjIjLWVXvXGEYnNhbgbH76hW5wFl89Ve8YMvHBcF50P++sRD1HwHSF6naDoiASpmHxAKBnyKJvdxgo06DMygMqlrg8zwEk0Ilh1nF9m5KGEEYLggxQLZEi2dXMANPZs3wR5qOY=
-addons:
-  sauce_connect: true
-script: mvn test verify -Ptravis -Dexec.args="-Duser.timezone=UTC"
+  matrix:
+  - goals=test verify use_sc=false it_profile=rest
+  - goals=verify package=environment use_sc=true it_profile=travis it_browsers="chrome:45:Linux"
+  - goals=verify package=forge use_sc=true it_profile=travis it_browsers="chrome:45:Linux"
+  - goals=verify package=illusion use_sc=true it_profile=travis it_browsers="chrome:45:Linux"
+  - goals=verify package=illusion2 use_sc=true it_profile=travis it_browsers="chrome:45:Linux"
+  - goals=verify package=gamelibrary use_sc=true it_profile=travis it_browsers="chrome:45:Linux"
+  - goals=verify package=forum use_sc=true it_profile=travis it_browsers="chrome:45:Linux"
+  - goals=verify package=environment use_sc=true it_profile=travis it_browsers="safari:8.0:OS X 10.10"
+  - goals=verify package=forge use_sc=true it_profile=travis it_browsers="safari:8.0:OS X 10.10"
+  - goals=verify package=illusion use_sc=true it_profile=travis it_browsers="safari:8.0:OS X 10.10"
+  - goals=verify package=illusion2 use_sc=true it_profile=travis it_browsers="safari:8.0:OS X 10.10"
+  - goals=verify package=gamelibrary use_sc=true it_profile=travis it_browsers="safari:8.0:OS X 10.10"
+  - goals=verify package=forum use_sc=true it_profile=travis it_browsers="safari:8.0:OS X 10.10"
+  - goals=verify package=environment use_sc=true it_profile=travis it_browsers="firefox:41.0:Windows 8"
+  - goals=verify package=forge use_sc=true it_profile=travis it_browsers="firefox:41.0:Windows 8"
+  - goals=verify package=illusion use_sc=true it_profile=travis it_browsers="firefox:41.0:Windows 8"
+  - goals=verify package=illusion2 use_sc=true it_profile=travis it_browsers="firefox:41.0:Windows 8"
+  - goals=verify package=gamelibrary use_sc=true it_profile=travis it_browsers="firefox:41.0:Windows 8"
+  - goals=verify package=forum use_sc=true it_profile=travis it_browsers="firefox:41.0:Windows 8"
+  - goals=verify package=environment use_sc=true it_profile=travis it_browsers="internet explorer:11.0:Windows 8.1"
+  - goals=verify package=forge use_sc=true it_profile=travis it_browsers="internet explorer:11.0:Windows 8.1"
+  - goals=verify package=illusion use_sc=true it_profile=travis it_browsers="internet explorer:11.0:Windows 8.1"
+  - goals=verify package=illusion2 use_sc=true it_profile=travis it_browsers="internet explorer:11.0:Windows 8.1"
+  - goals=verify package=gamelibrary use_sc=true it_profile=travis it_browsers="internet explorer:11.0:Windows 8.1"
+  - goals=verify package=forum use_sc=true it_profile=travis it_browsers="internet explorer:11.0:Windows 8.1"
+  - goals=verify package=environment use_sc=true it_profile=travis it_browsers="microsoftedge:20.10240:Windows 10"
+  - goals=verify package=forge use_sc=true it_profile=travis it_browsers="microsoftedge:20.10240:Windows 10"
+  - goals=verify package=illusion use_sc=true it_profile=travis it_browsers="microsoftedge:20.10240:Windows 10"
+  - goals=verify package=illusion2 use_sc=true it_profile=travis it_browsers="microsoftedge:20.10240:Windows 10"
+  - goals=verify package=gamelibrary use_sc=true it_profile=travis it_browsers="microsoftedge:20.10240:Windows 10"
+  - goals=verify package=forum use_sc=true it_profile=travis it_browsers="microsoftedge:20.10240:Windows 10"
+before_script:
+- if [ $use_sc = true ]; then curl -sS https://saucelabs.com/downloads/sc-4.3.11-linux.tar.gz|tar -xzC /tmp/; fi;
+- if [ $use_sc = true ]; then /tmp/sc-4.3.11-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish -D cdnjs.cloudflare.com -B www.facebook.com --daemonize --pidfile /tmp/sc.pid; fi;
+script: mvn $goals -P$it_profile -Dexec.args="-Duser.timezone=UTC" -Dmaven.javadoc.skip=true -Dsource.skip=true -Dit.properties.file=src/test/resources/it-travis.properties -Dit.package=$package -Dit.browsers="$it_browsers"
+after_script:
+- if [ $use_sc = true ]; then kill `cat /tmp/sc.pid`; fi;
+- if [ $use_sc = true ]; then c=0; while kill -0 `cat /tmp/sc.pid`; do sleep 0.5; c=$((c+1)); if [ $c -gt 60 ]; then kill -9 `cat /tmp/sc.pid`; fi; done; fi;
 after_success:
-- python travis/m2conf.py
-- mvn deploy --settings ~/.m2/mySettings.xml
+- if [ $TRAVIS_BRANCH = 'devel' ]; then python travis/m2conf.py; fi;
+- if [ $TRAVIS_BRANCH = 'devel' ]; then mvn deploy --settings ~/.m2/mySettings.xml; fi;
+after_failure:
+- cat itests/target/cargo/configurations/wildfly8x/log/server.log
+        

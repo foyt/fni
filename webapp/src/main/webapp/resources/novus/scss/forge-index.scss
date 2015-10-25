@@ -64,6 +64,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   padding-right: 8px; 
 }
 
+.forge-menu-open>a,
 .forge-menu:hover>a {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
@@ -71,6 +72,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   padding-bottom: 7px;
 }
 
+.forge-menu-open .forge-menu-items,
 .forge-menu:hover .forge-menu-items {
   display: block;
   position: absolute;
@@ -85,9 +87,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   @include box-sizing(border-box);
 }
 
-.forge-menu:hover .forge-menu-items a:before {
-}
-
+.forge-menu-open .forge-menu-items a,
 .forge-menu:hover .forge-menu-items a {
   color: $menu-button-color;
   padding-left: $menu-button-padding + 18px;
@@ -100,6 +100,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   text-decoration: none;
 }
 
+.forge-menu-open .forge-menu-items a:hover,
 .forge-menu:hover .forge-menu-items a:hover {
   background: $menu-button-background-hover;
 }
@@ -109,6 +110,7 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   position: relative;
 }
 
+.forge-material-open,
 .forge-material:hover {
   background: $selected-background-color;
 }
@@ -131,12 +133,13 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   font-weight: bold;
 }
 
+.forge-material-open .forge-material-actions,
 .forge-material:hover .forge-material-actions {
   max-height: 180px;
   @include transition-property(max-height);
   @include transition-duration(1s);
   @include transition-delay(0.5s);
-  @transition-timing-function (ease-in);
+  @include transition-timing-function (ease-in);
 }
 
 .forge-material-actions a {

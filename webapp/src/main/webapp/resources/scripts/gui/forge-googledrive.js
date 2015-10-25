@@ -8,5 +8,9 @@
       $(this).css("height", scrollHeight);
     });
   });
+  
+  $(window).resize(function () {
+    $('.forge-google-drive-container iframe').attr('src', $('.forge-google-drive-container iframe').attr('src'));
+  });
 
 }).call(this);

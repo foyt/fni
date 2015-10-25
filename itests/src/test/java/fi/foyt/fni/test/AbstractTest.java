@@ -141,6 +141,10 @@ public abstract class AbstractTest {
   
   private SqlSet getSqlSet(Method method, String id) {
     DefineSqlSets defineSqlSets = method.getDeclaringClass().getAnnotation(DefineSqlSets.class);
+    if (defineSqlSets == null) {
+      defineSqlSets = method.getDeclaringClass().getSuperclass().getAnnotation(DefineSqlSets.class);
+    }
+    
     if (defineSqlSets != null) {
       for (DefineSqlSet defineSqlSet : defineSqlSets.value()) {
         if (defineSqlSet.id().equals(id)) {
@@ -157,7 +161,12 @@ public abstract class AbstractTest {
   }
 
   protected String getAppUrl(boolean secure) {
-    return (secure ? "https://" : "http://") + getHost() + ':' + (secure ? getPortHttps() : getPortHttp()) + '/' + getCtxPath();
+    String ctxPath = getCtxPath();
+    return String.format("%s%s:%d%s", secure ? "https://" : "http://", getHost(), secure ? getPortHttps() : getPortHttp(), ctxPath != null ? "/" + ctxPath : "");
+  }
+
+  protected String getSeleniumVersion() {
+    return System.getProperty("it.selenium.version");
   }
 
   protected String getHost() {

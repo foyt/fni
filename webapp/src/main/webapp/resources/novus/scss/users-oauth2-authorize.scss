@@ -2,15 +2,7 @@
 @import "compass";
 @import "styles";
 
-/* Panel */ 
-
-.users-oauth2-authorize-panel {
-  @include generic-panel;
-  padding-bottom: 20px;
-  text-align: center;
-}
-
-.users-oauth2-authorize-panel p {
+.question p {
   margin-top: 40px;
   margin-bottom: 80px; 
   font-size: 20px;

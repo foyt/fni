@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -41,7 +40,6 @@ import fi.foyt.fni.system.SystemSettingsController;
 
 @RewriteConfiguration
 @ApplicationScoped
-@Stateful
 public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfigurationProvider {
 
   @Inject

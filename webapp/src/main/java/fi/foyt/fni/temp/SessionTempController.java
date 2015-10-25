@@ -11,14 +11,15 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
 
 import org.apache.commons.io.IOUtils;
+import java.io.Serializable;
 
 @SessionScoped
-@Stateful
-public class SessionTempController {
+public class SessionTempController implements Serializable {
+
+  private static final long serialVersionUID = -8459443898172617439L;
 
   @PostConstruct
   public void postConstruct() {

@@ -3,25 +3,21 @@ package fi.foyt.fni.auth;
 import java.util.List;
 import java.util.UUID;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.dao.auth.InternalAuthDAO;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.users.PasswordResetKeyDAO;
-import fi.foyt.fni.persistence.dao.users.UserVerificationKeyDAO;
 import fi.foyt.fni.persistence.dao.users.UserTokenDAO;
+import fi.foyt.fni.persistence.dao.users.UserVerificationKeyDAO;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.auth.InternalAuth;
 import fi.foyt.fni.persistence.model.auth.UserIdentifier;
 import fi.foyt.fni.persistence.model.users.PasswordResetKey;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.persistence.model.users.UserVerificationKey;
 import fi.foyt.fni.persistence.model.users.UserToken;
+import fi.foyt.fni.persistence.model.users.UserVerificationKey;
 
-@RequestScoped
-@Stateful
 public class AuthenticationController {
 	
 	@Inject

@@ -5,12 +5,16 @@
   xmlns:h="http://java.sun.com/jsf/html"
   template="/WEB-INF/templates/gridbase.xhtml">
   
+  <ui:define name="grid-css">
+    <h:outputStylesheet library="novus" name="css/grid.css"/>
+  </ui:define>
+  
   <ui:define name="view-scripts">
     <!-- Strophe -->
     
-    <h:outputScript name="scripts/strophe/strophe.js"/>
-    <h:outputScript name="scripts/strophe/plugins/strophe.muc.js"/>
-    <h:outputScript name="scripts/strophe/plugins/strophe.register.js"/>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/strophe.js/1.2.3/strophe.min.js"></script>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/strophejs-plugins/muc/strophe.muc.js"></script>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/strophejs-plugins/register/strophe.register.js"></script>
     
     <!-- View scripts -->
     

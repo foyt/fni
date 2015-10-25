@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,9 +19,9 @@ import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 
 import fi.foyt.fni.persistence.dao.gamelibrary.BookPublicationDAO;
-import fi.foyt.fni.persistence.dao.gamelibrary.PublicationFileDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationAuthorDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationDAO;
+import fi.foyt.fni.persistence.dao.gamelibrary.PublicationFileDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationImageDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationTagDAO;
 import fi.foyt.fni.persistence.model.common.Language;
@@ -39,8 +37,6 @@ import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
-@Stateful
-@Dependent
 public class PublicationController {
 	
 	@Inject

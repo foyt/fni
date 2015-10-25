@@ -3,7 +3,6 @@ package fi.foyt.fni.auth;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.model.auth.AuthSource;
@@ -11,7 +10,6 @@ import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.system.SystemSettingsController;
 
-@RequestScoped
 public class GuestAuthenticationStrategy extends AbstractInternalAuthenticationStrategy {
 
 	@Inject

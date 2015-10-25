@@ -8,7 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -18,7 +17,6 @@ import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.drive.DriveScopes;
 
 @ApplicationScoped
-@Stateful
 public class SystemGoogleDriveCredentials implements Serializable {
   
   private static final long serialVersionUID = -7571174639569905090L;

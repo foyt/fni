@@ -6,17 +6,17 @@
       
     },
     _create : function() {
-      this._date = this.element.find('input[type="date"]')
+      this._date = this.element.find('input.datepicker')
         .attr('type', 'text')
         .datepicker()
-        .on('change', $.proxy(this._onDatePickerChange, this));
+        .on('change blur keyup', $.proxy(this._onDatePickerChange, this));
       
-      this._time = this.element.find('input[type="time"]')
+      this._time = this.element.find('input.timepicker')
         .attr('type', 'text')
         .timepicker({
           timeFormat: 'G:i'
         })
-        .on('change', $.proxy(this._onTimePickerChange, this));
+        .on('change blur', $.proxy(this._onTimePickerChange, this));
       
       var value = this.element.find('input[type="hidden"]').val();
       if (value) {
@@ -35,6 +35,7 @@
     _onTimePickerChange: function () {
       this._updateValue();
     },
+    
     dateTime: function () {
       var date = this._date.datepicker('getDate');
       if (!date) {

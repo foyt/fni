@@ -1,14 +1,18 @@
 mixin view-header()
   div(class="flex-row view-header")
-    div(class="flex-cell-row sm-flex-hide")
-      div(class="view-header-navigation")
-        for breadcrumb, index in breadcrumbs
-          a(class="view-header-navigation-item",href=breadcrumb.url)
-            =breadcrumb.text 
-          unless index >= (size(breadcrumbs) - 1)
-            span(class="view-header-navigation-separator")
-    div(class="view-header-description")
-      p(class="view-header-description-title")
-        =eventName
-      p(class="view-header-description-text")
-        =eventDescription
+    div(class="flex-cell-full")     
+      div(class="flex-row sm-flex-hide")
+        div(class="flex-cell-full")      
+          div(class="view-header-navigation")
+            for breadcrumb, index in breadcrumbs
+              a(class="view-header-navigation-item",href=breadcrumb.url)
+                =breadcrumb.text 
+              unless index >= (size(breadcrumbs) - 1)
+                span(class="view-header-navigation-separator")
+      div(class="flex-row")
+        div(class="flex-cell-full")            
+          div(class="view-header-description")
+            p(class="view-header-description-title")
+              =eventName
+            p(class="view-header-description-text")
+              =eventDescription

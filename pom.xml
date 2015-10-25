@@ -64,7 +64,7 @@
     <!-- Hibernate -->
 
     <hibernate-jpamodelgen.version>4.3.6.Final</hibernate-jpamodelgen.version>
-
+    
     <!-- APIDocs -->
 
     <apidocs.apiVersion>1</apidocs.apiVersion>

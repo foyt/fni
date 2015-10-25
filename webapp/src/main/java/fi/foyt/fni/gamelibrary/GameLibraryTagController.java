@@ -3,8 +3,6 @@ package fi.foyt.fni.gamelibrary;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import fi.foyt.fni.persistence.dao.gamelibrary.GameLibraryTagDAO;
@@ -13,8 +11,6 @@ import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 
-@Stateful
-@Dependent
 public class GameLibraryTagController {
 
 	@Inject

@@ -2,21 +2,6 @@
 @import "compass";
 @import "styles";
 
-$selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
-
-/* Panels */ 
-
-.illusion-event-materials-panel {
-  @include generic-panel;
-  position: relative;
-  background: #fff;
-}
-
-.illusion-event-materials {
-  margin-top: 20px;
-}
-
-img.export-character-sheet-xls {
-  max-height: 17px;
-  padding-top: 1px;
+.export-character-sheet-xls {
+  cursor: pointer;
 }

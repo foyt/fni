@@ -2,6 +2,8 @@
   'use strict';
 
   $(document).ready(function() { 
+    webshim.polyfill('forms');
+    
     $('.timezone').html(jstz.determine().name());
     $('.event-start').dateTimeField();
     $('.event-end').dateTimeField();
@@ -14,7 +16,7 @@
         $(element).datepicker('setDate', new Date(Date.parse(date)));
       }
       
-      $(element).change(function() {
+      $(element).on("change blur", function() {
         if (!$(this).val()) {
           $($(this).data('alt-field')).val('');
         } else {

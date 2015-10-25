@@ -35,24 +35,9 @@ public abstract class AbstractUITest extends AbstractTest {
     String appUrl = getAppUrl(secure);
     String ctxPath = getCtxPath();
     driver.get(appUrl + path);
-    String expectedUrl = getAppUrl(true) + "/login/?redirectUrl=" + URLEncoder.encode("/" + ctxPath + path, "UTF-8");
+    String expectedUrl = getAppUrl(true) + "/login/?redirectUrl=" + URLEncoder.encode(ctxPath != null ? "/" + ctxPath + path : path, "UTF-8");
     waitForUrlMatches(driver, "https://.*");
     assertEquals(expectedUrl, driver.getCurrentUrl());
-  }
-  
-  protected void loginInternal(RemoteWebDriver driver, String email, String password) {
-    String loginUrl = getAppUrl(true) + "/login/";
-    if (!StringUtils.startsWith(driver.getCurrentUrl(), loginUrl)) {
-      driver.get(loginUrl);
-    }
-    
-    driver.findElement(By.cssSelector(".user-login-email")).sendKeys(email);
-    driver.findElement(By.cssSelector(".user-login-password")).sendKeys(password);
-    driver.findElement(By.cssSelector(".user-login-button")).click();
-    waitForUrlNotMatches(driver, ".*/login.*");
-
-    assertEquals(1, driver.findElements(By.cssSelector(".menu-tools-account")).size());
-    assertEquals(0, driver.findElements(By.cssSelector(".menu-tools-login")).size());
   }
   
   protected void sleep(long millis) {
@@ -62,12 +47,6 @@ public abstract class AbstractUITest extends AbstractTest {
     }
   }
   
-  protected void logout(RemoteWebDriver driver) {
-    driver.get(getAppUrl() + "/logout");
-    assertEquals(0, driver.findElements(By.cssSelector(".menu-tools-account")).size());
-    assertEquals(1, driver.findElements(By.cssSelector(".menu-tools-login")).size());
-  }
-
   protected void acceptCookieDirective(RemoteWebDriver driver) {
     acceptCookieDirective(driver, false);
   }
@@ -75,24 +54,6 @@ public abstract class AbstractUITest extends AbstractTest {
   protected void acceptCookieDirective(RemoteWebDriver driver, boolean secure) {
     driver.get(getAppUrl(secure) + "/");
     driver.manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
-  }
-  
-  protected void testTitle(RemoteWebDriver driver, String view, String expectedTitle) {
-    testTitle(driver, view, expectedTitle, false);
-  }
-
-  protected void testTitle(RemoteWebDriver driver, String view, String expectedTitle, boolean secure) {
-    driver.get(getAppUrl(secure) + view);
-    assertEquals(expectedTitle, driver.getTitle());
-  }
-
-  protected void testAccessDenied(RemoteWebDriver driver, String view) {
-    testAccessDenied(driver, view, false);
-  }
-  
-  protected void testAccessDenied(RemoteWebDriver driver, String view, boolean secure) {
-    driver.get(getAppUrl(secure) + view);
-    assertEquals("Access Denied!", driver.getTitle());
   }
   
   protected void testNotFound(RemoteWebDriver driver, String view) {
@@ -135,10 +96,6 @@ public abstract class AbstractUITest extends AbstractTest {
   protected void waitForNotification(RemoteWebDriver driver) {
     new WebDriverWait(driver, 60)
       .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".notifications .notification")));
-  }
-
-  protected void assertNotification(RemoteWebDriver driver, String serverity, String text) {
-    assertEquals(StringUtils.lowerCase(text), StringUtils.lowerCase(driver.findElement(By.cssSelector(".notification-" + serverity)).getText()));
   }
 
   protected void assertNotificationStartsWith(RemoteWebDriver driver, String serverity, String text) {

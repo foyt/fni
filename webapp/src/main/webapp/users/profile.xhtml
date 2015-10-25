@@ -3,10 +3,10 @@
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['users.profile.pageTitle']}</ui:define>
-  
   <ui:define name="view-scripts">
     <!-- jQuery Magnific-Popup  -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/jquery.magnific-popup.min.js"></script>
@@ -19,7 +19,7 @@
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/magnific-popup.min.css"/>
 
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/users-profile.css"/>
   </ui:define>
 
@@ -27,168 +27,298 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['users.profile.navigationIndex']}</h:link>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:outputLink value="#{request.contextPath}/profile/#{usersProfileBackingBean.userId}" styleClass="view-header-navigation-item">#{usersProfileBackingBean.fullName}</h:outputLink>
-      </h:panelGroup>
-  
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['users.profile.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['users.profile.descriptionText']}</p>
-      </h:panelGroup>
-      
-      <!-- Search -->
-      
-      <h:panelGroup layout="block" styleClass="users-profile-search-container">
-        <input type="text" class="users-profile-search" placeholder="#{locales['users.profile.searchPlaceHolder']}"/>
-        <h:panelGroup layout="block" styleClass="users-profile-search-loading" style="display: none"/>
-        <h:panelGroup layout="block" styleClass="users-profile-search-result" style="display: none"/>
-      </h:panelGroup>
-    </h:panelGroup>
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['users.profile.navigationIndex']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/users/profile.jsf?userId=#{sessionBackingBean.loggedUser.id}">#{usersProfileBackingBean.fullName}</a>
+          </div>
+        </div>
 
-    <!-- Content -->
-
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="grid_12 tight">
-        <!-- About -->
-  
-        <h:panelGroup layout="block" styleClass="users-profile-about-panel">
-          <h2>#{usersProfileBackingBean.fullName}</h2>
-          <h:panelGroup layout="block" styleClass="users-profile-about">
-            <h:graphicImage value="/users/profileImages/#{usersProfileBackingBean.userId}?width=140&amp;height=140"/>
-            <p>
-              <h:outputText value="#{usersProfileBackingBean.about}" escape="false"/>
-            </p>
-          </h:panelGroup>
-        </h:panelGroup>
+        <!-- Description -->
+    
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['users.profile.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['users.profile.descriptionText']}</p>
+        </div>
         
-        <!-- Game Library -->
-      
-        <h:panelGroup layout="block" styleClass="users-profile-publications-panel" rendered="#{usersProfileBackingBean.hasGameLibraryPublications}">
-          <h3>#{locales['users.profile.gameLibraryPublications']}</h3>
-
-          <ui:repeat var="publication" value="#{usersProfileBackingBean.publishedPublications}">
-            <ui:include src="/facelets/userprofilepublication.xhtml">
-              <ui:param name="publication" value="#{publication}"/>
-            </ui:include>
-          </ui:repeat>
+        <!-- Search -->
+        
+        <h:panelGroup layout="block" styleClass="view-header-search-container">
+        <input type="text" class="view-header-search users-profile-search" placeholder="#{locales['users.profile.searchPlaceHolder']}"/>
+          <h:panelGroup layout="block" styleClass="view-header-search-loading users-profile-search-loading" style="display: none"/>
+          <h:panelGroup layout="block" styleClass="view-header-search-result users-profile-search-result" style="display: none"/>
         </h:panelGroup>
+      </div>
+    </div>
+    
+    <div class="flex-row">
+      <div class="flex-cell-full">
       
-	      <h:panelGroup layout="block" styleClass="users-profile-events-panel" rendered="#{not empty usersProfileBackingBean.organizerInEvents}">
-          <h3>#{locales['users.profile.illusionEvents']}</h3>
-          
-          <ui:repeat var="event" value="#{usersProfileBackingBean.organizerInEvents}">
-            <div class="users-profile-illusion-event">
-              <h2>
-                <h:link outcome="/illusion/event.jsf?urlName=#{event.urlName}" value="#{event.name}"/>
-              </h2>
-              <div class="users-profile-illusion-event-date">
-                <h:outputFormat value="#{locales['users.profile.illusionEventDateRange']}" rendered="#{event.endDate ne null}">
-                  <f:param value="#{event.startDate}"/>
-                  <f:param value="#{event.endDate}"/>
-                </h:outputFormat>
-                <h:outputFormat value="#{locales['users.profile.illusionEventDateSingle']}" rendered="#{event.endDate eq null}">
-                  <f:param value="#{event.startDate}"/>
-                </h:outputFormat>
+        <div class="flex-row">
+          <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full index-box no-margin-bottom">
+            <div class="flex-row">
+              <div class="flex-cell-full no-margin-top">
+                <h3>#{usersProfileBackingBean.fullName}</h3>
               </div>
-              <div class="users-profile-illusion-event-desc" title="#{event.description}">#{event.description.length() > 200 ? event.description.substring(0, 200).concat('...') : event.description}</div>
             </div>
-          </ui:repeat>
-	      </h:panelGroup>
-      </h:panelGroup>
+            
+            <div class="flex-row">
+              <div class="lg-flex-cell-4 lg-flex-cell-first md-flex-cell-5 md-flex-cell-first sm-flex-cell-full">
+                <h:graphicImage value="/users/profileImages/#{usersProfileBackingBean.userId}?width=140&amp;height=140"/>
+              </div>
+              
+              <div class="lg-flex-cell-12 lg-flex-cell-last md-flex-cell-11 md-flex-cell-last sm-flex-cell-full">
+                <h:outputText value="#{usersProfileBackingBean.about}" escape="false"/>
+              </div>
+            </div>
+          </div>
+          
+          <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-full index-box no-margin-bottom">
+            <div class="flex-row">
+              <div class="flex-cell-full no-margin-top">
+                <h3>#{locales['users.profile.contactInfo']}</h3>
+              </div>
+            </div>
+            
+            <div class="flex-row users-profile-contact-info" jsf:rendered="#{!empty(usersProfileBackingBean.contactFieldHomePage)}">
+              <div class="flex-cell-full">
+                <label>#{locales['users.profile.contactInformationHomePage']}</label>
+              </div>
+              <div class="flex-cell-full">
+                <a href="#{usersProfileBackingBean.contactFieldHomePage}" target="_blank">#{usersProfileBackingBean.contactFieldHomePage}</a>
+              </div>
+            </div>
+            
+            <div class="flex-row users-profile-contact-info" jsf:rendered="#{!empty(usersProfileBackingBean.contactFieldBlog)}">
+              <div class="flex-cell-full">
+                <label>#{locales['users.profile.contactInformationBlog']}</label>
+              </div>
+              <div class="flex-cell-full">
+                <a href="#{usersProfileBackingBean.contactFieldBlog}" target="_blank">#{usersProfileBackingBean.contactFieldBlog}</a>
+              </div>
+            </div>
+            
+            <div class="flex-row users-profile-contact-info" jsf:rendered="#{!empty(usersProfileBackingBean.contactFieldFacebook)}">
+              <div class="flex-cell-full">
+                <label>#{locales['users.profile.contactInformationFacebook']}</label>
+              </div>
+              <div class="flex-cell-full">
+                <a href="#{usersProfileBackingBean.contactFieldFacebook}" target="_blank">#{usersProfileBackingBean.contactFieldFacebook}</a>
+              </div>
+            </div>
+            
+            <div class="flex-row users-profile-contact-info" jsf:rendered="#{!empty(usersProfileBackingBean.contactFieldTwitter)}">
+              <div class="flex-cell-full">
+                <label>#{locales['users.profile.contactInformationTwitter']}</label>
+              </div>
+              <div class="flex-cell-full">
+                <a href="#{usersProfileBackingBean.contactFieldTwitter}" target="_blank">#{usersProfileBackingBean.contactFieldTwitter}</a>
+              </div>
+            </div>
+            
+            <div class="flex-row users-profile-contact-info" jsf:rendered="#{!empty(usersProfileBackingBean.contactFieldLinkedIn)}">
+              <div class="flex-cell-full">
+                <label>#{locales['users.profile.contactInformationLinkedIn']}</label>
+              </div>
+              <div class="flex-cell-full">
+                <a href="#{usersProfileBackingBean.contactFieldLinkedIn}" target="_blank">#{usersProfileBackingBean.contactFieldLinkedIn}</a>
+              </div>
+            </div>
+            
+            <div class="flex-row users-profile-contact-info" jsf:rendered="#{!empty(usersProfileBackingBean.contactFieldGooglePlus)}">
+              <div class="flex-cell-full">
+                <label>#{locales['users.profile.contactInformationGooglePlus']}</label>
+              </div>
+              <div class="flex-cell-full">
+                <a href="#{usersProfileBackingBean.contactFieldGooglePlus}" target="_blank">#{usersProfileBackingBean.contactFieldGooglePlus}</a>
+              </div>
+            </div>
+          </div>          
+        </div>
+       
+      </div>
+    </div>    
 
-      <h:panelGroup layout="block" styleClass="grid_4 omega">
-        <!-- Forum -->
-        
-        <h:panelGroup layout="block" styleClass="users-profile-forum-panel" rendered="#{usersProfileBackingBean.forumTotalPosts > 0}">
-          <h3>#{locales['users.profile.forumActivity']}</h3>
-          
-          <h:panelGroup layout="block" styleClass="users-profile-forum-activity">
-            <h:outputLabel value="#{locales['users.profile.forumTotalTopics']}" />
-            <h:panelGroup layout="block" styleClass="users-profile-forum-activity-total-posts">
-              #{usersProfileBackingBean.forumTotalPosts}
-            </h:panelGroup>
-          </h:panelGroup>
-          
-          <h:panelGroup layout="block" styleClass="users-profile-forum-activity">
-            <h:outputLabel value="#{locales['users.profile.forumLastMessageInTopic']}" />
-            <h:panelGroup layout="block" styleClass="users-profile-forum-activity-last-message-in-topic">
-              <h:outputLink value="#{request.contextPath}/forum/#{usersProfileBackingBean.forumLastMessageTopicUrl}">
-                #{usersProfileBackingBean.forumLastMessageTopic}
-              </h:outputLink>
-            </h:panelGroup>
-          </h:panelGroup>
-          
-          <h:panelGroup layout="block" styleClass="users-profile-forum-activity">
-            <h:outputLabel value="#{locales['users.profile.forumMostActiveInTopic']}" />
-            <h:panelGroup layout="block" styleClass="users-profile-forum-activity-most-active-in-topic">
-              <h:outputLink value="#{request.contextPath}/forum/#{usersProfileBackingBean.forumMostActiveInTopicUrl}">
-                #{usersProfileBackingBean.forumMostActiveInTopic}
-              </h:outputLink>
-            </h:panelGroup>
-          </h:panelGroup>
-          
-        </h:panelGroup>
-        
-        <!-- Contact Info -->
-        
-        <h:panelGroup layout="block" styleClass="users-profile-contact-info-panel" rendered="#{usersProfileBackingBean.hasContactInformation}">
-          <h3>#{locales['users.profile.contactInfo']}</h3>
-          
-          <h:panelGroup layout="block" rendered="#{!empty(usersProfileBackingBean.contactFieldHomePage)}" styleClass="users-profile-contact-info">
-            <h:outputLabel value="#{locales['users.profile.contactInformationHomePage']}" />
-            <div>
-              <h:outputLink value="#{usersProfileBackingBean.contactFieldHomePage}" target="_blank">#{usersProfileBackingBean.contactFieldHomePage}</h:outputLink>
-            </div>
-          </h:panelGroup>
-          
-          <h:panelGroup layout="block" rendered="#{!empty(usersProfileBackingBean.contactFieldBlog)}" styleClass="users-profile-contact-info">
-            <h:outputLabel value="#{locales['users.profile.contactInformationBlog']}" />
-            <div>
-              <h:outputLink value="#{usersProfileBackingBean.contactFieldBlog}" target="_blank">#{usersProfileBackingBean.contactFieldBlog}</h:outputLink>
-            </div>
-          </h:panelGroup>
-          
-          <h:panelGroup layout="block" rendered="#{!empty(usersProfileBackingBean.contactFieldFacebook)}" styleClass="users-profile-contact-info">
-            <h:outputLabel value="#{locales['users.profile.contactInformationFacebook']}" />
-            <div>
-              <h:outputLink value="#{usersProfileBackingBean.contactFieldFacebook}" target="_blank">#{usersProfileBackingBean.contactFieldFacebook}</h:outputLink>
-            </div>
-          </h:panelGroup>
+    <div class="flex-row">
+      <div class="flex-cell-full">
+      
+        <div class="flex-row">
+          <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full index-box no-margin-top no-margin-bottom">
+            
+            <div class="flex-row">
+              <div class="flex-cell-full no-margin-top">
+                <h3>#{locales['users.profile.gameLibraryPublications']}</h3>
+              </div>
+              
+              <div class="flex-cell-full publications">
+                <ui:repeat var="publication" value="#{usersProfileBackingBean.publishedPublications}">
+                  <div class="flex-row publication">
+                    <div class="flex-cell-full">
+                      <a href="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}" class="publication-image">
+                        <h:graphicImage value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?width=200"/>
+                      </a>
+                    
+                      <h4>
+                        <a jsf:outcome="/gamelibrary/publication.jsf?faces-redirect=true&amp;urlName=#{publication.urlName}">#{publication.name}</a>
+                      </h4>
+                      
+                      <div class="tags">
+                        <ui:repeat var="tag" value="#{usersProfileBackingBean.getPublicationTags(publication)}">
+                          <a jsf:outcome="/gamelibrary/taglist.jsf?tag=#{tag.text}" class="tag">#{tag.text}</a>
+                        </ui:repeat>
+                      </div>
+                      
+                      <div class="description">
+                        <h:outputText value="#{usersProfileBackingBean.replaceDescriptionLineBreaks(publication.description)}" escape="false"/>
+                      </div>
+                    </div>
+                  </div>
 
-          <h:panelGroup layout="block" rendered="#{!empty(usersProfileBackingBean.contactFieldTwitter)}" styleClass="users-profile-contact-info">
-            <h:outputLabel value="#{locales['users.profile.contactInformationTwitter']}" />
-            <div>
-              <h:outputLink value="#{usersProfileBackingBean.contactFieldTwitter}" target="_blank">#{usersProfileBackingBean.contactFieldTwitter}</h:outputLink>
+                  <!-- 
+                  <div class="flex-row">
+                    <div class="lg-flex-cell-10 lg-flex-cell-first md-flex-cell-10 md-flex-cell-first sm-flex-cell-full">
+                      <div class="flex-row">
+                        <div class="flex-cell-full">
+                          
+                        </div>
+                      </div>
+                      
+                      <div class="flex-row">
+                        <div class="flex-cell-full">
+                          <ui:repeat var="tag" value="#{usersProfileBackingBean.getPublicationTags(publication)}">
+                            <a jsf:outcome="/gamelibrary/taglist.jsf?tag=#{tag.text}" class="tag">#{tag.text}</a>
+                          </ui:repeat>
+                        </div>
+                      </div>
+                
+                      <div class="flex-row">
+                        <div class="flex-cell-full description">
+                          <h:outputText value="#{usersProfileBackingBean.replaceDescriptionLineBreaks(publication.description)}" escape="false"/>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="flex-cell-6 flex-cell-last flex-right">
+                    </div>
+                  </div>
+                   -->
+                </ui:repeat>   
+              </div>           
             </div>
-          </h:panelGroup>
-
-          <h:panelGroup layout="block" rendered="#{!empty(usersProfileBackingBean.contactFieldLinkedIn)}" styleClass="users-profile-contact-info">
-            <h:outputLabel value="#{locales['users.profile.contactInformationLinkedIn']}" />
-            <div>
-              <h:outputLink value="#{usersProfileBackingBean.contactFieldLinkedIn}" target="_blank">#{usersProfileBackingBean.contactFieldLinkedIn}</h:outputLink>
-            </div>
-          </h:panelGroup>
-
-          <h:panelGroup layout="block" rendered="#{!empty(usersProfileBackingBean.contactFieldGooglePlus)}" styleClass="users-profile-contact-info">
-            <h:outputLabel value="#{locales['users.profile.contactInformationGooglePlus']}" />
-            <div>
-              <h:outputLink value="#{usersProfileBackingBean.contactFieldGooglePlus}" target="_blank">#{usersProfileBackingBean.contactFieldGooglePlus}</h:outputLink>
-            </div>
-          </h:panelGroup>
           
-        </h:panelGroup>
-      </h:panelGroup>
+          </div>
+          
+          <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-full index-box no-margin-top no-margin-bottom" jsf:rendered="#{usersProfileBackingBean.forumTotalPosts > 0}">
+            <div class="flex-row forum-activity">
+              <div class="flex-cell-full no-margin-top">
+                <h3>#{locales['users.profile.forumActivity']}</h3>
+              </div>
+            </div>
+            
+            <div class="flex-row forum-activity">
+              <div class="flex-cell-full">
+                <label>#{locales['users.profile.forumTotalTopics']}</label>
+              </div>
+            </div>
 
-    </h:panelGroup>
+            <div class="flex-row forum-activity">
+              <div class="flex-cell-full">
+                #{usersProfileBackingBean.forumTotalPosts}
+              </div>
+            </div>
+            
+            <div class="flex-row forum-activity">
+              <div class="flex-cell-full">
+                <label>#{locales['users.profile.forumLastMessageInTopic']}</label>
+              </div>
+            </div>
+
+            <div class="flex-row forum-activity">
+              <div class="flex-cell-full">
+                <a jsf:value="/forum/forum.jsf?forumUrlName=#{usersProfileBackingBean.forumLastMessageTopicUrl}">
+                  #{usersProfileBackingBean.forumLastMessageTopic}
+                </a>
+              </div>
+            </div>
+            
+            <div class="flex-row forum-activity">
+              <div class="flex-cell-full">
+                <label>#{locales['users.profile.forumMostActiveInTopic']}</label>
+              </div>
+            </div>
+
+            <div class="flex-row forum-activity">
+              <div class="flex-cell-full">
+                <a jsf:value="/forum/forum.jsf?forumUrlName=#{usersProfileBackingBean.forumMostActiveInTopicUrl}">
+                  #{usersProfileBackingBean.forumMostActiveInTopic}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-row">
+      <div class="flex-cell-full">
+      
+        <div class="flex-row">
+          <div class="flex-cell-full index-box no-margin-top" jsf:rendered="#{not empty usersProfileBackingBean.organizerInEvents}">
+            
+            <div class="flex-row">
+              <div class="flex-cell-full no-margin-top">
+                <h3>#{locales['users.profile.illusionEvents']}</h3>
+              </div>
+              
+              <div class="flex-cell-full">
+                <ui:repeat var="event" value="#{usersProfileBackingBean.organizerInEvents}">
+                  <div class="flex-row event">
+                    <div class="flex-cell-full">
+                      <div class="flex-row">
+                        <div class="flex-cell-full">
+                          <h4>
+                            <a jsf:outcome="/illusion/event.jsf?urlName=#{event.urlName}">#{event.name}</a>
+                          </h4>
+                        </div>
+                      </div>
+                      
+                      <div class="flex-row">
+                        <div class="flex-cell-full date">
+                          <h:outputFormat value="#{locales['users.profile.illusionEventDateRange']}" rendered="#{event.endDate ne null}">
+                            <f:param value="#{event.startDate}"/>
+                            <f:param value="#{event.endDate}"/>
+                          </h:outputFormat>
+                          
+                          <h:outputFormat value="#{locales['users.profile.illusionEventDateSingle']}" rendered="#{event.endDate eq null}">
+                            <f:param value="#{event.startDate}"/>
+                          </h:outputFormat>
+                        </div>
+                      </div>
+                    
+                      <div class="flex-row">
+                        <div class="flex-cell-full description">
+                          <div title="#{event.description}">#{event.description.length() > 200 ? event.description.substring(0, 200).concat('...') : event.description}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                
+                </ui:repeat>
+              </div>
+              
+            </div>
+          
+          </div>
+        </div>
+      </div>
+    </div>
 
   </ui:define>
 

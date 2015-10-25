@@ -1,0 +1,58 @@
+@import "vars";
+@import "compass";
+
+@mixin screen-modifier ($name, $prefix) {
+  @for $i from 1 through $grid-columns {
+    .#{$prefix}flex-cell-#{$i} {
+      flex-basis: auto;
+      width: calc(#{100% / $grid-columns * $i} - #{$grid-margin});
+      &.#{$prefix}flex-cell-first {
+        flex-basis: auto;
+        width: calc(#{100% / $grid-columns * $i} - #{$grid-margin / 2});
+      } 
+      
+      &.#{$prefix}flex-cell-last {
+        flex-basis: auto;
+        width: calc(#{100% / $grid-columns * $i} - #{$grid-margin / 2});
+      }
+    }
+  }
+  
+  @for $i from 1 through 12 {
+    .#{$prefix}flex-cell12-#{$i} {
+      flex-basis: auto;
+      width: calc(#{100% / 12 * $i} - #{$grid-margin});
+      
+      &.#{$prefix}flex-cell12-first {
+        flex-basis: auto;
+        width: calc(#{100% / 12 * $i} - #{$grid-margin / 2});
+      } 
+      
+      &.#{$prefix}flex-cell12-last {
+        flex-basis: auto;
+        width: calc(#{100% / 12 * $i} - #{$grid-margin / 2});
+      }
+    }
+  }
+  .#{$prefix}flex-cell-full {
+    flex-basis: auto;
+    width: 100%;
+  }
+}
+
+@media screen {  
+  @include screen-modifier("Default", '');
+}
+
+@media screen and (max-width: 767px) {
+  @include screen-modifier("Small", 'sm-');
+}
+
+@media screen and (min-width: 768px) and (max-width: 959px) {
+  @include screen-modifier("Medium", 'md-');
+}
+
+@media screen and (min-width: 960px) {
+  @include screen-modifier("Large", 'lg-');
+}
+

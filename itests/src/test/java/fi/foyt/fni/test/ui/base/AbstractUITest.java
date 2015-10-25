@@ -1,6 +1,8 @@
 package fi.foyt.fni.test.ui.base;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -12,12 +14,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -61,9 +66,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     capabilities.setCapability("video-upload-on-pass", false);
     capabilities.setCapability("capture-html", true);
     capabilities.setCapability("timeZone", "Universal");
-    capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-    capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"));
-    
+    capabilities.setCapability("seleniumVersion", getSeleniumVersion());
+    capabilities.setCapability("commandTimeout", 600);
+    // Temporary settings to try whether tests will work on changes on Sauce labs side
+    capabilities.setCapability("chromedriverVersion", "2.20");
+    capabilities.setCapability("iedriverVersion", "2.48.0");
+        
     if (getSauceTunnelId() != null) {
       capabilities.setCapability("tunnel-identifier", getSauceTunnelId());
     }
@@ -73,6 +81,28 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   
   protected void loginInternal(String email, String password) {
     loginInternal(getWebDriver(), email, password);
+  }
+  
+  protected void loginInternal(RemoteWebDriver driver, String email, String password) {
+    String loginUrl = getAppUrl(true) + "/login/";
+    if (!StringUtils.startsWith(driver.getCurrentUrl(), loginUrl)) {
+      driver.get(loginUrl);
+    }
+    
+    waitForSelectorPresent(".user-login-email");
+
+    if (!findElementsBySelector("#cookiesdirective").isEmpty()) {
+      driver.manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
+      driver.get(loginUrl);
+    }
+
+    waitAndSendKeys(".user-login-email", email);
+    waitAndSendKeys(".user-login-password", password);
+    waitAndClick(".user-login-button");
+    waitForSelectorPresent(".menu-tools-account");
+
+    assertSelectorPresent(".menu-tools-account");
+    assertSelectorNotPresent(".menu-tools-login");
   }
 
   protected void loginFacebook() {
@@ -84,6 +114,8 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     typeSelectorInputValue("#email", getFacebookUsername());
     typeSelectorInputValue("#pass", getFacebookPassword());
     clickSelector("*[name='login']");
+    
+    waitForSelectorPresent(".menu-tools-account");
     assertLoggedIn();
   }
 
@@ -109,7 +141,9 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void logout() {
-    logout(getWebDriver());
+    navigate("/logout");
+    assertSelectorNotPresent(".menu-tools-account");
+    assertSelectorPresent(".menu-tools-login");
   }
 
   protected void assertLoggedIn() {
@@ -125,9 +159,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void waitSelectorToBeClickable(final String selector) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
-        List<WebElement> elements = driver.findElements(By.cssSelector(selector));
-        if (elements.size() > 0) {
-          return ExpectedConditions.elementToBeClickable(elements.get(0)).apply(driver) != null;
+        try {
+          List<WebElement> elements = findElementsBySelector(selector);
+          if (elements.size() > 0) {
+            return ExpectedConditions.elementToBeClickable(elements.get(0)).apply(driver) != null;
+          }
+        } catch (StaleElementReferenceException e) {
         }
         
         return false;
@@ -146,9 +183,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void waitForInputValueNotBlank(final String selector) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
-        List<WebElement> elements = driver.findElements(By.cssSelector(selector));
-        if (elements.size() > 0) {
-          return StringUtils.isNotBlank(elements.get(0).getAttribute("value"));
+        try {
+          List<WebElement> elements = driver.findElements(By.cssSelector(selector));
+          if (elements.size() > 0) {
+            return StringUtils.isNotBlank(elements.get(0).getAttribute("value"));
+          }
+        } catch (StaleElementReferenceException e) {
         }
         
         return false;
@@ -157,19 +197,21 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void waitForSelectorNotPresent(final String selector) {
-    
-    new WebDriverWait(getWebDriver(), 60).until(
-      new ExpectedCondition<List<WebElement>>() {
-        
-        @Override
-        public List<WebElement> apply(WebDriver driver) {
-          List<WebElement> elements = driver.findElements(By.cssSelector(selector));
-          return elements.size() > 0 ? elements : null;
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        try {
+          List<WebElement> elements = findElementsBySelector(selector);
+          if (elements.isEmpty()) {
+            return true;
+          }
+        } catch (StaleElementReferenceException e) {
         }
         
+        return false;
       }
-    );
+    });
   }
+  
   
   protected void waitForSelectorPresent(final String selector) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
@@ -196,21 +238,40 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected List<WebElement> findElementsBySelector(String selector) {
-    return getWebDriver().findElementsByCssSelector(selector);
+    try {
+      return getWebDriver().findElementsByCssSelector(selector);
+    } catch (NoSuchElementException e) {
+      return Collections.emptyList();
+    }
+  }
+  
+  protected void assertSelectorText(String selector, String text) {
+    assertSelectorText(selector, text, false, false);
+  }
+  
+  protected void assertSelectorText(String selector, String text, boolean ignoreCase) {
+    assertSelectorText(selector, text, ignoreCase, false);
+  }
+  
+  protected void assertSelectorText(String selector, String text, boolean ignoreCase, boolean trim) {
+    WebElement element = findElementBySelector(selector);
+    
+    String elementText = element.getText();
+    if (trim) {
+      elementText = StringUtils.trim(elementText);
+    }
+    
+    if (ignoreCase) {
+      assertTrue(String.format("Expected %s but was %s", text, elementText), text.equalsIgnoreCase(elementText));
+    } else {
+      assertTrue(String.format("Expected %s but was %s", text, elementText), text.equals(elementText));
+    }
   }
 
   protected void assertSelectorTextIgnoreCase(String selector, String text) {
-    assertEquals(toLowerCase(text), toLowerCase((findElementBySelector(selector)).getText()));
+    assertSelectorText(selector, text, true);
   }
   
-  private String toLowerCase(String text) {
-    if (text == null) {
-      return text;
-    }
-    
-    return text.toLowerCase();
-  }
-
   protected void waitForUrlMatches(String regex) {
     waitForUrlMatches(getWebDriver(), regex);
   }
@@ -220,21 +281,34 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void waitForSelectorText(final String selector, final String text) {
-    waitForSelectorText(selector, text, false);
+    waitForSelectorText(selector, text, false, false);
+  }
+
+  protected void waitForSelectorText(final String selector, final String text, boolean ignoreCase) {
+    waitForSelectorText(selector, text, ignoreCase, false);
   }
   
-  protected void waitForSelectorText(final String selector, final String text, final boolean ignoreCase) {
+  protected void waitForSelectorText(final String selector, final String text, final boolean ignoreCase, final boolean trim) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
         try {
-          if (ignoreCase) {
-            return text.equalsIgnoreCase(driver.findElement(By.cssSelector(selector)).getText());
-          } else {
-            return text.equals(driver.findElement(By.cssSelector(selector)).getText());
+          WebElement element = findElementBySelector(selector);
+          if (element != null) {
+            String elementText = element.getText();
+            if (trim) {
+              elementText = StringUtils.trim(elementText);
+            }
+            
+            if (ignoreCase) {
+              return text.equalsIgnoreCase(elementText);
+            } else {
+              return text.equals(elementText);
+            }
           }
-        } catch (StaleElementReferenceException e) {
-          return false;
+        } catch (Exception e) {
         }
+        
+        return false;
       }
     }); 
   }
@@ -243,12 +317,17 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     assertTrue("url '" + getWebDriver().getCurrentUrl() + "' does not match " + regex, getWebDriver().getCurrentUrl().matches(regex));
   }
 
+  protected void waitTitle(String title) {
+    new WebDriverWait(getWebDriver(), 60)
+      .until(ExpectedConditions.titleIs(title));
+  }
+
   protected void waitForNotification() {
     waitForNotification(getWebDriver());
   }
 
   protected void assertNotification(String serverity, String text) {
-    assertNotification(getWebDriver(), serverity, text);
+    assertSelectorText(".notification-" + serverity, text, true, true);
   }
   
   protected void assertNotificationStartsWith(String serverity, String text) {
@@ -267,30 +346,48 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     testLoginRequired(getWebDriver(), path);
   }
   
-  protected void testAccessDenied(String path) throws UnsupportedEncodingException {
-    testAccessDenied(getWebDriver(), path);
+  protected void testAccessDenied(String path) {
+    testAccessDenied(path, false);
   }
   
+  protected void testAccessDenied(String path, boolean secure) {
+    navigate(path, secure);
+    waitTitle("Access Denied!");
+    assertEquals("Access Denied!", getWebDriver().getTitle());
+  }
+
   protected void testTitle(String view, String expectedTitle) {
-    testTitle(getWebDriver(), view, expectedTitle);
+    testTitle(view, expectedTitle, false);
+  }
+  
+  protected void testTitle(String view, String expectedTitle, boolean secure) {
+    navigate(view, secure);
+    testTitle(expectedTitle);
   }
 
   protected void testTitle(String expected) {
-    assertEquals(expected, getWebDriver().getTitle());
+    waitTitle(expected);
+    assertTitle(expected);
   }
   
   protected void assertSelectorPresent(String selector) {
-    assertTrue("Element not present '" + selector + "'", getWebDriver().findElementsByCssSelector(selector).size() > 0);
+    assertTrue("Element not present '" + selector + "'", findElementsBySelector(selector).size() > 0);
   }
   
   protected void assertSelectorEnabled(String selector) {
-    List<WebElement> elements = getWebDriver().findElementsByCssSelector(selector);
+    List<WebElement> elements = findElementsBySelector(selector);
     assertTrue("Element not present '" + selector + "'", elements.size() > 0);
     assertTrue("Element not enabled '" + selector + "'", elements.get(0).isEnabled());
   }
+  
+  protected void assertSelectorDisabled(String selector) {
+    List<WebElement> elements = findElementsBySelector(selector);
+    assertTrue("Element not present '" + selector + "'", elements.size() > 0);
+    assertFalse("Element not disabled '" + selector + "'", elements.get(0).isEnabled());
+  }
 
   protected void assertSelectorNotPresent(String selector) {
-    assertTrue("Element present '" + selector + "'", getWebDriver().findElementsByCssSelector(selector).size() == 0);
+    assertTrue("Element present '" + selector + "'", findElementsBySelector(selector).size() == 0);
   }
 
   protected void assertSelectorVisible(String selector) {
@@ -298,7 +395,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void assertSelectorNotVisible(String selector) {
-    if (getWebDriver().findElementsByCssSelector(selector).size() == 0) {
+    if (findElementsBySelector(selector).size() == 0) {
       return;
     }
     
@@ -314,11 +411,15 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void assertSelectorCount(String selector, int expected) {
-    assertEquals(expected, getWebDriver().findElementsByCssSelector(selector).size());
+    assertEquals(expected, findElementsBySelector(selector).size());
   }
 
   protected void assertSelectorValue(String selector, String expected) {
     assertEquals(expected, findElementBySelector(selector).getAttribute("value"));
+  }
+
+  protected void assertSelectorValueNot(String selector, String expected) {
+    assertNotEquals(expected, findElementBySelector(selector).getAttribute("value"));
   }
 
   protected void assertTitle(String expected) {
@@ -337,6 +438,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     getWebDriver().findElementByCssSelector(selector).click();
   }
   
+  protected void scrollWaitAndClick(String selector) {
+    scrollIntoView(selector);
+    waitSelectorToBeClickable(selector);
+    clickSelector(selector);
+  }
+  
   protected void waitAndClick(String selector) {
     waitSelectorToBeClickable(selector);
     clickSelector(selector);
@@ -346,13 +453,21 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     waitForSelectorVisible(selector);
     sendKeysSelector(selector, keysToSend);
   }
+  
+  protected void scrollWaitAndType(String selector, String keysToSend) {
+    scrollIntoView(selector);
+    waitForSelectorVisible(selector);
+    sendKeysSelector(selector, keysToSend);
+  }
 
   protected void sendKeysSelector(String selector, String keysToSend) {
     getWebDriver().findElementByCssSelector(selector).sendKeys(keysToSend);
   }
   
   protected void testNotFound(String path) {
-    testNotFound(getWebDriver(), path);
+    navigate(path);
+    waitTitle("Page Not Found!");
+    assertEquals("Page Not Found!", getWebDriver().getTitle());
   }
   
   protected void clearSelectorInput(String selector) {
@@ -385,14 +500,32 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     executeScript(String.format("window.scrollBy(%d, %d)",  x, y));
   }
   
+  protected void scrollIntoView(String selector) {
+    ((JavascriptExecutor) getWebDriver()).executeScript(String.format("document.querySelectorAll('%s').item(0).scrollIntoView(true);", selector));
+  }
+  
   protected void executeScript(String script) {
     ((JavascriptExecutor) getWebDriver()).executeScript(script, "");
   }
   
   protected void waitForPageLoad() {
+    try {
+      new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+        public Boolean apply(WebDriver driver) {
+          return !((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
+        }
+      });
+    } catch (Exception e) {
+      
+    }
+    
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
-        return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
+        try {
+          return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
+        } catch (Exception e) {
+          return false;
+        }
       }
     });
   }

@@ -9,9 +9,19 @@ public enum SystemSettingKey {
 	SYSTEM_USER_EMAIL,
 	SYSTEM_MAILER_NAME,
 	SYSTEM_MAILER_MAIL,
+	
+	/* Google Analytics */
+	
+	GOOGLE_ANALYTICS_TRACKING_ID, 
+	
+	/* Piwik */
+	
 	PIWIK_URL,
   PIWIK_SITEID,
-	USERVOICE_CLIENT_KEY,
+	
+  /* UserVoice */
+  
+  USERVOICE_CLIENT_KEY,
 	
 	/* Pdf Service */
 

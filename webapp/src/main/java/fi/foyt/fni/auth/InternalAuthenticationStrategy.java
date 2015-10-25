@@ -3,14 +3,11 @@ package fi.foyt.fni.auth;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.enterprise.context.RequestScoped;
-
 import org.apache.commons.codec.digest.DigestUtils;
 
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.users.UserToken;
 
-@RequestScoped
 public class InternalAuthenticationStrategy extends AbstractInternalAuthenticationStrategy {
 
   @Override

@@ -8,12 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
+import java.io.Serializable;
 
 @SessionScoped
-@Stateful
-public class DebugTimerResults {
+public class DebugTimerResults implements Serializable {
+
+  private static final long serialVersionUID = 7694312148885572882L;
 
   @PostConstruct
   public void init() {
