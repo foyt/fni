@@ -7,7 +7,7 @@
   <parent>
     <groupId>fi.foyt.fni</groupId>
     <artifactId>parent</artifactId>
-    <version>3.2.29-SNAPSHOT</version>
+    <version>3.2.29</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   
@@ -202,7 +202,7 @@
         <it.port.https>8443</it.port.https>
         <it.smtp.port>3025</it.smtp.port>
         <it.host>test.forgeandillusion.net</it.host>
-        <it.ctx></it.ctx>
+        <it.ctx />
         <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
         <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE</it.jdbc.url>
         <it.jdbc.jndi>java:/jboss/datasources/fni</it.jdbc.jndi>
@@ -634,7 +634,7 @@
         <it.port.https>8443</it.port.https>
         <it.smtp.port>3025</it.smtp.port>
         <it.host>test.forgeandillusion.net</it.host>
-        <it.ctx></it.ctx>
+        <it.ctx />
         <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
         <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE</it.jdbc.url>
         <it.jdbc.jndi>java:/jboss/datasources/fni</it.jdbc.jndi>
@@ -1063,7 +1063,7 @@
         <it.port.https>8443</it.port.https>
         <it.smtp.port>3025</it.smtp.port>
         <it.host>test.forgeandillusion.net</it.host>
-        <it.ctx></it.ctx>
+        <it.ctx />
         <it.smtp.port>3025</it.smtp.port>
         <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
         <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE</it.jdbc.url>
@@ -1077,7 +1077,7 @@
         <it.truststorepass>truststorepass</it.truststorepass>
         <it.properties.file>src/test/resources/it.properties</it.properties.file>
         <it.browsers>chrome:45:Linux</it.browsers>
-        <it.package></it.package>
+        <it.package />
         <it.tests>fi/foyt/fni/test/ui/sauce/${it.package}/*IT.java</it.tests>
       </properties>
       
@@ -1527,7 +1527,7 @@
         <it.port.https>8443</it.port.https>
         <it.smtp.port>3025</it.smtp.port>
         <it.host>test.forgeandillusion.net</it.host>
-        <it.ctx></it.ctx>
+        <it.ctx />
         <it.smtp.port>3025</it.smtp.port>
         <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
         <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE</it.jdbc.url>
@@ -1541,7 +1541,7 @@
         <it.truststorepass>truststorepass</it.truststorepass>
         <it.properties.file>src/test/resources/it-travis.properties</it.properties.file>
         <it.browsers>chrome:45:Linux</it.browsers>
-        <it.package></it.package>
+        <it.package />
         <it.tests>fi/foyt/fni/test/ui/sauce/${it.package}/*IT.java</it.tests>
       </properties>
       
