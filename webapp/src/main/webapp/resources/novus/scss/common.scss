@@ -217,6 +217,20 @@ $header-text-color-hover: #000;
   font-size: 14px;
 }
 
+/* Body */
+
+body {
+  min-height: 100vh;
+  @include display-flex;
+  @include flex-direction(column);
+}
+
+/* Main */
+
+main {
+  @include flex-grow(1);
+}
+
 /* Footer */
 
 body > footer {
