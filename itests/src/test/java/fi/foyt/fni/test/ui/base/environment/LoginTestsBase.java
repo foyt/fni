@@ -10,8 +10,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
@@ -78,14 +76,13 @@ public class LoginTestsBase extends AbstractUITest {
   public void testRegisterPasswordMismatch() {
     acceptCookieDirective();
     navigate("/login/", true);
-    waitTitle("Login");
     
-    getWebDriver().findElement(By.cssSelector(".user-register-first-name")).sendKeys("Ärri");
-    getWebDriver().findElement(By.cssSelector(".user-register-last-name")).sendKeys("Pörri");
-    getWebDriver().findElement(By.cssSelector(".user-register-email")).sendKeys("register.tester@foyt.fi");
-    getWebDriver().findElement(By.cssSelector(".user-register-password1")).sendKeys("qwe");
-    getWebDriver().findElement(By.cssSelector(".user-register-password2")).sendKeys("asd");
-    getWebDriver().findElement(By.cssSelector(".user-register-button")).click();
+    waitAndSendKeys(".user-register-first-name", "Ärri");
+    waitAndSendKeys(".user-register-last-name", "Pörri");
+    waitAndSendKeys(".user-register-email", "register.tester@foyt.fi");
+    waitAndSendKeys(".user-register-password1", "qwe");
+    waitAndSendKeys(".user-register-password2", "asd");
+    waitAndClick(".user-register-button");
     
     waitForNotification(getWebDriver());
     assertNotification("warning", "Passwords Do Not Match");
@@ -97,14 +94,14 @@ public class LoginTestsBase extends AbstractUITest {
     
     GreenMail greenMail = startSmtpServer();
     try {
-      getWebDriver().get(getAppUrl(true) + "/login/");
+      navigate("/login/", true);
       
-      getWebDriver().findElement(By.cssSelector(".user-register-first-name")).sendKeys("Ärri");
-      getWebDriver().findElement(By.cssSelector(".user-register-last-name")).sendKeys("Pörri");
-      getWebDriver().findElement(By.cssSelector(".user-register-email")).sendKeys("register.tester@foyt.fi");
-      getWebDriver().findElement(By.cssSelector(".user-register-password1")).sendKeys("qwe");
-      getWebDriver().findElement(By.cssSelector(".user-register-password2")).sendKeys("qwe");
-      getWebDriver().findElement(By.cssSelector(".user-register-button")).click();
+      waitAndSendKeys(".user-register-first-name", "Ärri");
+      waitAndSendKeys(".user-register-last-name", "Pörri");
+      waitAndSendKeys(".user-register-email", "register.tester@foyt.fi");
+      waitAndSendKeys(".user-register-password1", "qwe");
+      waitAndSendKeys(".user-register-password2", "qwe");
+      waitAndClick(".user-register-button");
       
       waitForNotification(getWebDriver());
       assertNotificationStartsWith(getWebDriver(), "info", "Verification Email Has Been Sent");
@@ -123,7 +120,7 @@ public class LoginTestsBase extends AbstractUITest {
   public void testResetPasswordIncorrectEmail() {
     navigate("/login/", true);
     waitTitle("Login");
-    clickSelector(".users-login-forgot-password-link");
+    waitAndClick(".users-login-forgot-password-link");
     waitForSelectorPresent(".ui-dialog");
     assertSelectorText(".ui-dialog-title", "Forgot password", true, true);
     assertSelectorText(".users-forgot-password-dialog p", "Enter your email address to the field below and we will send you a password reset link", true, true);
@@ -139,15 +136,14 @@ public class LoginTestsBase extends AbstractUITest {
     navigate("/login/", true);
     waitTitle("Login");
 
-    getWebDriver().findElement(By.cssSelector(".users-login-forgot-password-link")).click();
-
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".ui-dialog")));
-
+    waitAndClick(".users-login-forgot-password-link");
+    waitForSelectorPresent(".ui-dialog");
+    
     assertEquals("Forgot password", getWebDriver().findElement(By.cssSelector(".ui-dialog-title")).getText());
     assertEquals("Enter your email address to the field below and we will send you a password reset link", getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog p")).getText());
     
-    getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog input[name=\"email\"]")).sendKeys("invalidaddress");
-    getWebDriver().findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
+    waitAndSendKeys(".users-forgot-password-dialog input[name=\"email\"]", "invalidaddress");
+    waitAndClick(".ui-dialog-buttonpane .ok-button");
     
     waitForNotification(getWebDriver());
     assertNotification("warning", "User Could Not Be Found By Given E-mail");
@@ -161,8 +157,7 @@ public class LoginTestsBase extends AbstractUITest {
       navigate("/login/", true);
       waitTitle("Login");
       waitAndClick(".users-login-forgot-password-link");
-
-      new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".ui-dialog")));
+      waitForSelectorPresent(".ui-dialog");
 
       assertEquals("Forgot password", getWebDriver().findElement(By.cssSelector(".ui-dialog-title")).getText());
       assertEquals("Enter your email address to the field below and we will send you a password reset link", getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog p")).getText());
