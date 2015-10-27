@@ -399,7 +399,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
       return;
     }
     
-    assertTrue("Element not visible '" + selector + "'", !getWebDriver().findElementByCssSelector(selector).isDisplayed());
+    assertTrue("Element not visible '" + selector + "'", !findElementBySelector(selector).isDisplayed());
   }
   
   protected void assertSelectorClickable(String selector) {
