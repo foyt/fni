@@ -67,18 +67,6 @@
           var PIWIK_SITEID = #{trackingBackingBean.piwikSiteId};
         </script>
       </ui:fragment>
-
-      <!-- Google Analytics -->
-      <ui:fragment rendered="#{trackingBackingBean.googleAnalyticsEnabled}">
-        <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-          ga('create', '#{trackingBackingBean.googleAnalyticsId}', 'auto');
-          ga('send', 'pageview');
-        </script>
-      </ui:fragment>
       
       <h:outputScript name="/scripts/gui/notifications.js"></h:outputScript>
       <h:outputScript name="/scripts/gui/messages.js"></h:outputScript>
@@ -109,13 +97,16 @@
       <ui:insert name="footer">
         <footer class="hide_on_mobile sm-flex-hide">
           <div class="flex-grid">
-            <div class="container_16 flex-row">
-              <div class="grid_8 flex-cell-8 no-margin-top no-margin-bottom">
-                <div class="footer-logo-oo"></div>
+            <div class="flex-row flex-align-items-center footer-logos">
+            
+              <div class="flex-cell-8 flex-right no-margin-top no-margin-bottom flex-cell-first">
+                <div class="footer-logo footer-logo-foyt"></div>
               </div>
-              <div class="grid_8 flex-cell-8 no-margin-top no-margin-bottom">
-                <div class="footer-logo-foyt"></div>
+              
+              <div class="flex-cell-8 flex-left no-margin-top no-margin-bottom flex-cell-last">
+                <div class="footer-logo footer-logo-oo"></div>
               </div>
+              
             </div>
           </div>
         </footer>
@@ -129,6 +120,19 @@
       <ui:fragment rendered="#{piwikBackingBean.hasPiwikUrl}">
         <noscript><p><img src="//#{piwikBackingBean.piwikUrl}/piwik.php?idsite=#{piwikBackingBean.piwikSiteId}" style="border:0" alt="" /></p></noscript>
       </ui:fragment>
+      
+      <!-- Google Analytics -->
+      <ui:fragment rendered="#{trackingBackingBean.googleAnalyticsEnabled}">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+          ga('create', '#{trackingBackingBean.googleAnalyticsId}', 'auto');
+          ga('send', 'pageview');
+        </script>
+      </ui:fragment>
+      
     </h:body>
   </f:view>
 </html>

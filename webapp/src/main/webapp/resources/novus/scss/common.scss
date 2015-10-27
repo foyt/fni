@@ -239,20 +239,33 @@ body > footer {
   margin-top: 100px;
 }
 
-.footer-logo-foyt {
-  margin-top: 23px;
-  @include background-image(url('#' + '{resource["novus:gfx/layout/logo-foyt.png"]}'));
-  width: 151px;
-  height: 40px;
-  display: block;
+.footer-logos {
+  height: 86px;
+}
+
+.footer-logo {
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: inline-block;
+  width: 100%;
 }
 
 .footer-logo-oo {
-  margin-top: 13px;
-  @include background-image(url('#' + '{resource["novus:gfx/layout/logo-oo.png"]}'));
-  width: 309px;
-  height: 60px;
-  display: block;
+  @include background-image (url("/theme/gfx/layout/logo-oo.svg"));
+  min-height: 70px;
+  max-height: 100%;
+  width: 57px;
+  max-width: 100%;
+  margin-left: 20px;
+}
+
+.footer-logo-foyt {
+  @include background-image (url("/theme/gfx/layout/logo-foyt.svg"));
+  min-height: 50px;
+  max-height: 100%;
+  width: 188px;
+  max-width: 100%;
+  margin-right: 20px;
 }
 
 /* jQuery ui */
