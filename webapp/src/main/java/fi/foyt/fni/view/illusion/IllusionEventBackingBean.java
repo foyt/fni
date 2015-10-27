@@ -116,14 +116,7 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
     
     IllusionEventDocument indexDocument = illusionEventController.findByFolderAndDocumentType(folder, IllusionEventDocumentType.INDEX);
     if (indexDocument != null) {
-      try {
-        FileData indexData = materialController.getMaterialData(null, null, indexDocument);
-        if (indexData != null) {
-          indexText = new String(indexData.getData(), "UTF-8");
-        }
-      } catch (IOException | GeneralSecurityException e) {
-        logger.log(Level.WARNING, "Could not retreive event index text", e);
-      }
+      indexText = indexDocument.getData();
     }
 
     IllusionEventJoinMode joinMode = illusionEvent.getJoinMode();
