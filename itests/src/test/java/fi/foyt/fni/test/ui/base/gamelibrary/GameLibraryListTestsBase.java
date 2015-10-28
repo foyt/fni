@@ -1,7 +1,6 @@
 package fi.foyt.fni.test.ui.base.gamelibrary;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.UnsupportedEncodingException;
@@ -254,9 +253,9 @@ public class GameLibraryListTestsBase extends AbstractUITest {
 
   private void assertShareButtonsHidden(RemoteWebDriver driver, String publicationSelector) {
     new WebDriverWait(getWebDriver(), 10).until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-twitter")));
-    assertFalse(getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-twitter")).isDisplayed());
-    assertFalse(getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-facebook")).isDisplayed());
-    assertFalse(getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-share-button .entypo-gplus")).isDisplayed());
+    assertSelectorNotVisible(String.format("%s .gamelibrary-publication-share-button .entypo-twitter", publicationSelector));
+    assertSelectorNotVisible(String.format("%s .gamelibrary-publication-share-button .entypo-facebook", publicationSelector));
+    assertSelectorNotVisible(String.format("%s .gamelibrary-publication-share-button .entypo-gplus", publicationSelector));
   }
 
   private void assertShareButtonsVisible(RemoteWebDriver driver, String publicationSelector) {
