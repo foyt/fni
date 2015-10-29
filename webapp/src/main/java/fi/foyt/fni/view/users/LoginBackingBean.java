@@ -1,7 +1,6 @@
 package fi.foyt.fni.view.users;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,6 +23,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
@@ -41,6 +41,7 @@ import fi.foyt.fni.auth.InvalidCredentialsException;
 import fi.foyt.fni.auth.MultipleEmailAccountsException;
 import fi.foyt.fni.auth.OAuthAuthenticationStrategy;
 import fi.foyt.fni.auth.UserNotConfirmedException;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
@@ -95,24 +96,34 @@ public class LoginBackingBean {
 	private Mailer mailer;
 
   @Inject
+	private NavigationController navigationController;
+
+  @Inject
   private HttpServletRequest request;
 	
 	@RequestAction
 	@Deferred
-	public void init() throws UnsupportedEncodingException {
-	  if (StringUtils.isNotBlank(redirectUrl)) {
-	    sessionController.setRedirectUrl(redirectUrl);
-	  }
-	  
-	  if (StringUtils.isNotBlank(loginMethod)) {
-	    AuthSource authSource = AuthSource.valueOf(loginMethod);
-	    if (authSource != null) {
-	      handleExternalLogin(authSource);
-	    }
-	  } else {
-	    if (!systemSettingsController.getSiteHost().equals(request.getServerName())) {
-        handleExternalLogin(AuthSource.ILLUSION_INTERNAL);
-	    }
+	public String init() {
+	  try {
+  	  if (StringUtils.isNotBlank(redirectUrl)) {
+  	    sessionController.setRedirectUrl(redirectUrl);
+  	  }
+  	  
+  	  if (StringUtils.isNotBlank(loginMethod)) {
+  	    AuthSource authSource = EnumUtils.getEnum(AuthSource.class, loginMethod);
+  	    if (authSource != null) {
+  	      handleExternalLogin(authSource);
+  	    }
+  	  } else {
+  	    if (!systemSettingsController.getSiteHost().equals(request.getServerName())) {
+          handleExternalLogin(AuthSource.ILLUSION_INTERNAL);
+  	    }
+  	  }
+      
+      return null;
+	  } catch (Exception e) {
+	    logger.log(Level.SEVERE, "Error occurred while initalizing LoginBackingBean", e);
+	    return navigationController.internalError();
 	  }
 	}
 
