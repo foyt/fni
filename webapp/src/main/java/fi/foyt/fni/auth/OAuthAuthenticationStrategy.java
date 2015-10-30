@@ -69,16 +69,25 @@ public abstract class OAuthAuthenticationStrategy extends AuthenticationStrategy
   
 	@Override
   public UserToken accessToken(Locale locale, Map<String, String[]> parameters) throws MultipleEmailAccountsException, EmailDoesNotMatchLoggedUserException, IdentityBelongsToAnotherUserException, ExternalLoginFailedException {
-    Token requestToken = sessionController.getLoginRequestToken();
-    String[] scopes = sessionController.getLoginScopes();
-    sessionController.setLoginRequestToken(null);
-    sessionController.setLoginScopes(null);
-    
-    OAuthService service = getOAuthService(scopes);
-    Verifier verifier = new Verifier(getVerifier(parameters));
-    Token accessToken = service.getAccessToken(requestToken, verifier);
-    
-    return handleLogin(locale, service, accessToken, scopes);
+    try {
+  	  Token requestToken = sessionController.getLoginRequestToken();
+      String[] scopes = sessionController.getLoginScopes();
+      sessionController.setLoginRequestToken(null);
+      sessionController.setLoginScopes(null);
+      
+      OAuthService service = getOAuthService(scopes);
+      String verifierValue = getVerifier(parameters);
+      if (StringUtils.isBlank(verifierValue)) {
+        return null;
+      }
+      
+      Verifier verifier = new Verifier(verifierValue);
+      Token accessToken = service.getAccessToken(requestToken, verifier);
+      
+      return handleLogin(locale, service, accessToken, scopes);
+    } catch (Exception e) {
+      throw new ExternalLoginFailedException(e);
+    }
   }
   
   protected abstract String getVerifier(Map<String, String[]> parameters);
