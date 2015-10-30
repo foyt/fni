@@ -20,9 +20,6 @@
     
     <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/forge-character-sheets.css"/>
-    <style type="text/css">
-    .CodeMirror {border-top: 1px solid #888; border-bottom: 1px solid #888;}
-    </style>
   </ui:define>
   
   <ui:define name="view-scripts">
@@ -42,6 +39,8 @@
 		<script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.6.0/mode/javascript/javascript.min.js"></script>
 		<script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.6.0/mode/css/css.min.js"></script>
 		<script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.6.0/mode/htmlmixed/htmlmixed.min.js"></script>
+    
+    <h:outputScript name="scripts/gui/code-mirror.js"/>
     <h:outputScript name="scripts/gui/forge-character-sheets.js"/>
   </ui:define>
 
