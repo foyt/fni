@@ -5,6 +5,7 @@
     options: {
       lineNumbers: true,
       foldGutter: true,
+      lineWrapping: false,
       gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
     },
     _create : function() {
@@ -13,7 +14,8 @@
         extraKeys: {"Ctrl-Space": "autocomplete"},
         lineNumbers: this.options.lineNumbers,
         foldGutter: this.options.foldGutter,
-        gutters: this.options.gutters
+        gutters: this.options.gutters,
+        lineWrapping: this.options.lineWrapping
       });
 
       this._editor.on("change", $.proxy(function() {

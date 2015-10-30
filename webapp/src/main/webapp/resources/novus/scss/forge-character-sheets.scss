@@ -55,6 +55,8 @@ h3 {
 
 .CodeMirror {
   @include box-sizing(border-box);
+  border-top: 1px solid #888; 
+  border-bottom: 1px solid #888;
 }
 
 .forge-chracter-sheet-save {
