@@ -3,6 +3,7 @@
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['gamelibrary.index.pageTitle']}</ui:define>
@@ -79,33 +80,113 @@
     
     <div class="flex-row">
     
-      <!-- Products -->
-
       <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full sm-flex-cell-first flex-overflow-hidden"> 
-        <ui:include src="/facelets/gamelibrarypublications.xhtml">
-          <ui:param name="publications" value="#{gameLibraryIndexBackingBean.publications}"/>
-        </ui:include> 
+        <h:form>
+          <ui:repeat var="publication" value="#{gameLibraryIndexBackingBean.publications}">
+            <div class="flex-row gamelibrary-publication">
+              <div class="flex-cell-full index-box">
+                <div class="flex-row">
+                  <div class="flex-cell-full no-margin-top no-margin-bottom">
+                    <a class="gamelibrary-publication-image-link" href="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
+                      <img src="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=260"/>
+                    </a>
+                    <h3>
+                      <a jsf:outcome="/gamelibrary/publication.jsf?faces-redirect=true&amp;urlName=#{publication.urlName}">#{publication.name}</a>
+                    </h3>
+                    <div class="gamelibrary-publication-tags">
+                      <ui:repeat var="tag" value="#{gameLibraryIndexBackingBean.getTags(publication)}">
+                        <a jsf:outcome="/gamelibrary/taglist.jsf?tag=#{tag}" class="gamelibrary-publication-tag">#{tag}</a>
+                      </ui:repeat>
+                    </div>
+                    <div class="gamelibrary-publication-description">
+                      <h:outputText value="#{gameLibraryIndexBackingBean.getDescription(publication)}" escape="false"/>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex-row">
+                  <div class="flex-cell-full">
+                    <div class="gamelibrary-publication-details">
+                      <div class="gamelibrary-publication-detail gamelibrary-publication-detail-price" jsf:rendered="#{gameLibraryIndexBackingBean.isPublicationPurchasable(publication)}">
+                        <label>#{locales['gamelibrary.publications.detailsPrice']}</label>
+                        <span class="gamelibrary-publication-detail-value">
+                          <h:outputFormat value="#{publication.price}">
+                            <f:convertNumber currencyCode="EUR" type="currency" />
+                          </h:outputFormat>
+                        </span>
+                      </div>
+                      <div class="gamelibrary-publication-detail gamelibrary-publication-detail-number-of-pages">
+                        <label>#{locales['gamelibrary.publications.detailsNumberOfPages']}</label>
+                        <span class="gamelibrary-publication-detail-value">
+                          <h:outputText value="#{gameLibraryIndexBackingBean.getPublicationNumberOfPages(publication)}" />
+                        </span>
+                      </div>
+                      <div class="gamelibrary-publication-detail" jsf:rendered="#{gameLibraryIndexBackingBean.hasAuthors(publication)}">
+                        <label jsf:rendered="#{gameLibraryIndexBackingBean.hasSingleAuthor(publication)}">#{locales['gamelibrary.publications.detailsAuthor']}</label>
+                        <label jsf:rendered="#{!gameLibraryIndexBackingBean.hasSingleAuthor(publication)}">#{locales['gamelibrary.publications.detailsAuthors']}</label>
+                        <ui:repeat var="author" value="#{gameLibraryIndexBackingBean.getAuthors(publication)}">
+                          <a jsf:outcome="/users/profile.jsf?userId=#{author.id}" class="gamelibrary-publication-author">#{author.fullName}</a>
+                        </ui:repeat>
+                      </div>
+                      <div class="gamelibrary-publication-creative-commans-license-container" jsf:rendered="#{gameLibraryIndexBackingBean.getCreativeCommonsLicense(publication) ne null}">
+                        <a href="#{gameLibraryIndexBackingBean.getCreativeCommonsLicense(publication).url}">
+                          <img src="#{gameLibraryIndexBackingBean.getCreativeCommonsLicense(publication).iconUrl}"/>
+                        </a>
+                      </div>
+                      <div class="gamelibrary-publication-detail gamelibrary-publication-detail-license" jsf:rendered="#{(gameLibraryIndexBackingBean.getCreativeCommonsLicense(publication) eq null)and(!empty(publication.license))}">
+                        <label>#{locales['gamelibrary.publications.licenseOther']}</label>       
+                        <a href="#{publication.license}" target="_blank">#{publication.license}</a>                 
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex-row">
+                  <div class="flex-cell-full flex-cell-last flex-right no-margin-top no-margin-bottom">
+                    <a class="gamelibrary-publication-action gamelibrary-publication-action-add-to-cart" jsf:rendered="#{gameLibraryIndexBackingBean.isPublicationPurchasable(publication)}" jsf:action="#{gameLibraryIndexBackingBean.addPublicationToShoppingCart(publication)}">
+                      #{locales['gamelibrary.publications.addToShoppingCart']}
+                    </a>
+                  </div>
+                </div>     
+                <div class="flex-row">
+                  <div class="flex-cell-8 flex-cell-first no-margin-top no-margin-bottom">
+                    <a jsf:outcome="/forum/topic.jsf?forumUrlName=#{publication.forumTopic.forum.urlName}&amp;forumTopicUrlName=#{publication.forumTopic.urlName}" class="gamelibrary-publication-comments" jsf:rendered="#{publication.forumTopic ne null}">
+                      <h:outputFormat value="#{locales['gamelibrary.publications.comments']}">
+                        <f:param value="#{gameLibraryIndexBackingBean.getPublicationCommentCount(publication)}"/>
+                      </h:outputFormat>
+                    </a>
+                  </div>
+                  <div class="flex-cell-8 flex-cell-last flex-right no-margin-top no-margin-bottom">
+                    <h:outputLink styleClass="gamelibrary-publication-action gamelibrary-publication-action-download-pdf" value="#{request.contextPath}/gamelibrary/publicationFiles/#{publication.id}" rendered="#{gameLibraryIndexBackingBean.isPublicationDownloadable(publication)}">#{locales['gamelibrary.publications.downloadFreePdf']}</h:outputLink>
+                  </div>
+                </div>  
+                <div class="flex-row">
+                  <div class="flex-cell-full flex-right">
+                    <div class="gamelibrary-publication-share-container">
+                      <div id="gamelibrary-publication-share-button-${publication.id}" class="gamelibrary-publication-share-button" data-url-name="${publication.urlName}" data-button-text="#{locales['gamelibrary.publications.shareButtonText']}"></div>
+                    </div>
+                  </div>
+                </div>  
+              </div>
+            </div>
+          </ui:repeat>
+        </h:form>
       </div>
 
       <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-full flex-overflow-hidden"> 
-        <!-- Shopping cart -->
+
         <div class="flex-row">
           <div class="flex-cell-full index-box">
             <ui:include src="/facelets/gamelibraryminishoppingcart.xhtml" />
           </div>
         </div>
-
-        <!-- Categories -->
-
+        
         <div class="flex-row sm-flex-hide">
           <div class="flex-cell-full index-box">
             <ui:include src="/facelets/gamelibrarycategories.xhtml" />
           </div>
         </div>
       </div> 
-
+ 
     </div>
-    
   </ui:define>
 
 </ui:composition>
