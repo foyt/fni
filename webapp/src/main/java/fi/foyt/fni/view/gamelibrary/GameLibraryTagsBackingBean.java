@@ -1,7 +1,5 @@
 package fi.foyt.fni.view.gamelibrary;
 
-import java.util.List;
-
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -16,13 +14,12 @@ import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
 import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
-import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 
 @RequestScoped
 @Named
 @Stateful
 @Join (path = "/gamelibrary/tags/{tag}", to = "/gamelibrary/taglist.jsf")
-public class GameLibraryTagsBackingBean {
+public class GameLibraryTagsBackingBean extends AbstractGameLibraryListBackingBean {
   
   @Parameter
   private String tag;
@@ -47,12 +44,8 @@ public class GameLibraryTagsBackingBean {
       return navigationController.notFound(); 
     }
     
-    return null;
+    return init(publicationController.listPublicationsByPublishedAndTags(false, tag));
   }
-	
-	public List<Publication> getPublications() {
-		return publicationController.listPublicationsByPublishedAndTags(false, tag);
-	}
 	
 	public String getTag() {
 		return tag;
