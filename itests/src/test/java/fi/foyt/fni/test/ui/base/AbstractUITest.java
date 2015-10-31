@@ -68,9 +68,6 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     capabilities.setCapability("timeZone", "Universal");
     capabilities.setCapability("seleniumVersion", getSeleniumVersion());
     capabilities.setCapability("commandTimeout", 600);
-    // Temporary settings to try whether tests will work on changes on Sauce labs side
-    capabilities.setCapability("chromedriverVersion", "2.20");
-    capabilities.setCapability("iedriverVersion", "2.48.0");
         
     if (getSauceTunnelId() != null) {
       capabilities.setCapability("tunnel-identifier", getSauceTunnelId());
