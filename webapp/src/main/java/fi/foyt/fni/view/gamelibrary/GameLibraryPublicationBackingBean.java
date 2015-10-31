@@ -1,5 +1,8 @@
 package fi.foyt.fni.view.gamelibrary;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -12,13 +15,23 @@ import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
+import fi.foyt.fni.forum.ForumController;
+import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
+import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
 import fi.foyt.fni.jsf.NavigationController;
+import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationAuthor;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
+import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.users.Role;
+import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.UnauthorizedException;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.utils.licenses.CreativeCommonsLicense;
+import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 
 @RequestScoped
 @Named
@@ -41,6 +54,15 @@ public class GameLibraryPublicationBackingBean {
 
   @Inject
   private SystemSettingsController systemSettingsController;
+
+  @Inject
+  private GameLibraryTagController gameLibraryTagController;
+
+  @Inject
+  private ForumController forumController;
+
+  @Inject
+  private SessionShoppingCartController sessionShoppingCartController;
   
   @RequestAction
   public String init() {
@@ -71,6 +93,32 @@ public class GameLibraryPublicationBackingBean {
     metaUrl = String.format("%s/gamelibrary/%s", systemSettingsController.getSiteUrl(true, true), publication.getUrlName());
     metaImage = String.format("%s/gamelibrary/publicationImages/%d", systemSettingsController.getSiteUrl(true, true), publication.getDefaultImage().getId());
     metaLocale = publication.getLanguage() != null ? publication.getLanguage().getLocale().toString() : "";
+    
+    String description = publication.getDescription();
+    List<PublicationImage> images = publicationController.listPublicationImagesByPublication(publication);
+    List<PublicationTag> publicationTags = gameLibraryTagController.listPublicationTags(publication);
+    List<PublicationAuthor> publicationAuthors = publicationController.listPublicationAuthors(publication);
+    tags = new ArrayList<>();
+    authors = new ArrayList<>();
+    
+    for (PublicationTag publicationTag : publicationTags) {
+      tags.add(publicationTag.getTag().getText());
+    }
+
+    for (PublicationAuthor publicationAuthor : publicationAuthors) {
+      authors.add(publicationAuthor.getAuthor());
+    }
+    
+    this.hasImage = !images.isEmpty();
+    this.description = StringUtils.isBlank(description) ? "" : description.replace("\n", "<br/>");
+    this.creativeCommonsLicence = CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
+    this.commentCount = publication.getForumTopic() != null ? forumController.countPostsByTopic(publication.getForumTopic()) : null;
+    
+    if (publication instanceof BookPublication) {
+      downloadable = ((BookPublication) publication).getDownloadableFile() != null;
+      purchasable = ((BookPublication) publication).getPrintableFile() != null;
+      pageNumbers = ((BookPublication) publication).getNumberOfPages();
+    }
     
     return null;
   }
@@ -107,10 +155,72 @@ public class GameLibraryPublicationBackingBean {
     return metaUrl;
   }
 	
+	public boolean hasImages() {
+    return hasImage;
+  }
+
+  public List<String> getTags() {
+    return tags;
+  }
+  
+  public boolean getHasAuthors() {
+    return getPublicationAuthors().size() > 0;
+  }
+  
+  public boolean getHasSingleAuthor() {
+    return getPublicationAuthors().size() == 1;
+  }
+  
+  public List<User> getAuthors() {
+    return getPublicationAuthors();
+  }
+  
+  private List<User> getPublicationAuthors() {
+    return authors;
+  }
+  
+  public Long getPublicationCommentCount() {
+    return commentCount;
+  }
+  
+  public Integer getPublicationNumberOfPages() {
+    return pageNumbers;
+  }
+  
+  public boolean getPublicationDownloadable() {
+    return downloadable;
+  }
+
+  public boolean getPublicationPurchasable() {
+    return purchasable;
+  }
+  
+  public CreativeCommonsLicense getCreativeCommonsLicense() {
+    return creativeCommonsLicence;
+  }
+  
+  public String getDescription() {
+    return description;
+  }
+  
+  public String addPublicationToShoppingCart() {
+    sessionShoppingCartController.addPublication(publication);
+    return null;
+  }
+	
 	private Publication publication;
 	private String metaDescription;
 	private String metaTitle;
 	private String metaUrl;
 	private String metaImage;
 	private String metaLocale;
+  private List<User> authors;
+  private Boolean hasImage;
+  private List<String> tags;
+  private Long commentCount;
+  private Integer pageNumbers;
+  private Boolean purchasable;
+  private Boolean downloadable;
+  private String description;
+  private CreativeCommonsLicense creativeCommonsLicence;
 }

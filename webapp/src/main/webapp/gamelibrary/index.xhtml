@@ -148,7 +148,7 @@
                 </div>     
                 <div class="flex-row">
                   <div class="flex-cell-8 flex-cell-first no-margin-top no-margin-bottom">
-                    <a jsf:outcome="/forum/topic.jsf?forumUrlName=#{publication.forumTopic.forum.urlName}&amp;forumTopicUrlName=#{publication.forumTopic.urlName}" class="gamelibrary-publication-comments" jsf:rendered="#{publication.forumTopic ne null}">
+                    <a jsf:outcome="/forum/topic.jsf?forumUrlName=#{publication.forumTopic.forum.urlName}&amp;topicUrlName=#{publication.forumTopic.urlName}" class="gamelibrary-publication-comments" jsf:rendered="#{publication.forumTopic ne null}">
                       <h:outputFormat value="#{locales['gamelibrary.publications.comments']}">
                         <f:param value="#{gameLibraryIndexBackingBean.getPublicationCommentCount(publication)}"/>
                       </h:outputFormat>

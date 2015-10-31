@@ -2,7 +2,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" 
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:jsf="http://xmlns.jcp.org/jsf" 
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">
@@ -92,9 +93,92 @@
 
     <div class="flex-row">
       <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full sm-flex-cell-first flex-overflow-hidden"> 
-        <ui:include src="/facelets/gamelibrarypublication.xhtml">
-          <ui:param name="publication" value="#{gameLibraryPublicationBackingBean.publication}"/>
-        </ui:include> 
+        <h:form>
+          <div class="flex-row gamelibrary-publication">
+            <div class="flex-cell-full index-box">
+              <div class="flex-row">
+                <div class="flex-cell-full no-margin-top no-margin-bottom">
+                  <a class="gamelibrary-publication-image-link" href="#{request.contextPath}/gamelibrary/publicationImages/#{gameLibraryPublicationBackingBean.publication.defaultImage.id}">
+                    <img src="/gamelibrary/publicationImages/#{gameLibraryPublicationBackingBean.publication.defaultImage.id}?height=260"/>
+                  </a>
+                  <h3>
+                    <a jsf:outcome="/gamelibrary/publication.jsf?faces-redirect=true&amp;urlName=#{gameLibraryPublicationBackingBean.publication.urlName}">#{gameLibraryPublicationBackingBean.publication.name}</a>
+                  </h3>
+                  <div class="gamelibrary-publication-tags">
+                    <ui:repeat var="tag" value="#{gameLibraryPublicationBackingBean.tags}">
+                      <a jsf:outcome="/gamelibrary/taglist.jsf?tag=#{tag}" class="gamelibrary-publication-tag">#{tag}</a>
+                    </ui:repeat>
+                  </div>
+                  <div class="gamelibrary-publication-description">
+                    <h:outputText value="#{gameLibraryPublicationBackingBean.description}" escape="false"/>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <div class="gamelibrary-publication-details">
+                    <div class="gamelibrary-publication-detail gamelibrary-publication-detail-price" jsf:rendered="#{gameLibraryPublicationBackingBean.publicationPurchasable}">
+                      <label>#{locales['gamelibrary.publications.detailsPrice']}</label>
+                      <span class="gamelibrary-publication-detail-value">
+                        <h:outputFormat value="#{gameLibraryPublicationBackingBean.publication.price}">
+                          <f:convertNumber currencyCode="EUR" type="currency" />
+                        </h:outputFormat>
+                      </span>
+                    </div>
+                    <div class="gamelibrary-publication-detail gamelibrary-publication-detail-number-of-pages">
+                      <label>#{locales['gamelibrary.publications.detailsNumberOfPages']}</label>
+                      <span class="gamelibrary-publication-detail-value">
+                        <h:outputText value="#{gameLibraryPublicationBackingBean.publicationNumberOfPages}" />
+                      </span>
+                    </div>
+                    <div class="gamelibrary-publication-detail" jsf:rendered="#{gameLibraryPublicationBackingBean.hasAuthors}">
+                      <label jsf:rendered="#{gameLibraryPublicationBackingBean.hasSingleAuthor}">#{locales['gamelibrary.publications.detailsAuthor']}</label>
+                      <label jsf:rendered="#{!gameLibraryPublicationBackingBean.hasSingleAuthor}">#{locales['gamelibrary.publications.detailsAuthors']}</label>
+                      <ui:repeat var="author" value="#{gameLibraryPublicationBackingBean.authors}">
+                        <a jsf:outcome="/users/profile.jsf?userId=#{author.id}" class="gamelibrary-publication-author">#{author.fullName}</a>
+                      </ui:repeat>
+                    </div>
+                    <div class="gamelibrary-publication-creative-commans-license-container" jsf:rendered="#{gameLibraryPublicationBackingBean.creativeCommonsLicense ne null}">
+                      <a href="#{gameLibraryPublicationBackingBean.creativeCommonsLicense.url}">
+                        <img src="#{gameLibraryPublicationBackingBean.creativeCommonsLicense.iconUrl}"/>
+                      </a>
+                    </div>
+                    <div class="gamelibrary-publication-detail gamelibrary-publication-detail-license" jsf:rendered="#{(gameLibraryPublicationBackingBean.creativeCommonsLicense eq null)and(!empty(gameLibraryPublicationBackingBean.publication.license))}">
+                      <label>#{locales['gamelibrary.publications.licenseOther']}</label>       
+                      <a href="#{gameLibraryPublicationBackingBean.publication.license}" target="_blank">#{gameLibraryPublicationBackingBean.publication.license}</a>                 
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-row">
+                <div class="flex-cell-full flex-cell-last flex-right no-margin-top no-margin-bottom">
+                  <a class="gamelibrary-publication-action gamelibrary-publication-action-add-to-cart" jsf:rendered="#{gameLibraryPublicationBackingBean.publicationPurchasable}" jsf:action="#{gameLibraryPublicationBackingBean.addPublicationToShoppingCart}">
+                    #{locales['gamelibrary.publications.addToShoppingCart']}
+                  </a>
+                </div>
+              </div>     
+              <div class="flex-row">
+                <div class="flex-cell-8 flex-cell-first no-margin-top no-margin-bottom">
+                  <a jsf:outcome="/forum/topic.jsf?forumUrlName=#{gameLibraryPublicationBackingBean.publication.forumTopic.forum.urlName}&amp;topicUrlName=#{gameLibraryPublicationBackingBean.publication.forumTopic.urlName}" class="gamelibrary-publication-comments" jsf:rendered="#{gameLibraryPublicationBackingBean.publication.forumTopic ne null}">
+                    <h:outputFormat value="#{locales['gamelibrary.publications.comments']}">
+                      <f:param value="#{gameLibraryPublicationBackingBean.publicationCommentCount}"/>
+                    </h:outputFormat>
+                  </a>
+                </div>
+                <div class="flex-cell-8 flex-cell-last flex-right no-margin-top no-margin-bottom">
+                  <h:outputLink styleClass="gamelibrary-publication-action gamelibrary-publication-action-download-pdf" value="#{request.contextPath}/gamelibrary/publicationFiles/#{gameLibraryPublicationBackingBean.publication.id}" rendered="#{gameLibraryPublicationBackingBean.publicationDownloadable}">#{locales['gamelibrary.publications.downloadFreePdf']}</h:outputLink>
+                </div>
+              </div>  
+              <div class="flex-row">
+                <div class="flex-cell-full flex-right">
+                  <div class="gamelibrary-publication-share-container">
+                    <div id="gamelibrary-publication-share-button-#{gameLibraryPublicationBackingBean.publication.id}" class="gamelibrary-publication-share-button" data-url-name="#{gameLibraryPublicationBackingBean.publication.urlName}" data-button-text="#{locales['gamelibrary.publications.shareButtonText']}"></div>
+                  </div>
+                </div>
+              </div>  
+            </div>
+          </div>
+        </h:form>
       </div>
       
       <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-full flex-overflow-hidden"> 
