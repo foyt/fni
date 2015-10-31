@@ -109,13 +109,13 @@ public class GameLibraryListTestsBase extends AbstractUITest {
     acceptCookieDirective(getWebDriver(), true);
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
 
-    testPublicationDetails(getWebDriver(), ".gamelibrary-publication:nth-child(1)", UML_ID, UML_PATH, UML_TITLE, UML_TAGS, UML_DESC, UML_PRICE, UML_PAGES,
+    testPublicationDetails(getWebDriver(), ".gamelibrary-publication[data-index='0']", UML_ID, UML_PATH, UML_TITLE, UML_TAGS, UML_DESC, UML_PRICE, UML_PAGES,
         UML_AUTHOR_NAMES, UML_AUTHOR_IDS, UML_LICENSE, UML_PURCHASABLE, UML_COMMENT_URL, UML_COMMENTS);
 
-    testPublicationDetails(getWebDriver(), ".gamelibrary-publication:nth-child(2)", BYSARUS_ID, BYSARUS_PATH, BYSARUS_TITLE, BYSARUS_TAGS, BYSARUS_DESC, BYSARUS_PRICE,
+    testPublicationDetails(getWebDriver(), ".gamelibrary-publication[data-index='1']", BYSARUS_ID, BYSARUS_PATH, BYSARUS_TITLE, BYSARUS_TAGS, BYSARUS_DESC, BYSARUS_PRICE,
         BYSARUS_PAGES, BYSARUS_AUTHOR_NAMES, BYSARUS_AUTHOR_IDS, BYSARUS_LICENSE, BYSARUS_PURCHASABLE, BYSARUS_COMMENT_URL, BYSARUS_COMMENTS);
 
-    testPublicationDetails(getWebDriver(), ".gamelibrary-publication:nth-child(3)", SIMPLE_ID, SIMPLE_PATH, SIMPLE_TITLE, SIMPLE_TAGS, SIMPLE_DESC, SIMPLE_PRICE,
+    testPublicationDetails(getWebDriver(), ".gamelibrary-publication[data-index='2']", SIMPLE_ID, SIMPLE_PATH, SIMPLE_TITLE, SIMPLE_TAGS, SIMPLE_DESC, SIMPLE_PRICE,
         SIMPLE_PAGES, SIMPLE_AUTHOR_NAMES, SIMPLE_AUTHOR_IDS, SIMPLE_LICENSE, SIMPLE_PURCHASABLE, SIMPLE_COMMENT_URL, SIMPLE_COMMENTS);
   }
   
@@ -147,10 +147,10 @@ public class GameLibraryListTestsBase extends AbstractUITest {
     acceptCookieDirective(getWebDriver(), true);
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/tags/test");
 
-    testPublicationDetails(getWebDriver(), ".gamelibrary-publication:nth-child(1)", SIMPLE_ID, SIMPLE_PATH, SIMPLE_TITLE, SIMPLE_TAGS, SIMPLE_DESC, SIMPLE_PRICE,
+    testPublicationDetails(getWebDriver(), ".gamelibrary-publication[data-index='0']", SIMPLE_ID, SIMPLE_PATH, SIMPLE_TITLE, SIMPLE_TAGS, SIMPLE_DESC, SIMPLE_PRICE,
         SIMPLE_PAGES, SIMPLE_AUTHOR_NAMES, SIMPLE_AUTHOR_IDS, SIMPLE_LICENSE, SIMPLE_PURCHASABLE, SIMPLE_COMMENT_URL, SIMPLE_COMMENTS);
 
-    testPublicationDetails(getWebDriver(), ".gamelibrary-publication:nth-child(2)", BYSARUS_ID, BYSARUS_PATH, BYSARUS_TITLE, BYSARUS_TAGS, BYSARUS_DESC, BYSARUS_PRICE,
+    testPublicationDetails(getWebDriver(), ".gamelibrary-publication[data-index='1']", BYSARUS_ID, BYSARUS_PATH, BYSARUS_TITLE, BYSARUS_TAGS, BYSARUS_DESC, BYSARUS_PRICE,
         BYSARUS_PAGES, BYSARUS_AUTHOR_NAMES, BYSARUS_AUTHOR_IDS, BYSARUS_LICENSE, BYSARUS_PURCHASABLE, BYSARUS_COMMENT_URL, BYSARUS_COMMENTS);
   }
 

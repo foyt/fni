@@ -82,8 +82,8 @@
     
       <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full sm-flex-cell-first flex-overflow-hidden"> 
         <h:form>
-          <ui:repeat var="publication" value="#{gameLibraryIndexBackingBean.publications}">
-            <div class="flex-row gamelibrary-publication">
+          <ui:repeat var="publication" value="#{gameLibraryIndexBackingBean.publications}" varStatus="vs">
+            <div class="flex-row gamelibrary-publication" data-index="#{vs.index}">
               <div class="flex-cell-full index-box">
                 <div class="flex-row">
                   <div class="flex-cell-full no-margin-top no-margin-bottom">
