@@ -314,9 +314,18 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     assertTrue("url '" + getWebDriver().getCurrentUrl() + "' does not match " + regex, getWebDriver().getCurrentUrl().matches(regex));
   }
 
-  protected void waitTitle(String title) {
-    new WebDriverWait(getWebDriver(), 60)
-      .until(ExpectedConditions.titleIs(title));
+  protected void waitTitle(final String title) {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      @Override
+      public Boolean apply(WebDriver driver) {
+        try {
+          return title.equals(driver.getTitle());
+        } catch (Exception e) {
+        }
+        
+        return false;
+      }
+    });
   }
 
   protected void waitForNotification() {
