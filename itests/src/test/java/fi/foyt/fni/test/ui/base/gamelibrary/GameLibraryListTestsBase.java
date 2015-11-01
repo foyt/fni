@@ -96,11 +96,11 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testMiniCartTexts() {
     navigate("/gamelibrary/", true);
-    assertSelectorTextIgnoreCase(".gamelibrary-mini-shopping-cart-title", "SHOPPING CART");
+    assertSelectorText(".gamelibrary-mini-shopping-cart-title", "SHOPPING CART", true, true);
     assertEquals(getAppUrl(true) + "/gamelibrary/cart/", getWebDriver().findElement(By.cssSelector(".gamelibrary-mini-shopping-cart-view")).getAttribute("href"));
-    assertSelectorTextIgnoreCase(".gamelibrary-mini-shopping-cart-empty","Shopping cart is empty");
-    assertSelectorTextIgnoreCase(".gamelibrary-mini-shopping-cart-summary label","Total");
-    assertSelectorTextIgnoreCase(".gamelibrary-mini-shopping-cart-summary span","EUR0.00");
+    assertSelectorText(".gamelibrary-mini-shopping-cart-empty","Shopping cart is empty", true, true);
+    assertSelectorText(".gamelibrary-mini-shopping-cart-summary label","Total", true, true);
+    assertSelectorText(".gamelibrary-mini-shopping-cart-summary span","EUR0.00", true, true);
   }
 
   @Test
@@ -185,21 +185,21 @@ public class GameLibraryListTestsBase extends AbstractUITest {
       String numberOfPages, String[] authorNames, Long[] authorIds, String license, boolean purchasable, String commentUrl, int comments) {
 //    CreativeCommonsLicense creativeCommonsLicense = CreativeCommonsUtils.parseLicenseUrl(license);
 
-    assertSelectorTextIgnoreCase(String.format("%s h3 a", publicationSelector), title);
+    assertSelectorText(String.format("%s h3 a", publicationSelector), title, true, true);
     assertEquals(getAppUrl(true) + path, getWebDriver().findElement(By.cssSelector(publicationSelector + " h3 a")).getAttribute("href"));
 
     for (int i = 0, l = tags.length; i < l; i++) {
       String tag = tags[i];
-      assertSelectorTextIgnoreCase(String.format("%s .gamelibrary-publication-tags a:nth-child(%d)", publicationSelector, i + 1), tag);
+      assertSelectorText(String.format("%s .gamelibrary-publication-tags a:nth-child(%d)", publicationSelector, i + 1), tag, true, true);
     }
     
-    assertSelectorTextIgnoreCase(String.format("%s .gamelibrary-publication-description", publicationSelector), description);
+    assertSelectorText(String.format("%s .gamelibrary-publication-description", publicationSelector), description, true, true);
 
     if (price != null) {
-      assertSelectorTextIgnoreCase(String.format("%s .gamelibrary-publication-detail-price span", publicationSelector), price);
+      assertSelectorText(String.format("%s .gamelibrary-publication-detail-price span", publicationSelector), price, true, true);
     }
 
-    assertSelectorTextIgnoreCase(String.format("%s .gamelibrary-publication-detail-number-of-pages span", publicationSelector), numberOfPages);
+    assertSelectorText(String.format("%s .gamelibrary-publication-detail-number-of-pages span", publicationSelector), numberOfPages, true, true);
 
     if (authorIds == null || authorNames == null) {
       assertSelectorNotPresent(String.format("%s .gamelibrary-publication-author", publicationSelector));
@@ -237,7 +237,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
 //      assertEquals(license, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-detail-license a")).getAttribute("href"));
 //    }
 
-    assertSelectorTextIgnoreCase(String.format("%s .gamelibrary-publication-comments", publicationSelector), String.format("COMMENTS (%d)", comments));
+    assertSelectorText(String.format("%s .gamelibrary-publication-comments", publicationSelector), String.format("COMMENTS (%d)", comments), true, true);
     assertEquals(getAppUrl(true) + "/forum/" + commentUrl, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-comments")).getAttribute("href"));
     
     assertShareButtonsHidden(getWebDriver(), publicationSelector);
