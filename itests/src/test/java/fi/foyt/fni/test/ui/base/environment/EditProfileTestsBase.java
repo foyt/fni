@@ -67,7 +67,7 @@ public class EditProfileTestsBase extends AbstractUITest {
       loginInternal(getWebDriver(), "passchange@foyt.fi", "oldpass");
       getWebDriver().get(getAppUrl() + "/editprofile");
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password")).click();
-      waitForElementVisible(getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-container")));
+      waitForSelectorVisible(".users-editprofile-authentication-source-change-password-container");
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-container input[type=\"submit\"]")).click();
       waitForNotification(getWebDriver());
       assertNotification("warning", "Password is required");
@@ -85,7 +85,7 @@ public class EditProfileTestsBase extends AbstractUITest {
       loginInternal(getWebDriver(), "passchange@foyt.fi", "oldpass");
       getWebDriver().get(getAppUrl() + "/editprofile");
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password")).click();
-      waitForElementVisible(getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-container")));
+      waitForSelectorVisible(".users-editprofile-authentication-source-change-password-container");
 
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-password1")).sendKeys("qwe");
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-password2")).sendKeys("asd");
@@ -107,7 +107,7 @@ public class EditProfileTestsBase extends AbstractUITest {
       loginInternal(getWebDriver(), "passchange@foyt.fi", "oldpass");
       getWebDriver().get(getAppUrl() + "/editprofile");
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password")).click();
-      waitForElementVisible(getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-container")));
+      waitForSelectorVisible(".users-editprofile-authentication-source-change-password-container");
 
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-password1")).sendKeys("qwe");
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-password2")).sendKeys("qwe");

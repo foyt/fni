@@ -169,12 +169,23 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     });
   }
   
-  protected void waitForElementVisible(WebElement element) {
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.visibilityOf(element));
-  }
-
-  protected void waitForSelectorVisible(String selector) {
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(selector)));
+  protected void waitForSelectorVisible(final String selector) {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        List<WebElement> elements = findElementsBySelector(selector);
+        if (elements.isEmpty()) {
+          return false;
+        }
+        
+        for (WebElement element : elements) {
+          if (!element.isDisplayed()){
+            return false;
+          }
+        }
+        
+        return true;
+      }
+    });
   }
 
   protected void waitForInputValueNotBlank(final String selector) {
