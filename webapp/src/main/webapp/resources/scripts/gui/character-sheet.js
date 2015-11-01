@@ -22,7 +22,7 @@
     
     },
     _create : function() {
-      this.element.addClass('i-field i-field-initialized');
+      this.element.addClass('i-field initialized');
     },
     
     readOnly: function () {
@@ -43,7 +43,7 @@
     _create : function() {
       this._fields = $(this.element).attr('data-fields').split(',');
       
-      this.element.addClass('i-field-sum i-field-sum-initialized');
+      this.element.addClass('i-field-sum initialized');
       
       if (this._fields.length > 0) {
         $(this.element).attr('readOnly', 'readOnly');
@@ -66,7 +66,7 @@
             sum += parseInt($(field).val());
           break;
           default:
-            throw new Error("Can not sum of filed typed: " + $(field).attr('type'));
+            throw new Error("Can not sum of field typed: " + $(field).attr('type') + " (" + $(field).attr('name') + ')');
           break;
         }
       }, this));
@@ -77,7 +77,9 @@
   
   $.widget("custom.illusionRoll", {
     _create : function() {
-      this.element.click($.proxy(this._onClick, this));
+      this.element
+        .click($.proxy(this._onClick, this))
+        .addClass('initialized');
     },
 
     fields: function() {
@@ -136,31 +138,8 @@
       preview: false
     },
     _create : function() {
-      // Initialize fields
       
-      $('.i-field')
-        .illusionField()
-        .on('change', $.proxy(this._onIllusionFieldChange, this)); 
-      
-      $('.i-field-sum').illusionSumField();
-
-      // Initialize progress bars
-      
-      $(this.element).find('.i-progressbar').each(function (index, field) {
-        var targetField = $($(field).attr('data-field'));
-        
-        $(field).progressbar({
-          value: parseInt(targetField.val())
-        });
-
-        targetField.change($.proxy(function (event) {
-          $(this).progressbar("value", parseInt($(event.target).val()));
-        }, field));
-      });
-      
-      // Initialize rolls
-      
-      $(this.element).find('.i-roll').illusionRoll();
+      this.initFields();
       
       if (!this.options.preview) {
         var socketUrl = (window.location.protocol == 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + this.options.contextPath + '/ws/' + this.options.eventId + '/characterSheet/' + this.options.materialId + '/' + this.options.participantId + '/' + this.options.key;
@@ -173,6 +152,49 @@
       $(this.element).on('roll', '.i-roll', $.proxy(this._onRoll, this));
     },
     
+    initFields: function (fields) {
+      if (fields === undefined) {
+        fields = this.element.find('.i-field,.i-field-sum,.i-progressbar,.i-roll').filter(':not(.initialized)');
+      }
+      
+      $(fields)
+        .filter('.i-field')
+        .illusionField()
+        .on('change', $.proxy(this._onIllusionFieldChange, this)); 
+      
+      $(fields)
+        .filter('.i-field-sum')
+        .illusionSumField();
+
+      // Initialize progress bars
+      
+      $(fields)
+        .filter('.i-progressbar')
+        .each(function (index, field) {
+          var targetField = $($(field).attr('data-field'));
+          
+          $(field)
+            .addClass('initialized')
+            .progressbar({
+              value: parseInt(targetField.val())
+            });
+  
+          targetField.change($.proxy(function (event) {
+            $(this).progressbar("value", parseInt($(event.target).val()));
+          }, field));
+        });
+      
+      // Initialize rolls
+      
+      $(fields)
+        .filter('.i-roll')
+        .illusionRoll();
+    },
+    
+    preview: function () {
+      return this.options.preview;
+    },
+    
     load: function (sheetData) {
       for (var key in sheetData) {
         var value = sheetData[key];
@@ -183,12 +205,12 @@
         this._updateDataLinks(sheetData);
       }
       
-      $('i-field-sum-initialized').illusionSumField('updateSum');
+      $('.i-field-sum.initialized').illusionSumField('updateSum');
     },
     
     set: function (key, value) {
       $('*[name="' + key + '"]').val(value);
-      $('i-field-sum-initialized').illusionSumField('updateSum');
+      $('.i-field-sum.initialized').illusionSumField('updateSum');
     },
     
     _sendUpdate: function (key, value) {
@@ -204,9 +226,13 @@
       
       if ($(this.element).find('.i-data-link').length > 0) {
         var sheetData = {};
-        $(this.element).find('.i-field-initialized').each(function (index, field) {
-          if ($(field).illusionField('readOnly')) {
-            sheetData[$(field).attr('name')] = $(field).val();
+        $(this.element).find('.i-field.initialized').each(function (index, field) {
+          try {
+            if ($(field).illusionField('readOnly')) {
+              sheetData[$(field).attr('name')] = $(field).val();
+            }
+          } catch (e) {
+            $(field).addClass('error');
           }
         });
         
