@@ -1,7 +1,6 @@
 package fi.foyt.fni.view.illusion;
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.HashMap;
@@ -29,7 +28,6 @@ import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.jade.JadeController;
 import fi.foyt.fni.jsf.NavigationController;
-import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
@@ -40,7 +38,6 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventDocumentType;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.utils.data.FileData;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
 @RequestScoped
@@ -66,9 +63,6 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
 
   @Inject
   private IllusionEventPageController illusionEventPageController;
-  
-  @Inject
-  private MaterialController materialController;
 
   @Inject
   private IllusionEventNavigationController illusionEventNavigationController;
