@@ -198,7 +198,9 @@
     load: function (sheetData) {
       for (var key in sheetData) {
         var value = sheetData[key];
-        $('*[name="' + key + '"]').val(value);
+        $('*[name="' + key + '"]')
+          .val(value)
+          .trigger('change');
       }
 
       if ($(this.element).find('.i-data-link').length > 0) {
