@@ -138,15 +138,18 @@
       preview: false
     },
     _create : function() {
-      
+      this._receiving = false;
       this.initFields();
       
       if (!this.options.preview) {
+        this._webSocketOpen = false;
+        this._webSocketLastPong = null;
         var socketUrl = (window.location.protocol == 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host + this.options.contextPath + '/ws/' + this.options.eventId + '/characterSheet/' + this.options.materialId + '/' + this.options.participantId + '/' + this.options.key;
         this._webSocket = this._openWebSocket(socketUrl);
         this._webSocket.onmessage = $.proxy(this._onWebSocketMessage, this);
         this._webSocket.onopen = $.proxy(this._onWebSocketOpen, this);
         $(window).on('beforeunload', $.proxy(this._onWindowBeforeUnload, this));
+        this._keepalivePing();
       }
       
       $(this.element).on('roll', '.i-roll', $.proxy(this._onRoll, this));
@@ -196,27 +199,48 @@
     },
     
     load: function (sheetData) {
-      for (var key in sheetData) {
-        var value = sheetData[key];
-        $('*[name="' + key + '"]')
-          .val(value)
-          .trigger('change');
+      this._receiving = true;
+      try {
+        for (var key in sheetData) {
+          var value = sheetData[key];
+          $('*[name="' + key + '"]')
+            .val(value)
+            .trigger('change');
+        }
+  
+        if ($(this.element).find('.i-data-link').length > 0) {
+          this._updateDataLinks(sheetData);
+        }
+        
+        $('.i-field-sum.initialized').illusionSumField('updateSum');
+      } finally {
+        this._receiving = false;
       }
-
-      if ($(this.element).find('.i-data-link').length > 0) {
-        this._updateDataLinks(sheetData);
-      }
-      
-      $('.i-field-sum.initialized').illusionSumField('updateSum');
     },
     
     set: function (key, value) {
-      $('*[name="' + key + '"]').val(value);
-      $('.i-field-sum.initialized').illusionSumField('updateSum');
+      this._receiving = true;
+      try {
+        $('*[name="' + key + '"]').val(value).trigger("change");
+        $('.i-field-sum.initialized').illusionSumField('updateSum');
+      } finally {
+        this._receiving = false;
+      }
+    },
+    
+    _keepalivePing: function () {
+      var _this = this;
+      
+      setTimeout(function() {
+        $.get(_this.options.contextPath + '/keepalive')
+          .always(function() { 
+            _this._keepalivePing(); 
+          });
+      }, 60 * 1000);
     },
     
     _sendUpdate: function (key, value) {
-      if (!this.options.preview) {
+      if (!this._receiving && !this.options.preview) {
         this._webSocket.send(JSON.stringify({
           type: 'update',
           data: { 
@@ -259,6 +283,33 @@
       $(this.element).find('.i-data-link').attr('href', window.document.location.search + '&d=' + btoa(JSON.stringify(sheetData)));
     },
     
+    _resetSocketKeepalive: function () {
+      this._webSocketLastPong = new Date().getTime();
+    },
+    
+    _sendSocketPing: function () {
+      this._webSocket.send(JSON.stringify({
+        type: 'ping'
+      }));
+    },
+    
+    _startSocketPing: function () {
+      this._webSocketLastPong = new Date().getTime();
+      var _this = this;
+      
+      setInterval(function () {
+        if (_this._webSocketOpen) { 
+          var sincePong = new Date().getTime() - _this._webSocketLastPong;
+          if (sincePong > 15000) {
+            _this._closeSocket()
+            window.location.reload(true);
+          }
+  
+          _this._sendSocketPing();
+        }
+      }, 1000);
+    },
+    
     _openWebSocket: function (url) {
       if ((typeof window.WebSocket) !== 'undefined') {
         return new WebSocket(url);
@@ -269,8 +320,15 @@
       return null;
     },
     
+    _closeSocket: function () {
+      this._webSocketOpen = false;
+      this._webSocket.onclose = function () {};
+      this._webSocket.close();
+    },
+    
     _onWebSocketMessage: function (event) {
       var data = event.data;
+      
       var message = $.parseJSON(data);
       var messageData = $.parseJSON(message.data);
       switch (message.type) {
@@ -280,15 +338,22 @@
         case 'update':
           this.set(messageData.key, messageData.value);
         break;
+        case 'pong':
+          this._resetSocketKeepalive();
+        break;
       }
     },
     
     _onWebSocketOpen: function (event) {
       this._webSocket.onclose = $.proxy(this._onWebSocketClose, this);    
       this._webSocket.onerror = $.proxy(this._onWebSocketError, this);    
+      this._startSocketPing();
+      this._webSocketOpen = true;
     },
     
     _onWebSocketClose: function (event) {
+      this._webSocketOpen = false;
+      
       if (event.code == 1000) {
         window.location.reload(true);
       } else {
@@ -305,8 +370,7 @@
     },
     
     _onWindowBeforeUnload: function (event) {
-      this._webSocket.onclose = function () {};
-      this._webSocket.close();
+      this._closeSocket();
     },
     
     _onRoll: function (event, data) {

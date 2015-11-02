@@ -2,14 +2,10 @@ package fi.foyt.fni.view.illusion;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.websocket.CloseReason;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
@@ -32,10 +28,9 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 
 @ServerEndpoint ("/ws/{EVENTID}/characterSheet/{MATERIALID}/{PARTICIPANTID}/{KEY}")
+@Stateless
 public class CharacterSheetWebSocket {
   
-  private static final Map<String, List<Session>> clientMap = new HashMap<>();
-
   @Inject
   private MaterialController materialController;
   
@@ -45,63 +40,55 @@ public class CharacterSheetWebSocket {
   @Inject
   private IllusionEventMaterialController illusionEventMaterialController;
   
-  @PostConstruct
-  public void init() {
-  }
+  @Inject
+  private CharacterSheetWebSocketClients clients;
   
   @OnOpen
-  @Transactional
   public void onOpen(final Session client, EndpointConfig endpointConfig, @PathParam("EVENTID") Long eventId, @PathParam("MATERIALID") Long materialId, @PathParam("PARTICIPANTID") Long participantId, @PathParam("KEY") String key) throws IOException {
-    synchronized (this) {
-      CharacterSheet sheet = materialController.findCharacterSheetById(materialId);
-      if (sheet == null) {
-        client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Not Found"));
-        return;
-      }
-      
-      IllusionEvent illusionEvent = illusionEventController.findIllusionEventById(eventId);
-      if (illusionEvent == null) {
-        client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Not Found"));
-        return;
-      }
-      
-      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
-      if (participant == null) {
-        client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Not Found"));
-        return;
-      }
-      
-      if (!participant.getEvent().getId().equals(illusionEvent.getId())) {
-        client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Not Found"));
-        return;
-      }
-
-      fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting webSocketKey = illusionEventMaterialController.findParticipantSettingByMaterialAndParticipantAndKey(sheet, participant, IllusionEventMaterialParticipantSettingKey.WEBSOCKET_KEY);
-      if (webSocketKey == null || !webSocketKey.getValue().equals(key)) {
-        client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Forbidden"));
-        return;
-      }
-      
-      Map<String, String> sheetData = materialController.getUserCharacterSheetData(sheet, participant.getUser());
-      if (sheetData != null) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new Message("load", objectMapper.writeValueAsString(new LoadMessageData(sheetData)))));
-      }
-      
-      addClient(eventId, materialId, participant.getId(), client);
+    CharacterSheet sheet = materialController.findCharacterSheetById(materialId);
+    if (sheet == null) {
+      client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Not Found"));
+      return;
     }
+    
+    IllusionEvent illusionEvent = illusionEventController.findIllusionEventById(eventId);
+    if (illusionEvent == null) {
+      client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Not Found"));
+      return;
+    }
+    
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
+    if (participant == null) {
+      client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Not Found"));
+      return;
+    }
+    
+    if (!participant.getEvent().getId().equals(illusionEvent.getId())) {
+      client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Not Found"));
+      return;
+    }
+
+    fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting webSocketKey = illusionEventMaterialController.findParticipantSettingByMaterialAndParticipantAndKey(sheet, participant, IllusionEventMaterialParticipantSettingKey.WEBSOCKET_KEY);
+    if (webSocketKey == null || !webSocketKey.getValue().equals(key)) {
+      client.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Forbidden"));
+      return;
+    }
+    
+    Map<String, String> sheetData = materialController.getUserCharacterSheetData(sheet, participant.getUser());
+    if (sheetData != null) {
+      ObjectMapper objectMapper = new ObjectMapper();
+      client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new Message("load", objectMapper.writeValueAsString(new LoadMessageData(sheetData)))));
+    }
+    
+    clients.addClient(eventId, materialId, participant.getId(), client);
   }
   
   @OnClose
-  @Transactional
   public void onClose(final Session session, CloseReason closeReason, @PathParam("EVENTID") Long eventId, @PathParam("MATERIALID") Long materialId, @PathParam("PARTICIPANTID") Long participantId, @PathParam("KEY") String key) {
-    synchronized (this) {
-      removeClient(eventId, materialId, participantId);
-    }
+    clients.removeClient(session.getId(), eventId, materialId, participantId);
   }
 
   @OnMessage
-  @Transactional
   public void onMessage(Reader messageReader, Session client, @PathParam("EVENTID") Long eventId, @PathParam("MATERIALID") Long materialId, @PathParam("PARTICIPANTID") Long participantId, @PathParam("KEY") String key) throws IOException {
     CharacterSheet sheet = materialController.findCharacterSheetById(materialId);
     if (sheet == null) {
@@ -143,7 +130,7 @@ public class CharacterSheetWebSocket {
             materialController.setUserCharacterSheetValue(sheet, participant.getUser(), updateData.getKey(), updateData.getValue());
           }
           
-          for (Session participantOtherClient : getParticipantOtherClients(client, eventId, materialId, participant.getId())) {
+          for (Session participantOtherClient : clients.getParticipantOtherClients(client, eventId, materialId, participant.getId())) {
             participantOtherClient.getAsyncRemote().sendText(objectMapper.writeValueAsString(new Message("update", objectMapper.writeValueAsString(updateData))));
           }
         break;
@@ -151,56 +138,13 @@ public class CharacterSheetWebSocket {
           RollMessageData rollData = objectMapper.readValue(message.getData(), RollMessageData.class);
           materialController.addCharacterSheetRoll(sheet, participant.getUser(), rollData.getLabel(), rollData.getRoll(), rollData.getResult());
         break;
+        case "ping":
+          client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new Message("pong", "{}")));
+        break;
       }
     } catch (IOException e) {
       client.close(new CloseReason(CloseReason.CloseCodes.UNEXPECTED_CONDITION, "Internal Error"));
     }
-  }
-
-  private String getClientId(Long eventId, Long materialId, Long participantId) {
-    return new StringBuilder()
-      .append(eventId)
-      .append('-')
-      .append(materialId)
-      .append('-')
-      .append(participantId)
-      .toString();
-  }
-  
-  private void addClient(Long eventId, Long materialId, Long participantId, Session client) {
-    String clientId = getClientId(eventId, materialId, participantId);
-    
-    List<Session> clientList = clientMap.get(clientId);
-    if (clientList == null) {
-      clientList = new ArrayList<>();
-    }
-    
-    clientList.add(client);
-    
-    clientMap.put(clientId, clientList);
-  }
-  
-  private List<Session> getParticipantClients(Long eventId, Long materialId, Long participantId) {
-    return clientMap.get(getClientId(eventId, materialId, participantId));
-  }
-
-  private List<Session> getParticipantOtherClients(Session client, Long eventId, Long materialId, Long participantId) {
-    List<Session> result = new ArrayList<>();
-    
-    List<Session> participantClients = getParticipantClients(eventId, materialId, participantId);
-    if (participantClients != null) {
-      for (Session otherClient : participantClients) {
-        if (!otherClient.getId().equals(client)) {
-          result.add(otherClient);
-        }
-      }
-    }
-    
-    return result;
-  }
-
-  private void removeClient(Long eventId, Long materialId, Long participantId) {
-    clientMap.remove(getClientId(eventId, materialId, participantId));
   }
   
   @SuppressWarnings("unused")
@@ -310,4 +254,5 @@ public class CharacterSheetWebSocket {
     private String roll;
     private Integer result;
   }
+
 }
