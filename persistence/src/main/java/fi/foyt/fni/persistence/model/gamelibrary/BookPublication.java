@@ -2,6 +2,7 @@ package fi.foyt.fni.persistence.model.gamelibrary;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.NotNull;
@@ -53,10 +54,10 @@ public class BookPublication extends Publication {
     this.printCount = printCount;
   }
 	
-	@ManyToOne
+	@ManyToOne (fetch = FetchType.LAZY)
 	private PublicationFile downloadableFile;
 
-  @ManyToOne
+  @ManyToOne (fetch = FetchType.LAZY)
   private PublicationFile printableFile;
   
   private Integer numberOfPages;
