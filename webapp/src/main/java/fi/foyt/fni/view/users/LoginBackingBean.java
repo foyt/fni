@@ -122,7 +122,7 @@ public class LoginBackingBean {
       
       return null;
 	  } catch (Exception e) {
-	    logger.log(Level.SEVERE, "Error occurred while initalizing LoginBackingBean", e);
+	    logger.log(Level.SEVERE, String.format("Error occurred while initalizing LoginBackingBean. Request query string: %s", request.getQueryString()), e);
 	    return navigationController.internalError();
 	  }
 	}
