@@ -1,4 +1,4 @@
-package fi.foyt.fni.test.ui.sauce.illusion;
+package fi.foyt.fni.test.ui.sauce.illusion.settings;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -13,11 +13,11 @@ import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
 import fi.foyt.fni.test.SqlSets;
-import fi.foyt.fni.test.ui.base.illusion.IllusionCreateEventTestsBase;
+import fi.foyt.fni.test.ui.base.illusion.IllusionEventSettingsTestsBase;
 import fi.foyt.fni.test.ui.sauce.SauceLabsUtils;
 
 @RunWith (Parameterized.class)
-public class IllusionCreateEventTestsIT extends IllusionCreateEventTestsBase {
+public class IllusionEventSettingsTestsIT extends IllusionEventSettingsTestsBase {
 
   public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(getSauceUsername(), getSauceAccessKey());
 
@@ -29,7 +29,7 @@ public class IllusionCreateEventTestsIT extends IllusionCreateEventTestsBase {
     return SauceLabsUtils.getSauceBrowsers();
   }
 
-  public IllusionCreateEventTestsIT(String browser, String version, String platform) {
+  public IllusionEventSettingsTestsIT(String browser, String version, String platform) {
     this.browser = browser;
     this.version = version;
     this.platform = platform;
@@ -46,25 +46,25 @@ public class IllusionCreateEventTestsIT extends IllusionCreateEventTestsBase {
   }
   
   @Override
-  @SqlSets ("illusion-basic")
-  public void testCreateEventType() throws Exception {
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
+  public void testEventType() throws Exception {
     if ("microsoftedge".equals(browser)) {
       // FIXME: Microsoft edge driver does not support checking checkboxes
       return;
     }
     
-    super.testCreateEventType();
+    super.testEventType();
   }
   
   @Override
-  @SqlSets ("illusion-basic")
-  public void testEventLarpKalenteriCreateLocation() throws Exception {
+  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
+  public void testLocation() throws Exception {
     if ("microsoftedge".equals(browser)) {
       // FIXME: Test does not work on edge, needs more investigation
       return;
     }
     
-    super.testEventLarpKalenteriCreateLocation();
+    super.testLocation();
   }
   
   private String platform;

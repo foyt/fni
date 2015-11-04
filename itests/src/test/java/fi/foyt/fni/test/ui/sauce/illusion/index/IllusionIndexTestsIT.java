@@ -1,4 +1,4 @@
-package fi.foyt.fni.test.ui.sauce.illusion2;
+package fi.foyt.fni.test.ui.sauce.illusion.index;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -12,12 +12,11 @@ import org.junit.runners.Parameterized;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
-import fi.foyt.fni.test.SqlSets;
-import fi.foyt.fni.test.ui.base.illusion.IllusionEventSettingsTestsBase;
+import fi.foyt.fni.test.ui.base.illusion.IllusionIndexTestsBase;
 import fi.foyt.fni.test.ui.sauce.SauceLabsUtils;
 
 @RunWith (Parameterized.class)
-public class IllusionEventSettingsTestsIT extends IllusionEventSettingsTestsBase {
+public class IllusionIndexTestsIT extends IllusionIndexTestsBase {
 
   public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(getSauceUsername(), getSauceAccessKey());
 
@@ -29,7 +28,7 @@ public class IllusionEventSettingsTestsIT extends IllusionEventSettingsTestsBase
     return SauceLabsUtils.getSauceBrowsers();
   }
 
-  public IllusionEventSettingsTestsIT(String browser, String version, String platform) {
+  public IllusionIndexTestsIT(String browser, String version, String platform) {
     this.browser = browser;
     this.version = version;
     this.platform = platform;
@@ -43,28 +42,6 @@ public class IllusionEventSettingsTestsIT extends IllusionEventSettingsTestsBase
   @After
   public void tearDown() {
     getWebDriver().quit();
-  }
-  
-  @Override
-  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
-  public void testEventType() throws Exception {
-    if ("microsoftedge".equals(browser)) {
-      // FIXME: Microsoft edge driver does not support checking checkboxes
-      return;
-    }
-    
-    super.testEventType();
-  }
-  
-  @Override
-  @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
-  public void testLocation() throws Exception {
-    if ("microsoftedge".equals(browser)) {
-      // FIXME: Test does not work on edge, needs more investigation
-      return;
-    }
-    
-    super.testLocation();
   }
   
   private String platform;

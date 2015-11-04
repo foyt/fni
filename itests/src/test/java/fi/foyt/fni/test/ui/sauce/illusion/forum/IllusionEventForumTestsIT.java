@@ -1,4 +1,4 @@
-package fi.foyt.fni.test.ui.sauce.illusion;
+package fi.foyt.fni.test.ui.sauce.illusion.forum;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

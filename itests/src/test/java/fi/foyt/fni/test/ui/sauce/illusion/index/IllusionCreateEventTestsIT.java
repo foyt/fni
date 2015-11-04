@@ -1,4 +1,4 @@
-package fi.foyt.fni.test.ui.sauce.illusion;
+package fi.foyt.fni.test.ui.sauce.illusion.index;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -12,11 +12,12 @@ import org.junit.runners.Parameterized;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
-import fi.foyt.fni.test.ui.base.illusion.IllusionEventPagesTestsBase;
+import fi.foyt.fni.test.SqlSets;
+import fi.foyt.fni.test.ui.base.illusion.IllusionCreateEventTestsBase;
 import fi.foyt.fni.test.ui.sauce.SauceLabsUtils;
 
 @RunWith (Parameterized.class)
-public class IllusionEventPagesTestsIT extends IllusionEventPagesTestsBase {
+public class IllusionCreateEventTestsIT extends IllusionCreateEventTestsBase {
 
   public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(getSauceUsername(), getSauceAccessKey());
 
@@ -28,7 +29,7 @@ public class IllusionEventPagesTestsIT extends IllusionEventPagesTestsBase {
     return SauceLabsUtils.getSauceBrowsers();
   }
 
-  public IllusionEventPagesTestsIT(String browser, String version, String platform) {
+  public IllusionCreateEventTestsIT(String browser, String version, String platform) {
     this.browser = browser;
     this.version = version;
     this.platform = platform;
@@ -39,15 +40,31 @@ public class IllusionEventPagesTestsIT extends IllusionEventPagesTestsBase {
     setWebDriver(createSauceWebDriver(browser, version, platform));
   }
   
-  @Override
-  public void testPagePermaLink() throws Exception {
-    // TODO: Re-enable test. Currently disabled because test depends on 
-    // websockets and sauce connect does not support them
-  }
-  
   @After
   public void tearDown() {
     getWebDriver().quit();
+  }
+  
+  @Override
+  @SqlSets ("illusion-basic")
+  public void testCreateEventType() throws Exception {
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Microsoft edge driver does not support checking checkboxes
+      return;
+    }
+    
+    super.testCreateEventType();
+  }
+  
+  @Override
+  @SqlSets ("illusion-basic")
+  public void testEventLarpKalenteriCreateLocation() throws Exception {
+    if ("microsoftedge".equals(browser)) {
+      // FIXME: Test does not work on edge, needs more investigation
+      return;
+    }
+    
+    super.testEventLarpKalenteriCreateLocation();
   }
   
   private String platform;

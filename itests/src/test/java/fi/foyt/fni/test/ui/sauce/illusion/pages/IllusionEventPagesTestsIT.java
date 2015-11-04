@@ -1,4 +1,4 @@
-package fi.foyt.fni.test.ui.sauce.illusion2;
+package fi.foyt.fni.test.ui.sauce.illusion.pages;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -12,11 +12,11 @@ import org.junit.runners.Parameterized;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
-import fi.foyt.fni.test.ui.base.illusion.IllusionEventEditTemplateTestsBase;
+import fi.foyt.fni.test.ui.base.illusion.IllusionEventPagesTestsBase;
 import fi.foyt.fni.test.ui.sauce.SauceLabsUtils;
 
 @RunWith (Parameterized.class)
-public class IllusionEventEditTemplateTestsIT extends IllusionEventEditTemplateTestsBase {
+public class IllusionEventPagesTestsIT extends IllusionEventPagesTestsBase {
 
   public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(getSauceUsername(), getSauceAccessKey());
 
@@ -28,7 +28,7 @@ public class IllusionEventEditTemplateTestsIT extends IllusionEventEditTemplateT
     return SauceLabsUtils.getSauceBrowsers();
   }
 
-  public IllusionEventEditTemplateTestsIT(String browser, String version, String platform) {
+  public IllusionEventPagesTestsIT(String browser, String version, String platform) {
     this.browser = browser;
     this.version = version;
     this.platform = platform;
@@ -37,6 +37,12 @@ public class IllusionEventEditTemplateTestsIT extends IllusionEventEditTemplateT
   @Before
   public void setUp() throws MalformedURLException {
     setWebDriver(createSauceWebDriver(browser, version, platform));
+  }
+  
+  @Override
+  public void testPagePermaLink() throws Exception {
+    // TODO: Re-enable test. Currently disabled because test depends on 
+    // websockets and sauce connect does not support them
   }
   
   @After
