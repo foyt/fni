@@ -1076,7 +1076,9 @@
         <it.keystorepass>keystorepass</it.keystorepass>
         <it.truststorepass>truststorepass</it.truststorepass>
         <it.properties.file>src/test/resources/it.properties</it.properties.file>
-        <it.browsers>chrome:45:Linux</it.browsers>
+        <it.browser>chrome</it.browser>
+        <it.browser.version>45</it.browser>
+        <it.browser.platform>Linux</it.browser>
         <it.package />
         <it.tests>fi/foyt/fni/test/ui/sauce/${it.package}/*IT.java</it.tests>
       </properties>
@@ -1167,7 +1169,9 @@
                 <it.sauce.host>${it.sauce.host}</it.sauce.host>
                 <it.sauce.port>${it.sauce.port}</it.sauce.port>
                 <it.sauce.tunnelId>${it.sauce.tunnelId}</it.sauce.tunnelId>
-                <it.browsers>${it.browsers}</it.browsers>
+                <it.browser>${it.browser}</it.browser>
+                <it.browser.version>${it.browser.version}</it.browser>
+                <it.browser.platform>${it.browser.platform}</it.browser>
               </systemPropertyVariables>
             </configuration>
             <executions>
@@ -1540,7 +1544,9 @@
         <it.keystorepass>keystorepass</it.keystorepass>
         <it.truststorepass>truststorepass</it.truststorepass>
         <it.properties.file>src/test/resources/it-travis.properties</it.properties.file>
-        <it.browsers>chrome:45:Linux</it.browsers>
+        <it.browser>chrome</it.browser>
+        <it.browser.version>45</it.browser>
+        <it.browser.platform>Linux</it.browser>
         <it.package />
         <it.tests>fi/foyt/fni/test/ui/sauce/${it.package}/*IT.java</it.tests>
       </properties>
@@ -1631,7 +1637,9 @@
                 <it.sauce.tunnelId>${env.TRAVIS_JOB_NUMBER}</it.sauce.tunnelId>
                 <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
                 <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
-                <it.browsers>${it.browsers}</it.browsers>
+                <it.browser>${it.browser}</it.browser>
+                <it.browser.version>${it.browser.version}</it.browser>
+                <it.browser.platform>${it.browser.platform}</it.browser>
               </systemPropertyVariables>
             </configuration>
             <executions>

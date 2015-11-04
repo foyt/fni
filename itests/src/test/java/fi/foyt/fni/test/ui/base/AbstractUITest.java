@@ -54,7 +54,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     return webDriver;
   }
   
-  protected RemoteWebDriver createSauceWebDriver(String browser, String version, String platform) throws MalformedURLException {
+  protected RemoteWebDriver createSauceWebDriver() throws MalformedURLException {
+    String browser = getBrowser();
+    String version = getBrowserVersion();
+    String platform = getPlatform();
+    
     DesiredCapabilities capabilities = new DesiredCapabilities();
     
     capabilities.setCapability(CapabilityType.BROWSER_NAME, browser);

@@ -1,22 +1,17 @@
 package fi.foyt.fni.test.ui.sauce.illusion.participants;
 
 import java.net.MalformedURLException;
-import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
 import fi.foyt.fni.test.SqlSets;
 import fi.foyt.fni.test.ui.base.illusion.IllusionEventParticipantsTestsBase;
-import fi.foyt.fni.test.ui.sauce.SauceLabsUtils;
 
-@RunWith (Parameterized.class)
 public class IllusionEventParticipantsTestsIT extends IllusionEventParticipantsTestsBase {
 
   public SauceOnDemandAuthentication authentication = new SauceOnDemandAuthentication(getSauceUsername(), getSauceAccessKey());
@@ -24,20 +19,9 @@ public class IllusionEventParticipantsTestsIT extends IllusionEventParticipantsT
   @Rule
   public SauceOnDemandTestWatcher resultReportingTestWatcher = new SauceOnDemandTestWatcher(this, authentication);
 
-  @Parameterized.Parameters
-  public static List<String[]> browsers() throws Exception {
-    return SauceLabsUtils.getSauceBrowsers();
-  }
-
-  public IllusionEventParticipantsTestsIT(String browser, String version, String platform) {
-    this.browser = browser;
-    this.version = version;
-    this.platform = platform;
-  }
-  
   @Before
   public void setUp() throws MalformedURLException {
-    setWebDriver(createSauceWebDriver(browser, version, platform));
+    setWebDriver(createSauceWebDriver());
   }
   
   @After
@@ -48,7 +32,7 @@ public class IllusionEventParticipantsTestsIT extends IllusionEventParticipantsT
   @Override
   @SqlSets ({"illusion-basic", "illusion-event", "illusion-event-participant", "illusion-event-organizer"})
   public void testUpdateRole() {
-    if ("microsoftedge".equals(browser)) {
+    if ("microsoftedge".equals(getWebDriver())) {
       // FIXME: Microsoft edge driver does not support checking checkboxes
       return;
     }
@@ -56,7 +40,4 @@ public class IllusionEventParticipantsTestsIT extends IllusionEventParticipantsT
     super.testUpdateRole();
   }
   
-  private String platform;
-  private String browser;
-  private String version;  
 }
