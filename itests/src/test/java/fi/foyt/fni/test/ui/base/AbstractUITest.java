@@ -97,8 +97,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
       driver.get(loginUrl);
     }
 
+    scrollIntoView(".user-login-button");
+    scrollWindowBy(0, -300);
+    
     waitAndSendKeys(".user-login-email", email);
     waitAndSendKeys(".user-login-password", password);
+    
     waitAndClick(".user-login-button");
     waitForSelectorPresent(".menu-tools-account");
 
