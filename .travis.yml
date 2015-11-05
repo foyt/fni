@@ -97,6 +97,7 @@ script:
     -Dexec.args="-Duser.timezone=UTC" 
     -Dmaven.javadoc.skip=true 
     -Dsource.skip=true 
+    -DfailIfNoTests=true
     -Dit.properties.file=src/test/resources/it-travis.properties 
     -Dit.package=$package 
     -Dit.browser="$it_browser"
