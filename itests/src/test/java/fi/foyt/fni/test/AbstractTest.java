@@ -170,7 +170,7 @@ public abstract class AbstractTest {
   }
     
   protected String getPlatform() {
-    return System.getProperty("it.browser");
+    return System.getProperty("it.platform");
   }
 
   protected String getBrowserVersion() {
@@ -178,7 +178,7 @@ public abstract class AbstractTest {
   }
 
   protected String getBrowser() {
-    return System.getProperty("it.platform");
+    return System.getProperty("it.browser");
   }
 
   protected String getHost() {
