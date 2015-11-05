@@ -344,7 +344,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void waitForNotification() {
-    waitForNotification(getWebDriver());
+    waitForSelectorPresent(".notifications .notification");
   }
 
   protected void assertNotification(String serverity, String text) {
@@ -352,7 +352,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void assertNotificationStartsWith(String serverity, String text) {
-    assertNotificationStartsWith(getWebDriver(), serverity, text);
+    assertTrue(StringUtils.startsWithIgnoreCase(findElementBySelector(".notification-" + serverity).getText(), text));
   }
   
   protected void navigate(String path) {

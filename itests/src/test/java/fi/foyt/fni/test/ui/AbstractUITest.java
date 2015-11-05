@@ -1,18 +1,15 @@
 package fi.foyt.fni.test.ui;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import fi.foyt.fni.test.AbstractTest;
@@ -93,13 +90,4 @@ public abstract class AbstractUITest extends AbstractTest {
     });
   }
 
-  protected void waitForNotification(RemoteWebDriver driver) {
-    new WebDriverWait(driver, 60)
-      .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".notifications .notification")));
-  }
-
-  protected void assertNotificationStartsWith(RemoteWebDriver driver, String serverity, String text) {
-    assertTrue(StringUtils.startsWithIgnoreCase(driver.findElement(By.cssSelector(".notification-" + serverity)).getText(), text));
-  }
-  
 }
