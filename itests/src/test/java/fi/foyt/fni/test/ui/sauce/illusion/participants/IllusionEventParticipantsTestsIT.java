@@ -32,7 +32,7 @@ public class IllusionEventParticipantsTestsIT extends IllusionEventParticipantsT
   @Override
   @SqlSets ({"illusion-basic", "illusion-event", "illusion-event-participant", "illusion-event-organizer"})
   public void testUpdateRole() {
-    if ("microsoftedge".equals(getWebDriver())) {
+    if ("microsoftedge".equals(getBrowser())) {
       // FIXME: Microsoft edge driver does not support checking checkboxes
       return;
     }
