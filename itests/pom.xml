@@ -1077,8 +1077,8 @@
         <it.truststorepass>truststorepass</it.truststorepass>
         <it.properties.file>src/test/resources/it.properties</it.properties.file>
         <it.browser>chrome</it.browser>
-        <it.browser.version>45</it.browser>
-        <it.browser.platform>Linux</it.browser>
+        <it.browser.version>45</it.browser.version>
+        <it.platform>Linux</it.platform>
         <it.package />
         <it.tests>fi/foyt/fni/test/ui/sauce/${it.package}/*IT.java</it.tests>
       </properties>
@@ -1170,8 +1170,8 @@
                 <it.sauce.port>${it.sauce.port}</it.sauce.port>
                 <it.sauce.tunnelId>${it.sauce.tunnelId}</it.sauce.tunnelId>
                 <it.browser>${it.browser}</it.browser>
-                <it.browser.version>${it.browser.version}</it.browser>
-                <it.browser.platform>${it.browser.platform}</it.browser>
+                <it.browser.version>${it.browser.version}</it.browser.version>
+                <it.platform>${it.browser.platform}</it.platform>
               </systemPropertyVariables>
             </configuration>
             <executions>
@@ -1545,8 +1545,8 @@
         <it.truststorepass>truststorepass</it.truststorepass>
         <it.properties.file>src/test/resources/it-travis.properties</it.properties.file>
         <it.browser>chrome</it.browser>
-        <it.browser.version>45</it.browser>
-        <it.browser.platform>Linux</it.browser>
+        <it.browser.version>45</it.browser.version>
+        <it.platform>Linux</it.platform>
         <it.package />
         <it.tests>fi/foyt/fni/test/ui/sauce/${it.package}/*IT.java</it.tests>
       </properties>
@@ -1638,8 +1638,8 @@
                 <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
                 <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
                 <it.browser>${it.browser}</it.browser>
-                <it.browser.version>${it.browser.version}</it.browser>
-                <it.browser.platform>${it.browser.platform}</it.browser>
+                <it.browser.version>${it.browser.version}</it.browser.version>
+                <it.platform>${it.browser.platform}</it.platform>
               </systemPropertyVariables>
             </configuration>
             <executions>
