@@ -20,7 +20,6 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
@@ -90,20 +89,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
       driver.get(loginUrl);
     }
     
-    waitForSelectorPresent(".user-login-email");
-
-    if (!findElementsBySelector("#cookiesdirective").isEmpty()) {
-      driver.manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
-      driver.get(loginUrl);
-    }
-
-    scrollIntoView(".user-login-button");
-    scrollWindowBy(0, -300);
+    scrollWaitAndType(".user-login-email", email);
+    scrollWaitAndType(".user-login-password", password);
+    scrollWaitAndClick(".user-login-button");
     
-    waitAndSendKeys(".user-login-email", email);
-    waitAndSendKeys(".user-login-password", password);
-    
-    waitAndClick(".user-login-button");
     waitForSelectorPresent(".menu-tools-account");
 
     assertSelectorPresent(".menu-tools-account");
