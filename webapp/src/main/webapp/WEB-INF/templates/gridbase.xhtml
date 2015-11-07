@@ -55,7 +55,9 @@
       <h:outputScript name="scripts/gui/dust.js"></h:outputScript>
       
       <!-- Cookies Directive -->
-
+      <script type="text/javascript">
+        window.cookieconsent_options = {"message":"#{locales['cookieconsent.message']}","dismiss":"#{locales['cookieconsent.dismiss']}","learnMore":"#{locales['cookieconsent.learnMore']}","link":"/about#cookies","theme":"dark-bottom"};
+      </script>
       <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
       
       <!-- Piwik -->
