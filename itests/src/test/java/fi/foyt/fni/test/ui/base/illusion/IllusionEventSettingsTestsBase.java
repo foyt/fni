@@ -94,7 +94,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testDates() throws Exception {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
@@ -137,7 +137,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testLocation() throws Exception {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     String location = "Test Valley District, United Kingdom";
@@ -192,7 +192,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testDomain() throws Exception {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     String location = "Test place";
@@ -208,7 +208,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventSignUpDates() throws Exception {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     String signUpStartDate = "10/05/2030";
@@ -227,7 +227,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventImageUrl() throws Exception {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     String imageUrl = "http://www.url.to/image.png";
@@ -243,7 +243,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventBeginnerFriendly() throws Exception {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     
@@ -258,7 +258,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventAgeLimit() throws Exception {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     String ageLimit = "16";
@@ -274,7 +274,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventType() throws Exception {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
 
@@ -289,7 +289,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventGenres() throws Exception {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
 
@@ -308,7 +308,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventPublished() throws Exception {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
 
@@ -332,7 +332,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testEventDelete() throws Exception {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     clickSelector(".illusion-remove-event");
@@ -449,7 +449,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
               false, 
               1l)))));
     
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     
@@ -571,7 +571,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
               false, 
               1l)))));
     
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     clickSelector(".illusion-event-settings-genre input[value='1']");
@@ -695,7 +695,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
               false, 
               1l)))));
     
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     typeSelectorInputValue(".illusion-event-settings-location", "Otakaari 24, 02150 Espoo, Finland");
@@ -788,7 +788,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         .withHeader("Content-Type", "application/json")
         .withBody(responseBody)));
     
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     
@@ -879,7 +879,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         .withHeader("Content-Type", "application/json")
         .withBody(responseBody)));
     
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     
@@ -973,7 +973,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         .withHeader("Content-Type", "application/json")
         .withBody(responseBody)));
     
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     typeSelectorInputValue(".illusion-event-settings-location", "Otakaari 24, 02150 Espoo, Finland");
@@ -1098,7 +1098,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
               false, 
               1l)))));
     
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     
@@ -1221,7 +1221,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
               false, 
               1l)))));
     
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     

@@ -37,7 +37,7 @@ public class ForgeConnectDropboxTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users"})
   public void testConnect() {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
 
     loginGoogle();
     navigate("/forge/");

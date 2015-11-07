@@ -90,7 +90,7 @@ public class LoginTestsBase extends AbstractUITest {
 
   @Test
   public void testRegister() throws MessagingException {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     
     GreenMail greenMail = startSmtpServer();
     try {

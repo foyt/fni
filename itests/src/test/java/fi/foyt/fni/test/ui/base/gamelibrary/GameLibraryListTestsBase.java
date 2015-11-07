@@ -106,7 +106,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testMostRecentList() {
-    acceptCookieDirective(getWebDriver(), true);
+    acceptCookieDirective();
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
 
     testPublicationDetails(getWebDriver(), ".gamelibrary-publication[data-index='0']", UML_ID, UML_PATH, UML_TITLE, UML_TAGS, UML_DESC, UML_PRICE, UML_PAGES,
@@ -144,7 +144,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testTagList() {
-    acceptCookieDirective(getWebDriver(), true);
+    acceptCookieDirective();
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/tags/test");
 
     testPublicationDetails(getWebDriver(), ".gamelibrary-publication[data-index='0']", SIMPLE_ID, SIMPLE_PATH, SIMPLE_TITLE, SIMPLE_TAGS, SIMPLE_DESC, SIMPLE_PRICE,
@@ -157,7 +157,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testPublicationDetailsSimple() {
-    acceptCookieDirective(getWebDriver(), true);
+    acceptCookieDirective();
     getWebDriver().get(getAppUrl(true) + SIMPLE_PATH);
     testPublicationDetails(getWebDriver(), ".gamelibrary-publication", SIMPLE_ID, SIMPLE_PATH, SIMPLE_TITLE, SIMPLE_TAGS, SIMPLE_DESC, SIMPLE_PRICE, SIMPLE_PAGES, SIMPLE_AUTHOR_NAMES,
         SIMPLE_AUTHOR_IDS, SIMPLE_LICENSE, SIMPLE_PURCHASABLE, SIMPLE_COMMENT_URL, SIMPLE_COMMENTS);
@@ -166,7 +166,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testPublicationDetailsBySaAndRus() {
-    acceptCookieDirective(getWebDriver(), true);
+    acceptCookieDirective();
     getWebDriver().get(getAppUrl(true) + BYSARUS_PATH);
     testPublicationDetails(getWebDriver(), ".gamelibrary-publication", BYSARUS_ID, BYSARUS_PATH, BYSARUS_TITLE, BYSARUS_TAGS, BYSARUS_DESC, BYSARUS_PRICE, BYSARUS_PAGES, BYSARUS_AUTHOR_NAMES,
         BYSARUS_AUTHOR_IDS, BYSARUS_LICENSE, BYSARUS_PURCHASABLE, BYSARUS_COMMENT_URL, BYSARUS_COMMENTS);
@@ -175,7 +175,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testPublicationDetailsUmlaut() {
-    acceptCookieDirective(getWebDriver(), true);
+    acceptCookieDirective();
     getWebDriver().get(getAppUrl(true) + UML_PATH);
     testPublicationDetails(getWebDriver(), ".gamelibrary-publication", UML_ID, UML_PATH, UML_TITLE, UML_TAGS, UML_DESC, UML_PRICE, UML_PAGES, UML_AUTHOR_NAMES, UML_AUTHOR_IDS, UML_LICENSE,
         UML_PURCHASABLE, UML_COMMENT_URL, UML_COMMENTS);

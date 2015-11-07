@@ -497,7 +497,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void acceptCookieDirective() {
-    acceptCookieDirective(getWebDriver()); 
+    waitAndClick(".cc_banner-wrapper .cc_btn_accept_all");
   }
   
   protected void selectSelectBoxByValue(String selector, String value) {
