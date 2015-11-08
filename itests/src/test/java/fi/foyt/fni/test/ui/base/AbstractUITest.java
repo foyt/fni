@@ -469,6 +469,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void scrollWaitAndType(String selector, String keysToSend) {
+    waitForSelectorPresent(selector);
     scrollIntoView(selector);
     waitForSelectorVisible(selector);
     sendKeysSelector(selector, keysToSend);
