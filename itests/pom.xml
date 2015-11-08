@@ -526,7 +526,7 @@
                   <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
                   <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
                   <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
-                </systemProperties>                
+              </systemProperties>                
               </container>
               <configuration>
                 <properties>
@@ -583,6 +583,7 @@
                       <command>/system-property=fni-host:add(value="${it.host}")</command>
                       <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
                       <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
+                      <command>/system-property=it-test(value="true")</command>
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
@@ -1012,6 +1013,7 @@
                       <command>/system-property=fni-host:add(value="${it.host}")</command>
                       <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
                       <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
+                      <command>/system-property=it-test(value="true")</command>
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
@@ -1453,6 +1455,7 @@
                       <command>/system-property=fni-host:add(value="${it.host}")</command>
                       <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
                       <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
+                      <command>/system-property=it-test(value="true")</command>
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
@@ -1909,6 +1912,7 @@
                       <command>/system-property=fni-host:add(value="${it.host}")</command>
                       <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
                       <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
+                      <command>/system-property=it-test(value="true")</command>
                       <command>/core-service=management/security-realm=ssl-realm:add()</command>
                       <command>/core-service=management/security-realm=ssl-realm/server-identity=ssl:add(keystore-path="${it.keystore}",keystore-password="${it.keystorepass}",alias="${it.host}")</command>
                       <command>/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding="https",security-realm="ssl-realm")</command>
