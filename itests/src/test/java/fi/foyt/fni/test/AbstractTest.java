@@ -168,6 +168,18 @@ public abstract class AbstractTest {
   protected String getSeleniumVersion() {
     return System.getProperty("it.selenium.version");
   }
+    
+  protected String getPlatform() {
+    return System.getProperty("it.platform");
+  }
+
+  protected String getBrowserVersion() {
+    return System.getProperty("it.browser.version");
+  }
+
+  protected String getBrowser() {
+    return System.getProperty("it.browser");
+  }
 
   protected String getHost() {
     return System.getProperty("it.host");

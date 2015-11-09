@@ -449,8 +449,8 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     
     navigate("/illusion/createevent");
     
-    findElementBySelector(".illusion-create-event-name").sendKeys(name);
-    findElementBySelector(".illusion-create-event-description").sendKeys(description);
+    waitAndSendKeys(".illusion-create-event-name", name);
+    waitAndSendKeys(".illusion-create-event-description", description);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", "10/20/2030");
     clickSelector(".illusion-create-event-larp-kalenteri");

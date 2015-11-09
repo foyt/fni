@@ -16,7 +16,7 @@ public class UsersVerifyTestsBase extends AbstractUITest {
   @Test
   public void testInvalidKeyTest() {
     getWebDriver().get(getAppUrl() + "/users/verify/bogus");
-    waitForNotification(getWebDriver());
+    waitForNotification();
     assertNotification("error", "Invalid Verification Key. Perhaps You Have Already Clicked This Link Before");
   }
 
@@ -32,7 +32,7 @@ public class UsersVerifyTestsBase extends AbstractUITest {
       getWebDriver().findElement(By.cssSelector(".user-login-password")).sendKeys("pass");
       getWebDriver().findElement(By.cssSelector(".user-login-button")).click();
 
-      waitForNotification(getWebDriver());
+      waitForNotification();
       assertNotification("warning", "You Have Not Confirmed Your E-email Address");
 
       String key = UUID.randomUUID().toString();

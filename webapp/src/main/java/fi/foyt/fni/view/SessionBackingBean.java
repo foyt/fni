@@ -75,6 +75,7 @@ public class SessionBackingBean {
       logger.log(Level.SEVERE, "Could not serialize date formatters", e);
     }
     
+    test = StringUtils.equals(System.getProperty("it-test"), "true");
   }
   
   private String getDateFormat(int style) {
@@ -132,6 +133,11 @@ public class SessionBackingBean {
 	  return request.getRequestURI();
 	}
 	
+	public boolean getTest() {
+	  return test;
+	}
+	
 	private String dateFormats;
 	private String timeFormats;
+	private boolean test;
 }

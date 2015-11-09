@@ -20,7 +20,6 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
@@ -54,7 +53,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     return webDriver;
   }
   
-  protected RemoteWebDriver createSauceWebDriver(String browser, String version, String platform) throws MalformedURLException {
+  protected RemoteWebDriver createSauceWebDriver() throws MalformedURLException {
+    String browser = getBrowser();
+    String version = getBrowserVersion();
+    String platform = getPlatform();
+    
     DesiredCapabilities capabilities = new DesiredCapabilities();
     
     capabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
@@ -86,16 +89,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
       driver.get(loginUrl);
     }
     
-    waitForSelectorPresent(".user-login-email");
-
-    if (!findElementsBySelector("#cookiesdirective").isEmpty()) {
-      driver.manage().addCookie(new Cookie("cookiesDirective", "1", getHost(), "/", null));
-      driver.get(loginUrl);
-    }
-
-    waitAndSendKeys(".user-login-email", email);
-    waitAndSendKeys(".user-login-password", password);
-    waitAndClick(".user-login-button");
+    scrollWaitAndType(".user-login-email", email);
+    scrollWaitAndType(".user-login-password", password);
+    scrollWaitAndClick(".user-login-button");
+    
     waitForSelectorPresent(".menu-tools-account");
 
     assertSelectorPresent(".menu-tools-account");
@@ -196,7 +193,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
           if (elements.size() > 0) {
             return StringUtils.isNotBlank(elements.get(0).getAttribute("value"));
           }
-        } catch (StaleElementReferenceException e) {
+        } catch (Exception e) {
         }
         
         return false;
@@ -212,7 +209,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
           if (elements.isEmpty()) {
             return true;
           }
-        } catch (StaleElementReferenceException e) {
+        } catch (Exception e) {
         }
         
         return false;
@@ -340,7 +337,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void waitForNotification() {
-    waitForNotification(getWebDriver());
+    waitForSelectorPresent(".notifications .notification");
   }
 
   protected void assertNotification(String serverity, String text) {
@@ -348,7 +345,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void assertNotificationStartsWith(String serverity, String text) {
-    assertNotificationStartsWith(getWebDriver(), serverity, text);
+    assertTrue(StringUtils.startsWithIgnoreCase(findElementBySelector(".notification-" + serverity).getText(), text));
   }
   
   protected void navigate(String path) {
@@ -472,6 +469,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void scrollWaitAndType(String selector, String keysToSend) {
+    waitForSelectorPresent(selector);
     scrollIntoView(selector);
     waitForSelectorVisible(selector);
     sendKeysSelector(selector, keysToSend);
@@ -500,7 +498,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void acceptCookieDirective() {
-    acceptCookieDirective(getWebDriver()); 
+//    waitAndClick(".cc_banner-wrapper .cc_btn_accept_all");
   }
   
   protected void selectSelectBoxByValue(String selector, String value) {

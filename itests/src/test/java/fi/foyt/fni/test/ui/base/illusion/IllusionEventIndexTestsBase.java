@@ -110,6 +110,7 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
   @SqlSets ("illusion-event-oai")
   public void testJoinOpenNotLoggedIn() {
     navigate("/illusion/event/open");
+    waitForSelectorPresent(".illusion-event-join-button");
     assertSelectorClickable(".illusion-event-join-button");
     clickSelector(".illusion-event-join-button");
     waitForUrlMatches(".*/login.*");

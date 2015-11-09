@@ -69,7 +69,7 @@ public class EditProfileTestsBase extends AbstractUITest {
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password")).click();
       waitForSelectorVisible(".users-editprofile-authentication-source-change-password-container");
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-container input[type=\"submit\"]")).click();
-      waitForNotification(getWebDriver());
+      waitForNotification();
       assertNotification("warning", "Password is required");
     } finally {
       deleteUser(7l);
@@ -91,7 +91,7 @@ public class EditProfileTestsBase extends AbstractUITest {
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-password2")).sendKeys("asd");
       
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-container input[type=\"submit\"]")).click();
-      waitForNotification(getWebDriver());
+      waitForNotification();
       assertNotification("warning", "Passwords do not match");
     } finally {
       deleteUser(7l);
@@ -113,7 +113,7 @@ public class EditProfileTestsBase extends AbstractUITest {
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-password2")).sendKeys("qwe");
       
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-container input[type=\"submit\"]")).click();
-      waitForNotification(getWebDriver());
+      waitForNotification();
       assertNotification("info", "Password Changed");
 
       loginInternal(getWebDriver(), "passchange@foyt.fi", "qwe");

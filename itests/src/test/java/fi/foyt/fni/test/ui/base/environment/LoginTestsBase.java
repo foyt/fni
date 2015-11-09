@@ -66,7 +66,7 @@ public class LoginTestsBase extends AbstractUITest {
     navigate("/login/", true);
     waitTitle("Login");
     clickSelector(".user-register-button");
-    waitForNotification(getWebDriver());
+    waitForNotification();
     assertSelectorText(".notifications-container .notification-error:nth-child(1)", "First Name Is Required", true, true);
     assertSelectorText(".notifications-container .notification-error:nth-child(2)", "Last Name Is Required", true, true);
     assertSelectorText(".notifications-container .notification-error:nth-child(3)", "Email Is Required", true, true);
@@ -84,13 +84,13 @@ public class LoginTestsBase extends AbstractUITest {
     waitAndSendKeys(".user-register-password2", "asd");
     waitAndClick(".user-register-button");
     
-    waitForNotification(getWebDriver());
+    waitForNotification();
     assertNotification("warning", "Passwords Do Not Match");
   }
 
   @Test
   public void testRegister() throws MessagingException {
-    acceptCookieDirective(getWebDriver());
+    acceptCookieDirective();
     
     GreenMail greenMail = startSmtpServer();
     try {
@@ -103,8 +103,8 @@ public class LoginTestsBase extends AbstractUITest {
       waitAndSendKeys(".user-register-password2", "qwe");
       waitAndClick(".user-register-button");
       
-      waitForNotification(getWebDriver());
-      assertNotificationStartsWith(getWebDriver(), "info", "Verification Email Has Been Sent");
+      waitForNotification();
+      assertNotificationStartsWith("info", "Verification Email Has Been Sent");
 
       assertEquals(1, greenMail.getReceivedMessages().length);
 
@@ -126,7 +126,7 @@ public class LoginTestsBase extends AbstractUITest {
     assertSelectorText(".users-forgot-password-dialog p", "Enter your email address to the field below and we will send you a password reset link", true, true);
     sendKeysSelector(".users-forgot-password-dialog input[name=\"email\"]", "nonexisting@foyt.fi");
     clickSelector(".ui-dialog-buttonpane .ok-button");
-    waitForNotification(getWebDriver());
+    waitForNotification();
     assertNotification("warning", "User Could Not Be Found By Given E-mail");
   }
   
@@ -145,7 +145,7 @@ public class LoginTestsBase extends AbstractUITest {
     waitAndSendKeys(".users-forgot-password-dialog input[name=\"email\"]", "invalidaddress");
     waitAndClick(".ui-dialog-buttonpane .ok-button");
     
-    waitForNotification(getWebDriver());
+    waitForNotification();
     assertNotification("warning", "User Could Not Be Found By Given E-mail");
   }
   
@@ -165,8 +165,8 @@ public class LoginTestsBase extends AbstractUITest {
       getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog input[name=\"email\"]")).sendKeys("user@foyt.fi");
       getWebDriver().findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
       
-      waitForNotification(getWebDriver());
-      assertNotificationStartsWith(getWebDriver(), "info", "Password reset e-mail has been sent into user@foyt.fi. Click link on the e-mail to reset your password.");
+      waitForNotification();
+      assertNotificationStartsWith("info", "Password reset e-mail has been sent into user@foyt.fi. Click link on the e-mail to reset your password.");
       
       assertEquals(1, greenMail.getReceivedMessages().length);
       String mailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
@@ -183,8 +183,8 @@ public class LoginTestsBase extends AbstractUITest {
     loginInternal(getWebDriver(), "missinginfo@foyt.fi", "pass");
     waitForUrlMatches(getWebDriver(), ".*/editprofile.*");
     assertEquals("Edit Profile", getWebDriver().getTitle());
-    waitForNotification(getWebDriver());
-    assertNotificationStartsWith(getWebDriver(), "info", "Your profile is missing some required information, please fill the missing fields before continuing");
+    waitForNotification();
+    assertNotificationStartsWith("info", "Your profile is missing some required information, please fill the missing fields before continuing");
     
   }
 
