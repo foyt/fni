@@ -58,7 +58,11 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
   public Configuration getConfiguration(ServletContext context) {
     ConfigurationBuilder configuration = ConfigurationBuilder.begin();
 
-    String contextPath = systemSettingsController.getSiteContextPath();
+    String contextPath = context != null ? context.getContextPath() : null;
+    if (StringUtils.isEmpty(contextPath)) {
+      contextPath = "";
+    }
+    
     Integer httpPort = systemSettingsController.getSiteHttpPort();
     String port = httpPort != 80 ? ":" + httpPort : "";
     String siteHost = systemSettingsController.getSiteHost();
@@ -113,7 +117,7 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
            event.getRequest().getSession().invalidate();
          }
       }
-      .and(Redirect.temporary(siteUrl + "/logout?redirectUrl={scheme}://{domain}:{port}" + context.getContextPath() + "/")));
+      .and(Redirect.temporary(siteUrl + "/logout?redirectUrl={scheme}://{domain}:{port}" + contextPath + "/")));
     
     return configuration;
   }

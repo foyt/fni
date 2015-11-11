@@ -3,6 +3,7 @@ package fi.foyt.fni.jsf;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.config.Configuration;
 import org.ocpsoft.rewrite.config.ConfigurationBuilder;
 import org.ocpsoft.rewrite.config.Direction;
@@ -26,6 +27,11 @@ public class DefaultsRewriteConfigurationProvider extends HttpConfigurationProvi
   
   @Override
   public Configuration getConfiguration(ServletContext context) {
+    String contextPath = context != null ? context.getContextPath() : null;
+    if (StringUtils.isEmpty(contextPath)) {
+      contextPath = "";
+    }
+    
     ConfigurationBuilder configuration = ConfigurationBuilder.begin();
 
     configuration
@@ -34,7 +40,7 @@ public class DefaultsRewriteConfigurationProvider extends HttpConfigurationProvi
     
     configuration.addRule()
       .when(Direction.isInbound().and(Path.matches("/login")).and(Query.matches("{query}")))
-      .perform(Redirect.temporary(context.getContextPath() + "/login/?{query}"));
+      .perform(Redirect.temporary(contextPath + "/login/?{query}"));
     
     String siteHost = systemSettingsController.getSiteHost();
     
@@ -51,7 +57,7 @@ public class DefaultsRewriteConfigurationProvider extends HttpConfigurationProvi
            event.getRequest().getSession().invalidate();
          }
       }
-      .and(Redirect.temporary(context.getContextPath() + "/")));
+      .and(Redirect.temporary(contextPath + "/")));
     
     configuration.addRule()
       .when(
