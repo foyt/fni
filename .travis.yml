@@ -89,8 +89,8 @@ env:
   - goals=verify package=forum use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
   
 before_script:
-- if [ $use_sc = true ]; then curl -sS https://saucelabs.com/downloads/sc-4.3.11-linux.tar.gz|tar -xzC /tmp/; fi;
-- if [ $use_sc = true ]; then /tmp/sc-4.3.11-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish -D *.facebook.com,cdnjs.cloudflare.com --daemonize --pidfile /tmp/sc.pid; fi;
+- if [ $use_sc = true ]; then curl -sS https://saucelabs.com/downloads/sc-4.3.12-linux.tar.gz|tar -xzC /tmp/; fi;
+- if [ $use_sc = true ]; then /tmp/sc-4.3.12-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish -D *.facebook.com,cdnjs.cloudflare.com --daemonize --pidfile /tmp/sc.pid; fi;
 script: 
   mvn $goals 
     -P$it_profile 
