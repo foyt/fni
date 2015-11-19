@@ -112,17 +112,17 @@ public class LoginBackingBean {
   	  if (StringUtils.isNotBlank(loginMethod)) {
   	    AuthSource authSource = EnumUtils.getEnum(AuthSource.class, loginMethod);
   	    if (authSource != null) {
-  	      handleExternalLogin(authSource);
+  	      return handleExternalLogin(authSource);
   	    }
   	  } else {
   	    if (!systemSettingsController.getSiteHost().equals(request.getServerName())) {
-          handleExternalLogin(AuthSource.ILLUSION_INTERNAL);
+  	      return handleExternalLogin(AuthSource.ILLUSION_INTERNAL);
   	    }
   	  }
       
       return null;
 	  } catch (Exception e) {
-	    logger.log(Level.SEVERE, String.format("Error occurred while initalizing LoginBackingBean. Request query string: %s", request.getQueryString()), e);
+	    logger.log(Level.SEVERE, String.format("Error occurred while initalizing LoginBackingBean. Request url: %s?%s", request.getRequestURL().toString(), request.getQueryString()), e);
 	    return navigationController.internalError();
 	  }
 	}
@@ -314,7 +314,7 @@ public class LoginBackingBean {
 		}
 	}
 
-	private void handleExternalLogin(AuthSource authSource) {
+	private String handleExternalLogin(AuthSource authSource) {
 	  FacesContext facesContext = FacesContext.getCurrentInstance();
 	  ExternalContext externalContext = facesContext.getExternalContext();
 		Map<String, String[]> parameters = externalContext.getRequestParameterValuesMap();
@@ -346,7 +346,11 @@ public class LoginBackingBean {
 						} else {
 							String[] extraScopes = parameters.get("extraScopes");
 							String redirectUrl = oAuthStrategy.authorize(extraScopes);
-							externalContext.redirect(redirectUrl);
+							if (StringUtils.isNotBlank(redirectUrl)) {
+							  externalContext.redirect(redirectUrl);
+							} else {
+							  return navigationController.accessDenied(); 
+							}
 						}
 					}
 				}
@@ -369,6 +373,8 @@ public class LoginBackingBean {
 		} else {
 			FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.invalidAuthenticationStrategy"));
 		}
+		
+		return null;
 	}
   
   public String getReturnParam() {

@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
@@ -19,6 +21,9 @@ import fi.foyt.fni.persistence.model.users.UserToken;
 import fi.foyt.fni.session.SessionController;
 
 public abstract class OAuthAuthenticationStrategy extends AuthenticationStrategy {
+  
+  @Inject
+  private Logger logger;
   
   @Inject
   private SessionController sessionController;
@@ -40,31 +45,34 @@ public abstract class OAuthAuthenticationStrategy extends AuthenticationStrategy
     }
     
     OAuthService service = getOAuthService(scopes);
-    
-    Token requestToken = null;
-    
-    
-    boolean isV1 = getApi() instanceof DefaultApi10a;
-    if (isV1) {
-      requestToken = service.getRequestToken();
-    }
-    
-    String authUrl = service.getAuthorizationUrl(requestToken);
-    
-    if (isV1) {
-      if (StringUtils.isNotBlank(getCallbackUrl())) {
-        try {
-          authUrl += "&oauth_callback=" + URLEncoder.encode(getCallbackUrl(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-        	throw new ConfigurationErrorException(e);
+    if (service != null) {
+      Token requestToken = null;
+      
+      
+      boolean isV1 = getApi() instanceof DefaultApi10a;
+      if (isV1) {
+        requestToken = service.getRequestToken();
+      }
+      
+      String authUrl = service.getAuthorizationUrl(requestToken);
+      
+      if (isV1) {
+        if (StringUtils.isNotBlank(getCallbackUrl())) {
+          try {
+            authUrl += "&oauth_callback=" + URLEncoder.encode(getCallbackUrl(), "UTF-8");
+          } catch (UnsupportedEncodingException e) {
+          	throw new ConfigurationErrorException(e);
+          }
         }
       }
+      
+      sessionController.setLoginRequestToken(requestToken);
+      sessionController.setLoginScopes(scopes);
+     
+      return authUrl;
+    } else {
+      return null;
     }
-    
-    sessionController.setLoginRequestToken(requestToken);
-    sessionController.setLoginScopes(scopes);
-   
-    return authUrl;
   }
   
 	@Override
@@ -76,15 +84,19 @@ public abstract class OAuthAuthenticationStrategy extends AuthenticationStrategy
       sessionController.setLoginScopes(null);
       
       OAuthService service = getOAuthService(scopes);
-      String verifierValue = getVerifier(parameters);
-      if (StringUtils.isBlank(verifierValue)) {
+      if (service != null) {
+        String verifierValue = getVerifier(parameters);
+        if (StringUtils.isBlank(verifierValue)) {
+          return null;
+        }
+        
+        Verifier verifier = new Verifier(verifierValue);
+        Token accessToken = service.getAccessToken(requestToken, verifier);
+        
+        return handleLogin(locale, service, accessToken, scopes);
+      } else {
         return null;
       }
-      
-      Verifier verifier = new Verifier(verifierValue);
-      Token accessToken = service.getAccessToken(requestToken, verifier);
-      
-      return handleLogin(locale, service, accessToken, scopes);
     } catch (Exception e) {
       throw new ExternalLoginFailedException(e);
     }
@@ -105,22 +117,31 @@ public abstract class OAuthAuthenticationStrategy extends AuthenticationStrategy
   protected abstract String[] getRequiredScopes();
   
   public OAuthService getOAuthService(String... scopes) {
-    ServiceBuilder serviceBuilder = new ServiceBuilder().provider(getApi())
-      .apiKey(getApiKey())
-      .apiSecret(getApiSecret())
-      .callback(getCallbackUrl());
-     
-    if ((scopes != null) && (scopes.length > 0)) {
-      StringBuilder scopeBuilder = new StringBuilder();
-      for (int i = 0, l = scopes.length; i < l;i++) {
-        scopeBuilder.append(scopes[i]);
-        if (i < (l - 1))
-          scopeBuilder.append(' ');
-      }
-      serviceBuilder = serviceBuilder.scope(scopeBuilder.toString());
-    }
+    String apiKey = getApiKey();
+    String apiSecret = getApiSecret();
+    String callbackUrl = getCallbackUrl();
     
-    return serviceBuilder.build();
+    if (StringUtils.isBlank(apiKey) || StringUtils.isBlank(apiSecret) || StringUtils.isBlank(callbackUrl)) {
+      logger.log(Level.WARNING, "Could not create OAuthService because apiKey, apiSecret or callbackUrl was missing");
+      return null;
+    } else {
+      ServiceBuilder serviceBuilder = new ServiceBuilder().provider(getApi())
+        .apiKey(apiKey)
+        .apiSecret(apiSecret)
+        .callback(callbackUrl);
+       
+      if ((scopes != null) && (scopes.length > 0)) {
+        StringBuilder scopeBuilder = new StringBuilder();
+        for (int i = 0, l = scopes.length; i < l;i++) {
+          scopeBuilder.append(scopes[i]);
+          if (i < (l - 1))
+            scopeBuilder.append(' ');
+        }
+        serviceBuilder = serviceBuilder.scope(scopeBuilder.toString());
+      }
+      
+      return serviceBuilder.build();
+    }
   }
 
 }
