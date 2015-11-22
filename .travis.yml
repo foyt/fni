@@ -103,8 +103,8 @@ script:
     -Dit.browser.version="$it_browser_version"
     -Dit.platform="$it_platform"
 after_script:
-- if [ $use_sc = true ]; then kill `cat /tmp/sc.pid`; fi;
-- if [ $use_sc = true ]; then c=0; while kill -0 `cat /tmp/sc.pid`; do sleep 0.5; c=$((c+1)); if [ $c -gt 60 ]; then kill -9 `cat /tmp/sc.pid`; fi; done; fi;
+- if [ -e /tmp/sc.pid ] && [ $use_sc = true ]; then kill `cat /tmp/sc.pid`; fi;
+- if [ -e /tmp/sc.pid ] && [ $use_sc = true ]; then c=0; while kill -0 `cat /tmp/sc.pid`; do sleep 0.5; c=$((c+1)); if [ $c -gt 60 ]; then kill -9 `cat /tmp/sc.pid`; fi; done; fi;
 after_success:
 - if [ $TRAVIS_BRANCH = 'devel' ]; then python travis/m2conf.py; fi;
 - if [ $TRAVIS_BRANCH = 'devel' ]; then mvn deploy --settings ~/.m2/mySettings.xml; fi;
