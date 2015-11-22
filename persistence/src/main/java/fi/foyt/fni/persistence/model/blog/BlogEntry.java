@@ -131,7 +131,7 @@ public class BlogEntry {
   
   @NotNull
   @NotEmpty
-  @Column (nullable=false)
+  @Column (nullable=false, unique = true)
   private String guid;
 
   @ManyToOne
