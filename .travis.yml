@@ -90,7 +90,7 @@ env:
   
 before_script:
 - if [ $use_sc = true ]; then curl -sS https://saucelabs.com/downloads/sc-4.3.12-linux.tar.gz|tar -xzC /tmp/; fi;
-- if [ $use_sc = true ]; then /tmp/sc-4.3.12-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish -D *.facebook.com,cdnjs.cloudflare.com --daemonize --pidfile /tmp/sc.pid; fi;
+- if [ $use_sc = true ]; then /tmp/sc-4.3.12-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish -B *.facebook.com --daemonize --pidfile /tmp/sc.pid; fi;
 script: 
   mvn $goals 
     -P$it_profile 
