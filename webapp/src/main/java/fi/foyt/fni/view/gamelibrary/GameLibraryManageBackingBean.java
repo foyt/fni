@@ -86,7 +86,7 @@ public class GameLibraryManageBackingBean {
 		return CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
 	}
   
-  public void createBookPublication() throws IOException {
+  public String createBookPublication() throws IOException {
     Language defaultLanguage = systemSettingsController.getDefaultLanguage();
     
   	BookPublication bookPublication = publicationController.createBookPublication(
@@ -105,12 +105,7 @@ public class GameLibraryManageBackingBean {
   	    null,
   	    defaultLanguage);
   	
-  	FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
-  	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
-  	  .append("/gamelibrary/manage/")
-  	  .append(bookPublication.getId())
-  	  .append("/edit")
-  	  .toString());
+  	return String.format("/gamelibrary/editpublication.jsf?faces-redirect=true&amp;publicationId=%d", bookPublication.getId());
   }
   
   public String publish(Long publicationId) {
