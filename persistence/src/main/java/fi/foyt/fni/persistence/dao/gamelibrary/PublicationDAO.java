@@ -56,20 +56,6 @@ public class PublicationDAO extends GenericDAO<Publication> {
     return query.getResultList();
   }
 
-	public List<Publication> listByPublished(Boolean published) {
-		EntityManager entityManager = getEntityManager();
-
-    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<Publication> criteria = criteriaBuilder.createQuery(Publication.class);
-    Root<Publication> root = criteria.from(Publication.class);
-    criteria.select(root);
-    criteria.where(
-  		criteriaBuilder.equal(root.get(Publication_.published), published)
-    );
-    
-    return entityManager.createQuery(criteria).getResultList();
-	}
-
 	public List<Publication> listByCreatorAndPublished(User creator, Boolean published) {
 		EntityManager entityManager = getEntityManager();
 

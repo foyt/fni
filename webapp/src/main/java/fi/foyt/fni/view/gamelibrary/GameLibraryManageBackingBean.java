@@ -68,23 +68,18 @@ public class GameLibraryManageBackingBean {
 
   @RequestAction
   public String init() {
+    unpublishedBooks = publicationController.listUnpublishedBooks();
+    publishedBooks = publicationController.listPublishedBooks();
+    
     return null;
   }
   
-  public List<Publication> getUnpublishedPublications() {
-  	return publicationController.listUnpublishedPublications();
-  }
-	
-  public List<Publication> getPublishedPublications() {
-  	return publicationController.listPublishedPublications();
+  public List<BookPublication> getPublishedBooks() {
+    return publishedBooks;
   }
   
-  public BookPublication getBookPublication(Publication publication) {
-  	if (publication instanceof BookPublication) {
-  		return (BookPublication) publication;
-  	}
-  	
-  	return null;
+  public List<BookPublication> getUnpublishedBooks() {
+    return unpublishedBooks;
   }
   
   public CreativeCommonsLicense getCreativeCommonsLicense(Publication publication) {
@@ -171,4 +166,6 @@ public class GameLibraryManageBackingBean {
     return "/gamelibrary/manage.jsf?faces-redirect=true";
 	}
 
+  private List<BookPublication> unpublishedBooks;
+  private List<BookPublication> publishedBooks;
 }

@@ -1,6 +1,12 @@
 package fi.foyt.fni.persistence.dao.gamelibrary;
 
 import java.util.Date;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.common.Language;
@@ -8,6 +14,7 @@ import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationFile;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
+import fi.foyt.fni.persistence.model.gamelibrary.Publication_;
 import fi.foyt.fni.persistence.model.users.User;
 
 public class BookPublicationDAO extends GenericDAO<BookPublication> {
@@ -43,6 +50,20 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
     
     return bookPublication;
 	}
+
+  public List<BookPublication> listByPublished(Boolean published) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<BookPublication> criteria = criteriaBuilder.createQuery(BookPublication.class);
+    Root<BookPublication> root = criteria.from(BookPublication.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(Publication_.published), published)
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+  }
 
 	public BookPublication updateNumberOfPages(BookPublication bookPublication, Integer numberOfPages) {
 		bookPublication.setNumberOfPages(numberOfPages);
