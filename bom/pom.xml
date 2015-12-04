@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fi.foyt.fni</groupId>
   <artifactId>bom</artifactId>
-  <version>3.2.37</version>
+  <version>3.2.38-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Forge &amp; Illusion - BOM</name>
   <description>Forge &amp; Illusion - Bill Of Materials</description>
