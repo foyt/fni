@@ -90,7 +90,7 @@ env:
   
 before_script:
 - if [ $use_sc = true ]; then curl -sS https://saucelabs.com/downloads/sc-4.3.13-linux.tar.gz|tar -xzC /tmp/; fi;
-- if [ $use_sc = true ]; then /tmp/sc-4.3.13-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish -B *.facebook.com --daemonize --readyfile /tmp/sc.ready --wait-tunnel-shutdown; fi;
+- if [ $use_sc = true ]; then /tmp/sc-4.3.13-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish -B *.facebook.com --daemonize --readyfile /tmp/sc-ready --wait-tunnel-shutdown; fi;
 - if [ $use_sc = true ]; then 
     t=0;
     while [ ! -f /tmp/sc-ready ]; do 
