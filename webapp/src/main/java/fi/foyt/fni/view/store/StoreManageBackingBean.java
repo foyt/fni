@@ -10,6 +10,8 @@ import javax.inject.Named;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
+import fi.foyt.fni.gamelibrary.OrderController;
+import fi.foyt.fni.gamelibrary.ShoppingCartController;
 import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.store.StoreProduct;
 import fi.foyt.fni.persistence.model.users.Permission;
@@ -37,6 +39,12 @@ public class StoreManageBackingBean {
 
   @Inject
   private SystemSettingsController systemSettingsController;
+  
+  @Inject
+  private ShoppingCartController shoppingCartController;
+  
+  @Inject
+  private OrderController orderController;
 
   @RequestAction
   public String init() {
@@ -96,6 +104,35 @@ public class StoreManageBackingBean {
     storeProductController.unpublishStoreProduct(storeProduct);
     
     return "/store/manage?faces-redirect=true";
+  }
+  
+  public String remove(Long productId) {
+    if (!sessionController.hasLoggedUserPermission(Permission.STORE_MANAGE_PRODUCTS)) {
+      return navigationController.accessDenied();
+    }
+    
+    StoreProduct storeProduct = storeProductController.findStoreProductById(productId);
+    if (storeProduct == null) {
+      return navigationController.notFound();
+    }
+    
+    storeProductController.deleteStoreProduct(storeProduct);
+    
+    return "/store/manage?faces-redirect=true";
+  }
+  
+  public boolean isRemovable(Long productId) {
+    StoreProduct storeProduct = storeProductController.findStoreProductById(productId);
+    
+    if (orderController.listOrdersByPublication(storeProduct).size() > 0) {
+      return false;
+    }
+    
+    if (shoppingCartController.listShoppingCartsByPublication(storeProduct).size() > 0) {
+      return false;
+    }
+    
+    return true;
   }
   
   private List<StoreProduct> unpublishedProducts;

@@ -157,11 +157,11 @@
       }
     });
   });
-/**
-  $(document).on('click', '.gamelibrary-manage-remove-link', function (event) {
+
+  $(document).on('click', '.store-manage-remove-link', function (event) {
     var form = $(this).closest('form');
     
-    dust.render("gamelibrary-remove", {
+    dust.render("store-remove", {
       name: $.trim($(this).closest('.store-manage-list-cell').find('.store-manage-list-name').text())
     }, function(err, html) {
       if (!err) {
@@ -172,7 +172,7 @@
           buttons: [{
             'text': dialog.data('remove-button'),
             'click': function(event) { 
-              form.find('.gamelibrary-manage-delete-button').click();
+              form.find('.store-manage-delete-button').click();
             }
           }, {
             'text': dialog.data('cancel-button'),
@@ -186,5 +186,5 @@
       }
     });
   });
-  **/
+
 }).call(this);

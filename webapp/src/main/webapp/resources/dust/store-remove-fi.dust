@@ -1,0 +1,7 @@
+<div title="Poista '{name}'?" data-remove-button="Poista" data-cancel-button="Peruuta">
+  <div class="store-remove-dialog">
+    <p>
+      Halutko varmasti poistaa tuotteen '{name}'?
+    </p>
+  </div>
+</div>

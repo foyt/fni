@@ -171,4 +171,13 @@ public class StoreProductController {
   public StoreProduct unpublishStoreProduct(StoreProduct storeProduct) {
     return storeProductDAO.updatePublished(storeProduct, Boolean.FALSE);
   }
+
+  public void deleteStoreProduct(StoreProduct storeProduct) {
+    List<PublicationTag> tags = publicationTagDAO.listByPublication(storeProduct);
+    for (PublicationTag tag : tags) {
+      publicationTagDAO.delete(tag);
+    }
+    
+    storeProductDAO.delete(storeProduct);
+  }
 }
