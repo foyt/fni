@@ -63,9 +63,6 @@ public class PublicationController {
 	private PublicationAuthorDAO publicationAuthorDAO;
 
 	@Inject
-  private StoreProductDAO storeProductDAO;
-
-	@Inject
 	private FullTextEntityManager fullTextEntityManager;
 	
 	/* Publications */
@@ -474,51 +471,6 @@ public class PublicationController {
 	public void deletePublicationAuthor(PublicationAuthor publicationAuthor) {
 		publicationAuthorDAO.delete(publicationAuthor);
 	}
-	
-	/* Store Products */
-	
-	public List<StoreProduct> listUnpublishedStoreProducts() {
-    return storeProductDAO.listByPublished(Boolean.FALSE);
-  }
-
-  public List<StoreProduct> listPublishedStoreProducts() {
-    return storeProductDAO.listByPublished(Boolean.TRUE);
-  }
-
-  public StoreProduct createStoreProduct(User creator, String name, Language language) {
-    User modifier = creator;
-    String urlName = createUrlName(name);
-    String description = null;
-    Double price = 0d;
-    Double authorsShare = 0d;
-    PublicationImage defaultImage = null;
-    Date created = new Date();
-    Integer height = null;
-    Date modified = created;
-    Boolean published = Boolean.FALSE;
-    Integer width = null;
-    Integer depth = null;
-    Double weight = null;
-    ForumTopic forumTopic = null;
-    
-    return storeProductDAO.create(name, 
-        urlName, 
-        description, 
-        price, 
-        authorsShare, 
-        defaultImage, 
-        created, 
-        creator, 
-        modified, 
-        modifier, 
-        published, 
-        height, 
-        width, 
-        depth, 
-        weight, 
-        forumTopic, 
-        language);
-  }
 	
 	private String createUrlName(String name) {
 	  return createUrlName(null, name);

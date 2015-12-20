@@ -14,6 +14,7 @@ import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication_;
 import fi.foyt.fni.persistence.model.store.StoreProduct;
+import fi.foyt.fni.persistence.model.store.StoreProduct_;
 import fi.foyt.fni.persistence.model.users.User;
 
 public class StoreProductDAO extends GenericDAO<StoreProduct> {
@@ -58,9 +59,38 @@ public class StoreProductDAO extends GenericDAO<StoreProduct> {
     return entityManager.createQuery(criteria).getResultList();
   }
 
+  public StoreProduct findByUrlName(String urlName) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<StoreProduct> criteria = criteriaBuilder.createQuery(StoreProduct.class);
+    Root<StoreProduct> root = criteria.from(StoreProduct.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(StoreProduct_.urlName), urlName)
+    );
+    
+    return getSingleResult(entityManager.createQuery(criteria));
+  }
+
   public StoreProduct updateAuthorsShare(StoreProduct bookPublication, Double authorsShare) {
     bookPublication.setAuthorsShare(authorsShare);
     return persist(bookPublication);
   }
 
+  public StoreProduct updateName(StoreProduct bookPublication, String name) {
+    bookPublication.setName(name);
+    return persist(bookPublication);
+  }
+
+  public StoreProduct updateDescription(StoreProduct bookPublication, String description) {
+    bookPublication.setDescription(description);
+    return persist(bookPublication);
+  }
+
+  public StoreProduct updatePrice(StoreProduct bookPublication, Double price) {
+    bookPublication.setPrice(price);
+    return persist(bookPublication);
+  }
+  
 }
