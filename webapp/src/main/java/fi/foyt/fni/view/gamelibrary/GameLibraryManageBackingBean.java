@@ -82,7 +82,7 @@ public class GameLibraryManageBackingBean {
     return unpublishedBooks;
   }
   
-  public CreativeCommonsLicense getCreativeCommonsLicense(Publication publication) {
+  public CreativeCommonsLicense getCreativeCommonsLicense(BookPublication publication) {
 		return CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
 	}
   

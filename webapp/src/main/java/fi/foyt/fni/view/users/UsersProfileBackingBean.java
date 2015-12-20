@@ -28,6 +28,7 @@ import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
+import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationAuthor;
@@ -202,7 +203,7 @@ public class UsersProfileBackingBean {
 		return result;
 	}
 	
-	public CreativeCommonsLicense getPublicationCreativeCommonsLicense(Publication publication) {
+	public CreativeCommonsLicense getPublicationCreativeCommonsLicense(BookPublication publication) {
 		return CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
 	}
 

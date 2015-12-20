@@ -66,7 +66,7 @@ public class GameLibraryPublicationBackingBean {
   
   @RequestAction
   public String init() {
-    publication = publicationController.findPublicationByUrlName(getUrlName());
+    publication = publicationController.findBookPublicationByUrlName(getUrlName());
     if (publication == null) {
       return navigationController.notFound();
     }
@@ -208,7 +208,7 @@ public class GameLibraryPublicationBackingBean {
     return null;
   }
 	
-	private Publication publication;
+	private BookPublication publication;
 	private String metaDescription;
 	private String metaTitle;
 	private String metaUrl;

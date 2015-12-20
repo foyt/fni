@@ -8,12 +8,21 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @PrimaryKeyJoinColumn (name="id")
 @Indexed
 public class BookPublication extends Publication {
-	
+
+  public String getLicense() {
+    return license;
+  }
+  
+  public void setLicense(String license) {
+    this.license = license;
+  }
+  
 	public PublicationFile getPrintableFile() {
     return printableFile;
   }
@@ -62,6 +71,11 @@ public class BookPublication extends Publication {
   
   private Integer numberOfPages;
   
+  @NotNull
+  @NotEmpty
+  @Column(nullable = false)
+  private String license;
+
   @Column (nullable = false)
   @NotNull  
   private Long downloadCount;

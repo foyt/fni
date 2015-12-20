@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -12,9 +13,9 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
+import fi.foyt.fni.persistence.model.gamelibrary.BookPublication_;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationFile;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
-import fi.foyt.fni.persistence.model.gamelibrary.Publication_;
 import fi.foyt.fni.persistence.model.users.User;
 
 public class BookPublicationDAO extends GenericDAO<BookPublication> {
@@ -59,12 +60,47 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
     Root<BookPublication> root = criteria.from(BookPublication.class);
     criteria.select(root);
     criteria.where(
-      criteriaBuilder.equal(root.get(Publication_.published), published)
+      criteriaBuilder.equal(root.get(BookPublication_.published), published)
     );
     
     return entityManager.createQuery(criteria).getResultList();
   }
+  
+  public BookPublication findByUrlName(String urlName) {
+    EntityManager entityManager = getEntityManager();
 
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<BookPublication> criteria = criteriaBuilder.createQuery(BookPublication.class);
+    Root<BookPublication> root = criteria.from(BookPublication.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(BookPublication_.urlName), urlName)
+    );
+    
+    return getSingleResult(entityManager.createQuery(criteria));
+  }
+  
+  public List<BookPublication> listByPublishedOrderByCreated(Boolean published, int firstResult, int maxResults) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<BookPublication> criteria = criteriaBuilder.createQuery(BookPublication.class);
+    Root<BookPublication> root = criteria.from(BookPublication.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(BookPublication_.published), published)
+    );
+    
+    
+    criteria.orderBy(criteriaBuilder.desc(root.get(BookPublication_.created)));
+
+    TypedQuery<BookPublication> query = entityManager.createQuery(criteria);
+    query.setFirstResult(firstResult);
+    query.setMaxResults(maxResults);
+    
+    return query.getResultList();
+  }
+  
 	public BookPublication updateNumberOfPages(BookPublication bookPublication, Integer numberOfPages) {
 		bookPublication.setNumberOfPages(numberOfPages);
 		getEntityManager().persist(bookPublication);
@@ -96,4 +132,9 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
     return persist(bookPublication);
   }
 
+  public BookPublication updateLicense(BookPublication publication, String license) {
+    publication.setLicense(license);
+    return persist(publication);
+  }
+  
 }
