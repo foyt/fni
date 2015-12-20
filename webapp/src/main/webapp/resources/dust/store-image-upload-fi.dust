@@ -1,0 +1,15 @@
+<div title="Lataa kuva" data-upload-button="Lataa" data-cancel-button="Peruuta">
+  <div class="store-manage-image-upload-dialog">
+    <form target="_upload_image_" method="post" enctype="multipart/form-data" action="{@contextPath/}/store/productImages/{productId}?mode=REPLACE"> 
+      <p>
+        Valitse uusi tuotteen kuva
+      </p>
+    
+      <div>
+        <input type="file" name="file"/>
+      </div>
+    </form>  
+  
+    <iframe name="_upload_image_" style="border: 0px; visibility:hidden; opacity: 0; height: 0px; width: 0px" width="0" height="0"></iframe>
+  </div>
+</div>
