@@ -35,13 +35,13 @@
          
         <div class="flex-cell-row sm-flex-hide">
           <div class="view-header-navigation">
-            <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['gamelibrary.editPublication.navigationIndex']}</h:link>
+            <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['gamelibrary.editPublication.navigationIndex']}</a>
             <span class="view-header-navigation-separator"/>
-            <h:link styleClass="view-header-navigation-item" outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.editPublication.navigationMostRecent']}</h:link>
+            <a class="view-header-navigation-item" jsf:outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.editPublication.navigationMostRecent']}</a>
             <span class="view-header-navigation-separator"/>
-            <h:link styleClass="view-header-navigation-item" outcome="/gamelibrary/manage.jsf">#{locales['gamelibrary.editPublication.navigationManagement']}</h:link>
+            <a class="view-header-navigation-item" jsf:outcome="/gamelibrary/manage.jsf">#{locales['gamelibrary.editPublication.navigationManagement']}</a>
             <span class="view-header-navigation-separator"/>
-            <h:link styleClass="view-header-navigation-item" outcome="/gamelibrary/editpublication.jsf?publicationId=#{gameLibraryEditPublicationBackingBean.publicationId}">#{locales['gamelibrary.editPublication.navigationEditBookPublication']}</h:link>
+            <a class="view-header-navigation-item" jsf:outcome="/gamelibrary/editpublication.jsf?publicationId=#{gameLibraryEditPublicationBackingBean.publicationId}">#{locales['gamelibrary.editPublication.navigationEditBookPublication']}</a>
           </div>
         </div>
 
@@ -70,7 +70,7 @@
             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['gamelibrary.editPublication.nameLabel']}</label>
             </div>
-            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
               <input type="text" name="name" jsf:value="#{gameLibraryEditPublicationBackingBean.name}" required="required" jsf:requiredMessage="#{locales['gamelibrary.editPublication.nameRequired']}"/>
             </div>
           </div>
@@ -79,8 +79,8 @@
             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['gamelibrary.editPublication.descriptionLabel']}</label>
             </div>
-            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-              <textarea name="description" jsf:value="#{gameLibraryEditPublicationBackingBean.description}" rows="5" required="required" jsf:requiredMessage="#{locales['gamelibrary.editPublication.descriptionRequired']}"></textarea>
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <textarea jsf:value="#{gameLibraryEditPublicationBackingBean.description}" required="required" />
             </div>
           </div>
           
@@ -88,7 +88,7 @@
             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['gamelibrary.editPublication.priceLabel']}</label>
             </div>
-            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
               <input name="price" type="number" jsf:value="#{gameLibraryEditPublicationBackingBean.price}" required="required" jsf:requiredMessage="#{locales['gamelibrary.editPublication.priceRequired']}"/>
             </div>
           </div>
@@ -97,7 +97,7 @@
             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['gamelibrary.editPublication.languageLabel']}</label>
             </div>
-            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
               <h:selectOneMenu value="#{gameLibraryEditPublicationBackingBean.languageId}">
                 <f:selectItems value="#{gameLibraryEditPublicationBackingBean.languageSelectItems}" />
               </h:selectOneMenu>
@@ -108,31 +108,39 @@
             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['gamelibrary.editPublication.tagsLabel']}</label>
             </div>
-            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-              <div>
-                <ui:repeat var="tag" value="#{gameLibraryEditPublicationBackingBean.tags}">
-                  <span>
-                    <span>#{tag}</span>
-                    <a href="javascript:void(null)" data-tag="#{tag}"/>
-                  </span>
-                </ui:repeat>
-              </div>
-              <div>
-                <h:selectOneMenu value="#{gameLibraryEditPublicationBackingBean.addExistingTag}">
-                  <f:selectItems value="#{gameLibraryEditPublicationBackingBean.tagSelectItems}" />
-                  <f:ajax execute="@form" render="@form"/>
-                </h:selectOneMenu>
-                
-                <div class="new-tag-container" style="#{gameLibraryEditPublicationBackingBean.addExistingTag eq '_NEW_' ? '' : 'display: none'}">
-                  <label>#{locales['gamelibrary.editPublication.newTagLabel']}</label>
-                  <input type="text" jsf:value="#{gameLibraryEditPublicationBackingBean.addNewTag}"/>
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <div class="flex-row">
+                <div class="flex-cell-full no-margin-bottom tags">
+	                <ui:repeat var="tag" value="#{gameLibraryEditPublicationBackingBean.tags}">
+	                  <span class="tag">
+	                    <span>#{tag}</span>
+	                    <a href="javascript:void(null)" data-tag="#{tag}"/>
+	                  </span>
+	                </ui:repeat>
                 </div>
-                
-                <h:commandLink styleClass="gamelibrary-edit-publication-new-tag-link" action="#{gameLibraryEditPublicationBackingBean.addTag}" value="#{locales['gamelibrary.editPublication.addTag']}" />
-                <h:commandButton id="remove-tag-command-button" action="#{gameLibraryEditPublicationBackingBean.removeTag}" style="display: none"/>
-                <h:inputHidden id="remove-tag-text" value="#{gameLibraryEditPublicationBackingBean.removeTagText}" />
-                <h:inputHidden value="#{gameLibraryEditPublicationBackingBean.tags}" converter="fi.foyt.fni.jsf.StringListConverter"/>
-                
+              </div>
+
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <h:selectOneMenu value="#{gameLibraryEditPublicationBackingBean.addExistingTag}">
+                    <f:selectItems value="#{gameLibraryEditPublicationBackingBean.tagSelectItems}" />
+                    <f:ajax execute="@form" render="@form"/>
+                  </h:selectOneMenu>
+                  
+                  <div class="new-tag-container" style="#{gameLibraryEditPublicationBackingBean.addExistingTag eq '_NEW_' ? '' : 'display: none'}">
+                    <label>#{locales['gamelibrary.editPublication.newTagLabel']}</label>
+                    <input type="text" jsf:value="#{gameLibraryEditPublicationBackingBean.addNewTag}"/>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <h:commandLink styleClass="gamelibrary-edit-publication-new-tag-link" action="#{gameLibraryEditPublicationBackingBean.addTag}" value="#{locales['gamelibrary.editPublication.addTag']}" />
+                  <h:commandButton id="remove-tag-command-button" action="#{gameLibraryEditPublicationBackingBean.removeTag}" style="display: none"/>
+                  <h:inputHidden id="remove-tag-text" value="#{gameLibraryEditPublicationBackingBean.removeTagText}" />
+                  <h:inputHidden value="#{gameLibraryEditPublicationBackingBean.tags}" converter="fi.foyt.fni.jsf.StringListConverter"/>
+                </div>
               </div>
             </div>
           </div>
@@ -141,7 +149,7 @@
             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['gamelibrary.editPublication.licenseLabel']}</label>
             </div>
-            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
             
               <div>
                 <h:selectOneMenu value="#{gameLibraryEditPublicationBackingBean.licenseType}" requiredMessage="#{locales['gamelibrary.editPublication.licenseRequired']}">
@@ -176,34 +184,48 @@
             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['gamelibrary.editPublication.authorsLabel']}</label>
             </div>
-            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-              <div class="gamelibrary-edit-publication-authors-container">        
-                <ui:repeat var="authorName" value="#{gameLibraryEditPublicationBackingBean.authorNames}" varStatus="vs">
-                  <h:panelGroup styleClass="gamelibrary-edit-publication-author">
-                    <span>#{authorName}</span>
-                    <a href="javascript:void(null)" data-author-id="#{gameLibraryEditPublicationBackingBean.authorIds[vs.index]}"/>
-                  </h:panelGroup>
-                </ui:repeat>
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <div class="flex-row">
+                <div class="flex-cell-full no-margin-bottom">
+                  <div class="gamelibrary-edit-publication-authors-container">        
+                    <ui:repeat var="authorName" value="#{gameLibraryEditPublicationBackingBean.authorNames}" varStatus="vs">
+                      <span class="author">
+                        <span>#{authorName}</span>
+                        <a href="javascript:void(null)" data-author-id="#{gameLibraryEditPublicationBackingBean.authorIds[vs.index]}"/>
+                      </span>
+                    </ui:repeat>
+                  </div>
+                </div>
               </div>
               
-              <h:commandButton id="remove-author-command-button" action="#{gameLibraryEditPublicationBackingBean.removeAuthor}" style="display: none"/>
-              <h:inputHidden id="remove-author-id" value="#{gameLibraryEditPublicationBackingBean.removeAuthorId}" />
-              
-              <h:selectOneMenu value="#{gameLibraryEditPublicationBackingBean.addAuthorId}">
-                <f:selectItems value="#{gameLibraryEditPublicationBackingBean.authorSelectItems}"/>
-              </h:selectOneMenu>
-            </div>
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <h:commandButton id="remove-author-command-button" action="#{gameLibraryEditPublicationBackingBean.removeAuthor}" style="display: none"/>
+                  <h:inputHidden id="remove-author-id" value="#{gameLibraryEditPublicationBackingBean.removeAuthorId}" />
+                  
+                  <h:selectOneMenu value="#{gameLibraryEditPublicationBackingBean.addAuthorId}">
+                    <f:selectItems value="#{gameLibraryEditPublicationBackingBean.authorSelectItems}"/>
+                  </h:selectOneMenu>
+                </div>
+              </div>
   
-            <h:commandLink styleClass="gamelibrary-edit-publication-add-author-link" value="#{locales['gamelibrary.editPublication.addAuthor']}" action="#{gameLibraryEditPublicationBackingBean.addAuthor}" />
-            <h:inputHidden value="#{gameLibraryEditPublicationBackingBean.authorIds}" converter="fi.foyt.fni.jsf.LongListConverter"/>
-            <h:inputHidden value="#{gameLibraryEditPublicationBackingBean.authorNames}" converter="fi.foyt.fni.jsf.StringListConverter"/>
+              <div class="flex-row">
+                <div class="flex-cell-full">
+  
+                  <h:commandLink styleClass="gamelibrary-edit-publication-add-author-link" value="#{locales['gamelibrary.editPublication.addAuthor']}" action="#{gameLibraryEditPublicationBackingBean.addAuthor}" />
+                  <h:inputHidden value="#{gameLibraryEditPublicationBackingBean.authorIds}" converter="fi.foyt.fni.jsf.LongListConverter"/>
+                  <h:inputHidden value="#{gameLibraryEditPublicationBackingBean.authorNames}" converter="fi.foyt.fni.jsf.StringListConverter"/>
+                </div>
+              </div>
+            </div>
+             
           </div>
           
           <div class="flex-row field">
             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['gamelibrary.editPublication.widthLabel']}</label>
             </div>
-            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
               <input type="text" name="width" jsf:value="#{gameLibraryEditPublicationBackingBean.width}"/>
             </div>
             <div class="lg-flex-cell-1 lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-full">
@@ -215,7 +237,7 @@
             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['gamelibrary.editPublication.heightLabel']}</label>
             </div>
-            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
               <input type="text" name="height" jsf:value="#{gameLibraryEditPublicationBackingBean.height}"/>
             </div>
             <div class="lg-flex-cell-1 lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-full">
@@ -227,7 +249,7 @@
             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['gamelibrary.editPublication.depthLabel']}</label>
             </div>
-            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
               <input type="text" name="depth" jsf:value="#{gameLibraryEditPublicationBackingBean.depth}"/>
             </div>
             <div class="lg-flex-cell-1 lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-full">
@@ -239,7 +261,7 @@
             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['gamelibrary.editPublication.weightLabel']}</label>
             </div>
-            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
               <input type="text" name="weight" jsf:value="#{gameLibraryEditPublicationBackingBean.weight}"/>
             </div>
             <div class="lg-flex-cell-1 lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-full">
@@ -251,7 +273,7 @@
             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['gamelibrary.editPublication.numberOfPagesLabel']}</label>
             </div>
-            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
               <input type="text" name="numberOfPages" jsf:value="#{gameLibraryEditPublicationBackingBean.numberOfPages}"/>
             </div>
             <div class="lg-flex-cell-1 lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-full">
