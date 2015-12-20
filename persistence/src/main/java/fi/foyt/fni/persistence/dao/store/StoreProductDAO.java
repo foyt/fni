@@ -73,24 +73,29 @@ public class StoreProductDAO extends GenericDAO<StoreProduct> {
     return getSingleResult(entityManager.createQuery(criteria));
   }
 
-  public StoreProduct updateAuthorsShare(StoreProduct bookPublication, Double authorsShare) {
-    bookPublication.setAuthorsShare(authorsShare);
-    return persist(bookPublication);
+  public StoreProduct updateAuthorsShare(StoreProduct storeProduct, Double authorsShare) {
+    storeProduct.setAuthorsShare(authorsShare);
+    return persist(storeProduct);
   }
 
-  public StoreProduct updateName(StoreProduct bookPublication, String name) {
-    bookPublication.setName(name);
-    return persist(bookPublication);
+  public StoreProduct updateName(StoreProduct storeProduct, String name) {
+    storeProduct.setName(name);
+    return persist(storeProduct);
   }
 
-  public StoreProduct updateDescription(StoreProduct bookPublication, String description) {
-    bookPublication.setDescription(description);
-    return persist(bookPublication);
+  public StoreProduct updateDescription(StoreProduct storeProduct, String description) {
+    storeProduct.setDescription(description);
+    return persist(storeProduct);
   }
 
-  public StoreProduct updatePrice(StoreProduct bookPublication, Double price) {
-    bookPublication.setPrice(price);
-    return persist(bookPublication);
+  public StoreProduct updatePrice(StoreProduct storeProduct, Double price) {
+    storeProduct.setPrice(price);
+    return persist(storeProduct);
+  }
+
+  public StoreProduct updatePublished(StoreProduct storeProduct, Boolean published) {
+    storeProduct.setPublished(published);
+    return persist(storeProduct);
   }
   
 }

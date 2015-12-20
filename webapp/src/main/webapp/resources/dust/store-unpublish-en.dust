@@ -1,0 +1,7 @@
+<div title="Unpublish '{name}'?" data-unpublish-button="Unpublish" data-cancel-button="Cancel">
+  <div class="store-unpublish-dialog">
+    <p>
+      Do you really wish to unpublish '{name}'
+    </p>
+  </div>
+</div>

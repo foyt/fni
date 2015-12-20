@@ -163,4 +163,12 @@ public class StoreProductController {
       }
     } while (true);
   }
+
+  public StoreProduct publishStoreProduct(StoreProduct storeProduct) {
+    return storeProductDAO.updatePublished(storeProduct, Boolean.TRUE);
+  }
+
+  public StoreProduct unpublishStoreProduct(StoreProduct storeProduct) {
+    return storeProductDAO.updatePublished(storeProduct, Boolean.FALSE);
+  }
 }

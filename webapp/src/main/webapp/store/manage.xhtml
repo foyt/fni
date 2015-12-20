@@ -110,13 +110,14 @@
                         <a class="store-manage-publish-link" href="javascript:void(null)" jsf:rendered="#{!product.published}">
                           #{locales['store.manage.productPublishLink']}
                         </a>
-<!--                         
+
                         <h:commandButton style="display: none" styleClass="store-manage-publish-button" action="#{storeManageBackingBean.publish(product.id)}"/>
+<!-- 
                         <a class="store-manage-remove-link" href="javascript:void(null)" jsf:rendered="#{!product.published and storeManageBackingBean.isRemovable(product.id)}">
                           #{locales['store.manage.productDeleteLink']}
                         </a>
                         <h:commandButton style="display: none" styleClass="store-manage-delete-button" action="#{storeManageBackingBean.remove(product.id)}"/>
-                         -->
+ -->
                       </h:form>
                     </div>
                   </div>                  
@@ -169,12 +170,10 @@
                   <div class="flex-row">
                     <div class="flex-cell-full no-margin-top no-margin-bottom store-manage-list-actions">
                       <h:form>
-                        <!-- 
                         <a class="store-manage-unpublish-link" href="javascript:void(null)" jsf:rendered="#{product.published}">
                           #{locales['store.manage.productUnpublishLink']}
                         </a>
                         <h:commandButton styleClass="store-manage-unpublish-button" style="display: none" action="#{storeManageBackingBean.unpublish(product.id)}"/>
-                         -->
                       </h:form>
                     </div>
                   </div>                  

@@ -68,6 +68,36 @@ public class StoreManageBackingBean {
     return String.format("/store/editstoreproduct.jsf?faces-redirect=true&amp;storeProductId=%d", storeProduct.getId());
   }
   
+  public String publish(Long productId) {
+    if (!sessionController.hasLoggedUserPermission(Permission.STORE_MANAGE_PRODUCTS)) {
+      return navigationController.accessDenied();
+    }
+    
+    StoreProduct storeProduct = storeProductController.findStoreProductById(productId);
+    if (storeProduct == null) {
+      return navigationController.notFound();
+    }
+    
+    storeProductController.publishStoreProduct(storeProduct);
+
+    return "/store/manage?faces-redirect=true";
+  }
+  
+  public String unpublish(Long productId) {
+    if (!sessionController.hasLoggedUserPermission(Permission.STORE_MANAGE_PRODUCTS)) {
+      return navigationController.accessDenied();
+    }
+    
+    StoreProduct storeProduct = storeProductController.findStoreProductById(productId);
+    if (storeProduct == null) {
+      return navigationController.notFound();
+    }
+    
+    storeProductController.unpublishStoreProduct(storeProduct);
+    
+    return "/store/manage?faces-redirect=true";
+  }
+  
   private List<StoreProduct> unpublishedProducts;
   private List<StoreProduct> publishedProducts;
 }

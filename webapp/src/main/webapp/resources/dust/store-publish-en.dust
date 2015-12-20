@@ -1,0 +1,7 @@
+<div title="Publish '{name}'?" data-publish-button="Publish" data-cancel-button="Cancel">
+  <div class="store-publish-dialog">
+    <p>
+      Do you really wish to publish '{name}'
+    </p>
+  </div>
+</div>
