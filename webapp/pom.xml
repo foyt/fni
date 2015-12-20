@@ -431,34 +431,6 @@
               <pluginExecutions>
                 <pluginExecution>
                   <pluginExecutionFilter>
-                    <groupId>nl.geodienstencentrum.maven</groupId>
-                    <artifactId>sass-maven-plugin</artifactId>
-                    <versionRange>[2.5,)</versionRange>
-                    <goals>
-                      <goal>update-stylesheets</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
-                
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>com.github.warmuuh</groupId>
-                    <artifactId>libsass-maven-plugin</artifactId>
-                    <versionRange>[0.1,)</versionRange>
-                    <goals>
-                      <goal>compile</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
-                
-                <pluginExecution>
-                  <pluginExecutionFilter>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>keytool-maven-plugin</artifactId>
                     <versionRange>[1.4,)</versionRange>
@@ -511,7 +483,7 @@
          <configuration>
             <inputPath>${basedir}/src/main/webapp/resources/novus/scss/</inputPath>
             <includePath>${basedir}/../compass-mixins/</includePath>
-            <outputPath>${project.build.directory}/${project.build.finalName}/resources/novus/css</outputPath>
+            <outputPath>${basedir}/target/resources/novus/css</outputPath>
             <outputStyle>compressed</outputStyle>
             <generateSourceMap>false</generateSourceMap>
             <omitSourceMapingURL>true</omitSourceMapingURL>

@@ -37,7 +37,7 @@
           <div class="view-header-navigation">
             <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['users.profile.navigationIndex']}</a>
             <span class="view-header-navigation-separator"/>
-            <a class="view-header-navigation-item" jsf:outcome="/users/profile.jsf?userId=#{sessionBackingBean.loggedUser.id}">#{usersProfileBackingBean.fullName}</a>
+            <a class="view-header-navigation-item" jsf:outcome="/users/profile.jsf?userId=#{usersProfileBackingBean.userId}">#{usersProfileBackingBean.fullName}</a>
           </div>
         </div>
 
