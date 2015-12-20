@@ -1,0 +1,28 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+h3 {
+  @include header-3;
+  color: $title-color;
+}
+
+.field input[type="text"], 
+.field input[type="number"], 
+.field textarea, 
+.field select {
+  font-size: 14px;
+  font-family: $default-font;
+  width: 100%; 
+  @include box-sizing(border-box);
+}
+
+.field textarea {
+  height: 120px;
+}
+
+.field label {
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+}
