@@ -16,6 +16,10 @@ public class NavigationController {
     return "/error/internal-error.jsf";
   }
   
+  public String requireLogin() {
+    return requireLogin(null);
+  }
+  
   @LoggedIn
   public String requireLogin(String nextRule) {
     return nextRule;
