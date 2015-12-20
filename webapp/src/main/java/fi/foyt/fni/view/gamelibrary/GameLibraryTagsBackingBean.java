@@ -44,7 +44,7 @@ public class GameLibraryTagsBackingBean extends AbstractGameLibraryListBackingBe
       return navigationController.notFound(); 
     }
     
-    return init(publicationController.listPublicationsByPublishedAndTags(false, tag));
+    return init(publicationController.listBookPublicationsByPublishedAndTags(false, tag));
   }
 	
 	public String getTag() {

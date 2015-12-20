@@ -2,15 +2,42 @@
 @import "compass";
 @import "styles";
 
-/* Generic */
+@import "vars";
+@import "compass";
+@import "styles";
+
+h3 {
+  @include header-3;
+  color: $title-color;
+}
+
+.field input[type="text"], 
+.field input[type="number"], 
+.field textarea, 
+.field select {
+  font-size: 14px;
+  font-family: $default-font;
+  width: 100%; 
+  @include box-sizing(border-box);
+}
+
+.field textarea {
+  height: 120px;
+}
+
+.field label {
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+}
+
+/**
 
 .gamelibrary-edit-publication-panel h3 {
   @include header-3;
   color: $title-color;
   margin-bottom: 18px;
 }
-
-/* Panels */
 
 .gamelibrary-edit-publication-panel {
   @include generic-panel;
@@ -31,8 +58,6 @@
   content: '<<';
   margin-right: 4px;
 }
-
-/* Form */
 
 .gamelibrary-edit-publication-form-section {
   color: $default-color;
@@ -156,8 +181,6 @@
   color: #f00; 
 }
 
-/* Submit */
-
 .gamelibrary-edit-publication-save {  
   margin-top: 20px;
   color: $default-color;
@@ -177,3 +200,5 @@
   background: #aaa;
   cursor: default;
 }
+
+**/

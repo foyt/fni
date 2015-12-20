@@ -24,6 +24,7 @@ import fi.foyt.fni.persistence.dao.gamelibrary.PublicationDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationFileDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationImageDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationTagDAO;
+import fi.foyt.fni.persistence.dao.store.StoreProductDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
@@ -33,6 +34,7 @@ import fi.foyt.fni.persistence.model.gamelibrary.PublicationAuthor;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationFile;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
+import fi.foyt.fni.persistence.model.store.StoreProduct;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.utils.search.SearchResult;
 import fi.foyt.fni.utils.servlet.RequestUtils;
@@ -61,6 +63,9 @@ public class PublicationController {
 	private PublicationAuthorDAO publicationAuthorDAO;
 
 	@Inject
+  private StoreProductDAO storeProductDAO;
+
+	@Inject
 	private FullTextEntityManager fullTextEntityManager;
 	
 	/* Publications */
@@ -77,35 +82,42 @@ public class PublicationController {
 		return publicationDAO.listAll();
 	}
 
-	public List<Publication> listPublicationsByPublishedAndTags(boolean includeUnpublished, String... tags) {
+	public List<BookPublication> listBookPublicationsByPublishedAndTags(boolean includeUnpublished, String... tags) {
 		List<GameLibraryTag> gameLibraryTags = new ArrayList<>();
 
 		for (String tag : tags) {
 			gameLibraryTags.add(gameLibraryTagController.findTagByText(tag));
 		}
 
-		return listPublicationsByPublishedAndTags(includeUnpublished, gameLibraryTags);
+		return listBookPublicationsByPublishedAndTags(includeUnpublished, gameLibraryTags);
 	}
 
-	public List<Publication> listPublicationsByPublishedAndTags(boolean includeUnpublished, List<GameLibraryTag> gameLibraryTags) {
+	public List<BookPublication> listBookPublicationsByPublishedAndTags(boolean includeUnpublished, List<GameLibraryTag> gameLibraryTags) {
+	  List<BookPublication> result = new ArrayList<>();
+	  
+	  // TODO: Optimize this
+	  
 	  List<Publication> publications = publicationTagDAO.listPublicationsByGameLibraryTags(gameLibraryTags);
 	  if (includeUnpublished) {
-	    return publications;
-	  } else {
-	    List<Publication> result = new ArrayList<>();
+	    for (Publication publication : publications) {
+	      if (publication instanceof BookPublication) {
+  	      result.add((BookPublication) publication); 
+	      }
+	    }
 	    
+	  } else {
 		  for (Publication publication : publications) {
-		    if (publication.getPublished()) {
-		      result.add(publication);
+		    if (publication instanceof BookPublication && publication.getPublished()) {
+		      result.add((BookPublication) publication);
 		    }
 		  }
-		  
-		  return result;
 	  }
+    
+    return result;
 	}
 
-	public List<Publication> listRecentPublications(int maxRecentPublication) {
-		return publicationDAO.listByPublishedOrderByCreated(Boolean.TRUE, 0, maxRecentPublication);
+	public List<BookPublication> listRecentBookPublications(int maxRecentPublication) {
+		return bookPublicationDAO.listByPublishedOrderByCreated(Boolean.TRUE, 0, maxRecentPublication);
 	}
 
 	public List<BookPublication> listUnpublishedBooks() {
@@ -192,8 +204,8 @@ public class PublicationController {
 		return publication;
 	}
 
-	public Publication updateLicense(Publication publication, String licenseUrl) {
-		return publicationDAO.updateLicense(publication, licenseUrl);
+	public BookPublication updateLicense(BookPublication publication, String licenseUrl) {
+		return bookPublicationDAO.updateLicense(publication, licenseUrl);
 	}
 	
 	public Publication updateDimensions(Publication publication, Integer width, Integer height, Integer depth) {
@@ -364,6 +376,10 @@ public class PublicationController {
 	public BookPublication findBookPublicationById(Long id) {
 		return bookPublicationDAO.findById(id);
 	}
+
+  public BookPublication findBookPublicationByUrlName(String urlName) {
+    return bookPublicationDAO.findByUrlName(urlName);
+  }
 	
 	public BookPublication updateNumberOfPages(BookPublication bookPublication, Integer numberOfPages) {
     return bookPublicationDAO.updateNumberOfPages(bookPublication, numberOfPages);
@@ -458,6 +474,51 @@ public class PublicationController {
 	public void deletePublicationAuthor(PublicationAuthor publicationAuthor) {
 		publicationAuthorDAO.delete(publicationAuthor);
 	}
+	
+	/* Store Products */
+	
+	public List<StoreProduct> listUnpublishedStoreProducts() {
+    return storeProductDAO.listByPublished(Boolean.FALSE);
+  }
+
+  public List<StoreProduct> listPublishedStoreProducts() {
+    return storeProductDAO.listByPublished(Boolean.TRUE);
+  }
+
+  public StoreProduct createStoreProduct(User creator, String name, Language language) {
+    User modifier = creator;
+    String urlName = createUrlName(name);
+    String description = null;
+    Double price = 0d;
+    Double authorsShare = 0d;
+    PublicationImage defaultImage = null;
+    Date created = new Date();
+    Integer height = null;
+    Date modified = created;
+    Boolean published = Boolean.FALSE;
+    Integer width = null;
+    Integer depth = null;
+    Double weight = null;
+    ForumTopic forumTopic = null;
+    
+    return storeProductDAO.create(name, 
+        urlName, 
+        description, 
+        price, 
+        authorsShare, 
+        defaultImage, 
+        created, 
+        creator, 
+        modified, 
+        modifier, 
+        published, 
+        height, 
+        width, 
+        depth, 
+        weight, 
+        forumTopic, 
+        language);
+  }
 	
 	private String createUrlName(String name) {
 	  return createUrlName(null, name);

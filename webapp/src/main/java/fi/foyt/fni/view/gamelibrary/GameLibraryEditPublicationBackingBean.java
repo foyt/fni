@@ -91,7 +91,8 @@ public class GameLibraryEditPublicationBackingBean {
   @Deferred
   @IgnorePostback
 	public void init() {
-		Publication publication = publicationController.findPublicationById(publicationId);
+		BookPublication publication = publicationController.findBookPublicationById(publicationId);
+		// TODO: Not found?
 		
 		name = publication.getName();
 		description = publication.getDescription();
@@ -424,7 +425,7 @@ public class GameLibraryEditPublicationBackingBean {
 			publicationController.updateWeight(publication, getWeight());
 			publicationController.updateDimensions(publication, getWidth(), getHeight(), getDepth());
 			publicationController.updatePublicationAuthors(publication, authors);
-			publicationController.updateLicense(publication, license);
+			publicationController.updateLicense(bookPublication, license);
 			publicationController.updateTags(bookPublication, tags);
 			publicationController.updateNumberOfPages(bookPublication, getNumberOfPages());
       publicationController.updatePublicationLanguage(bookPublication, language);

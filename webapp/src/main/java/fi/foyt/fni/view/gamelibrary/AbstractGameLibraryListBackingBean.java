@@ -36,7 +36,7 @@ public abstract class AbstractGameLibraryListBackingBean {
   @Inject
   private SessionShoppingCartController sessionShoppingCartController;
   
-  protected String init(List<Publication> publications) {
+  protected String init(List<BookPublication> publications) {
     this.publications = publications;
     this.authors = new HashMap<>();
     this.hasImages = new HashMap<>();
@@ -48,7 +48,7 @@ public abstract class AbstractGameLibraryListBackingBean {
     this.purchasables = new HashMap<>();
     this.pageNumbers = new HashMap<>();
     
-    for (Publication publication : publications) {
+    for (BookPublication publication : publications) {
       String description = publication.getDescription();
       List<PublicationImage> images = publicationController.listPublicationImagesByPublication(publication);
       List<PublicationTag> publicationTags = gameLibraryTagController.listPublicationTags(publication);
@@ -70,19 +70,17 @@ public abstract class AbstractGameLibraryListBackingBean {
       this.creativeCommonsLicences.put(publication.getId(), CreativeCommonsUtils.parseLicenseUrl(publication.getLicense()));
       this.authors.put(publication.getId(), users);
       this.commentCounts.put(publication.getId(), publication.getForumTopic() != null ? forumController.countPostsByTopic(publication.getForumTopic()) : null);
-      
-      if (publication instanceof BookPublication) {
-        downloadables.put(publication.getId(), ((BookPublication) publication).getDownloadableFile() != null);
-        purchasables.put(publication.getId(), ((BookPublication) publication).getPrintableFile() != null);
-        pageNumbers.put(publication.getId(), ((BookPublication) publication).getNumberOfPages());
-      }
+
+      downloadables.put(publication.getId(), publication.getDownloadableFile() != null);
+      purchasables.put(publication.getId(), publication.getPrintableFile() != null);
+      pageNumbers.put(publication.getId(), publication.getNumberOfPages());
     }
     
     return null;
   }
 
   
-  public List<Publication> getPublications() {
+  public List<BookPublication> getPublications() {
     return publications;
   }
   
@@ -139,7 +137,7 @@ public abstract class AbstractGameLibraryListBackingBean {
     return null;
   }
   
-  private List<Publication> publications;
+  private List<BookPublication> publications;
   private Map<Long, List<User>> authors;
   private Map<Long, Boolean> hasImages;
   private Map<Long, List<String>> tags;

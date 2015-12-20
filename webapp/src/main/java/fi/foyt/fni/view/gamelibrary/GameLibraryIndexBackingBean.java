@@ -23,6 +23,6 @@ public class GameLibraryIndexBackingBean extends AbstractGameLibraryListBackingB
 
   @RequestAction
 	public String load() {
-	  return init(publicationController.listRecentPublications(MAX_RECENT_PUBLICATIONS));
+	  return init(publicationController.listRecentBookPublications(MAX_RECENT_PUBLICATIONS));
 	}
 }
