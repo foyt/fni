@@ -3,16 +3,13 @@
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">
     <h:outputFormat value="#{locales['gamelibrary.editPublication.pageTitle']}">
       <f:param value="#{gameLibraryEditPublicationBackingBean.name}"/>
     </h:outputFormat>
-  </ui:define>
-  
-  <ui:define name="grid-css">
-    <h:outputStylesheet library="novus" name="css/grid.css"/>
   </ui:define>
   
   <ui:define name="view-scripts">
@@ -22,7 +19,7 @@
   </ui:define>
   
   <ui:define name="view-stylesheets">
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary-edit-publication.css"/>
   </ui:define>
 
@@ -30,122 +27,164 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
+    
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['gamelibrary.editPublication.navigationIndex']}</h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.editPublication.navigationMostRecent']}</h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/gamelibrary/manage.jsf">#{locales['gamelibrary.editPublication.navigationManagement']}</h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/gamelibrary/editpublication.jsf?publicationId=#{gameLibraryEditPublicationBackingBean.publicationId}">#{locales['gamelibrary.editPublication.navigationEditBookPublication']}</h:link>
+          </div>
+        </div>
+
+        <!-- Description -->
+    
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['gamelibrary.editPublication.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['gamelibrary.editPublication.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
     
     <!-- View Content -->
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-panel">
-      
-        <h:link styleClass="gamelibrary-edit-publication-back-link" value="#{locales['gamelibrary.editPublication.backLink']}" outcome="/gamelibrary/manage.jsf"/>
-      
-        <h3>
-          <h:outputFormat value="#{locales['gamelibrary.editPublication.publicationTitle']}">
-            <f:param value="#{gameLibraryEditPublicationBackingBean.name}"/>
-          </h:outputFormat>
-        </h3>
+    <h:form>
+      <div class="flex-row">
+        <div class="flex-cell-full index-box">
         
-        <h:form styleClass="gamelibrary-edit-publication-form">
-          <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-form-section">
-            <h:outputLabel value="#{locales['gamelibrary.editPublication.nameLabel']}" />
-            <div>
-              <h:inputText name="name" value="#{gameLibraryEditPublicationBackingBean.name}" required="required" requiredMessage="#{locales['gamelibrary.editPublication.nameRequired']}"/>
-            </div>
-          </h:panelGroup>
+          <h3>
+            <h:outputFormat value="#{locales['gamelibrary.editPublication.publicationTitle']}">
+              <f:param value="#{gameLibraryEditPublicationBackingBean.name}"/>
+            </h:outputFormat>
+          </h3>
           
-          <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-form-section">
-            <h:outputLabel value="#{locales['gamelibrary.editPublication.descriptionLabel']}" />
-            <div>
-              <h:inputTextarea name="description" value="#{gameLibraryEditPublicationBackingBean.description}" rows="5" required="required" requiredMessage="#{locales['gamelibrary.editPublication.descriptionRequired']}"/>
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['gamelibrary.editPublication.nameLabel']}</label>
             </div>
-          </h:panelGroup>
-          
-          <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-form-section">
-            <h:outputLabel value="#{locales['gamelibrary.editPublication.priceLabel']}" />
-            <div>
-              <h:inputText name="price" type="number" value="#{gameLibraryEditPublicationBackingBean.price}" required="required" requiredMessage="#{locales['gamelibrary.editPublication.priceRequired']}"/>
+            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <input type="text" name="name" jsf:value="#{gameLibraryEditPublicationBackingBean.name}" required="required" jsf:requiredMessage="#{locales['gamelibrary.editPublication.nameRequired']}"/>
             </div>
-          </h:panelGroup>
+          </div>
           
-          <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-form-section">
-            <h:outputLabel value="#{locales['gamelibrary.editPublication.languageLabel']}" />
-            <h:selectOneMenu value="#{gameLibraryEditPublicationBackingBean.languageId}">
-              <f:selectItems value="#{gameLibraryEditPublicationBackingBean.languageSelectItems}" />
-            </h:selectOneMenu>
-          </h:panelGroup>
-
-          <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-form-section">
-            <h:outputLabel value="#{locales['gamelibrary.editPublication.tagsLabel']}" />
-            <div>
-              <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-tags-container">        
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['gamelibrary.editPublication.descriptionLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <textarea name="description" jsf:value="#{gameLibraryEditPublicationBackingBean.description}" rows="5" required="required" jsf:requiredMessage="#{locales['gamelibrary.editPublication.descriptionRequired']}"></textarea>
+            </div>
+          </div>
+          
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['gamelibrary.editPublication.priceLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <input name="price" type="number" jsf:value="#{gameLibraryEditPublicationBackingBean.price}" required="required" jsf:requiredMessage="#{locales['gamelibrary.editPublication.priceRequired']}"/>
+            </div>
+          </div>
+          
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['gamelibrary.editPublication.languageLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <h:selectOneMenu value="#{gameLibraryEditPublicationBackingBean.languageId}">
+                <f:selectItems value="#{gameLibraryEditPublicationBackingBean.languageSelectItems}" />
+              </h:selectOneMenu>
+            </div>
+          </div>
+          
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['gamelibrary.editPublication.tagsLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <div>
                 <ui:repeat var="tag" value="#{gameLibraryEditPublicationBackingBean.tags}">
-                  <h:panelGroup styleClass="gamelibrary-edit-publication-tag">
+                  <span>
                     <span>#{tag}</span>
                     <a href="javascript:void(null)" data-tag="#{tag}"/>
-                  </h:panelGroup>     
+                  </span>
                 </ui:repeat>
-              </h:panelGroup>
-            
+              </div>
               <div>
                 <h:selectOneMenu value="#{gameLibraryEditPublicationBackingBean.addExistingTag}">
                   <f:selectItems value="#{gameLibraryEditPublicationBackingBean.tagSelectItems}" />
                   <f:ajax execute="@form" render="@form"/>
                 </h:selectOneMenu>
                 
-                <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-new-tag-container" style="#{gameLibraryEditPublicationBackingBean.addExistingTag eq '_NEW_' ? '' : 'display: none'}">        
-                  <h:outputLabel value="#{locales['gamelibrary.editPublication.newTagLabel']}"/>
-                  <h:inputText value="#{gameLibraryEditPublicationBackingBean.addNewTag}"/>
-                </h:panelGroup>
-              </div>
-
-              <h:commandLink styleClass="gamelibrary-edit-publication-new-tag-link" action="#{gameLibraryEditPublicationBackingBean.addTag}" value="#{locales['gamelibrary.editPublication.addTag']}" />
-              
-              <h:commandButton id="remove-tag-command-button" action="#{gameLibraryEditPublicationBackingBean.removeTag}" style="display: none"/>
-              <h:inputHidden id="remove-tag-text" value="#{gameLibraryEditPublicationBackingBean.removeTagText}" />
-              <h:inputHidden value="#{gameLibraryEditPublicationBackingBean.tags}" converter="fi.foyt.fni.jsf.StringListConverter"/>
-            </div>
-          </h:panelGroup>
-
-          <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-form-section">
-            <h:outputLabel value="#{locales['gamelibrary.editPublication.licenseLabel']}" />
-            <div>
-              <h:selectOneMenu value="#{gameLibraryEditPublicationBackingBean.licenseType}" requiredMessage="#{locales['gamelibrary.editPublication.licenseRequired']}">
-                <f:selectItems value="#{gameLibraryEditPublicationBackingBean.licenseSelectItems}"/>
-                <f:ajax execute="@form" render="@form"/>
-              </h:selectOneMenu>
-              
-              <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-license-cc-container" style="#{gameLibraryEditPublicationBackingBean.licenseType eq 'CREATIVE_COMMONS' ? '' : 'display: none'}"> 
-                <h:outputLabel value="#{locales['gamelibrary.editPublication.licenseCreativeCommonsAllowModifications']}" />
-                <h:selectOneRadio value="#{gameLibraryEditPublicationBackingBean.creativeCommonsDerivatives}">
-                  <f:selectItems value="#{gameLibraryEditPublicationBackingBean.creativeCommonsDerivativesSelectItems}"/>
-                </h:selectOneRadio>
-                
-                <h:outputLabel value="#{locales['gamelibrary.editPublication.licenseCreativeCommonsAllowCommercial']}" />
-                <h:selectOneRadio value="#{gameLibraryEditPublicationBackingBean.creativeCommonsCommercial}">
-                  <f:selectItems value="#{gameLibraryEditPublicationBackingBean.creativeCommonsCommercialSelectItems}"/>
-                </h:selectOneRadio>
-              </h:panelGroup>
-   
-              <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-license-other" style="#{gameLibraryEditPublicationBackingBean.licenseType eq 'OTHER' ? '' : 'display: none'}">   
-                <h:outputLabel value="#{locales['gamelibrary.editPublication.linkToLicense']}" />
-                <div>
-                  <h:inputText value="#{gameLibraryEditPublicationBackingBean.licenseOther}"/>
+                <div class="new-tag-container" style="#{gameLibraryEditPublicationBackingBean.addExistingTag eq '_NEW_' ? '' : 'display: none'}">
+                  <label>#{locales['gamelibrary.editPublication.newTagLabel']}</label>
+                  <input type="text" jsf:value="#{gameLibraryEditPublicationBackingBean.addNewTag}"/>
                 </div>
-              </h:panelGroup>
+                
+                <h:commandLink styleClass="gamelibrary-edit-publication-new-tag-link" action="#{gameLibraryEditPublicationBackingBean.addTag}" value="#{locales['gamelibrary.editPublication.addTag']}" />
+                <h:commandButton id="remove-tag-command-button" action="#{gameLibraryEditPublicationBackingBean.removeTag}" style="display: none"/>
+                <h:inputHidden id="remove-tag-text" value="#{gameLibraryEditPublicationBackingBean.removeTagText}" />
+                <h:inputHidden value="#{gameLibraryEditPublicationBackingBean.tags}" converter="fi.foyt.fni.jsf.StringListConverter"/>
+                
+              </div>
             </div>
-          </h:panelGroup>
-
-          <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-form-section">
-            <h:outputLabel value="#{locales['gamelibrary.editPublication.authorsLabel']}" />
-            <div>
-              <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-authors-container">        
+          </div>
+          
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['gamelibrary.editPublication.licenseLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+            
+              <div>
+                <h:selectOneMenu value="#{gameLibraryEditPublicationBackingBean.licenseType}" requiredMessage="#{locales['gamelibrary.editPublication.licenseRequired']}">
+                  <f:selectItems value="#{gameLibraryEditPublicationBackingBean.licenseSelectItems}"/>
+                  <f:ajax execute="@form" render="@form"/>
+                </h:selectOneMenu>
+                
+                <div class="gamelibrary-edit-publication-license-cc-container" style="#{gameLibraryEditPublicationBackingBean.licenseType eq 'CREATIVE_COMMONS' ? '' : 'display: none'}"> 
+                  <label>#{locales['gamelibrary.editPublication.licenseCreativeCommonsAllowModifications']}</label>
+                  <h:selectOneRadio value="#{gameLibraryEditPublicationBackingBean.creativeCommonsDerivatives}">
+                    <f:selectItems value="#{gameLibraryEditPublicationBackingBean.creativeCommonsDerivativesSelectItems}"/>
+                  </h:selectOneRadio>
+                  
+                  <label>#{locales['gamelibrary.editPublication.licenseCreativeCommonsAllowCommercial']}</label>
+                  <h:selectOneRadio value="#{gameLibraryEditPublicationBackingBean.creativeCommonsCommercial}">
+                    <f:selectItems value="#{gameLibraryEditPublicationBackingBean.creativeCommonsCommercialSelectItems}"/>
+                  </h:selectOneRadio>
+                </div>
+     
+                <div class="gamelibrary-edit-publication-license-other" style="#{gameLibraryEditPublicationBackingBean.licenseType eq 'OTHER' ? '' : 'display: none'}">   
+                  <label>#{locales['gamelibrary.editPublication.linkToLicense']}</label>
+                  <div>
+                    <input type="text" jsf:value="#{gameLibraryEditPublicationBackingBean.licenseOther}"/>
+                  </div>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+          
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['gamelibrary.editPublication.authorsLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <div class="gamelibrary-edit-publication-authors-container">        
                 <ui:repeat var="authorName" value="#{gameLibraryEditPublicationBackingBean.authorNames}" varStatus="vs">
                   <h:panelGroup styleClass="gamelibrary-edit-publication-author">
                     <span>#{authorName}</span>
                     <a href="javascript:void(null)" data-author-id="#{gameLibraryEditPublicationBackingBean.authorIds[vs.index]}"/>
                   </h:panelGroup>
                 </ui:repeat>
-              </h:panelGroup>
+              </div>
               
               <h:commandButton id="remove-author-command-button" action="#{gameLibraryEditPublicationBackingBean.removeAuthor}" style="display: none"/>
               <h:inputHidden id="remove-author-id" value="#{gameLibraryEditPublicationBackingBean.removeAuthorId}" />
@@ -154,39 +193,78 @@
                 <f:selectItems value="#{gameLibraryEditPublicationBackingBean.authorSelectItems}"/>
               </h:selectOneMenu>
             </div>
-            
+  
             <h:commandLink styleClass="gamelibrary-edit-publication-add-author-link" value="#{locales['gamelibrary.editPublication.addAuthor']}" action="#{gameLibraryEditPublicationBackingBean.addAuthor}" />
             <h:inputHidden value="#{gameLibraryEditPublicationBackingBean.authorIds}" converter="fi.foyt.fni.jsf.LongListConverter"/>
             <h:inputHidden value="#{gameLibraryEditPublicationBackingBean.authorNames}" converter="fi.foyt.fni.jsf.StringListConverter"/>
-          </h:panelGroup>
-      
-          <h:panelGroup layout="block" styleClass="gamelibrary-edit-publication-form-section">
-            <h:outputLabel value="#{locales['gamelibrary.editPublication.detailsLabel']}" />
-            <table class="gamelibrary-edit-publication-details-table">
-              <tr>
-                <td><h:outputLabel value="#{locales['gamelibrary.editPublication.widthLabel']}" /></td><td><h:inputText name="width" value="#{gameLibraryEditPublicationBackingBean.width}"/><span>mm</span></td>
-              </tr>
-              <tr>
-                <td><h:outputLabel value="#{locales['gamelibrary.editPublication.heightLabel']}" /></td><td><h:inputText name="height" value="#{gameLibraryEditPublicationBackingBean.height}"/><span>mm</span></td>
-              </tr>
-              <tr>
-                <td><h:outputLabel value="#{locales['gamelibrary.editPublication.depthLabel']}" /></td><td><h:inputText name="depth" value="#{gameLibraryEditPublicationBackingBean.depth}"/><span>mm</span></td>
-              </tr>
-              <tr>
-                <td><h:outputLabel value="#{locales['gamelibrary.editPublication.weightLabel']}" /></td><td><h:inputText name="weight" value="#{gameLibraryEditPublicationBackingBean.weight}"/><span>g</span></td>
-              </tr>
-              <tr>
-                <td><h:outputLabel value="#{locales['gamelibrary.editPublication.numberOfPagesLabel']}" /></td><td><h:inputText name="numberOfPages" value="#{gameLibraryEditPublicationBackingBean.numberOfPages}"/></td>
-              </tr>
-            </table>
-          </h:panelGroup>
+          </div>
           
-          <h:commandButton styleClass="gamelibrary-edit-publication-save" action="#{gameLibraryEditPublicationBackingBean.save}" value="#{locales['gamelibrary.editPublication.saveButtonLabel']}">
-          </h:commandButton>
-        </h:form>
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['gamelibrary.editPublication.widthLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <input type="text" name="width" jsf:value="#{gameLibraryEditPublicationBackingBean.width}"/>
+            </div>
+            <div class="lg-flex-cell-1 lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-full">
+              <span>mm</span>
+            </div>
+          </div>
+          
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['gamelibrary.editPublication.heightLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <input type="text" name="height" jsf:value="#{gameLibraryEditPublicationBackingBean.height}"/>
+            </div>
+            <div class="lg-flex-cell-1 lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-full">
+              <span>mm</span>
+            </div>
+          </div>
+          
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['gamelibrary.editPublication.depthLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <input type="text" name="depth" jsf:value="#{gameLibraryEditPublicationBackingBean.depth}"/>
+            </div>
+            <div class="lg-flex-cell-1 lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-full">
+              <span>mm</span>
+            </div>
+          </div>
+          
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['gamelibrary.editPublication.weightLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <input type="text" name="weight" jsf:value="#{gameLibraryEditPublicationBackingBean.weight}"/>
+            </div>
+            <div class="lg-flex-cell-1 lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-full">
+              <span>mm</span>
+            </div>
+          </div>
+          
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['gamelibrary.editPublication.numberOfPagesLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <input type="text" name="numberOfPages" jsf:value="#{gameLibraryEditPublicationBackingBean.numberOfPages}"/>
+            </div>
+            <div class="lg-flex-cell-1 lg-flex-cell-last md-flex-cell-2 md-flex-cell-last sm-flex-cell-full">
+              <span>mm</span>
+            </div>
+          </div>
         
-      </h:panelGroup>
-    </h:panelGroup>   
+          <h:commandButton styleClass="gamelibrary-edit-publication-save" action="#{gameLibraryEditPublicationBackingBean.save}" value="#{locales['gamelibrary.editPublication.saveButtonLabel']}"></h:commandButton>
+        
+        </div>
+      </div>
+    </h:form>
+    
   </ui:define>
 
 </ui:composition>
