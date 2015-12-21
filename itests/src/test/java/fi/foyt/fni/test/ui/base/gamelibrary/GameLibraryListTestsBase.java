@@ -259,7 +259,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   }
 
   private void assertShareButtonsVisible(RemoteWebDriver driver, String publicationSelector) {
-    waitForSelectorPresent(String.format("%s .gamelibrary-publication-share-button .entypo-twitter", publicationSelector));
+    waitForSelectorVisible(String.format("%s .gamelibrary-publication-share-button .entypo-twitter", publicationSelector));
     assertSelectorVisible(String.format("%s .gamelibrary-publication-share-button .entypo-twitter", publicationSelector));
     assertSelectorVisible(String.format("%s .gamelibrary-publication-share-button .entypo-facebook", publicationSelector));
     assertSelectorVisible(String.format("%s .gamelibrary-publication-share-button .entypo-gplus", publicationSelector));
