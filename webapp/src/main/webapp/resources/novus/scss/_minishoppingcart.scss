@@ -5,7 +5,7 @@
 
 /* Shopping Cart */
 
-.gamelibrary-mini-shopping-cart-view {
+.mini-shopping-cart-view {
   color: $default-color;
   font-family: $default-font;
   font-size: 16px;
@@ -16,52 +16,52 @@
   text-transform: none;
 }
 
-.gamelibrary-mini-shopping-cart-empty {
+.mini-shopping-cart-empty {
   color: $default-color;
   font-family: $default-font;
   font-size: 13px;
 }
 
-.gamelibrary-mini-shopping-cart-item {
+.mini-shopping-cart-item {
   color: $default-color;
   font-family: $default-font;
   font-size: 13px;
 }
 
-.gamelibrary-mini-shopping-cart-item-count {
+.mini-shopping-cart-item-count {
   display: inline-block;
 }
 
-.gamelibrary-mini-shopping-cart-item-count:after {
+.mini-shopping-cart-item-count:after {
   content: 'x';
   margin-left: 3px;
   margin-right: 3px;
 }
 
-.gamelibrary-mini-shopping-cart-item-name {
+.mini-shopping-cart-item-name {
   display: inline-block;
 }
 
-.gamelibrary-mini-shopping-cart-item-price {
+.mini-shopping-cart-item-price {
   display: inline-block;
   float: right;
 }
 
-.gamelibrary-mini-shopping-cart-items:after {
+.mini-shopping-cart-items:after {
   content: '------------------------------';
 }
 
-.gamelibrary-mini-shopping-cart-summary {
+.mini-shopping-cart-summary {
   color: $default-color;
   font-family: $default-font;
   font-size: 13px;
   display: block;
 }
 
-.gamelibrary-mini-shopping-cart-summary label {
+.mini-shopping-cart-summary label {
   font-weight: bold;
 }
 
-.gamelibrary-mini-shopping-cart-summary span { 
+.mini-shopping-cart-summary span { 
   float: right;
 }
