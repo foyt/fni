@@ -6,14 +6,14 @@
   
   <h:panelGroup layout="block" styleClass="mini-shopping-cart">
     <h3 class="mini-shopping-cart-title-container">
-      <h:panelGroup styleClass="mini-shopping-cart-title">#{locales['gamelibrary.miniShoppingCart.title']}</h:panelGroup>
-      <h:outputLink styleClass="mini-shopping-cart-view" value="#{request.contextPath}/gamelibrary/cart/">#{locales['gamelibrary.miniShoppingCart.view']}</h:outputLink>
+      <h:panelGroup styleClass="mini-shopping-cart-title">#{locales['store.miniShoppingCart.title']}</h:panelGroup>
+      <h:outputLink styleClass="mini-shopping-cart-view" value="#{request.contextPath}/gamelibrary/cart/">#{locales['store.miniShoppingCart.view']}</h:outputLink>
     </h3>
     
     <h:panelGroup layout="block" styleClass="mini-shopping-cart-contents">
       <h:panelGroup layout="block" styleClass="mini-shopping-cart-items">
         <h:panelGroup layout="block" styleClass="mini-shopping-cart-empty" rendered="#{gameLibraryMiniShoppingCartBackingBean.shoppingCartEmpty}">
-          <h:outputText value="#{locales['gamelibrary.miniShoppingCart.empty']}" /> 
+          <h:outputText value="#{locales['store.miniShoppingCart.empty']}" /> 
         </h:panelGroup>
         
         <ui:repeat var="cartItem" value="#{gameLibraryMiniShoppingCartBackingBean.shoppingCartItems}">   
@@ -34,7 +34,7 @@
       
     <h:panelGroup layout="block" styleClass="mini-shopping-cart-summary">
       <h:panelGroup layout="block" styleClass="mini-shopping-cart-summary">
-        <h:outputLabel value="#{locales['gamelibrary.miniShoppingCart.total']}" />
+        <h:outputLabel value="#{locales['store.miniShoppingCart.total']}" />
         <h:panelGroup styleClass="mini-shopping-cart-summary-total">
           <h:outputText value="#{gameLibraryMiniShoppingCartBackingBean.itemCosts}" >
             <f:convertNumber currencyCode="EUR" type="currency" />
