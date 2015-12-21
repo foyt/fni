@@ -525,7 +525,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   
   protected void waitForPageLoad() {
     try {
-      new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      new WebDriverWait(getWebDriver(), 5).until(new ExpectedCondition<Boolean>() {
         public Boolean apply(WebDriver driver) {
           return !((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
         }
