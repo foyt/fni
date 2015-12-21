@@ -41,7 +41,11 @@ public class StoreProductController {
   public StoreProduct findStoreProductById(Long id) {
     return storeProductDAO.findById(id);
   }
-  
+
+  public StoreProduct findStoreProductByUrlNam(String urlName) {
+    return storeProductDAO.findByUrlName(urlName);
+  }
+
   public List<StoreProduct> listUnpublishedStoreProducts() {
     return storeProductDAO.listByPublished(Boolean.FALSE);
   }

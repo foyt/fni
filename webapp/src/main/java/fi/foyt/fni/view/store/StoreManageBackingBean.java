@@ -24,7 +24,7 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @RequestScoped
 @Named
 @Stateful
-@Join (path = "/store/manage", to = "/store/manage.jsf")
+@Join (path = "/store/manage/", to = "/store/manage.jsf")
 @LoggedIn
 public class StoreManageBackingBean {
 	
