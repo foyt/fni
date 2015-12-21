@@ -28,6 +28,10 @@
     
     <wiremock.version>1.55</wiremock.version>
     
+    <!-- Keytool -->
+    
+    <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
+    
   </properties>
 
   <dependencies>
@@ -403,7 +407,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>keytool-maven-plugin</artifactId>
-            <version>1.4</version>
+            <version>${keytool-maven-plugin.version}</version>
             <executions>
               <execution>
                 <phase>pre-integration-test</phase>
@@ -832,7 +836,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>keytool-maven-plugin</artifactId>
-            <version>1.4</version>
+            <version>${keytool-maven-plugin.version}</version>
             <executions>
               <execution>
                 <phase>pre-integration-test</phase>
@@ -1275,7 +1279,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>keytool-maven-plugin</artifactId>
-            <version>1.4</version>
+            <version>${keytool-maven-plugin.version}</version>
             <executions>
               <execution>
                 <phase>pre-integration-test</phase>
@@ -1732,7 +1736,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>keytool-maven-plugin</artifactId>
-            <version>1.4</version>
+            <version>${keytool-maven-plugin.version}</version>
             <executions>
               <execution>
                 <phase>pre-integration-test</phase>
