@@ -1,0 +1,161 @@
+@charset "utf-8";
+@import "vars";
+@import "compass";
+@import "styles";
+@import "minishoppingcart";
+
+$share-button-width: 66px;
+$share-button-padding: 5px;
+
+/* General */
+
+h3 {
+  @include header-2;
+}
+
+h3 a {
+  color: $default-color;
+  text-decoration: none;
+}
+
+/* Products */
+
+.store-product-image-link {
+  float: right;
+  padding-left: 10px;
+  padding-bottom: 10px;
+}
+
+.store-product-image-link img {
+  vertical-align: top;
+}
+
+.tags {
+  margin-top: 18px;
+  margin-bottom: 14px;
+}
+
+.tag {
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase;
+  margin-right: 10px;
+  color: $default-color;
+  text-decoration: none;
+}
+
+.store-product-detail {
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase; 
+}
+
+.store-product-detail label {
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.store-product-detail a {
+  text-decoration: none;
+  color: $default-color;
+}
+
+.description {
+  font-family: $default-font;
+  font-size: 13px;
+}
+
+/* Share */
+
+.store-product-share-container {
+  margin-top: 15px;
+  text-align: right;
+  display: inline-block;
+  height: 0px;
+}
+
+.store-product-share-container .store-product-share-button {
+  width: ($share-button-width + ($share-button-padding * 2)) !important;
+}
+
+.store-product-share-container .store-product-share-button .entypo-export {
+  background: #333;
+  color: #fff;
+  padding: 5px;
+  font-family: $title-font;
+  font-size: 12px; 
+  margin: 0px;
+  width: $share-button-width !important;
+  display: block;
+}
+
+.store-product-share-container .store-product-share-button .entypo-export span {
+  display: inline-block;
+  width: 42px;
+  text-align: center;
+}
+
+.store-product-share-container .active {
+  position: absolute;
+}
+
+.store-product-action,
+.store-product-comments {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 10px;
+  text-transform: uppercase; 
+  text-decoration: none;
+}
+
+/* Categories */
+
+.store-categories-title {
+  @include header-2;
+  margin-bottom: 12px;
+}
+
+.store-category {
+  display: block;
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 13px;
+}
+
+.store-category:before {
+  content: '»';
+}
+
+.store-category-name {
+  color: $default-color;
+  text-decoration: none;
+  margin-left: 7px;
+}
+
+@media screen and (max-width: 360px) {
+  .store-product h3 {
+    max-width: 50%;
+    word-wrap: break-word;
+  }
+  
+  .store-product .store-product-tags {
+    max-width: 50%;
+    word-wrap: break-word;
+  }
+
+  .store-product-image-link {
+    max-width: 50%;
+    @include box-sizing(border-box);
+  }
+  
+  .store-product-image-link img {
+    max-width: 100%;
+  }
+  
+}
+
+@media screen and (max-width: 767px) {
+  .store-product-share-container .active {
+    right: 0px;  
+  }
+}
