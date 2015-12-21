@@ -40,7 +40,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     
     navigate("/gamelibrary/testbook_1", true);
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
-    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 1);
+    waitForSelectorCount(".mini-shopping-cart-item", 1);
     navigate("/gamelibrary/cart/", true);
     waitTitle("Forge & Illusion - Game Library");
 
@@ -95,10 +95,10 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
 
     navigate("/gamelibrary/testbook_1", true);
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
-    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 1);
+    waitForSelectorCount(".mini-shopping-cart-item", 1);
     navigate("/gamelibrary/pangram_fi", true);
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
-    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 2);
+    waitForSelectorCount(".mini-shopping-cart-item", 2);
     navigate("/gamelibrary/cart/", true);
     waitTitle("Forge & Illusion - Game Library");
     
@@ -157,10 +157,10 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     
     navigate("/gamelibrary/testbook_1", true);
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
-    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 1);
+    waitForSelectorCount(".mini-shopping-cart-item", 1);
     navigate("/gamelibrary/pangram_fi", true);
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
-    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 2);
+    waitForSelectorCount(".mini-shopping-cart-item", 2);
     navigate("/gamelibrary/cart/", true);
     waitTitle("Forge & Illusion - Game Library");
 
@@ -201,7 +201,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
         
         navigate("/gamelibrary/testbook_1", true);
         waitAndClick(".gamelibrary-publication-action-add-to-cart");
-        waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 1);
+        waitForSelectorCount(".mini-shopping-cart-item", 1);
         navigate("/gamelibrary/cart/", true);
         waitTitle("Forge & Illusion - Game Library");
         
