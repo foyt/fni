@@ -12,12 +12,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
-import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
 import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
-import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.store.StoreProduct;
+import fi.foyt.fni.persistence.model.store.StoreProductTag;
 import fi.foyt.fni.store.StoreProductController;
 
 @RequestScoped
@@ -33,9 +32,6 @@ public class StoreIndexBackingBean {
   private SessionShoppingCartController sessionShoppingCartController;
   
   @Inject
-  private GameLibraryTagController gameLibraryTagController;
-  
-  @Inject
   private NavigationController navigationController; 
 
   @RequestAction
@@ -46,7 +42,7 @@ public class StoreIndexBackingBean {
     
     for (StoreProduct storeProduct : storeProducts) {
       PublicationImage defaultImage = storeProduct.getDefaultImage();
-      List<PublicationTag> productTags = gameLibraryTagController.listPublicationTags(storeProduct);
+      List<StoreProductTag> productTags = storeProductController.listProductTags(storeProduct);
       
       String urlName = storeProduct.getUrlName();
       String name = storeProduct.getName();
@@ -54,7 +50,7 @@ public class StoreIndexBackingBean {
       description = StringUtils.isBlank(description) ? "" : description.replace("\n", "<br/>");
       List<String> tags = new ArrayList<>(productTags.size());
       
-      for (PublicationTag productTag : productTags) {
+      for (StoreProductTag productTag : productTags) {
         tags.add(productTag.getTag().getText());
       }
       

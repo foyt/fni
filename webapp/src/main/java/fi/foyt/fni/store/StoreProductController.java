@@ -10,15 +10,17 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 
-import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationTagDAO;
 import fi.foyt.fni.persistence.dao.store.StoreProductDAO;
+import fi.foyt.fni.persistence.dao.store.StoreProductTagDAO;
+import fi.foyt.fni.persistence.dao.store.StoreTagDAO;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
-import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.store.StoreProduct;
+import fi.foyt.fni.persistence.model.store.StoreProductTag;
+import fi.foyt.fni.persistence.model.store.StoreTag;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
@@ -29,9 +31,12 @@ public class StoreProductController {
   
   @Inject
   private PublicationTagDAO publicationTagDAO;
+
+  @Inject
+  private StoreTagDAO storeTagDAO;
   
   @Inject
-  private GameLibraryTagController gameLibraryTagController;
+  private StoreProductTagDAO storeProductTagDAO;
   
   public StoreProduct findStoreProductById(Long id) {
     return storeProductDAO.findById(id);
@@ -87,15 +92,15 @@ public class StoreProductController {
     storeProductDAO.updateDescription(storeProduct, description);
     storeProductDAO.updatePrice(storeProduct, price);
     
-    List<GameLibraryTag> productTags = new ArrayList<>();
+    List<StoreTag> productTags = new ArrayList<>();
     
     for (String tag : tags) {
-      GameLibraryTag gameLibraryTag = gameLibraryTagController.findTagByText(tag);
-      if (gameLibraryTag == null) {
-        gameLibraryTag = gameLibraryTagController.createTag(tag);
+      StoreTag storeTag = storeTagDAO.findByText(tag);
+      if (storeTag == null) {
+        storeTag = storeTagDAO.create(tag);
       }
       
-      productTags.add(gameLibraryTag);
+      productTags.add(storeTag);
     }
     
     updateTags(storeProduct, productTags);
@@ -103,17 +108,17 @@ public class StoreProductController {
     return storeProduct;
   }
   
-  private StoreProduct updateTags(StoreProduct storeProduct, List<GameLibraryTag> tags) {
-    List<GameLibraryTag> addTags = new ArrayList<>(tags);
+  private StoreProduct updateTags(StoreProduct storeProduct, List<StoreTag> tags) {
+    List<StoreTag> addTags = new ArrayList<>(tags);
     
-    Map<Long, PublicationTag> existingTagMap = new HashMap<Long, PublicationTag>();
-    List<PublicationTag> existingTags = gameLibraryTagController.listPublicationTags(storeProduct);
-    for (PublicationTag existingTag : existingTags) {
+    Map<Long, StoreProductTag> existingTagMap = new HashMap<>();
+    List<StoreProductTag> existingTags = storeProductTagDAO.listByProduct(storeProduct);
+    for (StoreProductTag existingTag : existingTags) {
       existingTagMap.put(existingTag.getTag().getId(), existingTag);
     }
     
     for (int i = addTags.size() - 1; i >= 0; i--) {
-      GameLibraryTag addTag = addTags.get(i);
+      StoreTag addTag = addTags.get(i);
       
       if (existingTagMap.containsKey(addTag.getId())) {
         addTags.remove(i);
@@ -122,12 +127,12 @@ public class StoreProductController {
       existingTagMap.remove(addTag.getId());
     }
     
-    for (PublicationTag removeTag : existingTagMap.values()) {
-      gameLibraryTagController.deletePublicationTag(removeTag);
+    for (StoreProductTag removeTag : existingTagMap.values()) {
+      storeProductTagDAO.delete(removeTag);
     }
     
-    for (GameLibraryTag gameLibraryTag : addTags) {
-      publicationTagDAO.create(gameLibraryTag, storeProduct);
+    for (StoreTag addTag : addTags) {
+      storeProductTagDAO.create(addTag, storeProduct);
     }
     
     return storeProduct;
@@ -180,4 +185,15 @@ public class StoreProductController {
     
     storeProductDAO.delete(storeProduct);
   }
+  
+  /* Tags */
+
+  public List<StoreProductTag> listProductTags(StoreProduct storeProduct) {
+    return storeProductTagDAO.listByProduct(storeProduct);
+  }
+
+  public List<StoreTag> listStoreTags() {
+    return storeTagDAO.listAll();
+  }
+
 }

@@ -17,12 +17,11 @@ import org.ocpsoft.rewrite.annotation.Matches;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
-import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.jsf.NavigationController;
-import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
-import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.store.StoreProduct;
+import fi.foyt.fni.persistence.model.store.StoreProductTag;
+import fi.foyt.fni.persistence.model.store.StoreTag;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.session.SessionController;
@@ -38,9 +37,6 @@ public class StoreEditProductBackingBean {
   @Parameter
   @Matches ("[0-9]{1,}")
   private Long productId;
-
-	@Inject
-	private GameLibraryTagController gameLibraryTagController;
 
 	@Inject
 	private SessionController sessionController;
@@ -73,9 +69,9 @@ public class StoreEditProductBackingBean {
 
     tags = new ArrayList<>();
     
-    List<PublicationTag> publicationTags = gameLibraryTagController.listPublicationTags(storeProduct);
-    for (PublicationTag publicationTag : publicationTags) {
-      tags.add(publicationTag.getTag().getText());
+    List<StoreProductTag> productTags = storeProductController.listProductTags(storeProduct);
+    for (StoreProductTag productTag : productTags) {
+      tags.add(productTag.getTag().getText());
     }
 		
 		return null;
@@ -179,12 +175,12 @@ public class StoreEditProductBackingBean {
   }
   
   private List<SelectItemGroup> createTagSelectItems(Locale locale) {
-    List<GameLibraryTag> tags = gameLibraryTagController.listGameLibraryTags();
+    List<StoreTag> tags = storeProductController.listStoreTags();
     
     ArrayList<SelectItemGroup> result = new ArrayList<>();
 
     List<SelectItem> tagItems = new ArrayList<>();
-    for (GameLibraryTag tag : tags) {
+    for (StoreTag tag : tags) {
       tagItems.add(new SelectItem(tag.getText(), StringUtils.capitalize(tag.getText())));
     }
     
