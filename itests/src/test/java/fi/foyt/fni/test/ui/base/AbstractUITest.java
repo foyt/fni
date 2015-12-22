@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
@@ -372,9 +374,24 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void navigate(String path, Boolean secure) {
-    getWebDriver().get(getAppUrl(secure) + path);
+    String url = String.format("%s%s", getAppUrl(secure), path);
+    int i = 0;
+    
+    while (!tryNavigate(url)) {
+      i++;
+      if (i > 4) {
+        Logger.getLogger(getClass().getName()).log(Level.SEVERE, String.format("Failed to navigate to url %s", url));
+        return;
+      }
+    }
   }
   
+  private boolean tryNavigate(String url) {
+    getWebDriver().get(url);
+    waitForUrl(getWebDriver(), url);
+    return StringUtils.equals(getWebDriver().getCurrentUrl(), url);
+  }
+
   protected void testLoginRequired(String path) throws UnsupportedEncodingException {
     testLoginRequired(getWebDriver(), path);
   }
