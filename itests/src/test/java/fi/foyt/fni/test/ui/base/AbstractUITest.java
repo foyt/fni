@@ -489,6 +489,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     assertEquals("Page Not Found!", getWebDriver().getTitle());
   }
   
+  protected void testNotFound(String path, boolean secure) {
+    navigate(path, secure);
+    waitTitle("Page Not Found!");
+    assertEquals("Page Not Found!", getWebDriver().getTitle());
+  }
+  
   protected void clearSelectorInput(String selector) {
     findElementBySelector(selector).clear();
   }
