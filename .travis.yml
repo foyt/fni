@@ -24,6 +24,7 @@ env:
   matrix:
   - goals=verify use_sc=false it_profile=rest
   
+  - goals=verify package=store use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
   - goals=verify package=environment use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
   - goals=verify package=forge use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
   - goals=verify package=illusion/forum use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
@@ -36,6 +37,7 @@ env:
   - goals=verify package=gamelibrary use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
   - goals=verify package=forum use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
   
+  - goals=verify package=store use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
   - goals=verify package=environment use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
   - goals=verify package=forge use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
   - goals=verify package=illusion/forum use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
@@ -49,6 +51,7 @@ env:
   - goals=verify package=gamelibrary use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
   - goals=verify package=forum use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
   
+  - goals=verify package=store use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
   - goals=verify package=environment use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
   - goals=verify package=forge use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
   - goals=verify package=illusion/forum use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
@@ -62,6 +65,7 @@ env:
   - goals=verify package=gamelibrary use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
   - goals=verify package=forum use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
 
+  - goals=verify package=store use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
   - goals=verify package=environment use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
   - goals=verify package=forge use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
   - goals=verify package=illusion/forum use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
@@ -75,6 +79,7 @@ env:
   - goals=verify package=gamelibrary use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
   - goals=verify package=forum use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
 
+  - goals=verify package=store use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
   - goals=verify package=environment use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
   - goals=verify package=forge use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
   - goals=verify package=illusion/forum use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
