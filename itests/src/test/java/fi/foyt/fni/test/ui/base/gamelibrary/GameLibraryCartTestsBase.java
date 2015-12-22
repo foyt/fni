@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -39,6 +38,10 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     acceptCookieDirective();
     
     navigate("/gamelibrary/testbook_1", true);
+   
+    // We have to wait for share button animation to end
+    Thread.sleep(500);
+    
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
     waitForSelectorCount(".mini-shopping-cart-item", 1);
     navigate("/gamelibrary/cart/", true);
@@ -54,7 +57,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.id("cart-form:notes")).sendKeys(notes);
     getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).click();
 
-    acceptPaytrailPayment(getWebDriver());
+    acceptPaytrailPayment();
     waitTitle("Forge & Illusion - Game Library");
     waitForSelectorPresent(".gamelibrary-order-status");
     
@@ -94,9 +97,17 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     acceptCookieDirective();
 
     navigate("/gamelibrary/testbook_1", true);
+   
+    // We have to wait for share button animation to end
+    Thread.sleep(500);
+    
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
     waitForSelectorCount(".mini-shopping-cart-item", 1);
     navigate("/gamelibrary/pangram_fi", true);
+    
+    // We have to wait for share button animation to end
+    Thread.sleep(500);
+    
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
     waitForSelectorCount(".mini-shopping-cart-item", 2);
     navigate("/gamelibrary/cart/", true);
@@ -115,7 +126,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.id("cart-form:notes")).sendKeys(notes);
     getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).click();
 
-    acceptPaytrailPayment(getWebDriver());
+    acceptPaytrailPayment();
     waitTitle("Forge & Illusion - Game Library");
     waitForSelectorPresent(".gamelibrary-order-status");
 
@@ -156,9 +167,17 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     acceptCookieDirective();
     
     navigate("/gamelibrary/testbook_1", true);
+    
+    // We have to wait for share button animation to end
+    Thread.sleep(500);
+    
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
     waitForSelectorCount(".mini-shopping-cart-item", 1);
     navigate("/gamelibrary/pangram_fi", true);
+
+    // We have to wait for share button animation to end
+    Thread.sleep(500);
+
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
     waitForSelectorCount(".mini-shopping-cart-item", 2);
     navigate("/gamelibrary/cart/", true);
@@ -200,6 +219,10 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
         loginInternal(email, password);
         
         navigate("/gamelibrary/testbook_1", true);
+        
+        // We have to wait for share button animation to end
+        Thread.sleep(500);
+
         waitAndClick(".gamelibrary-publication-action-add-to-cart");
         waitForSelectorCount(".mini-shopping-cart-item", 1);
         navigate("/gamelibrary/cart/", true);
@@ -228,7 +251,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
         assertEquals(addressPostalOffice, getWebDriver().findElement(By.id("cart-form:payerPostalOffice")).getAttribute("value"));
         getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).click();
 
-        acceptPaytrailPayment(getWebDriver());
+        acceptPaytrailPayment();
         logout();
         loginInternal(getWebDriver(), email, password);
 
@@ -252,19 +275,6 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     } finally {
       deleteUser(userId);
     }
-  }
-
-  private void acceptPaytrailPayment(RemoteWebDriver driver) {
-    waitAndClick("input[value=\"Osuuspankki\"]");
-    waitForUrl(getWebDriver(), "https://kultaraha.op.fi/cgi-bin/krcgi");
-
-    waitAndSendKeys("*[name='id']", "123456");
-    waitAndSendKeys("*[name='pw']", "7890");
-    waitAndClick("*[name='ktunn']");
-
-    waitAndSendKeys("*[name='avainluku']", "1234");
-    waitAndClick("*[name='avainl']");
-    waitAndClick("#Toiminto");
   }
 
 }
