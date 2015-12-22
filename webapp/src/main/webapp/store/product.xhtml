@@ -67,7 +67,7 @@
       <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full sm-flex-cell-first flex-overflow-hidden"> 
         <h:form>
 
-          <div class="flex-row store-product" data-index="#{vs.index}">
+          <div class="flex-row store-product">
             <div class="flex-cell-full index-box">
               <div class="flex-row">
                 <div class="flex-cell-full no-margin-top no-margin-bottom">
@@ -79,7 +79,7 @@
                   </h3>
                   <div class="tags">
                     <ui:repeat var="tag" value="#{storeProductBackingBean.tags}">
-                      <span class="tag">#{tag}</span>
+                      <a class="tag" jsf:outcome="/store/index.jsf?tag=#{tag}">#{tag}</a>
                     </ui:repeat>
                   </div>
                   <div class="description">
