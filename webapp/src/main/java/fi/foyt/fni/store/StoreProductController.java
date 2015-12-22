@@ -4,24 +4,32 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 
+import fi.foyt.fni.forum.ForumController;
+import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.persistence.dao.gamelibrary.PublicationTagDAO;
 import fi.foyt.fni.persistence.dao.store.StoreProductDAO;
 import fi.foyt.fni.persistence.dao.store.StoreProductTagDAO;
 import fi.foyt.fni.persistence.dao.store.StoreTagDAO;
 import fi.foyt.fni.persistence.model.common.Language;
+import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.store.StoreProduct;
 import fi.foyt.fni.persistence.model.store.StoreProductTag;
 import fi.foyt.fni.persistence.model.store.StoreTag;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
 public class StoreProductController {
@@ -38,6 +46,15 @@ public class StoreProductController {
   @Inject
   private StoreProductTagDAO storeProductTagDAO;
   
+  @Inject
+  private SystemSettingsController systemSettingsController;
+  
+  @Inject
+  private UserController userController;
+    
+  @Inject
+  private ForumController forumController;
+  
   public StoreProduct findStoreProductById(Long id) {
     return storeProductDAO.findById(id);
   }
@@ -52,6 +69,19 @@ public class StoreProductController {
 
   public List<StoreProduct> listPublishedStoreProducts() {
     return storeProductDAO.listByPublished(Boolean.TRUE);
+  }
+
+  public List<StoreProduct> listProductsByTags(String[] tags) {
+    List<StoreTag> productTags = new ArrayList<>();
+    
+    for (String tag : tags) {
+      StoreTag storeTag = storeTagDAO.findByText(tag);
+      if (storeTag != null) {
+        productTags.add(storeTag);
+      }
+    }
+    
+    return storeProductTagDAO.listProductsByStoreTags(productTags);
   }
 
   public StoreProduct createStoreProduct(User creator, String name, Language language) {
@@ -174,6 +204,27 @@ public class StoreProductController {
   }
 
   public StoreProduct publishStoreProduct(StoreProduct storeProduct) {
+    if (storeProduct.getForumTopic() == null) {
+      Long forumId = systemSettingsController.getLongSetting(SystemSettingKey.GAMELIBRARY_PUBLICATION_FORUM_ID);
+      String systemUserEmail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_USER_EMAIL);
+      User systemUser = userController.findUserByEmail(systemUserEmail);
+      Forum gameLibraryForum = forumController.findForumById(forumId);
+      
+      if ((gameLibraryForum != null) && (systemUser != null)) {
+        String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+        String subject = storeProduct.getName();
+        String link = String.format("%s/store/%s", contextPath, storeProduct.getUrlName());
+
+        Locale publicationLocale = storeProduct.getLanguage().getLocale();
+        String initialMessage = ExternalLocales.getText(publicationLocale, "gamelibrary.forum.initialMessage", link, subject);
+        
+        ForumTopic topic = forumController.createTopic(gameLibraryForum, subject, systemUser);
+        forumController.createForumPost(topic, systemUser, initialMessage);
+        
+        storeProductDAO.updateForumTopic(storeProduct, topic);
+      }
+    }
+    
     return storeProductDAO.updatePublished(storeProduct, Boolean.TRUE);
   }
 

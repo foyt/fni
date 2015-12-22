@@ -73,7 +73,7 @@
                     </h3>
                     <div class="tags">
                       <ui:repeat var="tag" value="#{product.tags}">
-                        <span class="tag">#{tag}</span>
+                        <a class="tag" jsf:outcome="/store/index.jsf?tag=#{tag}">#{tag}</a>
                       </ui:repeat>
                     </div>
                     <div class="description">
@@ -95,13 +95,22 @@
                     </div>
                   </div>
                 </div>
+                    
                 <div class="flex-row">
-                  <div class="flex-cell-full flex-cell-last flex-right no-margin-top no-margin-bottom">
+                  <div class="flex-cell-8 flex-cell-first no-margin-top no-margin-bottom">
+                    <a jsf:outcome="/forum/topic.jsf?forumUrlName=#{product.forumUrlName}&amp;topicUrlName=#{product.forumTopicUrlName}" class="store-product-comments">
+                      <h:outputFormat value="#{locales['gamelibrary.publications.comments']}">
+                        <f:param value="#{product.commentCount}"/>
+                      </h:outputFormat>
+                    </a>
+                  </div>
+                  <div class="flex-cell-8 flex-cell-last flex-right no-margin-top no-margin-bottom">
                     <a class="store-product-action store-product-action-add-to-cart" jsf:action="#{storeIndexBackingBean.addToShoppingCart(product.id)}">
                       #{locales['store.index.addToShoppingCart']}
                     </a>
-                  </div>
-                </div>     
+                  </div>                  
+                </div> 
+                   
                 <div class="flex-row">
                   <div class="flex-cell-full flex-right">
                     <div class="store-product-share-container">

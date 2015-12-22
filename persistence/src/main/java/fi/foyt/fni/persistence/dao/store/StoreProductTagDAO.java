@@ -66,7 +66,7 @@ public class StoreProductTagDAO extends GenericDAO<StoreProductTag> {
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<StoreProduct> criteria = criteriaBuilder.createQuery(StoreProduct.class);
     Root<StoreProductTag> root = criteria.from(StoreProductTag.class);
-    criteria.select(root.get(StoreProductTag_.product));
+    criteria.select(root.get(StoreProductTag_.product)).distinct(true);
     criteria.where(
     	root.get(StoreProductTag_.tag).in(storeTags)
     );

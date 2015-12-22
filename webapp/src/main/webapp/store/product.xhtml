@@ -101,13 +101,22 @@
                   </div>
                 </div>
               </div>
+                  
               <div class="flex-row">
-                <div class="flex-cell-full flex-cell-last flex-right no-margin-top no-margin-bottom">
+                <div class="flex-cell-8 flex-cell-first no-margin-top no-margin-bottom">
+                  <a jsf:outcome="/forum/topic.jsf?forumUrlName=#{storeProductBackingBean.forumUrlName}&amp;topicUrlName=#{storeProductBackingBean.forumTopicUrlName}" class="store-product-comments">
+                    <h:outputFormat value="#{locales['gamelibrary.publications.comments']}">
+                      <f:param value="#{storeProductBackingBean.commentCount}"/>
+                    </h:outputFormat>
+                  </a>
+                </div>
+                <div class="flex-cell-8 flex-cell-last flex-right no-margin-top no-margin-bottom">
                   <a class="store-product-action store-product-action-add-to-cart" jsf:action="#{storeProductBackingBean.addToShoppingCart}">
                     #{locales['store.product.addToShoppingCart']}
                   </a>
-                </div>
-              </div>     
+                </div>                  
+              </div>
+
               <div class="flex-row">
                 <div class="flex-cell-full flex-right">
                   <div class="store-product-share-container">

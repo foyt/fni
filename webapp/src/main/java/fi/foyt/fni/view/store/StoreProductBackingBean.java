@@ -13,6 +13,7 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
+import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
 import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationImage;
@@ -36,6 +37,9 @@ public class StoreProductBackingBean {
  
   @Inject
   private SessionShoppingCartController sessionShoppingCartController;
+
+  @Inject
+  private ForumController forumController;
   
   @Inject
   private SessionController sessionController;
@@ -74,6 +78,10 @@ public class StoreProductBackingBean {
     description = StringUtils.isBlank(description) ? "" : description.replace("\n", "<br/>");
     tags = new ArrayList<>(productTags.size());
     
+    forumUrlName = storeProduct.getForumTopic() != null ? storeProduct.getForumTopic().getForum().getUrlName() : "";
+    forumTopicUrlName = storeProduct.getForumTopic() != null ? storeProduct.getForumTopic().getUrlName() : "";
+    commentCount = forumController.countPostsByTopic(storeProduct.getForumTopic());
+
     for (StoreProductTag productTag : productTags) {
       tags.add(productTag.getTag().getText());
     }
@@ -119,6 +127,18 @@ public class StoreProductBackingBean {
   public String getDescription() {
     return description;
   }
+  
+  public Long getCommentCount() {
+    return commentCount;
+  }
+  
+  public String getForumTopicUrlName() {
+    return forumTopicUrlName;
+  }
+  
+  public String getForumUrlName() {
+    return forumUrlName;
+  }
 
   public List<String> getTags() {
     return tags;
@@ -129,6 +149,9 @@ public class StoreProductBackingBean {
   private Long defaultImageId;
   private String name;
   private String description;
+  private String forumUrlName;
+  private String forumTopicUrlName;
+  private Long commentCount;
   private List<String> tags;
   
 }

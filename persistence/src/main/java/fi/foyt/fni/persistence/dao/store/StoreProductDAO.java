@@ -97,5 +97,10 @@ public class StoreProductDAO extends GenericDAO<StoreProduct> {
     storeProduct.setPublished(published);
     return persist(storeProduct);
   }
+
+  public StoreProduct updateForumTopic(StoreProduct storeProduct, ForumTopic forumTopic) {
+    storeProduct.setForumTopic(forumTopic);
+    return persist(storeProduct);
+  }
   
 }
