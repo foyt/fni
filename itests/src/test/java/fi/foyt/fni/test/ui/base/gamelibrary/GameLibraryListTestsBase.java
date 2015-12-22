@@ -96,11 +96,11 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testMiniCartTexts() {
     navigate("/gamelibrary/", true);
-    assertSelectorText(".gamelibrary-mini-shopping-cart-title", "SHOPPING CART", true, true);
-    assertEquals(getAppUrl(true) + "/gamelibrary/cart/", getWebDriver().findElement(By.cssSelector(".gamelibrary-mini-shopping-cart-view")).getAttribute("href"));
-    assertSelectorText(".gamelibrary-mini-shopping-cart-empty","Shopping cart is empty", true, true);
-    assertSelectorText(".gamelibrary-mini-shopping-cart-summary label","Total", true, true);
-    assertSelectorText(".gamelibrary-mini-shopping-cart-summary span","EUR0.00", true, true);
+    assertSelectorText(".mini-shopping-cart-title", "SHOPPING CART", true, true);
+    assertEquals(getAppUrl(true) + "/gamelibrary/cart/", getWebDriver().findElement(By.cssSelector(".mini-shopping-cart-view")).getAttribute("href"));
+    assertSelectorText(".mini-shopping-cart-empty","Shopping cart is empty", true, true);
+    assertSelectorText(".mini-shopping-cart-summary label","Total", true, true);
+    assertSelectorText(".mini-shopping-cart-summary span","EUR0.00", true, true);
   }
 
   @Test
