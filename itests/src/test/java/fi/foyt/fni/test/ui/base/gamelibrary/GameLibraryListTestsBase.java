@@ -108,6 +108,8 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   public void testMostRecentList() {
     acceptCookieDirective();
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
+    
+    assertSelectorCount(".gamelibrary-publication", 3);
 
     testPublicationDetails(getWebDriver(), ".gamelibrary-publication[data-index='0']", UML_ID, UML_PATH, UML_TITLE, UML_TAGS, UML_DESC, UML_PRICE, UML_PAGES,
         UML_AUTHOR_NAMES, UML_AUTHOR_IDS, UML_LICENSE, UML_PURCHASABLE, UML_COMMENT_URL, UML_COMMENTS);
