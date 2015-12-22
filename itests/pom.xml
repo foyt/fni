@@ -1086,7 +1086,8 @@
         <it.browser>chrome</it.browser>
         <it.browser.version>45</it.browser.version>
         <it.platform>Linux</it.platform>
-        <it.package />
+        <it.sauce.tunnelId>local</it.sauce.tunnelId>
+        <it.package>*</it.package>
         <it.tests>fi/foyt/fni/test/ui/sauce/${it.package}/*IT.java</it.tests>
       </properties>
       
@@ -1479,6 +1480,7 @@
             <configuration>
               <sauceUsername>${it.sauce.username}</sauceUsername>
               <sauceAccessKey>${it.sauce.accessKey}</sauceAccessKey>
+              <options>-i ${it.sauce.tunnelId}</options>
               <quietMode>true</quietMode>
             </configuration>
             <executions>
@@ -1555,7 +1557,7 @@
         <it.browser>chrome</it.browser>
         <it.browser.version>45</it.browser.version>
         <it.platform>Linux</it.platform>
-        <it.package />
+        <it.package/>
         <it.tests>fi/foyt/fni/test/ui/sauce/${it.package}/*IT.java</it.tests>
       </properties>
       
