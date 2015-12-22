@@ -15,6 +15,8 @@ install: true
 branches:
   except:
   - master
+matrix:
+  fast_finish: true
 env:
   global:
   - secure: nSldmFh+YCDB2zErXTzy2wkTnw7QLDGYR53apjR7N033WyotFHM8suiVUkFN1OCw1b7qTk2FnikJ5+5KbiI5wxm+4v07Qc0MQtBAV7bdeE1efLgdp335L2/DETSEY+Hiz6WQThmMOYooM1Z0qn3UO80fGiGD9FMkShbmQKuGUe4=
@@ -22,8 +24,6 @@ env:
   - secure: TjZNKclYzXO4CaiJI0NsDAOTYbVXUjU7db/4Pgx00eNCQxJMEmdt3sdzt5r5bRQtB4rPWGKa9Ki4wfd+MMHAa987bjIwSTzBXiCG8+LJNutdCTDXk446dmgsAWWjF39Y4kfnagZ/qbxEiVb+9+ixfrLyNKhvVDE34y26ySrxdZg=
   - secure: WUWchzcdGrC6aifA9DuztFPpJLjrns/4ymIzHmjIjLWVXvXGEYnNhbgbH76hW5wFl89Ve8YMvHBcF50P++sRD1HwHSF6naDoiASpmHxAKBnyKJvdxgo06DMygMqlrg8zwEk0Ilh1nF9m5KGEEYLggxQLZEi2dXMANPZs3wR5qOY=
   matrix:
-    fast_finish: true
-matrix:
   - goals=verify package=store use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
   - goals=verify package=environment use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
   - goals=verify package=forge use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
