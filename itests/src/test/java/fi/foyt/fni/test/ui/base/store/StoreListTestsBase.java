@@ -6,8 +6,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -88,7 +86,7 @@ public class StoreListTestsBase extends AbstractUITest {
   }
 
   private void assertShareButtonsHidden(RemoteWebDriver driver, String publicationSelector) {
-    new WebDriverWait(getWebDriver(), 10).until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(publicationSelector + " .store-product-share-button .entypo-twitter")));
+    waitNotVisible(publicationSelector + " .store-product-share-button .entypo-twitter");
     assertSelectorNotVisible(String.format("%s .store-product-share-button .entypo-twitter", publicationSelector));
     assertSelectorNotVisible(String.format("%s .store-product-share-button .entypo-facebook", publicationSelector));
     assertSelectorNotVisible(String.format("%s .store-product-share-button .entypo-gplus", publicationSelector));
@@ -100,4 +98,5 @@ public class StoreListTestsBase extends AbstractUITest {
     assertSelectorVisible(String.format("%s .store-product-share-button .entypo-facebook", publicationSelector));
     assertSelectorVisible(String.format("%s .store-product-share-button .entypo-gplus", publicationSelector));
   }
+
 }

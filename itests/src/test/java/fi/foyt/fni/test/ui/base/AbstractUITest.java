@@ -185,6 +185,25 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     });
   }
 
+  protected void waitNotVisible(final String selector) {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        List<WebElement> elements = findElementsBySelector(selector);
+        if (elements.isEmpty()) {
+          return true;
+        }
+        
+        for (WebElement element : elements) {
+          if (element.isDisplayed()){
+            return false;
+          }
+        }
+        
+        return true;
+      }
+    });
+  }
+  
   protected void waitForInputValueNotBlank(final String selector) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
@@ -577,6 +596,19 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     }
   }
 
+  protected void acceptPaytrailPayment() {
+    waitAndClick("input[value=\"Osuuspankki\"]");
+    waitForUrl(getWebDriver(), "https://kultaraha.op.fi/cgi-bin/krcgi");
+
+    waitAndSendKeys("*[name='id']", "123456");
+    waitAndSendKeys("*[name='pw']", "7890");
+    waitAndClick("*[name='ktunn']");
+
+    waitAndSendKeys("*[name='avainluku']", "1234");
+    waitAndClick("*[name='avainl']");
+    waitAndClick("#Toiminto");
+  }
+  
   private String sessionId;
   private RemoteWebDriver webDriver;
 }

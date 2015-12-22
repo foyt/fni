@@ -1,8 +1,8 @@
 insert into 
   Publication (id, name, published, urlName, creator_id, defaultImage_id, forumTopic_id, modifier_id, language_id, price, weight, depth, height, width, created, modified, description, authorsShare)
 values 
-  (4, 'Fat hag dwarves quickly zap jinx mob', true, 'test_product_1', 2, null, 27, 2, (select id from Language where iso2 = 'en'), 20, 1,2,3,4, PARSEDATETIME('1 1 2012', 'd M yyyy'), PARSEDATETIME('1 1 2012', 'd M yyyy'), 'Fat hag dwarves quickly zap jinx mob', 0),
-  (5, 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг', true, 'with-special.characters-2', 2, null, 28, 2, (select id from Language where iso2 = 'en'), 20, 1,2,3,4, PARSEDATETIME('1 1 2012', 'd M yyyy'), PARSEDATETIME('1 1 2012', 'd M yyyy'), 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг', 0);
+  (4, 'Fat hag dwarves quickly zap jinx mob', true, 'test_product_1', 2, null, 29, 2, (select id from Language where iso2 = 'en'), 20, 1,2,3,4, PARSEDATETIME('1 1 2012', 'd M yyyy'), PARSEDATETIME('1 1 2012', 'd M yyyy'), 'Fat hag dwarves quickly zap jinx mob', 0),
+  (5, 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг', true, 'with-special.characters-2', 2, null, 30, 2, (select id from Language where iso2 = 'en'), 20, 1,2,3,4, PARSEDATETIME('1 1 2012', 'd M yyyy'), PARSEDATETIME('1 1 2012', 'd M yyyy'), 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг', 0);
 
 insert into 
   PublicationImage (id, created, modified, creator_id, modifier_id, publication_id, contentType, content)

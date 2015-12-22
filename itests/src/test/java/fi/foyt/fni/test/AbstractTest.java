@@ -31,11 +31,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
+import org.junit.rules.TestWatcher;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
 
-public abstract class AbstractTest {
+public abstract class AbstractTest extends TestWatcher {
 
   private static final long TEST_START_TIME = System.currentTimeMillis();
 

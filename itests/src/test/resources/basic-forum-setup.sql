@@ -19,8 +19,8 @@ values
   (8, PARSEDATETIME('1 1 2011 16:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2011 16:30', 'd M yyyy HH:mm'), 0, 1),
   (9, PARSEDATETIME('1 1 2012 17:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2012 17:30', 'd M yyyy HH:mm'), 0, 1),
   (10, PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), 0, 1),
-  (27, PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), 0, 1),
-  (28, PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), 0, 1);
+  (29, PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), 0, 1),
+  (30, PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), PARSEDATETIME('1 1 2013 18:30', 'd M yyyy HH:mm'), 0, 1);
 
 insert into 
   ForumTopic (id, forum_id, urlName, subject) 
@@ -35,8 +35,8 @@ values
   (8, 5, 'testbook_1', 'Fat hag dwarves quickly zap jinx mob'),
   (9, 5, 'with-special.characters', 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг'),
   (10, 5, 'pangram_fi', 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.'),
-  (27, 5, 'test_product_1', 'Fat hag dwarves quickly zap jinx mob'),
-  (28, 5, 'with-special.characters-2', 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг');
+  (29, 5, 'test_product_1', 'Fat hag dwarves quickly zap jinx mob'),
+  (30, 5, 'with-special.characters-2', 'Эх, чужак, общий съём цен шляп (юфть) – вдрызг');
  
 insert into 
   ForumMessage (id, created, modified, views, author_id)
