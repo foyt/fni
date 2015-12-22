@@ -93,9 +93,15 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     String addressPostalCode = "12345";
     String addressPostalOffice = "Mäkkylä";
     String notes = "Tämä on automaattinen testitilaus";
-    
-    acceptCookieDirective();
 
+    if ("microsoftedge".equals(getBrowser())) {
+      firstName = "Arri";
+      lastName = "Porri";
+      addressStreet = "Arri Porri Katu 18 F22";
+      addressPostalOffice = "Makkylä";
+      notes = "Tama on automaattinen testitilaus";
+    }
+    
     navigate("/gamelibrary/testbook_1", true);
    
     // We have to wait for share button animation to end
@@ -212,6 +218,11 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     String addressPostalCode = "12345";
     String addressPostalOffice = "Mäkkylä";
 
+    if ("microsoftedge".equals(getBrowser())) {
+      addressStreet = "Arri Porri Katu 18 F22";
+      addressPostalOffice = "Makkylä";
+    }
+    
     createUser(userId, firstName, lastName, email, password, "en_US", "GRAVATAR", "USER");
     try {
       try {

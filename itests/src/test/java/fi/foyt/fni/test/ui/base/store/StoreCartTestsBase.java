@@ -87,6 +87,14 @@ public class StoreCartTestsBase extends AbstractUITest {
     String addressPostalOffice = "Mäkkylä";
     String notes = "Tämä on automaattinen testitilaus";
     
+    if ("microsoftedge".equals(getBrowser())) {
+      firstName = "Arri";
+      lastName = "Porri";
+      addressStreet = "Arri Porri Katu 18 F22";
+      addressPostalOffice = "Makkylä";
+      notes = "Tama on automaattinen testitilaus";
+    }
+    
     navigate("/store/", true);
     
     // We have to wait for share button animation to end
