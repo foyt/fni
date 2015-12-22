@@ -360,6 +360,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     testLoginRequired(getWebDriver(), path);
   }
   
+  protected void testLoginRequired(String path, boolean secure) throws UnsupportedEncodingException {
+    testLoginRequired(getWebDriver(), path, secure);
+  }
+  
   protected void testAccessDenied(String path) {
     testAccessDenied(path, false);
   }
