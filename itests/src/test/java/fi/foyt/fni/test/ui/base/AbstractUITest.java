@@ -388,8 +388,13 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   
   private boolean tryNavigate(String url) {
     getWebDriver().get(url);
-    waitForUrl(getWebDriver(), url);
-    return StringUtils.equals(getWebDriver().getCurrentUrl(), url);
+    String currentUrl = getWebDriver().getCurrentUrl();
+    
+    if (StringUtils.isBlank(currentUrl) || StringUtils.equals(currentUrl, "about:blank")) {
+      return false; 
+    }
+    
+    return true;
   }
 
   protected void testLoginRequired(String path) throws UnsupportedEncodingException {
