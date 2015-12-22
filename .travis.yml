@@ -22,7 +22,8 @@ env:
   - secure: TjZNKclYzXO4CaiJI0NsDAOTYbVXUjU7db/4Pgx00eNCQxJMEmdt3sdzt5r5bRQtB4rPWGKa9Ki4wfd+MMHAa987bjIwSTzBXiCG8+LJNutdCTDXk446dmgsAWWjF39Y4kfnagZ/qbxEiVb+9+ixfrLyNKhvVDE34y26ySrxdZg=
   - secure: WUWchzcdGrC6aifA9DuztFPpJLjrns/4ymIzHmjIjLWVXvXGEYnNhbgbH76hW5wFl89Ve8YMvHBcF50P++sRD1HwHSF6naDoiASpmHxAKBnyKJvdxgo06DMygMqlrg8zwEk0Ilh1nF9m5KGEEYLggxQLZEi2dXMANPZs3wR5qOY=
   matrix:
-    fast_finish: true
+  fast_finish: true
+  global:
     - goals=verify package=store use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
     - goals=verify package=environment use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
     - goals=verify package=forge use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
@@ -93,7 +94,7 @@ env:
     - goals=verify package=forum use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
   
     - goals=verify use_sc=false it_profile=rest
-
+    
 before_script:
 - if [ $use_sc = true ]; then curl -sS https://saucelabs.com/downloads/sc-4.3.13-linux.tar.gz|tar -xzC /tmp/; fi;
 - if [ $use_sc = true ]; then /tmp/sc-4.3.13-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish -B *.facebook.com --daemonize --readyfile /tmp/sc-ready --wait-tunnel-shutdown; fi;
