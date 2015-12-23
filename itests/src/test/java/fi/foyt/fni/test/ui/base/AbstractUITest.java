@@ -390,7 +390,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     getWebDriver().get(url);
     String currentUrl = getWebDriver().getCurrentUrl();
     
-    if (StringUtils.isBlank(currentUrl) || StringUtils.equals(currentUrl, "about:blank")) {
+    if (StringUtils.isBlank(currentUrl) || StringUtils.startsWith(currentUrl, "about:")) {
       return false; 
     }
     
