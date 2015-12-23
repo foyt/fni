@@ -398,6 +398,20 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     return true;
   }
 
+  protected void navigateAndWait(String path) {
+    navigateAndWait(path, false);
+  }
+
+  protected void navigateAndWait(String path, Boolean secure) {
+    navigate(path, secure);
+    String url = String.format("%s%s", getAppUrl(secure), path);
+    waitForUrl(url);
+  }
+
+  protected void waitForUrl(String url) {
+    waitForUrl(getWebDriver(), url);
+  }
+  
   protected void testLoginRequired(RemoteWebDriver driver, String path) throws UnsupportedEncodingException {
     testLoginRequired(driver, path, false);  
   }
