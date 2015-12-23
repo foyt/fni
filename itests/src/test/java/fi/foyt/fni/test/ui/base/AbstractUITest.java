@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -395,6 +396,18 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     }
     
     return true;
+  }
+
+  protected void testLoginRequired(RemoteWebDriver driver, String path) throws UnsupportedEncodingException {
+    testLoginRequired(driver, path, false);  
+  }
+  
+  protected void testLoginRequired(RemoteWebDriver driver, String path, boolean secure) throws UnsupportedEncodingException {
+    navigate(path, secure);
+    String ctxPath = getCtxPath();
+    String expectedUrl = getAppUrl(true) + "/login/?redirectUrl=" + URLEncoder.encode(ctxPath != null ? "/" + ctxPath + path : path, "UTF-8");
+    waitForUrlMatches(driver, "https://.*");
+    assertEquals(expectedUrl, driver.getCurrentUrl());
   }
 
   protected void testLoginRequired(String path) throws UnsupportedEncodingException {

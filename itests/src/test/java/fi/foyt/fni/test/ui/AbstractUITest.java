@@ -23,19 +23,6 @@ public abstract class AbstractUITest extends AbstractTest {
     return link;
   }
   
-  protected void testLoginRequired(RemoteWebDriver driver, String path) throws UnsupportedEncodingException {
-    testLoginRequired(driver, path, false);  
-  }
-  
-  protected void testLoginRequired(RemoteWebDriver driver, String path, boolean secure) throws UnsupportedEncodingException {
-    String appUrl = getAppUrl(secure);
-    String ctxPath = getCtxPath();
-    driver.get(appUrl + path);
-    String expectedUrl = getAppUrl(true) + "/login/?redirectUrl=" + URLEncoder.encode(ctxPath != null ? "/" + ctxPath + path : path, "UTF-8");
-    waitForUrlMatches(driver, "https://.*");
-    assertEquals(expectedUrl, driver.getCurrentUrl());
-  }
-  
   protected void sleep(long millis) {
     try {
       Thread.sleep(millis);
