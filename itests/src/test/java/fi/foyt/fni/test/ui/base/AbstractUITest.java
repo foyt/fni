@@ -89,7 +89,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void loginInternal(RemoteWebDriver driver, String email, String password) {
     String loginUrl = getAppUrl(true) + "/login/";
     if (!StringUtils.startsWith(driver.getCurrentUrl(), loginUrl)) {
-      driver.get(loginUrl);
+      navigateAndWait("/login/", true);
     }
     
     scrollWaitAndType(".user-login-email", email);
