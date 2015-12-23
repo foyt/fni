@@ -148,13 +148,6 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     assertSelectorText(".gamelibrary-order-notes p", notes, true, true);
     assertSelectorCount(".gamelibrary-order-item", 2);
     
-    assertEquals("2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", findElementsBySelector(".gamelibrary-order-item div:nth-child(1)").get(0).getText());
-    assertEquals("EUR10.00", findElementsBySelector(".gamelibrary-order-item div:nth-child(2)").get(0).getText());
-    assertEquals("EUR20.00", findElementsBySelector(".gamelibrary-order-item div:nth-child(3)").get(0).getText());
-    assertEquals("1 X BEOWULF POHTI ZULUJA JA ÅNGSTRÖM-YKSIKKÖÄ KATSELLESSAAN Q-STONE- JA CMX-YHTYEITÄ VIDEOLTA.", findElementsBySelector(".gamelibrary-order-item div:nth-child(1)").get(1).getText());
-    assertEquals("EUR7.50", findElementsBySelector(".gamelibrary-order-item div:nth-child(2)").get(1).getText());
-    assertEquals("EUR7.50", findElementsBySelector(".gamelibrary-order-item div:nth-child(3)").get(1).getText());
-
     assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(1)", "2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", true, true);
     assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(2)", "EUR10.00", true, true);
     assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(3)", "EUR20.00", true, true);

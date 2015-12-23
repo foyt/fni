@@ -141,13 +141,6 @@ public class StoreCartTestsBase extends AbstractUITest {
     assertSelectorText(".gamelibrary-order-notes p", notes, true, true);
     assertSelectorCount(".gamelibrary-order-item", 2);
     
-    assertEquals("2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", StringUtils.upperCase(findElementsBySelector(".gamelibrary-order-item div:nth-child(1)").get(0).getText()));
-    assertEquals("EUR20.00", StringUtils.upperCase(findElementsBySelector(".gamelibrary-order-item div:nth-child(2)").get(0).getText()));
-    assertEquals("EUR40.00", StringUtils.upperCase(findElementsBySelector(".gamelibrary-order-item div:nth-child(3)").get(0).getText()));
-    assertEquals("1 X ЭХ, ЧУЖАК, ОБЩИЙ СЪЁМ ЦЕН ШЛЯП (ЮФТЬ) – ВДРЫЗГ", StringUtils.upperCase(findElementsBySelector(".gamelibrary-order-item div:nth-child(1)").get(1).getText()));
-    assertEquals("EUR20.00", StringUtils.upperCase(findElementsBySelector(".gamelibrary-order-item div:nth-child(2)").get(1).getText()));
-    assertEquals("EUR20.00", StringUtils.upperCase(findElementsBySelector(".gamelibrary-order-item div:nth-child(3)").get(1).getText()));
-
     assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(1)", "2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", true, true);
     assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(2)", "EUR20.00", true, true);
     assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(3)", "EUR40.00", true, true);
