@@ -288,9 +288,9 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     }
     
     if (ignoreCase) {
-      assertTrue(String.format("Expected %s but was %s", text, elementText), text.equalsIgnoreCase(elementText));
+      assertTrue(String.format("Expected '%s' but was '%s'", text, elementText), text.equalsIgnoreCase(elementText));
     } else {
-      assertTrue(String.format("Expected %s but was %s", text, elementText), text.equals(elementText));
+      assertTrue(String.format("Expected '%s' but was '%s'", text, elementText), text.equals(elementText));
     }
   }
 

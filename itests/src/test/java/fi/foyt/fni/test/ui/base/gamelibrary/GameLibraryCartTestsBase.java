@@ -136,16 +136,16 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     waitTitle("Forge & Illusion - Game Library");
     waitForSelectorPresent(".gamelibrary-order-status");
 
-    assertSelectorTextIgnoreCase(".gamelibrary-order-status", "Status: Paid, Waiting for Delivery");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-name", firstName + " " + lastName);
-    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-email", email);
-    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-mobile", mobile);
+    assertSelectorText(".gamelibrary-order-status", "Status: Paid, Waiting for Delivery", true, true);
+    assertSelectorText(".gamelibrary-order-customer-name", firstName + " " + lastName, true, true);
+    assertSelectorText(".gamelibrary-order-customer-email", email, true, true);
+    assertSelectorText(".gamelibrary-order-customer-mobile", mobile, true, true);
 
-    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-street", addressStreet);
-    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-postal-code", addressPostalCode + " " + addressPostalOffice);
-    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-country", "Finland");
+    assertSelectorText(".gamelibrary-order-delivery-address-street", addressStreet, true, true);
+    assertSelectorText(".gamelibrary-order-delivery-address-postal-code", addressPostalCode + " " + addressPostalOffice, true, true);
+    assertSelectorText(".gamelibrary-order-delivery-address-country", "Finland", true, true);
     
-    assertSelectorTextIgnoreCase(".gamelibrary-order-notes p", notes);
+    assertSelectorText(".gamelibrary-order-notes p", notes, true, true);
     assertSelectorCount(".gamelibrary-order-item", 2);
     
     assertEquals("2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", findElementsBySelector(".gamelibrary-order-item div:nth-child(1)").get(0).getText());
@@ -155,16 +155,16 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     assertEquals("EUR7.50", findElementsBySelector(".gamelibrary-order-item div:nth-child(2)").get(1).getText());
     assertEquals("EUR7.50", findElementsBySelector(".gamelibrary-order-item div:nth-child(3)").get(1).getText());
 
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(1)", "2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(2)", "EUR10.00");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(3)", "EUR20.00");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(1)", "1 X BEOWULF POHTI ZULUJA JA ÅNGSTRÖM-YKSIKKÖÄ KATSELLESSAAN Q-STONE- JA CMX-YHTYEITÄ VIDEOLTA.");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(2)", "EUR7.50");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(3)", "EUR7.50");
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(1)", "2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", true, true);
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(2)", "EUR10.00", true, true);
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(3)", "EUR20.00", true, true);
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(1)", "1 X BEOWULF POHTI ZULUJA JA ÅNGSTRÖM-YKSIKKÖÄ KATSELLESSAAN Q-STONE- JA CMX-YHTYEITÄ VIDEOLTA.", true, true);
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(2)", "EUR7.50", true, true);
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(3)", "EUR7.50", true, true);
     
-    assertSelectorTextIgnoreCase(".gamelibrary-order-total div", "EUR27.50");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-tax-label label", "TAX (0% - NOT VAT REGISTERED)");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-tax-amount div", "EUR0.00");
+    assertSelectorText(".gamelibrary-order-total div", "EUR27.50", true, true);
+    assertSelectorText(".gamelibrary-order-tax-label label", "TAX (0% - NOT VAT REGISTERED)", true, true);
+    assertSelectorText(".gamelibrary-order-tax-amount div", "EUR0.00", true, true);
   }
 
   @Test
