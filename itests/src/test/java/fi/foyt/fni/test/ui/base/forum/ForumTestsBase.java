@@ -22,14 +22,14 @@ public class ForumTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users", "forum-basic"})
   public void testTexts() {
-    getWebDriver().get(getAppUrl() + "/forum/1_topic_forum");
+    navigateAndWait("/forum/1_topic_forum");
     assertSelectorText(".view-header-description-title", "SINGLE TOPIC FORUM", true, true);
   }
 
   @Test
   @SqlSets ({"basic-users", "forum-basic"})
   public void testAnonymous() {
-    navigate("/forum/1_topic_forum");
+    navigateAndWait("/forum/1_topic_forum");
     assertSelectorVisible(".forum-new-topic-login-link");
     assertSelectorTextIgnoreCase(".forum-new-topic-login-link", "LOGIN TO CREATE NEW TOPIC");
   }
@@ -38,7 +38,7 @@ public class ForumTestsBase extends AbstractUITest {
   @SqlSets ({"basic-users", "forum-basic"})
   public void testLoggedIn() {
     loginInternal("user@foyt.fi", "pass");
-    navigate("/forum/1_topic_forum");
+    navigateAndWait("/forum/1_topic_forum");
     assertSelectorVisible(".forum-view-new-topic-link");
   }
 
@@ -52,7 +52,7 @@ public class ForumTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users", "forum-basic", "forum-with-special-characters"})
   public void testSpecialCharacter() throws Exception {
-    navigate("/forum/with-special.characters");
+    navigateAndWait("/forum/with-special.characters");
     assertTitle("Forum");
   }
 
@@ -65,15 +65,15 @@ public class ForumTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users", "forum-basic"})
   public void testForumLink() {
-    navigate("/forum/1_topic_forum");
-    assertSelectorTextIgnoreCase("h3 a", "Single topic Forum");
+    navigateAndWait("/forum/1_topic_forum");
+    assertSelectorText("h3 a", "Single topic Forum", true, true);
     assertEquals(String.format("%s/forum/1_topic_forum", getAppUrl()), findElementBySelector("h3 a").getAttribute("href"));
   }
   
   @Test
   @SqlSets ({"basic-users", "forum-basic"})
   public void testTopicLink() {
-    navigate("/forum/1_topic_forum");
+    navigateAndWait("/forum/1_topic_forum");
     assertSelectorTextIgnoreCase("*[data-topic-index=\"0\"] h5 a", "Topic of single topic forum");
     assertEquals(String.format("%s/forum/1_topic_forum/single_topic", getAppUrl()), findElementBySelector("*[data-topic-index=\"0\"] h5 a").getAttribute("href"));
   }
@@ -81,7 +81,7 @@ public class ForumTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users", "forum-basic"})
   public void testAuthorLink() {
-    navigate("/forum/");
+    navigateAndWait("/forum/");
     assertSelectorTextIgnoreCase("*[data-topic-index=\"0\"] .topic-start-info a", "Test Guest");
     assertEquals(String.format("%s/profile/1", getAppUrl()), findElementBySelector("*[data-topic-index=\"0\"] .topic-start-info a").getAttribute("href"));
   }
