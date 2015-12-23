@@ -91,7 +91,7 @@ public class StoreCartTestsBase extends AbstractUITest {
       firstName = "Arri";
       lastName = "Porri";
       addressStreet = "Arri Porri Katu 18 F22";
-      addressPostalOffice = "Makkylä";
+      addressPostalOffice = "Makkyla";
       notes = "Tama on automaattinen testitilaus";
     }
     
@@ -115,14 +115,14 @@ public class StoreCartTestsBase extends AbstractUITest {
     waitAndClick(String.format(".gamelibrary-cart-item[data-item-index='%d'] .gamelibrary-cart-action-inc-count", 0));
     waitForSelectorText(String.format(".gamelibrary-cart-item[data-item-index='%d'] div:first-child", 0), "2", true, true);
 
-    getWebDriver().findElement(By.id("cart-form:payerFirstName")).sendKeys(firstName);
-    getWebDriver().findElement(By.id("cart-form:payerLastName")).sendKeys(lastName);
-    getWebDriver().findElement(By.id("cart-form:payerEmail")).sendKeys(email);
-    getWebDriver().findElement(By.id("cart-form:payerMobile")).sendKeys(mobile);
-    getWebDriver().findElement(By.id("cart-form:payerStreetAddress")).sendKeys(addressStreet);
-    getWebDriver().findElement(By.id("cart-form:payerPostalCode")).sendKeys(addressPostalCode);
-    getWebDriver().findElement(By.id("cart-form:payerPostalOffice")).sendKeys(addressPostalOffice);
-    getWebDriver().findElement(By.id("cart-form:notes")).sendKeys(notes);
+    sendKeysSelector(".payerFirstName", firstName);
+    sendKeysSelector(".payerLastName", lastName);
+    sendKeysSelector(".payerEmail", email);
+    sendKeysSelector(".payerMobile", mobile);
+    sendKeysSelector(".payerStreetAddress", addressStreet);
+    sendKeysSelector(".payerPostalCode", addressPostalCode);
+    sendKeysSelector(".payerPostalOffice", addressPostalOffice);
+    sendKeysSelector(".notes", notes);
     getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).click();
 
     acceptPaytrailPayment();

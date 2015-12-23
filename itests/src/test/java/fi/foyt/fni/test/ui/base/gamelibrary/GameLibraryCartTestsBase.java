@@ -98,7 +98,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
       firstName = "Arri";
       lastName = "Porri";
       addressStreet = "Arri Porri Katu 18 F22";
-      addressPostalOffice = "Makkylä";
+      addressPostalOffice = "Makkyla";
       notes = "Tama on automaattinen testitilaus";
     }
     
@@ -220,7 +220,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
 
     if ("microsoftedge".equals(getBrowser())) {
       addressStreet = "Arri Porri Katu 18 F22";
-      addressPostalOffice = "Makkylä";
+      addressPostalOffice = "Makkyla";
     }
     
     createUser(userId, firstName, lastName, email, password, "en_US", "GRAVATAR", "USER");
