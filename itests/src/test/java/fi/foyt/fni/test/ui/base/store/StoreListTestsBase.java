@@ -3,6 +3,7 @@ package fi.foyt.fni.test.ui.base.store;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -22,7 +23,8 @@ public class StoreListTestsBase extends AbstractUITest {
   @Test
   public void testHttps() {
     navigate("/store/");
-    assertTrue(getWebDriver().getCurrentUrl().startsWith("https://"));
+    waitForUrlMatches("https.*");
+    assertTrue(StringUtils.startsWith(getWebDriver().getCurrentUrl(), "https://"));
   }
   
   @Test
