@@ -43,6 +43,7 @@ public class StoreProductTestsBase extends AbstractUITest {
   @SqlSets ({"basic-users", "basic-forum", "store-products"})
   public void testDetails() {
     navigate("/store/test_product_1", true);
+    waitForSelectorPresent(".store-product");
     assertSelectorCount(".store-product", 1);
     testProductDetails(".store-product", "4", "/store/test_product_1", "Fat hag dwarves quickly zap jinx mob", new String[] {"test", "with whitespace"}, "Fat hag dwarves quickly zap jinx mob", "EUR20.00", "immutable/test_product_1", 0);
   }
