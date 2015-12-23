@@ -80,6 +80,7 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
     clickSelector(".illusion-event-manage-pages-new-page");
     waitForUrlMatches(".*/edit-page.*");
     assertUrlMatches(".*/illusion/event/openevent/edit-page.*");
+    navigate("/");
     executeSql("update MaterialRevision set checksum = ? where id in (select id from DocumentRevision where document_id in (select id from Material where parentFolder_id = ? and urlName = ?))", "DELETE", 20000, "new_page");
     executeSql("delete from DocumentRevision where document_id in (select id from Material where parentFolder_id = ? and urlName = ?)", 20000, "new_page");
     executeSql("delete from MaterialRevision where checksum = ?", "DELETE");
