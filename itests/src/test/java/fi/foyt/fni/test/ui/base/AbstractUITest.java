@@ -117,11 +117,8 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void loginGoogle() {
-    acceptCookieDirective();
     navigate("/login/", true);
-    waitForSelectorVisible(".user-login-external-google");
-    clickSelector(".user-login-external-google");
-    waitForSelectorVisible("#Email");
+    waitAndClick(".user-login-external-google");
     waitAndClick("#Email");
     typeSelectorInputValue("#Email", getGoogleUsername());
     
@@ -129,11 +126,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
       clickSelector("#next");
     }
     
-    waitForSelectorVisible("#Passwd");
     waitAndClick("#Passwd");
     typeSelectorInputValue("#Passwd", getGooglePassword());
-    clickSelector("#signIn");
-    waitForUrlMatches("^" + getAppUrl() + ".*");
+    waitAndClick("#signIn");
+    waitForSelectorVisible(".menu-tools-account");
     assertLoggedIn();
   }
   
