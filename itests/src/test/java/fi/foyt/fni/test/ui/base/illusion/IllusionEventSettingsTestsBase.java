@@ -881,7 +881,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     
     acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
-    navigate("/illusion/event/openevent/settings");
+    navigateAndWait("/illusion/event/openevent/settings");
     
     clickSelector(".illusion-event-settings-genre input[value='1']");
     clickSelector(".illusion-event-settings-genre input[value='3']");
@@ -890,7 +890,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     clickSelector(".illusion-event-settings-save");  
     waitForPageLoad();
     
-    navigate("/illusion/event/openevent/settings");
+    navigateAndWait("/illusion/event/openevent/settings");
     
     verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
       .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
