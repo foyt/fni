@@ -253,7 +253,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
       public Boolean apply(WebDriver driver) {
         try {
           return findElementsBySelector(selector).size() == count;
-        } catch (StaleElementReferenceException e) {
+        } catch (Exception e) {
           return false;
         }
       }
