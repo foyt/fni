@@ -1,8 +1,5 @@
 package fi.foyt.fni.test.ui.base.store;
 
-import static org.junit.Assert.assertEquals;
-
-import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.openqa.selenium.By;
 

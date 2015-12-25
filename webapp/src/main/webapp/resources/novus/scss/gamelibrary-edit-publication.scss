@@ -2,10 +2,6 @@
 @import "compass";
 @import "styles";
 
-@import "vars";
-@import "compass";
-@import "styles";
-
 h3 {
   @include header-3;
   color: $title-color;

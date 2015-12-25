@@ -59,7 +59,7 @@ public class StoreProductController {
     return storeProductDAO.findById(id);
   }
 
-  public StoreProduct findStoreProductByUrlNam(String urlName) {
+  public StoreProduct findStoreProductByUrlName(String urlName) {
     return storeProductDAO.findByUrlName(urlName);
   }
 

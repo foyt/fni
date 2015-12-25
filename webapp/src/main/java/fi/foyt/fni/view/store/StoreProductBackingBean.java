@@ -49,7 +49,7 @@ public class StoreProductBackingBean {
 
   @RequestAction
   public String load() {
-    StoreProduct storeProduct = storeProductController.findStoreProductByUrlNam(getUrlName());
+    StoreProduct storeProduct = storeProductController.findStoreProductByUrlName(getUrlName());
     if (storeProduct == null) {
       return navigationController.notFound();
     }

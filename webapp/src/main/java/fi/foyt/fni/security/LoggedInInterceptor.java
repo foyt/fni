@@ -25,7 +25,6 @@ public class LoggedInInterceptor implements Serializable {
 	@Inject
 	private SessionController sessionController;
 
-  @SuppressWarnings("cdi-ambiguous-dependency")
   @Inject
 	private HttpServletRequest httpServletRequest;
 	

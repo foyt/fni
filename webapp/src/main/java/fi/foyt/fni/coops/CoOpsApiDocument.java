@@ -79,7 +79,6 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
   @Inject
   private Event<CoOpsSessionOpenEvent> sessionOpenEvent;
 
-  @SuppressWarnings("cdi-ambiguous-dependency")
   @Inject
   private HttpServletRequest httpRequest;
 

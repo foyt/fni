@@ -2,9 +2,6 @@ package fi.foyt.fni.test.ui;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
