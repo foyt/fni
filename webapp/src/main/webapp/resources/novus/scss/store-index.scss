@@ -1,0 +1,17 @@
+@charset "utf-8";
+@import "vars";
+@import "compass";
+@import "styles";
+@import "minishoppingcart";
+@import "store-products";
+
+/* General */
+
+h3 {
+  @include header-2;
+}
+
+h3 a {
+  color: $default-color;
+  text-decoration: none;
+}

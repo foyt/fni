@@ -28,6 +28,10 @@
     
     <wiremock.version>1.55</wiremock.version>
     
+    <!-- Keytool -->
+    
+    <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
+    
   </properties>
 
   <dependencies>
@@ -403,7 +407,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>keytool-maven-plugin</artifactId>
-            <version>1.4</version>
+            <version>${keytool-maven-plugin.version}</version>
             <executions>
               <execution>
                 <phase>pre-integration-test</phase>
@@ -832,7 +836,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>keytool-maven-plugin</artifactId>
-            <version>1.4</version>
+            <version>${keytool-maven-plugin.version}</version>
             <executions>
               <execution>
                 <phase>pre-integration-test</phase>
@@ -1082,7 +1086,8 @@
         <it.browser>chrome</it.browser>
         <it.browser.version>45</it.browser.version>
         <it.platform>Linux</it.platform>
-        <it.package />
+        <it.sauce.tunnelId>local</it.sauce.tunnelId>
+        <it.package>*</it.package>
         <it.tests>fi/foyt/fni/test/ui/sauce/${it.package}/*IT.java</it.tests>
       </properties>
       
@@ -1275,7 +1280,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>keytool-maven-plugin</artifactId>
-            <version>1.4</version>
+            <version>${keytool-maven-plugin.version}</version>
             <executions>
               <execution>
                 <phase>pre-integration-test</phase>
@@ -1471,10 +1476,11 @@
           <plugin>
             <groupId>com.saucelabs.maven.plugin</groupId>
             <artifactId>sauce-connect-plugin</artifactId>
-            <version>2.1.20</version>
+            <version>2.1.19</version>
             <configuration>
               <sauceUsername>${it.sauce.username}</sauceUsername>
               <sauceAccessKey>${it.sauce.accessKey}</sauceAccessKey>
+              <options>-i ${it.sauce.tunnelId}</options>
               <quietMode>true</quietMode>
             </configuration>
             <executions>
@@ -1551,7 +1557,7 @@
         <it.browser>chrome</it.browser>
         <it.browser.version>45</it.browser.version>
         <it.platform>Linux</it.platform>
-        <it.package />
+        <it.package/>
         <it.tests>fi/foyt/fni/test/ui/sauce/${it.package}/*IT.java</it.tests>
       </properties>
       
@@ -1732,7 +1738,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>keytool-maven-plugin</artifactId>
-            <version>1.4</version>
+            <version>${keytool-maven-plugin.version}</version>
             <executions>
               <execution>
                 <phase>pre-integration-test</phase>

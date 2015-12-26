@@ -23,6 +23,7 @@ import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
+import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
 import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
@@ -61,7 +62,7 @@ public class IndexViewBackingBean {
 	
 	@PostConstruct
 	public void init() {
-		latestGameLibraryPublications = publicationController.listRecentPublications(MAX_GAME_LIBRARY_PUBLICATIONS);
+		latestGameLibraryPublications = publicationController.listRecentBookPublications(MAX_GAME_LIBRARY_PUBLICATIONS);
 		latestForumTopics = forumController.listLatestForumTopics(MAX_FORUM_TOPICS);
 		illusionEvents = createEventPojos(illusionEventController.listNextIllusionEvents(MAX_ILLUSION_EVENTS));
 	
@@ -84,7 +85,7 @@ public class IndexViewBackingBean {
 		return blogController.listBlogEntryTags(entry);
 	}
 	
-	public List<Publication> getLatestGameLibraryPublications() {
+	public List<BookPublication> getLatestGameLibraryPublications() {
 		return latestGameLibraryPublications;
 	}
 	
@@ -138,7 +139,7 @@ public class IndexViewBackingBean {
     }
   }    
 	
-	private List<Publication> latestGameLibraryPublications;
+	private List<BookPublication> latestGameLibraryPublications;
 	private List<ForumTopic> latestForumTopics;
 	private List<Event> illusionEvents;
 	private int newsArchiveYear;

@@ -96,11 +96,11 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testMiniCartTexts() {
     navigate("/gamelibrary/", true);
-    assertSelectorText(".gamelibrary-mini-shopping-cart-title", "SHOPPING CART", true, true);
-    assertEquals(getAppUrl(true) + "/gamelibrary/cart/", getWebDriver().findElement(By.cssSelector(".gamelibrary-mini-shopping-cart-view")).getAttribute("href"));
-    assertSelectorText(".gamelibrary-mini-shopping-cart-empty","Shopping cart is empty", true, true);
-    assertSelectorText(".gamelibrary-mini-shopping-cart-summary label","Total", true, true);
-    assertSelectorText(".gamelibrary-mini-shopping-cart-summary span","EUR0.00", true, true);
+    assertSelectorText(".mini-shopping-cart-title", "SHOPPING CART", true, true);
+    assertEquals(getAppUrl(true) + "/gamelibrary/cart/", getWebDriver().findElement(By.cssSelector(".mini-shopping-cart-view")).getAttribute("href"));
+    assertSelectorText(".mini-shopping-cart-empty","Shopping cart is empty", true, true);
+    assertSelectorText(".mini-shopping-cart-summary label","Total", true, true);
+    assertSelectorText(".mini-shopping-cart-summary span","EUR0.00", true, true);
   }
 
   @Test
@@ -108,6 +108,8 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   public void testMostRecentList() {
     acceptCookieDirective();
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
+    
+    assertSelectorCount(".gamelibrary-publication", 3);
 
     testPublicationDetails(getWebDriver(), ".gamelibrary-publication[data-index='0']", UML_ID, UML_PATH, UML_TITLE, UML_TAGS, UML_DESC, UML_PRICE, UML_PAGES,
         UML_AUTHOR_NAMES, UML_AUTHOR_IDS, UML_LICENSE, UML_PURCHASABLE, UML_COMMENT_URL, UML_COMMENTS);
@@ -259,7 +261,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   }
 
   private void assertShareButtonsVisible(RemoteWebDriver driver, String publicationSelector) {
-    waitForSelectorPresent(String.format("%s .gamelibrary-publication-share-button .entypo-twitter", publicationSelector));
+    waitForSelectorVisible(String.format("%s .gamelibrary-publication-share-button .entypo-twitter", publicationSelector));
     assertSelectorVisible(String.format("%s .gamelibrary-publication-share-button .entypo-twitter", publicationSelector));
     assertSelectorVisible(String.format("%s .gamelibrary-publication-share-button .entypo-facebook", publicationSelector));
     assertSelectorVisible(String.format("%s .gamelibrary-publication-share-button .entypo-gplus", publicationSelector));

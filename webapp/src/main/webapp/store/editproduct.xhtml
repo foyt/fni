@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">
+    <h:outputFormat value="#{locales['store.editProduct.pageTitle']}">
+      <f:param value="#{storeEditProductBackingBean.name}"/>
+    </h:outputFormat>
+  </ui:define>
+  
+  <ui:define name="view-scripts">
+    <!-- View scripts -->
+    
+    <h:outputScript name="scripts/gui/store-edit-product.js"/>
+  </ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
+    <h:outputStylesheet library="novus" name="css/store-edit-product.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/flex-menu.xhtml" />
+    
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['store.editProduct.navigationIndex']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/store/index.jsf">#{locales['store.editProduct.storeIndex']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/store/manage.jsf">#{locales['store.editProduct.navigationManagement']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/store/editproduct.jsf?productId=#{storeEditProductBackingBean.productId}">#{locales['store.editProduct.navigationEditProduct']}</a>
+          </div>
+        </div>
+
+        <!-- Description -->
+    
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['store.editProduct.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['store.editProduct.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- View Content -->
+    
+    <h:form>
+      <div class="flex-row">
+        <div class="flex-cell-full index-box">
+        
+          <h3>
+            <h:outputFormat value="#{locales['store.editProduct.productTitle']}">
+              <f:param value="#{storeEditProductBackingBean.name}"/>
+            </h:outputFormat>
+          </h3>
+          
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['store.editProduct.nameLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <input type="text" name="name" jsf:value="#{storeEditProductBackingBean.name}" required="required"/>
+            </div>
+          </div>
+          
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['store.editProduct.descriptionLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <textarea jsf:value="#{storeEditProductBackingBean.description}" required="required" />
+            </div>
+          </div>
+          
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['store.editProduct.priceLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <input name="price" type="number" jsf:value="#{storeEditProductBackingBean.price}" required="required"/>
+            </div>
+          </div>
+          
+          <div class="flex-row field">
+            <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+              <label>#{locales['store.editProduct.tagsLabel']}</label>
+            </div>
+            <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+              <div class="flex-row">
+                <div class="flex-cell-full no-margin-bottom tags">
+	                <ui:repeat var="tag" value="#{storeEditProductBackingBean.tags}">
+	                  <span class="tag">
+	                    <span>#{tag}</span>
+	                    <a href="javascript:void(null)" data-tag="#{tag}"/>
+	                  </span>
+	                </ui:repeat>
+                </div>
+              </div>
+
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <h:selectOneMenu value="#{storeEditProductBackingBean.addExistingTag}">
+                    <f:selectItems value="#{storeEditProductBackingBean.tagSelectItems}" />
+                    <f:ajax execute="@form" render="@form"/>
+                  </h:selectOneMenu>
+                  
+                  <div class="new-tag-container" style="#{storeEditProductBackingBean.addExistingTag eq '_NEW_' ? '' : 'display: none'}">
+                    <label>#{locales['store.editProduct.newTagLabel']}</label>
+                    <input type="text" jsf:value="#{storeEditProductBackingBean.addNewTag}"/>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <h:commandLink styleClass="new-tag-link" action="#{storeEditProductBackingBean.addTag}" value="#{locales['store.editProduct.addTag']}" />
+                  <h:commandButton id="remove-tag-command-button" action="#{storeEditProductBackingBean.removeTag}" style="display: none"/>
+                  <h:inputHidden id="remove-tag-text" value="#{storeEditProductBackingBean.removeTagText}" />
+                  <h:inputHidden value="#{storeEditProductBackingBean.tags}" converter="fi.foyt.fni.jsf.StringListConverter"/>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <h:commandButton styleClass="save" action="#{storeEditProductBackingBean.save}" value="#{locales['store.editProduct.saveButtonLabel']}"></h:commandButton>
+
+        </div>
+      </div>
+    </h:form>
+    
+  </ui:define>
+
+</ui:composition>

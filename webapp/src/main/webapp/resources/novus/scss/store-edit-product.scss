@@ -1,0 +1,103 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+@import "vars";
+@import "compass";
+@import "styles";
+
+h3 {
+  @include header-3;
+  color: $title-color;
+}
+
+.field input[type="text"], 
+.field input[type="number"], 
+.field textarea, 
+.field select {
+  font-size: 14px;
+  font-family: $default-font;
+  width: 100%; 
+  @include box-sizing(border-box);
+}
+
+.field textarea {
+  height: 120px;
+}
+
+.field label {
+  font-size: 13px;
+  font-family: $default-font;
+  font-weight: bold;
+}
+
+.tag {
+  background: #000;
+  color: #fff;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-radius: 8px;
+  font-family: $default-font;
+  font-size: 12px;
+  margin-right: 4px;
+  white-space: nowrap;
+  word-wrap: normal;
+  margin-bottom: 5px;
+  display: inline-block;
+}
+
+
+.new-tag-link {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 12px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.tag a {
+  color: #fff;
+  font-size: 12px;
+  margin-left: 8px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.tag a:after {
+  content: 'X';
+}
+
+.tag a:hover:after {
+  color: #f00; 
+}
+
+.save {  
+  margin-top: 20px;
+  color: $default-color;
+  font-family: $title-font;
+  font-size: 16px;
+  text-transform: uppercase;
+  padding: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.save:disabled {
+  color: #eee;
+  background: #aaa;
+  cursor: default;
+}

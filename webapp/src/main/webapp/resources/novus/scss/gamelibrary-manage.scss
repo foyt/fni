@@ -2,27 +2,9 @@
 @import "compass";
 @import "styles";
 
-$header-background-color: #000;
-$header-text-color: #fff;
-
-/* Generic */
-
-.gamelibrary-manage-panel h3 {
+h3 {
   @include header-3;
   color: $title-color;
-  margin-bottom: 18px;
-}
-
-/* Panels */
-
-.gamelibrary-manage-panel {
-  @include generic-panel;
-}
-
-/* Actions */
-
-.gamelibrary-manage-actions {
-  margin-bottom: 18px;
 }
 
 .gamelibrary-manage-actions input[type="submit"] {
@@ -38,109 +20,50 @@ $header-text-color: #fff;
   cursor: pointer;
 }
 
-/* Lists */
-
-.gamelibrary-manage-published {
-  margin-top: 36px;
-}
-
-.gamelibrary-manage-publicationlist {
-  color: $default-color;
+.gamelibrary-manage-list-header-row {
+  font-weight: bold;
   font-family: $default-font;
   font-size: 12px;
-  width: 100%;
-  border-spacing: 1px;
-  border-collapse: separate;
 }
 
-.gamelibrary-manage-publicationlist th {
-  font-weight: bold;
-  padding: 4px;
-}
-
-.gamelibrary-manage-publicationlist td {
-  padding: {
-    top: 4px;
-    bottom: 4px;
-    left: 8px;
-  }
+.gamelibrary-manage-list-row {
   background: rgba(200, 200, 200, 0.3);
+  margin-bottom: 1px;
+  
+  &:last-child {
+    margin-bottom: 0px;
+  }
 }
 
-td.gamelibrary-manage-publicationlist-image {
-  width: 56px;
-  text-align: center;
-  padding-left: 0px;
+.gamelibrary-manage-list-cell {
+  font-size: 12px;
+  font-family: $default-font;
+  
+  img {
+    vertical-align: top;
+  }
 }
 
-.gamelibrary-manage-publicationlist-image img {
-  vertical-align: middle;
-}
-
-.gamelibrary-manage-publicationlist-name-actions {
-  width: 350px;
-}
-
-.gamelibrary-manage-publicationlist-name {
+.gamelibrary-manage-list-name {
   font-size: 14px;
   font-weight: bold;
-}
-
-.gamelibrary-manage-publicationlist-name a {
+  font-family: $default-font;
   color: $default-color;
   text-decoration: none;
 }
 
-.gamelibrary-manage-publicationlist-actions form {
-  display: inline-block;
+.gamelibrary-manage-list-actions {
+  font-size: 12px;
+  font-family: $default-font;
+  
+  a {
+    color: $default-color;
+    text-transform: uppercase; 
+    text-decoration: none;
+  }
 }
 
-.gamelibrary-manage-publicationlist-actions a {
-  color: $default-color;
-  text-transform: uppercase; 
-  text-decoration: none;
-  margin-right: 8px;
-}
-
-.gamelibrary-manage-publicationlist-price, .gamelibrary-manage-publicationlist-dimensions {
-  width: 100px;
-}
-
-.gamelibrary-manage-publicationlist-license {
-  width: 90px;
-}
-
-.gamelibrary-manage-publicationlist-license img {
-  vertical-align: top;
-}
-
-.gamelibrary-manage-publicationlist-flags {
-  width: 80px;
-}
-
-.gamelibrary-manage-publicationlist-flags img {
-  margin-right: 8px;
-  vertical-align: middle;
-}
-
-.gamelibrary-manage-publicationlist-flags img:last-child {
-  margin-right: 0px;
-}
-
-/* jQuery UI */
-
-.gamelibrary-manage-image-upload-dialog p, .gamelibrary-manage-file-upload-dialog p, .gamelibrary-manage-printable-upload-dialog p {
-  font-style: italic;
-  font-size: 14px;
-  margin-top: 8px;
-}
-
-.gamelibrary-publish-dialog p, .gamelibrary-unpublish-dialog p, .gamelibrary-remove-dialog p {
-  font-style: italic;
-  font-size: 14px;
-  margin-top: 16px;
-}
-
-.gamelibrary-manage-image-upload-dialog input[type="file"], .gamelibrary-manage-file-upload-dialog input[type="file"], .gamelibrary-manage-printable-upload-dialog input[type="file"] {
-  margin-top: 16px;
+.gamelibrary-manage-list-icons img {
+  margin-left: 2px;
+  margin-right: 2px;
 }

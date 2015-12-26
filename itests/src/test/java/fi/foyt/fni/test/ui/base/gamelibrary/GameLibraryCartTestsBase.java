@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -39,8 +38,12 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     acceptCookieDirective();
     
     navigate("/gamelibrary/testbook_1", true);
+   
+    // We have to wait for share button animation to end
+    Thread.sleep(500);
+    
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
-    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 1);
+    waitForSelectorCount(".mini-shopping-cart-item", 1);
     navigate("/gamelibrary/cart/", true);
     waitTitle("Forge & Illusion - Game Library");
 
@@ -54,7 +57,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.id("cart-form:notes")).sendKeys(notes);
     getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).click();
 
-    acceptPaytrailPayment(getWebDriver());
+    acceptPaytrailPayment();
     waitTitle("Forge & Illusion - Game Library");
     waitForSelectorPresent(".gamelibrary-order-status");
     
@@ -90,15 +93,29 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     String addressPostalCode = "12345";
     String addressPostalOffice = "Mäkkylä";
     String notes = "Tämä on automaattinen testitilaus";
-    
-    acceptCookieDirective();
 
+    if ("microsoftedge".equals(getBrowser())) {
+      firstName = "Arri";
+      lastName = "Porri";
+      addressStreet = "Arri Porri Katu 18 F22";
+      addressPostalOffice = "Makkyla";
+      notes = "Tama on automaattinen testitilaus";
+    }
+    
     navigate("/gamelibrary/testbook_1", true);
+   
+    // We have to wait for share button animation to end
+    Thread.sleep(500);
+    
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
-    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 1);
+    waitForSelectorCount(".mini-shopping-cart-item", 1);
     navigate("/gamelibrary/pangram_fi", true);
+    
+    // We have to wait for share button animation to end
+    Thread.sleep(500);
+    
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
-    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 2);
+    waitForSelectorCount(".mini-shopping-cart-item", 2);
     navigate("/gamelibrary/cart/", true);
     waitTitle("Forge & Illusion - Game Library");
     
@@ -115,39 +132,32 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     getWebDriver().findElement(By.id("cart-form:notes")).sendKeys(notes);
     getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).click();
 
-    acceptPaytrailPayment(getWebDriver());
+    acceptPaytrailPayment();
     waitTitle("Forge & Illusion - Game Library");
     waitForSelectorPresent(".gamelibrary-order-status");
 
-    assertSelectorTextIgnoreCase(".gamelibrary-order-status", "Status: Paid, Waiting for Delivery");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-name", firstName + " " + lastName);
-    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-email", email);
-    assertSelectorTextIgnoreCase(".gamelibrary-order-customer-mobile", mobile);
+    assertSelectorText(".gamelibrary-order-status", "Status: Paid, Waiting for Delivery", true, true);
+    assertSelectorText(".gamelibrary-order-customer-name", firstName + " " + lastName, true, true);
+    assertSelectorText(".gamelibrary-order-customer-email", email, true, true);
+    assertSelectorText(".gamelibrary-order-customer-mobile", mobile, true, true);
 
-    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-street", addressStreet);
-    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-postal-code", addressPostalCode + " " + addressPostalOffice);
-    assertSelectorTextIgnoreCase(".gamelibrary-order-delivery-address-country", "Finland");
+    assertSelectorText(".gamelibrary-order-delivery-address-street", addressStreet, true, true);
+    assertSelectorText(".gamelibrary-order-delivery-address-postal-code", addressPostalCode + " " + addressPostalOffice, true, true);
+    assertSelectorText(".gamelibrary-order-delivery-address-country", "Finland", true, true);
     
-    assertSelectorTextIgnoreCase(".gamelibrary-order-notes p", notes);
+    assertSelectorText(".gamelibrary-order-notes p", notes, true, true);
     assertSelectorCount(".gamelibrary-order-item", 2);
     
-    assertEquals("2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", findElementsBySelector(".gamelibrary-order-item div:nth-child(1)").get(0).getText());
-    assertEquals("EUR10.00", findElementsBySelector(".gamelibrary-order-item div:nth-child(2)").get(0).getText());
-    assertEquals("EUR20.00", findElementsBySelector(".gamelibrary-order-item div:nth-child(3)").get(0).getText());
-    assertEquals("1 X BEOWULF POHTI ZULUJA JA ÅNGSTRÖM-YKSIKKÖÄ KATSELLESSAAN Q-STONE- JA CMX-YHTYEITÄ VIDEOLTA.", findElementsBySelector(".gamelibrary-order-item div:nth-child(1)").get(1).getText());
-    assertEquals("EUR7.50", findElementsBySelector(".gamelibrary-order-item div:nth-child(2)").get(1).getText());
-    assertEquals("EUR7.50", findElementsBySelector(".gamelibrary-order-item div:nth-child(3)").get(1).getText());
-
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(1)", "2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(2)", "EUR10.00");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(3)", "EUR20.00");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(1)", "1 X BEOWULF POHTI ZULUJA JA ÅNGSTRÖM-YKSIKKÖÄ KATSELLESSAAN Q-STONE- JA CMX-YHTYEITÄ VIDEOLTA.");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(2)", "EUR7.50");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(3)", "EUR7.50");
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(1)", "2 X FAT HAG DWARVES QUICKLY ZAP JINX MOB", true, true);
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(2)", "EUR10.00", true, true);
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='0'] div:nth-child(3)", "EUR20.00", true, true);
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(1)", "1 X BEOWULF POHTI ZULUJA JA ÅNGSTRÖM-YKSIKKÖÄ KATSELLESSAAN Q-STONE- JA CMX-YHTYEITÄ VIDEOLTA.", true, true);
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(2)", "EUR7.50", true, true);
+    assertSelectorText(".gamelibrary-order-item[data-order-item-index='1'] div:nth-child(3)", "EUR7.50", true, true);
     
-    assertSelectorTextIgnoreCase(".gamelibrary-order-total div", "EUR27.50");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-tax-label label", "TAX (0% - NOT VAT REGISTERED)");
-    assertSelectorTextIgnoreCase(".gamelibrary-order-tax-amount div", "EUR0.00");
+    assertSelectorText(".gamelibrary-order-total div", "EUR27.50", true, true);
+    assertSelectorText(".gamelibrary-order-tax-label label", "TAX (0% - NOT VAT REGISTERED)", true, true);
+    assertSelectorText(".gamelibrary-order-tax-amount div", "EUR0.00", true, true);
   }
 
   @Test
@@ -156,11 +166,19 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     acceptCookieDirective();
     
     navigate("/gamelibrary/testbook_1", true);
+    
+    // We have to wait for share button animation to end
+    Thread.sleep(500);
+    
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
-    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 1);
+    waitForSelectorCount(".mini-shopping-cart-item", 1);
     navigate("/gamelibrary/pangram_fi", true);
+
+    // We have to wait for share button animation to end
+    Thread.sleep(500);
+
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
-    waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 2);
+    waitForSelectorCount(".mini-shopping-cart-item", 2);
     navigate("/gamelibrary/cart/", true);
     waitTitle("Forge & Illusion - Game Library");
 
@@ -193,6 +211,11 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     String addressPostalCode = "12345";
     String addressPostalOffice = "Mäkkylä";
 
+    if ("microsoftedge".equals(getBrowser())) {
+      addressStreet = "Arri Porri Katu 18 F22";
+      addressPostalOffice = "Makkyla";
+    }
+    
     createUser(userId, firstName, lastName, email, password, "en_US", "GRAVATAR", "USER");
     try {
       try {
@@ -200,8 +223,12 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
         loginInternal(email, password);
         
         navigate("/gamelibrary/testbook_1", true);
+        
+        // We have to wait for share button animation to end
+        Thread.sleep(500);
+
         waitAndClick(".gamelibrary-publication-action-add-to-cart");
-        waitForSelectorCount(".gamelibrary-mini-shopping-cart-item", 1);
+        waitForSelectorCount(".mini-shopping-cart-item", 1);
         navigate("/gamelibrary/cart/", true);
         waitTitle("Forge & Illusion - Game Library");
         
@@ -228,7 +255,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
         assertEquals(addressPostalOffice, getWebDriver().findElement(By.id("cart-form:payerPostalOffice")).getAttribute("value"));
         getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).click();
 
-        acceptPaytrailPayment(getWebDriver());
+        acceptPaytrailPayment();
         logout();
         loginInternal(getWebDriver(), email, password);
 
@@ -252,19 +279,6 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
     } finally {
       deleteUser(userId);
     }
-  }
-
-  private void acceptPaytrailPayment(RemoteWebDriver driver) {
-    waitAndClick("input[value=\"Osuuspankki\"]");
-    waitForUrl(getWebDriver(), "https://kultaraha.op.fi/cgi-bin/krcgi");
-
-    waitAndSendKeys("*[name='id']", "123456");
-    waitAndSendKeys("*[name='pw']", "7890");
-    waitAndClick("*[name='ktunn']");
-
-    waitAndSendKeys("*[name='avainluku']", "1234");
-    waitAndClick("*[name='avainl']");
-    waitAndClick("#Toiminto");
   }
 
 }

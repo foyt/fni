@@ -2,9 +2,6 @@ package fi.foyt.fni.test.ui;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -21,19 +18,6 @@ public abstract class AbstractUITest extends AbstractTest {
     }
     
     return link;
-  }
-  
-  protected void testLoginRequired(RemoteWebDriver driver, String path) throws UnsupportedEncodingException {
-    testLoginRequired(driver, path, false);  
-  }
-  
-  protected void testLoginRequired(RemoteWebDriver driver, String path, boolean secure) throws UnsupportedEncodingException {
-    String appUrl = getAppUrl(secure);
-    String ctxPath = getCtxPath();
-    driver.get(appUrl + path);
-    String expectedUrl = getAppUrl(true) + "/login/?redirectUrl=" + URLEncoder.encode(ctxPath != null ? "/" + ctxPath + path : path, "UTF-8");
-    waitForUrlMatches(driver, "https://.*");
-    assertEquals(expectedUrl, driver.getCurrentUrl());
   }
   
   protected void sleep(long millis) {

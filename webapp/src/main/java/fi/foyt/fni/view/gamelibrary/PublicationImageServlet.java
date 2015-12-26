@@ -32,7 +32,10 @@ import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.images.ImageUtils;
 import fi.foyt.fni.view.AbstractFileServlet;
 
-@WebServlet(urlPatterns = "/gamelibrary/publicationImages/*", name = "gamelibrary-publicationimage")
+@WebServlet(
+  urlPatterns = { "/gamelibrary/publicationImages/*", "/store/productImages/*" }, 
+  name = "gamelibrary-publicationimage"
+)
 @Transactional
 public class PublicationImageServlet extends AbstractFileServlet {
 

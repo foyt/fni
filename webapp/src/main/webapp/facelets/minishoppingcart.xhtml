@@ -1,0 +1,47 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  xmlns:h="http://java.sun.com/jsf/html">
+  
+  <h:panelGroup layout="block" styleClass="mini-shopping-cart">
+    <h3 class="mini-shopping-cart-title-container">
+      <span class="mini-shopping-cart-title">#{locales['store.miniShoppingCart.title']}</span>
+      <a class="mini-shopping-cart-view" jsf:value="/gamelibrary/cart.jsf">#{locales['store.miniShoppingCart.view']}</a>
+    </h3>
+    
+    <h:panelGroup layout="block" styleClass="mini-shopping-cart-contents">
+      <h:panelGroup layout="block" styleClass="mini-shopping-cart-items">
+        <h:panelGroup layout="block" styleClass="mini-shopping-cart-empty" rendered="#{gameLibraryMiniShoppingCartBackingBean.shoppingCartEmpty}">
+          <h:outputText value="#{locales['store.miniShoppingCart.empty']}" /> 
+        </h:panelGroup>
+        
+        <ui:repeat var="cartItem" value="#{gameLibraryMiniShoppingCartBackingBean.shoppingCartItems}">   
+          <h:panelGroup layout="block" styleClass="mini-shopping-cart-item">
+            <h:panelGroup layout="block" styleClass="mini-shopping-cart-item-count">#{cartItem.count}</h:panelGroup>
+            <h:panelGroup layout="block" styleClass="mini-shopping-cart-item-name">
+              #{cartItem.publication.name.length() gt 15 ? cartItem.publication.name.substring(0, 12).concat('...') : cartItem.publication.name}
+            </h:panelGroup>
+            <h:panelGroup layout="block" styleClass="mini-shopping-cart-item-price">
+              <h:outputText value="#{cartItem.publication.price}" >
+                <f:convertNumber currencyCode="EUR" type="currency" />
+              </h:outputText>
+            </h:panelGroup>
+          </h:panelGroup>
+        </ui:repeat>
+      </h:panelGroup>    
+    </h:panelGroup>
+      
+    <h:panelGroup layout="block" styleClass="mini-shopping-cart-summary">
+      <h:panelGroup layout="block" styleClass="mini-shopping-cart-summary">
+        <h:outputLabel value="#{locales['store.miniShoppingCart.total']}" />
+        <h:panelGroup styleClass="mini-shopping-cart-summary-total">
+          <h:outputText value="#{gameLibraryMiniShoppingCartBackingBean.itemCosts}" >
+            <f:convertNumber currencyCode="EUR" type="currency" />
+          </h:outputText>
+        </h:panelGroup>
+      </h:panelGroup>      
+    </h:panelGroup>    
+  </h:panelGroup>
+  
+ </ui:composition>

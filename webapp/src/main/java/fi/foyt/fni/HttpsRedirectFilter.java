@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.system.SystemSettingsController;
 
-@WebFilter (urlPatterns = { "/login/*", "/gamelibrary/*", "/oauth2/*" })
+@WebFilter (urlPatterns = { "/login/*", "/gamelibrary/*", "/oauth2/*", "/store/*" })
 public class HttpsRedirectFilter implements Filter {
   
   @Inject

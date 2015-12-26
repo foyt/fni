@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:jsf="http://xmlns.jcp.org/jsf" 
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['store.manage.pageTitle']}</ui:define>
+  <ui:define name="view-scripts">
+
+    <!-- jQuery Magnific-Popup  -->
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/jquery.magnific-popup.min.js"></script>
+
+    <!-- View scripts -->
+    
+    <h:outputScript name="scripts/gui/store-manage.js"/>
+  </ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/magnific-popup.min.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
+    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <h:outputStylesheet library="novus" name="css/store-manage.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/flex-menu.xhtml" />
+    
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['store.manage.navigationIndex']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/store/index.jsf">#{locales['store.manage.navigationStore']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/store/manage.jsf">#{locales['store.manage.navigationManagement']}</a>
+          </div>
+        </div>
+
+        <!-- Description -->
+    
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['store.manage.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['store.manage.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex-row">
+      <div class="flex-cell-full index-box">
+        
+        <!-- Actions -->
+      
+        <div class="flex-row">
+          <div class="flex-cell-full store-manage-actions">
+            <h:form>
+              <h:commandButton value="#{locales['store.manage.createStoreProduct']}" action="#{storeManageBackingBean.createStoreProduct}" />
+            </h:form>
+          </div>
+        </div>
+        
+        <!-- Unpublished products list -->
+        
+        <div class="flex-row">
+          <div class="flex-cell-full store-manage-list store-manage-unpublished">
+            <div class="flex-row">
+              <div class="flex-cell-full">
+                <h3>#{locales['store.manage.unpublishedTitle']}</h3>
+              </div>
+            </div>
+            
+            <div class="flex-row store-manage-list-header-row md-flex-hide sm-flex-hide">
+              <div class="flex-cell-1 flex-cell-first">#{locales['store.manage.productImageLabel']}</div>
+              <div class="flex-cell-13">#{locales['store.manage.productNameLabel']}</div>
+              <div class="flex-cell-2 flex-cell-last">#{locales['store.manage.productPriceLabel']}</div>
+            </div>
+            
+            <ui:repeat var="product" value="#{storeManageBackingBean.unpublishedProducts}">
+              
+              <div class="flex-row flex-align-items-center store-manage-list-row">
+                <div class="lg-flex-cell-1 lg-flex-cell-first md-flex-hide md-flex-hide sm-flex-hide flex-center store-manage-list-cell">
+                  <a jsf:rendered="#{product.defaultImage ne null}" class="store-manage-product-image-link" href="#{request.contextPath}/store/productImages/#{product.defaultImage.id}">
+                    <h:graphicImage styleClass="store-manage-product-image" value="/store/productImages/#{product.defaultImage.id}?height=32"/>
+                  </a>
+                </div>
+                
+                <div class="lg-flex-cell-13 md-flex-cell-13 sm-flex-full store-manage-list-cell">
+                  <div class="flex-row">
+                    <div class="flex-cell-full no-margin-top no-margin-bottom">
+                      <a jsf:outcome="/store/product.jsf?urlName=#{product.urlName}" class="store-manage-list-name">#{product.name}</a>
+                    </div>
+                  </div>
+                  <div class="flex-row">
+                    <div class="flex-cell-full no-margin-top no-margin-bottom store-manage-list-actions">
+                      <h:form>
+                        <a jsf:outcome="/store/editproduct.jsf?productId=#{product.id}" jsf:rendered="#{!product.published}">
+                          #{locales['store.manage.productEditLink']}
+                        </a>
+                        <a class="store-manage-upload-image-link" href="javascript:void(null)" data-product-id="#{product.id}">
+                          #{locales['store.manage.productUploadImage']}
+                        </a>  
+                        <a class="store-manage-publish-link" href="javascript:void(null)" jsf:rendered="#{!product.published}">
+                          #{locales['store.manage.productPublishLink']}
+                        </a>
+
+                        <h:commandButton style="display: none" styleClass="store-manage-publish-button" action="#{storeManageBackingBean.publish(product.id)}"/>
+
+                        <a class="store-manage-remove-link" href="javascript:void(null)" jsf:rendered="#{!product.published and storeManageBackingBean.isRemovable(product.id)}">
+                          #{locales['store.manage.productDeleteLink']}
+                        </a>
+                        <h:commandButton style="display: none" styleClass="store-manage-delete-button" action="#{storeManageBackingBean.remove(product.id)}"/>
+
+                      </h:form>
+                    </div>
+                  </div>                  
+                </div>
+                
+                <div class="flex-cell-2 sm-flex-hide store-manage-list-cell">
+                  <h:outputText value="#{product.price}" >
+                    <f:convertNumber currencyCode="EUR" type="currency" />
+                  </h:outputText>
+                </div>
+              
+              </div>
+                        
+            </ui:repeat>
+            
+          </div>
+        </div>
+        
+        <!-- Published products list -->
+        
+        <div class="flex-row">
+          <div class="flex-cell-full store-manage-list store-manage-published">
+            <div class="flex-row">
+              <div class="flex-cell-full">
+                <h3>#{locales['store.manage.publishedTitle']}</h3>
+              </div>
+            </div>
+            
+            <div class="flex-row store-manage-list-header-row md-flex-hide sm-flex-hide">
+              <div class="flex-cell-1 flex-cell-first">#{locales['store.manage.productImageLabel']}</div>
+              <div class="flex-cell-13">#{locales['store.manage.productNameLabel']}</div>
+              <div class="flex-cell-2 flex-cell-last">#{locales['store.manage.productPriceLabel']}</div>
+            </div>
+            
+            <ui:repeat var="product" value="#{storeManageBackingBean.publishedProducts}">
+              
+              <div class="flex-row flex-align-items-center store-manage-list-row">
+                <div class="lg-flex-cell-1 lg-flex-cell-first md-flex-hide md-flex-hide sm-flex-hide flex-center store-manage-list-cell">
+                  <h:outputLink rendered="#{product.defaultImage ne null}" styleClass="store-manage-product-image-link" value="#{request.contextPath}/store/productImages/#{product.defaultImage.id}">
+                    <h:graphicImage styleClass="store-manage-product-image" value="/store/productImages/#{product.defaultImage.id}?height=32"/>
+                  </h:outputLink>
+                </div>
+                
+                <div class="lg-flex-cell-13 md-flex-cell-13 sm-flex-cell-full store-manage-list-cell">
+                  <div class="flex-row">
+                    <div class="flex-cell-full no-margin-top no-margin-bottom">
+                      <h:outputLink value="#{request.contextPath}/store/#{product.urlName}" styleClass="store-manage-list-name">#{product.name}</h:outputLink>
+                    </div>
+                  </div>
+                  <div class="flex-row">
+                    <div class="flex-cell-full no-margin-top no-margin-bottom store-manage-list-actions">
+                      <h:form>
+                        <a class="store-manage-unpublish-link" href="javascript:void(null)" jsf:rendered="#{product.published}">
+                          #{locales['store.manage.productUnpublishLink']}
+                        </a>
+                        <h:commandButton styleClass="store-manage-unpublish-button" style="display: none" action="#{storeManageBackingBean.unpublish(product.id)}"/>
+                      </h:form>
+                    </div>
+                  </div>                  
+                </div>
+                
+                <div class="flex-cell-2 store-manage-list-cell sm-flex-hide">
+                  <h:outputText value="#{product.price}" >
+                    <f:convertNumber currencyCode="EUR" type="currency" />
+                  </h:outputText>
+                </div>
+              </div>
+                        
+            </ui:repeat>
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+      
+  </ui:define>
+
+</ui:composition>

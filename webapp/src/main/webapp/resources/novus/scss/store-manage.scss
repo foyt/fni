@@ -1,0 +1,69 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+h3 {
+  @include header-3;
+  color: $title-color;
+}
+
+.store-manage-actions input[type="submit"] {
+  color: $default-color;
+  font-family: $title-font;
+  font-size: 14px;
+  text-transform: uppercase;
+  padding: 8px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.store-manage-list-header-row {
+  font-weight: bold;
+  font-family: $default-font;
+  font-size: 12px;
+}
+
+.store-manage-list-row {
+  background: rgba(200, 200, 200, 0.3);
+  margin-bottom: 1px;
+  
+  &:last-child {
+    margin-bottom: 0px;
+  }
+}
+
+.store-manage-list-cell {
+  font-size: 12px;
+  font-family: $default-font;
+  
+  img {
+    vertical-align: top;
+  }
+}
+
+.store-manage-list-name {
+  font-size: 14px;
+  font-weight: bold;
+  font-family: $default-font;
+  color: $default-color;
+  text-decoration: none;
+}
+
+.store-manage-list-actions {
+  font-size: 12px;
+  font-family: $default-font;
+  
+  a {
+    color: $default-color;
+    text-transform: uppercase; 
+    text-decoration: none;
+  }
+}
+
+.store-manage-list-icons img {
+  margin-left: 2px;
+  margin-right: 2px;
+}

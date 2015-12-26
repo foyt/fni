@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['store.index.pageTitle']}</ui:define>
+  
+  <ui:define name="view-scripts">
+    <!-- jQuery Magnific-Popup  -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/jquery.magnific-popup.min.js"></script>
+
+    <!-- share-button -->
+    
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/share-button/0.5.0/share.min.js"></script>
+    
+    <!-- View scripts -->
+    
+    <h:outputScript name="scripts/gui/store-index.js"/>
+  </ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/magnific-popup.min.css"/>
+
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
+    <h:outputStylesheet library="novus" name="css/store-index.css"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/flex-menu.xhtml" />
+    
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['store.index.navigationIndex']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/store/index.jsf">#{locales['store.index.storeIndex']}</a>
+          </div>
+        </div>
+
+        <!-- Description -->
+    
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['store.index.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['store.index.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    
+    <div class="flex-row">
+      <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full sm-flex-cell-first flex-overflow-hidden"> 
+        <h:form>
+          <ui:repeat var="product" value="#{storeIndexBackingBean.products}" varStatus="vs">
+            <div class="flex-row store-product" data-index="#{vs.index}">
+              <div class="flex-cell-full index-box">
+                <div class="flex-row">
+                  <div class="flex-cell-full no-margin-top no-margin-bottom">
+                    <a class="store-product-image-link" href="#{request.contextPath}/store/productImages/#{product.defaultImageId}">
+                      <img src="/store/productImages/#{product.defaultImageId}?height=260"/>
+                    </a>
+                    <h3>
+                      <a jsf:outcome="/store/product.jsf?faces-redirect=true&amp;urlName=#{product.urlName}">#{product.name}</a>
+                    </h3>
+                    <div class="tags">
+                      <ui:repeat var="tag" value="#{product.tags}">
+                        <a class="tag" jsf:outcome="/store/index.jsf?tag=#{tag}">#{tag}</a>
+                      </ui:repeat>
+                    </div>
+                    <div class="description">
+                      <h:outputText value="#{product.description}" escape="false"/>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex-row">
+                  <div class="flex-cell-full">
+                    <div class="store-product-details">
+                      <div class="store-product-detail store-product-detail-price">
+                        <label>#{locales['store.index.detailsPrice']}</label>
+                        <span class="store-product-detail-value">
+                          <h:outputFormat value="#{product.price}">
+                            <f:convertNumber currencyCode="EUR" type="currency" />
+                          </h:outputFormat>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                    
+                <div class="flex-row">
+                  <div class="flex-cell-8 flex-cell-first no-margin-top no-margin-bottom">
+                    <a jsf:outcome="/forum/topic.jsf?forumUrlName=#{product.forumUrlName}&amp;topicUrlName=#{product.forumTopicUrlName}" class="store-product-comments">
+                      <h:outputFormat value="#{locales['gamelibrary.publications.comments']}">
+                        <f:param value="#{product.commentCount}"/>
+                      </h:outputFormat>
+                    </a>
+                  </div>
+                  <div class="flex-cell-8 flex-cell-last flex-right no-margin-top no-margin-bottom">
+                    <a class="store-product-action store-product-action-add-to-cart" jsf:action="#{storeIndexBackingBean.addToShoppingCart(product.id)}">
+                      #{locales['store.index.addToShoppingCart']}
+                    </a>
+                  </div>                  
+                </div> 
+                   
+                <div class="flex-row">
+                  <div class="flex-cell-full flex-right">
+                    <div class="store-product-share-container">
+                      <div id="store-product-share-button-#{product.id}" class="store-product-share-button" data-url-name="${product.urlName}" data-button-text="#{locales['store.index.shareButtonText']}"></div>
+                    </div>
+                  </div>
+                </div>  
+              </div>
+            </div>
+          </ui:repeat>
+        </h:form>
+      </div>
+
+      <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-full flex-overflow-hidden"> 
+        <div class="flex-row">
+          <div class="flex-cell-full index-box">
+            <ui:include src="/facelets/minishoppingcart.xhtml" />
+          </div>
+        </div>
+      </div> 
+ 
+    </div>
+  </ui:define>
+
+</ui:composition>

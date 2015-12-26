@@ -1,0 +1,7 @@
+<div title="Julkaise '{name}'?" data-publish-button="Julkaise" data-cancel-button="Peruuta">
+  <div class="store-publish-dialog">
+    <p>
+      Halutko varmasti julkaista tuotteen '{name}'
+    </p>
+  </div>
+</div>

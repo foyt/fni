@@ -202,6 +202,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     findElementBySelector(".illusion-create-event-save").click();
     waitForUrlMatches(".*/illusion/event/" + urlName);
     navigate("/illusion/event/" + urlName + "/settings");
+    waitForSelectorPresent(".illusion-event-settings-location");
     assertSelectorValue(".illusion-event-settings-location", location);
     
     deleteIllusionEventByUrl(urlName);

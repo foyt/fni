@@ -77,43 +77,50 @@ public class PublicationController {
 		return publicationDAO.listAll();
 	}
 
-	public List<Publication> listPublicationsByPublishedAndTags(boolean includeUnpublished, String... tags) {
+	public List<BookPublication> listBookPublicationsByPublishedAndTags(boolean includeUnpublished, String... tags) {
 		List<GameLibraryTag> gameLibraryTags = new ArrayList<>();
 
 		for (String tag : tags) {
 			gameLibraryTags.add(gameLibraryTagController.findTagByText(tag));
 		}
 
-		return listPublicationsByPublishedAndTags(includeUnpublished, gameLibraryTags);
+		return listBookPublicationsByPublishedAndTags(includeUnpublished, gameLibraryTags);
 	}
 
-	public List<Publication> listPublicationsByPublishedAndTags(boolean includeUnpublished, List<GameLibraryTag> gameLibraryTags) {
+	public List<BookPublication> listBookPublicationsByPublishedAndTags(boolean includeUnpublished, List<GameLibraryTag> gameLibraryTags) {
+	  List<BookPublication> result = new ArrayList<>();
+	  
+	  // TODO: Optimize this
+	  
 	  List<Publication> publications = publicationTagDAO.listPublicationsByGameLibraryTags(gameLibraryTags);
 	  if (includeUnpublished) {
-	    return publications;
-	  } else {
-	    List<Publication> result = new ArrayList<>();
+	    for (Publication publication : publications) {
+	      if (publication instanceof BookPublication) {
+  	      result.add((BookPublication) publication); 
+	      }
+	    }
 	    
+	  } else {
 		  for (Publication publication : publications) {
-		    if (publication.getPublished()) {
-		      result.add(publication);
+		    if (publication instanceof BookPublication && publication.getPublished()) {
+		      result.add((BookPublication) publication);
 		    }
 		  }
-		  
-		  return result;
 	  }
+    
+    return result;
 	}
 
-	public List<Publication> listRecentPublications(int maxRecentPublication) {
-		return publicationDAO.listByPublishedOrderByCreated(Boolean.TRUE, 0, maxRecentPublication);
+	public List<BookPublication> listRecentBookPublications(int maxRecentPublication) {
+		return bookPublicationDAO.listByPublishedOrderByCreated(Boolean.TRUE, 0, maxRecentPublication);
 	}
 
-	public List<Publication> listUnpublishedPublications() {
-		return publicationDAO.listByPublished(Boolean.FALSE);
+	public List<BookPublication> listUnpublishedBooks() {
+		return bookPublicationDAO.listByPublished(Boolean.FALSE);
 	}
 	
-	public List<Publication> listPublishedPublications() {
-		return publicationDAO.listByPublished(Boolean.TRUE);
+	public List<BookPublication> listPublishedBooks() {
+		return bookPublicationDAO.listByPublished(Boolean.TRUE);
 	}
 	
 	public List<Publication> listPublishedPublicationsByCreator(User creator) {
@@ -192,8 +199,8 @@ public class PublicationController {
 		return publication;
 	}
 
-	public Publication updateLicense(Publication publication, String licenseUrl) {
-		return publicationDAO.updateLicense(publication, licenseUrl);
+	public BookPublication updateLicense(BookPublication publication, String licenseUrl) {
+		return bookPublicationDAO.updateLicense(publication, licenseUrl);
 	}
 	
 	public Publication updateDimensions(Publication publication, Integer width, Integer height, Integer depth) {
@@ -364,6 +371,10 @@ public class PublicationController {
 	public BookPublication findBookPublicationById(Long id) {
 		return bookPublicationDAO.findById(id);
 	}
+
+  public BookPublication findBookPublicationByUrlName(String urlName) {
+    return bookPublicationDAO.findByUrlName(urlName);
+  }
 	
 	public BookPublication updateNumberOfPages(BookPublication bookPublication, Integer numberOfPages) {
     return bookPublicationDAO.updateNumberOfPages(bookPublication, numberOfPages);

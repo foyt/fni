@@ -1,0 +1,7 @@
+<div title="Muuta '{name}' yksityiseksi?" data-unpublish-button="Muuta" data-cancel-button="Peruuta">
+  <div class="store-unpublish-dialog">
+    <p>
+      Haluatko todella muuttaa tuotteen '{name}' yksityiseksi?
+    </p>
+  </div>
+</div>

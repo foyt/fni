@@ -163,14 +163,6 @@ public class Publication {
 		return forumTopic;
 	}
   
-  public String getLicense() {
-		return license;
-	}
-  
-  public void setLicense(String license) {
-		this.license = license;
-	}
-  
   public void setForumTopic(ForumTopic forumTopic) {
 		this.forumTopic = forumTopic;
 	}
@@ -263,11 +255,6 @@ public class Publication {
   
   @ManyToOne
   private ForumTopic forumTopic;
-  
-  @NotNull
-  @NotEmpty
-  @Column(nullable = false)
-  private String license;
   
   @ManyToOne
   private Language language;

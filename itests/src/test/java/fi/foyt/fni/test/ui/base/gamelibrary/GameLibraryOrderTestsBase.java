@@ -16,8 +16,7 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testAccessKey() throws Exception {
-    navigate("/gamelibrary/orders/1?key=bogus-access-key", true);
-    waitTitle("Forge & Illusion - Game Library");
+    navigateAndWait("/gamelibrary/orders/1?key=bogus-access-key", true);
     testOrderDetails(getWebDriver());
   }
 
@@ -47,8 +46,7 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testUser() throws Exception {
     loginInternal("user@foyt.fi", "pass");
-    navigate("/gamelibrary/orders/1", true);
-    waitTitle("Forge & Illusion - Game Library");
+    navigateAndWait("/gamelibrary/orders/1", true);
     testOrderDetails(getWebDriver());
   }
 
@@ -56,8 +54,7 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testLibrarian() throws Exception {
     loginInternal("librarian@foyt.fi", "pass");
-    navigate("/gamelibrary/orders/1", true);
-    waitTitle("Forge & Illusion - Game Library");
+    navigateAndWait("/gamelibrary/orders/1", true);
     testOrderDetails(getWebDriver());
   }
 
@@ -65,8 +62,7 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testAdmin() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
-    navigate("/gamelibrary/orders/1", true);
-    waitTitle("Forge & Illusion - Game Library");
+    navigateAndWait("/gamelibrary/orders/1", true);
     testOrderDetails(getWebDriver());
   }
 

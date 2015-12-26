@@ -2,15 +2,11 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" 
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:jsf="http://xmlns.jcp.org/jsf" 
   template="/WEB-INF/templates/gridbase.xhtml">
 
   <ui:define name="page-title">#{locales['gamelibrary.manage.pageTitle']}</ui:define>
-  
-  <ui:define name="grid-css">
-    <h:outputStylesheet library="novus" name="css/grid.css"/>
-  </ui:define>
-  
   <ui:define name="view-scripts">
     <!-- jQuery Magnific-Popup  -->
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/jquery.magnific-popup.min.js"></script>
@@ -22,8 +18,7 @@
   
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/magnific-popup.min.css"/>
-  
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary-common.css"/>
     <h:outputStylesheet library="novus" name="css/gamelibrary-manage.css"/>
@@ -33,61 +28,229 @@
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <!-- Header -->
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['gamelibrary.manage.navigationIndex']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.manage.navigationMostRecent']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/gamelibrary/manage.jsf">#{locales['gamelibrary.manage.navigationManagement']}</a>
+          </div>
+        </div>
+
+        <!-- Description -->
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">#{locales['gamelibrary.index.navigationIndex']}</h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">#{locales['gamelibrary.index.navigationMostRecent']}</h:panelGroup>
-      </h:panelGroup>
-  
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['gamelibrary.manage.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['gamelibrary.manage.descriptionText']}</p>
-      </h:panelGroup>
-    </h:panelGroup>
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['gamelibrary.manage.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['gamelibrary.manage.descriptionText']}</p>
+        </div>
+      </div>
+    </div>
     
-    <!-- View Content -->
-    
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="gamelibrary-manage-panel">
+    <div class="flex-row">
+      <div class="flex-cell-full index-box">
         
         <!-- Actions -->
+      
+        <div class="flex-row">
+          <div class="flex-cell-full gamelibrary-manage-actions">
+            <h:form>
+              <h:commandButton value="#{locales['gamelibrary.manage.createBookPublicationAction']}" action="#{gameLibraryManageBackingBean.createBookPublication}" />
+            </h:form>
+          </div>
+        </div>
         
-        <h:panelGroup layout="block" styleClass="gamelibrary-manage-actions">
-          <h:form>
-            <h:commandButton value="#{locales['gamelibrary.manage.createBookPublicationAction']}" action="#{gameLibraryManageBackingBean.createBookPublication}" />
-          </h:form>
-        </h:panelGroup>
-                
         <!-- Unpublished publications list -->
         
-        <h:panelGroup layout="block" styleClass="gamelibrary-manage-unpublished">
-          <h3>#{locales['gamelibrary.manage.unpublishedTitle']}</h3>
-          
-          <ui:include src="/facelets/gamelibrarymanagepublicationlist.xhtml">
-            <ui:param name="publications" value="#{gameLibraryManageBackingBean.unpublishedPublications}"/>
-          </ui:include>
-        </h:panelGroup>
+        <div class="flex-row">
+          <div class="flex-cell-full gamelibrary-manage-list gamelibrary-manage-unpublished">
+            <div class="flex-row">
+              <div class="flex-cell-full">
+                <h3>#{locales['gamelibrary.manage.unpublishedTitle']}</h3>
+              </div>
+            </div>
+            
+            <div class="flex-row gamelibrary-manage-list-header-row md-flex-hide sm-flex-hide">
+              <div class="flex-cell-1 flex-cell-first">#{locales['gamelibrary.manage.publicationImageLabel']}</div>
+              <div class="flex-cell-8">#{locales['gamelibrary.manage.publicationNameLabel']}</div>
+              <div class="flex-cell-2">#{locales['gamelibrary.manage.publicationPriceLabel']}</div>
+              <div class="flex-cell-2">#{locales['gamelibrary.manage.publicationDimensionsLabel']}</div>
+              <div class="flex-cell-2">#{locales['gamelibrary.manage.publicationLicenseLabel']}</div>
+              <div class="flex-cell-1 flex-cell-last"></div>
+            </div>
+            
+            <ui:repeat var="publication" value="#{gameLibraryManageBackingBean.unpublishedBooks}">
+              
+              <div class="flex-row flex-align-items-center gamelibrary-manage-list-row">
+                <div class="lg-flex-cell-1 lg-flex-cell-first md-flex-hide md-flex-hide sm-flex-hide flex-center gamelibrary-manage-list-cell">
+                  <a jsf:rendered="#{publication.defaultImage ne null}" class="gamelibrary-manage-publication-image-link" href="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
+                    <h:graphicImage styleClass="gamelibrary-manage-publication-image" value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=32"/>
+                  </a>
+                </div>
+                
+                <div class="lg-flex-cell-8 md-flex-cell-8 sm-flex-full gamelibrary-manage-list-cell">
+                  <div class="flex-row">
+                    <div class="flex-cell-full no-margin-top no-margin-bottom">
+                      <a jsf:outcome="/gamelibrary/publication.jsf?urlName=#{publication.urlName}" class="gamelibrary-manage-list-name">#{publication.name}</a>
+                    </div>
+                  </div>
+                  <div class="flex-row">
+                    <div class="flex-cell-full no-margin-top no-margin-bottom gamelibrary-manage-list-actions">
+                      <h:form>
+                        <a jsf:outcome="/gamelibrary/editpublication.jsf?publicationId=#{publication.id}" jsf:rendered="#{!publication.published}">
+                          #{locales['gamelibrary.manage.publicationEditLink']}
+                        </a>
+                        <a class="gamelibrary-manage-upload-image-link" href="javascript:void(null)" data-publication-id="#{publication.id}">
+                          #{locales['gamelibrary.manage.publicationUploadImage']}
+                        </a>  
+                        <a class="gamelibrary-manage-upload-downloadable-link" href="javascript:void(null)" data-publication-id="#{publication.id}">
+                          #{locales['gamelibrary.manage.publicationUploadPDF']}
+                        </a>
+                        <a class="gamelibrary-manage-upload-printable-link" href="javascript:void(null)" data-publication-id="#{publication.id}">
+                          #{locales['gamelibrary.manage.publicationUploadPrintable']}
+                        </a>
+                        
+                        <a class="gamelibrary-manage-publish-link" href="javascript:void(null)" jsf:rendered="#{!publication.published}">
+                          #{locales['gamelibrary.manage.publicationPublishLink']}
+                        </a>
+                        <h:commandButton style="display: none" styleClass="gamelibrary-manage-publish-button" action="#{gameLibraryManageBackingBean.publish(publication.id)}"/>
+                        
+                        <a class="gamelibrary-manage-remove-link" href="javascript:void(null)" jsf:rendered="#{!publication.published and gameLibraryManageBackingBean.isRemovable(publication.id)}">
+                          #{locales['gamelibrary.manage.publicationDeleteLink']}
+                        </a>
+                        <h:commandButton style="display: none" styleClass="gamelibrary-manage-delete-button" action="#{gameLibraryManageBackingBean.remove(publication.id)}"/>
+                      </h:form>
+                    </div>
+                  </div>                  
+                </div>
+                
+                <div class="flex-cell-2 sm-flex-hide gamelibrary-manage-list-cell">
+                  <h:outputText value="#{publication.price}" >
+                    <f:convertNumber currencyCode="EUR" type="currency" />
+                  </h:outputText>
+                </div>
+              
+                <div class="flex-cell-2 sm-flex-hide gamelibrary-manage-list-cell">
+                  <h:outputText value="#{publication.width} x #{publication.height} x #{publication.depth}" />
+                </div>
+              
+                <div class="flex-cell-2 sm-flex-hide gamelibrary-manage-list-cell">
+                  <ui:fragment rendered="#{gameLibraryManageBackingBean.getCreativeCommonsLicense(publication) ne null}">
+                    <a href="#{gameLibraryManageBackingBean.getCreativeCommonsLicense(publication).url}">
+                      <img src="#{gameLibraryManageBackingBean.getCreativeCommonsLicense(publication).iconUrl}"/>
+                    </a>
+                  </ui:fragment>
+                  
+                  <ui:fragment rendered="#{gameLibraryManageBackingBean.getCreativeCommonsLicense(publication) eq null}">
+                    <a href="#{publication.license}" title="#{publication.license}">
+                      #{publication.license.length() gt 16 ? publication.license.substring(0, 13).concat('...') : publication.license}
+                    </a>
+                  </ui:fragment>
+                </div>
+              
+                <div class="flex-cell-1 flex-cell-last sm-flex-hide gamelibrary-manage-list-cell gamelibrary-manage-list-icons">
+                  <h:graphicImage title="#{locales['gamelibrary.manage.publicationImageDownloadableTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-downloadable.png" rendered="#{publication.downloadableFile ne null}"/>
+                  <h:graphicImage title="#{locales['gamelibrary.manage.publicationImagePrintableTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-printable.png" rendered="#{publication.printableFile ne null}"/>
+                </div>
+              
+              </div>
+                        
+            </ui:repeat>
+            
+          </div>
+        </div>
         
         <!-- Published publications list -->
         
-        <h:panelGroup layout="block" styleClass="gamelibrary-manage-published">
-          <h3>#{locales['gamelibrary.manage.publishedTitle']}</h3>
-          
-          <ui:include src="/facelets/gamelibrarymanagepublicationlist.xhtml">
-            <ui:param name="publications" value="#{gameLibraryManageBackingBean.publishedPublications}"/>
-          </ui:include>
-        </h:panelGroup>
-      </h:panelGroup>
-    </h:panelGroup>   
+        <div class="flex-row">
+          <div class="flex-cell-full gamelibrary-manage-list gamelibrary-manage-published">
+            <div class="flex-row">
+              <div class="flex-cell-full">
+                <h3>#{locales['gamelibrary.manage.publishedTitle']}</h3>
+              </div>
+            </div>
+            
+            <div class="flex-row gamelibrary-manage-list-header-row md-flex-hide sm-flex-hide">
+              <div class="flex-cell-1 flex-cell-first">#{locales['gamelibrary.manage.publicationImageLabel']}</div>
+              <div class="flex-cell-8">#{locales['gamelibrary.manage.publicationNameLabel']}</div>
+              <div class="flex-cell-2">#{locales['gamelibrary.manage.publicationPriceLabel']}</div>
+              <div class="flex-cell-2">#{locales['gamelibrary.manage.publicationDimensionsLabel']}</div>
+              <div class="flex-cell-2">#{locales['gamelibrary.manage.publicationLicenseLabel']}</div>
+              <div class="flex-cell-1 flex-cell-last"></div>
+            </div>
+            
+            <ui:repeat var="publication" value="#{gameLibraryManageBackingBean.publishedBooks}">
+              
+              <div class="flex-row flex-align-items-center gamelibrary-manage-list-row">
+                <div class="lg-flex-cell-1 lg-flex-cell-first md-flex-hide md-flex-hide sm-flex-hide flex-center gamelibrary-manage-list-cell">
+                  <h:outputLink rendered="#{publication.defaultImage ne null}" styleClass="gamelibrary-manage-publication-image-link" value="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
+                    <h:graphicImage styleClass="gamelibrary-manage-publication-image" value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=32"/>
+                  </h:outputLink>
+                </div>
+                
+                <div class="lg-flex-cell-8 md-flex-cell-8 sm-flex-cell-full gamelibrary-manage-list-cell">
+                  <div class="flex-row">
+                    <div class="flex-cell-full no-margin-top no-margin-bottom">
+                      <h:outputLink value="#{request.contextPath}/gamelibrary/#{publication.urlName}" styleClass="gamelibrary-manage-list-name">#{publication.name}</h:outputLink>
+                    </div>
+                  </div>
+                  <div class="flex-row">
+                    <div class="flex-cell-full no-margin-top no-margin-bottom gamelibrary-manage-list-actions">
+                      <h:form>
+                        <a class="gamelibrary-manage-unpublish-link" href="javascript:void(null)" jsf:rendered="#{publication.published}">
+                          #{locales['gamelibrary.manage.publicationUnpublishLink']}
+                        </a>
+                        <h:commandButton styleClass="gamelibrary-manage-unpublish-button" style="display: none" action="#{gameLibraryManageBackingBean.unpublish(publication.id)}"/>
+                      </h:form>
+                    </div>
+                  </div>                  
+                </div>
+                
+                <div class="flex-cell-2 gamelibrary-manage-list-cell sm-flex-hide">
+                  <h:outputText value="#{publication.price}" >
+                    <f:convertNumber currencyCode="EUR" type="currency" />
+                  </h:outputText>
+                </div>
+              
+                <div class="flex-cell-2 gamelibrary-manage-list-cell sm-flex-hide">
+                  <h:outputText value="#{publication.width} x #{publication.height} x #{publication.depth}" />
+                </div>
+              
+                <div class="flex-cell-2 gamelibrary-manage-list-cell sm-flex-hide">
+                  <ui:fragment rendered="#{gameLibraryManageBackingBean.getCreativeCommonsLicense(publication) ne null}">
+                    <h:outputLink value="#{gameLibraryManageBackingBean.getCreativeCommonsLicense(publication).url}">
+                      <img src="#{gameLibraryManageBackingBean.getCreativeCommonsLicense(publication).iconUrl}"/>
+                    </h:outputLink>
+                  </ui:fragment>
+                  
+                  <ui:fragment rendered="#{gameLibraryManageBackingBean.getCreativeCommonsLicense(publication) eq null}">
+                    <h:outputLink value="#{publication.license}" title="#{publication.license}">
+                      #{publication.license.length() gt 16 ? publication.license.substring(0, 13).concat('...') : publication.license}
+                    </h:outputLink>
+                  </ui:fragment>
+                </div>
+              
+                <div class="flex-cell-1 flex-cell-last gamelibrary-manage-list-cell gamelibrary-manage-list-icons sm-flex-hide">
+                  <h:graphicImage title="#{locales['gamelibrary.manage.publicationImageDownloadableTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-downloadable.png" rendered="#{publication.downloadableFile ne null}"/>
+                  <h:graphicImage title="#{locales['gamelibrary.manage.publicationImagePrintableTooltip']}" library="novus" name="/gfx/icons/16x16/gamelibrary/manage-printable.png" rendered="#{publication.printableFile ne null}"/>
+                </div>
+              
+              </div>
+                        
+            </ui:repeat>
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+      
   </ui:define>
 
 </ui:composition>

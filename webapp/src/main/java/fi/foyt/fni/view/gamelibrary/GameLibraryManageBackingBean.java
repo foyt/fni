@@ -68,30 +68,25 @@ public class GameLibraryManageBackingBean {
 
   @RequestAction
   public String init() {
+    unpublishedBooks = publicationController.listUnpublishedBooks();
+    publishedBooks = publicationController.listPublishedBooks();
+    
     return null;
   }
   
-  public List<Publication> getUnpublishedPublications() {
-  	return publicationController.listUnpublishedPublications();
-  }
-	
-  public List<Publication> getPublishedPublications() {
-  	return publicationController.listPublishedPublications();
+  public List<BookPublication> getPublishedBooks() {
+    return publishedBooks;
   }
   
-  public BookPublication getBookPublication(Publication publication) {
-  	if (publication instanceof BookPublication) {
-  		return (BookPublication) publication;
-  	}
-  	
-  	return null;
+  public List<BookPublication> getUnpublishedBooks() {
+    return unpublishedBooks;
   }
   
-  public CreativeCommonsLicense getCreativeCommonsLicense(Publication publication) {
+  public CreativeCommonsLicense getCreativeCommonsLicense(BookPublication publication) {
 		return CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
 	}
   
-  public void createBookPublication() throws IOException {
+  public String createBookPublication() throws IOException {
     Language defaultLanguage = systemSettingsController.getDefaultLanguage();
     
   	BookPublication bookPublication = publicationController.createBookPublication(
@@ -110,12 +105,7 @@ public class GameLibraryManageBackingBean {
   	    null,
   	    defaultLanguage);
   	
-  	FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
-  	  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
-  	  .append("/gamelibrary/manage/")
-  	  .append(bookPublication.getId())
-  	  .append("/edit")
-  	  .toString());
+  	return String.format("/gamelibrary/editpublication.jsf?faces-redirect=true&amp;publicationId=%d", bookPublication.getId());
   }
   
   public String publish(Long publicationId) {
@@ -171,4 +161,6 @@ public class GameLibraryManageBackingBean {
     return "/gamelibrary/manage.jsf?faces-redirect=true";
 	}
 
+  private List<BookPublication> unpublishedBooks;
+  private List<BookPublication> publishedBooks;
 }

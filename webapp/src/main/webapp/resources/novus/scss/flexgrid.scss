@@ -125,6 +125,18 @@
     
   .#{$prefix}flex-align-items-bottom {
     @include align-items(flex-end);
+  }  
+  
+  .#{$prefix}flex-self-items-top {
+    @include align-self(flex-start);
+  }
+  
+  .#{$prefix}flex-self-items-center {
+    @include align-self(center);
+  }
+    
+  .#{$prefix}flex-self-items-bottom {
+    @include align-self(flex-end);
   }
   
   .#{$prefix}flex-justify-content-start {

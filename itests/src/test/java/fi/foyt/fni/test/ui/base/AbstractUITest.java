@@ -13,10 +13,13 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
@@ -86,7 +89,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void loginInternal(RemoteWebDriver driver, String email, String password) {
     String loginUrl = getAppUrl(true) + "/login/";
     if (!StringUtils.startsWith(driver.getCurrentUrl(), loginUrl)) {
-      driver.get(loginUrl);
+      navigateAndWait("/login/", true);
     }
     
     scrollWaitAndType(".user-login-email", email);
@@ -114,11 +117,8 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void loginGoogle() {
-    acceptCookieDirective();
     navigate("/login/", true);
-    waitForSelectorVisible(".user-login-external-google");
-    clickSelector(".user-login-external-google");
-    waitForSelectorVisible("#Email");
+    waitAndClick(".user-login-external-google");
     waitAndClick("#Email");
     typeSelectorInputValue("#Email", getGoogleUsername());
     
@@ -126,11 +126,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
       clickSelector("#next");
     }
     
-    waitForSelectorVisible("#Passwd");
     waitAndClick("#Passwd");
     typeSelectorInputValue("#Passwd", getGooglePassword());
-    clickSelector("#signIn");
-    waitForUrlMatches("^" + getAppUrl() + ".*");
+    waitAndClick("#signIn");
+    waitForSelectorVisible(".menu-tools-account");
     assertLoggedIn();
   }
   
@@ -185,6 +184,25 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     });
   }
 
+  protected void waitNotVisible(final String selector) {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        List<WebElement> elements = findElementsBySelector(selector);
+        if (elements.isEmpty()) {
+          return true;
+        }
+        
+        for (WebElement element : elements) {
+          if (element.isDisplayed()){
+            return false;
+          }
+        }
+        
+        return true;
+      }
+    });
+  }
+  
   protected void waitForInputValueNotBlank(final String selector) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
@@ -231,7 +249,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
       public Boolean apply(WebDriver driver) {
         try {
           return findElementsBySelector(selector).size() == count;
-        } catch (StaleElementReferenceException e) {
+        } catch (Exception e) {
           return false;
         }
       }
@@ -267,9 +285,9 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     }
     
     if (ignoreCase) {
-      assertTrue(String.format("Expected %s but was %s", text, elementText), text.equalsIgnoreCase(elementText));
+      assertTrue(String.format("Expected '%s' but was '%s'", text, elementText), text.equalsIgnoreCase(elementText));
     } else {
-      assertTrue(String.format("Expected %s but was %s", text, elementText), text.equals(elementText));
+      assertTrue(String.format("Expected '%s' but was '%s'", text, elementText), text.equals(elementText));
     }
   }
 
@@ -353,11 +371,61 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void navigate(String path, Boolean secure) {
-    getWebDriver().get(getAppUrl(secure) + path);
+    String url = String.format("%s%s", getAppUrl(secure), path);
+    int i = 0;
+    
+    while (!tryNavigate(url)) {
+      i++;
+      if (i > 4) {
+        Logger.getLogger(getClass().getName()).log(Level.SEVERE, String.format("Failed to navigate to url %s", url));
+        return;
+      }
+    }
   }
   
+  private boolean tryNavigate(String url) {
+    getWebDriver().get(url);
+    String currentUrl = getWebDriver().getCurrentUrl();
+    
+    if (StringUtils.isBlank(currentUrl) || StringUtils.startsWith(currentUrl, "about:")) {
+      return false; 
+    }
+    
+    return true;
+  }
+
+  protected void navigateAndWait(String path) {
+    navigateAndWait(path, false);
+  }
+
+  protected void navigateAndWait(String path, Boolean secure) {
+    navigate(path, secure);
+    String url = String.format("%s%s", getAppUrl(secure), path);
+    waitForUrl(url);
+  }
+
+  protected void waitForUrl(String url) {
+    waitForUrl(getWebDriver(), url);
+  }
+  
+  protected void testLoginRequired(RemoteWebDriver driver, String path) throws UnsupportedEncodingException {
+    testLoginRequired(driver, path, false);  
+  }
+  
+  protected void testLoginRequired(RemoteWebDriver driver, String path, boolean secure) throws UnsupportedEncodingException {
+    navigate(path, secure);
+    String ctxPath = getCtxPath();
+    String expectedUrl = getAppUrl(true) + "/login/?redirectUrl=" + URLEncoder.encode(ctxPath != null ? "/" + ctxPath + path : path, "UTF-8");
+    waitForUrlMatches(driver, "https://.*");
+    assertEquals(expectedUrl, driver.getCurrentUrl());
+  }
+
   protected void testLoginRequired(String path) throws UnsupportedEncodingException {
     testLoginRequired(getWebDriver(), path);
+  }
+  
+  protected void testLoginRequired(String path, boolean secure) throws UnsupportedEncodingException {
+    testLoginRequired(getWebDriver(), path, secure);
   }
   
   protected void testAccessDenied(String path) {
@@ -485,6 +553,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     assertEquals("Page Not Found!", getWebDriver().getTitle());
   }
   
+  protected void testNotFound(String path, boolean secure) {
+    navigate(path, secure);
+    waitTitle("Page Not Found!");
+    assertEquals("Page Not Found!", getWebDriver().getTitle());
+  }
+  
   protected void clearSelectorInput(String selector) {
     findElementBySelector(selector).clear();
   }
@@ -525,7 +599,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   
   protected void waitForPageLoad() {
     try {
-      new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      new WebDriverWait(getWebDriver(), 5).until(new ExpectedCondition<Boolean>() {
         public Boolean apply(WebDriver driver) {
           return !((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
         }
@@ -567,6 +641,19 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     }
   }
 
+  protected void acceptPaytrailPayment() {
+    waitAndClick("input[value=\"Osuuspankki\"]");
+    waitForUrl(getWebDriver(), "https://kultaraha.op.fi/cgi-bin/krcgi");
+
+    waitAndSendKeys("*[name='id']", "123456");
+    waitAndSendKeys("*[name='pw']", "7890");
+    waitAndClick("*[name='ktunn']");
+
+    waitAndSendKeys("*[name='avainluku']", "1234");
+    waitAndClick("*[name='avainl']");
+    waitAndClick("#Toiminto");
+  }
+  
   private String sessionId;
   private RemoteWebDriver webDriver;
 }
