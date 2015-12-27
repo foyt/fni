@@ -6,11 +6,7 @@
   xmlns:h="http://java.sun.com/jsf/html" 
   template="/WEB-INF/templates/gridbase.xhtml">
 
-  <ui:define name="page-title">
-    <h:outputFormat value="#{locales['illusion.eventMaterials.pageTitle']}">
-      <f:param value="#{illusionEventMaterialsBackingBean.name}"/>
-    </h:outputFormat>
-  </ui:define>
+  <ui:param name="skipTitle" value="true" />
   
   <ui:define name="view-custom-head">
     <h:outputText value="#{illusionEventMaterialsBackingBean.headHtml}" escape="false"/>
