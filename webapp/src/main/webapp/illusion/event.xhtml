@@ -2,23 +2,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
 
-  <ui:define name="page-title">
-    <h:outputFormat value="#{locales['illusion.event.pageTitle']}">
-      <f:param value="#{illusionEventBackingBean.name}"/>
-    </h:outputFormat>
-  </ui:define>
-  
-  <ui:define name="view-scripts">
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/social-likes/3.0.3/social-likes.min.js"/>
-  </ui:define>
-  
-  <ui:define name="view-stylesheets">
-    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/social-likes/3.0.3/social-likes_birman.css"/>
-    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
-    <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
-    <h:outputStylesheet library="novus" name="css/illusion-event.css"/>
-  </ui:define>  
+  <ui:param name="skipTitle" value="true" />
   
   <ui:define name="view-custom-head">
     <h:outputText value="#{illusionEventBackingBean.headHtml}" escape="false"/>
