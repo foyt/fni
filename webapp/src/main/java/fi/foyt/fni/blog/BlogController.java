@@ -18,12 +18,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
 
-import com.sun.syndication.feed.synd.SyndCategory;
-import com.sun.syndication.feed.synd.SyndEntry;
-import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.SyndFeedInput;
-import com.sun.syndication.io.XmlReader;
+import com.rometools.rome.feed.synd.SyndCategory;
+import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.io.FeedException;
+import com.rometools.rome.io.SyndFeedInput;
+import com.rometools.rome.io.XmlReader;
 
 import fi.foyt.fni.persistence.dao.blog.BlogCategoryDAO;
 import fi.foyt.fni.persistence.dao.blog.BlogEntryDAO;
@@ -96,7 +96,6 @@ public class BlogController {
 		return blogCategoryDAO.listBySyncNeNullAndNextSyncLe(new Date());
 	}
 
-	@SuppressWarnings("unchecked")
 	public BlogCategory synchronizeEntries(BlogCategory blogCategory) {
 		SyndFeedInput input = new SyndFeedInput();
 		try {

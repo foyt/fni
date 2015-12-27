@@ -99,7 +99,11 @@
 
     <!-- Rome -->
 
-    <rome.version>1.0.0</rome.version>
+    <rome.version>1.5.1</rome.version>
+    
+    <!-- JDom -->
+
+    <jdom.version>2.0.2</jdom.version>
 
     <!-- Apache Commons -->
 
@@ -301,9 +305,17 @@
       <!-- Rome -->
 
       <dependency>
-        <groupId>net.java.dev.rome</groupId>
+        <groupId>com.rometools</groupId>
         <artifactId>rome</artifactId>
         <version>${rome.version}</version>
+      </dependency>
+      
+      <!-- JDom -->
+
+      <dependency>
+        <groupId>org.jdom</groupId>
+        <artifactId>jdom</artifactId>
+        <version>${jdom.version}</version>
       </dependency>
 
       <!-- Xalan -->
