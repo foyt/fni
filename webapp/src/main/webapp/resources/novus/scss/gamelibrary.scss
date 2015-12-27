@@ -29,6 +29,16 @@ h3 a {
   margin-top: 4px;
 }
 
+.feed-link {
+  text-decoration: none;
+  
+  img {
+    max-height: 15px;
+    vertical-align: middle;
+  }
+  
+}
+
 /* Publications */
 
 .gamelibrary-publication-image-link {

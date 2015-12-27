@@ -21,6 +21,11 @@
     <h:outputScript name="scripts/gui/gamelibrary.js"/>
   </ui:define>
   
+  <ui:define name="view-custom-head">
+    <link rel="alternate" type="application/rss+xml" title="#{locales['gamelibrary.index.rssFeedTitle']}" href="#{gameLibraryIndexBackingBean.rssFeedUrl}"/>
+    <link rel="alternate" type="application/atom+xml" title="#{locales['gamelibrary.index.atomFeedTitle']}" href="#{gameLibraryIndexBackingBean.atomFeedUrl}"/>
+  </ui:define>
+  
   <ui:define name="view-stylesheets">
     <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/magnific-popup.min.css"/>
 
@@ -39,20 +44,27 @@
       <div class="flex-cell-full">
         <!-- Navigation -->
          
-        <div class="flex-cell-row sm-flex-hide">
-          <h:panelGroup layout="block" styleClass="view-header-navigation">
-            <h:panelGroup styleClass="view-header-navigation-item">
-              <h:link outcome="/index.jsf">#{locales['gamelibrary.index.navigationIndex']}</h:link>
+        <div class="flex-row sm-flex-hide">
+          <div class="flex-cell-15 flex-cell-first no-margin-top no-margin-bottom">
+            <h:panelGroup layout="block" styleClass="view-header-navigation">
+              <h:panelGroup styleClass="view-header-navigation-item">
+                <h:link outcome="/index.jsf">#{locales['gamelibrary.index.navigationIndex']}</h:link>
+              </h:panelGroup>
+              <h:panelGroup styleClass="view-header-navigation-separator"/>
+              <h:panelGroup styleClass="view-header-navigation-item">
+                <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.index.navigationGameLibrary']}</h:link>
+              </h:panelGroup>
+              <h:panelGroup styleClass="view-header-navigation-separator"/>
+              <h:panelGroup styleClass="view-header-navigation-item">
+                <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.index.navigationMostRecent']}</h:link>
+              </h:panelGroup>
             </h:panelGroup>
-            <h:panelGroup styleClass="view-header-navigation-separator"/>
-            <h:panelGroup styleClass="view-header-navigation-item">
-              <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.index.navigationGameLibrary']}</h:link>
-            </h:panelGroup>
-            <h:panelGroup styleClass="view-header-navigation-separator"/>
-            <h:panelGroup styleClass="view-header-navigation-item">
-              <h:link outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.index.navigationMostRecent']}</h:link>
-            </h:panelGroup>
-          </h:panelGroup>
+          </div>    
+          <div class="flex-cell-1 flex-cell-last flex-right no-margin-top no-margin-bottom">
+            <a class="feed-link" title="#{locales['gamelibrary.index.rssFeedTitle']}" href="#{gameLibraryIndexBackingBean.rssFeedUrl}">
+              <img src="/theme/gfx/icons/scalable/generic/feed.svg"/>
+            </a>
+          </div>
         </div>
     
         <!-- Description -->
