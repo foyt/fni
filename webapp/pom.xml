@@ -326,8 +326,14 @@
     <!-- Rome -->
 
     <dependency>
-      <groupId>net.java.dev.rome</groupId>
+      <groupId>com.rometools</groupId>
       <artifactId>rome</artifactId>
+      <exclusions>
+        <exclusion>
+          <artifactId>org.slf4j</artifactId>
+          <groupId>slf4j-api</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <!-- Lucene Highlighter -->
