@@ -97,20 +97,7 @@ env:
   - goals=verify use_sc=false it_profile=rest
 
 before_script:
-- if [ $start_sc_tunnel = true ]; then curl -sS https://saucelabs.com/downloads/sc-4.3.13-linux.tar.gz|tar -xzC /tmp/; fi;
-- if [ $start_sc_tunnel = true ]; then /tmp/sc-4.3.13-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish -B *.facebook.com --daemonize --readyfile /tmp/sc-ready --wait-tunnel-shutdown; fi;
-- if [ $start_sc_tunnel = true ]; then 
-    t=0;
-    while [ ! -f /tmp/sc-ready ]; do 
-      sleep 0.5; 
-      t=$((t+1)); 
-      if [ $t -gt 180 ]; then 
-        killall sc;
-        echo "Unable to get Sauce connection within 3 minutes";
-        exit 1;
-      fi;
-    done;
-  fi;
+- bash travis-before-script.sh
 script: 
   if [[ $run_tests = true ]]; then
     mvn $goals 

@@ -15,4 +15,4 @@ if [[ ("$TRAVIS_PULL_REQUEST" = "false") && ("$TRAVIS_BRANCH" = "devel") ]]; the
   export deploy=true
 fi;
 
-echo "Test setup: run tests: $run_tests, start sauce tunnel: $start_sc_tunnel; deploy: $deploy"
+echo "Test setup: run tests: $run_tests, start sauce tunnel: $start_sc_tunnel, deploy: $deploy"
