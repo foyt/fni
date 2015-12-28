@@ -99,18 +99,7 @@ env:
 before_script:
 - bash travis-before-script.sh
 script: 
-  if [[ $run_tests = true ]]; then
-    mvn $goals 
-      -P$it_profile 
-      -Dexec.args="-Duser.timezone=UTC" 
-      -Dmaven.javadoc.skip=true 
-      -Dsource.skip=true 
-      -Dit.properties.file=src/test/resources/it-travis.properties 
-      -Dit.package=$package 
-      -Dit.browser="$it_browser"
-      -Dit.browser.version="$it_browser_version"
-      -Dit.platform="$it_platform";
-  fi;
+- bash travis-script.sh
 after_success:
 - if [ $start_sc_tunnel = true ]; then killall sc; fi;
 - if [ $deploy = true ]; then python travis/m2conf.py; fi;
