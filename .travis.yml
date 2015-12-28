@@ -11,6 +11,7 @@ before_install:
   -in travis-encrypted.tar.enc -out travis-encrypted.tar -d
 - tar xvf travis-encrypted.tar
 - unset GEM_PATH
+- bash travis-setenv.sh
 install: true
 branches:
   except:
@@ -96,9 +97,9 @@ env:
   - goals=verify use_sc=false it_profile=rest
 
 before_script:
-- if [ $use_sc = true ]; then curl -sS https://saucelabs.com/downloads/sc-4.3.13-linux.tar.gz|tar -xzC /tmp/; fi;
-- if [ $use_sc = true ]; then /tmp/sc-4.3.13-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish -B *.facebook.com --daemonize --readyfile /tmp/sc-ready --wait-tunnel-shutdown; fi;
-- if [ $use_sc = true ]; then 
+- if [ $start_sc_tunnel = true ]; then curl -sS https://saucelabs.com/downloads/sc-4.3.13-linux.tar.gz|tar -xzC /tmp/; fi;
+- if [ $start_sc_tunnel = true ]; then /tmp/sc-4.3.13-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish -B *.facebook.com --daemonize --readyfile /tmp/sc-ready --wait-tunnel-shutdown; fi;
+- if [ $start_sc_tunnel = true ]; then 
     t=0;
     while [ ! -f /tmp/sc-ready ]; do 
       sleep 0.5; 
@@ -111,7 +112,7 @@ before_script:
     done;
   fi;
 script: 
-  if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then
+  if [[ $run_tests = true ]]; then
     mvn $goals 
       -P$it_profile 
       -Dexec.args="-Duser.timezone=UTC" 
@@ -124,10 +125,10 @@ script:
       -Dit.platform="$it_platform";
   fi;
 after_success:
-- if [ $use_sc = true ]; then killall sc; fi;
-- if [ $TRAVIS_BRANCH = 'devel' ]; then python travis/m2conf.py; fi;
-- if [ $TRAVIS_BRANCH = 'devel' ]; then mvn deploy --settings ~/.m2/mySettings.xml; fi;
+- if [ $start_sc_tunnel = true ]; then killall sc; fi;
+- if [ $deploy = true ]; then python travis/m2conf.py; fi;
+- if [ $deploy = true ]; then mvn deploy --settings ~/.m2/mySettings.xml; fi;
 after_failure:
-- if [ $use_sc = true ]; then killall sc; fi;
+- if [ $start_sc_tunnel = true ]; then killall sc; fi;
 - cat itests/target/cargo/configurations/wildfly8x/log/server.log
         
