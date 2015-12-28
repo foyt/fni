@@ -103,6 +103,4 @@ script:
 after_success:
 - bash travis-after-success.sh
 after_failure:
-- if [ $start_sc_tunnel = true ]; then killall sc; fi;
-- cat itests/target/cargo/configurations/wildfly8x/log/server.log
-        
+- bash travis-after-failure.sh
