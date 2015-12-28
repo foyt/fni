@@ -12,7 +12,9 @@
      
       <!-- Title -->
     
-      <title><ui:insert name="page-title"></ui:insert></title>
+      <ui:fragment rendered="#{skipTitle ne true}">
+        <title><ui:insert name="page-title"></ui:insert></title>
+      </ui:fragment>
       
       <!-- View Port -->
       <meta http-equiv="x-ua-compatible" content="ie=edge" />

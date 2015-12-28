@@ -6,22 +6,7 @@
   xmlns:jsf="http://xmlns.jcp.org/jsf"
   template="/WEB-INF/templates/gridbase.xhtml">
 
-  <ui:define name="page-title">
-    <h:outputFormat value="#{locales['illusion.eventMaterial.pageTitle']}">
-      <f:param value="#{illusionEventMaterialBackingBean.name}"/>
-    </h:outputFormat>
-  </ui:define>
-  
-  <ui:define name="view-scripts">
-    <h:outputScript name="scripts/gui/illusion-event-material.js"/>
-  </ui:define>
-  
-  <ui:define name="view-stylesheets">
-    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
-    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
-    <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
-    <h:outputStylesheet library="novus" name="css/illusion-event-material.css"/>
-  </ui:define>  
+  <ui:param name="skipTitle" value="true" />
   
   <ui:define name="view-custom-head">
     <h:outputText value="#{illusionEventMaterialBackingBean.headHtml}" escape="false"/>

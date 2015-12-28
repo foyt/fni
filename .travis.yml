@@ -11,6 +11,7 @@ before_install:
   -in travis-encrypted.tar.enc -out travis-encrypted.tar -d
 - tar xvf travis-encrypted.tar
 - unset GEM_PATH
+- . travis-setenv.sh
 install: true
 branches:
   except:
@@ -96,36 +97,10 @@ env:
   - goals=verify use_sc=false it_profile=rest
 
 before_script:
-- if [ $use_sc = true ]; then curl -sS https://saucelabs.com/downloads/sc-4.3.13-linux.tar.gz|tar -xzC /tmp/; fi;
-- if [ $use_sc = true ]; then /tmp/sc-4.3.13-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish -B *.facebook.com --daemonize --readyfile /tmp/sc-ready --wait-tunnel-shutdown; fi;
-- if [ $use_sc = true ]; then 
-    t=0;
-    while [ ! -f /tmp/sc-ready ]; do 
-      sleep 0.5; 
-      t=$((t+1)); 
-      if [ $t -gt 180 ]; then 
-        killall sc;
-        echo "Unable to get Sauce connection within 3 minutes";
-        exit 1;
-      fi;
-    done;
-  fi;
+- . travis-before-script.sh
 script: 
-  mvn $goals 
-    -P$it_profile 
-    -Dexec.args="-Duser.timezone=UTC" 
-    -Dmaven.javadoc.skip=true 
-    -Dsource.skip=true 
-    -Dit.properties.file=src/test/resources/it-travis.properties 
-    -Dit.package=$package 
-    -Dit.browser="$it_browser"
-    -Dit.browser.version="$it_browser_version"
-    -Dit.platform="$it_platform"
+- . travis-script.sh
 after_success:
-- if [ $use_sc = true ]; then killall sc; fi;
-- if [ $TRAVIS_BRANCH = 'devel' ]; then python travis/m2conf.py; fi;
-- if [ $TRAVIS_BRANCH = 'devel' ]; then mvn deploy --settings ~/.m2/mySettings.xml; fi;
+- . travis-after-success.sh
 after_failure:
-- if [ $use_sc = true ]; then killall sc; fi;
-- cat itests/target/cargo/configurations/wildfly8x/log/server.log
-        
+- . travis-after-failure.sh

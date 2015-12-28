@@ -344,9 +344,9 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     String startDate = "10/20/2030";
       
     navigate("/illusion/createevent");
-    typeSelectorInputValue(".illusion-create-event-name", name);
-    typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
-    typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
+    waitAndSendKeys(".illusion-create-event-name", name);
+    waitAndSendKeys("input[data-alt-field='.actual-start-date']", startDate);
+    waitAndSendKeys("input[data-alt-field='.actual-end-date']", startDate);
     clickSelector(".illusion-create-event-genre input[value='1']");
     clickSelector(".illusion-create-event-genre input[value='3']");
     waitSelectorToBeClickable(".illusion-create-event-save");
