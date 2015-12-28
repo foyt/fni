@@ -7,7 +7,7 @@ if [[ $start_sc_tunnel = true ]]; then
   /tmp/sc-4.3.13-linux/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY -i $TRAVIS_JOB_NUMBER --vm-version dev-varnish -B *.facebook.com --daemonize --readyfile /tmp/sc-ready --wait-tunnel-shutdown
   t=0;
   while [ ! -f /tmp/sc-ready ]; do 
-    sleep 0.5; 
+    sleep 1; 
     t=$((t+1)); 
     if [ $t -gt 180 ]; then 
       killall sc;
