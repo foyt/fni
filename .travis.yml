@@ -101,9 +101,7 @@ before_script:
 script: 
 - bash travis-script.sh
 after_success:
-- if [ $start_sc_tunnel = true ]; then killall sc; fi;
-- if [ $deploy = true ]; then python travis/m2conf.py; fi;
-- if [ $deploy = true ]; then mvn deploy --settings ~/.m2/mySettings.xml; fi;
+- bash travis-after-success.sh
 after_failure:
 - if [ $start_sc_tunnel = true ]; then killall sc; fi;
 - cat itests/target/cargo/configurations/wildfly8x/log/server.log
