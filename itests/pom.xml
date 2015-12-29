@@ -218,6 +218,8 @@
         <it.keystorepass>keystorepass</it.keystorepass>
         <it.truststorepass>truststorepass</it.truststorepass>
         <it.properties.file>src/test/resources/it.properties</it.properties.file>
+        <it.files.pdf>${project.basedir}/test.pdf</it.files.pdf>
+        <it.files.png>${project.basedir}/test.png</it.files.png>
       </properties>
       
       <dependencies>
@@ -307,6 +309,8 @@
                 <it.dropbox.apiSecret>${it.dropbox.apiSecret}</it.dropbox.apiSecret>
                 <it.dropbox.username>${it.dropbox.username}</it.dropbox.username>
                 <it.dropbox.password>${it.dropbox.password}</it.dropbox.password>
+                <it.files.pdf>${it.files.pdf}</it.files.pdf>
+                <it.files.png>${it.files.png}</it.files.png>
               </systemPropertyVariables>
             </configuration>
             <executions>
@@ -652,6 +656,8 @@
         <it.keystorepass>keystorepass</it.keystorepass>
         <it.truststorepass>truststorepass</it.truststorepass>
         <it.properties.file>src/test/resources/it.properties</it.properties.file>
+        <it.files.pdf>${project.basedir}/test.pdf</it.files.pdf>
+        <it.files.png>${project.basedir}/test.png</it.files.png>
       </properties>
       
       <dependencies>
@@ -736,6 +742,8 @@
                 <it.dropbox.apiSecret>${it.dropbox.apiSecret}</it.dropbox.apiSecret>
                 <it.dropbox.username>${it.dropbox.username}</it.dropbox.username>
                 <it.dropbox.password>${it.dropbox.password}</it.dropbox.password>
+                <it.files.pdf>${it.files.pdf}</it.files.pdf>
+                <it.files.png>${it.files.png}</it.files.png>
               </systemPropertyVariables>
             </configuration>
             <executions>
@@ -1089,6 +1097,8 @@
         <it.sauce.tunnelId>local</it.sauce.tunnelId>
         <it.package>*</it.package>
         <it.tests>fi/foyt/fni/test/ui/sauce/${it.package}/*IT.java</it.tests>
+        <it.files.pdf>${project.basedir}/test.pdf</it.files.pdf>
+        <it.files.png>${project.basedir}/test.png</it.files.png>
       </properties>
       
       <dependencies>
@@ -1180,6 +1190,8 @@
                 <it.browser>${it.browser}</it.browser>
                 <it.browser.version>${it.browser.version}</it.browser.version>
                 <it.platform>${it.browser.platform}</it.platform>
+                <it.files.pdf>${it.files.pdf}</it.files.pdf>
+                <it.files.png>${it.files.png}</it.files.png>
               </systemPropertyVariables>
             </configuration>
             <executions>
@@ -1559,6 +1571,8 @@
         <it.platform>Linux</it.platform>
         <it.package />
         <it.tests>fi/foyt/fni/test/ui/sauce/${it.package}/*IT.java</it.tests>
+        <it.files.pdf>${project.basedir}/test.pdf</it.files.pdf>
+        <it.files.png>${project.basedir}/test.png</it.files.png>
       </properties>
       
       <dependencies>
@@ -1650,6 +1664,8 @@
                 <it.browser>${it.browser}</it.browser>
                 <it.browser.version>${it.browser.version}</it.browser.version>
                 <it.platform>${it.browser.platform}</it.platform>
+                <it.files.pdf>${it.files.pdf}</it.files.pdf>
+                <it.files.png>${it.files.png}</it.files.png>
               </systemPropertyVariables>
             </configuration>
             <executions>

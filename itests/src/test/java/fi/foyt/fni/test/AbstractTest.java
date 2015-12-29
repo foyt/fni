@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -268,6 +269,14 @@ public abstract class AbstractTest extends TestWatcher {
 
   protected String getSauceTunnelId() {
     return System.getProperty("it.sauce.tunnelId");
+  }
+  
+  protected File getTestPdf() {
+    return new File(System.getProperty("it.files.pdf"));
+  }
+
+  protected File getTestPng() {
+    return new File(System.getProperty("it.files.png"));
   }
 
   protected Connection getConnection() throws Exception {
