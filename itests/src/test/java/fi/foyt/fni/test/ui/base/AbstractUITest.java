@@ -30,6 +30,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
@@ -83,6 +84,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     RemoteWebDriver driver = new RemoteWebDriver(new URL(String.format("http://%s:%s@ondemand.saucelabs.com:80/wd/hub", getSauceUsername(), getSauceAccessKey())), capabilities);
     driver.setFileDetector(new LocalFileDetector());
     
+    return driver;
+  }
+
+  protected ChromeDriver createChromeDriver() {
+    ChromeDriver driver = new ChromeDriver();
     return driver;
   }
   
