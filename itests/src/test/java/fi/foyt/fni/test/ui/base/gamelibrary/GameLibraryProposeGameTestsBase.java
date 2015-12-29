@@ -15,6 +15,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
+import org.openqa.selenium.Keys;
 
 import com.icegreen.greenmail.util.GreenMail;
 
@@ -122,4 +123,52 @@ public class GameLibraryProposeGameTestsBase extends AbstractUITest {
     executeSql("delete from Publication where creator_id = ?", 2);
   }
 
+  @Test
+  @SqlSets ("basic-users")
+  public void testProposeTags() throws Exception {
+    GreenMail greenMail = startSmtpServer();
+    try {
+      loginInternal("user@foyt.fi", "pass");
+      navigate("/gamelibrary/proposegame/", true);
+      
+      File testPng = getTestPng();
+      File testPdf = getTestPdf();
+      
+      waitAndSendKeys(".gamelibrary-propose-game-form-name", "My awesome game");
+      waitAndSendKeys(".gamelibrary-propose-game-form-description", "This game is just pretty awesome");
+      waitAndSendKeys(".gamelibrary-propose-game-form-authors-share", "5");
+      waitAndClick(".tagsinput .ui-autocomplete-input");
+      sendKeysSelector(".tagsinput .ui-autocomplete-input", "test tag" + Keys.ENTER);
+      
+      waitAndSendKeys(".gamelibrary-propose-game-form-section-image input[name='file']", testPng.getAbsolutePath());
+      waitForSelectorPresent(".gamelibrary-propose-game-form-section-image .upload-field-file-name");
+      assertSelectorCount(".gamelibrary-propose-game-form-section-image .upload-field-file-name", 1);
+      assertSelectorText(".gamelibrary-propose-game-form-section-image .upload-field-file-name", testPng.getName(), true, true);
+      
+      waitAndSendKeys(".gamelibrary-propose-game-form-section-downloadable input[name='file']", testPdf.getAbsolutePath());
+      waitForSelectorPresent(".gamelibrary-propose-game-form-section-downloadable .upload-field-file-name");
+      assertSelectorCount(".gamelibrary-propose-game-form-section-downloadable .upload-field-file-name", 1);
+      assertSelectorText(".gamelibrary-propose-game-form-section-downloadable .upload-field-file-name", testPdf.getName(), true, true);
+      
+      waitAndClick(".gamelibrary-propose-game-send");
+
+      waitForSelectorVisible(".gamelibrary-publication h3 a");
+      assertSelectorCount(".gamelibrary-publication-tag", 1);
+      assertSelectorText(".gamelibrary-publication-tag", "test tag", true, true);
+      
+    } finally {
+      greenMail.stop();
+    } 
+    
+    executeSql("delete from PublicationTag where publication_id in (select id from Publication where creator_id = ?)", 2);
+    executeSql("delete from GameLibraryTag where text = ?", "test tag");
+    executeSql("update PublicationFile set contentType = 'DELETE' where id in (select printableFile_id from BookPublication where id in (select id from Publication where creator_id = ?) union select downloadableFile_id from BookPublication where id in (select id from Publication where creator_id = ?))", 2, 2);
+    executeSql("update Publication set defaultImage_id = null where creator_id = ?", 2);
+    executeSql("Update BookPublication set printableFile_id = null, downloadableFile_id = null where id in (select id from Publication where creator_id = ?)", 2);
+    executeSql("delete from PublicationImage where publication_id in (select id from Publication where creator_id = ?)", 2);
+    executeSql("delete from PublicationFile where contentType = 'DELETE'");
+    executeSql("delete from BookPublication where id in (select id from Publication where creator_id = ?)", 2);
+    executeSql("delete from Publication where creator_id = ?", 2);
+  }
+  
 }
