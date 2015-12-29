@@ -170,5 +170,94 @@ public class GameLibraryProposeGameTestsBase extends AbstractUITest {
     executeSql("delete from BookPublication where id in (select id from Publication where creator_id = ?)", 2);
     executeSql("delete from Publication where creator_id = ?", 2);
   }
-  
+
+  @Test
+  @SqlSets ("basic-users")
+  public void testProposeLicenseCC() throws Exception {
+    GreenMail greenMail = startSmtpServer();
+    try {
+      loginInternal("user@foyt.fi", "pass");
+      navigate("/gamelibrary/proposegame/", true);
+      
+      File testPng = getTestPng();
+      File testPdf = getTestPdf();
+      
+      waitAndSendKeys(".gamelibrary-propose-game-form-name", "My awesome game");
+      waitAndSendKeys(".gamelibrary-propose-game-form-description", "This game is just pretty awesome");
+      waitAndSendKeys(".gamelibrary-propose-game-form-authors-share", "5");
+      clickSelector(".gamelibrary-propose-game-form-creative-commons-derivatives input[value='SHARE_ALIKE']");
+      clickSelector(".gamelibrary-propose-game-form-creative-commons-commercial input[value='NO']");
+      
+      waitAndSendKeys(".gamelibrary-propose-game-form-section-image input[name='file']", testPng.getAbsolutePath());
+      waitForSelectorPresent(".gamelibrary-propose-game-form-section-image .upload-field-file-name");
+      assertSelectorCount(".gamelibrary-propose-game-form-section-image .upload-field-file-name", 1);
+      assertSelectorText(".gamelibrary-propose-game-form-section-image .upload-field-file-name", testPng.getName(), true, true);
+      
+      waitAndSendKeys(".gamelibrary-propose-game-form-section-downloadable input[name='file']", testPdf.getAbsolutePath());
+      waitForSelectorPresent(".gamelibrary-propose-game-form-section-downloadable .upload-field-file-name");
+      assertSelectorCount(".gamelibrary-propose-game-form-section-downloadable .upload-field-file-name", 1);
+      assertSelectorText(".gamelibrary-propose-game-form-section-downloadable .upload-field-file-name", testPdf.getName(), true, true);
+      
+      waitAndClick(".gamelibrary-propose-game-send");
+
+      waitForSelectorVisible(".gamelibrary-publication h3 a");
+      
+      assertEquals("https://creativecommons.org/licenses/by-nc-sa/3.0", findElementBySelector(".gamelibrary-publication-creative-commans-license-container a").getAttribute("href"));
+    } finally {
+      greenMail.stop();
+    } 
+
+    executeSql("update PublicationFile set contentType = 'DELETE' where id in (select printableFile_id from BookPublication where id in (select id from Publication where creator_id = ?) union select downloadableFile_id from BookPublication where id in (select id from Publication where creator_id = ?))", 2, 2);
+    executeSql("update Publication set defaultImage_id = null where creator_id = ?", 2);
+    executeSql("Update BookPublication set printableFile_id = null, downloadableFile_id = null where id in (select id from Publication where creator_id = ?)", 2);
+    executeSql("delete from PublicationImage where publication_id in (select id from Publication where creator_id = ?)", 2);
+    executeSql("delete from PublicationFile where contentType = 'DELETE'");
+    executeSql("delete from BookPublication where id in (select id from Publication where creator_id = ?)", 2);
+    executeSql("delete from Publication where creator_id = ?", 2);
+  }
+
+  @Test
+  @SqlSets ("basic-users")
+  public void testProposeLicenseOther() throws Exception {
+    GreenMail greenMail = startSmtpServer();
+    try {
+      loginInternal("user@foyt.fi", "pass");
+      navigate("/gamelibrary/proposegame/", true);
+      
+      File testPng = getTestPng();
+      File testPdf = getTestPdf();
+      
+      waitAndSendKeys(".gamelibrary-propose-game-form-name", "My awesome game");
+      waitAndSendKeys(".gamelibrary-propose-game-form-description", "This game is just pretty awesome");
+      waitAndSendKeys(".gamelibrary-propose-game-form-authors-share", "5");
+      selectSelectBoxByValue(".gamelibrary-propose-game-license-select", "OTHER");
+      waitAndSendKeys(".gamelibrary-propose-game-form-section-otherlicense input", "http://mylicense.example.com/test");
+      
+      waitAndSendKeys(".gamelibrary-propose-game-form-section-image input[name='file']", testPng.getAbsolutePath());
+      waitForSelectorPresent(".gamelibrary-propose-game-form-section-image .upload-field-file-name");
+      assertSelectorCount(".gamelibrary-propose-game-form-section-image .upload-field-file-name", 1);
+      assertSelectorText(".gamelibrary-propose-game-form-section-image .upload-field-file-name", testPng.getName(), true, true);
+      
+      waitAndSendKeys(".gamelibrary-propose-game-form-section-downloadable input[name='file']", testPdf.getAbsolutePath());
+      waitForSelectorPresent(".gamelibrary-propose-game-form-section-downloadable .upload-field-file-name");
+      assertSelectorCount(".gamelibrary-propose-game-form-section-downloadable .upload-field-file-name", 1);
+      assertSelectorText(".gamelibrary-propose-game-form-section-downloadable .upload-field-file-name", testPdf.getName(), true, true);
+      
+      waitAndClick(".gamelibrary-propose-game-send");
+
+      waitForSelectorVisible(".gamelibrary-publication h3 a");
+      assertEquals("http://mylicense.example.com/test", findElementBySelector(".gamelibrary-publication-detail-license a").getAttribute("href"));
+    } finally {
+      greenMail.stop();
+    } 
+
+    executeSql("update PublicationFile set contentType = 'DELETE' where id in (select printableFile_id from BookPublication where id in (select id from Publication where creator_id = ?) union select downloadableFile_id from BookPublication where id in (select id from Publication where creator_id = ?))", 2, 2);
+    executeSql("update Publication set defaultImage_id = null where creator_id = ?", 2);
+    executeSql("Update BookPublication set printableFile_id = null, downloadableFile_id = null where id in (select id from Publication where creator_id = ?)", 2);
+    executeSql("delete from PublicationImage where publication_id in (select id from Publication where creator_id = ?)", 2);
+    executeSql("delete from PublicationFile where contentType = 'DELETE'");
+    executeSql("delete from BookPublication where id in (select id from Publication where creator_id = ?)", 2);
+    executeSql("delete from Publication where creator_id = ?", 2);
+  }
+
 }
