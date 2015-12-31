@@ -28,4 +28,104 @@ public class GameLibraryProposeGameTestsIT extends GameLibraryProposeGameTestsBa
     getWebDriver().quit();
   }
   
+  @Override
+  public void testPropose() throws Exception {
+    if ("microsoftedge".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+    
+    if ("safari".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+    
+    if ("firefox".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+
+    if ("internet explorer".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+    
+    super.testPropose();
+  }
+  
+  @Override
+  public void testProposeLicenseCC() throws Exception {
+    if ("microsoftedge".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+    
+    if ("safari".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+    
+    if ("firefox".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+
+    if ("internet explorer".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+    
+    super.testProposeLicenseCC();
+  }
+  
+  @Override
+  public void testProposeLicenseOther() throws Exception {
+    if ("microsoftedge".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+    
+    if ("safari".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+    
+    if ("firefox".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+
+    if ("internet explorer".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+    
+    super.testProposeLicenseOther();
+  }
+  
+  @Override
+  public void testProposeTags() throws Exception {
+    if ("microsoftedge".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+    
+    if ("safari".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+    
+    if ("firefox".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+
+    if ("internet explorer".equals(getBrowser())) {
+      // FIXME: File upload does not work with this driver
+      return;
+    }
+    
+    super.testProposeTags();
+  }
+  
 }
