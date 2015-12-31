@@ -9,6 +9,7 @@ import org.junit.Rule;
 import com.saucelabs.common.SauceOnDemandAuthentication;
 import com.saucelabs.junit.SauceOnDemandTestWatcher;
 
+import fi.foyt.fni.test.SqlSets;
 import fi.foyt.fni.test.ui.base.gamelibrary.GameLibraryProposeGameTestsBase;
 
 public class GameLibraryProposeGameTestsIT extends GameLibraryProposeGameTestsBase {
@@ -29,6 +30,7 @@ public class GameLibraryProposeGameTestsIT extends GameLibraryProposeGameTestsBa
   }
   
   @Override
+  @SqlSets ("basic-users")
   public void testPropose() throws Exception {
     if ("microsoftedge".equals(getBrowser())) {
       // FIXME: File upload does not work with this driver
@@ -54,6 +56,7 @@ public class GameLibraryProposeGameTestsIT extends GameLibraryProposeGameTestsBa
   }
   
   @Override
+  @SqlSets ("basic-users")
   public void testProposeLicenseCC() throws Exception {
     if ("microsoftedge".equals(getBrowser())) {
       // FIXME: File upload does not work with this driver
@@ -79,6 +82,7 @@ public class GameLibraryProposeGameTestsIT extends GameLibraryProposeGameTestsBa
   }
   
   @Override
+  @SqlSets ("basic-users")
   public void testProposeLicenseOther() throws Exception {
     if ("microsoftedge".equals(getBrowser())) {
       // FIXME: File upload does not work with this driver
@@ -104,6 +108,7 @@ public class GameLibraryProposeGameTestsIT extends GameLibraryProposeGameTestsBa
   }
   
   @Override
+  @SqlSets ("basic-users")
   public void testProposeTags() throws Exception {
     if ("microsoftedge".equals(getBrowser())) {
       // FIXME: File upload does not work with this driver
