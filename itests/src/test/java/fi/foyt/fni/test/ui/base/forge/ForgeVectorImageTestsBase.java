@@ -36,12 +36,12 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
   @SqlSets ({"basic-materials-users"})
   public void testNotFound() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    testNotFound(getWebDriver(), "/forge/vectorimages/2/folder/subfolder");
-    testNotFound(getWebDriver(), "/forge/vectorimages//image");
-    testNotFound(getWebDriver(), "/forge/vectorimages/a/image");
-    testNotFound(getWebDriver(), "/forge/vectorimages/2");
-    testNotFound(getWebDriver(), "/forge/vectorimages/2/");
-    testNotFound(getWebDriver(), "/forge/vectorimages/2/*");
+    testNotFound("/forge/vectorimages/2/folder/subfolder");
+    testNotFound("/forge/vectorimages//image");
+    testNotFound("/forge/vectorimages/a/image");
+    testNotFound("/forge/vectorimages/2");
+    testNotFound("/forge/vectorimages/2/");
+    testNotFound("/forge/vectorimages/2/*");
   }
 
   @Test

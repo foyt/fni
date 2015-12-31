@@ -37,11 +37,11 @@ public class AdminArchiveUserTestsBase extends AbstractUITest {
   @SqlSets ({"basic-users"})
   public void testNotFound() throws Exception {
     loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
-    testNotFound(getWebDriver(), "/admin/archive-user");
-    testNotFound(getWebDriver(), "/admin/archive-user/");
-    testNotFound(getWebDriver(), "/admin/archive-user/");
-    testNotFound(getWebDriver(), "/admin/archive-user/-1");
-    testNotFound(getWebDriver(), "/admin/archive-user/2048");
+    testNotFound("/admin/archive-user");
+    testNotFound("/admin/archive-user/");
+    testNotFound("/admin/archive-user/");
+    testNotFound("/admin/archive-user/-1");
+    testNotFound("/admin/archive-user/2048");
   }
   
   @Test

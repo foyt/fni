@@ -76,20 +76,20 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testTagNotFound() {
-    testNotFound(getWebDriver(), "/gamelibrary/tags/bogus", true);
-    testNotFound(getWebDriver(), "/gamelibrary/tags/~", true);
-    testNotFound(getWebDriver(), "/gamelibrary/tags/12345", true);
-    testNotFound(getWebDriver(), "/gamelibrary/tags/-1", true);
-    testNotFound(getWebDriver(), "/gamelibrary/tags/", true);
+    testNotFound("/gamelibrary/tags/bogus", true);
+    testNotFound("/gamelibrary/tags/~", true);
+    testNotFound("/gamelibrary/tags/12345", true);
+    testNotFound("/gamelibrary/tags/-1", true);
+    testNotFound("/gamelibrary/tags/", true);
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testPublicationNotFound() {
-    testNotFound(getWebDriver(), "/gamelibrary/bogus", true);
-    testNotFound(getWebDriver(), "/gamelibrary/~", true);
-    testNotFound(getWebDriver(), "/gamelibrary/12345", true);
-    testNotFound(getWebDriver(), "/gamelibrary/-1", true);
+    testNotFound("/gamelibrary/bogus", true);
+    testNotFound("/gamelibrary/~", true);
+    testNotFound("/gamelibrary/12345", true);
+    testNotFound("/gamelibrary/-1", true);
   }
 
   @Test

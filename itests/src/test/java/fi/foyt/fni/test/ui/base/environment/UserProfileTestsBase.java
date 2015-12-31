@@ -44,11 +44,11 @@ public class UserProfileTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic")
   public void testNotFound() throws Exception {
-    testNotFound(getWebDriver(), "/profile/~");
-    testNotFound(getWebDriver(), "/profile/12345");
-    testNotFound(getWebDriver(), "/profile/-1");
-    testNotFound(getWebDriver(), "/profile/");
-    testNotFound(getWebDriver(), "/profile/asd");
+    testNotFound("/profile/~");
+    testNotFound("/profile/12345");
+    testNotFound("/profile/-1");
+    testNotFound("/profile/");
+    testNotFound("/profile/asd");
   }
 
 }

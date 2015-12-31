@@ -44,12 +44,12 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
   @SqlSets ({"basic-materials-users"})
   public void testNotFound() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    testNotFound(getWebDriver(), "/forge/documents/2/folder/subfolder");
-    testNotFound(getWebDriver(), "/forge/documents//document");
-    testNotFound(getWebDriver(), "/forge/documents/a/document");
-    testNotFound(getWebDriver(), "/forge/documents/2");
-    testNotFound(getWebDriver(), "/forge/documents/2/");
-    testNotFound(getWebDriver(), "/forge/documents/2/*");
+    testNotFound("/forge/documents/2/folder/subfolder");
+    testNotFound("/forge/documents//document");
+    testNotFound("/forge/documents/a/document");
+    testNotFound("/forge/documents/2");
+    testNotFound("/forge/documents/2/");
+    testNotFound("/forge/documents/2/*");
   }
 
   @Test

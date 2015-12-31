@@ -1,7 +1,5 @@
 package fi.foyt.fni.test.ui;
 
-import static org.junit.Assert.assertEquals;
-
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -25,19 +23,6 @@ public abstract class AbstractUITest extends AbstractTest {
       Thread.sleep(millis);
     } catch (InterruptedException e) {
     }
-  }
-  
-  protected void testNotFound(RemoteWebDriver driver, String view) {
-    testNotFound(driver, view, false); 
-  }
-  
-  protected void testNotFound(RemoteWebDriver driver, String view, boolean secure) {
-    driver.get(getAppUrl(secure) + view);
-    assertNotFound(driver);
-  }
-
-  protected void assertNotFound(RemoteWebDriver driver) {
-    assertEquals("Page Not Found!", driver.getTitle());
   }
   
   protected void waitForUrl(RemoteWebDriver driver, final String url) {

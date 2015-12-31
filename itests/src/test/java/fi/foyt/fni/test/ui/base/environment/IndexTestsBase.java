@@ -30,7 +30,7 @@ public class IndexTestsBase extends AbstractUITest {
 
   @Test
   public void testUnicodeGarbage() {
-    testNotFound(getWebDriver(), "/å®‰è£…è¯´æ˜Ž.txt");
+    testNotFound("/å®‰è£…è¯´æ˜Ž.txt");
   }
 
   @Test

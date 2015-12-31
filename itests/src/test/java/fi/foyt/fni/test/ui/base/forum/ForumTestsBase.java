@@ -45,8 +45,8 @@ public class ForumTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users", "forum-basic"})
   public void testNotFound() throws Exception {
-    testNotFound(getWebDriver(), "/forum/qwe");
-    testNotFound(getWebDriver(), "/forum/*");
+    testNotFound("/forum/qwe");
+    testNotFound("/forum/*");
   }
 
   @Test
