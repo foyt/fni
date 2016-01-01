@@ -11,9 +11,8 @@
   
   <ui:define name="view-scripts">
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.3/jquery.tagsinput.min.js"/>
-  
-    <h:outputScript name="scripts/jquery.fileupload/jquery.iframe-transport.js" />
-    <h:outputScript name="scripts/jquery.fileupload/jquery.fileupload.js" />
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.fileupload.min.js"/>
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.iframe-transport.min.js"/>
     <h:outputScript name="scripts/uploadfield/uploadfield.js"/>
 
     <!-- View scripts -->
@@ -73,7 +72,7 @@
               <h:outputLabel value="#{locales['gamelibrary.proposegame.nameLabel']}" />
             </div>
             <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-              <input type="text" jsf:value="#{gameLibraryProposeGameBackingBean.name}" required="required"/>
+              <input class="gamelibrary-propose-game-form-name" type="text" jsf:value="#{gameLibraryProposeGameBackingBean.name}" required="required"/>
             </div>
           </div>
           
@@ -82,7 +81,7 @@
               <h:outputLabel value="#{locales['gamelibrary.proposegame.descriptionLabel']}" />
             </div>
             <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-              <textarea jsf:value="#{gameLibraryProposeGameBackingBean.description}" required="required"></textarea>
+              <textarea class="gamelibrary-propose-game-form-description" jsf:value="#{gameLibraryProposeGameBackingBean.description}" required="required"></textarea>
             </div>
           </div>
           
@@ -91,7 +90,7 @@
               <h:outputLabel value="#{locales['gamelibrary.proposegame.languageLabel']}" />
             </div>
             <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-              <h:selectOneMenu value="#{gameLibraryProposeGameBackingBean.languageId}">
+              <h:selectOneMenu styleClass="gamelibrary-propose-game-form-language" value="#{gameLibraryProposeGameBackingBean.languageId}">
                 <f:selectItems 
                   var="language" 
                   value="#{gameLibraryProposeGameBackingBean.languages}"
@@ -116,7 +115,7 @@
               <div class="info lg-flex-hide sm-flex-hide">#{locales['gamelibrary.proposegame.authorsShareInfo']}</div>
             </div>
             <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-              <input type="number" step="0.01" jsf:value="#{gameLibraryProposeGameBackingBean.authorsShare}"/>
+              <input class="gamelibrary-propose-game-form-authors-share" type="number" step="0.01" jsf:value="#{gameLibraryProposeGameBackingBean.authorsShare}"/>
             </div>
             <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-hide md-flex-cell-full sm-flex-cell-full">
               <div class="info">#{locales['gamelibrary.proposegame.authorsShareInfo']}</div>
@@ -146,7 +145,7 @@
               
               <div class="flex-row">
                 <div class="flex-cell-full">
-                  <h:selectOneRadio value="#{gameLibraryProposeGameBackingBean.creativeCommonsDerivatives}" p:required="required">
+                  <h:selectOneRadio styleClass="gamelibrary-propose-game-form-creative-commons-derivatives" value="#{gameLibraryProposeGameBackingBean.creativeCommonsDerivatives}" p:required="required">
                     <f:selectItem itemValue="YES" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowModificationsYes']}"/>
                     <f:selectItem itemValue="NO" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowModificationsNo']}"/>
                     <f:selectItem itemValue="SHARE_ALIKE" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowModificationsShare']}"/>
@@ -162,7 +161,7 @@
               
               <div class="flex-row">
                 <div class="flex-cell-full">
-                  <h:selectOneRadio value="#{gameLibraryProposeGameBackingBean.creativeCommonsCommercial}" p:required="required">
+                  <h:selectOneRadio styleClass="gamelibrary-propose-game-form-creative-commons-commercial" value="#{gameLibraryProposeGameBackingBean.creativeCommonsCommercial}" p:required="required">
                     <f:selectItem itemValue="YES" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowCommercialYes']}"/>
                     <f:selectItem itemValue="NO" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowCommercialNo']}"/>
                   </h:selectOneRadio>
@@ -177,11 +176,11 @@
               <h:outputLabel value="#{locales['gamelibrary.proposegame.linkToLicense']}" />
             </div>
             <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-              <input type="text" jsf:value="#{gameLibraryProposeGameBackingBean.licenseOther}" required="required"/>
+              <input class="gamelibrary-propose-game-form-license-other" type="text" jsf:value="#{gameLibraryProposeGameBackingBean.licenseOther}" required="required"/>
             </div>
           </div>
           
-          <div class="flex-row gamelibrary-propose-game-form-section">
+          <div class="flex-row gamelibrary-propose-game-form-section gamelibrary-propose-game-form-section-image">
             <div class="lg-flex-cell-4 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <h:outputLabel value="#{locales['gamelibrary.proposegame.imageFileLabel']}" />
               <div class="info lg-flex-hide sm-flex-hide">#{locales['gamelibrary.proposegame.imageFileInfo']}</div>
@@ -197,7 +196,7 @@
             </div>
           </div>
           
-          <div class="flex-row gamelibrary-propose-game-form-section">
+          <div class="flex-row gamelibrary-propose-game-form-section gamelibrary-propose-game-form-section-downloadable">
             <div class="lg-flex-cell-4 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <h:outputLabel value="#{locales['gamelibrary.proposegame.downloadableFileLabel']}" />
             </div>
@@ -209,7 +208,7 @@
             </div>
           </div>
           
-          <div class="flex-row gamelibrary-propose-game-form-section">
+          <div class="flex-row gamelibrary-propose-game-form-section gamelibrary-propose-game-form-section-printable">
             <div class="lg-flex-cell-4 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <h:outputLabel value="#{locales['gamelibrary.proposegame.printableFileLabel']}" />
             </div>

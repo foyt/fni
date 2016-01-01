@@ -56,11 +56,11 @@ public class ForumTopicTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users", "forum-basic"})
   public void testNotFound() throws Exception {
-    testNotFound(getWebDriver(), "/forum/5_topic_forum/invalid");
-    testNotFound(getWebDriver(), "/forum/5_topic_forum/1234");
-    testNotFound(getWebDriver(), "/forum/5_topic_forum/~");
-    testNotFound(getWebDriver(), "/forum///asd");
-    testNotFound(getWebDriver(), "/forum/*/*");
+    testNotFound("/forum/5_topic_forum/invalid");
+    testNotFound("/forum/5_topic_forum/1234");
+    testNotFound("/forum/5_topic_forum/~");
+    testNotFound("/forum///asd");
+    testNotFound("/forum/*/*");
   }
 
   @Test

@@ -50,5 +50,23 @@
   $(document).on('change', '.gamelibrary-propose-game-license-select', function (event) {
     checkLicense();
   });
+
+  $(document).on("uploadStart", '.upload-field', function () {
+    $('.gamelibrary-propose-game-send').attr('disabled', 'disabled');
+  });
   
+  $(document).on("uploadDone", '.upload-field', function () {
+    var uploading = false;
+    
+    $('.upload-field').each(function (index, fileField) {
+      if ($(fileField).uploadField('uploading')) {
+        uploading = true;
+      }
+    });
+    
+    if (!uploading) {
+      $('.gamelibrary-propose-game-send').removeAttr('disabled');
+    }
+  });
+
 }).call(this);

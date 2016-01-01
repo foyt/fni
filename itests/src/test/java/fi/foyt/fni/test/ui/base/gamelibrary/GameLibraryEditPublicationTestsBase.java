@@ -31,10 +31,10 @@ public class GameLibraryEditPublicationTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testNotFound() throws Exception {
-    testNotFound(getWebDriver(), "/gamelibrary/manage/¨/edit");
-    testNotFound(getWebDriver(), "/gamelibrary/manage/-1/edit");
-    testNotFound(getWebDriver(), "/gamelibrary/manage//edit");
-    testNotFound(getWebDriver(), "/gamelibrary/manage/asd/edit");
+    testNotFound("/gamelibrary/manage/¨/edit");
+    testNotFound("/gamelibrary/manage/-1/edit");
+    testNotFound("/gamelibrary/manage//edit");
+    testNotFound("/gamelibrary/manage/asd/edit");
   }
 
   @Test

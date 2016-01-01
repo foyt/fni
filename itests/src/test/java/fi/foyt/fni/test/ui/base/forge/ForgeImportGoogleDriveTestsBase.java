@@ -39,7 +39,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
   @SqlSets ({"basic-materials-users"})
   public void testNotFound() throws Exception {
     loginGoogle();
-    testNotFound(getWebDriver(), "/forge/import-google-drive?parentFolderId=12345");
+    testNotFound("/forge/import-google-drive?parentFolderId=12345");
   }
 
   @Test

@@ -6,6 +6,9 @@
 
     },
     _create : function() {
+      this.element.addClass('upload-field');
+      this._uploading = false;
+      
       $(this.element[0].form).submit($.proxy(this._onFormSubmit, this));
       
       this._required = this.element.attr('required') == 'required';
@@ -65,6 +68,10 @@
       this.element.find('input[type="file"]').remove();
     },
     
+    uploading: function () {
+      return this._uploading;
+    },
+    
     _createFileElement: function (fileName, progress) {
       return $('<div>')
         .addClass('upload-field-file')
@@ -78,6 +85,9 @@
     },
     
     _onFileUploadAdd : function(e, data) {
+      this.element.trigger("uploadStart");
+      
+      this._uploading = true;
       this.element.parent().find('.upload-field-file').remove();
       
       data.context = this._createFileElement(data.files[0].name, 0);
@@ -93,6 +103,10 @@
       this._fileNameInput.val(fileName);
       this._contentTypeInput.val(contentType);
       this._fileIdInput.val(fileId);
+      
+      this._uploading = false;
+      
+      this.element.trigger("uploadDone");
     },
     
     _onFileUploadAlways: function (e, data) {

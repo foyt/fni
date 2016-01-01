@@ -50,14 +50,14 @@ public class ForumPostEditTestsBase extends AbstractUITest {
   @SqlSets ("forum-basic")
   public void testNotFound() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
-    testNotFound(getWebDriver(), "/forum/q/single_topic/edit/8");
-    testNotFound(getWebDriver(), "/forum/1_topic_forum/q/edit/8");
-    testNotFound(getWebDriver(), "/forum//single_topic/edit/8");
-    testNotFound(getWebDriver(), "/forum/1_topic_forum//edit/8");
-    testNotFound(getWebDriver(), "/forum///edit/8");
-    testNotFound(getWebDriver(), "/forum/1_topic_forum/single_topic/edit/abc");
-    testNotFound(getWebDriver(), "/forum/1_topic_forum/single_topic/edit/1024");
-    testNotFound(getWebDriver(), "/forum/1_topic_forum/single_topic/edit/9");
+    testNotFound("/forum/q/single_topic/edit/8");
+    testNotFound("/forum/1_topic_forum/q/edit/8");
+    testNotFound("/forum//single_topic/edit/8");
+    testNotFound("/forum/1_topic_forum//edit/8");
+    testNotFound("/forum///edit/8");
+    testNotFound("/forum/1_topic_forum/single_topic/edit/abc");
+    testNotFound("/forum/1_topic_forum/single_topic/edit/1024");
+    testNotFound("/forum/1_topic_forum/single_topic/edit/9");
   }
 
   @Test

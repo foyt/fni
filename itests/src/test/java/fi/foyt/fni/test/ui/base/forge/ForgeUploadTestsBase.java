@@ -34,7 +34,7 @@ public class ForgeUploadTestsBase extends AbstractUITest {
   @SqlSets ({"basic-materials-users"})
   public void testNotFound() throws Exception {
     loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    testNotFound(getWebDriver(), "/forge/upload?parentFolderId=12345");
+    testNotFound("/forge/upload?parentFolderId=12345");
   }
 
   @Test

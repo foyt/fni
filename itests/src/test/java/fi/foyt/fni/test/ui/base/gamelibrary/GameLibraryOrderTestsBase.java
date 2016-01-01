@@ -29,10 +29,10 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testNotFound() throws Exception {
-    testNotFound(getWebDriver(), "/gamelibrary/orders/~", true);
-    testNotFound(getWebDriver(), "/gamelibrary/orders/-1", true);
-    testNotFound(getWebDriver(), "/gamelibrary/orders/", true);
-    testNotFound(getWebDriver(), "/gamelibrary/orders/asd", true);
+    testNotFound("/gamelibrary/orders/~", true);
+    testNotFound("/gamelibrary/orders/-1", true);
+    testNotFound("/gamelibrary/orders/", true);
+    testNotFound("/gamelibrary/orders/asd", true);
   }
 
   @Test
