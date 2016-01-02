@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">
+    <h:outputFormat value="#{locales['illusion.editRegistration.pageTitle']}">
+      <f:param value="#{illusionEventEditRegistrationBackingBean.name}"/>
+    </h:outputFormat>
+  </ui:define>
+
+  <ui:define name="view-scripts">
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/codemirror.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/addon/hint/show-hint.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/addon/hint/javascript-hint.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/addon/fold/foldcode.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/addon/fold/foldgutter.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/addon/fold/brace-fold.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/addon/fold/comment-fold.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/mode/javascript/javascript.min.js"></script>
+    <h:outputScript name="scripts/gui/code-mirror.js"/>
+    <h:outputScript name="scripts/gui/illusion-event-edit-registration.js"/>
+    <h:outputScript name="scripts/gui/illusion-common.js"/>
+  </ui:define>
+   
+  <ui:define name="view-stylesheets">
+    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/codemirror.min.css"></link>
+    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/addon/hint/show-hint.min.css"></link>
+    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/addon/fold/foldgutter.min.css"></link>
+
+    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
+    <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
+    <h:outputStylesheet library="novus" name="css/illusion-event-edit-registration.css"/>
+  </ui:define>  
+
+  <ui:define name="grid-content">
+    <!-- Menu -->
+
+    <ui:include src="/facelets/flex-menu.xhtml" />
+    
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <h:link styleClass="view-header-navigation-item" outcome="/index.jsf">#{locales['illusion.editRegistration.navigationIndex']}</h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/illusion/index.jsf">#{locales['illusion.editRegistration.navigationIllusion']}</h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/illusion/event.jsf">
+              <f:param name="urlName" value="#{illusionEventEditRegistrationBackingBean.urlName}"/>
+              <h:outputText value="#{illusionEventEditRegistrationBackingBean.name}" />
+            </h:link>
+            <span class="view-header-navigation-separator"/>
+            <h:link styleClass="view-header-navigation-item" outcome="/illusion/event-edit-registration.jsf">
+              <f:param name="urlName" value="#{illusionEventEditRegistrationBackingBean.urlName}"/>
+              <h:outputFormat value="#{locales['illusion.editRegistration.navigationEditRegistration']}"/>
+            </h:link>
+          </div>
+        </div>
+
+        <!-- Description -->
+    
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{illusionEventEditRegistrationBackingBean.name}</p>
+          <p class="view-header-description-text">#{illusionEventEditRegistrationBackingBean.description}</p>
+        </div>
+      </div>
+    </div>
+
+    <ui:include src="/facelets/illusionnavigation.xhtml"/>
+
+    <div class="flex-row">
+      <div class="flex-cell-full index-box no-margin-top">
+        <h3>#{locales['illusion.editRegistration.editorTitle']}</h3>
+     
+        <h:form>
+          <textarea jsf:value="#{illusionEventEditRegistrationBackingBean.formData}" class="editor"/>
+          <h:commandButton action="#{illusionEventEditRegistrationBackingBean.save}" class="save" value="#{locales['illusion.editRegistration.save']}" />
+        </h:form>
+      </div>
+    </div>
+
+  </ui:define>
+
+</ui:composition>
