@@ -76,6 +76,7 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
     addDomainRule(configuration, siteHost, "/illusion/event-forum-post.jsf", "event-forum/{postId}", null, new String[] { "postId" });
     addDomainRule(configuration, siteHost, "/illusion/event-participants.jsf", "participants");
     addDomainRule(configuration, siteHost, "/illusion/event-payment.jsf", "payment");
+    addDomainRule(configuration, siteHost, "/illusion/event-registration.jsf", "registration");
     addDomainRule(configuration, siteHost, "/illusion/event-settings.jsf", "settings");
     addDomainRule(configuration, siteHost, "/illusion/dojoin.jsf", "dojoin");
     addDomainRule(configuration, siteHost, "/illusion/event-edit-page.jsf", "edit-page", null, new String[] { "pageId" });
