@@ -13,12 +13,6 @@ div.flex-row
         if (joinMode == 'APPROVE')&&(ref != 'inv')
           a(class="illusion-event-join-button",href=eventUrl + "/dojoin")
             = locale.text('illusion.event.requestToJoinButton')
-        if hasSignUpFee
-          div.illusion-event-join-info
-            = locale.text('illusion.event.joinInfoPrice')
-        else
-          div.illusion-event-join-info
-            = locale.text('illusion.event.joinInfoFree')
     .social-likes-container
       .social-likes.social-likes_visible(data-counters='no')
         div.facebook(title= locale.text('illusion.event.shareOnFacebook'))
