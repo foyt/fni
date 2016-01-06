@@ -280,8 +280,16 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
     }
     
     illusionEventController.saveRegistrationFormAnswers(form, participant, answers);
-    
-    sendConfirmRegistrationMail(event, participant, newUser, password);
+
+    try {
+      sendConfirmRegistrationMail(event, participant, newUser, password, answers);
+    } catch (JadeException | IOException e) {
+      logger.log(Level.SEVERE, "Failed to render registration mail template", e);
+      return navigationController.internalError();
+    } catch (MessagingException e) {
+      logger.log(Level.SEVERE, "Failed to send registration mail", e);
+      return navigationController.internalError();
+    }
     
     return String.format("/illusion/event-registration.jsf?urlName=%s", getUrlName());
   }
@@ -317,14 +325,12 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
     return illusionEventController.createIllusionEventParticipant(user, event, null, participantRole);
   }
   
-  private void sendConfirmRegistrationMail(IllusionEvent illusionEvent, IllusionEventParticipant participant, boolean newUser, String password) {
+  private Map<String, Object> createMailTemplateModel(IllusionEventParticipant participant, IllusionEvent illusionEvent, String email, boolean newUser, String password, Map<String, String> answers) {
     Map<String, Object> templateModel = new HashMap<>();
     
     IllusionEventRegistrationForm form = illusionEventController.findEventRegistrationForm(illusionEvent);
     User user = participant.getUser();
-    String email = userController.getUserPrimaryEmail(user);
     
-    Map<String, String> answers = illusionEventController.loadRegistrationFormAnswers(form, participant);
     FormReader formReader = new FormReader(form.getData());
     List<Map<String, Object>> formDatas = new ArrayList<>();
     
@@ -344,25 +350,20 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
     templateModel.put("password", password);
     templateModel.put("formDatas", formDatas);
     templateModel.put("locale", new JadeLocaleHelper(sessionController.getLocale()));
+    
+    return templateModel;
+  }
+  
+  private void sendConfirmRegistrationMail(IllusionEvent illusionEvent, IllusionEventParticipant participant, boolean newUser, String password, Map<String, String> answers) throws JadeException, IOException, MessagingException {
+    String email = userController.getUserPrimaryEmail(participant.getUser());
+    Map<String, Object> templateModel = createMailTemplateModel(participant, illusionEvent, email, newUser, password, answers);
           
     String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
     String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
     String toName = getParticipantDisplayName(participant);
     String subject = ExternalLocales.getText(sessionController.getLocale(), "illusion.registration.registeredMail.subject", illusionEvent.getName());
-    String content = null;
-    try {
-      content = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/mail-confirm-registration", templateModel);
-    } catch (JadeException | IOException e) {
-      logger.log(Level.SEVERE, "Failed to render registration mail template", e);
-      return;
-    }
-    
-    try {
-      mailer.sendMail(fromMail, fromName, email, toName, subject, content, "text/html");
-    } catch (MessagingException e) {
-      logger.log(Level.SEVERE, "Failed to send registration mail", e);
-      return;
-    }
+    String content = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/mail-confirm-registration", templateModel);
+    mailer.sendMail(fromMail, fromName, email, toName, subject, content, "text/html");
   }
   
   private String headHtml;
