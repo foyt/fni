@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -173,20 +174,33 @@ public abstract class AbstractIllusionEventBackingBean {
     return jadeConfiguration;
   }
   
-  protected Map<String, Object> createMailTemplateModel(IllusionEventParticipant participant, IllusionEvent illusionEvent, String email, boolean newUser, String password, Map<String, String> answers) {
+  protected Map<String, Object> createRegistrationMailTemplateModel(IllusionEventParticipant participant, IllusionEvent illusionEvent, String email, boolean newUser, String password, Map<String, String> answers) {
+    Locale locale = sessionController.getLocale();
+    
     Map<String, Object> templateModel = new HashMap<>();
     
     IllusionEventRegistrationForm form = illusionEventController.findEventRegistrationForm(illusionEvent);
     User user = participant.getUser();
-    
-    FormReader formReader = new FormReader(form.getData());
     List<Map<String, Object>> formDatas = new ArrayList<>();
     
-    for (String field : formReader.getFields()) {
-      Map<String, Object> data = new HashMap<>();
-      data.put("label", formReader.getFieldLabel(field));
-      data.put("value", StringUtils.replace(answers.get(field), "\n", "<br/>"));
-      formDatas.add(data);
+    if (form != null) {
+      FormReader formReader = new FormReader(form.getData());
+      for (String field : formReader.getFields()) {
+        formDatas.add(createFormData(formReader.getFieldLabel(field), answers.get(field)));
+      }
+    } else {
+      String firstName = user.getFirstName();
+      String lastName = user.getLastName();
+      
+      formDatas.add(createFormData(ExternalLocales.getText(locale, "illusion.registration.registeredMail.defaultEmailHeader"), email)); 
+      
+      if (StringUtils.isNotBlank(firstName)) {
+        formDatas.add(createFormData(ExternalLocales.getText(locale, "illusion.registration.registeredMail.defaultFirstNameHeader"), firstName)); 
+      }
+      
+      if (StringUtils.isNotBlank(lastName)) {
+        formDatas.add(createFormData(ExternalLocales.getText(locale, "illusion.registration.registeredMail.defaultLastNameHeader"), lastName)); 
+      }
     }
     
     templateModel.put("eventName", illusionEvent.getName());
@@ -202,9 +216,17 @@ public abstract class AbstractIllusionEventBackingBean {
     return templateModel;
   }
   
+  private Map<String, Object> createFormData(String label, String value) {
+    Map<String, Object> data = new HashMap<>();
+    data.put("label", label);
+    data.put("value", StringUtils.replace(value, "\n", "<br/>"));
+    return data;
+  }
+  
   protected void sendConfirmRegistrationMail(IllusionEvent illusionEvent, IllusionEventParticipant participant, boolean newUser, String password, Map<String, String> answers) throws JadeException, IOException, MessagingException {
     String email = userController.getUserPrimaryEmail(participant.getUser());
-    Map<String, Object> templateModel = createMailTemplateModel(participant, illusionEvent, email, newUser, password, answers);
+    
+    Map<String, Object> templateModel = createRegistrationMailTemplateModel(participant, illusionEvent, email, newUser, password, answers);
           
     String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
     String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
