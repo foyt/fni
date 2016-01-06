@@ -5,6 +5,46 @@
 
 .alpaca-form {
   
+  .alpaca-message {
+    font-weight: bold;
+    font-size: 12px;
+    font-family:"PT Sans";
+    color: #f00;
+  }
+  
+  .alpaca-field-any,
+  .alpaca-field-array,
+  .alpaca-field-checkbox,
+  .alpaca-field-radio,
+  .alpaca-field-number,
+  .alpaca-field-file,
+  .alpaca-field-select,
+  .alpaca-field-textarea,
+  .alpaca-field-text,
+  .alpaca-field-email {
+    input,
+    select,
+    textarea {
+      border: 1px solid #aaa;
+    }
+  
+    &.alpaca-invalid {
+      input,
+      select,
+      textarea {
+        border: 1px solid #f00;
+      }
+    }
+  
+    &.alpaca-field-valid {
+      input,
+      select,
+      textarea {
+        border: 1px solid #080;
+      }
+    }
+  }
+  
   label {
     font-size: 13px;
     font-family: $default-font;

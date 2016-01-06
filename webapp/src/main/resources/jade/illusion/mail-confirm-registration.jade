@@ -1,0 +1,23 @@
+p
+  if firstName
+    =locale.text('illusion.registration.registeredMail.headerUser', firstName)
+  else
+    =locale.text('illusion.registration.registeredMail.header')
+p
+  if role == 'PENDING_APPROVAL'
+    =locale.text('illusion.registration.registeredMail.sentForApproval', eventName)
+  else
+    =locale.text('illusion.registration.registeredMail.sent', eventName)
+each formData in formDatas
+  p
+    b
+      =formData.label
+      |:
+  p 
+    != formData.value
+if newUser
+    =locale.text('illusion.registration.registeredMail.newUser', password) 
+hr
+p
+  =locale.text('illusion.registration.registeredMail.footer') 
+hr
