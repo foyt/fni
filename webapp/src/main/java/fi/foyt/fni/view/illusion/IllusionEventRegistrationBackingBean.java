@@ -3,7 +3,6 @@ package fi.foyt.fni.view.illusion;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -33,21 +32,17 @@ import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.illusion.registration.FormReader;
 import fi.foyt.fni.jade.JadeController;
-import fi.foyt.fni.jade.JadeLocaleHelper;
 import fi.foyt.fni.jsf.NavigationController;
-import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.auth.InternalAuth;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventRegistrationForm;
-import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
 
 // TODO: Mail organizers about new participants
@@ -84,12 +79,6 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
 
   @Inject
   private NavigationController navigationController;
-  
-  @Inject
-  private SystemSettingsController systemSettingsController;
-  
-  @Inject
-  private Mailer mailer;
   
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
@@ -323,47 +312,6 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
         : IllusionEventParticipantRole.PARTICIPANT;
     
     return illusionEventController.createIllusionEventParticipant(user, event, null, participantRole);
-  }
-  
-  private Map<String, Object> createMailTemplateModel(IllusionEventParticipant participant, IllusionEvent illusionEvent, String email, boolean newUser, String password, Map<String, String> answers) {
-    Map<String, Object> templateModel = new HashMap<>();
-    
-    IllusionEventRegistrationForm form = illusionEventController.findEventRegistrationForm(illusionEvent);
-    User user = participant.getUser();
-    
-    FormReader formReader = new FormReader(form.getData());
-    List<Map<String, Object>> formDatas = new ArrayList<>();
-    
-    for (String field : formReader.getFields()) {
-      Map<String, Object> data = new HashMap<>();
-      data.put("label", formReader.getFieldLabel(field));
-      data.put("value", StringUtils.replace(answers.get(field), "\n", "<br/>"));
-      formDatas.add(data);
-    }
-    
-    templateModel.put("eventName", illusionEvent.getName());
-    templateModel.put("firstName", user.getFirstName());
-    templateModel.put("lastName", user.getLastName());
-    templateModel.put("email", email);
-    templateModel.put("newUser", newUser);
-    templateModel.put("role", participant.getRole());
-    templateModel.put("password", password);
-    templateModel.put("formDatas", formDatas);
-    templateModel.put("locale", new JadeLocaleHelper(sessionController.getLocale()));
-    
-    return templateModel;
-  }
-  
-  private void sendConfirmRegistrationMail(IllusionEvent illusionEvent, IllusionEventParticipant participant, boolean newUser, String password, Map<String, String> answers) throws JadeException, IOException, MessagingException {
-    String email = userController.getUserPrimaryEmail(participant.getUser());
-    Map<String, Object> templateModel = createMailTemplateModel(participant, illusionEvent, email, newUser, password, answers);
-          
-    String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
-    String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
-    String toName = getParticipantDisplayName(participant);
-    String subject = ExternalLocales.getText(sessionController.getLocale(), "illusion.registration.registeredMail.subject", illusionEvent.getName());
-    String content = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/mail-confirm-registration", templateModel);
-    mailer.sendMail(fromMail, fromName, email, toName, subject, content, "text/html");
   }
   
   private String headHtml;

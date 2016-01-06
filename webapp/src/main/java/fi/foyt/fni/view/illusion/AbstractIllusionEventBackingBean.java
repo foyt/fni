@@ -1,10 +1,19 @@
 package fi.foyt.fni.view.illusion;
 
-import javax.inject.Inject;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import javax.inject.Inject;
+import javax.mail.MessagingException;
+
+import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import de.neuland.jade4j.JadeConfiguration;
+import de.neuland.jade4j.exceptions.JadeException;
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
@@ -12,13 +21,20 @@ import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionJadeTemplateLoader;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
+import fi.foyt.fni.illusion.registration.FormReader;
+import fi.foyt.fni.jade.JadeLocaleHelper;
+import fi.foyt.fni.jade.JadeController;
 import fi.foyt.fni.jsf.NavigationController;
+import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventRegistrationForm;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
 
 public abstract class AbstractIllusionEventBackingBean {
@@ -41,6 +57,15 @@ public abstract class AbstractIllusionEventBackingBean {
   @Inject
   private IllusionTemplateModelBuilderFactory illusionTemplateModelBuilderFactory;
 
+  @Inject
+  private SystemSettingsController systemSettingsController;
+  
+  @Inject
+  private JadeController jadeController;
+  
+  @Inject
+  private Mailer mailer;
+  
   @Inject
   private NavigationController navigationController;
 
@@ -146,6 +171,47 @@ public abstract class AbstractIllusionEventBackingBean {
 
   protected JadeConfiguration getJadeConfiguration() {
     return jadeConfiguration;
+  }
+  
+  protected Map<String, Object> createMailTemplateModel(IllusionEventParticipant participant, IllusionEvent illusionEvent, String email, boolean newUser, String password, Map<String, String> answers) {
+    Map<String, Object> templateModel = new HashMap<>();
+    
+    IllusionEventRegistrationForm form = illusionEventController.findEventRegistrationForm(illusionEvent);
+    User user = participant.getUser();
+    
+    FormReader formReader = new FormReader(form.getData());
+    List<Map<String, Object>> formDatas = new ArrayList<>();
+    
+    for (String field : formReader.getFields()) {
+      Map<String, Object> data = new HashMap<>();
+      data.put("label", formReader.getFieldLabel(field));
+      data.put("value", StringUtils.replace(answers.get(field), "\n", "<br/>"));
+      formDatas.add(data);
+    }
+    
+    templateModel.put("eventName", illusionEvent.getName());
+    templateModel.put("firstName", user.getFirstName());
+    templateModel.put("lastName", user.getLastName());
+    templateModel.put("email", email);
+    templateModel.put("newUser", newUser);
+    templateModel.put("role", participant.getRole());
+    templateModel.put("password", password);
+    templateModel.put("formDatas", formDatas);
+    templateModel.put("locale", new JadeLocaleHelper(sessionController.getLocale()));
+    
+    return templateModel;
+  }
+  
+  protected void sendConfirmRegistrationMail(IllusionEvent illusionEvent, IllusionEventParticipant participant, boolean newUser, String password, Map<String, String> answers) throws JadeException, IOException, MessagingException {
+    String email = userController.getUserPrimaryEmail(participant.getUser());
+    Map<String, Object> templateModel = createMailTemplateModel(participant, illusionEvent, email, newUser, password, answers);
+          
+    String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
+    String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
+    String toName = getParticipantDisplayName(participant);
+    String subject = ExternalLocales.getText(sessionController.getLocale(), "illusion.registration.registeredMail.subject", illusionEvent.getName());
+    String content = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/mail-confirm-registration", templateModel);
+    mailer.sendMail(fromMail, fromName, email, toName, subject, content, "text/html");
   }
   
   private Long id;
