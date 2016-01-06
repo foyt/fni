@@ -271,7 +271,7 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
     illusionEventController.saveRegistrationFormAnswers(form, participant, answers);
 
     try {
-      sendConfirmRegistrationMail(event, participant, newUser, password, answers);
+      sendConfirmRegistrationMails(event, participant, newUser, password, answers);
     } catch (JadeException | IOException e) {
       logger.log(Level.SEVERE, "Failed to render registration mail template", e);
       return navigationController.internalError();

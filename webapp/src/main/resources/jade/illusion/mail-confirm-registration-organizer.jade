@@ -1,0 +1,26 @@
+p
+  if organizerFirstName
+    =locale.text('illusion.registration.registeredOrganizerMail.headerUser', organizerFirstName)
+  else
+    =locale.text('illusion.registration.registeredOrganizerMail.header')
+p
+  if participantRole == 'PENDING_APPROVAL'
+    =locale.text('illusion.registration.registeredOrganizerMail.requestedText', participantDisplayName, eventName)
+  else
+    =locale.text('illusion.registration.registeredOrganizerMail.registeredText', participantDisplayName, eventName)
+each formData in formDatas
+  p
+    b
+      =formData.label
+      |:
+  p 
+    != formData.value
+p
+  =locale.text('illusion.registration.registeredOrganizerMail.manageText')
+  | 
+  a(href=participantsUrl)
+    =locale.text('illusion.registration.registeredOrganizerMail.membersLink')
+hr
+p
+  =locale.text('illusion.registration.registeredOrganizerMail.footer') 
+hr
