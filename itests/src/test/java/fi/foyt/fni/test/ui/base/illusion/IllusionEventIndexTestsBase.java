@@ -109,18 +109,23 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-event-oai")
   public void testJoinOpenNotLoggedIn() {
-    navigate("/illusion/event/open");
-    waitForSelectorPresent(".illusion-event-join-button");
-    assertSelectorClickable(".illusion-event-join-button");
-    clickSelector(".illusion-event-join-button");
-    waitForUrlMatches(".*/login.*");
-    assertLogin();
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
-    assertUrlMatches(".*/illusion/event/open");
-    assertSelectorCount(".illusion-event-navigation>a", 1);
-    assertSelectorNotPresent(".illusion-event-join-button");
-    assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
-    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
+    GreenMail greenMail = startSmtpServer();
+    try {
+      navigate("/illusion/event/open");
+      waitForSelectorPresent(".illusion-event-join-button");
+      assertSelectorClickable(".illusion-event-join-button");
+      clickSelector(".illusion-event-join-button");
+      waitForUrlMatches(".*/login.*");
+      assertLogin();
+      loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+      assertUrlMatches(".*/illusion/event/open");
+      assertSelectorCount(".illusion-event-navigation>a", 1);
+      assertSelectorNotPresent(".illusion-event-join-button");
+      assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
+      assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
+    } finally {
+      greenMail.stop();
+    }
   }
 
   @Test
@@ -160,15 +165,20 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-event-oai")
   public void testJoinOpenLoggedIn() {
-    loginInternal("user@foyt.fi", "pass");
-    navigate("/illusion/event/open");
-    assertSelectorClickable(".illusion-event-join-button");
-    clickSelector(".illusion-event-join-button");
-    waitForSelectorNotPresent(".illusion-event-join-button");
-    assertSelectorCount(".illusion-event-navigation>a", 1);
-    assertSelectorNotPresent(".illusion-event-join-button");
-    assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
-    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
+    GreenMail greenMail = startSmtpServer();
+    try {
+      loginInternal("user@foyt.fi", "pass");
+      navigate("/illusion/event/open");
+      assertSelectorClickable(".illusion-event-join-button");
+      clickSelector(".illusion-event-join-button");
+      waitForSelectorNotPresent(".illusion-event-join-button");
+      assertSelectorCount(".illusion-event-navigation>a", 1);
+      assertSelectorNotPresent(".illusion-event-join-button");
+      assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
+      assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
+    } finally {
+      greenMail.stop();
+    }
   }
 
   @Test
@@ -182,15 +192,17 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
       clickSelector(".illusion-event-join-button");
       assertUrlMatches(".*/illusion/event/approve.*");
       waitForNotification();
-      assertNotification("info", "Your request to join the event was sent to event organizers for approval.");
       navigate("/illusion/event/approve");
       assertNotification("warning", "Waiting for event organizer to accept your request...");
-      
-      assertEquals(1, greenMail.getReceivedMessages().length);
+      assertEquals(2, greenMail.getReceivedMessages().length);
 
-      String mailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertEquals("Request to join group", greenMail.getReceivedMessages()[0].getSubject());
-      assertTrue(mailBody, StringUtils.startsWithIgnoreCase(mailBody, "Hi Test Admin"));
+      String mail1Body = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
+      assertEquals("Illusion - Registration to event Approve", greenMail.getReceivedMessages()[0].getSubject());
+      assertTrue(mail1Body, StringUtils.startsWithIgnoreCase(mail1Body, "<p>Hi Test,"));
+
+      String mail2Body = GreenMailUtil.getBody(greenMail.getReceivedMessages()[1]);
+      assertEquals("Illusion - Registration to event Approve", greenMail.getReceivedMessages()[1].getSubject());
+      assertTrue(mail2Body, StringUtils.startsWithIgnoreCase(mail2Body, "<p>Hi Test,"));
     } finally {
       greenMail.stop();
     } 
@@ -248,17 +260,22 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-event-custom")
   public void testCustomDomainJoinOpenLoggedIn() {
-    loginInternal("user@foyt.fi", "pass");
-    getWebDriver().get(getCustomEventUrl());
-    
-    waitAndClick(".illusion-event-join-button");
-    waitForSelectorNotPresent(".illusion-event-join-button");
-    waitTitle("Illusion - Open Event");
-
-    assertSelectorCount(".illusion-event-navigation>a", 1);
-    assertSelectorNotPresent(".illusion-event-join-button");
-    assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
-    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
+    GreenMail greenMail = startSmtpServer();
+    try {
+      loginInternal("user@foyt.fi", "pass");
+      getWebDriver().get(getCustomEventUrl());
+      
+      waitAndClick(".illusion-event-join-button");
+      waitForSelectorNotPresent(".illusion-event-join-button");
+      waitTitle("Illusion - Open Event");
+  
+      assertSelectorCount(".illusion-event-navigation>a", 1);
+      assertSelectorNotPresent(".illusion-event-join-button");
+      assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
+      assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
+    } finally {
+      greenMail.stop();
+    }
   }
   
   @Test
