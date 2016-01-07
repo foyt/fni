@@ -229,6 +229,7 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
 
     FormReader formReader = new FormReader(form.getData());
     boolean newUser = false;
+    boolean newParticipant = false;
     String password = null;
     
     if (participant == null) {
@@ -257,9 +258,16 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
           user = createNewUser(firstName, lastName, registrantEmail, password);
           participant = createNewParticipant(user, event);
           newUser = true;
+          newParticipant = true;
         } else {
-          // existing user, new participant
-          participant = createNewParticipant(user, event);
+          participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
+          if (participant == null) {
+            // existing user, new participant
+            participant = createNewParticipant(user, event);
+            newParticipant = true;
+          } else {
+            // Otherwise existing participant is just updating answers
+          }
         }
       }
     } else {
@@ -270,14 +278,16 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
     
     illusionEventController.saveRegistrationFormAnswers(form, participant, answers);
 
-    try {
-      sendConfirmRegistrationMails(event, participant, newUser, password, answers);
-    } catch (JadeException | IOException e) {
-      logger.log(Level.SEVERE, "Failed to render registration mail template", e);
-      return navigationController.internalError();
-    } catch (MessagingException e) {
-      logger.log(Level.SEVERE, "Failed to send registration mail", e);
-      return navigationController.internalError();
+    if (newParticipant) {
+      try {
+        sendConfirmRegistrationMails(event, participant, newUser, password, answers);
+      } catch (JadeException | IOException e) {
+        logger.log(Level.SEVERE, "Failed to render registration mail template", e);
+        return navigationController.internalError();
+      } catch (MessagingException e) {
+        logger.log(Level.SEVERE, "Failed to send registration mail", e);
+        return navigationController.internalError();
+      }
     }
     
     return String.format("/illusion/event-registration.jsf?urlName=%s", getUrlName());
