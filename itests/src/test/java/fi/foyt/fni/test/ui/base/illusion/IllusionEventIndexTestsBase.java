@@ -141,15 +141,18 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
       loginInternal(getWebDriver(), "user@foyt.fi", "pass");
       assertUrlMatches(".*/illusion/event/approve.*");
       waitForNotification();
-      assertNotification("info", "Your request to join the event was sent to event organizers for approval.");
+
       navigate("/illusion/event/approve");
       assertNotification("warning", "Waiting for event organizer to accept your request...");
-      
-      assertEquals(1, greenMail.getReceivedMessages().length);
+      assertEquals(2, greenMail.getReceivedMessages().length);
 
-      String mailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertEquals("Request to join group", greenMail.getReceivedMessages()[0].getSubject());
-      assertTrue(mailBody, StringUtils.startsWithIgnoreCase(mailBody, "Hi Test Admin"));
+      String mail1Body = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
+      assertEquals("Illusion - Registration to event Approve", greenMail.getReceivedMessages()[0].getSubject());
+      assertTrue(mail1Body, StringUtils.startsWithIgnoreCase(mail1Body, "<p>Hi Test,"));
+
+      String mail2Body = GreenMailUtil.getBody(greenMail.getReceivedMessages()[1]);
+      assertEquals("Illusion - Registration to event Approve", greenMail.getReceivedMessages()[1].getSubject());
+      assertTrue(mail2Body, StringUtils.startsWithIgnoreCase(mail2Body, "<p>Hi Test,"));
     } finally {
       greenMail.stop();
     } 
