@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.mail.MessagingException;
@@ -25,7 +24,6 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventRegistrationForm;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.utils.faces.FacesUtils;
 
 @RequestScoped
 @Named
@@ -72,9 +70,8 @@ public class IllusionEventDoJoinBackingBean extends AbstractIllusionEventBacking
       switch (illusionEvent.getJoinMode()) {
         case APPROVE:
           participant = illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PENDING_APPROVAL);
-          FacesUtils.addPostRedirectMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("illusion.event.approvalPendingMessage"));
           newParticipant = true;
-          redirectRule = "/illusion/event.jsf?faces-redirect=true&ignoreMessages=true&urlName=" + getUrlName();
+          redirectRule = "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
         break;
         case OPEN:
           participant = illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PARTICIPANT);
