@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.mail.MessagingException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
@@ -54,6 +55,12 @@ public class IllusionEventDoJoinBackingBean extends AbstractIllusionEventBacking
       return String.format("/illusion/event-registration.jsf?faces-redirect=true&urlName=%s", getUrlName());
     }
     
+    String requireLogin = navigationController.requireLogin();
+    if (StringUtils.isNotBlank(requireLogin)) {
+      return requireLogin;
+    }
+    
+    String redirectRule = null;
     boolean newParticipant = false;
     
     User loggedUser = sessionController.getLoggedUser();
@@ -64,14 +71,16 @@ public class IllusionEventDoJoinBackingBean extends AbstractIllusionEventBacking
       
       switch (illusionEvent.getJoinMode()) {
         case APPROVE:
-          illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PENDING_APPROVAL);
+          participant = illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PENDING_APPROVAL);
           FacesUtils.addPostRedirectMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("illusion.event.approvalPendingMessage"));
           newParticipant = true;
-          return "/illusion/event.jsf?faces-redirect=true&ignoreMessages=true&urlName=" + getUrlName();
+          redirectRule = "/illusion/event.jsf?faces-redirect=true&ignoreMessages=true&urlName=" + getUrlName();
+        break;
         case OPEN:
-          illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PARTICIPANT);
+          participant = illusionEventController.createIllusionEventParticipant(loggedUser, illusionEvent, null, IllusionEventParticipantRole.PARTICIPANT);
           newParticipant = true;
-          return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
+          redirectRule = "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
+        break;
         default:
           return navigationController.accessDenied();
       }      
@@ -88,14 +97,15 @@ public class IllusionEventDoJoinBackingBean extends AbstractIllusionEventBacking
           if (illusionEvent.getSignUpFee() == null) {
             illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
           } else {
-            return "/illusion/event-payment.jsf?faces-redirect=true&urlName=" + getUrlName();
+            redirectRule = "/illusion/event-payment.jsf?faces-redirect=true&urlName=" + getUrlName();
           }
+        break;
         case PENDING_APPROVAL:
         case WAITING_PAYMENT:
-          return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
         case ORGANIZER:
         case PARTICIPANT:
-          return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
+          redirectRule = "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
+        break;
       }
     }
     
@@ -111,7 +121,7 @@ public class IllusionEventDoJoinBackingBean extends AbstractIllusionEventBacking
       }
     }
     
-    return null;
+    return redirectRule;
   }
 
   public String getUrlName() {
