@@ -1,19 +1,19 @@
 package fi.foyt.fni.illusion.registration;
 
-import java.util.SortedMap;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties (ignoreUnknown = true)
 public class FormSchema {
   
-  public SortedMap<String, FormSchemaProperty> getProperties() {
+  public Map<String, FormSchemaProperty> getProperties() {
     return properties;
   }
   
-  public void setProperties(SortedMap<String, FormSchemaProperty> properties) {
+  public void setProperties(Map<String, FormSchemaProperty> properties) {
     this.properties = properties;
   }
   
-  private SortedMap<String, FormSchemaProperty> properties;
+  private Map<String, FormSchemaProperty> properties;
 }

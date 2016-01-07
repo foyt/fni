@@ -28,8 +28,17 @@ public class FormOptionField {
   public void setType(String type) {
     this.type = type;
   }
+  
+  public Integer getOrder() {
+    return order;
+  }
+  
+  public void setOrder(Integer order) {
+    this.order = order;
+  }
 
   private String id;
   private String label;
   private String type;
+  private Integer order;
 }

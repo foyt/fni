@@ -219,7 +219,7 @@ public abstract class AbstractIllusionEventBackingBean {
     
     if (form != null) {
       FormReader formReader = new FormReader(form.getData());
-      for (String field : formReader.getFields()) {
+      for (String field : formReader.getFields(true)) {
         formDatas.add(createFormData(formReader.getFieldLabel(field), answers.get(field)));
       }
     } else {
