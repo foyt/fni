@@ -27,8 +27,6 @@
       );
     };  
     
-    console.log('Debug logging is enabled');
-
     for (var i = 0, l = messages.length; i < l; i++) {
       console.log(messages[i]);
     }
