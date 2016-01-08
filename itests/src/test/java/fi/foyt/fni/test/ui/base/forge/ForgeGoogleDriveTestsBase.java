@@ -1,12 +1,6 @@
 package fi.foyt.fni.test.ui.base.forge;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -24,9 +18,9 @@ public class ForgeGoogleDriveTestsBase extends AbstractUITest {
 
   @Test
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), GOOGLEDOC_IN_ROOT);
-    testLoginRequired(getWebDriver(), GOOGLEDOC_IN_FOLDER);
-    testLoginRequired(getWebDriver(), GOOGLEDOC_IN_SUBFOLDER);
+    testLoginRequired(GOOGLEDOC_IN_ROOT);
+    testLoginRequired(GOOGLEDOC_IN_FOLDER);
+    testLoginRequired(GOOGLEDOC_IN_SUBFOLDER);
   }
 
   @Test
@@ -41,31 +35,31 @@ public class ForgeGoogleDriveTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testMayView() {
-    loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
-    testMayView(getWebDriver(), GOOGLEDOC_IN_ROOT);
-    testMayView(getWebDriver(), GOOGLEDOC_IN_FOLDER);
-    testMayView(getWebDriver(), GOOGLEDOC_IN_SUBFOLDER);
+    loginInternal("librarian@foyt.fi", "pass");
+    testMayView(GOOGLEDOC_IN_ROOT);
+    testMayView(GOOGLEDOC_IN_FOLDER);
+    testMayView(GOOGLEDOC_IN_SUBFOLDER);
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testMayEdit() {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
-    testMayView(getWebDriver(), GOOGLEDOC_IN_ROOT);
-    testMayView(getWebDriver(), GOOGLEDOC_IN_FOLDER);
-    testMayView(getWebDriver(), GOOGLEDOC_IN_SUBFOLDER);
+    loginInternal("admin@foyt.fi", "pass");
+    testMayView(GOOGLEDOC_IN_ROOT);
+    testMayView(GOOGLEDOC_IN_FOLDER);
+    testMayView(GOOGLEDOC_IN_SUBFOLDER);
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testWithHyphen() {
     loginInternal("user@foyt.fi", "pass");
-    testMayView(getWebDriver(), "/forge/google-drive/2/googledoc-hyphen");
+    testMayView("/forge/google-drive/2/googledoc-hyphen");
   }
 
-  private void testMayView(RemoteWebDriver driver, String path) {
-    getWebDriver().get(getAppUrl() + path);
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".forge-google-drive-container iframe")));
-    assertEquals(1, getWebDriver().findElements(By.cssSelector(".forge-google-drive-container iframe")).size());
+  private void testMayView(String path) {
+    navigate(path);
+    waitForSelectorPresent(".forge-google-drive-container iframe");
+    assertSelectorPresent(".forge-google-drive-container iframe");
   }
 }
