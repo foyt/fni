@@ -191,6 +191,7 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
     try {
       loginInternal("user@foyt.fi", "pass");
       navigate("/illusion/event/approve");
+      waitForSelectorPresent(".illusion-event-join-button");
       assertSelectorClickable(".illusion-event-join-button");
       clickSelector(".illusion-event-join-button");
       assertUrlMatches(".*/illusion/event/approve.*");
