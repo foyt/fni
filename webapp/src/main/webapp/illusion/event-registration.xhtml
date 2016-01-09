@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:param name="skipTitle" value="true" />
+  
+  <ui:define name="view-custom-head">
+    <h:outputText value="#{illusionEventRegistrationBackingBean.headHtml}" escape="false"/>
+  </ui:define>
+  
+  <ui:define name="grid-content">
+    <ui:include src="/facelets/flex-menu.xhtml" />
+    <h:outputText value="#{illusionEventRegistrationBackingBean.contentsHtml}" escape="false"/>
+    <h:form style="display: none">
+      <input type="hidden" jsf:value="#{illusionEventRegistrationBackingBean.answers}" class="answers"/>
+      <input type="submit" jsf:action="#{illusionEventRegistrationBackingBean.save}" class="save"/>
+    </h:form>
+  </ui:define>
+
+</ui:composition>

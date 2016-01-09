@@ -1,0 +1,27 @@
+@import "vars";
+@import "compass";
+@import "styles";
+
+h3 {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.CodeMirror {
+  border: 1px solid #aaa;
+  height: 400px;
+}
+
+.save { 
+  @include header-4;
+  width: 256px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background: #000;
+  color: #fff;
+  border: 0px;
+  border-radius: 8px;
+  margin-top: 20px;
+  cursor: pointer;
+  display: block;
+}

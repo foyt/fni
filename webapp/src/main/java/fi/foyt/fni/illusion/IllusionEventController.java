@@ -39,6 +39,9 @@ import fi.foyt.fni.persistence.dao.illusion.IllusionEventMaterialParticipantSett
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantImageDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantSettingDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventRegistrationFormDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventRegistrationFormFieldAnswerDAO;
+import fi.foyt.fni.persistence.dao.illusion.IllusionEventRegistrationFormFieldDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventTemplateDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventTypeDAO;
@@ -60,6 +63,9 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantImage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantSetting;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventRegistrationForm;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventRegistrationFormField;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventRegistrationFormFieldAnswer;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventTemplate;
@@ -139,6 +145,15 @@ public class IllusionEventController {
   @Inject
   private IllusionEventGroupMemberDAO illusionEventParticipantGroupMemberDAO;
 
+  @Inject
+  private IllusionEventRegistrationFormDAO illusionEventRegistrationFormDAO;
+
+  @Inject
+  private IllusionEventRegistrationFormFieldDAO illusionEventRegistrationFormFieldDAO;
+  
+  @Inject
+  private IllusionEventRegistrationFormFieldAnswerDAO illusionEventRegistrationFormFieldAnswerDAO;
+  
   @Inject
   private OAuthController oAuthController;
 
@@ -815,4 +830,65 @@ public class IllusionEventController {
       return larpKalenteriEvent;
     }
   }
+  
+  /* Registration */
+  
+  public IllusionEventRegistrationForm findEventRegistrationForm(IllusionEvent event) {
+    List<IllusionEventRegistrationForm> forms = illusionEventRegistrationFormDAO.listByEvent(event);
+    if (forms.isEmpty()) {
+      return null;
+    } 
+    
+    if (forms.size() > 1) {
+      logger.severe(String.format("Event %d has multiple registration forms", event.getId()));
+    }
+    
+    return forms.get(0);
+  }
+  
+  public IllusionEventRegistrationForm createEventRegistrationForm(IllusionEvent event, String formData) {
+    List<IllusionEventRegistrationForm> forms = illusionEventRegistrationFormDAO.listByEvent(event);
+    if (forms.isEmpty()) {
+      return illusionEventRegistrationFormDAO.create(event, formData);
+    } else {
+      logger.severe(String.format("Event %d already has a registration form", event.getId()));
+      return null;
+    }
+  }
+
+  public IllusionEventRegistrationForm updateEventRegistrationForm(IllusionEventRegistrationForm form, String formData) {
+    return illusionEventRegistrationFormDAO.updateData(form, formData);
+  }
+
+  public void saveRegistrationFormAnswers(IllusionEventRegistrationForm form, IllusionEventParticipant participant, Map<String, String> answers) {
+    for (String fieldName : answers.keySet()) {
+      String value = answers.get(fieldName);
+      
+      IllusionEventRegistrationFormField field = illusionEventRegistrationFormFieldDAO.findByFormAndName(form, fieldName);
+      if (field == null) {
+        field = illusionEventRegistrationFormFieldDAO.create(form, fieldName);
+      }
+      
+      IllusionEventRegistrationFormFieldAnswer answer = illusionEventRegistrationFormFieldAnswerDAO.findByFieldAndParticipant(field, participant);
+      if (answer == null) {
+        illusionEventRegistrationFormFieldAnswerDAO.create(field, participant, value);
+      } else {
+        illusionEventRegistrationFormFieldAnswerDAO.updateValue(answer, value);
+      }
+    
+    }
+  }
+  
+  public Map<String, String> loadRegistrationFormAnswers(IllusionEventRegistrationForm form, IllusionEventParticipant participant) {
+    Map<String, String> answers = new HashMap<>();
+    
+    List<IllusionEventRegistrationFormField> fields = illusionEventRegistrationFormFieldDAO.listByForm(form);
+    for (IllusionEventRegistrationFormField field : fields) {
+      IllusionEventRegistrationFormFieldAnswer answer = illusionEventRegistrationFormFieldAnswerDAO.findByFieldAndParticipant(field, participant);
+      answers.put(field.getName(), answer != null ? answer.getValue() : "");
+    }
+    
+    return answers;
+  }
+  
 }

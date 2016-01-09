@@ -1,8 +1,6 @@
 package fi.foyt.fni.view.illusion;
 
 import java.io.IOException;
-import java.text.NumberFormat;
-import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,19 +112,8 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
     }
 
     IllusionEventJoinMode joinMode = illusionEvent.getJoinMode();
-    boolean hasSignUpFee = illusionEvent.getSignUpFee() != null;
-    String signUpFee = null;
-    if (hasSignUpFee) {
-      Currency currency = illusionEvent.getSignUpFeeCurrency();
-      NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-      currencyFormatter.setCurrency(currency);
-      signUpFee = currencyFormatter.format(illusionEvent.getSignUpFee());
-    }
-    
     IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.INDEX)
       .put("joinMode", joinMode.toString())
-      .put("hasSignUpFee", hasSignUpFee)
-      .put("signUpFee", signUpFee)
       .put("ref", ref);
     
     if ("1".equals(illusionEventController.getSetting(illusionEvent, IllusionEventSettingKey.INDEX_INCLUDE_ALL_PAGES))) {

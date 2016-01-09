@@ -31,7 +31,7 @@
       <ui:insert name="grid-css">
         <h:outputStylesheet library="novus" name="css/flexgrid.css"/>
       </ui:insert>
-
+      
       <!-- Global Variables -->
       
       <script type="text/javascript">
@@ -46,6 +46,8 @@
       <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
       <h:outputScript name="scripts/gui/common.js"></h:outputScript>
        
+      <h:outputScript rendered="#{sessionBackingBean.test}" name="scripts/debug.js" />
+      
       <!-- jQuery UI -->
  
       <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>

@@ -94,8 +94,6 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "illusion-event", "illusion-event-organizer"})
   public void testDates() throws Exception {
-    acceptCookieDirective();
-    
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
 
@@ -103,6 +101,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     String startTime = "12:00";
     String endDate = "11/21/2031";
     String endTime = "10:30";
+    
+    waitForSelectorPresent("input[data-alt-field='.actual-start-date']");
     
     assertSelectorValueNot("input[data-alt-field='.actual-start-date']", startDate);
     assertSelectorValueNot("input[data-alt-field='.actual-start-time']", startTime);

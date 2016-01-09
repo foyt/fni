@@ -1,6 +1,5 @@
 package fi.foyt.fni.illusion;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,25 +33,10 @@ public class IllusionEventParticipantRoleChangeListener {
 
   @Inject
   private SystemSettingsController systemSettingsController;
-
+  
   @Inject
   private Mailer mailer;
   
-  public void onParticipantAddedEvent(@Observes IllusionParticipantAddedEvent event) {
-    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(event.getMemberId());
-    if (participant.getRole() == IllusionEventParticipantRole.PENDING_APPROVAL) {
-      List<IllusionEventParticipant> organizers = illusionEventController.listIllusionEventParticipantsByEventAndRole(participant.getEvent(), IllusionEventParticipantRole.ORGANIZER);
-      String groupUrl = systemSettingsController.getSiteUrl(false, true);
-      if (StringUtils.isNotBlank(groupUrl)) {
-        groupUrl += "/illusion/group/" + participant.getEvent().getUrlName();
-      }
-      
-      for (IllusionEventParticipant organizer : organizers) {
-        sendGroupJoinRequestMail(groupUrl, participant, organizer);
-      }
-    }
-  }
-
   public void onParticipantRoleChangeEvent(@Observes IllusionParticipantRoleChangeEvent event) {
     if (event.getOldRole().equals(IllusionEventParticipantRole.PENDING_APPROVAL)) {
       IllusionEventParticipant groupMember = illusionEventController.findIllusionEventParticipantById(event.getMemberId());
@@ -94,31 +78,6 @@ public class IllusionEventParticipantRoleChangeListener {
     
     try {
       mailer.sendMail(fromMail, fromName, userMail, userName, subject, content, "text/plain");
-    } catch (MessagingException e) {
-      logger.log(Level.SEVERE, "Could not send a group accept notification mail", e);
-    }
-  }
-
-  private void sendGroupJoinRequestMail(String groupUrl, IllusionEventParticipant groupMember, IllusionEventParticipant organizers) {
-    String groupName = groupMember.getEvent().getName();
-
-    User master = organizers.getUser();
-    Locale masterLocale = LocaleUtils.toLocale(master.getLocale());
-    String masterMail = userController.getUserPrimaryEmail(master);
-    String masterName = master.getFullName();
-    String membersUrl = groupUrl + "/members";
-
-    User user = groupMember.getUser();
-    String userName = user.getFullName();
-    
-    String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
-    String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
- 
-    String subject = ExternalLocales.getText(masterLocale, "illusion.mail.joinRequest.subject");
-    String content = ExternalLocales.getText(masterLocale, "illusion.mail.joinRequest.content", masterName, userName, groupName, membersUrl);  
-
-    try {
-      mailer.sendMail(fromMail, fromName, masterMail, masterName, subject, content, "text/plain");
     } catch (MessagingException e) {
       logger.log(Level.SEVERE, "Could not send a group accept notification mail", e);
     }
