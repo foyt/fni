@@ -42,7 +42,7 @@
       },
       "view": {
         "parent": edit ? "web-edit" : "web-create",
-        "locale": "fi_FI"
+        "locale": LOCALE == 'fi' ? "fi_FI" : 'en_US'
       }
     };
     
