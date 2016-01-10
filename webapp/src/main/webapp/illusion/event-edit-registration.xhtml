@@ -21,6 +21,10 @@
     <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/addon/fold/brace-fold.min.js"></script>
     <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/addon/fold/comment-fold.min.js"></script>
     <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/mode/javascript/javascript.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="//code.cloudcms.com/alpaca/1.5.14/web/alpaca.js"></script>
+    
+    <h:outputScript name="scripts/gui/alpaca-locales.js"/>
     <h:outputScript name="scripts/gui/code-mirror.js"/>
     <h:outputScript name="scripts/gui/illusion-event-edit-registration.js"/>
     <h:outputScript name="scripts/gui/illusion-common.js"/>
@@ -30,12 +34,15 @@
     <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/codemirror.min.css"></link>
     <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/addon/hint/show-hint.min.css"></link>
     <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.10.0/addon/fold/foldgutter.min.css"></link>
+    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.min.css"></link>
+    <link rel="StyleSheet" href="//code.cloudcms.com/alpaca/1.5.14/web/alpaca.min.css"></link>
 
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
     <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-common.css"/>
     <h:outputStylesheet library="novus" name="css/illusion-event-edit-registration.css"/>
   </ui:define>  
+  
 
   <ui:define name="grid-content">
     <!-- Menu -->
@@ -75,16 +82,45 @@
 
     <ui:include src="/facelets/illusionnavigation.xhtml"/>
 
-    <div class="flex-row">
-      <div class="flex-cell-full index-box no-margin-top">
-        <h3>#{locales['illusion.editRegistration.editorTitle']}</h3>
-     
-        <h:form>
-          <textarea jsf:value="#{illusionEventEditRegistrationBackingBean.formData}" class="editor"/>
-          <h:commandButton action="#{illusionEventEditRegistrationBackingBean.save}" class="save" value="#{locales['illusion.editRegistration.save']}" />
-        </h:form>
+    <h:form>
+      <div class="flex-row">
+        <div class="flex-cell-full index-box no-margin-top">
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <h3>#{locales['illusion.editRegistration.editorTitle']}</h3>
+            </div>
+          </div>
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <div class="tabs">
+                <ul>
+                  <li><a href="#editor">#{locales['illusion.editRegistration.editorLabel']}</a></li>
+                  <li><a href="#code">#{locales['illusion.editRegistration.codeLabel']}</a></li>
+                </ul>
+                <div id="editor" class="flex-row">
+                  <div class="flex-cell-full no-margin-top">
+                    <div class="visual-editor" 
+                      data-edit-field-locale="#{locales['illusion.editRegistration.editField']}" 
+                      data-edit-dialog-apply-locale="#{locales['illusion.editRegistration.editDialogApply']}" 
+                      data-edit-dialog-cancel-locale="#{locales['illusion.editRegistration.editDialogCancel']}"/>
+                  </div>
+                </div>
+                <div id="code" class="flex-row">
+                  <div class="flex-cell-full no-margin-top">
+                    <textarea jsf:value="#{illusionEventEditRegistrationBackingBean.formData}" class="code-editor"/>
+                  </div>   
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex-row">
+            <div class="flex-cell-full">
+              <h:commandButton action="#{illusionEventEditRegistrationBackingBean.save}" class="save" value="#{locales['illusion.editRegistration.save']}" />
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </h:form>
 
   </ui:define>
 
