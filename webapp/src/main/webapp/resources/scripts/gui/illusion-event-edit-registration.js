@@ -5,7 +5,7 @@
   
   $.widget("custom.registerFormEditor", {
     options: {
-    
+      fieldTypes: ['text', 'textarea', 'checkbox', 'radio', 'select', 'number', 'email', 'url']
     },
     
     _create : function() {
@@ -26,8 +26,10 @@
       
       this.element.find('.visual-editor')
         .registerFormVisualEditor({
+          fieldTypes: this.options.fieldTypes,
           locales: {
             edit: this.element.find('.visual-editor').attr('data-edit-field-locale'),
+            newField: this.element.find('.visual-editor').attr('data-add-new-field-locale'),
             editDialog: {
               apply: this.element.find('.visual-editor').attr('data-edit-dialog-apply-locale'),
               cancel: this.element.find('.visual-editor').attr('data-edit-dialog-cancel-locale')
@@ -152,68 +154,63 @@
     },
     
     _create : function() {
-      this._createForm(); 
-      this.element.on('click', '.item-editor .edit', $.proxy(this._onEditClick, this));
-    },
-    
-    refresh: function () {
-      $(this.element).alpaca('destroy');
-      this._createForm();
-    },
-    
-    _onFormPostRender: function() {
-      $(this.element).find('.alpaca-container-item').each($.proxy(function (index, item) {
-        $('<div>')
-          .addClass('item-editor')
-          .appendTo(item)
-          .append(
-            $('<a>')
-              .addClass('edit')
-              .attr({'href': 'javascript:void(null)'})
-              .text(this.options.locales.edit)    
-          );
+      this._rendered = false;
+      
+      $(document).on("mouseup", $.proxy(this._onDocumentMouseUp, this));
+      
+      $('<div>')
+        .addClass('new-field-container')
+        .append(
+          $('<a>')
+            .attr({'href': 'javascript:void(null)'})
+            .addClass('new-field-link')
+            .click($.proxy(this._onNewFieldLinkClick, this))
+            .text(this.options.locales.newField))
+        .append(
+          $('<ul>')
+            .hide()
+            .addClass('field-types'))
+        .appendTo(this.element);
+      
+      $('<div>')
+        .addClass('form')
+        .appendTo(this.element);
+      
+      this._createForm($.proxy(function () {
+        $.each(this.options.fieldTypes, $.proxy(function (index, type) {
+          var instance = new Alpaca.fieldClassRegistry[type]();
+          var title = instance.getTitle();
+          
+          this.element.find('.new-field-container .field-types')
+            .append(
+              $('<li>')
+                .attr({
+                  'data-type': type
+                })
+                .text(title)
+            );
+        }, this));
       }, this));
       
-      $(this.element)
-        .find('.alpaca-field-object>.alpaca-container')
-        .sortable({
-          start: $.proxy(this._onSortableStart, this),
-          stop: $.proxy(this._onSortableStop, this)
-        })
-        .disableSelection();
+      this.element.on('click', '.item-editor .edit', $.proxy(this._onEditClick, this));
+      this.element.on('click', '.new-field-container .field-types li', $.proxy(this._onNewFieldClick, this));
+      this.element.on('formPostRender', $.proxy(this._onFormPostRender, this));
     },
     
-    _onSortableStart: function( event, ui ) {
-      this._sortFrom = $(ui.item).index();
+    refresh: function (callback) {
+      $(this.element).find('.form').alpaca('destroy');
+      this._createForm($.proxy(function () {
+        if ($.isFunction(callback)) {
+          callback();
+        }
+      }, this));
     },
     
-    _onSortableStop: function( event, ui ) {
-      $(document.body).registerFormEditor("moveField", this._sortFrom, $(ui.item).index());
-      this._sortFrom = null;
-    },
-    
-    _createForm: function () {
-      var extraOptions = {
-        "view": {
-          "parent": "web-create",
-          "locale": LOCALE == 'fi' ? "fi_FI" : 'en_US',
-          "displayReadonly": true
-        },
-        "postRender": $.proxy(this._onFormPostRender, this)
-      };
-        
-      var options = $.extend(true, $(document.body).registerFormEditor("form"), extraOptions);
-      
-      $(this.element).alpaca(options);
-    },
-    
-    _onEditClick: function (event) {
+    _openFieldEditor: function (fieldId) {
       // TODO: Separate to basic and advanced tabs
       var removeProperties = ['title', 'description', 'dependencies'];
       var addOptions = ['label'];
       
-      var fieldElement = $(event.target).closest('.alpaca-container-item').find('.alpaca-field');
-      var fieldId = fieldElement.attr('data-alpaca-field-id');
       var field = Alpaca.fieldInstances[fieldId];
       
       var schema = field.getSchemaOfSchema();
@@ -309,7 +306,8 @@
           schemaOptions.fields[fieldName] = $.extend(field, {
             animate: false,
             collapsible: false,
-            toolbarSticky: true
+            toolbarSticky: true,
+            toolbarStyle: 'link'
           });
         }
       });
@@ -321,6 +319,118 @@
       }, extraOptions);
             
       $('<div>').alpaca(options);
+    },
+    
+    _onNewFieldLinkClick: function (event) {
+      this.element.find('.new-field-container .field-types').show();
+    },
+    
+    _onDocumentMouseUp: function (event) {
+      if ($(event.target).closest('.new-field-container').length == 0) {
+        this.element.find('.new-field-container .field-types').hide();
+      }
+    },
+    
+    _onNewFieldClick: function (event) {
+      this.element.find('.new-field-container .field-types').hide();
+      var newField = $(event.target);
+      var type = newField.attr('data-type');
+      this._appendNewField(type, $.proxy(function (fieldId) {
+        this._openFieldEditor(fieldId);
+      }, this));
+    },
+    
+    _appendNewField: function(type, callback) {
+      var instance = new Alpaca.fieldClassRegistry[type]();
+      var oldForm = $(document.body).registerFormEditor("form");
+      var name = "field-" + Math.round(Math.random() * 1000).toString(16);
+      var schema = {};
+      var options = {};
+      var fieldCount = 0;
+      
+      $.each(oldForm.schema.properties, function (name, option) {
+        fieldCount++;
+      });
+      
+      schema[name] = {
+        "type" : instance.getType()
+      };
+      
+      options[name] = {
+        "type": instance.getFieldType(),
+        "label": instance.getTitle(),
+        "order": (fieldCount + 1).toString()
+      };
+      
+      var form = $.extend(true, oldForm, {
+        schema: { properties : schema },
+        options: { fields: options }
+      });
+
+      $(document.body).registerFormEditor("form", form);
+      this.refresh($.proxy(function () {
+        if ($.isFunction(callback)) {
+          callback(this.element.find('[data-alpaca-field-name="' + name + '"]').attr('data-alpaca-field-id'));
+        }
+      }, this));
+    },
+    
+    _onFormPostRender: function() {
+      $(this.element).find('.alpaca-container-item').each($.proxy(function (index, item) {
+        $('<div>')
+          .addClass('item-editor')
+          .appendTo(item)
+          .append(
+            $('<a>')
+              .addClass('edit')
+              .attr({'href': 'javascript:void(null)'})
+              .text(this.options.locales.edit)    
+          );
+      }, this));
+      
+      $(this.element)
+        .find('.alpaca-field-object>.alpaca-container')
+        .sortable({
+          start: $.proxy(this._onSortableStart, this),
+          stop: $.proxy(this._onSortableStop, this)
+        })
+        .disableSelection();
+    },
+    
+    _onSortableStart: function( event, ui ) {
+      this._sortFrom = $(ui.item).index();
+    },
+    
+    _onSortableStop: function( event, ui ) {
+      $(document.body).registerFormEditor("moveField", this._sortFrom, $(ui.item).index());
+      this._sortFrom = null;
+    },
+    
+    _createForm: function (callback) {
+      var extraOptions = {
+        "view": {
+          "parent": "web-create",
+          "locale": LOCALE == 'fi' ? "fi_FI" : 'en_US',
+          "displayReadonly": true
+        },
+        "postRender": $.proxy(function () {
+          this.element.trigger("formPostRender");
+          if ($.isFunction(callback)) {
+            callback();
+          }
+        }, this)
+      };
+        
+      var options = $.extend(true, $(document.body).registerFormEditor("form"), extraOptions);
+      
+      $(this.element).find('.form').alpaca(options);
+    },
+    
+    _onEditClick: function (event) {
+      var fieldElement = $(event.target).closest('.alpaca-container-item').find('.alpaca-field');
+      var fieldId = fieldElement.attr('data-alpaca-field-id');
+      
+      this._openFieldEditor(fieldId);
     }
   });
   

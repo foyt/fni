@@ -47,6 +47,14 @@ h3 {
     }
   }
   
+  .new-field-container {
+    margin-top: -40px;
+  }
+  
+  .form {
+    margin-top: 40px;
+  }
+  
 }
 
 .field-editor-dialog {
@@ -115,6 +123,41 @@ h3 {
       }
     }
   }
+}
+
+.new-field-container {
+  position: absolute;
+  right: 20px;
+  background: #fff;
+  z-index: 99;
+  border: 1px solid #000;
+  width: 140px;
+ 
+  .new-field-link {
+    text-decoration: none;
+    padding-top: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+    display: inline-block;
+    font-weight: bold;
+    width: 100%;
+    @include box-sizing(border-box);
+  }
+
+  .field-types li {
+    padding-top: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+    
+    &:hover {
+      background: #47B0B0;
+      color: #fff;
+      cursor: pointer;
+    }
+  }
+
 }
 
 .save { 
