@@ -8,7 +8,13 @@
         "invalid": "Tämä tieto on virheellinen",
         "disallowValue": "Arvot '{0}' eivät ole sallittuja.",
         "notOptional": "Kenttä ei ole valinnainen",
-        "invalidEmail": "Virheellinen sähköpostiosoite"
+        "invalidEmail": "Virheellinen sähköpostiosoite",
+        "noneLabel" : "Ei valintaa",
+        "addItemButtonLabel" : "Lisää valinta",
+        "addButtonLabel" : "Lisää",
+        "removeButtonLabel" : "Poista",
+        "upButtonLabel" : "Ylös",
+        "downButtonLabel" : "Alas"
       }
     }
   });
