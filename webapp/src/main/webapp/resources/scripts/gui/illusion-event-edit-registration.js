@@ -31,6 +31,8 @@
             edit: this.element.find('.visual-editor').attr('data-edit-field-locale'),
             newField: this.element.find('.visual-editor').attr('data-add-new-field-locale'),
             editDialog: {
+              basic: this.element.find('.visual-editor').attr('data-edit-dialog-basic-locale'),
+              advanced: this.element.find('.visual-editor').attr('data-edit-dialog-advanced-locale'),
               apply: this.element.find('.visual-editor').attr('data-edit-dialog-apply-locale'),
               cancel: this.element.find('.visual-editor').attr('data-edit-dialog-cancel-locale')
             }
@@ -207,11 +209,14 @@
     },
     
     _openFieldEditor: function (fieldId) {
-      // TODO: Separate to basic and advanced tabs
+      var field = Alpaca.fieldInstances[fieldId];
+
       var removeProperties = ['title', 'description', 'dependencies'];
       var addOptions = ['label'];
-      
-      var field = Alpaca.fieldInstances[fieldId];
+      var basicProperties = ['label', 'readonly', 'required'];
+      if (['checkbox', 'radio', 'select'].indexOf(field.type) != -1) {
+        basicProperties.push('enum');
+      }
       
       var schema = field.getSchemaOfSchema();
       var schemaOptions = field.getOptionsForSchema();
@@ -247,12 +252,35 @@
           optionsExtra.fields[field] = $.extend(true, optionsOptions.fields[field], {});
         }
       });
+
+      var schema = $.extend(true, schemaExtra, schema);
+      var options = $.extend(true, optionsExtra, schemaOptions);
+      var bindings = {};
+      
+      $.each(schema.properties, function (fieldName, schema) {
+        bindings[fieldName] = basicProperties.indexOf(fieldName) == -1 ? '#field-advanced' : '#field-basic';
+      });
+      
+      var template = $('<div>')
+        .addClass('tabs');
+      
+      $('<ul>')
+        .append($('<li>').append($('<a>').attr('href', '#field-basic').text(this.options.locales.editDialog.basic)))
+        .append($('<li>').append($('<a>').attr('href', '#field-advanced').text(this.options.locales.editDialog.advanced)))
+        .appendTo(template);
+      
+      $('<div>').attr({id: 'field-basic'}).appendTo(template);
+      $('<div>').attr({id: 'field-advanced'}).appendTo(template);
       
       var extraOptions = {
         "view": {
           "parent": "web-edit",
           "displayReadonly": false,
-          "locale": LOCALE == 'fi' ? "fi_FI" : 'en_US'
+          "locale": LOCALE == 'fi' ? "fi_FI" : 'en_US',
+          "layout": {
+            "template": template.wrap('<div>').parent().html(),
+            "bindings": bindings
+          }
         },
         "postRender": $.proxy(function(control) {
           var dialog = $('<div>');
@@ -298,6 +326,9 @@
                 }
               }]
             });
+          
+            dialog.find('.tabs').tabs();
+
         }, this)
       };
       
@@ -311,11 +342,11 @@
           });
         }
       });
-
+      
       var options = $.extend(true, {
         data: fieldData,
-        schema: $.extend(true, schemaExtra, schema),
-        options: $.extend(true, optionsExtra, schemaOptions)
+        schema: schema,
+        options: options
       }, extraOptions);
             
       $('<div>').alpaca(options);
