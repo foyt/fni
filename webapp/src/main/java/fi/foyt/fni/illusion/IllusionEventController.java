@@ -432,7 +432,7 @@ public class IllusionEventController {
   /* IllusionEventParticipant */
   
   public IllusionEventParticipant createIllusionEventParticipant(User user, IllusionEvent event, String displayName, IllusionEventParticipantRole role) {
-    IllusionEventParticipant participant = illusionEventParticipantDAO.create(user, event, displayName, role);
+    IllusionEventParticipant participant = illusionEventParticipantDAO.create(user, event, displayName, role, new Date());
     illusionParticipantAddedEvent.fire(new IllusionParticipantAddedEvent(participant.getId()));
     
     return participant;

@@ -1,5 +1,8 @@
 package fi.foyt.fni.persistence.model.illusion;
 
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -8,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
@@ -57,6 +62,14 @@ public class IllusionEventParticipant {
     this.event = event;
   }
   
+  public Date getCreated() {
+    return created;
+  }
+  
+  public void setCreated(Date created) {
+    this.created = created;
+  }
+  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
@@ -72,4 +85,9 @@ public class IllusionEventParticipant {
   @NotNull
   @Enumerated (EnumType.STRING)
   private IllusionEventParticipantRole role;
+  
+  @NotNull
+  @Column (nullable = false)
+  @Temporal (TemporalType.TIMESTAMP)
+  private Date created;
 }

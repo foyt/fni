@@ -1,5 +1,6 @@
 package fi.foyt.fni.persistence.dao.illusion;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -20,13 +21,14 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionEventParticipant create(User user, IllusionEvent event, String displayName, IllusionEventParticipantRole role) {
+	public IllusionEventParticipant create(User user, IllusionEvent event, String displayName, IllusionEventParticipantRole role, Date created) {
 		IllusionEventParticipant illusionEventParticipant = new IllusionEventParticipant();
 
     illusionEventParticipant.setEvent(event);
     illusionEventParticipant.setDisplayName(displayName);
     illusionEventParticipant.setRole(role);
     illusionEventParticipant.setUser(user);
+    illusionEventParticipant.setCreated(created);
 
 		return persist(illusionEventParticipant);
 	}
