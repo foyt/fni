@@ -2,12 +2,18 @@ package fi.foyt.fni.rest.illusion;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -29,6 +35,9 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.CellReference;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -37,10 +46,12 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.joda.time.DateTime;
 
 import fi.foyt.fni.forum.ForumController;
+import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventMaterialController;
 import fi.foyt.fni.illusion.IllusionEventPageController;
 import fi.foyt.fni.illusion.IllusionEventPageVisibility;
+import fi.foyt.fni.illusion.registration.FormReader;
 import fi.foyt.fni.materials.CharacterSheetData;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
@@ -50,6 +61,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventGenre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventRegistrationForm;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
 import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 import fi.foyt.fni.persistence.model.materials.IllusionEventDocument;
@@ -73,6 +85,9 @@ import fi.foyt.fni.users.UserController;
 @Stateful
 @RequestScoped
 public class IllusionRestServices {
+  
+  @Inject
+  private Logger logger;
 
   @Inject
   private SessionController sessionController;
@@ -1474,6 +1489,128 @@ public class IllusionRestServices {
         row.createCell(1).setCellFormula("MIN(" + cellRefs + ")");
         row.createCell(2).setCellFormula("MAX(" + cellRefs + ")");
         row.createCell(3).setCellFormula("AVERAGE(" + cellRefs + ")");
+      }
+
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      try {
+        workbook.write(out);
+        out.flush();
+        return out.toByteArray();
+        
+      } finally {
+        out.close();
+      }
+
+    } finally {
+      workbook.close();
+    }
+  }
+  
+  /**
+   * Returns registration for data
+   * 
+   * @param eventId id of event
+   * @param format output format
+   * @return Response
+   */
+  @GET
+  @Path("/events/{EVENTID:[0-9]*}/registrationFormData")
+  @Security (
+    allowService = false,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.ILLUSION_FIND_REGISTRATION_FORM_DATA }
+  )
+  public Response getRegistrationFormData(@PathParam ("EVENTID") Long eventId, @QueryParam ("format") String format) {
+    if (format == null) {
+      return Response.status(Status.BAD_REQUEST).entity("format is required").build(); 
+    }
+    
+    DataOutputFormat outputFormat = DataOutputFormat.valueOf(format);
+    if (outputFormat == null) {
+      return Response.status(Status.BAD_REQUEST).entity("invalid format").build(); 
+    }
+    
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+    
+    if (!isLoggedUserEventOrganizer(event)) {
+      return Response.status(Status.FORBIDDEN).entity("Only event organizers can export registration form datas").build(); 
+    }
+    
+    IllusionEventRegistrationForm registrationForm = illusionEventController.findEventRegistrationForm(event);
+    
+    try {
+      switch (outputFormat) {
+        case XLS:
+          return Response
+              .ok(getRegistrationSheetDataAsXLS(event, registrationForm))
+              .header("Content-Disposition", String.format("attachment; filename=%s_registrations.xls", event.getUrlName()))
+              .build();
+      }
+      
+      return Response.status(Status.BAD_REQUEST).entity("invalid format").build(); 
+    } catch (IOException e) {
+      return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+    }
+  }
+
+  private byte[] getRegistrationSheetDataAsXLS(IllusionEvent event, IllusionEventRegistrationForm registrationForm) throws JsonParseException, JsonMappingException, IOException {
+    FormReader formReader = registrationForm != null ? new FormReader(registrationForm.getData()) : null;
+    Locale locale = sessionController.getLocale();
+    List<String> fields = null;
+    List<IllusionEventParticipant> participants = illusionEventController.listIllusionEventParticipantsByEventAndRole(event, IllusionEventParticipantRole.PARTICIPANT);
+    
+    Workbook workbook = new HSSFWorkbook();
+    try {
+      Sheet sheet = workbook.createSheet(event.getName());
+      Row headerRow = sheet.createRow(0);
+      headerRow.createCell(0).setCellValue(ExternalLocales.getText(locale, "illusion.registration.registeredHeader"));
+      
+      if (registrationForm != null) {
+        fields = formReader.getFields(true);
+        for (int i = 0, l = fields.size(); i < l; i++) {
+          String fieldLabel = formReader.getFieldLabel(fields.get(i));
+          Cell cell = headerRow.createCell(i + 1);
+          cell.setCellValue(fieldLabel);
+        }
+      } else {
+        headerRow.createCell(1).setCellValue(ExternalLocales.getText(locale, "illusion.registration.defaultEmailHeader"));
+        headerRow.createCell(2).setCellValue(ExternalLocales.getText(locale, "illusion.registration.defaultFirstNameHeader"));
+        headerRow.createCell(3).setCellValue(ExternalLocales.getText(locale, "illusion.registration.defaultLastNameHeader"));
+      }
+      
+      SimpleDateFormat dateFormat = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.FULL, locale);
+      CreationHelper createHelper = workbook.getCreationHelper();
+      CellStyle dateStyle = workbook.createCellStyle();
+      dateStyle.setDataFormat(createHelper.createDataFormat().getFormat(dateFormat.toPattern()));
+      
+      for (int participantIndex = 0, participantsSize = participants.size(); participantIndex < participantsSize; participantIndex++) {
+        IllusionEventParticipant participant = participants.get(participantIndex);
+        Row row = sheet.createRow(participantIndex + 1);
+        Cell createdCell = row.createCell(0);
+        createdCell.setCellStyle(dateStyle);
+        createdCell.setCellValue(participant.getCreated());
+        
+        if (registrationForm != null) {
+          Map<String, String> answers = illusionEventController.loadRegistrationFormAnswers(registrationForm, participant);
+          
+          for (int fieldIndex = 0, fieldsSize = fields.size(); fieldIndex < fieldsSize; fieldIndex++) {
+            String value = answers.get(fields.get(fieldIndex));
+            Cell cell = row.createCell(fieldIndex + 1);
+            cell.setCellValue(value);
+          }
+        } else {
+          User user = participant.getUser();
+          if (user != null) {
+            row.createCell(1).setCellValue(userController.getUserPrimaryEmail(user));
+            row.createCell(2).setCellValue(user.getFirstName());
+            row.createCell(3).setCellValue(user.getLastName());
+          } else {
+            logger.log(Level.SEVERE, String.format("Participant %d had a null user", participant.getId()));
+          }
+        }
       }
 
       ByteArrayOutputStream out = new ByteArrayOutputStream();

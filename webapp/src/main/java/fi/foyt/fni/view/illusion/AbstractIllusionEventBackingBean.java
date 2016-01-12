@@ -226,14 +226,14 @@ public abstract class AbstractIllusionEventBackingBean {
       String firstName = user.getFirstName();
       String lastName = user.getLastName();
       
-      formDatas.add(createFormData(ExternalLocales.getText(locale, "illusion.registration.registeredMail.defaultEmailHeader"), email)); 
+      formDatas.add(createFormData(ExternalLocales.getText(locale, "illusion.registration.defaultEmailHeader"), email)); 
       
       if (StringUtils.isNotBlank(firstName)) {
-        formDatas.add(createFormData(ExternalLocales.getText(locale, "illusion.registration.registeredMail.defaultFirstNameHeader"), firstName)); 
+        formDatas.add(createFormData(ExternalLocales.getText(locale, "illusion.registration.defaultFirstNameHeader"), firstName)); 
       }
       
       if (StringUtils.isNotBlank(lastName)) {
-        formDatas.add(createFormData(ExternalLocales.getText(locale, "illusion.registration.registeredMail.defaultLastNameHeader"), lastName)); 
+        formDatas.add(createFormData(ExternalLocales.getText(locale, "illusion.registration.defaultLastNameHeader"), lastName)); 
       }
     }
     
