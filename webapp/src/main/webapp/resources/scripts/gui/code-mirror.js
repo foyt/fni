@@ -31,6 +31,10 @@
       }
     },
     
+    refresh: function () {
+      this._editor.refresh();
+    },
+    
     _destroy : function() {
     
     }

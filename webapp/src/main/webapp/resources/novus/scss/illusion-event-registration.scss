@@ -1,61 +1,10 @@
 @import "vars";
 @import "compass";
 @import "styles";
-
+@import "illusion-registration-form-defaults";
 
 .alpaca-form {
-  
-  .alpaca-message {
-    font-weight: bold;
-    font-size: 12px;
-    font-family:"PT Sans";
-    color: #f00;
-  }
-  
-  .alpaca-field-any,
-  .alpaca-field-array,
-  .alpaca-field-checkbox,
-  .alpaca-field-radio,
-  .alpaca-field-number,
-  .alpaca-field-file,
-  .alpaca-field-select,
-  .alpaca-field-textarea,
-  .alpaca-field-text,
-  .alpaca-field-email {
-    input,
-    select,
-    textarea {
-      border: 1px solid #aaa;
-    }
-  
-    &.alpaca-invalid {
-      input,
-      select,
-      textarea {
-        border: 1px solid #f00;
-      }
-    }
-  
-    &.alpaca-field-valid {
-      input,
-      select,
-      textarea {
-        border: 1px solid #080;
-      }
-    }
-  }
-  
-  label {
-    font-size: 13px;
-    font-family: $default-font;
-    font-weight: bold;
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-  
-  .alpaca-icon-required {
-    display: none;
-  }
+  @include registration-form-defaults;
   
   button {
     @include header-4;
@@ -71,15 +20,4 @@
     text-align: center;
   }
   
-  input[type="text"], 
-  input[type="email"], 
-  input[type="number"], 
-  textarea, 
-  select {
-    font-size: 14px;
-    font-family: $default-font;
-    width: 100%; 
-    @include box-sizing(border-box);
-  }
-
 }

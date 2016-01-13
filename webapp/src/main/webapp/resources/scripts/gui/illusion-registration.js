@@ -1,19 +1,6 @@
 (function() {
   'use strict';
   
-  $.alpaca.registerView({
-    "id": "base",
-    "messages": {
-      "fi_FI": {
-        "required": "Tämä tieto on pakollinen",
-        "invalid": "Tämä tieto on virheellinen",
-        "disallowValue": "Arvo {0} eivät ole sallittuja.",
-        "notOptional": "Kenttä ei ole valinnainen",
-        "invalidEmail": "Virheellinen sähköpostiosoite"
-      }
-    }
-  });
-
   $(document).ready(function () {
     var form = $('#registration-form');
     
@@ -42,7 +29,7 @@
       },
       "view": {
         "parent": edit ? "web-edit" : "web-create",
-        "locale": "fi_FI"
+        "locale": LOCALE == 'fi' ? "fi_FI" : 'en_US'
       }
     };
     

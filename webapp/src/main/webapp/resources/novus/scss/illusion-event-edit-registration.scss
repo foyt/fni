@@ -1,6 +1,8 @@
 @import "vars";
 @import "compass";
 @import "styles";
+@import "illusion-registration-form-defaults";
+@import "//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css";
 
 h3 {
   margin-top: 10px;
@@ -10,6 +12,152 @@ h3 {
 .CodeMirror {
   border: 1px solid #aaa;
   height: 400px;
+}
+
+.visual-editor {
+  @include registration-form-defaults;
+
+  .alpaca-container-item {
+    opacity: 1;
+    padding: 10px;
+    border: 1px dotted #aaa;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  
+  .ui-state-highlight { 
+    margin: 10px;
+    height: 10px;
+  }
+  
+  .item-editor {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    cursor: move;
+    
+    a.edit {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  }
+  
+  .new-field-container {
+    margin-top: -40px;
+  }
+  
+  .form {
+    margin-top: 40px;
+  }
+  
+}
+
+.field-editor-dialog {
+  @include registration-form-defaults;
+  
+  .alpaca-field-array {
+    position: relative;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin-top: 20px;
+    padding: 10px;
+    
+    .alpaca-field-text {
+      width: 80%;
+      margin-bottom: 5px;
+    }
+    
+    .alpaca-array-actionbar {
+      position: absolute;
+      right: 10px;
+      margin-top: 0px;
+      
+      .alpaca-array-actionbar-action {
+        
+        /** Font awesome **/
+        
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        transform: translate(0, 0);
+        
+        display: inline-block;
+        vertical-align: top;
+        border: 1px solid #000;        
+        padding: 0px;
+        margin-top: 2.5px;
+        background: #000;
+        border-radius: 3px;
+        color: #fff;
+        display: inline-block;
+        cursor: pointer;
+        
+        &.alpaca-button-disabled {
+          cursor: default;
+          background: #666;
+        }
+
+        &[data-alpaca-array-actionbar-action="add"]:before {
+          content: "\f067";
+        }
+
+        &[data-alpaca-array-actionbar-action="remove"]:before {
+          content: "\f068";
+        }
+        
+        &[data-alpaca-array-actionbar-action="up"]:before {
+          content:"\f062";
+        }
+
+        &[data-alpaca-array-actionbar-action="down"]:before {
+          content:"\f063";
+        }
+      }
+    }
+  }
+}
+
+.new-field-container {
+  position: absolute;
+  right: 20px;
+  background: #fff;
+  z-index: 99;
+  border: 1px solid #000;
+  width: 140px;
+ 
+  .new-field-link {
+    text-decoration: none;
+    padding-top: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+    display: inline-block;
+    font-weight: bold;
+    width: 100%;
+    @include box-sizing(border-box);
+  }
+
+  .field-types li {
+    padding-top: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+    
+    &:hover {
+      background: #47B0B0;
+      color: #fff;
+      cursor: pointer;
+    }
+  }
+
 }
 
 .save { 
