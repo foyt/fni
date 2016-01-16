@@ -5,7 +5,7 @@
       // IE 11
       $(document.head)
         .append($('<link>').attr({
-          'href': CONTEXTPATH + '/theme/css/flexgrid-ie.css',
+          'href': '//static.forgeandillusion.net/libs/fni-flexgrid/1.0.0/flexgrid-ie.css',
           'rel': 'stylesheet'
         }));
     }
