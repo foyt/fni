@@ -38,12 +38,12 @@ h3 {
     right: 0px;
     cursor: move;
     
-    a.edit {
-      position: absolute;
-      right: 10px;
-      top: 10px;
+    a.edit, a.remove {
       text-decoration: none;
       font-weight: bold;
+      float: right;
+      margin-right: 10px;
+      margin-top: 10px;
     }
   }
   

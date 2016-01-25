@@ -29,6 +29,7 @@
           fieldTypes: this.options.fieldTypes,
           locales: {
             edit: this.element.find('.visual-editor').attr('data-edit-field-locale'),
+            remove: this.element.find('.visual-editor').attr('data-remove-field-locale'),
             newField: this.element.find('.visual-editor').attr('data-add-new-field-locale'),
             editDialog: {
               basic: this.element.find('.visual-editor').attr('data-edit-dialog-basic-locale'),
@@ -195,6 +196,7 @@
       }, this));
       
       this.element.on('click', '.item-editor .edit', $.proxy(this._onEditClick, this));
+      this.element.on('click', '.item-editor .remove', $.proxy(this._onRemoveClick, this));
       this.element.on('click', '.new-field-container .field-types li', $.proxy(this._onNewFieldClick, this));
       this.element.on('formPostRender', $.proxy(this._onFormPostRender, this));
     },
@@ -206,6 +208,16 @@
           callback();
         }
       }, this));
+    },
+    
+    _removeField: function (fieldId) {
+      var field = Alpaca.fieldInstances[fieldId];
+      var form = $(document.body).registerFormEditor("form");
+      delete form.schema.properties[field.propertyId];
+      delete form.options.fields[field.propertyId];
+      
+      $(document.body).registerFormEditor("form", form);
+      this.refresh();
     },
     
     _openFieldEditor: function (fieldId) {
@@ -421,12 +433,16 @@
         $('<div>')
           .addClass('item-editor')
           .appendTo(item)
-          .append(
+          .append([
             $('<a>')
               .addClass('edit')
               .attr({'href': 'javascript:void(null)'})
-              .text(this.options.locales.edit)    
-          );
+              .text(this.options.locales.edit),
+            $('<a>')
+              .addClass('remove')
+              .attr({'href': 'javascript:void(null)'})
+              .text(this.options.locales.remove)    
+          ]);
       }, this));
       
       $(this.element)
@@ -470,8 +486,13 @@
     _onEditClick: function (event) {
       var fieldElement = $(event.target).closest('.alpaca-container-item').find('.alpaca-field');
       var fieldId = fieldElement.attr('data-alpaca-field-id');
-      
       this._openFieldEditor(fieldId);
+    },
+    
+    _onRemoveClick: function (event) {
+      var fieldElement = $(event.target).closest('.alpaca-container-item').find('.alpaca-field');
+      var fieldId = fieldElement.attr('data-alpaca-field-id');
+      this._removeField(fieldId);
     }
   });
   
