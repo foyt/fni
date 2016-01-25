@@ -298,21 +298,31 @@
                 'text': this.options.locales.editDialog.apply,
                 'click': $.proxy(function(event) { 
                   var form = $(document.body).registerFormEditor("form");
-                  
-                  $.each(control.getValue(), $.proxy(function (key, value) {
-                    if (!control.schema.properties[key].readonly) {
+                  var schemaProperties = field.getSchemaOfSchema().properties;
+                  var optionProperties = field.getSchemaOfOptions().properties;
+                  var values = control.getValue();
+
+                  $.each(schemaProperties, function (key) {
+                    var value = values[key];
+                    if (control.schema.properties[key] && !control.schema.properties[key].readonly) {
                       if ($.isArray(value) && value.length == 0) {
                         value = undefined;
                       }
                       
-                      if (schema.properties[key]) {
-                        form.schema.properties[field.name][key] = value;
-                      } else {
-                        form.options.fields[field.name][key] = value;
+                      form.schema.properties[field.name][key] = value;
+                    }
+                  });
+                  
+                  $.each(optionProperties, function (key) {
+                    var value = values[key];
+                    if (control.schema.properties[key] && !control.schema.properties[key].readonly) {
+                      if ($.isArray(value) && value.length == 0) {
+                        value = undefined;
                       }
                       
+                      form.options.fields[field.name][key] = value;
                     }
-                  }, this));
+                  });
                   
                   $(document.body).registerFormEditor("form", form);
                   this.refresh();
