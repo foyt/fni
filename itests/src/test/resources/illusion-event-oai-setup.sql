@@ -36,8 +36,8 @@ values
   (20014, 'INDEX', 0);  
   
 insert into
-  IllusionEventParticipant (id, role, event_id, user_id)
+  IllusionEventParticipant (id, role, event_id, user_id, created)
 values 
-  (2, 'ORGANIZER', 2, 4),
-  (3, 'ORGANIZER', 3, 4),
-  (4, 'ORGANIZER', 4, 4);
+  (2, 'ORGANIZER', 2, 4, PARSEDATETIME('1 1 2010', 'd M yyyy')),
+  (3, 'ORGANIZER', 3, 4, PARSEDATETIME('1 1 2010', 'd M yyyy')),
+  (4, 'ORGANIZER', 4, 4, PARSEDATETIME('1 1 2010', 'd M yyyy'));
