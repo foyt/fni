@@ -1,9 +1,189 @@
 @import "vars";
 
-@media screen and (max-width: $grid-width-desktop) {
-  @import "grid/grid-mobile"
+@media (max-width: $grid-width-desktop) {
+  .hide_on_mobile {
+    display: none !important;
+  }
+  
+  @for $i from 1 through $grid-columns {
+    .grid_#{$i} { 
+      display: block;
+      width: 100%;
+    }
+  }
 }
 
-@media screen and (min-width: $grid-width-desktop) {
-  @import "grid/grid-desktop"
+@media (min-width: $grid-width-desktop) {
+  $grid-cell-width: $grid-width-desktop / $grid-columns;
+
+  body {
+    min-width: $grid-width-desktop;
+  }
+  
+  /* Container
+  ----------------------------------------------------------------------------------------------------*/
+  
+  .container_#{$grid-columns} {
+    margin-left: auto;
+    margin-right: auto;
+    width: $grid-width-desktop;
+  }
+  
+  /* Grid >> Global
+  ----------------------------------------------------------------------------------------------------*/
+  
+  @for $i from 1 through $grid-columns {
+    .grid_#{$i} { 
+      display: inline;
+      float: left;
+      margin-left: $grid-margin;
+      margin-right: $grid-margin;
+    }
+  }
+  
+  @for $i from 1 through $grid-columns {
+    .push_#{$i}, .pull_#{$i} { 
+      position: relative;
+    }
+  }
+  
+  /* Grid >> Children (Alpha ~ First, Omega ~ Last)
+  ----------------------------------------------------------------------------------------------------*/
+  
+  .alpha {
+    margin-left: 0;
+  }
+  
+  .omega {
+    margin-right: 0;
+  }
+  
+  .tight {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  .slim-left, .narrow-left {
+    margin-left: $grid-margin / 2;
+  }
+  
+  .slim-right, .narrow-right {
+    margin-right: $grid-margin / 2;
+  }
+  
+  /* Grid >> 16 Columns
+  ----------------------------------------------------------------------------------------------------*/
+  
+  @for $i from 1 through $grid-columns {
+    .container_#{$grid-columns} .grid_#{$i} {
+      width: ($grid-cell-width * $i) - ($grid-margin * 2);
+    }
+    
+    .container_#{$grid-columns} .grid_#{$i}.tight {
+      width: ($grid-cell-width * $i);
+    }
+    
+    .container_#{$grid-columns} .grid_#{$i}.alpha, .container_#{$grid-columns} .grid_#{$i}.omega {
+      width: ($grid-cell-width * $i) - $grid-margin;
+    }
+  
+    .container_#{$grid-columns} .grid_#{$i}.slim-left, .container_#{$grid-columns} .grid_#{$i}.slim-right {
+      width: ($grid-cell-width * $i) - ($grid-margin) + ($grid-margin / 2);
+    }
+    
+    .container_#{$grid-columns} .grid_#{$i}.alpha.slim-left, .container_#{$grid-columns} .grid_#{$i}.alpha.slim-right,
+    .container_#{$grid-columns} .grid_#{$i}.omega.slim-left, .container_#{$grid-columns} .grid_#{$i}.omega.slim-right {
+      width: ($grid-cell-width * $i) - ($grid-margin) + ($grid-margin / 2);
+    }
+    
+    .container_#{$grid-columns} .grid_#{$i}.narrow-left, .container_#{$grid-columns} .grid_#{$i}.narrow-right {
+      width: ($grid-cell-width * $i) - (($grid-margin) + ($grid-margin / 2));
+    }
+    
+    .container_#{$grid-columns} .grid_#{$i}.alpha.narrow-left, .container_#{$grid-columns} .grid_#{$i}.alpha.narrow-right,
+    .container_#{$grid-columns} .grid_#{$i}.omega.narrow-left, .container_#{$grid-columns} .grid_#{$i}.omega.narrow-right {
+      width: ($grid-cell-width * $i) - (($grid-margin) + ($grid-margin / 2));
+    }
+  }
+  
+  /* Prefix Extra Space >> 16 Columns
+  ----------------------------------------------------------------------------------------------------*/
+  
+  @for $i from 1 through $grid-columns {
+    .container_#{$grid-columns} .prefix_#{$i} {
+      padding-left: ($grid-cell-width * $i);
+    }
+  }
+  
+  /* Suffix Extra Space >> 16 Columns
+  ----------------------------------------------------------------------------------------------------*/
+  
+  @for $i from 1 through $grid-columns {
+    .container_#{$grid-columns} .suffix_#{$i} {
+      padding-right: ($grid-cell-width * $i);
+    }
+  }
+  
+  /* Push Space >> 16 Columns
+  ----------------------------------------------------------------------------------------------------*/
+  
+  @for $i from 1 through $grid-columns {
+    .container_#{$grid-columns} .push_#{$i} {
+      left: ($grid-cell-width * $i);
+    }
+  }
+  
+  /* Pull Space >> 16 Columns
+  ----------------------------------------------------------------------------------------------------*/
+  
+  @for $i from 1 through $grid-columns {
+    .container_#{$grid-columns} .pull_#{$i} {
+      left: -($grid-cell-width * $i);
+    }
+  }
+  
+  /* `Clear Floated Elements
+  ----------------------------------------------------------------------------------------------------*/
+  
+  /* http://sonspring.com/journal/clearing-floats */
+  
+  .clear {
+    clear: both;
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+  }
+  
+  /* http://www.yuiblog.com/blog/2010/09/27/clearfix-reloaded-overflowhidden-demystified */
+  
+  .clearfix:before,
+  .clearfix:after,
+  .container_16:before,
+  .container_16:after {
+    content: '.';
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    font-size: 0;
+    line-height: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .clearfix:after,
+  .container_16:after {
+    clear: both;
+  }
+  
+  /*
+    The following zoom:1 rule is specifically for IE6 + IE7.
+    Move to separate stylesheet if invalid CSS is a problem.
+  */
+  
+  .clearfix,
+  .container_16 {
+    zoom: 1;
+  }
 }
