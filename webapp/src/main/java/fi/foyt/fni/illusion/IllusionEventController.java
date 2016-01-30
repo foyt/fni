@@ -449,7 +449,11 @@ public class IllusionEventController {
   public IllusionEventParticipant findIllusionEventParticipantByEventAndUser(IllusionEvent event, User user) {
     return illusionEventParticipantDAO.findByEventAndUser(event, user);
   }
-  
+
+  public IllusionEventParticipant findParticipantByEventAndAccessCode(IllusionEvent event, String accessCode) {
+    return illusionEventParticipantDAO.findByEventAndAccessCode(event, accessCode);
+  }
+
   public List<IllusionEventParticipant> listIllusionEventParticipantsByEvent(IllusionEvent event) {
     return illusionEventParticipantDAO.listByEvent(event);
   }

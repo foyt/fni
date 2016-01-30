@@ -70,6 +70,14 @@ public class IllusionEventParticipant {
     this.created = created;
   }
   
+  public String getAccessCode() {
+    return accessCode;
+  }
+  
+  public void setAccessCode(String accessCode) {
+    this.accessCode = accessCode;
+  }
+  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   private Long id;
@@ -90,4 +98,6 @@ public class IllusionEventParticipant {
   @Column (nullable = false)
   @Temporal (TemporalType.TIMESTAMP)
   private Date created;
+  
+  private String accessCode;
 }

@@ -14,6 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
@@ -59,6 +60,9 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
   @Parameter
   private String urlName;
 
+  @Parameter
+  private String accessCode;
+  
   @Inject
   private Logger logger;
 
@@ -91,6 +95,17 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
     if (illusionEvent.getSignUpFee() == null) {
       return navigationController.internalError();
     }
+    
+    if (participant == null) {
+      if (StringUtils.isBlank(getAccessCode())) {
+        return navigationController.requireLogin();
+      }
+      
+      participant = illusionEventController.findParticipantByEventAndAccessCode(illusionEvent, getAccessCode());
+      if (participant == null) {
+        return navigationController.requireLogin();
+      }
+    }
 
     String currentPageId = IllusionEventPage.Static.INDEX.name();
     Currency currency = systemSettingsController.getDefaultCurrency();
@@ -100,35 +115,26 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
     Double totalAmount = signUpFee;
     Double taxAmount = totalAmount - (totalAmount / (1 + (vatPercent / 100)));
     Boolean vatRegistered = systemSettingsController.isVatRegistered();
-
-    String payerCompany = null;
-    String payerFirstName = null;
-    String payerLastName = null;
-    String payerEmail = null;
-    String payerMobile = null;
-    String payerTelephone = null;
+    User user = participant.getUser();
+    
+    String payerCompany = user.getCompany();
+    String payerFirstName = user.getFirstName();
+    String payerLastName = user.getLastName();
+    String payerEmail = userController.getUserPrimaryEmail(user);
+    String payerMobile = user.getMobile();
+    String payerTelephone = user.getPhone();
     String payerStreetAddress = null;
     String payerPostalCode = null;
     String payerPostalOffice = null;
     Long payerCountryId = systemSettingsController.getDefaultCountry().getId();
     String notes = null;
 
-    if (participant != null) {
-      User user = participant.getUser();
-      payerCompany = user.getCompany();
-      payerFirstName = user.getFirstName();
-      payerLastName = user.getLastName();
-      payerEmail = userController.getUserPrimaryEmail(user);
-      payerMobile = user.getMobile();
-      payerTelephone = user.getPhone();
-
-      Address address = userController.findAddressByUserAndType(user, AddressType.PAYMENT_CONTACT);
-      if (address != null) {
-        payerStreetAddress = address.getStreet1();
-        payerPostalCode = address.getPostalCode();
-        payerPostalOffice = address.getCity();
-        payerCountryId = address.getCountry().getId();
-      }
+    Address address = userController.findAddressByUserAndType(user, AddressType.PAYMENT_CONTACT);
+    if (address != null) {
+      payerStreetAddress = address.getStreet1();
+      payerPostalCode = address.getPostalCode();
+      payerPostalOffice = address.getCity();
+      payerCountryId = address.getCountry().getId();
     }
 
     IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, currentPageId)
@@ -172,8 +178,24 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
   }
   
   public String proceedToPayment() {
-    User loggedUser = sessionController.getLoggedUser();
+    User user = sessionController.getLoggedUser();
     IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
+    IllusionEventParticipant participant = null;
+    
+    if (user == null) {
+      participant = illusionEventController.findParticipantByEventAndAccessCode(illusionEvent, getAccessCode());
+      if (participant == null) {
+        return navigationController.requireLogin();
+      }
+      
+      user = participant.getUser();
+    } else {
+      participant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, user);
+    }
+    
+    if ((user == null) || (participant == null)) {
+      return navigationController.requireLogin();
+    }
     
     ObjectMapper objectMapper = new ObjectMapper();
     
@@ -193,18 +215,12 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
       String.format("%s/paytrail/pending", baseUrl)
     );
     
-    String accessKey = null;
-    Address address = null;
+    String accessKey = UUID.randomUUID().toString();
+    Address address = userController.findAddressByUserAndType(user, AddressType.PAYMENT_CONTACT);
     Country payerAddressCountry = systemSettingsController.findCountryById(details.getPayerCountryId());
 
-    if (loggedUser == null) {
-      accessKey = UUID.randomUUID().toString();
-    } else {
-      address = userController.findAddressByUserAndType(loggedUser, AddressType.PAYMENT_CONTACT);
-    }
-    
     if (address == null) {
-      address = userController.createAddress(loggedUser, 
+      address = userController.createAddress(user, 
         AddressType.PAYMENT_CONTACT, 
         details.getPayerStreetAddress(), 
         null,
@@ -228,7 +244,7 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
     Address orderAddress = userController.createAddress(address.getUser(), AddressType.PAYMENT_CONTACT_ARCHIVED, address.getStreet1(), address.getStreet2(),
         address.getPostalCode(), address.getCity(), address.getCountry());
 
-    Order order = orderController.createOrder(loggedUser, 
+    Order order = orderController.createOrder(user, 
         accessKey, 
         details.getPayerCompany(), 
         details.getPayerEmail(), 
@@ -330,6 +346,14 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
   
   public void setOrderDetails(String orderDetails) {
     this.orderDetails = orderDetails;
+  }
+  
+  public String getAccessCode() {
+    return accessCode;
+  }
+  
+  public void setAccessCode(String accessCode) {
+    this.accessCode = accessCode;
   }
 
   private String headHtml;

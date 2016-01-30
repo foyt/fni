@@ -17,6 +17,7 @@
     <h:outputText value="#{illusionEventPaymentBackingBean.contentsHtml}" escape="false"/>
     
     <h:form style="display: none">
+      <input type="hidden" jsf:value="#{illusionEventPaymentBackingBean.accessCode}"/>
       <input type="hidden" class="payment-details" jsf:value="#{illusionEventPaymentBackingBean.orderDetails}"/>
       <input type="submit" class="form-submit" jsf:action="#{illusionEventPaymentBackingBean.proceedToPayment}"/>
     </h:form>
