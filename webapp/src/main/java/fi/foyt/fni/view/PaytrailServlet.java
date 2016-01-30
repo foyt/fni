@@ -75,7 +75,7 @@ public class PaytrailServlet extends HttpServlet {
 		        
             response.sendRedirect(request.getContextPath() + getOrderRedirectUrl(order));
 			    break;
-			    case ILLUSION_GROUP:
+			    case ILLUSION_EVENT:
             orderController.updateOrderAsPaid(order);
             response.sendRedirect(request.getContextPath() + getIllusionRedirectUrl(order));
 			    break;
@@ -117,7 +117,7 @@ public class PaytrailServlet extends HttpServlet {
     IllusionEvent illusionEvent = orderController.findOrderIllusionEvent(order);
 
     return new StringBuilder()
-      .append("/illusion/group/")
+      .append("/illusion/event/")
       .append(illusionEvent.getUrlName())
       .toString();
 	}

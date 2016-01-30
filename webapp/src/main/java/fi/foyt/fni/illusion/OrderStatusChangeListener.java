@@ -51,10 +51,10 @@ public class OrderStatusChangeListener {
   		Order order = orderController.findOrderById(event.getOrderId()); 
   		if (order != null) {
   		  switch (order.getType()) {
-  		    case ILLUSION_GROUP:
-  		      IllusionEvent group = orderController.findOrderIllusionEvent(order);
-  		      if (group != null) {
-  		        IllusionEventParticipant member = illusionEventController.findIllusionEventParticipantByEventAndUser(group, order.getCustomer());
+  		    case ILLUSION_EVENT:
+  		      IllusionEvent illusionEvent = orderController.findOrderIllusionEvent(order);
+  		      if (illusionEvent != null) {
+  		        IllusionEventParticipant member = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, order.getCustomer());
     		      illusionEventController.updateIllusionEventParticipantRole(member, IllusionEventParticipantRole.PARTICIPANT);
     		      sendPaymentAcceptedMail(member);
   		      } else {
@@ -82,7 +82,7 @@ public class OrderStatusChangeListener {
     
     String groupUrl = systemSettingsController.getSiteUrl(false, true);
     if (StringUtils.isNotBlank(groupUrl)) {
-      groupUrl += "/illusion/group/" + groupUrlName;
+      groupUrl += "/illusion/event/" + groupUrlName;
     }
 
     String subject = ExternalLocales.getText(userLocale, "illusion.mail.paymentAccepted.subject");
