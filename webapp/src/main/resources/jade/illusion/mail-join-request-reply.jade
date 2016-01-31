@@ -1,0 +1,32 @@
+p
+  if firstName
+    =locale.text('illusion.payment.joinRequestReplyMail.headerUser', firstName)
+  else
+    =locale.text('illusion.payment.joinRequestReplyMail.header')
+p
+  span
+    if accepted
+      =locale.text('illusion.payment.joinRequestReplyMail.acceptedPrefix')
+    else
+      =locale.text('illusion.payment.joinRequestReplyMail.declinedPrefix')
+  span
+    | 
+  a(href=eventLink)
+    =locale.text('illusion.payment.joinRequestReplyMail.eventLink', eventName)
+  span
+    | 
+  span
+    if accepted
+      =locale.text('illusion.payment.joinRequestReplyMail.acceptedPostfix')
+    else
+      =locale.text('illusion.payment.joinRequestReplyMail.declinedPostfix')
+if waitingPayment
+  p
+    =locale.text('illusion.payment.joinRequestReplyMail.paymentPrefix')
+  p
+    a(href=paymentLink)
+      =locale.text('illusion.payment.joinRequestReplyMail.paymentLink', paymentLink)
+hr
+p
+  =locale.text('illusion.payment.joinRequestReplyMail.footer') 
+hr
