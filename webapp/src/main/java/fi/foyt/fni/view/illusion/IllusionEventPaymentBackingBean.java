@@ -105,6 +105,10 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
       if (participant == null) {
         return navigationController.requireLogin();
       }
+      
+      if (!sessionController.isLoggedIn()) {
+        sessionController.login(participant.getUser());
+      }
     }
     
     switch (participant.getRole()) {
