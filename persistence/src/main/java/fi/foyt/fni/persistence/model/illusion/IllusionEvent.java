@@ -218,6 +218,14 @@ public class IllusionEvent {
   public void setForumTopic(ForumTopic forumTopic) {
     this.forumTopic = forumTopic;
   }
+  
+  public IllusionEventPaymentMode getPaymentMode() {
+    return paymentMode;
+  }
+  
+  public void setPaymentMode(IllusionEventPaymentMode paymentMode) {
+    this.paymentMode = paymentMode;
+  }
 
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
@@ -294,4 +302,9 @@ public class IllusionEvent {
   
   @ManyToOne
   private ForumTopic forumTopic;
+
+  @NotNull
+  @Enumerated (EnumType.STRING)
+  @Column (nullable = false)
+  private IllusionEventPaymentMode paymentMode;
 }

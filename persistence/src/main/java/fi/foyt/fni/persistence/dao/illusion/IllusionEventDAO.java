@@ -14,6 +14,7 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventPaymentMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent_;
 import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
@@ -23,7 +24,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionEvent create(String urlName, String name, String location, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, String signUpFeeText, Currency signUpFeeCurrency, Date start, Date end, OAuthClient oAuthClient, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate, Boolean published, ForumTopic forumTopic) {
+	public IllusionEvent create(String urlName, String name, String location, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, String signUpFeeText, Currency signUpFeeCurrency, Date start, Date end, OAuthClient oAuthClient, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate, Boolean published, ForumTopic forumTopic, IllusionEventPaymentMode paymentMode) {
 		IllusionEvent illusionEvent = new IllusionEvent();
 		
 		illusionEvent.setName(name);
@@ -48,6 +49,7 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
 		illusionEvent.setSignUpEndDate(signUpEndDate);
 		illusionEvent.setPublished(published);
 		illusionEvent.setForumTopic(forumTopic);
+		illusionEvent.setPaymentMode(paymentMode);
 		
 		return persist(illusionEvent);
 	}
@@ -337,5 +339,11 @@ public class IllusionEventDAO extends GenericDAO<IllusionEvent> {
     illusionEvent.setPublished(published);
     return persist(illusionEvent);
   }
+
+  public IllusionEvent updatePaymentMode(IllusionEvent illusionEvent, IllusionEventPaymentMode paymentMode) {
+    illusionEvent.setPaymentMode(paymentMode);
+    return persist(illusionEvent);
+  }
+  
 
 }

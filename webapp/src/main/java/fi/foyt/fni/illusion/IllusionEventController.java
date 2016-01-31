@@ -63,6 +63,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantImage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantSetting;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventPaymentMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventRegistrationForm;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventRegistrationFormField;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventRegistrationFormFieldAnswer;
@@ -181,7 +182,7 @@ public class IllusionEventController {
 
     IllusionFolder illusionFolder = findUserIllusionFolder(user, true);
     IllusionEventFolder illusionEventFolder = createIllusionEventFolder(user, illusionFolder, urlName, name);
-    IllusionEvent event = createIllusionEvent(urlName, location, name, description, xmppRoom, illusionEventFolder, joinMode, created, signUpFee, signUpFeeText, signUpFeeCurrency, start, end, ageLimit, beginnerFriendly, imageUrl, type, signUpStartDate, signUpEndDate);
+    IllusionEvent event = createIllusionEvent(urlName, location, name, description, xmppRoom, illusionEventFolder, joinMode, created, signUpFee, signUpFeeText, signUpFeeCurrency, start, end, ageLimit, beginnerFriendly, imageUrl, type, signUpStartDate, signUpEndDate, IllusionEventPaymentMode.NONE);
 
     String indexDocumentTitle = ExternalLocales.getText(locale, "illusion.newEvent.indexDocumentTitle");
     String indexDocumentContent = ExternalLocales.getText(locale, "illusion.newEvent.indexDocumentContent");
@@ -201,12 +202,12 @@ public class IllusionEventController {
     return event;
   }
 
-  private IllusionEvent createIllusionEvent(String urlName, String location, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, String signUpFeeText, Currency signUpFeeCurrency, Date start, Date end, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate) {
+  private IllusionEvent createIllusionEvent(String urlName, String location, String name, String description, String xmppRoom, IllusionEventFolder folder, IllusionEventJoinMode joinMode, Date created, Double signUpFee, String signUpFeeText, Currency signUpFeeCurrency, Date start, Date end, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, IllusionEventType type, Date signUpStartDate, Date signUpEndDate, IllusionEventPaymentMode paymentMode) {
     Forum forum = forumController.findForumByUrlName("illusion");
     String systemUserEmail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
     User systemUser = userController.findUserByEmail(systemUserEmail);
     ForumTopic forumTopic = forumController.createTopic(forum, name, systemUser);
-    return illusionEventDAO.create(urlName, name, location, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeText, signUpFeeCurrency, start, end, null, ageLimit, beginnerFriendly, imageUrl, type, signUpStartDate, signUpEndDate, Boolean.FALSE, forumTopic);
+    return illusionEventDAO.create(urlName, name, location, description, xmppRoom, folder, joinMode, created, signUpFee, signUpFeeText, signUpFeeCurrency, start, end, null, ageLimit, beginnerFriendly, imageUrl, type, signUpStartDate, signUpEndDate, Boolean.FALSE, forumTopic, paymentMode);
   }
 
   public IllusionEvent findIllusionEventById(Long id) {
@@ -356,10 +357,12 @@ public class IllusionEventController {
     return illusionEventDAO.updateDomain(illusionEvent, StringUtils.isNotBlank(domain) ? domain : null);
   }
 
-  public IllusionEvent updateEventSignUpFee(IllusionEvent illusionEvent, String signUpFeeText, Double signUpFee, Currency signUpFeeCurrency) {
+  public IllusionEvent updateEventSignUpFee(IllusionEvent illusionEvent, String signUpFeeText, Double signUpFee, Currency signUpFeeCurrency, IllusionEventPaymentMode paymentMode) {
     illusionEventDAO.updateSignUpFee(illusionEvent, signUpFee);
     illusionEventDAO.updateSignUpFeeText(illusionEvent, signUpFeeText);
     illusionEventDAO.updateSignUpFeeCurrency(illusionEvent, signUpFeeCurrency);
+    illusionEventDAO.updatePaymentMode(illusionEvent, paymentMode);
+    
     return illusionEvent;
   }
   

@@ -442,7 +442,7 @@ public class IllusionRestServices {
     illusionEventController.updateIllusionEventImageUrl(event, entity.getImageUrl());
     illusionEventController.updateEventGenres(event, genres);
     illusionEventController.updateEventDomain(event, entity.getDomain());
-    illusionEventController.updateEventSignUpFee(event, signUpFeeText, signUpFee, signUpFeeCurrency);
+    illusionEventController.updateEventSignUpFee(event, signUpFeeText, signUpFee, signUpFeeCurrency, event.getPaymentMode());
     illusionEventController.updatePublished(event, entity.getPublished());
     
     return Response.noContent().build();

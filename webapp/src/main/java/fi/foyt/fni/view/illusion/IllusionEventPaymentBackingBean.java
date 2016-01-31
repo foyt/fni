@@ -106,6 +106,19 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
         return navigationController.requireLogin();
       }
     }
+    
+    switch (participant.getRole()) {
+      case BANNED:
+      case BOT:
+        return navigationController.accessDenied();
+      case PENDING_APPROVAL:
+        return String.format("/illusion/event.jsf?faces-redirect=true&urlName=%s", getUrlName());
+      case ORGANIZER:
+      case PARTICIPANT:
+        return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
+      case WAITING_PAYMENT:
+      case INVITED:
+    }
 
     String currentPageId = IllusionEventPage.Static.INDEX.name();
     Currency currency = systemSettingsController.getDefaultCurrency();
@@ -195,6 +208,19 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
     
     if ((user == null) || (participant == null)) {
       return navigationController.requireLogin();
+    }
+    
+    switch (participant.getRole()) {
+      case BANNED:
+      case BOT:
+        return navigationController.accessDenied();
+      case PENDING_APPROVAL:
+        return String.format("/illusion/event.jsf?faces-redirect=true&urlName=%s", getUrlName());
+      case ORGANIZER:
+      case PARTICIPANT:
+        return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
+      case WAITING_PAYMENT:
+      case INVITED:
     }
     
     ObjectMapper objectMapper = new ObjectMapper();
