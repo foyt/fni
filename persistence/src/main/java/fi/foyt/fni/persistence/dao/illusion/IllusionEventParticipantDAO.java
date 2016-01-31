@@ -162,4 +162,9 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
     return persist(illusionEventParticipant);
   }
 
+  public IllusionEventParticipant updateAccessCode(IllusionEventParticipant illusionEventParticipant, String accessCode) {
+    illusionEventParticipant.setAccessCode(accessCode);
+    return persist(illusionEventParticipant);
+  }
+
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -106,13 +107,15 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
     
     String formData = null;
     List<String> readonlyFields = new ArrayList<>();
+    
+    User user = sessionController.getLoggedUser();
 
-    if (participant != null) {
-      if (!hasPermissionToJoin(participant)) {
-        return navigationController.accessDenied();
+    if (user != null) {
+      if (participant != null) {
+        if (!hasPermissionToJoin(participant)) {
+          return navigationController.accessDenied();
+        }
       }
-      
-      User user = participant.getUser();
       
       Map<String, String> answers = illusionEventController.loadRegistrationFormAnswers(form, participant);
       
@@ -134,7 +137,7 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
       try {
         formData = new ObjectMapper().writeValueAsString(answers);
       } catch (JsonProcessingException e1) {
-        logger.log(Level.SEVERE, String.format("Failed to read form answers for form %d, participant %d", form.getId(), participant.getId()), e1);
+        logger.log(Level.SEVERE, String.format("Failed to read form answers for form %d, user %d", form.getId(), user.getId()), e1);
         return navigationController.internalError();
       }
       
@@ -233,6 +236,8 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
     String password = null;
     
     if (participant == null) {
+      newParticipant = true;
+      
       if (sessionController.isLoggedIn()) {
         // User is logged in but is not yet a participant in this event, so we just create new one
         participant = createNewParticipant(sessionController.getLoggedUser(), event);
@@ -258,13 +263,11 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
           user = createNewUser(firstName, lastName, registrantEmail, password);
           participant = createNewParticipant(user, event);
           newUser = true;
-          newParticipant = true;
         } else {
           participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
           if (participant == null) {
             // existing user, new participant
             participant = createNewParticipant(user, event);
-            newParticipant = true;
           } else {
             // Otherwise existing participant is just updating answers
           }
@@ -290,7 +293,16 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
       }
     }
     
-    return String.format("/illusion/event-registration.jsf?urlName=%s", getUrlName());
+    if (StringUtils.isBlank(participant.getAccessCode())) {
+      String accessCode = UUID.randomUUID().toString();
+      illusionEventController.updateIllusionEventParticipantAccessCode(participant, accessCode);
+    }
+    
+    if (!sessionController.isLoggedIn()) {
+      sessionController.login(participant.getUser());
+    }
+    
+    return String.format("/illusion/event.jsf?urlName=%s&faces-redirect=true", getUrlName());
   }
   
   private User createNewUser(String firstName, String lastName, String email, String password) {

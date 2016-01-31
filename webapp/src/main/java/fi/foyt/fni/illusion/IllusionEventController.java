@@ -484,6 +484,10 @@ public class IllusionEventController {
     return participant;
   }
 
+  public IllusionEventParticipant updateIllusionEventParticipantAccessCode(IllusionEventParticipant participant, String accessCode) {
+    return illusionEventParticipantDAO.updateAccessCode(participant, accessCode);
+  }
+
   private String createUrlName(String name) {
     int maxLength = 20;
     int padding = 0;
