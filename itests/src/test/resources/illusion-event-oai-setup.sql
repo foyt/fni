@@ -8,11 +8,11 @@ values
 insert into Folder (id) values (20002), (20003), (20004);
 insert into IllusionEventFolder (id) values (20002), (20003), (20004);
 insert into 
-  IllusionEvent (id, urlName, xmppRoom, name, description, created, folder_id, joinMode, signUpFee, signUpFeeCurrency, start, end, published)
+  IllusionEvent (id, urlName, xmppRoom, name, description, created, folder_id, joinMode, signUpFee, signUpFeeCurrency, start, end, published, paymentMode)
 values 
-  (2, 'open', 'open@bogustalk.net', 'Open', 'Event for automatic testing (Open)', PARSEDATETIME('1 1 2010', 'd M yyyy'), 20002, 'OPEN', null, null, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('2 1 2010', 'd M yyyy'), true),
-  (3, 'approve', 'approve@bogustalk.net', 'Approve', 'Event for automatic testing (Approve)', PARSEDATETIME('1 1 2010', 'd M yyyy'), 20003, 'APPROVE', null, null, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('2 1 2010', 'd M yyyy'), true),
-  (4, 'invite', 'invite@bogustalk.net', 'Invite Only', 'Event for automatic testing (Invite Only)', PARSEDATETIME('1 1 2010', 'd M yyyy'), 20004, 'INVITE_ONLY', null, null, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('2 1 2010', 'd M yyyy'), true);
+  (2, 'open', 'open@bogustalk.net', 'Open', 'Event for automatic testing (Open)', PARSEDATETIME('1 1 2010', 'd M yyyy'), 20002, 'OPEN', null, null, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('2 1 2010', 'd M yyyy'), true, 'NONE'),
+  (3, 'approve', 'approve@bogustalk.net', 'Approve', 'Event for automatic testing (Approve)', PARSEDATETIME('1 1 2010', 'd M yyyy'), 20003, 'APPROVE', null, null, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('2 1 2010', 'd M yyyy'), true, 'NONE'),
+  (4, 'invite', 'invite@bogustalk.net', 'Invite Only', 'Event for automatic testing (Invite Only)', PARSEDATETIME('1 1 2010', 'd M yyyy'), 20004, 'INVITE_ONLY', null, null, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('2 1 2010', 'd M yyyy'), true, 'NONE');
 
 insert into 
   Material (id, created, modified, publicity, title, type, urlName, creator_id, language_id, modifier_id, parentFolder_id) 

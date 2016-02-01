@@ -5,9 +5,9 @@ values
 insert into Folder (id) values (20010);
 insert into IllusionEventFolder (id) values (20010);
 insert into 
-  IllusionEvent (id, urlName, xmppRoom, name, description, created, folder_id, joinMode, signUpFee, signUpFeeCurrency, start, end, published) 
+  IllusionEvent (id, urlName, xmppRoom, name, description, created, folder_id, joinMode, signUpFee, signUpFeeCurrency, start, end, published, paymentMode) 
 values 
-  (2, 'upcoming_1', 'upcoming_1@bogustalk.net', 'Upcoming #1', 'Upcoming event #1', PARSEDATETIME('1 1 2010', 'd M yyyy'), 20010, 'OPEN', null, null, DATEADD('DAY', 1, CURRENT_DATE()), DATEADD('DAY', 2, CURRENT_DATE()), true);
+  (2, 'upcoming_1', 'upcoming_1@bogustalk.net', 'Upcoming #1', 'Upcoming event #1', PARSEDATETIME('1 1 2010', 'd M yyyy'), 20010, 'OPEN', null, null, DATEADD('DAY', 1, CURRENT_DATE()), DATEADD('DAY', 2, CURRENT_DATE()), true, 'NONE');
 
 insert into 
   Material (id, created, modified, publicity, title, type, urlName, creator_id, language_id, modifier_id, parentFolder_id) 
@@ -16,6 +16,6 @@ values
 insert into Folder (id) values (20011);
 insert into IllusionEventFolder (id) values (20011);
 insert into 
-  IllusionEvent (id, urlName, xmppRoom, name, description, created, folder_id, joinMode, signUpFee, signUpFeeCurrency, start, end, published) 
+  IllusionEvent (id, urlName, xmppRoom, name, description, created, folder_id, joinMode, signUpFee, signUpFeeCurrency, start, end, published, paymentMode) 
 values 
-  (3, 'upcoming_2', 'upcoming_2@bogustalk.net', 'Upcoming #2', 'Upcoming event #2', PARSEDATETIME('1 1 2010', 'd M yyyy'), 20011, 'OPEN', null, null, DATEADD('DAY', -1, CURRENT_DATE()), DATEADD('DAY', 2, CURRENT_DATE()), true);
+  (3, 'upcoming_2', 'upcoming_2@bogustalk.net', 'Upcoming #2', 'Upcoming event #2', PARSEDATETIME('1 1 2010', 'd M yyyy'), 20011, 'OPEN', null, null, DATEADD('DAY', -1, CURRENT_DATE()), DATEADD('DAY', 2, CURRENT_DATE()), true, 'NONE');

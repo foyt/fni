@@ -5,9 +5,9 @@ values
 insert into Folder (id) values (20014);
 insert into IllusionEventFolder (id) values (20014);
 insert into 
-  IllusionEvent (id, urlName, xmppRoom, name, description, created, folder_id, joinMode, signUpFee, signUpFeeCurrency, start, end, published) 
+  IllusionEvent (id, urlName, xmppRoom, name, description, created, folder_id, joinMode, signUpFee, signUpFeeCurrency, start, end, published, paymentMode) 
 values 
-  (4, 'upcoming_unpublished', 'upcoming_unpublished@bogustalk.net', 'Upcoming unpublished', 'Upcoming unpublished', PARSEDATETIME('1 1 2010', 'd M yyyy'), 20014, 'OPEN', null, null, DATEADD('DAY', 1, CURRENT_DATE()), DATEADD('DAY', 2, CURRENT_DATE()), false);
+  (4, 'upcoming_unpublished', 'upcoming_unpublished@bogustalk.net', 'Upcoming unpublished', 'Upcoming unpublished', PARSEDATETIME('1 1 2010', 'd M yyyy'), 20014, 'OPEN', null, null, DATEADD('DAY', 1, CURRENT_DATE()), DATEADD('DAY', 2, CURRENT_DATE()), false, 'NONE');
 insert into
   IllusionEventParticipant (role, event_id, user_id, created)
 values 
