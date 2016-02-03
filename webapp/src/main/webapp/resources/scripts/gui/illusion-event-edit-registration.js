@@ -43,7 +43,7 @@
     
     form: function (val) {
       if (val === undefined) {
-        return this._parseForm(this.element.find('.code-editor').codeMirror("value"));
+        return this._parseForm(this.element.find('.code-editor').codeMirror("value")||'{}');
       } else {
         this.element.find('.code-editor')
           .codeMirror("value", JSON.stringify(val, null, 2));
