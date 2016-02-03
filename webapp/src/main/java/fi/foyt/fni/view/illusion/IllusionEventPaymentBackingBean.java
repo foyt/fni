@@ -93,17 +93,26 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     if (illusionEvent.getSignUpFee() == null) {
-      return navigationController.internalError();
+      logger.warning(String.format("User ended up on payment even though the event %d does not have a sign-up fee", illusionEvent.getId()));
+      return String.format("/illusion/event.jsf?faces-redirect=true&urlName=%s", getUrlName());
     }
     
     if (participant == null) {
       if (StringUtils.isBlank(getAccessCode())) {
-        return navigationController.requireLogin();
+        if (sessionController.isLoggedIn()) {
+          return navigationController.accessDenied();
+        } else {
+          return navigationController.requireLogin();
+        }
       }
-      
+
       participant = illusionEventController.findParticipantByEventAndAccessCode(illusionEvent, getAccessCode());
       if (participant == null) {
-        return navigationController.requireLogin();
+        if (sessionController.isLoggedIn()) {
+          return navigationController.accessDenied();
+        } else {
+          return navigationController.requireLogin();
+        }
       }
       
       if (!sessionController.isLoggedIn()) {
