@@ -15,6 +15,13 @@ each formData in formDatas
       |:
   p 
     != formData.value
+if waitingPayment
+  br
+  p
+    =locale.text('illusion.registration.registeredMail.payment')
+  p
+    a(href=paymentLink)
+      =paymentLink
 if newUser
     =locale.text('illusion.registration.registeredMail.newUser', password) 
 hr

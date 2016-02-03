@@ -180,6 +180,14 @@ public abstract class AbstractIllusionEventBackingBean {
     User user = participant.getUser();
     List<Map<String, Object>> formDatas = createFormDatas(illusionEvent, email, answers, user);
     
+    if (participant.getRole() == IllusionEventParticipantRole.WAITING_PAYMENT) {
+      String eventUrl = illusionEventController.getEventUrl(illusionEvent);
+      String accessCode = participant.getAccessCode();
+      String paymentLink = accessCode != null ? String.format("%s/payment?accessCode=%s", eventUrl, accessCode) : String.format("%s/payment", eventUrl);
+      templateModel.put("waitingPayment", true);
+      templateModel.put("paymentLink", paymentLink);
+    }
+      
     templateModel.put("eventName", illusionEvent.getName());
     templateModel.put("firstName", user.getFirstName());
     templateModel.put("lastName", user.getLastName());
