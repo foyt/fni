@@ -1,0 +1,16 @@
+p
+  if firstName
+    =locale.text('illusion.payment.eventPaidOrganizerMail.headerUser', organizerFirstName)
+  else
+    =locale.text('illusion.payment.eventPaidOrganizerMail.header')
+p
+  span
+    =locale.text('illusion.payment.eventPaidOrganizerMail.paidPrefix', participantFirstName)
+  span
+    | 
+  a(href=eventLink)
+    =eventName
+hr
+p
+  =locale.text('illusion.payment.eventPaidOrganizerMail.footer') 
+hr

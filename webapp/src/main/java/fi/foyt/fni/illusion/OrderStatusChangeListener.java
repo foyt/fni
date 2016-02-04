@@ -1,6 +1,7 @@
 package fi.foyt.fni.illusion;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -48,6 +49,7 @@ public class OrderStatusChangeListener {
   		        IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, order.getCustomer());
     		      illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
     		      sendPaymentAcceptedMail(participant);
+    		      sendPaymentAcceptedMailOrganizers(participant);
   		      } else {
   		        logger.severe("Tried to lift illusion group member role to participant for non-existing group");
   		      }
@@ -69,11 +71,22 @@ public class OrderStatusChangeListener {
     Locale locale = LocaleUtils.toLocale(user.getLocale());
     
     String subject = ExternalLocales.getText(locale, "illusion.payment.eventPaidMail.subject", illusionEvent.getName());
-    Map<String, Object> templateModel = createMailTemplateModel(participant, illusionEvent);
+    Map<String, Object> templateModel = createPaymentAcceptedMailTemplateModel(participant, illusionEvent);
     illusionMailer.sendMail(participant, subject, "mail-event-paid", templateModel);
   }
   
-  private Map<String, Object> createMailTemplateModel(IllusionEventParticipant participant, IllusionEvent illusionEvent) {
+  private void sendPaymentAcceptedMailOrganizers(IllusionEventParticipant participant) {
+    IllusionEvent event = participant.getEvent();
+    List<IllusionEventParticipant> organizers = illusionEventController.listIllusionEventParticipantsByEventAndRole(event, IllusionEventParticipantRole.ORGANIZER);
+    for (IllusionEventParticipant organizer : organizers) {
+      Locale locale = LocaleUtils.toLocale(organizer.getUser().getLocale());
+      String subject = ExternalLocales.getText(locale, "illusion.payment.eventPaidMail.subject", event.getName());
+      Map<String, Object> templateModel = createPaymentAcceptedOrganizerMailTemplateModel(participant, organizer, event);
+      illusionMailer.sendMail(organizer, subject, "mail-event-paid-organizer", templateModel);
+    }
+  }
+  
+  private Map<String, Object> createPaymentAcceptedMailTemplateModel(IllusionEventParticipant participant, IllusionEvent illusionEvent) {
     Map<String, Object> templateModel = new HashMap<>();
     User user = participant.getUser();
     Locale locale = LocaleUtils.toLocale(user.getLocale());
@@ -81,6 +94,21 @@ public class OrderStatusChangeListener {
     
     templateModel.put("firstName", user.getFirstName());
     templateModel.put("eventName", illusionEvent.getName());
+    templateModel.put("eventLink", eventUrl);
+    templateModel.put("locale", new JadeLocaleHelper(locale));
+    
+    return templateModel;
+  }
+  private Map<String, Object> createPaymentAcceptedOrganizerMailTemplateModel(IllusionEventParticipant participant, IllusionEventParticipant organizer, IllusionEvent event) {
+    Map<String, Object> templateModel = new HashMap<>();
+    User participantUser = participant.getUser();
+    User organizerUser = participant.getUser();
+    Locale locale = LocaleUtils.toLocale(participantUser.getLocale());
+    String eventUrl = illusionEventController.getEventUrl(event);
+    
+    templateModel.put("organizerFirstName", organizerUser.getFirstName());
+    templateModel.put("participantFirstName", participantUser.getFirstName());
+    templateModel.put("eventName", event.getName());
     templateModel.put("eventLink", eventUrl);
     templateModel.put("locale", new JadeLocaleHelper(locale));
     
