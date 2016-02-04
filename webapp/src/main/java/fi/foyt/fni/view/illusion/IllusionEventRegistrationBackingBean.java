@@ -52,7 +52,7 @@ import fi.foyt.fni.users.UserController;
 @RequestScoped
 @Named
 @Stateful
-@Join(path = "/illusion/event/{urlName}/event-registration", to = "/illusion/event-registration.jsf")
+@Join(path = "/illusion/event/{urlName}/registration", to = "/illusion/event-registration.jsf")
 public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventBackingBean {
   
   @Inject
