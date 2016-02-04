@@ -14,6 +14,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.gamelibrary.OrderController;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.paytrail.PaytrailService;
@@ -29,6 +30,9 @@ public class PaytrailServlet extends HttpServlet {
 
 	@Inject
 	private OrderController orderController;
+	
+  @Inject
+	private IllusionEventController illusionEventController;
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -115,11 +119,7 @@ public class PaytrailServlet extends HttpServlet {
 	 
 	private String getIllusionRedirectUrl(Order order) {
     IllusionEvent illusionEvent = orderController.findOrderIllusionEvent(order);
-
-    return new StringBuilder()
-      .append("/illusion/event/")
-      .append(illusionEvent.getUrlName())
-      .toString();
+    return illusionEventController.getEventUrl(illusionEvent);
 	}
 
 	private String getPathAction(HttpServletRequest req) {
