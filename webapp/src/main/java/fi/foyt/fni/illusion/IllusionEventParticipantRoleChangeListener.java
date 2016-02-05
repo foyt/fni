@@ -1,132 +1,76 @@
 package fi.foyt.fni.illusion;
 
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map;
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.mail.MessagingException;
 
 import org.apache.commons.lang3.LocaleUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.i18n.ExternalLocales;
-import fi.foyt.fni.mail.Mailer;
+import fi.foyt.fni.jade.JadeLocaleHelper;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
-import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.system.SystemSettingsController;
-import fi.foyt.fni.users.UserController;
 
 public class IllusionEventParticipantRoleChangeListener {
   
   @Inject
-  private Logger logger;
-
-  @Inject
   private IllusionEventController illusionEventController;
-
-  @Inject
-  private UserController userController;
-
-  @Inject
-  private SystemSettingsController systemSettingsController;
   
   @Inject
-  private Mailer mailer;
+  private IllusionMailer illusionMailer;
   
   public void onParticipantRoleChangeEvent(@Observes IllusionParticipantRoleChangeEvent event) {
-    if (event.getOldRole().equals(IllusionEventParticipantRole.PENDING_APPROVAL)) {
-      IllusionEventParticipant groupMember = illusionEventController.findIllusionEventParticipantById(event.getMemberId());
-      
-      switch (event.getNewRole()) {
-        case BANNED:
-          sendDeclineMail(groupMember);
-        break;
-        case ORGANIZER:
-        case PARTICIPANT:
-          sendAcceptMail(groupMember);
-        break;
-        case WAITING_PAYMENT:
-          sendPaidGroupAcceptMail(groupMember);
-        default:
-        break;
-      }
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(event.getMemberId());
+    IllusionEvent illusionEvent = participant.getEvent();
+    User user = participant.getUser();
+    Locale locale = LocaleUtils.toLocale(user.getLocale());
+    
+    switch (event.getOldRole()) {
+      case PENDING_APPROVAL:
+        handleJoinRequestReply(participant, illusionEvent, user, locale);
+      break;
+      default:
+      break;
     }
   }
   
-  private void sendPaidGroupAcceptMail(IllusionEventParticipant groupMember) {
-    User user = groupMember.getUser();
-    Locale userLocale = LocaleUtils.toLocale(user.getLocale());
-    String userMail = userController.getUserPrimaryEmail(user);
-    String userName = groupMember.getUser().getFullName();
-    String groupName = groupMember.getEvent().getName();
-    String groupUrlName = groupMember.getEvent().getUrlName();
-    
-    String paymentUrl = systemSettingsController.getSiteUrl(false, true);
-    if (StringUtils.isNotBlank(paymentUrl)) {
-      paymentUrl += "/illusion/group/" + groupUrlName + "/payment";
-    }
-
-    String subject = ExternalLocales.getText(userLocale, "illusion.mail.paidGroupJoinRequestAccepted.subject");
-    String content = ExternalLocales.getText(userLocale, "illusion.mail.paidGroupJoinRequestAccepted.content", userName, groupName, paymentUrl);
-
-    String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
-    String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
-    
-    try {
-      mailer.sendMail(fromMail, fromName, userMail, userName, subject, content, "text/plain");
-    } catch (MessagingException e) {
-      logger.log(Level.SEVERE, "Could not send a group accept notification mail", e);
-    }
+  private void handleJoinRequestReply(IllusionEventParticipant participant, IllusionEvent illusionEvent, User user, Locale locale) {
+    String subject = ExternalLocales.getText(locale, "illusion.payment.joinRequestReplyMail.subject", illusionEvent.getName());
+    Map<String, Object> templateModel = createJoinRequestReplyMailTemplateModel(participant, illusionEvent);
+    illusionMailer.sendMail(participant, subject, "mail-join-request-reply", templateModel);
   }
-  
-  private void sendAcceptMail(IllusionEventParticipant groupMember) {
-    User user = groupMember.getUser();
-    Locale userLocale = LocaleUtils.toLocale(user.getLocale());
-    String userMail = userController.getUserPrimaryEmail(user);
-    String userName = groupMember.getUser().getFullName();
-    String groupName = groupMember.getEvent().getName();
-    String groupUrlName = groupMember.getEvent().getUrlName();
-    
-    String groupUrl = systemSettingsController.getSiteUrl(false, true);
-    if (StringUtils.isNotBlank(groupUrl)) {
-      groupUrl += "/illusion/group/" + groupUrlName;
-    }
 
-    String subject = ExternalLocales.getText(userLocale, "illusion.mail.joinRequestAccepted.subject");
-    String content = ExternalLocales.getText(userLocale, "illusion.mail.joinRequestAccepted.content", userName, groupName, groupUrl);
-
-    String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
-    String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
+  private Map<String, Object> createJoinRequestReplyMailTemplateModel(IllusionEventParticipant participant, IllusionEvent illusionEvent) {
+    Map<String, Object> templateModel = new HashMap<>();
+    User user = participant.getUser();
+    IllusionEventParticipantRole role = participant.getRole();
     
-    try {
-      mailer.sendMail(fromMail, fromName, userMail, userName, subject, content, "text/plain");
-    } catch (MessagingException e) {
-      logger.log(Level.SEVERE, "Could not send a group accept notification mail", e);
+    String accessCode = participant.getAccessCode();
+    boolean waitingPayment = role == IllusionEventParticipantRole.WAITING_PAYMENT;
+    boolean directlyAdded = (role == (IllusionEventParticipantRole.ORGANIZER)) || (role == IllusionEventParticipantRole.PARTICIPANT);
+    boolean accepted = waitingPayment || directlyAdded;
+    
+    Locale locale = LocaleUtils.toLocale(user.getLocale());
+    String eventUrl = illusionEventController.getEventUrl(illusionEvent);
+    String paymentLink = null;
+    
+    if (waitingPayment) {
+      paymentLink = accessCode != null ? String.format("%s/payment?accessCode=%s", eventUrl, accessCode) : String.format("%s/payment", eventUrl);
     }
+    
+    templateModel.put("firstName", user.getFirstName());
+    templateModel.put("eventName", illusionEvent.getName());
+    templateModel.put("eventLink", eventUrl);
+    templateModel.put("accepted", accepted);
+    templateModel.put("waitingPayment", waitingPayment);
+    templateModel.put("paymentLink", paymentLink);
+    templateModel.put("locale", new JadeLocaleHelper(locale));
+    
+    return templateModel;
   }
-  
-  private void sendDeclineMail(IllusionEventParticipant groupMember) {
-    User user = groupMember.getUser();
-    Locale userLocale = LocaleUtils.toLocale(user.getLocale());
-    String userMail = userController.getUserPrimaryEmail(user);
-    String userName = groupMember.getUser().getFullName();
-    String groupName = groupMember.getEvent().getName();
-    
-    String subject = ExternalLocales.getText(userLocale, "illusion.mail.joinRequestDeclined.subject");
-    String content = ExternalLocales.getText(userLocale, "illusion.mail.joinRequestDeclined.content", userName, groupName);
-
-    String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
-    String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
-    
-    try {
-      mailer.sendMail(fromMail, fromName, userMail, userName, subject, content, "text/plain");
-    } catch (MessagingException e) {
-      logger.log(Level.SEVERE, "Could not send a group accept notification mail", e);
-    }
-  }
-  
 }

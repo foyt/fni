@@ -442,7 +442,7 @@ public class IllusionRestServices {
     illusionEventController.updateIllusionEventImageUrl(event, entity.getImageUrl());
     illusionEventController.updateEventGenres(event, genres);
     illusionEventController.updateEventDomain(event, entity.getDomain());
-    illusionEventController.updateEventSignUpFee(event, signUpFeeText, signUpFee, signUpFeeCurrency);
+    illusionEventController.updateEventSignUpFee(event, signUpFeeText, signUpFee, signUpFeeCurrency, event.getPaymentMode());
     illusionEventController.updatePublished(event, entity.getPublished());
     
     return Response.noContent().build();
@@ -602,7 +602,7 @@ public class IllusionRestServices {
     allowNotLogged = true,
     scopes = { OAuthScopes.ILLUSION_FIND_EVENT_PARTICIPANT }
   )
-  public Response listEventParticipants(@PathParam ("EVENTID") Long eventId, @QueryParam ("userId") Long userId) {
+  public Response listEventParticipants(@PathParam ("EVENTID") Long eventId, @QueryParam ("userId") Long userId, @QueryParam ("email") String email) {
     IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
     if (event == null) {
       return Response.status(Status.NOT_FOUND).build();
@@ -621,16 +621,21 @@ public class IllusionRestServices {
     }
     
     List<IllusionEventParticipant> result = null;
+    User user = null;
     
     if (userId != null) {
-      User user = userController.findUserById(userId);
-      if (user != null) {
-        IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
-        if (participant != null) {
-          result = Arrays.asList(participant);
-        }
+      user = userController.findUserById(userId);
+    } else if (StringUtils.isNotBlank(email)) {
+      user = userController.findUserByEmail(email);
+    }
+    
+    if (user != null) {
+      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
+      if (participant != null) {
+        result = Arrays.asList(participant);
       }
-    } else {
+    }
+    else {
       result = illusionEventController.listIllusionEventParticipantsByEvent(event);
     }
     

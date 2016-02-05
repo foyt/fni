@@ -1,6 +1,7 @@
 package fi.foyt.fni.view.illusion;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
@@ -16,6 +17,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 import org.ocpsoft.rewrite.annotation.Join;
@@ -32,12 +34,16 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventGenre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventPaymentMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventSettingKey;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventType;
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
+import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
 @RequestScoped
@@ -62,6 +68,12 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   private IllusionEventNavigationController illusionEventNavigationController;
   
   @Inject
+  private SystemSettingsController systemSettingsController;
+  
+  @Inject
+  private SessionController sessionController;
+  
+  @Inject
   private NavigationController navigationController;
 
   @Override
@@ -72,7 +84,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
 
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.SETTINGS);
     illusionEventNavigationController.setEventUrlName(getUrlName());
-
+    
     published = illusionEvent.getPublished();
     name = illusionEvent.getName();
     description = illusionEvent.getDescription();
@@ -90,7 +102,12 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     genreIds = new ArrayList<Long>();
     signUpFeeCurrency = illusionEvent.getSignUpFeeCurrency() != null ? illusionEvent.getSignUpFeeCurrency().getCurrencyCode() : null;
     signUpFeeText = illusionEvent.getSignUpFeeText();
+    paymentMode = illusionEvent.getPaymentMode();
+    
     larpKalenteriSync = StringUtils.isNotBlank(illusionEventController.getSetting(illusionEvent, IllusionEventSettingKey.LARP_KALENTERI_ID));
+    handlingFeeText = formatCurrency(
+      systemSettingsController.getCurrencySetting(SystemSettingKey.ILLUSION_EVENT_PAYMENT_HANDLING_FEE_CURRENCY), 
+      systemSettingsController.getDoubleSetting(SystemSettingKey.ILLUSION_EVENT_PAYMENT_HANDLING_FEE));
 
     List<IllusionEventGenre> eventGenres = illusionEventController.listIllusionEventGenres(illusionEvent);
     for (IllusionEventGenre eventGenre : eventGenres) {
@@ -106,6 +123,12 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     genres = illusionEventController.listGenres();
     
     return null;
+  }
+  
+  private String formatCurrency(Currency currency, Double value) {
+    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(sessionController.getLocale());
+    currencyFormat.setCurrency(currency);
+    return currencyFormat.format(value);
   }
   
   public Boolean getPublished() {
@@ -284,6 +307,14 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   public void setSignUpFeeText(String signUpFeeText) {
     this.signUpFeeText = signUpFeeText;
   }
+  
+  public IllusionEventPaymentMode getPaymentMode() {
+    return paymentMode;
+  }
+  
+  public void setPaymentMode(IllusionEventPaymentMode paymentMode) {
+    this.paymentMode = paymentMode;
+  }
 
   public String save() throws Exception {
     IllusionEventType type = illusionEventController.findTypeById(getTypeId());
@@ -291,11 +322,26 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     
     String signUpFeeText = getSignUpFeeText();
     Currency signUpFeeCurrency = null;
+    Double signUpFee = null;
 
     if (StringUtils.isNotBlank(signUpFeeText)) {
       signUpFeeCurrency = Currency.getInstance(getSignUpFeeCurrency());
     }
     
+    if (getPaymentMode() == IllusionEventPaymentMode.JOIN) {
+      if (StringUtils.isBlank(signUpFeeText)) {
+        FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.paymentTypeJoinFeeRequired"));
+        return null;
+      }
+      
+      signUpFee = NumberUtils.toDouble(signUpFeeText);
+      
+      if (!(signUpFee > 0)) {
+        FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.signUpFeeInvalid"));
+        return null;
+      }
+    }
+
     illusionEventController.updateIllusionEventName(illusionEvent, getName());
     illusionEventController.updateIllusionEventDescription(illusionEvent, getDescription());
     illusionEventController.updateIllusionEventJoinMode(illusionEvent, getJoinMode());
@@ -307,7 +353,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     illusionEventController.updateIllusionEventAgeLimit(illusionEvent, getAgeLimit());
     illusionEventController.updateIllusionEventBeginnerFriendly(illusionEvent, getBeginnerFriendly());
     illusionEventController.updateIllusionEventImageUrl(illusionEvent, getImageUrl());
-    illusionEventController.updateEventSignUpFee(illusionEvent, signUpFeeText, illusionEvent.getSignUpFee(), signUpFeeCurrency);
+    illusionEventController.updateEventSignUpFee(illusionEvent, signUpFeeText, signUpFee, signUpFeeCurrency, getPaymentMode());
     
     if (StringUtils.isNotBlank(getDomain()) && !illusionEventController.isEventAllowedDomain(getDomain())) {
       FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.customDomainInvalid"));
@@ -369,6 +415,10 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
     return parser.parseDateTime(iso).toDate();
   }
+  
+  public String getHandlingFeeText() {
+    return handlingFeeText;
+  }
 
   private Boolean published;
   private String name;
@@ -390,6 +440,8 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   private Long typeId;
   private String signUpFeeCurrency;
   private String signUpFeeText;
+  private String handlingFeeText;
   private List<Long> genreIds;
   private List<SelectItem> typeSelectItems;
+  private IllusionEventPaymentMode paymentMode;
 }

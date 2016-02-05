@@ -143,6 +143,24 @@
                 </div>
                 
                 <div class="flex-row illusion-event-settings-field">
+                  <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                    <label>#{locales['illusion.eventSettings.signUpFeePaymentLabel']}</label>
+                  </div>
+                  <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                    <select jsf:value="#{illusionEventSettingsBackingBean.paymentMode}" size="1">
+                      <f:selectItem itemValue="NONE" itemLabel="#{locales['illusion.eventSettings.signUpFeePaymentNone']}"/>
+                      <f:selectItem itemValue="JOIN" itemLabel="#{locales['illusion.eventSettings.signUpFeePaymentJoin']}"/>
+                    </select>
+                  </div>
+                  <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-full md-flex-right sm-flex-cell-full">
+                    <div class="illusion-event-settings-sign-up-fee-info">
+                      <h:outputFormat value="#{locales['illusion.eventSettings.signUpFeePaymentHelp']}">
+                        <f:param value="#{illusionEventSettingsBackingBean.handlingFeeText}"/>
+                      </h:outputFormat>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex-row illusion-event-settings-field">
                   <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-7 sm-flex-cell-first">
                     <h:outputLabel value="#{locales['illusion.eventSettings.descriptionLabel']}" />
                   </div>

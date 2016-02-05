@@ -1,49 +1,47 @@
 package fi.foyt.fni.view.illusion;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Currency;
-import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
-import org.ocpsoft.rewrite.annotation.RequestAction;
-import org.ocpsoft.rewrite.faces.annotation.Deferred;
-import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import de.neuland.jade4j.exceptions.JadeException;
 import fi.foyt.fni.gamelibrary.OrderController;
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionEventController;
+import fi.foyt.fni.illusion.IllusionEventPage;
+import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
+import fi.foyt.fni.jade.JadeController;
 import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.common.Country;
 import fi.foyt.fni.persistence.model.gamelibrary.Order;
+import fi.foyt.fni.persistence.model.gamelibrary.OrderItem;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderStatus;
 import fi.foyt.fni.persistence.model.gamelibrary.OrderType;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
-import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
-import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.Address;
 import fi.foyt.fni.persistence.model.users.AddressType;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
-import fi.foyt.fni.utils.faces.FacesUtils;
 import fi.foyt.paytrail.PaytrailException;
 import fi.foyt.paytrail.PaytrailService;
 import fi.foyt.paytrail.rest.Contact;
@@ -57,11 +55,14 @@ import fi.foyt.paytrail.rest.UrlSet;
 @Named
 @Stateful
 @Join(path = "/illusion/event/{urlName}/payment", to = "/illusion/event-payment.jsf")
-public class IllusionEventPaymentBackingBean {
+public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackingBean {
 
   @Parameter
   private String urlName;
 
+  @Parameter
+  private String accessCode;
+  
   @Inject
   private Logger logger;
 
@@ -75,7 +76,7 @@ public class IllusionEventPaymentBackingBean {
   private SystemSettingsController systemSettingsController;
 
   @Inject
-  private UserController userController; 
+  private UserController userController;
 
   @Inject
   private OrderController orderController;
@@ -84,86 +85,116 @@ public class IllusionEventPaymentBackingBean {
   private PaytrailService paytrailService;
 
   @Inject
+  private JadeController jadeController;
+
+  @Inject
   private NavigationController navigationController;
 
-  @PostConstruct
-  @LoggedIn
-  public void postConstruct() {
-    countrySelectItems = new ArrayList<>();
-    
-    List<Country> countries = systemSettingsController.listCountries();
-    for (Country country : countries) {
-      countrySelectItems.add(new SelectItem(country.getId(), country.getName()));
-    }
-    
-  }
-
-  @RequestAction
-  @Deferred
-  @LoggedIn
-  public String init() {
-    IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
-    if (illusionEvent == null) {
-      return navigationController.notFound();
-    }
-
+  @Override
+  public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     if (illusionEvent.getSignUpFee() == null) {
-      return navigationController.internalError();
-    }
-
-    User loggedUser = sessionController.getLoggedUser();
-    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
-    if (participant == null) {
-      return navigationController.accessDenied();
+      logger.warning(String.format("User ended up on payment even though the event %d does not have a sign-up fee", illusionEvent.getId()));
+      return String.format("/illusion/event.jsf?faces-redirect=true&urlName=%s", getUrlName());
     }
     
-    if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER && !illusionEvent.getPublished()) {
-      return navigationController.accessDenied();
+    if (participant == null) {
+      if (StringUtils.isBlank(getAccessCode())) {
+        if (sessionController.isLoggedIn()) {
+          return navigationController.accessDenied();
+        } else {
+          return navigationController.requireLogin();
+        }
+      }
+
+      participant = illusionEventController.findParticipantByEventAndAccessCode(illusionEvent, getAccessCode());
+      if (participant == null) {
+        if (sessionController.isLoggedIn()) {
+          return navigationController.accessDenied();
+        } else {
+          return navigationController.requireLogin();
+        }
+      }
+      
+      if (!sessionController.isLoggedIn()) {
+        sessionController.login(participant.getUser());
+      }
     }
-
-    handlingFee = systemSettingsController.getDoubleSetting(SystemSettingKey.ILLUSION_GROUP_HANDLING_FEE);
-    currency = systemSettingsController.getCurrencySetting(SystemSettingKey.ILLUSION_GROUP_HANDLING_FEE_CURRENCY);
-    signUpFee = illusionEvent.getSignUpFee();
-    vatPercent = systemSettingsController.getVatPercent();
-    totalAmount = handlingFee + signUpFee; 
-    taxAmount = totalAmount - (totalAmount / (1 + (vatPercent / 100)));
-    vatRegistered = systemSettingsController.isVatRegistered();
-
+    
     switch (participant.getRole()) {
       case BANNED:
       case BOT:
-      case PENDING_APPROVAL:
         return navigationController.accessDenied();
+      case PENDING_APPROVAL:
+        return String.format("/illusion/event.jsf?faces-redirect=true&urlName=%s", getUrlName());
       case ORGANIZER:
       case PARTICIPANT:
         return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
       case WAITING_PAYMENT:
       case INVITED:
-        return null;
+    }
+
+    String currentPageId = IllusionEventPage.Static.INDEX.name();
+    Currency currency = systemSettingsController.getDefaultCurrency();
+    
+    Double signUpFee = illusionEvent.getSignUpFee();
+    Double vatPercent = systemSettingsController.getVatPercent();
+    Double totalAmount = signUpFee;
+    Double taxAmount = totalAmount - (totalAmount / (1 + (vatPercent / 100)));
+    Boolean vatRegistered = systemSettingsController.isVatRegistered();
+    User user = participant.getUser();
+    
+    String payerCompany = user.getCompany();
+    String payerFirstName = user.getFirstName();
+    String payerLastName = user.getLastName();
+    String payerEmail = userController.getUserPrimaryEmail(user);
+    String payerMobile = user.getMobile();
+    String payerTelephone = user.getPhone();
+    String payerStreetAddress = null;
+    String payerPostalCode = null;
+    String payerPostalOffice = null;
+    Long payerCountryId = systemSettingsController.getDefaultCountry().getId();
+    String notes = null;
+
+    Address address = userController.findAddressByUserAndType(user, AddressType.PAYMENT_CONTACT);
+    if (address != null) {
+      payerStreetAddress = address.getStreet1();
+      payerPostalCode = address.getPostalCode();
+      payerPostalOffice = address.getCity();
+      payerCountryId = address.getCountry().getId();
+    }
+
+    IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, currentPageId)
+      .put("payerCompany", payerCompany)
+      .put("payerFirstName", payerFirstName)
+      .put("payerLastName", payerLastName)
+      .put("payerEmail", payerEmail)
+      .put("payerMobile", payerMobile)
+      .put("payerTelephone", payerTelephone)
+      .put("payerStreetAddress", payerStreetAddress)
+      .put("payerPostalCode", payerPostalCode)
+      .put("payerPostalOffice", payerPostalOffice)
+      .put("payerCountryId", payerCountryId)
+      .put("notes", notes)
+      .put("currency", currency)
+      .put("signUpFee", signUpFee)
+      .put("vatPercent", vatPercent)
+      .put("totalAmount", totalAmount)
+      .put("taxAmount", taxAmount)
+      .put("vatRegistered", vatRegistered)
+      .addBreadcrumb(illusionEvent, "/payment", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventPayment.navigationPayment"));
+
+    try {
+      Map<String, Object> templateModel = templateModelBuilder.build(sessionController.getLocale());
+      headHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/payment-head", templateModel);
+      contentsHtml = jadeController.renderTemplate(getJadeConfiguration(), illusionEvent.getUrlName() + "/payment-contents", templateModel);
+    } catch (JadeException | IOException e) {
+      logger.log(Level.SEVERE, "Could not parse jade template", e);
+      return navigationController.internalError();
     }
     
-    return navigationController.internalError();
+    return null;
   }
   
-  @RequestAction
-  @Deferred
-  @IgnorePostback
-  @LoggedIn
-  public void defaults() {
-    User loggedUser = sessionController.getLoggedUser();
-    Address address = userController.findAddressByUserAndType(loggedUser, AddressType.DELIVERY);
-    
-    countryId = systemSettingsController.getDefaultCountry().getId();
-    firstName = loggedUser.getFirstName();
-    lastName = loggedUser.getLastName();
-    email = userController.getUserPrimaryEmail(loggedUser);
-    mobile = loggedUser.getMobile();
-    phone = loggedUser .getPhone();
-    streetAddress = address != null ? address.getStreet1() : null;
-    postalCode = address != null ? address.getPostalCode() : null;
-    postalOffice = address != null ? address.getCity() : null;
-  }
-
   public String getUrlName() {
     return urlName;
   }
@@ -171,235 +202,304 @@ public class IllusionEventPaymentBackingBean {
   public void setUrlName(@SecurityContext String urlName) {
     this.urlName = urlName;
   }
-
-  public void setCountryId(Long countryId) {
-    this.countryId = countryId;
-  }
-
-  public Long getCountryId() {
-    return countryId;
-  }
   
-  public String getCompany() {
-    return company;
-  }
-  
-  public void setCompany(String company) {
-    this.company = company;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getMobile() {
-    return mobile;
-  }
-
-  public void setMobile(String mobile) {
-    this.mobile = mobile;
-  }
-
-  public String getPhone() {
-    return phone;
-  }
-  
-  public void setPhone(String phone) {
-    this.phone = phone;
-  }
-
-  public String getStreetAddress() {
-    return streetAddress;
-  }
-
-  public void setStreetAddress(String streetAddress) {
-    this.streetAddress = streetAddress;
-  }
-
-  public String getPostalCode() {
-    return postalCode;
-  }
-
-  public void setPostalCode(String postalCode) {
-    this.postalCode = postalCode;
-  }
-
-  public String getPostalOffice() {
-    return postalOffice;
-  }
-
-  public void setPostalOffice(String postalOffice) {
-    this.postalOffice = postalOffice;
-  }
-  
-  public String getNotes() {
-    return notes;
-  }
-  
-  public void setNotes(String notes) {
-    this.notes = notes;
-  }
-
-  public Double getHandlingFee() {
-    return handlingFee;
-  }
-  
-  public Double getSignUpFee() {
-    return signUpFee;
-  }
-  
-  public Currency getCurrency() {
-    return currency;
-  }
-  
-  public Double getVatPercent() {
-    return vatPercent;
-  }
-  
-  public boolean isVatRegistered() {
-    return vatRegistered;
-  }
-  
-  public Double getTaxAmount() {
-    return taxAmount;
-  }
-  
-  public Double getTotalAmount() {
-    return totalAmount;
-  }
-  
-  public List<SelectItem> getCountrySelectItems() {
-    return countrySelectItems;
-  }
-  
-  public void proceedToPayment() {
+  public String proceedToPayment() {
+    User user = sessionController.getLoggedUser();
     IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
-    String localAddress = FacesUtils.getLocalAddress(true);
-    User loggedUser = sessionController.getLoggedUser();
-
+    IllusionEventParticipant participant = null;
+    
+    if (user == null) {
+      participant = illusionEventController.findParticipantByEventAndAccessCode(illusionEvent, getAccessCode());
+      if (participant == null) {
+        return navigationController.requireLogin();
+      }
+      
+      user = participant.getUser();
+    } else {
+      participant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, user);
+    }
+    
+    if ((user == null) || (participant == null)) {
+      return navigationController.requireLogin();
+    }
+    
+    switch (participant.getRole()) {
+      case BANNED:
+      case BOT:
+        return navigationController.accessDenied();
+      case PENDING_APPROVAL:
+        return String.format("/illusion/event.jsf?faces-redirect=true&urlName=%s", getUrlName());
+      case ORGANIZER:
+      case PARTICIPANT:
+        return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
+      case WAITING_PAYMENT:
+      case INVITED:
+    }
+    
+    ObjectMapper objectMapper = new ObjectMapper();
+    
+    PaymentDetails details;
+    try {
+      details = objectMapper.readValue(getOrderDetails(), PaymentDetails.class);
+    } catch (IOException e) {
+      logger.log(Level.SEVERE, "Failed to unmarshal payment details", e);
+      return navigationController.internalError();
+    }
+    
+    String baseUrl = systemSettingsController.getSiteUrl(true, true);
     UrlSet urlSet = new UrlSet(
-      localAddress + "/paytrail/success", 
-      localAddress + "/paytrail/failure", 
-      localAddress + "/paytrail/notify", 
-      localAddress + "/paytrail/pending"
+      String.format("%s/paytrail/success", baseUrl),
+      String.format("%s/paytrail/failure", baseUrl),
+      String.format("%s/paytrail/notify", baseUrl),
+      String.format("%s/paytrail/pending", baseUrl)
     );
-
-    Address address = userController.findAddressByUserAndType(loggedUser, AddressType.DELIVERY);
-    Country deliveryAddressCountry = systemSettingsController.findCountryById(getCountryId());
+    
+    String accessKey = UUID.randomUUID().toString();
+    Address address = userController.findAddressByUserAndType(user, AddressType.PAYMENT_CONTACT);
+    Country payerAddressCountry = systemSettingsController.findCountryById(details.getPayerCountryId());
 
     if (address == null) {
-      address = userController.createAddress(loggedUser, AddressType.DELIVERY, getStreetAddress(), null, getPostalCode(), getPostalOffice(), deliveryAddressCountry);
+      address = userController.createAddress(user, 
+        AddressType.PAYMENT_CONTACT, 
+        details.getPayerStreetAddress(), 
+        null,
+        details.getPayerPostalCode(), 
+        details.getPayerPostalOffice(), 
+        payerAddressCountry);
     } else {
-      userController.updateAddress(address, getStreetAddress(), null, getPostalCode(), getPostalOffice(), deliveryAddressCountry);
+      userController.updateAddress(address, 
+        details.getPayerStreetAddress(), 
+        null,
+        details.getPayerPostalCode(), 
+        details.getPayerPostalOffice(), 
+        payerAddressCountry);
     }
-
-    String streetAddess = address.getStreet1();
-    if (StringUtils.isNotEmpty(address.getStreet2())) {
-      streetAddess += '\n' + address.getStreet2();
-    }
-
-    String company = getCompany();
-    String mobile = getMobile();
-    String phone = getPhone();
-    String firstName = getFirstName();
-    String lastName = getLastName();
-    String email = getEmail();
     
-    Locale paymentLocale = getPaymentLocale();
+    Currency currency = systemSettingsController.getDefaultCurrency();
+    Double signUpFee = illusionEvent.getSignUpFee();
+    Double vatPercent = systemSettingsController.getVatPercent();
+    Double totalAmount = signUpFee;
     
-    userController.updateUserCompany(loggedUser, company);
-    userController.updateUserMobile(loggedUser, mobile);
-    userController.updateUserPhone(loggedUser, phone);
-
-    Contact contact = new Contact(firstName, lastName, email, new fi.foyt.paytrail.rest.Address(streetAddess, address.getPostalCode(), address.getCity(),
-        address.getCountry().getCode()), phone, mobile, company);
-
-    String notes = getNotes();
-
-    Address orderAddress = userController.createAddress(address.getUser(), AddressType.DELIVERY_ARCHIVED, address.getStreet1(), address.getStreet2(),
+    Address orderAddress = userController.createAddress(address.getUser(), AddressType.PAYMENT_CONTACT_ARCHIVED, address.getStreet1(), address.getStreet2(),
         address.getPostalCode(), address.getCity(), address.getCountry());
 
-    Order order = orderController.createOrder(loggedUser, null, company, email, firstName, lastName, mobile, phone, OrderStatus.NEW, OrderType.ILLUSION_GROUP, null, notes, orderAddress);
-
+    Order order = orderController.createOrder(user, 
+        accessKey, 
+        details.getPayerCompany(), 
+        details.getPayerEmail(), 
+        details.getPayerFirstName(), 
+        details.getPayerLastName(), 
+        details.getPayerMobile(), 
+        details.getPayerTelephone(), 
+        OrderStatus.NEW, 
+        OrderType.ILLUSION_EVENT,
+        null, 
+        details.getNotes(), 
+        orderAddress);
+    
+    Contact contact = new Contact(
+        order.getCustomerFirstName(), 
+        order.getCustomerLastName(), 
+        order.getCustomerEmail(), 
+        new fi.foyt.paytrail.rest.Address(address.getStreet1(), address.getPostalCode(), address.getCity(), address.getCountry().getCode()), 
+        order.getCustomerPhone(), 
+        order.getCustomerMobile(),
+        order.getCustomerCompany());
+    
     OrderDetails orderDetails = new OrderDetails(1, contact);
-    String orderNumber = order.getId().toString();
-    Payment payment = new Payment(orderNumber, orderDetails, urlSet, null, null, getCurrency().getCurrencyCode(), paymentLocale.toString(), null, null, null);
-    payment.setDescription(notes);
+    Payment payment = new Payment(order.getId().toString(), 
+      orderDetails, 
+      urlSet, 
+      null, 
+      null, 
+      currency.getCurrencyCode(), 
+      getPaymentLocale().toString(), 
+      null, 
+      null, 
+      null);
+    payment.setDescription(details.getNotes());
+    
+    OrderItem orderItem = orderController.createOrderItem(order, null, illusionEvent, illusionEvent.getName(), totalAmount, 1);
     
     try {
-      addProduct(payment, order, null, ExternalLocales.getText(paymentLocale, "illusion.group.payment.handlingFeeItem"), handlingFee, Product.TYPE_HANDLING);
-      addProduct(payment, order, illusionEvent, ExternalLocales.getText(paymentLocale, "illusion.group.payment.signUpFeeItem", illusionEvent.getName()), signUpFee, Product.TYPE_NORMAL);
-      
-      Result result = paytrailService.processPayment(payment);
-      if (result != null) {
-        try {
-          FacesContext.getCurrentInstance().getExternalContext().redirect(result.getUrl());
-        } catch (IOException e) {
-          logger.log(Level.SEVERE, "Could not redirect to Paytrail", e);
-          FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_FATAL, e.getMessage());
-        }
-      } else {
-        FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_FATAL, "Unknown error occurred while communicating with Paytrail");
-      }
+      paytrailService.addProduct(payment, orderItem.getName(), "#" + orderItem.getId().toString(), 
+          orderItem.getCount().doubleValue(), orderItem.getUnitPrice(), vatPercent, 0d, Product.TYPE_NORMAL);
     } catch (PaytrailException e) {
-      logger.log(Level.SEVERE, "Error occurred while communicating with Paytrail", e);
-      FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_FATAL, e.getMessage());
+      logger.log(Level.SEVERE, "Could not add product to Paytrail payment", e);
+      return navigationController.internalError();
     }
-  }
-  
-  private void addProduct(Payment payment, Order order, IllusionEvent illusionEvent, String title, Double price, Integer productType) throws PaytrailException {
-    paytrailService.addProduct(payment, title, "", 1d, price, vatPercent, 0d, productType);
-    orderController.createOrderItem(order, null, illusionEvent, title, price,1);
+    
+    Result result = null;
+    try {
+      result = paytrailService.processPayment(payment);
+    } catch (PaytrailException e) {
+      logger.log(Level.SEVERE, "Could not process Paytrail payment", e);
+      return navigationController.internalError();
+    }
+    
+    if (result != null) {
+      try {
+        FacesContext.getCurrentInstance().getExternalContext()
+          .redirect(result.getUrl());
+        return null;
+      } catch (IOException e) {
+        logger.log(Level.SEVERE, "Failed to rediect");
+        return navigationController.internalError();
+      }
+    } else {
+      logger.log(Level.SEVERE, "Unknown error occurred while communicating with Paytrail");
+      return navigationController.internalError();
+    }
   }
   
   private Locale getPaymentLocale() {
     switch (sessionController.getLocale().getLanguage()) {
-      case "fi":
-        return new Locale("fi", "FI");
-      case "sv":
-        return new Locale("sv", "SE");
-      default:      
-        return new Locale("en", "US");
+    case "fi":
+      return new Locale("fi", "FI");
+    case "sv":
+      return new Locale("sv", "SE");
+    default:
+      return new Locale("en", "US");
     }
   }
 
-  private Long countryId;
-  private String company;
-  private String firstName;
-  private String lastName;
-  private String email;
-  private String mobile;
-  private String phone;
-  private String streetAddress;
-  private String postalCode;
-  private String postalOffice;
-  private String notes;
-  private Double handlingFee;
-  private Double signUpFee;
-  private Double taxAmount;
-  private Double vatPercent;
-  private Double totalAmount;
-  private boolean vatRegistered;
-  private Currency currency;
-  private List<SelectItem> countrySelectItems;
+  public String getHeadHtml() {
+    return headHtml;
+  }
+
+  public void setHeadHtml(String headHtml) {
+    this.headHtml = headHtml;
+  }
+
+  public String getContentsHtml() {
+    return contentsHtml;
+  }
+
+  public void setContentsHtml(String contentsHtml) {
+    this.contentsHtml = contentsHtml;
+  }
+  
+  public String getOrderDetails() {
+    return orderDetails;
+  }
+  
+  public void setOrderDetails(String orderDetails) {
+    this.orderDetails = orderDetails;
+  }
+  
+  public String getAccessCode() {
+    return accessCode;
+  }
+  
+  public void setAccessCode(String accessCode) {
+    this.accessCode = accessCode;
+  }
+
+  private String headHtml;
+  private String contentsHtml;
+  private String orderDetails;
+  
+  public static class PaymentDetails {
+    
+    public String getPayerCompany() {
+      return payerCompany;
+    }
+    
+    public void setPayerCompany(String payerCompany) {
+      this.payerCompany = payerCompany;
+    }
+
+    public String getPayerFirstName() {
+      return payerFirstName;
+    }
+
+    public void setPayerFirstName(String payerFirstName) {
+      this.payerFirstName = payerFirstName;
+    }
+
+    public String getPayerLastName() {
+      return payerLastName;
+    }
+
+    public void setPayerLastName(String payerLastName) {
+      this.payerLastName = payerLastName;
+    }
+
+    public String getPayerEmail() {
+      return payerEmail;
+    }
+
+    public void setPayerEmail(String payerEmail) {
+      this.payerEmail = payerEmail;
+    }
+
+    public String getPayerMobile() {
+      return payerMobile;
+    }
+
+    public void setPayerMobile(String payerMobile) {
+      this.payerMobile = payerMobile;
+    }
+
+    public String getPayerTelephone() {
+      return payerTelephone;
+    }
+
+    public void setPayerTelephone(String payerTelephone) {
+      this.payerTelephone = payerTelephone;
+    }
+
+    public String getPayerStreetAddress() {
+      return payerStreetAddress;
+    }
+
+    public void setPayerStreetAddress(String payerStreetAddress) {
+      this.payerStreetAddress = payerStreetAddress;
+    }
+
+    public String getPayerPostalCode() {
+      return payerPostalCode;
+    }
+
+    public void setPayerPostalCode(String payerPostalCode) {
+      this.payerPostalCode = payerPostalCode;
+    }
+
+    public String getPayerPostalOffice() {
+      return payerPostalOffice;
+    }
+
+    public void setPayerPostalOffice(String payerPostalOffice) {
+      this.payerPostalOffice = payerPostalOffice;
+    }
+
+    public Long getPayerCountryId() {
+      return payerCountryId;
+    }
+
+    public void setPayerCountryId(Long payerCountryId) {
+      this.payerCountryId = payerCountryId;
+    }
+
+    public String getNotes() {
+      return notes;
+    }
+
+    public void setNotes(String notes) {
+      this.notes = notes;
+    }
+
+    private String payerCompany;
+    private String payerFirstName;
+    private String payerLastName;
+    private String payerEmail;
+    private String payerMobile;
+    private String payerTelephone;
+    private String payerStreetAddress;
+    private String payerPostalCode;
+    private String payerPostalOffice;
+    private Long payerCountryId;
+    private String notes;
+  }
+
 }

@@ -4,6 +4,6 @@ public enum OrderType {
 
   GAMELIBRARY_BOOK,
   
-  ILLUSION_GROUP
+  ILLUSION_EVENT
   
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,6 +39,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
+import fi.foyt.fni.persistence.model.illusion.IllusionEventPaymentMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventRegistrationForm;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
@@ -50,7 +52,7 @@ import fi.foyt.fni.users.UserController;
 @RequestScoped
 @Named
 @Stateful
-@Join(path = "/illusion/event/{urlName}/event-registration", to = "/illusion/event-registration.jsf")
+@Join(path = "/illusion/event/{urlName}/registration", to = "/illusion/event-registration.jsf")
 public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventBackingBean {
   
   @Inject
@@ -92,7 +94,29 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
 
     IllusionEventRegistrationForm form = illusionEventController.findEventRegistrationForm(illusionEvent);
     if ((form == null) || StringUtils.isBlank(form.getData())) {
-      return navigationController.notFound();
+      return handleFormless(participant, illusionEvent);
+    }
+
+    if (illusionEvent.getJoinMode() == IllusionEventJoinMode.INVITE_ONLY) {
+      if (!sessionController.isLoggedIn()) {
+        return navigationController.requireLogin();
+      }
+      
+      if (participant == null) {
+        return navigationController.accessDenied();
+      }
+      
+      switch (participant.getRole()) {
+        case BANNED:
+        case BOT:
+          return navigationController.accessDenied();
+        case ORGANIZER:
+        case PARTICIPANT:
+        case PENDING_APPROVAL:
+        case WAITING_PAYMENT:
+          return String.format("/illusion/event.jsf?faces-redirect=true&urlName=%s", getUrlName());
+        case INVITED:
+      }
     }
 
     FormReader formReader = new FormReader(form.getData());
@@ -106,13 +130,15 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
     
     String formData = null;
     List<String> readonlyFields = new ArrayList<>();
+    
+    User user = sessionController.getLoggedUser();
 
-    if (participant != null) {
-      if (!hasPermissionToJoin(participant)) {
-        return navigationController.accessDenied();
+    if (user != null) {
+      if (participant != null) {
+        if (!hasPermissionToJoin(participant)) {
+          return navigationController.accessDenied();
+        }
       }
-      
-      User user = participant.getUser();
       
       Map<String, String> answers = illusionEventController.loadRegistrationFormAnswers(form, participant);
       
@@ -134,7 +160,7 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
       try {
         formData = new ObjectMapper().writeValueAsString(answers);
       } catch (JsonProcessingException e1) {
-        logger.log(Level.SEVERE, String.format("Failed to read form answers for form %d, participant %d", form.getId(), participant.getId()), e1);
+        logger.log(Level.SEVERE, String.format("Failed to read form answers for form %d, user %d", form.getId(), user.getId()), e1);
         return navigationController.internalError();
       }
       
@@ -169,6 +195,50 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
     return null;
   }
   
+  private String handleFormless(IllusionEventParticipant participant, IllusionEvent illusionEvent) {
+    if (!sessionController.isLoggedIn()) {
+      return navigationController.requireLogin();
+    }
+    
+    if (participant != null) {
+      switch (participant.getRole()) {
+        case BANNED:
+        case BOT:
+          return navigationController.accessDenied();
+        case ORGANIZER:
+        case PARTICIPANT:
+        case PENDING_APPROVAL:
+        case WAITING_PAYMENT:
+          return String.format("/illusion/event.jsf?urlName=%s&faces-redirect=true", getUrlName());
+        case INVITED:
+      }
+    }
+    
+    switch (illusionEvent.getJoinMode()) {
+      case OPEN:
+      case APPROVE:
+        IllusionEventParticipant newParticipant = createNewParticipant(sessionController.getLoggedUser(), illusionEvent);
+        
+        try {
+          acceptParticipant(illusionEvent, newParticipant, null, false, null);
+        } catch (JadeException | IOException e) {
+          logger.log(Level.SEVERE, "Failed to render registration mail template", e);
+          return navigationController.internalError();
+        } catch (MessagingException e) {
+          logger.log(Level.SEVERE, "Failed to send registration mail", e);
+          return navigationController.internalError();
+        }
+      break;
+      case INVITE_ONLY:
+        if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.INVITED)) {
+          return navigationController.accessDenied();
+        }
+      break;
+    }
+    
+    return String.format("/illusion/event.jsf?urlName=%s&faces-redirect=true", getUrlName());
+  }
+
   @Override
   public String getUrlName() {
     return urlName;
@@ -229,7 +299,6 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
 
     FormReader formReader = new FormReader(form.getData());
     boolean newUser = false;
-    boolean newParticipant = false;
     String password = null;
     
     if (participant == null) {
@@ -258,13 +327,11 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
           user = createNewUser(firstName, lastName, registrantEmail, password);
           participant = createNewParticipant(user, event);
           newUser = true;
-          newParticipant = true;
         } else {
           participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
           if (participant == null) {
             // existing user, new participant
             participant = createNewParticipant(user, event);
-            newParticipant = true;
           } else {
             // Otherwise existing participant is just updating answers
           }
@@ -277,20 +344,35 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
     }
     
     illusionEventController.saveRegistrationFormAnswers(form, participant, answers);
-
-    if (newParticipant) {
-      try {
-        sendConfirmRegistrationMails(event, participant, newUser, password, answers);
-      } catch (JadeException | IOException e) {
-        logger.log(Level.SEVERE, "Failed to render registration mail template", e);
-        return navigationController.internalError();
-      } catch (MessagingException e) {
-        logger.log(Level.SEVERE, "Failed to send registration mail", e);
-        return navigationController.internalError();
-      }
+    
+    try {
+      acceptParticipant(event, participant, answers, newUser, password);
+    } catch (JadeException | IOException e) {
+      logger.log(Level.SEVERE, "Failed to render registration mail template", e);
+      return navigationController.internalError();
+    } catch (MessagingException e) {
+      logger.log(Level.SEVERE, "Failed to send registration mail", e);
+      return navigationController.internalError();
     }
     
-    return String.format("/illusion/event-registration.jsf?urlName=%s", getUrlName());
+    if (!sessionController.isLoggedIn()) {
+      sessionController.login(participant.getUser());
+    }
+    
+    return String.format("/illusion/event.jsf?urlName=%s&faces-redirect=true", getUrlName());
+  }
+
+  private void acceptParticipant(IllusionEvent event, IllusionEventParticipant participant, Map<String, String> answers, boolean newUser, String password) throws JadeException, IOException, MessagingException {
+    IllusionEventParticipantRole role = participant.getRole();
+    if ((role != IllusionEventParticipantRole.PARTICIPANT) && (role != IllusionEventParticipantRole.ORGANIZER)) {
+      illusionEventController.updateIllusionEventParticipantRole(participant, getNewParticipantRole(event));
+      sendConfirmRegistrationMails(event, participant, newUser, password, answers);
+    }
+    
+    if (StringUtils.isBlank(participant.getAccessCode())) {
+      String accessCode = UUID.randomUUID().toString();
+      illusionEventController.updateIllusionEventParticipantAccessCode(participant, accessCode);
+    }
   }
   
   private User createNewUser(String firstName, String lastName, String email, String password) {
@@ -317,11 +399,20 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
   }
 
   private IllusionEventParticipant createNewParticipant(User user, IllusionEvent event) {
-    IllusionEventParticipantRole participantRole = event.getJoinMode() == IllusionEventJoinMode.APPROVE 
-        ? IllusionEventParticipantRole.PENDING_APPROVAL
-        : IllusionEventParticipantRole.PARTICIPANT;
-    
+    IllusionEventParticipantRole participantRole = getNewParticipantRole(event);
     return illusionEventController.createIllusionEventParticipant(user, event, null, participantRole);
+  }
+  
+  private IllusionEventParticipantRole getNewParticipantRole(IllusionEvent event) {
+    if (event.getJoinMode() == IllusionEventJoinMode.APPROVE) {
+      return IllusionEventParticipantRole.PENDING_APPROVAL;
+    }
+    
+    if (event.getPaymentMode() == IllusionEventPaymentMode.JOIN) {
+      return IllusionEventParticipantRole.WAITING_PAYMENT;
+    }
+    
+    return IllusionEventParticipantRole.PARTICIPANT;
   }
   
   private String headHtml;

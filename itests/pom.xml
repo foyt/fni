@@ -18,7 +18,7 @@
     
     <!-- GreenMail -->
     
-    <greenmail.version>1.3.1b</greenmail.version>
+    <greenmail.version>1.4.1</greenmail.version>
     
     <!-- REST Assured -->
     
@@ -646,7 +646,7 @@
         <it.host>test.forgeandillusion.net</it.host>
         <it.ctx />
         <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
-        <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE</it.jdbc.url>
+        <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE</it.jdbc.url>
         <it.jdbc.jndi>java:/jboss/datasources/fni</it.jdbc.jndi>
         <it.jdbc.username>sa</it.jdbc.username>
         <it.jdbc.password>sa</it.jdbc.password>

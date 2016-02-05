@@ -8,7 +8,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 
 public class AbstractIllusionUITest extends AbstractUITest {
 
-  private static final String CUSTOM_EVENT_HOST = "custom-test.forgeandillusion.net";
+  public static final String CUSTOM_EVENT_HOST = "custom-test.forgeandillusion.net";
   
   protected String getCustomEventUrl() {
     return String.format("http://%s:%d%s", CUSTOM_EVENT_HOST, getPortHttp(), getCtxPath() != null ? "/" + getCtxPath() : "");

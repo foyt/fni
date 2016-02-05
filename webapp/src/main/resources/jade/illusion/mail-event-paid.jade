@@ -1,0 +1,20 @@
+p
+  if firstName
+    =locale.text('illusion.payment.eventPaidMail.headerUser', firstName)
+  else
+    =locale.text('illusion.payment.eventPaidMail.header')
+p
+  span
+    =locale.text('illusion.payment.eventPaidMail.paidPrefix')
+  span
+    | 
+  a(href=eventLink)
+    =eventName
+  span
+    | 
+  span
+    =locale.text('illusion.payment.eventPaidMail.paidPostfix')
+hr
+p
+  =locale.text('illusion.payment.eventPaidMail.footer') 
+hr

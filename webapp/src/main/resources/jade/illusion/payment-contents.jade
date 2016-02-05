@@ -1,0 +1,114 @@
+include common
++view-header()
++navigation()
+div.flex-row.payment
+  div.flex-cell-full.index-box.no-margin-top.no-margin-bottom
+    .flex-row
+      .flex-cell-full.index-box
+        form
+          .flex-row
+            .flex-cell-full
+              h3
+                = locale.text('illusion.eventPayment.title', eventName)
+          .flex-row
+            .flex-cell-full
+              h4
+                = locale.text('illusion.eventPayment.payerDetailsLabel')
+          .flex-row.flex-align-items-center.field
+            .lg-flex-cell-4.lg-flex-cell-first.md-flex-cell-6.md-flex-cell-first.sm-flex-cell-full
+              label
+                = locale.text('illusion.eventPayment.companyLabel')
+            .lg-flex-cell-6.lg-flex-cell-last.md-flex-cell-10.md-flex-cell-last.sm-flex-cell-full
+              input.payerCompany(type='text', name='payerCompany', value=payerCompany)
+          .flex-row.flex-align-items-center.field
+            .lg-flex-cell-4.lg-flex-cell-first.md-flex-cell-6.md-flex-cell-first.sm-flex-cell-full
+              label
+                = locale.text('illusion.eventPayment.firstNameLabel')
+            .lg-flex-cell-6.lg-flex-cell-last.md-flex-cell-10.md-flex-cell-last.sm-flex-cell-full
+              input.payerFirstName(type='text', required='required', name='payerFirstName', value=payerFirstName)
+          .flex-row.flex-align-items-center.field
+            .lg-flex-cell-4.lg-flex-cell-first.md-flex-cell-6.md-flex-cell-first.sm-flex-cell-full
+              label
+                = locale.text('illusion.eventPayment.lastNameLabel')
+            .lg-flex-cell-6.lg-flex-cell-last.md-flex-cell-10.md-flex-cell-last.sm-flex-cell-full
+              input.payerLastName(type='text', required='required', name='payerLastName', value=payerLastName)
+          .flex-row.flex-align-items-center.field
+            .lg-flex-cell-4.lg-flex-cell-first.md-flex-cell-6.md-flex-cell-first.sm-flex-cell-full
+              label
+                = locale.text('illusion.eventPayment.emailLabel')
+            .lg-flex-cell-6.lg-flex-cell-last.md-flex-cell-10.md-flex-cell-last.sm-flex-cell-full
+              input.payerEmail(type='email', required='required', name='payerEmail', value=payerEmail)
+          .flex-row.flex-align-items-center.field
+            .lg-flex-cell-4.lg-flex-cell-first.md-flex-cell-6.md-flex-cell-first.sm-flex-cell-full
+              label
+                = locale.text('illusion.eventPayment.mobileNumberlLabel')
+            .lg-flex-cell-6.lg-flex-cell-last.md-flex-cell-10.md-flex-cell-last.sm-flex-cell-full
+              input.payerMobile(type='text', required='required', name='payerMobile', value=payerMobile)
+          .flex-row.flex-align-items-center.field
+            .lg-flex-cell-4.lg-flex-cell-first.md-flex-cell-6.md-flex-cell-first.sm-flex-cell-full
+              label
+                = locale.text('illusion.eventPayment.telephoneNumberlLabel')
+            .lg-flex-cell-6.lg-flex-cell-last.md-flex-cell-10.md-flex-cell-last.sm-flex-cell-full
+              input.payerTelephone(type='text', name='payerTelephone', value=payerTelephone)
+          .flex-row.flex-align-items-center.field
+            .lg-flex-cell-4.lg-flex-cell-first.md-flex-cell-6.md-flex-cell-first.sm-flex-cell-full
+              label
+                = locale.text('illusion.eventPayment.streetAddressLabel')
+            .lg-flex-cell-6.lg-flex-cell-last.md-flex-cell-10.md-flex-cell-last.sm-flex-cell-full
+              input.payerStreetAddress(type='text', required='required', name='payerStreetAddress', value=payerStreetAddress)
+          .flex-row.flex-align-items-center.field
+            .lg-flex-cell-4.lg-flex-cell-first.md-flex-cell-6.md-flex-cell-first.sm-flex-cell-full
+              label
+                = locale.text('illusion.eventPayment.postalCodeLabel')
+            .lg-flex-cell-6.lg-flex-cell-last.md-flex-cell-10.md-flex-cell-last.sm-flex-cell-full
+              input.payerPostalCode(type='text', required='required', name='payerPostalCode', value=payerPostalCode)
+          .flex-row.flex-align-items-center.field
+            .lg-flex-cell-4.lg-flex-cell-first.md-flex-cell-6.md-flex-cell-first.sm-flex-cell-full
+              label
+                = locale.text('illusion.eventPayment.postalOfficeLabel')
+            .lg-flex-cell-6.lg-flex-cell-last.md-flex-cell-10.md-flex-cell-last.sm-flex-cell-full
+              input.payerPostalOffice(type='text', required='required', name='payerPostalOffice', value=payerPostalOffice)
+          .flex-row.flex-align-items-center.field
+            .lg-flex-cell-4.lg-flex-cell-first.md-flex-cell-6.md-flex-cell-first.sm-flex-cell-full
+              label
+                = locale.text('illusion.eventPayment.countryLabel')
+            .lg-flex-cell-6.lg-flex-cell-last.md-flex-cell-10.md-flex-cell-last.sm-flex-cell-full
+              select(size='1', name='payerCountryId', value=payerCountryId)
+                option(selected='selected', value='319') Finland
+          .flex-row.field
+            .lg-flex-cell-4.lg-flex-cell-first.md-flex-cell-6.md-flex-cell-first.sm-flex-cell-full
+              label
+                = locale.text('illusion.eventPayment.notesLabel')
+            .lg-flex-cell-6.lg-flex-cell-last.md-flex-cell-10.md-flex-cell-last.sm-flex-cell-full
+              textarea.notes(name='notes', value=notes)
+          .flex-row
+            .flex-cell-full
+              h3
+                = locale.text('illusion.eventPayment.summaryLabel')
+          .flex-row.summary-field
+            .lg-flex-cell-4.lg-flex-cell-first.md-flex-cell-6.md-flex-cell-first.sm-flex-cell-full
+              label
+                = locale.text('illusion.eventPayment.feeLabel')
+            .lg-flex-cell-6.lg-flex-cell-last.md-flex-cell-10.md-flex-cell-last.sm-flex-cell-full
+              = locale.formatCurrency(currency, signUpFee)
+          .flex-row.summary-field
+            .lg-flex-cell-4.lg-flex-cell-first.md-flex-cell-6.md-flex-cell-first.sm-flex-cell-full
+              label
+                if vatPercent > 0
+                  = locale.text('illusion.eventPayment.taxLabel', vatPercent)
+                else
+                  = locale.text('illusion.eventPayment.notVatRegistered')
+            .lg-flex-cell-6.lg-flex-cell-last.md-flex-cell-10.md-flex-cell-last.sm-flex-cell-full
+              = locale.formatCurrency(currency, taxAmount)
+          .flex-row.summary-field.summary-field-total
+            .lg-flex-cell-4.lg-flex-cell-first.md-flex-cell-6.md-flex-cell-first.sm-flex-cell-full
+              label
+                = locale.text('illusion.eventPayment.totalLabel')
+            .lg-flex-cell-6.lg-flex-cell-last.md-flex-cell-10.md-flex-cell-last.sm-flex-cell-full.summary-field-total-value
+              = locale.formatCurrency(currency, totalAmount)
+          .flex-row
+            .flex-cell-full
+              input(type="submit",class="proceed-to-payment", value=locale.text('illusion.eventPayment.proceedToCheckout'))
+  
+  
+  

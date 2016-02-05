@@ -28,7 +28,9 @@ values
   (16, 'LARP_KALENTERI_CLIENT_SECRET', 'client-secret'),
   (17, 'PDF_SERVICE_URL', 'http://pdf.forgeandillusion.net:1180'),
   (18, 'PDF_SERVICE_SECRET', 'secret'),
-  (19, 'PDF_SERVICE_CALLBACK_SECRET', 'another-secret');
+  (19, 'PDF_SERVICE_CALLBACK_SECRET', 'another-secret'),
+  (20, 'ILLUSION_EVENT_PAYMENT_HANDLING_FEE_CURRENCY', 'EUR'),
+  (21, 'ILLUSION_EVENT_PAYMENT_HANDLING_FEE', '1.00');
   
 insert into 
   OAuthClient (id, clientId, clientSecret, name, type, redirectUrl)

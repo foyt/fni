@@ -2,115 +2,79 @@
 @import "compass";
 @import "styles";
 
-$info-text-color: rgb(255, 255, 255);
-$info-background-color: darken($panel-background-color, 80%);
-
-/* Panels */ 
-
-.illusion-event-payment-panel {
-  @include generic-panel;
-  position: relative;
-  background: #fff;
-}
-
 /* Generic */
 
-.illusion-event-payment-panel h3 {
-  @include header-3;
-  color: $title-color;
-}
+.payment {
+  .index-box {
+    position: relative;
+    padding: 10px;
+  }
+ 
+  h3 {
+    @include header-3;
+    margin-bottom: 10px;
+  }
 
-/* Info */
+  h4 {
+    @include header-4;
+  }
 
-.illusion-event-payment-info {
-  color: $info-text-color;
-  background-color: $info-background-color;
-  text-align: center;
-  font-size: 12px;
-  font-family: $default-font;
-  font-weight: bold;
-  font-style: italic;
-  padding: 5px;
-  margin-bottom: 40px;
-}
-
-/* Form */
-
-.illusion-event-payment-fields {
-  margin-top: 20px;
-}
-
-.illusion-event-payment-fields {
-  margin-bottom: 40px;
-}
-
-.illusion-event-payment-field {
-  margin-bottom: 9px;
-}
-
-.illusion-event-payment-field label {
-  width: 130px;
-  display: inline-block;
-  font-size: 13px;
-  font-family: $default-font;
-  font-weight: bold;
-  vertical-align: top;
-}
-
-.illusion-event-payment-field input[type="text"], 
-.illusion-event-payment-field select {
-  width: 260px;
-  font-size: 14px;
-  font-family: $default-font;
-  @include box-sizing(border-box);
-}
-
-.illusion-event-payment-field textarea {
-  width: 260px;
-  height: 96px;
-  font-size: 14px;
-  @include box-sizing(border-box);
-}
-
-/* Summary */
-
-.illusion-event-payment-summary {
-  margin-top: 20px;
-}
-
-.illusion-event-payment-summary-row {
-  width: 100%;
-  @include box-sizing(border-box);
-  font-family: $default-font;
-  color: $default-color;
-  font-size: 13px;
-  border-bottom: 1px solid #000;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  text-transform: uppercase;
-}
-
-.illusion-event-payment-summary-row label {
-  width: 300px;
-  display: inline-block;
-}
-
-.illusion-event-payment-summary-row span {
-  display: inline-block;
-}
-
-/* Submit */
-
-.illusion-event-payment-button {  
-  @include header-3;
-  padding-left: 23px;
-  padding-right: 23px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  background: #000;
-  color: #fff;
-  border: 0px;
-  border-radius: 15px;
-  margin-top: 35px;
-  cursor: pointer;
+  /* Forms */
+  
+  .field input[type="text"], 
+  .field input[type="email"], 
+  .field input[type="number"], 
+  .field textarea, 
+  .field select {
+    font-size: 14px;
+    font-family: $default-font;
+    width: 100%; 
+    @include box-sizing(border-box);
+  }
+  
+  .field textarea {
+    height: 120px;
+  }
+  
+  
+  .field label {
+    font-size: 13px;
+    font-family: $default-font;
+    font-weight: bold;
+  }
+  
+  .summary-field {
+    font-family: "PT Sans",sans-serif;
+    font-size: 10px;
+    text-transform: uppercase;
+  }
+  
+  .summary-field-total {
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    margin-bottom: 25px;
+    margin-top: 5px;
+    padding-bottom: 4px;
+    padding-top: 4px;
+  }
+  
+  input[type="submit"] {  
+    @include header-3;
+    padding-left: 23px;
+    padding-right: 23px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background: #000;
+    color: #fff;
+    border: 0px;
+    border-radius: 15px;
+    margin-top: 35px;
+    cursor: pointer;
+    
+    &:disabled {
+      color: #eee;
+      background: #aaa;
+      cursor: default;
+    }
+  }
 }

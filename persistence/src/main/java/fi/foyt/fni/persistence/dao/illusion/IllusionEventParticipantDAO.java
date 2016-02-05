@@ -49,7 +49,24 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
 
     return getSingleResult(entityManager.createQuery(criteria));
   }
-  
+
+  public IllusionEventParticipant findByEventAndAccessCode(IllusionEvent event, String accessCode) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<IllusionEventParticipant> criteria = criteriaBuilder.createQuery(IllusionEventParticipant.class);
+    Root<IllusionEventParticipant> root = criteria.from(IllusionEventParticipant.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.and(
+        criteriaBuilder.equal(root.get(IllusionEventParticipant_.event), event),
+        criteriaBuilder.equal(root.get(IllusionEventParticipant_.accessCode), accessCode)
+      )
+    );
+
+    return getSingleResult(entityManager.createQuery(criteria));
+  }
+
 	public List<IllusionEventParticipant> listByEvent(IllusionEvent event) {
 		EntityManager entityManager = getEntityManager();
 
@@ -142,6 +159,11 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
 
   public IllusionEventParticipant updateDisplayName(IllusionEventParticipant illusionEventParticipant, String displayName) {
     illusionEventParticipant.setDisplayName(displayName);
+    return persist(illusionEventParticipant);
+  }
+
+  public IllusionEventParticipant updateAccessCode(IllusionEventParticipant illusionEventParticipant, String accessCode) {
+    illusionEventParticipant.setAccessCode(accessCode);
     return persist(illusionEventParticipant);
   }
 
