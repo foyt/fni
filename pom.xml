@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fi.foyt.fni</groupId>
   <artifactId>parent</artifactId>
-  <version>3.2.43-SNAPSHOT</version>
+  <version>3.2.43</version>
   <packaging>pom</packaging>
   <name>Forge &amp; Illusion - Parent</name>
   <description>Forge &amp; Illusion - parent pom.xml</description>
@@ -161,7 +161,7 @@
               <goal>jar</goal>
             </goals>
             <configuration>
-              <skip>true</skip>
+              <additionalparam>-Xdoclint:none</additionalparam>
             </configuration>
           </execution>
 <!-- 
