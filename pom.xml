@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fi.foyt.fni</groupId>
   <artifactId>parent</artifactId>
-  <version>3.2.40-SNAPSHOT</version>
+  <version>3.2.41</version>
   <packaging>pom</packaging>
   <name>Forge &amp; Illusion - Parent</name>
   <description>Forge &amp; Illusion - parent pom.xml</description>
@@ -109,6 +109,17 @@
                 </pluginExecution>
               </pluginExecutions>
             </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.1</version>
+          <configuration>
+            <mavenExecutorId>forked-path</mavenExecutorId>
+            <useReleaseProfile>false</useReleaseProfile>
+            <arguments>-Psonatype-oss-release</arguments>
+            <tagNameFormat>@{project.version}</tagNameFormat>
           </configuration>
         </plugin>
       </plugins>
