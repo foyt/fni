@@ -1,6 +1,7 @@
 package fi.foyt.fni.persistence.dao.materials;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -178,6 +179,29 @@ public class MaterialDAO extends GenericDAO<Material> {
           materialJoin.get(Material_.type).in(types),
           root.get(UserMaterialRole_.role).in(roles)
         )
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+  }
+
+  public List<Material> listByPublicityAndCreatorAndAndTypes(MaterialPublicity publicity, User creator, List<MaterialType> types) {
+    if ((types == null) || (types.isEmpty())) {
+      return Collections.emptyList();
+    }
+    
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Material> criteria = criteriaBuilder.createQuery(Material.class);
+    Root<Material> root = criteria.from(Material.class);
+    
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.and(
+        criteriaBuilder.equal(root.get(Material_.publicity), publicity),
+        criteriaBuilder.equal(root.get(Material_.creator), creator),
+        root.get(Material_.type).in(types)
+      )
     );
     
     return entityManager.createQuery(criteria).getResultList();
