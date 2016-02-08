@@ -53,6 +53,8 @@ h4 {
   border-top: 1px solid $border-color;
   
   .post-content {
+    @include html-default-styles;
+  
     color: $default-color;
     font-family: $default-font;
     font-size: 13px;
