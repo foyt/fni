@@ -2,7 +2,10 @@ package fi.foyt.fni.view.forge;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -16,6 +19,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.xml.sax.SAXException;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itextpdf.text.DocumentException;
 
 import fi.foyt.fni.materials.MaterialController;
@@ -41,6 +46,9 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Named
 @Stateful
 public class ForgeMaterialActionBackingBean {
+
+  @Inject
+  private Logger logger;
 
 	@Inject
 	private MaterialController materialController;
@@ -87,6 +95,14 @@ public class ForgeMaterialActionBackingBean {
   
   public void setMaterialSharePublicity(String materialSharePublicity) {
     this.materialSharePublicity = materialSharePublicity;
+  }
+  
+  public String getMaterialShareTags() {
+    return materialShareTags;
+  }
+  
+  public void setMaterialShareTags(String materialShareTags) {
+    this.materialShareTags = materialShareTags;
   }
   
   public Map<String, String> getMaterialShareCollaborators() {
@@ -242,11 +258,19 @@ public class ForgeMaterialActionBackingBean {
 	    }
 	  }
 	  
+	  try {
+	    List<String> tags = new ObjectMapper().readValue(getMaterialShareTags(), new TypeReference<List<String>>() { });
+      materialController.setMaterialTags(material, tags);
+    } catch (IOException e) {
+      logger.log(Level.SEVERE, "Failed to unserialize material tags", e);
+    }
+	  
 	  MaterialPublicity publicity = MaterialPublicity.valueOf(getMaterialSharePublicity());
 	  
 	  if (publicity != material.getPublicity()) {
 	    materialController.updateMaterialPublicity(material, publicity, loggedUser);
 	  }
+	  
 	}
 	
 	@LoggedIn
@@ -276,5 +300,6 @@ public class ForgeMaterialActionBackingBean {
 	private Long targetFolderId;
 	private String materialSharePublicity;
 	private Map<String, String> materialShareCollaborators;
+	private String materialShareTags;
 	private String newFolderName;
 }

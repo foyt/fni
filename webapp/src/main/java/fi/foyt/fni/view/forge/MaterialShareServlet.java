@@ -31,6 +31,7 @@ import fi.foyt.fni.persistence.model.materials.MaterialRole;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.system.TagController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
@@ -43,6 +44,9 @@ public class MaterialShareServlet extends HttpServlet {
   @Inject
   private MaterialController materialController;
 
+  @Inject
+  private TagController tagController;
+  
   @Inject
   private MaterialUserController materialUserController;
 
@@ -120,6 +124,8 @@ public class MaterialShareServlet extends HttpServlet {
     result.put("publicUrl", RequestUtils.getRequestHostUrl(request) + contextPath + "/materials/" + material.getPath());
     result.put("public", materialPermissionController.isPublic(loggedUser, material));
     result.put("invitables", invitables);
+    result.put("allTags", tagController.getAllTags());
+    result.put("tags", materialController.getMaterialTags(material));
 
     response.setContentType("application/json");
 

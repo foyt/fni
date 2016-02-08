@@ -69,6 +69,7 @@ import fi.foyt.fni.drive.SystemGoogleDriveCredentials;
 import fi.foyt.fni.materials.operations.MaterialCopy;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
+import fi.foyt.fni.persistence.dao.common.TagDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventMaterialParticipantSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
@@ -221,6 +222,9 @@ public class MaterialController {
 
   @Inject
   private MaterialTagDAO materialTagDAO;
+
+  @Inject
+  private TagDAO tagDAO;
 
   @Inject
   private UserMaterialRoleDAO userMaterialRoleDAO;
@@ -1413,6 +1417,71 @@ public class MaterialController {
           materialDAO.listByRootFolderAndUserAndTypesAndRoles(user, types, roles));
     }
   }
+  
+  public List<Material> listPublicMaterialsByCreatorAndTypes(User creator, List<MaterialType> types) {
+    return materialDAO.listByPublicityAndCreatorAndAndTypes(MaterialPublicity.PUBLIC, creator, types);
+  }
+  
+  public List<MaterialTag> listMaterialTags(Material material) {
+    return materialTagDAO.listByMaterial(material); 
+  }
+  
+  public Material updateMaterialTags(Material material, List<Tag> tags) {
+    List<MaterialTag> existingTags = listMaterialTags(material);
+    List<Tag> addTags = new ArrayList<>(tags);
+    
+    Map<Long, MaterialTag> existingTagMap = new HashMap<>();
+    for (MaterialTag existingTag : existingTags) {
+      existingTagMap.put(existingTag.getTag().getId(), existingTag);
+    }
+    
+    for (int i = addTags.size() - 1; i >= 0; i--) {
+      Tag addTag = addTags.get(i);
+      
+      if (existingTagMap.containsKey(addTag.getId())) {
+        addTags.remove(i);
+      } 
+      
+      existingTagMap.remove(addTag.getId());
+    }
+    
+    for (MaterialTag removeTag : existingTagMap.values()) {
+      materialTagDAO.delete(removeTag);
+    }
+    
+    for (Tag tag : addTags) {
+      materialTagDAO.create(material, tag);
+    }
+    
+    return material;
+  }
+  
+  public List<String> getMaterialTags(Material material) {
+    List<MaterialTag> materialTags = listMaterialTags(material);
+    
+    List<String> result = new ArrayList<>(materialTags.size());
+    for (MaterialTag materialTag : materialTags) {
+      result.add(materialTag.getTag().getText());
+    }
+    
+    return result;
+  }
+
+  public Material setMaterialTags(Material material, List<String> tagTexts) {
+    List<Tag> materialTags = new ArrayList<>();
+    
+    for (String tagText : tagTexts) {
+      Tag tag = tagDAO.findByText(tagText);
+      if (tag == null) {
+        tag = tagDAO.create(tagText);
+      }
+      
+      materialTags.add(tag);
+    }
+    
+    return updateMaterialTags(material, materialTags);
+  }
+
 
   public String getUniqueMaterialUrlName(User owner, Folder parentFolder, Material material, String title) {
     String urlName = RequestUtils.createUrlName(title);

@@ -119,6 +119,7 @@
       <h:inputHidden id="target-folder-id" value="#{forgeMaterialActionBackingBean.targetFolderId}" />
       <h:inputHidden id="material-share-publicity" value="#{forgeMaterialActionBackingBean.materialSharePublicity}" />
       <h:inputHidden id="material-share-collaborators" value="#{forgeMaterialActionBackingBean.materialShareCollaborators}" converter="fi.foyt.fni.jsf.JsonMapConverter" />
+      <h:inputHidden id="material-share-tags" value="#{forgeMaterialActionBackingBean.materialShareTags}" />
       <h:inputHidden id="new-folder-name" value="#{forgeMaterialActionBackingBean.newFolderName}" />
       <h:commandButton id="delete" action="#{forgeMaterialActionBackingBean.deleteMaterial}" />
       <h:commandButton id="move" action="#{forgeMaterialActionBackingBean.moveMaterial}" />

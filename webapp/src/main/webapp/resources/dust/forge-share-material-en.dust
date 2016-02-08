@@ -31,6 +31,11 @@
       {/if}
     </div>
     
+    <h4>Tags</h4>
+    <div class="forge-share-material-tags">
+      <input type="text" value="{tags}"/>
+    </div>
+    
     <h4>Collaborators</h4>
     <div class="forge-share-material-collaborators">
     
