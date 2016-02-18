@@ -29,19 +29,17 @@
          
         <div class="flex-cell-row sm-flex-hide">
           <div class="view-header-navigation">
-            <a class="view-header-navigation-item" jsf:outcome="/index.jsf">Etusivu</a>
+            <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['forge.public.navigationIndex']}</a>
             <span class="view-header-navigation-separator"/>
-            <a class="view-header-navigation-item" jsf:outcome="/forum/index.jsf">Forge</a>
+            <a class="view-header-navigation-item" jsf:outcome="/forge/index.jsf">#{locales['forge.public.navigationForge']}</a>
             <span class="view-header-navigation-separator"/>
-            <a class="view-header-navigation-item" jsf:outcome="/forum/index.jsf">Materiaalipankki</a>
-            <span class="view-header-navigation-separator"/>
-            <a class="view-header-navigation-item" jsf:outcome="/forum/index.jsf">Antti Leppä</a>
+            <a class="view-header-navigation-item" jsf:outcome="/forge/public.jsf">#{locales['forge.public.navigationForgePublic']}</a>
           </div>
         </div>
         
         <div class="view-header-description">
-          <p class="view-header-description-title">Materiaalipankki</p>
-          <p class="view-header-description-text">Lorem ipsum dolor sit amet</p>
+          <p class="view-header-description-title">#{locales['forge.public.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['forge.public.descriptionText']}</p>
         </div>
         
         <div class="view-header-search-container">
@@ -53,57 +51,80 @@
     </div> 
     
     <div class="flex-row forge-public">
-      <div class="flex-cell-full index-box">
+      <div class="flex-cell-full">
         <div class="flex-row">
-          <div class="flex-cell-full">
-            <h2>Profiili: #{forgePublicBackingBean.userName}</h2>
-          </div>
-        </div>
-        
-        <div class="flex-row">
-          <div class="flex-cell-full">
-            <ui:repeat var="material" value="#{forgePublicBackingBean.materials}">
-              <div class="flex-row material">
-                <div class="flex-cell-full">
-                  <div class="flex-row">
-                    <div class="flex-cell-7 flex-cell-first no-margin-bottom">
-                      <h4>
-                        <h:graphicImage styleClass="icon" library="novus" name="/gfx/icons/48x48/forge/icon-#{material.icon}.png"/> 
-                        <a target="_blank" href="#{material.editPath}">#{material.title}</a>
-                      </h4>
-                      <p class="modified">Muokattu: #{material.modified}</p>
-                    </div>
-                    
-                    <div class="flex-cell-9 flex-right flex-cell-last no-margin-bottom">
-                      <ui:fragment rendered="#{material.creativeCommonsIconUrl eq null}">
-                        <a class="license-link" href="#{material.license}">#{material.license}</a>
-                      </ui:fragment>
-                      <ui:fragment rendered="#{material.creativeCommonsIconUrl ne null}">
-                        <img src="#{material.creativeCommonsIconUrl}" />
-                      </ui:fragment>
-                    </div>
-                  </div> 
-
-                  <div class="flex-row">
-                    <div class="flex-cell-10 flex-cell-first">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse at nulla a mauris bibendum porta. Nulla id dictum sem. Sed metus mauris, auctor vel erat a, porta</p>
-                    </div>
-                    <div class="flex-cell-6 flex-cell-last flex-right">
-                    </div>
+          <div class="flex-cell-12 flex-cell-first no-margin-top no-margin-bottom">
+            <div class="flex-row">
+              <div class="flex-cell-full index-box">
+                <div class="flex-row">
+                  <div class="flex-cell-full">
+                    <h3>Satunnainen poiminta</h3>
                   </div>
-                  
-                  <div class="flex-row">
-                    <div class="flex-cell-full">
-                      <a href="/forge/public" class="creator-tag">#{material.creatorName}</a>
-                      <ui:repeat var="tag" value="#{material.tags}">
-                        <a href="/forge/public/tags/#{tag}" class="tag">#{tag}</a>
-                      </ui:repeat>
-                    </div>
-                  </div>  
-                  
+                </div>
+                
+                <div class="flex-row">
+                  <div class="flex-cell-full">
+                    <ui:include src="/facelets/forgepublicmaterial.xhtml">
+                      <ui:param name="material" value="#{forgePublicBackingBean.recommendedMaterial}" />
+                    </ui:include>
+                  </div>
                 </div>
               </div>
-            </ui:repeat>
+            </div>
+            
+            <div class="flex-row">
+              <div class="flex-cell-8 flex-cell-first index-box">
+                <div class="flex-row">
+                  <div class="flex-cell-full">
+                    <h3>Suosituimmat</h3>
+                  </div>
+                </div>
+                
+                <div class="flex-row">
+                  <div class="flex-cell-full">
+                    <ui:include src="/facelets/forgepublicmaterialscompact.xhtml">
+                      <ui:param name="materials" value="#{forgePublicBackingBean.mostPopularMaterial}" />
+                    </ui:include>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex-cell-8 flex-cell-last index-box">
+                <div class="flex-row">
+                  <div class="flex-cell-full">
+                    <h3>Uusimmat</h3>
+                  </div>
+                </div>
+                
+                <div class="flex-row">
+                  <div class="flex-cell-full">
+                    <ui:include src="/facelets/forgepublicmaterialscompact.xhtml">
+                      <ui:param name="materials" value="#{forgePublicBackingBean.latestMaterials}" />
+                    </ui:include>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex-cell-4 flex-cell-last index-box">
+            <div class="flex-row">
+              <div class="flex-cell-full">
+                <h3>Kategoriat</h3>
+              </div>
+            </div>
+            
+            <div class="flex-row">
+              <div class="flex-cell-full">
+                <ui:include src="/facelets/forgepublictags.xhtml">
+                  <ui:param name="tags" value="#{forgePublicBackingBean.tags}" />
+                </ui:include>
+              </div>
+            </div>
+              
+            <div class="more-container"> 
+              <a jsf:outcome="/gamelibrary/index.jsf" class="more-link">#{locales['index.gameLibraryMoreLink']}</a>
+            </div>
           </div>
         </div>
       </div>

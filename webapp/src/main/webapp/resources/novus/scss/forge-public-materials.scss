@@ -3,7 +3,7 @@
 @import "compass";
 @import "styles";
 
-.forge-public {
+.forge-public-materials {
   
   .index-box {
     position: relative;
@@ -16,7 +16,7 @@
   
   h3 {
     @include header-3;
-    color: $title-color;
+    margin-bottom: 10px;
   }
 
   h4 {
@@ -50,6 +50,13 @@
       text-transform: uppercase;
       text-decoration: none;
     }
+
+    .license-link {
+      font-family: $default-font;
+      font-size: 10px;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
     
     .tag, .creator-tag {
       font-family: $default-font;
@@ -59,13 +66,6 @@
       text-decoration: none;
       display: inline-block;
       white-space: nowrap;
-    }
-    
-    .license-link {
-      font-family: $default-font;
-      font-size: 10px;
-      text-transform: uppercase;
-      text-decoration: none;
     }
     
     .tag {

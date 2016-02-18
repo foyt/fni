@@ -101,6 +101,7 @@ import fi.foyt.fni.persistence.dao.materials.MaterialViewDAO;
 import fi.foyt.fni.persistence.dao.materials.PdfDAO;
 import fi.foyt.fni.persistence.dao.materials.PermaLinkDAO;
 import fi.foyt.fni.persistence.dao.materials.StarredMaterialDAO;
+import fi.foyt.fni.persistence.dao.materials.TagWithCount;
 import fi.foyt.fni.persistence.dao.materials.UserMaterialRoleDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageRevisionDAO;
@@ -1421,9 +1422,33 @@ public class MaterialController {
   public List<Material> listPublicMaterialsByCreatorAndTypes(User creator, List<MaterialType> types) {
     return materialDAO.listByPublicityAndCreatorAndAndTypes(MaterialPublicity.PUBLIC, creator, types);
   }
+
+  public List<Material> listPublicMaterialsByTags(List<Tag> tags) {
+    return materialTagDAO.listMaterialsByPublicityAndTags(MaterialPublicity.PUBLIC, tags);
+  }
   
   public List<MaterialTag> listMaterialTags(Material material) {
     return materialTagDAO.listByMaterial(material); 
+  }
+  
+  public long countMaterialsByTag(Tag tag) {
+    return materialTagDAO.countByTag(tag);
+  }
+  
+  public long countPublicMaterialsByTag(Tag tag) {
+    return materialTagDAO.countByTagAndMaterialPublicity(tag, MaterialPublicity.PUBLIC);
+  }
+  
+  public List<TagWithCount> listPublicMaterialTagsWithCounts(int maxTags) {
+    return materialTagDAO.listWithCountsByMaterialPublicityOrderByCountAndName(MaterialPublicity.PUBLIC, null, maxTags);
+  }
+
+  public List<Material> listLatestPublicMaterials(int maxResults) {
+    return materialDAO.listByPublicityOrderByModified(MaterialPublicity.PUBLIC, 0, maxResults);
+  }
+
+  public List<Material> listMostPopuralMaterials(int maxResults) {
+    return materialDAO.listByPublicityOrderByViews(MaterialPublicity.PUBLIC, 0, maxResults);
   }
   
   public Material updateMaterialTags(Material material, List<Tag> tags) {
@@ -2176,5 +2201,32 @@ public class MaterialController {
     
     return null;
   }
-  
+//
+//  public class TagWithCount {
+//    
+//    public TagWithCount(Tag tag, Long count) {
+//      this.tag = tag;
+//      this.count = count;
+//    }
+//    
+//    public Long getCount() {
+//      return count;
+//    }
+//    
+//    public void setCount(Long count) {
+//      this.count = count;
+//    }
+//    
+//    public Tag getTag() {
+//      return tag;
+//    }
+//    
+//    public void setTag(Tag tag) {
+//      this.tag = tag;
+//    }
+//    
+//    private Tag tag;
+//    private Long count;
+//  }
+
 }

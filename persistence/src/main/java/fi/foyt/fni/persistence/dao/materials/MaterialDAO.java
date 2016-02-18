@@ -19,6 +19,8 @@ import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.materials.MaterialRole;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
+import fi.foyt.fni.persistence.model.materials.MaterialView;
+import fi.foyt.fni.persistence.model.materials.MaterialView_;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole_;
 import fi.foyt.fni.persistence.model.users.User;
@@ -228,6 +230,61 @@ public class MaterialDAO extends GenericDAO<Material> {
     TypedQuery<Material> query = entityManager.createQuery(criteria);
     query.setFirstResult(firstResult);
     query.setMaxResults(maxResults);
+    
+    return query.getResultList();
+  }
+
+  public List<Material> listByPublicityOrderByModified(MaterialPublicity publicity, Integer firstResult, Integer maxResults) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Material> criteria = criteriaBuilder.createQuery(Material.class);
+    Root<Material> root = criteria.from(Material.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(Material_.publicity), publicity)
+    );
+    
+    criteria.orderBy(criteriaBuilder.desc(root.get(Material_.modified)));
+    
+    TypedQuery<Material> query = entityManager.createQuery(criteria);
+    
+    if (firstResult != null) {
+      query.setFirstResult(firstResult);
+    }
+    
+    if (maxResults != null) {
+      query.setMaxResults(maxResults);
+    }
+    
+    return query.getResultList();
+  }
+
+  public List<Material> listByPublicityOrderByViews(MaterialPublicity publicity, Integer firstResult, Integer maxResults) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Material> criteria = criteriaBuilder.createQuery(Material.class);
+    Root<MaterialView> root = criteria.from(MaterialView.class);
+    Join<MaterialView, Material> materialJoin = root.join(MaterialView_.material);
+    
+    criteria.select(root.get(MaterialView_.material)).distinct(true);
+    
+    criteria.where(
+      criteriaBuilder.equal(materialJoin.get(Material_.publicity), publicity)
+    );
+    
+    criteria.orderBy(criteriaBuilder.desc(root.get(MaterialView_.count)));
+    
+    TypedQuery<Material> query = entityManager.createQuery(criteria);
+    
+    if (firstResult != null) {
+      query.setFirstResult(firstResult);
+    }
+    
+    if (maxResults != null) {
+      query.setMaxResults(maxResults);
+    }
     
     return query.getResultList();
   }

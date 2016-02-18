@@ -1,0 +1,15 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  xmlns:h="http://java.sun.com/jsf/html">
+
+  <ul class="tags">
+    <ui:repeat var="tag" value="#{tags}">
+      <li>
+        <a jsf:outcome="/forge/public-materials.jsf?tags=#{tag.text}" class="tag">#{tag.text} (#{tag.count})</a>
+      </li>
+    </ui:repeat>
+  </ul>
+  
+</ui:composition>
