@@ -38,7 +38,7 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Join (path = "/forum/{forumUrlName}/{topicUrlName}", to = "/forum/topic.jsf")
 public class ForumTopicBackingBean {
 
-  public static final int POST_PER_PAGE = 3;
+  public static final int POST_PER_PAGE = 15;
 
   @Parameter
   @Matches ("[a-z0-9_.-]{1,}")
