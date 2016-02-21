@@ -12,7 +12,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
-import fi.foyt.fni.persistence.model.materials.Material_;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
@@ -21,6 +20,7 @@ import fi.foyt.fni.persistence.model.materials.MaterialRole;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.materials.MaterialView;
 import fi.foyt.fni.persistence.model.materials.MaterialView_;
+import fi.foyt.fni.persistence.model.materials.Material_;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole_;
 import fi.foyt.fni.persistence.model.users.User;
@@ -316,7 +316,22 @@ public class MaterialDAO extends GenericDAO<Material> {
     
     return entityManager.createQuery(criteria).getSingleResult();
   }
-  
+
+  public List<Material> listRandomMaterialsByPublicity(MaterialPublicity publicity, Integer firstResult, Integer maxResults) {
+    EntityManager entityManager = getEntityManager();
+    TypedQuery<Material> query = entityManager.createQuery("from Material where publicity = ? order by rand()", Material.class);
+    query.setParameter(1, publicity);
+    if (firstResult != null) {
+      query.setFirstResult(firstResult);
+    }
+    
+    if (maxResults != null) {
+      query.setMaxResults(maxResults);
+    }
+    
+    return query.getResultList();
+  }
+
   public Material updatePublicity(Material material, MaterialPublicity publicity, User modifier) {
   	material.setPublicity(publicity);
   	material.setModified(new Date());
@@ -358,4 +373,10 @@ public class MaterialDAO extends GenericDAO<Material> {
     entityManager.persist(material);
     return material;
   }
+
+  public Material updateDescription(Material material, String description) {
+    material.setDescription(description);
+    return persist(material);
+  }
+  
 }

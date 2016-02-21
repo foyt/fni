@@ -7,7 +7,7 @@
   <div class="flex-row material">
     <div class="flex-cell-full">
       <div class="flex-row">
-        <div class="flex-cell-7 flex-cell-first no-margin-bottom">
+        <div class="flex-cell-12 flex-cell-first no-margin-bottom">
           <h4>
             <img class="icon" jsf:name="/gfx/icons/48x48/forge/icon-#{material.icon}.png" jsf:library="novus"/>
             <a target="_blank" href="#{material.editPath}">#{material.title}</a>
@@ -19,23 +19,44 @@
             </h:outputFormat>
           </p>
         </div>
-          
-        <div class="flex-cell-9 flex-right flex-cell-last no-margin-bottom">
-          <ui:fragment rendered="#{material.creativeCommonsIconUrl eq null}">
+
+        <ui:fragment rendered="#{material.creativeCommonsIconUrl eq null}">
+          <div class="flex-cell-4 flex-right flex-cell-last no-margin-bottom license-link-container">
             <a target="_blank" class="license-link" href="#{material.license}">#{material.license}</a>
+          </div>
+        </ui:fragment>
+          
+        <ui:fragment rendered="#{material.creativeCommonsIconUrl ne null}">
+          <div class="flex-cell-4 flex-right flex-cell-last no-margin-bottom">
+            <a target="_blank" href="#{material.license}">
+              <img src="#{material.creativeCommonsIconUrl}" />
+            </a>
+          </div>
+        </ui:fragment>
+          
+        <!--   
+        <div class="flex-cell-4 flex-right flex-cell-last no-margin-bottom">
+          <ui:fragment rendered="#{material.creativeCommonsIconUrl eq null}">
+            <div class="license-link-container"> 
+              <a target="_blank" class="license-link" href="#{material.license}">#{material.license}</a>
+            </div>
           </ui:fragment>
           <ui:fragment rendered="#{material.creativeCommonsIconUrl ne null}">
-            <a target="_blank" class="license-link" href="#{material.license}">
+            <a target="_blank" href="#{material.license}">
               <img src="#{material.creativeCommonsIconUrl}" />
             </a>
           </ui:fragment>
         </div>
+         -->
       </div> 
 
       <div class="flex-row">
         <div class="flex-cell-10 flex-cell-first">
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse at nulla a mauris bibendum porta. Nulla id dictum sem. Sed metus mauris, auctor vel erat a, porta</p>
+          <ui:fragment rendered="#{!empty(material.description)}">
+            <p>#{material.description}</p>
+          </ui:fragment>
         </div>
+        
         <div class="flex-cell-6 flex-cell-last flex-right">
         </div>
       </div>

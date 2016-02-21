@@ -36,6 +36,11 @@
       <input type="text" value="{tags}"/>
     </div>
     
+    <h4>Description</h4>
+    <div class="forge-share-material-description">
+      <textarea>{description}</textarea>
+    </div>
+    
     <h4>Collaborators</h4>
     <div class="forge-share-material-collaborators">
     

@@ -1395,6 +1395,15 @@ public class MaterialController {
   public List<Material> listModifiedMaterialsByUser(User user, Integer firstResult, Integer maxResults) {
     return materialDAO.listByModifierExcludingTypesSortByModified(user, Arrays.asList(new MaterialType[] { MaterialType.FOLDER }), firstResult, maxResults);
   }
+  
+  public Material findRandomPublicMaterial() {
+    List<Material> materials = materialDAO.listRandomMaterialsByPublicity(MaterialPublicity.PUBLIC, 0, 1);
+    if (!materials.isEmpty()) {
+      return materials.get(0);
+    }
+    
+    return null;
+  }
 
   @SuppressWarnings("unchecked")
   public List<Material> listMaterialsByFolder(User user, Folder folder) {
@@ -1507,6 +1516,9 @@ public class MaterialController {
     return updateMaterialTags(material, materialTags);
   }
 
+  public Material updateMaterialDescription(Material material, String description) {
+    return materialDAO.updateDescription(material, description);
+  }
 
   public String getUniqueMaterialUrlName(User owner, Folder parentFolder, Material material, String title) {
     String urlName = RequestUtils.createUrlName(title);
@@ -2201,32 +2213,5 @@ public class MaterialController {
     
     return null;
   }
-//
-//  public class TagWithCount {
-//    
-//    public TagWithCount(Tag tag, Long count) {
-//      this.tag = tag;
-//      this.count = count;
-//    }
-//    
-//    public Long getCount() {
-//      return count;
-//    }
-//    
-//    public void setCount(Long count) {
-//      this.count = count;
-//    }
-//    
-//    public Tag getTag() {
-//      return tag;
-//    }
-//    
-//    public void setTag(Tag tag) {
-//      this.tag = tag;
-//    }
-//    
-//    private Tag tag;
-//    private Long count;
-//  }
 
 }

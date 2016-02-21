@@ -61,6 +61,13 @@
       white-space: nowrap;
     }
     
+    .license-link-container {
+      overflow:hidden; 
+      text-overflow: ellipsis;
+      min-width:0;
+      color: blue;
+    }
+
     .license-link {
       font-family: $default-font;
       font-size: 10px;

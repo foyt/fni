@@ -26,19 +26,12 @@ public class ForgePublicBackingBean extends AbstractForgePublicViewBackingBean {
   
   @RequestAction
   public String init() {
-    Long recommendedMaterialId = 618l;
-    
     this.tags = toTagBeans(materialController.listPublicMaterialTagsWithCounts(TAG_COUNT));
-    this.recommendedMaterial = toMaterialBean(materialController.findMaterialById(recommendedMaterialId));
-    this.randomMaterial = toMaterialBean(materialController.findMaterialById(recommendedMaterialId));
+    this.randomMaterial = toMaterialBean(materialController.findRandomPublicMaterial());
     this.latestMaterials = toMaterialBeans(materialController.listLatestPublicMaterials(LATEST_COUNT));
     this.mostPopularMaterial = toMaterialBeans(materialController.listMostPopuralMaterials(POPULAR_COUNT));
     
     return null;
-  }
-
-  public PublicMaterialBean getRecommendedMaterial() {
-    return recommendedMaterial;
   }
   
   public PublicMaterialBean getRandomMaterial() {
@@ -57,7 +50,6 @@ public class ForgePublicBackingBean extends AbstractForgePublicViewBackingBean {
     return tags;
   }
 
-  private PublicMaterialBean recommendedMaterial;
   private PublicMaterialBean randomMaterial;
   private List<PublicMaterialBean> latestMaterials;
   private List<PublicMaterialBean> mostPopularMaterial;
