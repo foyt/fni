@@ -5,8 +5,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
+
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.dao.materials.TagWithCount;
+import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.MaterialTag;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.utils.licenses.CreativeCommonsLicense;
@@ -34,7 +37,7 @@ public abstract class AbstractForgePublicViewBackingBean {
     String icon = materialController.getMaterialIcon(material.getType());
     
     String license = CreativeCommonsUtils.createLicenseUrl(true, true, randBoolean(), randBoolean());
-    if (Math.random() > 0.9) {
+    if (Math.random() > 0.2) {
       license = "https://www.mycustomlicense.org";
     }
     
@@ -50,10 +53,15 @@ public abstract class AbstractForgePublicViewBackingBean {
     
     String viewPath = String.format("/materials/%s", material.getPath());
     String editPath = materialController.getForgeMaterialViewerUrl(material);
+    String description = material.getDescription();
+    if (StringUtils.isBlank(description) && (material instanceof Document)) {
+      description = StringUtils.abbreviate(((Document) material).getContentPlain(), 250);
+    }
     
     return new PublicMaterialBean(
         material.getId(), 
         material.getTitle(), 
+        description,
         icon, 
         license,
         commonsLicence != null ? commonsLicence.getIconUrl(true) : null, 

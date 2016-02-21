@@ -43,7 +43,7 @@
         </div>
         
         <div class="view-header-search-container">
-          <input type="text" class="view-header-search forge-search" placeholder="Hae materiaalipankista"/>
+          <input type="text" class="view-header-search forge-search" placeholder="#{locales['forge.public.searchPlaceholder']}"/>
           <div class="view-header-search-loading forge-search-loading" style="display: none"/>
           <div class="view-header-search-result forge-search-result" style="display: none"/>
         </div>
@@ -58,7 +58,7 @@
               <div class="flex-cell-full index-box">
                 <div class="flex-row">
                   <div class="flex-cell-full">
-                    <h3>Satunnainen poiminta</h3>
+                    <h3>#{locales['forge.public.randomMaterial']}</h3>
                   </div>
                 </div>
                 
@@ -76,7 +76,7 @@
               <div class="flex-cell-8 flex-cell-first index-box">
                 <div class="flex-row">
                   <div class="flex-cell-full">
-                    <h3>Suosituimmat</h3>
+                    <h3>#{locales['forge.public.mostPopular']}</h3>
                   </div>
                 </div>
                 
@@ -92,7 +92,7 @@
               <div class="flex-cell-8 flex-cell-last index-box">
                 <div class="flex-row">
                   <div class="flex-cell-full">
-                    <h3>Uusimmat</h3>
+                    <h3>#{locales['forge.public.latestMaterials']}</h3>
                   </div>
                 </div>
                 
@@ -110,7 +110,7 @@
           <div class="flex-cell-4 flex-cell-last index-box">
             <div class="flex-row">
               <div class="flex-cell-full">
-                <h3>Kategoriat</h3>
+                <h3>#{locales['forge.public.tags']}</h3>
               </div>
             </div>
             
@@ -122,7 +122,7 @@
               </div>
             </div>
               
-            <div class="more-container"> 
+            <div class="more-container" style="display: none"> 
               <a jsf:outcome="/gamelibrary/index.jsf" class="more-link">#{locales['index.gameLibraryMoreLink']}</a>
             </div>
           </div>
