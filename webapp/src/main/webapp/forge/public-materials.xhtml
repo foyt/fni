@@ -46,7 +46,7 @@
         </div>
         
         <div class="view-header-search-container">
-          <input type="text" class="view-header-search forge-search" placeholder="Hae materiaalipankista"/>
+          <input type="text" class="view-header-search forge-search" placeholder="#{locales['forge.publicMaterials.searchPlaceholder']}"/>
           <div class="view-header-search-loading forge-search-loading" style="display: none"/>
           <div class="view-header-search-result forge-search-result" style="display: none"/>
         </div>
@@ -62,11 +62,19 @@
               <div class="flex-row">
                 <div class="flex-cell-full">
                   <ui:fragment rendered="#{forgePublicMaterialsBackingBean.userId ne null}">
-                    <h3>Profiili: #{forgePublicMaterialsBackingBean.userName}</h3>
+                    <h3>
+                      <h:outputFormat value="#{locales['forge.publicMaterials.profile']}">
+                        <f:param value="#{forgePublicMaterialsBackingBean.userName}"/>
+                      </h:outputFormat>
+                    </h3>
                   </ui:fragment>
                   
                   <ui:fragment rendered="#{forgePublicMaterialsBackingBean.tags ne null}">
-                    <h3>Kategoria: #{forgePublicMaterialsBackingBean.tags}</h3>
+                    <h3>
+                      <h:outputFormat value="#{locales['forge.publicMaterials.category']}">
+                        <f:param value="#{forgePublicMaterialsBackingBean.tags}"/>
+                      </h:outputFormat>
+                    </h3>
                   </ui:fragment>
                 </div>
               </div>
@@ -89,21 +97,24 @@
                             </p>
                           </div>
                           
-                          <div class="flex-cell-4 flex-right flex-cell-last no-margin-bottom">
-                            <ui:fragment rendered="#{material.creativeCommonsIconUrl eq null}">
+                          <ui:fragment rendered="#{material.creativeCommonsIconUrl eq null}">
+                            <div class="flex-cell-4 flex-right flex-cell-last no-margin-bottom license-link-container">
                               <a target="_blank" class="license-link" href="#{material.license}">#{material.license}</a>
-                            </ui:fragment>
-                            <ui:fragment rendered="#{material.creativeCommonsIconUrl ne null}">
-                              <a target="_blank" class="license-link" href="#{material.license}">
+                            </div>
+                          </ui:fragment>
+                            
+                          <ui:fragment rendered="#{material.creativeCommonsIconUrl ne null}">
+                            <div class="flex-cell-4 flex-right flex-cell-last no-margin-bottom">
+                              <a target="_blank" href="#{material.license}">
                                 <img src="#{material.creativeCommonsIconUrl}" />
                               </a>
-                            </ui:fragment>
-                          </div>
+                            </div>
+                          </ui:fragment>
                         </div> 
       
                         <div class="flex-row">
                           <div class="flex-cell-10 flex-cell-first">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse at nulla a mauris bibendum porta. Nulla id dictum sem. Sed metus mauris, auctor vel erat a, porta</p>
+                            <p>#{material.description}</p>
                           </div>
                           <div class="flex-cell-6 flex-cell-last flex-right">
                           </div>
@@ -127,7 +138,7 @@
           <div class="flex-cell-4 flex-cell-last index-box">
             <div class="flex-row">
               <div class="flex-cell-full">
-                <h3>Kategoriat</h3>
+                <h3>#{locales['forge.publicMaterials.categories']}</h3>
               </div>
             </div>
             
@@ -139,7 +150,7 @@
               </div>
             </div>
               
-            <div class="more-container"> 
+            <div class="more-container" style="dislay: none"> 
               <a jsf:outcome="/gamelibrary/index.jsf" class="more-link">#{locales['index.gameLibraryMoreLink']}</a>
             </div>
           </div>
