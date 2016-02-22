@@ -76,7 +76,7 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-basic")
   public void testLoggedIn() throws Exception {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     testTitle("/illusion/event/openevent", "Illusion - Open Event");
     assertSelectorCount(".illusion-event-navigation>a", 1);
     assertSelectorPresent(".illusion-event-join-button");
@@ -87,7 +87,7 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-participant")
   public void testLoggedInParticipant() throws Exception {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     testTitle("/illusion/event/openevent", "Illusion - Open Event");
     assertSelectorCount(".illusion-event-navigation>a", 1);
     assertSelectorNotPresent(".illusion-event-join-button");
@@ -98,7 +98,7 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-organizer")
   public void testLoggedInOrganizer() throws Exception {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
+    loginInternal("admin@foyt.fi", "pass");
     testTitle("/illusion/event/openevent", "Illusion - Open Event");
     assertSelectorCount(".illusion-event-navigation>a", 1);
     assertSelectorNotPresent(".illusion-event-join-button");
@@ -117,7 +117,7 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
       clickSelector(".illusion-event-join-button");
       waitForUrlMatches(".*/login.*");
       assertLogin();
-      loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+      loginInternal("user@foyt.fi", "pass");
       assertUrlMatches(".*/illusion/event/open");
       assertSelectorCount(".illusion-event-navigation>a", 1);
       assertSelectorNotPresent(".illusion-event-join-button");
@@ -138,7 +138,7 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
       clickSelector(".illusion-event-join-button");
       waitForUrlMatches(".*/login.*");
       assertLogin();
-      loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+      loginInternal("user@foyt.fi", "pass");
       assertUrlMatches(".*/illusion/event/approve.*");
       waitForNotification();
 

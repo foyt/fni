@@ -32,7 +32,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
 
   @Test
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), "/forge/import-google-drive");
+    testLoginRequired("/forge/import-google-drive");
   }
 
   @Test
@@ -96,7 +96,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".forge-create-folder-dialog")));
     getWebDriver().findElement(By.cssSelector(".forge-create-folder-dialog .forge-create-folder-name")).sendKeys("test folder");
     getWebDriver().findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
-    waitForUrlMatches(getWebDriver(), ".*/forge/folders/[0-9]{1,}/test_folder");
+    waitForUrlMatches(".*/forge/folders/[0-9]{1,}/test_folder");
     waitAndClick(".forge-import-material-menu");
     waitAndClick(".forge-import-material-menu .forge-import-google-drive");
     waitForUrlMatches(".*\\/import-google-drive\\?parentFolderId=[0-9]{1,}.*");

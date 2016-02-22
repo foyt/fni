@@ -1,9 +1,6 @@
 package fi.foyt.fni.test.ui.base.forge;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -20,14 +17,14 @@ public class ForgeFolderTestsBase extends AbstractUITest {
 
   @Test
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), FOLDER);
-    testLoginRequired(getWebDriver(), SUBFOLDER);
+    testLoginRequired(FOLDER);
+    testLoginRequired(SUBFOLDER);
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testForbidden() throws Exception {
-    loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
+    loginInternal("guest@foyt.fi", "pass");
     testAccessDenied(FOLDER);
     testAccessDenied(SUBFOLDER);
   }
@@ -47,29 +44,28 @@ public class ForgeFolderTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testMayView() {
-    loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
-    testMayViewFolder(getWebDriver(), FOLDER);
-    testMayViewFolder(getWebDriver(), SUBFOLDER);
+    loginInternal("librarian@foyt.fi", "pass");
+    testMayViewFolder(FOLDER);
+    testMayViewFolder(SUBFOLDER);
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testMayEdit() {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
-    testMayViewFolder(getWebDriver(), FOLDER);
-    testMayViewFolder(getWebDriver(), SUBFOLDER);
+    loginInternal("admin@foyt.fi", "pass");
+    testMayViewFolder(FOLDER);
+    testMayViewFolder(SUBFOLDER);
   }
 
-  private void testMayViewFolder(RemoteWebDriver driver, String path) {
-    driver.get(getAppUrl() + path);
-    assertEquals("Forge", driver.getTitle());
+  private void testMayViewFolder(String path) {
+    testTitle(path, "Forge");
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testOpenShareDialog() {
     acceptCookieDirective();
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     navigate(FOLDER);
     waitAndClick(".forge-material[data-material-id=\"4\"] .forge-material-icon");
     waitAndClick(".forge-material[data-material-id=\"4\"] .forge-material-action-share a");

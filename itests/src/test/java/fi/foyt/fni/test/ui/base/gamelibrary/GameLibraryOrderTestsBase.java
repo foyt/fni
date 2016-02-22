@@ -1,7 +1,6 @@
 package fi.foyt.fni.test.ui.base.gamelibrary;
 
 import org.junit.Test;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -17,7 +16,7 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testAccessKey() throws Exception {
     navigateAndWait("/gamelibrary/orders/1?key=bogus-access-key", true);
-    testOrderDetails(getWebDriver());
+    testOrderDetails();
   }
 
   @Test
@@ -47,7 +46,7 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   public void testUser() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     navigateAndWait("/gamelibrary/orders/1", true);
-    testOrderDetails(getWebDriver());
+    testOrderDetails();
   }
 
   @Test
@@ -55,7 +54,7 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   public void testLibrarian() throws Exception {
     loginInternal("librarian@foyt.fi", "pass");
     navigateAndWait("/gamelibrary/orders/1", true);
-    testOrderDetails(getWebDriver());
+    testOrderDetails();
   }
 
   @Test
@@ -63,10 +62,10 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   public void testAdmin() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
     navigateAndWait("/gamelibrary/orders/1", true);
-    testOrderDetails(getWebDriver());
+    testOrderDetails();
   }
 
-  private void testOrderDetails(RemoteWebDriver driver) {
+  private void testOrderDetails() {
     String firstName = "Bogus";
     String lastName = "Person";
     String company = "Bogus Company";

@@ -28,7 +28,7 @@ public class UsersResetPasswordTestsBase extends AbstractUITest {
   public void testCorrectKeyTest() throws Exception {
     createUser(USER_ID, "Reset", "Test", USER_EMAIL, "pass", "en_US", "GRAVATAR", "USER");
     try {
-      loginInternal(getWebDriver(), USER_EMAIL, "pass");
+      loginInternal(USER_EMAIL, "pass");
       logout();
 
       String key = UUID.randomUUID().toString();
@@ -40,7 +40,7 @@ public class UsersResetPasswordTestsBase extends AbstractUITest {
         sendKeysSelector(".password2", "qwe");
         getWebDriver().findElement(By.cssSelector("input[type='submit']")).click();
 
-        loginInternal(getWebDriver(), USER_EMAIL, "qwe");
+        loginInternal(USER_EMAIL, "qwe");
       } finally {
         executeSql("delete from PasswordResetKey where id = ?", USER_ID);
       }

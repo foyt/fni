@@ -15,13 +15,13 @@ public class ForgeIndexTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testTitle() {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     testTitle("/forge/", "Forge");
   }
 
   @Test
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), "/forge/");
+    testLoginRequired("/forge/");
   }
 
   @Test
@@ -39,7 +39,7 @@ public class ForgeIndexTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testOpenShareDialog() {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     navigate("/forge");
     waitForSelectorVisible(".forge-material[data-material-id=\"16\"] .forge-material-icon");
     clickSelector(".forge-material[data-material-id=\"16\"] .forge-material-icon");

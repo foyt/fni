@@ -18,15 +18,15 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
 
   @Test
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), VECTOR_IMAGE_IN_ROOT);
-    testLoginRequired(getWebDriver(), VECTOR_IMAGE_IN_FOLDER);
-    testLoginRequired(getWebDriver(), VECTOR_IMAGE_IN_SUBFOLDER);
+    testLoginRequired(VECTOR_IMAGE_IN_ROOT);
+    testLoginRequired(VECTOR_IMAGE_IN_FOLDER);
+    testLoginRequired(VECTOR_IMAGE_IN_SUBFOLDER);
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testForbidden() throws Exception {
-    loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
+    loginInternal("guest@foyt.fi", "pass");
     testAccessDenied(VECTOR_IMAGE_IN_ROOT);
     testAccessDenied(VECTOR_IMAGE_IN_FOLDER);
     testAccessDenied(VECTOR_IMAGE_IN_SUBFOLDER);
@@ -35,7 +35,7 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testNotFound() throws Exception {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     testNotFound("/forge/vectorimages/2/folder/subfolder");
     testNotFound("/forge/vectorimages//image");
     testNotFound("/forge/vectorimages/a/image");
@@ -47,7 +47,7 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testMayView() {
-    loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
+    loginInternal("librarian@foyt.fi", "pass");
     testMayViewVectorImage(VECTOR_IMAGE_IN_ROOT);
     testMayViewVectorImage(VECTOR_IMAGE_IN_FOLDER);
     testMayViewVectorImage(VECTOR_IMAGE_IN_SUBFOLDER);
@@ -56,7 +56,7 @@ public class ForgeVectorImageTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testMayEdit() {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
+    loginInternal("admin@foyt.fi", "pass");
     testMayEditVectorImage(VECTOR_IMAGE_IN_ROOT);
     testMayEditVectorImage(VECTOR_IMAGE_IN_FOLDER);
     testMayEditVectorImage(VECTOR_IMAGE_IN_SUBFOLDER);

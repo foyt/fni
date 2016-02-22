@@ -26,7 +26,7 @@ public class ForgeGoogleDriveTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testForbidden() throws Exception {
-    loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
+    loginInternal("guest@foyt.fi", "pass");
     testAccessDenied(GOOGLEDOC_IN_ROOT);
     testAccessDenied(GOOGLEDOC_IN_FOLDER);
     testAccessDenied(GOOGLEDOC_IN_SUBFOLDER);

@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -78,25 +77,25 @@ public class StoreProductTestsBase extends AbstractUITest {
     assertSelectorText(String.format("%s .store-product-comments", productSelector), String.format("COMMENTS (%d)", comments), true, true);
     assertEquals(getAppUrl(true) + "/forum/" + commentUrl, getWebDriver().findElement(By.cssSelector(productSelector + " .store-product-comments")).getAttribute("href"));
     
-    assertShareButtonsHidden(getWebDriver(), productSelector);
+    assertShareButtonsHidden(productSelector);
     waitAndClick(productSelector + " .store-product-share-button label");
-    assertShareButtonsVisible(getWebDriver(), productSelector);
+    assertShareButtonsVisible(productSelector);
     waitAndClick(productSelector + " .store-product-share-button label");
-    assertShareButtonsHidden(getWebDriver(), productSelector);
+    assertShareButtonsHidden(productSelector);
     waitAndClick(productSelector + " .store-product-share-button label");
-    assertShareButtonsVisible(getWebDriver(), productSelector);
+    assertShareButtonsVisible(productSelector);
     waitAndClick(productSelector + " .store-product-detail-price");
-    assertShareButtonsHidden(getWebDriver(), productSelector);
+    assertShareButtonsHidden(productSelector);
   }
 
-  private void assertShareButtonsHidden(RemoteWebDriver driver, String publicationSelector) {
+  private void assertShareButtonsHidden(String publicationSelector) {
     new WebDriverWait(getWebDriver(), 10).until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(publicationSelector + " .store-product-share-button .entypo-twitter")));
     assertSelectorNotVisible(String.format("%s .store-product-share-button .entypo-twitter", publicationSelector));
     assertSelectorNotVisible(String.format("%s .store-product-share-button .entypo-facebook", publicationSelector));
     assertSelectorNotVisible(String.format("%s .store-product-share-button .entypo-gplus", publicationSelector));
   }
 
-  private void assertShareButtonsVisible(RemoteWebDriver driver, String publicationSelector) {
+  private void assertShareButtonsVisible(String publicationSelector) {
     waitForSelectorVisible(String.format("%s .store-product-share-button .entypo-twitter", publicationSelector));
     assertSelectorVisible(String.format("%s .store-product-share-button .entypo-twitter", publicationSelector));
     assertSelectorVisible(String.format("%s .store-product-share-button .entypo-facebook", publicationSelector));

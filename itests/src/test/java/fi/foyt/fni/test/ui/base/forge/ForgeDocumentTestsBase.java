@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -26,15 +25,15 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
 
   @Test
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), DOCUMENT_IN_ROOT);
-    testLoginRequired(getWebDriver(), DOCUMENT_IN_FOLDER);
-    testLoginRequired(getWebDriver(), DOCUMENT_IN_SUBFOLDER);
+    testLoginRequired(DOCUMENT_IN_ROOT);
+    testLoginRequired(DOCUMENT_IN_FOLDER);
+    testLoginRequired(DOCUMENT_IN_SUBFOLDER);
   }
   
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testForbidden() throws Exception {
-    loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
+    loginInternal("guest@foyt.fi", "pass");
     testAccessDenied(DOCUMENT_IN_ROOT);
     testAccessDenied(DOCUMENT_IN_FOLDER);
     testAccessDenied(DOCUMENT_IN_SUBFOLDER);
@@ -43,7 +42,7 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testNotFound() throws Exception {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     testNotFound("/forge/documents/2/folder/subfolder");
     testNotFound("/forge/documents//document");
     testNotFound("/forge/documents/a/document");
@@ -55,7 +54,7 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testMayView() {
-    loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
+    loginInternal("librarian@foyt.fi", "pass");
     testMayViewDocument(DOCUMENT_IN_ROOT);
     testMayViewDocument(DOCUMENT_IN_FOLDER);
     testMayViewDocument(DOCUMENT_IN_SUBFOLDER);
@@ -95,14 +94,14 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
   }
 
   private void testMayViewDocument(String documentPath) {
-    testDocumentEditable(getWebDriver(), documentPath, false);
+    testDocumentEditable(documentPath, false);
   }
 
   private void testMayEditDocument(String documentPath) {
-    testDocumentEditable(getWebDriver(), documentPath, true);
+    testDocumentEditable(documentPath, true);
   }
 
-  private void testDocumentEditable(RemoteWebDriver driver, String documentPath, boolean expect) {
+  private void testDocumentEditable(String documentPath, boolean expect) {
     navigate(documentPath);
     assertDocumentEditable(expect);
   }
