@@ -8,7 +8,7 @@ public class AdminArchiveUserTestsIT extends AdminArchiveUserTestsBase {
   
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
   
   @After

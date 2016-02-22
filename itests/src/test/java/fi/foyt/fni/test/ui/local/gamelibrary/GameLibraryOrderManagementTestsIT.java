@@ -8,7 +8,7 @@ public class GameLibraryOrderManagementTestsIT extends GameLibraryOrderManagemen
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

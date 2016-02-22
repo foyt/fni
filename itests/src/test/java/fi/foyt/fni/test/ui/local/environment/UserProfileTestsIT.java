@@ -8,7 +8,7 @@ public class UserProfileTestsIT extends UserProfileTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

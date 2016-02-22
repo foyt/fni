@@ -8,7 +8,7 @@ public class ForgeIndexTestsIT extends ForgeIndexTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

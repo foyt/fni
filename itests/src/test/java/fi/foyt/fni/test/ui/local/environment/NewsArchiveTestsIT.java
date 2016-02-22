@@ -8,7 +8,7 @@ public class NewsArchiveTestsIT extends NewsArchiveTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
   
   @After

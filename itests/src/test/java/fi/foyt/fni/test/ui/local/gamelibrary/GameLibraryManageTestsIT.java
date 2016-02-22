@@ -8,7 +8,7 @@ public class GameLibraryManageTestsIT extends GameLibraryManageTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

@@ -8,7 +8,7 @@ public class IllusionEventEditTemplateTestsIT extends IllusionEventEditTemplateT
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

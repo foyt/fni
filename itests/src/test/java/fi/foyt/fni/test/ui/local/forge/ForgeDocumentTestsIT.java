@@ -8,7 +8,7 @@ public class ForgeDocumentTestsIT extends ForgeDocumentTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

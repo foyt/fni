@@ -8,7 +8,7 @@ public class AboutTestsIT extends AboutTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
   
   @After

@@ -8,7 +8,7 @@ public class ForgeIllusionTestsIT extends ForgeIllusionTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

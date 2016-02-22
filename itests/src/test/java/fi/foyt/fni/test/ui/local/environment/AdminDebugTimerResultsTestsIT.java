@@ -8,7 +8,7 @@ public class AdminDebugTimerResultsTestsIT extends AdminDebugTimerResultsTestsBa
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

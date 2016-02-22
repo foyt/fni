@@ -8,7 +8,7 @@ public class UsersResetPasswordTestsIT extends UsersResetPasswordTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

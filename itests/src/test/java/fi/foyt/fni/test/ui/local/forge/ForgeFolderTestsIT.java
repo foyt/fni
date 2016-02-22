@@ -8,7 +8,7 @@ public class ForgeFolderTestsIT extends ForgeFolderTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

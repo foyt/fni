@@ -8,7 +8,7 @@ public class ForgeConnectDropboxTestsIT extends ForgeConnectDropboxTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

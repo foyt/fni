@@ -8,7 +8,7 @@ public class ForumPostEditTestsIT extends ForumPostEditTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

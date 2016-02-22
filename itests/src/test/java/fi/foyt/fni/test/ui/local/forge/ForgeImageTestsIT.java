@@ -8,7 +8,7 @@ public class ForgeImageTestsIT extends ForgeImageTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

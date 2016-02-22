@@ -8,7 +8,7 @@ public class GameLibraryEditPublicationTestsIT extends GameLibraryEditPublicatio
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

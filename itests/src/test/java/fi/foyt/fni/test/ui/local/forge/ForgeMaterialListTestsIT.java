@@ -8,7 +8,7 @@ public class ForgeMaterialListTestsIT extends ForgeMaterialListTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

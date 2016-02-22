@@ -8,7 +8,7 @@ public class IllusionEventIndexTestsIT extends IllusionEventIndexTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

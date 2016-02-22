@@ -8,7 +8,7 @@ public class IllusionEventMaterialsTestsIT extends IllusionEventMaterialsTestsBa
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

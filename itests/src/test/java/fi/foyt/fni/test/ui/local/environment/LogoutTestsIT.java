@@ -8,7 +8,7 @@ public class LogoutTestsIT extends LogoutTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

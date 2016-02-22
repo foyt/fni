@@ -8,7 +8,7 @@ public class StoreCartTestsIT extends StoreCartTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

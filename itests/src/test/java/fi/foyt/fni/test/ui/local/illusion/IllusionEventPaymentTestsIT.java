@@ -9,7 +9,7 @@ public class IllusionEventPaymentTestsIT extends IllusionEventPaymentTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

@@ -8,7 +8,7 @@ public class IllusionEventManageTemplatesTestsIT extends IllusionEventManageTemp
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

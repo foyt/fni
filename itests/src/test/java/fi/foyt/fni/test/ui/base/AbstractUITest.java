@@ -93,6 +93,17 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     return driver;
   }
 
+  protected WebDriver createLocalDriver() {
+    switch (getDriver()) {
+      case "chrome":
+        return createChromeDriver();
+      case "phantomjs":
+        return createPhantomJsDriver();
+    }
+    
+    throw new RuntimeException(String.format("Unknown driver %s", getDriver()));
+  }
+
   protected WebDriver createChromeDriver() {
     ChromeDriver driver = new ChromeDriver();
     return driver;

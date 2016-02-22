@@ -8,7 +8,7 @@ public class IndexTestsIT extends IndexTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

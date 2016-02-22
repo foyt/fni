@@ -8,7 +8,7 @@ public class IllusionEventGroupsTestsIT extends IllusionEventGroupsTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

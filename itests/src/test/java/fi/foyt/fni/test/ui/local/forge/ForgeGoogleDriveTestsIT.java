@@ -8,7 +8,7 @@ public class ForgeGoogleDriveTestsIT extends ForgeGoogleDriveTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

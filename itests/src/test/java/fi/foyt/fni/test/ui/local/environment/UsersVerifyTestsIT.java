@@ -8,7 +8,7 @@ public class UsersVerifyTestsIT extends UsersVerifyTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

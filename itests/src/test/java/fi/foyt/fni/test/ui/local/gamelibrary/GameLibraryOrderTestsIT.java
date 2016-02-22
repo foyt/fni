@@ -8,7 +8,7 @@ public class GameLibraryOrderTestsIT extends GameLibraryOrderTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

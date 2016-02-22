@@ -8,7 +8,7 @@ public class ForgeUploadTestsIT extends ForgeUploadTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

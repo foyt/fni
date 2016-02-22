@@ -8,7 +8,7 @@ public class ForgeBookDesignTestsIT extends ForgeBookDesignTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

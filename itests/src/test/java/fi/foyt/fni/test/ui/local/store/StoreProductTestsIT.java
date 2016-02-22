@@ -8,7 +8,7 @@ public class StoreProductTestsIT extends StoreProductTestsBase {
 
   @Before
   public void setUp() {
-    setWebDriver(createChromeDriver());
+    setWebDriver(createLocalDriver());
   }
 
   @After

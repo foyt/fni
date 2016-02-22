@@ -164,7 +164,11 @@ public abstract class AbstractTest extends TestWatcher {
   protected String getSeleniumVersion() {
     return System.getProperty("it.selenium.version");
   }
-    
+
+  protected String getDriver() {
+    return System.getProperty("it.driver");
+  }
+  
   protected String getPlatform() {
     return System.getProperty("it.platform");
   }
