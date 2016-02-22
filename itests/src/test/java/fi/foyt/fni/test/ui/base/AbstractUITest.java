@@ -27,10 +27,14 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.internal.FindsByCssSelector;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
@@ -49,12 +53,14 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     return sessionId;
   }
   
-  protected void setWebDriver(RemoteWebDriver webDriver) {
+  protected void setWebDriver(WebDriver webDriver) {
     this.webDriver = webDriver;
-    this.sessionId = webDriver.getSessionId().toString();
+    if (webDriver instanceof RemoteWebDriver) {
+      this.sessionId = ((RemoteWebDriver) webDriver).getSessionId().toString();
+    }
   }
   
-  protected RemoteWebDriver getWebDriver() {
+  protected WebDriver getWebDriver() {
     return webDriver;
   }
   
@@ -87,18 +93,21 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     return driver;
   }
 
-  protected ChromeDriver createChromeDriver() {
+  protected WebDriver createChromeDriver() {
     ChromeDriver driver = new ChromeDriver();
     return driver;
   }
   
-  protected void loginInternal(String email, String password) {
-    loginInternal(getWebDriver(), email, password);
+  protected WebDriver createPhantomJsDriver() {
+    DesiredCapabilities desiredCapabilities = DesiredCapabilities.phantomjs();
+    desiredCapabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, ".phantomjs/bin/phantomjs");
+    desiredCapabilities.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, new String[] { "--ignore-ssl-errors=true", "--webdriver-loglevel=NONE" } );
+    return new PhantomJSDriver(desiredCapabilities);
   }
   
-  protected void loginInternal(RemoteWebDriver driver, String email, String password) {
+  protected void loginInternal(String email, String password) {
     String loginUrl = getAppUrl(true) + "/login/";
-    if (!StringUtils.startsWith(driver.getCurrentUrl(), loginUrl)) {
+    if (!StringUtils.startsWith(getWebDriver().getCurrentUrl(), loginUrl)) {
       navigateAndWait("/login/", true);
     }
     
@@ -268,12 +277,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected WebElement findElementBySelector(String selector) {
-    return getWebDriver().findElementByCssSelector(selector);
+    return ((FindsByCssSelector) getWebDriver()).findElementByCssSelector(selector);
   }
   
   protected List<WebElement> findElementsBySelector(String selector) {
     try {
-      return getWebDriver().findElementsByCssSelector(selector);
+      return ((FindsByCssSelector) getWebDriver()).findElementsByCssSelector(selector);
     } catch (NoSuchElementException e) {
       return Collections.emptyList();
     }
@@ -306,12 +315,20 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     assertSelectorText(selector, text, true);
   }
   
-  protected void waitForUrlMatches(String regex) {
-    waitForUrlMatches(getWebDriver(), regex);
+  protected void waitForUrlMatches(final String regex) {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        return driver.getCurrentUrl().matches(regex);
+      }
+    });
   }
 
-  protected void waitForUrlNotMatches(String regex) {
-    waitForUrlNotMatches(getWebDriver(), regex);
+  protected void waitForUrlNotMatches(final String regex) {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        return !driver.getCurrentUrl().matches(regex);
+      }
+    });
   }
   
   protected void waitForSelectorText(final String selector, final String text) {
@@ -415,28 +432,24 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     waitForUrl(url);
   }
 
-  protected void waitForUrl(String url) {
-    waitForUrl(getWebDriver(), url);
+  protected void waitForUrl(final String url) {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        return url.equals(driver.getCurrentUrl());
+      }
+    });
   }
   
-  protected void testLoginRequired(RemoteWebDriver driver, String path) throws UnsupportedEncodingException {
-    testLoginRequired(driver, path, false);  
-  }
-  
-  protected void testLoginRequired(RemoteWebDriver driver, String path, boolean secure) throws UnsupportedEncodingException {
-    navigate(path, secure);
-    String ctxPath = getCtxPath();
-    String expectedUrl = getAppUrl(true) + "/login/?redirectUrl=" + URLEncoder.encode(ctxPath != null ? "/" + ctxPath + path : path, "UTF-8");
-    waitForUrlMatches(driver, "https://.*");
-    assertEquals(expectedUrl, driver.getCurrentUrl());
-  }
-
   protected void testLoginRequired(String path) throws UnsupportedEncodingException {
-    testLoginRequired(getWebDriver(), path);
+    testLoginRequired(path, false);  
   }
   
   protected void testLoginRequired(String path, boolean secure) throws UnsupportedEncodingException {
-    testLoginRequired(getWebDriver(), path, secure);
+    navigate(path, secure);
+    String ctxPath = getCtxPath();
+    String expectedUrl = getAppUrl(true) + "/login/?redirectUrl=" + URLEncoder.encode(ctxPath != null ? "/" + ctxPath + path : path, "UTF-8");
+    waitForUrlMatches("https://.*");
+    assertEquals(expectedUrl, getWebDriver().getCurrentUrl());
   }
   
   protected void testAccessDenied(String path) {
@@ -484,7 +497,9 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void assertSelectorVisible(String selector) {
-    assertTrue("Element visible '" + selector + "'", getWebDriver().findElementByCssSelector(selector).isDisplayed());
+    WebElement element = findElementBySelector(selector);
+    assertNotNull("Element not present '" + selector + "'", element);
+    assertTrue("Element visible '" + selector + "'", element.isDisplayed());
   }
 
   protected void assertSelectorNotVisible(String selector) {
@@ -528,7 +543,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void clickSelector(String selector) {
-    getWebDriver().findElementByCssSelector(selector).click();
+    findElementBySelector(selector).click();
   }
   
   protected void scrollWaitAndClick(String selector) {
@@ -555,7 +570,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void sendKeysSelector(String selector, String keysToSend) {
-    getWebDriver().findElementByCssSelector(selector).sendKeys(keysToSend);
+    findElementBySelector(selector).sendKeys(keysToSend);
   }
   
   protected void testNotFound(String path) {
@@ -645,7 +660,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void takeScreenshot(File file) throws WebDriverException, IOException {
     FileOutputStream fileOuputStream = new FileOutputStream(file);
     try {
-     fileOuputStream.write(webDriver.getScreenshotAs(OutputType.BYTES));
+     fileOuputStream.write(((TakesScreenshot) webDriver).getScreenshotAs(OutputType.BYTES));
     } finally {
       fileOuputStream.flush();
       fileOuputStream.close();
@@ -654,7 +669,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
 
   protected void acceptPaytrailPayment() {
     waitAndClick("input[value=\"Osuuspankki\"]");
-    waitForUrl(getWebDriver(), "https://kultaraha.op.fi/cgi-bin/krcgi");
+    waitForUrl("https://kultaraha.op.fi/cgi-bin/krcgi");
 
     waitAndSendKeys("*[name='id']", "123456");
     waitAndSendKeys("*[name='pw']", "7890");
@@ -666,5 +681,5 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   private String sessionId;
-  private RemoteWebDriver webDriver;
+  private WebDriver webDriver;
 }
