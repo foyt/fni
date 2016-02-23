@@ -23,6 +23,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
+import org.jboss.logging.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.After;
@@ -39,6 +40,11 @@ public abstract class AbstractTest {
 
   @Rule
   public TestName testName = new TestName();
+
+  @Before
+  public void printName(){
+    Logger.getLogger(getClass().getName()).info(String.format("running test %s", testName.getMethodName()));
+  }
   
   @After
   public void flushCache() throws ClientProtocolException, IOException {
