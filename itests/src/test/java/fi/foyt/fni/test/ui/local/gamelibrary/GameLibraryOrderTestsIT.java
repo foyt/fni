@@ -1,6 +1,5 @@
 package fi.foyt.fni.test.ui.local.gamelibrary;
 
-import org.junit.After;
 import org.junit.Before;
 import fi.foyt.fni.test.ui.base.gamelibrary.GameLibraryOrderTestsBase;
 
@@ -11,9 +10,4 @@ public class GameLibraryOrderTestsIT extends GameLibraryOrderTestsBase {
     setWebDriver(createLocalDriver());
   }
 
-  @After
-  public void tearDown() {
-    getWebDriver().quit();
-  }
-   
 }

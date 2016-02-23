@@ -2,6 +2,7 @@
 export run_tests=false
 export start_sc_tunnel=false
 export deploy=false
+export rc=false
 
 if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then
   export run_tests=true
@@ -15,4 +16,8 @@ if [[ ("$TRAVIS_PULL_REQUEST" = "false") && ("$TRAVIS_BRANCH" = "devel") ]]; the
   export deploy=true
 fi;
 
-echo "Test setup: run tests: $run_tests, start sauce tunnel: $start_sc_tunnel, deploy: $deploy"
+if [[ ("$TRAVIS_PULL_REQUEST" != "false") && ("$TRAVIS_BRANCH" = "master") ]]; then
+  export rc=true
+fi;
+
+echo "Test setup: run tests: $run_tests, start sauce tunnel: $start_sc_tunnel, deploy: $deploy, rc: $rc"

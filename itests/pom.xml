@@ -649,7 +649,6 @@
       </activation>
       
       <properties>
-        <it.driver>phantomjs</it.driver>
         <wildfly.home>${project.basedir}/.cargo/extracts/wildfly-8.1.0.Final/wildfly-8.1.0.Final</wildfly.home>
         <wildfly.version>8.1.0.Final</wildfly.version>
         <h2.version>1.4.177</h2.version>
@@ -671,6 +670,7 @@
         <it.properties.file>src/test/resources/it.properties</it.properties.file>
         <it.files.pdf>${project.basedir}/test.pdf</it.files.pdf>
         <it.files.png>${project.basedir}/test.png</it.files.png>
+        <it.browser>phantomjs</it.browser>
       </properties>
       
       <dependencies>
@@ -758,7 +758,7 @@
                 <it.dropbox.password>${it.dropbox.password}</it.dropbox.password>
                 <it.files.pdf>${it.files.pdf}</it.files.pdf>
                 <it.files.png>${it.files.png}</it.files.png>
-                <it.driver>${it.driver}</it.driver>
+                <it.browser>${it.browser}</it.browser>
               </systemPropertyVariables>
             </configuration>
             <executions>

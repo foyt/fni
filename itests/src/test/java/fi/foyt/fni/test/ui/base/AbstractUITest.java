@@ -22,7 +22,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Rule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
@@ -47,6 +51,24 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.saucelabs.common.SauceOnDemandSessionIdProvider;
 
 public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implements SauceOnDemandSessionIdProvider {
+
+  @Rule
+  public TestWatcher testWatcher = new TestWatcher() {
+    
+    @Override
+    protected void failed(Throwable e, Description description) {
+      try {
+        takeScreenshot();
+      } catch (WebDriverException | IOException e1) {
+        e1.printStackTrace();
+      }
+    }
+    
+    protected void finished(Description description) {
+      getWebDriver().quit();
+    };
+    
+  };
   
   @Override
   public String getSessionId() {
@@ -55,6 +77,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   
   protected void setWebDriver(WebDriver webDriver) {
     this.webDriver = webDriver;
+    
     if (webDriver instanceof RemoteWebDriver) {
       this.sessionId = ((RemoteWebDriver) webDriver).getSessionId().toString();
     }
@@ -94,14 +117,14 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected WebDriver createLocalDriver() {
-    switch (getDriver()) {
+    switch (getBrowser()) {
       case "chrome":
         return createChromeDriver();
       case "phantomjs":
         return createPhantomJsDriver();
     }
     
-    throw new RuntimeException(String.format("Unknown driver %s", getDriver()));
+    throw new RuntimeException(String.format("Unknown browser %s", getBrowser()));
   }
 
   protected WebDriver createChromeDriver() {
@@ -112,8 +135,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected WebDriver createPhantomJsDriver() {
     DesiredCapabilities desiredCapabilities = DesiredCapabilities.phantomjs();
     desiredCapabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, ".phantomjs/bin/phantomjs");
-    desiredCapabilities.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, new String[] { "--ignore-ssl-errors=true", "--webdriver-loglevel=NONE" } );
-    return new PhantomJSDriver(desiredCapabilities);
+    desiredCapabilities.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, new String[] { "--ignore-ssl-errors=true", "--webdriver-loglevel=NONE", "--load-images=false" } );
+    PhantomJSDriver driver = new PhantomJSDriver(desiredCapabilities);
+    driver.manage().window().setSize(new Dimension(1024, 768));
+    return driver;
   }
   
   protected void loginInternal(String email, String password) {
