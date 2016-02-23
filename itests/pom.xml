@@ -671,6 +671,8 @@
         <it.files.pdf>${project.basedir}/test.pdf</it.files.pdf>
         <it.files.png>${project.basedir}/test.png</it.files.png>
         <it.browser>phantomjs</it.browser>
+        <it.package>*</it.package>
+        <it.tests>fi/foyt/fni/test/ui/local/${it.package}/*IT.java</it.tests>
       </properties>
       
       <dependencies>
@@ -726,7 +728,7 @@
             <version>2.16</version>
             <configuration>
               <includes>
-                <include>fi/foyt/fni/test/ui/local/**/*IT.java</include>
+                <include>${it.tests}</include>
               </includes>
               <systemPropertyVariables>
                 <java.util.logging.config.file>${project.basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
