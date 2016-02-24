@@ -223,7 +223,7 @@
         <it.host>test.forgeandillusion.net</it.host>
         <it.ctx />
         <it.jdbc.driver>org.h2.Driver</it.jdbc.driver>
-        <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE</it.jdbc.url>
+        <it.jdbc.url>jdbc:h2:file:${project.build.directory}/h2;AUTO_SERVER=TRUE;DB_CLOSE_ON_EXIT=FALSE</it.jdbc.url>
         <it.jdbc.jndi>java:/jboss/datasources/fni</it.jdbc.jndi>
         <it.jdbc.username>sa</it.jdbc.username>
         <it.jdbc.password>sa</it.jdbc.password>
@@ -297,6 +297,10 @@
                 <java.util.logging.config.file>${project.basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                 <jboss.home>${wildfly.home}</jboss.home>
                 <module.path>${wildfly.home}/modules</module.path>
+                <javax.net.ssl.keyStore>${it.keystore}</javax.net.ssl.keyStore>
+                <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
+                <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
+                <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
                 <it.project.version>${project.version}</it.project.version>
                 <it.selenium.version>${selenium-java.version}</it.selenium.version>
                 <it.host>${it.host}</it.host>
@@ -734,6 +738,10 @@
                 <java.util.logging.config.file>${project.basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                 <jboss.home>${wildfly.home}</jboss.home>
                 <module.path>${wildfly.home}/modules</module.path>
+                <javax.net.ssl.keyStore>${it.keystore}</javax.net.ssl.keyStore>
+                <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
+                <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
+                <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
                 <it.project.version>${project.version}</it.project.version>
                 <it.selenium.version>${selenium-java.version}</it.selenium.version>
                 <it.host>${it.host}</it.host>
@@ -1176,6 +1184,10 @@
                 <java.util.logging.config.file>${project.basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                 <jboss.home>${wildfly.home}</jboss.home>
                 <module.path>${wildfly.home}/modules</module.path>
+                <javax.net.ssl.keyStore>${it.keystore}</javax.net.ssl.keyStore>
+                <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
+                <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
+                <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
                 <it.project.version>${project.version}</it.project.version>
                 <it.selenium.version>${selenium-java.version}</it.selenium.version>
                 <it.host>${it.host}</it.host>
@@ -1651,6 +1663,10 @@
                 <java.util.logging.config.file>${project.basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                 <jboss.home>${wildfly.home}</jboss.home>
                 <module.path>${wildfly.home}/modules</module.path>
+                <javax.net.ssl.keyStore>${it.keystore}</javax.net.ssl.keyStore>
+                <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
+                <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
+                <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
                 <it.project.version>${project.version}</it.project.version>
                 <it.selenium.version>${selenium-java.version}</it.selenium.version>
                 <it.host>${it.host}</it.host>
