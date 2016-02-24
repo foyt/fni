@@ -2,7 +2,6 @@ package fi.foyt.fni.test.ui.sauce.forge;
 
 import java.net.MalformedURLException;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 
@@ -23,9 +22,4 @@ public class ForgeImportGoogleDriveTestsIT extends ForgeImportGoogleDriveTestsBa
     setWebDriver(createSauceWebDriver());
   }
   
-  @After
-  public void tearDown() {
-    getWebDriver().quit();
-  }
-    
 }

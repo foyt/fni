@@ -49,7 +49,7 @@ public class IllusionEventMaterialTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "event", "event-participant", "event-materials", "event-materials-participants"})
   public void testLoggedInParticipant() throws Exception {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     testTitle("/illusion/event/openevent/materials/document", "Illusion - Open Event");
     assertSelectorCount(".illusion-event-navigation>a", 2);
     assertSelectorCount(".illusion-event-navigation-item-active", 1);
@@ -61,7 +61,7 @@ public class IllusionEventMaterialTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "event", "event-invited", "event-materials", "event-materials-participants", "event-materials-public"})
   public void testLoggedInInvited() throws Exception {
-    loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
+    loginInternal("librarian@foyt.fi", "pass");
     testTitle("/illusion/event/openevent/materials/document", "Illusion - Open Event");
     assertSelectorCount(".illusion-event-navigation>a", 2);
     assertSelectorCount(".illusion-event-navigation-item-active", 1);

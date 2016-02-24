@@ -26,13 +26,13 @@ public class ForumPostEditTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("forum-basic")
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), TEST_POST);
+    testLoginRequired(TEST_POST);
   }
 
   @Test
   @SqlSets ("forum-basic")
   public void testUser() throws Exception {
-    loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
+    loginInternal("guest@foyt.fi", "pass");
     testAccessDenied(TEST_POST);
   }
 

@@ -2,7 +2,6 @@ package fi.foyt.fni.test.ui.sauce.illusion.index;
 
 import java.net.MalformedURLException;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 
@@ -22,11 +21,6 @@ public class IllusionCreateEventTestsIT extends IllusionCreateEventTestsBase {
   @Before
   public void setUp() throws MalformedURLException {
     setWebDriver(createSauceWebDriver());
-  }
-  
-  @After
-  public void tearDown() {
-    getWebDriver().quit();
   }
   
   @Override

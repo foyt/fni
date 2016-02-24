@@ -31,12 +31,17 @@ public class ForgeConnectDropboxTestsBase extends AbstractUITest {
   
   @Test
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), "/forge/connect-dropbox");
+    testLoginRequired("/forge/connect-dropbox");
   }
   
   @Test
   @SqlSets ({"basic-users"})
   public void testConnect() {
+    if ("phantomjs".equals(getBrowser())) {
+      // TODO: Dropbox requires a CAPTCHA on phantomjs
+      return;
+    }
+    
     acceptCookieDirective();
 
     loginGoogle();
@@ -44,7 +49,7 @@ public class ForgeConnectDropboxTestsBase extends AbstractUITest {
     waitAndClick(".forge-import-material-menu");
     waitAndClick(".forge-import-material-menu .forge-connect-dropbox");
     
-    waitForUrlMatches(getWebDriver(), "^https://www.dropbox.com/1/oauth/authorize.*");
+    waitForUrlMatches("^https://www.dropbox.com/1/oauth/authorize.*");
     new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.visibilityOfElementLocated(By.id("login-content")));
     getWebDriver().findElement(By.cssSelector("#login-content input[type=\"email\"]")).click();
     getWebDriver().findElement(By.cssSelector("#login-content input[type=\"email\"]")).sendKeys(getDropboxUsername());

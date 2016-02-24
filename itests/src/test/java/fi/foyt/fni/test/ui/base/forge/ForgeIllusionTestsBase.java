@@ -18,7 +18,7 @@ public class ForgeIllusionTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("illusion-open-materials")
   public void testOpenShareDialog() {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     navigate("/forge/folders/2/illusion/openevent");
     waitForSelectorVisible(".forge-material[data-material-id=\"20001\"] .forge-material-icon");
     clickSelector(".forge-material[data-material-id=\"20001\"] .forge-material-icon");

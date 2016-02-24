@@ -21,26 +21,26 @@ public class ForgeUploadTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testTitle() {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     testTitle("/forge/upload", "Forge - Import From My Computer");
   }
 
   @Test
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), "/forge/upload");
+    testLoginRequired("/forge/upload");
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testNotFound() throws Exception {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     testNotFound("/forge/upload?parentFolderId=12345");
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testBreadcrumbs() {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     
     getWebDriver().get(getAppUrl() + "/forge/upload");
     List<WebElement> breadcrumbs = getWebDriver().findElements(By.cssSelector(".view-header-navigation .view-header-navigation-item"));
