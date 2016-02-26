@@ -5,4 +5,3 @@ compile.sh
 /target/
 /google-drive-service-privatekey.p12
 /travis-encrypted.tar
-.gnupg
