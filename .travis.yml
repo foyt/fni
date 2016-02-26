@@ -177,6 +177,10 @@ env:
   - goals=verify run=on_rc package=forum use_sc=true it_profile=travis it_browser="internet
     explorer" it_browser_version="11.0" it_platform="Windows 8.1"
 before_script:
+- eval `ssh-agent -s`
+- ssh-add .travisdeploykey
+- git config user.name "Travis CI"
+- git config user.email "travis@travis-ci.org"
 - . travis-before-script.sh
 script:
 - . travis-script.sh
