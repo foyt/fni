@@ -236,6 +236,11 @@
                 <goals>
                   <goal>sign</goal>
                 </goals>
+                <configuration>
+                  <passphrase>${env.PGP_PASSPHRASE}</passphrase>
+                  <secretKeyring>.gnupg/secring.gpg</secretKeyring>
+                  <publicKeyring>.gnupg/pubring.gpg</publicKeyring>
+                </configuration>  
               </execution>
             </executions>
           </plugin>

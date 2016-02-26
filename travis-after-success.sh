@@ -11,5 +11,5 @@ fi;
 
 if [[ ($release = "true") && ($perform_release = "true") ]]; then
   python travis/m2conf.py;
-  mvn -B release:prepare release:perform -Darguments="-Dgpg.passphrase=$PGP_PASSPHRASE -Dgpg.secretKeyring=.gnupg/secring.gpg"
+  mvn -B release:prepare release:perform
 fi;
