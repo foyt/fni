@@ -10,6 +10,8 @@ if [[ $deploy = true ]]; then
 fi;
 
 if [[ ($release = "true") && ($perform_release = "true") ]]; then
+  git checkout master
+  git reset --hard
   python travis/m2conf.py;
   mvn -B release:prepare release:perform
 fi;
