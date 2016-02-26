@@ -23,6 +23,7 @@ env:
   - secure: TjZNKclYzXO4CaiJI0NsDAOTYbVXUjU7db/4Pgx00eNCQxJMEmdt3sdzt5r5bRQtB4rPWGKa9Ki4wfd+MMHAa987bjIwSTzBXiCG8+LJNutdCTDXk446dmgsAWWjF39Y4kfnagZ/qbxEiVb+9+ixfrLyNKhvVDE34y26ySrxdZg=
   - secure: WUWchzcdGrC6aifA9DuztFPpJLjrns/4ymIzHmjIjLWVXvXGEYnNhbgbH76hW5wFl89Ve8YMvHBcF50P++sRD1HwHSF6naDoiASpmHxAKBnyKJvdxgo06DMygMqlrg8zwEk0Ilh1nF9m5KGEEYLggxQLZEi2dXMANPZs3wR5qOY=
   - secure: Bej5uhDhyLkfSyRRmmRRhKt7xvR4wVRjc2/w9+5KRVfz9T8Um+dAafW5kjbEAJjGExxbb3Y0oBE/y/kFkMM3pQSYHgdEieik9xzaoFJCZT03GKNQ9LxtmA5GaSWl+8O2YCCcGbjTmkUjOFVdZSBUHyGb59mh1UX5ixZ09NgJoro=
+  - secure: nON4ACO5jMkwiE/uwkSHspmBhwDcWmsgXUoqOYp1uCZya/s65VHRPI5EplnFa0C2dZ7Z/k67GwstYI8dFKWOTySmfJeHzNinXa/zjolCCsvNi9Xy6lxv/kBnewyBBKS1vLiDXa4ExUDtqYEzm8w8GJe2fFiiwQp+0ub7dYkMkqc=
   matrix:
   - goals=verify run=always perform_release=true use_sc=false it_profile=rest
   - goals=verify run=on_pr package=store use_sc=false it_profile=ui it_browser="phantomjs"
