@@ -71,7 +71,7 @@
     <apidocs.docBasePath>http://foyt.github.io/fni/api/</apidocs.docBasePath>
     <apidocs.apiBasePath>http://www.forgeandillusion/rest/</apidocs.apiBasePath>
 
-    <arguments>-Dgpg.passphrase=${env.PGP_PASSPHRASE} -Dgpg.publicKeyring=.gnupg/pubring.gpg -Dgpg.secretKeyring=.gnupg/secring.gpg</arguments>
+    <arguments>-Dgpg.keyname=${env.PGP_KEYNAME} -Dgpg.passphrase=${env.PGP_PASSPHRASE} -Dgpg.publicKeyring=.gnupg/pubring.gpg -Dgpg.secretKeyring=.gnupg/secring.gpg</arguments>
   </properties>
 
   <dependencyManagement>
