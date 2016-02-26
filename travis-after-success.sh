@@ -9,7 +9,7 @@ if [[ $deploy = true ]]; then
   mvn deploy --settings ~/.m2/mySettings.xml;
 fi;
 
-if [[ $release = true ]]; then
+if [[ ($release = "true") && ($perform_release = "true") ]]; then
   python travis/m2conf.py;
   mvn -B release:prepare release:perform -Darguments="-Dgpg.passphrase=$PGP_PASSPHRASE"
 fi;
