@@ -39,7 +39,7 @@ public class UsersVerifyTestsBase extends AbstractUITest {
       executeSql("insert into UserVerificationKey (id, created, value, user_id) values (?, ?, ?, ?)", USER_ID, new Date(), key, USER_ID);
       try {
         getWebDriver().get(getAppUrl() + "/users/verify/" + key);
-        loginInternal(getWebDriver(), USER_EMAIL, "pass");
+        loginInternal(USER_EMAIL, "pass");
       } finally {
         executeSql("delete from UserVerificationKey where id = ?", USER_ID);
       }

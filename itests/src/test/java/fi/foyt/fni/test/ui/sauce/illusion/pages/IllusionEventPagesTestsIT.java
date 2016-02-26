@@ -2,7 +2,6 @@ package fi.foyt.fni.test.ui.sauce.illusion.pages;
 
 import java.net.MalformedURLException;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 
@@ -29,9 +28,4 @@ public class IllusionEventPagesTestsIT extends IllusionEventPagesTestsBase {
     // websockets and sauce connect does not support them
   }
   
-  @After
-  public void tearDown() {
-    getWebDriver().quit();
-  }
-   
 }

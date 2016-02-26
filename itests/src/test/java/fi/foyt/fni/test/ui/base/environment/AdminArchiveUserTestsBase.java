@@ -30,13 +30,13 @@ public class AdminArchiveUserTestsBase extends AbstractUITest {
   
   @Test
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), "/admin/archive-user/" + USER_ID);
+    testLoginRequired("/admin/archive-user/" + USER_ID);
   }
   
   @Test
   @SqlSets ({"basic-users"})
   public void testNotFound() throws Exception {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
+    loginInternal("admin@foyt.fi", "pass");
     testNotFound("/admin/archive-user");
     testNotFound("/admin/archive-user/");
     testNotFound("/admin/archive-user/");
@@ -47,7 +47,7 @@ public class AdminArchiveUserTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users"})
   public void testArchive() throws Exception {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
+    loginInternal("admin@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/admin/archive-user/" + USER_ID);
     assertEquals("Forge & Illusion", getWebDriver().getTitle());
   }
@@ -55,7 +55,7 @@ public class AdminArchiveUserTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users"})
   public void testUnauthorized() throws Exception {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     testAccessDenied("/admin/archive-user/" + USER_ID);
   }
   

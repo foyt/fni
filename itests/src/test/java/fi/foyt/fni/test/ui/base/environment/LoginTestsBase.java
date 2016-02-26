@@ -45,7 +45,7 @@ public class LoginTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic")
   public void testInternal() {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
   }
 
   @Test
@@ -180,8 +180,8 @@ public class LoginTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic")
   public void testMissingInformation() {
-    loginInternal(getWebDriver(), "missinginfo@foyt.fi", "pass");
-    waitForUrlMatches(getWebDriver(), ".*/editprofile.*");
+    loginInternal("missinginfo@foyt.fi", "pass");
+    waitForUrlMatches(".*/editprofile.*");
     assertEquals("Edit Profile", getWebDriver().getTitle());
     waitForNotification();
     assertNotificationStartsWith("info", "Your profile is missing some required information, please fill the missing fields before continuing");

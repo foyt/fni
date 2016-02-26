@@ -2,7 +2,6 @@ package fi.foyt.fni.test.ui.sauce.forum;
 
 import java.net.MalformedURLException;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 
@@ -21,11 +20,6 @@ public class ForumTestsIT extends ForumTestsBase {
   @Before
   public void setUp() throws MalformedURLException {
     setWebDriver(createSauceWebDriver());
-  }
-  
-  @After
-  public void tearDown() {
-    getWebDriver().quit();
   }
   
 }

@@ -17,27 +17,27 @@ public class GameLibraryManageTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testTitle() {
-    loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
+    loginInternal("librarian@foyt.fi", "pass");
     testTitle("/gamelibrary/manage/", "Game Library - Management");
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), "/gamelibrary/manage/", true);
+    testLoginRequired("/gamelibrary/manage/", true);
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testUnauthorized() throws Exception {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     testAccessDenied("/gamelibrary/manage/", true);
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testLibrarian() throws Exception {
-    loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
+    loginInternal("librarian@foyt.fi", "pass");
     getWebDriver().get(getAppUrl(true) + "/gamelibrary/manage/");
     assertEquals("Game Library - Management", getWebDriver().getTitle());
   }
