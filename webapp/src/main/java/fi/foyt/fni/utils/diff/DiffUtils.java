@@ -2,23 +2,23 @@ package fi.foyt.fni.utils.diff;
 
 import java.util.LinkedList;
 
-import name.fraser.neil.plaintext.diff_match_patch;
-import name.fraser.neil.plaintext.diff_match_patch.Diff;
-import name.fraser.neil.plaintext.diff_match_patch.Patch;
+import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch;
+import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch.Diff;
+import org.bitbucket.cowwoc.diffmatchpatch.DiffMatchPatch.Patch;
 
 public class DiffUtils {
 
   public static String makePatch(String text1, String text2) {
-    diff_match_patch diffMatchPatch = new diff_match_patch();
-    LinkedList<Diff> diffs = diffMatchPatch.diff_main(text1, text2);
-    diffMatchPatch.diff_cleanupEfficiency(diffs);
-    return diffMatchPatch.patch_toText(diffMatchPatch.patch_make(diffs));
+    DiffMatchPatch diffMatchPatch = new DiffMatchPatch();
+    LinkedList<Diff> diffs = diffMatchPatch.diffMain(text1, text2);
+    diffMatchPatch.diffCleanupEfficiency(diffs);
+    return diffMatchPatch.patchToText(diffMatchPatch.patchMake(diffs));
   }
   
   public static PatchResult applyPatch(String text, String textline) {
-    diff_match_patch diffMatchPatch = new diff_match_patch();
-    LinkedList<Patch> patches = new LinkedList<Patch>(diffMatchPatch.patch_fromText(textline));
-    Object[] patchResult = diffMatchPatch.patch_apply(patches, text);
+    DiffMatchPatch diffMatchPatch = new DiffMatchPatch();
+    LinkedList<Patch> patches = new LinkedList<Patch>(diffMatchPatch.patchFromText(textline));
+    Object[] patchResult = diffMatchPatch.patchApply(patches, text);
     
     String patchedText = (String) patchResult[0];
     boolean[] applied = (boolean[]) patchResult[1];

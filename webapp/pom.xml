@@ -292,10 +292,8 @@
     <!-- Diff patch match -->
 
     <dependency>
-      <groupId>diff_match_patch</groupId>
-      <artifactId>diff_match_patch</artifactId>
-      <type>jar</type>
-      <scope>compile</scope>
+      <groupId>org.bitbucket.cowwoc</groupId>
+      <artifactId>diff-match-patch</artifactId>
     </dependency>
 
     <!-- JTidy -->
@@ -534,14 +532,6 @@
       <id>repository.jboss.org-public</id>
       <name>JBoss repository</name>
       <url>https://repository.jboss.org/nexus/content/groups/public</url>
-    </repository>
-
-    <!-- Diff-patch-match -->
-
-    <repository>
-      <id>google-diff-patch-match</id>
-      <name>google-diff-patch-match</name>
-      <url>http://google-diff-match-patch.googlecode.com/svn/trunk/maven/</url>
     </repository>
     
     <!-- Sauce Labs -->

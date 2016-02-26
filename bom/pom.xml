@@ -74,7 +74,7 @@
     
     <!-- Diff Match Patch -->
     
-    <diff_match_patch.version>current</diff_match_patch.version>
+    <diff_match_patch.version>1.1</diff_match_patch.version>
     
     <!-- CNGram -->
     
@@ -267,11 +267,11 @@
       <!-- Diff patch match -->
 
       <dependency>
-        <groupId>diff_match_patch</groupId>
-        <artifactId>diff_match_patch</artifactId>
+        <groupId>org.bitbucket.cowwoc</groupId>
+        <artifactId>diff-match-patch</artifactId>
         <version>${diff_match_patch.version}</version>
       </dependency>
-
+      
       <!-- NGram -->
 
       <dependency>
