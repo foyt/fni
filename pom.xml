@@ -70,6 +70,10 @@
     <apidocs.apiVersion>1</apidocs.apiVersion>
     <apidocs.docBasePath>http://foyt.github.io/fni/api/</apidocs.docBasePath>
     <apidocs.apiBasePath>http://www.forgeandillusion/rest/</apidocs.apiBasePath>
+    
+    <gpg.passphrase>${env.PGP_PASSPHRASE}</gpg.passphrase>
+    <gpg.publicKeyring>.gnupg/pubring.gpg</gpg.publicKeyring>
+    <gpg.secretKeyring>.gnupg/secring.gpg</gpg.secretKeyring>
   </properties>
 
   <dependencyManagement>
@@ -242,11 +246,6 @@
                 <goals>
                   <goal>sign</goal>
                 </goals>
-                <configuration>
-                  <passphrase>${env.PGP_PASSPHRASE}</passphrase>
-                  <secretKeyring>.gnupg/secring.gpg</secretKeyring>
-                  <publicKeyring>.gnupg/pubring.gpg</publicKeyring>
-                </configuration>  
               </execution>
             </executions>
           </plugin>
