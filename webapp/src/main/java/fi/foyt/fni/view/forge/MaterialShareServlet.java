@@ -127,6 +127,7 @@ public class MaterialShareServlet extends HttpServlet {
     result.put("allTags", tagController.getAllTags());
     result.put("tags", materialController.getMaterialTags(material));
     result.put("description", material.getDescription());
+    result.put("license", material.getLicense());
 
     response.setContentType("application/json");
 

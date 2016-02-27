@@ -60,6 +60,14 @@ public class Material {
     this.description = description;
   }
   
+  public String getLicense() {
+    return license;
+  }
+  
+  public void setLicense(String license) {
+    this.license = license;
+  }
+  
   public MaterialPublicity getPublicity() {
 	  return publicity;
   }
@@ -152,6 +160,8 @@ public class Material {
   @Column 
   @Lob
   private String description;
+  
+  private String license;
   
   @Column (nullable=false)
   @Enumerated (EnumType.STRING)

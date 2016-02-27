@@ -257,7 +257,8 @@
   		            var tagsVal = $(this).find('.forge-share-material-tags input').val();
   		            var tags = tagsVal ? tagsVal.split(',') : [];
   		            var description = $(this).find('.forge-share-material-description textarea').val();
-  		            
+  		            var license = $(this).find('input[name="license"]').val();
+                  
   		            $(this).find('.forge-share-material-collaborator').each(function(index, element) {
   		              collaborators[$(element).find('input[name="collaborator"]').val()] = $(element).find('select[name="role"]').val();
   		            });
@@ -266,6 +267,7 @@
                   $('input[name="' + prefix + ':material-share-publicity' + '"]').val(publicity);
                   $('input[name="' + prefix + ':material-share-tags' + '"]').val(JSON.stringify(tags));
                   $('input[name="' + prefix + ':material-share-description' + '"]').val(description);
+                  $('input[name="' + prefix + ':material-share-license' + '"]').val(license);
                   $('input[name="' + prefix + ':material-share-collaborators' + '"]').val(JSON.stringify(collaborators));
   	              $('input[name="' + prefix + ':material-share-save' + '"]').click();
   		          }

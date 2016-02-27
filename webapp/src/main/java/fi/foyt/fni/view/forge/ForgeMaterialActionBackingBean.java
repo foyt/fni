@@ -113,6 +113,14 @@ public class ForgeMaterialActionBackingBean {
     this.materialShareDescription = materialShareDescription;
   }
   
+  public String getMaterialShareLicense() {
+    return materialShareLicense;
+  }
+  
+  public void setMaterialShareLicense(String materialShareLicense) {
+    this.materialShareLicense = materialShareLicense;
+  }
+  
   public Map<String, String> getMaterialShareCollaborators() {
     return materialShareCollaborators;
   }
@@ -280,6 +288,7 @@ public class ForgeMaterialActionBackingBean {
 	  }
 	  
 	  materialController.updateMaterialDescription(material, getMaterialShareDescription());
+	  materialController.updateMaterialLicense(material, getMaterialShareLicense());
 	}
 	
 	@LoggedIn
@@ -311,5 +320,6 @@ public class ForgeMaterialActionBackingBean {
 	private Map<String, String> materialShareCollaborators;
 	private String materialShareTags;
 	private String materialShareDescription;
+  private String materialShareLicense;
 	private String newFolderName;
 }

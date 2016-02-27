@@ -40,6 +40,11 @@
       {/if}
     </div>
     
+    <h4>Lisenssi</h4>
+    <div class="forge-share-material-license">
+      <input type="url" value="{license}" name="license"/>
+    </div>
+    
     <h4>Tagit</h4>
     <div class="forge-share-material-tags">
       <input type="text" value="{tags}"/>

@@ -365,9 +365,18 @@ $selected-background-color: lighten(rgba(71, 176, 176, 0.90), 30%);
   margin-left: 4px;
 }
 
-.forge-share-material-url input[type="text"] {
-  @include box-sizing(border-box); 
-  width: 100%;
+.forge-share-material-license {
+  input[type="url"] {
+    @include box-sizing(border-box); 
+    width: 100%;
+  }
+}
+
+.forge-share-material-url { 
+  input[type="text"] {
+    @include box-sizing(border-box); 
+    width: 100%;
+  }
 }
 
 textarea {

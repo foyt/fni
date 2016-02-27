@@ -378,5 +378,10 @@ public class MaterialDAO extends GenericDAO<Material> {
     material.setDescription(description);
     return persist(material);
   }
+
+  public Material updateLicense(Material material, String license) {
+    material.setLicense(license);
+    return persist(material);
+  }
   
 }

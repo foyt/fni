@@ -1520,6 +1520,10 @@ public class MaterialController {
     return materialDAO.updateDescription(material, description);
   }
 
+  public Material updateMaterialLicense(Material material, String license) {
+    return materialDAO.updateLicense(material, license);
+  }
+
   public String getUniqueMaterialUrlName(User owner, Folder parentFolder, Material material, String title) {
     String urlName = RequestUtils.createUrlName(title);
     if (material != null && urlName.equals(material.getUrlName()))
