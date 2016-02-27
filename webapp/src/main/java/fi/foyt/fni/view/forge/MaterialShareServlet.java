@@ -122,7 +122,7 @@ public class MaterialShareServlet extends HttpServlet {
     Map<String, Object> result = new HashMap<String, Object>();
     result.put("collaborators", collaborators);
     result.put("publicUrl", RequestUtils.getRequestHostUrl(request) + contextPath + "/materials/" + material.getPath());
-    result.put("public", materialPermissionController.isPublic(loggedUser, material));
+    result.put("publicity", material.getPublicity());
     result.put("invitables", invitables);
     result.put("allTags", tagController.getAllTags());
     result.put("tags", materialController.getMaterialTags(material));

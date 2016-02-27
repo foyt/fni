@@ -5,16 +5,25 @@
     <h4>Publicity</h4>
     
     <div class="forge-share-material-publicity-field">
-      {@if cond="{public}"}
-        <input type="radio" name="publicity" value="PRIVATE"/>
-      {:else}
+      {@if cond="'{publicity}'=='PRIVATE'"}
         <input type="radio" name="publicity" value="PRIVATE" checked="checked"/>
+      {:else}
+        <input type="radio" name="publicity" value="PRIVATE"/>
       {/if}
       <label>Private</label>
     </div>
 
     <div class="forge-share-material-publicity-field">
-      {@if cond="{public}"}
+      {@if cond="'{publicity}'=='LINK'"}
+        <input type="radio" name="publicity" value="LINK" checked="checked"/>
+      {:else}
+        <input type="radio" name="publicity" value="LINK"/>
+      {/if}
+      <label>Public with link</label>
+    </div>
+
+    <div class="forge-share-material-publicity-field">
+      {@if cond="'{publicity}'=='PUBLIC'"}
         <input type="radio" name="publicity" value="PUBLIC" checked="checked"/>
       {:else}
         <input type="radio" name="publicity" value="PUBLIC"/>
@@ -24,10 +33,10 @@
     
     <h4>Public URL</h4>
     <div class="forge-share-material-url">
-      {@if cond="{public}"}
-        <input type="text" readonly="readonly" value="{publicUrl}"/>
-      {:else}
+      {@if cond="'{publicity}'=='PRIVATE'"}
         <input type="text" readonly="readonly" value="{publicUrl}" disabled="disabled"/>
+      {:else}
+        <input type="text" readonly="readonly" value="{publicUrl}"/>
       {/if}
     </div>
     

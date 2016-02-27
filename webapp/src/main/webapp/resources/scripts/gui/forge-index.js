@@ -278,7 +278,7 @@
             });
     		    
     		    dialog.find('input[type="radio"]').change(function (event) {
-    		      if ($(this).val() == 'private') {
+    		      if ($(this).val() == 'PRIVATE') {
                 $(dialog).find('.forge-share-material-url input[type="text"]').attr('disabled', 'disabled');
     		      } else {
                 $(dialog).find('.forge-share-material-url input[type="text"]').attr('disabled', null);
