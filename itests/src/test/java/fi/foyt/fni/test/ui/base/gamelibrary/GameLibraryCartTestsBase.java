@@ -257,7 +257,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
 
         acceptPaytrailPayment();
         logout();
-        loginInternal(getWebDriver(), email, password);
+        loginInternal(email, password);
 
         navigate("/gamelibrary/cart/", true);
         waitTitle("Forge & Illusion - Game Library");

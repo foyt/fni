@@ -15,20 +15,20 @@ public class AdminDebugTimerResultsTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users"})
   public void testTitle() throws Exception {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
+    loginInternal("admin@foyt.fi", "pass");
     testTitle("/admin/debug-timer-results", "Debug Timer Results");
   }
 
   @Test
   @SqlSets ({"basic-users"})
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), "/admin/debug-timer-results");
+    testLoginRequired("/admin/debug-timer-results");
   }
 
   @Test
   @SqlSets ({"basic-users"})
   public void testUnauthorized() throws Exception {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     testAccessDenied("/admin/debug-timer-results");
   }
 

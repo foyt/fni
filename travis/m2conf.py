@@ -20,24 +20,43 @@ if not serversNodes:
 else:
   serversNode = serversNodes[0]
 
-sonatypeServerNode = m2.createElement("server")
-sonatypeServerId = m2.createElement("id")
-sonatypeServerUser = m2.createElement("username")
-sonatypeServerPass = m2.createElement("password")
+snapshotsServerNode = m2.createElement("server")
+snapshotsServerId = m2.createElement("id")
+snapshotsServerUser = m2.createElement("username")
+snapshotsServerPass = m2.createElement("password")
 
-idNode = m2.createTextNode("sonatype-nexus-snapshots")
-userNode = m2.createTextNode(os.environ["SONATYPE_USERNAME"])
-passNode = m2.createTextNode(os.environ["SONATYPE_PASSWORD"])
+snapshotsIdNode = m2.createTextNode("sonatype-nexus-snapshots")
+snapshotsUserNode = m2.createTextNode(os.environ["SONATYPE_USERNAME"])
+snapshotsPassNode = m2.createTextNode(os.environ["SONATYPE_PASSWORD"])
 
-sonatypeServerId.appendChild(idNode)
-sonatypeServerUser.appendChild(userNode)
-sonatypeServerPass.appendChild(passNode)
+snapshotsServerId.appendChild(snapshotsIdNode)
+snapshotsServerUser.appendChild(snapshotsUserNode)
+snapshotsServerPass.appendChild(snapshotsPassNode)
 
-sonatypeServerNode.appendChild(sonatypeServerId)
-sonatypeServerNode.appendChild(sonatypeServerUser)
-sonatypeServerNode.appendChild(sonatypeServerPass)
+snapshotsServerNode.appendChild(snapshotsServerId)
+snapshotsServerNode.appendChild(snapshotsServerUser)
+snapshotsServerNode.appendChild(snapshotsServerPass)
 
-serversNode.appendChild(sonatypeServerNode)
+serversNode.appendChild(snapshotsServerNode)
+
+stagingServerNode = m2.createElement("server")
+stagingServerId = m2.createElement("id")
+stagingServerUser = m2.createElement("username")
+stagingServerPass = m2.createElement("password")
+
+stagingIdNode = m2.createTextNode("sonatype-nexus-staging")
+stagingUserNode = m2.createTextNode(os.environ["SONATYPE_USERNAME"])
+stagingPassNode = m2.createTextNode(os.environ["SONATYPE_PASSWORD"])
+
+stagingServerId.appendChild(stagingIdNode)
+stagingServerUser.appendChild(stagingUserNode)
+stagingServerPass.appendChild(stagingPassNode)
+
+stagingServerNode.appendChild(stagingServerId)
+stagingServerNode.appendChild(stagingServerUser)
+stagingServerNode.appendChild(stagingServerPass)
+
+serversNode.appendChild(stagingServerNode)
 
 m2Str = m2.toxml()
 f = open(homedir + '/.m2/mySettings.xml', 'w')

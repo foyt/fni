@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 
 import javax.mail.MessagingException;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 
@@ -25,11 +24,6 @@ public class IllusionEventForumTestsIT extends IllusionEventForumTestsBase {
   @Before
   public void setUp() throws MalformedURLException {
     setWebDriver(createSauceWebDriver());
-  }
-  
-  @After
-  public void tearDown() {
-    getWebDriver().quit();
   }
   
   @Override

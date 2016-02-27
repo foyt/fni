@@ -15,27 +15,27 @@ public class GameLibraryOrderManagementTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), "/gamelibrary/ordermanagement/", true);
+    testLoginRequired("/gamelibrary/ordermanagement/", true);
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testUnauthorized() throws Exception {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     testAccessDenied("/gamelibrary/ordermanagement/", true);
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testLibrarian() {
-    loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
+    loginInternal("librarian@foyt.fi", "pass");
     testTitle("/gamelibrary/ordermanagement/", "Game Library - Order Management");
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testAdmin() throws Exception {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
+    loginInternal("admin@foyt.fi", "pass");
     testTitle("/gamelibrary/ordermanagement/", "Game Library - Order Management");
   }
 

@@ -1,5 +1,6 @@
 package fi.foyt.fni.test;
 
+import static com.jayway.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -21,40 +22,37 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
-import org.junit.rules.TestWatcher;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
 
-public abstract class AbstractTest extends TestWatcher {
+public abstract class AbstractTest {
 
   private static final long TEST_START_TIME = System.currentTimeMillis();
 
   @Rule
   public TestName testName = new TestName();
   
+  @Before
+  public void printName(){
+    System.out.println(String.format("> %s", testName.getMethodName()));
+  }
+  
   @After
   public void flushCache() throws ClientProtocolException, IOException {
-    HttpGet get = new HttpGet(getAppUrl() + "/rest/system/jpa/cache/flush");
-    CloseableHttpClient client = HttpClientBuilder.create().build();
-    try {
-      get.addHeader("Authorization", "Bearer systemtoken");
-      HttpResponse response = client.execute(get);
-      assertEquals(200, response.getStatusLine().getStatusCode());
-    } finally {
-      client.close();
-    }
+    given()
+      .baseUri(getAppUrl() + "/rest")
+      .header("Authorization", "Bearer systemtoken")
+      .get("/system/jpa/cache/flush")
+      .then()
+      .statusCode(200);
   }
 
   @Before
@@ -170,7 +168,7 @@ public abstract class AbstractTest extends TestWatcher {
   protected String getSeleniumVersion() {
     return System.getProperty("it.selenium.version");
   }
-    
+  
   protected String getPlatform() {
     return System.getProperty("it.platform");
   }
@@ -186,7 +184,7 @@ public abstract class AbstractTest extends TestWatcher {
   protected String getHost() {
     return System.getProperty("it.host");
   }
-
+  
   protected int getPortHttp() {
     return Integer.parseInt(System.getProperty("it.port.http"));
   }

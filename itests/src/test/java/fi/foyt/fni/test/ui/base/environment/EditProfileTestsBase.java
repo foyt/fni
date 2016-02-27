@@ -18,19 +18,19 @@ public class EditProfileTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users"})
   public void testTitle() {
-    loginInternal(getWebDriver(), "user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
     testTitle("/editprofile", "Edit Profile");
   }
 
   @Test
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(getWebDriver(), "/editprofile");
+    testLoginRequired("/editprofile");
   }
 
   @Test
   @SqlSets ({"basic-users"})
   public void testGuest() throws Exception {
-    loginInternal(getWebDriver(), "guest@foyt.fi", "pass");
+    loginInternal("guest@foyt.fi", "pass");
     testAccessDenied("/editprofile");
   }
 
@@ -45,7 +45,7 @@ public class EditProfileTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users"})
   public void testLibrarian() throws Exception {
-    loginInternal(getWebDriver(), "librarian@foyt.fi", "pass");
+    loginInternal("librarian@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/editprofile");
     assertEquals("Edit Profile", getWebDriver().getTitle());
   }
@@ -53,7 +53,7 @@ public class EditProfileTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users"})
   public void testAdministrator() throws Exception {
-    loginInternal(getWebDriver(), "admin@foyt.fi", "pass");
+    loginInternal("admin@foyt.fi", "pass");
     getWebDriver().get(getAppUrl() + "/editprofile");
     assertEquals("Edit Profile", getWebDriver().getTitle());
   }
@@ -64,7 +64,7 @@ public class EditProfileTestsBase extends AbstractUITest {
     
     createUser(7l, "Password", "Change", "passchange@foyt.fi", "oldpass", "en", "GRAVATAR", "USER");
     try {
-      loginInternal(getWebDriver(), "passchange@foyt.fi", "oldpass");
+      loginInternal("passchange@foyt.fi", "oldpass");
       getWebDriver().get(getAppUrl() + "/editprofile");
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password")).click();
       waitForSelectorVisible(".users-editprofile-authentication-source-change-password-container");
@@ -82,7 +82,7 @@ public class EditProfileTestsBase extends AbstractUITest {
     
     createUser(7l, "Password", "Change", "passchange@foyt.fi", "oldpass", "en", "GRAVATAR", "USER");
     try {
-      loginInternal(getWebDriver(), "passchange@foyt.fi", "oldpass");
+      loginInternal("passchange@foyt.fi", "oldpass");
       getWebDriver().get(getAppUrl() + "/editprofile");
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password")).click();
       waitForSelectorVisible(".users-editprofile-authentication-source-change-password-container");
@@ -104,7 +104,7 @@ public class EditProfileTestsBase extends AbstractUITest {
     
     createUser(7l, "Password", "Change", "passchange@foyt.fi", "oldpass", "en", "GRAVATAR", "USER");
     try {
-      loginInternal(getWebDriver(), "passchange@foyt.fi", "oldpass");
+      loginInternal("passchange@foyt.fi", "oldpass");
       getWebDriver().get(getAppUrl() + "/editprofile");
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password")).click();
       waitForSelectorVisible(".users-editprofile-authentication-source-change-password-container");
@@ -116,7 +116,7 @@ public class EditProfileTestsBase extends AbstractUITest {
       waitForNotification();
       assertNotification("info", "Password Changed");
 
-      loginInternal(getWebDriver(), "passchange@foyt.fi", "qwe");
+      loginInternal("passchange@foyt.fi", "qwe");
     } finally {
       deleteUser(7l);
     }

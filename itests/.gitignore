@@ -3,3 +3,5 @@
 /.project
 /.cargo/
 /.settings/
+/.phantomjs/
+phantomjsdriver.log

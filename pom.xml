@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fi.foyt.fni</groupId>
   <artifactId>parent</artifactId>
-  <version>3.2.45-SNAPSHOT</version>
+  <version>3.2.92-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Forge &amp; Illusion - Parent</name>
   <description>Forge &amp; Illusion - parent pom.xml</description>
@@ -11,7 +11,7 @@
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
-    <version>7</version>
+    <version>9</version>
   </parent>
 
   <organization>
@@ -23,6 +23,7 @@
     <developerConnection>scm:git:git@github.com:foyt/fni.git</developerConnection>
     <url>git@github.com:foyt/fni.git</url>
     <connection>scm:git:git@github.com:foyt/fni.git</connection>
+    <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
@@ -66,10 +67,12 @@
     <hibernate-jpamodelgen.version>4.3.6.Final</hibernate-jpamodelgen.version>
     
     <!-- APIDocs -->
-
+    
     <apidocs.apiVersion>1</apidocs.apiVersion>
     <apidocs.docBasePath>http://foyt.github.io/fni/api/</apidocs.docBasePath>
     <apidocs.apiBasePath>http://www.forgeandillusion/rest/</apidocs.apiBasePath>
+
+    <arguments>-Dgpg.passphrase=${env.PGP_PASSPHRASE} -Dgpg.homedir=${project.build.directory}/../.gnupg</arguments>
   </properties>
 
   <dependencyManagement>
@@ -114,11 +117,11 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
-          <version>2.1</version>
+          <version>2.5.3</version>
           <configuration>
             <mavenExecutorId>forked-path</mavenExecutorId>
             <useReleaseProfile>false</useReleaseProfile>
-            <arguments>-Psonatype-oss-release</arguments>
+            <arguments>${arguments} -Psonatype-oss-release</arguments>
             <tagNameFormat>@{project.version}</tagNameFormat>
           </configuration>
         </plugin>
@@ -160,9 +163,6 @@
             <goals>
               <goal>jar</goal>
             </goals>
-            <configuration>
-              <additionalparam>-Xdoclint:none</additionalparam>
-            </configuration>
           </execution>
 <!-- 
           <execution>
@@ -219,5 +219,49 @@
     <module>persistence</module>
     <module>itests</module>
   </modules>
+  
+  <profiles>
+    <profile>
+      <id>doclint-java8-disable</id>
+      <activation>
+        <jdk>[1.8,)</jdk>
+      </activation>
+      <properties>
+        <javadoc.opts>-Xdoclint:none</javadoc.opts>
+      </properties>
+    </profile>
+    <profile>
+      <id>sonatype-oss-release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.6</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>sonatype-nexus-staging</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
   
 </project>
