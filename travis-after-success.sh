@@ -10,8 +10,13 @@ if [[ $deploy = true ]]; then
 fi;
 
 if [[ ($release = "true") && ($perform_release = "true") ]]; then
-  git checkout master
-  git reset --hard
-  python travis/m2conf.py;
-  mvn -B release:prepare release:perform --settings ~/.m2/mySettings.xml
+  commitmessage=`git log --pretty=format:"%s" -1`;
+
+  if [[ $commitmessage == *"[RELEASE]"* ]]; then
+    git checkout master
+    git reset --hard
+    python travis/m2conf.py;
+    mvn -B release:prepare release:perform --settings ~/.m2/mySettings.xml
+  fi;
+  
 fi;
