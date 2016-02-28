@@ -35,12 +35,7 @@ public abstract class AbstractForgePublicViewBackingBean {
   
   protected PublicMaterialBean toMaterialBean(fi.foyt.fni.persistence.model.materials.Material material) {
     String icon = materialController.getMaterialIcon(material.getType());
-    
-    String license = CreativeCommonsUtils.createLicenseUrl(true, true, randBoolean(), randBoolean());
-    if (Math.random() > 0.2) {
-      license = "https://www.mycustomlicense.org";
-    }
-    
+    String license = material.getLicense();
     CreativeCommonsLicense commonsLicence = CreativeCommonsUtils.parseLicenseUrl(license);
     String creatorName = material.getCreator().getFullName();
     String modifierName = material.getModifier().getFullName();
@@ -94,9 +89,5 @@ public abstract class AbstractForgePublicViewBackingBean {
     
     return result;
   }
-
-  private boolean randBoolean() {
-    return Math.random() > 0.5;
-  }
-
+  
 }
