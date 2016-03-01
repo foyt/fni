@@ -319,8 +319,8 @@ public class MaterialDAO extends GenericDAO<Material> {
 
   public List<Material> listRandomMaterialsByPublicity(MaterialPublicity publicity, Integer firstResult, Integer maxResults) {
     EntityManager entityManager = getEntityManager();
-    TypedQuery<Material> query = entityManager.createQuery("from Material where publicity = ? order by rand()", Material.class);
-    query.setParameter(1, publicity);
+    TypedQuery<Material> query = entityManager.createQuery("from Material where publicity = :publicity order by rand()", Material.class);
+    query.setParameter("publicity", publicity);
     if (firstResult != null) {
       query.setFirstResult(firstResult);
     }
