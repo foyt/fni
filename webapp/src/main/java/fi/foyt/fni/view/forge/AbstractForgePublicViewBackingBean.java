@@ -48,11 +48,25 @@ public abstract class AbstractForgePublicViewBackingBean {
     
     String viewPath = String.format("/materials/%s", material.getPath());
     String editPath = materialController.getForgeMaterialViewerUrl(material);
+    String downloadLink = String.format("/materials/%s?download=true", material.getPath());
     String path = material.getPath();
     
     String description = material.getDescription();
     if (StringUtils.isBlank(description) && (material instanceof Document)) {
       description = StringUtils.abbreviate(((Document) material).getContentPlain(), 250);
+    }
+    
+    Boolean viewable;
+    switch (material.getType()) {
+      case DOCUMENT:
+      case IMAGE:
+      case PDF:
+      case VECTOR_IMAGE:
+        viewable = true;
+      break;
+      default:
+        viewable = false;
+      break;
     }
     
     return new PublicMaterialBean(
@@ -70,7 +84,9 @@ public abstract class AbstractForgePublicViewBackingBean {
         tags,
         viewPath,
         editPath,
-        path);
+        downloadLink,
+        path,
+        viewable);
   }
   
   protected List<PublicMaterialBean> toMaterialBeans(List<fi.foyt.fni.persistence.model.materials.Material> materials) {

@@ -88,7 +88,8 @@
                           <div class="flex-cell-12 flex-cell-first no-margin-bottom">
                             <h4>
                               <img class="icon" jsf:name="/gfx/icons/48x48/forge/icon-#{material.icon}.png" jsf:library="novus"/>
-                              <a jsf:outcome="/forge/public-material.jsf?path=#{material.path}">#{material.title}</a>
+                              <a jsf:rendered="#{material.viewable}" jsf:outcome="/forge/public-material.jsf?path=#{material.path}">#{material.title}</a>
+                              <a jsf:rendered="#{!material.viewable}" jsf:value="#{material.downloadLink}">#{material.title}</a>
                             </h4>
                             <p class="modified">
                               <h:outputFormat value="#{locales['forge.public.generic.materialModified']}">
