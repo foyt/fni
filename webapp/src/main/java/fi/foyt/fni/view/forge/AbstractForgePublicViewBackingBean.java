@@ -48,6 +48,8 @@ public abstract class AbstractForgePublicViewBackingBean {
     
     String viewPath = String.format("/materials/%s", material.getPath());
     String editPath = materialController.getForgeMaterialViewerUrl(material);
+    String path = material.getPath();
+    
     String description = material.getDescription();
     if (StringUtils.isBlank(description) && (material instanceof Document)) {
       description = StringUtils.abbreviate(((Document) material).getContentPlain(), 250);
@@ -67,7 +69,8 @@ public abstract class AbstractForgePublicViewBackingBean {
         modifierName,
         tags,
         viewPath,
-        editPath);
+        editPath,
+        path);
   }
   
   protected List<PublicMaterialBean> toMaterialBeans(List<fi.foyt.fni.persistence.model.materials.Material> materials) {

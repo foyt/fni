@@ -7,7 +7,7 @@ public class PublicMaterialBean {
 
   public PublicMaterialBean(Long id, String title, String description, String icon, String license, String creativeCommonsIconUrl, Date modified, 
       Long creatorId, String creatorName, Long modifierId, String modifierName, 
-      List<String> tags, String viewPath, String editPath) {
+      List<String> tags, String viewPath, String editPath, String path) {
     super();
     this.id = id;
     this.title = title;
@@ -23,6 +23,7 @@ public class PublicMaterialBean {
     this.tags = tags;
     this.viewPath = viewPath;
     this.editPath = editPath;
+    this.path = path;
   }
 
   public Long getId() {
@@ -81,6 +82,10 @@ public class PublicMaterialBean {
     return viewPath;
   }
   
+  public String getPath() {
+    return path;
+  }
+  
   private Long id;
   private String title;
   private String description;
@@ -95,4 +100,5 @@ public class PublicMaterialBean {
   private List<String> tags;
   private String editPath;
   private String viewPath;
+  private String path;
 }
