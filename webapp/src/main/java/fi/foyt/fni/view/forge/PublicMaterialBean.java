@@ -5,10 +5,10 @@ import java.util.List;
 
 public class PublicMaterialBean {
 
-  public PublicMaterialBean(Long id, String title, String description, String icon, String license, String creativeCommonsIconUrl, Date modified, 
-      Long creatorId, String creatorName, Long modifierId, String modifierName, 
+  public PublicMaterialBean(Long id, String title, String description, String icon, String license, String creativeCommonsIconUrl, 
+      Long creatorId, String creatorName, Date created, Long modifierId, String modifierName, Date modified, 
       List<String> tags, String viewPath, String editPath, String downloadLink, 
-      String path, Boolean viewable) {
+      String path, Boolean viewable, Boolean printable) {
     super();
     this.id = id;
     this.title = title;
@@ -17,6 +17,7 @@ public class PublicMaterialBean {
     this.icon = icon;
     this.creativeCommonsIconUrl = creativeCommonsIconUrl;
     this.modified = modified;
+    this.created = created;
     this.creatorId = creatorId;
     this.creatorName = creatorName;
     this.modifierId = modifierId;
@@ -27,6 +28,7 @@ public class PublicMaterialBean {
     this.downloadLink = downloadLink;
     this.path = path;
     this.viewable = viewable;
+    this.printable = printable;
   }
 
   public Long getId() {
@@ -65,6 +67,10 @@ public class PublicMaterialBean {
     return creatorName;
   }
   
+  public Date getCreated() {
+    return created;
+  }
+  
   public Long getModifierId() {
     return modifierId;
   }
@@ -93,6 +99,10 @@ public class PublicMaterialBean {
     return viewable;
   }
   
+  public Boolean getPrintable() {
+    return printable;
+  }
+  
   public String getDownloadLink() {
     return downloadLink;
   }
@@ -106,6 +116,7 @@ public class PublicMaterialBean {
   private Date modified;
   private Long modifierId;
   private String modifierName;
+  private Date created;
   private Long creatorId;
   private String creatorName;
   private List<String> tags;
@@ -114,4 +125,5 @@ public class PublicMaterialBean {
   private String downloadLink;
   private String path;
   private Boolean viewable;
+  private Boolean printable;
 }

@@ -46,6 +46,57 @@
     @include box-sizing(border-box);
   }
   
+  .tags {
+    .tag, .creator-tag {
+      font-family: $default-font;
+      font-size: 10px;
+      text-transform: uppercase;
+      padding-right: 5px;
+      text-decoration: none;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    
+    .tag {
+      color: $default-color;
+    }
+    
+    .creator-tag {
+      color: $title-color;
+    }
+  }
+  
+  .createdModified {
+    font-family: $default-font;
+    font-size: 10px;
+    text-transform: uppercase;
+  }
+  
+}
+
+.forge-public-material-title {
+  
+  h2 {
+    @include header-2;
+  }
+  
+}
+
+.actions a {
+  font-family: $default-font;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: $default-color;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.categories {
+  h3 {
+    @include header-3;
+    margin-bottom: 10px;
+  }
+  
   .tags a {
     display: block;
     color: $default-color;
@@ -71,29 +122,5 @@
     font-size: 16px;
     text-decoration: none;
     font-weight: bold;
-  }
-  
-}
-
-.forge-public-material-title {
-  
-  h2 {
-    @include header-2;
-  }
-  
-}
-
-.forge-public-download {
-  font-family: $default-font;
-  font-size: 14px;
-  text-transform: uppercase;
-  color: $default-color;
-  text-decoration: none;
-}
-
-.categories {
-  h3 {
-    @include header-3;
-    margin-bottom: 10px;
   }
 }

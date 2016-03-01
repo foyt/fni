@@ -69,6 +69,8 @@ public abstract class AbstractForgePublicViewBackingBean {
       break;
     }
     
+    Boolean printable = materialController.isPrintableAsPdfType(material.getType());
+    
     return new PublicMaterialBean(
         material.getId(), 
         material.getTitle(), 
@@ -76,17 +78,19 @@ public abstract class AbstractForgePublicViewBackingBean {
         icon, 
         license,
         commonsLicence != null ? commonsLicence.getIconUrl(true) : null, 
-        material.getModified(), 
         material.getCreator().getId(),
         creatorName, 
+        material.getCreated(),
         material.getModifier().getId(),
         modifierName,
+        material.getModified(), 
         tags,
         viewPath,
         editPath,
         downloadLink,
         path,
-        viewable);
+        viewable,
+        printable);
   }
   
   protected List<PublicMaterialBean> toMaterialBeans(List<fi.foyt.fni.persistence.model.materials.Material> materials) {

@@ -35,7 +35,7 @@
             <span class="view-header-navigation-separator"/>
             <a class="view-header-navigation-item" jsf:outcome="/forge/public.jsf">#{locales['forge.publicMaterial.navigationForgePublic']}</a>
             <span class="view-header-navigation-separator"/>
-            <a class="view-header-navigation-item" jsf:outcome="/forge/public-material.jsf?path=#{forgePublicMaterialBackingBean.path}">#{forgePublicMaterialBackingBean.title}</a>
+            <a class="view-header-navigation-item" jsf:outcome="/forge/public-material.jsf?path=#{forgePublicMaterialBackingBean.path}">#{forgePublicMaterialBackingBean.material.title}</a>
           </div>
         </div>
 
@@ -57,11 +57,8 @@
         <div class="flex-row">
           <div class="flex-cell-12 flex-cell-first index-box">
             <div class="flex-row">
-              <div class="flex-cell-13 flex-cell-first no-margin-top forge-public-material-title">
-                <h2>#{forgePublicMaterialBackingBean.title}</h2>
-              </div>
-              <div class="flex-cell-3 flex-cell-last no-margin-top flex-right">
-                <a class="forge-public-download" href="#{forgePublicMaterialBackingBean.downloadLink}">#{locales['forge.publicMaterial.downloadMaterial']}</a>
+              <div class="flex-cell-full no-margin-top forge-public-material-title">
+                <h2>#{forgePublicMaterialBackingBean.material.title}</h2>
               </div>
             </div>          
             <div class="flex-row">
@@ -79,6 +76,29 @@
                 </ui:fragment>
               </div>
             </div>
+            
+            <div class="flex-row">
+              <div class="flex-cell-11 flex-cell-first tags no-margin-bottom">
+                <a jsf:outcome="/forge/public-materials.jsf?userId=#{forgePublicMaterialBackingBean.material.creatorId}" class="creator-tag">#{forgePublicMaterialBackingBean.material.creatorName}</a>
+                <ui:repeat var="tag" value="#{forgePublicMaterialBackingBean.material.tags}">
+                  <a jsf:outcome="/forge/public-materials.jsf?tags=#{tag}" class="tag">#{tag}</a>
+                </ui:repeat>
+              </div>
+              <div class="flex-cell-5 flex-cell-last flex-right no-margin-bottom">
+                <span class="createdModified">
+                  <h:outputFormat value="#{locales['forge.publicMaterial.createdModified']}">
+                    <f:param value="#{forgePublicMaterialBackingBean.material.created}"/>
+                    <f:param value="#{forgePublicMaterialBackingBean.material.modified}"/>
+                  </h:outputFormat>
+                </span>
+              </div>
+            </div>  
+            <div class="flex-row">
+              <div class="flex-cell-full no-margin-top actions">
+                <a jsf:value="#{forgePublicMaterialBackingBean.material.downloadLink}">#{locales['forge.publicMaterial.downloadMaterial']}</a>
+                <a jsf:value="/forge/pdf/#{forgePublicMaterialBackingBean.material.id}" jsf:rendered="#{forgePublicMaterialBackingBean.material.printable}">#{locales['forge.publicMaterial.printToPdf']}</a>
+              </div>
+            </div>   
           </div>
         
           <div class="flex-cell-4 flex-cell-last index-box categories">

@@ -64,9 +64,9 @@ public class ForgePublicMaterialBackingBean extends AbstractForgePublicViewBacki
       }
     }
     
-    downloadLink = String.format("/materials/%s?download=true", material.getPath());
-    title = material.getTitle();
-    allTags = toTagBeans(materialController.listPublicMaterialTagsWithCounts(TAG_COUNT));
+
+    this.material = toMaterialBean(material);
+    this.allTags = toTagBeans(materialController.listPublicMaterialTagsWithCounts(TAG_COUNT));
     
     return null;
   }
@@ -77,10 +77,6 @@ public class ForgePublicMaterialBackingBean extends AbstractForgePublicViewBacki
   
   public void setPath(String path) {
     this.path = path;
-  }
-  
-  public String getTitle() {
-    return title;
   }
   
   public String getContentType() {
@@ -98,20 +94,19 @@ public class ForgePublicMaterialBackingBean extends AbstractForgePublicViewBacki
   public String getImageUrl() {
     return imageUrl;
   }
-
-  public String getDownloadLink() {
-    return downloadLink;
-  }
   
+  public PublicMaterialBean getMaterial() {
+    return material;
+  }
+
   public List<PublicTagBean> getAllTags() {
     return allTags;
   }
 
-  private String title;
   private String contentType;
   private String html;
   private String imageUrl;
   private String embedUrl;
-  private String downloadLink;
+  private PublicMaterialBean material;
   private List<PublicTagBean> allTags;
 }
