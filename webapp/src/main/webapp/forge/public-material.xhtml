@@ -57,7 +57,15 @@
         <div class="flex-row">
           <div class="flex-cell-12 flex-cell-first index-box">
             <div class="flex-row">
-              <div class="flex-cell-full forge-public-material-container">
+              <div class="flex-cell-13 flex-cell-first no-margin-top forge-public-material-title">
+                <h2>#{forgePublicMaterialBackingBean.title}</h2>
+              </div>
+              <div class="flex-cell-3 flex-cell-last no-margin-top flex-right">
+                <a class="forge-public-download" href="#{forgePublicMaterialBackingBean.downloadLink}">#{locales['forge.publicMaterial.downloadMaterial']}</a>
+              </div>
+            </div>          
+            <div class="flex-row">
+              <div class="flex-cell-full forge-public-material-container no-margin-bottom">
                 <ui:fragment rendered="#{forgePublicMaterialBackingBean.html ne null}">
                   <article>
                     <h:outputText value="#{forgePublicMaterialBackingBean.html}" escape="false"/>
@@ -69,11 +77,6 @@
                 <ui:fragment rendered="#{forgePublicMaterialBackingBean.embedUrl ne null}">
                   <iframe src="#{forgePublicMaterialBackingBean.embedUrl}#view=fit"/>
                 </ui:fragment>
-              </div>
-            </div>
-            <div class="flex-row" style="display: none">
-              <div class="flex-cell-full">
-                <a href="#{forgePublicMaterialBackingBean.editLink}">#{locales['forge.publicMaterial.editMaterial']}</a>
               </div>
             </div>
           </div>

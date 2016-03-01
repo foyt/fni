@@ -1,10 +1,6 @@
 package fi.foyt.fni.view.forge;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -21,10 +17,6 @@ import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Material;
-import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.system.SystemSettingsController;
-import fi.foyt.fni.system.TagController;
-import fi.foyt.fni.users.UserController;
 
 @Join(path = "/forge/public/materials/{path}", to = "/forge/public-material.jsf")
 @RequestScoped
@@ -37,18 +29,6 @@ public class ForgePublicMaterialBackingBean extends AbstractForgePublicViewBacki
   private String path;
   
   @Inject
-  private Logger logger;
-  
-  @Inject
-  private SessionController sessionController;
-  
-  @Inject
-  private UserController userController;
-
-  @Inject
-  private TagController tagController;
-  
-  @Inject
   private MaterialController materialController;
   
   @Inject
@@ -56,9 +36,6 @@ public class ForgePublicMaterialBackingBean extends AbstractForgePublicViewBacki
   
   @Inject
   private NavigationController navigationController;
-  
-  @Inject
-  private SystemSettingsController systemSettingsController;
   
   @RequestAction
   public String init() {
@@ -87,7 +64,7 @@ public class ForgePublicMaterialBackingBean extends AbstractForgePublicViewBacki
       }
     }
     
-    editLink = materialController.getForgeMaterialViewerUrl(material);
+    downloadLink = String.format("/materials/%s?download=true", material.getPath());
     title = material.getTitle();
     allTags = toTagBeans(materialController.listPublicMaterialTagsWithCounts(TAG_COUNT));
     
@@ -121,9 +98,9 @@ public class ForgePublicMaterialBackingBean extends AbstractForgePublicViewBacki
   public String getImageUrl() {
     return imageUrl;
   }
-  
-  public String getEditLink() {
-    return editLink;
+
+  public String getDownloadLink() {
+    return downloadLink;
   }
   
   public List<PublicTagBean> getAllTags() {
@@ -135,6 +112,6 @@ public class ForgePublicMaterialBackingBean extends AbstractForgePublicViewBacki
   private String html;
   private String imageUrl;
   private String embedUrl;
-  private String editLink;
+  private String downloadLink;
   private List<PublicTagBean> allTags;
 }
