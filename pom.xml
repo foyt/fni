@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fi.foyt.fni</groupId>
   <artifactId>parent</artifactId>
-  <version>3.2.45-SNAPSHOT</version>
+  <version>3.3.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Forge &amp; Illusion - Parent</name>
   <description>Forge &amp; Illusion - parent pom.xml</description>
@@ -23,6 +23,7 @@
     <developerConnection>scm:git:git@github.com:foyt/fni.git</developerConnection>
     <url>git@github.com:foyt/fni.git</url>
     <connection>scm:git:git@github.com:foyt/fni.git</connection>
+    <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
@@ -66,10 +67,12 @@
     <hibernate-jpamodelgen.version>4.3.6.Final</hibernate-jpamodelgen.version>
     
     <!-- APIDocs -->
-
+    
     <apidocs.apiVersion>1</apidocs.apiVersion>
     <apidocs.docBasePath>http://foyt.github.io/fni/api/</apidocs.docBasePath>
     <apidocs.apiBasePath>http://www.forgeandillusion/rest/</apidocs.apiBasePath>
+
+    <arguments>-Dgpg.passphrase=${env.PGP_PASSPHRASE} -Dgpg.homedir=${project.build.directory}/../.gnupg</arguments>
   </properties>
 
   <dependencyManagement>
@@ -160,9 +163,6 @@
             <goals>
               <goal>jar</goal>
             </goals>
-            <configuration>
-              <additionalparam>-Xdoclint:none</additionalparam>
-            </configuration>
           </execution>
 <!-- 
           <execution>
@@ -221,6 +221,15 @@
   </modules>
   
   <profiles>
+    <profile>
+      <id>doclint-java8-disable</id>
+      <activation>
+        <jdk>[1.8,)</jdk>
+      </activation>
+      <properties>
+        <javadoc.opts>-Xdoclint:none</javadoc.opts>
+      </properties>
+    </profile>
     <profile>
       <id>sonatype-oss-release</id>
       <build>

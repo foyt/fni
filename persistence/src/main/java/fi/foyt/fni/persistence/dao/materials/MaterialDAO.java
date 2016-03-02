@@ -1,6 +1,7 @@
 package fi.foyt.fni.persistence.dao.materials;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -11,13 +12,15 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
-import fi.foyt.fni.persistence.model.materials.Material_;
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.materials.MaterialRole;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
+import fi.foyt.fni.persistence.model.materials.MaterialView;
+import fi.foyt.fni.persistence.model.materials.MaterialView_;
+import fi.foyt.fni.persistence.model.materials.Material_;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole_;
 import fi.foyt.fni.persistence.model.users.User;
@@ -183,6 +186,29 @@ public class MaterialDAO extends GenericDAO<Material> {
     return entityManager.createQuery(criteria).getResultList();
   }
 
+  public List<Material> listByPublicityAndCreatorAndAndTypes(MaterialPublicity publicity, User creator, List<MaterialType> types) {
+    if ((types == null) || (types.isEmpty())) {
+      return Collections.emptyList();
+    }
+    
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Material> criteria = criteriaBuilder.createQuery(Material.class);
+    Root<Material> root = criteria.from(Material.class);
+    
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.and(
+        criteriaBuilder.equal(root.get(Material_.publicity), publicity),
+        criteriaBuilder.equal(root.get(Material_.creator), creator),
+        root.get(Material_.type).in(types)
+      )
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+  }
+
   public List<Material> listByModifierExcludingTypesSortByModified(User modifier, Collection<MaterialType> types, int firstResult, int maxResults) {
     EntityManager entityManager = getEntityManager();
 
@@ -204,6 +230,61 @@ public class MaterialDAO extends GenericDAO<Material> {
     TypedQuery<Material> query = entityManager.createQuery(criteria);
     query.setFirstResult(firstResult);
     query.setMaxResults(maxResults);
+    
+    return query.getResultList();
+  }
+
+  public List<Material> listByPublicityOrderByModified(MaterialPublicity publicity, Integer firstResult, Integer maxResults) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Material> criteria = criteriaBuilder.createQuery(Material.class);
+    Root<Material> root = criteria.from(Material.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(Material_.publicity), publicity)
+    );
+    
+    criteria.orderBy(criteriaBuilder.desc(root.get(Material_.modified)));
+    
+    TypedQuery<Material> query = entityManager.createQuery(criteria);
+    
+    if (firstResult != null) {
+      query.setFirstResult(firstResult);
+    }
+    
+    if (maxResults != null) {
+      query.setMaxResults(maxResults);
+    }
+    
+    return query.getResultList();
+  }
+
+  public List<Material> listByPublicityOrderByViews(MaterialPublicity publicity, Integer firstResult, Integer maxResults) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Material> criteria = criteriaBuilder.createQuery(Material.class);
+    Root<MaterialView> root = criteria.from(MaterialView.class);
+    Join<MaterialView, Material> materialJoin = root.join(MaterialView_.material);
+    
+    criteria.select(root.get(MaterialView_.material)).distinct(true);
+    
+    criteria.where(
+      criteriaBuilder.equal(materialJoin.get(Material_.publicity), publicity)
+    );
+    
+    criteria.orderBy(criteriaBuilder.desc(root.get(MaterialView_.count)));
+    
+    TypedQuery<Material> query = entityManager.createQuery(criteria);
+    
+    if (firstResult != null) {
+      query.setFirstResult(firstResult);
+    }
+    
+    if (maxResults != null) {
+      query.setMaxResults(maxResults);
+    }
     
     return query.getResultList();
   }
@@ -235,7 +316,22 @@ public class MaterialDAO extends GenericDAO<Material> {
     
     return entityManager.createQuery(criteria).getSingleResult();
   }
-  
+
+  public List<Material> listRandomMaterialsByPublicity(MaterialPublicity publicity, Integer firstResult, Integer maxResults) {
+    EntityManager entityManager = getEntityManager();
+    TypedQuery<Material> query = entityManager.createQuery("from Material where publicity = :publicity order by rand()", Material.class);
+    query.setParameter("publicity", publicity);
+    if (firstResult != null) {
+      query.setFirstResult(firstResult);
+    }
+    
+    if (maxResults != null) {
+      query.setMaxResults(maxResults);
+    }
+    
+    return query.getResultList();
+  }
+
   public Material updatePublicity(Material material, MaterialPublicity publicity, User modifier) {
   	material.setPublicity(publicity);
   	material.setModified(new Date());
@@ -277,4 +373,15 @@ public class MaterialDAO extends GenericDAO<Material> {
     entityManager.persist(material);
     return material;
   }
+
+  public Material updateDescription(Material material, String description) {
+    material.setDescription(description);
+    return persist(material);
+  }
+
+  public Material updateLicense(Material material, String license) {
+    material.setLicense(license);
+    return persist(material);
+  }
+  
 }

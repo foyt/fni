@@ -16,7 +16,7 @@ else
   fi;
 fi;
 
-if [[ ("$use_sc" = "true") && ("$run_tests" = "true") ]]; then
+if [[ ("$use_sc" = "true") && ("$run_tests" = "true") && ("$rc" = "true") ]]; then
   export start_sc_tunnel=true
 fi;
 

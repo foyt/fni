@@ -14,6 +14,10 @@ before_install:
 - unset GEM_PATH
 - . travis-setenv.sh
 install: true
+branches:
+  only:
+    - master
+    - devel
 matrix:
   fast_finish: true
 env:
@@ -22,10 +26,10 @@ env:
   - secure: DgqS4PrNEmnOblJNe+qeSGsiOtVb5qMgEtTrMD1Y+FdOyWER/orgMOGDWy/xtbbS1dbaCmATOdRxsvXJqRrPaNZLcWZ8e+9d/L3XWYmoBRaGDiH1eVjUUibK79xOUyrBChLCEOkgfuIKHr3nkiPfDWRb5a6CsNn0cbPu56+8j64=
   - secure: TjZNKclYzXO4CaiJI0NsDAOTYbVXUjU7db/4Pgx00eNCQxJMEmdt3sdzt5r5bRQtB4rPWGKa9Ki4wfd+MMHAa987bjIwSTzBXiCG8+LJNutdCTDXk446dmgsAWWjF39Y4kfnagZ/qbxEiVb+9+ixfrLyNKhvVDE34y26ySrxdZg=
   - secure: WUWchzcdGrC6aifA9DuztFPpJLjrns/4ymIzHmjIjLWVXvXGEYnNhbgbH76hW5wFl89Ve8YMvHBcF50P++sRD1HwHSF6naDoiASpmHxAKBnyKJvdxgo06DMygMqlrg8zwEk0Ilh1nF9m5KGEEYLggxQLZEi2dXMANPZs3wR5qOY=
-  - secure: "Bej5uhDhyLkfSyRRmmRRhKt7xvR4wVRjc2/w9+5KRVfz9T8Um+dAafW5kjbEAJjGExxbb3Y0oBE/y/kFkMM3pQSYHgdEieik9xzaoFJCZT03GKNQ9LxtmA5GaSWl+8O2YCCcGbjTmkUjOFVdZSBUHyGb59mh1UX5ixZ09NgJoro="
-  matrix:  
+  - secure: Bej5uhDhyLkfSyRRmmRRhKt7xvR4wVRjc2/w9+5KRVfz9T8Um+dAafW5kjbEAJjGExxbb3Y0oBE/y/kFkMM3pQSYHgdEieik9xzaoFJCZT03GKNQ9LxtmA5GaSWl+8O2YCCcGbjTmkUjOFVdZSBUHyGb59mh1UX5ixZ09NgJoro=
+  - secure: RR/Pt4JZJ5chOGk6cO2OjBfSECGOgpG+L+POfReh8Ua+oyHNZNXWCDGl3oxAbUmEJZYTHB5bgMNe//iZkNDQWu68bvNi1GXy3G5eztCVJVyX79T2i6sp0hUYHPLE6c/xQdpqng7ckqj83tLK1BPIU0IA8uLJMxhee4Id2M64F10=
+  matrix:
   - goals=verify run=always perform_release=true use_sc=false it_profile=rest
-  
   - goals=verify run=on_pr package=store use_sc=false it_profile=ui it_browser="phantomjs"
   - goals=verify run=on_pr package=environment use_sc=false it_profile=ui it_browser="phantomjs"
   - goals=verify run=on_pr package=forge use_sc=false it_profile=ui it_browser="phantomjs"
@@ -34,84 +38,155 @@ env:
   - goals=verify run=on_pr package=illusion/groups use_sc=false it_profile=ui it_browser="phantomjs"
   - goals=verify run=on_pr package=illusion/index use_sc=false it_profile=ui it_browser="phantomjs"
   - goals=verify run=on_pr package=illusion/pages use_sc=false it_profile=ui it_browser="phantomjs"
-  - goals=verify run=on_pr package=illusion/participants use_sc=false it_profile=ui it_browser="phantomjs"
+  - goals=verify run=on_pr package=illusion/participants use_sc=false it_profile=ui
+    it_browser="phantomjs"
   - goals=verify run=on_pr package=illusion/settings use_sc=false it_profile=ui it_browser="phantomjs"
   - goals=verify run=on_pr package=illusion/templates use_sc=false it_profile=ui it_browser="phantomjs"
   - goals=verify run=on_pr package=gamelibrary use_sc=false it_profile=ui it_browser="phantomjs"
   - goals=verify run=on_pr package=forum use_sc=false it_profile=ui it_browser="phantomjs"
-  
-  - goals=verify run=on_rc package=store use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
-  - goals=verify run=on_rc package=environment use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
-  - goals=verify run=on_rc package=forge use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
-  - goals=verify run=on_rc package=illusion/forum use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
-  - goals=verify run=on_rc package=illusion/materials use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
-  - goals=verify run=on_rc package=illusion/groups use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
-  - goals=verify run=on_rc package=illusion/index use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
-  - goals=verify run=on_rc package=illusion/pages use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
-  - goals=verify run=on_rc package=illusion/participants use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
-  - goals=verify run=on_rc package=illusion/settings use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
-  - goals=verify run=on_rc package=illusion/templates use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
-  - goals=verify run=on_rc package=gamelibrary use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
-  - goals=verify run=on_rc package=forum use_sc=true it_profile=travis it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows 10"
-  
-  - goals=verify run=on_rc package=store use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
-  - goals=verify run=on_rc package=environment use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
-  - goals=verify run=on_rc package=forge use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
-  - goals=verify run=on_rc package=illusion/forum use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
-  - goals=verify run=on_rc package=illusion/materials use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
-  - goals=verify run=on_rc package=illusion/groups use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
-  - goals=verify run=on_rc package=illusion/pages use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
-  - goals=verify run=on_rc package=illusion/participants use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
-  - goals=verify run=on_rc package=illusion/settings use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
-  - goals=verify run=on_rc package=illusion/templates  use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
-  - goals=verify run=on_rc package=gamelibrary use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
-  - goals=verify run=on_rc package=forum use_sc=true it_profile=travis it_browser="chrome" it_browser_version="46" it_platform="Linux"
-  
-  - goals=verify run=on_rc package=store use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
-  - goals=verify run=on_rc package=environment use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
-  - goals=verify run=on_rc package=forge use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
-  - goals=verify run=on_rc package=illusion/forum use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
-  - goals=verify run=on_rc package=illusion/materials use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
-  - goals=verify run=on_rc package=illusion/groups use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
-  - goals=verify run=on_rc package=illusion/index use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
-  - goals=verify run=on_rc package=illusion/pages use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
-  - goals=verify run=on_rc package=illusion/participants use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
-  - goals=verify run=on_rc package=illusion/settings use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
-  - goals=verify run=on_rc package=illusion/templates use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
-  - goals=verify run=on_rc package=gamelibrary use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
-  - goals=verify run=on_rc package=forum use_sc=true it_profile=travis it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
-  
-  - goals=verify run=on_rc package=store use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
-  - goals=verify run=on_rc package=environment use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
-  - goals=verify run=on_rc package=forge use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
-  - goals=verify run=on_rc package=illusion/forum use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
-  - goals=verify run=on_rc package=illusion/materials use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
-  - goals=verify run=on_rc package=illusion/groups use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
-  - goals=verify run=on_rc package=illusion/index use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
-  - goals=verify run=on_rc package=illusion/pages use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
-  - goals=verify run=on_rc package=illusion/participants use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
-  - goals=verify run=on_rc package=illusion/settings use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
-  - goals=verify run=on_rc package=illusion/templates use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
-  - goals=verify run=on_rc package=gamelibrary use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
-  - goals=verify run=on_rc package=forum use_sc=true it_profile=travis it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
-  
-  - goals=verify run=on_rc package=store use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
-  - goals=verify run=on_rc package=environment use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
-  - goals=verify run=on_rc package=forge use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
-  - goals=verify run=on_rc package=illusion/forum use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
-  - goals=verify run=on_rc package=illusion/materials use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
-  - goals=verify run=on_rc package=illusion/groups use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
-  - goals=verify run=on_rc package=illusion/index use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
-  - goals=verify run=on_rc package=illusion/pages use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
-  - goals=verify run=on_rc package=illusion/participants use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
-  - goals=verify run=on_rc package=illusion/settings use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
-  - goals=verify run=on_rc package=illusion/templates use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
-  - goals=verify run=on_rc package=gamelibrary use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
-  - goals=verify run=on_rc package=forum use_sc=true it_profile=travis it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows 8.1"
-
+  - goals=verify run=on_rc package=store use_sc=true it_profile=travis it_browser="microsoftedge"
+    it_browser_version="20.10240" it_platform="Windows 10"
+  - goals=verify run=on_rc package=environment use_sc=true it_profile=travis it_browser="microsoftedge"
+    it_browser_version="20.10240" it_platform="Windows 10"
+  - goals=verify run=on_rc package=forge use_sc=true it_profile=travis it_browser="microsoftedge"
+    it_browser_version="20.10240" it_platform="Windows 10"
+  - goals=verify run=on_rc package=illusion/forum use_sc=true it_profile=travis it_browser="microsoftedge"
+    it_browser_version="20.10240" it_platform="Windows 10"
+  - goals=verify run=on_rc package=illusion/materials use_sc=true it_profile=travis
+    it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows
+    10"
+  - goals=verify run=on_rc package=illusion/groups use_sc=true it_profile=travis it_browser="microsoftedge"
+    it_browser_version="20.10240" it_platform="Windows 10"
+  - goals=verify run=on_rc package=illusion/index use_sc=true it_profile=travis it_browser="microsoftedge"
+    it_browser_version="20.10240" it_platform="Windows 10"
+  - goals=verify run=on_rc package=illusion/pages use_sc=true it_profile=travis it_browser="microsoftedge"
+    it_browser_version="20.10240" it_platform="Windows 10"
+  - goals=verify run=on_rc package=illusion/participants use_sc=true it_profile=travis
+    it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows
+    10"
+  - goals=verify run=on_rc package=illusion/settings use_sc=true it_profile=travis
+    it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows
+    10"
+  - goals=verify run=on_rc package=illusion/templates use_sc=true it_profile=travis
+    it_browser="microsoftedge" it_browser_version="20.10240" it_platform="Windows
+    10"
+  - goals=verify run=on_rc package=gamelibrary use_sc=true it_profile=travis it_browser="microsoftedge"
+    it_browser_version="20.10240" it_platform="Windows 10"
+  - goals=verify run=on_rc package=forum use_sc=true it_profile=travis it_browser="microsoftedge"
+    it_browser_version="20.10240" it_platform="Windows 10"
+  - goals=verify run=on_rc package=store use_sc=true it_profile=travis it_browser="chrome"
+    it_browser_version="46" it_platform="Linux"
+  - goals=verify run=on_rc package=environment use_sc=true it_profile=travis it_browser="chrome"
+    it_browser_version="46" it_platform="Linux"
+  - goals=verify run=on_rc package=forge use_sc=true it_profile=travis it_browser="chrome"
+    it_browser_version="46" it_platform="Linux"
+  - goals=verify run=on_rc package=illusion/forum use_sc=true it_profile=travis it_browser="chrome"
+    it_browser_version="46" it_platform="Linux"
+  - goals=verify run=on_rc package=illusion/materials use_sc=true it_profile=travis
+    it_browser="chrome" it_browser_version="46" it_platform="Linux"
+  - goals=verify run=on_rc package=illusion/groups use_sc=true it_profile=travis it_browser="chrome"
+    it_browser_version="46" it_platform="Linux"
+  - goals=verify run=on_rc package=illusion/pages use_sc=true it_profile=travis it_browser="chrome"
+    it_browser_version="46" it_platform="Linux"
+  - goals=verify run=on_rc package=illusion/participants use_sc=true it_profile=travis
+    it_browser="chrome" it_browser_version="46" it_platform="Linux"
+  - goals=verify run=on_rc package=illusion/settings use_sc=true it_profile=travis
+    it_browser="chrome" it_browser_version="46" it_platform="Linux"
+  - goals=verify run=on_rc package=illusion/templates  use_sc=true it_profile=travis
+    it_browser="chrome" it_browser_version="46" it_platform="Linux"
+  - goals=verify run=on_rc package=gamelibrary use_sc=true it_profile=travis it_browser="chrome"
+    it_browser_version="46" it_platform="Linux"
+  - goals=verify run=on_rc package=forum use_sc=true it_profile=travis it_browser="chrome"
+    it_browser_version="46" it_platform="Linux"
+  - goals=verify run=on_rc package=store use_sc=true it_profile=travis it_browser="safari"
+    it_browser_version="8.0" it_platform="OS X 10.10"
+  - goals=verify run=on_rc package=environment use_sc=true it_profile=travis it_browser="safari"
+    it_browser_version="8.0" it_platform="OS X 10.10"
+  - goals=verify run=on_rc package=forge use_sc=true it_profile=travis it_browser="safari"
+    it_browser_version="8.0" it_platform="OS X 10.10"
+  - goals=verify run=on_rc package=illusion/forum use_sc=true it_profile=travis it_browser="safari"
+    it_browser_version="8.0" it_platform="OS X 10.10"
+  - goals=verify run=on_rc package=illusion/materials use_sc=true it_profile=travis
+    it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
+  - goals=verify run=on_rc package=illusion/groups use_sc=true it_profile=travis it_browser="safari"
+    it_browser_version="8.0" it_platform="OS X 10.10"
+  - goals=verify run=on_rc package=illusion/index use_sc=true it_profile=travis it_browser="safari"
+    it_browser_version="8.0" it_platform="OS X 10.10"
+  - goals=verify run=on_rc package=illusion/pages use_sc=true it_profile=travis it_browser="safari"
+    it_browser_version="8.0" it_platform="OS X 10.10"
+  - goals=verify run=on_rc package=illusion/participants use_sc=true it_profile=travis
+    it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
+  - goals=verify run=on_rc package=illusion/settings use_sc=true it_profile=travis
+    it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
+  - goals=verify run=on_rc package=illusion/templates use_sc=true it_profile=travis
+    it_browser="safari" it_browser_version="8.0" it_platform="OS X 10.10"
+  - goals=verify run=on_rc package=gamelibrary use_sc=true it_profile=travis it_browser="safari"
+    it_browser_version="8.0" it_platform="OS X 10.10"
+  - goals=verify run=on_rc package=forum use_sc=true it_profile=travis it_browser="safari"
+    it_browser_version="8.0" it_platform="OS X 10.10"
+  - goals=verify run=on_rc package=store use_sc=true it_profile=travis it_browser="firefox"
+    it_browser_version="41.0" it_platform="Windows 8"
+  - goals=verify run=on_rc package=environment use_sc=true it_profile=travis it_browser="firefox"
+    it_browser_version="41.0" it_platform="Windows 8"
+  - goals=verify run=on_rc package=forge use_sc=true it_profile=travis it_browser="firefox"
+    it_browser_version="41.0" it_platform="Windows 8"
+  - goals=verify run=on_rc package=illusion/forum use_sc=true it_profile=travis it_browser="firefox"
+    it_browser_version="41.0" it_platform="Windows 8"
+  - goals=verify run=on_rc package=illusion/materials use_sc=true it_profile=travis
+    it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
+  - goals=verify run=on_rc package=illusion/groups use_sc=true it_profile=travis it_browser="firefox"
+    it_browser_version="41.0" it_platform="Windows 8"
+  - goals=verify run=on_rc package=illusion/index use_sc=true it_profile=travis it_browser="firefox"
+    it_browser_version="41.0" it_platform="Windows 8"
+  - goals=verify run=on_rc package=illusion/pages use_sc=true it_profile=travis it_browser="firefox"
+    it_browser_version="41.0" it_platform="Windows 8"
+  - goals=verify run=on_rc package=illusion/participants use_sc=true it_profile=travis
+    it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
+  - goals=verify run=on_rc package=illusion/settings use_sc=true it_profile=travis
+    it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
+  - goals=verify run=on_rc package=illusion/templates use_sc=true it_profile=travis
+    it_browser="firefox" it_browser_version="41.0" it_platform="Windows 8"
+  - goals=verify run=on_rc package=gamelibrary use_sc=true it_profile=travis it_browser="firefox"
+    it_browser_version="41.0" it_platform="Windows 8"
+  - goals=verify run=on_rc package=forum use_sc=true it_profile=travis it_browser="firefox"
+    it_browser_version="41.0" it_platform="Windows 8"
+  - goals=verify run=on_rc package=store use_sc=true it_profile=travis it_browser="internet
+    explorer" it_browser_version="11.0" it_platform="Windows 8.1"
+  - goals=verify run=on_rc package=environment use_sc=true it_profile=travis it_browser="internet
+    explorer" it_browser_version="11.0" it_platform="Windows 8.1"
+  - goals=verify run=on_rc package=forge use_sc=true it_profile=travis it_browser="internet
+    explorer" it_browser_version="11.0" it_platform="Windows 8.1"
+  - goals=verify run=on_rc package=illusion/forum use_sc=true it_profile=travis it_browser="internet
+    explorer" it_browser_version="11.0" it_platform="Windows 8.1"
+  - goals=verify run=on_rc package=illusion/materials use_sc=true it_profile=travis
+    it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows
+    8.1"
+  - goals=verify run=on_rc package=illusion/groups use_sc=true it_profile=travis it_browser="internet
+    explorer" it_browser_version="11.0" it_platform="Windows 8.1"
+  - goals=verify run=on_rc package=illusion/index use_sc=true it_profile=travis it_browser="internet
+    explorer" it_browser_version="11.0" it_platform="Windows 8.1"
+  - goals=verify run=on_rc package=illusion/pages use_sc=true it_profile=travis it_browser="internet
+    explorer" it_browser_version="11.0" it_platform="Windows 8.1"
+  - goals=verify run=on_rc package=illusion/participants use_sc=true it_profile=travis
+    it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows
+    8.1"
+  - goals=verify run=on_rc package=illusion/settings use_sc=true it_profile=travis
+    it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows
+    8.1"
+  - goals=verify run=on_rc package=illusion/templates use_sc=true it_profile=travis
+    it_browser="internet explorer" it_browser_version="11.0" it_platform="Windows
+    8.1"
+  - goals=verify run=on_rc package=gamelibrary use_sc=true it_profile=travis it_browser="internet
+    explorer" it_browser_version="11.0" it_platform="Windows 8.1"
+  - goals=verify run=on_rc package=forum use_sc=true it_profile=travis it_browser="internet
+    explorer" it_browser_version="11.0" it_platform="Windows 8.1"
 before_script:
+- eval `ssh-agent -s`
+- ssh-add .travisdeploykey
+- git config user.name "Travis CI"
+- git config user.email "travis@travis-ci.org"
 - . travis-before-script.sh
-script: 
+script:
 - . travis-script.sh
 after_success:
 - . travis-after-success.sh

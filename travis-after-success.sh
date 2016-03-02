@@ -10,6 +10,16 @@ if [[ $deploy = true ]]; then
 fi;
 
 if [[ ($release = "true") && ($perform_release = "true") ]]; then
-  python travis/m2conf.py;
-  mvn -B release:prepare release:perform -Darguments="-Dgpg.passphrase=$PGP_PASSPHRASE"
+  commitmessage=`git log --pretty=format:"%s" -1`;
+
+  if [[ $commitmessage == *"[RELEASE]"* ]]; then
+    git checkout master
+    git reset --hard
+    python travis/m2conf.py;
+    mvn -B release:prepare release:perform --settings ~/.m2/mySettings.xml
+    git checkout devel 
+    git merge master
+    git push
+  fi;
+  
 fi;
