@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:ui="http://java.sun.com/jsf/facelets" 
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:h="http://java.sun.com/jsf/html" 
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase.xhtml">
+
+  <ui:define name="page-title">#{locales['forge.index.pageTitle']}</ui:define>
+  
+  <ui:define name="view-stylesheets">
+    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
+    <h:outputStylesheet library="novus" name="css/forge-public-material.css"/>
+  </ui:define>
+  
+  <ui:define name="view-scripts">
+    <h:outputScript name="scripts/gui/forge-public-material.js"/>
+  </ui:define>
+
+  <ui:define name="grid-content">
+
+    <!-- Menu -->
+
+    <ui:include src="/facelets/flex-menu.xhtml" />
+    
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['forge.publicMaterial.navigationIndex']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/forge/index.jsf">#{locales['forge.publicMaterial.navigationForge']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/forge/public.jsf">#{locales['forge.publicMaterial.navigationForgePublic']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/forge/public-material.jsf?path=#{forgePublicMaterialBackingBean.path}">#{forgePublicMaterialBackingBean.material.title}</a>
+          </div>
+        </div>
+
+        <div class="view-header-description">
+          <p class="view-header-description-title">#{locales['forge.publicMaterial.descriptionTitle']}</p>
+          <p class="view-header-description-text">#{locales['forge.publicMaterial.descriptionText']}</p>
+        </div>
+        
+        <div class="view-header-search-container">
+          <input type="text" class="view-header-search forge-search" placeholder="#{locales['forge.publicMaterial.searchPlaceholder']}"/>
+          <div class="view-header-search-loading forge-search-loading" style="display: none"/>
+          <div class="view-header-search-result forge-search-result" style="display: none"/>
+        </div>
+      </div>
+    </div> 
+    
+    <div class="flex-row forge-public-material">
+      <div class="flex-cell-full forge-public-material-cell">
+        <div class="flex-row">
+          <div class="flex-cell-12 flex-cell-first index-box">
+            <div class="flex-row">
+              <div class="flex-cell-full no-margin-top forge-public-material-title">
+                <h2>#{forgePublicMaterialBackingBean.material.title}</h2>
+              </div>
+            </div>          
+            <div class="flex-row">
+              <div class="flex-cell-full forge-public-material-container no-margin-bottom">
+                <ui:fragment rendered="#{forgePublicMaterialBackingBean.html ne null}">
+                  <article>
+                    <h:outputText value="#{forgePublicMaterialBackingBean.html}" escape="false"/>
+                  </article>
+                </ui:fragment>
+                <ui:fragment rendered="#{forgePublicMaterialBackingBean.imageUrl ne null}">
+                  <img src="#{forgePublicMaterialBackingBean.imageUrl}"/>
+                </ui:fragment>
+                <ui:fragment rendered="#{forgePublicMaterialBackingBean.embedUrl ne null}">
+                  <iframe src="#{forgePublicMaterialBackingBean.embedUrl}#view=fit"/>
+                </ui:fragment>
+              </div>
+            </div>
+            
+            <div class="flex-row">
+              <div class="flex-cell-11 flex-cell-first tags no-margin-bottom">
+                <a jsf:outcome="/forge/public-materials.jsf?userId=#{forgePublicMaterialBackingBean.material.creatorId}" class="creator-tag">#{forgePublicMaterialBackingBean.material.creatorName}</a>
+                <ui:repeat var="tag" value="#{forgePublicMaterialBackingBean.material.tags}">
+                  <a jsf:outcome="/forge/public-materials.jsf?tags=#{tag}" class="tag">#{tag}</a>
+                </ui:repeat>
+              </div>
+              <div class="flex-cell-5 flex-cell-last flex-right no-margin-bottom">
+                <span class="createdModified">
+                  <h:outputFormat value="#{locales['forge.publicMaterial.createdModified']}">
+                    <f:param value="#{forgePublicMaterialBackingBean.material.created}"/>
+                    <f:param value="#{forgePublicMaterialBackingBean.material.modified}"/>
+                  </h:outputFormat>
+                </span>
+              </div>
+            </div>  
+            <div class="flex-row">
+              <div class="flex-cell-full no-margin-top actions">
+                <a jsf:value="#{forgePublicMaterialBackingBean.material.downloadLink}">#{locales['forge.publicMaterial.downloadMaterial']}</a>
+                <a jsf:value="/forge/pdf/#{forgePublicMaterialBackingBean.material.id}" jsf:rendered="#{forgePublicMaterialBackingBean.material.printable}">#{locales['forge.publicMaterial.printToPdf']}</a>
+              </div>
+            </div>   
+          </div>
+        
+          <div class="flex-cell-4 flex-cell-last index-box categories">
+            <div class="flex-row">
+              <div class="flex-cell-full">
+                <h3>#{locales['forge.publicMaterial.categories']}</h3>
+              </div>
+            </div>
+            
+            <div class="flex-row">
+              <div class="flex-cell-full">
+                <ui:include src="/facelets/forgepublictags.xhtml">
+                  <ui:param name="tags" value="#{forgePublicMaterialBackingBean.allTags}" />
+                </ui:include>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    
+  </ui:define>    
+
+</ui:composition>

@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -49,6 +50,22 @@ public class Material {
   
   public void setTitle(String title) {
     this.title = title;
+  }
+  
+  public String getDescription() {
+    return description;
+  }
+  
+  public void setDescription(String description) {
+    this.description = description;
+  }
+  
+  public String getLicense() {
+    return license;
+  }
+  
+  public void setLicense(String license) {
+    this.license = license;
   }
   
   public MaterialPublicity getPublicity() {
@@ -139,6 +156,12 @@ public class Material {
   @Column (nullable=false)
   @Field
   private String title;
+
+  @Column 
+  @Lob
+  private String description;
+  
+  private String license;
   
   @Column (nullable=false)
   @Enumerated (EnumType.STRING)

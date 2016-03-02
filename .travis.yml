@@ -14,6 +14,10 @@ before_install:
 - unset GEM_PATH
 - . travis-setenv.sh
 install: true
+branches:
+  only:
+    - master
+    - devel
 matrix:
   fast_finish: true
 env:
