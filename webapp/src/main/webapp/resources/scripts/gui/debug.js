@@ -16,13 +16,15 @@
         'position': 'fixed',
         'left': '0px',
         'right': '0px',
-        'bottom': '0px'
+        'bottom': '0px',
+        'font': 'Courier New',
+        'word-break': 'break-all'
       })
       .appendTo(document.body);
     
     console.log = function (message) {
       $('#log').append(
-        $('<pre>')
+        $('<div>')
           .text($.type(message) == 'string' ? message : JSON.stringify(message))    
       );
     };  
