@@ -69,6 +69,7 @@ import fi.foyt.fni.drive.SystemGoogleDriveCredentials;
 import fi.foyt.fni.materials.operations.MaterialCopy;
 import fi.foyt.fni.persistence.dao.auth.UserIdentifierDAO;
 import fi.foyt.fni.persistence.dao.common.LanguageDAO;
+import fi.foyt.fni.persistence.dao.common.TagDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventMaterialParticipantSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
@@ -100,6 +101,7 @@ import fi.foyt.fni.persistence.dao.materials.MaterialViewDAO;
 import fi.foyt.fni.persistence.dao.materials.PdfDAO;
 import fi.foyt.fni.persistence.dao.materials.PermaLinkDAO;
 import fi.foyt.fni.persistence.dao.materials.StarredMaterialDAO;
+import fi.foyt.fni.persistence.dao.materials.TagWithCount;
 import fi.foyt.fni.persistence.dao.materials.UserMaterialRoleDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageRevisionDAO;
@@ -221,6 +223,9 @@ public class MaterialController {
 
   @Inject
   private MaterialTagDAO materialTagDAO;
+
+  @Inject
+  private TagDAO tagDAO;
 
   @Inject
   private UserMaterialRoleDAO userMaterialRoleDAO;
@@ -1390,6 +1395,15 @@ public class MaterialController {
   public List<Material> listModifiedMaterialsByUser(User user, Integer firstResult, Integer maxResults) {
     return materialDAO.listByModifierExcludingTypesSortByModified(user, Arrays.asList(new MaterialType[] { MaterialType.FOLDER }), firstResult, maxResults);
   }
+  
+  public Material findRandomPublicMaterial() {
+    List<Material> materials = materialDAO.listRandomMaterialsByPublicity(MaterialPublicity.PUBLIC, 0, 1);
+    if (!materials.isEmpty()) {
+      return materials.get(0);
+    }
+    
+    return null;
+  }
 
   @SuppressWarnings("unchecked")
   public List<Material> listMaterialsByFolder(User user, Folder folder) {
@@ -1412,6 +1426,102 @@ public class MaterialController {
       return (List<Material>) CollectionUtils.union(materialDAO.listByRootFolderAndTypesAndCreator(types, user),
           materialDAO.listByRootFolderAndUserAndTypesAndRoles(user, types, roles));
     }
+  }
+  
+  public List<Material> listPublicMaterialsByCreatorAndTypes(User creator, List<MaterialType> types) {
+    return materialDAO.listByPublicityAndCreatorAndAndTypes(MaterialPublicity.PUBLIC, creator, types);
+  }
+
+  public List<Material> listPublicMaterialsByTags(List<Tag> tags) {
+    return materialTagDAO.listMaterialsByPublicityAndTags(MaterialPublicity.PUBLIC, tags);
+  }
+  
+  public List<MaterialTag> listMaterialTags(Material material) {
+    return materialTagDAO.listByMaterial(material); 
+  }
+  
+  public long countMaterialsByTag(Tag tag) {
+    return materialTagDAO.countByTag(tag);
+  }
+  
+  public long countPublicMaterialsByTag(Tag tag) {
+    return materialTagDAO.countByTagAndMaterialPublicity(tag, MaterialPublicity.PUBLIC);
+  }
+  
+  public List<TagWithCount> listPublicMaterialTagsWithCounts(int maxTags) {
+    return materialTagDAO.listWithCountsByMaterialPublicityOrderByCountAndName(MaterialPublicity.PUBLIC, null, maxTags);
+  }
+
+  public List<Material> listLatestPublicMaterials(int maxResults) {
+    return materialDAO.listByPublicityOrderByModified(MaterialPublicity.PUBLIC, 0, maxResults);
+  }
+
+  public List<Material> listMostPopuralMaterials(int maxResults) {
+    return materialDAO.listByPublicityOrderByViews(MaterialPublicity.PUBLIC, 0, maxResults);
+  }
+  
+  public Material updateMaterialTags(Material material, List<Tag> tags) {
+    List<MaterialTag> existingTags = listMaterialTags(material);
+    List<Tag> addTags = new ArrayList<>(tags);
+    
+    Map<Long, MaterialTag> existingTagMap = new HashMap<>();
+    for (MaterialTag existingTag : existingTags) {
+      existingTagMap.put(existingTag.getTag().getId(), existingTag);
+    }
+    
+    for (int i = addTags.size() - 1; i >= 0; i--) {
+      Tag addTag = addTags.get(i);
+      
+      if (existingTagMap.containsKey(addTag.getId())) {
+        addTags.remove(i);
+      } 
+      
+      existingTagMap.remove(addTag.getId());
+    }
+    
+    for (MaterialTag removeTag : existingTagMap.values()) {
+      materialTagDAO.delete(removeTag);
+    }
+    
+    for (Tag tag : addTags) {
+      materialTagDAO.create(material, tag);
+    }
+    
+    return material;
+  }
+  
+  public List<String> getMaterialTags(Material material) {
+    List<MaterialTag> materialTags = listMaterialTags(material);
+    
+    List<String> result = new ArrayList<>(materialTags.size());
+    for (MaterialTag materialTag : materialTags) {
+      result.add(materialTag.getTag().getText());
+    }
+    
+    return result;
+  }
+
+  public Material setMaterialTags(Material material, List<String> tagTexts) {
+    List<Tag> materialTags = new ArrayList<>();
+    
+    for (String tagText : tagTexts) {
+      Tag tag = tagDAO.findByText(tagText);
+      if (tag == null) {
+        tag = tagDAO.create(tagText);
+      }
+      
+      materialTags.add(tag);
+    }
+    
+    return updateMaterialTags(material, materialTags);
+  }
+
+  public Material updateMaterialDescription(Material material, String description) {
+    return materialDAO.updateDescription(material, description);
+  }
+
+  public Material updateMaterialLicense(Material material, String license) {
+    return materialDAO.updateLicense(material, license);
   }
 
   public String getUniqueMaterialUrlName(User owner, Folder parentFolder, Material material, String title) {
@@ -2107,5 +2217,5 @@ public class MaterialController {
     
     return null;
   }
-  
+
 }

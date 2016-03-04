@@ -1,0 +1,113 @@
+@charset "utf-8";
+@import "vars";
+@import "compass";
+@import "styles";
+
+.forge-public-materials {
+  
+  .index-box {
+    position: relative;
+  }
+  
+  h2 {
+    @include header-2;
+    color: $title-color;
+  }
+  
+  h3 {
+    @include header-3;
+    margin-bottom: 10px;
+  }
+
+  h4 {
+    @include header-4;
+    
+    a {
+      color: $default-color;
+      text-decoration: none;
+    }
+    
+  }
+  
+  .material {
+    p {
+      font-family: $default-font;
+      font-size: 14px;
+      color: $default-color;
+    }
+    
+    .icon {
+      margin-right: 5px;
+      margin-top: -2px;
+      max-height: 1.4em;
+      vertical-align: top;
+      margin-left: -4px;
+    }
+    
+    .modified {
+      font-family: $default-font;
+      font-size: 10px;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .license-link-container {
+      overflow:hidden; 
+      text-overflow: ellipsis;
+      min-width:0;
+      color: blue;
+    }
+
+    .license-link {
+      font-family: $default-font;
+      font-size: 10px;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    
+    .tag, .creator-tag {
+      font-family: $default-font;
+      font-size: 10px;
+      text-transform: uppercase;
+      padding-right: 5px;
+      text-decoration: none;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    
+    .tag {
+      color: $default-color;
+    }
+    
+    .creator-tag {
+      color: $title-color;
+    }
+  }
+  
+  .tags a {
+    display: block;
+    color: $default-color;
+    font-family: $default-font;
+    font-size: 13px;
+    text-decoration: none;
+  }
+  
+  .tags a:before {
+    content: '»';
+    padding-right: 7px;
+  }
+  
+  .more-container {
+    position: absolute;
+    bottom: 10px;
+    right: 26px;
+  }
+  
+  .more-link {
+    font-family: $default-font;
+    color: $default-color;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+}

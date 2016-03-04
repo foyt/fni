@@ -5,16 +5,25 @@
     <h4>Julkisuus</h4>
     
     <div class="forge-share-material-publicity-field">
-      {@if cond="{public}"}
-        <input type="radio" name="publicity" value="PRIVATE"/>
-      {:else}
+      {@if cond="'{publicity}'=='PRIVATE'"}
         <input type="radio" name="publicity" value="PRIVATE" checked="checked"/>
+      {:else}
+        <input type="radio" name="publicity" value="PRIVATE"/>
       {/if}
       <label>Yksityinen</label>
     </div>
 
     <div class="forge-share-material-publicity-field">
-      {@if cond="{public}"}
+      {@if cond="'{publicity}'=='LINK'"}
+        <input type="radio" name="publicity" value="LINK" checked="checked"/>
+      {:else}
+        <input type="radio" name="publicity" value="LINK"/>
+      {/if}
+      <label>Julkinen linkillä</label>
+    </div>
+
+    <div class="forge-share-material-publicity-field">
+      {@if cond="'{publicity}'=='PUBLIC'"}
         <input type="radio" name="publicity" value="PUBLIC" checked="checked"/>
       {:else}
         <input type="radio" name="publicity" value="PUBLIC"/>
@@ -24,11 +33,26 @@
     
     <h4>Julkinen URL</h4>
     <div class="forge-share-material-url">
-      {@if cond="{public}"}
-        <input type="text" readonly="readonly" value="{publicUrl}"/>
-      {:else}
+      {@if cond="'{publicity}'=='PRIVATE'"}
         <input type="text" readonly="readonly" value="{publicUrl}" disabled="disabled"/>
+      {:else}
+        <input type="text" readonly="readonly" value="{publicUrl}"/>
       {/if}
+    </div>
+    
+    <h4>Lisenssi</h4>
+    <div class="forge-share-material-license">
+      <input type="url" value="{license}" name="license"/>
+    </div>
+    
+    <h4>Tagit</h4>
+    <div class="forge-share-material-tags">
+      <input type="text" value="{tags}"/>
+    </div>
+    
+    <h4>Kuvaus</h4>
+    <div class="forge-share-material-description">
+      <textarea>{description}</textarea>
     </div>
     
     <h4>Muokkaajat</h4>

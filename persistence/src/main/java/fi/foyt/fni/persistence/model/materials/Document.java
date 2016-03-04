@@ -8,6 +8,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.Indexed;
@@ -33,9 +34,9 @@ public class Document extends Material {
   
   @Transient
   public String getContentPlain() {
-    return StringEscapeUtils.unescapeHtml4(getData().replaceAll("\\<.*?>",""));
+    return StringUtils.normalizeSpace(StringEscapeUtils.unescapeHtml4(getData().replaceAll("\\<.*?>"," ")));
   }
-  
+
   @Column 
   @Lob
   private String data;
