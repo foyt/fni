@@ -12,7 +12,10 @@ if [[ "$TRAVIS_PULL_REQUEST" != "false" ]]; then
   fi;
 else
   if [[ ("$TRAVIS_BRANCH" = "master") ]]; then
-    export release=true
+    commitmessage=`git log --pretty=format:"%s" -1`;
+    if [[ ($commitmessage == *"Merge pull request"*) && ($commitmessage == *"from foyt/devel"*) ]]; then
+      export release=true
+    fi;
   fi;
 fi;
 
