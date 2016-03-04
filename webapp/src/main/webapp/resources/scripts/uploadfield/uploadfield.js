@@ -55,6 +55,7 @@
           },
           add : $.proxy(this._onFileUploadAdd, this),
           done : $.proxy(this._onFileUploadDone, this),
+          fail : $.proxy(this._onFileUploadFail, this),
           always: $.proxy(this._onFileUploadAlways, this),
           progress : $.proxy(this._onFileUploadProgress, this)          
         });
@@ -107,6 +108,12 @@
       this._uploading = false;
       
       this.element.trigger("uploadDone");
+    },
+    
+    _onFileUploadFail: function(e, data) {
+      var jqXHR = data.jqXHR;
+      var error = jqXHR ? jqXHR.responseText || jqXHR.statusText || 'Error' : 'Error';
+      $('.notifications').notifications('notification', 'error', error);
     },
     
     _onFileUploadAlways: function (e, data) {
