@@ -159,6 +159,10 @@ public class ForumController implements Serializable {
 		return forumPostDAO.countByTopic(topic);
 	}
 
+  public Long countPostsByTopicAndCreatedSince(ForumTopic topic, Date createdSince) {
+    return forumPostDAO.countByTopicAndCreatedSince(topic, createdSince);
+  }
+
 	public Long countPostsByTopicAndAuthor(ForumTopic topic, User author) {
 		return forumPostDAO.countByTopicAndAuthor(topic, author);
 	}
@@ -436,6 +440,15 @@ public class ForumController implements Serializable {
     }
     
     return result;
+  }
+
+  public Long getUnreadPostCount(ForumTopic forumTopic, User user) {
+    ForumTopicRead topicRead = forumTopicReadDAO.findByUserAndForumTopic(user, forumTopic);
+    if (topicRead == null) {
+      return countPostsByTopic(forumTopic);
+    } else {
+      return countPostsByTopicAndCreatedSince(forumTopic, topicRead.getTime());
+    }
   }
   
 	private String createUrlName(Forum forum, String subject) {

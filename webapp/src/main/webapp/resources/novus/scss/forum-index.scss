@@ -41,7 +41,19 @@ h5 {
     font-size: 13px;
     font-weight: bold;
   }
+
+  .topic-unread-count {
+    color: $title-color;
     
+    &:before {
+      content: '('
+    }
+    
+    &:after {
+      content: ')'
+    }
+  }
+  
   .more-link {
     color: $default-color;
     font-family: $default-font;

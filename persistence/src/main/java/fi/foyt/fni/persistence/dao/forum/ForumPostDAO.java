@@ -175,6 +175,23 @@ public class ForumPostDAO extends GenericDAO<ForumPost> {
     return entityManager.createQuery(criteria).getSingleResult();
   }
   
+  public Long countByTopicAndCreatedSince(ForumTopic topic, Date createdSince) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Long> criteria = criteriaBuilder.createQuery(Long.class);
+    Root<ForumPost> root = criteria.from(ForumPost.class);
+    criteria.select(criteriaBuilder.count(root));
+    criteria.where(
+      criteriaBuilder.and(
+        criteriaBuilder.equal(root.get(ForumPost_.topic), topic),
+        criteriaBuilder.greaterThanOrEqualTo(root.get(ForumPost_.created), createdSince)
+      )
+    );
+
+    return entityManager.createQuery(criteria).getSingleResult();
+  }
+  
   public Long countByAuthor(User author) {
     EntityManager entityManager = getEntityManager();
 

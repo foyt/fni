@@ -109,12 +109,29 @@
                             <a jsf:outcome="/forum/topic.jsf?forumUrlName=#{forumBackingBean.forumUrlName}&amp;topicUrlName=#{topic.urlName}">#{topic.subject}</a>
                           </h5>
                         </div>
-                      
-                        <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full topic-post-count">
-                          <h:outputFormat value="#{locales['forum.forum.topicTotalPosts']}">
-                            <f:param value="#{forumBackingBean.getTopicPostCount(topic)}"/>
-                          </h:outputFormat>
-                        </div>  
+                        
+                        <ui:fragment rendered="#{forumBackingBean.getTopicUnreadPostCount(topic) gt 0}">
+                          <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full topic-post-count topic-post-count has-unread">
+                            <span>
+                              <h:outputFormat value="#{locales['forum.forum.topicTotalPosts']}">
+                                <f:param value="#{forumBackingBean.getTopicPostCount(topic)}"/>
+                              </h:outputFormat>
+                            </span>
+                            <span class="topic-unread-count"><h:outputFormat value="#{locales['forum.forum.topicTotalPostsUnread']}">
+                                <f:param value="#{forumBackingBean.getTopicUnreadPostCount(topic)}"/>
+                              </h:outputFormat></span>
+                          </div>  
+                        </ui:fragment> 
+                        
+                        <ui:fragment rendered="#{forumBackingBean.getTopicUnreadPostCount(topic) le 0}">
+                          <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full topic-post-count topic-post-count">
+                            <span>
+                              <h:outputFormat value="#{locales['forum.forum.topicTotalPosts']}">
+                                <f:param value="#{forumBackingBean.getTopicPostCount(topic)}"/>
+                              </h:outputFormat>
+                            </span>
+                          </div>  
+                        </ui:fragment>
                       </div>
                       
                       <div class="flex-row">

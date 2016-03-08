@@ -2,7 +2,9 @@ package fi.foyt.fni.view.forum;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -37,16 +39,37 @@ public class ForumIndexBackingBean {
 	@RequestAction
 	public String init() {
 	  forums = new ArrayList<>();
+	  topics = new HashMap<>();
+    topicUnreadCounts = new HashMap<>();
     
     for (ForumCategory forumCategory : forumController.listVisibleCategories()) {
       forums.addAll(forumController.listForumsByCategory(forumCategory));
     }
     
-    if (sessionController.isLoggedIn()) {
+    boolean hasReadAnyForums = false;
+    User loggedUser = sessionController.getLoggedUser();
+    
+    if (loggedUser != null) {
       // If user has never been in forum, we mark everything read
-      User loggedUser = sessionController.getLoggedUser();
       if (!forumController.hasReadAnyForums(loggedUser)) {
         forumController.markAllForumsRead(loggedUser);
+      } else {
+        hasReadAnyForums = true;
+      }
+    }
+    
+    for (Forum forum : forums) {
+      List<ForumTopic> forumTopics = forumController.listLatestForumTopicsByForum(forum, MAX_TOPICS);
+      topics.put(forum.getId(), forumTopics);
+      
+      for (ForumTopic forumTopic : forumTopics) {
+        Long unreadCount = 0l;
+        
+        if (hasReadAnyForums) {
+          unreadCount = forumController.getUnreadPostCount(forumTopic, loggedUser);
+        }
+        
+        topicUnreadCounts.put(forumTopic.getId(), unreadCount);
       }
     }
     
@@ -56,11 +79,15 @@ public class ForumIndexBackingBean {
 	/* ForumTopic */
 	
 	public List<ForumTopic> getTopics(Forum forum) {
-		return forumController.listLatestForumTopicsByForum(forum, MAX_TOPICS);
+		return topics.get(forum.getId());
 	}
 	
 	public Long getTopicPostCount(ForumTopic topic) {
 		return forumController.countPostsByTopic(topic);
+	}
+	
+	public Long getTopicUnreadPostCount(ForumTopic topic) {
+	  return topicUnreadCounts.get(topic.getId());
 	}
 	
 	public Date getTopicLastMessageDate(ForumTopic topic) {
@@ -96,4 +123,6 @@ public class ForumIndexBackingBean {
 	}
 	
 	private List<Forum> forums;
+	private Map<Long, List<ForumTopic>> topics;
+	private Map<Long, Long> topicUnreadCounts;
 }

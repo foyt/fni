@@ -26,6 +26,7 @@ h5 {
 }
 
 .forum {
+  
   .forum-topic-count,
   .forum-last-message,
   .topic-post-count, 
@@ -34,6 +35,18 @@ h5 {
     font-family: $default-font;
     font-size: 13px;
     font-weight: bold;
+  }
+
+  .topic-unread-count {
+    color: $title-color;
+    
+    &:before {
+      content: '('
+    }
+    
+    &:after {
+      content: ')'
+    }
   }
     
   .more-link {
