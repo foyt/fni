@@ -33,11 +33,13 @@ import fi.foyt.fni.persistence.dao.forum.ForumCategoryDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumPostDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumTopicDAO;
+import fi.foyt.fni.persistence.dao.forum.ForumTopicReadDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumTopicWatcherDAO;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumCategory;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
+import fi.foyt.fni.persistence.model.forum.ForumTopicRead;
 import fi.foyt.fni.persistence.model.forum.ForumTopicWatcher;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.utils.search.SearchResult;
@@ -67,6 +69,9 @@ public class ForumController implements Serializable {
 
   @Inject
   private ForumTopicWatcherDAO forumTopicWatcherDAO;
+
+  @Inject
+  private ForumTopicReadDAO forumTopicReadDAO;
   
 	@Inject
 	@ForumPostCreated
@@ -413,6 +418,24 @@ public class ForumController implements Serializable {
 
   public void deleteTopicWatcher(ForumTopicWatcher topicWatcher) {
     forumTopicWatcherDAO.delete(topicWatcher);
+  }
+  
+  /* ForumTopicRead */
+  
+  public boolean hasReadAnyForums(User user) {
+    return forumTopicReadDAO.countByUser(user) > 0;
+  }
+  
+  public List<ForumTopicRead> markAllForumsRead(User user) {
+    List<ForumTopicRead> result = new ArrayList<>();
+    
+    Date time = new Date();
+    List<ForumTopic> topics = forumTopicDAO.listAll();
+    for (ForumTopic topic : topics) {
+      result.add(forumTopicReadDAO.create(topic, user, time));
+    }
+    
+    return result;
   }
   
 	private String createUrlName(Forum forum, String subject) {
