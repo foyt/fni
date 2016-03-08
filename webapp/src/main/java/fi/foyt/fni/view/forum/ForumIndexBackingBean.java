@@ -10,12 +10,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumCategory;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
+import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
 @Stateful
@@ -25,8 +28,30 @@ public class ForumIndexBackingBean {
 	
 	private final static int MAX_TOPICS = 3;
 	
+  @Inject
+	private SessionController sessionController;
+	
 	@Inject
 	private ForumController forumController;
+	
+	@RequestAction
+	public String init() {
+	  forums = new ArrayList<>();
+    
+    for (ForumCategory forumCategory : forumController.listVisibleCategories()) {
+      forums.addAll(forumController.listForumsByCategory(forumCategory));
+    }
+    
+    if (sessionController.isLoggedIn()) {
+      // If user has never been in forum, we mark everything read
+      User loggedUser = sessionController.getLoggedUser();
+      if (!forumController.hasReadAnyForums(loggedUser)) {
+        forumController.markAllForumsRead(loggedUser);
+      }
+    }
+    
+    return null;
+	}
 	
 	/* ForumTopic */
 	
@@ -50,13 +75,7 @@ public class ForumIndexBackingBean {
 	/* Forum */
 	
 	public List<Forum> getForums() {
-		List<Forum> result = new ArrayList<>();
-		
-		for (ForumCategory forumCategory : forumController.listVisibleCategories()) {
-			result.addAll(forumController.listForumsByCategory(forumCategory));
-		}
-		
-		return result;
+		return forums;
 	}
 	
 	public Long getForumPostCount(Forum forum) {
@@ -75,4 +94,6 @@ public class ForumIndexBackingBean {
 		
 		return null;
 	}
+	
+	private List<Forum> forums;
 }
