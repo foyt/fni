@@ -113,7 +113,9 @@ public class ForumTopicBackingBean {
       // If user has never been in forum, we mark everything read
       User loggedUser = sessionController.getLoggedUser();
       if (!forumController.hasReadAnyForums(loggedUser)) {
-        forumController.markAllForumsRead(loggedUser);
+        forumController.markAllForumTopicsRead(loggedUser);
+      } else {
+        forumController.markForumTopicRead(topic, loggedUser); 
       }
     }
 		

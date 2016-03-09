@@ -52,7 +52,7 @@ public class ForumIndexBackingBean {
     if (loggedUser != null) {
       // If user has never been in forum, we mark everything read
       if (!forumController.hasReadAnyForums(loggedUser)) {
-        forumController.markAllForumsRead(loggedUser);
+        forumController.markAllForumTopicsRead(loggedUser);
       } else {
         hasReadAnyForums = true;
       }

@@ -430,7 +430,7 @@ public class ForumController implements Serializable {
     return forumTopicReadDAO.countByUser(user) > 0;
   }
   
-  public List<ForumTopicRead> markAllForumsRead(User user) {
+  public List<ForumTopicRead> markAllForumTopicsRead(User user) {
     List<ForumTopicRead> result = new ArrayList<>();
     
     Date time = new Date();
@@ -440,6 +440,15 @@ public class ForumController implements Serializable {
     }
     
     return result;
+  }
+  
+  public ForumTopicRead markForumTopicRead(ForumTopic topic, User user) {
+    ForumTopicRead topicRead = forumTopicReadDAO.findByUserAndForumTopic(user, topic);
+    if (topicRead == null) {
+      return forumTopicReadDAO.create(topic, user, new Date());
+    } else {
+      return forumTopicReadDAO.updateTime(topicRead, new Date());
+    }
   }
 
   public Long getUnreadPostCount(ForumTopic forumTopic, User user) {
