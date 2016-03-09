@@ -73,6 +73,7 @@ public class ForumIndexTestsBase extends AbstractUITest {
     loginInternal("user@foyt.fi", "pass");
     try {
       navigateAndWait("/forum/");
+      waitForSelectorPresent("*[data-forum-index=\"0\"]");
       assertSelectorText("*[data-forum-index=\"0\"] .topic-post-count span:nth-child(1)", "posts: 1", true, true);
       assertSelectorNotPresent("*[data-forum-index=\"0\"] .topic-post-count span:nth-child(2)");
       assertSelectorNotPresent("*[data-forum-index=\"0\"] .topic-post-count.has-unread");
@@ -93,6 +94,7 @@ public class ForumIndexTestsBase extends AbstractUITest {
     loginInternal("user@foyt.fi", "pass");
     try {
       navigateAndWait("/forum/");
+      waitForSelectorPresent("*[data-forum-index=\"0\"]");
       assertSelectorText("*[data-forum-index=\"0\"] .topic-post-count span:nth-child(1)", "posts: 2", true, true);
       assertSelectorText("*[data-forum-index=\"0\"] .topic-post-count span:nth-child(2)", "unread 1", true, true);
       assertSelectorPresent("*[data-forum-index=\"0\"] .topic-post-count.has-unread");

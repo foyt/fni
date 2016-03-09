@@ -95,6 +95,7 @@ public class ForumTestsBase extends AbstractUITest {
     loginInternal("user@foyt.fi", "pass");
     try {
       navigateAndWait("/forum/1_topic_forum");
+      waitForSelectorPresent(".topic-post-count");
       assertSelectorText(".topic-post-count span:nth-child(1)", "posts: 1", true, true);
       assertSelectorNotPresent(".topic-post-count span:nth-child(2)");
       assertSelectorNotPresent(".topic-post-count.has-unread");
@@ -116,6 +117,7 @@ public class ForumTestsBase extends AbstractUITest {
     loginInternal("user@foyt.fi", "pass");
     try {
       navigateAndWait("/forum/1_topic_forum");
+      waitForSelectorPresent(".topic-post-count");
       assertSelectorText(".topic-post-count span:nth-child(1)", "posts: 2", true, true);
       assertSelectorText(".topic-post-count span:nth-child(2)", "unread 1", true, true);
       assertSelectorPresent(".topic-post-count.has-unread");
