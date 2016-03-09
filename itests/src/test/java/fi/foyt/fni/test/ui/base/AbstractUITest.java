@@ -351,6 +351,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     assertSelectorText(selector, text, true);
   }
   
+
+  protected void waitAndAssertSelectorText(String selector, String text, boolean ignoreCase, boolean trim) {
+    waitForSelectorPresent(selector);
+    assertSelectorText(selector, text, ignoreCase, trim);
+  }
+  
   protected void waitForUrlMatches(final String regex) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
