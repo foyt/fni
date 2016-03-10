@@ -2,10 +2,7 @@ package fi.foyt.fni.test.ui.base.forum;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-
 import org.junit.Test;
-import org.openqa.selenium.WebDriverException;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -94,7 +91,7 @@ public class ForumTestsBase extends AbstractUITest {
   public void testForumUnread() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     try {
-      navigateAndWait("/forum/1_topic_forum");
+      navigate("/forum/1_topic_forum");
       waitAndAssertSelectorText(".topic-post-count span:nth-child(1)", "posts: 1", true, true);
       assertSelectorNotPresent(".topic-post-count span:nth-child(2)");
       assertSelectorNotPresent(".topic-post-count.has-unread");
@@ -115,14 +112,14 @@ public class ForumTestsBase extends AbstractUITest {
     
     loginInternal("user@foyt.fi", "pass");
     try {
-      navigateAndWait("/forum/1_topic_forum");
+      navigate("/forum/1_topic_forum");
       waitAndAssertSelectorText(".topic-post-count span:nth-child(1)", "posts: 2", true, true);
       assertSelectorText(".topic-post-count span:nth-child(2)", "unread 1", true, true);
       assertSelectorPresent(".topic-post-count.has-unread");
       navigate("/forum/1_topic_forum/single_topic");
       waitForSelectorVisible(".cke_wysiwyg_frame");
       
-      navigateAndWait("/forum/1_topic_forum");
+      navigate("/forum/1_topic_forum");
       waitAndAssertSelectorText(".topic-post-count span:nth-child(1)", "posts: 2", true, true);
       assertSelectorNotPresent(".topic-post-count span:nth-child(2)");
       assertSelectorNotPresent(".topic-post-count.has-unread");

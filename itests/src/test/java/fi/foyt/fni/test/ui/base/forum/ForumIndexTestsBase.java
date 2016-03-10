@@ -66,16 +66,15 @@ public class ForumIndexTestsBase extends AbstractUITest {
     assertEquals(String.format("%s/profile/1", getAppUrl()), findElementBySelector("*[data-forum-index=\"2\"] *[data-topic-index=\"0\"] .topic-start-info a").getAttribute("href"));
   }
 
-
   @Test
   @SqlSets ({"basic-users", "forum-basic"})
-  public void testForumUnread() {
+  public void testForumUnread() throws Exception {
     loginInternal("user@foyt.fi", "pass");
     try {
-      navigateAndWait("/forum/");
-      waitAndAssertSelectorText("*[data-forum-index=\"0\"] .topic-post-count span:nth-child(1)", "posts: 1", true, true);
-      assertSelectorNotPresent("*[data-forum-index=\"0\"] .topic-post-count span:nth-child(2)");
-      assertSelectorNotPresent("*[data-forum-index=\"0\"] .topic-post-count.has-unread");
+      navigate("/forum/");
+      waitAndAssertSelectorText("*[data-forum-index=\"1\"] .topic-post-count span:nth-child(1)", "posts: 1", true, true);
+      assertSelectorNotPresent("*[data-forum-index=\"1\"] .topic-post-count span:nth-child(2)");
+      assertSelectorNotPresent("*[data-forum-index=\"1\"] .topic-post-count.has-unread");
     } finally {
       logout();
     }
@@ -92,17 +91,17 @@ public class ForumIndexTestsBase extends AbstractUITest {
     
     loginInternal("user@foyt.fi", "pass");
     try {
-      navigateAndWait("/forum/");
-      waitAndAssertSelectorText("*[data-forum-index=\"0\"] .topic-post-count span:nth-child(1)", "posts: 2", true, true);
-      assertSelectorText("*[data-forum-index=\"0\"] .topic-post-count span:nth-child(2)", "unread 1", true, true);
-      assertSelectorPresent("*[data-forum-index=\"0\"] .topic-post-count.has-unread");
+      navigate("/forum/");
+      waitAndAssertSelectorText("*[data-forum-index=\"1\"] .topic-post-count span:nth-child(1)", "posts: 2", true, true);
+      assertSelectorText("*[data-forum-index=\"1\"] .topic-post-count span:nth-child(2)", "unread 1", true, true);
+      assertSelectorPresent("*[data-forum-index=\"1\"] .topic-post-count.has-unread");
       navigate("/forum/1_topic_forum/single_topic");
       waitForSelectorVisible(".cke_wysiwyg_frame");
       
-      navigateAndWait("/forum/");
-      assertSelectorText("*[data-forum-index=\"0\"] .topic-post-count span:nth-child(1)", "posts: 2", true, true);
-      assertSelectorNotPresent("*[data-forum-index=\"0\"] .topic-post-count span:nth-child(2)");
-      assertSelectorNotPresent("*[data-forum-index=\"0\"] .topic-post-count.has-unread");
+      navigate("/forum/");
+      assertSelectorText("*[data-forum-index=\"1\"] .topic-post-count span:nth-child(1)", "posts: 2", true, true);
+      assertSelectorNotPresent("*[data-forum-index=\"1\"] .topic-post-count span:nth-child(2)");
+      assertSelectorNotPresent("*[data-forum-index=\"1\"] .topic-post-count.has-unread");
     } finally {
       logout();
     }
