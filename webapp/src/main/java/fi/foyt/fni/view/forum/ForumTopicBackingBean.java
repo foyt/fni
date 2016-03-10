@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -37,6 +39,9 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Named
 @Join (path = "/forum/{forumUrlName}/{topicUrlName}", to = "/forum/topic.jsf")
 public class ForumTopicBackingBean {
+  
+  @Inject
+  private Logger logger;
 
   public static final int POST_PER_PAGE = 15;
 
@@ -64,14 +69,14 @@ public class ForumTopicBackingBean {
   private NavigationController navigationController;
 	
 	@RequestAction
-	public String load() throws FileNotFoundException {
+	public String load() {
 		if (page == null) {
 			page = 0;
 		}
 		
 		forum = forumController.findForumByUrlName(getForumUrlName());
 		if (forum == null) {
-		  throw new FileNotFoundException();
+		  return navigationController.notFound();
 		}   
 		
 		if (!forum.getCategory().getVisible()) {
@@ -88,6 +93,7 @@ public class ForumTopicBackingBean {
     topicAuthorId = topic.getAuthor().getId();
     topicAuthorName = topic.getAuthor().getFullName();
     topicCreated = topic.getCreated();
+    postCount = Math.round(Math.ceil(new Double(forumController.countPostsByTopic(topic)) / POST_PER_PAGE));
     
     long pageCount = getPostCount();
 		
@@ -102,6 +108,16 @@ public class ForumTopicBackingBean {
 		for (ForumPost post : posts) {
 		  forumController.updatePostViews(post, post.getViews() + 1);
 		}
+		    
+    if (sessionController.isLoggedIn()) {
+      // If user has never been in forum, we mark everything read
+      User loggedUser = sessionController.getLoggedUser();
+      if (!forumController.hasReadAnyForums(loggedUser)) {
+        forumController.markAllForumTopicsRead(loggedUser);
+      } else {
+        forumController.markForumTopicRead(topic, loggedUser); 
+      }
+    }
 		
 		return null;
 	}
@@ -178,13 +194,17 @@ public class ForumTopicBackingBean {
     return topicCreated;
   }
 	
-	public boolean getMayModifyPost(ForumPost forumPost) throws FileNotFoundException {
-	  return securityController.checkPermission(Permission.FORUM_POST_MODIFY, forumPost.getId());
+	public boolean getMayModifyPost(ForumPost forumPost) {
+	  try {
+      return securityController.checkPermission(Permission.FORUM_POST_MODIFY, forumPost.getId());
+    } catch (FileNotFoundException e) {
+      return false;
+    }
 	}
 	
 	@LoggedIn
 	@Secure (Permission.FORUM_POST_CREATE)
-	public void postReply() throws IOException {
+	public void postReply() {
 		String content = StringUtils.strip(getReply());
 		if (StringUtils.isEmpty(content)) {
 			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("forum.topic.contentRequired"));
@@ -192,18 +212,22 @@ public class ForumTopicBackingBean {
 		  ForumTopic topic = forumController.findForumTopicById(getTopicId());
   		User author = sessionController.getLoggedUser();
   		ForumPost post = forumController.createForumPost(topic, author, content);
-  
-  		FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
-  		  .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
-  		  .append("/forum/")
-  		  .append(forum.getUrlName())
-  		  .append('/')
-  		  .append(topic.getUrlName())
-  		  .append("?page=")
-  		  .append(getPostCount() - 1)
-  		  .append("#p")
-  		  .append(post.getId())
-  		  .toString());
+
+  		try {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
+          .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
+          .append("/forum/")
+          .append(forum.getUrlName())
+          .append('/')
+          .append(topic.getUrlName())
+          .append("?page=")
+          .append(getPostCount() - 1)
+          .append("#p")
+          .append(post.getId())
+          .toString());
+      } catch (IOException e) {
+        logger.log(Level.SEVERE, "Failed to redirect user to new post", e);
+      }
 		}
 	}
 	
@@ -231,8 +255,7 @@ public class ForumTopicBackingBean {
   }
 	
 	private long getPostCount() {
-	  ForumTopic topic = forumController.findForumTopicById(getTopicId());
-		return Math.round(Math.ceil(new Double(forumController.countPostsByTopic(topic)) / POST_PER_PAGE));
+		return postCount;
 	}
 	
 	private List<Integer> pages;
@@ -244,4 +267,5 @@ public class ForumTopicBackingBean {
 	private Date topicCreated;
 	private List<ForumPost> posts;
 	private String reply;
+	private long postCount;
 }
