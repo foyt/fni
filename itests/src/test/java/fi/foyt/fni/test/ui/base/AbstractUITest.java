@@ -96,6 +96,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     String version = getBrowserVersion();
     String platform = getPlatform();
     
+    if (StringUtils.isBlank(version)) {
+      version = "latest";
+    }
+    
     DesiredCapabilities capabilities = new DesiredCapabilities();
     
     capabilities.setCapability(CapabilityType.BROWSER_NAME, browser);
