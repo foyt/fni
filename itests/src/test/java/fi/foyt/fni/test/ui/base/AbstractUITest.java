@@ -158,7 +158,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     scrollWaitAndType(".user-login-password", password);
     scrollWaitAndClick(".user-login-button");
     
-    waitForSelectorPresent(".menu-tools-account");
+    waitForSelectorVisible(".menu-tools-account");
 
     assertSelectorPresent(".menu-tools-account");
     assertSelectorNotPresent(".menu-tools-login");
