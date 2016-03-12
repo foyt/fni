@@ -304,6 +304,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     findElementBySelector(".illusion-create-event-save").click();
     waitForUrlMatches(".*/illusion/event/" + name);
     navigate("/illusion/event/" + name + "/settings");
+    waitForSelectorPresent(".illusion-event-settings-age-limit");
     assertSelectorValue(".illusion-event-settings-age-limit", ageLimit);
     
     deleteIllusionEventByUrl(name);
