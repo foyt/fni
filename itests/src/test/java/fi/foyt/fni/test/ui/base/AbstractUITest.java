@@ -68,7 +68,6 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
       try {
         getWebDriver().quit();
       } catch (Exception e) {
-        e.printStackTrace();
       }
     };
     
