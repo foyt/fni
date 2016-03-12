@@ -275,7 +275,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     typeSelectorInputValue(".illusion-create-event-name", name);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
-    clickSelector(".illusion-create-event-beginner-friendly");
+    scrollWaitAndClick(".illusion-create-event-beginner-friendly");
     scrollWaitAndClick(".illusion-create-event-save");
     waitForUrlMatches(".*/illusion/event/" + name);
     navigate("/illusion/event/" + name + "/settings");
