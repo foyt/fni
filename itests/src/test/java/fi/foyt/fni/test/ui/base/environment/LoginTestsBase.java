@@ -77,8 +77,8 @@ public class LoginTestsBase extends AbstractUITest {
     acceptCookieDirective();
     navigate("/login/", true);
     
-    waitAndSendKeys(".user-register-first-name", "Ärri");
-    waitAndSendKeys(".user-register-last-name", "Pörri");
+    waitAndSendKeys(".user-register-first-name", "Register");
+    waitAndSendKeys(".user-register-last-name", "Tester");
     waitAndSendKeys(".user-register-email", "register.tester@foyt.fi");
     waitAndSendKeys(".user-register-password1", "qwe");
     waitAndSendKeys(".user-register-password2", "asd");
@@ -96,8 +96,8 @@ public class LoginTestsBase extends AbstractUITest {
     try {
       navigate("/login/", true);
       
-      waitAndSendKeys(".user-register-first-name", "Ärri");
-      waitAndSendKeys(".user-register-last-name", "Pörri");
+      waitAndSendKeys(".user-register-first-name", "Register");
+      waitAndSendKeys(".user-register-last-name", "Tester");
       waitAndSendKeys(".user-register-email", "register.tester@foyt.fi");
       waitAndSendKeys(".user-register-password1", "qwe");
       waitAndSendKeys(".user-register-password2", "qwe");
