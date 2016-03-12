@@ -76,13 +76,13 @@ public class StoreListTestsBase extends AbstractUITest {
     assertEquals(getAppUrl(true) + "/forum/" + commentUrl, getWebDriver().findElement(By.cssSelector(productSelector + " .store-product-comments")).getAttribute("href"));
     
     assertShareButtonsHidden(productSelector);
-    waitAndClick(productSelector + " .store-product-share-button label");
+    scrollWaitAndClick(productSelector + " .store-product-share-button label");
     assertShareButtonsVisible(productSelector);
-    waitAndClick(productSelector + " .store-product-share-button label");
+    scrollWaitAndClick(productSelector + " .store-product-share-button label");
     assertShareButtonsHidden(productSelector);
-    waitAndClick(productSelector + " .store-product-share-button label");
+    scrollWaitAndClick(productSelector + " .store-product-share-button label");
     assertShareButtonsVisible(productSelector);
-    waitAndClick(productSelector + " .store-product-detail-price");
+    scrollWaitAndClick(productSelector + " .store-product-detail-price");
     assertShareButtonsHidden(productSelector);
   }
 
