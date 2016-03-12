@@ -49,6 +49,7 @@ public class ForumTopicTestsBase extends AbstractUITest {
     loginInternal("user@foyt.fi", "pass");
     navigate("/forum/5_topic_forum/topic5of5");
     assertSelectorVisible(".forum-topic-post-editor-container");
+    scrollIntoView(".forum-topic-post-editor-container");
     waitForSelectorVisible(".forum-topic-post-editor-container .cke_wysiwyg_frame");
     assertSelectorVisible(".forum-topic-post-editor-container .cke_wysiwyg_frame");
   }
