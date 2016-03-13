@@ -62,6 +62,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/createevent");
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
+    scrollIntoView(".illusion-create-event-save");
     clickSelector(".illusion-create-event-save");
     assertSelectorPresent(".illusion-create-event-name:invalid");
   }
