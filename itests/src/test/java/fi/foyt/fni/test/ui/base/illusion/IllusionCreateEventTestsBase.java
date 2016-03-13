@@ -342,8 +342,8 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     waitAndSendKeys(".illusion-create-event-name", name);
     waitAndSendKeys("input[data-alt-field='.actual-start-date']", startDate);
     waitAndSendKeys("input[data-alt-field='.actual-end-date']", startDate);
-    clickSelector(".illusion-create-event-genre input[value='1']");
-    clickSelector(".illusion-create-event-genre input[value='3']");
+    scrollWaitAndClick(".illusion-create-event-genre input[value='1']");
+    scrollWaitAndClick(".illusion-create-event-genre input[value='3']");
     scrollWaitAndClick(".illusion-create-event-save");
     waitForUrlMatches(".*/illusion/event/" + name);
     navigate("/illusion/event/" + name + "/settings");
@@ -448,7 +448,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     waitAndSendKeys(".illusion-create-event-description", description);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", "10/20/2030");
-    clickSelector(".illusion-create-event-larp-kalenteri");
+    scrollWaitAndClick(".illusion-create-event-larp-kalenteri");
     scrollWaitAndClick(".illusion-create-event-save");
 
     waitForUrlMatches(".*/illusion/event/" + urlName);
@@ -680,7 +680,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", "10/20/2030");
     typeSelectorInputValue(".illusion-create-event-location", "Otakaari 24, 02150 Espoo, Finland");
-    clickSelector(".illusion-create-event-larp-kalenteri");
+    scrollWaitAndClick(".illusion-create-event-larp-kalenteri");
     
     waitForInputValueNotBlank(".location-lat");
     scrollWaitAndClick(".illusion-create-event-save");
