@@ -84,7 +84,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     loginInternal("admin@foyt.fi", "pass");
     testTitle("/illusion/event/openevent/settings", "Event Settings");
     assertSelectorCount(".illusion-event-navigation-admin-menu.illusion-event-navigation-item-active", 1);
-    clickSelector(".illusion-event-navigation-admin-menu");
+    scrollWaitAndClick(".illusion-event-navigation-admin-menu");
     waitForSelectorVisible(".illusion-event-navigation-admin-menu .illusion-event-navigation-menu-items");
     assertSelectorCount(".illusion-event-navigation-admin-menu .illusion-event-navigation-item.illusion-event-navigation-item-active", 1);
     assertSelectorPresent(".illusion-event-navigation-admin-menu");
@@ -123,9 +123,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     assertSelectorValue("input[data-alt-field='.actual-start-time']", startTime);
     assertSelectorValue("input[data-alt-field='.actual-end-date']", endDate);
     assertSelectorValue("input[data-alt-field='.actual-end-time']", endTime);
-    
-    waitSelectorToBeClickable(".illusion-event-settings-save");
-    clickSelector(".illusion-event-settings-save");
+    scrollWaitAndClick(".illusion-event-settings-save");
     waitForPageLoad();
     
     assertSelectorValue("input[data-alt-field='.actual-start-date']", startDate);
@@ -142,7 +140,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     String location = "Test Valley District, United Kingdom";
     typeSelectorInputValue(".illusion-event-settings-location", location);
-    clickSelector(".illusion-event-settings-save");
+    scrollWaitAndClick(".illusion-event-settings-save");
     waitForPageLoad();
     
     assertSelectorValue(".illusion-event-settings-location", location);
@@ -197,7 +195,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     String location = "Test place";
     typeSelectorInputValue(".illusion-event-settings-domain", location);
-    clickSelector(".illusion-event-settings-save");
+    scrollWaitAndClick(".illusion-event-settings-save");
     waitForPageLoad();
     
     assertSelectorValue(".illusion-event-settings-domain", location);
@@ -216,7 +214,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     
     typeSelectorInputValue(".sign-up-start-date", signUpStartDate);
     typeSelectorInputValue(".sign-up-end-date", signUpEndDate);
-    clickSelector(".illusion-event-settings-save");
+    scrollWaitAndClick(".illusion-event-settings-save");
     waitForPageLoad();
     
     navigate("/illusion/event/openevent/settings");
@@ -233,7 +231,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     String imageUrl = "http://www.url.to/image.png";
 
     typeSelectorInputValue(".illusion-event-settings-image-url", imageUrl);
-    clickSelector(".illusion-event-settings-save");
+    scrollWaitAndClick(".illusion-event-settings-save");
     waitForPageLoad();
     
     navigate("/illusion/event/openevent/settings");
@@ -247,8 +245,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     
-    clickSelector(".illusion-event-settings-beginner-friendly");
-    clickSelector(".illusion-event-settings-save");
+    scrollWaitAndClick(".illusion-event-settings-beginner-friendly");
+    scrollWaitAndClick(".illusion-event-settings-save");
     waitForPageLoad();
     
     navigate("/illusion/event/openevent/settings");
@@ -264,7 +262,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     String ageLimit = "16";
 
     typeSelectorInputValue(".illusion-event-settings-age-limit", ageLimit);
-    clickSelector(".illusion-event-settings-save");
+    scrollWaitAndClick(".illusion-event-settings-save");
     waitForPageLoad();
     
     navigate("/illusion/event/openevent/settings");
@@ -279,7 +277,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
 
     selectSelectBoxByValue(".illusion-event-settings-type", "2");
-    clickSelector(".illusion-event-settings-save");
+    scrollWaitAndClick(".illusion-event-settings-save");
     waitForPageLoad();
     
     navigate("/illusion/event/openevent/settings");
@@ -314,15 +312,15 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
 
     assertSelectorPresent(".illusion-event-settings-published:checked");
     
-    clickSelector(".illusion-event-settings-published");
-    clickSelector(".illusion-event-settings-save");
+    scrollWaitAndClick(".illusion-event-settings-published");
+    scrollWaitAndClick(".illusion-event-settings-save");
     waitForPageLoad();
     
     navigate("/illusion/event/openevent/settings");
     assertSelectorNotPresent(".illusion-event-settings-published:checked");
     
-    clickSelector(".illusion-event-settings-published");
-    clickSelector(".illusion-event-settings-save");
+    scrollWaitAndClick(".illusion-event-settings-published");
+    scrollWaitAndClick(".illusion-event-settings-save");
     waitForPageLoad();
     
     navigate("/illusion/event/openevent/settings");
@@ -335,10 +333,10 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
-    clickSelector(".illusion-remove-event");
+    scrollWaitAndClick(".illusion-remove-event");
     waitForSelectorVisible(".ui-dialog");
     assertSelectorClickable(".ui-dialog .remove-button");
-    clickSelector(".ui-dialog .remove-button");
+    scrollWaitAndClick(".ui-dialog .remove-button");
     waitForUrlNotMatches(".*/illusion/event/openevent/settings");
     testNotFound("/illusion/event/openevent");
   }
@@ -453,7 +451,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     
-    clickSelector(".illusion-event-settings-save");
+    scrollWaitAndClick(".illusion-event-settings-save");
     waitForPageLoad();
     
     navigate("/illusion/event/openevent/settings");
@@ -699,10 +697,10 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     typeSelectorInputValue(".illusion-event-settings-location", "Otakaari 24, 02150 Espoo, Finland");
-    clickSelector(".illusion-event-settings-image-url");
+    scrollWaitAndClick(".illusion-event-settings-image-url");
     waitForInputValueNotBlank(".location-lat");
     
-    clickSelector(".illusion-event-settings-save");  
+    scrollWaitAndClick(".illusion-event-settings-save");  
     waitForPageLoad();
     
     navigate("/illusion/event/openevent/settings");
@@ -792,8 +790,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     
-    clickSelector(".illusion-create-event-larp-kalenteri");
-    clickSelector(".illusion-event-settings-save");  
+    scrollWaitAndClick(".illusion-create-event-larp-kalenteri");
+    scrollWaitAndClick(".illusion-event-settings-save");  
     waitForPageLoad();
     
     navigate("/illusion/event/openevent/settings");
@@ -883,11 +881,10 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     loginInternal("admin@foyt.fi", "pass");
     navigateAndWait("/illusion/event/openevent/settings");
     
-    clickSelector(".illusion-event-settings-genre input[value='1']");
-    clickSelector(".illusion-event-settings-genre input[value='3']");
-    clickSelector(".illusion-create-event-larp-kalenteri");
-    
-    clickSelector(".illusion-event-settings-save");  
+    scrollWaitAndClick(".illusion-event-settings-genre input[value='1']");
+    scrollWaitAndClick(".illusion-event-settings-genre input[value='3']");
+    scrollWaitAndClick(".illusion-create-event-larp-kalenteri");
+    scrollWaitAndClick(".illusion-event-settings-save");  
     waitForPageLoad();
     
     navigateAndWait("/illusion/event/openevent/settings");
@@ -977,10 +974,10 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     typeSelectorInputValue(".illusion-event-settings-location", "Otakaari 24, 02150 Espoo, Finland");
-    clickSelector(".illusion-create-event-larp-kalenteri");
+    scrollWaitAndClick(".illusion-create-event-larp-kalenteri");
     waitForInputValueNotBlank(".location-lat");
     
-    clickSelector(".illusion-event-settings-save");  
+    scrollWaitAndClick(".illusion-event-settings-save");  
     waitForPageLoad();
     
     navigate("/illusion/event/openevent/settings");
@@ -1102,8 +1099,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     
-    clickSelector(".illusion-event-settings-published");
-    clickSelector(".illusion-event-settings-save");  
+    scrollWaitAndClick(".illusion-event-settings-published");
+    scrollWaitAndClick(".illusion-event-settings-save");  
     waitForPageLoad();
     
     navigate("/illusion/event/openevent/settings");
@@ -1225,8 +1222,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     
-    clickSelector(".illusion-event-settings-published");
-    clickSelector(".illusion-event-settings-save");  
+    scrollWaitAndClick(".illusion-event-settings-published");
+    scrollWaitAndClick(".illusion-event-settings-save");  
     waitForPageLoad();
     
     navigate("/illusion/event/openevent/settings");
