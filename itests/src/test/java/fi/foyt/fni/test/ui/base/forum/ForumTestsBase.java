@@ -105,6 +105,7 @@ public class ForumTestsBase extends AbstractUITest {
       waitForSelectorVisible(".cke_wysiwyg_frame");
       executeScript("CKEDITOR.instances[Object.keys(CKEDITOR.instances)[0]].setData('<p>Post</p>')");
       waitAndClick(".forum-topic-post-send-container input");
+      waitForSelectorCount(".post", 2);
     } finally {
       logout();
     }
