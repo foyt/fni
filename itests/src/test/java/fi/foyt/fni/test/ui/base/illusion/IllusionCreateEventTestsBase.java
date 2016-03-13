@@ -35,7 +35,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
   @Rule
   public WireMockRule wireMockRule = new WireMockRule(9080);
   
-  @Test
+  @Test 
   public void testLoginRedirect() throws UnsupportedEncodingException {
     testLoginRequired("/illusion/createevent");
   }
@@ -562,9 +562,9 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     findElementBySelector(".illusion-create-event-description").sendKeys(description);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", "10/20/2030");
-    clickSelector(".illusion-create-event-genre input[value='1']");
-    clickSelector(".illusion-create-event-genre input[value='3']");
-    clickSelector(".illusion-create-event-larp-kalenteri");
+    scrollWaitAndClick(".illusion-create-event-genre input[value='1']");
+    scrollWaitAndClick(".illusion-create-event-genre input[value='3']");
+    scrollWaitAndClick(".illusion-create-event-larp-kalenteri");
     scrollWaitAndClick(".illusion-create-event-save");
 
     waitForUrlMatches(".*/illusion/event/" + urlName);
