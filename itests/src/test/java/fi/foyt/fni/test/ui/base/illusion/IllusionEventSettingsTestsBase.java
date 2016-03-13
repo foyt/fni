@@ -293,9 +293,9 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
 
-    clickSelector(".illusion-event-settings-genre input[value='1']");
-    clickSelector(".illusion-event-settings-genre input[value='3']");
-    clickSelector(".illusion-event-settings-save");
+    scrollWaitAndClick(".illusion-event-settings-genre input[value='1']");
+    scrollWaitAndClick(".illusion-event-settings-genre input[value='3']");
+    scrollWaitAndClick(".illusion-event-settings-save");
     waitForPageLoad();
     
     navigate("/illusion/event/openevent/settings");

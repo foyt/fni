@@ -82,9 +82,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     findElementBySelector(".illusion-create-event-description").sendKeys(description);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", "10/20/2030");
-    
-    waitSelectorToBeClickable(".illusion-create-event-save");
-    findElementBySelector(".illusion-create-event-save").click();
+    scrollWaitAndClick(".illusion-create-event-save");
 
     waitForUrlMatches(".*/illusion/event/" + urlName);
     testTitle("Illusion - name");
@@ -118,9 +116,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     typeSelectorInputValue(".illusion-create-event-description", description);
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
-    
-    waitSelectorToBeClickable(".illusion-create-event-save");
-    findElementBySelector(".illusion-create-event-save").click();
+    scrollWaitAndClick(".illusion-create-event-save");
 
     waitForUrlMatches(".*/illusion/event/" + urlName);
     testTitle("Illusion - " + name);
@@ -158,9 +154,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     typeSelectorInputValue("input[data-alt-field='.actual-start-time']", startTime);
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", endDate);
     typeSelectorInputValue("input[data-alt-field='.actual-end-time']", endTime);
-    
-    waitSelectorToBeClickable(".illusion-create-event-save");
-    findElementBySelector(".illusion-create-event-save").click();
+    scrollWaitAndClick(".illusion-create-event-save");
 
     waitForUrlMatches(".*/illusion/event/" + urlName);
     testTitle("Illusion - " + name);
@@ -198,8 +192,8 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
     typeSelectorInputValue(".illusion-create-event-location", location);
-    waitSelectorToBeClickable(".illusion-create-event-save");
-    findElementBySelector(".illusion-create-event-save").click();
+    scrollWaitAndClick(".illusion-create-event-save");
+    
     waitForUrlMatches(".*/illusion/event/" + urlName);
     navigate("/illusion/event/" + urlName + "/settings");
     waitForSelectorPresent(".illusion-event-settings-location");
@@ -226,8 +220,8 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
     typeSelectorInputValue(".sign-up-start-date", signUpStartDate);
     typeSelectorInputValue(".sign-up-end-date", signUpEndDate);
-    waitSelectorToBeClickable(".illusion-create-event-save");
-    findElementBySelector(".illusion-create-event-save").click();
+    scrollWaitAndClick(".illusion-create-event-save");
+
     waitForUrlMatches(".*/illusion/event/" + name);
     navigate("/illusion/event/" + name + "/settings");
     assertSelectorValue(".sign-up-start-date", signUpStartDate);
@@ -252,8 +246,8 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
     typeSelectorInputValue(".illusion-create-event-image-url", imageUrl);
-    waitSelectorToBeClickable(".illusion-create-event-save");
-    findElementBySelector(".illusion-create-event-save").click();
+    scrollWaitAndClick(".illusion-create-event-save");
+
     waitForUrlMatches(".*/illusion/event/" + name);
     navigate("/illusion/event/" + name + "/settings");
     assertSelectorValue(".illusion-event-settings-image-url", imageUrl);
@@ -300,8 +294,8 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
     typeSelectorInputValue(".illusion-create-event-age-limit", ageLimit);
-    waitSelectorToBeClickable(".illusion-create-event-save");
-    findElementBySelector(".illusion-create-event-save").click();
+    scrollWaitAndClick(".illusion-create-event-save");
+
     waitForUrlMatches(".*/illusion/event/" + name);
     navigate("/illusion/event/" + name + "/settings");
     waitForSelectorPresent(".illusion-event-settings-age-limit");
@@ -325,8 +319,8 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", startDate);
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", startDate);
     selectSelectBoxByValue(".illusion-create-event-type", "2");
-    waitSelectorToBeClickable(".illusion-create-event-save");
-    findElementBySelector(".illusion-create-event-save").click();
+    scrollWaitAndClick(".illusion-create-event-save");
+
     waitForUrlMatches(".*/illusion/event/" + name);
     navigate("/illusion/event/" + name + "/settings");
     assertSelectBoxValue(".illusion-event-settings-type", "2");
@@ -350,8 +344,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     waitAndSendKeys("input[data-alt-field='.actual-end-date']", startDate);
     clickSelector(".illusion-create-event-genre input[value='1']");
     clickSelector(".illusion-create-event-genre input[value='3']");
-    waitSelectorToBeClickable(".illusion-create-event-save");
-    findElementBySelector(".illusion-create-event-save").click();
+    scrollWaitAndClick(".illusion-create-event-save");
     waitForUrlMatches(".*/illusion/event/" + name);
     navigate("/illusion/event/" + name + "/settings");
     
@@ -456,9 +449,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
     typeSelectorInputValue("input[data-alt-field='.actual-end-date']", "10/20/2030");
     clickSelector(".illusion-create-event-larp-kalenteri");
-    
-    waitSelectorToBeClickable(".illusion-create-event-save");
-    findElementBySelector(".illusion-create-event-save").click();
+    scrollWaitAndClick(".illusion-create-event-save");
 
     waitForUrlMatches(".*/illusion/event/" + urlName);
     testTitle("Illusion - name");
@@ -574,9 +565,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     clickSelector(".illusion-create-event-genre input[value='1']");
     clickSelector(".illusion-create-event-genre input[value='3']");
     clickSelector(".illusion-create-event-larp-kalenteri");
-    
-    waitSelectorToBeClickable(".illusion-create-event-save");
-    findElementBySelector(".illusion-create-event-save").click();
+    scrollWaitAndClick(".illusion-create-event-save");
 
     waitForUrlMatches(".*/illusion/event/" + urlName);
     testTitle("Illusion - name");
@@ -694,9 +683,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     clickSelector(".illusion-create-event-larp-kalenteri");
     
     waitForInputValueNotBlank(".location-lat");
-    
-    waitSelectorToBeClickable(".illusion-create-event-save");
-    findElementBySelector(".illusion-create-event-save").click();
+    scrollWaitAndClick(".illusion-create-event-save");
 
     waitForUrlMatches(".*/illusion/event/" + urlName);
     testTitle("Illusion - name");
