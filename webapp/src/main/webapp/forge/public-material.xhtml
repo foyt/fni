@@ -78,13 +78,13 @@
             </div>
             
             <div class="flex-row">
-              <div class="flex-cell-11 flex-cell-first tags no-margin-bottom">
+              <div class="flex-cell-10 flex-cell-first tags no-margin-bottom">
                 <a jsf:outcome="/forge/public-materials.jsf?userId=#{forgePublicMaterialBackingBean.material.creatorId}" class="creator-tag">#{forgePublicMaterialBackingBean.material.creatorName}</a>
                 <ui:repeat var="tag" value="#{forgePublicMaterialBackingBean.material.tags}">
                   <a jsf:outcome="/forge/public-materials.jsf?tags=#{tag}" class="tag">#{tag}</a>
                 </ui:repeat>
               </div>
-              <div class="flex-cell-5 flex-cell-last flex-right no-margin-bottom">
+              <div class="flex-cell-6 flex-cell-last flex-right no-margin-bottom">
                 <span class="createdModified">
                   <h:outputFormat value="#{locales['forge.publicMaterial.createdModified']}">
                     <f:param value="#{forgePublicMaterialBackingBean.material.created}"/>
@@ -95,21 +95,11 @@
             </div>  
             <div class="flex-row">
               <div class="flex-cell-full actions">
-                <div class="flex-row">
-                  <div class="flex-cell-full no-margin-top no-margin-bottom">
-                    <a jsf:value="#{forgePublicMaterialBackingBean.material.downloadLink}" jsf:rendered="#{!forgePublicMaterialBackingBean.material.printable}">#{locales['forge.publicMaterial.downloadMaterial']}</a>
-                  </div>
-                </div>
-                <div class="flex-row">
-                  <div class="flex-cell-full no-margin-top no-margin-bottom">
-                    <a jsf:value="/forge/pdf/#{forgePublicMaterialBackingBean.material.id}" jsf:rendered="#{forgePublicMaterialBackingBean.material.printable}">#{locales['forge.publicMaterial.downloadPdf']}</a>
-                  </div>
-                </div>
-                <div class="flex-row">
-                  <div class="flex-cell-full no-margin-top no-margin-bottom">
-                    <a jsf:value="#{forgePublicMaterialBackingBean.material.downloadLink}" jsf:rendered="#{forgePublicMaterialBackingBean.material.printable}">#{locales['forge.publicMaterial.downloadHtml']}</a>
-                  </div>
-                </div>
+                <a jsf:value="#{forgePublicMaterialBackingBean.material.downloadLink}" jsf:rendered="#{!forgePublicMaterialBackingBean.material.printable}">#{locales['forge.publicMaterial.downloadMaterial']}</a>
+                <a jsf:value="/forge/pdf/#{forgePublicMaterialBackingBean.material.id}" jsf:rendered="#{forgePublicMaterialBackingBean.material.printable}">#{locales['forge.publicMaterial.downloadPdf']}</a>
+                <a jsf:value="#{forgePublicMaterialBackingBean.material.downloadLink}" jsf:rendered="#{forgePublicMaterialBackingBean.material.printable}">#{locales['forge.publicMaterial.downloadHtml']}</a>
+                <a target="_blank" jsf:value="#{forgePublicMaterialBackingBean.material.editPath}" jsf:rendered="#{forgePublicMaterialBackingBean.mayEdit}">#{locales['forge.publicMaterial.edit']}</a>
+                <a target="_blank" jsf:value="#{forgePublicMaterialBackingBean.material.folderPath}" jsf:rendered="#{forgePublicMaterialBackingBean.mayEdit}">#{locales['forge.publicMaterial.openFolder']}</a>
               </div>
             </div>   
           </div>
