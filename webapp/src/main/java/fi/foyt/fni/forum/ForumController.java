@@ -33,11 +33,13 @@ import fi.foyt.fni.persistence.dao.forum.ForumCategoryDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumPostDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumTopicDAO;
+import fi.foyt.fni.persistence.dao.forum.ForumTopicReadDAO;
 import fi.foyt.fni.persistence.dao.forum.ForumTopicWatcherDAO;
 import fi.foyt.fni.persistence.model.forum.Forum;
 import fi.foyt.fni.persistence.model.forum.ForumCategory;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
+import fi.foyt.fni.persistence.model.forum.ForumTopicRead;
 import fi.foyt.fni.persistence.model.forum.ForumTopicWatcher;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.utils.search.SearchResult;
@@ -67,6 +69,9 @@ public class ForumController implements Serializable {
 
   @Inject
   private ForumTopicWatcherDAO forumTopicWatcherDAO;
+
+  @Inject
+  private ForumTopicReadDAO forumTopicReadDAO;
   
 	@Inject
 	@ForumPostCreated
@@ -153,6 +158,10 @@ public class ForumController implements Serializable {
 	public Long countPostsByTopic(ForumTopic topic) {
 		return forumPostDAO.countByTopic(topic);
 	}
+
+  public Long countPostsByTopicAndCreatedSince(ForumTopic topic, Date createdSince) {
+    return forumPostDAO.countByTopicAndCreatedSince(topic, createdSince);
+  }
 
 	public Long countPostsByTopicAndAuthor(ForumTopic topic, User author) {
 		return forumPostDAO.countByTopicAndAuthor(topic, author);
@@ -413,6 +422,42 @@ public class ForumController implements Serializable {
 
   public void deleteTopicWatcher(ForumTopicWatcher topicWatcher) {
     forumTopicWatcherDAO.delete(topicWatcher);
+  }
+  
+  /* ForumTopicRead */
+  
+  public boolean hasReadAnyForums(User user) {
+    return forumTopicReadDAO.countByUser(user) > 0;
+  }
+  
+  public List<ForumTopicRead> markAllForumTopicsRead(User user) {
+    List<ForumTopicRead> result = new ArrayList<>();
+    
+    Date time = new Date();
+    List<ForumTopic> topics = forumTopicDAO.listAll();
+    for (ForumTopic topic : topics) {
+      result.add(forumTopicReadDAO.create(topic, user, time));
+    }
+    
+    return result;
+  }
+  
+  public ForumTopicRead markForumTopicRead(ForumTopic topic, User user) {
+    ForumTopicRead topicRead = forumTopicReadDAO.findByUserAndForumTopic(user, topic);
+    if (topicRead == null) {
+      return forumTopicReadDAO.create(topic, user, new Date());
+    } else {
+      return forumTopicReadDAO.updateTime(topicRead, new Date());
+    }
+  }
+
+  public Long getUnreadPostCount(ForumTopic forumTopic, User user) {
+    ForumTopicRead topicRead = forumTopicReadDAO.findByUserAndForumTopic(user, forumTopic);
+    if (topicRead == null) {
+      return countPostsByTopic(forumTopic);
+    } else {
+      return countPostsByTopicAndCreatedSince(forumTopic, topicRead.getTime());
+    }
   }
   
 	private String createUrlName(Forum forum, String subject) {

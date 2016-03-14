@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -61,12 +63,36 @@ public class ForumBackingBean {
 		}
 		
 		topics = forumController.listTopicsByForum(forum);
-		Collections.sort(topics, new Comparator<ForumTopic>() {
+    topicUnreadCounts = new HashMap<>();
+
+    Collections.sort(topics, new Comparator<ForumTopic>() {
 			@Override
 			public int compare(ForumTopic o1, ForumTopic o2) {
 				return o2.getCreated().compareTo(o1.getCreated());
 			}
 		});
+    
+    boolean hasReadAnyForums = false;
+    User loggedUser = sessionController.getLoggedUser();
+    
+    if (loggedUser != null) {
+      // If user has never been in forum, we mark everything read
+      if (!forumController.hasReadAnyForums(loggedUser)) {
+        forumController.markAllForumTopicsRead(loggedUser);
+      } else {
+        hasReadAnyForums = true;
+      }
+    }
+    
+    for (ForumTopic topic : topics) {
+      Long unreadCount = 0l;
+      
+      if (hasReadAnyForums) {
+        unreadCount = forumController.getUnreadPostCount(topic, loggedUser);
+      }
+      
+      topicUnreadCounts.put(topic.getId(), unreadCount);
+    }
 		
 		return null;
 	}
@@ -78,6 +104,10 @@ public class ForumBackingBean {
 	public int getTopicCount() {
 		return getTopics().size();
 	}
+  
+  public Long getTopicUnreadPostCount(ForumTopic topic) {
+    return topicUnreadCounts.get(topic.getId());
+  }
 	
 	public Date getLastMessageDate() {
 		ForumPost post = forumController.getLastPostByForum(forum);
@@ -156,4 +186,5 @@ public class ForumBackingBean {
 	private String newTopicSubject;
 	private String newTopicContents;
 	private List<ForumTopic> topics;
+  private Map<Long, Long> topicUnreadCounts;
 }

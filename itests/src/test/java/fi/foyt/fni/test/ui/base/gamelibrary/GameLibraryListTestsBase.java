@@ -242,13 +242,13 @@ public class GameLibraryListTestsBase extends AbstractUITest {
     assertEquals(getAppUrl(true) + "/forum/" + commentUrl, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-comments")).getAttribute("href"));
     
     assertShareButtonsHidden(publicationSelector);
-    waitAndClick(publicationSelector + " .gamelibrary-publication-share-button label");
+    scrollWaitAndClick(publicationSelector + " .gamelibrary-publication-share-button label");
     assertShareButtonsVisible(publicationSelector);
-    waitAndClick(publicationSelector + " .gamelibrary-publication-share-button label");
+    scrollWaitAndClick(publicationSelector + " .gamelibrary-publication-share-button label");
     assertShareButtonsHidden(publicationSelector);
-    waitAndClick(publicationSelector + " .gamelibrary-publication-share-button label");
+    scrollWaitAndClick(publicationSelector + " .gamelibrary-publication-share-button label");
     assertShareButtonsVisible(publicationSelector);
-    waitAndClick(publicationSelector + " .gamelibrary-publication-detail-number-of-pages");
+    scrollWaitAndClick(publicationSelector + " .gamelibrary-publication-detail-number-of-pages");
     assertShareButtonsHidden(publicationSelector);
   }
 

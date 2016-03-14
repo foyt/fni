@@ -21,6 +21,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Rule;
 import org.junit.rules.TestWatcher;
@@ -65,7 +66,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     }
     
     protected void finished(Description description) {
-      getWebDriver().quit();
+      try {
+        getWebDriver().quit();
+      } catch (Exception e) {
+      }
     };
     
   };
@@ -91,6 +95,10 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     String browser = getBrowser();
     String version = getBrowserVersion();
     String platform = getPlatform();
+    
+    if (StringUtils.isBlank(version)) {
+      version = "latest";
+    }
     
     DesiredCapabilities capabilities = new DesiredCapabilities();
     
@@ -151,7 +159,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     scrollWaitAndType(".user-login-password", password);
     scrollWaitAndClick(".user-login-button");
     
-    waitForSelectorPresent(".menu-tools-account");
+    waitForSelectorVisible(".menu-tools-account");
 
     assertSelectorPresent(".menu-tools-account");
     assertSelectorNotPresent(".menu-tools-login");
@@ -349,6 +357,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
 
   protected void assertSelectorTextIgnoreCase(String selector, String text) {
     assertSelectorText(selector, text, true);
+  }
+  
+
+  protected void waitAndAssertSelectorText(String selector, String text, boolean ignoreCase, boolean trim) {
+    waitForSelectorPresent(selector);
+    assertSelectorText(selector, text, ignoreCase, trim);
   }
   
   protected void waitForUrlMatches(final String regex) {
@@ -652,7 +666,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void scrollIntoView(String selector) {
-    ((JavascriptExecutor) getWebDriver()).executeScript(String.format("document.querySelectorAll('%s').item(0).scrollIntoView(true);", selector));
+    ((JavascriptExecutor) getWebDriver()).executeScript(String.format("document.querySelectorAll('%s').item(0).scrollIntoView(true);", StringEscapeUtils.escapeEcmaScript(selector)));
   }
   
   protected void executeScript(String script) {
