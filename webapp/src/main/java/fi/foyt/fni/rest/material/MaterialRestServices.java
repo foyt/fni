@@ -22,6 +22,7 @@ import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.BookTemplate;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Image;
+import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
 import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.users.User;
@@ -47,6 +48,28 @@ public class MaterialRestServices {
 
   @Context
   private OAuthAccessToken accessToken;
+  
+  @GET
+  @Path ("/materials/{ID:[0-9]*}")
+  @Security (
+    allowService = true,
+    allowNotLogged = true,
+    scopes = { OAuthScopes.MATERIAL_FIND }
+  )
+  public Response findMaterial(@PathParam ("ID") Long id) {
+    Material material = materialController.findMaterialById(id);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!materialPermissionController.isPublic(sessionController.getLoggedUser(), material)) {
+      if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
+        return Response.status(Status.FORBIDDEN).build();
+      }
+    }
+    
+    return Response.ok(createRestModel(material)).build();
+  }
   
   @GET
   @Path ("/bookTemplates/")
@@ -141,6 +164,16 @@ public class MaterialRestServices {
     return Response.ok(createRestModel(image)).build();
   }
   
+  private List<fi.foyt.fni.rest.material.model.Material> createRestModel(fi.foyt.fni.persistence.model.materials.Material... entities) {
+    List<fi.foyt.fni.rest.material.model.Material> result = new ArrayList<>();
+    
+    for (fi.foyt.fni.persistence.model.materials.Material entity : entities) {
+      result.add(createRestModel(entity));
+    }
+    
+    return result;
+  }
+  
   private List<fi.foyt.fni.rest.material.model.BookTemplate> createRestModel(fi.foyt.fni.persistence.model.materials.BookTemplate... entities) {
     List<fi.foyt.fni.rest.material.model.BookTemplate> result = new ArrayList<>();
     
@@ -173,16 +206,29 @@ public class MaterialRestServices {
     return result;
   }
   
+  private fi.foyt.fni.rest.material.model.Material createRestModel(fi.foyt.fni.persistence.model.materials.Material entity) {
+    Long languageId = entity.getLanguage() != null ? entity.getLanguage().getId() : null;
+    Long creatorId = entity.getCreator() != null ? entity.getCreator().getId() : null;
+    Long modifierId = entity.getModifier() != null ? entity.getModifier().getId() : null;
+    Long parentFolderId = entity.getParentFolder() != null ? entity.getParentFolder().getId() : null;
+    List<String> tags = materialController.getMaterialTags(entity);
+    
+    return new fi.foyt.fni.rest.material.model.Material(entity.getId(), entity.getType(), entity.getUrlName(), 
+        entity.getPath(), entity.getTitle(), entity.getDescription(), entity.getPublicity(), languageId, entity.getModified(), 
+        entity.getCreated(), creatorId, modifierId, parentFolderId, entity.getLicense(), tags);
+  }
+  
   private fi.foyt.fni.rest.material.model.BookTemplate createRestModel(fi.foyt.fni.persistence.model.materials.BookTemplate entity) {
     Long languageId = entity.getLanguage() != null ? entity.getLanguage().getId() : null;
     Long creatorId = entity.getCreator() != null ? entity.getCreator().getId() : null;
     Long modifierId = entity.getModifier() != null ? entity.getModifier().getId() : null;
     Long parentFolderId = entity.getParentFolder() != null ? entity.getParentFolder().getId() : null;
+    List<String> tags = materialController.getMaterialTags(entity);
     
     return new fi.foyt.fni.rest.material.model.BookTemplate(entity.getId(), entity.getType(), entity.getUrlName(), 
         entity.getPath(), entity.getTitle(), entity.getPublicity(), languageId, entity.getModified(), 
         entity.getCreated(), creatorId, modifierId, parentFolderId, entity.getData(), entity.getStyles(), 
-        entity.getFonts(), entity.getIconUrl(), entity.getDescription());
+        entity.getFonts(), entity.getIconUrl(), entity.getDescription(), entity.getLicense(), tags);
   }
   
   private fi.foyt.fni.rest.material.model.Document createRestModel(fi.foyt.fni.persistence.model.materials.Document entity) {
@@ -190,10 +236,11 @@ public class MaterialRestServices {
     Long creatorId = entity.getCreator() != null ? entity.getCreator().getId() : null;
     Long modifierId = entity.getModifier() != null ? entity.getModifier().getId() : null;
     Long parentFolderId = entity.getParentFolder() != null ? entity.getParentFolder().getId() : null;
-    
+    List<String> tags = materialController.getMaterialTags(entity);
+
     return new fi.foyt.fni.rest.material.model.Document(entity.getId(), entity.getType(), entity.getUrlName(), 
-        entity.getPath(), entity.getTitle(), entity.getPublicity(), languageId, entity.getModified(), 
-        entity.getCreated(), creatorId, modifierId, parentFolderId, entity.getData());
+        entity.getPath(), entity.getTitle(), entity.getDescription(), entity.getPublicity(), languageId, entity.getModified(), 
+        entity.getCreated(), creatorId, modifierId, parentFolderId, entity.getData(), entity.getLicense(), tags);
   }
   
   private fi.foyt.fni.rest.material.model.Image createRestModel(fi.foyt.fni.persistence.model.materials.Image entity) {
@@ -201,9 +248,11 @@ public class MaterialRestServices {
     Long creatorId = entity.getCreator() != null ? entity.getCreator().getId() : null;
     Long modifierId = entity.getModifier() != null ? entity.getModifier().getId() : null;
     Long parentFolderId = entity.getParentFolder() != null ? entity.getParentFolder().getId() : null;
+    List<String> tags = materialController.getMaterialTags(entity);
     
     return new fi.foyt.fni.rest.material.model.Image(entity.getId(), entity.getType(), entity.getUrlName(), entity.getPath(), 
-        entity.getTitle(), entity.getPublicity(), languageId, entity.getModified(), entity.getCreated(), creatorId, modifierId, parentFolderId);
+        entity.getTitle(), entity.getDescription(), entity.getPublicity(), languageId, entity.getModified(), entity.getCreated(), 
+        creatorId, modifierId, parentFolderId, entity.getLicense(), tags);
   }
-
+  
 }
