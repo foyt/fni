@@ -26,6 +26,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.queryParser.ParseException;
 
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.i18n.ExternalLocales;
@@ -39,6 +40,7 @@ import fi.foyt.fni.rest.illusion.OAuthScopes;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
+import fi.foyt.fni.utils.search.SearchResult;
 
 /**
  * User REST services
@@ -160,13 +162,10 @@ public class UserRestServices {
   @GET
   @Security (
     allowService = true,
+    allowNotLogged = false,
     scopes = { OAuthScopes.USERS_LIST }
   )
-  public Response listUsers(@QueryParam ("email") String email) {
-    if (StringUtils.isBlank(email)) {
-      return Response.status(Status.NOT_IMPLEMENTED).entity("listing all users without a filter is not supported yet").build();
-    }
-    
+  public Response listUsers(@QueryParam ("email") String email, @QueryParam ("search") String search, @QueryParam ("maxResults") @DefaultValue ("10") Integer maxResults) {
     List<User> result = new ArrayList<>();
     
     if (StringUtils.isNotBlank(email)) {
@@ -174,10 +173,18 @@ public class UserRestServices {
       if (user != null) {
         result.add(user);
       }
-    }
-    
-    if (result.isEmpty()) {
-      return Response.status(Status.NO_CONTENT).build();
+    } else if (StringUtils.isNotBlank(search)) {
+      try {
+        List<SearchResult<User>> searchResults = userController.searchUsers(search, maxResults);
+        for (SearchResult<User> searchResult : searchResults) {
+          result.add(searchResult.getEntity());
+        }
+      } catch (ParseException e) {
+        logger.log(Level.SEVERE, "Failed to parse search string", e);
+        return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+      }
+    } else {
+      return Response.status(Status.NOT_IMPLEMENTED).entity("Listing all users is not implemented").build();
     }
     
     return Response.ok(createRestModel(result.toArray(new User[0]))).build();
