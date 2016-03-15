@@ -19,16 +19,19 @@ import javax.ws.rs.core.Response.Status;
 
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
+import fi.foyt.fni.persistence.model.common.Tag;
 import fi.foyt.fni.persistence.model.materials.BookTemplate;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
 import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.rest.Security;
 import fi.foyt.fni.rest.illusion.OAuthScopes;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.system.TagController;
 
 @Path("/material")
 @Produces(MediaType.APPLICATION_JSON)
@@ -45,6 +48,9 @@ public class MaterialRestServices {
   
   @Inject
   private MaterialController materialController;
+  
+  @Inject
+  private TagController tagController;
 
   @Context
   private OAuthAccessToken accessToken;
@@ -54,7 +60,7 @@ public class MaterialRestServices {
   @Security (
     allowService = true,
     allowNotLogged = true,
-    scopes = { OAuthScopes.MATERIAL_FIND }
+    scopes = { OAuthScopes.MATERIAL_FIND_MATERIAL }
   )
   public Response findMaterial(@PathParam ("ID") Long id) {
     Material material = materialController.findMaterialById(id);
@@ -163,7 +169,28 @@ public class MaterialRestServices {
     
     return Response.ok(createRestModel(image)).build();
   }
+
+  @GET
+  @Path ("/tags/")
+  @Security (
+    allowService = true,
+    allowNotLogged = true,
+    scopes = { OAuthScopes.MATERIAL_LIST_TAGS }
+  )
+  public Response listTags() {
+    return Response.ok(createRestModel(tagController.listAllTags().toArray(new fi.foyt.fni.persistence.model.common.Tag[0]))).build();
+  }
   
+  private List<fi.foyt.fni.rest.material.model.Tag> createRestModel(fi.foyt.fni.persistence.model.common.Tag... entities) {
+    List<fi.foyt.fni.rest.material.model.Tag> result = new ArrayList<>();
+    
+    for (fi.foyt.fni.persistence.model.common.Tag entity : entities) {
+      result.add(createRestModel(entity));
+    }
+    
+    return result;
+  }
+
   private List<fi.foyt.fni.rest.material.model.Material> createRestModel(fi.foyt.fni.persistence.model.materials.Material... entities) {
     List<fi.foyt.fni.rest.material.model.Material> result = new ArrayList<>();
     
@@ -254,5 +281,8 @@ public class MaterialRestServices {
         entity.getTitle(), entity.getDescription(), entity.getPublicity(), languageId, entity.getModified(), entity.getCreated(), 
         creatorId, modifierId, parentFolderId, entity.getLicense(), tags);
   }
-  
+
+  private fi.foyt.fni.rest.material.model.Tag createRestModel(fi.foyt.fni.persistence.model.common.Tag entity) {
+    return new fi.foyt.fni.rest.material.model.Tag(entity.getId(), entity.getText());
+  }
 }
