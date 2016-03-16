@@ -19,12 +19,12 @@ import javax.ws.rs.core.Response.Status;
 
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.persistence.model.common.Tag;
+import fi.foyt.fni.materials.MaterialUserController;
 import fi.foyt.fni.persistence.model.materials.BookTemplate;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.Material;
-import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
+import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
 import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.users.User;
@@ -48,6 +48,9 @@ public class MaterialRestServices {
   
   @Inject
   private MaterialController materialController;
+
+  @Inject
+  private MaterialUserController materialUserController;
   
   @Inject
   private TagController tagController;
@@ -75,6 +78,28 @@ public class MaterialRestServices {
     }
     
     return Response.ok(createRestModel(material)).build();
+  }
+  
+  @GET
+  @Path ("/materials/{ID:[0-9]*}/users")
+  @Security (
+    allowService = true,
+    allowNotLogged = true,
+    scopes = { OAuthScopes.MATERIAL_LIST_USERS }
+  )
+  public Response listMaterialUsers(@PathParam ("ID") Long id) {
+    Material material = materialController.findMaterialById(id);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!materialPermissionController.isPublic(sessionController.getLoggedUser(), material)) {
+      if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
+        return Response.status(Status.FORBIDDEN).build();
+      }
+    }
+    
+    return Response.ok(createRestModel(materialUserController.listMaterialUsers(material).toArray(new UserMaterialRole[0]))).build();
   }
   
   @GET
@@ -191,6 +216,7 @@ public class MaterialRestServices {
     return result;
   }
 
+  @SuppressWarnings("unused")
   private List<fi.foyt.fni.rest.material.model.Material> createRestModel(fi.foyt.fni.persistence.model.materials.Material... entities) {
     List<fi.foyt.fni.rest.material.model.Material> result = new ArrayList<>();
     
@@ -227,6 +253,16 @@ public class MaterialRestServices {
     List<fi.foyt.fni.rest.material.model.Image> result = new ArrayList<>();
     
     for (fi.foyt.fni.persistence.model.materials.Image entity : entities) {
+      result.add(createRestModel(entity));
+    }
+    
+    return result;
+  }
+  
+  private List<fi.foyt.fni.rest.material.model.MaterialUser> createRestModel(fi.foyt.fni.persistence.model.materials.UserMaterialRole... entities) {
+    List<fi.foyt.fni.rest.material.model.MaterialUser> result = new ArrayList<>();
+    
+    for (fi.foyt.fni.persistence.model.materials.UserMaterialRole entity : entities) {
       result.add(createRestModel(entity));
     }
     
@@ -284,5 +320,9 @@ public class MaterialRestServices {
 
   private fi.foyt.fni.rest.material.model.Tag createRestModel(fi.foyt.fni.persistence.model.common.Tag entity) {
     return new fi.foyt.fni.rest.material.model.Tag(entity.getId(), entity.getText());
+  }
+  
+  private fi.foyt.fni.rest.material.model.MaterialUser createRestModel(fi.foyt.fni.persistence.model.materials.UserMaterialRole entity) {
+    return new fi.foyt.fni.rest.material.model.MaterialUser(entity.getId(), entity.getUser().getId(), entity.getRole());
   }
 }

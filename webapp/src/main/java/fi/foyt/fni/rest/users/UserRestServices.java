@@ -16,6 +16,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -83,7 +84,7 @@ public class UserRestServices {
   @POST
   @Security (
     allowService = true,
-    scopes = { OAuthScopes.USERS_CREATE }
+    scopes = { OAuthScopes.USERS_USER_CREATE }
   )
   public Response createUser(fi.foyt.fni.rest.users.model.User entity, @QueryParam ("generateCredentials") @DefaultValue ("TRUE") Boolean generateCredentials, @QueryParam ("sendCredentials") @DefaultValue ("TRUE") Boolean sendCredentials, @QueryParam ("password") String password) {
     if (entity.getEmails() == null || entity.getEmails().isEmpty()) {
@@ -163,7 +164,7 @@ public class UserRestServices {
   @Security (
     allowService = true,
     allowNotLogged = false,
-    scopes = { OAuthScopes.USERS_LIST }
+    scopes = { OAuthScopes.USERS_USER_LIST }
   )
   public Response listUsers(@QueryParam ("email") String email, @QueryParam ("search") String search, @QueryParam ("maxResults") @DefaultValue ("10") Integer maxResults) {
     List<User> result = new ArrayList<>();
@@ -191,16 +192,36 @@ public class UserRestServices {
   }
   
   /**
-   * Returns logged user info
+   * Returns user info
    * 
    * @return Response response
    * @responseType fi.foyt.fni.rest.users.model.User
    */
+  @Path("/users/{ID:[0-9]*}")
+  @Security (
+    allowNotLogged = false,
+    allowService = false,
+    scopes = OAuthScopes.USERS_USER_FIND
+  )
+  @GET
+  public Response findUser(@PathParam ("ID") Long id) {
+    User user = userController.findUserById(id);
+    if (user == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (user.getArchived()) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    return Response.ok(createRestModel(user)).build();
+  }
+  
   @Path("/users/me")
   @Security (
     allowNotLogged = false,
     allowService = false,
-    scopes = OAuthScopes.USERS_ACCESS_ME
+    scopes = OAuthScopes.USERS_USER_FIND_ME
   )
   @GET
   public Response getOwnInfo() {
