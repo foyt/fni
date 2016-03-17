@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -172,6 +173,41 @@ public class MaterialRestServices {
     }
     
     return Response.ok(createRestModel(userMaterialRole)).build();
+  }
+
+  @PUT
+  @Path ("/materials/{MATERIALID:[0-9]*}/users/{ID:[0-9]*}")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_UPDATE_USER }
+  )
+  public Response updateMaterialUser(@PathParam ("MATERIALID") Long materialId, @PathParam ("ID") Long id, MaterialUser payload) {
+    UserMaterialRole userMaterialRole = materialUserController.findUserMaterialRoleById(id);
+    if (userMaterialRole == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    Material material = materialController.findMaterialById(materialId);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!material.getId().equals(userMaterialRole.getMaterial().getId())) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!materialPermissionController.isPublic(sessionController.getLoggedUser(), material)) {
+      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+        return Response.status(Status.FORBIDDEN).build();
+      }
+    }
+    
+    if (payload.getRole() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Missing role").build();
+    }
+    
+    return Response.ok(createRestModel(materialUserController.updateUserMaterialRole(userMaterialRole, payload.getRole()))).build();
   }
   
   @GET
