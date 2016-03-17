@@ -7,6 +7,7 @@ import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -208,6 +209,39 @@ public class MaterialRestServices {
     }
     
     return Response.ok(createRestModel(materialUserController.updateUserMaterialRole(userMaterialRole, payload.getRole()))).build();
+  }
+
+  @DELETE
+  @Path ("/materials/{MATERIALID:[0-9]*}/users/{ID:[0-9]*}")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_DELETE_USER }
+  )
+  public Response deleteMaterialUser(@PathParam ("MATERIALID") Long materialId, @PathParam ("ID") Long id) {
+    UserMaterialRole userMaterialRole = materialUserController.findUserMaterialRoleById(id);
+    if (userMaterialRole == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    Material material = materialController.findMaterialById(materialId);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!material.getId().equals(userMaterialRole.getMaterial().getId())) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!materialPermissionController.isPublic(sessionController.getLoggedUser(), material)) {
+      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+        return Response.status(Status.FORBIDDEN).build();
+      }
+    }
+    
+    materialUserController.deleteUserMaterialRole(userMaterialRole);
+    
+    return Response.noContent().build();
   }
   
   @GET
