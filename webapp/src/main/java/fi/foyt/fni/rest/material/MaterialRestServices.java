@@ -8,6 +8,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -30,8 +31,10 @@ import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.rest.Security;
 import fi.foyt.fni.rest.illusion.OAuthScopes;
+import fi.foyt.fni.rest.material.model.MaterialUser;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.TagController;
+import fi.foyt.fni.users.UserController;
 
 @Path("/material")
 @Produces(MediaType.APPLICATION_JSON)
@@ -43,6 +46,9 @@ public class MaterialRestServices {
   @Inject
   private SessionController sessionController;
 
+  @Inject
+  private UserController userController;
+  
   @Inject
   private MaterialPermissionController materialPermissionController;
   
@@ -79,16 +85,51 @@ public class MaterialRestServices {
     
     return Response.ok(createRestModel(material)).build();
   }
+
+  @POST
+  @Path ("/materials/{ID:[0-9]*}/users")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_CREATE_USER }
+  )
+  public Response createMaterialUser(@PathParam ("ID") Long materialId, MaterialUser payload) {
+    Material material = materialController.findMaterialById(materialId);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!materialPermissionController.isPublic(sessionController.getLoggedUser(), material)) {
+      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+        return Response.status(Status.FORBIDDEN).build();
+      }
+    }
+    
+    if (payload.getRole() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Missing role").build();
+    }
+    
+    User user = userController.findUserById(payload.getUserId());
+    if (user == null) {
+      return Response.status(Status.BAD_REQUEST).entity(String.format("Invalid userId %d", payload.getUserId())).build();
+    }
+    
+    if (materialUserController.findUserMaterialRole(user, material) != null) {
+      return Response.status(Status.BAD_REQUEST).entity("User already has existing role in this material").build();
+    }
+    
+    return Response.ok(createRestModel(materialUserController.createUserMaterialRole(user, material, payload.getRole()))).build();
+  }
   
   @GET
   @Path ("/materials/{ID:[0-9]*}/users")
   @Security (
     allowService = true,
-    allowNotLogged = true,
+    allowNotLogged = false,
     scopes = { OAuthScopes.MATERIAL_LIST_USERS }
   )
-  public Response listMaterialUsers(@PathParam ("ID") Long id) {
-    Material material = materialController.findMaterialById(id);
+  public Response listMaterialUsers(@PathParam ("ID") Long materialId) {
+    Material material = materialController.findMaterialById(materialId);
     if (material == null) {
       return Response.status(Status.NOT_FOUND).build();
     }
@@ -100,6 +141,37 @@ public class MaterialRestServices {
     }
     
     return Response.ok(createRestModel(materialUserController.listMaterialUsers(material).toArray(new UserMaterialRole[0]))).build();
+  }
+  
+  @GET
+  @Path ("/materials/{MATERIALID:[0-9]*}/users/{ID:[0-9]*}")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_FIND_USER }
+  )
+  public Response listMaterialUsers(@PathParam ("MATERIALID") Long materialId, @PathParam ("ID") Long id) {
+    UserMaterialRole userMaterialRole = materialUserController.findUserMaterialRoleById(id);
+    if (userMaterialRole == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    Material material = materialController.findMaterialById(materialId);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!material.getId().equals(userMaterialRole.getMaterial().getId())) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!materialPermissionController.isPublic(sessionController.getLoggedUser(), material)) {
+      if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
+        return Response.status(Status.FORBIDDEN).build();
+      }
+    }
+    
+    return Response.ok(createRestModel(userMaterialRole)).build();
   }
   
   @GET
