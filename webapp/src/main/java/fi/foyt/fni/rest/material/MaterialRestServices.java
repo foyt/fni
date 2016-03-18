@@ -2,6 +2,7 @@ package fi.foyt.fni.rest.material;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -23,8 +24,10 @@ import javax.ws.rs.core.Response.Status;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.materials.MaterialUserController;
+import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.BookTemplate;
 import fi.foyt.fni.persistence.model.materials.Document;
+import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
@@ -35,6 +38,7 @@ import fi.foyt.fni.rest.Security;
 import fi.foyt.fni.rest.illusion.OAuthScopes;
 import fi.foyt.fni.rest.material.model.MaterialUser;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.system.TagController;
 import fi.foyt.fni.users.UserController;
 
@@ -48,6 +52,9 @@ public class MaterialRestServices {
   @Inject
   private SessionController sessionController;
 
+  @Inject
+  private SystemSettingsController systemSettingsController;
+  
   @Inject
   private UserController userController;
   
@@ -88,6 +95,61 @@ public class MaterialRestServices {
     return Response.ok(createRestModel(material)).build();
   }
 
+  @PUT
+  @Path ("/materials/{ID:[0-9]*}")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_UPDATE_MATERIAL }
+  )
+  public Response updateMaterial(@PathParam ("ID") Long id, fi.foyt.fni.rest.material.model.Material payload) {
+    Material material = materialController.findMaterialById(id);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    User loggedUser = sessionController.getLoggedUser();
+    
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    Language language = null;
+    if (payload.getLanguageId() != null) {
+      language = systemSettingsController.findLanguageById(payload.getLanguageId());
+      if (language == null) {
+        return Response.status(Status.BAD_REQUEST).entity(String.format("Invalid language %d", payload.getLanguageId())).build();
+      }
+    }
+    
+    materialController.updateMaterialTitle(material, payload.getTitle(), loggedUser);
+    materialController.updateMaterialDescription(material, payload.getDescription());
+    materialController.updateMaterialLicense(material, payload.getLicense());
+    materialController.setMaterialTags(material, payload.getTags());
+    materialController.updateMaterialPublicity(material, payload.getPublicity(), loggedUser);
+    materialController.updateMaterialLanguage(material, language);
+    
+    Long parentFolderId = material.getParentFolder() != null ? material.getParentFolder().getId() : null;
+    
+    if (!Objects.equals(parentFolderId, payload.getParentFolderId())) {
+      Folder parentFolder = null;
+      if (payload.getParentFolderId() != null) {
+        parentFolder = materialController.findFolderById(payload.getParentFolderId());
+        if (parentFolder == null) {
+          return Response.status(Status.BAD_REQUEST).entity(String.format("Invalid parentFolder %d", payload.getParentFolderId())).build();
+        } else {
+          if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
+            return Response.status(Status.FORBIDDEN).build();
+          }
+        }
+      }
+      
+      materialController.moveMaterial(material, parentFolder, loggedUser);
+    }
+    
+    return Response.ok(createRestModel(material)).build();
+  }
+  
   @POST
   @Path ("/materials/{ID:[0-9]*}/users")
   @Security (
