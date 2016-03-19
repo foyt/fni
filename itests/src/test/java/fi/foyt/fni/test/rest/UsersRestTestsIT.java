@@ -149,6 +149,22 @@ public class UsersRestTestsIT extends AbstractRestTest {
   
   @Test
   @SqlSets ({"basic-users", "service-client"})
+  public void testFindUserById() throws Exception {
+    givenJson(createServiceToken())
+      .get("/users/users/2")
+      .then()
+      .statusCode(200)
+      .body("id", is(2))
+      .body("firstName", is("Test"))
+      .body("lastName", is("User"))
+      .body("nickname", is((String) null))
+      .body("locale", is("en_US"))
+      .body("emails.size()", is(1))
+      .body("emails[0]", is("user@foyt.fi"));
+  }
+  
+  @Test
+  @SqlSets ({"basic-users", "service-client"})
   public void testFindUserByEmail() throws Exception {
     givenJson(createServiceToken())
       .queryParam("email", "user@foyt.fi")

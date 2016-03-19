@@ -200,7 +200,7 @@ public class UserRestServices {
   @Path("/users/{ID:[0-9]*}")
   @Security (
     allowNotLogged = false,
-    allowService = false,
+    allowService = true,
     scopes = OAuthScopes.USERS_USER_FIND
   )
   @GET
