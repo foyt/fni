@@ -58,10 +58,9 @@
     <h4>Collaborators</h4>
     <div class="forge-share-material-collaborators">
     
-      {#collaborators}
-        <div class="forge-share-material-collaborator">
-          <label>{name}</label>
-          <input type="hidden" value="{id}" name="collaborator"/>
+      {#materialUsers}
+        <div class="forge-share-material-collaborator" data-user-id="{userId}" data-original-id="{id}" data-original-role="{role}">
+          <label>{displayName}</label>
           <select name="role">
             {@if cond="'{role}' == 'MAY_EDIT'"}
               <option value="MAY_EDIT" selected="selected">May Edit</option>
@@ -76,7 +75,7 @@
             <option value="NONE" >None</option>
           </select>
         </div>
-      {/collaborators}
+      {/materialUsers}
     </div>
     
     <h4>Add a collaborator</h4>

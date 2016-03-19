@@ -217,108 +217,11 @@
       }
     });
   });
-
+  
   $(document).on('click', '.forge-material-action-share a', function (event) {
-    var materialId = $(this).data('material-id');
-    var actionForm = $('#forge-action-form-container form');
-    var prefix = actionForm.attr('name');
-    
-    $.ajax({
-      url : CONTEXTPATH + "/forge/materialShare/",
-      data: {
-      	materialId: materialId 
-      },
-      success : function(data) {
-        dust.render("forge-share-material", data, function(err, html) {
-  		    if (!err) {
-  		      var dialog = $(html);
-     		    var createRoleSelect = function () {
-  		        var roles = {
-  		          'MAY_EDIT': $(dialog).data('role-may-edit'),
-  		          'MAY_VIEW': $(dialog).data('role-may-view'),
-  		          'NONE': $(dialog).data('role-none')
-  		        };
-  		        	
-  		        var select = $('<select name="role">');
-  		        $.each(roles, function (role, text) {
-  		          select.append($('<option>').attr('value', role).text(text));
-  		        });
-  		        return select;
-  		      };
-  		        
-    		    dialog.dialog({
-  		        modal: true,
-  		        width: 600,
-  		        buttons: [{
-  		          'text': dialog.data('save-button'),
-  		          'click': function(event) { 
-  		            var publicity = $(this).find('input[name="publicity"]:checked').val();
-  		            var collaborators = new Object();
-  		            var tagsVal = $(this).find('.forge-share-material-tags input').val();
-  		            var tags = tagsVal ? tagsVal.split(',') : [];
-  		            var description = $(this).find('.forge-share-material-description textarea').val();
-  		            var license = $(this).find('input[name="license"]').val();
-                  
-  		            $(this).find('.forge-share-material-collaborator').each(function(index, element) {
-  		              collaborators[$(element).find('input[name="collaborator"]').val()] = $(element).find('select[name="role"]').val();
-  		            });
-
-                  $('input[name="' + prefix + ':material-id' + '"]').val(materialId);
-                  $('input[name="' + prefix + ':material-share-publicity' + '"]').val(publicity);
-                  $('input[name="' + prefix + ':material-share-tags' + '"]').val(JSON.stringify(tags));
-                  $('input[name="' + prefix + ':material-share-description' + '"]').val(description);
-                  $('input[name="' + prefix + ':material-share-license' + '"]').val(license);
-                  $('input[name="' + prefix + ':material-share-collaborators' + '"]').val(JSON.stringify(collaborators));
-  	              $('input[name="' + prefix + ':material-share-save' + '"]').click();
-  		          }
-  		        }, {
-  		          'text': dialog.data('cancel-button'),
-  		          'click': function(event) { 
-  		            $(this).dialog("close");
-  		          }
-  	          }]
-            });
-    		    
-    		    dialog.find('input[type="radio"]').change(function (event) {
-    		      if ($(this).val() == 'PRIVATE') {
-                $(dialog).find('.forge-share-material-url input[type="text"]').attr('disabled', 'disabled');
-    		      } else {
-                $(dialog).find('.forge-share-material-url input[type="text"]').attr('disabled', null);
-    		      }
-    		    });
-    		    
-    		    dialog.find('.forge-share-material-invite input').autocomplete({
-    		      source: data.invitables,
-  		        select: function( event, ui ) {
-                var collaborators = $(dialog).find('.forge-share-material-collaborators');
-                var id = ui.item.value;
-                if (collaborators.find('input[value="' + id + '"]').length == 0) {
-                  collaborators.append(
-                    $('<div class="forge-share-material-collaborator">')
-                      .append($('<input name="collaborator" type="hidden">').val(id))
-                      .append($('<label>').text(ui.item.label))
-                      .append(createRoleSelect())); 
-                }
-              },
-              close: function( event, ui ) {
-                $(this).val('');
-              }
-    		    });
-
-            $(dialog).find('.forge-share-material-tags input').tagsInput({
-              'autocomplete_url': 'about:blank',
-              'autocomplete': {
-                source: data.allTags
-              },
-              width: '100%',
-              height: '80px'
-            });
-          } else {
-            // TODO: Proper error handling...
-            alert(err);
-          }
-        });
-      }
+    var materialId = $(this).attr('data-material-id');
+    $('<div>').materialShareDialog({
+      materialId: materialId
     });
   });
   
