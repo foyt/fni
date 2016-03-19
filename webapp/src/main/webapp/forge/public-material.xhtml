@@ -9,12 +9,18 @@
   <ui:define name="page-title">#{locales['forge.index.pageTitle']}</ui:define>
   
   <ui:define name="view-stylesheets">
+    <link rel="StyleSheet" href="//static.forgeandillusion.net/libs/jquery-ui/1.11.4/themes/smoothness/jquery-ui.min.css"/>
+    <link rel="StyleSheet" href="//static.forgeandillusion.net/libs/jquery-tagsinput/1.3.3/jquery.tagsinput.css"/>
     <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
     <h:outputStylesheet library="novus" name="css/forge-public-material.css"/>
   </ui:define>
   
   <ui:define name="view-scripts">
-    <h:outputScript name="scripts/gui/forge-public-material.js"/>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/jquery.rest/1.0.2/jquery.rest.min.js"></script>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/async/1.5.2/async.min.js"></script>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/jquery-tagsinput/1.3.3/jquery.tagsinput.min.js"/>
+    <script type="text/javascript" src="/scripts/gui/material-share-dialog.js"></script>
+    <script type="text/javascript" src="/scripts/gui/forge-public-material.js"></script>
   </ui:define>
 
   <ui:define name="grid-content">
@@ -100,6 +106,7 @@
                 <a jsf:value="#{forgePublicMaterialBackingBean.material.downloadLink}" jsf:rendered="#{forgePublicMaterialBackingBean.material.printable}">#{locales['forge.publicMaterial.downloadHtml']}</a>
                 <a target="_blank" jsf:value="#{forgePublicMaterialBackingBean.material.editPath}" jsf:rendered="#{forgePublicMaterialBackingBean.mayEdit}">#{locales['forge.publicMaterial.edit']}</a>
                 <a target="_blank" jsf:value="#{forgePublicMaterialBackingBean.material.folderPath}" jsf:rendered="#{forgePublicMaterialBackingBean.mayEdit}">#{locales['forge.publicMaterial.openFolder']}</a>
+                <a class="material-share" href="javascript:void(null)" jsf:rendered="#{forgePublicMaterialBackingBean.mayEdit}">#{locales['forge.publicMaterial.materialShare']}</a>
               </div>
             </div>   
           </div>
@@ -122,6 +129,8 @@
           
         </div>
       </div>
+      
+      <input type="hidden" class="material-id" value="#{forgePublicMaterialBackingBean.material.id}"/>
     </div>
     
   </ui:define>    
