@@ -55,6 +55,16 @@ public abstract class AbstractTest {
       .statusCode(200);
   }
 
+  
+  protected void reindexHibernateSearch() {
+    given()
+      .baseUri(getAppUrl() + "/rest")
+      .header("Authorization", "Bearer systemtoken")
+      .get("/system/search/reindex")
+      .then()
+      .statusCode(200);
+  }
+
   @Before
   public void sqlSetup() throws Exception {
     List<String> sqlFiles = new ArrayList<>();
@@ -123,7 +133,7 @@ public abstract class AbstractTest {
       executeSqlFile(sqlFile);
     }
   }
-
+  
   private Method getTestMethod() throws NoSuchMethodException {
     String methodName = testName.getMethodName();
     int parameterizedIndex = methodName.indexOf("[");

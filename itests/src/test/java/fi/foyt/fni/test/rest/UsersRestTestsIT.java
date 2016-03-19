@@ -137,6 +137,18 @@ public class UsersRestTestsIT extends AbstractRestTest {
   
   @Test
   @SqlSets ({"basic-users", "service-client"})
+  public void testSearchUsers() throws Exception {
+    reindexHibernateSearch();
+    givenJson(createServiceToken())
+      .queryParam("search", "test")
+      .get("/users/users")
+      .then()
+      .statusCode(200)
+      .body("id.size()", is(5));
+  }
+  
+  @Test
+  @SqlSets ({"basic-users", "service-client"})
   public void testFindUserByEmail() throws Exception {
     givenJson(createServiceToken())
       .queryParam("email", "user@foyt.fi")
