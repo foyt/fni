@@ -131,7 +131,8 @@ public class UsersRestTestsIT extends AbstractRestTest {
       .queryParam("email", "noone@foyt.fi")
       .get("/users/users")
       .then()
-      .statusCode(204);
+      .statusCode(200)
+      .body("id.size()", is(0));
   }
   
   @Test
