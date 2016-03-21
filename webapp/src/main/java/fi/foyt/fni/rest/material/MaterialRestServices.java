@@ -86,9 +86,22 @@ public class MaterialRestServices {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    if (!materialPermissionController.isPublic(sessionController.getLoggedUser(), material)) {
-      if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
-        return Response.status(Status.FORBIDDEN).build();
+    User user = null;
+    if (!sessionController.isLoggedIn()) {
+      if ((accessToken != null) && (accessToken.getClient().getType() == OAuthClientType.SERVICE)) {
+        user = accessToken.getClient().getServiceUser();
+      }
+    } else {
+      user = sessionController.getLoggedUser();
+    }
+    
+    if (!materialPermissionController.isPublic(user, material)) {
+      if (!materialPermissionController.hasAccessPermission(user, material)) {
+        if (user == null) {
+          return Response.status(Status.UNAUTHORIZED).build();
+        } else {
+          return Response.status(Status.FORBIDDEN).build();
+        }
       }
     }
     
@@ -163,10 +176,8 @@ public class MaterialRestServices {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    if (!materialPermissionController.isPublic(sessionController.getLoggedUser(), material)) {
-      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
-        return Response.status(Status.FORBIDDEN).build();
-      }
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
     }
     
     if (payload.getRole() == null) {
@@ -198,10 +209,8 @@ public class MaterialRestServices {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    if (!materialPermissionController.isPublic(sessionController.getLoggedUser(), material)) {
-      if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
-        return Response.status(Status.FORBIDDEN).build();
-      }
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
     }
     
     return Response.ok(createRestModel(materialUserController.listMaterialUsers(material).toArray(new UserMaterialRole[0]))).build();
@@ -229,10 +238,8 @@ public class MaterialRestServices {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    if (!materialPermissionController.isPublic(sessionController.getLoggedUser(), material)) {
-      if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), material)) {
-        return Response.status(Status.FORBIDDEN).build();
-      }
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
     }
     
     return Response.ok(createRestModel(userMaterialRole)).build();
@@ -260,10 +267,8 @@ public class MaterialRestServices {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    if (!materialPermissionController.isPublic(sessionController.getLoggedUser(), material)) {
-      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
-        return Response.status(Status.FORBIDDEN).build();
-      }
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
     }
     
     if (payload.getRole() == null) {
@@ -294,11 +299,9 @@ public class MaterialRestServices {
     if (!material.getId().equals(userMaterialRole.getMaterial().getId())) {
       return Response.status(Status.NOT_FOUND).build();
     }
-    
-    if (!materialPermissionController.isPublic(sessionController.getLoggedUser(), material)) {
-      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
-        return Response.status(Status.FORBIDDEN).build();
-      }
+
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
     }
     
     materialUserController.deleteUserMaterialRole(userMaterialRole);
