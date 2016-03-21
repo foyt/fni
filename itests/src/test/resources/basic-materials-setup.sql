@@ -29,25 +29,25 @@ values
 insert into Folder (id) values (18);
 
 insert into   
-  Material (id, created, modified, publicity, title, type, urlName, creator_id, modifier_id, parentFolder_id)
+  Material (id, created, modified, publicity, title, type, urlName, creator_id, modifier_id, parentFolder_id, license, description)
 values 
-  (3, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Document', 'DOCUMENT', 'document', 2, 2, null),
-  (4, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Document in Folder', 'DOCUMENT', 'document_in_folder', 2, 2, 1),
-  (5, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Document in Subfolder', 'DOCUMENT', 'document_in_subfolder', 2, 2, 2),
-  (6, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Image', 'IMAGE', 'image', 2, 2, null),
-  (7, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Image in Folder', 'IMAGE', 'image_in_folder', 2, 2, 1),
-  (8, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Image in Subfolder', 'IMAGE', 'image_in_subfolder', 2, 2, 2),
-  (9, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Vector Image', 'VECTOR_IMAGE', 'vectorimage', 2, 2, null),
-  (10, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Vector Image in Folder', 'VECTOR_IMAGE', 'vectorimage_in_folder', 2, 2, 1),
-  (11, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Vector Image in Subfolder', 'VECTOR_IMAGE', 'vectorimage_in_subfolder', 2, 2, 2),
-  (12, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc', 'GOOGLE_DOCUMENT', 'googledoc', 2, 2, null),
-  (13, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc in Folder', 'GOOGLE_DOCUMENT', 'googledoc_in_folder', 2, 2, 1),
-  (14, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc in Subfolder', 'GOOGLE_DOCUMENT', 'googledoc_in_subfolder', 2, 2, 2),
-  (15, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.', 'DOCUMENT', 'beowulf_pohti_zuluja_ja_angstrom-yksikkoa_katsellessaan_q-stone-_ja_cmx-yhtyeita_videolta', 2, 2, null),
-  (19, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Document', 'DOCUMENT', 'document-hyphen', 2, 2, null),
-  (20, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Image', 'IMAGE', 'image-hyphen', 2, 2, null),
-  (21, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Vector Image', 'VECTOR_IMAGE', 'vectorimage-hyphen', 2, 2, null),
-  (22, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc', 'GOOGLE_DOCUMENT', 'googledoc-hyphen', 2, 2, null);
+  (3, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Document', 'DOCUMENT', 'document', 2, 2, null, 'http://creativecommons.org/licenses/by-sa/4.0/', 'Document material for automated tests'),
+  (4, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Document in Folder', 'DOCUMENT', 'document_in_folder', 2, 2, 1, null, null),
+  (5, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Document in Subfolder', 'DOCUMENT', 'document_in_subfolder', 2, 2, 2, null, null),
+  (6, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Image', 'IMAGE', 'image', 2, 2, null, null, null),
+  (7, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Image in Folder', 'IMAGE', 'image_in_folder', 2, 2, 1, null, null),
+  (8, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Image in Subfolder', 'IMAGE', 'image_in_subfolder', 2, 2, 2, null, null),
+  (9, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Vector Image', 'VECTOR_IMAGE', 'vectorimage', 2, 2, null, null, null),
+  (10, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Vector Image in Folder', 'VECTOR_IMAGE', 'vectorimage_in_folder', 2, 2, 1, null, null),
+  (11, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Vector Image in Subfolder', 'VECTOR_IMAGE', 'vectorimage_in_subfolder', 2, 2, 2, null, null),
+  (12, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc', 'GOOGLE_DOCUMENT', 'googledoc', 2, 2, null, null, null),
+  (13, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc in Folder', 'GOOGLE_DOCUMENT', 'googledoc_in_folder', 2, 2, 1, null, null),
+  (14, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc in Subfolder', 'GOOGLE_DOCUMENT', 'googledoc_in_subfolder', 2, 2, 2, null, null),
+  (15, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Beowulf pohti zuluja ja ångström-yksikköä katsellessaan Q-stone- ja CMX-yhtyeitä videolta.', 'DOCUMENT', 'beowulf_pohti_zuluja_ja_angstrom-yksikkoa_katsellessaan_q-stone-_ja_cmx-yhtyeita_videolta', 2, 2, null, null, null),
+  (19, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Document', 'DOCUMENT', 'document-hyphen', 2, 2, null, null, null),
+  (20, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Image', 'IMAGE', 'image-hyphen', 2, 2, null, null, null),
+  (21, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Vector Image', 'VECTOR_IMAGE', 'vectorimage-hyphen', 2, 2, null, null, null),
+  (22, PARSEDATETIME('1 1 2010', 'd M yyyy'), PARSEDATETIME('1 1 2010', 'd M yyyy'), 'PRIVATE', 'Google Doc', 'GOOGLE_DOCUMENT', 'googledoc-hyphen', 2, 2, null, null, null);
   
 insert into 
   Document (id, data)
