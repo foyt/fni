@@ -32,5 +32,16 @@ public class MaterialsUserRestTestsIT extends AbstractRestTest {
       .body("userId[1]", is(4))
       .body("role[1]", is("MAY_EDIT"));
   }
-  
+
+  @Test
+  @SqlSets({"basic-users", "user-client", "basic-materials"})
+  public void testFindMaterialUser() throws OAuthSystemException, OAuthProblemException {
+    givenJson("access-token")
+      .get("/material/materials/{ID}/users/{ID}", 3, 3)
+      .then()
+      .statusCode(200)
+      .body("id", is(3))
+      .body("userId", is(3))
+      .body("role", is("MAY_VIEW"));
+  }
 }
