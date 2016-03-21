@@ -1,21 +1,16 @@
 package fi.foyt.fni.test.rest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.junit.Test;
 
-import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
-import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.rest.material.model.Material;
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
