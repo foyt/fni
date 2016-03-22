@@ -60,13 +60,16 @@
     
     <div class="flex-row forge-public-material">
       <div class="flex-cell-full forge-public-material-cell">
+        
+      
         <div class="flex-row">
           <div class="flex-cell-12 flex-cell-first index-box">
             <div class="flex-row">
               <div class="flex-cell-full no-margin-top forge-public-material-title">
                 <h2>#{forgePublicMaterialBackingBean.material.title}</h2>
               </div>
-            </div>          
+            </div>     
+                 
             <div class="flex-row">
               <div class="flex-cell-full forge-public-material-container no-margin-bottom">
                 <ui:fragment rendered="#{forgePublicMaterialBackingBean.html ne null}">
@@ -81,24 +84,75 @@
                   <iframe src="#{forgePublicMaterialBackingBean.embedUrl}#view=fit"/>
                 </ui:fragment>
               </div>
-            </div>
+            </div>  
             
             <div class="flex-row">
-              <div class="flex-cell-10 flex-cell-first tags no-margin-bottom">
-                <a jsf:outcome="/forge/public-materials.jsf?userId=#{forgePublicMaterialBackingBean.material.creatorId}" class="creator-tag">#{forgePublicMaterialBackingBean.material.creatorName}</a>
-                <ui:repeat var="tag" value="#{forgePublicMaterialBackingBean.material.tags}">
-                  <a jsf:outcome="/forge/public-materials.jsf?tags=#{tag}" class="tag">#{tag}</a>
-                </ui:repeat>
+              <div class="flex-cell-full details-container">
+                <div class="flex-row">
+                  <div class="flex-cell-full">
+                    <h4>#{locales['forge.publicMaterial.detailsLabel']}</h4>
+                  </div>
+                </div>
+                
+                <div class="flex-row flex-align-items-center">
+                  <div class="flex-cell-4 flex-cell-first">
+                    <label>#{locales['forge.publicMaterial.categoriesLabel']}</label>
+                  </div>
+                  <div class="flex-cell-12 flex-cell-last tags">
+                    <a jsf:outcome="/forge/public-materials.jsf?userId=#{forgePublicMaterialBackingBean.material.creatorId}" class="creator-tag">#{forgePublicMaterialBackingBean.material.creatorName}</a>
+                    <ui:repeat var="tag" value="#{forgePublicMaterialBackingBean.material.tags}">
+                      <a jsf:outcome="/forge/public-materials.jsf?tags=#{tag}" class="tag">#{tag}</a>
+                    </ui:repeat>
+                  </div>
+                </div>
+                
+                <ui:fragment rendered="#{forgePublicMaterialBackingBean.material.creativeCommonsIconUrl eq null}">
+                  <div class="flex-row flex-align-items-center">
+                    <div class="flex-cell-4 flex-cell-first">
+                      <label>#{locales['forge.publicMaterial.licenseLabel']}</label>
+                    </div>
+                    <div class="flex-cell-12 flex-cell-last license">
+                      <a target="_blank" class="license-link" href="#{forgePublicMaterialBackingBean.material.license}">#{forgePublicMaterialBackingBean.material.license}</a>
+                    </div>
+                  </div>
+                </ui:fragment>
+                
+                <ui:fragment rendered="#{forgePublicMaterialBackingBean.material.creativeCommonsIconUrl ne null}">
+                  <div class="flex-row flex-align-items-center">
+                    <div class="flex-cell-4 flex-cell-first">
+                      <label>#{locales['forge.publicMaterial.licenseLabel']}</label>
+                    </div>
+                    <div class="flex-cell-12 flex-cell-last license">
+                      <a target="_blank" href="#{forgePublicMaterialBackingBean.material.license}">
+                        <img src="#{forgePublicMaterialBackingBean.material.creativeCommonsIconUrl}" />
+                      </a>
+                    </div>
+                  </div>
+                </ui:fragment>
+                
+                <div class="flex-row flex-align-items-center">
+                  <div class="flex-cell-4 flex-cell-first">
+                    <label>#{locales['forge.publicMaterial.modificationsLabel']}</label>
+                  </div>
+                  <div class="flex-cell-12 flex-cell-last created-modified">
+                    <h:outputFormat value="#{locales['forge.publicMaterial.createdModified']}">
+                      <f:param value="#{forgePublicMaterialBackingBean.material.created}"/>
+                      <f:param value="#{forgePublicMaterialBackingBean.material.modified}"/>
+                    </h:outputFormat>
+                  </div>
+                </div>
+
+                <div class="flex-row">
+                  <div class="flex-cell-full">
+                    <label>#{locales['forge.publicMaterial.descriptionLabel']}</label>
+                  </div>
+                  <div class="flex-cell-full description">
+                    <p>#{forgePublicMaterialBackingBean.material.description}</p>
+                  </div>
+                </div>
               </div>
-              <div class="flex-cell-6 flex-cell-last flex-right no-margin-bottom">
-                <span class="createdModified">
-                  <h:outputFormat value="#{locales['forge.publicMaterial.createdModified']}">
-                    <f:param value="#{forgePublicMaterialBackingBean.material.created}"/>
-                    <f:param value="#{forgePublicMaterialBackingBean.material.modified}"/>
-                  </h:outputFormat>
-                </span>
-              </div>
-            </div>  
+            </div>
+            
             <div class="flex-row">
               <div class="flex-cell-full actions">
                 <a jsf:value="#{forgePublicMaterialBackingBean.material.downloadLink}" jsf:rendered="#{!forgePublicMaterialBackingBean.material.printable}">#{locales['forge.publicMaterial.downloadMaterial']}</a>
@@ -108,7 +162,7 @@
                 <a target="_blank" jsf:value="#{forgePublicMaterialBackingBean.material.folderPath}" jsf:rendered="#{forgePublicMaterialBackingBean.mayEdit}">#{locales['forge.publicMaterial.openFolder']}</a>
                 <a class="material-share" href="javascript:void(null)" jsf:rendered="#{forgePublicMaterialBackingBean.mayEdit}">#{locales['forge.publicMaterial.materialShare']}</a>
               </div>
-            </div>   
+            </div> 
           </div>
         
           <div class="flex-cell-4 flex-cell-last index-box categories">
