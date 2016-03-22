@@ -22,14 +22,16 @@
       <label>Julkinen linkillä</label>
     </div>
 
-    <div class="forge-share-material-publicity-field">
-      {@if cond="'{publicity}'=='PUBLIC'"}
-        <input type="radio" name="publicity" value="PUBLIC" checked="checked"/>
-      {:else}
-        <input type="radio" name="publicity" value="PUBLIC"/>
-      {/if}
-      <label>Julkinen</label>
-    </div>
+    {@if cond="{publishable}"}
+      <div class="forge-share-material-publicity-field">
+        {@if cond="'{publicity}'=='PUBLIC'"}
+          <input type="radio" name="publicity" value="PUBLIC" checked="checked"/>
+        {:else}
+          <input type="radio" name="publicity" value="PUBLIC"/>
+        {/if}
+        <label>Julkinen</label>
+      </div>
+    {/if}
     
     <h4>Julkinen URL</h4>
     <div class="forge-share-material-url">

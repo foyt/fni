@@ -4,7 +4,8 @@
   $.widget("custom.materialShareDialog", {
     options : {
       materialId: null,
-      illusionEventId: null
+      illusionEventId: null,
+      publishableTypes: [ 'DOCUMENT', 'IMAGE', 'PDF', 'FILE', 'BINARY', 'VECTOR_IMAGE', 'GOOGLE_DOCUMENT', 'DROPBOX_FILE' ]
     },
     
     _createRemoveMaterialUser: function (id) {
@@ -191,7 +192,7 @@
     },
     
     _load: function (callback) {
-      async.parallel([this._createMaterialLoad(), this._createTagsLoad(), this._createUsersLoad()], function (err, results) {
+      async.parallel([this._createMaterialLoad(), this._createTagsLoad(), this._createUsersLoad()], $.proxy(function (err, results) {
         if (err) {
           $('.notifications').notifications('notification', 'error', err);
         } else {
@@ -207,7 +208,8 @@
             publicUrl: baseUrl + '/materials/' + material.path,
             allTags: $.map(allTags, function (tag) {
               return tag.text;
-            })
+            }),
+            publishable: this.options.publishableTypes.indexOf(material.type) != -1
           });
           
           dust.render("forge-share-material", data, function(err, html) {
@@ -218,7 +220,7 @@
             }
           });
         }
-      });
+      }, this));
     },
     
     _createMaterialLoad: function () {
