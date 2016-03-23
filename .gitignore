@@ -6,3 +6,4 @@ compile.sh
 /google-drive-service-privatekey.p12
 /travis-encrypted.tar
 /.gnupg/
+/.travisdeploykey
