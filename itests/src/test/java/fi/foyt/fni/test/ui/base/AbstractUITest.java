@@ -14,6 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -192,6 +193,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     waitAndClick("#Passwd");
     typeSelectorInputValue("#Passwd", getGooglePassword());
     waitAndClick("#signIn");
+    
+    waitPresent("#submit_approve_access", ".menu-tools-account");
+    if (!findElements("#submit_approve_access").isEmpty()) {
+      clickSelector("#submit_approve_access");
+    }
+    
     waitForSelectorVisible(".menu-tools-account");
     assertLoggedIn();
   }
@@ -299,6 +306,13 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     });
   }
   
+  protected void waitPresent(final String... selectors) {
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        return findElements(selectors).size() > 0;
+      }
+    });
+  }
   
   protected void waitForSelectorPresent(final String selector) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
@@ -330,6 +344,16 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     } catch (NoSuchElementException e) {
       return Collections.emptyList();
     }
+  }
+  
+  protected List<WebElement> findElements(String... selectors) {
+    List<WebElement> result = new ArrayList<>();
+
+    for (String selector : selectors) {
+      result.addAll(findElementsBySelector(selector));
+    }
+    
+    return result;
   }
   
   protected void assertSelectorText(String selector, String text) {
