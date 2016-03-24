@@ -196,7 +196,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     
     waitPresent("#submit_approve_access", ".menu-tools-account");
     if (!findElements("#submit_approve_access").isEmpty()) {
-      clickSelector("#submit_approve_access");
+      waitAndClick("#submit_approve_access");
     }
     
     waitForSelectorVisible(".menu-tools-account");

@@ -50,7 +50,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     
     waitPresent("#submit_approve_access", ".forge-import-google-drive-check-container");
     if (!findElements("#submit_approve_access").isEmpty()) {
-      clickSelector("#submit_approve_access");
+      waitAndClick("#submit_approve_access");
     }
 
     waitPresent(".forge-import-google-drive-check-container");
@@ -79,7 +79,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     
     waitPresent("#submit_approve_access", ".menu-tools-account");
     if (!findElements("#submit_approve_access").isEmpty()) {
-      clickSelector("#submit_approve_access");
+      waitAndClick("#submit_approve_access");
     }
     
     waitTitle("Forge - Import From Google Drive");
@@ -94,7 +94,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     
     waitPresent("#submit_approve_access", ".forge-import-google-drive-check-container");
     if (!findElements("#submit_approve_access").isEmpty()) {
-      clickSelector("#submit_approve_access");
+      waitAndClick("#submit_approve_access");
     }
     
     scrollWaitAndClick(".forge-import-google-drive-check-container input[type=\"checkbox\"]");
@@ -121,7 +121,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     
     waitPresent("#submit_approve_access", ".forge-import-google-drive-check-container");
     if (!findElements("#submit_approve_access").isEmpty()) {
-      clickSelector("#submit_approve_access");
+      waitAndClick("#submit_approve_access");
     }
     
     waitForUrlMatches(".*\\/import-google-drive\\?parentFolderId=[0-9]{1,}.*");
