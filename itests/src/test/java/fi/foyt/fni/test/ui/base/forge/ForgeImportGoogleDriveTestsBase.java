@@ -52,7 +52,9 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     if (!findElements("#submit_approve_access").isEmpty()) {
       clickSelector("#submit_approve_access");
     }
-    
+
+    waitPresent(".forge-import-google-drive-check-container");
+
     assertTitle("Forge - Import From Google Drive");
   }
 
@@ -60,8 +62,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
   @SqlSets ({"basic-materials-users"})
   public void testLoggedInWithFacebook() throws Exception {
     loginFacebook();
-    getWebDriver().get(getAppUrl() + "/forge/import-google-drive");
-    assertEquals("Sign in - Google Accounts", getWebDriver().getTitle());
+    navigate("/forge/import-google-drive");
     
     waitForSelectorVisible("#Email");
     waitAndClick("#Email");
