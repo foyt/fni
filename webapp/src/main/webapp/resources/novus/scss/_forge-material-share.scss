@@ -1,0 +1,83 @@
+/* Share dialog */
+
+.forge-share-material-dialog {
+   
+   p {
+    font-style: italic;
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  
+  h4 {
+    @include header-4;
+    color: $title-color;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .forge-share-material-publicity-field {
+    height: 20px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-right: 10px;
+    display: inline-block;
+  }
+  
+  .forge-share-material-publicity-field label {
+    font-size: 12px;
+    font-family: $default-font;
+    font-weight: bold;
+    margin-left: 4px;
+  }
+  
+  .forge-share-material-license {
+    input[type="url"] {
+      @include box-sizing(border-box); 
+      width: 100%;
+    }
+  }
+  
+  .forge-share-material-url { 
+    input[type="text"] {
+      @include box-sizing(border-box); 
+      width: 100%;
+    }
+  }
+  
+  textarea {
+    @include box-sizing(border-box); 
+    width: 100%;
+    height: 80px;
+  }
+  
+  .tagsinput {
+    @include box-sizing(border-box); 
+  }
+  
+  .forge-share-material-collaborator {
+    height: 20px;
+    clear: both;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+  
+  .forge-share-material-collaborator label {
+    font-family: $default-font;
+    font-size: 12px;
+  }
+  
+  .forge-share-material-collaborator select {
+    float: right;
+  }
+  
+  .forge-share-material-invite p {
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .forge-share-material-invite input[type="text"] {
+    @include box-sizing(border-box); 
+    width: 100%;
+  }
+}

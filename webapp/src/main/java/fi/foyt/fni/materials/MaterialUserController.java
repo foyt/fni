@@ -22,6 +22,10 @@ public class MaterialUserController {
   public UserMaterialRole createUserMaterialRole(User user, Material material, MaterialRole role) {
     return userMaterialRoleDAO.create(material, user, role);
   }
+
+  public UserMaterialRole findUserMaterialRoleById(Long id) {
+    return userMaterialRoleDAO.findById(id);
+  }
   
   public UserMaterialRole findUserMaterialRole(User user, Material material) {
     return userMaterialRoleDAO.findByMaterialAndUser(material, user);

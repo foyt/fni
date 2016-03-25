@@ -1516,6 +1516,10 @@ public class MaterialController {
     return updateMaterialTags(material, materialTags);
   }
 
+  public Material updateMaterialTitle(Material material, String title, User modifier) {
+    return materialDAO.updateTitle(material, title, modifier);
+  }
+  
   public Material updateMaterialDescription(Material material, String description) {
     return materialDAO.updateDescription(material, description);
   }
@@ -1524,6 +1528,10 @@ public class MaterialController {
     return materialDAO.updateLicense(material, license);
   }
 
+  public Material updateMaterialLanguage(Material material, Language language) {
+    return materialDAO.updateLanguage(material, language);
+  }
+  
   public String getUniqueMaterialUrlName(User owner, Folder parentFolder, Material material, String title) {
     String urlName = RequestUtils.createUrlName(title);
     if (material != null && urlName.equals(material.getUrlName()))

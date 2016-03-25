@@ -131,7 +131,36 @@ public class UsersRestTestsIT extends AbstractRestTest {
       .queryParam("email", "noone@foyt.fi")
       .get("/users/users")
       .then()
-      .statusCode(204);
+      .statusCode(200)
+      .body("id.size()", is(0));
+  }
+  
+  @Test
+  @SqlSets ({"basic-users", "service-client"})
+  public void testSearchUsers() throws Exception {
+    reindexHibernateSearch();
+    givenJson(createServiceToken())
+      .queryParam("search", "test")
+      .get("/users/users")
+      .then()
+      .statusCode(200)
+      .body("id.size()", is(5));
+  }
+  
+  @Test
+  @SqlSets ({"basic-users", "service-client"})
+  public void testFindUserById() throws Exception {
+    givenJson(createServiceToken())
+      .get("/users/users/2")
+      .then()
+      .statusCode(200)
+      .body("id", is(2))
+      .body("firstName", is("Test"))
+      .body("lastName", is("User"))
+      .body("nickname", is((String) null))
+      .body("locale", is("en_US"))
+      .body("emails.size()", is(1))
+      .body("emails[0]", is("user@foyt.fi"));
   }
   
   @Test

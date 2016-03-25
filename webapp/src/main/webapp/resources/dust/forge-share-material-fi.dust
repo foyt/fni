@@ -22,14 +22,16 @@
       <label>Julkinen linkillä</label>
     </div>
 
-    <div class="forge-share-material-publicity-field">
-      {@if cond="'{publicity}'=='PUBLIC'"}
-        <input type="radio" name="publicity" value="PUBLIC" checked="checked"/>
-      {:else}
-        <input type="radio" name="publicity" value="PUBLIC"/>
-      {/if}
-      <label>Julkinen</label>
-    </div>
+    {@if cond="{publishable}"}
+      <div class="forge-share-material-publicity-field">
+        {@if cond="'{publicity}'=='PUBLIC'"}
+          <input type="radio" name="publicity" value="PUBLIC" checked="checked"/>
+        {:else}
+          <input type="radio" name="publicity" value="PUBLIC"/>
+        {/if}
+        <label>Julkinen</label>
+      </div>
+    {/if}
     
     <h4>Julkinen URL</h4>
     <div class="forge-share-material-url">
@@ -58,10 +60,9 @@
     <h4>Muokkaajat</h4>
     <div class="forge-share-material-collaborators">
     
-      {#collaborators}
-        <div class="forge-share-material-collaborator">
-          <label>{name}</label>
-          <input type="hidden" value="{id}" name="collaborator"/>
+      {#materialUsers}
+        <div class="forge-share-material-collaborator" data-user-id="{userId}" data-original-id="{id}" data-original-role="{role}">
+          <label>{displayName}</label>
           <select name="role">
             {@if cond="'{role}' == 'MAY_EDIT'"}
               <option value="MAY_EDIT" selected="selected">Saa Muokata</option>
@@ -76,7 +77,7 @@
             <option value="NONE" >Ei oikeutta</option>
           </select>
         </div>
-      {/collaborators}
+      {/materialUsers}
     </div>
     
     <h4>Lisää muokkaajia</h4>

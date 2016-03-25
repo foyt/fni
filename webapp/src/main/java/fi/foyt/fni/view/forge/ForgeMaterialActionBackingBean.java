@@ -2,10 +2,6 @@ package fi.foyt.fni.view.forge;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -16,21 +12,15 @@ import javax.inject.Named;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.xml.sax.SAXException;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itextpdf.text.DocumentException;
 
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.materials.MaterialUserController;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
-import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
-import fi.foyt.fni.persistence.model.materials.MaterialRole;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.security.LoggedIn;
@@ -38,7 +28,6 @@ import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.security.UnauthorizedException;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
@@ -47,20 +36,11 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Stateful
 public class ForgeMaterialActionBackingBean {
 
-  @Inject
-  private Logger logger;
-
 	@Inject
 	private MaterialController materialController;
 
-  @Inject
-  private UserController userController;
-	
 	@Inject
 	private SessionController sessionController;
-
-  @Inject
-	private MaterialUserController materialUserController;
 
   @Inject
 	private MaterialPermissionController materialPermissionController;
@@ -89,46 +69,6 @@ public class ForgeMaterialActionBackingBean {
     this.parentFolderId = parentFolderId;
   }
   
-  public String getMaterialSharePublicity() {
-    return materialSharePublicity;
-  }
-  
-  public void setMaterialSharePublicity(String materialSharePublicity) {
-    this.materialSharePublicity = materialSharePublicity;
-  }
-  
-  public String getMaterialShareTags() {
-    return materialShareTags;
-  }
-  
-  public void setMaterialShareTags(String materialShareTags) {
-    this.materialShareTags = materialShareTags;
-  }
-  
-  public String getMaterialShareDescription() {
-    return materialShareDescription;
-  }
-  
-  public void setMaterialShareDescription(String materialShareDescription) {
-    this.materialShareDescription = materialShareDescription;
-  }
-  
-  public String getMaterialShareLicense() {
-    return materialShareLicense;
-  }
-  
-  public void setMaterialShareLicense(String materialShareLicense) {
-    this.materialShareLicense = materialShareLicense;
-  }
-  
-  public Map<String, String> getMaterialShareCollaborators() {
-    return materialShareCollaborators;
-  }
-  
-  public void setMaterialShareCollaborators(Map<String, String> materialShareCollaborators) {
-    this.materialShareCollaborators = materialShareCollaborators;
-  }
-
   public String getNewFolderName() {
     return newFolderName;
   }
@@ -247,50 +187,7 @@ public class ForgeMaterialActionBackingBean {
 			}
 		}
 	}
-	
-	@LoggedIn
-	@Secure (Permission.MATERIAL_MODIFY)
-  @SecurityContext(context = "#{forgeMaterialActionBackingBean.materialId}")
-  public void materialShareSave() {
-	  User loggedUser = sessionController.getLoggedUser();
-	  
-	  Material material = materialController.findMaterialById(getMaterialId());
-	  
-	  Map<String, String> collaborators = getMaterialShareCollaborators();
-	  for (String collaboratorStr : collaborators.keySet()) {
-	    if (StringUtils.isNotBlank(collaboratorStr)) {
-	      Long id = NumberUtils.createLong(StringUtils.substring(collaboratorStr, 1));
-        String roleStr = collaborators.get(collaboratorStr);
-        MaterialRole role = StringUtils.isBlank(roleStr) || "NONE".equals(roleStr) ? null : MaterialRole.valueOf(roleStr);
-	          
-	      switch (collaboratorStr.charAt(0)) {
-  	      case 'U':
-  	        User user = userController.findUserById(id);
-  	        // TODO: Modifier
-  	        materialUserController.setMaterialUserRole(user, material, role);
-  	      break;
-  	    }
-  	    
-	    }
-	  }
-	  
-	  try {
-	    List<String> tags = new ObjectMapper().readValue(getMaterialShareTags(), new TypeReference<List<String>>() { });
-      materialController.setMaterialTags(material, tags);
-    } catch (IOException e) {
-      logger.log(Level.SEVERE, "Failed to unserialize material tags", e);
-    }
-	  
-	  MaterialPublicity publicity = MaterialPublicity.valueOf(getMaterialSharePublicity());
-	  
-	  if (publicity != material.getPublicity()) {
-	    materialController.updateMaterialPublicity(material, publicity, loggedUser);
-	  }
-	  
-	  materialController.updateMaterialDescription(material, getMaterialShareDescription());
-	  materialController.updateMaterialLicense(material, getMaterialShareLicense());
-	}
-	
+
 	@LoggedIn
   public void newFolder() throws IOException {
 	  if (StringUtils.isBlank(getNewFolderName())) {
@@ -316,10 +213,5 @@ public class ForgeMaterialActionBackingBean {
 	private Long materialId;
 	private Long parentFolderId;
 	private Long targetFolderId;
-	private String materialSharePublicity;
-	private Map<String, String> materialShareCollaborators;
-	private String materialShareTags;
-	private String materialShareDescription;
-  private String materialShareLicense;
 	private String newFolderName;
 }

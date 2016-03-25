@@ -117,16 +117,10 @@
       <h:inputHidden id="material-id" value="#{forgeMaterialActionBackingBean.materialId}" />
       <h:inputHidden id="parent-folder-id" value="#{forgeMaterialActionBackingBean.parentFolderId}" />
       <h:inputHidden id="target-folder-id" value="#{forgeMaterialActionBackingBean.targetFolderId}" />
-      <h:inputHidden id="material-share-publicity" value="#{forgeMaterialActionBackingBean.materialSharePublicity}" />
-      <h:inputHidden id="material-share-collaborators" value="#{forgeMaterialActionBackingBean.materialShareCollaborators}" converter="fi.foyt.fni.jsf.JsonMapConverter" />
-      <h:inputHidden id="material-share-tags" value="#{forgeMaterialActionBackingBean.materialShareTags}" />
-      <h:inputHidden id="material-share-description" value="#{forgeMaterialActionBackingBean.materialShareDescription}" />
-      <h:inputHidden id="material-share-license" value="#{forgeMaterialActionBackingBean.materialShareLicense}" />
       <h:inputHidden id="new-folder-name" value="#{forgeMaterialActionBackingBean.newFolderName}" />
       <h:commandButton id="delete" action="#{forgeMaterialActionBackingBean.deleteMaterial}" />
       <h:commandButton id="move" action="#{forgeMaterialActionBackingBean.moveMaterial}" />
       <h:commandButton id="print-file" action="#{forgeMaterialActionBackingBean.printFile}" />
-      <h:commandButton id="material-share-save" action="#{forgeMaterialActionBackingBean.materialShareSave}" />
       <h:commandButton id="new-folder" action="#{forgeMaterialActionBackingBean.newFolder}" />
       <h:commandButton id="copy" action="#{forgeMaterialActionBackingBean.copyMaterial}" />
     </h:form>

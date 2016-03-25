@@ -50,7 +50,8 @@ public abstract class AbstractForgePublicViewBackingBean {
     String editPath = materialController.getForgeMaterialViewerUrl(material);
     String downloadLink = String.format("/materials/%s?download=true", material.getPath());
     String path = material.getPath();
-    
+    String parentPath = material.getParentFolder() != null ? materialController.getForgeMaterialViewerUrl(material.getParentFolder()) : "/forge/";
+
     String description = material.getDescription();
     if (StringUtils.isBlank(description) && (material instanceof Document)) {
       description = StringUtils.abbreviate(((Document) material).getContentPlain(), 250);
@@ -88,6 +89,7 @@ public abstract class AbstractForgePublicViewBackingBean {
         viewPath,
         editPath,
         downloadLink,
+        parentPath,
         path,
         viewable,
         printable);

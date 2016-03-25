@@ -13,6 +13,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
 import fi.foyt.fni.persistence.dao.GenericDAO;
+import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
@@ -381,6 +382,11 @@ public class MaterialDAO extends GenericDAO<Material> {
 
   public Material updateLicense(Material material, String license) {
     material.setLicense(license);
+    return persist(material);
+  }
+
+  public Material updateLanguage(Material material, Language language) {
+    material.setLanguage(language);
     return persist(material);
   }
   

@@ -1,6 +1,7 @@
 package fi.foyt.fni.rest.system;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.ws.rs.GET;
@@ -11,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import fi.foyt.fni.rest.Security;
 import fi.foyt.fni.rest.illusion.OAuthScopes;
+import fi.foyt.fni.system.SearchController;
 
 @Path ("/system")
 @RequestScoped
@@ -19,6 +21,9 @@ public class SystemRESTService {
   
   @PersistenceUnit
   private EntityManagerFactory entityManagerFactory;
+  
+  @Inject
+  private SearchController searchController;
 
   /**
    * Returns pong
@@ -47,6 +52,20 @@ public class SystemRESTService {
   ) 
   public Response flushCaches() {
     entityManagerFactory.getCache().evictAll();
+    return Response.ok("ok").build();
+  }
+  
+  @GET
+  @Path ("/search/reindex")
+  @Produces (MediaType.TEXT_PLAIN)
+  @Security (
+    allowService = true,
+    scopes = { 
+      OAuthScopes.SYSTEM_REINDEX_SEARCH  
+    }
+  ) 
+  public Response reindexSearch() {
+    searchController.reindexEntities();
     return Response.ok("ok").build();
   }
   
