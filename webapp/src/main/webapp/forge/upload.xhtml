@@ -22,12 +22,13 @@
   <ui:define name="view-scripts">
     <!-- jquery.fileupload -->
 
-    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/2.2.0/js/canvas-to-blob.min.js"/>
-    <script type="text/javascript" charset="utf8" src="//static.forgeandillusion.net/libs/load-image/1.10.0/load-image.all.min.js"/>
-    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.fileupload.min.js"/>
-    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.iframe-transport.min.js"/>
-    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.fileupload-process.min.js"/>
-    <script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.5.7/jquery.fileupload-image.min.js"/>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/blueimp-canvas-to-blob/3.3.0/canvas-to-blob.min.js"/>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/load-image/1.10.0/load-image.all.min.js"/>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/blueimp-file-upload/9.12.1/jquery.fileupload.min.js"/>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/blueimp-file-upload/9.12.1/jquery.iframe-transport.min.js"/>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/blueimp-file-upload/9.12.1/jquery.fileupload-process.min.js"/>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/blueimp-file-upload/9.12.1/jquery.fileupload-image.min.js"/>
+    <script type="text/javascript" src="/scripts/uploadfield/uploadfield.js"/>
 
     <!-- View scripts -->
 
@@ -61,7 +62,7 @@
         
         <div class="flex-row">
           <div class="flex-cell-full forge-upload-field">
-            <input id="forge-upload-field-button" type="file" name="files" multiple="multiple"/>
+            <input id="forge-upload-field-button" type="file" name="file" multiple="multiple"/>
             <h:panelGroup layout="block" styleClass="forge-upload-field-info">#{locales['forge.upload.uploadInfo']}</h:panelGroup>
           </div>
         </div>
@@ -97,10 +98,11 @@
           </div>
         </div>
     
-        <input type="hidden" value="#{forgeUploadBackingBean.parentFolderId}" name="parentFolderId"/>
-        
         <h:form>
-          <h:commandButton action="#{forgeUploadBackingBean.uploadDone}" styleClass="upload-done-action" style="display: none"/>
+          <input type="hidden" jsf:value="#{forgeUploadBackingBean.fileInfos}" class="file-infos"/>
+          <input type="hidden" jsf:value="#{forgeUploadBackingBean.convert}" class="convert"/>
+          <input type="hidden" jsf:value="#{forgeUploadBackingBean.parentFolderId}"/>
+          <h:commandButton action="#{forgeUploadBackingBean.save}" styleClass="save" style="display: none"/>
         </h:form>
         
       </div>
