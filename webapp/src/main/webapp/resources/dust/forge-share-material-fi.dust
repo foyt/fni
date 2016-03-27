@@ -3,6 +3,7 @@
     <p>Voit määrittää ketkä näkevät materiaalin säätämällä sen julkisuutta ja lisätä käyttäjiä muokkaajiksi tai katselijoiksi muokkaajat osiosta.</p>
     
     <h4>Julkisuus</h4>
+    <p class="publish-info">Varmistathan, että sinulla on materiaalin julkaisuun. Lisää tietoja julkaisemisesta voit lukea <a target="_blank" href="{publishGuideLink}">tästä</a> -dokumentista</p>
     
     <div class="forge-share-material-publicity-field">
       {@if cond="'{publicity}'=='PRIVATE'"}
