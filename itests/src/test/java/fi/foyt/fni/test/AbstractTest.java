@@ -146,7 +146,10 @@ public abstract class AbstractTest {
 
   @After
   public void dataClean() throws Exception {
-    assertEquals("ForumTopicWatchers not properly cleaned", Integer.valueOf(0), countForumTopicWatchers());
+    if ("true".equals(System.getProperty("it.verifyclean"))) {
+      assertEquals(String.format("ForumTopicWatchers not properly cleaned on test %s", testName.getMethodName()), Integer.valueOf(0), countForumTopicWatchers());
+      assertEquals(String.format("ForumMessages not properly cleaned on test %s", testName.getMethodName()), Integer.valueOf(0), countForumMessages());
+    }
   }
   
   private SqlSet getSqlSet(Method method, String id) {
@@ -446,6 +449,27 @@ public abstract class AbstractTest {
     
     return null;
   }
+  
+  protected Integer countForumMessages() throws Exception, SQLException {
+    Connection connection = getConnection();
+    try {
+      connection.setAutoCommit(true);
+      PreparedStatement statement = connection.prepareStatement("select count(id) from ForumMessage");
+      try {
+        statement.execute();
+        ResultSet resultSet = statement.getResultSet();
+        if (resultSet.next()) {
+          return resultSet.getInt(1);
+        }
+      } finally {
+        statement.close();
+      }
+    } finally {
+      connection.close();
+    }
+    
+    return null;
+  }
 
   protected void deleteUser(Long userId) throws Exception {
     executeSql("delete from DropboxFile where id in (select id from Material where creator_id = ?)", userId);
@@ -474,7 +498,9 @@ public abstract class AbstractTest {
     executeSql("delete from IllusionEventSetting where event_id = (select id from IllusionEvent where urlName = ?)", urlName);
     executeSql("update Material set type = 'DELETE' where id in (select folder_id from IllusionEvent where urlName = ?) or parentFolder_id in (select folder_id from IllusionEvent where urlName = ?)", urlName, urlName);
     executeSql("delete from IllusionEvent where urlName = ?", urlName);
+    executeSql("delete from ForumPost where topic_id in (select id from ForumTopic where urlName = 'DELETE')");
     executeSql("delete from ForumTopic where urlName = 'DELETE'");
+    executeSql("delete from ForumMessage where id not in (select id from ForumPost union select id from ForumTopic)");
     executeSql("update Material set parentFolder_id = null where id in (select id from Material where type = 'DELETE')");
     executeSql("delete from IllusionEventDocument where id in (select id from Material where type = 'DELETE')");
     executeSql("delete from IllusionEventFolder where id in (select id from Material where type = 'DELETE')");
