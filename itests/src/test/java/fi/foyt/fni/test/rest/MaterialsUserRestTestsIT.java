@@ -29,10 +29,8 @@ public class MaterialsUserRestTestsIT extends AbstractRestTest {
       .then()
       .statusCode(200)
       .body("id.size()", is(2))
-      .body("id[0]", is(3))
       .body("userId[0]", is(3))
       .body("role[0]", is("MAY_VIEW"))
-      .body("id[1]", is(4))
       .body("userId[1]", is(4))
       .body("role[1]", is("MAY_EDIT"));
   }
