@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -26,7 +26,7 @@ import fi.foyt.fni.session.Logout;
 import fi.foyt.fni.session.UserSessionEvent;
 import fi.foyt.fni.users.UserController;
 
-@Stateless
+@ApplicationScoped
 public class CoOpsSessionEventsListener {
   
   @Inject
