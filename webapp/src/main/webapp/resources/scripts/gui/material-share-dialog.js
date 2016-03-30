@@ -192,13 +192,14 @@
     },
     
     _load: function (callback) {
-      async.parallel([this._createMaterialLoad(), this._createTagsLoad(), this._createUsersLoad()], $.proxy(function (err, results) {
+      async.parallel([this._createMaterialLoad(), this._createTagsLoad(), this._createUsersLoad(), this._createPublishGuideUrlLoad()], $.proxy(function (err, results) {
         if (err) {
           $('.notifications').notifications('notification', 'error', err);
         } else {
           var material = results[0];
           var allTags = results[1];
           var materialUsers = results[2];
+          var publishGuideLink = results[3].value;
           
           var href = window.location.href;
           var baseUrl = href.substring(0, href.length - (window.location.pathname.length));
@@ -209,7 +210,8 @@
             allTags: $.map(allTags, function (tag) {
               return tag.text;
             }),
-            publishable: this.options.publishableTypes.indexOf(material.type) != -1
+            publishable: this.options.publishableTypes.indexOf(material.type) != -1,
+            publishGuideLink: publishGuideLink
           });
           
           dust.render("forge-share-material", data, function(err, html) {
@@ -231,6 +233,14 @@
           } else {
             callback(null, material);
           }
+        });
+      }, this);
+    },
+    
+    _createPublishGuideUrlLoad: function () {
+      return $.proxy(function (callback) {
+        this._restCall(this._getSystemClient(false).settings.read('PUBLISH_GUIDE_' + LOCALE.toUpperCase()), function (err, setting) {
+          callback(err, setting);
         });
       }, this);
     },
@@ -329,6 +339,12 @@
           }
         });
       }
+    },
+    
+    _getSystemClient: function (stringify) {
+      var client = new $.RestClient(CONTEXTPATH + '/rest/system/', {stringifyData: stringify === false ? false : true});
+      client.add("settings");
+      return client;
     },
     
     _getMaterialClient: function (stringify) {

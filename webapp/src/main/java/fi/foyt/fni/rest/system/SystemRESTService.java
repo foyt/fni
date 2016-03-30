@@ -6,24 +6,60 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.rest.Security;
 import fi.foyt.fni.rest.illusion.OAuthScopes;
+import fi.foyt.fni.rest.system.model.SystemSetting;
 import fi.foyt.fni.system.SearchController;
+import fi.foyt.fni.system.SystemSettingsController;
 
 @Path ("/system")
 @RequestScoped
 @Produces (MediaType.APPLICATION_JSON)
 public class SystemRESTService {
   
+  private static SystemSettingKey[] PUBLIC_SETTING_KEYS = {
+    SystemSettingKey.PUBLISH_GUIDE_EN,
+    SystemSettingKey.PUBLISH_GUIDE_FI
+  };
+  
   @PersistenceUnit
   private EntityManagerFactory entityManagerFactory;
+
+  @Inject
+  private SystemSettingsController systemSettingsController;
   
   @Inject
   private SearchController searchController;
+
+  /**
+   * Returns pong
+   * 
+   * @return pong
+   */
+  @GET
+  @Path ("/settings/{KEY}")
+  @Security (
+    allowNotLogged = true,
+    scopes = {
+      OAuthScopes.SYSTEM_SETTINGS_FIND
+    }
+  )  
+  public Response getSetting(@PathParam ("KEY") SystemSettingKey key) {
+    if (!ArrayUtils.contains(PUBLIC_SETTING_KEYS, key)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    return Response.ok(new SystemSetting(key, systemSettingsController.getSetting(key))).build();
+  }
 
   /**
    * Returns pong
@@ -35,7 +71,7 @@ public class SystemRESTService {
   @Produces (MediaType.TEXT_PLAIN)
   @Security (
     allowNotLogged = true,
-    scopes = { }
+    scopes = {}
   )  
   public Response getPing() {
     return Response.ok("pong").build();

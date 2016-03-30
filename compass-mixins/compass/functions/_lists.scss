@@ -76,15 +76,3 @@
 @function first-value-of($list) {
   @return nth($list, 1);
 }
-
-@if not(function-exists(compact)) {
-  @function compact($vars...) {
-    $list: ();
-    @each $var in $vars {
-        @if $var {
-            $list: append($list, $var, comma);
-        }
-    }
-    @return $list;
-  }
-}
