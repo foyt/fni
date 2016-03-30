@@ -8,6 +8,10 @@
     margin-top: 8px;
   }
   
+  .publish-info {
+    margin-bottom: 8px;
+  }
+  
   h4 {
     @include header-4;
     color: $title-color;

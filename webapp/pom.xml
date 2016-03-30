@@ -474,7 +474,7 @@
       <plugin>
          <groupId>com.github.warmuuh</groupId>
          <artifactId>libsass-maven-plugin</artifactId>
-         <version>0.1.7-libsass_3.2.4</version>
+         <version>0.2.2-libsass_3.3.3 </version>
          <executions>
             <execution>
                <id>sassProcessSource</id>
