@@ -17,6 +17,7 @@ import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Material;
+import fi.foyt.fni.session.SessionController;
 
 @Join(path = "/forge/public/materials/{path}", to = "/forge/public-material.jsf")
 @RequestScoped
@@ -33,6 +34,9 @@ public class ForgePublicMaterialBackingBean extends AbstractForgePublicViewBacki
   
   @Inject
   private MaterialPermissionController materialPermissionController;
+  
+  @Inject
+  private SessionController sessionController;
   
   @Inject
   private NavigationController navigationController;
@@ -64,7 +68,7 @@ public class ForgePublicMaterialBackingBean extends AbstractForgePublicViewBacki
       }
     }
     
-
+    this.mayEdit = materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material);
     this.material = toMaterialBean(material);
     this.allTags = toTagBeans(materialController.listPublicMaterialTagsWithCounts(TAG_COUNT));
     
@@ -102,6 +106,10 @@ public class ForgePublicMaterialBackingBean extends AbstractForgePublicViewBacki
   public List<PublicTagBean> getAllTags() {
     return allTags;
   }
+  
+  public Boolean getMayEdit() {
+    return mayEdit;
+  }
 
   private String contentType;
   private String html;
@@ -109,4 +117,5 @@ public class ForgePublicMaterialBackingBean extends AbstractForgePublicViewBacki
   private String embedUrl;
   private PublicMaterialBean material;
   private List<PublicTagBean> allTags;
+  private Boolean mayEdit;
 }

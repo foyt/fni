@@ -16,6 +16,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -26,6 +27,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.queryParser.ParseException;
 
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.i18n.ExternalLocales;
@@ -39,6 +41,7 @@ import fi.foyt.fni.rest.illusion.OAuthScopes;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
+import fi.foyt.fni.utils.search.SearchResult;
 
 /**
  * User REST services
@@ -81,7 +84,7 @@ public class UserRestServices {
   @POST
   @Security (
     allowService = true,
-    scopes = { OAuthScopes.USERS_CREATE }
+    scopes = { OAuthScopes.USERS_USER_CREATE }
   )
   public Response createUser(fi.foyt.fni.rest.users.model.User entity, @QueryParam ("generateCredentials") @DefaultValue ("TRUE") Boolean generateCredentials, @QueryParam ("sendCredentials") @DefaultValue ("TRUE") Boolean sendCredentials, @QueryParam ("password") String password) {
     if (entity.getEmails() == null || entity.getEmails().isEmpty()) {
@@ -160,13 +163,10 @@ public class UserRestServices {
   @GET
   @Security (
     allowService = true,
-    scopes = { OAuthScopes.USERS_LIST }
+    allowNotLogged = false,
+    scopes = { OAuthScopes.USERS_USER_LIST }
   )
-  public Response listUsers(@QueryParam ("email") String email) {
-    if (StringUtils.isBlank(email)) {
-      return Response.status(Status.NOT_IMPLEMENTED).entity("listing all users without a filter is not supported yet").build();
-    }
-    
+  public Response listUsers(@QueryParam ("email") String email, @QueryParam ("search") String search, @QueryParam ("maxResults") @DefaultValue ("10") Integer maxResults) {
     List<User> result = new ArrayList<>();
     
     if (StringUtils.isNotBlank(email)) {
@@ -174,26 +174,54 @@ public class UserRestServices {
       if (user != null) {
         result.add(user);
       }
-    }
-    
-    if (result.isEmpty()) {
-      return Response.status(Status.NO_CONTENT).build();
+    } else if (StringUtils.isNotBlank(search)) {
+      try {
+        List<SearchResult<User>> searchResults = userController.searchUsers(search, maxResults);
+        for (SearchResult<User> searchResult : searchResults) {
+          result.add(searchResult.getEntity());
+        }
+      } catch (ParseException e) {
+        logger.log(Level.SEVERE, "Failed to parse search string", e);
+        return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+      }
+    } else {
+      return Response.status(Status.NOT_IMPLEMENTED).entity("Listing all users is not implemented").build();
     }
     
     return Response.ok(createRestModel(result.toArray(new User[0]))).build();
   }
   
   /**
-   * Returns logged user info
+   * Returns user info
    * 
    * @return Response response
    * @responseType fi.foyt.fni.rest.users.model.User
    */
+  @Path("/users/{ID:[0-9]*}")
+  @Security (
+    allowNotLogged = false,
+    allowService = true,
+    scopes = OAuthScopes.USERS_USER_FIND
+  )
+  @GET
+  public Response findUser(@PathParam ("ID") Long id) {
+    User user = userController.findUserById(id);
+    if (user == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (user.getArchived()) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    return Response.ok(createRestModel(user)).build();
+  }
+  
   @Path("/users/me")
   @Security (
     allowNotLogged = false,
     allowService = false,
-    scopes = OAuthScopes.USERS_ACCESS_ME
+    scopes = OAuthScopes.USERS_USER_FIND_ME
   )
   @GET
   public Response getOwnInfo() {

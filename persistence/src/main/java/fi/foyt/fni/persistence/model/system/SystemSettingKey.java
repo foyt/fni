@@ -9,6 +9,8 @@ public enum SystemSettingKey {
 	SYSTEM_USER_EMAIL,
 	SYSTEM_MAILER_NAME,
 	SYSTEM_MAILER_MAIL,
+	PUBLISH_GUIDE_EN,
+  PUBLISH_GUIDE_FI,
 	
 	/* Google Analytics */
 	

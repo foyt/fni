@@ -313,6 +313,7 @@
                 <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
                 <it.project.version>${project.version}</it.project.version>
                 <it.selenium.version>${selenium-java.version}</it.selenium.version>
+                <it.verifyclean>${it.verifyclean}</it.verifyclean>
                 <it.host>${it.host}</it.host>
                 <it.port.http>${it.port.http}</it.port.http>
                 <it.port.https>${it.port.https}</it.port.https>
@@ -754,6 +755,7 @@
                 <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
                 <it.project.version>${project.version}</it.project.version>
                 <it.selenium.version>${selenium-java.version}</it.selenium.version>
+                <it.verifyclean>${it.verifyclean}</it.verifyclean>
                 <it.host>${it.host}</it.host>
                 <it.port.http>${it.port.http}</it.port.http>
                 <it.port.https>${it.port.https}</it.port.https>
@@ -1200,6 +1202,7 @@
                 <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
                 <it.project.version>${project.version}</it.project.version>
                 <it.selenium.version>${selenium-java.version}</it.selenium.version>
+                <it.verifyclean>${it.verifyclean}</it.verifyclean>
                 <it.host>${it.host}</it.host>
                 <it.port.http>${it.port.http}</it.port.http>
                 <it.port.https>${it.port.https}</it.port.https>
@@ -1679,6 +1682,7 @@
                 <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
                 <it.project.version>${project.version}</it.project.version>
                 <it.selenium.version>${selenium-java.version}</it.selenium.version>
+                <it.verifyclean>${it.verifyclean}</it.verifyclean>
                 <it.host>${it.host}</it.host>
                 <it.port.http>${it.port.http}</it.port.http>
                 <it.port.https>${it.port.https}</it.port.https>

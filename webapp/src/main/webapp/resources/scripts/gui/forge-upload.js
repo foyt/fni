@@ -1,6 +1,8 @@
 (function() {
   'use strict';
   
+  var uploadCount = 0;
+  
   function roundTo(value, digits) {
     var mul = Math.pow(10, digits);
     return Math.round(value * mul) / mul;
@@ -17,17 +19,16 @@
 
   function updateFileCount() {
     if ($('.forge-upload-file-container').length > 0) {
-      $('.forge-upload-upload-button').removeAttr("disabled");
       $('.forge-upload-no-files').hide();
     } else {
-      $('.forge-upload-upload-button').attr("disabled", "disabled");
       $('.forge-upload-no-files').show();
     }
   };
   
   $(document).ready(function() {
     $('#forge-upload-field-button').fileupload({
-      autoUpload: false,
+      url : CONTEXTPATH + '/tempUpload',
+      autoUpload : true,
       dataType : 'json',
       maxFileSize: 5000000, 
       disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
@@ -37,6 +38,8 @@
     })
     .prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled')
     .on('fileuploadadd', function (e, data) {
+      $('.forge-upload-upload-button').attr('disabled', 'disabled');
+      
       if (data.files && data.files.length == 1) {
         var file = data.files[0];
 
@@ -69,6 +72,8 @@
         updateFileCount();
         
         data.process();
+        
+        uploadCount++;
       }
     })
     .on('fileuploadprocessalways', function (e, data) {
@@ -91,44 +96,46 @@
           }
         }
       }
-      
     })
     .on('fileuploadprogress', function (e, data) {
       var progress = parseInt(data.loaded / data.total * 100, 10);
       data.context.find('.forge-upload-file-progress').progressbar({
         value: progress
       });
-    });
-    
-    function submitNextFile() {
-      var nextFile = $('.forge-upload-files .forge-upload-file-container');
-      if (nextFile.length > 0) {
-        nextFile = nextFile.first();
-        var data = nextFile.data('data');
-        data.submit().always($.proxy(function () {
-          $(this).remove();
-          updateFileCount();
-          submitNextFile();
-        }, nextFile));
-      } else {
-        $('.upload-done-action').click();
+    })
+    .on('fileuploaddone', function (e, data) {
+      var fileName = data.files[0].name;
+      var fileType = data.files[0].type;
+
+      data.context
+        .find('.forge-upload-file-container')
+        .attr({
+          'data-file-id': data.result.fileId,
+          'data-file-name': fileName,
+          'data-file-type': fileType
+        });
+      
+      uploadCount--;
+      
+      if (uploadCount == 0) {
+        $('.forge-upload-upload-button').removeAttr('disabled', 'disabled');
       }
-    }
-    
+    });
+
     $('.forge-upload-upload-button').click(function (e) {
       var parentFolderId = $('input[name="parentFolderId"]').val();
       var convert = $('input[name="convert"]').prop("checked");
+      var fileInfos = $.map($('.forge-upload-file-container'), function (fileContainer) {
+        return {
+          fileId: $(fileContainer).attr('data-file-id'),
+          fileName: $(fileContainer).attr('data-file-name'),
+          fileType: $(fileContainer).attr('data-file-type')
+        };
+      });
       
-      var uploadUrl = CONTEXTPATH + '/forge/upload/';
-      if (parentFolderId) {
-        uploadUrl += '?parentFolderId=' + parentFolderId + '&convert=' + (convert ? 'true' : 'false');
-      } else {
-        uploadUrl += '?convert=' + (convert ? 'true' : 'false');
-      }
-      
-      $('#forge-upload-field-button').fileupload('option', 'url', uploadUrl);
-      
-      submitNextFile();
+      $('.file-infos').val(JSON.stringify(fileInfos));
+      $('.convert').val(convert);
+      $('.save')[0].click();
     });
     
     $(document).on('click','.forge-upload-file-remove', function (e) {

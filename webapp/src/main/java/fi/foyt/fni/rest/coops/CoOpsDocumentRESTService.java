@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -61,7 +62,10 @@ public class CoOpsDocumentRESTService {
   public Response load(@PathParam ("FILEID") String fileId, @QueryParam ("revisionNumber") Long revisionNumber) {
     try {
       File file = coOpsApiDocument.fileGet(fileId, revisionNumber);
-      return Response.ok(file).build();
+      return Response
+        .ok(file)
+        .cacheControl(noCache())
+        .build();
     } catch (CoOpsNotImplementedException e) {
       return Response.status(Status.NOT_IMPLEMENTED).build();
     } catch (CoOpsNotFoundException e) {
@@ -74,7 +78,7 @@ public class CoOpsDocumentRESTService {
       return Response.status(Status.FORBIDDEN).build();
     } 
   }
-  
+
   /**
    * Patches a file.
    * 
@@ -101,7 +105,10 @@ public class CoOpsDocumentRESTService {
       }
       
       coOpsApiDocument.filePatch(fileId, patch.getSessionId(), patch.getRevisionNumber(), patch.getPatch(), patch.getProperties(), patch.getExtensions());
-      return Response.noContent().build();
+      return Response
+        .noContent()
+        .cacheControl(noCache())
+        .build();
     } catch (CoOpsNotFoundException e) {
       return Response.status(Status.NOT_FOUND).build();
     } catch (CoOpsUsageException e) {
@@ -143,9 +150,15 @@ public class CoOpsDocumentRESTService {
     try {
       List<Patch> patches = coOpsApiDocument.fileUpdate(fileId, sessionId, revisionNumber);
       if (patches.isEmpty()) {
-        return Response.noContent().build();
+        return Response
+          .noContent()
+          .cacheControl(noCache())
+          .build();
       } else {
-        return Response.ok(patches).build();
+        return Response
+          .ok(patches)
+          .cacheControl(noCache())
+          .build();
       }
     } catch (CoOpsNotFoundException e) {
       return Response.status(Status.NOT_FOUND).build();
@@ -175,7 +188,9 @@ public class CoOpsDocumentRESTService {
   )
   public Response join(@PathParam ("FILEID") String fileId, @QueryParam("algorithm") List<String> algorithms, @QueryParam ("protocolVersion") String protocolVersion) {
     try {
-      return Response.ok(coOpsApiDocument.fileJoin(fileId, algorithms, protocolVersion)).build();
+      return Response.ok(coOpsApiDocument.fileJoin(fileId, algorithms, protocolVersion))
+          .cacheControl(noCache())
+          .build();
     } catch (CoOpsNotFoundException e) {
       return Response.status(Status.NOT_FOUND).build();
     } catch (CoOpsUsageException e) {
@@ -187,6 +202,17 @@ public class CoOpsDocumentRESTService {
     } catch (CoOpsNotImplementedException e) {
       return Response.status(Status.NOT_IMPLEMENTED).build();
     } 
+  }
+  
+  private CacheControl noCache() {
+    CacheControl cacheControl = new CacheControl();
+    
+    cacheControl.setMustRevalidate(true);
+    cacheControl.setNoCache(true);
+    cacheControl.setProxyRevalidate(true);
+    cacheControl.setNoStore(true);
+    
+    return cacheControl;
   }
   
 }

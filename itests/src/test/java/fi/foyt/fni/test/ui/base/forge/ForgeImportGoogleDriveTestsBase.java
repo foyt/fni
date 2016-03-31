@@ -46,15 +46,23 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
   @SqlSets ({"basic-materials-users"})
   public void testLoggedInWithGoogle() throws Exception {
     loginGoogle();
-    testTitle("/forge/import-google-drive", "Forge - Import From Google Drive");
+    navigate("/forge/import-google-drive");
+    
+    waitPresent("#submit_approve_access", ".forge-import-google-drive-check-container");
+    if (!findElements("#submit_approve_access").isEmpty()) {
+      waitAndClick("#submit_approve_access");
+    }
+
+    waitPresent(".forge-import-google-drive-check-container");
+
+    assertTitle("Forge - Import From Google Drive");
   }
 
   @Test
   @SqlSets ({"basic-materials-users"})
   public void testLoggedInWithFacebook() throws Exception {
     loginFacebook();
-    getWebDriver().get(getAppUrl() + "/forge/import-google-drive");
-    assertEquals("Sign in - Google Accounts", getWebDriver().getTitle());
+    navigate("/forge/import-google-drive");
     
     waitForSelectorVisible("#Email");
     waitAndClick("#Email");
@@ -69,6 +77,11 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     typeSelectorInputValue("#Passwd", getGooglePassword());
     clickSelector("#signIn");
     
+    waitPresent("#submit_approve_access", ".menu-tools-account");
+    if (!findElements("#submit_approve_access").isEmpty()) {
+      waitAndClick("#submit_approve_access");
+    }
+    
     waitTitle("Forge - Import From Google Drive");
     assertTitle("Forge - Import From Google Drive");
   }
@@ -78,9 +91,15 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
   public void testImportMaterial() throws Exception {
     loginGoogle();
     getWebDriver().get(getAppUrl() + "/forge/import-google-drive");
-    getWebDriver().findElement(By.cssSelector(".forge-import-google-drive-check-container input[type=\"checkbox\"]")).click();
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.elementToBeClickable(By.cssSelector(".forge-import-google-drive-button")));
-    getWebDriver().findElement(By.cssSelector(".forge-import-google-drive-button")).click();
+    
+    waitPresent("#submit_approve_access", ".forge-import-google-drive-check-container");
+    if (!findElements("#submit_approve_access").isEmpty()) {
+      waitAndClick("#submit_approve_access");
+    }
+    
+    scrollWaitAndClick(".forge-import-google-drive-check-container input[type=\"checkbox\"]");
+    scrollWaitAndClick(".forge-import-google-drive-button");
+    
     waitTitle("Forge");
     assertEquals("Forge", getWebDriver().getTitle());
     assertEquals(2, getWebDriver().findElements(By.cssSelector(".forge-material-title[title=\"How to get started with Drive\"]")).size());
@@ -99,6 +118,12 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     waitForUrlMatches(".*/forge/folders/[0-9]{1,}/test_folder");
     waitAndClick(".forge-import-material-menu");
     waitAndClick(".forge-import-material-menu .forge-import-google-drive");
+    
+    waitPresent("#submit_approve_access", ".forge-import-google-drive-check-container");
+    if (!findElements("#submit_approve_access").isEmpty()) {
+      waitAndClick("#submit_approve_access");
+    }
+    
     waitForUrlMatches(".*\\/import-google-drive\\?parentFolderId=[0-9]{1,}.*");
     assertUrlMatches(".*\\/import-google-drive\\?parentFolderId=[0-9]{1,}.*");
     waitAndClick(".forge-import-google-drive-check-container input[type=\"checkbox\"]");
