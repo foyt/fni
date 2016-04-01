@@ -59,7 +59,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
       getWebDriver().findElement(By.id("cart-form:payerPostalCode")).sendKeys(addressPostalCode);
       getWebDriver().findElement(By.id("cart-form:payerPostalOffice")).sendKeys(addressPostalOffice);
       getWebDriver().findElement(By.id("cart-form:notes")).sendKeys(notes);
-      getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).click();
+      scrollWaitAndClick(".gamelibrary-cart-submit");
   
       acceptPaytrailPayment();
       waitTitle("Forge & Illusion - Game Library");
