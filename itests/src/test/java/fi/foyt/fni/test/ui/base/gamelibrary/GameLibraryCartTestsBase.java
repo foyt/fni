@@ -63,8 +63,8 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
   
       acceptPaytrailPayment();
       waitTitle("Forge & Illusion - Game Library");
-      scrollIntoView(".gamelibrary-order-status");
       waitForSelectorPresent(".gamelibrary-order-status");
+      scrollIntoView(".gamelibrary-order-status");
       
       assertSelectorText(".gamelibrary-order-status", "Status: Paid, Waiting for Delivery", true, true);
       assertSelectorText(".gamelibrary-order-customer-name", firstName + " " + lastName, true, true);
