@@ -3,6 +3,7 @@ package fi.foyt.fni.view.illusion;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -288,10 +289,22 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
       return navigationController.internalError();
     }
     
-    Map<String, String> answers = null;
+    Map<String, String> answers = new HashMap<>();
     
     try {
-      answers = (new ObjectMapper()).readValue(getAnswers(), new TypeReference<Map<String, String>>() {});
+      Map<String, Object> answerData = (new ObjectMapper()).readValue(getAnswers(), new TypeReference<Map<String, Object>>() {});
+      for (String key : answerData.keySet()) {
+        String answer = null;
+        
+        Object answerObject = answerData.get(key);
+        if (answerObject instanceof List) {
+          answer = StringUtils.join((List<?>) answerObject, ",");
+        } else {
+          answer = String.valueOf(answerObject);
+        }
+        
+        answers.put(key, answer);
+      }
     } catch (IOException e) {
       logger.log(Level.SEVERE, "Failed to read registration form values", e);
       return navigationController.internalError();
