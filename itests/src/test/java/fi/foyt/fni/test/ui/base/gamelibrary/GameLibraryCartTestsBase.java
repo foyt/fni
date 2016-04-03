@@ -59,12 +59,12 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
       getWebDriver().findElement(By.id("cart-form:payerPostalCode")).sendKeys(addressPostalCode);
       getWebDriver().findElement(By.id("cart-form:payerPostalOffice")).sendKeys(addressPostalOffice);
       getWebDriver().findElement(By.id("cart-form:notes")).sendKeys(notes);
-      getWebDriver().findElement(By.cssSelector(".gamelibrary-cart-submit")).click();
+      scrollWaitAndClick(".gamelibrary-cart-submit");
   
       acceptPaytrailPayment();
       waitTitle("Forge & Illusion - Game Library");
-      scrollIntoView(".gamelibrary-order-status");
       waitForSelectorPresent(".gamelibrary-order-status");
+      scrollIntoView(".gamelibrary-order-status");
       
       assertSelectorText(".gamelibrary-order-status", "Status: Paid, Waiting for Delivery", true, true);
       assertSelectorText(".gamelibrary-order-customer-name", firstName + " " + lastName, true, true);

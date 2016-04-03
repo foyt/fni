@@ -400,13 +400,22 @@
       var schema = {};
       var options = {};
       var fieldCount = 0;
+      var schemaType = instance.getType();
+      
+      switch (type) {
+        case 'checkbox':
+          // When type is checkbox, type should be "array" instead of "boolean"
+          // alpaca reports use (see #394 for details)
+          schemaType = 'array';
+        break;
+      }
       
       $.each(oldForm.schema.properties, function (name, option) {
         fieldCount++;
       });
       
       schema[name] = {
-        "type" : instance.getType()
+        "type" : schemaType
       };
       
       options[name] = {
