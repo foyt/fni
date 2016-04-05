@@ -1,10 +1,16 @@
 package fi.foyt.fni.view.illusion;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.io.IOUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
@@ -18,6 +24,7 @@ import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
+import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
 @Named
@@ -30,7 +37,13 @@ public class IllusionEventEditRegistrationBackingBean extends AbstractIllusionEv
 
   @Parameter
   private String urlName;
-
+  
+  @Inject
+  private Logger logger;
+  
+  @Inject
+  private SessionController sessionController;
+  
   @Inject
   private IllusionEventController illusionEventController;
 
@@ -49,10 +62,28 @@ public class IllusionEventEditRegistrationBackingBean extends AbstractIllusionEv
     if (form != null) {
       formData = form.getData();
     } else {
-      formData = "";
+      formData = loadDefaultTemplate();
     }
     
     return null;
+  }
+
+  private String loadDefaultTemplate() {
+    ClassLoader classLoader = getClass().getClassLoader();
+
+    String path = String.format("fi/foyt/fni/illusion/registration/empty_form_%s.json", sessionController.getLocale().getLanguage());
+    
+    try {
+      InputStream templateStream = classLoader.getResourceAsStream(path);
+      try {
+        return IOUtils.toString(templateStream);
+      } finally {
+        templateStream.close();
+      }
+    } catch (IOException e) {
+      logger.log(Level.SEVERE, "Failed to load initial registration form", e);
+      return "{}";
+    }
   }
 
   @Override
