@@ -286,24 +286,32 @@
 							return false;
 						});
 					}
-				
 					
-				} else {
-						// if a user tabs out of the field, create a new tag
-						// this is only available if autocomplete is not used.
-						$(data.fake_input).bind('blur',data,function(event) { 
-							var d = $(this).attr('data-default');
-							if ($(event.data.fake_input).val()!='' && $(event.data.fake_input).val()!=d) { 
-								if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) )
-									$(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique),pattern:(settings.pattern)});
-							} else {
-								$(event.data.fake_input).val($(event.data.fake_input).attr('data-default'));
-								$(event.data.fake_input).css('color',settings.placeholderColor);
-							}
-							return false;
-						});
+					$(data.fake_input).autocomplete({
+					  open: function (event, ui) {
+	            $(this).attr('data-autocomplete-open', 'true');
+					  },
+					  close: function (event, ui) {
+	            $(this).removeAttr('data-autocomplete-open');
+					  }
+					});
+				} 
 				
-				}
+				// if a user tabs out of the field, create a new tag
+				$(data.fake_input).bind('blur',data,function(event) {
+				  if ($(this).attr('data-autocomplete-open') !== 'true') {
+						var d = $(this).attr('data-default');
+						if ($(event.data.fake_input).val()!='' && $(event.data.fake_input).val()!=d) { 
+							if( (event.data.minChars <= $(event.data.fake_input).val().length) && (!event.data.maxChars || (event.data.maxChars >= $(event.data.fake_input).val().length)) )
+								$(event.data.real_input).addTag($(event.data.fake_input).val(),{focus:true,unique:(settings.unique),pattern:(settings.pattern)});
+						} else {
+							$(event.data.fake_input).val($(event.data.fake_input).attr('data-default'));
+							$(event.data.fake_input).css('color',settings.placeholderColor);
+						}
+						return false;
+				  }
+				});
+				
 				// if user types a default delimiter like comma,semicolon and then create a new tag
 				$(data.fake_input).bind('keypress',data,function(event) {
 					if (_checkDelimiter(event)) {
