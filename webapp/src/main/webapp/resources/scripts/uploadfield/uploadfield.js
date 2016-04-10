@@ -61,7 +61,8 @@
         });
       
       if (this.options.fileNameInput.val() && this._contentTypeInput.val() && this._fileIdInput.val()) {
-        this._createFileElement(this.options.fileNameInput.val(), 100);
+        this._createFileElement(this.options.fileNameInput.val(), 100)
+          .addClass('done')
       }
     },
     
@@ -91,7 +92,8 @@
       this._uploading = true;
       this.element.parent().find('.upload-field-file').remove();
       
-      data.context = this._createFileElement(data.files[0].name, 0);
+      data.context = this._createFileElement(data.files[0].name, 0)
+        .addClass('loading');
       
       data.submit();
     },
@@ -107,6 +109,10 @@
       
       this._uploading = false;
       
+      $(data.context)
+        .removeClass('loading')
+        .addClass('done')
+        
       this.element.trigger("uploadDone");
     },
     
