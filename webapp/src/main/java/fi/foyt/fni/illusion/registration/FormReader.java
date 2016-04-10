@@ -1,6 +1,5 @@
 package fi.foyt.fni.illusion.registration;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,6 +21,10 @@ public class FormReader {
   
   public Form getForm() {
     return form;
+  }
+  
+  public Exception getParseError() {
+    return parseError;
   }
   
   public String getEmailField() {
@@ -141,6 +144,19 @@ public class FormReader {
     return properties;
   }
 
+  public FormSchemaProperty getSchemaProperty(String fieldName) {
+    return getSchemaProperties().get(fieldName);
+  }
+  
+  public boolean isRequiredField(String fieldName) {
+    FormSchemaProperty schemaProperty = getSchemaProperty(fieldName);
+    if (schemaProperty != null) {
+      return schemaProperty.getRequired();
+    }
+    
+    return false;
+  }
+  
   public String getFieldLabel(String field) {
     String result = null;
     
@@ -164,11 +180,13 @@ public class FormReader {
     ObjectMapper objectMapper = new ObjectMapper();
     try {
       return objectMapper.readValue(formJson, Form.class);
-    } catch (IOException e) {
+    } catch (Exception e) {
+      parseError = e;
       Logger.getLogger(getClass().getName()).log(Level.SEVERE, String.format("Could not parse registration form"), e);
       return null;
     }
   }
   
   private Form form;
+  private Exception parseError; 
 }
