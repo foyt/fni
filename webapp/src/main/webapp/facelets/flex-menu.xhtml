@@ -51,16 +51,16 @@
             <f:param value="#{sessionBackingBean.locale.language}"/>
           </h:outputFormat>
         </a>
-        <ul class="menu-tools-locale-list" style="display: none">
-          <h:form>
-            <li>
-              <a jsf:action="#{sessionBackingBean.changeLocale('fi')}">#{locales['menu.toolLocaleFinnish']}</a>
-            </li>
-            <li>
-              <a jsf:action="#{sessionBackingBean.changeLocale('en')}">#{locales['menu.toolLocaleEnglish']}</a>
-            </li>
-          </h:form>
-        </ul>     
+        <h:form>
+          <ul class="menu-tools-locale-list" style="display: none">
+              <li>
+                <a jsf:action="#{sessionBackingBean.changeLocale('fi')}">#{locales['menu.toolLocaleFinnish']}</a>
+              </li>
+              <li>
+                <a jsf:action="#{sessionBackingBean.changeLocale('en')}">#{locales['menu.toolLocaleEnglish']}</a>
+              </li>
+          </ul>     
+        </h:form>
       </div>
       
       <a jsf:outcome="/users/login.jsf?redirectUrl=#{sessionBackingBean.requestPath}" class="menu-tools-login" jsf:rendered="#{not sessionBackingBean.loggedIn}">#{locales['menu.toolLogin']}</a>
