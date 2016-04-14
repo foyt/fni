@@ -1,8 +1,7 @@
 @import "vars";
 @import "compass";
 @import "styles";
-
-@IMPORT "https://yui-s.yahooapis.com/3.13.0/build/cssreset/cssreset-min.css";
+@import "//static.forgeandillusion.net/libs/cssreset/3.13.0/cssreset-min.css";
 
 $notifications-background-color: #babdb6;
 $notifications-text-color: #fff;
