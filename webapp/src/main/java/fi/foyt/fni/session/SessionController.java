@@ -30,6 +30,12 @@ public class SessionController implements Serializable {
 	
 	@Inject
 	private Logger logger;
+
+  @Inject
+  private UserDAO userDAO;
+
+  @Inject
+  private UserTokenDAO userTokenDAO;
   
   @Inject
 	private PermissionController permissionController;
@@ -45,7 +51,21 @@ public class SessionController implements Serializable {
 	@PostConstruct
 	public void init() {
 	  loggedUserId = null;
-	  locale = null;
+	  
+    User user = getLoggedUser();
+    
+    if (user != null && StringUtils.isNotBlank(user.getLocale())) {
+      try {
+        locale = LocaleUtils.toLocale(user.getLocale());
+      } catch (IllegalArgumentException e) {
+        // Invalid locale has somehow ended up in the database
+        logger.log(Level.SEVERE, "Invalid locale found from User", e);
+      }
+    }
+    
+    if (locale == null) {
+      locale = Locale.getDefault();;
+    }
 	}
 	
 	@PreDestroy
@@ -57,12 +77,6 @@ public class SessionController implements Serializable {
       logger.info("Anonymous user session ended");
 	  }
 	}
-
-	@Inject
-  private UserDAO userDAO;
-
-  @Inject
-  private UserTokenDAO userTokenDAO;
 
   public boolean isLoggedIn() {
     return loggedUserId != null;
@@ -152,21 +166,6 @@ public class SessionController implements Serializable {
 
   
   public Locale getLocale() {
-    if (locale == null) {
-      User user = getLoggedUser();
-      
-      if (user != null && StringUtils.isNotBlank(user.getLocale())) {
-        try {
-          return LocaleUtils.toLocale(user.getLocale());
-        } catch (IllegalArgumentException e) {
-          // Invalid locale has somehow ended up in the database
-          logger.log(Level.SEVERE, "Invalid locale found from User", e);
-        }
-      }
-      
-      return Locale.getDefault();
-    }
-    
     return locale;
   }
   

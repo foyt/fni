@@ -3,7 +3,9 @@ package fi.foyt.fni.view.index;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -26,7 +28,6 @@ import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
 import fi.foyt.fni.persistence.model.gamelibrary.Publication;
-import fi.foyt.fni.persistence.model.gamelibrary.PublicationTag;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 
 @RequestScoped
@@ -43,8 +44,6 @@ public class IndexViewBackingBean {
 	
 	private static final int MAX_FORUM_TOPICS = 19;
 	
-	private static final int DEFAULT_FEED_ENTRIES = 3;
-
 	@Inject
 	private BlogController blogController;
 
@@ -65,24 +64,33 @@ public class IndexViewBackingBean {
 		latestGameLibraryPublications = publicationController.listRecentBookPublications(MAX_GAME_LIBRARY_PUBLICATIONS);
 		latestForumTopics = forumController.listLatestForumTopics(MAX_FORUM_TOPICS);
 		illusionEvents = createEventPojos(illusionEventController.listNextIllusionEvents(MAX_ILLUSION_EVENTS));
-	
+		latestBlogEntries = blogController.listBlogEntries(MAX_LATEST_ENTRIES);
+	  
     DateTime lastPostDate = blogController.getLastBlogDate();
     if (lastPostDate != null) {
       newsArchiveMonth = lastPostDate.getMonthOfYear();
       newsArchiveYear = lastPostDate.getYear();
     }
+    
+    entryTags = new HashMap<>();
+    
+    for (BlogEntry latestBlogEntry : latestBlogEntries) {
+      entryTags.put(latestBlogEntry.getId(), blogController.listBlogEntryTags(latestBlogEntry));
+    }
+    
+    publicationTags = new HashMap<>();
+    
+    for (BookPublication latestGameLibraryPublication : latestGameLibraryPublications) {
+      publicationTags.put(latestGameLibraryPublication.getId(), gameLibraryTagController.listPublicationGameLibraryTags(latestGameLibraryPublication));
+    }
 	}
 	
 	public List<BlogEntry> getLatestBlogEntries() {
-		return blogController.listBlogEntries(MAX_LATEST_ENTRIES);
-	}
-
-	public List<BlogEntry> getBlogFeed() {
-		return blogController.listBlogEntries(DEFAULT_FEED_ENTRIES);
+		return latestBlogEntries;
 	}
 	
 	public List<BlogTag> getBlogEntryTags(BlogEntry entry) {
-		return blogController.listBlogEntryTags(entry);
+		return entryTags.get(entry.getId());
 	}
 	
 	public List<BookPublication> getLatestGameLibraryPublications() {
@@ -90,14 +98,7 @@ public class IndexViewBackingBean {
 	}
 	
 	public List<GameLibraryTag> getPublicationTags(Publication publication) {
-		List<GameLibraryTag> result = new ArrayList<>();
-		
-		List<PublicationTag> publicationTags = gameLibraryTagController.listPublicationTags(publication);
-		for (PublicationTag publicationTag : publicationTags) {
-			result.add(publicationTag.getTag());
-		}
-		
-		return result;
+		return publicationTags.get(publication.getId());
 	}
 	
 	public List<ForumTopic> getLatestForumTopics() {
@@ -142,6 +143,9 @@ public class IndexViewBackingBean {
 	private List<BookPublication> latestGameLibraryPublications;
 	private List<ForumTopic> latestForumTopics;
 	private List<Event> illusionEvents;
+  private List<BlogEntry> latestBlogEntries;
+  private Map<Long, List<BlogTag>> entryTags;
+  private Map<Long, List<GameLibraryTag>> publicationTags;
 	private int newsArchiveYear;
 	private int newsArchiveMonth;
 	

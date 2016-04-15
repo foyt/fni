@@ -5,93 +5,85 @@
   xmlns:jsf="http://xmlns.jcp.org/jsf"
   xmlns:h="http://java.sun.com/jsf/html">
   
-  <h:outputScript name="scripts/gui/menu.js" target="head"/>
-  
   <div class="flex-row index-menu"> 
     <div class="lg-flex-cell-3 md-flex-cell-16 md-flex-center sm-flex-cell-16 sm-flex-center">
       <a class="menu-logo" jsf:outcome="/index.jsf" data-text="#{locales['menu.logoText']}">#{locales['menu.logoText']}</a>
     </div>
     
-    <h:panelGroup layout="block" styleClass="menu-navigation-container lg-flex-cell-8 md-flex-cell-16 sm-flex-cell-16 no-margin-top no-margin-bottom">
+    <div class="menu-navigation-container lg-flex-cell-8 md-flex-cell-16 sm-flex-cell-16 no-margin-top no-margin-bottom">
       <div class="flex-row">
         <div class="flex-center lg-flex-cell-3 lg-flex-cell-first md-flex-cell-3 md-flex-cell-first sm-flex-cell-8 sm-flex-cell-first sm-flex-order-3">
-          <h:link outcome="/forge/index.jsf">#{locales['menu.menuForge']}</h:link>
+          <a jsf:outcome="/forge/index.jsf">#{locales['menu.menuForge']}</a>
         </div>
         <div class="flex-center lg-flex-cell-3 md-flex-cell-3 sm-flex-cell-8 sm-flex-cell-last sm-flex-order-4">
-          <h:link outcome="/illusion/index.jsf">#{locales['menu.menuIllusion']}</h:link>
+          <a jsf:outcome="/illusion/index.jsf">#{locales['menu.menuIllusion']}</a>
         </div>
         <div class="flex-center lg-flex-cell-3 md-flex-cell-3 sm-flex-cell-5 sm-flex-order-1">
-          <h:link outcome="/gamelibrary/index.jsf">#{locales['menu.menuGameLibrary']}</h:link>
+          <a jsf:outcome="/gamelibrary/index.jsf">#{locales['menu.menuGameLibrary']}</a>
         </div>
         <div class="flex-center lg-flex-cell-3 md-flex-cell-3 sm-flex-cell-6 sm-flex-cell-first sm-flex-order-0">
-          <h:link outcome="/forum/index.jsf">#{locales['menu.menuForum']}</h:link>
+          <a jsf:outcome="/forum/index.jsf">#{locales['menu.menuForum']}</a>
         </div>
         <div class="flex-center lg-flex-cell-3 lg-flex-cell-last md-flex-cell-3 md-flex-cell-last sm-flex-cell-5 sm-flex-order-1 sm-flex-cell-last">
           <div class="menu-about-container">
-            <h:outputLink value="javascript:void(null)" styleClass="menu-about">#{locales['menu.menuAbout']}</h:outputLink>
+            <a href="javascript:void(null)" class="menu-about">#{locales['menu.menuAbout']}</a>
             <ul class="menu-about-list" style="display: none">
-              <li><h:link outcome="/about.jsf" fragment="vision">#{locales['menu.menuAboutVision']}</h:link></li>
-              <li><h:link outcome="/about.jsf" fragment="information">#{locales['menu.menuAboutInformation']}</h:link></li>
-              <li><h:link outcome="/about.jsf" fragment="forum">#{locales['menu.menuAboutForum']}</h:link></li>
-              <li><h:link outcome="/about.jsf" fragment="distribution">#{locales['menu.menuAboutDistribution']}</h:link></li>
-              <li><h:link outcome="/about.jsf" fragment="gameplay">#{locales['menu.menuAboutGameplay']}</h:link></li>
-              <li><h:link outcome="/about.jsf" fragment="history">#{locales['menu.menuAboutHistory']}</h:link></li>
-              <li><h:link outcome="/about.jsf" fragment="cookies">#{locales['menu.menuAboutCookies']}</h:link></li>
-              <li><h:link outcome="/about.jsf" fragment="opensource">#{locales['menu.menuAboutOpenSource']}</h:link></li>
-              <li><h:link outcome="/about.jsf" fragment="contact">#{locales['menu.menuAboutContact']}</h:link></li>
-              <li><h:link outcome="/about.jsf" fragment="acknowledgements">#{locales['menu.menuAboutAcknowledgements']}</h:link></li>
+              <li><a jsf:outcome="/about.jsf" jsf:fragment="vision">#{locales['menu.menuAboutVision']}</a></li>
+              <li><a jsf:outcome="/about.jsf" jsf:fragment="information">#{locales['menu.menuAboutInformation']}</a></li>
+              <li><a jsf:outcome="/about.jsf" jsf:fragment="forum">#{locales['menu.menuAboutForum']}</a></li>
+              <li><a jsf:outcome="/about.jsf" jsf:fragment="distribution">#{locales['menu.menuAboutDistribution']}</a></li>
+              <li><a jsf:outcome="/about.jsf" jsf:fragment="gameplay">#{locales['menu.menuAboutGameplay']}</a></li>
+              <li><a jsf:outcome="/about.jsf" jsf:fragment="history">#{locales['menu.menuAboutHistory']}</a></li>
+              <li><a jsf:outcome="/about.jsf" jsf:fragment="cookies">#{locales['menu.menuAboutCookies']}</a></li>
+              <li><a jsf:outcome="/about.jsf" jsf:fragment="opensource">#{locales['menu.menuAboutOpenSource']}</a></li>
+              <li><a jsf:outcome="/about.jsf" jsf:fragment="contact">#{locales['menu.menuAboutContact']}</a></li>
+              <li><a jsf:outcome="/about.jsf" jsf:fragment="acknowledgements">#{locales['menu.menuAboutAcknowledgements']}</a></li>
             </ul>
           </div>
         </div>
       </div>
-    </h:panelGroup>
-    
-    <h:panelGroup layout="block" styleClass="menu-tools-container lg-flex-cell-5 md-flex-cell-16 sm-flex-cell-16">
+    </div>
+
+    <div class="menu-tools-container lg-flex-cell-5 md-flex-cell-16 sm-flex-cell-16">
       <div class="menu-tools-locale-container">
         <a href="javascript:void(null)" class="menu-tools-locale">
           <h:outputFormat value="#{locales['menu.toolLocale']}">
             <f:param value="#{sessionBackingBean.locale.language}"/>
           </h:outputFormat>
         </a>
-        
         <h:form>
           <ul class="menu-tools-locale-list" style="display: none">
-            <li>
-              <h:commandLink action="#{sessionBackingBean.changeLocale('fi')}" value="#{locales['menu.toolLocaleFinnish']}">
-                <f:ajax onevent="onChangeLocale" execute="@form"/>
-              </h:commandLink>
-            </li>
-            
-            <li>
-              <h:commandLink action="#{sessionBackingBean.changeLocale('en')}" value="#{locales['menu.toolLocaleEnglish']}">
-                <f:ajax onevent="onChangeLocale" execute="@form"/>
-              </h:commandLink>
-            </li>
-          </ul>
+              <li>
+                <a jsf:action="#{sessionBackingBean.changeLocale('fi')}">#{locales['menu.toolLocaleFinnish']}</a>
+              </li>
+              <li>
+                <a jsf:action="#{sessionBackingBean.changeLocale('en')}">#{locales['menu.toolLocaleEnglish']}</a>
+              </li>
+          </ul>     
         </h:form>
       </div>
       
-      <h:link outcome="/users/login.jsf?redirectUrl=#{sessionBackingBean.requestPath}" styleClass="menu-tools-login" rendered="#{not sessionBackingBean.loggedIn}">#{locales['menu.toolLogin']}</h:link>
+      <a jsf:outcome="/users/login.jsf?redirectUrl=#{sessionBackingBean.requestPath}" class="menu-tools-login" jsf:rendered="#{not sessionBackingBean.loggedIn}">#{locales['menu.toolLogin']}</a>
       
-      <h:panelGroup layout="block" styleClass="menu-tools-account-container" rendered="#{sessionBackingBean.loggedIn}">
-        <h:outputLink value="javascript:void(null)" styleClass="menu-tools-account">
+      <div class="menu-tools-account-container" jsf:rendered="#{sessionBackingBean.loggedIn}">
+        <a href="javascript:void(null)" class="menu-tools-account">
           <h:outputFormat value="#{locales['menu.toolAccount']}"/>
-        </h:outputLink>
+        </a>
         
         <ul class="menu-tools-account-list" style="display: none">
-          <li class="menu-tools-account-edit-profile"><h:link value="#{locales['menu.toolAccountEditProfile']}" outcome="/users/editprofile.jsf" /></li>
-          <li class="menu-tools-account-view-profile"><h:outputLink value="#{request.contextPath}/profile/#{sessionBackingBean.loggedUser.id}">#{locales['menu.toolAccountViewProfile']}</h:outputLink></li>
-          <li class="menu-tools-account-logout"><h:outputLink value="#{request.contextPath}/logout">#{locales['menu.toolAccountLogout']}</h:outputLink></li>
+          <li class="menu-tools-account-edit-profile"><a jsf:outcome="/users/editprofile.jsf">#{locales['menu.toolAccountEditProfile']}</a></li>
+          <li class="menu-tools-account-view-profile"><a jsf:outcome="/users/profile.jsf?userId=#{sessionBackingBean.loggedUser.id}">#{locales['menu.toolAccountViewProfile']}</a></li>
+          <li class="menu-tools-account-logout"><a href="#{request.contextPath}/logout">#{locales['menu.toolAccountLogout']}</a></li>
         </ul>
-      </h:panelGroup>
+      </div>
       
-      <h:panelGroup layout="block" styleClass="menu-tools-search-container">
+      <div class="menu-tools-search-container">
         <input class="menu-tools-search-text" type="text"></input>
-        <h:panelGroup layout="block" styleClass="menu-tools-search-loading" style="display: none"/>
-        <h:panelGroup layout="block" styleClass="menu-tools-search-result" style="display: none"/>
-      </h:panelGroup>
-      <h:outputLink value="javascript:null(void)" styleClass="menu-tools-search">#{locales['menu.toolSearch']}</h:outputLink>
-    </h:panelGroup>
+        <div class="menu-tools-search-loading" style="display: none"/>
+        <div class="menu-tools-search-result" style="display: none"/>
+      </div>
+      <a href="javascript:null(void)" class="menu-tools-search">#{locales['menu.toolSearch']}</a>
+    </div>
   </div>
-    
+
 </ui:composition>
