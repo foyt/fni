@@ -1,0 +1,45 @@
+{
+  "schema": {
+    "type": "object",
+    "required": false,
+    "properties": {
+      "firstname": {
+        "type": "string",
+        "readonly": false,
+        "required": true
+      },
+      "lastname": {
+        "type": "string",
+        "readonly": false,
+        "required": true
+      },
+      "email": {
+        "type": "string",
+        "readonly": false,
+        "required": true
+      }
+    }
+  },
+  "options": {
+    "fields": {
+      "firstname": {
+        "type": "text",
+        "label": "Pelaajan etunimi",
+        "order": "1",
+        "readonly": false
+      },
+      "lastname": {
+        "type": "text",
+        "label": "Pelaajan sukunimi",
+        "order": "2",
+        "readonly": false
+      },
+      "email": {
+        "type": "email",
+        "label": "Sähköpostiosoite",
+        "order": "3",
+        "readonly": false
+      }
+    }
+  }
+}

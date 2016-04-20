@@ -45,15 +45,17 @@
                   <th>Min</th>
                   <th>Max</th>
                   <th>Average</th>
+                  <th>Total Average</th>
                   <th>Total</th>
                 </tr>
-                <ui:repeat var="methodStats" value="#{requestStats.methodStats}">
+                <ui:repeat var="methodStats" value="#{requestStats.methodStatList}">
                   <tr class="#{methodStats.total >= 200 ? (methodStats.total >= 500 ? 'admin-debug-timer-result-high' : 'admin-debug-timer-result-med') : 'admin-debug-timer-result-low'}">
                     <td><span title="#{methodStats.methodDetails}">#{methodStats.methodName}</span></td>
                     <td>#{methodStats.count}</td>
                     <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.min)}</td>
                     <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.max)}</td>
                     <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.avg)}</td>
+                    <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.totalAvg)}</td>
                     <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.total)}</td>
                   </tr>
                 </ui:repeat>
