@@ -160,7 +160,9 @@
                 <a jsf:value="#{forgePublicMaterialBackingBean.material.downloadLink}" jsf:rendered="#{forgePublicMaterialBackingBean.material.printable}">#{locales['forge.publicMaterial.downloadHtml']}</a>
                 <a target="_blank" jsf:value="#{forgePublicMaterialBackingBean.material.editPath}" jsf:rendered="#{forgePublicMaterialBackingBean.mayEdit}">#{locales['forge.publicMaterial.edit']}</a>
                 <a target="_blank" jsf:value="#{forgePublicMaterialBackingBean.material.folderPath}" jsf:rendered="#{forgePublicMaterialBackingBean.mayEdit}">#{locales['forge.publicMaterial.openFolder']}</a>
-                <a class="material-share" href="javascript:void(null)" jsf:rendered="#{forgePublicMaterialBackingBean.mayEdit}">#{locales['forge.publicMaterial.materialShare']}</a>
+                <ui:fragment rendered="#{forgePublicMaterialBackingBean.mayEdit}">
+                  <a class="material-share" href="javascript:void(null)">#{locales['forge.publicMaterial.materialShare']}</a>
+                </ui:fragment>
               </div>
             </div> 
           </div>
