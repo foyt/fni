@@ -5,30 +5,22 @@
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" 
   xmlns:jsf="http://xmlns.jcp.org/jsf"
-  template="/WEB-INF/templates/gridbase.xhtml">
-
-  <ui:define name="page-title">#{locales['index.title']}</ui:define>
-      
-  <ui:define name="view-scripts">
-    <!-- jQuery Magnific-Popup  -->
+  template="/WEB-INF/templates/gridbase-s.xhtml">
   
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/jquery.magnific-popup.min.js"></script>
-    
-    <!-- View scripts -->
-    
-    <h:outputScript name="scripts/gui/index.js"/>
+  <ui:define name="title">
+    <title>#{locales['index.title']}</title>
   </ui:define>
   
-  <ui:define name="view-stylesheets">
-    <!-- jQuery Magnific-Popup  -->
-    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/magnific-popup.min.css"/>
-    
-    <!-- View styles -->
-    
-    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
-    <h:outputStylesheet library="novus" name="css/index.css"/>
+  <ui:define name="scripts">
+    <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/jquery.magnific-popup/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script defer="defer" type="text/javascript" src="/scripts/gui/index.js"></script>
   </ui:define>
 
+  <ui:define name="styles">
+    <link rel="StyleSheet" href="//static.forgeandillusion.net/libs/jquery.magnific-popup/1.1.0/jquery.magnific-popup.min.css"></link>
+    <link rel="StyleSheet" href="/theme/css/index.css"></link>
+  </ui:define>
+  
   <ui:define name="grid-content">
 
     <!-- Menu -->
@@ -39,7 +31,7 @@
     
     <div class="flex-row md-flex-hide sm-flex-hide">
       <div class="flex-cell-full no-margin-top no-margin-bottom">
-        <h:graphicImage library="novus" name="gfx/layout/banner.jpg" styleClass="banner"/>
+        <img src="/theme/gfx/layout/banner.jpg" class="banner"/>
       </div>
     </div>
     
@@ -67,7 +59,7 @@
             <div class="lg-flex-cell-8 md-flex-cell-12 sm-flex-cell-16">
               <div class="publication-image">
                 <a class="publication-image-link" href="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
-                  <img jsf:value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=200"/>
+                  <img src="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=200"/>
                 </a>
               </div>
 
@@ -127,7 +119,7 @@
     </div>
     
     <!-- Blog and forum -->
-    
+
     <div class="flex-row">
       <div class="lg-flex-cell-first index-box lg-flex-cell-12 md-flex-cell-12 sm-flex-cell-full">
         <h3>
@@ -188,7 +180,7 @@
           
         <div class="more-container">
           <a class="more-link" jsf:outcome="/forum/index.jsf">#{locales['index.forumMoreLink']}</a>
-        </div> 
+        </div>
       </div>  
     </div>
     
