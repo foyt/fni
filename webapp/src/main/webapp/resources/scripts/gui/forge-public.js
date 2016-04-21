@@ -47,5 +47,12 @@
       $('.forge-search-result').hide(); 
     }
   });
+  
+  $(document).ready(function () {
+    $('p.description').each(function (index, p) {
+      $(p).attr('title', $(p).text());
+      $clamp(p, {clamp: 8});
+    });
+  });
 
 }).call(this);
