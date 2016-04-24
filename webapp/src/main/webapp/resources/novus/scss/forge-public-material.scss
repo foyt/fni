@@ -59,15 +59,16 @@
     }
   }
   
-  .tags {
+  .material-tags {
+    max-width: 100%;
+    word-wrap: break-word;
+  
     .tag, .creator-tag {
       font-family: $default-font;
       font-size: 10px;
       text-transform: uppercase;
       padding-right: 5px;
       text-decoration: none;
-      display: inline-block;
-      white-space: nowrap;
     }
     
     .tag {
@@ -119,6 +120,7 @@
   color: $default-color;
   text-decoration: none;
   margin-right: 10px;
+  white-space: nowrap;
 }
 
 .categories {
@@ -128,19 +130,26 @@
     margin-bottom: 10px;
   }
   
-  .tags a {
-    display: block;
-    color: $default-color;
-    font-family: $default-font;
-    font-size: 13px;
-    text-decoration: none;
-  }
+  .tags {
+    li {
+      max-width: 100%;
+      word-wrap: break-word;
+    }
   
-  .tags a:before {
-    content: '»';
-    padding-right: 7px;
+    a {
+      display: block;
+      color: $default-color;
+      font-family: $default-font;
+      font-size: 13px;
+      text-decoration: none;
+      
+      &:before {
+        content: '»';
+        padding-right: 7px;
+      }
+    }
   }
-  
+
   .more-container {
     position: absolute;
     bottom: 10px;

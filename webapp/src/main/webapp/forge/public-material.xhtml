@@ -63,12 +63,10 @@
       </div>
     </div> 
     
-    <div class="flex-row forge-public-material">
+    <div class="flex-row forge-public-material flex-min">
       <div class="flex-cell-full forge-public-material-cell">
-        
-      
         <div class="flex-row">
-          <div class="flex-cell-12 flex-cell-first index-box">
+          <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full index-box">
             <div class="flex-row">
               <div class="flex-cell-full no-margin-top forge-public-material-title">
                 <h2>#{forgePublicMaterialBackingBean.material.title}</h2>
@@ -99,11 +97,11 @@
                   </div>
                 </div>
                 
-                <div class="flex-row flex-align-items-center">
-                  <div class="flex-cell-4 flex-cell-first">
+                <div class="flex-row lg-flex-align-items-center md-flex-align-items-center">
+                  <div class="lg-flex-cell-4 lg-flex-cell-first md-flex-cell-4 md-flex-cell-first sm-flex-cell-5 sm-flex-cell-first">
                     <label>#{locales['forge.publicMaterial.categoriesLabel']}</label>
                   </div>
-                  <div class="flex-cell-12 flex-cell-last tags">
+                  <div class="lg-flex-cell-12 lg-flex-cell-last md-flex-cell-12 md-flex-cell-last sm-flex-cell-11 sm-flex-cell-last material-tags">
                     <a jsf:outcome="/forge/public-materials.jsf?userId=#{forgePublicMaterialBackingBean.material.creatorId}" class="creator-tag">#{forgePublicMaterialBackingBean.material.creatorName}</a>
                     <ui:repeat var="tag" value="#{forgePublicMaterialBackingBean.material.tags}">
                       <a jsf:outcome="/forge/public-materials.jsf?tags=#{tag}" class="tag">#{tag}</a>
@@ -112,8 +110,8 @@
                 </div>
                 
                 <ui:fragment rendered="#{forgePublicMaterialBackingBean.material.creativeCommonsIconUrl eq null}">
-                  <div class="flex-row flex-align-items-center">
-                    <div class="flex-cell-4 flex-cell-first">
+                  <div class="flex-row lg-flex-align-items-center md-flex-align-items-center">
+                    <div class="lg-flex-cell-4 lg-flex-cell-first md-flex-cell-4 md-flex-cell-first sm-flex-cell-5 sm-flex-cell-first">
                       <label>#{locales['forge.publicMaterial.licenseLabel']}</label>
                     </div>
                     <div class="flex-cell-12 flex-cell-last license">
@@ -123,11 +121,11 @@
                 </ui:fragment>
                 
                 <ui:fragment rendered="#{forgePublicMaterialBackingBean.material.creativeCommonsIconUrl ne null}">
-                  <div class="flex-row flex-align-items-center">
-                    <div class="flex-cell-4 flex-cell-first">
+                  <div class="flex-row lg-flex-align-items-center md-flex-align-items-center">
+                    <div class="lg-flex-cell-4 lg-flex-cell-first md-flex-cell-4 md-flex-cell-first sm-flex-cell-5 sm-flex-cell-first">
                       <label>#{locales['forge.publicMaterial.licenseLabel']}</label>
                     </div>
-                    <div class="flex-cell-12 flex-cell-last license">
+                    <div class="lg-flex-cell-12 lg-flex-cell-last md-flex-cell-12 md-flex-cell-last sm-flex-cell-11 sm-flex-cell-last license">
                       <a target="_blank" href="#{forgePublicMaterialBackingBean.material.license}">
                         <img src="#{forgePublicMaterialBackingBean.material.creativeCommonsIconUrl}" />
                       </a>
@@ -136,10 +134,10 @@
                 </ui:fragment>
                 
                 <div class="flex-row flex-align-items-center">
-                  <div class="flex-cell-4 flex-cell-first">
+                  <div class="lg-flex-cell-4 lg-flex-cell-first md-flex-cell-4 md-flex-cell-first sm-flex-cell-5 sm-flex-cell-first">
                     <label>#{locales['forge.publicMaterial.modificationsLabel']}</label>
                   </div>
-                  <div class="flex-cell-12 flex-cell-last created-modified">
+                  <div class="lg-flex-cell-12 lg-flex-cell-last md-flex-cell-12 md-flex-cell-last sm-flex-cell-11 sm-flex-cell-last created-modified">
                     <h:outputFormat value="#{locales['forge.publicMaterial.createdModified']}">
                       <f:param value="#{forgePublicMaterialBackingBean.material.created}"/>
                       <f:param value="#{forgePublicMaterialBackingBean.material.modified}"/>
@@ -172,7 +170,7 @@
             </div> 
           </div>
         
-          <div class="flex-cell-4 flex-cell-last index-box categories">
+          <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-full index-box categories">
             <div class="flex-row">
               <div class="flex-cell-full">
                 <h3>#{locales['forge.publicMaterial.categories']}</h3>
