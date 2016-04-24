@@ -7,7 +7,21 @@
   template="/WEB-INF/templates/gridbase-s.xhtml">
   
   <ui:define name="title">
-    <title>#{locales['forge.publicMaterials.pageTitle']}</title>
+    <ui:fragment rendered="#{forgePublicMaterialsBackingBean.userName ne null}">
+      <title>
+        <h:outputFormat value="#{locales['forge.publicMaterials.pageTitle']}">
+          <f:param value="#{forgePublicMaterialsBackingBean.userName}"/>
+        </h:outputFormat>
+      </title>
+    </ui:fragment>
+      
+    <ui:fragment rendered="#{forgePublicMaterialsBackingBean.tags ne null}">
+      <title>
+        <h:outputFormat value="#{locales['forge.publicMaterials.pageTitle']}">
+          <f:param value="#{forgePublicMaterialsBackingBean.tags}"/>
+        </h:outputFormat>
+      </title>
+    </ui:fragment>    
   </ui:define>
   
   <ui:define name="styles">
