@@ -6,25 +6,27 @@
   xmlns:h="http://java.sun.com/jsf/html">
   
   <div class="flex-row index-menu"> 
-    <div class="lg-flex-cell-3 md-flex-cell-16 md-flex-center sm-flex-cell-16 sm-flex-center">
+    <div class="lg-flex-cell-2 lg-flex-cell-first md-flex-cell-16 md-flex-center sm-flex-cell-16 sm-flex-center flex-overflow-hidden">
       <a class="menu-logo" jsf:outcome="/index.jsf" data-text="#{locales['menu.logoText']}">#{locales['menu.logoText']}</a>
     </div>
-    
-    <div class="menu-navigation-container lg-flex-cell-8 md-flex-cell-16 sm-flex-cell-16 no-margin-top no-margin-bottom">
+    <div class="menu-navigation-container lg-flex-cell-10 md-flex-cell-16 sm-flex-cell-16">
       <div class="flex-row">
-        <div class="flex-center lg-flex-cell-3 lg-flex-cell-first md-flex-cell-3 md-flex-cell-first sm-flex-cell-8 sm-flex-cell-first sm-flex-order-3">
+        <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 lg-flex-cell12-first md-flex-cell12-2 md-flex-cell12-first sm-flex-cell12-4 md-flex-cell12-first sm-flex-order-1">
           <a jsf:outcome="/forge/index.jsf">#{locales['menu.menuForge']}</a>
         </div>
-        <div class="flex-center lg-flex-cell-3 md-flex-cell-3 sm-flex-cell-8 sm-flex-cell-last sm-flex-order-4">
+        <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 lg-flex-cell-first md-flex-cell12-2 sm-flex-cell12-4 sm-flex-order-3">
+          <a jsf:outcome="/forge/public.jsf">#{locales['menu.menuForgePublic']}</a>
+        </div>
+        <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 md-flex-cell12-2 sm-flex-cell12-4 sm-flex-order-5">
           <a jsf:outcome="/illusion/index.jsf">#{locales['menu.menuIllusion']}</a>
         </div>
-        <div class="flex-center lg-flex-cell-3 md-flex-cell-3 sm-flex-cell-5 sm-flex-order-1">
+        <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 md-flex-cell12-2 sm-flex-cell12-4 sm-flex-order-2">
           <a jsf:outcome="/gamelibrary/index.jsf">#{locales['menu.menuGameLibrary']}</a>
         </div>
-        <div class="flex-center lg-flex-cell-3 md-flex-cell-3 sm-flex-cell-6 sm-flex-cell-first sm-flex-order-0">
+        <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 md-flex-cell12-2 sm-flex-cell12-4 sm-flex-order-4">
           <a jsf:outcome="/forum/index.jsf">#{locales['menu.menuForum']}</a>
         </div>
-        <div class="flex-center lg-flex-cell-3 lg-flex-cell-last md-flex-cell-3 md-flex-cell-last sm-flex-cell-5 sm-flex-order-1 sm-flex-cell-last">
+        <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 lg-flex-cell12-last md-flex-cell12-2 md-flex-cell12-last sm-flex-cell12-4 sm-flex-order-6">
           <div class="menu-about-container">
             <a href="javascript:void(null)" class="menu-about">#{locales['menu.menuAbout']}</a>
             <ul class="menu-about-list" style="display: none">
@@ -44,7 +46,7 @@
       </div>
     </div>
 
-    <div class="menu-tools-container lg-flex-cell-5 md-flex-cell-16 sm-flex-cell-16">
+    <div class="menu-tools-container lg-flex-cell-4 md-flex-cell-16 sm-flex-cell-16">
       <div class="menu-tools-locale-container">
         <a href="javascript:void(null)" class="menu-tools-locale">
           <h:outputFormat value="#{locales['menu.toolLocale']}">
