@@ -4,19 +4,39 @@
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" 
   xmlns:jsf="http://xmlns.jcp.org/jsf"
-  template="/WEB-INF/templates/gridbase.xhtml">
-
-  <ui:define name="page-title">#{locales['forge.index.pageTitle']}</ui:define>
+  template="/WEB-INF/templates/gridbase-s.xhtml">
   
-  <ui:define name="view-stylesheets">
-    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
-    <h:outputStylesheet library="novus" name="css/forge-public-materials.css"/>
+  <ui:define name="title">
+    <ui:fragment rendered="#{forgePublicMaterialsBackingBean.userName ne null}">
+      <title>
+        <h:outputFormat value="#{locales['forge.publicMaterials.pageTitle']}">
+          <f:param value="#{forgePublicMaterialsBackingBean.userName}"/>
+        </h:outputFormat>
+      </title>
+    </ui:fragment>
+      
+    <ui:fragment rendered="#{forgePublicMaterialsBackingBean.tags ne null}">
+      <title>
+        <h:outputFormat value="#{locales['forge.publicMaterials.pageTitle']}">
+          <f:param value="#{forgePublicMaterialsBackingBean.tags}"/>
+        </h:outputFormat>
+      </title>
+    </ui:fragment>    
   </ui:define>
   
-  <ui:define name="view-scripts">
-    <h:outputScript name="scripts/gui/forge-public-materials.js"/>
+  <ui:define name="styles">
+    <link rel="StyleSheet" href="/theme/css/forge-public-materials.css"></link>
+    <link rel="StyleSheet" href="/theme/css/flex-menu.css"></link>
   </ui:define>
-
+  
+  <ui:define name="scripts">
+    <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/dustjs-linkedin/2.7.2/dust-full.min.js"></script>
+    <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/dustjs-helpers/1.7.3/dust-helpers.min.js"></script>
+    <script defer="defer" type="text/javascript" src="/scripts/gui/dust.js"></script>
+    <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/clampjs/0.5.1/clamp.min.js"></script>
+    <script defer="defer" type="text/javascript" src="/scripts/gui/forge-public-materials.js"></script>
+  </ui:define>
+  
   <ui:define name="grid-content">
 
     <!-- Menu -->
@@ -53,15 +73,14 @@
       </div>
     </div> 
     
-    <div class="flex-row forge-public-materials">
+    <div class="flex-row forge-public-materials flex-min">
       <div class="flex-cell-full">
         <div class="flex-row">
-          <div class="flex-cell-12 flex-cell-first index-box">
-          
+          <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full index-box">
             <div class="flex-cell-full">
               <div class="flex-row">
                 <div class="flex-cell-full">
-                  <ui:fragment rendered="#{forgePublicMaterialsBackingBean.userId ne null}">
+                  <ui:fragment rendered="#{forgePublicMaterialsBackingBean.userName ne null}">
                     <h3>
                       <h:outputFormat value="#{locales['forge.publicMaterials.profile']}">
                         <f:param value="#{forgePublicMaterialsBackingBean.userName}"/>
@@ -85,27 +104,35 @@
                     <div class="flex-row material">
                       <div class="flex-cell-full">
                         <div class="flex-row">
-                          <div class="flex-cell-12 flex-cell-first no-margin-bottom">
-                            <h4>
-                              <img class="icon" jsf:name="/gfx/icons/48x48/forge/icon-#{material.icon}.png" jsf:library="novus"/>
-                              <a jsf:rendered="#{material.viewable}" jsf:outcome="/forge/public-material.jsf?path=#{material.path}">#{material.title}</a>
-                              <a jsf:rendered="#{!material.viewable}" jsf:value="#{material.downloadLink}">#{material.title}</a>
-                            </h4>
-                            <p class="modified">
-                              <h:outputFormat value="#{locales['forge.public.generic.materialModified']}">
-                                <f:param value="#{material.modified}"/>
-                              </h:outputFormat>
-                            </p>
+                          <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-11 lg-flex-cell-first no-margin-bottom">
+                            <div class="flex-row">
+                              <div class="flex-cell-full">
+                                <h4>
+                                  <img class="icon" jsf:name="/gfx/icons/48x48/forge/icon-#{material.icon}.png" jsf:library="novus"/>
+                                  <a jsf:rendered="#{material.viewable}" jsf:outcome="/forge/public-material.jsf?path=#{material.path}">#{material.title}</a>
+                                  <a jsf:rendered="#{!material.viewable}" jsf:value="#{material.downloadLink}">#{material.title}</a>
+                                </h4>
+                              </div>
+                            </div>
+                            <div class="flex-row">
+                              <div class="flex-cell-full">
+                                <p class="modified">
+                                  <h:outputFormat value="#{locales['forge.public.generic.materialModified']}">
+                                    <f:param value="#{material.modified}"/>
+                                  </h:outputFormat>
+                                </p>
+                              </div>
+                            </div>
                           </div>
                           
                           <ui:fragment rendered="#{material.creativeCommonsIconUrl eq null}">
-                            <div class="flex-cell-4 flex-right flex-cell-last no-margin-bottom license-link-container">
+                            <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-5 sm-flex-cell-last flex-right no-margin-bottom license-link-container">
                               <a target="_blank" class="license-link" href="#{material.license}">#{material.license}</a>
                             </div>
                           </ui:fragment>
                             
                           <ui:fragment rendered="#{material.creativeCommonsIconUrl ne null}">
-                            <div class="flex-cell-4 flex-right flex-cell-last no-margin-bottom">
+                            <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-5 sm-flex-cell-last flex-right no-margin-bottom">
                               <a target="_blank" href="#{material.license}">
                                 <img src="#{material.creativeCommonsIconUrl}" />
                               </a>
@@ -114,10 +141,8 @@
                         </div> 
       
                         <div class="flex-row">
-                          <div class="flex-cell-10 flex-cell-first">
+                          <div class="flex-cell-full">
                             <p>#{material.description}</p>
-                          </div>
-                          <div class="flex-cell-6 flex-cell-last flex-right">
                           </div>
                         </div>
                         
@@ -136,7 +161,8 @@
               </div>
             </div>
           </div>
-          <div class="flex-cell-4 flex-cell-last index-box">
+          
+          <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-full index-box">
             <div class="flex-row">
               <div class="flex-cell-full">
                 <h3>#{locales['forge.publicMaterials.categories']}</h3>
@@ -151,7 +177,7 @@
               </div>
             </div>
               
-            <div class="more-container" style="dislay: none"> 
+            <div class="more-container" style="display: none"> 
               <a jsf:outcome="/gamelibrary/index.jsf" class="more-link">#{locales['index.gameLibraryMoreLink']}</a>
             </div>
           </div>

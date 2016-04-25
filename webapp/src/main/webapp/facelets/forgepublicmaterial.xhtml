@@ -7,28 +7,36 @@
   <div class="flex-row material">
     <div class="flex-cell-full">
       <div class="flex-row">
-        <div class="flex-cell-12 flex-cell-first no-margin-bottom">
-          <h4>
-            <img class="icon" jsf:name="/gfx/icons/48x48/forge/icon-#{material.icon}.png" jsf:library="novus"/>
-            <a jsf:rendered="#{material.viewable}" jsf:outcome="/forge/public-material.jsf?path=#{material.path}">#{material.title}</a>
-            <a jsf:rendered="#{!material.viewable}" jsf:value="#{material.downloadLink}">#{material.title}</a>
-          </h4>
+        <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-11 sm-flex-cell-first no-margin-bottom material-title-container">
+          <div class="flex-row">
+            <div class="flex-cell-full no-margin-top">
+              <h4>
+                <img class="icon" jsf:name="/gfx/icons/48x48/forge/icon-#{material.icon}.png" jsf:library="novus"/>
+                <a jsf:rendered="#{material.viewable}" jsf:outcome="/forge/public-material.jsf?path=#{material.path}">#{material.title}</a>
+                <a jsf:rendered="#{!material.viewable}" jsf:value="#{material.downloadLink}">#{material.title}</a>
+              </h4>
+            </div>
+          </div>
           
-          <p class="modified">
-            <h:outputFormat value="#{locales['forge.public.generic.materialModified']}">
-              <f:param value="#{material.modified}"/>
-            </h:outputFormat>
-          </p>
+          <div class="flex-row">
+            <div class="flex-cell-full no-margin-bottom">
+              <p class="modified">
+                <h:outputFormat value="#{locales['forge.public.generic.materialModified']}">
+                  <f:param value="#{material.modified}"/>
+                </h:outputFormat>
+              </p>
+            </div>
+          </div>          
         </div>
 
         <ui:fragment rendered="#{material.creativeCommonsIconUrl eq null}">
-          <div class="flex-cell-4 flex-right flex-cell-last no-margin-bottom license-link-container">
+          <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-4 sm-flex-cell-last flex-right no-margin-bottom license-link-container">
             <a target="_blank" class="license-link" href="#{material.license}">#{material.license}</a>
           </div>
         </ui:fragment>
           
         <ui:fragment rendered="#{material.creativeCommonsIconUrl ne null}">
-          <div class="flex-cell-4 flex-right flex-cell-last no-margin-bottom">
+          <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-5 sm-flex-cell-last flex-right no-margin-bottom">
             <a target="_blank" href="#{material.license}">
               <img src="#{material.creativeCommonsIconUrl}" />
             </a>
@@ -37,13 +45,10 @@
       </div> 
 
       <div class="flex-row">
-        <div class="flex-cell-10 flex-cell-first">
+        <div class="flex-cell-full">
           <ui:fragment rendered="#{!empty(material.description)}">
-            <p>#{material.description}</p>
+            <p class="description">#{material.description}</p>
           </ui:fragment>
-        </div>
-        
-        <div class="flex-cell-6 flex-cell-last flex-right">
         </div>
       </div>
       

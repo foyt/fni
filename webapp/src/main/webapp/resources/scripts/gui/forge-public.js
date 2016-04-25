@@ -48,10 +48,11 @@
     }
   });
   
-  $(document).on('click', '.material-share', function () {
-    $('<div>').materialShareDialog({
-      materialId: $('.material-id').val()
+  $(document).ready(function () {
+    $('p.description').each(function (index, p) {
+      $(p).attr('title', $(p).text());
+      $clamp(p, {clamp: 8});
     });
   });
-  
+
 }).call(this);
