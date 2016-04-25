@@ -1,32 +1,41 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <groupId>fi.foyt.fni</groupId>
   <artifactId>itests</artifactId>
+  <version>3.3.5-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Forge &amp; Illusion - itests</name>
   <description>Forge &amp; Illusion - Integration tests</description>
-  <parent>
-    <groupId>fi.foyt.fni</groupId>
-    <artifactId>parent</artifactId>
-    <version>3.3.5-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
   
   <properties>
+    <!-- Project -->
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- Maven -->
+
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+  
     <!-- Selenium -->
 
-    <selenium-java.version>2.52.0</selenium-java.version>
+    <selenium-java.version>2.53.0</selenium-java.version>
+    
+    <!-- Saucelabs JUnit -->
+    
+    <sauce_junit.version>2.1.21</sauce_junit.version>
     
     <!-- PhantomJS driver -->
     
-    <phantomjsdriver.version>1.2.1</phantomjsdriver.version>
+    <phantomjsdriver.version>1.3.0</phantomjsdriver.version>
     
     <!-- GreenMail -->
     
-    <greenmail.version>1.4.1</greenmail.version>
+    <greenmail.version>1.5.0</greenmail.version>
     
     <!-- REST Assured -->
     
-    <restassured.version>2.8.0</restassured.version>  
+    <restassured.version>2.9.0</restassured.version>  
     
     <!-- WireMock -->
     
@@ -35,6 +44,14 @@
     <!-- Keytool -->
     
     <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
+    
+    <!-- Jackson -->
+    
+    <jackson-datatype-joda.version>2.3.0</jackson-datatype-joda.version>
+    
+    <!-- Apache Oltu -->
+    
+    <apache-oltu.version>1.0.0</apache-oltu.version>
   </properties>
 
   <dependencies>
@@ -44,73 +61,39 @@
       <groupId>fi.foyt.fni</groupId>
       <artifactId>rest-model</artifactId>
       <scope>test</scope>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>fi.foyt.fni</groupId>
       <artifactId>larp-kalenteri-rest-model</artifactId>
       <scope>test</scope>
+      <version>${project.version}</version>
     </dependency>
     
-    <!-- Mail -->
-    
-    <dependency>
-      <groupId>com.sun.mail</groupId>
-      <artifactId>javax.mail</artifactId>
-      <scope>test</scope>
-    </dependency>
-
     <!-- Jackson -->
-
+    
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-joda</artifactId>
+      <version>${jackson-datatype-joda.version}</version>
       <scope>test</scope>
-    </dependency>
+    </dependency> 
 
     <!-- Apache Oltu -->
     
     <dependency>
       <groupId>org.apache.oltu.oauth2</groupId>
       <artifactId>org.apache.oltu.oauth2.client</artifactId>
+      <version>${apache-oltu.version}</version>
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.apache.oltu.oauth2</groupId>
-      <artifactId>org.apache.oltu.oauth2.authzserver</artifactId>
-      <scope>test</scope>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.oltu.oauth2</groupId>
-      <artifactId>org.apache.oltu.oauth2.resourceserver</artifactId>
-      <scope>test</scope>
-    </dependency>
-        
-    <!-- Test -->
-    
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
       <scope>test</scope>
       <version>${selenium-java.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>httpclient</artifactId>
-          <groupId>org.apache.httpcomponents</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>httpmime</artifactId>
-          <groupId>org.apache.httpcomponents</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     
     <dependency>
@@ -118,29 +101,13 @@
       <artifactId>phantomjsdriver</artifactId>
       <version>${phantomjsdriver.version}</version>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.seleniumhq.selenium</groupId>
-          <artifactId>selenium-remote-driver</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.seleniumhq.selenium</groupId>
-          <artifactId>selenium-java</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   
     <dependency>
       <groupId>com.saucelabs</groupId>
       <artifactId>sauce_junit</artifactId>
-      <version>2.1.20</version>
+      <version>${sauce_junit.version}</version>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>httpclient</artifactId>
-          <groupId>org.apache.httpcomponents</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>
@@ -148,16 +115,6 @@
       <artifactId>greenmail</artifactId>
       <scope>test</scope>
       <version>${greenmail.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>javax.mail</groupId>
-          <artifactId>mail</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
      
     <dependency>
@@ -165,16 +122,6 @@
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
       <version>${restassured.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>httpclient</artifactId>
-          <groupId>org.apache.httpcomponents</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>httpmime</artifactId>
-          <groupId>org.apache.httpcomponents</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>    
 
     <dependency>
@@ -182,38 +129,7 @@
       <artifactId>wiremock</artifactId>
       <version>${wiremock.version}</version>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>httpclient</artifactId>
-          <groupId>org.apache.httpcomponents</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
-
-    <dependency>
-      <artifactId>httpclient</artifactId>
-      <groupId>org.apache.httpcomponents</groupId>
-      <version>4.5.1</version>
-    </dependency>
-    
-    <dependency>
-      <artifactId>httpmime</artifactId>
-      <groupId>org.apache.httpcomponents</groupId>
-      <version>4.5.1</version>
-    </dependency>
-    
-    <dependency>
-      <artifactId>httpcore</artifactId>
-      <groupId>org.apache.httpcomponents</groupId>
-      <version>4.4</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>xml-apis</groupId>
-      <artifactId>xml-apis</artifactId>
-      <version>1.4.01</version>
-    </dependency>
-    
   </dependencies>
   
   <profiles>
@@ -226,7 +142,7 @@
       <properties>
         <wildfly.home>${project.basedir}/.cargo/extracts/wildfly-8.1.0.Final/wildfly-8.1.0.Final</wildfly.home>
         <wildfly.version>8.1.0.Final</wildfly.version>
-        <h2.version>1.4.177</h2.version>
+        <h2.version>1.4.191</h2.version>
         <it.port.http>8080</it.port.http>
         <it.port.https>8443</it.port.https>
         <it.smtp.port>3025</it.smtp.port>
@@ -258,6 +174,7 @@
         <dependency>
           <groupId>fi.foyt.fni</groupId>
           <artifactId>persistence</artifactId>
+          <version>${project.version}</version>
         </dependency>
       </dependencies>
       <build>
@@ -666,7 +583,7 @@
       <properties>
         <wildfly.home>${project.basedir}/.cargo/extracts/wildfly-8.1.0.Final/wildfly-8.1.0.Final</wildfly.home>
         <wildfly.version>8.1.0.Final</wildfly.version>
-        <h2.version>1.4.177</h2.version>
+        <h2.version>1.4.191</h2.version>
         <it.port.http>8080</it.port.http>
         <it.port.https>8443</it.port.https>
         <it.smtp.port>3025</it.smtp.port>
@@ -701,6 +618,7 @@
         <dependency>
           <groupId>fi.foyt.fni</groupId>
           <artifactId>persistence</artifactId>
+          <version>${project.version}</version>
         </dependency>
       </dependencies>
       <build>
@@ -1110,7 +1028,7 @@
       <properties>
         <wildfly.home>${project.basedir}/.cargo/extracts/wildfly-8.1.0.Final/wildfly-8.1.0.Final</wildfly.home>
         <wildfly.version>8.1.0.Final</wildfly.version>
-        <h2.version>1.4.177</h2.version>
+        <h2.version>1.4.191</h2.version>
         <it.port.http>8080</it.port.http>
         <it.port.https>8443</it.port.https>
         <it.smtp.port>3025</it.smtp.port>
@@ -1149,6 +1067,7 @@
         <dependency>
           <groupId>fi.foyt.fni</groupId>
           <artifactId>persistence</artifactId>
+          <version>${project.version}</version>
         </dependency>
       </dependencies>
       <build>
@@ -1531,7 +1450,7 @@
           <plugin>
             <groupId>com.saucelabs.maven.plugin</groupId>
             <artifactId>sauce-connect-plugin</artifactId>
-            <version>2.1.19</version>
+            <version>2.1.21</version>
             <configuration>
               <sauceUsername>${it.sauce.username}</sauceUsername>
               <sauceAccessKey>${it.sauce.accessKey}</sauceAccessKey>
@@ -1591,7 +1510,7 @@
       <properties>
         <wildfly.home>${project.basedir}/.cargo/extracts/wildfly-8.1.0.Final/wildfly-8.1.0.Final</wildfly.home>
         <wildfly.version>8.1.0.Final</wildfly.version>
-        <h2.version>1.4.177</h2.version>
+        <h2.version>1.4.191</h2.version>
         <it.port.http>8080</it.port.http>
         <it.port.https>8443</it.port.https>
         <it.smtp.port>3025</it.smtp.port>
@@ -1629,6 +1548,7 @@
         <dependency>
           <groupId>fi.foyt.fni</groupId>
           <artifactId>persistence</artifactId>
+          <version>${project.version}</version>
         </dependency>
       </dependencies>
       <build>
