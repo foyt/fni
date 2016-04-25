@@ -34,6 +34,10 @@ public abstract class AbstractForgePublicViewBackingBean {
   private MaterialController materialController;
   
   protected PublicMaterialBean toMaterialBean(fi.foyt.fni.persistence.model.materials.Material material) {
+    if (material == null) {
+      return null;
+    }
+    
     String icon = materialController.getMaterialIcon(material.getType());
     String license = material.getLicense();
     CreativeCommonsLicense commonsLicence = CreativeCommonsUtils.parseLicenseUrl(license);
