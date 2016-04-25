@@ -269,12 +269,13 @@ public class MaterialDAO extends GenericDAO<Material> {
     Root<MaterialView> root = criteria.from(MaterialView.class);
     Join<MaterialView, Material> materialJoin = root.join(MaterialView_.material);
     
-    criteria.select(root.get(MaterialView_.material)).distinct(true);
+    criteria.select(root.get(MaterialView_.material));
     
     criteria.where(
       criteriaBuilder.equal(materialJoin.get(Material_.publicity), publicity)
     );
     
+    criteria.groupBy(root.get(MaterialView_.material));
     criteria.orderBy(criteriaBuilder.desc(root.get(MaterialView_.count)));
     
     TypedQuery<Material> query = entityManager.createQuery(criteria);
