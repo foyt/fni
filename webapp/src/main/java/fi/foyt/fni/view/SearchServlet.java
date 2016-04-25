@@ -139,6 +139,7 @@ public class SearchServlet extends HttpServlet {
       jsonItem.put("id", searchResult.getEntity().getId());
 			jsonItem.put("name", searchResult.getTitle());
 			jsonItem.put("link", systemSettingsController.getSiteUrl(false, true) + searchResult.getLink());
+			jsonItem.put("path", searchResult.getLink());
 			result.add(jsonItem);
 		}
 		
@@ -158,11 +159,13 @@ public class SearchServlet extends HttpServlet {
 		List<SearchResult<Material>> searchResults = materialController.searchMaterials(loggedUser, queryText, maxHits);
 		for (SearchResult<Material> searchResult : searchResults) {
 		  String link = materialController.getForgeMaterialViewerUrl(searchResult.getEntity());
+		  String path = searchResult.getEntity().getPath();
 		  
       Map<String, Object> jsonItem = new HashMap<>();
       jsonItem.put("id", searchResult.getEntity().getId());
       jsonItem.put("name", searchResult.getTitle());
       jsonItem.put("link", systemSettingsController.getSiteUrl(false, true) + link);
+      jsonItem.put("path", path);
       result.add(jsonItem);
     }
 		
@@ -178,6 +181,7 @@ public class SearchServlet extends HttpServlet {
       jsonItem.put("id", searchResult.getEntity().getId());
 			jsonItem.put("name", searchResult.getTitle());
 			jsonItem.put("link", systemSettingsController.getSiteUrl(false, true) + searchResult.getLink());
+			jsonItem.put("path", searchResult.getLink());
 			result.add(jsonItem);
 		}
 		
@@ -193,6 +197,7 @@ public class SearchServlet extends HttpServlet {
       jsonItem.put("id", searchResult.getEntity().getId());
       jsonItem.put("name", searchResult.getTitle());
       jsonItem.put("link", systemSettingsController.getSiteUrl(false, true) + searchResult.getLink());
+      jsonItem.put("path", searchResult.getLink());
       result.add(jsonItem);
     }
     

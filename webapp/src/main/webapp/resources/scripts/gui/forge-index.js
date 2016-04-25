@@ -42,8 +42,7 @@
               if (!err) {
                 $('.forge-search-result').show().html(html);
               } else {
-                // TODO: Proper error handling...
-                alert(err);
+                $('.notifications').notifications('notification', 'error', err);
               }
             }); 
             

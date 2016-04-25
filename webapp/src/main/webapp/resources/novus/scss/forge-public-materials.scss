@@ -30,6 +30,15 @@
   }
   
   .material {
+    h4 {
+      max-width: 100%;
+      word-wrap: break-word;
+      
+      a {
+        margin-left: 30px;
+      }
+    }
+    
     p {
       font-family: $default-font;
       font-size: 14px;
@@ -42,6 +51,7 @@
       max-height: 1.4em;
       vertical-align: top;
       margin-left: -4px;
+      position: absolute;
     }
     
     .modified {
@@ -84,17 +94,24 @@
     }
   }
   
-  .tags a {
-    display: block;
-    color: $default-color;
-    font-family: $default-font;
-    font-size: 13px;
-    text-decoration: none;
-  }
+  .tags {
+    li {
+      max-width: 100%;
+      word-wrap: break-word;
+    }
   
-  .tags a:before {
-    content: '»';
-    padding-right: 7px;
+    a {
+      display: block;
+      color: $default-color;
+      font-family: $default-font;
+      font-size: 13px;
+      text-decoration: none;
+      
+      &:before {
+        content: '»';
+        padding-right: 7px;
+      }
+    }
   }
   
   .more-container {
