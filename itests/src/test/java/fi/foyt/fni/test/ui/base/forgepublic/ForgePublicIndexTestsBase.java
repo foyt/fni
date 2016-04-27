@@ -17,6 +17,17 @@ public class ForgePublicIndexTestsBase extends AbstractUITest {
   public void testTitle() {
     testTitle("/forge/public", "Forge Public");
   }
+  
+  @Test
+  @SqlSets ({"users", "public-materials"})
+  public void testRandomMaterialAnonymous() {
+    navigate("/forge/public");
+    waitAndAssertSelectorText(".random h3", "Random material", true, true);
+    assertSelectorCount(".random .material", 1);
+    assertSelectorPresent(".random .material h4 a");
+    assertSelectorPresent(".random .material .modified");
+    assertSelectorPresent(".random .material .creator-tag");
+  }
 
   @Test
   @SqlSets ({"users", "public-materials"})
