@@ -754,6 +754,29 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     waitAndClick("#Toiminto");
   }
   
+  protected void setCKEditorContents(int index, String contents) {
+    String data = StringEscapeUtils.escapeEcmaScript(contents);
+    
+    String script = String.format(
+      "function setEditorContents() { " +
+      "  var instance = CKEDITOR.instances[Object.keys(CKEDITOR.instances)[%d]]; " + 
+      "  instance.on('instanceReady', function (e) { " + 
+      "    instance.setData('%s'); " + 
+      "  }); " + 
+      "  if (instance.status == 'ready') { " + 
+      "    instance.setData('%s'); " + 
+      "  } " + 
+      "}; " + 
+      "CKEDITOR.on('loaded', function() { " + 
+      "  setEditorContents(); " +   
+      "}); " +
+      "if (CKEDITOR.status == 'loaded') { " + 
+      "  setEditorContents(); " +   
+      "};", index, data, data);
+    
+    executeScript(script);
+  }
+  
   private String sessionId;
   private WebDriver webDriver;
 }

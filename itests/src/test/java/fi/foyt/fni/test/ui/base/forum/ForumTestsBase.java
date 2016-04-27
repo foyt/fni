@@ -90,42 +90,39 @@ public class ForumTestsBase extends AbstractUITest {
   @SqlSets ({"basic-users", "forum-basic"})
   public void testForumUnread() throws Exception {
     loginInternal("user@foyt.fi", "pass");
-    try {
-      navigate("/forum/1_topic_forum");
-      waitAndAssertSelectorText(".topic-post-count span:nth-child(1)", "posts: 1", true, true);
-      assertSelectorNotPresent(".topic-post-count span:nth-child(2)");
-      assertSelectorNotPresent(".topic-post-count.has-unread");
-    } finally {
-      logout();
-    }
+
+    navigate("/forum/1_topic_forum");
+    waitAndAssertSelectorText(".topic-post-count span:nth-child(1)", "posts: 1", true, true);
+    assertSelectorNotPresent(".topic-post-count span:nth-child(2)");
+    assertSelectorNotPresent(".topic-post-count.has-unread");
+
+    logout();
     
     loginInternal("librarian@foyt.fi", "pass");
-    try {
-      navigate("/forum/1_topic_forum/single_topic");
-      waitForSelectorVisible(".cke_wysiwyg_frame");
-      executeScript("CKEDITOR.instances[Object.keys(CKEDITOR.instances)[0]].setData('<p>Post</p>')");
-      waitAndClick(".forum-topic-post-send-container input");
-      waitForSelectorCount(".post", 2);
-    } finally {
-      logout();
-    }
+
+    navigate("/forum/1_topic_forum/single_topic");
+    waitForSelectorVisible(".cke_wysiwyg_frame");
+    setCKEditorContents(0, "<p>Post</p>");
+    waitAndClick(".forum-topic-post-send-container input");
+    waitForSelectorCount(".post", 2);
+
+    logout();
     
     loginInternal("user@foyt.fi", "pass");
-    try {
-      navigate("/forum/1_topic_forum");
-      waitAndAssertSelectorText(".topic-post-count span:nth-child(1)", "posts: 2", true, true);
-      assertSelectorText(".topic-post-count span:nth-child(2)", "unread 1", true, true);
-      assertSelectorPresent(".topic-post-count.has-unread");
-      navigate("/forum/1_topic_forum/single_topic");
-      waitForSelectorVisible(".cke_wysiwyg_frame");
-      
-      navigate("/forum/1_topic_forum");
-      waitAndAssertSelectorText(".topic-post-count span:nth-child(1)", "posts: 2", true, true);
-      assertSelectorNotPresent(".topic-post-count span:nth-child(2)");
-      assertSelectorNotPresent(".topic-post-count.has-unread");
-    } finally {
-      logout();
-    }
+
+    navigate("/forum/1_topic_forum");
+    waitAndAssertSelectorText(".topic-post-count span:nth-child(1)", "posts: 2", true, true);
+    assertSelectorText(".topic-post-count span:nth-child(2)", "unread 1", true, true);
+    assertSelectorPresent(".topic-post-count.has-unread");
+    navigate("/forum/1_topic_forum/single_topic");
+    waitForSelectorVisible(".cke_wysiwyg_frame");
+    
+    navigate("/forum/1_topic_forum");
+    waitAndAssertSelectorText(".topic-post-count span:nth-child(1)", "posts: 2", true, true);
+    assertSelectorNotPresent(".topic-post-count span:nth-child(2)");
+    assertSelectorNotPresent(".topic-post-count.has-unread");
+
+    logout();
   }
 
 }
