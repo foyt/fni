@@ -1,5 +1,6 @@
 package fi.foyt.fni.persistence.dao.materials;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -270,12 +271,11 @@ public class MaterialDAO extends GenericDAO<Material> {
     Join<MaterialView, Material> materialJoin = root.join(MaterialView_.material);
     
     criteria.select(root.get(MaterialView_.material));
-    
     criteria.where(
       criteriaBuilder.equal(materialJoin.get(Material_.publicity), publicity)
     );
     
-    criteria.groupBy(root.get(MaterialView_.material));
+    criteria.groupBy(root.get(MaterialView_.material), root.get(MaterialView_.count));
     criteria.orderBy(criteriaBuilder.desc(root.get(MaterialView_.count)));
     
     TypedQuery<Material> query = entityManager.createQuery(criteria);
