@@ -31,7 +31,7 @@
       </div> 
       
       <div class="flex-row">
-        <div class="flex-cell-full">
+        <div class="flex-cell-full material-tags">
           <a jsf:outcome="/forge/public-materials.jsf?userId=#{material.creatorId}" class="creator-tag">#{material.creatorName}</a>
           <ui:repeat var="tag" value="#{material.tags}">
             <a jsf:outcome="/forge/public-materials.jsf?tags=#{tag}" class="tag">#{tag}</a>
