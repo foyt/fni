@@ -16,7 +16,7 @@ public class ForgePublicMaterialsTestsBase extends AbstractUITest {
 
   @Test
   public void testTitleTags() {
-    testTitle("/forge/public/materials/?tags=test", "Forge Public - Test");
+    testTitle("/forge/public/materials/?tags=test", "Forge Public - test");
   }
   
   @Test
