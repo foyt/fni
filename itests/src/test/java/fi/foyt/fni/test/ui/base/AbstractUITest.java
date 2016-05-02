@@ -546,7 +546,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void testTitle(String expected) {
-    waitTitle(expected);
+    try {
+      waitTitle(expected);
+    } catch (Exception e) {
+    }
+    
     assertTitle(expected);
   }
 
