@@ -30,7 +30,7 @@ public class ForgePublicMaterialsTestsBase extends AbstractUITest {
   public void testAuthorAnonymous() {
     navigate("/forge/public/materials/?userId=2");
     waitForSelectorPresent(".forge-public-materials");
-    assertSelectorCount(".forge-public-materials .material", 17);
+    assertSelectorCount(".forge-public-materials .material", 18);
     assertSelectorText(".forge-public-materials .material:nth-child(1) h4 a", "Document", true, true);
     assertSelectorText(".forge-public-materials .material:nth-child(1) .modified", "MODIFIED: WEDNESDAY, JANUARY 6, 2010", true, true);
     assertSelectorText(".forge-public-materials .material:nth-child(1) .creator-tag", "Test User", true, true);
@@ -46,7 +46,7 @@ public class ForgePublicMaterialsTestsBase extends AbstractUITest {
     loginInternal("user@foyt.fi", "pass");
     navigate("/forge/public/materials/?userId=2");
     waitForSelectorPresent(".forge-public-materials");
-    assertSelectorCount(".forge-public-materials .material", 17);
+    assertSelectorCount(".forge-public-materials .material", 18);
     assertSelectorText(".forge-public-materials .material:nth-child(1) h4 a", "Document", true, true);
     assertSelectorText(".forge-public-materials .material:nth-child(1) .modified", "MODIFIED: WEDNESDAY, JANUARY 6, 2010", true, true);
     assertSelectorText(".forge-public-materials .material:nth-child(1) .creator-tag", "Test User", true, true);

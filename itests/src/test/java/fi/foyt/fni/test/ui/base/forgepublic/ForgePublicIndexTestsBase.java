@@ -51,8 +51,8 @@ public class ForgePublicIndexTestsBase extends AbstractUITest {
     navigate("/forge/public");
     waitAndAssertSelectorText(".latest h3", "Latest", true, true);
     assertSelectorCount(".latest .material", 5);
-    assertSelectorText(".latest .material:nth-child(1) h4 a", "Google Doc", true, true);
-    assertSelectorText(".latest .material:nth-child(1) .modified", "MODIFIED: FRIDAY, JANUARY 22, 2010", true, true);
+    assertSelectorText(".latest .material:nth-child(1) h4 a", "PDF", true, true);
+    assertSelectorText(".latest .material:nth-child(1) .modified", "MODIFIED: SATURDAY, JANUARY 23, 2010", true, true);
   }
 
   @Test
@@ -101,8 +101,8 @@ public class ForgePublicIndexTestsBase extends AbstractUITest {
     navigate("/forge/public");
     waitAndAssertSelectorText(".latest h3", "Latest", true, true);
     assertSelectorCount(".latest .material", 5);
-    assertSelectorText(".latest .material:nth-child(1) h4 a", "Google Doc", true, true);
-    assertSelectorText(".latest .material:nth-child(1) .modified", "MODIFIED: FRIDAY, JANUARY 22, 2010", true, true);
+    assertSelectorText(".latest .material:nth-child(1) h4 a", "PDF", true, true);
+    assertSelectorText(".latest .material:nth-child(1) .modified", "MODIFIED: SATURDAY, JANUARY 23, 2010", true, true);
   }
 
   @Test
