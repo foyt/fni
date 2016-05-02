@@ -1840,12 +1840,20 @@ public class MaterialController {
 
     String[] pathElements = materialPath.split("/");
     if (pathElements.length >= 2) {
-      Long userId = NumberUtils.createLong(pathElements[0]);
+      String userIdPart = pathElements[0];
+      if (!NumberUtils.isNumber(userIdPart)) {
+        return null;
+      }
+
+      Long userId = NumberUtils.createLong(userIdPart);
       if (userId == null) {
         return null;
       }
 
       User owner = userDAO.findById(userId);
+      if (owner == null) {
+        return null;
+      }
 
       Folder parentFolder = null;
 

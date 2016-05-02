@@ -14,6 +14,7 @@ import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.model.common.Tag;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
@@ -53,6 +54,9 @@ public class ForgePublicMaterialsBackingBean extends AbstractForgePublicViewBack
   @Inject
   private MaterialController materialController;
   
+  @Inject
+  private NavigationController navigationController;
+  
   @RequestAction
   public String init() {
     if (getUserId() != null) {
@@ -74,6 +78,8 @@ public class ForgePublicMaterialsBackingBean extends AbstractForgePublicViewBack
         if (!tags.isEmpty()) {
           materials = toMaterialBeans(materialController.listPublicMaterialsByTags(tags));
         }
+      } else {
+        return navigationController.notFound();
       }
     }
     

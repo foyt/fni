@@ -1,0 +1,1 @@
+delete from MaterialView where material_id in (3,4,5,6,7,8) and user_id in (1,2,3,4,5,6);

@@ -1,0 +1,26 @@
+insert into 
+  MaterialView (viewed, material_id, user_id, count) 
+values 
+  (PARSEDATETIME('1 1 2011', 'd M yyyy'), 3, 1, 1),
+  (PARSEDATETIME('2 1 2011', 'd M yyyy'), 3, 2, 2),
+  (PARSEDATETIME('3 1 2011', 'd M yyyy'), 3, 3, 3),
+  (PARSEDATETIME('4 1 2011', 'd M yyyy'), 3, 4, 4),
+  (PARSEDATETIME('5 1 2011', 'd M yyyy'), 3, 5, 5),
+  (PARSEDATETIME('6 1 2011', 'd M yyyy'), 3, 6, 6),
+  (PARSEDATETIME('1 1 2011', 'd M yyyy'), 4, 1, 1),
+  (PARSEDATETIME('2 1 2011', 'd M yyyy'), 4, 2, 2),
+  (PARSEDATETIME('3 1 2011', 'd M yyyy'), 4, 3, 3),
+  (PARSEDATETIME('4 1 2011', 'd M yyyy'), 4, 4, 4),
+  (PARSEDATETIME('5 1 2011', 'd M yyyy'), 4, 5, 5),
+  (PARSEDATETIME('1 1 2011', 'd M yyyy'), 5, 1, 1),
+  (PARSEDATETIME('2 1 2011', 'd M yyyy'), 5, 2, 2),
+  (PARSEDATETIME('3 1 2011', 'd M yyyy'), 5, 3, 3),
+  (PARSEDATETIME('4 1 2011', 'd M yyyy'), 5, 4, 4),
+  (PARSEDATETIME('1 1 2011', 'd M yyyy'), 6, 1, 1),
+  (PARSEDATETIME('2 1 2011', 'd M yyyy'), 6, 2, 2),
+  (PARSEDATETIME('3 1 2011', 'd M yyyy'), 6, 3, 3),
+  (PARSEDATETIME('1 1 2011', 'd M yyyy'), 7, 1, 1),
+  (PARSEDATETIME('2 1 2011', 'd M yyyy'), 7, 2, 2),
+  (PARSEDATETIME('3 1 2011', 'd M yyyy'), 7, 3, 3),
+  (PARSEDATETIME('1 1 2011', 'd M yyyy'), 8, 1, 1),
+  (PARSEDATETIME('2 1 2011', 'd M yyyy'), 8, 2, 2);

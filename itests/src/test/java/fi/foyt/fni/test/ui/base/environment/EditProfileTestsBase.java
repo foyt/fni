@@ -105,17 +105,14 @@ public class EditProfileTestsBase extends AbstractUITest {
     createUser(7l, "Password", "Change", "passchange@foyt.fi", "oldpass", "en", "GRAVATAR", "USER");
     try {
       loginInternal("passchange@foyt.fi", "oldpass");
-      getWebDriver().get(getAppUrl() + "/editprofile");
-      getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password")).click();
+      navigate("/editprofile");
+      scrollWaitAndClick(".users-editprofile-authentication-source-change-password");
       waitForSelectorVisible(".users-editprofile-authentication-source-change-password-container");
-
-      getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-password1")).sendKeys("qwe");
-      getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-password2")).sendKeys("qwe");
-      
-      getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-container input[type=\"submit\"]")).click();
+      typeSelectorInputValue(".users-editprofile-authentication-source-change-password-password1", "qwe");
+      typeSelectorInputValue(".users-editprofile-authentication-source-change-password-password2", "qwe");
+      scrollWaitAndClick(".users-editprofile-authentication-source-change-password-container input[type=\"submit\"]");
       waitForNotification();
       assertNotification("info", "Password Changed");
-
       loginInternal("passchange@foyt.fi", "qwe");
     } finally {
       deleteUser(7l);
