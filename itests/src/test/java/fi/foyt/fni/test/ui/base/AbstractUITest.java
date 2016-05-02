@@ -549,6 +549,12 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     waitTitle(expected);
     assertTitle(expected);
   }
+
+  protected void assertHref(String selector, String href) {
+    WebElement element = findElementBySelector(selector);
+    assertNotNull(String.format("Element not present '%s'", selector), element);
+    assertEquals(href, element.getAttribute("href"));
+  }
   
   protected void assertSelectorPresent(String selector) {
     assertTrue("Element not present '" + selector + "'", findElementsBySelector(selector).size() > 0);
@@ -648,9 +654,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void testNotFound(String path) {
-    navigate(path);
-    waitTitle("Page Not Found!");
-    assertEquals("Page Not Found!", getWebDriver().getTitle());
+    testNotFound(path, false);
   }
   
   protected void testNotFound(String path, boolean secure) {
