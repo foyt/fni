@@ -21,6 +21,7 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.users.UserController;
 
 @ApplicationScoped
 public class OrderStatusChangeListener {
@@ -34,9 +35,11 @@ public class OrderStatusChangeListener {
   @Inject
   private IllusionMailer illusionMailer;
   
+  @Inject
+  private UserController userController; 
+  
 	@Inject
 	private IllusionEventController illusionEventController;
-
   
 	public void onOrderPaid(@Observes OrderPaidEvent event) {
 		if (event.getOrderId() != null) {
@@ -80,7 +83,7 @@ public class OrderStatusChangeListener {
     List<IllusionEventParticipant> organizers = illusionEventController.listIllusionEventParticipantsByEventAndRole(event, IllusionEventParticipantRole.ORGANIZER);
     for (IllusionEventParticipant organizer : organizers) {
       Locale locale = LocaleUtils.toLocale(organizer.getUser().getLocale());
-      String subject = ExternalLocales.getText(locale, "illusion.payment.eventPaidMail.subject", event.getName());
+      String subject = ExternalLocales.getText(locale, "illusion.payment.eventPaidOrganizerMail.subject", event.getName());
       Map<String, Object> templateModel = createPaymentAcceptedOrganizerMailTemplateModel(participant, organizer, event);
       illusionMailer.sendMail(organizer, subject, "mail-event-paid-organizer", templateModel);
     }
@@ -103,11 +106,12 @@ public class OrderStatusChangeListener {
     Map<String, Object> templateModel = new HashMap<>();
     User participantUser = participant.getUser();
     User organizerUser = participant.getUser();
-    Locale locale = LocaleUtils.toLocale(participantUser.getLocale());
+    Locale locale = LocaleUtils.toLocale(organizerUser.getLocale());
     String eventUrl = illusionEventController.getEventUrl(event);
+    String participantName = userController.getUserDisplayName(participantUser);
     
     templateModel.put("organizerFirstName", organizerUser.getFirstName());
-    templateModel.put("participantFirstName", participantUser.getFirstName());
+    templateModel.put("participantName", participantName);
     templateModel.put("eventName", event.getName());
     templateModel.put("eventLink", eventUrl);
     templateModel.put("locale", new JadeLocaleHelper(locale));
