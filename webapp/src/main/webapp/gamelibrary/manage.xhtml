@@ -89,7 +89,7 @@
               
               <div class="flex-row flex-align-items-center gamelibrary-manage-list-row">
                 <div class="lg-flex-cell-1 lg-flex-cell-first md-flex-hide md-flex-hide sm-flex-hide flex-center gamelibrary-manage-list-cell">
-                  <a jsf:rendered="#{publication.defaultImage ne null}" class="gamelibrary-manage-publication-image-link" href="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
+                  <a jsf:rendered="#{publication.defaultImage ne null}" class="gamelibrary-manage-publication-image-link" jsf:value="#{request.contextPath}/gamelibrary/publicationImages/#{publication.defaultImage.id}">
                     <h:graphicImage styleClass="gamelibrary-manage-publication-image" value="/gamelibrary/publicationImages/#{publication.defaultImage.id}?height=32"/>
                   </a>
                 </div>
@@ -116,12 +116,12 @@
                           #{locales['gamelibrary.manage.publicationUploadPrintable']}
                         </a>
                         
-                        <a class="gamelibrary-manage-publish-link" href="javascript:void(null)" jsf:rendered="#{!publication.published}">
+                        <a class="gamelibrary-manage-publish-link" jsf:value="javascript:void(null)" jsf:rendered="#{!publication.published}">
                           #{locales['gamelibrary.manage.publicationPublishLink']}
                         </a>
                         <h:commandButton style="display: none" styleClass="gamelibrary-manage-publish-button" action="#{gameLibraryManageBackingBean.publish(publication.id)}"/>
                         
-                        <a class="gamelibrary-manage-remove-link" href="javascript:void(null)" jsf:rendered="#{!publication.published and gameLibraryManageBackingBean.isRemovable(publication.id)}">
+                        <a class="gamelibrary-manage-remove-link" jsf:value="javascript:void(null)" jsf:rendered="#{!publication.published and gameLibraryManageBackingBean.isRemovable(publication.id)}">
                           #{locales['gamelibrary.manage.publicationDeleteLink']}
                         </a>
                         <h:commandButton style="display: none" styleClass="gamelibrary-manage-delete-button" action="#{gameLibraryManageBackingBean.remove(publication.id)}"/>
@@ -203,7 +203,7 @@
                   <div class="flex-row">
                     <div class="flex-cell-full no-margin-top no-margin-bottom gamelibrary-manage-list-actions">
                       <h:form>
-                        <a class="gamelibrary-manage-unpublish-link" href="javascript:void(null)" jsf:rendered="#{publication.published}">
+                        <a class="gamelibrary-manage-unpublish-link" jsf:value="javascript:void(null)" jsf:rendered="#{publication.published}">
                           #{locales['gamelibrary.manage.publicationUnpublishLink']}
                         </a>
                         <h:commandButton styleClass="gamelibrary-manage-unpublish-button" style="display: none" action="#{gameLibraryManageBackingBean.unpublish(publication.id)}"/>
