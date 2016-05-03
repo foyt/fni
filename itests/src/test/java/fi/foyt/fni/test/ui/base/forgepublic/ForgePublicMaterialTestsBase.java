@@ -109,7 +109,6 @@ public class ForgePublicMaterialTestsBase extends AbstractUITest {
     assertSelectorText(".details-container .description p", "", true, true);
     assertSelectorPresent(".license-link");
     assertSelectorNotPresent(".license a img");
-    assertHref(".license-link", null);
     assertSelectorCount(".actions a", 1);
     assertSelectorText(".actions a:nth-of-type(1)", "Download", true, true);
   }
@@ -127,7 +126,6 @@ public class ForgePublicMaterialTestsBase extends AbstractUITest {
     assertSelectorText(".details-container .description p", "", true, true);
     assertSelectorPresent(".license-link");
     assertSelectorNotPresent(".license a img");
-    assertHref(".license-link", null);
     assertSelectorCount(".actions a", 1);
     assertSelectorText(".actions a:nth-of-type(1)", "Download", true, true);
   }
