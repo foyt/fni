@@ -6,6 +6,13 @@
   <packaging>jar</packaging>
   <name>Forge &amp; Illusion - itests</name>
   <description>Forge &amp; Illusion - Integration tests</description>
+  <url>https://github.com/foyt/fni</url>
+  
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>9</version>
+  </parent>
   
   <properties>
     <!-- Project -->
@@ -53,6 +60,13 @@
     
     <apache-oltu.version>1.0.0</apache-oltu.version>
   </properties>
+
+  <scm>
+    <developerConnection>scm:git:git@github.com:foyt/fni.git</developerConnection>
+    <url>git@github.com:foyt/fni.git</url>
+    <connection>scm:git:git@github.com:foyt/fni.git</connection>
+    <tag>HEAD</tag>
+  </scm>
 
   <dependencies>
     <!-- WebApp -->
