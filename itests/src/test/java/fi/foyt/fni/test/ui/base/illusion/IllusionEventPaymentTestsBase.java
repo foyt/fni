@@ -660,7 +660,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
   @SqlSets ({"basic-users", "illusion-basic", "illusion-paid-events", "illusion-paid-events-custom"})
   public void testCustomDomainLoginRedirect() throws Exception {
     getWebDriver().get(getCustomEventUrl() + "/payment");
-    waitForUrlMatches(".*/login.*");
+    waitForSelectorPresent(".user-login-button");
   }
   
   private void updateEventParticipantRole(Long eventId, String email, IllusionEventParticipantRole role) throws JsonParseException, JsonMappingException, IOException {

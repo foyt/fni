@@ -1,0 +1,1 @@
+delete from MaterialTag where material_id in (3,4,5) and tag_id in (1,2,3);

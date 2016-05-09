@@ -239,18 +239,22 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void waitForSelectorVisible(final String selector) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
-        List<WebElement> elements = findElementsBySelector(selector);
-        if (elements.isEmpty()) {
-          return false;
-        }
-        
-        for (WebElement element : elements) {
-          if (!element.isDisplayed()){
+        try {
+          List<WebElement> elements = findElementsBySelector(selector);
+          if (elements.isEmpty()) {
             return false;
           }
+          
+          for (WebElement element : elements) {
+            if (!element.isDisplayed()){
+              return false;
+            }
+          }
+          
+          return true;
+        } catch (StaleElementReferenceException e) {
+          return false;
         }
-        
-        return true;
       }
     });
   }
@@ -258,18 +262,22 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void waitNotVisible(final String selector) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
-        List<WebElement> elements = findElementsBySelector(selector);
-        if (elements.isEmpty()) {
-          return true;
-        }
-        
-        for (WebElement element : elements) {
-          if (element.isDisplayed()){
-            return false;
+        try {
+          List<WebElement> elements = findElementsBySelector(selector);
+          if (elements.isEmpty()) {
+            return true;
           }
-        }
         
-        return true;
+          for (WebElement element : elements) {
+            if (element.isDisplayed()){
+              return false;
+            }
+          }
+        
+          return true;
+        } catch (StaleElementReferenceException e) {
+          return false;
+        }
       }
     });
   }
@@ -546,8 +554,18 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void testTitle(String expected) {
-    waitTitle(expected);
+    try {
+      waitTitle(expected);
+    } catch (Exception e) {
+    }
+    
     assertTitle(expected);
+  }
+
+  protected void assertHref(String selector, String href) {
+    WebElement element = findElementBySelector(selector);
+    assertNotNull(String.format("Element not present '%s'", selector), element);
+    assertEquals(href, element.getAttribute("href"));
   }
   
   protected void assertSelectorPresent(String selector) {
@@ -648,9 +666,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void testNotFound(String path) {
-    navigate(path);
-    waitTitle("Page Not Found!");
-    assertEquals("Page Not Found!", getWebDriver().getTitle());
+    testNotFound(path, false);
   }
   
   protected void testNotFound(String path, boolean secure) {
@@ -752,6 +768,29 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     waitAndSendKeys("*[name='avainluku']", "1234");
     waitAndClick("*[name='avainl']");
     waitAndClick("#Toiminto");
+  }
+  
+  protected void setCKEditorContents(int index, String contents) {
+    String data = StringEscapeUtils.escapeEcmaScript(contents);
+    
+    String script = String.format(
+      "function setEditorContents() { " +
+      "  var instance = CKEDITOR.instances[Object.keys(CKEDITOR.instances)[%d]]; " + 
+      "  instance.on('instanceReady', function (e) { " + 
+      "    instance.setData('%s'); " + 
+      "  }); " + 
+      "  if (instance.status == 'ready') { " + 
+      "    instance.setData('%s'); " + 
+      "  } " + 
+      "}; " + 
+      "CKEDITOR.on('loaded', function() { " + 
+      "  setEditorContents(); " +   
+      "}); " +
+      "if (CKEDITOR.status == 'loaded') { " + 
+      "  setEditorContents(); " +   
+      "};", index, data, data);
+    
+    executeScript(script);
   }
   
   private String sessionId;

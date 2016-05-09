@@ -4,17 +4,23 @@
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" 
   xmlns:jsf="http://xmlns.jcp.org/jsf"
-  template="/WEB-INF/templates/gridbase.xhtml">
-
-  <ui:define name="page-title">#{locales['forge.index.pageTitle']}</ui:define>
+  template="/WEB-INF/templates/gridbase-s.xhtml">
   
-  <ui:define name="view-stylesheets">
-    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
-    <h:outputStylesheet library="novus" name="css/forge-public.css"/>
+  <ui:define name="title">
+    <title>#{locales['forge.public.pageTitle']}</title>
   </ui:define>
   
-  <ui:define name="view-scripts">
-    <h:outputScript name="scripts/gui/forge-public.js"/>
+  <ui:define name="scripts">
+    <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/dustjs-linkedin/2.7.2/dust-full.min.js"></script>
+    <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/dustjs-helpers/1.7.3/dust-helpers.min.js"></script>
+    <script defer="defer" type="text/javascript" src="/scripts/gui/dust.js"></script>
+    <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/clampjs/0.5.1/clamp.min.js"></script>
+    <script defer="defer" type="text/javascript" src="/scripts/gui/forge-public.js"></script>
+  </ui:define>
+
+  <ui:define name="styles">
+    <link rel="StyleSheet" href="/theme/css/forge-public.css"></link>
+    <link rel="StyleSheet" href="/theme/css/flex-menu.css"></link>
   </ui:define>
 
   <ui:define name="grid-content">
@@ -50,12 +56,12 @@
       </div>
     </div> 
     
-    <div class="flex-row forge-public">
+    <div class="flex-row forge-public flex-min">
       <div class="flex-cell-full">
         <div class="flex-row">
-          <div class="flex-cell-12 flex-cell-first no-margin-top no-margin-bottom">
+          <div class="lg-flex-cell-12 lg-flex-cell-first no-margin-top no-margin-bottom md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
             <div class="flex-row">
-              <div class="flex-cell-full index-box">
+              <div class="flex-cell-full index-box random">
                 <div class="flex-row">
                   <div class="flex-cell-full">
                     <h3>#{locales['forge.public.randomMaterial']}</h3>
@@ -73,7 +79,7 @@
             </div>
             
             <div class="flex-row">
-              <div class="flex-cell-8 flex-cell-first index-box">
+              <div class="lg-flex-cell-8 lg-flex-cell-first md-flex-cell-full sm-flex-cell-full index-box most-popular">
                 <div class="flex-row">
                   <div class="flex-cell-full">
                     <h3>#{locales['forge.public.mostPopular']}</h3>
@@ -89,7 +95,7 @@
                 </div>
               </div>
               
-              <div class="flex-cell-8 flex-cell-last index-box">
+              <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-full sm-flex-cell-full index-box latest">
                 <div class="flex-row">
                   <div class="flex-cell-full">
                     <h3>#{locales['forge.public.latestMaterials']}</h3>
@@ -107,7 +113,7 @@
             </div>
           </div>
           
-          <div class="flex-cell-4 flex-cell-last index-box">
+          <div class="lg-flex-cell-4 lg-flex-cell-last md-flex-cell-4 md-flex-cell-last sm-flex-cell-full index-box categories">
             <div class="flex-row">
               <div class="flex-cell-full">
                 <h3>#{locales['forge.public.tags']}</h3>

@@ -309,6 +309,8 @@ public class PublicationController {
 	}
 	
 	public void deletePublication(Publication publication) {
+	  publicationDAO.updateDefaultImage(publication, null);
+	  
 		for (PublicationImage publicationImage : listPublicationImagesByPublication(publication)) {
 			deletePublicationImage(publicationImage);
 		}

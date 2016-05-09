@@ -1,0 +1,7 @@
+{?FORGE}
+  {#FORGE}
+    <a href="/forge/public/materials/{path}">{name}</a>
+  {/FORGE} 
+{:else}
+  <div class="view-header-search-no-result forge-search-no-result">No materials found</div>
+{/FORGE}

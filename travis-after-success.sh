@@ -15,7 +15,7 @@ if [[ ($release = "true") && ($perform_release = "true") ]]; then
   git reset --hard
   python travis/m2conf.py;
   mvn -B release:prepare release:perform --settings ~/.m2/mySettings.xml
-  git checkout devel 
+  git checkout -B devel
   git merge master
   git push --set-upstream origin devel
 fi;
