@@ -103,7 +103,7 @@ public class ForumTestsBase extends AbstractUITest {
     navigate("/forum/1_topic_forum/single_topic");
     waitForSelectorVisible(".cke_wysiwyg_frame");
     setCKEditorContents(0, "<p>Post</p>");
-    waitAndClick(".forum-topic-post-send-container input");
+    scrollWaitAndClick(".forum-topic-post-send-container input");
     waitForSelectorCount(".post", 2);
 
     logout();
