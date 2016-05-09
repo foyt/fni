@@ -239,18 +239,22 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void waitForSelectorVisible(final String selector) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
-        List<WebElement> elements = findElementsBySelector(selector);
-        if (elements.isEmpty()) {
-          return false;
-        }
-        
-        for (WebElement element : elements) {
-          if (!element.isDisplayed()){
+        try {
+          List<WebElement> elements = findElementsBySelector(selector);
+          if (elements.isEmpty()) {
             return false;
           }
+          
+          for (WebElement element : elements) {
+            if (!element.isDisplayed()){
+              return false;
+            }
+          }
+          
+          return true;
+        } catch (StaleElementReferenceException e) {
+          return false;
         }
-        
-        return true;
       }
     });
   }
@@ -258,18 +262,22 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected void waitNotVisible(final String selector) {
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
-        List<WebElement> elements = findElementsBySelector(selector);
-        if (elements.isEmpty()) {
-          return true;
-        }
-        
-        for (WebElement element : elements) {
-          if (element.isDisplayed()){
-            return false;
+        try {
+          List<WebElement> elements = findElementsBySelector(selector);
+          if (elements.isEmpty()) {
+            return true;
           }
-        }
         
-        return true;
+          for (WebElement element : elements) {
+            if (element.isDisplayed()){
+              return false;
+            }
+          }
+        
+          return true;
+        } catch (StaleElementReferenceException e) {
+          return false;
+        }
       }
     });
   }
