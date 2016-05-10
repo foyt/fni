@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fi.foyt.fni</groupId>
   <artifactId>itests</artifactId>
-  <version>3.3.6-SNAPSHOT</version>
+  <version>3.3.7-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Forge &amp; Illusion - itests</name>
   <description>Forge &amp; Illusion - Integration tests</description>
