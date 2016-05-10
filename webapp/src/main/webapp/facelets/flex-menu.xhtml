@@ -9,7 +9,7 @@
     <div class="lg-flex-cell-2 lg-flex-cell-first md-flex-cell-16 md-flex-center sm-flex-cell-16 sm-flex-center flex-overflow-hidden">
       <a class="menu-logo" jsf:outcome="/index.jsf" data-text="#{locales['menu.logoText']}">#{locales['menu.logoText']}</a>
     </div>
-    <div class="menu-navigation-container lg-flex-cell-10 md-flex-cell-16 sm-flex-cell-16">
+    <div class="menu-navigation-container lg-flex-cell-11 md-flex-cell-16 sm-flex-cell-16">
       <div class="flex-row">
         <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 lg-flex-cell12-first md-flex-cell12-2 md-flex-cell12-first sm-flex-cell12-4 md-flex-cell12-first sm-flex-order-1">
           <a jsf:outcome="/forge/index.jsf">#{locales['menu.menuForge']}</a>
@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <div class="menu-tools-container lg-flex-cell-4 md-flex-cell-16 sm-flex-cell-16">
+    <div class="menu-tools-container lg-flex-cell-3 md-flex-cell-16 sm-flex-cell-16">
       <div class="menu-tools-locale-container">
         <a href="javascript:void(null)" class="menu-tools-locale">
           <h:outputFormat value="#{locales['menu.toolLocale']}">
@@ -80,11 +80,10 @@
       </div>
       
       <div class="menu-tools-search-container">
-        <input class="menu-tools-search-text" type="text"></input>
+        <input class="menu-tools-search-text" type="text" placeholder="#{locales['menu.toolSearch']}"></input>
         <div class="menu-tools-search-loading" style="display: none"/>
         <div class="menu-tools-search-result" style="display: none"/>
       </div>
-      <a href="javascript:null(void)" class="menu-tools-search">#{locales['menu.toolSearch']}</a>
     </div>
   </div>
 
