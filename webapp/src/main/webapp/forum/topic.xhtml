@@ -76,7 +76,7 @@
                 <f:param value="#{forumTopicBackingBean.topicCreated}"/>
               </h:outputFormat>
             </span>
-            <a jsf:outcome="/users/profile.jsf?userId=#{forumTopicBackingBean.topicAuthorId}">
+            <a jsf:outcome="/users/profile.jsf?id=#{forumTopicBackingBean.topicAuthorId}">
               #{forumTopicBackingBean.topicAuthorName}
             </a>
           </div>  
@@ -103,7 +103,7 @@
                       </div>
                       <div class="flex-row">
                         <div class="flex-cell-full no-margin-top no-margin-bottom">
-                          <a jsf:outcome="/users/profile.jsf?userId=#{post.author.id}">#{post.author.fullName}</a>
+                          <a jsf:outcome="/users/profile.jsf?id=#{post.author.id}">#{post.author.fullName}</a>
                         </div>
                       </div>
                       <div class="flex-row sm-flex-hide">

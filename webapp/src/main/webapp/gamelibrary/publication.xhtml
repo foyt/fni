@@ -135,7 +135,7 @@
                       <label jsf:rendered="#{gameLibraryPublicationBackingBean.hasSingleAuthor}">#{locales['gamelibrary.publications.detailsAuthor']}</label>
                       <label jsf:rendered="#{!gameLibraryPublicationBackingBean.hasSingleAuthor}">#{locales['gamelibrary.publications.detailsAuthors']}</label>
                       <ui:repeat var="author" value="#{gameLibraryPublicationBackingBean.authors}">
-                        <a jsf:outcome="/users/profile.jsf?userId=#{author.id}" class="gamelibrary-publication-author">#{author.fullName}</a>
+                        <a jsf:outcome="/users/profile.jsf?id=#{author.id}" class="gamelibrary-publication-author">#{author.fullName}</a>
                       </ui:repeat>
                     </div>
                     <div class="gamelibrary-publication-creative-commans-license-container" jsf:rendered="#{gameLibraryPublicationBackingBean.creativeCommonsLicense ne null}">

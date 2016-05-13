@@ -78,7 +78,7 @@
         
         <ul class="menu-tools-account-list" style="display: none">
           <li class="menu-tools-account-edit-profile"><a jsf:outcome="/users/editprofile.jsf">#{locales['menu.toolAccountEditProfile']}</a></li>
-          <li class="menu-tools-account-view-profile"><a jsf:outcome="/users/profile.jsf?userId=#{sessionBackingBean.loggedUser.id}">#{locales['menu.toolAccountViewProfile']}</a></li>
+          <li class="menu-tools-account-view-profile"><a jsf:outcome="/users/profile.jsf?id=#{sessionBackingBean.loggedUser.id}">#{locales['menu.toolAccountViewProfile']}</a></li>
           <li class="menu-tools-account-logout"><a href="#{request.contextPath}/logout">#{locales['menu.toolAccountLogout']}</a></li>
         </ul>
       </div>
