@@ -10,7 +10,7 @@ $menu-background-color-hover: #fff;
 $menu-text-color-hover: #000;
 $menu-logo-shadow-color: rgba(255, 255, 255, 0.7);
 $menu-logo-font: "Bebas Neue",sans-serif;
-$search-box-width: 73px;
+$search-box-width: 68px;
 $search-box-width-focus: 175px; 
 $nav-item-count: 5;
 $nav-item-width: (460px - ($grid-margin * 2)) / $nav-item-count;
@@ -145,6 +145,8 @@ $menu-z-index: 9999;
 
 .menu-tools-locale-container, .menu-tools-account-container, .menu-tools-login {
   margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .menu-tools-locale, .menu-tools-login, .menu-tools-logout, .menu-tools-search, .menu-tools-account {

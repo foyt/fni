@@ -30,7 +30,6 @@ import org.junit.runner.Description;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
@@ -349,7 +348,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   protected List<WebElement> findElementsBySelector(String selector) {
     try {
       return ((FindsByCssSelector) getWebDriver()).findElementsByCssSelector(selector);
-    } catch (NoSuchElementException e) {
+    } catch (Exception e) {
       return Collections.emptyList();
     }
   }

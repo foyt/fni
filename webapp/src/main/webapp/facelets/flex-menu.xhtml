@@ -11,13 +11,16 @@
     </div>
     <div class="menu-navigation-container lg-flex-cell-11 md-flex-cell-16 sm-flex-cell-16">
       <div class="flex-row">
+        <div class="lg-flex-cell12-1 md-flex-cell12-1 sm-flex-hide"></div>
         <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 lg-flex-cell12-first md-flex-cell12-2 md-flex-cell12-first sm-flex-cell12-4 md-flex-cell12-first sm-flex-order-1">
           <a jsf:outcome="/forge/index.jsf">#{locales['menu.menuForge']}</a>
         </div>
+        <!-- 
         <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 lg-flex-cell-first md-flex-cell12-2 sm-flex-cell12-4 sm-flex-order-3">
           <a jsf:outcome="/forge/public.jsf">#{locales['menu.menuForgePublic']}</a>
         </div>
-        <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 md-flex-cell12-2 sm-flex-cell12-4 sm-flex-order-5">
+        -->
+        <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 md-flex-cell12-2 sm-flex-cell12-6 sm-flex-order-5">
           <a jsf:outcome="/illusion/index.jsf">#{locales['menu.menuIllusion']}</a>
         </div>
         <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 md-flex-cell12-2 sm-flex-cell12-4 sm-flex-order-2">
@@ -26,7 +29,7 @@
         <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 md-flex-cell12-2 sm-flex-cell12-4 sm-flex-order-4">
           <a jsf:outcome="/forum/index.jsf">#{locales['menu.menuForum']}</a>
         </div>
-        <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 lg-flex-cell12-last md-flex-cell12-2 md-flex-cell12-last sm-flex-cell12-4 sm-flex-order-6">
+        <div class="no-margin-top no-margin-bottom flex-center lg-flex-cell12-2 lg-flex-cell12-last md-flex-cell12-2 md-flex-cell12-last sm-flex-cell12-6 sm-flex-order-6">
           <div class="menu-about-container">
             <a href="javascript:void(null)" class="menu-about">#{locales['menu.menuAbout']}</a>
             <ul class="menu-about-list" style="display: none">
@@ -43,10 +46,11 @@
             </ul>
           </div>
         </div>
+        <div class="lg-flex-cell12-1 md-flex-cell12-1 sm-flex-hide"></div>
       </div>
     </div>
 
-    <div class="menu-tools-container lg-flex-cell-3 md-flex-cell-16 sm-flex-cell-16">
+    <div class="menu-tools-container no-margin-top no-margin-bottom lg-flex-cell-3 md-flex-cell-16 sm-flex-cell-16">
       <div class="menu-tools-locale-container">
         <a href="javascript:void(null)" class="menu-tools-locale">
           <h:outputFormat value="#{locales['menu.toolLocale']}">
