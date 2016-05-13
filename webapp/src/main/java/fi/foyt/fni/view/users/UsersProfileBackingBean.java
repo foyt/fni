@@ -1,6 +1,5 @@
 package fi.foyt.fni.view.users;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -44,12 +43,12 @@ import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 @RequestScoped
 @Stateful
 @Named
-@Join (path = "/profile/{userId}", to = "/users/profile.jsf" )
+@Join (path = "/profile/{id}", to = "/users/profile.jsf" )
 public class UsersProfileBackingBean {
   
   @Parameter
   @Matches ("[0-9]{1,}")
-  private Long userId;
+  private Long id;
   
 	@Inject
 	private UserController userController;
@@ -63,9 +62,6 @@ public class UsersProfileBackingBean {
 	@Inject
 	private ForumController forumController;
 
-	@Inject
-	private SessionShoppingCartController sessionShoppingCartController;
-
   @Inject
 	private IllusionEventController illusionEventController;
 
@@ -73,8 +69,10 @@ public class UsersProfileBackingBean {
   private NavigationController navigationController;
 
 	@RequestAction 
-	public String init() throws FileNotFoundException {
-		User user = userController.findUserById(getUserId());
+	public String init() {
+    this.userId = id;
+
+    User user = userController.findUserById(getId());
 		if (user == null) {
 		  return navigationController.notFound();
 		}
@@ -161,12 +159,16 @@ public class UsersProfileBackingBean {
     return value;
   }
 
-  public Long getUserId() {
-		return userId;
+  public Long getId() {
+		return id;
 	}
 	
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public Long getUserId() {
+	  return userId;
 	}
 
 	public String getFullName() {
@@ -214,11 +216,6 @@ public class UsersProfileBackingBean {
 		}
 		
 		return null;
-	}
-	
-	public String addPublicationToShoppingCart(Publication publication) {
-		sessionShoppingCartController.addPublication(publication);
-		return "pretty:gamelibrary-index";
 	}
 	
 	public List<Publication> getPublishedPublications() {
@@ -311,7 +308,8 @@ public class UsersProfileBackingBean {
       return new Event(event.getName(), event.getUrlName(), event.getDescription(), event.getStart(), null, event.getEnd(), null);
     }
   }  
-	
+
+  private Long userId;
 	private String fullName;
 	private String about;
 	private Long forumTotalPosts;

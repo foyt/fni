@@ -4,25 +4,22 @@
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" 
   xmlns:jsf="http://xmlns.jcp.org/jsf"
-  template="/WEB-INF/templates/gridbase.xhtml">
-
-  <ui:define name="page-title">#{locales['users.profile.pageTitle']}</ui:define>
-  <ui:define name="view-scripts">
-    <!-- jQuery Magnific-Popup  -->
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/jquery.magnific-popup.min.js"></script>
-    
-    <!-- View scripts -->
-    
-    <h:outputScript name="scripts/gui/users-profile.js"/>
+  template="/WEB-INF/templates/gridbase-s.xhtml">
+  
+  <ui:define name="title">
+    <title>#{locales['users.profile.pageTitle']}</title>
   </ui:define>
   
-  <ui:define name="view-stylesheets">
-    <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/magnific-popup.min.css"/>
-
-    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
-    <h:outputStylesheet library="novus" name="css/users-profile.css"/>
+  <ui:define name="scripts">
+    <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/jquery.magnific-popup/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script defer="defer" type="text/javascript" src="/scripts/gui/users-profile.js"></script>
   </ui:define>
 
+  <ui:define name="styles">
+    <link rel="StyleSheet" href="//static.forgeandillusion.net/libs/jquery.magnific-popup/1.1.0/jquery.magnific-popup.min.css"></link>
+    <link rel="StyleSheet" href="/theme/css/users-profile.css"></link>
+  </ui:define>
+  
   <ui:define name="grid-content">
 
     <!-- Menu -->
@@ -37,7 +34,7 @@
           <div class="view-header-navigation">
             <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['users.profile.navigationIndex']}</a>
             <span class="view-header-navigation-separator"/>
-            <a class="view-header-navigation-item" jsf:outcome="/users/profile.jsf?userId=#{usersProfileBackingBean.userId}">#{usersProfileBackingBean.fullName}</a>
+            <a class="view-header-navigation-item" jsf:outcome="/users/profile.jsf?id=#{usersProfileBackingBean.userId}">#{usersProfileBackingBean.fullName}</a>
           </div>
         </div>
 
