@@ -120,6 +120,15 @@
               </div>
             </div>
             
+            <div class="flex-row users-profile-contact-info" jsf:rendered="#{!empty(usersProfileBackingBean.contactFieldInstagram)}">
+              <div class="flex-cell-full">
+                <label>#{locales['users.profile.contactInformationInstagram']}</label>
+              </div>
+              <div class="flex-cell-full">
+                <a href="#{usersProfileBackingBean.contactFieldInstagram}" target="_blank">#{usersProfileBackingBean.contactFieldInstagram}</a>
+              </div>
+            </div>
+            
             <div class="flex-row users-profile-contact-info" jsf:rendered="#{!empty(usersProfileBackingBean.contactFieldLinkedIn)}">
               <div class="flex-cell-full">
                 <label>#{locales['users.profile.contactInformationLinkedIn']}</label>

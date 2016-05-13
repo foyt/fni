@@ -4,34 +4,23 @@
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html"  
   xmlns:jsf="http://xmlns.jcp.org/jsf"
-  template="/WEB-INF/templates/gridbase.xhtml">
+  template="/WEB-INF/templates/gridbase-s.xhtml">
 
-  <ui:define name="page-title">#{locales['users.editProfile.pageTitle']}</ui:define>
-
-  <ui:define name="view-scripts">
-    <!-- CKEditor -->
-  
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.4.5/ckeditor.js"/>
-  
-    <!-- md5 -->
-    
-    <script type="text/javascript" charset="utf8" src="//cdn.jsdelivr.net/jshash/2.2/md5-min.js"></script>
-    
-    <!-- View scripts -->
-    
-    <h:outputScript name="scripts/gui/users-editprofile.js"></h:outputScript>
+  <ui:define name="title">
+    <title>#{locales['users.editProfile.pageTitle']}</title>
   </ui:define>
   
-  <ui:define name="view-stylesheets">
-    <!-- JQuery UI -->
-    
-    <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+  <ui:define name="scripts">
+    <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/ckeditor/4.5.8/ckeditor.js"></script>
+    <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/jshash/2.2/md5-min.js"></script>
+    <script defer="defer" type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/webshim/1.15.10/minified/polyfiller.js"></script>
+    <script defer="defer" type="text/javascript" src="/scripts/gui/users-editprofile.js"></script>
+  </ui:define>
 
-    <!-- View styles -->
-    
-    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
-    <h:outputStylesheet library="novus" name="css/users-editprofile.css"/>
-    
+  <ui:define name="styles">
+    <link rel="StyleSheet" href="//static.forgeandillusion.net/libs/jquery-ui/1.11.4/themes/smoothness/jquery-ui.min.css"></link>
+    <link rel="StyleSheet" href="//static.forgeandillusion.net/libs/jquery.magnific-popup/1.1.0/jquery.magnific-popup.min.css"></link>
+    <link rel="StyleSheet" href="/theme/css/users-editprofile.css"></link>
   </ui:define>
 
   <ui:define name="grid-content">
@@ -66,8 +55,8 @@
 
     <div class="flex-row">
       <div class="flex-cell-full index-box">
+
         <h:form>
-        
           <div class="flex-row">
             <div class="flex-cell-full">
               <h3>#{locales['users.editProfile.editProfileTitle']}</h3>
@@ -84,7 +73,7 @@
                   <input type="text" required="required" jsf:value="#{editProfileBackingBean.firstName}" jsf:required="true" jsf:requiredMessage="#{locales['users.editProfile.firstNameRequired']}" data-requiredmessage="#{locales['users.editProfile.firstNameRequired']}"/>
                 </div>
               </div>
-              
+
               <div class="flex-row field">
                 <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
                   <label>#{locales['users.editProfile.lastNameLabel']}</label>
@@ -111,13 +100,12 @@
                   <h:selectOneRadio layout="pageDirection" styleClass="users-editprofile-image-source" value="#{editProfileBackingBean.profileImageSource}">
                     <f:selectItem itemLabel="#{locales['users.editProfile.profileImageSourceGravatar']}" itemValue="GRAVATAR"/>
                     <f:selectItem itemLabel="#{locales['users.editProfile.profileImageSourceFni']}" itemValue="FNI" itemDisabled="#{!editProfileBackingBean.hasFniProfileImage}"/>
-                    <f:ajax execute="@form" render="@form"/>
                   </h:selectOneRadio>
                 </div>
               </div>
-            
+
             </div>
-            
+
             <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full">
               <div class="flex-row">
                 <div class="flex-cell-full">
@@ -127,10 +115,9 @@
                   <a href="javascript:void(null)" class="users-editprofile-image-change" data-user-id="#{sessionBackingBean.loggedUser.id}">#{locales['users.editProfile.uploadProfileImage']}</a>
                 </div>
               </div>
-            </div>
-            
+            </div>   
          </div>
-         
+
          <div class="flex-row">
            <div class="flex-cell-full">
              <h3>#{locales['users.editProfile.contactInfoTitle']}</h3> 
@@ -144,7 +131,7 @@
                   <label>#{locales['users.editProfile.contactInfoFieldHomePage']}</label>
                 </div>
                 <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="text" jsf:value="#{editProfileBackingBean.contactInfoFieldHomePage}"/>
+                  <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldHomePage}"/>
                 </div>
               </div>
               
@@ -153,7 +140,7 @@
                   <label>#{locales['users.editProfile.contactInfoFieldBlog']}</label>
                 </div>
                 <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="text" jsf:value="#{editProfileBackingBean.contactInfoFieldBlog}"/>
+                  <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldBlog}"/>
                 </div>
               </div>
               
@@ -162,7 +149,7 @@
                   <label>#{locales['users.editProfile.contactInfoFieldFacebook']}</label>
                 </div>
                 <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="text" jsf:value="#{editProfileBackingBean.contactInfoFieldFacebook}"/>
+                  <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldFacebook}"/>
                 </div>
               </div>
               
@@ -171,7 +158,16 @@
                   <label>#{locales['users.editProfile.contactInfoFieldTwitter']}</label>
                 </div>
                 <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="text" jsf:value="#{editProfileBackingBean.contactInfoFieldTwitter}"/>
+                  <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldTwitter}"/>
+                </div>
+              </div>
+              
+              <div class="flex-row field">
+                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                  <label>#{locales['users.editProfile.contactInfoFieldInstagram']}</label>
+                </div>
+                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                  <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldInstagram}"/>
                 </div>
               </div>
               
@@ -180,7 +176,7 @@
                   <label>#{locales['users.editProfile.contactInfoFieldLinkedIn']}</label>
                 </div>
                 <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="text" jsf:value="#{editProfileBackingBean.contactInfoFieldLinkedIn}"/>
+                  <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldLinkedIn}"/>
                 </div>
               </div>
               
@@ -189,7 +185,7 @@
                   <label>#{locales['users.editProfile.contactInfoFieldGooglePlus']}</label>
                 </div>
                 <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="text" jsf:value="#{editProfileBackingBean.contactInfoFieldGooglePlus}"/>
+                  <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldGooglePlus}"/>
                 </div>
               </div>
             </div>
@@ -326,9 +322,9 @@
           <h:inputHidden id="change-password1-encoded" value="#{editProfileBackingBean.changePassword1}"/>
           <h:inputHidden id="change-password2-encoded" value="#{editProfileBackingBean.changePassword2}"/>
         </h:form>
+      
       </div>
     </div>
-
   </ui:define>
 
 </ui:composition>
