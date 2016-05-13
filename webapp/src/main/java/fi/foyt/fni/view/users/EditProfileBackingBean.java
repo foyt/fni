@@ -70,6 +70,7 @@ public class EditProfileBackingBean {
   	contactInfoFieldTwitter = userController.getContactFieldValue(loggedUser, UserContactFieldType.TWITTER);
   	contactInfoFieldLinkedIn = userController.getContactFieldValue(loggedUser, UserContactFieldType.LINKEDIN);
   	contactInfoFieldGooglePlus = userController.getContactFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS);
+    contactInfoFieldInstagram = userController.getContactFieldValue(loggedUser, UserContactFieldType.INSTAGRAM);
   	
   	profileImageSource = loggedUser.getProfileImageSource();
 		userIdentifiers = authenticationController.listUserIdentifiers(loggedUser);
@@ -277,6 +278,14 @@ public class EditProfileBackingBean {
 		this.contactInfoFieldGooglePlus = contactInfoFieldGooglePlus;
 	}
 	
+	public String getContactInfoFieldInstagram() {
+    return contactInfoFieldInstagram;
+  }
+	
+	public void setContactInfoFieldInstagram(String contactInfoFieldInstagram) {
+    this.contactInfoFieldInstagram = contactInfoFieldInstagram;
+  }
+	
 	public List<SelectItem> getAddAuthenticationSourcesSelectItems() {
 		return addAuthenticationSourcesSelectItems;
 	}
@@ -346,7 +355,7 @@ public class EditProfileBackingBean {
 		}
 	}
 
-	public void save() throws IOException {
+	public String save() throws IOException {
 		User loggedUser = sessionController.getLoggedUser();
 		
 		userController.updateFirstName(loggedUser, getFirstName());
@@ -360,6 +369,7 @@ public class EditProfileBackingBean {
   	userController.setContactFieldValue(loggedUser, UserContactFieldType.TWITTER, getContactInfoFieldTwitter());
   	userController.setContactFieldValue(loggedUser, UserContactFieldType.LINKEDIN, getContactInfoFieldLinkedIn());
   	userController.setContactFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS, getContactInfoFieldGooglePlus());
+    userController.setContactFieldValue(loggedUser, UserContactFieldType.INSTAGRAM, getContactInfoFieldInstagram());
   	
     FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.savedMessage"));
     
@@ -367,7 +377,10 @@ public class EditProfileBackingBean {
       FacesContext facesContext = FacesContext.getCurrentInstance();
       ExternalContext externalContext = facesContext.getExternalContext();
       externalContext.redirect(getRedirectUrl());
+      return null;
     }
+
+    return "/users/editprofile.jsf?faces-redirect=true";
 	}
 	
 	public void changePassword() {
@@ -401,4 +414,5 @@ public class EditProfileBackingBean {
   private String contactInfoFieldTwitter;
   private String contactInfoFieldLinkedIn;
   private String contactInfoFieldGooglePlus;
+  private String contactInfoFieldInstagram;
 }

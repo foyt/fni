@@ -7,6 +7,7 @@ public enum UserContactFieldType {
 	FACEBOOK,
 	TWITTER, 
 	LINKEDIN, 
-	GOOGLE_PLUS
+	GOOGLE_PLUS,
+	INSTAGRAM
 	
 }

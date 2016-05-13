@@ -22,7 +22,6 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
-import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
@@ -135,14 +134,26 @@ public class UsersProfileBackingBean {
 		contactFieldTwitter = getContactField(user, UserContactFieldType.TWITTER);
 		contactFieldLinkedIn = getContactField(user, UserContactFieldType.LINKEDIN);
 		contactFieldGooglePlus = getContactField(user, UserContactFieldType.GOOGLE_PLUS);
-		hasContactInformation = StringUtils.isNotBlank(contactFieldHomePage)||
-				StringUtils.isNotBlank(contactFieldBlog)||
-				StringUtils.isNotBlank(contactFieldFacebook)||
-				StringUtils.isNotBlank(contactFieldTwitter)||
-				StringUtils.isNotBlank(contactFieldLinkedIn)||
-				StringUtils.isNotBlank(contactFieldGooglePlus);
+		contactFieldInstagram = getContactField(user, UserContactFieldType.INSTAGRAM);
+		
+		hasContactInformation = hasContactInformation();
 		
 		return null;
+	}
+	
+	private boolean hasContactInformation() {
+	  return hasContactField(contactFieldHomePage, contactFieldBlog, contactFieldFacebook, 
+	      contactFieldTwitter, contactFieldLinkedIn, contactFieldGooglePlus, contactFieldInstagram); 
+	}
+	
+	private boolean hasContactField(String... fields) {
+	  for (String field : fields) {
+	    if (StringUtils.isNotBlank(field)) {
+	      return true;
+	    }
+	  }
+	  
+	  return false;
 	}
 	
 	private String getContactField(User user, UserContactFieldType contactFieldType) {
@@ -254,6 +265,10 @@ public class UsersProfileBackingBean {
 		return contactFieldGooglePlus;
 	}
 	
+	public String getContactFieldInstagram() {
+    return contactFieldInstagram;
+  }
+	
 	public Long getForumTotalPosts() {
 		return forumTotalPosts;
 	}
@@ -326,6 +341,7 @@ public class UsersProfileBackingBean {
 	private String contactFieldTwitter;
 	private String contactFieldLinkedIn;
 	private String contactFieldGooglePlus;
+  private String contactFieldInstagram;
 	private List<Event> organizerInEvents;
 	
   public class Event {
