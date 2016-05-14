@@ -68,7 +68,7 @@ public class EditProfileTestsBase extends AbstractUITest {
       getWebDriver().get(getAppUrl() + "/editprofile");
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password")).click();
       waitForSelectorVisible(".users-editprofile-authentication-source-change-password-container");
-      getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-container input[type=\"submit\"]")).click();
+      scrollWaitAndClick(".users-editprofile-authentication-source-change-password-container input[type=\"submit\"]");
       waitForNotification();
       assertNotification("warning", "Password is required");
     } finally {
@@ -89,8 +89,8 @@ public class EditProfileTestsBase extends AbstractUITest {
 
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-password1")).sendKeys("qwe");
       getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-password2")).sendKeys("asd");
-      
-      getWebDriver().findElement(By.cssSelector(".users-editprofile-authentication-source-change-password-container input[type=\"submit\"]")).click();
+
+      scrollWaitAndClick(".users-editprofile-authentication-source-change-password-container input[type=\"submit\"]");
       waitForNotification();
       assertNotification("warning", "Passwords do not match");
     } finally {

@@ -225,6 +225,9 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
 
     waitForUrlMatches(".*/illusion/event/" + name);
     navigate("/illusion/event/" + name + "/settings");
+    
+    waitForSelectorPresent(".sign-up-start-date");
+    
     assertSelectorValue(".sign-up-start-date", signUpStartDate);
     assertSelectorValue(".sign-up-end-date", signUpEndDate);
     
