@@ -1,7 +1,9 @@
 (function() {
   'use strict';
   
-  $(document).ready(function () {
+  $(document).ready(function() { 
+    webshim.polyfill('forms');
+  
     CKEDITOR.replace($('.about-editor').attr('name'), { 
       skin: 'moono',
       language: LOCALE,

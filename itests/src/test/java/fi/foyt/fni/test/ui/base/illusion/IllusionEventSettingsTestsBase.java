@@ -569,7 +569,6 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
               false, 
               1l)))));
     
-    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/event/openevent/settings");
     scrollWaitAndClick(".illusion-event-settings-genre input[value='1']");

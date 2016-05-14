@@ -137,7 +137,7 @@
                       <div class="flex-row">
                         <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full sm-flex-order-2 topic-start-info">
                           <span>#{locales['forum.forum.topicStartedBy']}</span>
-                          <a jsf:outcome="/users/profile.jsf?userId=#{topic.author.id}">#{topic.author.fullName}</a>
+                          <a jsf:outcome="/users/profile.jsf?id=#{topic.author.id}">#{topic.author.fullName}</a>
                           <span>
                             <h:outputText value="#{topic.created}">
                               <f:convertDateTime type="date"/>

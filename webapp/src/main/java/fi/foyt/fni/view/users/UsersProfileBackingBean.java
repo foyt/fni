@@ -1,6 +1,5 @@
 package fi.foyt.fni.view.users;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -23,7 +22,6 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
-import fi.foyt.fni.gamelibrary.SessionShoppingCartController;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
@@ -44,12 +42,12 @@ import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 @RequestScoped
 @Stateful
 @Named
-@Join (path = "/profile/{userId}", to = "/users/profile.jsf" )
+@Join (path = "/profile/{id}", to = "/users/profile.jsf" )
 public class UsersProfileBackingBean {
   
   @Parameter
   @Matches ("[0-9]{1,}")
-  private Long userId;
+  private Long id;
   
 	@Inject
 	private UserController userController;
@@ -63,9 +61,6 @@ public class UsersProfileBackingBean {
 	@Inject
 	private ForumController forumController;
 
-	@Inject
-	private SessionShoppingCartController sessionShoppingCartController;
-
   @Inject
 	private IllusionEventController illusionEventController;
 
@@ -73,8 +68,10 @@ public class UsersProfileBackingBean {
   private NavigationController navigationController;
 
 	@RequestAction 
-	public String init() throws FileNotFoundException {
-		User user = userController.findUserById(getUserId());
+	public String init() {
+    this.userId = id;
+
+    User user = userController.findUserById(getId());
 		if (user == null) {
 		  return navigationController.notFound();
 		}
@@ -137,14 +134,26 @@ public class UsersProfileBackingBean {
 		contactFieldTwitter = getContactField(user, UserContactFieldType.TWITTER);
 		contactFieldLinkedIn = getContactField(user, UserContactFieldType.LINKEDIN);
 		contactFieldGooglePlus = getContactField(user, UserContactFieldType.GOOGLE_PLUS);
-		hasContactInformation = StringUtils.isNotBlank(contactFieldHomePage)||
-				StringUtils.isNotBlank(contactFieldBlog)||
-				StringUtils.isNotBlank(contactFieldFacebook)||
-				StringUtils.isNotBlank(contactFieldTwitter)||
-				StringUtils.isNotBlank(contactFieldLinkedIn)||
-				StringUtils.isNotBlank(contactFieldGooglePlus);
+		contactFieldInstagram = getContactField(user, UserContactFieldType.INSTAGRAM);
+		
+		hasContactInformation = hasContactInformation();
 		
 		return null;
+	}
+	
+	private boolean hasContactInformation() {
+	  return hasContactField(contactFieldHomePage, contactFieldBlog, contactFieldFacebook, 
+	      contactFieldTwitter, contactFieldLinkedIn, contactFieldGooglePlus, contactFieldInstagram); 
+	}
+	
+	private boolean hasContactField(String... fields) {
+	  for (String field : fields) {
+	    if (StringUtils.isNotBlank(field)) {
+	      return true;
+	    }
+	  }
+	  
+	  return false;
 	}
 	
 	private String getContactField(User user, UserContactFieldType contactFieldType) {
@@ -161,12 +170,16 @@ public class UsersProfileBackingBean {
     return value;
   }
 
-  public Long getUserId() {
-		return userId;
+  public Long getId() {
+		return id;
 	}
 	
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public Long getUserId() {
+	  return userId;
 	}
 
 	public String getFullName() {
@@ -216,11 +229,6 @@ public class UsersProfileBackingBean {
 		return null;
 	}
 	
-	public String addPublicationToShoppingCart(Publication publication) {
-		sessionShoppingCartController.addPublication(publication);
-		return "pretty:gamelibrary-index";
-	}
-	
 	public List<Publication> getPublishedPublications() {
 		return publishedPublications;
 	}
@@ -256,6 +264,10 @@ public class UsersProfileBackingBean {
 	public String getContactFieldGooglePlus() {
 		return contactFieldGooglePlus;
 	}
+	
+	public String getContactFieldInstagram() {
+    return contactFieldInstagram;
+  }
 	
 	public Long getForumTotalPosts() {
 		return forumTotalPosts;
@@ -311,7 +323,8 @@ public class UsersProfileBackingBean {
       return new Event(event.getName(), event.getUrlName(), event.getDescription(), event.getStart(), null, event.getEnd(), null);
     }
   }  
-	
+
+  private Long userId;
 	private String fullName;
 	private String about;
 	private Long forumTotalPosts;
@@ -328,6 +341,7 @@ public class UsersProfileBackingBean {
 	private String contactFieldTwitter;
 	private String contactFieldLinkedIn;
 	private String contactFieldGooglePlus;
+  private String contactFieldInstagram;
 	private List<Event> organizerInEvents;
 	
   public class Event {
