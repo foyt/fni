@@ -21,11 +21,27 @@ h3 {
   vertical-align: top;
 }
 
-.history-image {
-  float: left;
-  padding-top: 4px;
-  margin-right: 10px;
-  margin-bottom: 10px;
+.block {
+  display: table;
+  
+  .sub-block {
+    clear: both;
+  
+    p:first-of-type {
+      padding-top: 0px;
+    }
+    
+    img {
+      float: left;
+      padding-top: 4px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+  }
+  
+  &:after {
+    clear: both;
+  }
 }
 
 .index-box p {
