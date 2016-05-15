@@ -23,7 +23,7 @@ public class MenuTestsBase extends AbstractUITest {
     assertSelectorTextIgnoreCase(String.format("a[href='/gamelibrary/']"), "Game Library");
     assertSelectorTextIgnoreCase(String.format("a[href='/forum/']"), "Forum");
   }
-
+  
   @Test
   public void testAbout() throws Exception {navigate("/");
 
@@ -51,35 +51,37 @@ public class MenuTestsBase extends AbstractUITest {
     WebElement aboutMenuContact = getWebDriver().findElement(By.cssSelector(".menu-about-list>li:nth-child(9)>a"));
     WebElement aboutMenuAcknowledgements = getWebDriver().findElement(By.cssSelector(".menu-about-list>li:nth-child(10)>a"));
 
+    String appUrl = getAppUrl(true);
+    
     assertEquals("Our Vision", aboutMenuVision.getText());
-    assertEquals(getAppUrl() + "/about#vision", stripLinkJSessionId(aboutMenuVision.getAttribute("href")));
+    assertEquals(String.format("%s/about#vision", appUrl), stripLinkJSessionId(aboutMenuVision.getAttribute("href")));
 
     assertEquals("Information", aboutMenuInformation.getText());
-    assertEquals(getAppUrl() + "/about#information", stripLinkJSessionId(aboutMenuInformation.getAttribute("href")));
+    assertEquals(String.format("%s/about#information", appUrl), stripLinkJSessionId(aboutMenuInformation.getAttribute("href")));
 
     assertEquals("Community participation and forum", aboutMenuForum.getText());
-    assertEquals(getAppUrl() + "/about#forum", stripLinkJSessionId(aboutMenuForum.getAttribute("href")));
+    assertEquals(String.format("%s/about#forum", appUrl), stripLinkJSessionId(aboutMenuForum.getAttribute("href")));
 
     assertEquals("Distribution", aboutMenuDistribution.getText());
-    assertEquals(getAppUrl() + "/about#distribution", stripLinkJSessionId(aboutMenuDistribution.getAttribute("href")));
+    assertEquals(String.format("%s/about#distribution", appUrl), stripLinkJSessionId(aboutMenuDistribution.getAttribute("href")));
 
     assertEquals("Gameplay", aboutMenuGameplay.getText());
-    assertEquals(getAppUrl() + "/about#gameplay", stripLinkJSessionId(aboutMenuGameplay.getAttribute("href")));
+    assertEquals(String.format("%s/about#gameplay", appUrl), stripLinkJSessionId(aboutMenuGameplay.getAttribute("href")));
 
     assertEquals("History", aboutMenuHistory.getText());
-    assertEquals(getAppUrl() + "/about#history", stripLinkJSessionId(aboutMenuHistory.getAttribute("href")));
+    assertEquals(String.format("%s/about#history", appUrl), stripLinkJSessionId(aboutMenuHistory.getAttribute("href")));
 
     assertEquals("Use of cookies", aboutMenuCookies.getText());
-    assertEquals(getAppUrl() + "/about#cookies", stripLinkJSessionId(aboutMenuCookies.getAttribute("href")));
+    assertEquals(String.format("%s/about#cookies", appUrl), stripLinkJSessionId(aboutMenuCookies.getAttribute("href")));
 
     assertEquals("Open Source", aboutMenuOpenSource.getText());
-    assertEquals(getAppUrl() + "/about#opensource", stripLinkJSessionId(aboutMenuOpenSource.getAttribute("href")));
+    assertEquals(String.format("%s/about#opensource", appUrl), stripLinkJSessionId(aboutMenuOpenSource.getAttribute("href")));
 
     assertEquals("Contacting us", aboutMenuContact.getText());
-    assertEquals(getAppUrl() + "/about#contact", stripLinkJSessionId(aboutMenuContact.getAttribute("href")));
+    assertEquals(String.format("%s/about#contact", appUrl), stripLinkJSessionId(aboutMenuContact.getAttribute("href")));
 
     assertEquals("Acknowledgements", aboutMenuAcknowledgements.getText());
-    assertEquals(getAppUrl() + "/about#acknowledgements", stripLinkJSessionId(aboutMenuAcknowledgements.getAttribute("href")));
+    assertEquals(String.format("%s/about#acknowledgements", appUrl), stripLinkJSessionId(aboutMenuAcknowledgements.getAttribute("href")));
 
     // Click somewhere else and the menu list should disappear
     clickSelector(".menu-tools-locale-container");
