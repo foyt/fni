@@ -143,7 +143,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
     } finally {
       greenMail.stop();
     }    
@@ -228,7 +228,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
     } finally {
       greenMail.stop();
     }    
@@ -296,7 +296,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Open"), greenMail.getReceivedMessages()[1].getSubject());
     } finally {
       greenMail.stop();
     }    
@@ -367,7 +367,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Open"), greenMail.getReceivedMessages()[1].getSubject());
     } finally {
       greenMail.stop();
     }    
@@ -435,7 +435,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Invite Only"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Invite Only"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Invite Only"), greenMail.getReceivedMessages()[1].getSubject());
       
     } finally {
       greenMail.stop();
@@ -499,7 +499,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Open"), greenMail.getReceivedMessages()[1].getSubject());
       
     } finally {
       greenMail.stop();
@@ -578,7 +578,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
     } finally {
       greenMail.stop();
     }    
@@ -647,7 +647,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Open"), greenMail.getReceivedMessages()[1].getSubject());
       
       assertTrue(StringUtils.startsWith(getWebDriver().getCurrentUrl(), String.format("http://%s", AbstractIllusionUITest.CUSTOM_EVENT_HOST)));
       
