@@ -3,68 +3,76 @@
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html"
-  template="/WEB-INF/templates/gridbase.xhtml">
+  template="/WEB-INF/templates/gridbase-s.xhtml">
   
-  <ui:define name="page-title">Debug Timer Results</ui:define>
-  <ui:define name="grid-css">
-    <h:outputStylesheet library="novus" name="css/grid.css"/>
+  <ui:define name="title">
+    <title>Debug Timer Results</title>
   </ui:define>
   
-  <ui:define name="view-scripts">
-  </ui:define>
-
-  <ui:define name="view-stylesheets">
-    <!-- View styles -->
-     
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
-    <h:outputStylesheet library="novus" name="css/admin-debug-timer-results.css"/>
+  <ui:define name="styles">
+    <link rel="StyleSheet" href="/theme/css/admin-debug-timer-results.css"></link>
   </ui:define>
 
   <ui:define name="grid-content">
 
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
-
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="grid_16 alpha slim-right">
-        <h:panelGroup layout="block" styleClass="admin-debug-timer-results-panel">
-          <h2>Timer results</h2>
-          <ui:repeat var="requestStats" value="#{debugTimerResultsBackingBean.requestStats}">
-            <div class="#{requestStats.requestMills >= 500 || requestStats.methodStats.size() gt 0 ? 'significant' : 'insignificant'}">
-              <h3>#{requestStats.view}</h3>
-              
-              <div class="#{requestStats.requestMills >= 750 ? (requestStats.requestMills >= 1000 ? 'admin-debug-timer-result-high' : 'admin-debug-timer-result-med') : 'admin-debug-timer-result-low'}">
-                #{debugTimerResultsBackingBean.getHumanReadableDuration(requestStats.requestMills)}
+    <ui:include src="/facelets/flex-menu.xhtml" />
+    
+    <div class="flex-row">
+      
+      <div class="index-box flex-cell-full">
+        <div class="flex-row">
+          <div class="flex-cell-full">
+            <h2>Timer results</h2>
+          </div>
+        </div>
+        
+        <div class="flex-row">
+          <div class="flex-cell-full">
+            <ui:repeat var="requestStats" value="#{debugTimerResultsBackingBean.requestStats}">
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <div class="#{requestStats.requestMills >= 500 || requestStats.methodStats.size() gt 0 ? 'significant' : 'insignificant'}">
+                    <h3>#{requestStats.view}</h3>
+                    
+                    <div class="#{requestStats.requestMills >= 750 ? (requestStats.requestMills >= 1000 ? 'admin-debug-timer-result-high' : 'admin-debug-timer-result-med') : 'admin-debug-timer-result-low'}">
+                      #{debugTimerResultsBackingBean.getHumanReadableDuration(requestStats.requestMills)}
+                    </div>
+                    
+                    <table>
+                      <tr>
+                        <th>Method</th>
+                        <th>Count</th>
+                        <th>Min</th>
+                        <th>Max</th>
+                        <th>Average</th>
+                        <th>Total Average</th>
+                        <th>Total</th>
+                      </tr>
+                      <ui:repeat var="methodStats" value="#{requestStats.methodStatList}">
+                        <tr class="#{methodStats.total >= 200 ? (methodStats.total >= 500 ? 'admin-debug-timer-result-high' : 'admin-debug-timer-result-med') : 'admin-debug-timer-result-low'}">
+                          <td><span title="#{methodStats.methodDetails}">#{methodStats.methodName}</span></td>
+                          <td>#{methodStats.count}</td>
+                          <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.min)}</td>
+                          <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.max)}</td>
+                          <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.avg)}</td>
+                          <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.totalAvg)}</td>
+                          <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.total)}</td>
+                        </tr>
+                      </ui:repeat>
+                    </table>
+                  </div>
+                </div>
               </div>
-              
-              <table>
-                <tr>
-                  <th>Method</th>
-                  <th>Count</th>
-                  <th>Min</th>
-                  <th>Max</th>
-                  <th>Average</th>
-                  <th>Total Average</th>
-                  <th>Total</th>
-                </tr>
-                <ui:repeat var="methodStats" value="#{requestStats.methodStatList}">
-                  <tr class="#{methodStats.total >= 200 ? (methodStats.total >= 500 ? 'admin-debug-timer-result-high' : 'admin-debug-timer-result-med') : 'admin-debug-timer-result-low'}">
-                    <td><span title="#{methodStats.methodDetails}">#{methodStats.methodName}</span></td>
-                    <td>#{methodStats.count}</td>
-                    <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.min)}</td>
-                    <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.max)}</td>
-                    <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.avg)}</td>
-                    <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.totalAvg)}</td>
-                    <td>#{debugTimerResultsBackingBean.getHumanReadableDuration(methodStats.total)}</td>
-                  </tr>
-                </ui:repeat>
-              </table>
-            </div>
-          </ui:repeat>
-        </h:panelGroup>
-      </h:panelGroup>
-    </h:panelGroup>
+            </ui:repeat>
+
+          </div>
+        </div>
+
+      </div>
+      
+    </div>
     
   </ui:define>
 
