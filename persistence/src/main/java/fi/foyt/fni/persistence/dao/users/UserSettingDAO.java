@@ -16,13 +16,11 @@ public class UserSettingDAO extends GenericDAO<UserSetting> {
 	private static final long serialVersionUID = 1L;
 
 	public UserSetting create(User user, UserSettingKey userSettingKey, String value) {
-    EntityManager entityManager = getEntityManager();
     UserSetting userSetting = new UserSetting();
     userSetting.setValue(value);
     userSetting.setUserSettingKey(userSettingKey);
     userSetting.setUser(user);
-    entityManager.persist(userSetting);
-    return userSetting;
+    return persist(userSetting);
   }
 
   public UserSetting findByUserAndUserSettingKey(User user, UserSettingKey userSettingKey) {
@@ -43,11 +41,8 @@ public class UserSettingDAO extends GenericDAO<UserSetting> {
   }
 
   public UserSetting updateValue(UserSetting userSetting, String value) {
-    EntityManager entityManager = getEntityManager();
     userSetting.setValue(value);
-
-    userSetting = entityManager.merge(userSetting);
-    return userSetting;
+    return persist(userSetting);
   }
 
 }

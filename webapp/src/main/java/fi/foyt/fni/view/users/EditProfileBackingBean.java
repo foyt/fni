@@ -30,6 +30,7 @@ import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserContactFieldType;
 import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
+import fi.foyt.fni.persistence.model.users.UserSettingKey;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
@@ -71,7 +72,7 @@ public class EditProfileBackingBean {
   	contactInfoFieldLinkedIn = userController.getContactFieldValue(loggedUser, UserContactFieldType.LINKEDIN);
   	contactInfoFieldGooglePlus = userController.getContactFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS);
     contactInfoFieldInstagram = userController.getContactFieldValue(loggedUser, UserContactFieldType.INSTAGRAM);
-  	
+    notificationForumNewPostMail = userController.getBooleanUserSetting(loggedUser, UserSettingKey.FORUM_NEW_POST_NOTIFICATION_EMAIL, Boolean.TRUE);
   	profileImageSource = loggedUser.getProfileImageSource();
 		userIdentifiers = authenticationController.listUserIdentifiers(loggedUser);
 		hasFniProfileImage = userController.hasProfileImage(loggedUser);
@@ -354,6 +355,14 @@ public class EditProfileBackingBean {
 		  authenticationController.removeUserIdentifier(userIdentifier);
 		}
 	}
+	
+	public Boolean getNotificationForumNewPostMail() {
+    return notificationForumNewPostMail;
+  }
+	
+	public void setNotificationForumNewPostMail(Boolean notificationForumNewPostMail) {
+    this.notificationForumNewPostMail = notificationForumNewPostMail;
+  }
 
 	public String save() throws IOException {
 		User loggedUser = sessionController.getLoggedUser();
@@ -370,7 +379,8 @@ public class EditProfileBackingBean {
   	userController.setContactFieldValue(loggedUser, UserContactFieldType.LINKEDIN, getContactInfoFieldLinkedIn());
   	userController.setContactFieldValue(loggedUser, UserContactFieldType.GOOGLE_PLUS, getContactInfoFieldGooglePlus());
     userController.setContactFieldValue(loggedUser, UserContactFieldType.INSTAGRAM, getContactInfoFieldInstagram());
-  	
+    userController.setUserSetting(loggedUser, UserSettingKey.FORUM_NEW_POST_NOTIFICATION_EMAIL, getNotificationForumNewPostMail());
+    
     FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.editProfile.savedMessage"));
     
     if (StringUtils.isNotBlank(getRedirectUrl())) {
@@ -415,4 +425,5 @@ public class EditProfileBackingBean {
   private String contactInfoFieldLinkedIn;
   private String contactInfoFieldGooglePlus;
   private String contactInfoFieldInstagram;
+  private Boolean notificationForumNewPostMail;
 }

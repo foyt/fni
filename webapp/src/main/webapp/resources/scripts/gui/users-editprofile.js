@@ -3,6 +3,7 @@
   
   $(document).ready(function() { 
     webshim.polyfill('forms');
+    $("#tabs").tabs();
   
     CKEDITOR.replace($('.about-editor').attr('name'), { 
       skin: 'moono',

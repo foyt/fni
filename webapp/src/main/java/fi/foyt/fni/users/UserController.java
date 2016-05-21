@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -28,7 +29,6 @@ import fi.foyt.fni.persistence.dao.users.UserEmailDAO;
 import fi.foyt.fni.persistence.dao.users.UserFriendDAO;
 import fi.foyt.fni.persistence.dao.users.UserImageDAO;
 import fi.foyt.fni.persistence.dao.users.UserSettingDAO;
-import fi.foyt.fni.persistence.dao.users.UserSettingKeyDAO;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
 import fi.foyt.fni.persistence.model.auth.UserIdentifier;
 import fi.foyt.fni.persistence.model.common.Country;
@@ -66,9 +66,6 @@ public class UserController implements Serializable {
 	
 	@Inject
 	private UserSettingDAO userSettingDAO;
-	
-	@Inject
-	private UserSettingKeyDAO userSettingKeyDAO;
 
 	@Inject
 	private UserContactFieldDAO userContactFieldDAO;
@@ -381,38 +378,54 @@ public class UserController implements Serializable {
     return false;
   }
   
-  public UserSetting getUserSetting(User user, String setting) {
-  	UserSettingKey settingKey = userSettingKeyDAO.findByKey(setting);
-		if (settingKey != null) {
-			UserSetting userSetting = userSettingDAO.findByUserAndUserSettingKey(user, settingKey);
-			if (userSetting != null) {
-				return userSetting;
-			}
-		}
-		
-		return null;
+  public String getUserSetting(User user, UserSettingKey settingKey, String defaultValue) {
+    UserSetting userSetting = findUserSetting(user, settingKey);
+    if ((userSetting == null) || StringUtils.isBlank(userSetting.getValue())) {
+      return defaultValue;
+    }
+    
+    return userSetting.getValue();
+  }
+  
+  public Boolean getBooleanUserSetting(User user, UserSettingKey settingKey, Boolean defaultValue) {
+    UserSetting userSetting = findUserSetting(user, settingKey);
+    if (userSetting == null) {
+      return defaultValue;
+    }
+    
+    Boolean result = BooleanUtils.toBoolean(userSetting.getValue());
+    return result != null ? result : null;
   }
 
-	public String getUserSettingValue(User user, String setting) {
-		UserSetting userSetting = getUserSetting(user, setting);
+	public UserSetting setUserSetting(User user, UserSettingKey settingKey, String value) {
+		UserSetting userSetting = findUserSetting(user, settingKey);
 		if (userSetting != null) {
-			return userSetting.getValue();
-		}
-		
-		return null;
-  }
-
-	public void setUserSettingValue(User user, String setting, String value) {
-		UserSetting userSetting = getUserSetting(user, setting);
-		if (userSetting != null) {
-			userSettingDAO.updateValue(userSetting, value);
+		  if (value != null) {
+		    userSettingDAO.delete(userSetting);
+		  } else {
+			  return userSettingDAO.updateValue(userSetting, value);
+		  }
 		} else {
-			UserSettingKey userSettingKey = userSettingKeyDAO.findByKey(setting);
-			if (userSettingKey != null) {
-			  userSettingDAO.create(user, userSettingKey, value);
-			}
+		  if (value != null) {
+		    return userSettingDAO.create(user, settingKey, value);
+		  }
 		}
+		
+    return null;
 	}
+	
+	public UserSetting setUserSetting(User user, UserSettingKey settingKey, Boolean value) {
+	  return setUserSetting(user, settingKey, value != null ? value.toString() : null);
+	}
+  
+  private UserSetting findUserSetting(User user, UserSettingKey settingKey) {
+    UserSetting userSetting = userSettingDAO.findByUserAndUserSettingKey(user, settingKey);
+    if (userSetting != null) {
+      return userSetting;
+    }
+    
+    return null;
+  }
 	
 	/* Contact Info */
 

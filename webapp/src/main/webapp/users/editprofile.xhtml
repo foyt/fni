@@ -18,8 +18,12 @@
   </ui:define>
 
   <ui:define name="styles">
+    <link rel="StyleSheet" href="//static.forgeandillusion.net/libs/fni-flexgrid/1.0.3/flexgrid.css"></link>
     <link rel="StyleSheet" href="//static.forgeandillusion.net/libs/jquery-ui/1.11.4/themes/smoothness/jquery-ui.min.css"></link>
     <link rel="StyleSheet" href="//static.forgeandillusion.net/libs/jquery.magnific-popup/1.1.0/jquery.magnific-popup.min.css"></link>
+    <link rel="StyleSheet" href="/theme/css/common.css"></link>
+    <link rel="StyleSheet" href="/theme/css/fonts.css"></link>
+    <link rel="StyleSheet" href="/theme/css/flex-menu.css"></link>
     <link rel="StyleSheet" href="/theme/css/users-editprofile.css"></link>
   </ui:define>
 
@@ -56,266 +60,291 @@
     <div class="flex-row">
       <div class="flex-cell-full index-box">
 
+        <h3>#{locales['users.editProfile.editProfileTitle']}</h3>
+
         <h:form>
-          <div class="flex-row">
-            <div class="flex-cell-full">
-              <h3>#{locales['users.editProfile.editProfileTitle']}</h3>
-            </div>
-          </div>
-        
-          <div class="flex-row">
-            <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
-              <div class="flex-row field">
-                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-                  <label>#{locales['users.editProfile.firstNameLabel']}</label>
-                </div>
-                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="text" required="required" jsf:value="#{editProfileBackingBean.firstName}" jsf:required="true" jsf:requiredMessage="#{locales['users.editProfile.firstNameRequired']}" data-requiredmessage="#{locales['users.editProfile.firstNameRequired']}"/>
-                </div>
-              </div>
-
-              <div class="flex-row field">
-                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-                  <label>#{locales['users.editProfile.lastNameLabel']}</label>
-                </div>
-                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="text" required="required" jsf:value="#{editProfileBackingBean.lastName}" jsf:required="true" jsf:requiredMessage="#{locales['users.editProfile.lastNameRequired']}" data-requiredmessage="#{locales['users.editProfile.lastNameRequired']}"/>
-                </div>
-              </div>
-              
-              <div class="flex-row field">
-                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-                  <label>#{locales['users.editProfile.nicknameLabel']}</label>
-                </div>
-                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="text" jsf:value="#{editProfileBackingBean.nickname}"/>
-                </div>
-              </div>
-              
-              <div class="flex-row field">
-                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-                  <label>#{locales['users.editProfile.profileImageSource']}</label>
-                </div>
-                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <h:selectOneRadio layout="pageDirection" styleClass="users-editprofile-image-source" value="#{editProfileBackingBean.profileImageSource}">
-                    <f:selectItem itemLabel="#{locales['users.editProfile.profileImageSourceGravatar']}" itemValue="GRAVATAR"/>
-                    <f:selectItem itemLabel="#{locales['users.editProfile.profileImageSourceFni']}" itemValue="FNI" itemDisabled="#{!editProfileBackingBean.hasFniProfileImage}"/>
-                  </h:selectOneRadio>
-                </div>
-              </div>
-
-            </div>
-
-            <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full">
+          <div id="tabs">
+            <ul>
+              <li><a href="#profile">#{locales['users.editProfile.profileTab']}</a></li>
+              <li><a href="#settings">#{locales['users.editProfile.settingsTab']}</a></li>
+            </ul>
+            <div id="profile">
               <div class="flex-row">
                 <div class="flex-cell-full">
-                  <h:graphicImage value="/users/profileImages/#{sessionBackingBean.loggedUser.id}?width=140&amp;height=140&amp;s=#{sessionBackingBean.loggedUser.profileImageSource}" />
-                </div>
-                <div class="flex-cell-full">
-                  <a href="javascript:void(null)" class="users-editprofile-image-change" data-user-id="#{sessionBackingBean.loggedUser.id}">#{locales['users.editProfile.uploadProfileImage']}</a>
+                  <h4>#{locales['users.editProfile.basicTitle']}</h4>
                 </div>
               </div>
-            </div>   
-         </div>
-
-         <div class="flex-row">
-           <div class="flex-cell-full">
-             <h3>#{locales['users.editProfile.contactInfoTitle']}</h3> 
-           </div>
-         </div>
-        
-          <div class="flex-row">
-            <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
-              <div class="flex-row field">
-                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-                  <label>#{locales['users.editProfile.contactInfoFieldHomePage']}</label>
-                </div>
-                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldHomePage}"/>
-                </div>
-              </div>
-              
-              <div class="flex-row field">
-                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-                  <label>#{locales['users.editProfile.contactInfoFieldBlog']}</label>
-                </div>
-                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldBlog}"/>
-                </div>
-              </div>
-              
-              <div class="flex-row field">
-                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-                  <label>#{locales['users.editProfile.contactInfoFieldFacebook']}</label>
-                </div>
-                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldFacebook}"/>
-                </div>
-              </div>
-              
-              <div class="flex-row field">
-                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-                  <label>#{locales['users.editProfile.contactInfoFieldTwitter']}</label>
-                </div>
-                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldTwitter}"/>
-                </div>
-              </div>
-              
-              <div class="flex-row field">
-                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-                  <label>#{locales['users.editProfile.contactInfoFieldInstagram']}</label>
-                </div>
-                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldInstagram}"/>
-                </div>
-              </div>
-              
-              <div class="flex-row field">
-                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-                  <label>#{locales['users.editProfile.contactInfoFieldLinkedIn']}</label>
-                </div>
-                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldLinkedIn}"/>
-                </div>
-              </div>
-              
-              <div class="flex-row field">
-                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-                  <label>#{locales['users.editProfile.contactInfoFieldGooglePlus']}</label>
-                </div>
-                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldGooglePlus}"/>
-                </div>
-              </div>
-            </div>
-          </div>
             
-          <div class="flex-row">
-            <div class="flex-cell-full">
-              <h3>#{locales['users.editProfile.authenticationSourcesTitle']}</h3>
-            </div>
-          </div>
-        
-          <div class="flex-row">
-            <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
-              <div class="flex-row field users-editprofile-add-authentication-source" jsf:rendered="#{!editProfileBackingBean.addAuthenticationSourcesSelectItems.isEmpty()}">
-                <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-                  <label>#{locales['users.editProfile.addNewAuthenticationSourceLabel']}</label>
-                </div>
-                <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                  <h:selectOneMenu>
-                    <f:selectItem itemValue="#{locales['users.editProfile.authenticationSourceChoose']}"/>
-                    <f:selectItems value="#{editProfileBackingBean.addAuthenticationSourcesSelectItems}"/>
-                  </h:selectOneMenu>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="flex-row users-editprofile-enable-authsource-container users-editprofile-enable-internal-authsource-container" style="display: none">
-            <div class="flex-cell-full">
-              <h:panelGroup layout="block" styleClass="users-editprofile-field">
-                <h:outputLabel value="#{locales['users.editProfile.addInternalAuthenticationSourcePassword1']}" />
-                <h:inputSecret id="new-internal-auth-password1"/>
-                <h:inputHidden id="new-internal-auth-password1-encoded" value="#{editProfileBackingBean.newInternalAuthencationSourcePassword1}"/>
-              </h:panelGroup>  
-              
-              <h:panelGroup layout="block" styleClass="users-editprofile-field">
-                <h:outputLabel value="#{locales['users.editProfile.addInternalAuthenticationSourcePassword2']}" />
-                <h:inputSecret id="new-internal-auth-password2"/>
-                <h:inputHidden id="new-internal-auth-password2-encoded" value="#{editProfileBackingBean.newInternalAuthencationSourcePassword1}"/>
-              </h:panelGroup>  
-            
-              <a class="users-editprofile-new-internal-auth-link" href="javascript:void(null)">#{locales['users.editProfile.addNewAuthenticationSourceLink']}</a>
-              <h:commandLink styleClass="users-editprofile-new-internal-auth-link-cmd" action="#{editProfileBackingBean.addNewInternalAuthencationSource}"></h:commandLink>
-            </div>
-          </div>
-          
-          <div class="flex-row users-editprofile-enable-authsource-container users-editprofile-enable-facebook-authsource-container" style="display: none">
-            <div class="flex-cell-full">
-              <h:commandLink action="#{editProfileBackingBean.enableFacebookAuthSource}" styleClass="users-editprofile-enable-facebook-authsource">#{locales['users.editProfile.addNewAuthenticationSourceLink']}</h:commandLink>
-            </div>
-          </div>
-          
-          <div class="flex-row users-editprofile-enable-authsource-container users-editprofile-enable-google-authsource-container" style="display: none">
-            <div class="flex-cell-full">
-              <h:commandLink action="#{editProfileBackingBean.enableGoogleAuthSource}" styleClass="users-editprofile-enable-google-authsource">#{locales['users.editProfile.addNewAuthenticationSourceLink']}</h:commandLink>
-            </div>
-          </div>
-            
-          <div class="flex-row">
-            <div class="flex-cell-full">
-              <label>#{locales['users.editProfile.enabledAuthenticationSources']}</label>
-            </div>
-          </div>
-          
-          <ui:repeat var="userIdentifier" value="#{editProfileBackingBean.userIdentifiers}">
-            <div class="flex-row users-editprofile-enabled-authentication-source">
-              <div class="flex-cell-full">
-                <div class="flex-row">
-                  <div class="flex-cell-full">
-                    <div class="flex-row">
-                      <div class="flex-cell-10 flex-cell-first">
-                        <label>#{editProfileBackingBean.getAuthenticationSourceName(userIdentifier.authSource)}</label>
-                        <span>&lt;#{userIdentifier.sourceId}&gt;</span>
-                      </div>
-                      
-                      <div class="flex-cell-6 flex-cell-last flex-right" jsf:rendered="#{userIdentifier.authSource eq 'INTERNAL'}">
-                        <a class="users-editprofile-authentication-source-change-password" jsf:value="javascript:void(null)">#{locales['users.editProfile.changePasswordLink']}</a>
-                      </div>
+              <div class="flex-row">
+                <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
+                  <div class="flex-row field">
+                    <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                      <label>#{locales['users.editProfile.firstNameLabel']}</label>
                     </div>
-
+                    <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                      <input type="text" required="required" jsf:value="#{editProfileBackingBean.firstName}" jsf:required="true" jsf:requiredMessage="#{locales['users.editProfile.firstNameRequired']}" data-requiredmessage="#{locales['users.editProfile.firstNameRequired']}"/>
+                    </div>
                   </div>
-                </div>                
-              
-                <div class="flex-row users-editprofile-authentication-source-change-password-container" jsf:rendered="#{userIdentifier.authSource eq 'INTERNAL'}" style="display: none">
-                  <div class="flex-cell-full">
-                    <div class="flex-row field">
-                      <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-                        <label>#{locales['users.editProfile.changePasswordPassword2']}</label>
-                      </div>
-                      <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                        <input type="password" class="users-editprofile-authentication-source-change-password-password2"/>
-                      </div>
-                    </div>
-                    
-                    <div class="flex-row field">
-                      <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-                        <label>#{locales['users.editProfile.changePasswordPassword1']}</label>
-                      </div>
-                      <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-                        <input type="password" class="users-editprofile-authentication-source-change-password-password1"/>
-                      </div>
-                    </div>
     
+                  <div class="flex-row field">
+                    <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                      <label>#{locales['users.editProfile.lastNameLabel']}</label>
+                    </div>
+                    <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                      <input type="text" required="required" jsf:value="#{editProfileBackingBean.lastName}" jsf:required="true" jsf:requiredMessage="#{locales['users.editProfile.lastNameRequired']}" data-requiredmessage="#{locales['users.editProfile.lastNameRequired']}"/>
+                    </div>
+                  </div>
+                  
+                  <div class="flex-row field">
+                    <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                      <label>#{locales['users.editProfile.nicknameLabel']}</label>
+                    </div>
+                    <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                      <input type="text" jsf:value="#{editProfileBackingBean.nickname}"/>
+                    </div>
+                  </div>
+                  
+                  <div class="flex-row field">
+                    <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                      <label>#{locales['users.editProfile.profileImageSource']}</label>
+                    </div>
+                    <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                      <h:selectOneRadio layout="pageDirection" styleClass="users-editprofile-image-source" value="#{editProfileBackingBean.profileImageSource}">
+                        <f:selectItem itemLabel="#{locales['users.editProfile.profileImageSourceGravatar']}" itemValue="GRAVATAR"/>
+                        <f:selectItem itemLabel="#{locales['users.editProfile.profileImageSourceFni']}" itemValue="FNI" itemDisabled="#{!editProfileBackingBean.hasFniProfileImage}"/>
+                      </h:selectOneRadio>
+                    </div>
+                  </div>
+    
+                </div>
+    
+                <div class="lg-flex-cell-4 lg-flex-cell-last lg-flex-right md-flex-cell-4 md-flex-cell-last md-flex-right sm-flex-cell-full">
+                  <div class="flex-row">
+                    <div class="flex-cell-full">
+                      <h:graphicImage value="/users/profileImages/#{sessionBackingBean.loggedUser.id}?width=140&amp;height=140&amp;s=#{sessionBackingBean.loggedUser.profileImageSource}" />
+                    </div>
+                    <div class="flex-cell-full">
+                      <a href="javascript:void(null)" class="users-editprofile-image-change" data-user-id="#{sessionBackingBean.loggedUser.id}">#{locales['users.editProfile.uploadProfileImage']}</a>
+                    </div>
+                  </div>
+                </div>   
+             </div>
+    
+             <div class="flex-row">
+               <div class="flex-cell-full">
+                 <h4>#{locales['users.editProfile.contactInfoTitle']}</h4> 
+               </div>
+             </div>
+            
+              <div class="flex-row">
+                <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
+                  <div class="flex-row field">
+                    <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                      <label>#{locales['users.editProfile.contactInfoFieldHomePage']}</label>
+                    </div>
+                    <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                      <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldHomePage}"/>
+                    </div>
+                  </div>
+                  
+                  <div class="flex-row field">
+                    <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                      <label>#{locales['users.editProfile.contactInfoFieldBlog']}</label>
+                    </div>
+                    <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                      <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldBlog}"/>
+                    </div>
+                  </div>
+                  
+                  <div class="flex-row field">
+                    <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                      <label>#{locales['users.editProfile.contactInfoFieldFacebook']}</label>
+                    </div>
+                    <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                      <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldFacebook}"/>
+                    </div>
+                  </div>
+                  
+                  <div class="flex-row field">
+                    <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                      <label>#{locales['users.editProfile.contactInfoFieldTwitter']}</label>
+                    </div>
+                    <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                      <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldTwitter}"/>
+                    </div>
+                  </div>
+                  
+                  <div class="flex-row field">
+                    <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                      <label>#{locales['users.editProfile.contactInfoFieldInstagram']}</label>
+                    </div>
+                    <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                      <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldInstagram}"/>
+                    </div>
+                  </div>
+                  
+                  <div class="flex-row field">
+                    <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                      <label>#{locales['users.editProfile.contactInfoFieldLinkedIn']}</label>
+                    </div>
+                    <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                      <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldLinkedIn}"/>
+                    </div>
+                  </div>
+                  
+                  <div class="flex-row field">
+                    <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                      <label>#{locales['users.editProfile.contactInfoFieldGooglePlus']}</label>
+                    </div>
+                    <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                      <input type="url" jsf:value="#{editProfileBackingBean.contactInfoFieldGooglePlus}"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <h4>#{locales['users.editProfile.aboutTitle']}</h4>
+                </div>
+              </div>
+              
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <textarea class="about-editor" jsf:value="#{editProfileBackingBean.about}"></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <div id="settings">
+              
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <h4>#{locales['users.editProfile.notificationsTitle']}</h4>
+                </div>
+              </div>
+              
+              <div class="flex-row">
+                <div class="flex-cell-full notification-setting"> 
+                  <input type="checkbox" class="notification-forum-new-post-mail" jsf:value="#{editProfileBackingBean.notificationForumNewPostMail}"/><label>#{locales['users.editProfile.forumNewPostNotificationEmail']}</label>
+                </div>
+              </div>
+              
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <h4>#{locales['users.editProfile.authenticationSourcesTitle']}</h4>
+                </div>
+              </div>
+            
+              <div class="flex-row">
+                <div class="lg-flex-cell-12 lg-flex-cell-first md-flex-cell-12 md-flex-cell-first sm-flex-cell-full">
+                  <div class="flex-row field users-editprofile-add-authentication-source" jsf:rendered="#{!editProfileBackingBean.addAuthenticationSourcesSelectItems.isEmpty()}">
+                    <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                      <label>#{locales['users.editProfile.addNewAuthenticationSourceLabel']}</label>
+                    </div>
+                    <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                      <h:selectOneMenu>
+                        <f:selectItem itemValue="#{locales['users.editProfile.authenticationSourceChoose']}"/>
+                        <f:selectItems value="#{editProfileBackingBean.addAuthenticationSourcesSelectItems}"/>
+                      </h:selectOneMenu>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex-row users-editprofile-enable-authsource-container users-editprofile-enable-internal-authsource-container" style="display: none">
+                <div class="flex-cell-full">
+                  <h:panelGroup layout="block" styleClass="users-editprofile-field">
+                    <h:outputLabel value="#{locales['users.editProfile.addInternalAuthenticationSourcePassword1']}" />
+                    <h:inputSecret id="new-internal-auth-password1"/>
+                    <h:inputHidden id="new-internal-auth-password1-encoded" value="#{editProfileBackingBean.newInternalAuthencationSourcePassword1}"/>
+                  </h:panelGroup>  
+                  
+                  <h:panelGroup layout="block" styleClass="users-editprofile-field">
+                    <h:outputLabel value="#{locales['users.editProfile.addInternalAuthenticationSourcePassword2']}" />
+                    <h:inputSecret id="new-internal-auth-password2"/>
+                    <h:inputHidden id="new-internal-auth-password2-encoded" value="#{editProfileBackingBean.newInternalAuthencationSourcePassword1}"/>
+                  </h:panelGroup>  
+                
+                  <a class="users-editprofile-new-internal-auth-link" href="javascript:void(null)">#{locales['users.editProfile.addNewAuthenticationSourceLink']}</a>
+                  <h:commandLink styleClass="users-editprofile-new-internal-auth-link-cmd" action="#{editProfileBackingBean.addNewInternalAuthencationSource}"></h:commandLink>
+                </div>
+              </div>
+              
+              <div class="flex-row users-editprofile-enable-authsource-container users-editprofile-enable-facebook-authsource-container" style="display: none">
+                <div class="flex-cell-full">
+                  <h:commandLink action="#{editProfileBackingBean.enableFacebookAuthSource}" styleClass="users-editprofile-enable-facebook-authsource">#{locales['users.editProfile.addNewAuthenticationSourceLink']}</h:commandLink>
+                </div>
+              </div>
+              
+              <div class="flex-row users-editprofile-enable-authsource-container users-editprofile-enable-google-authsource-container" style="display: none">
+                <div class="flex-cell-full">
+                  <h:commandLink action="#{editProfileBackingBean.enableGoogleAuthSource}" styleClass="users-editprofile-enable-google-authsource">#{locales['users.editProfile.addNewAuthenticationSourceLink']}</h:commandLink>
+                </div>
+              </div>
+                
+              <div class="flex-row">
+                <div class="flex-cell-full">
+                  <label>#{locales['users.editProfile.enabledAuthenticationSources']}</label>
+                </div>
+              </div>
+              
+              <ui:repeat var="userIdentifier" value="#{editProfileBackingBean.userIdentifiers}">
+                <div class="flex-row users-editprofile-enabled-authentication-source">
+                  <div class="flex-cell-full">
                     <div class="flex-row">
                       <div class="flex-cell-full">
-                        <h:commandButton action="#{editProfileBackingBean.changePassword}" value="#{locales['users.editProfile.changePasswordButton']}" />
+                        <div class="flex-row">
+                          <div class="flex-cell-10 flex-cell-first">
+                            <label>#{editProfileBackingBean.getAuthenticationSourceName(userIdentifier.authSource)}</label>
+                            <span>&lt;#{userIdentifier.sourceId}&gt;</span>
+                          </div>
+                          
+                          <div class="flex-cell-6 flex-cell-last flex-right" jsf:rendered="#{userIdentifier.authSource eq 'INTERNAL'}">
+                            <a class="users-editprofile-authentication-source-change-password" jsf:value="javascript:void(null)">#{locales['users.editProfile.changePasswordLink']}</a>
+                          </div>
+                        </div>
+    
                       </div>
-                    </div>
+                    </div>                
+                  
+                    <div class="flex-row users-editprofile-authentication-source-change-password-container" jsf:rendered="#{userIdentifier.authSource eq 'INTERNAL'}" style="display: none">
+                      <div class="flex-cell-full">
+                        <div class="flex-row field">
+                          <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                            <label>#{locales['users.editProfile.changePasswordPassword2']}</label>
+                          </div>
+                          <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                            <input type="password" class="users-editprofile-authentication-source-change-password-password2"/>
+                          </div>
+                        </div>
+                        
+                        <div class="flex-row field">
+                          <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
+                            <label>#{locales['users.editProfile.changePasswordPassword1']}</label>
+                          </div>
+                          <div class="lg-flex-cell-8 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
+                            <input type="password" class="users-editprofile-authentication-source-change-password-password1"/>
+                          </div>
+                        </div>
+        
+                        <div class="flex-row">
+                          <div class="flex-cell-full">
+                            <h:commandButton action="#{editProfileBackingBean.changePassword}" value="#{locales['users.editProfile.changePasswordButton']}" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>                                
                   </div>
-                </div>                                
-              </div>
-            </div>
-
-          </ui:repeat>
-          
-          <div class="flex-row">
-            <div class="flex-cell-full">
-              <h3>#{locales['users.editProfile.aboutTitle']}</h3>
+                </div>
+    
+              </ui:repeat>
             </div>
           </div>
           
           <div class="flex-row">
             <div class="flex-cell-full">
-              <textarea class="about-editor" jsf:value="#{editProfileBackingBean.about}"></textarea>
-            </div>
-          </div>
-          
-          <div class="flex-row">
-            <div class="flex-cell-full">
-              <h:commandButton action="#{editProfileBackingBean.save}" value="#{locales['users.editProfile.saveButton']}" />
+              <h:commandButton styleClass="save-button" action="#{editProfileBackingBean.save}" value="#{locales['users.editProfile.saveButton']}" />
             </div>
           </div>
           
