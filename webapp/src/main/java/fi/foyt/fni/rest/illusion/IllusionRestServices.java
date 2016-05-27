@@ -287,23 +287,52 @@ public class IllusionRestServices {
     allowNotLogged = true,
     scopes = { OAuthScopes.ILLUSION_LIST_EVENTS }
   )
-  public Response listEvents(@QueryParam ("minTime") DateTimeParameter minTime, @QueryParam ("maxTime") DateTimeParameter maxTime) {
+  public Response listEvents(
+      @QueryParam ("minTime") DateTimeParameter minTime, 
+      @QueryParam ("maxTime") DateTimeParameter maxTime,
+      @QueryParam ("organizer") Long[] organizerIds) {
+    
     List<IllusionEvent> events = null;
+    List<User> organizers = null;
+    
+    if ((organizerIds != null) && (organizerIds.length > 0)) {
+      organizers = new ArrayList<>(organizerIds.length);
+      for (Long organizerId : organizerIds) {
+        User organizer = userController.findUserById(organizerId);
+        if ((organizer == null) || (organizer.getArchived())) {
+          return Response.status(Status.BAD_REQUEST).entity(String.format("Invalid organizer id %d", organizerId)).build();
+        }
+        
+        organizers.add(organizer);
+      }
+    }
     
     if ((minTime != null) && (maxTime != null)) {
       if ((minTime == null) || (minTime == null)) {
         return Response.status(Status.BAD_REQUEST).build();
       }
       
-      events = illusionEventController.listEventsBetween(minTime.getDateTime().toDate(), maxTime.getDateTime().toDate(), Boolean.TRUE);
+      List<IllusionEvent> timeFrameEvents = illusionEventController.listPublishedEventsBetween(minTime.getDateTime().toDate(), maxTime.getDateTime().toDate(), Boolean.TRUE);
+      
+      if (organizers != null) {
+        events = new ArrayList<>(timeFrameEvents.size());
+        
+        for (IllusionEvent timeFrameEvent : timeFrameEvents) {
+          if (illusionEventController.isOneInRole(timeFrameEvent, organizers, IllusionEventParticipantRole.ORGANIZER)) {
+            events.add(timeFrameEvent);
+          }
+        }
+      } else {
+        events = timeFrameEvents;
+      }
     } else {
-      events = illusionEventController.listPublishedEvents();
+      if (organizers != null) {
+        events = illusionEventController.listPublishedEventsByUsersAndRole(organizers, IllusionEventParticipantRole.ORGANIZER);
+      } else {
+        events = illusionEventController.listPublishedEvents();
+      }
     }
      
-    if (events.isEmpty()) {
-      return Response.status(Status.NO_CONTENT).build();
-    }
-    
     return Response.ok(createRestModel(events))
         .build();
   }
@@ -770,10 +799,7 @@ public class IllusionRestServices {
     }
     
     List<fi.foyt.fni.persistence.model.illusion.IllusionEventGroup> groups = illusionEventController.listGroups(event);
-    if (groups.isEmpty()) {
-      return Response.noContent().build();
-    }
-
+    
     return Response.ok(createRestModel(groups.toArray(new fi.foyt.fni.persistence.model.illusion.IllusionEventGroup[0]))).build();
   }
   
