@@ -61,7 +61,7 @@
     <h4>Collaborators</h4>
     <div class="forge-share-material-collaborators">
     
-      {#materialUsers}
+      {#materialShareUsers}
         <div class="forge-share-material-collaborator" data-user-id="{userId}" data-original-id="{id}" data-original-role="{role}">
           <label>{displayName}</label>
           <select name="role">
@@ -78,7 +78,7 @@
             <option value="NONE" >None</option>
           </select>
         </div>
-      {/materialUsers}
+      {/materialShareUsers}
     </div>
     
     <h4>Add a collaborator</h4>

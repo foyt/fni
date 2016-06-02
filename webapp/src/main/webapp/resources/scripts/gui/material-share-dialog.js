@@ -8,21 +8,21 @@
       publishableTypes: [ 'DOCUMENT', 'IMAGE', 'PDF', 'FILE', 'BINARY', 'VECTOR_IMAGE', 'GOOGLE_DOCUMENT', 'DROPBOX_FILE' ]
     },
     
-    _createRemoveMaterialUser: function (id) {
+    _createRemoveMaterialShareUser: function (id) {
       return $.proxy(function (callback) {
-        this._restCall(this._getMaterialClient().materials.users.del(this.options.materialId, id), $.proxy(function (err) {
+        this._restCall(this._getMaterialClient().materials.shareUsers.del(this.options.materialId, id), $.proxy(function (err) {
           callback(err);
         }, this));
       }, this);
     },
     
-    _createUpdateMaterialUser: function (id, role) {
+    _createUpdateMaterialShareUser: function (id, role) {
       return $.proxy(function (callback) {
-        this._restCall(this._getMaterialClient(false).materials.users.read(this.options.materialId, id), $.proxy(function (getErr, materialUser) {
+        this._restCall(this._getMaterialClient(false).materials.shareUsers.read(this.options.materialId, id), $.proxy(function (getErr, materialUser) {
           if (getErr) {
             callback(getErr);
           } else {
-            this._restCall(this._getMaterialClient(true).materials.users.update(this.options.materialId, id, $.extend(materialUser, {
+            this._restCall(this._getMaterialClient(true).materials.shareUsers.update(this.options.materialId, id, $.extend(materialUser, {
               role: role
             })), $.proxy(function (updErr, updatedUser) {
               callback(updErr, updatedUser);
@@ -32,13 +32,13 @@
       }, this);
     },
     
-    _createCreateMaterialUser: function (userId, role) {
+    _createCreateMaterialShareUser: function (userId, role) {
       return $.proxy(function (callback) {
-        this._restCall(this._getMaterialClient(true).materials.users.create(this.options.materialId, {
+        this._restCall(this._getMaterialClient(true).materials.shareUsers.create(this.options.materialId, {
           userId: userId,
           role: role
-        }), $.proxy(function (err, materialUser) {
-          callback(err, materialUser);
+        }), $.proxy(function (err, shareUser) {
+          callback(err, shareUser);
         }, this));
       }, this);
     },
@@ -100,14 +100,14 @@
                 if (originalId) {
                   if (originalRole != role) {
                     if (role == 'NONE') {
-                      operations.push(this._createRemoveMaterialUser(originalId));
+                      operations.push(this._createRemoveMaterialShareUser(originalId));
                     } else {
-                      operations.push(this._createUpdateMaterialUser(originalId, role));
+                      operations.push(this._createUpdateMaterialShareUser(originalId, role));
                     }
                   }
                 } else {
                   if (role != 'NONE') {
-                    operations.push(this._createCreateMaterialUser(userId, role));
+                    operations.push(this._createCreateMaterialShareUser(userId, role));
                   }
                 }
               }, this));
@@ -150,36 +150,48 @@
               if (err) {
                 $('.notifications').notifications('notification', 'error', err);
               } else {
-                response($.map(invitables, function(invitable) {
-                  return {
-                    value: invitable.id,
-                    label: invitable.displayName
-                  }
-                }));
+                response(invitables);
               }
             });
           }, this),
           select: function( event, ui ) {
             var collaborators = $(dialog).find('.forge-share-material-collaborators');
-            var userId = ui.item.value;
-            var displayName = ui.item.label;
+            var item = ui.item;
+            var userId = item.value;
+            var displayName = item.label;
+            
+            console.log(item);
             
             if (collaborators.find('.forge-share-material-collaborator[data-user-id="' + userId + '"]').length == 0) {
-              $('<div>')
+              var collaborator = $('<div>')
                 .addClass('forge-share-material-collaborator')
                 .attr({
-                  'data-user-id': userId
+                  'data-user-id': userId,
+                  'data-type': item.type
                 })
                 .append($('<label>').text(displayName))
                 .append(createRoleSelect())
                 .appendTo(collaborators);
+              
+              switch (item.type) {
+                case 'ILLUSION-GROUP':
+                  collaborator.prepend($('<span>').addClass('fa fa-users'));
+                break;
+                default:
+                  collaborator.prepend($('<span>').addClass('fa fa-user'));
+                break;
+              }
             }
           },
           close: function( event, ui ) {
             $(this).val('');
           }
         });
-
+        
+        dialog.find('.forge-share-material-invite input')
+          .data("ui-autocomplete")
+          ._renderItem = $.proxy(this._buildInviteAutocompleteItem);
+        
         $(dialog).find('.forge-share-material-tags input').tagsInput({
           'autocomplete_url': 'about:blank',
           'autocomplete': {
@@ -191,21 +203,38 @@
       }, this));
     },
     
+    _buildInviteAutocompleteItem: function (ul, item) {
+      var li = $("<li>")
+        .append($('<span>').text(item.label))
+        .appendTo(ul);
+      
+      switch (item.type) {
+        case 'ILLUSION-GROUP':
+          li.prepend($('<span>').addClass('fa fa-users'));
+        break;
+        default:
+          li.prepend($('<span>').addClass('fa fa-user'));
+        break;
+      }
+      
+      return li;
+    },
+    
     _load: function (callback) {
-      async.parallel([this._createMaterialLoad(), this._createTagsLoad(), this._createUsersLoad(), this._createPublishGuideUrlLoad()], $.proxy(function (err, results) {
+      async.parallel([this._createMaterialLoad(), this._createTagsLoad(), this._createMaterialShareUsersLoad(), this._createPublishGuideUrlLoad()], $.proxy(function (err, results) {
         if (err) {
           $('.notifications').notifications('notification', 'error', err);
         } else {
           var material = results[0];
           var allTags = results[1];
-          var materialUsers = results[2];
+          var materialShareUsers = results[2];
           var publishGuideLink = results[3].value;
           
           var href = window.location.href;
           var baseUrl = href.substring(0, href.length - (window.location.pathname.length));
           
           var data = $.extend(material, {
-            materialUsers: materialUsers,
+            materialShareUsers: materialShareUsers,
             publicUrl: baseUrl + '/materials/' + material.path,
             allTags: $.map(allTags, function (tag) {
               return tag.text;
@@ -275,9 +304,9 @@
       }, this);
     },
     
-    _createUsersLoad: function () {
+    _createMaterialShareUsersLoad: function () {
       return $.proxy(function (callback) {
-        this._restCall(this._getMaterialClient(false).materials.users.read(this.options.materialId), $.proxy(function (err, materialUsers) {
+        this._restCall(this._getMaterialClient(false).materials.shareUsers.read(this.options.materialId), $.proxy(function (err, materialUsers) {
           if (err) {
             callback(err);
           } else {
@@ -309,36 +338,112 @@
       }, this);
     },
     
-    _searchInvitables: function (term, callback) {
-      if (this.options.illusionEventId) {
-        this._restCall(this._getIllusionClient(false).events.participants.read(this.options.illusionEventId, { search: term }), function (participants, err) {
-          if (err) {
-            callback(err);
-          } else {
-            callback(err, $.map(participants, function(participant) {
-              var displayName = user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : '<' + user.emails[0] + '>';
-              return {
-                id: participant.userId,
-                displayName: participant.displayName
-              }
-            }));
-          }
-        });
-      } else {
-        this._restCall(this._getUserClient(false).users.read({ search: term }), function (err, users) {
-          if (err) {
-            callback(err);
-          } else {
-            callback(err, $.map(users, function(user) {
-              var displayName = user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : '<' + user.emails[0] + '>';
-              return {
-                id: user.id,
-                displayName: displayName
-              }
-            }));
-          }
-        });
+    _getUserDisplayName: function (user) {
+      var displayName = user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : '';
+      
+      if (user.emails.length) {
+        displayName = (displayName ? displayName + ' ' : '') + '<' + user.emails[0] + '>';
       }
+      
+      return displayName;
+    },
+    
+    _createUserSearch: function (term) {
+      return $.proxy(function (callback) {
+        this._restCall(this._getUserClient(false).users.read({ search: term }), $.proxy(function (err, users) {
+          if (err) {
+            callback(err);
+          } else {
+            callback(err, $.map(users, $.proxy(function(user) {
+              var displayName = this._getUserDisplayName(user);
+              return {
+                value: user.id,
+                label: displayName,
+                type: 'USER'
+              }
+            }, this)));
+          }
+        }, this));
+      }, this)
+    },
+    
+    _createListEventGroupsCall: function (event) {
+      return $.proxy(function (callback) {
+        this._restCall(this._getIllusionClient(false).events.groups.read(event.id), function (err, groups) {
+          if (err) {
+            callback(err);
+          } else {
+            if (groups != null && groups.length) {
+              callback(null, {
+                groups: groups,
+                event: event
+              });
+            } else {
+              callback(null, null);
+            }
+          }
+        });
+      }, this)
+    },
+    
+    _stringContains: function (str, value) {
+      if (!str || !value) {
+        return false;
+      }
+      
+      return _.toLower(str).indexOf(_.toLower(value)) != -1;
+    },
+    
+    _createIllusionGroupSearch: function (term) {
+      return $.proxy(function (mainCallback) {
+        this._restCall(this._getUserClient(false).users.read('me'), $.proxy(function (meErr, me) {
+          if (meErr) {
+            mainCallback(meErr);
+          } else {
+            this._restCall(this._getIllusionClient(false).events.read({ organizer: me.id }), $.proxy(function (err, events) {
+              
+              var calls = _.map(events, $.proxy(function (event) {
+                return this._createListEventGroupsCall(event);
+              }, this));
+              
+              async.parallel(calls, $.proxy(function (groupsErr, groups) {
+                if (groupsErr) {
+                  mainCallback(groupsErr);
+                } else {
+                  var results = _.map(_.compact(_.flatten(groups)), $.proxy(function (result) {
+                    return _.map(result.groups, $.proxy(function (group) {
+                      var eventName = result.event.name;
+                      var groupName = group.name;
+                      if (!this._stringContains(groupName, term) && !this._stringContains(eventName, term)) {
+                        return null;
+                      }
+                      
+                      return {
+                        value: group.id,
+                        label: groupName + ' (' + eventName + ')',
+                        type: 'ILLUSION-GROUP'
+                      };
+                    }, this));
+                  }, this));
+                  
+                  mainCallback(null, _.compact(_.flatten(results)));
+                }
+              }, this));
+            }, this));
+          }
+        }, this));
+      }, this)
+    },
+    
+    _searchInvitables: function (term, callback) {
+      var tasks = [ this._createUserSearch(term), this._createIllusionGroupSearch(term) ];
+      async.parallel(tasks, function (err, results) {
+        if (err) {
+          callback(err);
+        } else {
+          callback(null, _.flatten(results));
+        }
+      });
     },
     
     _getSystemClient: function (stringify) {
@@ -350,7 +455,7 @@
     _getMaterialClient: function (stringify) {
       var materialClient = new $.RestClient(CONTEXTPATH + '/rest/material/', {stringifyData: stringify === false ? false : true});
       materialClient.add("materials");
-      materialClient.materials.add("users");
+      materialClient.materials.add("shareUsers");
       materialClient.add("tags");
       return materialClient;
     },
@@ -365,6 +470,7 @@
       var illusionClient = new $.RestClient(CONTEXTPATH + '/rest/illusion/', {stringifyData: stringify === false ? false : true});
       illusionClient.add('events');
       illusionClient.events.add('participants');
+      illusionClient.events.add('groups');
       return illusionClient;
     }
   });
