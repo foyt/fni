@@ -32,7 +32,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -95,6 +94,8 @@ import fi.foyt.fni.persistence.dao.materials.MaterialDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialRevisionSettingDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialSettingDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialSettingKeyDAO;
+import fi.foyt.fni.persistence.dao.materials.MaterialShareGroupDAO;
+import fi.foyt.fni.persistence.dao.materials.MaterialShareUserDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialTagDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialThumbnailDAO;
 import fi.foyt.fni.persistence.dao.materials.MaterialViewDAO;
@@ -102,7 +103,6 @@ import fi.foyt.fni.persistence.dao.materials.PdfDAO;
 import fi.foyt.fni.persistence.dao.materials.PermaLinkDAO;
 import fi.foyt.fni.persistence.dao.materials.StarredMaterialDAO;
 import fi.foyt.fni.persistence.dao.materials.TagWithCount;
-import fi.foyt.fni.persistence.dao.materials.UserMaterialRoleDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageDAO;
 import fi.foyt.fni.persistence.dao.materials.VectorImageRevisionDAO;
 import fi.foyt.fni.persistence.dao.users.UserDAO;
@@ -138,9 +138,10 @@ import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.materials.MaterialRevision;
 import fi.foyt.fni.persistence.model.materials.MaterialRevisionSetting;
-import fi.foyt.fni.persistence.model.materials.MaterialRole;
 import fi.foyt.fni.persistence.model.materials.MaterialSetting;
 import fi.foyt.fni.persistence.model.materials.MaterialSettingKey;
+import fi.foyt.fni.persistence.model.materials.MaterialShareGroup;
+import fi.foyt.fni.persistence.model.materials.MaterialShareUser;
 import fi.foyt.fni.persistence.model.materials.MaterialTag;
 import fi.foyt.fni.persistence.model.materials.MaterialThumbnail;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
@@ -148,7 +149,6 @@ import fi.foyt.fni.persistence.model.materials.MaterialView;
 import fi.foyt.fni.persistence.model.materials.Pdf;
 import fi.foyt.fni.persistence.model.materials.PermaLink;
 import fi.foyt.fni.persistence.model.materials.StarredMaterial;
-import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
 import fi.foyt.fni.persistence.model.materials.VectorImage;
 import fi.foyt.fni.persistence.model.materials.VectorImageRevision;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
@@ -226,9 +226,12 @@ public class MaterialController {
 
   @Inject
   private TagDAO tagDAO;
-
+  
   @Inject
-  private UserMaterialRoleDAO userMaterialRoleDAO;
+  private MaterialShareUserDAO materialShareUserDAO;
+  
+  @Inject
+  private MaterialShareGroupDAO materialShareGroupDAO;
 
   @Inject
   private MaterialThumbnailDAO materialThumbnailDAO;
@@ -1405,27 +1408,12 @@ public class MaterialController {
     return null;
   }
 
-  @SuppressWarnings("unchecked")
   public List<Material> listMaterialsByFolder(User user, Folder folder) {
-    List<MaterialRole> roles = Arrays.asList(MaterialRole.MAY_EDIT, MaterialRole.MAY_VIEW);
-
-    if (folder != null) {
-      return materialDAO.listByParentFolder(folder);
-    } else {
-      return (List<Material>) CollectionUtils.union(materialDAO.listByRootFolderAndCreator(user), materialDAO.listByRootFolderAndUserAndRoles(user, roles));
-    }
+    return materialDAO.listByFolderAndShared(folder, user);
   }
-
-  @SuppressWarnings("unchecked")
+  
   public List<Material> listMaterialsByFolderAndTypes(User user, Folder folder, Collection<MaterialType> types) {
-    List<MaterialRole> roles = Arrays.asList(MaterialRole.MAY_EDIT, MaterialRole.MAY_VIEW);
-
-    if (folder != null) {
-      return materialDAO.listByParentFolderAndTypes(folder, types);
-    } else {
-      return (List<Material>) CollectionUtils.union(materialDAO.listByRootFolderAndTypesAndCreator(types, user),
-          materialDAO.listByRootFolderAndUserAndTypesAndRoles(user, types, roles));
-    }
+    return materialDAO.listByFolderAndSharedAndTypes(folder, user, types);
   }
   
   public List<Material> listPublicMaterialsByCreatorAndTypes(User creator, List<MaterialType> types) {
@@ -1756,10 +1744,15 @@ public class MaterialController {
     for (PermaLink permaLink : permaLinks) {
       permaLinkDAO.delete(permaLink);
     }
-
-    List<UserMaterialRole> userMaterialRoles = userMaterialRoleDAO.listByMaterial(material);
-    for (UserMaterialRole userMaterialRole : userMaterialRoles) {
-      userMaterialRoleDAO.delete(userMaterialRole);
+    
+    List<MaterialShareUser> materialShareUsers = materialShareUserDAO.listByMaterial(material);
+    for (MaterialShareUser materialShareUser : materialShareUsers) {
+      materialShareUserDAO.delete(materialShareUser);
+    }
+    
+    List<MaterialShareGroup> materialShareGroups = materialShareGroupDAO.listByMaterial(material);
+    for (MaterialShareGroup materialShareGroup : materialShareGroups) {
+      materialShareGroupDAO.delete(materialShareGroup);
     }
 
     List<MaterialThumbnail> thumbnails = materialThumbnailDAO.listByMaterial(material);

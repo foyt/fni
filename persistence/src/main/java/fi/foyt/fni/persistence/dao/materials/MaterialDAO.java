@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.common.Language;
@@ -18,13 +19,17 @@ import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.materials.MaterialRole;
+import fi.foyt.fni.persistence.model.materials.MaterialShareGroup;
+import fi.foyt.fni.persistence.model.materials.MaterialShareGroup_;
+import fi.foyt.fni.persistence.model.materials.MaterialShareUser;
+import fi.foyt.fni.persistence.model.materials.MaterialShareUser_;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.materials.MaterialView;
 import fi.foyt.fni.persistence.model.materials.MaterialView_;
 import fi.foyt.fni.persistence.model.materials.Material_;
-import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
-import fi.foyt.fni.persistence.model.materials.UserMaterialRole_;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.users.UserGroupMember;
+import fi.foyt.fni.persistence.model.users.UserGroupMember_;
 
 public class MaterialDAO extends GenericDAO<Material> {
 
@@ -146,47 +151,6 @@ public class MaterialDAO extends GenericDAO<Material> {
     return entityManager.createQuery(criteria).getResultList();
   }
 
-	public List<Material> listByRootFolderAndUserAndRoles(User user, Collection<MaterialRole> roles) {
-		EntityManager entityManager = getEntityManager();
-
-    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<Material> criteria = criteriaBuilder.createQuery(Material.class);
-    Root<UserMaterialRole> root = criteria.from(UserMaterialRole.class);
-    Join<UserMaterialRole, Material> materialJoin = root.join(UserMaterialRole_.material);
-    
-    criteria.select(root.get(UserMaterialRole_.material)).distinct(true);
-    criteria.where(
-        criteriaBuilder.and(
-          criteriaBuilder.isNull(materialJoin.get(Material_.parentFolder)),
-          criteriaBuilder.equal(root.get(UserMaterialRole_.user), user),
-          root.get(UserMaterialRole_.role).in(roles)
-        )
-    );
-    
-    return entityManager.createQuery(criteria).getResultList();
-  }
-
-	public List<Material> listByRootFolderAndUserAndTypesAndRoles(User user, Collection<MaterialType> types, Collection<MaterialRole> roles) {
-		EntityManager entityManager = getEntityManager();
-
-    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-    CriteriaQuery<Material> criteria = criteriaBuilder.createQuery(Material.class);
-    Root<UserMaterialRole> root = criteria.from(UserMaterialRole.class);
-    Join<UserMaterialRole, Material> materialJoin = root.join(UserMaterialRole_.material);
-    
-    criteria.select(root.get(UserMaterialRole_.material)).distinct(true);
-    criteria.where(
-        criteriaBuilder.and(
-          criteriaBuilder.isNull(materialJoin.get(Material_.parentFolder)),
-          criteriaBuilder.equal(root.get(UserMaterialRole_.user), user),
-          materialJoin.get(Material_.type).in(types),
-          root.get(UserMaterialRole_.role).in(roles)
-        )
-    );
-    
-    return entityManager.createQuery(criteria).getResultList();
-  }
-
   public List<Material> listByPublicityAndCreatorAndAndTypes(MaterialPublicity publicity, User creator, List<MaterialType> types) {
     if ((types == null) || (types.isEmpty())) {
       return Collections.emptyList();
@@ -302,6 +266,125 @@ public class MaterialDAO extends GenericDAO<Material> {
     );
     
     return entityManager.createQuery(criteria).getResultList();
+  }
+
+  public List<Material> listByFolderAndShared(Folder parentFolder, User user) {
+    EntityManager entityManager = getEntityManager();
+    
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Material> criteria = criteriaBuilder.createQuery(Material.class);
+    Root<Material> root = criteria.from(Material.class);
+    
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.or(
+        criteriaBuilder.and(
+          parentFolder != null ? criteriaBuilder.equal(root.get(Material_.parentFolder), parentFolder) : criteriaBuilder.isNull(root.get(Material_.parentFolder)),
+          criteriaBuilder.equal(root.get(Material_.creator), user)
+        ),
+        root.in(subqueryGroupShares(criteriaBuilder, criteria, parentFolder, user)),
+        root.in(subqueryUserShares(criteriaBuilder, criteria, parentFolder, user))
+      )
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+  }
+
+  private Subquery<Material> subqueryGroupShares(CriteriaBuilder criteriaBuilder, CriteriaQuery<Material> criteria, Folder parentFolder, User user) {
+    Subquery<Material> subquery = criteria.subquery(Material.class);
+    Root<MaterialShareGroup> groupRoot = subquery.from(MaterialShareGroup.class);
+    Root<UserGroupMember> memberRoot = subquery.from(UserGroupMember.class);
+    Join<MaterialShareGroup, Material> materialJoin = groupRoot.join(MaterialShareGroup_.material);
+    subquery.select(materialJoin);
+    
+    subquery.where(
+      criteriaBuilder.and(
+        criteriaBuilder.equal(memberRoot.get(UserGroupMember_.user), user),
+        criteriaBuilder.equal(groupRoot.get(MaterialShareGroup_.userGroup), memberRoot.get(UserGroupMember_.group)),
+        groupRoot.get(MaterialShareGroup_.role).in(MaterialRole.MAY_EDIT, MaterialRole.MAY_VIEW),
+        parentFolder != null ? criteriaBuilder.equal(materialJoin.get(Material_.parentFolder), parentFolder) : criteriaBuilder.isNull(materialJoin.get(Material_.parentFolder))
+      )
+    );
+    
+    return subquery;
+  }
+
+  private Subquery<Material> subqueryUserShares(CriteriaBuilder criteriaBuilder, CriteriaQuery<Material> criteria, Folder parentFolder, User user) {
+    Subquery<Material> subquery = criteria.subquery(Material.class);
+    Root<MaterialShareUser> userRoot = subquery.from(MaterialShareUser.class);
+    Join<MaterialShareUser, Material> materialJoin = userRoot.join(MaterialShareUser_.material);
+    subquery.select(materialJoin);
+    
+    subquery.where(
+      criteriaBuilder.equal(userRoot.get(MaterialShareUser_.user), user),
+      userRoot.get(MaterialShareUser_.role).in(MaterialRole.MAY_EDIT, MaterialRole.MAY_VIEW),
+      parentFolder != null ? criteriaBuilder.equal(materialJoin.get(Material_.parentFolder), parentFolder) : criteriaBuilder.isNull(materialJoin.get(Material_.parentFolder))
+    );
+    
+    return subquery;
+  }
+
+  public List<Material> listByFolderAndSharedAndTypes(Folder parentFolder, User user, Collection<MaterialType> types) {
+    if (types == null || types.isEmpty()) {
+      return Collections.emptyList();
+    }
+    
+    EntityManager entityManager = getEntityManager();
+    
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Material> criteria = criteriaBuilder.createQuery(Material.class);
+    Root<Material> root = criteria.from(Material.class);
+    
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.or(
+        criteriaBuilder.and(
+          parentFolder != null ? criteriaBuilder.equal(root.get(Material_.parentFolder), parentFolder) : criteriaBuilder.isNull(root.get(Material_.parentFolder)),
+          criteriaBuilder.equal(root.get(Material_.creator), user),
+          root.get(Material_.type).in(types)
+        ),
+        root.in(subqueryGroupSharesTypes(criteriaBuilder, criteria, parentFolder, user, types)),
+        root.in(subqueryUserSharesTypes(criteriaBuilder, criteria, parentFolder, user, types))
+      )
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+  }
+
+  private Subquery<Material> subqueryGroupSharesTypes(CriteriaBuilder criteriaBuilder, CriteriaQuery<Material> criteria, Folder parentFolder, User user, Collection<MaterialType> types) {
+    Subquery<Material> subquery = criteria.subquery(Material.class);
+    Root<MaterialShareGroup> groupRoot = subquery.from(MaterialShareGroup.class);
+    Root<UserGroupMember> memberRoot = subquery.from(UserGroupMember.class);
+    Join<MaterialShareGroup, Material> materialJoin = groupRoot.join(MaterialShareGroup_.material);
+    subquery.select(materialJoin);
+    
+    subquery.where(
+      criteriaBuilder.and(
+        criteriaBuilder.equal(memberRoot.get(UserGroupMember_.user), user),
+        criteriaBuilder.equal(groupRoot.get(MaterialShareGroup_.userGroup), memberRoot.get(UserGroupMember_.group)),
+        groupRoot.get(MaterialShareGroup_.role).in(MaterialRole.MAY_EDIT, MaterialRole.MAY_VIEW),
+        parentFolder != null ? criteriaBuilder.equal(materialJoin.get(Material_.parentFolder), parentFolder) : criteriaBuilder.isNull(materialJoin.get(Material_.parentFolder)),
+        materialJoin.get(Material_.type).in(types)
+      )
+    );
+    
+    return subquery;
+  }
+
+  private Subquery<Material> subqueryUserSharesTypes(CriteriaBuilder criteriaBuilder, CriteriaQuery<Material> criteria, Folder parentFolder, User user, Collection<MaterialType> types) {
+    Subquery<Material> subquery = criteria.subquery(Material.class);
+    Root<MaterialShareUser> userRoot = subquery.from(MaterialShareUser.class);
+    Join<MaterialShareUser, Material> materialJoin = userRoot.join(MaterialShareUser_.material);
+    subquery.select(materialJoin);
+    
+    subquery.where(
+      criteriaBuilder.equal(userRoot.get(MaterialShareUser_.user), user),
+      userRoot.get(MaterialShareUser_.role).in(MaterialRole.MAY_EDIT, MaterialRole.MAY_VIEW),
+      parentFolder != null ? criteriaBuilder.equal(materialJoin.get(Material_.parentFolder), parentFolder) : criteriaBuilder.isNull(materialJoin.get(Material_.parentFolder)),
+      materialJoin.get(Material_.type).in(types)
+    );
+    
+    return subquery;
   }
 
   public Long countByCreator(User creator) {
