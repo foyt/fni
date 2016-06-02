@@ -83,7 +83,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     givenJson(token)
       .get("/illusion/events/{EVENTID}/groups", 4)
       .then()
-      .statusCode(204);
+      .statusCode(200)
+      .body("id.size()", is(0));
   }
 
   @Test
@@ -91,7 +92,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     givenJson()
       .get("/illusion/events/")
       .then()
-      .statusCode(204);
+      .statusCode(200)
+      .body("id.size()", is(0));
   }
 
   @Test

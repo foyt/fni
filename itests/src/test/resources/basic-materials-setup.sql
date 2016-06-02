@@ -87,16 +87,30 @@ values
   (14, '1ZTrze-3nBd_HWlxsdyX7dndLqlMUOU5Lid2XaJVrDuE', 'application/vnd.google-apps.document'),
   (22, '1ZTrze-3nBd_HWlxsdyX7dndLqlMUOU5Lid2XaJVrDuE', 'application/vnd.google-apps.document');
     
-insert into 
-  UserMaterialRole (role, material_id, user_id)
-values  
-  ('MAY_VIEW', 1, 3),
-  ('MAY_EDIT', 1, 4),
-  ('MAY_VIEW', 3, 3),
-  ('MAY_EDIT', 3, 4),
-  ('MAY_VIEW', 6, 3),
-  ('MAY_EDIT', 6, 4),
-  ('MAY_VIEW', 9, 3),
-  ('MAY_EDIT', 9, 4),
-  ('MAY_VIEW', 12, 3),
-  ('MAY_EDIT', 12, 4);
+insert into   
+  MaterialShare (id, material_id, role)
+values 
+  (1, 1, 'MAY_VIEW'),
+  (2, 1, 'MAY_EDIT'),
+  (3, 3, 'MAY_VIEW'),
+  (4, 3, 'MAY_EDIT'),
+  (5, 6, 'MAY_VIEW'),
+  (6, 6, 'MAY_EDIT'),
+  (7, 9, 'MAY_VIEW'),
+  (8, 9, 'MAY_EDIT'),
+  (9, 12, 'MAY_VIEW'),
+  (10, 12, 'MAY_EDIT');
+    
+insert into   
+  MaterialShareUser (id, user_id)
+values 
+  (1, 3),
+  (2, 4),
+  (3, 3),
+  (4, 4),
+  (5, 3),
+  (6, 4),
+  (7, 3),
+  (8, 4),
+  (9, 3),
+  (10, 4);
