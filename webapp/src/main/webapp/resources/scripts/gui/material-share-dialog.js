@@ -43,6 +43,41 @@
       }, this);
     },
     
+    _createRemoveMaterialShareGroup: function (id) {
+      return $.proxy(function (callback) {
+        this._restCall(this._getMaterialClient().materials.shareGroups.del(this.options.materialId, id), $.proxy(function (err) {
+          callback(err);
+        }, this));
+      }, this);
+    },
+    
+    _createUpdateMaterialShareGroup: function (id, role) {
+      return $.proxy(function (callback) {
+        this._restCall(this._getMaterialClient(false).materials.shareGroups.read(this.options.materialId, id), $.proxy(function (getErr, materialGroup) {
+          if (getErr) {
+            callback(getErr);
+          } else {
+            this._restCall(this._getMaterialClient(true).materials.shareGroups.update(this.options.materialId, id, $.extend(materialGroup, {
+              role: role
+            })), $.proxy(function (updErr, updatedGroup) {
+              callback(updErr, updatedGroup);
+            }, this));
+          }
+        }, this));
+      }, this);
+    },
+    
+    _createCreateMaterialShareGroup: function (userGroupId, role) {
+      return $.proxy(function (callback) {
+        this._restCall(this._getMaterialClient(true).materials.shareGroups.create(this.options.materialId, {
+          userGroupId: userGroupId,
+          role: role
+        }), $.proxy(function (err, shareGroup) {
+          callback(err, shareGroup);
+        }, this));
+      }, this);
+    },
+    
     _createUpdateMaterial: function (data) {
       return $.proxy(function (callback) {
         this._restCall(this._getMaterialClient(true).materials.read(this.options.materialId), $.proxy(function (err, material) {
@@ -59,12 +94,12 @@
     
     _create: function () {
       this._load($.proxy(function (data, html) {
-        var dialog = $(html);
-        var createRoleSelect = function () {
+        this._dialog = $(html);
+        var createRoleSelect = $.proxy(function () {
           var roles = {
-            'MAY_EDIT': $(dialog).data('role-may-edit'),
-            'MAY_VIEW': $(dialog).data('role-may-view'),
-            'NONE': $(dialog).data('role-none')
+            'MAY_EDIT': $(this._dialog).data('role-may-edit'),
+            'MAY_VIEW': $(this._dialog).data('role-may-view'),
+            'NONE': $(this._dialog).data('role-none')
           };
             
           var select = $('<select name="role">');
@@ -72,42 +107,56 @@
             select.append($('<option>').attr('value', role).text(text));
           });
           return select;
-        };
+        }, this);
           
-        dialog.dialog({
+        this._dialog.dialog({
           modal: true,
           width: 600,
-          open: function( event, ui ) {
-            $(dialog).dialog('widget').css('overflow', 'visible');
-          },
+          open: $.proxy(function( event, ui ) {
+            $(this._dialog).dialog('widget').css('overflow', 'visible');
+          }, this),
           buttons: [{
-            'text': dialog.data('save-button'),
+            'text': this._dialog.attr('data-save-button'),
             'click': $.proxy(function(event) { 
               var operations = [];
               
-              var publicity = $(dialog).find('input[name="publicity"]:checked').val();
-              var tagsVal = $(dialog).find('.forge-share-material-tags input').val();
+              var publicity = $(this._dialog).find('input[name="publicity"]:checked').val();
+              var tagsVal = $(this._dialog).find('.forge-share-material-tags input').val();
               var tags = tagsVal ? tagsVal.split(',') : [];
-              var description = $(dialog).find('.forge-share-material-description textarea').val();
-              var license = $(dialog).find('input[name="license"]').val();
+              var description = $(this._dialog).find('.forge-share-material-description textarea').val();
+              var license = $(this._dialog).find('input[name="license"]').val();
               
-              $(dialog).find('.forge-share-material-collaborator').each($.proxy(function(index, element) {
+              $(this._dialog).find('.forge-share-material-collaborator').each($.proxy(function(index, element) {
                 var originalId = $(element).attr('data-original-id');
                 var originalRole = $(element).attr('data-original-role');
+                var type = $(element).attr('data-type');
                 var userId = $(element).attr('data-user-id');
+                var userGroupId = $(element).attr('data-user-group-id');
                 var role = $(element).find('select[name="role"]').val();
                 
                 if (originalId) {
                   if (originalRole != role) {
                     if (role == 'NONE') {
-                      operations.push(this._createRemoveMaterialShareUser(originalId));
+                      if (type == 'GROUP') {
+                        operations.push(this._createRemoveMaterialShareGroup(originalId));
+                      } else {
+                        operations.push(this._createRemoveMaterialShareUser(originalId));
+                      }
                     } else {
-                      operations.push(this._createUpdateMaterialShareUser(originalId, role));
+                      if (type == 'GROUP') {
+                        operations.push(this._createUpdateMaterialShareGroup(originalId, role));
+                      } else {
+                        operations.push(this._createUpdateMaterialShareUser(originalId, role));
+                      }
                     }
                   }
                 } else {
                   if (role != 'NONE') {
-                    operations.push(this._createCreateMaterialShareUser(userId, role));
+                    if (type == 'GROUP') {
+                      operations.push(this._createCreateMaterialShareGroup(userGroupId, role));
+                    } else {
+                      operations.push(this._createCreateMaterialShareUser(userId, role));
+                    }
                   }
                 }
               }, this));
@@ -123,28 +172,28 @@
                 if (err) {
                   $('.notifications').notifications('notification', 'error', err);
                 } else {
-                  $(dialog).dialog("close");
+                  $(this._dialog).dialog("close");
                   window.location.reload(true);
                 }
               }, this));
             }, this)
           }, {
-            'text': dialog.data('cancel-button'),
+            'text': this._dialog.data('cancel-button'),
             'click': function(event) { 
               $(this).dialog("close");
             }
           }]
         });
         
-        dialog.find('input[type="radio"]').change(function (event) {
+        this._dialog.find('input[type="radio"]').change(function (event) {
           if ($(this).val() == 'PRIVATE') {
-            $(dialog).find('.forge-share-material-url input[type="text"]').attr('disabled', 'disabled');
+            $(this._dialog).find('.forge-share-material-url input[type="text"]').attr('disabled', 'disabled');
           } else {
-            $(dialog).find('.forge-share-material-url input[type="text"]').attr('disabled', null);
+            $(this._dialog).find('.forge-share-material-url input[type="text"]').attr('disabled', null);
           }
         });
         
-        dialog.find('.forge-share-material-invite input').autocomplete({
+        this._dialog.find('.forge-share-material-invite input').autocomplete({
           source: $.proxy(function (request, response) {
             this._searchInvitables(request.term, function (err, invitables) {
               if (err) {
@@ -154,45 +203,54 @@
               }
             });
           }, this),
-          select: function( event, ui ) {
-            var collaborators = $(dialog).find('.forge-share-material-collaborators');
+          select: $.proxy(function( event, ui ) {
+            var collaborators = $(this._dialog).find('.forge-share-material-collaborators');
             var item = ui.item;
-            var userId = item.value;
             var displayName = item.label;
             
-            console.log(item);
-            
-            if (collaborators.find('.forge-share-material-collaborator[data-user-id="' + userId + '"]').length == 0) {
-              var collaborator = $('<div>')
-                .addClass('forge-share-material-collaborator')
-                .attr({
-                  'data-user-id': userId,
-                  'data-type': item.type
-                })
-                .append($('<label>').text(displayName))
-                .append(createRoleSelect())
-                .appendTo(collaborators);
-              
-              switch (item.type) {
-                case 'ILLUSION-GROUP':
-                  collaborator.prepend($('<span>').addClass('fa fa-users'));
-                break;
-                default:
-                  collaborator.prepend($('<span>').addClass('fa fa-user'));
-                break;
-              }
+            if (item.existing) {
+              return;
             }
-          },
+            
+            var collaborator = $('<div>')
+              .addClass('forge-share-material-collaborator')
+              .attr({
+                'data-type': item.type
+              })
+              .append($('<label>').text(displayName))
+              .append(createRoleSelect())
+              .appendTo(collaborators);
+            
+            switch (item.type) {
+              case 'GROUP':
+              case 'ILLUSION-GROUP':
+                collaborator
+                  .attr({
+                    'data-type': 'GROUP',
+                    'data-user-group-id': item.value
+                  })
+                  .prepend($('<span>').addClass('fa fa-users'));
+              break;
+              default:
+                collaborator
+                  .attr({
+                    'data-type': 'USER',
+                    'data-user-id': item.value
+                  })
+                  .prepend($('<span>').addClass('fa fa-user'));
+              break;
+            }
+          }, this),
           close: function( event, ui ) {
             $(this).val('');
           }
         });
         
-        dialog.find('.forge-share-material-invite input')
+        this._dialog.find('.forge-share-material-invite input')
           .data("ui-autocomplete")
           ._renderItem = $.proxy(this._buildInviteAutocompleteItem);
         
-        $(dialog).find('.forge-share-material-tags input').tagsInput({
+        $(this._dialog).find('.forge-share-material-tags input').tagsInput({
           'autocomplete_url': 'about:blank',
           'autocomplete': {
             source: data.allTags
@@ -201,6 +259,26 @@
           height: '80px'
         });
       }, this));
+    },
+    
+    _getExistingUserIds: function () {
+      var filtered = _.filter(this._dialog.find('.forge-share-material-collaborator'), function (element) {
+        return $(element).attr('data-type') == 'USER';
+      });
+      
+      return _.map(filtered, function (element) {
+        return parseInt($(element).attr('data-user-id'));
+      });
+    },
+    
+    _getExistingUserGroupIds: function () {
+      var filtered = _.filter(this._dialog.find('.forge-share-material-collaborator'), function (element) {
+        return $(element).attr('data-type') == 'GROUP';
+      });
+      
+      return _.map(filtered, function (element) {
+        return parseInt($(element).attr('data-user-group-id'));
+      });
     },
     
     _buildInviteAutocompleteItem: function (ul, item) {
@@ -217,24 +295,30 @@
         break;
       }
       
+      if (item.existing) {
+        li.addClass('existing');
+      }
+      
       return li;
     },
     
     _load: function (callback) {
-      async.parallel([this._createMaterialLoad(), this._createTagsLoad(), this._createMaterialShareUsersLoad(), this._createPublishGuideUrlLoad()], $.proxy(function (err, results) {
+      async.parallel([this._createMaterialLoad(), this._createTagsLoad(), this._createMaterialShareUsersLoad(), this._createMaterialShareGroupsLoad(), this._createPublishGuideUrlLoad()], $.proxy(function (err, results) {
         if (err) {
           $('.notifications').notifications('notification', 'error', err);
         } else {
           var material = results[0];
           var allTags = results[1];
           var materialShareUsers = results[2];
-          var publishGuideLink = results[3].value;
+          var materialShareGroups = results[3];
+          var publishGuideLink = results[4].value;
           
           var href = window.location.href;
           var baseUrl = href.substring(0, href.length - (window.location.pathname.length));
           
           var data = $.extend(material, {
             materialShareUsers: materialShareUsers,
+            materialShareGroups: materialShareGroups,
             publicUrl: baseUrl + '/materials/' + material.path,
             allTags: $.map(allTags, function (tag) {
               return tag.text;
@@ -288,13 +372,13 @@
         })
     },
     
-    _createUserLoad: function (materialUser) {
+    _createMaterialShareUserLoad: function (materialShareUser) {
       return $.proxy(function (callback) {
-        this._restCall(this._getUserClient(false).users.read(materialUser.userId), function (err, user) {
+        this._restCall(this._getUserClient(false).users.read(materialShareUser.userId), function (err, user) {
           if (err) {
             callback(err);
           } else {
-            callback(err, $.extend(materialUser, {
+            callback(err, $.extend(materialShareUser, {
               firstName: user.firstName,
               lastName: user.lastName,
               emails: user.emails
@@ -306,25 +390,73 @@
     
     _createMaterialShareUsersLoad: function () {
       return $.proxy(function (callback) {
-        this._restCall(this._getMaterialClient(false).materials.shareUsers.read(this.options.materialId), $.proxy(function (err, materialUsers) {
+        this._restCall(this._getMaterialClient(false).materials.shareUsers.read(this.options.materialId), $.proxy(function (err, materialShareUsers) {
           if (err) {
             callback(err);
           } else {
-            var userLoads = $.map(materialUsers, $.proxy(function (materialUser) {
-              return this._createUserLoad(materialUser);
+            var loads = $.map(materialShareUsers, $.proxy(function (materialShareUser) {
+              return this._createMaterialShareUserLoad(materialShareUser);
             }, this));
             
-            async.parallel(userLoads, function (err, users) {
+            async.parallel(loads, $.proxy(function (err, materialShareUsers) {
               if (err) {
                 callback(err);
               } else {
-                callback(null, $.map(users, function (user) {
-                  return $.extend(user, {
-                    displayName: user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : '<' + user.emails[0] + '>'
+                callback(null, $.map(materialShareUsers, $.proxy(function (materialShareUser) {
+                  return $.extend(materialShareUser, {
+                    displayName: this._getUserDisplayName(materialShareUser)
                   });
-                }));
+                }, this)));
               }
-            });
+            }, this));
+          }
+        }, this));
+      }, this);
+    },
+    
+    _createMaterialShareGroupsLoad: function () {
+      return $.proxy(function (callback) {
+        this._restCall(this._getMaterialClient(false).materials.shareGroups.read(this.options.materialId), $.proxy(function (err, materialShareGroups) {
+          if (err) {
+            callback(err);
+          } else {
+            if (err) {
+              callback(err);
+            } else {
+              var groupLoads =  $.map(materialShareGroups, $.proxy(function (materialShareGroup) {
+                return $.proxy(function (callback) {
+                  this._restCall(this._getUserClient(false).groups.read(materialShareGroup.userGroupId), callback);
+                }, this)
+              }, this));
+              
+              async.parallel(groupLoads, $.proxy(function (groupsErr, groups) {
+                if (groupsErr) {
+                  callback(groupsErr);
+                } else {
+                  var eventLoads = _.map(groups, $.proxy(function (group) {
+                    return $.proxy(function (callback) {
+                      if (group.eventId) {
+                        this._restCall(this._getIllusionClient(false).events.read(group.eventId), callback);
+                      } else {
+                        callback();
+                      }
+                    }, this)
+                  }, this));
+                  
+                  async.parallel(eventLoads, $.proxy(function (eventsErr, events) {
+                    if (eventsErr) {
+                      callback(eventsErr);
+                    } else {
+                      callback(null, $.map(materialShareGroups, $.proxy(function (materialShareGroup, index) {
+                        return $.extend(materialShareGroup, {
+                          displayName: this._getGroupDisplayName(groups[index], events[index])
+                        });
+                      }, this)));
+                    }
+                  }, this));
+                }
+              }, this));
+            }
           }
         }, this));
       }, this);
@@ -345,6 +477,15 @@
         displayName = (displayName ? displayName + ' ' : '') + '<' + user.emails[0] + '>';
       }
       
+      return displayName;
+    },
+    
+    _getGroupDisplayName: function (group, event) {
+      var displayName = group.name;
+      if (event) {
+        return displayName + ' (' + event.name + ')';
+      } 
+
       return displayName;
     },
     
@@ -420,7 +561,7 @@
                       
                       return {
                         value: group.id,
-                        label: groupName + ' (' + eventName + ')',
+                        label: this._getGroupDisplayName(group, result.event),
                         type: 'ILLUSION-GROUP'
                       };
                     }, this));
@@ -437,13 +578,32 @@
     
     _searchInvitables: function (term, callback) {
       var tasks = [ this._createUserSearch(term), this._createIllusionGroupSearch(term) ];
-      async.parallel(tasks, function (err, results) {
+      async.parallel(tasks, $.proxy(function (err, results) {
         if (err) {
           callback(err);
         } else {
-          callback(null, _.flatten(results));
+          var existingUserIds = this._getExistingUserIds();
+          var existingGroupIds = this._getExistingUserGroupIds();
+          
+          var results = _.map(_.flatten(results), function (result) {
+            switch (result.type) {
+              case 'GROUP':
+              case 'ILLUSION-GROUP':
+                return _.extend(result, {
+                  existing: _.indexOf(existingGroupIds, result.value) != -1
+                });
+              break;
+              case 'USER':
+                return _.extend(result, {
+                  existing: _.indexOf(existingUserIds, result.value) != -1
+                });
+              break;
+            }
+          });
+          
+          callback(null, results);
         }
-      });
+      }, this));
     },
     
     _getSystemClient: function (stringify) {
@@ -456,6 +616,7 @@
       var materialClient = new $.RestClient(CONTEXTPATH + '/rest/material/', {stringifyData: stringify === false ? false : true});
       materialClient.add("materials");
       materialClient.materials.add("shareUsers");
+      materialClient.materials.add("shareGroups");
       materialClient.add("tags");
       return materialClient;
     },
@@ -463,6 +624,7 @@
     _getUserClient: function (stringify) {
       var userClient = new $.RestClient(CONTEXTPATH + '/rest/users/', {stringifyData: stringify === false ? false : true});
       userClient.add("users");
+      userClient.add("groups");
       return userClient;
     },
     

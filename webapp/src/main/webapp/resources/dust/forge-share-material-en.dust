@@ -62,7 +62,8 @@
     <div class="forge-share-material-collaborators">
     
       {#materialShareUsers}
-        <div class="forge-share-material-collaborator" data-user-id="{userId}" data-original-id="{id}" data-original-role="{role}">
+        <div class="forge-share-material-collaborator" data-user-id="{userId}" data-original-id="{id}" data-original-role="{role}" data-type="USER">
+          <span class="fa fa-user"></span>
           <label>{displayName}</label>
           <select name="role">
             {@if cond="'{role}' == 'MAY_EDIT'"}
@@ -75,10 +76,30 @@
             {:else}  
               <option value="MAY_VIEW">May View</option>
             {/if}
-            <option value="NONE" >None</option>
+            <option value="NONE">None</option>
           </select>
         </div>
       {/materialShareUsers}
+      
+      {#materialShareGroups}
+        <div class="forge-share-material-collaborator" data-user-group-id="{userGroupId}" data-original-id="{id}" data-original-role="{role}" data-type="GROUP">
+          <span class="fa fa-users"></span>
+          <label>{displayName}</label>
+          <select name="role">
+            {@if cond="'{role}' == 'MAY_EDIT'"}
+              <option value="MAY_EDIT" selected="selected">May Edit</option>
+            {:else}  
+              <option value="MAY_EDIT">May Edit</option>
+            {/if}
+            {@if cond="'{role}' == 'MAY_VIEW'"}
+              <option value="MAY_VIEW" selected="selected">May View</option>
+            {:else}  
+              <option value="MAY_VIEW">May View</option>
+            {/if}
+            <option value="NONE">None</option>
+          </select>
+        </div>
+      {/materialShareGroups}
     </div>
     
     <h4>Add a collaborator</h4>

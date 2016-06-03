@@ -2,11 +2,25 @@
 
 /* Share dialog */
 
-.ui-menu-item .fa {
-  color: $default-color;
-  margin-right: 5px;
-  text-align: center;
-  width: 15px;
+.ui-menu-item {
+  cursor: pointer;
+  
+  &.existing {
+    cursor: default;
+    color: #ddd;
+    
+    &.ui-state-focus {
+      border-color: transparent;
+      background: none;
+    }
+  }
+
+  .fa {
+    color: $default-color;
+    margin-right: 5px;
+    text-align: center;
+    width: 15px;
+  }
 }
 
 .forge-share-material-dialog {
