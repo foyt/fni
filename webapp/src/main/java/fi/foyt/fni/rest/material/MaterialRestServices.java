@@ -323,7 +323,7 @@ public class MaterialRestServices {
     allowNotLogged = false,
     scopes = { OAuthScopes.MATERIAL_CREATE_SHARE }
   )
-  public Response createMaterialUser(@PathParam ("ID") Long materialId, fi.foyt.fni.rest.material.model.MaterialShareGroup payload) {
+  public Response createMaterialGroup(@PathParam ("ID") Long materialId, fi.foyt.fni.rest.material.model.MaterialShareGroup payload) {
     Material material = materialController.findMaterialById(materialId);
     if (material == null) {
       return Response.status(Status.NOT_FOUND).build();

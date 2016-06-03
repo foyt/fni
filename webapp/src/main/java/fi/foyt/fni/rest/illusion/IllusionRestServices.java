@@ -804,6 +804,53 @@ public class IllusionRestServices {
   }
   
   /**
+   * Returns an event group
+   * 
+   * @param eventId event id 
+   * @param groupId group id 
+   * @return Response
+   * @responseType fi.foyt.fni.rest.illusion.model.IllusionEventGroup
+   */
+  @Path("/events/{EVENTID:[0-9]*}/groups/{ID:[0-9]*}")
+  @GET
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_GROUP_LIST }
+  )
+  public Response findEventGroup(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long groupId) {
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+    
+    if (!sessionController.isLoggedIn()) {
+      if (accessToken == null) {
+        return Response.status(Status.UNAUTHORIZED).build();
+      }
+      
+      if (accessToken.getClient().getType() != OAuthClientType.SERVICE) {
+        return Response.status(Status.FORBIDDEN).entity(String.format("Invalid client type %s", accessToken.getClient().getType().toString())).build();
+      }
+    } else {
+      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
+      if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) { 
+        return Response.status(Status.FORBIDDEN).build();
+      }
+    }
+    
+    fi.foyt.fni.persistence.model.illusion.IllusionEventGroup group = illusionEventController.findGroupById(groupId);
+    if (group == null) {
+      return Response.status(Status.NOT_FOUND).entity(String.format("Group %d not found", groupId)).build();
+    }
+    
+    if (group.getEvent().equals(eventId)) {
+      return Response.status(Status.NOT_FOUND).entity(String.format("Group %d does not belong to event %d", groupId, eventId)).build();
+    }
+    
+    return Response.ok(createRestModel(group)).build();
+  }
+  
+  /**
    * Creates an event group
    * 
    * @param eventUrlName event's urlname
@@ -829,6 +876,8 @@ public class IllusionRestServices {
       return Response.status(Status.NOT_FOUND).build(); 
     }
     
+    User user = null;
+    
     if (!sessionController.isLoggedIn()) {
       if (accessToken == null) {
         return Response.status(Status.UNAUTHORIZED).build();
@@ -837,14 +886,17 @@ public class IllusionRestServices {
       if (accessToken.getClient().getType() != OAuthClientType.SERVICE) {
         return Response.status(Status.FORBIDDEN).entity(String.format("Invalid client type %s", accessToken.getClient().getType().toString())).build();
       }
+      
+      user = accessToken.getClient().getServiceUser();
     } else {
-      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
+      user = sessionController.getLoggedUser();
+      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
       if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) { 
         return Response.status(Status.FORBIDDEN).build();
       }
     }
 
-    return Response.ok(createRestModel(illusionEventController.createGroup(event, name))).build();
+    return Response.ok(createRestModel(illusionEventController.createGroup(event, name, user))).build();
   }
   
   /**

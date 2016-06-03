@@ -693,8 +693,8 @@ public class IllusionEventController {
     return illusionEventParticipantGroupDAO.findById(id);
   }
   
-  public IllusionEventGroup createGroup(IllusionEvent event, String name) {
-    return illusionEventParticipantGroupDAO.create(event, name);
+  public IllusionEventGroup createGroup(IllusionEvent event, String name, User creator) {
+    return illusionEventParticipantGroupDAO.create(event, name, creator);
   }
   
   public List<IllusionEventGroup> listGroups(IllusionEvent event) {

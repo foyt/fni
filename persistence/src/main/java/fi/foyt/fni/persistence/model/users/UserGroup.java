@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
 import javax.persistence.Inheritance;
 import javax.validation.constraints.NotNull;
 
@@ -25,6 +26,14 @@ public class UserGroup {
 	public void setName(String name) {
     this.name = name;
   }
+	
+	public User getCreator() {
+    return creator;
+  }
+	
+	public void setCreator(User creator) {
+    this.creator = creator;
+  }
  
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
@@ -33,4 +42,7 @@ public class UserGroup {
   @NotNull
   @NotEmpty
   private String name;
+  
+  @ManyToOne (optional = false)
+  private User creator;
 }
