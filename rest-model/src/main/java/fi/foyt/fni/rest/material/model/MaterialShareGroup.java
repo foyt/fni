@@ -2,13 +2,13 @@ package fi.foyt.fni.rest.material.model;
 
 import fi.foyt.fni.persistence.model.materials.MaterialRole;
 
-public class MaterialShareUserGroup extends MaterialShare {
+public class MaterialShareGroup extends MaterialShare {
 
-  public MaterialShareUserGroup() {
+  public MaterialShareGroup() {
     super();
   }
 
-  public MaterialShareUserGroup(Long id, Long userGroupId, MaterialRole role) {
+  public MaterialShareGroup(Long id, Long userGroupId, MaterialRole role) {
     super(id, role);
     this.userGroupId = userGroupId;
   }

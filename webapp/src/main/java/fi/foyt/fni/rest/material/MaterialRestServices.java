@@ -35,12 +35,14 @@ import fi.foyt.fni.persistence.model.materials.MaterialShareUser;
 import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
 import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.users.UserGroup;
 import fi.foyt.fni.rest.Security;
 import fi.foyt.fni.rest.illusion.OAuthScopes;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.system.TagController;
 import fi.foyt.fni.users.UserController;
+import fi.foyt.fni.users.UserGroupController;
 
 @Path("/material")
 @Produces(MediaType.APPLICATION_JSON)
@@ -57,6 +59,9 @@ public class MaterialRestServices {
   
   @Inject
   private UserController userController;
+  
+  @Inject
+  private UserGroupController userGroupController;
   
   @Inject
   private MaterialPermissionController materialPermissionController;
@@ -311,6 +316,154 @@ public class MaterialRestServices {
     return Response.noContent().build();
   }
   
+  @POST
+  @Path ("/materials/{ID:[0-9]*}/shareGroups")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_CREATE_SHARE }
+  )
+  public Response createMaterialUser(@PathParam ("ID") Long materialId, fi.foyt.fni.rest.material.model.MaterialShareGroup payload) {
+    Material material = materialController.findMaterialById(materialId);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    if (payload.getRole() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Missing role").build();
+    }
+    
+    UserGroup userGroup = userGroupController.findUserGroupById(payload.getUserGroupId());
+    if (userGroup == null) {
+      return Response.status(Status.BAD_REQUEST).entity(String.format("Invalid userGroupId %d", payload.getUserGroupId())).build();
+    }
+    
+    if (materialShareController.findMaterialShareGroupByGroupAndMaterial(userGroup, material) != null) {
+      return Response.status(Status.BAD_REQUEST).entity("UserGroup already has existing role in this material").build();
+    }
+    
+    return Response.ok(createRestModel(materialShareController.createMaterialShareGroup(userGroup, material, payload.getRole()))).build();
+  }
+  
+  @GET
+  @Path ("/materials/{ID:[0-9]*}/shareGroups")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_LIST_SHARES }
+  )
+  public Response listMaterialGroups(@PathParam ("ID") Long materialId) {
+    Material material = materialController.findMaterialById(materialId);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    List<MaterialShareGroup> materialShareGroups = materialShareController.listMaterialSharesGroups(material);
+
+    return Response.ok(createRestModel(materialShareGroups.toArray(new MaterialShareGroup[0]))).build();
+  }
+  
+  @GET
+  @Path ("/materials/{MATERIALID:[0-9]*}/shareGroups/{ID:[0-9]*}")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_FIND_SHARE }
+  )
+  public Response listMaterialGroups(@PathParam ("MATERIALID") Long materialId, @PathParam ("ID") Long id) {
+    MaterialShareGroup materialShareGroup = materialShareController.findMaterialShareGroup(id);
+    if (materialShareGroup == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    Material material = materialController.findMaterialById(materialId);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!material.getId().equals(materialShareGroup.getMaterial().getId())) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    return Response.ok(createRestModel(materialShareGroup)).build();
+  }
+
+  @PUT
+  @Path ("/materials/{MATERIALID:[0-9]*}/shareGroups/{ID:[0-9]*}")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_UPDATE_SHARE }
+  )
+  public Response updateMaterialGroup(@PathParam ("MATERIALID") Long materialId, @PathParam ("ID") Long id, fi.foyt.fni.rest.material.model.MaterialShareGroup payload) {
+    MaterialShareGroup materialShareGroup = materialShareController.findMaterialShareGroup(id);
+    if (materialShareGroup == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    Material material = materialController.findMaterialById(materialId);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!material.getId().equals(materialShareGroup.getMaterial().getId())) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    if (payload.getRole() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Missing role").build();
+    }
+    
+    return Response.ok(createRestModel(materialShareController.updateMaterialShareGroup(materialShareGroup, payload.getRole()))).build();
+  }
+
+  @DELETE
+  @Path ("/materials/{MATERIALID:[0-9]*}/shareGroups/{ID:[0-9]*}")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_DELETE_SHARE }
+  )
+  public Response deleteMaterialGroup(@PathParam ("MATERIALID") Long materialId, @PathParam ("ID") Long id) {
+    MaterialShareGroup materialShareGroup = materialShareController.findMaterialShareGroup(id);
+    if (materialShareGroup == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    Material material = materialController.findMaterialById(materialId);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!material.getId().equals(materialShareGroup.getMaterial().getId())) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    materialShareController.deleteMaterialShareGroup(materialShareGroup);
+    
+    return Response.noContent().build();
+  }
+  
   @GET
   @Path ("/bookTemplates/")
   @Security (
@@ -482,12 +635,12 @@ public class MaterialRestServices {
     return result;
   }
 
-  private fi.foyt.fni.rest.material.model.MaterialShareUserGroup createRestModel(fi.foyt.fni.persistence.model.materials.MaterialShareGroup entity) {
-    return new fi.foyt.fni.rest.material.model.MaterialShareUserGroup(entity.getId(), entity.getUserGroup().getId(), entity.getRole());
+  private fi.foyt.fni.rest.material.model.MaterialShareGroup createRestModel(fi.foyt.fni.persistence.model.materials.MaterialShareGroup entity) {
+    return new fi.foyt.fni.rest.material.model.MaterialShareGroup(entity.getId(), entity.getUserGroup().getId(), entity.getRole());
   }
   
-  private List<fi.foyt.fni.rest.material.model.MaterialShareUserGroup> createRestModel(fi.foyt.fni.persistence.model.materials.MaterialShareGroup... entities) {
-    List<fi.foyt.fni.rest.material.model.MaterialShareUserGroup> result = new ArrayList<>();
+  private List<fi.foyt.fni.rest.material.model.MaterialShareGroup> createRestModel(fi.foyt.fni.persistence.model.materials.MaterialShareGroup... entities) {
+    List<fi.foyt.fni.rest.material.model.MaterialShareGroup> result = new ArrayList<>();
     
     for (fi.foyt.fni.persistence.model.materials.MaterialShareGroup entity : entities) {
       result.add(createRestModel(entity));
