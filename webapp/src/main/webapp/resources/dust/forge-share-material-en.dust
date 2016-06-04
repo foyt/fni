@@ -9,43 +9,42 @@
       
       <h4>Publicity</h4>
       <p class="publish-info">Please make sure that you have a permission to publish the material. You can read more information about publishing from <a target="_blank" href="{publishGuideLink}">this</a> -document</p>
-      
       <div class="forge-share-material-publicity-field">
-        {@if cond="'{publicity}'=='PRIVATE'"}
+        {@eq key=publicity value="PRIVATE"}
           <input type="radio" name="publicity" value="PRIVATE" checked="checked"/>
         {:else}
           <input type="radio" name="publicity" value="PRIVATE"/>
-        {/if}
-        <label>Private</label>
+        {/eq}
+        <label>Yksityinen</label>
       </div>
   
       <div class="forge-share-material-publicity-field">
-        {@if cond="'{publicity}'=='LINK'"}
+        {@eq key=publicity value="LINK"}
           <input type="radio" name="publicity" value="LINK" checked="checked"/>
         {:else}
           <input type="radio" name="publicity" value="LINK"/>
-        {/if}
+        {/eq}
         <label>Public with link</label>
       </div>
   
-      {@if cond="{publishable}"}
+      {?publishable}
         <div class="forge-share-material-publicity-field">
-          {@if cond="'{publicity}'=='PUBLIC'"}
+          {@eq key=publicity value="PUBLIC"}
             <input type="radio" name="publicity" value="PUBLIC" checked="checked"/>
           {:else}
             <input type="radio" name="publicity" value="PUBLIC"/>
-          {/if}
+          {/eq}
           <label>Public</label>
         </div>
-      {/if}
+      {/publishable}
       
       <h4>Public URL</h4>
       <div class="forge-share-material-url">
-        {@if cond="'{publicity}'=='PRIVATE'"}
+        {@eq key=publicity value="PRIVATE"}
           <input type="text" readonly="readonly" value="{publicUrl}" disabled="disabled"/>
         {:else}
           <input type="text" readonly="readonly" value="{publicUrl}"/>
-        {/if}
+        {/eq}
       </div>
       
       <h4>License</h4>
@@ -66,22 +65,21 @@
     <div id="share">
       <h4>Collaborators</h4>
       <div class="forge-share-material-collaborators">
-      
         {#materialShareUsers}
           <div class="forge-share-material-collaborator" data-user-id="{userId}" data-original-id="{id}" data-original-role="{role}" data-type="USER">
             <span class="fa fa-user"></span>
             <label>{displayName}</label>
             <select name="role">
-              {@if cond="'{role}' == 'MAY_EDIT'"}
+              {@eq key=role value="MAY_EDIT"}
                 <option value="MAY_EDIT" selected="selected">May Edit</option>
               {:else}  
                 <option value="MAY_EDIT">May Edit</option>
-              {/if}
-              {@if cond="'{role}' == 'MAY_VIEW'"}
+              {/eq}
+              {@eq key=role value="MAY_VIEW"}
                 <option value="MAY_VIEW" selected="selected">May View</option>
               {:else}  
                 <option value="MAY_VIEW">May View</option>
-              {/if}
+              {/eq}
               <option value="NONE">None</option>
             </select>
           </div>
@@ -92,16 +90,16 @@
             <span class="fa fa-users"></span>
             <label>{displayName}</label>
             <select name="role">
-              {@if cond="'{role}' == 'MAY_EDIT'"}
+              {@eq key=role value="MAY_EDIT"}
                 <option value="MAY_EDIT" selected="selected">May Edit</option>
               {:else}  
                 <option value="MAY_EDIT">May Edit</option>
-              {/if}
-              {@if cond="'{role}' == 'MAY_VIEW'"}
+              {/eq}
+              {@eq key=role value="MAY_VIEW"}
                 <option value="MAY_VIEW" selected="selected">May View</option>
               {:else}  
                 <option value="MAY_VIEW">May View</option>
-              {/if}
+              {/eq}
               <option value="NONE">None</option>
             </select>
           </div>
