@@ -95,6 +95,8 @@
     _create: function () {
       this._load($.proxy(function (data, html) {
         this._dialog = $(html);
+        this._dialog.find('.tabs').tabs();
+        
         var createRoleSelect = $.proxy(function () {
           var roles = {
             'MAY_EDIT': $(this._dialog).data('role-may-edit'),

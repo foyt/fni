@@ -1,113 +1,119 @@
-<div title="Materiaalin jakaminen" data-save-button="Tallenna" data-cancel-button="Peruuta" data-role-may-edit="Saa muokata" data-role-may-view="Saa katsella" data-role-none="Ei oikeutta">
-  <div class="forge-share-material-dialog">
-    <p>Voit määrittää ketkä näkevät materiaalin säätämällä sen julkisuutta ja lisätä käyttäjiä muokkaajiksi tai katselijoiksi muokkaajat osiosta.</p>
-    
-    <h4>Julkisuus</h4>
-    <p class="publish-info">Varmistathan, että sinulla on materiaalin julkaisuun. Lisää tietoja julkaisemisesta voit lukea <a target="_blank" href="{publishGuideLink}">tästä</a> -dokumentista</p>
-    
-    <div class="forge-share-material-publicity-field">
-      {@if cond="'{publicity}'=='PRIVATE'"}
-        <input type="radio" name="publicity" value="PRIVATE" checked="checked"/>
-      {:else}
-        <input type="radio" name="publicity" value="PRIVATE"/>
-      {/if}
-      <label>Yksityinen</label>
-    </div>
-
-    <div class="forge-share-material-publicity-field">
-      {@if cond="'{publicity}'=='LINK'"}
-        <input type="radio" name="publicity" value="LINK" checked="checked"/>
-      {:else}
-        <input type="radio" name="publicity" value="LINK"/>
-      {/if}
-      <label>Julkinen linkillä</label>
-    </div>
-
-    {@if cond="{publishable}"}
-      <div class="forge-share-material-publicity-field">
-        {@if cond="'{publicity}'=='PUBLIC'"}
-          <input type="radio" name="publicity" value="PUBLIC" checked="checked"/>
-        {:else}
-          <input type="radio" name="publicity" value="PUBLIC"/>
-        {/if}
-        <label>Julkinen</label>
-      </div>
-    {/if}
-    
-    <h4>Julkinen URL</h4>
-    <div class="forge-share-material-url">
-      {@if cond="'{publicity}'=='PRIVATE'"}
-        <input type="text" readonly="readonly" value="{publicUrl}" disabled="disabled"/>
-      {:else}
-        <input type="text" readonly="readonly" value="{publicUrl}"/>
-      {/if}
-    </div>
-    
-    <h4>Lisenssi</h4>
-    <div class="forge-share-material-license">
-      <input type="url" value="{license}" name="license"/>
-    </div>
-    
-    <h4>Tagit</h4>
-    <div class="forge-share-material-tags">
-      <input type="text" value="{tags}"/>
-    </div>
-    
-    <h4>Kuvaus</h4>
-    <div class="forge-share-material-description">
-      <textarea>{description}</textarea>
-    </div>
-    
-    <h4>Muokkaajat</h4>
-    <div class="forge-share-material-collaborators">
-    
-      {#materialShareUsers}
-        <div class="forge-share-material-collaborator" data-user-id="{userId}" data-original-id="{id}" data-original-role="{role}" data-type="USER">
-          <span class="fa fa-user"></span>
-          <label>{displayName}</label>
-          <select name="role">
-            {@if cond="'{role}' == 'MAY_EDIT'"}
-              <option value="MAY_EDIT" selected="selected">Saa Muokata</option>
-            {:else}  
-              <option value="MAY_EDIT">Saa Muokata</option>
-            {/if}
-            {@if cond="'{role}' == 'MAY_VIEW'"}
-              <option value="MAY_VIEW" selected="selected">Saa Katsella</option>
-            {:else}  
-              <option value="MAY_VIEW">Saa Katsella</option>
-            {/if}
-            <option value="NONE">Ei oikeutta</option>
-          </select>
-        </div>
-      {/materialShareUsers}
+<div class="forge-share-material-dialog" title="Materiaalin jakaminen" data-save-button="Tallenna" data-cancel-button="Peruuta" data-role-may-edit="Saa muokata" data-role-may-view="Saa katsella" data-role-none="Ei oikeutta">
+  <div class="tabs">
+    <ul>
+      <li><a href="#publish">Julkaisu</a></li>
+      <li><a href="#share">Jakaminen</a></li>
+    </ul>
+    <div id="publish">
+      <p>Voit määrittää ketkä näkevät materiaalin säätämällä sen julkisuutta ja lisätä käyttäjiä muokkaajiksi tai katselijoiksi muokkaajat osiosta.</p>
       
-      {#materialShareGroups}
-        <div class="forge-share-material-collaborator" data-user-group-id="{userGroupId}" data-original-id="{id}" data-original-role="{role}" data-type="GROUP">
-          <span class="fa fa-users"></span>
-          <label>{displayName}</label>
-          <select name="role">
-            {@if cond="'{role}' == 'MAY_EDIT'"}
-              <option value="MAY_EDIT" selected="selected">Saa Muokata</option>
-            {:else}  
-              <option value="MAY_EDIT">Saa Muokata</option>
-            {/if}
-            {@if cond="'{role}' == 'MAY_VIEW'"}
-              <option value="MAY_VIEW" selected="selected">Saa Katsella</option>
-            {:else}  
-              <option value="MAY_VIEW">Saa Katsella</option>
-            {/if}
-            <option value="NONE">Ei oikeutta</option>
-          </select>
+      <h4>Julkisuus</h4>
+      <p class="publish-info">Varmistathan, että sinulla on materiaalin julkaisuun. Lisää tietoja julkaisemisesta voit lukea <a target="_blank" href="{publishGuideLink}">tästä</a> -dokumentista</p>
+      
+      <div class="forge-share-material-publicity-field">
+        {@if cond="'{publicity}'=='PRIVATE'"}
+          <input type="radio" name="publicity" value="PRIVATE" checked="checked"/>
+        {:else}
+          <input type="radio" name="publicity" value="PRIVATE"/>
+        {/if}
+        <label>Yksityinen</label>
+      </div>
+  
+      <div class="forge-share-material-publicity-field">
+        {@if cond="'{publicity}'=='LINK'"}
+          <input type="radio" name="publicity" value="LINK" checked="checked"/>
+        {:else}
+          <input type="radio" name="publicity" value="LINK"/>
+        {/if}
+        <label>Julkinen linkillä</label>
+      </div>
+  
+      {@if cond="{publishable}"}
+        <div class="forge-share-material-publicity-field">
+          {@if cond="'{publicity}'=='PUBLIC'"}
+            <input type="radio" name="publicity" value="PUBLIC" checked="checked"/>
+          {:else}
+            <input type="radio" name="publicity" value="PUBLIC"/>
+          {/if}
+          <label>Julkinen</label>
         </div>
-      {/materialShareGroups}
+      {/if}
+      
+      <h4>Julkinen URL</h4>
+      <div class="forge-share-material-url">
+        {@if cond="'{publicity}'=='PRIVATE'"}
+          <input type="text" readonly="readonly" value="{publicUrl}" disabled="disabled"/>
+        {:else}
+          <input type="text" readonly="readonly" value="{publicUrl}"/>
+        {/if}
+      </div>
+      
+      <h4>Lisenssi</h4>
+      <div class="forge-share-material-license">
+        <input type="url" value="{license}" name="license"/>
+      </div>
+      
+      <h4>Tagit</h4>
+      <div class="forge-share-material-tags">
+        <input type="text" value="{tags}"/>
+      </div>
+      
+      <h4>Kuvaus</h4>
+      <div class="forge-share-material-description">
+        <textarea>{description}</textarea>
+      </div>
     </div>
-    
-    <h4>Lisää muokkaajia</h4>
-    
-    <div class="forge-share-material-invite">
-      <p>Kirjoita kutsuttavan käyttäjän nimi kenttään ja valitse hänet alaspudotusvalikosta</p>
-      <input type="text"/>
+    <div>  
+      <h4>Muokkaajat</h4>
+      <div class="forge-share-material-collaborators">
+      
+        {#materialShareUsers}
+          <div class="forge-share-material-collaborator" data-user-id="{userId}" data-original-id="{id}" data-original-role="{role}" data-type="USER">
+            <span class="fa fa-user"></span>
+            <label>{displayName}</label>
+            <select name="role">
+              {@if cond="'{role}' == 'MAY_EDIT'"}
+                <option value="MAY_EDIT" selected="selected">Saa Muokata</option>
+              {:else}  
+                <option value="MAY_EDIT">Saa Muokata</option>
+              {/if}
+              {@if cond="'{role}' == 'MAY_VIEW'"}
+                <option value="MAY_VIEW" selected="selected">Saa Katsella</option>
+              {:else}  
+                <option value="MAY_VIEW">Saa Katsella</option>
+              {/if}
+              <option value="NONE">Ei oikeutta</option>
+            </select>
+          </div>
+        {/materialShareUsers}
+        
+        {#materialShareGroups}
+          <div class="forge-share-material-collaborator" data-user-group-id="{userGroupId}" data-original-id="{id}" data-original-role="{role}" data-type="GROUP">
+            <span class="fa fa-users"></span>
+            <label>{displayName}</label>
+            <select name="role">
+              {@if cond="'{role}' == 'MAY_EDIT'"}
+                <option value="MAY_EDIT" selected="selected">Saa Muokata</option>
+              {:else}  
+                <option value="MAY_EDIT">Saa Muokata</option>
+              {/if}
+              {@if cond="'{role}' == 'MAY_VIEW'"}
+                <option value="MAY_VIEW" selected="selected">Saa Katsella</option>
+              {:else}  
+                <option value="MAY_VIEW">Saa Katsella</option>
+              {/if}
+              <option value="NONE">Ei oikeutta</option>
+            </select>
+          </div>
+        {/materialShareGroups}
+      </div>
+      
+      <h4>Lisää muokkaajia</h4>
+      
+      <div class="forge-share-material-invite">
+        <p>Kirjoita kutsuttavan käyttäjän nimi kenttään ja valitse hänet alaspudotusvalikosta</p>
+        <input type="text"/>
+      </div>
     </div>
-    
   </div>
 </div>

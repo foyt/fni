@@ -24,6 +24,12 @@
 }
 
 .forge-share-material-dialog {
+  
+  &.ui-dialog-content {
+    padding-top: 3px;
+    padding-left: 1px;
+    padding-right: 1px;
+  }
    
    p {
     font-style: italic;
