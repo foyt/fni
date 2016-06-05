@@ -1,0 +1,1 @@
+delete from IllusionEventParticipant where event_id between 2 and 4;

@@ -287,23 +287,52 @@ public class IllusionRestServices {
     allowNotLogged = true,
     scopes = { OAuthScopes.ILLUSION_LIST_EVENTS }
   )
-  public Response listEvents(@QueryParam ("minTime") DateTimeParameter minTime, @QueryParam ("maxTime") DateTimeParameter maxTime) {
+  public Response listEvents(
+      @QueryParam ("minTime") DateTimeParameter minTime, 
+      @QueryParam ("maxTime") DateTimeParameter maxTime,
+      @QueryParam ("organizer") Long[] organizerIds) {
+    
     List<IllusionEvent> events = null;
+    List<User> organizers = null;
+    
+    if ((organizerIds != null) && (organizerIds.length > 0)) {
+      organizers = new ArrayList<>(organizerIds.length);
+      for (Long organizerId : organizerIds) {
+        User organizer = userController.findUserById(organizerId);
+        if ((organizer == null) || (organizer.getArchived())) {
+          return Response.status(Status.BAD_REQUEST).entity(String.format("Invalid organizer id %d", organizerId)).build();
+        }
+        
+        organizers.add(organizer);
+      }
+    }
     
     if ((minTime != null) && (maxTime != null)) {
       if ((minTime == null) || (minTime == null)) {
         return Response.status(Status.BAD_REQUEST).build();
       }
       
-      events = illusionEventController.listEventsBetween(minTime.getDateTime().toDate(), maxTime.getDateTime().toDate(), Boolean.TRUE);
+      List<IllusionEvent> timeFrameEvents = illusionEventController.listPublishedEventsBetween(minTime.getDateTime().toDate(), maxTime.getDateTime().toDate(), Boolean.TRUE);
+      
+      if (organizers != null) {
+        events = new ArrayList<>(timeFrameEvents.size());
+        
+        for (IllusionEvent timeFrameEvent : timeFrameEvents) {
+          if (illusionEventController.isOneInRole(timeFrameEvent, organizers, IllusionEventParticipantRole.ORGANIZER)) {
+            events.add(timeFrameEvent);
+          }
+        }
+      } else {
+        events = timeFrameEvents;
+      }
     } else {
-      events = illusionEventController.listPublishedEvents();
+      if (organizers != null) {
+        events = illusionEventController.listPublishedEventsByUsersAndRole(organizers, IllusionEventParticipantRole.ORGANIZER);
+      } else {
+        events = illusionEventController.listPublishedEvents();
+      }
     }
      
-    if (events.isEmpty()) {
-      return Response.status(Status.NO_CONTENT).build();
-    }
-    
     return Response.ok(createRestModel(events))
         .build();
   }
@@ -770,11 +799,55 @@ public class IllusionRestServices {
     }
     
     List<fi.foyt.fni.persistence.model.illusion.IllusionEventGroup> groups = illusionEventController.listGroups(event);
-    if (groups.isEmpty()) {
-      return Response.noContent().build();
-    }
-
+    
     return Response.ok(createRestModel(groups.toArray(new fi.foyt.fni.persistence.model.illusion.IllusionEventGroup[0]))).build();
+  }
+  
+  /**
+   * Returns an event group
+   * 
+   * @param eventId event id 
+   * @param groupId group id 
+   * @return Response
+   * @responseType fi.foyt.fni.rest.illusion.model.IllusionEventGroup
+   */
+  @Path("/events/{EVENTID:[0-9]*}/groups/{ID:[0-9]*}")
+  @GET
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_GROUP_LIST }
+  )
+  public Response findEventGroup(@PathParam ("EVENTID") Long eventId, @PathParam ("ID") Long groupId) {
+    IllusionEvent event = illusionEventController.findIllusionEventById(eventId);
+    if (event == null) {
+      return Response.status(Status.NOT_FOUND).build(); 
+    }
+    
+    if (!sessionController.isLoggedIn()) {
+      if (accessToken == null) {
+        return Response.status(Status.UNAUTHORIZED).build();
+      }
+      
+      if (accessToken.getClient().getType() != OAuthClientType.SERVICE) {
+        return Response.status(Status.FORBIDDEN).entity(String.format("Invalid client type %s", accessToken.getClient().getType().toString())).build();
+      }
+    } else {
+      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
+      if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) { 
+        return Response.status(Status.FORBIDDEN).build();
+      }
+    }
+    
+    fi.foyt.fni.persistence.model.illusion.IllusionEventGroup group = illusionEventController.findGroupById(groupId);
+    if (group == null) {
+      return Response.status(Status.NOT_FOUND).entity(String.format("Group %d not found", groupId)).build();
+    }
+    
+    if (group.getEvent().equals(eventId)) {
+      return Response.status(Status.NOT_FOUND).entity(String.format("Group %d does not belong to event %d", groupId, eventId)).build();
+    }
+    
+    return Response.ok(createRestModel(group)).build();
   }
   
   /**
@@ -803,6 +876,8 @@ public class IllusionRestServices {
       return Response.status(Status.NOT_FOUND).build(); 
     }
     
+    User user = null;
+    
     if (!sessionController.isLoggedIn()) {
       if (accessToken == null) {
         return Response.status(Status.UNAUTHORIZED).build();
@@ -811,14 +886,17 @@ public class IllusionRestServices {
       if (accessToken.getClient().getType() != OAuthClientType.SERVICE) {
         return Response.status(Status.FORBIDDEN).entity(String.format("Invalid client type %s", accessToken.getClient().getType().toString())).build();
       }
+      
+      user = accessToken.getClient().getServiceUser();
     } else {
-      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
+      user = sessionController.getLoggedUser();
+      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
       if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) { 
         return Response.status(Status.FORBIDDEN).build();
       }
     }
 
-    return Response.ok(createRestModel(illusionEventController.createGroup(event, name))).build();
+    return Response.ok(createRestModel(illusionEventController.createGroup(event, name, user))).build();
   }
   
   /**

@@ -8,6 +8,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
+import org.hibernate.jpa.criteria.compile.CriteriaQueryTypeQueryAdapter;
+
 public class GenericDAO<T> implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -78,6 +80,10 @@ public class GenericDAO<T> implements Serializable {
   	return entity;
   }
 
+  protected String getQueryHQL(Query query) {
+    return ((CriteriaQueryTypeQueryAdapter<?>) query).getHibernateQuery().getQueryString();
+  }
+  
   @javax.persistence.PersistenceContext
   private EntityManager entityManager;
 }

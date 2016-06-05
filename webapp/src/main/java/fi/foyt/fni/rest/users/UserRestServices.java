@@ -1,5 +1,6 @@
 package fi.foyt.fni.rest.users;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -33,14 +35,18 @@ import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.auth.InternalAuth;
+import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
+import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.persistence.model.users.UserProfileImageSource;
 import fi.foyt.fni.rest.Security;
 import fi.foyt.fni.rest.illusion.OAuthScopes;
+import fi.foyt.fni.rest.users.model.UserGroup;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
+import fi.foyt.fni.users.UserGroupController;
 import fi.foyt.fni.utils.search.SearchResult;
 
 /**
@@ -63,6 +69,9 @@ public class UserRestServices {
   private UserController userController;
 
   @Inject
+  private UserGroupController userGroupController;
+
+  @Inject
   private SystemSettingsController systemSettingsController;
 
   @Inject
@@ -70,6 +79,9 @@ public class UserRestServices {
 
   @Inject
   private Mailer mailer;
+  
+  @Context 
+  private OAuthAccessToken accessToken;
   
   /**
    * Creates new user
@@ -228,7 +240,47 @@ public class UserRestServices {
     User loggedUser = sessionController.getLoggedUser();
     return Response.ok(createRestModel(loggedUser)).build();
   }
-  
+
+  /**
+   * Returns an user group
+   * 
+   * @param eventId event id 
+   * @param groupId group id 
+   * @return Response
+   * @responseType fi.foyt.fni.rest.illusion.model.IllusionEventGroup
+   */
+  @Path("/groups/{ID:[0-9]*}")
+  @GET
+  @Security (
+    allowService = true,
+    scopes = { OAuthScopes.ILLUSION_GROUP_LIST }
+  )
+  public Response findEventGroup(@PathParam ("ID") Long groupId) {
+    if (!sessionController.isLoggedIn()) {
+      if (accessToken == null) {
+        return Response.status(Status.UNAUTHORIZED).build();
+      }
+      
+      if (accessToken.getClient().getType() != OAuthClientType.SERVICE) {
+        return Response.status(Status.FORBIDDEN).entity(String.format("Invalid client type %s", accessToken.getClient().getType().toString())).build();
+      }
+    }
+    
+    fi.foyt.fni.persistence.model.users.UserGroup group = userGroupController.findUserGroupById(groupId);
+    if (group == null) {
+      return Response.status(Status.NOT_FOUND).entity(String.format("Group %d not found", groupId)).build();
+    }
+    
+    if (group instanceof fi.foyt.fni.persistence.model.illusion.IllusionEventGroup) {
+      fi.foyt.fni.persistence.model.illusion.IllusionEventGroup illusionGroup = (fi.foyt.fni.persistence.model.illusion.IllusionEventGroup) group;
+      return Response
+        .temporaryRedirect(URI.create(String.format("/illusion/events/%d/groups/%d", illusionGroup.getEvent().getId(), illusionGroup.getId())))
+        .build();
+    } else {
+      return Response.ok(createRestModel(group)).build();
+    }
+  }
+
   private fi.foyt.fni.rest.users.model.User createRestModel(fi.foyt.fni.persistence.model.users.User user) {
     List<String> emails = userController.getUserEmails(user);
     return new fi.foyt.fni.rest.users.model.User(user.getId(), user.getFirstName(), user.getLastName(), user.getNickname(), user.getLocale(), emails);
@@ -242,6 +294,21 @@ public class UserRestServices {
     }
     
     return result.toArray(new fi.foyt.fni.rest.users.model.User[0]);
+  }
+
+  @SuppressWarnings("unused")
+  private List<UserGroup> createRestModel(fi.foyt.fni.persistence.model.users.UserGroup... userGroups) {
+    List<UserGroup> result = new ArrayList<>();
+    
+    for (fi.foyt.fni.persistence.model.users.UserGroup userGroup : userGroups) {
+      result.add(createRestModel(userGroup));
+    }
+    
+    return result;
+  }
+  
+  private UserGroup createRestModel(fi.foyt.fni.persistence.model.users.UserGroup group) {
+    return new UserGroup(group.getId(), group.getName());
   }
 
 }

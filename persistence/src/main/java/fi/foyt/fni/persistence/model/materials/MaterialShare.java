@@ -7,12 +7,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 
-import fi.foyt.fni.persistence.model.users.User;
-
 @Entity
-public class UserMaterialRole {
+@Inheritance (strategy = InheritanceType.JOINED)
+public class MaterialShare {
 
   public Long getId() {
     return id;
@@ -24,14 +25,6 @@ public class UserMaterialRole {
   
   public void setMaterial(Material material) {
     this.material = material;
-  }
-  
-  public User getUser() {
-    return user;
-  }
-  
-  public void setUser(User user) {
-    this.user = user;
   }
   
   public MaterialRole getRole() {
@@ -48,9 +41,6 @@ public class UserMaterialRole {
   
   @ManyToOne (optional = false)
   private Material material;
-  
-  @ManyToOne (optional = false)
-  private User user;
   
   @Column 
   @Enumerated (EnumType.STRING)
