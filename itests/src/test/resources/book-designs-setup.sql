@@ -13,8 +13,8 @@ INSERT INTO BookDesign (id, data, fonts, styles, pageTypes) VALUES
 insert into   
   MaterialShare (id, role, material_id)
 values 
-  (1001, 'MAY_EDIT', 123),
-  (1002, 'MAY_VIEW', 123);
+  (1001, 'MAY_VIEW', 123),
+  (1002, 'MAY_EDIT', 123);
     
 insert into   
   MaterialShareUser (id, user_id)
