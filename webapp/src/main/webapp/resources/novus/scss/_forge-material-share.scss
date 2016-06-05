@@ -6,12 +6,12 @@
   cursor: pointer;
   
   &.existing {
+    color: $autocomplete-disabled-color;
     cursor: default;
-    color: #ddd;
-    
+
     &.ui-state-focus {
-      border-color: transparent;
       background: none;
+      border-color: transparent;
     }
   }
 
@@ -24,11 +24,11 @@
 }
 
 .forge-share-material-dialog {
-  
+
   &.ui-dialog-content {
-    padding-top: 3px;
     padding-left: 1px;
     padding-right: 1px;
+    padding-top: 3px;
   }
    
    p {
@@ -92,7 +92,7 @@
     clear: both;
     margin-top: 4px;
     margin-bottom: 4px;
-    
+
     .fa {
       color: $default-color;
       margin-right: 5px;
