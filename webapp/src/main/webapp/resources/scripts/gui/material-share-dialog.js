@@ -119,6 +119,7 @@
           }, this),
           buttons: [{
             'text': this._dialog.attr('data-save-button'),
+            'class': 'save-button',
             'click': $.proxy(function(event) { 
               var operations = [];
               
@@ -181,6 +182,7 @@
             }, this)
           }, {
             'text': this._dialog.data('cancel-button'),
+            'class': 'cancel-button',
             'click': function(event) { 
               $(this).dialog("close");
             }

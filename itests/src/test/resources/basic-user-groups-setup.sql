@@ -1,8 +1,8 @@
 insert into
-  UserGroup (id, name) 
+  UserGroup (id, name, creator_id) 
 values  
-  (2001, 'Lowborn'),
-  (2002, 'Highborn');
+  (2001, 'Lowborn', 1),
+  (2002, 'Highborn', 1);
   
 insert into
   UserGroupMember (group_id, user_id) 
