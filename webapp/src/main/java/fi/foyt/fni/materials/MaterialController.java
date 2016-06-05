@@ -1409,11 +1409,19 @@ public class MaterialController {
   }
 
   public List<Material> listMaterialsByFolder(User user, Folder folder) {
-    return materialDAO.listByFolderAndShared(folder, user);
+    if (folder != null) {
+      return materialDAO.listByParentFolder(folder);
+    } else {
+      return materialDAO.listByParentFolderIsNullAndShared(user);
+    }
   }
   
   public List<Material> listMaterialsByFolderAndTypes(User user, Folder folder, Collection<MaterialType> types) {
-    return materialDAO.listByFolderAndSharedAndTypes(folder, user, types);
+    if (folder == null) {
+      return materialDAO.listByFolderIsNullAndSharedAndTypes(user, types);
+    } else {
+      return materialDAO.listByParentFolderAndTypes(folder, types);
+    }
   }
   
   public List<Material> listPublicMaterialsByCreatorAndTypes(User creator, List<MaterialType> types) {

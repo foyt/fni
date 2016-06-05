@@ -86,7 +86,11 @@ public class MaterialDAO extends GenericDAO<Material> {
   }
 
 	public List<Material> listByParentFolderAndTypes(Folder parentFolder, Collection<MaterialType> types) {
-		EntityManager entityManager = getEntityManager();
+	  if ((types == null) || (types.isEmpty())) {
+      return Collections.emptyList();
+    }
+    
+	  EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
     CriteriaQuery<Material> criteria = criteriaBuilder.createQuery(Material.class);
@@ -268,7 +272,7 @@ public class MaterialDAO extends GenericDAO<Material> {
     return entityManager.createQuery(criteria).getResultList();
   }
 
-  public List<Material> listByFolderAndShared(Folder parentFolder, User user) {
+  public List<Material> listByParentFolderIsNullAndShared(User user) {
     EntityManager entityManager = getEntityManager();
     
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -279,18 +283,18 @@ public class MaterialDAO extends GenericDAO<Material> {
     criteria.where(
       criteriaBuilder.or(
         criteriaBuilder.and(
-          parentFolder != null ? criteriaBuilder.equal(root.get(Material_.parentFolder), parentFolder) : criteriaBuilder.isNull(root.get(Material_.parentFolder)),
+          criteriaBuilder.isNull(root.get(Material_.parentFolder)),
           criteriaBuilder.equal(root.get(Material_.creator), user)
         ),
-        root.in(subqueryGroupShares(criteriaBuilder, criteria, parentFolder, user)),
-        root.in(subqueryUserShares(criteriaBuilder, criteria, parentFolder, user))
+        root.in(subqueryGroupShares(criteriaBuilder, criteria, user)),
+        root.in(subqueryUserShares(criteriaBuilder, criteria, user))
       )
     );
     
     return entityManager.createQuery(criteria).getResultList();
   }
 
-  private Subquery<Material> subqueryGroupShares(CriteriaBuilder criteriaBuilder, CriteriaQuery<Material> criteria, Folder parentFolder, User user) {
+  private Subquery<Material> subqueryGroupShares(CriteriaBuilder criteriaBuilder, CriteriaQuery<Material> criteria, User user) {
     Subquery<Material> subquery = criteria.subquery(Material.class);
     Root<MaterialShareGroup> groupRoot = subquery.from(MaterialShareGroup.class);
     Root<UserGroupMember> memberRoot = subquery.from(UserGroupMember.class);
@@ -302,14 +306,14 @@ public class MaterialDAO extends GenericDAO<Material> {
         criteriaBuilder.equal(memberRoot.get(UserGroupMember_.user), user),
         criteriaBuilder.equal(groupRoot.get(MaterialShareGroup_.userGroup), memberRoot.get(UserGroupMember_.group)),
         groupRoot.get(MaterialShareGroup_.role).in(MaterialRole.MAY_EDIT, MaterialRole.MAY_VIEW),
-        parentFolder != null ? criteriaBuilder.equal(materialJoin.get(Material_.parentFolder), parentFolder) : criteriaBuilder.isNull(materialJoin.get(Material_.parentFolder))
+        criteriaBuilder.isNull(materialJoin.get(Material_.parentFolder))
       )
     );
     
     return subquery;
   }
 
-  private Subquery<Material> subqueryUserShares(CriteriaBuilder criteriaBuilder, CriteriaQuery<Material> criteria, Folder parentFolder, User user) {
+  private Subquery<Material> subqueryUserShares(CriteriaBuilder criteriaBuilder, CriteriaQuery<Material> criteria, User user) {
     Subquery<Material> subquery = criteria.subquery(Material.class);
     Root<MaterialShareUser> userRoot = subquery.from(MaterialShareUser.class);
     Join<MaterialShareUser, Material> materialJoin = userRoot.join(MaterialShareUser_.material);
@@ -318,13 +322,13 @@ public class MaterialDAO extends GenericDAO<Material> {
     subquery.where(
       criteriaBuilder.equal(userRoot.get(MaterialShareUser_.user), user),
       userRoot.get(MaterialShareUser_.role).in(MaterialRole.MAY_EDIT, MaterialRole.MAY_VIEW),
-      parentFolder != null ? criteriaBuilder.equal(materialJoin.get(Material_.parentFolder), parentFolder) : criteriaBuilder.isNull(materialJoin.get(Material_.parentFolder))
+      criteriaBuilder.isNull(materialJoin.get(Material_.parentFolder))
     );
     
     return subquery;
   }
 
-  public List<Material> listByFolderAndSharedAndTypes(Folder parentFolder, User user, Collection<MaterialType> types) {
+  public List<Material> listByFolderIsNullAndSharedAndTypes(User user, Collection<MaterialType> types) {
     if (types == null || types.isEmpty()) {
       return Collections.emptyList();
     }
@@ -339,19 +343,19 @@ public class MaterialDAO extends GenericDAO<Material> {
     criteria.where(
       criteriaBuilder.or(
         criteriaBuilder.and(
-          parentFolder != null ? criteriaBuilder.equal(root.get(Material_.parentFolder), parentFolder) : criteriaBuilder.isNull(root.get(Material_.parentFolder)),
+          criteriaBuilder.isNull(root.get(Material_.parentFolder)),
           criteriaBuilder.equal(root.get(Material_.creator), user),
           root.get(Material_.type).in(types)
         ),
-        root.in(subqueryGroupSharesTypes(criteriaBuilder, criteria, parentFolder, user, types)),
-        root.in(subqueryUserSharesTypes(criteriaBuilder, criteria, parentFolder, user, types))
+        root.in(subqueryGroupSharesTypes(criteriaBuilder, criteria, user, types)),
+        root.in(subqueryUserSharesTypes(criteriaBuilder, criteria, user, types))
       )
     );
     
     return entityManager.createQuery(criteria).getResultList();
   }
 
-  private Subquery<Material> subqueryGroupSharesTypes(CriteriaBuilder criteriaBuilder, CriteriaQuery<Material> criteria, Folder parentFolder, User user, Collection<MaterialType> types) {
+  private Subquery<Material> subqueryGroupSharesTypes(CriteriaBuilder criteriaBuilder, CriteriaQuery<Material> criteria, User user, Collection<MaterialType> types) {
     Subquery<Material> subquery = criteria.subquery(Material.class);
     Root<MaterialShareGroup> groupRoot = subquery.from(MaterialShareGroup.class);
     Root<UserGroupMember> memberRoot = subquery.from(UserGroupMember.class);
@@ -363,7 +367,7 @@ public class MaterialDAO extends GenericDAO<Material> {
         criteriaBuilder.equal(memberRoot.get(UserGroupMember_.user), user),
         criteriaBuilder.equal(groupRoot.get(MaterialShareGroup_.userGroup), memberRoot.get(UserGroupMember_.group)),
         groupRoot.get(MaterialShareGroup_.role).in(MaterialRole.MAY_EDIT, MaterialRole.MAY_VIEW),
-        parentFolder != null ? criteriaBuilder.equal(materialJoin.get(Material_.parentFolder), parentFolder) : criteriaBuilder.isNull(materialJoin.get(Material_.parentFolder)),
+        criteriaBuilder.isNull(materialJoin.get(Material_.parentFolder)),
         materialJoin.get(Material_.type).in(types)
       )
     );
@@ -371,7 +375,7 @@ public class MaterialDAO extends GenericDAO<Material> {
     return subquery;
   }
 
-  private Subquery<Material> subqueryUserSharesTypes(CriteriaBuilder criteriaBuilder, CriteriaQuery<Material> criteria, Folder parentFolder, User user, Collection<MaterialType> types) {
+  private Subquery<Material> subqueryUserSharesTypes(CriteriaBuilder criteriaBuilder, CriteriaQuery<Material> criteria, User user, Collection<MaterialType> types) {
     Subquery<Material> subquery = criteria.subquery(Material.class);
     Root<MaterialShareUser> userRoot = subquery.from(MaterialShareUser.class);
     Join<MaterialShareUser, Material> materialJoin = userRoot.join(MaterialShareUser_.material);
@@ -380,7 +384,7 @@ public class MaterialDAO extends GenericDAO<Material> {
     subquery.where(
       criteriaBuilder.equal(userRoot.get(MaterialShareUser_.user), user),
       userRoot.get(MaterialShareUser_.role).in(MaterialRole.MAY_EDIT, MaterialRole.MAY_VIEW),
-      parentFolder != null ? criteriaBuilder.equal(materialJoin.get(Material_.parentFolder), parentFolder) : criteriaBuilder.isNull(materialJoin.get(Material_.parentFolder)),
+      criteriaBuilder.isNull(materialJoin.get(Material_.parentFolder)),
       materialJoin.get(Material_.type).in(types)
     );
     
