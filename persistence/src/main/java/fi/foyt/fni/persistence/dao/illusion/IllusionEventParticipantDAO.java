@@ -1,5 +1,6 @@
 package fi.foyt.fni.persistence.dao.illusion;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -115,7 +116,11 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
     return entityManager.createQuery(criteria).getResultList();
   }
 
-  public List<IllusionEvent> listIllusionEventsByUserAndRole(User user, IllusionEventParticipantRole role, Boolean published) {
+  public List<IllusionEvent> listIllusionEventsByUsersAndRole(List<User> users, IllusionEventParticipantRole role, Boolean published) {
+    if ((users == null) || (users.isEmpty())) {
+      return Collections.emptyList();
+    }
+    
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -126,7 +131,7 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
     criteria.select(root.get(IllusionEventParticipant_.event));
     criteria.where(
       criteriaBuilder.and(
-        criteriaBuilder.equal(root.get(IllusionEventParticipant_.user), user),
+        root.get(IllusionEventParticipant_.user).in(users),
         criteriaBuilder.equal(root.get(IllusionEventParticipant_.role), role),
         criteriaBuilder.equal(eventJoin.get(IllusionEvent_.published), published)
       )
@@ -151,6 +156,31 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
 
     return entityManager.createQuery(criteria).getSingleResult();
   }
+  
+  public Long countByEventAndRoleAndUsers(IllusionEvent event, IllusionEventParticipantRole role,
+      List<User> users) {
+    
+    if ((users == null) || (users.isEmpty())) {
+      return 0l;
+    }
+    
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Long> criteria = criteriaBuilder.createQuery(Long.class);
+    Root<IllusionEventParticipant> root = criteria.from(IllusionEventParticipant.class);
+    criteria.select(criteriaBuilder.count(root));
+    criteria.where(
+      criteriaBuilder.and(
+          root.get(IllusionEventParticipant_.user).in(users),
+          criteriaBuilder.equal(root.get(IllusionEventParticipant_.event), event),
+        criteriaBuilder.equal(root.get(IllusionEventParticipant_.role), role)
+      )
+    );
+
+    return entityManager.createQuery(criteria).getSingleResult();
+  }
+
 
 	public IllusionEventParticipant updateRole(IllusionEventParticipant illusionEventParticipant, IllusionEventParticipantRole role) {
 		illusionEventParticipant.setRole(role);

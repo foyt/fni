@@ -1,6 +1,35 @@
+@import "//static.forgeandillusion.net/libs/font-awesome/4.6.3/css/font-awesome.min.css";
+
 /* Share dialog */
 
+.ui-menu-item {
+  cursor: pointer;
+  
+  &.existing {
+    cursor: default;
+    color: #ddd;
+    
+    &.ui-state-focus {
+      border-color: transparent;
+      background: none;
+    }
+  }
+
+  .fa {
+    color: $default-color;
+    margin-right: 5px;
+    text-align: center;
+    width: 15px;
+  }
+}
+
 .forge-share-material-dialog {
+  
+  &.ui-dialog-content {
+    padding-top: 3px;
+    padding-left: 1px;
+    padding-right: 1px;
+  }
    
    p {
     font-style: italic;
@@ -63,6 +92,13 @@
     clear: both;
     margin-top: 4px;
     margin-bottom: 4px;
+    
+    .fa {
+      color: $default-color;
+      margin-right: 5px;
+      text-align: center;
+      width: 15px;
+    }
   }
   
   .forge-share-material-collaborator label {

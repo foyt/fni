@@ -1,6 +1,7 @@
 delete from CoOpsSession where material_id in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22);
 update Material set parentFolder_id = null where parentFolder_id in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22);
-delete from UserMaterialRole where material_id in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22);
+delete from MaterialShareUser where id in (select id from MaterialShare where material_id between 1 and 22);
+delete from MaterialShare where material_id between 1 and 22;
 delete from Folder where id in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22);
 update MaterialRevision set checksum = 'DELETE' where id in (select id from DocumentRevision where document_id in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22));
 delete from DocumentRevision where document_id in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22);

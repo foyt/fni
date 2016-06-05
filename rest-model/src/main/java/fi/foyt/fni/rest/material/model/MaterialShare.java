@@ -2,15 +2,14 @@ package fi.foyt.fni.rest.material.model;
 
 import fi.foyt.fni.persistence.model.materials.MaterialRole;
 
-public class MaterialUser {
+public abstract class MaterialShare {
 
-  public MaterialUser() {
+  public MaterialShare() {
   }
 
-  public MaterialUser(Long id, Long userId, MaterialRole role) {
+  public MaterialShare(Long id, MaterialRole role) {
     super();
     this.id = id;
-    this.userId = userId;
     this.role = role;
   }
 
@@ -30,15 +29,6 @@ public class MaterialUser {
     this.role = role;
   }
 
-  public Long getUserId() {
-    return userId;
-  }
-
-  public void setUserId(Long userId) {
-    this.userId = userId;
-  }
-
   private Long id;
-  private Long userId;
   private MaterialRole role;
 }

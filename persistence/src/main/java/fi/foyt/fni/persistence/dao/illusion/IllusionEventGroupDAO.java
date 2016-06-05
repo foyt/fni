@@ -11,18 +11,20 @@ import fi.foyt.fni.persistence.dao.GenericDAO;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventGroup;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventGroup_;
+import fi.foyt.fni.persistence.model.users.User;
 
 public class IllusionEventGroupDAO extends GenericDAO<IllusionEventGroup> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IllusionEventGroup create(IllusionEvent event, String name) {
-	  IllusionEventGroup illusionEventParticipantGroup  = new IllusionEventGroup();
+	public IllusionEventGroup create(IllusionEvent event, String name, User creator) {
+	  IllusionEventGroup illusionEventGroup  = new IllusionEventGroup();
 
-    illusionEventParticipantGroup.setEvent(event);
-    illusionEventParticipantGroup.setName(name);
+    illusionEventGroup.setEvent(event);
+    illusionEventGroup.setName(name);
+    illusionEventGroup.setCreator(creator);
     
-		return persist(illusionEventParticipantGroup);
+		return persist(illusionEventGroup);
 	}
 
   public List<IllusionEventGroup> listByEvent(IllusionEvent event) {
