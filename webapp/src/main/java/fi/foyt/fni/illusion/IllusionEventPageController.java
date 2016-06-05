@@ -8,7 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
@@ -26,7 +25,6 @@ import fi.foyt.fni.persistence.model.materials.IllusionEventFolder;
 import fi.foyt.fni.session.SessionController;
 
 @Dependent
-@Stateless
 public class IllusionEventPageController {
 
   @Inject
@@ -102,7 +100,7 @@ public class IllusionEventPageController {
     return result;
   }
   
-  public synchronized IllusionEventPageVisibility getPageVisibility(IllusionEvent illusionEvent, String pageId) {
+  public IllusionEventPageVisibility getPageVisibility(IllusionEvent illusionEvent, String pageId) {
     IllusionEventPageVisibility visibility = getPageSetting(illusionEvent, pageId).getVisibility();
     if (visibility != null) {
       return visibility;
@@ -116,13 +114,13 @@ public class IllusionEventPageController {
     return IllusionEventPageVisibility.HIDDEN;
   }
   
-  public synchronized void setPageVisibility(IllusionEvent illusionEvent, String pageId, IllusionEventPageVisibility visibility) {
+  public void setPageVisibility(IllusionEvent illusionEvent, String pageId, IllusionEventPageVisibility visibility) {
     PageSetting pageSetting = getPageSetting(illusionEvent, pageId);
     pageSetting.setVisibility(visibility);
     updatePageSetting(illusionEvent, pageId, pageSetting);
   }
 
-  private synchronized PageSettings getPageSettings(IllusionEvent illusionEvent) {
+  private PageSettings getPageSettings(IllusionEvent illusionEvent) {
     if (eventPageSettings.containsKey(illusionEvent.getId())) {
       return eventPageSettings.get(illusionEvent.getId());
     }
@@ -149,7 +147,7 @@ public class IllusionEventPageController {
     return pageSettings;
   }
 
-  private synchronized PageSetting getPageSetting(IllusionEvent illusionEvent, String pageId) {
+  private PageSetting getPageSetting(IllusionEvent illusionEvent, String pageId) {
     PageSettings pageSettings = getPageSettings(illusionEvent);
     if (!pageSettings.containsKey(pageId)) {
       return new PageSetting();
@@ -158,7 +156,7 @@ public class IllusionEventPageController {
     return pageSettings.get(pageId);
   }
   
-  private synchronized void updatePageSetting(IllusionEvent illusionEvent, String pageId, PageSetting pageSetting) {
+  private void updatePageSetting(IllusionEvent illusionEvent, String pageId, PageSetting pageSetting) {
     PageSettings pageSettings = getPageSettings(illusionEvent);
     pageSettings.put(pageId, pageSetting); 
     
