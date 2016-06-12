@@ -1,8 +1,6 @@
 package fi.foyt.fni.view.illusion;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +17,6 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 import de.neuland.jade4j.exceptions.JadeException;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPageController;
-import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.jade.JadeController;
 import fi.foyt.fni.jsf.NavigationController;
@@ -33,7 +30,6 @@ import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
-import fi.foyt.fni.system.SystemSettingsController;
 
 @RequestScoped
 @Named
@@ -68,10 +64,7 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
 
   @Inject
   private JadeController jadeController;
-
-  @Inject
-  private SystemSettingsController systemSettingsController;
-
+  
   @Inject
   private NavigationController navigationController;
   
@@ -100,39 +93,18 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
       if (!illusionEvent.getPublished()) {
         return navigationController.accessDenied();
       }
-
-      IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, document.getId().toString());
-      if (visibility != IllusionEventPageVisibility.VISIBLE) {
-        if (visibility == IllusionEventPageVisibility.HIDDEN) {
-          return navigationController.accessDenied();
-        }
-        
-        if (visibility == IllusionEventPageVisibility.PARTICIPANTS) {
-          if (!sessionController.isLoggedIn()) {
-            String redirectUrl = String.format("%s/illusion/event/%s/pages/%s", systemSettingsController.getSiteContextPath(), getUrlName(), getMaterialPath());
-            try {
-              return "/users/login.jsf?faces-redirect=true&redirectUrl=" + URLEncoder.encode(redirectUrl, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-              return navigationController.internalError();
-            }
-          }
-          
-          if (participant == null) {
-            return navigationController.accessDenied();
-          }
-          
-          if (participant.getRole() == IllusionEventParticipantRole.INVITED) {
-            illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
-          } else {
-            if ((participant.getRole() != IllusionEventParticipantRole.PARTICIPANT) && (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
-              return navigationController.accessDenied();
-            }
-          }
-        }
-      }
     }
 
-    illusionEventNavigationController.setSelectedPage(material.getId().toString());
+    if ((participant != null) && (participant.getRole() == IllusionEventParticipantRole.INVITED)) {
+      illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
+    }
+
+    String pageId = document.getId().toString();
+    if (!illusionEventPageController.isPageVisible(participant, illusionEvent, pageId)) {
+      return navigationController.requireLogin(navigationController.accessDenied());
+    }
+    
+    illusionEventNavigationController.setSelectedPage(pageId);
     pageTitle = material.getTitle();
     
     IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, material.getId().toString())

@@ -13,6 +13,10 @@
   </ui:define>
   
   <ui:define name="view-scripts">
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/jquery.rest/1.0.2/jquery.rest.min.js"></script>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/async/1.5.2/async.min.js"></script>
+    <script type="text/javascript" src="//static.forgeandillusion.net/libs/lodash/4.12.0/lodash.min.js"/>
+    
     <h:outputScript name="scripts/gui/illusion-manage-pages.js"/>
     <h:outputScript name="scripts/gui/illusion-common.js"></h:outputScript>
   </ui:define>
@@ -82,6 +86,7 @@
                 <h:commandButton styleClass="illusion-event-manage-pages-new-page" value="#{locales['illusion.managePages.newPage']}" action="#{illusionEventManagePagesBackingBean.newPage}" />
                 <input type="hidden" class="jsfActionPageId" jsf:value="#{illusionEventManagePagesBackingBean.pageId}"/>
                 <input type="hidden" class="jsfActionPageVisibility" jsf:value="#{illusionEventManagePagesBackingBean.pageVisibility}"/>
+                <input type="hidden" class="jsfActionGroupIds" jsf:value="#{illusionEventManagePagesBackingBean.groupIds}" jsf:converter="fi.foyt.fni.jsf.LongListConverter"/>
                 <h:commandLink styleClass="jsfActionChangeVisibility" action="#{illusionEventManagePagesBackingBean.changePageVisibility()}" />
               </h:form>
             </div>
@@ -106,7 +111,7 @@
                     <a class="illusion-remove-page" href="javascript:void(null)" data-event-id="#{illusionEventManagePagesBackingBean.id}" data-page-id="#{page.id}" data-page-title="#{page.title}">#{locales['illusion.managePages.deletePage']}</a>
                   </ui:fragment>
                   <ui:fragment rendered="#{page.visibilityChangeable}">
-                    <a class="illusion-change-visibility" href="javascript:void(null)" data-page-id="#{page.id}" data-page-title="#{page.title}" data-page-visibility="#{page.visibility}" data-page-requires-user="#{page.requiresUser}">#{locales['illusion.managePages.changeVisibility']}</a>
+                    <a class="illusion-change-visibility" href="javascript:void(null)" data-page-id="#{page.id}" data-page-title="#{page.title}" data-page-visibility="#{page.visibility}" data-page-requires-user="#{page.requiresUser}" data-group-ids="#{page.groupIds}">#{locales['illusion.managePages.changeVisibility']}</a>
                   </ui:fragment>
                 </div>
               </div>
@@ -114,6 +119,8 @@
                 <h:outputText rendered="#{page.visibility eq 'HIDDEN'}" value="#{locales['illusion.managePages.visibilityHidden']}"/>
                 <h:outputText rendered="#{page.visibility eq 'VISIBLE'}" value="#{locales['illusion.managePages.visibilityVisible']}"/>
                 <h:outputText rendered="#{page.visibility eq 'PARTICIPANTS'}" value="#{locales['illusion.managePages.visibilityParticipants']}"/>
+                <h:outputText rendered="#{page.visibility eq 'GROUPS'}" value="#{locales['illusion.managePages.visibilityGroups']}"/>
+                
               </div>
               <div class="flex-cell-2 flex-cell-last flex-right sm-flex-hide">
                 <h:graphicImage library="novus" name="/gfx/icons/48x48/forge/icon-document.png"/> 
@@ -122,6 +129,8 @@
           </ui:repeat> 
         </div>
       </div>
+      
+      <input type="hidden" class="event-id" value="#{illusionEventManagePagesBackingBean.id}"/>
     </div>
 
   </ui:define>

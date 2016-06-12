@@ -23,7 +23,6 @@ import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionEventPageController;
-import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.jade.JadeController;
 import fi.foyt.fni.jsf.NavigationController;
@@ -90,19 +89,14 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
       if (!illusionEvent.getPublished()) {
         return navigationController.accessDenied();
       }
-
-      IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, IllusionEventPage.Static.MATERIALS.name());
-      if (visibility == IllusionEventPageVisibility.HIDDEN) {
-        return navigationController.accessDenied();
-      }
     }
-    
-    if (participant.getRole() == IllusionEventParticipantRole.INVITED) {
+
+    if ((participant != null) && (participant.getRole() == IllusionEventParticipantRole.INVITED)) {
       illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
-    } else {
-      if ((participant.getRole() != IllusionEventParticipantRole.PARTICIPANT) && (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
-        return navigationController.accessDenied();
-      }
+    }
+
+    if (!illusionEventPageController.isPageVisible(participant, illusionEvent, IllusionEventPage.Static.MATERIALS.toString())) {
+      return navigationController.requireLogin(navigationController.accessDenied());
     }
 
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.MATERIALS);

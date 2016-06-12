@@ -117,9 +117,7 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
       .put("ref", ref);
     
     if ("1".equals(illusionEventController.getSetting(illusionEvent, IllusionEventSettingKey.INDEX_INCLUDE_ALL_PAGES))) {
-      List<IllusionEventPage> pages = participant != null ? 
-          illusionEventPageController.listParticipantPages(illusionEvent) : illusionEventPageController.listPublicPages(illusionEvent);
-      
+      List<IllusionEventPage> pages = illusionEventPageController.listVisiblePages(illusionEvent, participant);
       Map<String, String> pageContents = new HashMap<>();
           
       for (IllusionEventPage page : pages) {

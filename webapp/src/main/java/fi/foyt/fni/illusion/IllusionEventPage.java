@@ -22,20 +22,12 @@ public class IllusionEventPage {
     
   }
   
-  
-  public IllusionEventPage(String id, String urlName, String url, String title, String type, boolean editable, boolean deletable, boolean visibilityChangeable,
-      boolean requiresUser, IllusionEventPageVisibility visibility) {
-    super();
+  public IllusionEventPage(String id, String urlName, String url, String title, String type) {
     this.id = id;
     this.urlName = urlName;
     this.url = url;
     this.title = title;
     this.type = type;
-    this.editable = editable;
-    this.deletable = deletable;
-    this.visibilityChangeable = visibilityChangeable;
-    this.requiresUser = requiresUser;
-    this.visibility = visibility;
   }
 
   public String getId() {
@@ -57,35 +49,10 @@ public class IllusionEventPage {
   public String getType() {
     return type;
   }
-
-  public IllusionEventPageVisibility getVisibility() {
-    return visibility;
-  }
-
-  public boolean getDeletable() {
-    return deletable;
-  }
-
-  public boolean getEditable() {
-    return editable;
-  }
-
-  public boolean getVisibilityChangeable() {
-    return visibilityChangeable;
-  }
-
-  public boolean getRequiresUser() {
-    return requiresUser;
-  }
   
   private String id;
   private String urlName;
   private String url;
   private String title;
   private String type;
-  private boolean editable;
-  private boolean deletable;
-  private boolean visibilityChangeable;
-  private boolean requiresUser;
-  private IllusionEventPageVisibility visibility;
 }

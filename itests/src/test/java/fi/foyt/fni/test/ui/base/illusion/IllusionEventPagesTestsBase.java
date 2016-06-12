@@ -129,7 +129,7 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "event", "event-page"})
   public void testHiddenNotLoggedIn() throws UnsupportedEncodingException {
-    testAccessDenied("/illusion/event/openevent/pages/testpage");
+    testLoginRequired("/illusion/event/openevent/pages/testpage");
   }
   
   @Test

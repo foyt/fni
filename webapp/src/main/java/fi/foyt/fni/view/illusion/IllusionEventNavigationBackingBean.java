@@ -46,17 +46,12 @@ public class IllusionEventNavigationBackingBean {
         IllusionEventParticipant eventParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(illusionEvent, loggedUser);
         if (eventParticipant != null) {
           boolean organizer = eventParticipant.getRole() == IllusionEventParticipantRole.ORGANIZER;
-          boolean participant = eventParticipant.getRole() == IllusionEventParticipantRole.PARTICIPANT;
           administrationVisible = organizer;
-          pages = participant || organizer ? illusionEventPagesController.listParticipantPages(illusionEvent) : illusionEventPagesController.listPublicPages(illusionEvent);
-        } else {
-          pages = illusionEventPagesController.listPublicPages(illusionEvent);
         }
       }
-    } else {
-      pages = illusionEventPagesController.listPublicPages(illusionEvent);
     }
-    
+
+    pages = illusionEventPagesController.listVisiblePages(illusionEvent, sessionController.getLoggedUser());
   }
   
   public boolean getAdministrationVisible() {
