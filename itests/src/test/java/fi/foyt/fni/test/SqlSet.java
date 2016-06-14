@@ -7,8 +7,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SqlAfter {
+public @interface SqlSet {
 
-  String[] value();
+  String id();
+  SqlParam[] params() default {};  
   
 }

@@ -34,7 +34,7 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet(id = "groups", before = "illusion-event-oai-groups-setup.sql", after = "illusion-event-oai-groups-teardown.sql"),
   @DefineSqlSet(id = "posts", before = "illusion-event-oai-posts-setup.sql", after = "illusion-event-oai-posts-teardown.sql"),
   @DefineSqlSet(id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql"),
-  @DefineSqlSet(id = "event", before = { "illusion-event-open-setup.sql" }, after = { "illusion-event-open-teardown.sql"}),
+  @DefineSqlSet(id = "event", before = { "illusion-event-setup.sql" }, after = { "illusion-event-teardown.sql"}),  
   @DefineSqlSet(id = "event-unpublished", before = { "illusion-event-open-unpublished-setup.sql" }, after = { "illusion-event-open-unpublished-teardown.sql"}),
   @DefineSqlSet(id = "event-participant", before = {"illusion-event-open-participant-setup.sql" }, after = {"illusion-event-open-participant-teardown.sql"}),
   @DefineSqlSet(id = "event-organizer", before = {"illusion-event-open-organizer-setup.sql" }, after = {"illusion-event-open-organizer-teardown.sql"}),

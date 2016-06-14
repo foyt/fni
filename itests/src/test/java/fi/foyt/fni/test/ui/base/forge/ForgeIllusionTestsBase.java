@@ -9,8 +9,8 @@ import fi.foyt.fni.test.ui.base.AbstractUITest;
 
 @DefineSqlSets ({
   @DefineSqlSet (id = "illusion-open-materials", 
-    before = {"basic-users-setup.sql","basic-materials-setup.sql","illusion-basic-setup.sql","illusion-event-open-setup.sql", "illusion-event-open-participant-setup.sql"}, 
-    after = {"illusion-event-open-participant-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-materials-teardown.sql","basic-users-teardown.sql"}
+    before = {"basic-users-setup.sql","basic-materials-setup.sql","illusion-basic-setup.sql","illusion-event-setup.sql", "illusion-event-open-participant-setup.sql"}, 
+    after = {"illusion-event-open-participant-teardown.sql", "illusion-event-teardown.sql", "illusion-basic-teardown.sql","basic-materials-teardown.sql","basic-users-teardown.sql"}
   )
 })
 public class ForgeIllusionTestsBase extends AbstractUITest {

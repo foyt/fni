@@ -16,7 +16,7 @@ import fi.foyt.fni.test.ui.base.AbstractUITest;
   @DefineSqlSet (id = "basic-users", before = { "basic-users-setup.sql" }, after = { "basic-users-teardown.sql"  }),
   @DefineSqlSet (id = "forum-basic", before = { "basic-forum-setup.sql" }, after = { "basic-forum-teardown.sql" }),
   @DefineSqlSet (id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql"),
-  @DefineSqlSet (id = "event", before = { "illusion-event-open-setup.sql" }, after = { "illusion-event-open-teardown.sql" }),
+  @DefineSqlSet (id = "event", before = { "illusion-event-setup.sql" }, after = { "illusion-event-teardown.sql"}),  
   @DefineSqlSet (id = "event-forum", before = { "illusion-event-open-forum-setup.sql" }, after = {"illusion-event-open-forum-teardown.sql"}),
   @DefineSqlSet (id = "forum-with-special-characters", before = { "forum-with-special-characters-setup.sql"}, after={"forum-with-special-characters-teardown.sql" }),
   @DefineSqlSet (id = "forum-watchers", before = "forum-watchers-setup.sql", after = "forum-watchers-teardown.sql")

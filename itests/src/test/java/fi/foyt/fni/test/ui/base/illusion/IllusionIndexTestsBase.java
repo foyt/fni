@@ -13,8 +13,8 @@ import fi.foyt.fni.test.ui.base.AbstractUITest;
     after = {"basic-users-teardown.sql"}
   ),
   @DefineSqlSet (id = "events", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-upcoming-events-setup.sql", "illusion-upcoming-unpublished-event-setup.sql", "illusion-event-open-setup.sql"},
-    after = {"illusion-event-open-teardown.sql", "illusion-upcoming-unpublished-event-teardown.sql", "illusion-upcoming-events-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
+    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-upcoming-events-setup.sql", "illusion-upcoming-unpublished-event-setup.sql", "illusion-event-setup.sql"},
+    after = {"illusion-event-teardown.sql", "illusion-upcoming-unpublished-event-teardown.sql", "illusion-upcoming-events-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   )
 })
 public class IllusionIndexTestsBase extends AbstractUITest {

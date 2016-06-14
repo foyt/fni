@@ -16,7 +16,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
@@ -67,70 +71,123 @@ public abstract class AbstractTest {
 
   @Before
   public void sqlSetup() throws Exception {
-    List<String> sqlFiles = new ArrayList<>();
-    
-    Method method = getTestMethod();
-    SqlBefore sqlBefore = method.getAnnotation(SqlBefore.class);
-    if (sqlBefore != null) {
-      for (String sqlFile : sqlBefore.value()) {
-        sqlFiles.add(sqlFile);
-      }
-    }
-    
-    SqlSets sqlSets = method.getAnnotation(SqlSets.class);
-    if (sqlSets != null) {
-      for (String sqlSetId : sqlSets.value()) {
-        SqlSet sqlSet = getSqlSet(method, sqlSetId);
-        if (sqlSet == null) {
-          throw new RuntimeException("Could not find sqlset " + sqlSetId);
-        }
-        
-        if (sqlSet.getBefore() != null) {
-          for (String sqlFile : sqlSet.getBefore()) {
-            sqlFiles.add(sqlFile);
-          }
-        }
-      }
-    }
-    
-    for (String sqlFile : sqlFiles) {
-      executeSqlFile(sqlFile);
-    }
+    executeSqlStatements(getTestMethod(), true);
   }
 
   @After
   public void sqlTearDown() throws Exception {
-    List<String> sqlFiles = new ArrayList<>();
+    executeSqlStatements(getTestMethod(), false);
+  }
+  
+  private void executeSqlStatements(Method method, boolean before) throws Exception {
+    SqlSets sqlSets = method.getAnnotation(SqlSets.class);
+    if (sqlSets == null) {
+      return;
+    }
     
-    Method method = getTestMethod();
-    SqlAfter sqlAfter = method.getAnnotation(SqlAfter.class);
-    if (sqlAfter != null) {
-      for (String sqlFile : sqlAfter.value()) {
-        sqlFiles.add(sqlFile);
+    List<TestSql> testSqls = new ArrayList<>();
+    Class<?> testClass = method.getDeclaringClass();
+    
+    fi.foyt.fni.test.SqlSet[] methodSets = sqlSets.sets();
+    if (methodSets != null) {
+      if (!before) {
+        ArrayUtils.reverse(methodSets);
+      }
+      
+      for (fi.foyt.fni.test.SqlSet methodSet : methodSets) {
+        SqlParam[] methodSetParams = methodSet.params();
+        String sqlSetId = methodSet.id();
+        DefinedSqlSet definedSqlSet = getDefinedSqlSet(testClass, sqlSetId);
+        String[] sqlFiles = null;
+        Map<String, String> paramMap = definedSqlSet.getParams();
+        if (methodSetParams != null) {
+          for (SqlParam param : methodSetParams) {
+            paramMap.put(param.name(), param.value());
+          }
+        }
+        
+        if (before) {
+          sqlFiles = definedSqlSet.getBefore();
+        } else {
+          sqlFiles = definedSqlSet.getAfter();  
+        }
+        
+        for (String sqlFile : sqlFiles) {
+          testSqls.add(new TestSql(sqlFile, paramMap));
+        }
       }
     }
     
-    SqlSets sqlSets = method.getAnnotation(SqlSets.class);
-    if (sqlSets != null) {
+    if (sqlSets.value() != null) {
       String[] sqlSetIds = sqlSets.value();
-      ArrayUtils.reverse(sqlSetIds);
+      if (!before) {
+        ArrayUtils.reverse(sqlSetIds);
+      }
       
       for (String sqlSetId : sqlSetIds) {
-        SqlSet sqlSet = getSqlSet(method, sqlSetId);
-        if (sqlSet == null) {
+        DefinedSqlSet definedSqlSet = getDefinedSqlSet(method.getDeclaringClass(), sqlSetId);
+        if (definedSqlSet == null) {
           throw new RuntimeException("Could not find sqlset " + sqlSetId);
         }
         
-        if (sqlSet.getAfter() != null) {
-          for (String sqlFile : sqlSet.getAfter()) {
-            sqlFiles.add(sqlFile);
+        Map<String, String> paramMap = definedSqlSet.getParams();
+        if (before) {
+          if (definedSqlSet.getBefore() != null) {
+            for (String sqlFile : definedSqlSet.getBefore()) {
+              testSqls.add(new TestSql(sqlFile, paramMap));
+            }
+          }
+        } else {
+          if (definedSqlSet.getAfter() != null) {
+            for (String sqlFile : definedSqlSet.getAfter()) {
+              testSqls.add(new TestSql(sqlFile, paramMap));
+            }
           }
         }
       }
     }
     
-    for (String sqlFile : sqlFiles) {
-      executeSqlFile(sqlFile);
+    runTestSqls(testSqls);
+  }
+  
+  private void runTestSqls(List<TestSql> testSqls) throws Exception {
+    ClassLoader classLoader = getClass().getClassLoader();
+    Pattern paramPattern = Pattern.compile("\\{([^\\|\\}]*)(\\|[^\\}]*)?}");
+        
+    for (TestSql testSql : testSqls) {
+      InputStream sqlStream = classLoader.getResourceAsStream(testSql.getFile());
+      try {
+        String statements = IOUtils.toString(sqlStream);
+        StringBuffer statementBuffer = new StringBuffer();
+        
+        Matcher matcher = paramPattern.matcher(statements);
+        while (matcher.find()) {
+          String group = matcher.group(1);
+          String defaultValue = matcher.group(2);
+          if (StringUtils.isNotBlank(defaultValue)) {
+            defaultValue = defaultValue.substring(1);
+          }
+          
+          String value = testSql.getParams().containsKey(group) ? testSql.getParams().get(group) : defaultValue;
+          assertNotNull(String.format("%s: parameter %s in file %s does not have a value.", testName.getMethodName(), matcher.group(0), testSql.getFile()), value);
+          matcher.appendReplacement(statementBuffer, value);
+        }
+        matcher.appendTail(statementBuffer);
+
+        statements = statementBuffer.toString();
+        
+        if (StringUtils.isNotBlank(statements)) {
+          // Tokenization regex from https://github.com/otavanopisto/muikku/blob/master/muikku-core-plugins/src/test/java/fi/muikku/plugins/workspace/test/ui/SeleniumTestBase.java
+          for (String statement : statements.split(";(?=([^\']*\'[^\']*\')*[^\']*$)")) {
+            String sql = StringUtils.trim(statement);
+            if (StringUtils.isNotBlank(sql)) {
+              executeSql(sql);
+            }
+          }
+        }
+      } finally {
+        sqlStream.close();
+      }
     }
   }
   
@@ -152,16 +209,21 @@ public abstract class AbstractTest {
     }
   }
   
-  private SqlSet getSqlSet(Method method, String id) {
-    DefineSqlSets defineSqlSets = method.getDeclaringClass().getAnnotation(DefineSqlSets.class);
+  private DefinedSqlSet getDefinedSqlSet(Class<?> testClass, String id) {
+    DefineSqlSets defineSqlSets = testClass.getAnnotation(DefineSqlSets.class);
     if (defineSqlSets == null) {
-      defineSqlSets = method.getDeclaringClass().getSuperclass().getAnnotation(DefineSqlSets.class);
+      defineSqlSets = testClass.getSuperclass().getAnnotation(DefineSqlSets.class);
     }
     
     if (defineSqlSets != null) {
       for (DefineSqlSet defineSqlSet : defineSqlSets.value()) {
         if (defineSqlSet.id().equals(id)) {
-          return new SqlSet(defineSqlSet.before(), defineSqlSet.after());
+          Map<String, String> params = new HashMap<>();
+          for (SqlParam sqlParam : defineSqlSet.params()) {
+            params.put(sqlParam.name(), sqlParam.value());
+          }
+          
+          return new DefinedSqlSet(defineSqlSet.before(), defineSqlSet.after(), params);
         }
       }
     }
@@ -579,11 +641,12 @@ public abstract class AbstractTest {
     return getDate(year, monthOfYear, dayOfMonth, DateTimeZone.getDefault());
   }
 
-  private class SqlSet {
+  private class DefinedSqlSet {
 
-    public SqlSet(String[] before, String[] after) {
+    public DefinedSqlSet(String[] before, String[] after, Map<String, String> params) {
       this.before = before;
       this.after = after;
+      this.params = params;
     }
     
     public String[] getBefore() {
@@ -594,7 +657,32 @@ public abstract class AbstractTest {
       return after;
     }
     
+    public Map<String, String> getParams() {
+      return params;
+    }
+    
     private String[] before;
     private String[] after;
+    private Map<String, String> params;
+  }
+  
+  private class TestSql {
+    
+    public TestSql(String file, Map<String, String> params) {
+      super();
+      this.file = file;
+      this.params = params;
+    }
+
+    public String getFile() {
+      return file;
+    }
+    
+    public Map<String, String> getParams() {
+      return params;
+    }
+    
+    private String file;
+    private Map<String, String> params;
   }
 }

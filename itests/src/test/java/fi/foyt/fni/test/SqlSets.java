@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SqlSets {
 
-  String[] value();
+  String[] value() default {};
+  SqlSet[] sets() default {};
   
 }
