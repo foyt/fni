@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.joda.time.DateTime;
@@ -88,12 +88,33 @@ public abstract class AbstractTest {
     List<TestSql> testSqls = new ArrayList<>();
     Class<?> testClass = method.getDeclaringClass();
     
+    if (sqlSets.value() != null) {
+      String[] sqlSetIds = sqlSets.value();
+      for (String sqlSetId : sqlSetIds) {
+        DefinedSqlSet definedSqlSet = getDefinedSqlSet(method.getDeclaringClass(), sqlSetId);
+        if (definedSqlSet == null) {
+          throw new RuntimeException("Could not find sqlset " + sqlSetId);
+        }
+        
+        Map<String, String> paramMap = definedSqlSet.getParams();
+        if (before) {
+          if (definedSqlSet.getBefore() != null) {
+            for (String sqlFile : definedSqlSet.getBefore()) {
+              testSqls.add(new TestSql(sqlFile, paramMap));
+            }
+          }
+        } else {
+          if (definedSqlSet.getAfter() != null) {
+            for (String sqlFile : definedSqlSet.getAfter()) {
+              testSqls.add(new TestSql(sqlFile, paramMap));
+            }
+          }
+        }
+      }
+    }
+    
     fi.foyt.fni.test.SqlSet[] methodSets = sqlSets.sets();
     if (methodSets != null) {
-      if (!before) {
-        ArrayUtils.reverse(methodSets);
-      }
-      
       for (fi.foyt.fni.test.SqlSet methodSet : methodSets) {
         SqlParam[] methodSetParams = methodSet.params();
         String sqlSetId = methodSet.id();
@@ -116,35 +137,10 @@ public abstract class AbstractTest {
           testSqls.add(new TestSql(sqlFile, paramMap));
         }
       }
-    }
+    } 
     
-    if (sqlSets.value() != null) {
-      String[] sqlSetIds = sqlSets.value();
-      if (!before) {
-        ArrayUtils.reverse(sqlSetIds);
-      }
-      
-      for (String sqlSetId : sqlSetIds) {
-        DefinedSqlSet definedSqlSet = getDefinedSqlSet(method.getDeclaringClass(), sqlSetId);
-        if (definedSqlSet == null) {
-          throw new RuntimeException("Could not find sqlset " + sqlSetId);
-        }
-        
-        Map<String, String> paramMap = definedSqlSet.getParams();
-        if (before) {
-          if (definedSqlSet.getBefore() != null) {
-            for (String sqlFile : definedSqlSet.getBefore()) {
-              testSqls.add(new TestSql(sqlFile, paramMap));
-            }
-          }
-        } else {
-          if (definedSqlSet.getAfter() != null) {
-            for (String sqlFile : definedSqlSet.getAfter()) {
-              testSqls.add(new TestSql(sqlFile, paramMap));
-            }
-          }
-        }
-      }
+    if (!before) {
+      Collections.reverse(testSqls);
     }
     
     runTestSqls(testSqls);

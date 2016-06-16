@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import org.junit.Test;
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlParam;
 import fi.foyt.fni.test.SqlSets;
 import fi.foyt.fni.test.ui.base.AbstractIllusionUITest;
 
@@ -19,10 +20,24 @@ import fi.foyt.fni.test.ui.base.AbstractIllusionUITest;
   @DefineSqlSet(id = "event-organizer", before = {"illusion-event-open-organizer-setup.sql" }, after = {"illusion-event-open-organizer-teardown.sql"}),
   @DefineSqlSet(id = "event-invited", before = {"illusion-event-open-invited-setup.sql" }, after = {"illusion-event-open-invited-teardown.sql"}),
   @DefineSqlSet(id = "event-materials", before = {"illusion-event-open-materials-setup.sql"}, after = {"illusion-event-open-materials-teardown.sql"}),
-  @DefineSqlSet(id = "event-materials-participants", before = {"illusion-event-open-materials-to-participants-setup.sql" }, after = {"illusion-event-open-materials-to-participants-teardown.sql"}),
-  @DefineSqlSet(id = "event-materials-visible", before = {"illusion-event-open-materials-visible-setup.sql"}, after = {"illusion-event-open-materials-visible-teardown.sql"}),
   @DefineSqlSet(id = "event-materials-public", before = {"illusion-event-open-materials-public-setup.sql"}, after = {"illusion-event-open-materials-public-teardown.sql"}),
-  @DefineSqlSet(id = "event-custom", before = { "illusion-event-open-custom-setup.sql" }, after = {"illusion-event-open-custom-teardown.sql"})
+  @DefineSqlSet(id = "event-custom", before = { "illusion-event-open-custom-setup.sql" }, after = {"illusion-event-open-custom-teardown.sql"}),
+  @DefineSqlSet(id = "event-materials-visible", 
+    before = {"illusion-event-setting-setup.sql" }, 
+    after = {"illusion-event-setting-teardown.sql"}, params = {
+      @SqlParam (name = "id", value = "10"), 
+      @SqlParam (name = "eventId", value = "1"),
+      @SqlParam (name = "value", value = "{\"MATERIALS\":{\"visibility\":\"VISIBLE\"}}") 
+    }
+  ),
+  @DefineSqlSet(id = "event-materials-participants", 
+    before = {"illusion-event-setting-setup.sql" }, 
+    after = {"illusion-event-setting-teardown.sql"}, params = {
+      @SqlParam (name = "id", value = "20"), 
+      @SqlParam (name = "eventId", value = "1"),
+      @SqlParam (name = "value", value = "{\"MATERIALS\":{\"visibility\":\"PARTICIPANTS\"}}") 
+    }
+  )
 })
 public class IllusionEventMaterialTestsBase extends AbstractIllusionUITest {
   
@@ -126,7 +141,7 @@ public class IllusionEventMaterialTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ({"basic-users", "illusion-basic", "event", "event-unpublished", "event-organizer", "event-materials", "event-materials-participants", "event-materials-visible", "event-custom"})
+  @SqlSets ({"basic-users", "illusion-basic", "event", "event-unpublished", "event-organizer", "event-materials", "event-materials-visible", "event-custom"})
   public void testUnpublishedAccessDenied() throws UnsupportedEncodingException {
     loginInternal("user@foyt.fi", "pass");
     testAccessDenied("/illusion/event/openevent/materials/document");
