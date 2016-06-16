@@ -15,7 +15,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +24,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.joda.time.DateTime;
@@ -90,6 +90,11 @@ public abstract class AbstractTest {
     
     if (sqlSets.value() != null) {
       String[] sqlSetIds = sqlSets.value();
+      
+      if (!before) {
+        ArrayUtils.reverse(sqlSetIds);
+      }
+      
       for (String sqlSetId : sqlSetIds) {
         DefinedSqlSet definedSqlSet = getDefinedSqlSet(method.getDeclaringClass(), sqlSetId);
         if (definedSqlSet == null) {
@@ -115,6 +120,11 @@ public abstract class AbstractTest {
     
     fi.foyt.fni.test.SqlSet[] methodSets = sqlSets.sets();
     if (methodSets != null) {
+      
+      if (!before) {
+        ArrayUtils.reverse(methodSets);
+      }
+      
       for (fi.foyt.fni.test.SqlSet methodSet : methodSets) {
         SqlParam[] methodSetParams = methodSet.params();
         String sqlSetId = methodSet.id();
@@ -138,10 +148,6 @@ public abstract class AbstractTest {
         }
       }
     } 
-    
-    if (!before) {
-      Collections.reverse(testSqls);
-    }
     
     runTestSqls(testSqls);
   }
