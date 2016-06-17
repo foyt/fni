@@ -175,7 +175,6 @@
                 if (err) {
                   $('.notifications').notifications('notification', 'error', err);
                 } else {
-                  $(this._dialog).dialog("close");
                   window.location.reload(true);
                 }
               }, this));
