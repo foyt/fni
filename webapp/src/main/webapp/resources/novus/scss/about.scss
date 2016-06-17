@@ -27,8 +27,8 @@ h3 {
   .sub-block {
     clear: both;
   
-    p:first-of-type {
-      padding-top: 0px;
+    p::first-of-type {
+      padding-top: 0;
     }
     
     img {

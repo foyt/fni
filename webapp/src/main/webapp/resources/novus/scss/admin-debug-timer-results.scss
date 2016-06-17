@@ -37,11 +37,11 @@ h3 {
   font-family: courier;
   font-size: 12px;
   margin-bottom: 10px;
-}
-
-.index-box table th {
-  font-weight: bold;
-  padding-bottom: 8px;
+  
+  th {
+    font-weight: bold;
+    padding-bottom: 8px;
+  }
 }
 
 .admin-debug-timer-result-low {
