@@ -14,6 +14,7 @@ import javax.inject.Named;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
+import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -25,6 +26,7 @@ import fi.foyt.fni.persistence.model.users.UserGroupMember;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
+import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
 @Named
@@ -42,6 +44,9 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
   private Logger logger;
   
   @Inject
+  private SessionController sessionController;
+  
+  @Inject
   private IllusionEventController illusionEventController;
   
   @Inject
@@ -53,8 +58,33 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
     groups = illusionEventController.listGroups(illusionEvent);
-    participants = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.PARTICIPANT);
-
+    List<IllusionEventParticipant> eventParticipants = illusionEventController.listIllusionEventParticipantsByEventAndRoles(illusionEvent, 
+        IllusionEventParticipantRole.INVITED,
+        IllusionEventParticipantRole.WAITING_PAYMENT,
+        IllusionEventParticipantRole.PENDING_APPROVAL,
+        IllusionEventParticipantRole.PARTICIPANT);
+    
+    participants = new ArrayList<>(eventParticipants.size());
+    for (IllusionEventParticipant eventParticipant : eventParticipants) {
+      String roleDetails = null;
+      switch (eventParticipant.getRole()) {
+        case INVITED:
+          roleDetails = ExternalLocales.getText(sessionController.getLocale(), "illusion.eventGroups.roleDetailsInvited");
+        break;
+        case WAITING_PAYMENT:
+          roleDetails = ExternalLocales.getText(sessionController.getLocale(), "illusion.eventGroups.roleDetailsWaitingPaymement");
+        break;
+        case PENDING_APPROVAL:
+          roleDetails = ExternalLocales.getText(sessionController.getLocale(), "illusion.eventGroups.roleDetailsPendingApproval");
+        break;
+        default:
+        break;
+      }
+      
+      String displayName = getParticipantDisplayName(eventParticipant);
+      participants.add(new Participant(eventParticipant.getId(), roleDetails != null ? String.format("%s (%s)", displayName, roleDetails) : displayName));
+    }
+    
     return null;
   }
 
@@ -71,7 +101,7 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     return groups;
   }
   
-  public List<IllusionEventParticipant> getParticipants() {
+  public List<Participant> getParticipants() {
     return participants;
   }
   
@@ -112,11 +142,7 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     for (UserGroupMember member : members) {
       IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(group.getEvent(), member.getUser());
       if (participant != null) {
-        if (participant.getRole() == IllusionEventParticipantRole.PARTICIPANT) {
-          selectedGroupMemberParticipantIds.add(participant.getId());
-        } else {
-          logger.warning(String.format("User %d of group %d is not a member of an event %d", member.getUser().getId(), group.getId(), group.getEvent().getId()));
-        }
+        selectedGroupMemberParticipantIds.add(participant.getId());
       }
     }
   }
@@ -164,9 +190,28 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
   }
   
   private List<IllusionEventGroup> groups;
-  private List<IllusionEventParticipant> participants;
+  private List<Participant> participants;
   private Long selectedGroupId;
   private List<UserGroupMember> members;
   private String selectedGroupName;
   private List<Long> selectedGroupMemberParticipantIds;
+  
+  public class Participant {
+    
+    public Participant(Long id, String displayName) {
+      this.id = id;
+      this.displayName = displayName;
+    }
+    
+    public Long getId() {
+      return id;
+    }
+    
+    public String getDisplayName() {
+      return displayName;
+    }
+    
+    private Long id;
+    private String displayName;
+  }
 }

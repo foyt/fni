@@ -110,7 +110,7 @@
                       <div class="illusion-event-group-members-list-column-contents">
                         <ui:repeat var="participant" value="#{illusionEventGroupsBackingBean.participants}">
                           <div class="illusion-event-group-members-list-item" data-participant-id="#{participant.id}">
-                            <h:outputText value="#{illusionEventGroupsBackingBean.getParticipantDisplayName(participant)}" />
+                            <h:outputText value="${participant.displayName}" />
                           </div>             
                         </ui:repeat>
                       </div>
