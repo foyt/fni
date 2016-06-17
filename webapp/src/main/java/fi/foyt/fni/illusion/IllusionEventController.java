@@ -2,6 +2,7 @@ package fi.foyt.fni.illusion;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.Date;
@@ -465,7 +466,11 @@ public class IllusionEventController {
   }
   
   public List<IllusionEventParticipant> listIllusionEventParticipantsByEventAndRole(IllusionEvent event, IllusionEventParticipantRole role) {
-    return illusionEventParticipantDAO.listByEventAndRole(event, role);
+    return illusionEventParticipantDAO.listByEventAndRoles(event, Collections.singletonList(role));
+  }
+  
+  public List<IllusionEventParticipant> listIllusionEventParticipantsByEventAndRoles(IllusionEvent event, IllusionEventParticipantRole... roles) {
+    return illusionEventParticipantDAO.listByEventAndRoles(event, Arrays.asList(roles));
   }
 
   public Long countIllusionEventParticipantsByEventAndRole(IllusionEvent event, IllusionEventParticipantRole role) {

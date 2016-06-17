@@ -82,7 +82,11 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
     return entityManager.createQuery(criteria).getResultList();
 	}
   
-  public List<IllusionEventParticipant> listByEventAndRole(IllusionEvent event, IllusionEventParticipantRole role) {
+  public List<IllusionEventParticipant> listByEventAndRoles(IllusionEvent event, List<IllusionEventParticipantRole> roles) {
+    if (roles == null || roles.isEmpty()) {
+      return Collections.emptyList();
+    }
+    
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -92,7 +96,7 @@ public class IllusionEventParticipantDAO extends GenericDAO<IllusionEventPartici
     criteria.where(
       criteriaBuilder.and(
           criteriaBuilder.equal(root.get(IllusionEventParticipant_.event), event),
-          criteriaBuilder.equal(root.get(IllusionEventParticipant_.role), role)
+          root.get(IllusionEventParticipant_.role).in(roles)
       )
     );
 
