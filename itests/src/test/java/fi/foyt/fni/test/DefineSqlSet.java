@@ -12,5 +12,5 @@ public @interface DefineSqlSet {
   String id();
   String[] before();
   String[] after();
-  
+  SqlParam[] params() default {};
 }

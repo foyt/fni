@@ -139,14 +139,9 @@ public abstract class AbstractIllusionEventBackingBean {
     IllusionTemplateModelBuilder modelBuilder = illusionTemplateModelBuilderFactory
       .newBuilder();
     
-    if (participant != null) {
-      for (IllusionEventPage page : illusionEventPageController.listParticipantPages(illusionEvent)) {
-        modelBuilder.addPage(page);
-      }
-    } else {
-      for (IllusionEventPage page : illusionEventPageController.listPublicPages(illusionEvent)) {
-        modelBuilder.addPage(page);
-      }
+    List<IllusionEventPage> pages = illusionEventPageController.listVisiblePages(illusionEvent, participant);
+    for (IllusionEventPage page : pages) {
+      modelBuilder.addPage(page);
     }
     
     if (sessionController.isLoggedIn()) {

@@ -49,8 +49,8 @@ import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventMaterialController;
+import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionEventPageController;
-import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.illusion.registration.FormReader;
 import fi.foyt.fni.materials.CharacterSheetData;
 import fi.foyt.fni.materials.MaterialController;
@@ -103,15 +103,15 @@ public class IllusionRestServices {
 
   @Inject
   private IllusionEventController illusionEventController;
-
-  @Inject
-  private IllusionEventPageController illusionEventPageController;
   
   @Inject
   private IllusionEventMaterialController illusionEventMaterialController;
 
   @Inject
   private MaterialPermissionController materialPermissionController;
+  
+  @Inject
+  private IllusionEventPageController illusionEventPageController;
   
   @Context 
   private OAuthAccessToken accessToken;
@@ -1276,31 +1276,16 @@ public class IllusionRestServices {
     if (event == null) {
       return Response.status(Status.NOT_FOUND).build(); 
     }
-    
-    IllusionEventPageVisibility forumVisibility = illusionEventPageController.getPageVisibility(event, "FORUM");
-    if (forumVisibility != IllusionEventPageVisibility.VISIBLE) {
+
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
+    if (!illusionEventPageController.isPageVisible(participant, event, IllusionEventPage.Static.FORUM)) {
       if (!sessionController.isLoggedIn()) {
         return Response.status(Status.UNAUTHORIZED).build();
-      }
-      
-      User user = sessionController.getLoggedUser();
-
-      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
-      if (participant == null) {
-        return Response.status(Status.FORBIDDEN).build();
-      }
-      
-      if (forumVisibility == IllusionEventPageVisibility.HIDDEN) {
-        if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
-          return Response.status(Status.FORBIDDEN).build();
-        }
       } else {
-        if ((participant.getRole() != IllusionEventParticipantRole.ORGANIZER) && (participant.getRole() != IllusionEventParticipantRole.PARTICIPANT)) {
-          return Response.status(Status.FORBIDDEN).build();
-        }
+        return Response.status(Status.FORBIDDEN).build(); 
       }
     }
-    
+     
     List<fi.foyt.fni.persistence.model.forum.ForumPost> posts = forumController.listPostsByTopic(event.getForumTopic());
     if (posts.isEmpty()) {
       return Response.noContent().build();
@@ -1331,30 +1316,15 @@ public class IllusionRestServices {
       return Response.status(Status.NOT_FOUND).build(); 
     }
     
-    IllusionEventPageVisibility forumVisibility = illusionEventPageController.getPageVisibility(event, "FORUM");
-    if (forumVisibility != IllusionEventPageVisibility.VISIBLE) {
+    IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
+    if (!illusionEventPageController.isPageVisible(participant, event, IllusionEventPage.Static.FORUM)) {
       if (!sessionController.isLoggedIn()) {
         return Response.status(Status.UNAUTHORIZED).build();
-      }
-      
-      User user = sessionController.getLoggedUser();
-
-      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, user);
-      if (participant == null) {
-        return Response.status(Status.FORBIDDEN).build();
-      }
-      
-      if (forumVisibility == IllusionEventPageVisibility.HIDDEN) {
-        if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
-          return Response.status(Status.FORBIDDEN).build();
-        }
       } else {
-        if ((participant.getRole() != IllusionEventParticipantRole.ORGANIZER) && (participant.getRole() != IllusionEventParticipantRole.PARTICIPANT)) {
-          return Response.status(Status.FORBIDDEN).build();
-        }
+        return Response.status(Status.FORBIDDEN).build(); 
       }
     }
-    
+
     fi.foyt.fni.persistence.model.forum.ForumPost post = forumController.findForumPostById(postId);
     if ((post == null) || (!post.getTopic().getId().equals(event.getForumTopic().getId()))) {
       return Response.status(Status.NOT_FOUND).build(); 

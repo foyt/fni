@@ -1,1 +1,0 @@
-delete from IllusionEventSetting where event_id = 1 and settingKey = 'PAGE_SETTINGS';

@@ -2,27 +2,41 @@ package fi.foyt.fni.test.ui.base.illusion;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.http.client.ClientProtocolException;
 import org.junit.Test;
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlParam;
+import fi.foyt.fni.test.SqlSet;
 import fi.foyt.fni.test.SqlSets;
 import fi.foyt.fni.test.ui.base.AbstractIllusionUITest;
 
 @DefineSqlSets ({
   @DefineSqlSet(id = "basic-users", before = "basic-users-setup.sql", after = "basic-users-teardown.sql"),
   @DefineSqlSet(id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql"),
-  @DefineSqlSet(id = "event", before = { "illusion-event-open-setup.sql" }, after = { "illusion-event-open-teardown.sql"}),  
-  @DefineSqlSet(id = "event-participant", before = {"illusion-event-open-participant-setup.sql" }, after = {"illusion-event-open-participant-teardown.sql"}),
+  @DefineSqlSet(id = "event", before = { "illusion-event-setup.sql" }, after = { "illusion-event-teardown.sql"}),  
+  @DefineSqlSet(id = "event-participant", before = {"illusion-event-participant-setup.sql" }, after = {"illusion-event-participant-teardown.sql"}),
   @DefineSqlSet(id = "event-unpublished", before = { "illusion-event-open-unpublished-setup.sql" }, after = { "illusion-event-open-unpublished-teardown.sql"}),
   @DefineSqlSet(id = "event-organizer", before = {"illusion-event-open-organizer-setup.sql" }, after = {"illusion-event-open-organizer-teardown.sql"}),
   @DefineSqlSet(id = "event-invited", before = {"illusion-event-open-invited-setup.sql" }, after = {"illusion-event-open-invited-teardown.sql"}),
-  @DefineSqlSet(id = "event-page", before = {"illusion-event-open-page-setup.sql"}, after = {"illusion-event-open-page-teardown.sql"}),
-  @DefineSqlSet(id = "event-page-participants", before = {"illusion-event-open-page-participants-setup.sql" }, after = {"illusion-event-open-page-participants-teardown.sql"}),
-  @DefineSqlSet(id = "event-custom", before = { "illusion-event-open-custom-setup.sql" }, after = {"illusion-event-open-custom-teardown.sql"})
+  @DefineSqlSet(id = "event-setting", before = {"illusion-event-setting-setup.sql" }, after = {"illusion-event-setting-teardown.sql"}),
+  @DefineSqlSet(id = "event-page", before = {"illusion-event-page-setup.sql"}, after = {"illusion-event-page-teardown.sql"}),
+  @DefineSqlSet(id = "event-custom", before = { "illusion-event-open-custom-setup.sql" }, after = {"illusion-event-open-custom-teardown.sql"}),
+  @DefineSqlSet(id = "event-group", before = "illusion-group-setup.sql", after = "illusion-group-teardown.sql"),
+  @DefineSqlSet(id = "event-group-member", before = "illusion-group-member-setup.sql", after = "illusion-group-member-teardown.sql"),
+  @DefineSqlSet(id = "event-page-participants", 
+    before = {"illusion-event-setting-setup.sql" }, 
+    after = {"illusion-event-setting-teardown.sql"}, params = {
+      @SqlParam (name = "id", value = "1"), 
+      @SqlParam (name = "eventId", value = "1"),
+      @SqlParam (name = "value", value = "{\"20150\":{\"visibility\":\"PARTICIPANTS\" }}") 
+    }
+  ) 
 })
 public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   
@@ -129,7 +143,7 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "event", "event-page"})
   public void testHiddenNotLoggedIn() throws UnsupportedEncodingException {
-    testAccessDenied("/illusion/event/openevent/pages/testpage");
+    testLoginRequired("/illusion/event/openevent/pages/testpage");
   }
   
   @Test
@@ -212,4 +226,156 @@ public class IllusionEventPagesTestsBase extends AbstractIllusionUITest {
     testTitle("Open Event - Test Page");
   }
   
+  @Test
+  @SqlSets (
+    sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "event", params = {
+        @SqlParam (name = "urlName", value = "openevent") 
+      }),
+      @SqlSet (id = "event-participant", params = {
+        @SqlParam (name = "id", value = "1"),
+        @SqlParam (name = "role", value = "PARTICIPANT"),
+        @SqlParam (name = "eventId", value = "1"),
+        @SqlParam (name = "userId", value = "4")
+      }),
+      @SqlSet (id = "event-group", params = { 
+        @SqlParam (name = "id", value = "1000"),
+        @SqlParam (name = "name", value = "Test group"),
+        @SqlParam (name = "eventId", value = "1")
+      }),
+      @SqlSet (id = "event-group-member", params = { 
+        @SqlParam (name = "groupId", value = "1000"), 
+        @SqlParam (name = "userId", value = "3") 
+      }),
+      @SqlSet (id = "event-page", params = {
+        @SqlParam (name = "id", value = "20150"), 
+        @SqlParam (name = "urlName", value = "grouppage") 
+      }),
+      @SqlSet (id = "event-setting", params = {
+        @SqlParam (name = "id", value = "1"), 
+        @SqlParam (name = "eventId", value = "1"),
+        @SqlParam (name = "value", value = "{\"20150\":{\"visibility\":\"GROUPS\", \"groupIds\": [1000] }}") 
+      })
+  })
+  public void testVisibleGroupNotLoggedIn() throws UnsupportedEncodingException {
+    testLoginRequired("/illusion/event/openevent/pages/grouppage");
+  }
+  
+  @Test
+  @SqlSets (
+    sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "event", params = {
+        @SqlParam (name = "urlName", value = "openevent") 
+      }),
+      @SqlSet (id = "event-participant", params = {
+        @SqlParam (name = "id", value = "1"),
+        @SqlParam (name = "role", value = "PARTICIPANT"),
+        @SqlParam (name = "eventId", value = "1"),
+        @SqlParam (name = "userId", value = "4")
+      }),
+      @SqlSet (id = "event-group", params = { 
+        @SqlParam (name = "id", value = "1000"),
+        @SqlParam (name = "name", value = "Test group"),
+        @SqlParam (name = "eventId", value = "1")
+      }),
+      @SqlSet (id = "event-group-member", params = { 
+        @SqlParam (name = "groupId", value = "1000"), 
+        @SqlParam (name = "userId", value = "3") 
+      }),
+      @SqlSet (id = "event-page", params = {
+        @SqlParam (name = "id", value = "20150"), 
+        @SqlParam (name = "urlName", value = "grouppage") 
+      }),
+      @SqlSet (id = "event-setting", params = {
+        @SqlParam (name = "id", value = "1"), 
+        @SqlParam (name = "eventId", value = "1"),
+        @SqlParam (name = "value", value = "{\"20150\":{\"visibility\":\"GROUPS\", \"groupIds\": [1000] }}") 
+      })
+  })
+  public void testVisibleGroupLoggedInParticipant() throws UnsupportedEncodingException {
+    loginInternal("user@foyt.fi", "pass");
+    testAccessDenied("/illusion/event/openevent/pages/grouppage");
+  }
+  
+  @Test
+  @SqlSets (
+    sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "event", params = {
+        @SqlParam (name = "urlName", value = "openevent") 
+      }),
+      @SqlSet (id = "event-participant", params = {
+        @SqlParam (name = "id", value = "1"),
+        @SqlParam (name = "role", value = "PARTICIPANT"),
+        @SqlParam (name = "eventId", value = "1"),
+        @SqlParam (name = "userId", value = "3")
+      }),
+      @SqlSet (id = "event-group", params = { 
+        @SqlParam (name = "id", value = "1001"),
+        @SqlParam (name = "name", value = "Test group"),
+        @SqlParam (name = "eventId", value = "1")
+      }),
+      @SqlSet (id = "event-group-member", params = { 
+        @SqlParam (name = "groupId", value = "1001"), 
+        @SqlParam (name = "userId", value = "3") 
+      }),
+      @SqlSet (id = "event-page", params = {
+        @SqlParam (name = "id", value = "20150"), 
+        @SqlParam (name = "urlName", value = "grouppage") 
+      }),
+      @SqlSet (id = "event-setting", params = {
+        @SqlParam (name = "id", value = "1"), 
+        @SqlParam (name = "eventId", value = "1"),
+        @SqlParam (name = "value", value = "{\"20150\":{\"visibility\":\"GROUPS\", \"groupIds\": [1000] }}") 
+      })
+  })
+  public void testVisibleGroupLoggedInAnotherGroupMember() throws UnsupportedEncodingException {
+    loginInternal("user@foyt.fi", "pass");
+    testAccessDenied("/illusion/event/openevent/pages/grouppage");
+  }
+  
+  @Test
+  @SqlSets (
+    sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "event", params = {
+        @SqlParam (name = "urlName", value = "openevent") 
+      }),
+      @SqlSet (id = "event-participant", params = {
+        @SqlParam (name = "id", value = "1"),
+        @SqlParam (name = "role", value = "PARTICIPANT"),
+        @SqlParam (name = "eventId", value = "1"),
+        @SqlParam (name = "userId", value = "2")
+      }),
+      @SqlSet (id = "event-group", params = { 
+        @SqlParam (name = "id", value = "1000"),
+        @SqlParam (name = "name", value = "Test group"),
+        @SqlParam (name = "eventId", value = "1")
+      }),
+      @SqlSet (id = "event-group-member", params = { 
+        @SqlParam (name = "groupId", value = "1000"), 
+        @SqlParam (name = "userId", value = "2") 
+      }),
+      @SqlSet (id = "event-page", params = {
+        @SqlParam (name = "id", value = "20150"), 
+        @SqlParam (name = "urlName", value = "grouppage") 
+      }),
+      @SqlSet (id = "event-setting", params = {
+        @SqlParam (name = "id", value = "1"), 
+        @SqlParam (name = "eventId", value = "1"),
+        @SqlParam (name = "value", value = "{\"20150\":{\"visibility\":\"GROUPS\", \"groupIds\": [1000] }}") 
+      })
+  })
+  public void testVisibleGroupLoggedInMember() throws ClientProtocolException, IOException {
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/illusion/event/openevent/pages/grouppage");
+    waitForSelectorPresent(".illusion-event-page-content p");
+    assertSelectorTextIgnoreCase(".illusion-event-page-content p", "Page contents");
+  }
 }

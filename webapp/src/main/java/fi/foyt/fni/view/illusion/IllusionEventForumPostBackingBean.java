@@ -20,7 +20,6 @@ import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionEventPageController;
-import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.jade.JadeController;
 import fi.foyt.fni.jsf.NavigationController;
@@ -88,15 +87,8 @@ public class IllusionEventForumPostBackingBean extends AbstractIllusionEventBack
       }
     }
     
-    IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, IllusionEventPage.Static.FORUM.toString());
-    if (visibility == IllusionEventPageVisibility.HIDDEN) {
-      return navigationController.accessDenied();
-    }    
-    
-    if (visibility != IllusionEventPageVisibility.VISIBLE) {
-      if (participant == null) {
-        return navigationController.requireLogin(navigationController.accessDenied());
-      }
+    if (!illusionEventPageController.isPageVisible(participant, illusionEvent, IllusionEventPage.Static.FORUM.toString())) {
+      return navigationController.requireLogin(navigationController.accessDenied());
     }
 
     IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.FORUM);

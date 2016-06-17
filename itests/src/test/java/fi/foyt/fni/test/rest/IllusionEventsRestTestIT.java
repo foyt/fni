@@ -14,6 +14,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Test;
 
+import com.icegreen.greenmail.util.GreenMail;
 import com.jayway.restassured.response.Response;
 
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
@@ -23,6 +24,7 @@ import fi.foyt.fni.rest.illusion.model.IllusionEvent;
 import fi.foyt.fni.rest.illusion.model.IllusionEventParticipant;
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlParam;
 import fi.foyt.fni.test.SqlSets;
 
 @DefineSqlSets({ 
@@ -34,14 +36,21 @@ import fi.foyt.fni.test.SqlSets;
   @DefineSqlSet(id = "groups", before = "illusion-event-oai-groups-setup.sql", after = "illusion-event-oai-groups-teardown.sql"),
   @DefineSqlSet(id = "posts", before = "illusion-event-oai-posts-setup.sql", after = "illusion-event-oai-posts-teardown.sql"),
   @DefineSqlSet(id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql"),
-  @DefineSqlSet(id = "event", before = { "illusion-event-open-setup.sql" }, after = { "illusion-event-open-teardown.sql"}),
+  @DefineSqlSet(id = "event", before = { "illusion-event-setup.sql" }, after = { "illusion-event-teardown.sql"}),  
   @DefineSqlSet(id = "event-unpublished", before = { "illusion-event-open-unpublished-setup.sql" }, after = { "illusion-event-open-unpublished-teardown.sql"}),
   @DefineSqlSet(id = "event-participant", before = {"illusion-event-open-participant-setup.sql" }, after = {"illusion-event-open-participant-teardown.sql"}),
   @DefineSqlSet(id = "event-organizer", before = {"illusion-event-open-organizer-setup.sql" }, after = {"illusion-event-open-organizer-teardown.sql"}),
   @DefineSqlSet(id = "event-forum", before = { "illusion-event-open-forum-setup.sql" }, after = {"illusion-event-open-forum-teardown.sql"}),
-  @DefineSqlSet(id = "event-forum-visible", before = { "illusion-event-open-forum-visible-setup.sql" }, after = {"illusion-event-open-forum-visible-teardown.sql"}),
   @DefineSqlSet(id = "event-forum-posts", before = { "illusion-event-open-forum-posts-setup.sql" }, after = {"illusion-event-open-forum-posts-teardown.sql"}),
-  @DefineSqlSet(id = "event-character-sheet", before = { "illusion-event-open-character-sheet-setup.sql" }, after = {"illusion-event-open-character-sheet-teardown.sql"})
+  @DefineSqlSet(id = "event-character-sheet", before = { "illusion-event-open-character-sheet-setup.sql" }, after = {"illusion-event-open-character-sheet-teardown.sql"}),
+  @DefineSqlSet(id = "event-forum-visible", 
+    before = {"illusion-event-setting-setup.sql" }, 
+    after = {"illusion-event-setting-teardown.sql"}, params = {
+      @SqlParam (name = "id", value = "1"), 
+      @SqlParam (name = "eventId", value = "1"),
+      @SqlParam (name = "value", value = "{\"FORUM\":{\"visibility\":\"VISIBLE\"}}") 
+    }
+  ) 
 })
 public class IllusionEventsRestTestIT extends AbstractRestTest {
 
@@ -691,45 +700,50 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   @Test
   @SqlSets({"basic-users", "service-client", "illusion-basic", "event", "event-participant" })
   public void testUpdateParticipant() throws Exception {
-    String token = createServiceToken();
-    
-    IllusionEventParticipant createParticipant = new IllusionEventParticipant(null, 1l, IllusionEventParticipantRole.PENDING_APPROVAL);
-    
-    Response response = givenJson(token)
-      .body(createParticipant)
-      .post("/illusion/events/{EVENTID}/participants", 1l);    
-    response.then()
-      .statusCode(200);
-    
-    Long id = response.body().jsonPath().getLong("id");
-    givenJson(createServiceToken())
-      .get("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
-      .then()
-      .statusCode(200)
-      .body("id", not(is((Long) null)))
-      .body("role", is("PENDING_APPROVAL"))
-      .body("userId", is(1));
-    
-    IllusionEventParticipant updateParticipant = new IllusionEventParticipant(id, createParticipant.getUserId(), IllusionEventParticipantRole.ORGANIZER);
-    
-    givenJson(token)
-      .body(updateParticipant)
-      .put("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
-      .then()
-      .statusCode(204);
-    
-    givenJson(createServiceToken())
-      .get("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
-      .then()
-      .statusCode(200)
-      .body("id", is(id.intValue()))
-      .body("role", is("ORGANIZER"))
-      .body("userId", is(1));
-    
-    givenJson(token)
-      .delete("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
-      .then()
-      .statusCode(204);
+    GreenMail greenMail = startSmtpServer();
+    try {
+      String token = createServiceToken();
+      
+      IllusionEventParticipant createParticipant = new IllusionEventParticipant(null, 1l, IllusionEventParticipantRole.PENDING_APPROVAL);
+      
+      Response response = givenJson(token)
+        .body(createParticipant)
+        .post("/illusion/events/{EVENTID}/participants", 1l);    
+      response.then()
+        .statusCode(200);
+      
+      Long id = response.body().jsonPath().getLong("id");
+      givenJson(createServiceToken())
+        .get("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+        .then()
+        .statusCode(200)
+        .body("id", not(is((Long) null)))
+        .body("role", is("PENDING_APPROVAL"))
+        .body("userId", is(1));
+      
+      IllusionEventParticipant updateParticipant = new IllusionEventParticipant(id, createParticipant.getUserId(), IllusionEventParticipantRole.ORGANIZER);
+      
+      givenJson(token)
+        .body(updateParticipant)
+        .put("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+        .then()
+        .statusCode(204);
+      
+      givenJson(createServiceToken())
+        .get("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+        .then()
+        .statusCode(200)
+        .body("id", is(id.intValue()))
+        .body("role", is("ORGANIZER"))
+        .body("userId", is(1));
+      
+      givenJson(token)
+        .delete("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+        .then()
+        .statusCode(204);
+    } finally {
+      greenMail.stop();
+    } 
   }
   
   @Test

@@ -7,8 +7,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SqlBefore {
+public @interface SqlParam {
 
-  String[] value();
+  String name();
+  String value();
   
 }

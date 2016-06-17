@@ -20,28 +20,28 @@ import fi.foyt.fni.test.ui.base.AbstractIllusionUITest;
 
 @DefineSqlSets ({
   @DefineSqlSet (id = "illusion-basic", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql"}, 
-    after = {"illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
+    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-setup.sql"}, 
+    after = {"illusion-event-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   ),
   @DefineSqlSet (id = "illusion-participant", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-participant-setup.sql"}, 
-    after = {"illusion-event-open-participant-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
+    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-setup.sql", "illusion-event-open-participant-setup.sql"}, 
+    after = {"illusion-event-open-participant-teardown.sql", "illusion-event-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   ),
   @DefineSqlSet (id = "illusion-organizer", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-organizer-setup.sql"}, 
-    after = {"illusion-event-open-organizer-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
+    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-setup.sql", "illusion-event-open-organizer-setup.sql"}, 
+    after = {"illusion-event-open-organizer-teardown.sql", "illusion-event-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   ),
   @DefineSqlSet (id = "illusion-banned", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-banned-setup.sql"}, 
-    after = {"illusion-event-open-banned-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
+    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-setup.sql", "illusion-event-open-banned-setup.sql"}, 
+    after = {"illusion-event-open-banned-teardown.sql", "illusion-event-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   ),
   @DefineSqlSet (id = "illusion-event-oai", 
     before = {"basic-users-setup.sql","illusion-event-oai-setup.sql"}, 
     after = {"illusion-event-oai-teardown.sql","basic-users-teardown.sql"}
   ),
   @DefineSqlSet (id = "illusion-event-custom", 
-    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-open-setup.sql", "illusion-event-open-custom-setup.sql" },
-    after = {"illusion-event-open-custom-teardown.sql", "illusion-event-open-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
+    before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-event-setup.sql", "illusion-event-open-custom-setup.sql" },
+    after = {"illusion-event-open-custom-teardown.sql", "illusion-event-teardown.sql", "illusion-basic-teardown.sql","basic-users-teardown.sql"}
   ),
   @DefineSqlSet (id = "illusion-event-unpublished", 
   before = {"basic-users-setup.sql","illusion-basic-setup.sql", "illusion-upcoming-unpublished-event-setup.sql"},

@@ -1,0 +1,11 @@
+delete from MaterialView where material_id in ({indexId|20001}, {folderId|20000});
+delete from IllusionEventGenre where event_id = {eventId|1};
+delete from IllusionEventParticipant where event_id in ({eventId|1});
+delete from IllusionEventDocument where id = {indexId|20001};
+delete from Document where id = {indexId|20001};
+delete from Material where id = {indexId|20001};
+delete from IllusionEventSetting where event_id in ({eventId|1});
+delete from IllusionEvent where id = {eventId|1};
+delete from IllusionEventFolder where id = {folderId|20000};
+delete from Folder where id = {folderId|20000};
+delete from Material where id = {folderId|20000};
