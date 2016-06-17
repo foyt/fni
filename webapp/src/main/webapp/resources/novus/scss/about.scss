@@ -39,7 +39,7 @@ h3 {
     }
   }
   
-  &:after {
+  &::after {
     clear: both;
   }
 }
