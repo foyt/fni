@@ -3,8 +3,8 @@
   
   var messages = [];
   
-  console.log = function (message) {
-    messages.push(message);
+  console.log = function () {
+    messages.push(arguments);
   };
   
   $(document).ready(function () {
@@ -22,11 +22,8 @@
       })
       .appendTo(document.body);
     
-    console.log = function (message) {
-      $('#log').append(
-        $('<div>')
-          .text($.type(message) == 'string' ? message : JSON.stringify(message))    
-      );
+    console.log = function () {
+      $('#log').append($('<div>').text(JSON.stringify(arguments)));
     };  
     
     for (var i = 0, l = messages.length; i < l; i++) {
