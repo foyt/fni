@@ -218,13 +218,13 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void assertLoggedIn() {
-    assertSelectorNotVisible(".index-menu .menu-tools-login");
-    assertSelectorVisible(".index-menu .menu-tools-account-container");
+    assertSelectorNotPresent(".index-menu .menu-tools-login");
+    assertSelectorPresent(".index-menu .menu-tools-account-container");
   }
   
   protected void assertNotLoggedIn() {
-    assertSelectorVisible(".index-menu .menu-tools-login");
-    assertSelectorNotVisible(".index-menu .menu-tools-account-container");
+    assertSelectorPresent(".index-menu .menu-tools-login");
+    assertSelectorNotPresent(".index-menu .menu-tools-account-container");
   }
   
   protected void waitSelectorToBeClickable(final String selector) {

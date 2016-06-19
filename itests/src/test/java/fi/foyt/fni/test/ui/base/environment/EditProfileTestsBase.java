@@ -146,6 +146,8 @@ public class EditProfileTestsBase extends AbstractUITest {
     scrollWaitAndClick(".notification-forum-new-post-mail");
     assertSelectorPresent(".notification-forum-new-post-mail:checked");
     scrollWaitAndClick(".save-button");
+    sleep(1000);
+    
     waitAndClick("a[href='#settings']");
     assertSelectorPresent(".notification-forum-new-post-mail:checked");
   } 

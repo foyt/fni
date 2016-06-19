@@ -57,8 +57,6 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-basic")
   public void testNameRequired() {    
-    acceptCookieDirective();
-
     loginInternal("admin@foyt.fi", "pass");
     navigate("/illusion/createevent");
     typeSelectorInputValue("input[data-alt-field='.actual-start-date']", "10/20/2030");
@@ -70,7 +68,6 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-basic")
   public void testCreateEvent() throws Exception {
-    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
 
     String name = "name";
@@ -88,8 +85,8 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     waitForUrlMatches(".*/illusion/event/" + urlName);
     testTitle("Illusion - name");
     
-    assertSelectorTextIgnoreCase(".view-header-description-title", name);
-    assertSelectorTextIgnoreCase(".view-header-description-text", description);
+    waitAndAssertSelectorText(".view-header-description-title", name, true, true);
+    waitAndAssertSelectorText(".view-header-description-text", description, true, true);
     assertSelectorPresent(".illusion-event-navigation-admin-menu");
     
     waitForNotification();
@@ -102,8 +99,6 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-basic")
   public void testCreateEventWithStartDate() throws Exception {
-    acceptCookieDirective();
-
     loginInternal("admin@foyt.fi", "pass");
 
     String name = "withstart";
@@ -136,8 +131,6 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-basic")
   public void testCreateEventWithTimesAndDates() throws Exception {
-    acceptCookieDirective();
-    
     loginInternal("admin@foyt.fi", "pass");
 
     String name = "timesanddates";
@@ -177,8 +170,6 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-basic")
   public void testCreateEventWithLocation() throws Exception {
-    acceptCookieDirective();
-
     loginInternal("admin@foyt.fi", "pass");
 
     String name = "timesanddates";
@@ -207,7 +198,6 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-basic")
   public void testCreateEventSignUpDates() throws Exception {
-    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
 
     String name = "signupdates";
@@ -238,7 +228,6 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-basic")
   public void testCreateEventImageUrl() throws Exception {
-    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
 
     String name = "signupdates";
@@ -263,7 +252,6 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-basic")
   public void testCreateEventBeginnerFriendly() throws Exception {
-    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
 
     String name = "signupdates";
@@ -286,7 +274,6 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-basic")
   public void testCreateEventAgeLimit() throws Exception {
-    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
 
     String name = "signupdates";
@@ -312,7 +299,6 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-basic")
   public void testCreateEventType() throws Exception {
-    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
 
     String name = "signupdates";
@@ -337,7 +323,6 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-basic")
   public void testCreateEventGenres() throws Exception {
-    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
 
     String name = "signupdates";
@@ -370,7 +355,6 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriTypes();
     stubLarpKalenteriGenres();
     
-    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
 
     String name = "name";
@@ -484,7 +468,6 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriTypes();
     stubLarpKalenteriGenres();
     
-    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
 
     String name = "name";
@@ -601,7 +584,6 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriTypes();
     stubLarpKalenteriGenres();
     
-    acceptCookieDirective();
     loginInternal("admin@foyt.fi", "pass");
 
     String name = "name";

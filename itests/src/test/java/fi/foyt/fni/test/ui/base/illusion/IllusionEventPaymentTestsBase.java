@@ -80,8 +80,11 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
   
   @Test
   @SqlSets (
-    value = { "basic-users", "user-client", "illusion-basic", "illusion-paid-events" },
     sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "user-client"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "illusion-paid-events"),
       @SqlSet (id = "illusion-event-form", params = {
         @SqlParam (name = "eventId", value = "3")
       })
@@ -147,7 +150,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       
       assertLoggedIn();
 
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -165,8 +168,11 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
 
   @Test
   @SqlSets (
-    value = {"basic-users", "user-client", "illusion-basic", "illusion-paid-events"},
     sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "user-client"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "illusion-paid-events"),
       @SqlSet (id = "illusion-event-form", params = {
         @SqlParam (name = "eventId", value = "3")
       })
@@ -239,7 +245,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       
       assertLoggedIn();
 
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -257,8 +263,10 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
   
   @Test
   @SqlSets (
-    value = {"basic-users", "illusion-basic", "illusion-paid-events" },
     sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "illusion-paid-events"),
       @SqlSet (id = "illusion-event-form", params = {
         @SqlParam (name = "eventId", value = "2")
       })
@@ -311,10 +319,10 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       waitAndSendKeys(".payerPostalCode", "12345");
       waitAndSendKeys(".payerPostalOffice", "Test");
       waitAndSendKeys(".notes", "This is an automated test");
-      
+
       assertLoggedIn();
 
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -332,8 +340,10 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
   
   @Test
   @SqlSets (
-    value = {"basic-users", "illusion-basic", "illusion-paid-events" },
     sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "illusion-paid-events"),
       @SqlSet (id = "illusion-event-form", params = {
         @SqlParam (name = "eventId", value = "2")
       })
@@ -392,7 +402,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       
       assertLoggedIn();
 
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -410,8 +420,11 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
   
   @Test
   @SqlSets (
-    value = {"basic-users", "user-client", "illusion-basic", "illusion-paid-events" },
     sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "user-client"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "illusion-paid-events"),
       @SqlSet (id = "illusion-event-form", params = {
         @SqlParam (name = "eventId", value = "4")
       })
@@ -467,7 +480,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       
       assertLoggedIn();
 
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -496,6 +509,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       // User fills the registration form
       waitAndClick(".illusion-event-join-button");
 
+      waitMailsReceived(greenMail, 2);
       assertEquals(2, greenMail.getReceivedMessages().length);
 
       String registrantMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
@@ -531,7 +545,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       waitAndSendKeys(".payerPostalOffice", "Test");
       waitAndSendKeys(".notes", "This is an automated test");
       
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -610,7 +624,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       
       assertLoggedIn();
 
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -628,8 +642,11 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
   
   @Test
   @SqlSets (
-    value = {"basic-users", "illusion-basic", "illusion-paid-events", "illusion-paid-events-custom" },
     sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "illusion-paid-events"),
+      @SqlSet (id = "illusion-paid-events-custom"),
       @SqlSet (id = "illusion-event-form", params = {
         @SqlParam (name = "eventId", value = "2")
       })
@@ -686,7 +703,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       
       assertLoggedIn();
 
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);

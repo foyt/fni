@@ -212,8 +212,8 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     String signUpStartDate = "10/05/2030";
     String signUpEndDate = "10/10/2030";
     
-    typeSelectorInputValue(".sign-up-start-date", signUpStartDate);
-    typeSelectorInputValue(".sign-up-end-date", signUpEndDate);
+    scrollWaitAndType(".sign-up-start-date", signUpStartDate);
+    scrollWaitAndType(".sign-up-end-date", signUpEndDate);
     scrollWaitAndClick(".illusion-event-settings-save");
     waitForPageLoad();
     
@@ -230,7 +230,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     String imageUrl = "http://www.url.to/image.png";
 
-    typeSelectorInputValue(".illusion-event-settings-image-url", imageUrl);
+    scrollWaitAndType(".illusion-event-settings-image-url", imageUrl);
     scrollWaitAndClick(".illusion-event-settings-save");
     waitForPageLoad();
     

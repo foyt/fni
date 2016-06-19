@@ -1,13 +1,8 @@
 package fi.foyt.fni.test.ui.base.forge;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -42,27 +37,25 @@ public class ForgeConnectDropboxTestsBase extends AbstractUITest {
       return;
     }
     
-    acceptCookieDirective();
-
     loginGoogle();
     navigate("/forge/");
     waitAndClick(".forge-import-material-menu");
     waitAndClick(".forge-import-material-menu .forge-connect-dropbox");
     
     waitForUrlMatches("^https://www.dropbox.com/1/oauth/authorize.*");
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.visibilityOfElementLocated(By.id("login-content")));
-    getWebDriver().findElement(By.cssSelector("#login-content input[type=\"email\"]")).click();
-    getWebDriver().findElement(By.cssSelector("#login-content input[type=\"email\"]")).sendKeys(getDropboxUsername());
-    getWebDriver().findElement(By.cssSelector("#login-content input[type=\"password\"]")).click();
-    getWebDriver().findElement(By.cssSelector("#login-content input[type=\"password\"]")).sendKeys(getDropboxPassword());
-    getWebDriver().findElement(By.cssSelector(".login-button")).click();
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.elementToBeClickable(By.name("allow_access")));
-    getWebDriver().findElement(By.name("allow_access")).click();
-    new WebDriverWait(getWebDriver(), 60).until(ExpectedConditions.titleIs("Forge"));
-    assertEquals("Forge", getWebDriver().getTitle());
+   
+    waitAndClick("#login-content input[type=\"email\"]");
+    typeSelectorInputValue("#login-content input[type=\"email\"]", getDropboxUsername());
+    waitAndClick("#login-content input[type=\"password\"]");
+    typeSelectorInputValue("#login-content input[type=\"password\"]", getDropboxPassword());
+    waitAndClick(".login-button");
+    waitAndClick("*[name='allow_access']");
+    waitTitle("Forge");
+    assertTitle("Forge");
     waitForNotification();
     assertNotificationStartsWith("info", "Dropbox folder is connected");
-    assertEquals(2, getWebDriver().findElements(By.cssSelector(".forge-material-title[title=\"Dropbox\"]")).size());
+    waitForSelectorCount(".forge-material-title[title=\"Dropbox\"]", 2);
+    assertSelectorCount(".forge-material-title[title=\"Dropbox\"]", 2);
   }
   
 }
