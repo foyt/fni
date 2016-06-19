@@ -85,6 +85,10 @@ public class IllusionEventPageController {
         return true;
       case GROUPS:
         if (user != null) {
+          if (role == IllusionEventParticipantRole.ORGANIZER) {
+            return true;
+          }
+          
           for (Long groupId : pageSettings.getGroupIds()) {
             IllusionEventGroup group = illusionEventController.findGroupById(groupId);
             if (illusionEventController.findGroupMemberByGroupAndUser(group, user) != null) {
