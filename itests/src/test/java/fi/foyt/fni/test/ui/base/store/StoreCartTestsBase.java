@@ -36,14 +36,14 @@ public class StoreCartTestsBase extends AbstractUITest {
     navigate("/gamelibrary/cart/", true);
     waitTitle("Forge & Illusion - Game Library");
     
-    scrollWaitAndType("#cart-form:payerFirstName", firstName);
-    scrollWaitAndType("#cart-form:payerLastName", lastName);
-    scrollWaitAndType("#cart-form:payerEmail", email);
-    scrollWaitAndType("#cart-form:payerMobile", mobile);
-    scrollWaitAndType("#cart-form:payerStreetAddress", addressStreet);
-    scrollWaitAndType("#cart-form:payerPostalCode", addressPostalCode);
-    scrollWaitAndType("#cart-form:payerPostalOffice", addressPostalOffice);
-    scrollWaitAndType("#cart-form:notes", notes);
+    scrollWaitAndType(".payerFirstName", firstName);
+    scrollWaitAndType(".payerLastName", lastName);
+    scrollWaitAndType(".payerEmail", email);
+    scrollWaitAndType(".payerMobile", mobile);
+    scrollWaitAndType(".payerStreetAddress", addressStreet);
+    scrollWaitAndType(".payerPostalCode", addressPostalCode);
+    scrollWaitAndType(".payerPostalOffice", addressPostalOffice);
+    scrollWaitAndType(".notes", notes);
     scrollWaitAndClick(".gamelibrary-cart-submit");
 
     acceptPaytrailPayment();
