@@ -47,13 +47,13 @@ public class ForgeDocumentTestsIT extends ForgeDocumentTestsBase {
   
   @Override
   @SqlSets ({"basic-materials-users"})
-  public void textCreateSharedFolder() throws Exception {
+  public void testCreateSharedFolder() throws Exception {
     if ("microsoftedge".equals(getBrowser())) {
       // FIXME: Edge driver does not support frame switchTo
       return;
     }
     
-    super.textCreateSharedFolder();
+    super.testCreateSharedFolder();
   }
   
   @Override
