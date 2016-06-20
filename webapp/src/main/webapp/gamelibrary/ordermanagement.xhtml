@@ -3,59 +3,55 @@
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" 
-  template="/WEB-INF/templates/gridbase.xhtml">
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  template="/WEB-INF/templates/gridbase-s.xhtml">
+  
+  <ui:define name="title">
+    <title>#{locales['gamelibrary.orderManagement.pageTitle']}</title>
+  </ui:define>
+  
+  <ui:define name="scripts">
+    <script defer="defer" type="text/javascript" src="/scripts/gui/gamelibrary-order-management.js"></script>
+  </ui:define>
 
-  <ui:define name="page-title">#{locales['gamelibrary.orderManagement.pageTitle']}</ui:define>
-  
-  <ui:define name="grid-css">
-    <h:outputStylesheet library="novus" name="css/grid.css"/>
-  </ui:define>
-  
-  <ui:define name="view-scripts">
-    <!-- View scripts -->
-    
-    <h:outputScript name="scripts/gui/gamelibrary-order-management.js"/>
-  </ui:define>
-  
-  <ui:define name="view-stylesheets">
-    <!-- View Styles -->
-  
-    <h:outputStylesheet library="novus" name="css/menu.css"/>
-    <h:outputStylesheet library="novus" name="css/gamelibrary-order-management.css"/>
+  <ui:define name="styles">
+    <link rel="StyleSheet" href="/theme/css/common.css"></link>
+    <link rel="StyleSheet" href="/theme/css/fonts.css"></link>
+    <link rel="StyleSheet" href="/theme/css/flex-menu.css"></link>
+    <link rel="StyleSheet" href="//static.forgeandillusion.net/libs/fni-flexgrid/1.0.3/flexgrid.css"></link>
+    <link rel="StyleSheet" href="/theme/css/gamelibrary-order-management.css"></link>
   </ui:define>
 
   <ui:define name="grid-content">
-
     <!-- Menu -->
 
-    <ui:include src="/facelets/menu.xhtml" />
+    <ui:include src="/facelets/flex-menu.xhtml" />
     
-    <!-- Header -->
+    <div class="flex-row view-header">
+      <div class="flex-cell-full">
+        <!-- Navigation -->
+         
+        <div class="flex-cell-row sm-flex-hide">
+          <div class="view-header-navigation">
+            <a class="view-header-navigation-item" jsf:outcome="/index.jsf">#{locales['gamelibrary.orderManagement.navigationIndex']}</a>
+            <span class="view-header-navigation-separator"/>
+            <a class="view-header-navigation-item" jsf:outcome="/gamelibrary/index.jsf">#{locales['gamelibrary.orderManagement.navigationGameLibrary']}</a>
+          </div>
+        </div>
+
+        <div class="flex-row">
+          <div class="flex-cell-full no-margin-top">
+            <div class="description-panel">
+              <p class="description-title">#{locales['gamelibrary.orderManagement.descriptionTitle']}</p>
+              <p class="description-text">#{locales['gamelibrary.orderManagement.descriptionText']}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
     
-    <h:panelGroup layout="block" styleClass="grid_16 tight view-header">
-      <!-- Navigation -->
-      
-      <h:panelGroup layout="block" styleClass="view-header-navigation">
-        <h:panelGroup styleClass="view-header-navigation-item">#{locales['gamelibrary.orderManagement.navigationIndex']}</h:panelGroup>
-        <h:panelGroup styleClass="view-header-navigation-separator"/>
-        <h:panelGroup styleClass="view-header-navigation-item">#{locales['gamelibrary.orderManagement.navigationGameLibrary']}</h:panelGroup>
-      </h:panelGroup>
-  
-      <!-- Description -->
-  
-      <h:panelGroup layout="block" styleClass="view-header-description">
-        <p class="view-header-description-title">#{locales['gamelibrary.orderManagement.descriptionTitle']}</p>
-        <p class="view-header-description-text">#{locales['gamelibrary.orderManagement.descriptionText']}</p>
-      </h:panelGroup>
-    </h:panelGroup>
-    
-    <!-- View Content -->
-    
-    <h:panelGroup layout="block" styleClass="grid_16 tight">
-      <h:panelGroup layout="block" styleClass="gamelibrary-order-management-panel">
-        
-        <!-- order lists -->
-        
+    <div class="flex-row">
+      <div class="flex-cell-full index-box">
         <h:panelGroup layout="block" styleClass="gamelibrary-order-management-list" rendered="#{!empty(gameLibraryOrderManamentBackingBean.ordersNew)}">
           <h3>#{locales['gamelibrary.orderManagement.ordersNewTitle']}</h3>
           
@@ -103,8 +99,9 @@
             <ui:param name="orders" value="#{gameLibraryOrderManamentBackingBean.ordersDelivered}"/>
           </ui:include>
         </h:panelGroup>
-      </h:panelGroup>
-    </h:panelGroup>   
+      </div>
+    </div>
+
   </ui:define>
 
 </ui:composition>

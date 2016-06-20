@@ -1,0 +1,1 @@
+delete from IllusionEventParticipant where id = {id|1};

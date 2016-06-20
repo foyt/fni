@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase.xhtml">
+  xmlns:h="http://java.sun.com/jsf/html" template="/WEB-INF/templates/gridbase-s.xhtml">
 
-  <ui:define name="page-title">#{locales['about.pageTitle']}</ui:define>
+  <ui:define name="title">
+    <title>#{locales['about.pageTitle']}</title>
+  </ui:define>
 
-  <ui:define name="view-stylesheets">
-    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
-    <h:outputStylesheet library="novus" name="css/about.css"/>
+  <ui:define name="styles">
+    <link rel="StyleSheet" href="/theme/css/common.css"></link>
+    <link rel="StyleSheet" href="/theme/css/fonts.css"></link>
+    <link rel="StyleSheet" href="/theme/css/flex-menu.css"></link>
+    <link rel="StyleSheet" href="//static.forgeandillusion.net/libs/fni-flexgrid/1.0.3/flexgrid.css"></link>
+    <link rel="StyleSheet" href="/theme/css/about.css"></link>
   </ui:define>
 
   <ui:define name="grid-content">
@@ -28,91 +33,124 @@
         <h2>#{locales['about.title']}</h2>
         <p>#{locales['about.aboutText']}</p>
 
-        <h3 id="vision">#{locales['about.visionTitle']}</h3>
-        <p>#{locales['about.visionText1']}</p>
-        <p>#{locales['about.visionText2']}</p>
-        <p>#{locales['about.visionText3Prefix']} <a href="http://www.otavanopisto.fi" target="_blank">#{locales['about.visionText3LinkOO']}</a> #{locales['about.visionText3Postfix']}</p>
-        <p>#{locales['about.visionText4']}</p>
-        <p>#{locales['about.visionText5']}</p>
+        <div class="block">
+          <h3 id="vision">#{locales['about.visionTitle']}</h3>
+          <p>#{locales['about.visionText1']}</p>
+          <p>#{locales['about.visionText2']}</p>
+          <p>#{locales['about.visionText3Prefix']} <a href="http://www.otavanopisto.fi" target="_blank">#{locales['about.visionText3LinkOO']}</a>#{locales['about.visionText3Postfix']}</p>
+          <p>#{locales['about.visionText4']}</p>
+        </div>
         
-        <h3 id="information">#{locales['about.informationTitle']}</h3>
-        <p>#{locales['about.informationTextPrefix']}<a href="http://loki.pelilauta.fi/" target="_blank">#{locales['about.informationTextLinkLoki']}</a>#{locales['about.informationTextPostfix']}</p>
-
-        <h3 id="forum">#{locales['about.forumTitle']}</h3>
-        <p>#{locales['about.forumText']}</p>
-
-        <h3 id="distribution">#{locales['about.distributionTitle']}</h3>
-        <p>#{locales['about.distributionText1']}</p>
-        <p>#{locales['about.distributionText2']}</p>
+        <div class="block">
+          <h3 id="information">#{locales['about.informationTitle']}</h3>
+          <p>#{locales['about.informationTextPrefix']}<a href="http://loki.pelilauta.fi/" target="_blank">#{locales['about.informationTextLinkLoki']}</a>#{locales['about.informationTextPostfix']}</p>
+        </div>
         
-        <h3 id="gameplay">#{locales['about.gameplayTitle']}</h3>
-        <p>#{locales['about.gameplayText1']}</p>
-        <ul>
-          <li>#{locales['about.gameplayBullet1']}</li>
-          <li>#{locales['about.gameplayBullet2']}</li>
-          <li>#{locales['about.gameplayBullet3']}</li>
-          <li>#{locales['about.gameplayBullet4']}</li>
-          <li>#{locales['about.gameplayBullet5']}</li>
-          <li>#{locales['about.gameplayBullet6']}</li>
-          <li>#{locales['about.gameplayBullet7']}</li>
-          <li>#{locales['about.gameplayBullet8']}</li>
-        </ul>
-        <p>#{locales['about.gameplayText2']}</p>
+        <div class="block">
+          <h3 id="forum">#{locales['about.forumTitle']}</h3>
+          <p>#{locales['about.forumText']}</p>
+        </div>
         
-        <h3 id="history">#{locales['about.historyTitle']}</h3>
+        <div class="block">
+          <h3 id="distribution">#{locales['about.distributionTitle']}</h3>
+          <p>#{locales['about.distributionText1']}</p>
+          <p>#{locales['about.distributionText2']}</p>
+        </div>
+          
+        <div class="block">
+          <h3 id="gameplay">#{locales['about.eventsTitle']}</h3>
+          <p>#{locales['about.events1']}</p>
+          <p>#{locales['about.events2']}</p>
+        </div>
         
-        <p><h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-1.jpg" />#{locales['about.historyText1Part1']} <a href="#{request.contextPath}/profile/1">#{locales['about.historyText1Link1']}</a> #{locales['about.historyText1Part2']} <a href="#{request.contextPath}/profile/2">#{locales['about.historyText1Link2']}</a> #{locales['about.historyText1Part3']}</p>
-        <p>#{locales['about.historyText2']}</p>
-        <p>#{locales['about.historyText3']}</p>
-        <p>#{locales['about.historyText4']}</p>
-        
-        <p><h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-2.jpg" />#{locales['about.historyText5']}</p>
-        <p>#{locales['about.historyText6']}</p>
-        <p>#{locales['about.historyText7']}</p>
-        <p>#{locales['about.historyText8']}</p>
-        
-        <p><h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-3.jpg" />#{locales['about.historyText9']}</p>
-        <p>#{locales['about.historyText10']}</p>
-        <p>#{locales['about.historyText11']}</p>
-        
-        <p><h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-4.jpg" />#{locales['about.historyText12']}</p>
-        <p>#{locales['about.historyText13Part1']}<a href="#{request.contextPath}/profile/81">#{locales['about.historyText13Link1']}</a>#{locales['about.historyText13Part2']}</p>
-        
-        <p><h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-5.jpg" />#{locales['about.historyText14']}</p>
-        <p>#{locales['about.historyText15']}<br/><br/><br/></p>
-        
-        <p><h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-6.png" />#{locales['about.historyText16']}</p>
-        <p>#{locales['about.historyText17']}<br/><br/></p>
-        
-        <p><h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-7.png" />#{locales['about.historyText18']}</p>
-        <p>#{locales['about.historyText19']}</p>
-        <p>#{locales['about.historyText20']}</p>
-        
-        <h3 id="cookies">#{locales['about.cookiesTitle']}</h3>
-        <p>#{locales['about.cookiesText1']}</p>
-        <p>#{locales['about.cookiesText2']}</p>
-        <ul>
-          <li>#{locales['about.cookiesBullet1']}</li>
-          <li>#{locales['about.cookiesBullet2']}</li>
-        </ul>
-        <p>#{locales['about.cookiesText3']}</p>
-        <p>#{locales['about.cookiesText4']}</p>
-        
-        <h3 id="opensource">#{locales['about.openSourceTitle']}</h3>
-        <p>#{locales['about.openSourceText1']}</p>
-        <p><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.openSourceText2'])}" escape="false"/></p>
-        <ul>
-          <li><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.openSourceBullet1'])}" escape="false"/></li>
-          <li><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.openSourceBullet2'])}" escape="false"/></li>
-          <li><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.openSourceBullet3'])}" escape="false"/></li>                          
-        </ul>
-                
-        <h3 id="contact">#{locales['about.contactTitle']}</h3>
-        <p>#{locales['about.contactText']}</p>
+        <div class="block">
+          <h3 id="history">#{locales['about.historyTitle']}</h3>
+          
+          <div class="sub-block">
+            <h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-1.jpg" />
+            <p>#{locales['about.historyText1Part1']} <a href="#{request.contextPath}/profile/1">#{locales['about.historyText1Link1']}</a> #{locales['about.historyText1Part2']} <a href="#{request.contextPath}/profile/2">#{locales['about.historyText1Link2']}</a> #{locales['about.historyText1Part3']}</p>
+            <p>#{locales['about.historyText2']}</p>
+            <p>#{locales['about.historyText3']}</p>
+            <p>#{locales['about.historyText4']}</p>
+          </div>
+          
+          <div class="sub-block">
+            <h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-2.jpg" />
+            <p>#{locales['about.historyText5']}</p>
+            <p>#{locales['about.historyText6']}</p>
+            <p>#{locales['about.historyText7']}</p>
+            <p>#{locales['about.historyText8']}</p>
+          </div>
+          
+          <div class="sub-block">
+            <h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-3.jpg" />
+            <p>#{locales['about.historyText9']}</p>
+            <p>#{locales['about.historyText10']}</p>
+            <p>#{locales['about.historyText11']}</p>
+          </div>
+          
+          <div class="sub-block">
+            <h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-4.jpg" />
+            <p>#{locales['about.historyText12']}</p>
+            <p>#{locales['about.historyText13Part1']}<a href="#{request.contextPath}/profile/81">#{locales['about.historyText13Link1']}</a>#{locales['about.historyText13Part2']}</p>
+          </div>
+          
+          <div class="sub-block">
+            <h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-5.jpg" />
+            <p>#{locales['about.historyText14']}</p>
+            <p>#{locales['about.historyText15']}<br/><br/><br/></p>
+          </div>
+          
+          <div class="sub-block">
+            <h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-6.png" />
+            <p>#{locales['about.historyText16']}</p>
+            <p>#{locales['about.historyText17']}<br/><br/></p>
+          </div>
+          
+          <div class="sub-block">
+            <h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-7.png" />
+            <p>#{locales['about.historyText18']}</p>
+            <p>#{locales['about.historyText19']}</p>
+          </div>
             
-        <h3 id="acknowledgements">#{locales['about.acknowledgementsTitle']}</h3>
-        <p><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.acknowledgementsText1'])}" escape="false"/></p>
-        <p><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.acknowledgementsText2'])}" escape="false"/></p>
+          <div class="sub-block">
+            <h:graphicImage styleClass="history-image" library="novus" name="gfx/layout/history-8.png" />
+            <p>#{locales['about.historyText20']}</p>
+            <p>#{locales['about.historyText21']}</p>
+          </div>
+        </div>
+          
+        <div class="block">
+          <h3 id="cookies">#{locales['about.cookiesTitle']}</h3>
+          <p>#{locales['about.cookiesText1']}</p>
+          <p>#{locales['about.cookiesText2']}</p>
+          <ul>
+            <li>#{locales['about.cookiesBullet1']}</li>
+            <li>#{locales['about.cookiesBullet2']}</li>
+          </ul>
+          <p>#{locales['about.cookiesText3']}</p>
+          <p>#{locales['about.cookiesText4']}</p>
+        </div>
+        
+        <div class="block">
+          <h3 id="opensource">#{locales['about.openSourceTitle']}</h3>
+          <p>#{locales['about.openSourceText1']}</p>
+          <p><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.openSourceText2'])}" escape="false"/></p>
+          <ul>
+            <li><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.openSourceBullet1'])}" escape="false"/></li>
+            <li><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.openSourceBullet2'])}" escape="false"/></li>
+            <li><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.openSourceBullet3'])}" escape="false"/></li>                          
+          </ul>
+        </div>
+        
+        <div class="block">
+          <h3 id="contact">#{locales['about.contactTitle']}</h3>
+          <p>#{locales['about.contactText']}</p>
+              
+          <h3 id="acknowledgements">#{locales['about.acknowledgementsTitle']}</h3>
+          <p><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.acknowledgementsText1'])}" escape="false"/></p>
+          <p><h:outputText value="#{aboutBackingBean.getParsedText(locales['about.acknowledgementsText2'])}" escape="false"/></p>
+        </div>
       </div>    
     </div>
     

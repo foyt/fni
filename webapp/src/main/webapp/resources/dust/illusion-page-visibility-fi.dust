@@ -4,32 +4,55 @@
       Muuta sivun '{pageTitle}' näkyvyyttä
     </p>
       
-    {@if cond="'{pageRequiresUser}' != 'true'"}
-      <div>
-        {@if cond="'{pageVisibility}' == 'VISIBLE'"}
-          <input checked="checked" type="radio" name="visibility" value="VISIBLE"/> 
-        {:else}
-          <input type="radio" name="visibility" value="VISIBLE"/> 
-        {/if}
-        
-        <label>Näkyvissä kaikille</label>
-      </div>
-    {/if}
-    <div>
-      {@if cond="'{pageVisibility}' == 'PARTICIPANTS'"}
-        <input checked="checked" type="radio" name="visibility" value="PARTICIPANTS"/> 
-      {:else}
-        <input type="radio" name="visibility" value="PARTICIPANTS"/> 
-      {/if}
-      <label>Näkyvissä osallistujille</label>
-    </div>
-    <div>
-      {@if cond="'{pageVisibility}' == 'HIDDEN'"}
+    <div class="illusion-page-visibility-field">
+      {@eq key=pageVisibility value="HIDDEN"}
         <input checked="checked" type="radio" name="visibility" value="HIDDEN"/> 
       {:else}
         <input type="radio" name="visibility" value="HIDDEN"/> 
-      {/if}
+      {/eq}
       <label>Piilotettu</label>
+    </div>
+    
+    {^pageRequiresUser}
+      <div class="illusion-page-visibility-field">
+        {@eq key=pageVisibility value="VISIBLE"}
+          <input checked="checked" type="radio" name="visibility" value="VISIBLE"/> 
+        {:else}
+          <input type="radio" name="visibility" value="VISIBLE"/> 
+        {/eq}
+        <label>Näkyvissä kaikille</label>
+      </div>
+    {/pageRequiresUser}
+    
+    <div class="illusion-page-visibility-field">
+      {@eq key=pageVisibility value="PARTICIPANTS"}
+        <input checked="checked" type="radio" name="visibility" value="PARTICIPANTS"/> 
+      {:else}
+        <input type="radio" name="visibility" value="PARTICIPANTS"/> 
+      {/eq}
+      <label>Näkyvissä osallistujille</label>
+    </div>
+    
+    <div class="illusion-page-visibility-field">
+      {@eq key=pageVisibility value="GROUPS"}
+        <input checked="checked" type="radio" name="visibility" value="GROUPS"/> 
+      {:else}
+        <input type="radio" name="visibility" value="GROUPS"/> 
+      {/eq}
+      <label>Näkyvissä ryhmille</label>
+      
+      <div class="illusion-page-visibility-dialog-groups">
+        {#groups}
+          <div class="illusion-page-visibility-dialog-group">
+            {?selected}
+              <input type="checkbox" value="{id}" name="group" checked="checked"/>
+            {:else}
+              <input type="checkbox" value="{id}" name="group"/>
+            {/selected}
+            <label>{name}</label>
+          </div>
+        {/groups}
+      </div>
     </div>
   </div>
 </div>

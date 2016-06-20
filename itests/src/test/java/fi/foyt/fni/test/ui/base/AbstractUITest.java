@@ -37,6 +37,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.internal.FindsByCssSelector;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
@@ -130,6 +131,8 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
         return createChromeDriver();
       case "phantomjs":
         return createPhantomJsDriver();
+      case "firefox":
+        return createFirefoxDriver();
     }
     
     throw new RuntimeException(String.format("Unknown browser %s", getBrowser()));
@@ -137,6 +140,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
 
   protected WebDriver createChromeDriver() {
     ChromeDriver driver = new ChromeDriver();
+    return driver;
+  }
+
+  protected WebDriver createFirefoxDriver() {
+    FirefoxDriver driver = new FirefoxDriver();
     return driver;
   }
   
@@ -210,13 +218,13 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void assertLoggedIn() {
-    assertSelectorNotVisible(".index-menu .menu-tools-login");
-    assertSelectorVisible(".index-menu .menu-tools-account-container");
+    assertSelectorNotPresent(".index-menu .menu-tools-login");
+    assertSelectorPresent(".index-menu .menu-tools-account-container");
   }
   
   protected void assertNotLoggedIn() {
-    assertSelectorVisible(".index-menu .menu-tools-login");
-    assertSelectorNotVisible(".index-menu .menu-tools-account-container");
+    assertSelectorPresent(".index-menu .menu-tools-login");
+    assertSelectorNotPresent(".index-menu .menu-tools-account-container");
   }
   
   protected void waitSelectorToBeClickable(final String selector) {
@@ -688,6 +696,11 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   
   protected void acceptCookieDirective() {
 //    waitAndClick(".cc_banner-wrapper .cc_btn_accept_all");
+  }
+  
+  protected void waitAndSelect(String selector, String selection) {
+    waitPresent(selector);
+    selectSelectBoxByValue(selector, selection);
   }
   
   protected void selectSelectBoxByValue(String selector, String value) {

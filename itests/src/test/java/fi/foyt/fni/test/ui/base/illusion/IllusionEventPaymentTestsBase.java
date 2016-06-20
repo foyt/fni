@@ -30,6 +30,8 @@ import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.rest.illusion.model.IllusionEventParticipant;
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlParam;
+import fi.foyt.fni.test.SqlSet;
 import fi.foyt.fni.test.SqlSets;
 import fi.foyt.fni.test.ui.base.AbstractIllusionUITest;
 
@@ -37,9 +39,15 @@ import fi.foyt.fni.test.ui.base.AbstractIllusionUITest;
   @DefineSqlSet (id = "basic-users", before = { "basic-users-setup.sql" }, after = { "basic-users-teardown.sql"  }),
   @DefineSqlSet (id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql"),
   @DefineSqlSet (id = "illusion-paid-events", before = {"illusion-event-oai-paid-setup.sql"}, after = {"illusion-event-oai-paid-teardown.sql"} ),
-  @DefineSqlSet (id = "illusion-paid-events-forms", before = {"illusion-event-oai-paid-forms-setup.sql"}, after = {"illusion-event-oai-paid-forms-teardown.sql"} ),
   @DefineSqlSet (id = "illusion-paid-events-custom", before = {"illusion-event-oai-paid-custom-setup.sql"}, after = {"illusion-event-oai-paid-custom-teardown.sql"} ),
-  @DefineSqlSet(id = "user-client", before = "rest-user-client-setup.sql", after = "rest-user-client-teardown.sql")
+  @DefineSqlSet (id = "user-client", before = "rest-user-client-setup.sql", after = "rest-user-client-teardown.sql"),
+  @DefineSqlSet(id = "illusion-event-form", 
+    before = {"illusion-event-form-setup.sql" }, 
+    after = {"illusion-event-form-teardown.sql"}, params = {
+      @SqlParam (name = "id", value = "2"), 
+      @SqlParam (name = "data", value = "{\"schema\":{\"type\":\"object\",\"required\":false,\"properties\":{\"firstname\":{\"type\":\"string\",\"required\":true},\"lastname\":{\"type\":\"string\",\"required\":true},\"email\":{\"type\":\"string\",\"required\":true}}},\"options\":{\"type\":\"object\",\"fields\":{\"firstname\":{\"label\":\"First name\",\"type\":\"text\",\"id\":\"firstname\",\"order\":\"0\"},\"lastname\":{\"label\":\"Last name\",\"type\":\"text\",\"id\":\"lastname\",\"order\":\"1\"},\"email\":{\"label\":\"Email\",\"type\":\"email\",\"id\":\"email\",\"order\":\"2\"}}}}") 
+    }
+  )
 })
 public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
   
@@ -71,7 +79,16 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
   }
   
   @Test
-  @SqlSets ({"basic-users", "user-client", "illusion-basic", "illusion-paid-events", "illusion-paid-events-forms"})
+  @SqlSets (
+    sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "user-client"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "illusion-paid-events"),
+      @SqlSet (id = "illusion-event-form", params = {
+        @SqlParam (name = "eventId", value = "3")
+      })
+  })
   public void testApprovePaymentNotLoggedIn() throws Exception {
     GreenMail greenMail = startSmtpServer();
     try {
@@ -133,7 +150,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       
       assertLoggedIn();
 
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -143,14 +160,24 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
     } finally {
       greenMail.stop();
     }    
   }
 
   @Test
-  @SqlSets ({"basic-users", "user-client", "illusion-basic", "illusion-paid-events", "illusion-paid-events-forms"})
+  @SqlSets (
+    sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "user-client"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "illusion-paid-events"),
+      @SqlSet (id = "illusion-event-form", params = {
+        @SqlParam (name = "eventId", value = "3")
+      })
+    }
+  )
   public void testApprovePaymentLoggedIn() throws Exception {
     GreenMail greenMail = startSmtpServer();
     try {
@@ -218,7 +245,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       
       assertLoggedIn();
 
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -228,14 +255,23 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
     } finally {
       greenMail.stop();
     }    
   }
   
   @Test
-  @SqlSets ({"basic-users", "illusion-basic", "illusion-paid-events", "illusion-paid-events-forms"})
+  @SqlSets (
+    sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "illusion-paid-events"),
+      @SqlSet (id = "illusion-event-form", params = {
+        @SqlParam (name = "eventId", value = "2")
+      })
+    }
+  )
   public void testOpenPaymentNotLoggedIn() throws Exception {
     GreenMail greenMail = startSmtpServer();
     try {
@@ -283,10 +319,10 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       waitAndSendKeys(".payerPostalCode", "12345");
       waitAndSendKeys(".payerPostalOffice", "Test");
       waitAndSendKeys(".notes", "This is an automated test");
-      
+
       assertLoggedIn();
 
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -296,14 +332,23 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Open"), greenMail.getReceivedMessages()[1].getSubject());
     } finally {
       greenMail.stop();
     }    
   }
   
   @Test
-  @SqlSets ({"basic-users", "illusion-basic", "illusion-paid-events", "illusion-paid-events-forms"})
+  @SqlSets (
+    sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "illusion-paid-events"),
+      @SqlSet (id = "illusion-event-form", params = {
+        @SqlParam (name = "eventId", value = "2")
+      })
+    }
+  )
   public void testOpenPaymentLoggedIn() throws Exception {
     GreenMail greenMail = startSmtpServer();
     try {
@@ -357,7 +402,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       
       assertLoggedIn();
 
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -367,14 +412,24 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Open"), greenMail.getReceivedMessages()[1].getSubject());
     } finally {
       greenMail.stop();
     }    
   }
   
   @Test
-  @SqlSets ({"basic-users", "user-client", "illusion-basic", "illusion-paid-events", "illusion-paid-events-forms"})
+  @SqlSets (
+    sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "user-client"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "illusion-paid-events"),
+      @SqlSet (id = "illusion-event-form", params = {
+        @SqlParam (name = "eventId", value = "4")
+      })
+    }
+  )
   public void testInvitePaymentNotLoggedIn() throws Exception {
     GreenMail greenMail = startSmtpServer();
     try {
@@ -425,7 +480,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       
       assertLoggedIn();
 
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -435,7 +490,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Invite Only"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Invite Only"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Invite Only"), greenMail.getReceivedMessages()[1].getSubject());
       
     } finally {
       greenMail.stop();
@@ -454,6 +509,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       // User fills the registration form
       waitAndClick(".illusion-event-join-button");
 
+      waitMailsReceived(greenMail, 2);
       assertEquals(2, greenMail.getReceivedMessages().length);
 
       String registrantMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
@@ -489,7 +545,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       waitAndSendKeys(".payerPostalOffice", "Test");
       waitAndSendKeys(".notes", "This is an automated test");
       
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -499,7 +555,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Open"), greenMail.getReceivedMessages()[1].getSubject());
       
     } finally {
       greenMail.stop();
@@ -568,7 +624,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       
       assertLoggedIn();
 
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -578,14 +634,24 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
     } finally {
       greenMail.stop();
     }    
   }
   
   @Test
-  @SqlSets ({"basic-users", "illusion-basic", "illusion-paid-events", "illusion-paid-events-forms", "illusion-paid-events-custom"})
+  @SqlSets (
+    sets = {
+      @SqlSet (id = "basic-users"),
+      @SqlSet (id = "illusion-basic"),
+      @SqlSet (id = "illusion-paid-events"),
+      @SqlSet (id = "illusion-paid-events-custom"),
+      @SqlSet (id = "illusion-event-form", params = {
+        @SqlParam (name = "eventId", value = "2")
+      })
+    }
+  )
   public void testOpenPaymentNotLoggedInCustomDomain() throws Exception {
     GreenMail greenMail = startSmtpServer();
     try {
@@ -637,7 +703,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       
       assertLoggedIn();
 
-      waitAndClick(".proceed-to-payment");
+      scrollWaitAndClick(".proceed-to-payment");
       acceptPaytrailPayment();
       
       waitMailsReceived(greenMail, 2);
@@ -647,7 +713,8 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[0].getSubject());
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[1].getSubject());
+      assertEquals(String.format("Payment received for event %s", "Open"), greenMail.getReceivedMessages()[1].getSubject());
+      waitForUrlMatches(String.format("http://%s", AbstractIllusionUITest.CUSTOM_EVENT_HOST) + ".*");
       
       assertTrue(StringUtils.startsWith(getWebDriver().getCurrentUrl(), String.format("http://%s", AbstractIllusionUITest.CUSTOM_EVENT_HOST)));
       

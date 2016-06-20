@@ -90,7 +90,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
   @SqlSets ({"basic-materials-users"})
   public void testImportMaterial() throws Exception {
     loginGoogle();
-    getWebDriver().get(getAppUrl() + "/forge/import-google-drive");
+    navigate("/forge/import-google-drive");
     
     waitPresent("#submit_approve_access", ".forge-import-google-drive-check-container");
     if (!findElements("#submit_approve_access").isEmpty()) {
@@ -102,6 +102,7 @@ public class ForgeImportGoogleDriveTestsBase extends AbstractUITest {
     
     waitTitle("Forge");
     assertEquals("Forge", getWebDriver().getTitle());
+    waitForSelectorCount(".forge-material-title", 2);
     assertEquals(2, getWebDriver().findElements(By.cssSelector(".forge-material-title[title=\"How to get started with Drive\"]")).size());
   }
 

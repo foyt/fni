@@ -21,6 +21,7 @@ import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.users.UserSettingKey;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
@@ -58,12 +59,15 @@ public class ForumPostFollowerMailer {
       
       for (ForumTopicWatcher topicWatcher : topicWatchers) {
         if (!notifyUserIds.contains(topicWatcher.getUser().getId())) {
-          notifyUserIds.add(topicWatcher.getUser().getId());
+          User user = topicWatcher.getUser();
+          if (userController.getBooleanUserSetting(user, UserSettingKey.FORUM_NEW_POST_NOTIFICATION_EMAIL, Boolean.TRUE)) {
+            notifyUserIds.add(user.getId());
+          }
         }
       }
       
       notifyUserIds.remove(sessionController.getLoggedUserId());
-
+      
       for (Long notifyUserId : notifyUserIds) {
         User user = userController.findUserById(notifyUserId);
         try {

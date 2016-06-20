@@ -23,11 +23,11 @@ import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.mail.Mailer.MailBuilder;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionEventGroupMember;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.users.UserGroupMember;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
@@ -155,9 +155,14 @@ public class IllusionEventMailServlet extends AbstractFileServlet {
       Long groupId = NumberUtils.createLong(recipients.substring(6));
       IllusionEventGroup eventGroup = illusionEventController.findGroupById(groupId);
       if (eventGroup != null) {
-        List<IllusionEventGroupMember> members = illusionEventController.listGroupMembers(eventGroup);
-        for (IllusionEventGroupMember member : members) {
-          participants.add(member.getParticipant());
+        List<UserGroupMember> members = illusionEventController.listGroupMembers(eventGroup);
+        for (UserGroupMember member : members) {
+          IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(eventGroup.getEvent(), member.getUser());
+          if (participant != null) {
+            participants.add(participant);
+          } else {
+            logger.warning(String.format("User %d of group %d is not a member of an event %d", member.getUser().getId(), eventGroup.getId(), eventGroup.getEvent().getId()));
+          }
         }
       }
     }

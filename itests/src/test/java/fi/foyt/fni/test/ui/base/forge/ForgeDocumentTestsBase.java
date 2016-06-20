@@ -78,7 +78,7 @@ public class ForgeDocumentTestsBase extends AbstractUITest {
   
   @Test
   @SqlSets ({"basic-materials-users"})
-  public void textCreateSharedFolder() throws Exception {
+  public void testCreateSharedFolder() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
     navigate("/forge/folders/2/folder");
     clickSelector(".forge-new-material-menu");

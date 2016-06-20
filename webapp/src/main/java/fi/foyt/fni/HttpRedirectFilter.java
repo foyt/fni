@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import fi.foyt.fni.system.SystemSettingsController;
 
-@WebFilter (urlPatterns = { "/", "/about", "/forum/*", "/forge/*", "/illusion/*" })
+@WebFilter (urlPatterns = { "/about", "/forum/*", "/forge/*", "/illusion/*" })
 public class HttpRedirectFilter implements Filter {
 
   @Inject

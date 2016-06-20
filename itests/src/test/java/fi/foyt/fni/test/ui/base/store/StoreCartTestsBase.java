@@ -1,7 +1,6 @@
 package fi.foyt.fni.test.ui.base.store;
 
 import org.junit.Test;
-import org.openqa.selenium.By;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -36,15 +35,15 @@ public class StoreCartTestsBase extends AbstractUITest {
     waitForSelectorCount(".mini-shopping-cart-item", 1);
     navigate("/gamelibrary/cart/", true);
     waitTitle("Forge & Illusion - Game Library");
-
-    getWebDriver().findElement(By.id("cart-form:payerFirstName")).sendKeys(firstName);
-    getWebDriver().findElement(By.id("cart-form:payerLastName")).sendKeys(lastName);
-    getWebDriver().findElement(By.id("cart-form:payerEmail")).sendKeys(email);
-    getWebDriver().findElement(By.id("cart-form:payerMobile")).sendKeys(mobile);
-    getWebDriver().findElement(By.id("cart-form:payerStreetAddress")).sendKeys(addressStreet);
-    getWebDriver().findElement(By.id("cart-form:payerPostalCode")).sendKeys(addressPostalCode);
-    getWebDriver().findElement(By.id("cart-form:payerPostalOffice")).sendKeys(addressPostalOffice);
-    getWebDriver().findElement(By.id("cart-form:notes")).sendKeys(notes);
+    
+    scrollWaitAndType(".payerFirstName", firstName);
+    scrollWaitAndType(".payerLastName", lastName);
+    scrollWaitAndType(".payerEmail", email);
+    scrollWaitAndType(".payerMobile", mobile);
+    scrollWaitAndType(".payerStreetAddress", addressStreet);
+    scrollWaitAndType(".payerPostalCode", addressPostalCode);
+    scrollWaitAndType(".payerPostalOffice", addressPostalOffice);
+    scrollWaitAndType(".notes", notes);
     scrollWaitAndClick(".gamelibrary-cart-submit");
 
     acceptPaytrailPayment();

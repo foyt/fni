@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -13,17 +14,19 @@ import javax.inject.Named;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
+import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionEventGroupMember;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipantRole;
 import fi.foyt.fni.persistence.model.users.Permission;
+import fi.foyt.fni.persistence.model.users.UserGroupMember;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityContext;
+import fi.foyt.fni.session.SessionController;
 
 @RequestScoped
 @Named
@@ -38,6 +41,12 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
   private String urlName;
 
   @Inject
+  private Logger logger;
+  
+  @Inject
+  private SessionController sessionController;
+  
+  @Inject
   private IllusionEventController illusionEventController;
   
   @Inject
@@ -49,8 +58,33 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
     groups = illusionEventController.listGroups(illusionEvent);
-    participants = illusionEventController.listIllusionEventParticipantsByEventAndRole(illusionEvent, IllusionEventParticipantRole.PARTICIPANT);
-
+    List<IllusionEventParticipant> eventParticipants = illusionEventController.listIllusionEventParticipantsByEventAndRoles(illusionEvent, 
+        IllusionEventParticipantRole.INVITED,
+        IllusionEventParticipantRole.WAITING_PAYMENT,
+        IllusionEventParticipantRole.PENDING_APPROVAL,
+        IllusionEventParticipantRole.PARTICIPANT);
+    
+    participants = new ArrayList<>(eventParticipants.size());
+    for (IllusionEventParticipant eventParticipant : eventParticipants) {
+      String roleDetails = null;
+      switch (eventParticipant.getRole()) {
+        case INVITED:
+          roleDetails = ExternalLocales.getText(sessionController.getLocale(), "illusion.eventGroups.roleDetailsInvited");
+        break;
+        case WAITING_PAYMENT:
+          roleDetails = ExternalLocales.getText(sessionController.getLocale(), "illusion.eventGroups.roleDetailsWaitingPaymement");
+        break;
+        case PENDING_APPROVAL:
+          roleDetails = ExternalLocales.getText(sessionController.getLocale(), "illusion.eventGroups.roleDetailsPendingApproval");
+        break;
+        default:
+        break;
+      }
+      
+      String displayName = getParticipantDisplayName(eventParticipant);
+      participants.add(new Participant(eventParticipant.getId(), roleDetails != null ? String.format("%s (%s)", displayName, roleDetails) : displayName));
+    }
+    
     return null;
   }
 
@@ -67,7 +101,7 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     return groups;
   }
   
-  public List<IllusionEventParticipant> getParticipants() {
+  public List<Participant> getParticipants() {
     return participants;
   }
   
@@ -79,7 +113,7 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     this.selectedGroupName = selectedGroupName;
   }
   
-  public List<IllusionEventGroupMember> getMembers() {
+  public List<UserGroupMember> getMembers() {
     return members;
   }
   
@@ -105,21 +139,27 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     members = illusionEventController.listGroupMembers(group);
     selectedGroupMemberParticipantIds = new ArrayList<>();
     
-    for (IllusionEventGroupMember member : members) {
-      if (member.getParticipant().getRole() == IllusionEventParticipantRole.PARTICIPANT) {
-        selectedGroupMemberParticipantIds.add(member.getParticipant().getId());
+    for (UserGroupMember member : members) {
+      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(group.getEvent(), member.getUser());
+      if (participant != null) {
+        selectedGroupMemberParticipantIds.add(participant.getId());
       }
     }
   }
   
   public String saveGroup() {
     IllusionEventGroup group = illusionEventController.findGroupById(selectedGroupId);
-    List<IllusionEventGroupMember> currentMembers = illusionEventController.listGroupMembers(group);
+    List<UserGroupMember> currentMembers = illusionEventController.listGroupMembers(group);
     Set<Long> addParticipantIds = new HashSet<>();
     Set<Long> removeParticipantIds = new HashSet<>();
     
-    for (IllusionEventGroupMember currentMember : currentMembers) {
-      removeParticipantIds.add(currentMember.getParticipant().getId());
+    for (UserGroupMember currentMember : currentMembers) {
+      IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantByEventAndUser(group.getEvent(), currentMember.getUser());
+      if (participant != null) {
+        removeParticipantIds.add(participant.getId());
+      } else {
+        logger.warning(String.format("User %d of group %d is not a member of an event %d", currentMember.getUser().getId(), group.getId(), group.getEvent().getId()));
+      }
     }
     
     for (Long selectedGroupMemberParticipantId : selectedGroupMemberParticipantIds) {
@@ -132,15 +172,15 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
     
     for (Long participantId : removeParticipantIds) {
       IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
-      IllusionEventGroupMember member = illusionEventController.findGroupMemberByGroupAndParticipant(group, participant);
-      if (member != null) {
-        illusionEventController.deleteGroupMember(member);
+      UserGroupMember groupMember = illusionEventController.findGroupMemberByGroupAndUser(group, participant.getUser());
+      if (groupMember != null) {
+        illusionEventController.deleteGroupMember(groupMember);
       }
     }
     
     for (Long participantId : addParticipantIds) {
       IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
-      illusionEventController.createGroupMember(group, participant);
+      illusionEventController.createGroupMember(group, participant.getUser());
     }
     
     illusionEventController.updateGroupName(group, getSelectedGroupName());
@@ -150,9 +190,28 @@ public class IllusionEventGroupsBackingBean extends AbstractIllusionEventBacking
   }
   
   private List<IllusionEventGroup> groups;
-  private List<IllusionEventParticipant> participants;
+  private List<Participant> participants;
   private Long selectedGroupId;
-  private List<IllusionEventGroupMember> members;
+  private List<UserGroupMember> members;
   private String selectedGroupName;
   private List<Long> selectedGroupMemberParticipantIds;
+  
+  public class Participant {
+    
+    public Participant(Long id, String displayName) {
+      this.id = id;
+      this.displayName = displayName;
+    }
+    
+    public Long getId() {
+      return id;
+    }
+    
+    public String getDisplayName() {
+      return displayName;
+    }
+    
+    private Long id;
+    private String displayName;
+  }
 }

@@ -5,7 +5,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
@@ -14,6 +16,11 @@ import org.hibernate.search.annotations.Indexed;
 @PrimaryKeyJoinColumn (name="id")
 @Indexed
 @Cacheable (true)
+@Table (
+  uniqueConstraints = {
+    @UniqueConstraint (columnNames = {"forum_id", "urlName"})
+  }    
+)
 public class ForumTopic extends ForumMessage {
 
   public String getSubject() {

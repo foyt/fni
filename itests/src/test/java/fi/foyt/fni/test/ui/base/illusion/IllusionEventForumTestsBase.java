@@ -12,24 +12,39 @@ import com.icegreen.greenmail.util.GreenMail;
 
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
+import fi.foyt.fni.test.SqlParam;
 import fi.foyt.fni.test.SqlSets;
 import fi.foyt.fni.test.ui.base.AbstractIllusionUITest;
 
 @DefineSqlSets({ 
   @DefineSqlSet(id = "basic-users", before = "basic-users-setup.sql", after = "basic-users-teardown.sql"),
   @DefineSqlSet(id = "illusion-basic", before = "illusion-basic-setup.sql", after = "illusion-basic-teardown.sql"),
-  @DefineSqlSet(id = "event", before = { "illusion-event-open-setup.sql" }, after = { "illusion-event-open-teardown.sql"}),
+  @DefineSqlSet(id = "event", before = { "illusion-event-setup.sql" }, after = { "illusion-event-teardown.sql"}),  
   @DefineSqlSet(id = "event-unpublished", before = { "illusion-event-open-unpublished-setup.sql" }, after = { "illusion-event-open-unpublished-teardown.sql"}),
   @DefineSqlSet(id = "event-participant", before = {"illusion-event-open-participant-setup.sql" }, after = {"illusion-event-open-participant-teardown.sql"}),
   @DefineSqlSet(id = "event-organizer", before = {"illusion-event-open-organizer-setup.sql" }, after = {"illusion-event-open-organizer-teardown.sql"}),
   @DefineSqlSet(id = "event-invited", before = {"illusion-event-open-invited-setup.sql" }, after = {"illusion-event-open-invited-teardown.sql"}),
   @DefineSqlSet(id = "event-forum", before = { "illusion-event-open-forum-setup.sql" }, after = {"illusion-event-open-forum-teardown.sql"}),
-  @DefineSqlSet(id = "event-forum-participants", before = { "illusion-event-open-forum-participants-setup.sql" }, after = {"illusion-event-open-forum-participants-teardown.sql"}),
-  @DefineSqlSet(id = "event-forum-visible", before = { "illusion-event-open-forum-visible-setup.sql" }, after = {"illusion-event-open-forum-visible-teardown.sql"}),
   @DefineSqlSet(id = "event-forum-posts", before = { "illusion-event-open-forum-posts-setup.sql" }, after = {"illusion-event-open-forum-posts-teardown.sql"}),
   @DefineSqlSet(id = "event-forum-organizer-posts", before = { "illusion-event-open-forum-organizer-posts-setup.sql" }, after = {"illusion-event-open-forum-organizer-posts-teardown.sql"}),
   @DefineSqlSet(id = "event-forum-watchers", before = { "illusion-event-open-forum-watchers-setup.sql" }, after = {"illusion-event-open-forum-watchers-teardown.sql"}),
   @DefineSqlSet(id = "event-custom", before = { "illusion-event-open-custom-setup.sql" }, after = {"illusion-event-open-custom-teardown.sql"}),
+  @DefineSqlSet(id = "event-forum-visible", 
+    before = {"illusion-event-setting-setup.sql" }, 
+    after = {"illusion-event-setting-teardown.sql"}, params = {
+      @SqlParam (name = "id", value = "1"), 
+      @SqlParam (name = "eventId", value = "1"),
+      @SqlParam (name = "value", value = "{\"FORUM\":{\"visibility\":\"VISIBLE\"}}") 
+    }
+  ),
+  @DefineSqlSet(id = "event-forum-participants", 
+    before = {"illusion-event-setting-setup.sql" }, 
+    after = {"illusion-event-setting-teardown.sql"}, params = {
+      @SqlParam (name = "id", value = "1"), 
+      @SqlParam (name = "eventId", value = "1"),
+      @SqlParam (name = "value", value = "{\"FORUM\":{\"visibility\":\"PARTICIPANTS\"}}") 
+    }
+  )
 })
 public class IllusionEventForumTestsBase extends AbstractIllusionUITest {
   

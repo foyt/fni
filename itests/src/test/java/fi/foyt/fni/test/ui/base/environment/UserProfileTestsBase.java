@@ -16,10 +16,7 @@ import fi.foyt.fni.test.ui.base.AbstractUITest;
     before = { "illusion-basic-setup.sql" },
     after = { "illusion-basic-teardown.sql" }
   ),
-  @DefineSqlSet (id = "event", 
-    before = {"illusion-event-open-setup.sql"},
-    after = {"illusion-event-open-teardown.sql"}
-  ),
+  @DefineSqlSet(id = "event", before = { "illusion-event-setup.sql" }, after = { "illusion-event-teardown.sql"}),  
   @DefineSqlSet (id = "event-organizer", 
     before = {"illusion-event-open-organizer-setup.sql"},
     after = {"illusion-event-open-organizer-teardown.sql"}

@@ -2,6 +2,8 @@ package fi.foyt.fni.illusion;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,7 +13,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -34,7 +35,6 @@ import fi.foyt.fni.persistence.dao.illusion.GenreDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventGenreDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventGroupDAO;
-import fi.foyt.fni.persistence.dao.illusion.IllusionEventGroupMemberDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventMaterialParticipantSettingDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantDAO;
 import fi.foyt.fni.persistence.dao.illusion.IllusionEventParticipantImageDAO;
@@ -48,6 +48,7 @@ import fi.foyt.fni.persistence.dao.illusion.IllusionEventTypeDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionEventDocumentDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionEventFolderDAO;
 import fi.foyt.fni.persistence.dao.materials.IllusionFolderDAO;
+import fi.foyt.fni.persistence.dao.users.UserGroupMemberDAO;
 import fi.foyt.fni.persistence.model.chat.UserChatCredentials;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.forum.Forum;
@@ -56,7 +57,6 @@ import fi.foyt.fni.persistence.model.illusion.Genre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventGenre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventGroup;
-import fi.foyt.fni.persistence.model.illusion.IllusionEventGroupMember;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting;
 import fi.foyt.fni.persistence.model.illusion.IllusionEventParticipant;
@@ -79,12 +79,12 @@ import fi.foyt.fni.persistence.model.materials.MaterialPublicity;
 import fi.foyt.fni.persistence.model.oauth.OAuthClient;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.users.UserGroupMember;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @Dependent
-@Stateless
 public class IllusionEventController {
   
   private static final String ILLUSION_FOLDER_TITLE = "Illusion";
@@ -144,7 +144,7 @@ public class IllusionEventController {
   private IllusionEventGroupDAO illusionEventParticipantGroupDAO;
 
   @Inject
-  private IllusionEventGroupMemberDAO illusionEventParticipantGroupMemberDAO;
+  private UserGroupMemberDAO userGroupMemberDAO;
 
   @Inject
   private IllusionEventRegistrationFormDAO illusionEventRegistrationFormDAO;
@@ -230,8 +230,12 @@ public class IllusionEventController {
     return illusionEventDAO.listByPublishedOrderByStartAndEnd(Boolean.TRUE);
   }
   
+  public List<IllusionEvent> listPublishedEventsByUsersAndRole(List<User> users, IllusionEventParticipantRole role) {
+    return illusionEventParticipantDAO.listIllusionEventsByUsersAndRole(users, role, Boolean.TRUE);
+  }
+  
   public List<IllusionEvent> listPublishedEventsByUserAndRole(User user, IllusionEventParticipantRole role) {
-    return illusionEventParticipantDAO.listIllusionEventsByUserAndRole(user, role, Boolean.TRUE);
+    return listPublishedEventsByUsersAndRole(Collections.singletonList(user), role);
   }
 
   public List<IllusionEvent> listNextIllusionEvents(int maxResults) {
@@ -244,7 +248,7 @@ public class IllusionEventController {
     return illusionEventDAO.listByStartLTAndEndLTAndPublishedSortByEndAndStart(now, now, Boolean.TRUE, 0, maxResults);
   }
 
-  public List<IllusionEvent> listEventsBetween(Date start, Date end, Boolean published) {
+  public List<IllusionEvent> listPublishedEventsBetween(Date start, Date end, Boolean published) {
     return illusionEventDAO.listByStartLEAndGEAndPublishedSortByEndAndStart(end, start, Boolean.TRUE);
   }
   
@@ -462,7 +466,11 @@ public class IllusionEventController {
   }
   
   public List<IllusionEventParticipant> listIllusionEventParticipantsByEventAndRole(IllusionEvent event, IllusionEventParticipantRole role) {
-    return illusionEventParticipantDAO.listByEventAndRole(event, role);
+    return illusionEventParticipantDAO.listByEventAndRoles(event, Collections.singletonList(role));
+  }
+  
+  public List<IllusionEventParticipant> listIllusionEventParticipantsByEventAndRoles(IllusionEvent event, IllusionEventParticipantRole... roles) {
+    return illusionEventParticipantDAO.listByEventAndRoles(event, Arrays.asList(roles));
   }
 
   public Long countIllusionEventParticipantsByEventAndRole(IllusionEvent event, IllusionEventParticipantRole role) {
@@ -486,6 +494,10 @@ public class IllusionEventController {
 
   public IllusionEventParticipant updateIllusionEventParticipantAccessCode(IllusionEventParticipant participant, String accessCode) {
     return illusionEventParticipantDAO.updateAccessCode(participant, accessCode);
+  }
+
+  public boolean isOneInRole(IllusionEvent event, List<User> users, IllusionEventParticipantRole role) {
+    return illusionEventParticipantDAO.countByEventAndRoleAndUsers(event, role, users) > 0;
   }
 
   private String createUrlName(String name) {
@@ -686,8 +698,8 @@ public class IllusionEventController {
     return illusionEventParticipantGroupDAO.findById(id);
   }
   
-  public IllusionEventGroup createGroup(IllusionEvent event, String name) {
-    return illusionEventParticipantGroupDAO.create(event, name);
+  public IllusionEventGroup createGroup(IllusionEvent event, String name, User creator) {
+    return illusionEventParticipantGroupDAO.create(event, name, creator);
   }
   
   public List<IllusionEventGroup> listGroups(IllusionEvent event) {
@@ -699,7 +711,7 @@ public class IllusionEventController {
   }
   
   public void deleteGroup(IllusionEventGroup group) {
-    for (IllusionEventGroupMember member : listGroupMembers(group)) {
+    for (UserGroupMember member : listGroupMembers(group)) {
       deleteGroupMember(member); 
     }
 
@@ -708,20 +720,20 @@ public class IllusionEventController {
   
   /* Member */
   
-  public IllusionEventGroupMember createGroupMember(IllusionEventGroup group, IllusionEventParticipant participant) {
-    return illusionEventParticipantGroupMemberDAO.create(group, participant);
+  public UserGroupMember createGroupMember(IllusionEventGroup group, User user) {
+    return userGroupMemberDAO.create(group, user);
   }
   
-  public List<IllusionEventGroupMember> listGroupMembers(IllusionEventGroup group) {
-    return illusionEventParticipantGroupMemberDAO.listByGroup(group); 
+  public List<UserGroupMember> listGroupMembers(IllusionEventGroup group) {
+    return userGroupMemberDAO.listByGroup(group); 
   }
   
-  public void deleteGroupMember(IllusionEventGroupMember member) {
-    illusionEventParticipantGroupMemberDAO.delete(member);
+  public void deleteGroupMember(UserGroupMember member) {
+    userGroupMemberDAO.delete(member);
   }
 
-  public IllusionEventGroupMember findGroupMemberByGroupAndParticipant(IllusionEventGroup group, IllusionEventParticipant participant) {
-    return illusionEventParticipantGroupMemberDAO.findByGroupAndParticipant(group, participant);
+  public UserGroupMember findGroupMemberByGroupAndUser(IllusionEventGroup group, User user) {
+    return userGroupMemberDAO.findByGroupAndUser(group, user);
   }
   
   /* Larp-kalenteri */

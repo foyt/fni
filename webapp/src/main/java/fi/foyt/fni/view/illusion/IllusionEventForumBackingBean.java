@@ -22,7 +22,6 @@ import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.illusion.IllusionEventPage;
 import fi.foyt.fni.illusion.IllusionEventPageController;
-import fi.foyt.fni.illusion.IllusionEventPageVisibility;
 import fi.foyt.fni.illusion.IllusionTemplateModelBuilderFactory.IllusionTemplateModelBuilder;
 import fi.foyt.fni.jade.JadeController;
 import fi.foyt.fni.jsf.NavigationController;
@@ -82,25 +81,14 @@ public class IllusionEventForumBackingBean extends AbstractIllusionEventBackingB
       }
     }
     
-    IllusionEventPageVisibility visibility = illusionEventPageController.getPageVisibility(illusionEvent, IllusionEventPage.Static.FORUM.toString());
-    if (visibility == IllusionEventPageVisibility.HIDDEN) {
-      return navigationController.accessDenied();
-    }    
-    
-    if (visibility != IllusionEventPageVisibility.VISIBLE) {
-      if (participant == null) {
-        return navigationController.requireLogin(navigationController.accessDenied());
-      }
-      
-      if (participant.getRole() == IllusionEventParticipantRole.INVITED) {
-        illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
-      } else {
-        if ((participant.getRole() != IllusionEventParticipantRole.PARTICIPANT) && (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
-          return navigationController.accessDenied();
-        }
-      }
+    if ((participant != null) && (participant.getRole() == IllusionEventParticipantRole.INVITED)) {
+      illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
     }
-
+    
+    if (!illusionEventPageController.isPageVisible(participant, illusionEvent, IllusionEventPage.Static.FORUM.toString())) {
+      return navigationController.requireLogin(navigationController.accessDenied());
+    }
+    
     IllusionTemplateModelBuilder templateModelBuilder = createDefaultTemplateModelBuilder(illusionEvent, participant, IllusionEventPage.Static.FORUM)        
       .addBreadcrumb(illusionEvent, "/event-forum", ExternalLocales.getText(sessionController.getLocale(), "illusion.breadcrumbs.forum"));
 

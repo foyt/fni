@@ -5,3 +5,4 @@
 /hbm2ddl.xml
 /sql.ddl
 /target
+/hibernate.properties

@@ -23,24 +23,26 @@ import javax.ws.rs.core.Response.Status;
 
 import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.materials.MaterialPermissionController;
-import fi.foyt.fni.materials.MaterialUserController;
+import fi.foyt.fni.materials.MaterialShareController;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.materials.BookTemplate;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.Folder;
 import fi.foyt.fni.persistence.model.materials.Image;
 import fi.foyt.fni.persistence.model.materials.Material;
-import fi.foyt.fni.persistence.model.materials.UserMaterialRole;
+import fi.foyt.fni.persistence.model.materials.MaterialShareGroup;
+import fi.foyt.fni.persistence.model.materials.MaterialShareUser;
 import fi.foyt.fni.persistence.model.oauth.OAuthAccessToken;
 import fi.foyt.fni.persistence.model.oauth.OAuthClientType;
 import fi.foyt.fni.persistence.model.users.User;
+import fi.foyt.fni.persistence.model.users.UserGroup;
 import fi.foyt.fni.rest.Security;
 import fi.foyt.fni.rest.illusion.OAuthScopes;
-import fi.foyt.fni.rest.material.model.MaterialUser;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.system.TagController;
 import fi.foyt.fni.users.UserController;
+import fi.foyt.fni.users.UserGroupController;
 
 @Path("/material")
 @Produces(MediaType.APPLICATION_JSON)
@@ -59,13 +61,16 @@ public class MaterialRestServices {
   private UserController userController;
   
   @Inject
+  private UserGroupController userGroupController;
+  
+  @Inject
   private MaterialPermissionController materialPermissionController;
   
   @Inject
-  private MaterialController materialController;
-
+  private MaterialShareController materialShareController;
+  
   @Inject
-  private MaterialUserController materialUserController;
+  private MaterialController materialController;
   
   @Inject
   private TagController tagController;
@@ -164,13 +169,13 @@ public class MaterialRestServices {
   }
   
   @POST
-  @Path ("/materials/{ID:[0-9]*}/users")
+  @Path ("/materials/{ID:[0-9]*}/shareUsers")
   @Security (
     allowService = true,
     allowNotLogged = false,
-    scopes = { OAuthScopes.MATERIAL_CREATE_USER }
+    scopes = { OAuthScopes.MATERIAL_CREATE_SHARE }
   )
-  public Response createMaterialUser(@PathParam ("ID") Long materialId, MaterialUser payload) {
+  public Response createMaterialUser(@PathParam ("ID") Long materialId, fi.foyt.fni.rest.material.model.MaterialShareUser payload) {
     Material material = materialController.findMaterialById(materialId);
     if (material == null) {
       return Response.status(Status.NOT_FOUND).build();
@@ -188,20 +193,20 @@ public class MaterialRestServices {
     if (user == null) {
       return Response.status(Status.BAD_REQUEST).entity(String.format("Invalid userId %d", payload.getUserId())).build();
     }
-    
-    if (materialUserController.findUserMaterialRole(user, material) != null) {
+
+    if (materialShareController.findMaterialShareUserByUserAndMaterial(user, material) != null) {
       return Response.status(Status.BAD_REQUEST).entity("User already has existing role in this material").build();
     }
     
-    return Response.ok(createRestModel(materialUserController.createUserMaterialRole(user, material, payload.getRole()))).build();
+    return Response.ok(createRestModel(materialShareController.createMaterialShareUser(user, material, payload.getRole()))).build();
   }
   
   @GET
-  @Path ("/materials/{ID:[0-9]*}/users")
+  @Path ("/materials/{ID:[0-9]*}/shareUsers")
   @Security (
     allowService = true,
     allowNotLogged = false,
-    scopes = { OAuthScopes.MATERIAL_LIST_USERS }
+    scopes = { OAuthScopes.MATERIAL_LIST_SHARES }
   )
   public Response listMaterialUsers(@PathParam ("ID") Long materialId) {
     Material material = materialController.findMaterialById(materialId);
@@ -213,19 +218,21 @@ public class MaterialRestServices {
       return Response.status(Status.FORBIDDEN).build();
     }
     
-    return Response.ok(createRestModel(materialUserController.listMaterialUsers(material).toArray(new UserMaterialRole[0]))).build();
+    List<MaterialShareUser> materialShareUsers = materialShareController.listMaterialSharesUsers(material);
+
+    return Response.ok(createRestModel(materialShareUsers.toArray(new MaterialShareUser[0]))).build();
   }
   
   @GET
-  @Path ("/materials/{MATERIALID:[0-9]*}/users/{ID:[0-9]*}")
+  @Path ("/materials/{MATERIALID:[0-9]*}/shareUsers/{ID:[0-9]*}")
   @Security (
     allowService = true,
     allowNotLogged = false,
-    scopes = { OAuthScopes.MATERIAL_FIND_USER }
+    scopes = { OAuthScopes.MATERIAL_FIND_SHARE }
   )
   public Response listMaterialUsers(@PathParam ("MATERIALID") Long materialId, @PathParam ("ID") Long id) {
-    UserMaterialRole userMaterialRole = materialUserController.findUserMaterialRoleById(id);
-    if (userMaterialRole == null) {
+    MaterialShareUser materialShareUser = materialShareController.findMaterialShareUser(id);
+    if (materialShareUser == null) {
       return Response.status(Status.NOT_FOUND).build();
     }
     
@@ -234,7 +241,7 @@ public class MaterialRestServices {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    if (!material.getId().equals(userMaterialRole.getMaterial().getId())) {
+    if (!material.getId().equals(materialShareUser.getMaterial().getId())) {
       return Response.status(Status.NOT_FOUND).build();
     }
     
@@ -242,19 +249,19 @@ public class MaterialRestServices {
       return Response.status(Status.FORBIDDEN).build();
     }
     
-    return Response.ok(createRestModel(userMaterialRole)).build();
+    return Response.ok(createRestModel(materialShareUser)).build();
   }
 
   @PUT
-  @Path ("/materials/{MATERIALID:[0-9]*}/users/{ID:[0-9]*}")
+  @Path ("/materials/{MATERIALID:[0-9]*}/shareUsers/{ID:[0-9]*}")
   @Security (
     allowService = true,
     allowNotLogged = false,
-    scopes = { OAuthScopes.MATERIAL_UPDATE_USER }
+    scopes = { OAuthScopes.MATERIAL_UPDATE_SHARE }
   )
-  public Response updateMaterialUser(@PathParam ("MATERIALID") Long materialId, @PathParam ("ID") Long id, MaterialUser payload) {
-    UserMaterialRole userMaterialRole = materialUserController.findUserMaterialRoleById(id);
-    if (userMaterialRole == null) {
+  public Response updateMaterialUser(@PathParam ("MATERIALID") Long materialId, @PathParam ("ID") Long id, fi.foyt.fni.rest.material.model.MaterialShareUser payload) {
+    MaterialShareUser materialShareUser = materialShareController.findMaterialShareUser(id);
+    if (materialShareUser == null) {
       return Response.status(Status.NOT_FOUND).build();
     }
     
@@ -263,7 +270,7 @@ public class MaterialRestServices {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    if (!material.getId().equals(userMaterialRole.getMaterial().getId())) {
+    if (!material.getId().equals(materialShareUser.getMaterial().getId())) {
       return Response.status(Status.NOT_FOUND).build();
     }
     
@@ -275,19 +282,19 @@ public class MaterialRestServices {
       return Response.status(Status.BAD_REQUEST).entity("Missing role").build();
     }
     
-    return Response.ok(createRestModel(materialUserController.updateUserMaterialRole(userMaterialRole, payload.getRole()))).build();
+    return Response.ok(createRestModel(materialShareController.updateMaterialShareUser(materialShareUser, payload.getRole()))).build();
   }
 
   @DELETE
-  @Path ("/materials/{MATERIALID:[0-9]*}/users/{ID:[0-9]*}")
+  @Path ("/materials/{MATERIALID:[0-9]*}/shareUsers/{ID:[0-9]*}")
   @Security (
     allowService = true,
     allowNotLogged = false,
-    scopes = { OAuthScopes.MATERIAL_DELETE_USER }
+    scopes = { OAuthScopes.MATERIAL_DELETE_SHARE }
   )
   public Response deleteMaterialUser(@PathParam ("MATERIALID") Long materialId, @PathParam ("ID") Long id) {
-    UserMaterialRole userMaterialRole = materialUserController.findUserMaterialRoleById(id);
-    if (userMaterialRole == null) {
+    MaterialShareUser materialShareUser = materialShareController.findMaterialShareUser(id);
+    if (materialShareUser == null) {
       return Response.status(Status.NOT_FOUND).build();
     }
     
@@ -296,7 +303,7 @@ public class MaterialRestServices {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    if (!material.getId().equals(userMaterialRole.getMaterial().getId())) {
+    if (!material.getId().equals(materialShareUser.getMaterial().getId())) {
       return Response.status(Status.NOT_FOUND).build();
     }
 
@@ -304,7 +311,155 @@ public class MaterialRestServices {
       return Response.status(Status.FORBIDDEN).build();
     }
     
-    materialUserController.deleteUserMaterialRole(userMaterialRole);
+    materialShareController.deleteMaterialShareUser(materialShareUser);
+    
+    return Response.noContent().build();
+  }
+  
+  @POST
+  @Path ("/materials/{ID:[0-9]*}/shareGroups")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_CREATE_SHARE }
+  )
+  public Response createMaterialGroup(@PathParam ("ID") Long materialId, fi.foyt.fni.rest.material.model.MaterialShareGroup payload) {
+    Material material = materialController.findMaterialById(materialId);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    if (payload.getRole() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Missing role").build();
+    }
+    
+    UserGroup userGroup = userGroupController.findUserGroupById(payload.getUserGroupId());
+    if (userGroup == null) {
+      return Response.status(Status.BAD_REQUEST).entity(String.format("Invalid userGroupId %d", payload.getUserGroupId())).build();
+    }
+    
+    if (materialShareController.findMaterialShareGroupByGroupAndMaterial(userGroup, material) != null) {
+      return Response.status(Status.BAD_REQUEST).entity("UserGroup already has existing role in this material").build();
+    }
+    
+    return Response.ok(createRestModel(materialShareController.createMaterialShareGroup(userGroup, material, payload.getRole()))).build();
+  }
+  
+  @GET
+  @Path ("/materials/{ID:[0-9]*}/shareGroups")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_LIST_SHARES }
+  )
+  public Response listMaterialGroups(@PathParam ("ID") Long materialId) {
+    Material material = materialController.findMaterialById(materialId);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    List<MaterialShareGroup> materialShareGroups = materialShareController.listMaterialSharesGroups(material);
+
+    return Response.ok(createRestModel(materialShareGroups.toArray(new MaterialShareGroup[0]))).build();
+  }
+  
+  @GET
+  @Path ("/materials/{MATERIALID:[0-9]*}/shareGroups/{ID:[0-9]*}")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_FIND_SHARE }
+  )
+  public Response listMaterialGroups(@PathParam ("MATERIALID") Long materialId, @PathParam ("ID") Long id) {
+    MaterialShareGroup materialShareGroup = materialShareController.findMaterialShareGroup(id);
+    if (materialShareGroup == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    Material material = materialController.findMaterialById(materialId);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!material.getId().equals(materialShareGroup.getMaterial().getId())) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    return Response.ok(createRestModel(materialShareGroup)).build();
+  }
+
+  @PUT
+  @Path ("/materials/{MATERIALID:[0-9]*}/shareGroups/{ID:[0-9]*}")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_UPDATE_SHARE }
+  )
+  public Response updateMaterialGroup(@PathParam ("MATERIALID") Long materialId, @PathParam ("ID") Long id, fi.foyt.fni.rest.material.model.MaterialShareGroup payload) {
+    MaterialShareGroup materialShareGroup = materialShareController.findMaterialShareGroup(id);
+    if (materialShareGroup == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    Material material = materialController.findMaterialById(materialId);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!material.getId().equals(materialShareGroup.getMaterial().getId())) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    if (payload.getRole() == null) {
+      return Response.status(Status.BAD_REQUEST).entity("Missing role").build();
+    }
+    
+    return Response.ok(createRestModel(materialShareController.updateMaterialShareGroup(materialShareGroup, payload.getRole()))).build();
+  }
+
+  @DELETE
+  @Path ("/materials/{MATERIALID:[0-9]*}/shareGroups/{ID:[0-9]*}")
+  @Security (
+    allowService = true,
+    allowNotLogged = false,
+    scopes = { OAuthScopes.MATERIAL_DELETE_SHARE }
+  )
+  public Response deleteMaterialGroup(@PathParam ("MATERIALID") Long materialId, @PathParam ("ID") Long id) {
+    MaterialShareGroup materialShareGroup = materialShareController.findMaterialShareGroup(id);
+    if (materialShareGroup == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    Material material = materialController.findMaterialById(materialId);
+    if (material == null) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+    
+    if (!material.getId().equals(materialShareGroup.getMaterial().getId())) {
+      return Response.status(Status.NOT_FOUND).build();
+    }
+
+    if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), material)) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    materialShareController.deleteMaterialShareGroup(materialShareGroup);
     
     return Response.noContent().build();
   }
@@ -465,11 +620,29 @@ public class MaterialRestServices {
     
     return result;
   }
+
+  private fi.foyt.fni.rest.material.model.MaterialShareUser createRestModel(fi.foyt.fni.persistence.model.materials.MaterialShareUser entity) {
+    return new fi.foyt.fni.rest.material.model.MaterialShareUser(entity.getId(), entity.getUser().getId(), entity.getRole());
+  }
   
-  private List<fi.foyt.fni.rest.material.model.MaterialUser> createRestModel(fi.foyt.fni.persistence.model.materials.UserMaterialRole... entities) {
-    List<fi.foyt.fni.rest.material.model.MaterialUser> result = new ArrayList<>();
+  private List<fi.foyt.fni.rest.material.model.MaterialShareUser> createRestModel(fi.foyt.fni.persistence.model.materials.MaterialShareUser... entities) {
+    List<fi.foyt.fni.rest.material.model.MaterialShareUser> result = new ArrayList<>();
     
-    for (fi.foyt.fni.persistence.model.materials.UserMaterialRole entity : entities) {
+    for (fi.foyt.fni.persistence.model.materials.MaterialShareUser entity : entities) {
+      result.add(createRestModel(entity));
+    }
+    
+    return result;
+  }
+
+  private fi.foyt.fni.rest.material.model.MaterialShareGroup createRestModel(fi.foyt.fni.persistence.model.materials.MaterialShareGroup entity) {
+    return new fi.foyt.fni.rest.material.model.MaterialShareGroup(entity.getId(), entity.getUserGroup().getId(), entity.getRole());
+  }
+  
+  private List<fi.foyt.fni.rest.material.model.MaterialShareGroup> createRestModel(fi.foyt.fni.persistence.model.materials.MaterialShareGroup... entities) {
+    List<fi.foyt.fni.rest.material.model.MaterialShareGroup> result = new ArrayList<>();
+    
+    for (fi.foyt.fni.persistence.model.materials.MaterialShareGroup entity : entities) {
       result.add(createRestModel(entity));
     }
     
@@ -527,9 +700,5 @@ public class MaterialRestServices {
 
   private fi.foyt.fni.rest.material.model.Tag createRestModel(fi.foyt.fni.persistence.model.common.Tag entity) {
     return new fi.foyt.fni.rest.material.model.Tag(entity.getId(), entity.getText());
-  }
-  
-  private fi.foyt.fni.rest.material.model.MaterialUser createRestModel(fi.foyt.fni.persistence.model.materials.UserMaterialRole entity) {
-    return new fi.foyt.fni.rest.material.model.MaterialUser(entity.getId(), entity.getUser().getId(), entity.getRole());
   }
 }
