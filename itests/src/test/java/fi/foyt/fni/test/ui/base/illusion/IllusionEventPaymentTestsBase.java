@@ -714,6 +714,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       
       assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
       assertEquals(String.format("Payment received for event %s", "Open"), greenMail.getReceivedMessages()[1].getSubject());
+      waitForUrlMatches(String.format("http://%s", AbstractIllusionUITest.CUSTOM_EVENT_HOST) + ".*");
       
       assertTrue(StringUtils.startsWith(getWebDriver().getCurrentUrl(), String.format("http://%s", AbstractIllusionUITest.CUSTOM_EVENT_HOST)));
       
