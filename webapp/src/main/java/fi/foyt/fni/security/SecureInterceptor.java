@@ -67,8 +67,10 @@ public class SecureInterceptor implements Serializable {
 
           errorPage = navigationController.accessDenied();
         } catch (FileNotFoundException e) {
+          logger.log(Level.SEVERE, "Could not invoke secure interceptor", e);
           errorPage = navigationController.notFound();
         } catch (Exception e) {
+          logger.log(Level.SEVERE, "Could not invoke secure interceptor", e);
           errorPage = navigationController.internalError();
         }
   		} else {

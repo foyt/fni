@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
@@ -36,7 +38,7 @@ import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.auth.OAuthUtils;
 
 public class GoogleAuthenticationStrategy extends OAuthAuthenticationStrategy {
-
+  
 	@Inject
 	private SystemSettingsController systemSettingsController;
 
@@ -87,7 +89,9 @@ public class GoogleAuthenticationStrategy extends OAuthAuthenticationStrategy {
   }
   
   public static class GoogleApi20 extends DefaultApi20 {
+    
     private static final String AUTHORIZATION_URL = "https://accounts.google.com/o/oauth2/auth?client_id=%s&response_type=code&redirect_uri=%s&scope=%s";
+    private static final Logger logger = Logger.getLogger(GoogleApi20.class.getName());
 
     @Override
     public String getAccessTokenEndpoint() {
@@ -101,6 +105,7 @@ public class GoogleAuthenticationStrategy extends OAuthAuthenticationStrategy {
         String scope = new String(URLCodec.encodeUrl(null, config.getScope().getBytes("UTF-8")), "UTF-8");
         return String.format(AUTHORIZATION_URL, config.getApiKey(), callback, scope);
       } catch (UnsupportedEncodingException e) {
+        logger.log(Level.SEVERE, "Unsupported encoding", e);
         return null;
       }
     }
@@ -122,10 +127,11 @@ public class GoogleAuthenticationStrategy extends OAuthAuthenticationStrategy {
   }
 
   public static class GoogleService extends OAuth20ServiceImpl {
+
+    private static final Logger logger = Logger.getLogger(GoogleService.class.getName());
     
     public GoogleService(DefaultApi20 api, OAuthConfig config) {
       super(api, config);
-      
       this.api = api;
       this.config = config;
     }
@@ -149,6 +155,7 @@ public class GoogleAuthenticationStrategy extends OAuthAuthenticationStrategy {
         String tokenJson = objectMapper.writeValueAsString(objectMapper.readTree(response.getBody()));
         return api.getAccessTokenExtractor().extract(tokenJson);
       } catch (IOException e) {
+        logger.log(Level.SEVERE, "Unsupported encoding", e);
         return null;
       }
     }
@@ -182,7 +189,7 @@ public class GoogleAuthenticationStrategy extends OAuthAuthenticationStrategy {
 
       return loginUser(AuthSource.GOOGLE, email, accessToken.getToken(), accessToken.getSecret(), expires, identifier, Arrays.asList(email), firstName, lastName, null, userLocale, grantedScopes);
     } catch (IOException e) {
-    	throw new ExternalLoginFailedException();
+    	throw new ExternalLoginFailedException(e);
     }
   };
 

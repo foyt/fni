@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -31,6 +33,9 @@ public class ForgeGoogleDriveServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -1L;
 	private static final long DEFAULT_EXPIRE_TIME = 1000 * 60 * 60;
+	
+	@Inject
+  private Logger logger;
 
 	@Inject
 	private MaterialController materialController;
@@ -83,7 +88,8 @@ public class ForgeGoogleDriveServlet extends HttpServlet {
 		try {
 			data = materialController.getGoogleDocumentData(googleDocument);
 		} catch (MalformedURLException | GeneralSecurityException e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
+	    logger.log(Level.SEVERE, "Failed to load google document data", e);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
 			return;
 		}
 		

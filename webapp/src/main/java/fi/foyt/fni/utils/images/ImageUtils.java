@@ -7,12 +7,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
 import fi.foyt.fni.utils.data.TypedData;
 
 public class ImageUtils {
+  
+  private static final Logger logger = Logger.getLogger(ImageUtils.class.getName());
   
   public static BufferedImage readBufferedImage(TypedData originalData) throws IOException {
     ByteArrayInputStream inputStream = new ByteArrayInputStream(originalData.getData());
@@ -68,6 +72,7 @@ public class ImageUtils {
       	Method getBufferedImageMethod = scaledInstance.getClass().getMethod("getBufferedImage");
       	renderedImage = (BufferedImage) getBufferedImageMethod.invoke(scaledInstance);
     	} catch (Exception e) {
+        logger.log(Level.SEVERE, "Unexpected exception occurred while scaling image", e);
     	}
     }
     

@@ -3,6 +3,8 @@ package fi.foyt.fni.view.illusion;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -30,6 +32,9 @@ import fi.foyt.fni.persistence.model.materials.CharacterSheet;
 @ServerEndpoint ("/ws/{EVENTID}/characterSheet/{MATERIALID}/{PARTICIPANTID}/{KEY}")
 @Stateless
 public class CharacterSheetWebSocket {
+
+  @Inject
+  private Logger logger;
   
   @Inject
   private MaterialController materialController;
@@ -143,6 +148,7 @@ public class CharacterSheetWebSocket {
         break;
       }
     } catch (IOException e) {
+      logger.log(Level.SEVERE, "Internal server error", e);
       client.close(new CloseReason(CloseReason.CloseCodes.UNEXPECTED_CONDITION, "Internal Error"));
     }
   }

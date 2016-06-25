@@ -5,6 +5,8 @@ import java.util.Map;
 
 public class ErrorMessage {
   
+  public static final String PATCH_ERROR = "patchError";
+  
   public ErrorMessage() {
   }
   

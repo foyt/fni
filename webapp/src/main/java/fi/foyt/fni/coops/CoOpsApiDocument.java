@@ -277,7 +277,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
           String value = objectMapper.writeValueAsString(extensions.get(extension));
           materialController.createDocumentRevisionSetting(documentRevision, "extension." + extension, value);
         } catch (IOException e) {
-          throw new CoOpsInternalErrorException(extension);
+          throw new CoOpsInternalErrorException(e);
         }
       }
     }

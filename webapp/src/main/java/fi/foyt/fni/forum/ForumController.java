@@ -349,9 +349,7 @@ public class ForumController implements Serializable {
           ForumTopic topic = forumPost.getTopic();
           String link = "/forum/" + topic.getFullPath() + "#p" + forumPost.getId(); 
           posts.add(new SearchResult<ForumPost>(forumPost, forumPost.getTopic().getSubject(), link, matchText));
-        } catch (IOException e) {
-        	logger.log(Level.WARNING, "Lucene query analyzing failed", e);
-        } catch (InvalidTokenOffsetsException e) {
+        } catch (IOException | InvalidTokenOffsetsException e) {
         	logger.log(Level.WARNING, "Lucene query analyzing failed", e);
         }
   		}

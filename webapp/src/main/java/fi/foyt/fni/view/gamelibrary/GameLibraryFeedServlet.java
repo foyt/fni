@@ -154,6 +154,7 @@ public class GameLibraryFeedServlet extends HttpServlet {
       writer.flush();
       writer.close();
     } catch (IOException e) {
+      logger.log(Level.WARNING, "Failed to send servlet error", e);
       response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); 
     }
   }

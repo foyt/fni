@@ -2,6 +2,8 @@ package fi.foyt.fni.rest;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +29,9 @@ import fi.foyt.fni.session.SessionController;
 @Provider
 public class SecurityFilter implements ContainerRequestFilter {
 
+  @Inject
+  private Logger logger;
+  
   @Inject
   private SessionController sessionController;
   
@@ -85,8 +90,9 @@ public class SecurityFilter implements ContainerRequestFilter {
           }
         }
       } catch (OAuthProblemException e) {
-        
+        logger.log(Level.WARNING, "Could not invoke security filter", e);        
       } catch (OAuthSystemException e) {
+        logger.log(Level.WARNING, "Could not invoke security filter", e);        
         requestContext.abortWith(Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build());
         return;
       }

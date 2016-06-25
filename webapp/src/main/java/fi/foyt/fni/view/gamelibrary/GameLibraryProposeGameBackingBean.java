@@ -264,6 +264,7 @@ public class GameLibraryProposeGameBackingBean {
       try {
         bufferedImage = ImageUtils.readBufferedImage(new TypedData(fileData, getImageContentType()));
       } catch (Exception e) {
+        logger.log(Level.WARNING, "Failed read image as buffered image", e);
       }
       
       if (bufferedImage == null) {

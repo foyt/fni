@@ -1472,6 +1472,7 @@ public class IllusionRestServices {
           return Response.status(Status.BAD_REQUEST).entity("invalid format").build(); 
       }
     } catch (IOException e) {
+      logger.log(Level.SEVERE, "Unexpected exception occurred", e);
       return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
     }
   }
@@ -1601,6 +1602,7 @@ public class IllusionRestServices {
           return Response.status(Status.BAD_REQUEST).entity("invalid format").build(); 
       }
     } catch (IOException e) {
+      logger.log(Level.SEVERE, "Unexpected exception occurred", e);
       return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
     }
   }

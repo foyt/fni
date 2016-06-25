@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -40,6 +42,9 @@ import fi.foyt.fni.view.AbstractFileServlet;
 public class PublicationImageServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = 8109481247044843102L;
+	
+	@Inject
+	private Logger logger;
 
 	@Inject
 	private PublicationController publicationController;
@@ -100,6 +105,7 @@ public class PublicationImageServlet extends AbstractFileServlet {
   			try {
   				data = ImageUtils.resizeImage(data, width != null ? width : -1, height != null ? height : -1, null);
   			} catch (IOException e) {
+  	      logger.log(Level.SEVERE, "Failed to resize image", e);
   				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to resize image");
   				return;
   			}
@@ -188,6 +194,7 @@ public class PublicationImageServlet extends AbstractFileServlet {
 			}
 
 		} catch (FileUploadException e) {
+      logger.log(Level.SEVERE, "File uploading failed", e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return;
 		}

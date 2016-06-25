@@ -639,10 +639,12 @@ public class MaterialController {
           }
           
         } catch (Exception e) {
+          logger.log(Level.WARNING, "Failed to embed image as base64", e);
           // If anything goes wrong we just leave this img "as is".
         }
       }
     } catch (Exception e) {
+      logger.log(Level.WARNING, "Failed process document", e);
       // If anything goes wrong we just leave the document "as is".
     }
     

@@ -198,6 +198,7 @@ public class ForumTopicBackingBean {
 	  try {
       return securityController.checkPermission(Permission.FORUM_POST_MODIFY, forumPost.getId());
     } catch (FileNotFoundException e) {
+      logger.log(Level.SEVERE, "Failed to check permission for forum post modification", e);
       return false;
     }
 	}

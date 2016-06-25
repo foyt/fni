@@ -120,6 +120,7 @@ public class UserRestServices {
         return Response.status(Response.Status.BAD_REQUEST).entity("Unsupported locale").build();
       }
     } catch (IllegalArgumentException e) {
+      logger.log(Level.WARNING, "Invalid locale", e);        
       return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build(); 
     }
     

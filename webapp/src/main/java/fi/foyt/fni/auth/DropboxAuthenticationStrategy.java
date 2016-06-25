@@ -86,7 +86,7 @@ public class DropboxAuthenticationStrategy extends OAuthAuthenticationStrategy {
 
       return loginUser(AuthSource.DROPBOX, sourceId, accessToken.getToken(), accessToken.getSecret(), null, uid, null, names[0], names[1], null, userLocale, null);
     } catch (IOException e) {
-    	throw new ExternalLoginFailedException();
+    	throw new ExternalLoginFailedException(e);
     }
   }
   

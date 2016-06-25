@@ -3,6 +3,8 @@ package fi.foyt.fni.view.users;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -36,6 +38,9 @@ public class ProfileImageServlet extends AbstractFileServlet {
 	private static final long serialVersionUID = 8109481247044843102L;
 	
   private final static String GRAVATAR_URL = "://www.gravatar.com/avatar/";
+  
+  @Inject
+  private Logger logger;
 
 	@Inject
 	private UserController userController;
@@ -105,6 +110,7 @@ public class ProfileImageServlet extends AbstractFileServlet {
 		try {
 			profileImage = ImageUtils.resizeImage(profileImage, width, height, null);
 		} catch (IOException e) {
+		  logger.log(Level.WARNING, "Failed to resize image", e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to resize image");
 			return;
 		}
@@ -183,6 +189,7 @@ public class ProfileImageServlet extends AbstractFileServlet {
 			userController.updateProfileImage(loggedUser, file.getContentType(), file.getData());
 			userController.updateProfileImageSource(loggedUser, UserProfileImageSource.FNI);
 		} catch (FileUploadException e) {
+      logger.log(Level.SEVERE, "File uploading failed", e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return;
 		}

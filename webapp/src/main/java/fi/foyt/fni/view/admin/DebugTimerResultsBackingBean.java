@@ -103,6 +103,7 @@ public class DebugTimerResultsBackingBean {
           try {
             map.put(stat.getView(), (RequestStats) stat.clone());
           } catch (CloneNotSupportedException e) {
+            logger.log(Level.SEVERE, "Cloning failed", e);
           } 
         } else {
           RequestStats existing = map.get(stat.getView());
@@ -110,7 +111,7 @@ public class DebugTimerResultsBackingBean {
           existing.addMethodStats(stat.getMethodStats());
         }
       } catch (Exception e) {
-        e.printStackTrace();
+        logger.log(Level.SEVERE, "Unexcepted error", e);
       }
     }
     

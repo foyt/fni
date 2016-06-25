@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -37,6 +39,9 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Join(path = "/illusion/createevent", to = "/illusion/createevent.jsf")
 @LoggedIn
 public class IllusionCreateEventBackingBean {
+  
+  @Inject
+  private Logger logger;
 
   @Inject
   private SessionController sessionController;
@@ -277,6 +282,7 @@ public class IllusionCreateEventBackingBean {
       try {
         illusionEventController.updateLarpKalenteriEvent(event, getLocationLat(), getLocationLon());
       } catch (UnsupportedTypeException e) {
+        logger.log(Level.SEVERE, "Unsupported type", e);
         FacesUtils.addPostRedirectMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.createEvent.eventTypeNotSynchronizableToLarpKalenteri", type.getName()));
       }
     }

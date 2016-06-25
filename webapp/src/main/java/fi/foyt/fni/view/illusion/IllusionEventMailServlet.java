@@ -124,9 +124,7 @@ public class IllusionEventMailServlet extends AbstractFileServlet {
       }
 
       mailBuilder.send();
-    } catch (MessagingException e) {
-      logger.log(Level.SEVERE, "Could not send a mail", e);
-    } catch (UnsupportedEncodingException e) {
+    } catch (MessagingException | UnsupportedEncodingException e) {
       logger.log(Level.SEVERE, "Could not send a mail", e);
     }  
   }

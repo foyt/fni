@@ -6,11 +6,15 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class ExternalLocales {
+  
+  private static final Logger logger = Logger.getLogger(ExternalLocales.class.getName());
 
   public static String getText(Locale locale, String key) {
     return getResourceBundle(locale).getString(key);
@@ -41,7 +45,9 @@ public class ExternalLocales {
   	  ResourceBundle bundle = ResourceBundle.getBundle("fi.foyt.fni.external.locales", locale);
     	return bundle;
 	  } catch (Exception e) {
-  		if (StringUtils.isNotBlank(locale.getCountry())) { 
+	    logger.log(Level.WARNING, "Failed to load resource bundle", e);
+	    
+	    if (StringUtils.isNotBlank(locale.getCountry())) { 
   			return loadBundle(LocaleUtils.toLocale(locale.getLanguage()));
   		} else {
   			return ResourceBundle.getBundle("fi.foyt.fni.external.locales");

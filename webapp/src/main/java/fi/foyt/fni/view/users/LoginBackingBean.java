@@ -160,17 +160,22 @@ public class LoginBackingBean {
 					}
 				}
 			} catch (UserNotConfirmedException e) {
+	      logger.log(Level.FINEST, "User is not confirmed", e);
 				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.userNotVerified"));
 			} catch (MultipleEmailAccountsException e) {
+        logger.log(Level.SEVERE, "Several users found with an email address", e);
 				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.userConflictMultipleEmailAccounts"));
 			} catch (EmailDoesNotMatchLoggedUserException e) {
+        logger.log(Level.SEVERE, "User does not match logged user", e);
 				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.userConflictEmailDoesNotMatchLoggedUser"));
 			} catch (IdentityBelongsToAnotherUserException e) {
+        logger.log(Level.SEVERE, "Identity belongs to another user", e);
 				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.userConflictIdentityBelongsToAnotherUser"));
 			} catch (ExternalLoginFailedException e) {
 				logger.log(Level.SEVERE, "Login with external authentication source failed", e);
 				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.externalLoginFailed"));
 			} catch (InvalidCredentialsException e) {
+        logger.log(Level.FINEST, "Invalid credentials", e);
 				FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.invalidCredentials"));
 			} catch (IOException e) {
 				logger.log(Level.SEVERE, "Login redirect failed because of malformed url", e);
@@ -305,6 +310,7 @@ public class LoginBackingBean {
 					mailer.sendMail(fromMail, fromName, getForgotPasswordEmail(), user.getFullName(), mailTitle, mailContent, "text/html");
 					FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.login.resetPasswordEmailSent", getForgotPasswordEmail()));
 				} catch (MessagingException e) {
+	        logger.log(Level.SEVERE, "Failed to send reset password email", e);
 					FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("users.login.resetPasswordSendingFailed"));
 				}
 
@@ -355,10 +361,13 @@ public class LoginBackingBean {
 					}
 				}
 			} catch (MultipleEmailAccountsException e) {
+        logger.log(Level.SEVERE, "Multiple accounts found with an email address", e);
 				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.userConflictMultipleEmailAccounts"));
 			} catch (EmailDoesNotMatchLoggedUserException e) {
+        logger.log(Level.SEVERE, "Email does not match logged user", e);
 				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.userConflictEmailDoesNotMatchLoggedUser"));
 			} catch (IdentityBelongsToAnotherUserException e) {
+        logger.log(Level.SEVERE, "Identity belongs to another user", e);
 				FacesUtils.addMessage(FacesMessage.SEVERITY_FATAL, FacesUtils.getLocalizedValue("users.login.userConflictIdentityBelongsToAnotherUser"));
 			} catch (ConfigurationErrorException e) {
 				logger.log(Level.SEVERE, "Login failed because of configuration error", e);

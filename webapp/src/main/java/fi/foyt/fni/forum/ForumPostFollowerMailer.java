@@ -15,6 +15,7 @@ import org.apache.commons.lang3.LocaleUtils;
 
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.illusion.IllusionEventController;
+import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.forum.ForumTopicWatcher;
 import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
@@ -25,7 +26,6 @@ import fi.foyt.fni.persistence.model.users.UserSettingKey;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.users.UserController;
-import fi.foyt.fni.utils.mail.MailUtils;
 import fi.foyt.fni.view.forum.ForumTopicBackingBean;
 
 @Stateless
@@ -33,6 +33,9 @@ public class ForumPostFollowerMailer {
 
   @Inject
   private Logger logger;
+  
+  @Inject
+  private Mailer mailer;
 
   @Inject
   private UserController userController;
@@ -119,7 +122,7 @@ public class ForumPostFollowerMailer {
     String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
     String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
     
-    MailUtils.sendMail(fromMail, fromName, userEmail, user.getFullName(), subject, content, "text/plain");
+    mailer.sendMail(fromMail, fromName, userEmail, user.getFullName(), subject, content, "text/plain");
   }
 
 }

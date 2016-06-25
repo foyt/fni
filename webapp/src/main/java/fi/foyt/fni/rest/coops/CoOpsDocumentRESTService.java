@@ -1,6 +1,8 @@
 package fi.foyt.fni.rest.coops;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -34,6 +36,9 @@ import fi.foyt.fni.session.SessionController;
 @RequestScoped
 @Produces (MediaType.APPLICATION_JSON)
 public class CoOpsDocumentRESTService {
+  
+  @Inject
+  private Logger logger;
 
   @Inject
   private CoOpsApiDocument coOpsApiDocument;
@@ -67,14 +72,19 @@ public class CoOpsDocumentRESTService {
         .cacheControl(noCache())
         .build();
     } catch (CoOpsNotImplementedException e) {
+      logger.log(Level.SEVERE, "Attempted to use not implemented CoOps feature", e);
       return Response.status(Status.NOT_IMPLEMENTED).build();
     } catch (CoOpsNotFoundException e) {
+      logger.log(Level.WARNING, String.format("Tried to access non existing co-ops document %s", fileId), e);
       return Response.status(Status.NOT_FOUND).build();
     } catch (CoOpsUsageException e) {
+      logger.log(Level.WARNING, String.format("Malformed co-ops request on document %s", fileId), e);
       return Response.status(Status.BAD_REQUEST).build();
     } catch (CoOpsInternalErrorException e) {
+      logger.log(Level.SEVERE, String.format("Internal server error on co-ops document %s", fileId), e);
       return Response.status(Status.INTERNAL_SERVER_ERROR).build();
     } catch (CoOpsForbiddenException e) {      
+      logger.log(Level.WARNING, String.format("Unpermitted operation attempted on document %s", fileId), e);
       return Response.status(Status.FORBIDDEN).build();
     } 
   }
@@ -110,14 +120,19 @@ public class CoOpsDocumentRESTService {
         .cacheControl(noCache())
         .build();
     } catch (CoOpsNotFoundException e) {
+      logger.log(Level.WARNING, String.format("Tried to access non existing co-ops document %s", fileId), e);
       return Response.status(Status.NOT_FOUND).build();
     } catch (CoOpsUsageException e) {
+      logger.log(Level.WARNING, String.format("Malformed co-ops request on document %s", fileId), e);
       return Response.status(Status.BAD_REQUEST).build();
     } catch (CoOpsInternalErrorException e) {
+      logger.log(Level.SEVERE, String.format("Internal server error on co-ops document %s", fileId), e);
       return Response.status(Status.INTERNAL_SERVER_ERROR).build();
     } catch (CoOpsForbiddenException e) {      
+      logger.log(Level.WARNING, String.format("Unpermitted operation attempted on document %s", fileId), e);
       return Response.status(Status.FORBIDDEN).build();
     } catch (CoOpsConflictException e) {
+      logger.log(Level.FINEST, String.format("Conflict on document %s", fileId), e);
       return Response.status(Status.CONFLICT).build();
     } 
   }
@@ -161,12 +176,16 @@ public class CoOpsDocumentRESTService {
           .build();
       }
     } catch (CoOpsNotFoundException e) {
+      logger.log(Level.WARNING, String.format("Tried to access non existing co-ops document %s", fileId), e);
       return Response.status(Status.NOT_FOUND).build();
     } catch (CoOpsUsageException e) {
+      logger.log(Level.WARNING, String.format("Malformed co-ops request on document %s", fileId), e);
       return Response.status(Status.BAD_REQUEST).build();
     } catch (CoOpsInternalErrorException e) {
+      logger.log(Level.SEVERE, String.format("Internal server error on co-ops document %s", fileId), e);
       return Response.status(Status.INTERNAL_SERVER_ERROR).build();
     } catch (CoOpsForbiddenException e) {      
+      logger.log(Level.WARNING, String.format("Unpermitted operation attempted on document %s", fileId), e);
       return Response.status(Status.FORBIDDEN).build();
     } 
   }
@@ -192,14 +211,19 @@ public class CoOpsDocumentRESTService {
           .cacheControl(noCache())
           .build();
     } catch (CoOpsNotFoundException e) {
+      logger.log(Level.WARNING, String.format("Tried to access non existing co-ops document %s", fileId), e);
       return Response.status(Status.NOT_FOUND).build();
     } catch (CoOpsUsageException e) {
+      logger.log(Level.WARNING, String.format("Malformed co-ops request on document %s", fileId), e);
       return Response.status(Status.BAD_REQUEST).build();
     } catch (CoOpsInternalErrorException e) {
+      logger.log(Level.SEVERE, String.format("Internal server error on co-ops document %s", fileId), e);
       return Response.status(Status.INTERNAL_SERVER_ERROR).build();
     } catch (CoOpsForbiddenException e) {      
+      logger.log(Level.WARNING, String.format("Unpermitted operation attempted on document %s", fileId), e);
       return Response.status(Status.FORBIDDEN).build();
     } catch (CoOpsNotImplementedException e) {
+      logger.log(Level.SEVERE, "Attempted to use not implemented CoOps feature", e);
       return Response.status(Status.NOT_IMPLEMENTED).build();
     } 
   }

@@ -1,6 +1,8 @@
 package fi.foyt.fni.view.users;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
@@ -36,6 +38,9 @@ import fi.foyt.fni.session.SessionController;
 @Stateful
 @LoggedIn
 public class OAuth2AuthorizeBackingBean {
+  
+  @Inject
+  private Logger logger;
 
   @Inject
   private HttpServletRequest request;
@@ -69,6 +74,7 @@ public class OAuth2AuthorizeBackingBean {
         return "/users/oauth2-auto-authorize.jsf";
       }
     } catch (OAuthSystemException | OAuthProblemException e) {
+      logger.log(Level.SEVERE, "OAuth error occurred", e);
       return navigationController.internalError();
     }
 
@@ -95,6 +101,7 @@ public class OAuth2AuthorizeBackingBean {
           .setCode(authorizationCode.getCode());
       FacesContext.getCurrentInstance().getExternalContext().redirect(responseBuilder.buildQueryMessage().getLocationUri());
     } catch (IOException | OAuthSystemException e) {
+      logger.log(Level.WARNING, "Failed to embed image as base64", e);
       return navigationController.internalError();
     }
 
@@ -113,6 +120,7 @@ public class OAuth2AuthorizeBackingBean {
           .location(client.getRedirectUrl());
       FacesContext.getCurrentInstance().getExternalContext().redirect(responseBuilder.buildQueryMessage().getLocationUri());
     } catch (IOException | OAuthSystemException e) {
+      logger.log(Level.SEVERE, "OAuth error occurred", e);
       return navigationController.internalError();
     }
 

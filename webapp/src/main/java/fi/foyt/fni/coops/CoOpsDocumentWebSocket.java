@@ -5,6 +5,8 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -39,6 +41,9 @@ import fi.foyt.fni.persistence.model.materials.Material;
 public class CoOpsDocumentWebSocket {
   
   private static final Map<String, Map<String, Session>> fileClients = new HashMap<String, Map<String, Session>>();
+  
+  @Inject
+  private Logger logger;
 
   @Inject
   private CoOpsApiDocument coOpsApiDocument;
@@ -87,13 +92,17 @@ public class CoOpsDocumentWebSocket {
               sendPatch(client, patch);
             }
           } catch (CoOpsInternalErrorException e) {
+            logger.log(Level.SEVERE, String.format("Internal server error on co-ops document %s", fileId), e);
             client.close(new CloseReason(CloseReason.CloseCodes.UNEXPECTED_CONDITION, "Internal Error"));
           } catch (CoOpsUsageException e) {
-            client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new ErrorMessage("patchError", 400, e.getMessage())));
+            logger.log(Level.WARNING, String.format("Malformed co-ops request on document %s", fileId), e);
+            client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new ErrorMessage(ErrorMessage.PATCH_ERROR, 400, e.getMessage())));
           } catch (CoOpsNotFoundException e) {
-            client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new ErrorMessage("patchError", 404, e.getMessage())));
+            logger.log(Level.WARNING, String.format("Tried to access non existing co-ops document %s", fileId), e);
+            client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new ErrorMessage(ErrorMessage.PATCH_ERROR, 404, e.getMessage())));
           } catch (CoOpsForbiddenException e) {
-            client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new ErrorMessage("patchError", 500, e.getMessage())));
+            logger.log(Level.WARNING, String.format("Unpermitted operation attempted on document %s", fileId), e);
+            client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new ErrorMessage(ErrorMessage.PATCH_ERROR, 500, e.getMessage())));
           }
         }      
       } else {
@@ -152,14 +161,19 @@ public class CoOpsDocumentWebSocket {
   
       coOpsApiDocument.filePatch(fileId, patch.getSessionId(), patch.getRevisionNumber(), patch.getPatch(), patch.getProperties(), patch.getExtensions());
     } catch (CoOpsInternalErrorException e) {
+      logger.log(Level.SEVERE, String.format("Internal server error on co-ops document %s", fileId), e);
       client.close(new CloseReason(CloseReason.CloseCodes.UNEXPECTED_CONDITION, "Internal Error"));
     } catch (CoOpsUsageException e) {
+      logger.log(Level.WARNING, String.format("Malformed co-ops request on document %s", fileId), e);
       client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new ErrorMessage("patchError", 400, e.getMessage())));
     } catch (CoOpsNotFoundException e) {
+      logger.log(Level.WARNING, String.format("Tried to access non existing co-ops document %s", fileId), e);
       client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new ErrorMessage("patchError", 404, e.getMessage())));
     } catch (CoOpsConflictException e) {
+      logger.log(Level.FINEST, String.format("Conflict on document %s", fileId), e);
       client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new ErrorMessage("patchRejected", 409, "Conflict")));
     } catch (CoOpsForbiddenException e) {
+      logger.log(Level.WARNING, String.format("Unpermitted operation attempted on document %s", fileId), e);
       client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new ErrorMessage("patchError", 500, e.getMessage())));
     }
   }

@@ -8,6 +8,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +32,9 @@ import fi.foyt.fni.utils.auth.OAuthUtils;
 
 public class YahooAuthenticationStrategy extends OAuthAuthenticationStrategy {
 	
+  @Inject
+  private Logger logger;
+  
 	@Inject
 	private SystemSettingsController systemSettingsController;
 
@@ -112,7 +117,7 @@ public class YahooAuthenticationStrategy extends OAuthAuthenticationStrategy {
       
       return loginUser(AuthSource.YAHOO, sourceId, accessToken.getToken(), accessToken.getSecret(), expires, guid.getValue(), emails, familyName, givenName, nickname, null, grantedScopes);
     } catch (IOException e) {
-    	throw new ExternalLoginFailedException();
+    	throw new ExternalLoginFailedException(e);
     }
   };
   
@@ -128,6 +133,7 @@ public class YahooAuthenticationStrategy extends OAuthAuthenticationStrategy {
       
       return null;
     } catch (Exception e) {
+      logger.log(Level.SEVERE, "Could not extract expire", e);        
       return null;
     }
   }

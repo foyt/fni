@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,6 +31,9 @@ import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.auth.OAuthUtils;
 
 public class FacebookAuthenticationStrategy extends OAuthAuthenticationStrategy {
+  
+  @Inject
+  private Logger logger;
 
 	@Inject
 	private SystemSettingsController systemSettingsController;
@@ -103,7 +108,7 @@ public class FacebookAuthenticationStrategy extends OAuthAuthenticationStrategy 
       
       return loginUser(AuthSource.FACEBOOK, username, accessToken.getToken(), accessToken.getSecret(), expires, id, Arrays.asList(email), firstName, lastName, null, userLocale, grantedScopes);
     } catch (IOException e) {
-    	throw new ExternalLoginFailedException();
+    	throw new ExternalLoginFailedException(e);
     }
   };
   
@@ -119,6 +124,7 @@ public class FacebookAuthenticationStrategy extends OAuthAuthenticationStrategy 
       
       return null;
     } catch (Exception e) {
+      logger.log(Level.SEVERE, "Error occurred while extracting token", e);      
       return null;
     }
   }

@@ -77,6 +77,7 @@ public class CKBrowserConnectorServlet extends HttpServlet {
       try {
         handleListMaterials(request, response);
       } catch (UnsupportedEncodingException e) {
+        logger.log(Level.SEVERE, "Unsupported encoding", e);
         sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         return;
       }

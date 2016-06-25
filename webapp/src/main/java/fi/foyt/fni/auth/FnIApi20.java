@@ -2,6 +2,8 @@ package fi.foyt.fni.auth;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.codec.net.URLCodec;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -18,8 +20,12 @@ import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuth20ServiceImpl;
 import org.scribe.oauth.OAuthService;
 
+import fi.foyt.fni.i18n.ExternalLocales;
+
 public class FnIApi20 extends DefaultApi20 {
   
+  private static final Logger logger = Logger.getLogger(ExternalLocales.class.getName());
+
   public FnIApi20(String siteUrl) {
     this.siteUrl = siteUrl;
   }
@@ -40,6 +46,7 @@ public class FnIApi20 extends DefaultApi20 {
       
       return authorizationUrl;
     } catch (UnsupportedEncodingException e) {
+      logger.log(Level.SEVERE, "Unsupported locale", e);
       return null;
     }
   }
@@ -89,6 +96,7 @@ public class FnIApi20 extends DefaultApi20 {
         String tokenJson = objectMapper.writeValueAsString(objectMapper.readTree(response.getBody()));
         return api.getAccessTokenExtractor().extract(tokenJson);
       } catch (IOException e) {
+        logger.log(Level.SEVERE, "Failed to extract access token", e);
         return null;
       }
     }

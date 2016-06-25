@@ -5,10 +5,14 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
 
 public class JavaScriptMessages {
+  
+  private static final Logger logger = Logger.getLogger(JavaScriptMessages.class.getName());
 
   public static String getText(Locale locale, String key) {
     return getResourceBundle(locale).getString(key);
@@ -31,6 +35,8 @@ public class JavaScriptMessages {
   	  ResourceBundle bundle = ResourceBundle.getBundle("fi.foyt.fni.i18n.JavaScriptMessages", locale);
     	return bundle;
 	  } catch (Exception e) {
+      logger.log(Level.WARNING, "Could not load resource bundle", e);
+	    
   		if (StringUtils.isNotBlank(locale.getCountry())) { 
   			return loadBundle(new Locale(locale.getLanguage()));
   		} else {

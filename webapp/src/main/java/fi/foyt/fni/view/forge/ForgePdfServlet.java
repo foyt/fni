@@ -1,6 +1,8 @@
 package fi.foyt.fni.view.forge;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -30,6 +32,9 @@ import fi.foyt.fni.utils.data.TypedData;
 public class ForgePdfServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -1L;
+	
+  @Inject
+	private Logger logger;
 	
 	@Inject
 	private MaterialController materialController;
@@ -77,6 +82,7 @@ public class ForgePdfServlet extends HttpServlet {
 		try {
 			pdfData = materialController.printDocumentAsPdf(contextPath, baseUrl, sessionController.getLoggedUser(), document);
 		} catch (DocumentException | ParserConfigurationException | SAXException e) {
+      logger.log(Level.SEVERE, "Failed to print document as PDF", e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
 			return;
 		}

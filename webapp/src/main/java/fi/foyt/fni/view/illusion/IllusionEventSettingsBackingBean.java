@@ -381,8 +381,10 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
       } catch (IOException e) {
         logger.log(Level.SEVERE, "Failed to synchronize event into Larp-kalenteri", e);
       } catch (LarpKalenteriEventMissingException e) {
+        logger.log(Level.SEVERE, "Could not find larp-kalenteri event", e);
         FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.eventRemovedFromLarpKalenteri", type.getName()));
       } catch (UnsupportedTypeException e) {
+        logger.log(Level.SEVERE, "Unsupported type", e);
         FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.eventTypeNotSynchronizableToLarpKalenteri", type.getName()));
       }
     } else {

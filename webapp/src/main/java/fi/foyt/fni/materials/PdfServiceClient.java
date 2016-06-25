@@ -64,7 +64,7 @@ public class PdfServiceClient {
         EntityUtils.consume(entity);
       }
     } catch (IOException e) {
-      logger.log(Level.SEVERE, "Failed to convert url %s into pdf");
+      logger.log(Level.SEVERE, "Failed to convert url %s into pdf", e);
     }
 
     return null;
