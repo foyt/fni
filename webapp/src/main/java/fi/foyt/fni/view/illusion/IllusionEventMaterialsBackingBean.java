@@ -78,20 +78,17 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
   @Inject
   private NavigationController navigationController;
   
-  @SuppressWarnings("unchecked")
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     if (participant == null) {
       return navigationController.accessDenied();
     }
     
-    if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
-      if (!illusionEvent.getPublished()) {
-        return navigationController.accessDenied();
-      }
+    if (!illusionEvent.getPublished() && participant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
+      return navigationController.accessDenied();
     }
 
-    if ((participant != null) && (participant.getRole() == IllusionEventParticipantRole.INVITED)) {
+    if (participant.getRole() == IllusionEventParticipantRole.INVITED) {
       illusionEventController.updateIllusionEventParticipantRole(participant, IllusionEventParticipantRole.PARTICIPANT);
     }
 
@@ -102,45 +99,9 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.MATERIALS);
     illusionEventNavigationController.setEventUrlName(getUrlName());
 
-    User loggedUser = sessionController.getLoggedUser();
     IllusionEventFolder folder = illusionEvent.getFolder();
     
-    List<Material> materials = new ArrayList<>();
-    
-    List<Material> allMaterials = materialController.listMaterialsByFolderAndTypes(loggedUser, folder, Arrays.asList(
-      MaterialType.DOCUMENT,
-      MaterialType.IMAGE,
-      MaterialType.PDF,
-      MaterialType.FILE,
-      MaterialType.BINARY,
-      MaterialType.VECTOR_IMAGE,
-      MaterialType.GOOGLE_DOCUMENT,
-      MaterialType.DROPBOX_FILE,
-      MaterialType.CHARACTER_SHEET
-    ));
-    
-    if (participant.getRole() == IllusionEventParticipantRole.ORGANIZER) {
-      materials = allMaterials;
-    } else {
-      for (Material material : allMaterials) {
-        if (materialPermissionController.isPublic(loggedUser, material)) {
-          materials.add(material);
-        } else {
-          if (materialPermissionController.hasAccessPermission(loggedUser, material)) {
-            materials.add(material);
-          }
-        }
-      }
-    }
-    
-    Collections.sort(materials, ComparatorUtils.chainedComparator(
-      Arrays.asList(
-        new MaterialTypeComparator(MaterialType.ILLUSION_FOLDER),
-        new MaterialTypeComparator(MaterialType.DROPBOX_ROOT_FOLDER),
-        new MaterialTypeComparator(MaterialType.FOLDER), 
-        new TitleComparator())
-      )
-    );
+    List<Material> materials = getMaterials(participant, folder);
 
     List<Map<String, Object>> materialsModel = new ArrayList<>();
     
@@ -174,6 +135,49 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
     return null;
   }
 
+  @SuppressWarnings("unchecked")
+  private List<Material> getMaterials(IllusionEventParticipant participant, IllusionEventFolder folder) {
+    User user = participant.getUser();
+    
+    List<Material> materials = new ArrayList<>();
+    
+    List<Material> allMaterials = materialController.listMaterialsByFolderAndTypes(user, folder, Arrays.asList(
+      MaterialType.DOCUMENT,
+      MaterialType.IMAGE,
+      MaterialType.PDF,
+      MaterialType.FILE,
+      MaterialType.BINARY,
+      MaterialType.VECTOR_IMAGE,
+      MaterialType.GOOGLE_DOCUMENT,
+      MaterialType.DROPBOX_FILE,
+      MaterialType.CHARACTER_SHEET
+    ));
+    
+    if (participant.getRole() == IllusionEventParticipantRole.ORGANIZER) {
+      materials = allMaterials;
+    } else {
+      for (Material material : allMaterials) {
+        if (materialPermissionController.isPublic(user, material)) {
+          materials.add(material);
+        } else {
+          if (materialPermissionController.hasAccessPermission(user, material)) {
+            materials.add(material);
+          }
+        }
+      }
+    }
+    
+    Collections.sort(materials, ComparatorUtils.chainedComparator(
+      Arrays.asList(
+        new MaterialTypeComparator(MaterialType.ILLUSION_FOLDER),
+        new MaterialTypeComparator(MaterialType.DROPBOX_ROOT_FOLDER),
+        new MaterialTypeComparator(MaterialType.FOLDER), 
+        new TitleComparator())
+      )
+    );
+    return materials;
+  }
+
   @Override
   public String getUrlName() {
     return urlName;
@@ -196,7 +200,12 @@ public class IllusionEventMaterialsBackingBean extends AbstractIllusionEventBack
     
     Material current = material;
     do {
+      if (current == null) {
+        break;
+      }
+      
       path.add(0, current.getUrlName());
+      current = material.getParentFolder();
     } while ((current == null)||(current.getType() == MaterialType.ILLUSION_FOLDER));
     
     return StringUtils.join(path, "/");

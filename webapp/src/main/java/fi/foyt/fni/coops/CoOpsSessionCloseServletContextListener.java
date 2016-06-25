@@ -16,6 +16,7 @@ public class CoOpsSessionCloseServletContextListener implements ServletContextLi
 	@Inject
 	private CoOpsSessionController coOpsSessionController;
 	
+  @Override
 	@Transactional
   public void contextInitialized(ServletContextEvent event) {
     List<CoOpsSession> openSessions = coOpsSessionController.listSessionsByClosed(Boolean.FALSE);
@@ -24,6 +25,7 @@ public class CoOpsSessionCloseServletContextListener implements ServletContextLi
     }
   }
 
+  @Override
   public void contextDestroyed(ServletContextEvent event) {
   }
 }

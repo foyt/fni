@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -31,10 +32,10 @@ public class BookDesignRenderer {
   }
   
   private void printStyleRules(StringBuilder result, Map<String, String> rules) {
-    for (String rule : rules.keySet()) {
-      result.append(rule);
+    for (Entry<String, String> entry : rules.entrySet()) {
+      result.append(entry.getKey());
       result.append(':');
-      result.append(rules.get(rule));
+      result.append(rules.get(entry.getValue()));
       result.append(';');
     }
   }

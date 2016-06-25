@@ -87,7 +87,7 @@ public class ForgeImportGoogleDriveBackingBean {
     String contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
     
     if (parentFolderId != null) {
-      Folder parentFolder = parentFolderId != null ? materialController.findFolderById(parentFolderId) : null;
+      Folder parentFolder = materialController.findFolderById(parentFolderId);
       if (parentFolder != null) {
         if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
           return navigationController.accessDenied();

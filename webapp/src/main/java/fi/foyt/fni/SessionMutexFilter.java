@@ -31,6 +31,7 @@ import javax.servlet.http.HttpSession;
 } )
 public class SessionMutexFilter implements Filter {
 
+  @Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpSession session = null;
 		if (request instanceof HttpServletRequest) {
@@ -52,6 +53,7 @@ public class SessionMutexFilter implements Filter {
 		}
 	}
 
+  @Override
 	public void init(FilterConfig fConfig) throws ServletException {
 	}
 

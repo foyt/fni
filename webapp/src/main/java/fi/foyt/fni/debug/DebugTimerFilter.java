@@ -24,9 +24,11 @@ public class DebugTimerFilter implements Filter {
   @Inject
   private DebugTimerCollector debugTimerCollector;
 
+  @Override
   public void destroy() {
   }
 
+  @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
     long startTime = System.currentTimeMillis();
     
@@ -40,6 +42,7 @@ public class DebugTimerFilter implements Filter {
     }
   }
 
+  @Override
   public void init(FilterConfig fConfig) throws ServletException {
   }
 

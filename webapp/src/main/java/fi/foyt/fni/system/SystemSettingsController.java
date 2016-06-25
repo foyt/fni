@@ -22,9 +22,10 @@ import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 @Dependent
 public class SystemSettingsController {
 	
-	private static final String DEFAULT_COUNTRY_CODE = "FI";
-  private final static double VAT_PERCENT = 0;
-  private final static boolean VAT_REGISTERED = false;
+	private static final String DEFAULT_THEME = "default_dev";
+  private static final String DEFAULT_COUNTRY_CODE = "FI";
+  private static final double VAT_PERCENT = 0;
+  private static final boolean VAT_REGISTERED = false;
   private static final String DEFAULT_CURRENCY = "EUR";
 
 	@Inject
@@ -61,16 +62,16 @@ public class SystemSettingsController {
 		return getLocaleSetting(SystemSettingKey.DEFAULT_LOCALE);
 	}
 
-	public void updateSetting(SystemSettingKey key, String value) {
+	public SystemSetting updateSetting(SystemSettingKey key, String value) {
 		SystemSetting systemSetting = systemSettingDAO.findByKey(key);
 		if (systemSetting == null)
-			systemSetting = systemSettingDAO.create(key, value);
+			return systemSettingDAO.create(key, value);
 		else
-			systemSetting = systemSettingDAO.updateValue(systemSetting, value);
+		  return systemSettingDAO.updateValue(systemSetting, value);
 	}
 
 	public String getTheme() {
-		return "default_dev";
+		return DEFAULT_THEME;
 	}
 
 	public String getThemePath(HttpServletRequest request) {

@@ -32,7 +32,7 @@ public class SearchController {
       try {
         reindexEntity(indexedEntityClass);
       } catch (InterruptedException e) {
-        logger.log(Level.SEVERE, String.format("Failed to reindex entity %s", indexedEntityClass.getName()), e);
+        logger.log(Level.SEVERE, String.format("Reindex entity %s was interrupted", indexedEntityClass.getName()), e);
       }
     }
   }
@@ -49,7 +49,7 @@ public class SearchController {
   }
 
   private List<Class<?>> listIndexedEntityClasses() {
-    List<Class<?>> result = new ArrayList<Class<?>>();
+    List<Class<?>> result = new ArrayList<>();
     
     Metamodel metamodel = entityManager.getMetamodel();
     Set<EntityType<?>> entityTypes = metamodel.getEntities();

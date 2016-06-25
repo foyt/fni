@@ -9,6 +9,7 @@ import org.w3c.dom.NodeList;
 
 public class GenericNodePrinter implements NodePrinter {
   
+  @Override
   public void printNode(PrintingContext printingContext, Node node) throws IOException {
     Element element = (Element) node;
 

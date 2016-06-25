@@ -24,6 +24,7 @@ import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
@@ -70,6 +71,9 @@ public class GameLibraryEditPublicationBackingBean {
   @Inject
 	private SystemSettingsController systemSettingsController;
 	
+  @Inject
+  private NavigationController navigationController;
+  
   @RequestAction
 	@Deferred
 	public String load() {
@@ -80,7 +84,7 @@ public class GameLibraryEditPublicationBackingBean {
 		creativeCommonsCommercialSelectItems = createCreativeCommsonCommercialSelectItems();
 		languageSelectItems = createLanguageSelectItems();
 		
-		if (tagSelectItems.size() > 0 && tagSelectItems.get(1).getSelectItems().length > 0) {
+		if (!tagSelectItems.isEmpty() && tagSelectItems.get(1).getSelectItems().length > 0) {
       addExistingTag = (String) tagSelectItems.get(1).getSelectItems()[0].getValue();
     }
 		
@@ -90,10 +94,12 @@ public class GameLibraryEditPublicationBackingBean {
   @RequestAction
   @Deferred
   @IgnorePostback
-	public void init() {
+	public String init() {
 		BookPublication publication = publicationController.findBookPublicationById(publicationId);
-		// TODO: Not found?
-		
+		if (publication == null) {
+		  return navigationController.notFound();
+		}
+
 		name = publication.getName();
 		description = publication.getDescription();
 		price = publication.getPrice();
@@ -123,22 +129,22 @@ public class GameLibraryEditPublicationBackingBean {
 		}
 		
 		CreativeCommonsLicense creativeCommonsLicense = CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
-		licenseType =	creativeCommonsLicense != null ? LicenseType.CREATIVE_COMMONS : LicenseType.OTHER;
-		switch (licenseType) {
-			case CREATIVE_COMMONS:
-				creativeCommonsDerivatives = creativeCommonsLicense.getDerivatives() 
-				  ? creativeCommonsLicense.getShareAlike() 
-				  		? CreativeCommonsDerivatives.SHARE_ALIKE : CreativeCommonsDerivatives.YES 
-				  : CreativeCommonsDerivatives.NO;
-				creativeCommonsCommercial = creativeCommonsLicense.getCommercial() ? CreativeCommonsCommercial.YES : CreativeCommonsCommercial.NO;
-				licenseOther = "";
-			break;
-			case OTHER:
-				creativeCommonsDerivatives = CreativeCommonsDerivatives.YES;
-				creativeCommonsCommercial = CreativeCommonsCommercial.YES;
-				licenseOther = publication.getLicense();
-			break;
+		if (creativeCommonsLicense != null) {
+	    licenseType = LicenseType.CREATIVE_COMMONS;
+      creativeCommonsDerivatives = creativeCommonsLicense.getDerivatives() 
+          ? creativeCommonsLicense.getShareAlike() 
+              ? CreativeCommonsDerivatives.SHARE_ALIKE : CreativeCommonsDerivatives.YES 
+          : CreativeCommonsDerivatives.NO;
+        creativeCommonsCommercial = creativeCommonsLicense.getCommercial() ? CreativeCommonsCommercial.YES : CreativeCommonsCommercial.NO;
+        licenseOther = "";
+		} else {
+	    licenseType = LicenseType.OTHER;
+      creativeCommonsDerivatives = CreativeCommonsDerivatives.YES;
+      creativeCommonsCommercial = CreativeCommonsCommercial.YES;
+      licenseOther = publication.getLicense();
 		}
+		
+		return null;
 	}
   
   private List<SelectItem> createLanguageSelectItems() {
@@ -146,8 +152,7 @@ public class GameLibraryEditPublicationBackingBean {
     
     List<Language> languages = systemSettingsController.listLanguages();
     for (Language language : languages) {
-      String name = FacesUtils.getLocalizedValue("generic.languages." + language.getISO3());
-      result.add(new SelectItem(language.getId(), name));
+      result.add(new SelectItem(language.getId(), FacesUtils.getLocalizedValue("generic.languages." + language.getISO3())));
     }
     
     return result;
@@ -359,10 +364,8 @@ public class GameLibraryEditPublicationBackingBean {
 		  tag = StringUtils.lowerCase(StringUtils.trim(getAddNewTag()));
 		}
 		
-		if (StringUtils.isNotBlank(tag)) {
-			if (!tags.contains(tag)) {
-				tags.add(tag);
-			}
+		if (StringUtils.isNotBlank(tag) && !tags.contains(tag)) {
+			tags.add(tag);
 		}
 	}
 	
@@ -387,7 +390,7 @@ public class GameLibraryEditPublicationBackingBean {
 		Publication publication = publicationController.findPublicationById(publicationId);
 		if (publication instanceof BookPublication) {
 		  BookPublication bookPublication = (BookPublication) publication;
-		  String license = null;
+		  String license;
 		  
 		  switch (getLicenseType()) {
 				case CREATIVE_COMMONS:
@@ -399,17 +402,21 @@ public class GameLibraryEditPublicationBackingBean {
 				case OTHER:
 					license = getLicenseOther();
 				break;
+  		  default:
+  		    license = null;
+  		  break;
 			}
 		  
-		  List<GameLibraryTag> tags = new ArrayList<>();
-		  List<User> authors = new ArrayList<User>();
+		  List<GameLibraryTag> publicationTags = new ArrayList<>();
+		  List<User> authors = new ArrayList<>();
 		  
 		  for (String tag : getTags()) {
 		  	GameLibraryTag gameLibraryTag = gameLibraryTagController.findTagByText(tag);
 		  	if (gameLibraryTag == null) {
 		  		gameLibraryTag = gameLibraryTagController.createTag(tag);
 		  	}
-		  	tags.add(gameLibraryTag);
+		  	
+		  	publicationTags.add(gameLibraryTag);
 		  }
 		  
 		  for (Long authorId : getAuthorIds()) {
@@ -426,7 +433,7 @@ public class GameLibraryEditPublicationBackingBean {
 			publicationController.updateDimensions(publication, getWidth(), getHeight(), getDepth());
 			publicationController.updatePublicationAuthors(publication, authors);
 			publicationController.updateLicense(bookPublication, license);
-			publicationController.updateTags(bookPublication, tags);
+			publicationController.updateTags(bookPublication, publicationTags);
 			publicationController.updateNumberOfPages(bookPublication, getNumberOfPages());
       publicationController.updatePublicationLanguage(bookPublication, language);
 			publicationController.updatedModified(bookPublication, sessionController.getLoggedUser(), new Date());
@@ -436,20 +443,20 @@ public class GameLibraryEditPublicationBackingBean {
 	}
 	
 	private List<SelectItem> createLicenseSelectItems() {
-		List<SelectItem> licenseSelectItems = new ArrayList<>();
-		licenseSelectItems.add(new SelectItem(LicenseType.CREATIVE_COMMONS, FacesUtils.getLocalizedValue("gamelibrary.editPublication.licenseCreativeCommons")));
-		licenseSelectItems.add(new SelectItem(LicenseType.OTHER, FacesUtils.getLocalizedValue("gamelibrary.editPublication.licenseOther")));
-		return licenseSelectItems;
+		List<SelectItem> result = new ArrayList<>();
+		result.add(new SelectItem(LicenseType.CREATIVE_COMMONS, FacesUtils.getLocalizedValue("gamelibrary.editPublication.licenseCreativeCommons")));
+		result.add(new SelectItem(LicenseType.OTHER, FacesUtils.getLocalizedValue("gamelibrary.editPublication.licenseOther")));
+		return result;
 	}
 	
 	private List<SelectItemGroup> createTagSelectItems() {
-		List<GameLibraryTag> tags = gameLibraryTagController.listGameLibraryTags();
+		List<GameLibraryTag> gameLibraryTags = gameLibraryTagController.listGameLibraryTags();
 		
 		ArrayList<SelectItemGroup> result = new ArrayList<>();
 
 		List<SelectItem> tagItems = new ArrayList<>();
-		for (GameLibraryTag tag : tags) {
-			tagItems.add(new SelectItem(tag.getText(), StringUtils.capitalize(tag.getText())));
+		for (GameLibraryTag gameLibraryTag : gameLibraryTags) {
+			tagItems.add(new SelectItem(gameLibraryTag.getText(), StringUtils.capitalize(gameLibraryTag.getText())));
 		}
 		
 		SelectItemGroup existingTagGroup = new SelectItemGroup(FacesUtils.getLocalizedValue("gamelibrary.editPublication.existingTagsGroup"), "", false, tagItems.toArray(new SelectItem[0]));

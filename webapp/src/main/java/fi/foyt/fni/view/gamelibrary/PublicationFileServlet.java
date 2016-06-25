@@ -3,6 +3,8 @@ package fi.foyt.fni.view.gamelibrary;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -29,6 +31,9 @@ import fi.foyt.fni.view.AbstractFileServlet;
 public class PublicationFileServlet extends AbstractFileServlet {
 
 	private static final long serialVersionUID = -5117742561225873455L;
+	
+  @Inject
+	private Logger logger;
 
 	@Inject
 	private PublicationController publicationController;
@@ -41,26 +46,26 @@ public class PublicationFileServlet extends AbstractFileServlet {
 		// PublicationId could not be resolved, send 404
 		Long publicationId = getPathId(request);
 		if (publicationId == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+		  sendError(response, HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
 		// BookPublication was not found, send 404
 		BookPublication bookPublication = publicationController.findBookPublicationById(publicationId);
 		if (bookPublication == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 		
 		if (!bookPublication.getPublished()) {
 			if (!sessionController.isLoggedIn()) {
-				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+	      sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
 				return;
 			}
 			
 			if (!bookPublication.getCreator().getId().equals(sessionController.getLoggedUserId())) {
   			if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
-	  			response.sendError(HttpServletResponse.SC_FORBIDDEN);
+          sendError(response, HttpServletResponse.SC_FORBIDDEN);
 		  		return;
 			  }
 			}
@@ -69,7 +74,7 @@ public class PublicationFileServlet extends AbstractFileServlet {
 		// BookPublication does not have a file, send 404
 		PublicationFile file = bookPublication.getDownloadableFile();
 		if (file == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 		
@@ -97,11 +102,16 @@ public class PublicationFileServlet extends AbstractFileServlet {
 		response.setDateHeader("Last-Modified", lastModified);
 		response.setDateHeader("Expires", System.currentTimeMillis() + DEFAULT_EXPIRE_TIME);
 
-		ServletOutputStream outputStream = response.getOutputStream();
 		try {
-			outputStream.write(data.getData());
-		} finally {
-			outputStream.flush();
+  		ServletOutputStream outputStream = response.getOutputStream();
+  		try {
+  			outputStream.write(data.getData());
+  		} finally {
+  			outputStream.flush();
+  		}
+		} catch (IOException e) {
+		  logger.log(Level.SEVERE, "Failed to send response", e);
+		  sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -109,19 +119,19 @@ public class PublicationFileServlet extends AbstractFileServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User loggedUser = sessionController.getLoggedUser();
 		if (loggedUser == null) {
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+      sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}
 		
 		if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);
+      sendError(response, HttpServletResponse.SC_FORBIDDEN);
 			return;
 		}
 
 		// PublicationId could not be resolved, send 404
 		Long publicationId = getPathId(request);
 		if (publicationId == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
@@ -151,7 +161,12 @@ public class PublicationFileServlet extends AbstractFileServlet {
 				  }
 				}
 			}
-			
+      
+      if (file == null) {
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing file");
+        return;
+      }
+      
 			if (fileType == null) {
 			  response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         return;
@@ -173,6 +188,7 @@ public class PublicationFileServlet extends AbstractFileServlet {
 			);
 			
 		} catch (FileUploadException e) {
+		  logger.log(Level.SEVERE, "File uploading failed", e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return;
 		}

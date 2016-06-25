@@ -25,6 +25,7 @@ public class IllusionEventDoJoinBackingBean extends AbstractIllusionEventBacking
     return String.format("/illusion/event-registration.jsf?faces-redirect=true&urlName=%s", getUrlName());
   }
 
+  @Override
   public String getUrlName() {
     return urlName;
   }

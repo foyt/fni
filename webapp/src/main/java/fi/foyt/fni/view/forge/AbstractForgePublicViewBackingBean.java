@@ -11,22 +11,10 @@ import fi.foyt.fni.materials.MaterialController;
 import fi.foyt.fni.persistence.dao.materials.TagWithCount;
 import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.materials.MaterialTag;
-import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.utils.licenses.CreativeCommonsLicense;
 import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 
 public abstract class AbstractForgePublicViewBackingBean {
-
-  protected static final MaterialType[] SUPPORTED_TYPES = { 
-      MaterialType.DOCUMENT, 
-      MaterialType.IMAGE, 
-      MaterialType.PDF,
-      MaterialType.FILE, 
-      MaterialType.BINARY, 
-      MaterialType.VECTOR_IMAGE, 
-      MaterialType.GOOGLE_DOCUMENT,
-      MaterialType.DROPBOX_FILE 
-  };
 
   protected static final int TAG_COUNT = 30;
   

@@ -83,24 +83,24 @@ public class IllusionEventManagePagesBackingBean extends AbstractIllusionEventBa
   }
 
   private List<Page> loadPages(IllusionEvent event) {
-    List<Page> pages = new ArrayList<>();
+    List<Page> result = new ArrayList<>();
     String eventUrl = illusionEventController.getEventUrl(event);
     
     IllusionEventDocument indexDocument = illusionEventDocumentDAO.findByParentFolderAndDocumentType(event.getFolder(), IllusionEventDocumentType.INDEX);
     if (indexDocument != null) {
-      pages.add(createPage(event, "INDEX", indexDocument.getUrlName(), eventUrl, indexDocument.getTitle(), "INDEX", true, false, false, false));
+      result.add(createPage(event, "INDEX", indexDocument.getUrlName(), eventUrl, indexDocument.getTitle(), "INDEX", true, false, false, false));
     } else {
       logger.severe("Could not find index page document for event #" + event.getId());
     }
     
     for (IllusionEventDocument customPage : illusionEventPageController.listCustomPages(event.getFolder())) {
-      pages.add(createPage(event, customPage.getId().toString(), customPage.getUrlName(), eventUrl + "/pages/" + customPage.getUrlName(), customPage.getTitle(), "PAGE", true, true, true, false));
+      result.add(createPage(event, customPage.getId().toString(), customPage.getUrlName(), eventUrl + "/pages/" + customPage.getUrlName(), customPage.getTitle(), "PAGE", true, true, true, false));
     }
     
-    pages.add(createPage(event, "MATERIALS", "materials", eventUrl + "/materials", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.materials"), "MATERIALS", false, false, true, true));
-    pages.add(createPage(event, "FORUM", "event-forum", eventUrl + "/event-forum", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.forum"), "FORUM", false, false, true, false));
+    result.add(createPage(event, "MATERIALS", "materials", eventUrl + "/materials", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.materials"), "MATERIALS", false, false, true, true));
+    result.add(createPage(event, "FORUM", "event-forum", eventUrl + "/event-forum", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.forum"), "FORUM", false, false, true, false));
 
-    return pages;
+    return result;
   }
   
   private Page createPage(IllusionEvent event, String id, String urlName, String url, String title, String type, boolean editable, boolean deletable,
@@ -108,9 +108,9 @@ public class IllusionEventManagePagesBackingBean extends AbstractIllusionEventBa
     
     PageSetting setting = getPageSettings(event, id); 
     IllusionEventPageVisibility visibility = setting.getVisibility();
-    String groupIds = setting.getGroupIds() != null ? StringUtils.join(setting.getGroupIds().toArray(new Long[0]), ",") : null;
+    String pageGroupIds = setting.getGroupIds() != null ? StringUtils.join(setting.getGroupIds().toArray(new Long[0]), ",") : null;
     
-    return new Page(id, urlName, url, title, type, editable, deletable, visibilityChangeable, requiresUser, visibility, groupIds);
+    return new Page(id, urlName, url, title, type, editable, deletable, visibilityChangeable, requiresUser, visibility, pageGroupIds);
   }
   
   private PageSetting getPageSettings(IllusionEvent illusionEvent, String pageId) {
@@ -154,17 +154,6 @@ public class IllusionEventManagePagesBackingBean extends AbstractIllusionEventBa
     this.groupIds = groupIds;
   }
 
-  public String getRelativePath(Material material) {
-    List<String> path = new ArrayList<>();
-
-    Material current = material;
-    do {
-      path.add(0, current.getUrlName());
-    } while ((current == null) || (current.getType() == MaterialType.ILLUSION_FOLDER));
-
-    return StringUtils.join(path, "/");
-  }
-
   public String newPage() {
     IllusionEvent event = illusionEventController.findIllusionEventByUrlName(getUrlName());
     String title = FacesUtils.getLocalizedValue("illusion.managePages.untitledPage");
@@ -181,10 +170,9 @@ public class IllusionEventManagePagesBackingBean extends AbstractIllusionEventBa
     IllusionEvent event = illusionEventController.findIllusionEventByUrlName(getUrlName());
     
     IllusionEventPageVisibility visibility = getPageVisibility();
-    List<Long> groupIds = visibility == IllusionEventPageVisibility.GROUPS ? getGroupIds() : null;
     
     PageSetting pageSettings = illusionEventPageController.getPageSettings(event, getPageId());
-    pageSettings.setGroupIds(groupIds);
+    pageSettings.setGroupIds(visibility == IllusionEventPageVisibility.GROUPS ? getGroupIds() : null);
     pageSettings.setVisibility(visibility);
     
     illusionEventPageController.updatePageSetting(event, getPageId(), pageSettings);

@@ -1,6 +1,8 @@
 package fi.foyt.fni.utils.itext;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.codec.binary.Base64;
 import org.w3c.dom.Element;
@@ -22,7 +24,10 @@ import com.itextpdf.text.Image;
  * Modified version of B64ImgReplacedElementFactory.java from https://gist.github.com/915348#comments
  */
 public class B64ImgReplacedElementFactory implements ReplacedElementFactory {
+  
+  private static final Logger logger = Logger.getLogger(B64ImgReplacedElementFactory.class.getName());
 
+  @Override
 	public ReplacedElement createReplacedElement(LayoutContext c, BlockBox box, UserAgentCallback uac, int cssWidth, int cssHeight) {
 		Element e = box.getElement();
 		if (e == null) {
@@ -30,12 +35,12 @@ public class B64ImgReplacedElementFactory implements ReplacedElementFactory {
 		}
 		
 		String nodeName = e.getNodeName();
-		if (nodeName.equals("img")) {
+		if ("img".equals(nodeName)) {
   		String src = e.getAttribute("src");
-  		FSImage fsImage = null;
+  		FSImage fsImage;
   		
   		if (src.startsWith("data:")) {
-  			fsImage = buildBase64Image(c.getSharedContext(), src, uac);
+  			fsImage = buildBase64Image(c.getSharedContext(), src);
   		} else {
   			fsImage = uac.getImageResource(e.getAttribute("src")).getImage();
   		}
@@ -53,7 +58,7 @@ public class B64ImgReplacedElementFactory implements ReplacedElementFactory {
 		return null;
 	}
 
-	protected FSImage buildBase64Image(SharedContext sharedContext, String srcAttr, UserAgentCallback uac) {
+	private FSImage buildBase64Image(SharedContext sharedContext, String srcAttr) {
 		String b64encoded = srcAttr.substring(srcAttr.indexOf("base64,") + "base64,".length(), srcAttr.length());
 
 		byte[] decodedBytes = Base64.decodeBase64(b64encoded);
@@ -65,18 +70,20 @@ public class B64ImgReplacedElementFactory implements ReplacedElementFactory {
 			return new ITextFSImage(image);
 
 		} catch (BadElementException | IOException e) {
+		  logger.log(Level.SEVERE, "Failed to build base64 image", e);
 			return null;
 		}
 	}
 	
+	@Override
 	public void remove(Element e) {
 	}
 
+  @Override
 	public void reset() {
 	}
 
 	@Override
 	public void setFormSubmissionListener(FormSubmissionListener listener) {
-
 	}
 }

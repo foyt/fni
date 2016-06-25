@@ -2,11 +2,16 @@ package fi.foyt.fni.view;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -22,7 +27,10 @@ public abstract class AbstractFileServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 2682138379342291553L;
 
-	protected static final long DEFAULT_EXPIRE_TIME = 1000 * 60 * 60;
+	protected static final long DEFAULT_EXPIRE_TIME = 1000L * 60 * 60;
+	
+	@Inject
+	private Logger logger;
 	
 	protected String getPathLastBlock(HttpServletRequest req) {
     String pathInfo = req.getPathInfo();
@@ -50,5 +58,24 @@ public abstract class AbstractFileServlet extends HttpServlet {
 		((DiskFileItemFactory) factory).setRepository(repository);
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		return upload.parseRequest(request);
-	};
+	}
+	
+	protected void sendError(HttpServletResponse response, int status) {
+	  sendError(response, status, null);
+	}
+	
+	protected void sendError(HttpServletResponse response, int status, String message) {
+    response.setStatus(status);
+    if (StringUtils.isNotBlank(message)) {
+      PrintWriter writer;
+      try {
+        writer = response.getWriter();
+        writer.write(message);
+        writer.flush();
+      } catch (IOException e) {
+        logger.log(Level.SEVERE, "Failed to send error", e);
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      }
+    }
+	}
 }

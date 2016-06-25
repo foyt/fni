@@ -14,6 +14,7 @@ public class ServletCtxListener implements ServletContextListener {
 	@Inject
 	private Logger logger;
 	
+  @Override
   public void contextInitialized(ServletContextEvent event) {
     ServletContext servletContext = event.getServletContext();
         
@@ -24,6 +25,7 @@ public class ServletCtxListener implements ServletContextListener {
     logger.info("Forge & Illusion cloud started");
   }
 
+  @Override
   public void contextDestroyed(ServletContextEvent event) {
     logger.info("Forge & Illusion cloud stopped");
   }

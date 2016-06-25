@@ -139,6 +139,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     this.published = published;
   }
 
+  @Override
   public String getName() {
     return name;
   }
@@ -147,10 +148,12 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     this.name = name;
   }
 
+  @Override
   public String getDescription() {
     return description;
   }
 
+  @Override
   public void setDescription(String description) {
     this.description = description;
   }

@@ -234,7 +234,7 @@ public class IllusionRestServices {
       signUpFeeCurrency = Currency.getInstance(entity.getSignUpFeeCurrency());
     }
     
-    List<Genre> genres = null;
+    List<Genre> genres;
 
     if (entity.getGenreIds() != null) {
       genres = new ArrayList<>(entity.getGenreIds().size());
@@ -292,7 +292,7 @@ public class IllusionRestServices {
       @QueryParam ("maxTime") DateTimeParameter maxTime,
       @QueryParam ("organizer") Long[] organizerIds) {
     
-    List<IllusionEvent> events = null;
+    List<IllusionEvent> events;
     List<User> organizers = null;
     
     if ((organizerIds != null) && (organizerIds.length > 0)) {
@@ -308,10 +308,6 @@ public class IllusionRestServices {
     }
     
     if ((minTime != null) && (maxTime != null)) {
-      if ((minTime == null) || (minTime == null)) {
-        return Response.status(Status.BAD_REQUEST).build();
-      }
-      
       List<IllusionEvent> timeFrameEvents = illusionEventController.listPublishedEventsBetween(minTime.getDateTime().toDate(), maxTime.getDateTime().toDate(), Boolean.TRUE);
       
       if (organizers != null) {
@@ -1472,9 +1468,9 @@ public class IllusionRestServices {
       switch (outputFormat) {
         case XLS:
           return Response.ok(getCharacterSheetDataAsXLS(characterSheet)).header("Content-Disposition", "attachment; filename=" + characterSheet.getUrlName() + ".xls").build();
+        default:
+          return Response.status(Status.BAD_REQUEST).entity("invalid format").build(); 
       }
-      
-      return Response.status(Status.BAD_REQUEST).entity("invalid format").build(); 
     } catch (IOException e) {
       return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
     }
@@ -1601,9 +1597,9 @@ public class IllusionRestServices {
               .ok(getRegistrationSheetDataAsXLS(event, registrationForm))
               .header("Content-Disposition", String.format("attachment; filename=%s_registrations.xls", event.getUrlName()))
               .build();
+        default:
+          return Response.status(Status.BAD_REQUEST).entity("invalid format").build(); 
       }
-      
-      return Response.status(Status.BAD_REQUEST).entity("invalid format").build(); 
     } catch (IOException e) {
       return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
     }

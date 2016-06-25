@@ -66,7 +66,7 @@ public class ForgeUploadBackingBean {
 	  
     folders = new ArrayList<>();
     if (parentFolderId != null) {
-      Folder parentFolder = parentFolderId != null ? materialController.findFolderById(parentFolderId) : null;
+      Folder parentFolder = materialController.findFolderById(parentFolderId);
       if (parentFolder != null) {
         if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
           return navigationController.accessDenied();
@@ -158,7 +158,7 @@ public class ForgeUploadBackingBean {
         try {
           materialController.createMaterial(parentFolder, loggedUser, fileData);
         } catch (MimeTypeParseException | IOException | GeneralSecurityException e) {
-          logger.log(Level.SEVERE, String.format("Failed to convert file into Forge & Illusion format"), e);
+          logger.log(Level.SEVERE, "Failed to convert file into Forge & Illusion format", e);
           return navigationController.internalError();
         }
       } else {

@@ -102,13 +102,11 @@ public class ProfileImageServlet extends AbstractFileServlet {
 			return;
 		}
 
-		if ((width != null) && (height != null)) {
-			try {
-				profileImage = ImageUtils.resizeImage(profileImage, width, height, null);
-			} catch (IOException e) {
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to resize image");
-				return;
-			}
+		try {
+			profileImage = ImageUtils.resizeImage(profileImage, width, height, null);
+		} catch (IOException e) {
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to resize image");
+			return;
 		}
 
 		response.setContentType(profileImage.getContentType());
@@ -175,6 +173,11 @@ public class ProfileImageServlet extends AbstractFileServlet {
 						file = new TypedData(item.get(), item.getContentType());
 					}
 				}
+			}
+			
+			if (file == null) {
+			  response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing file");
+	      return;
 			}
 
 			userController.updateProfileImage(loggedUser, file.getContentType(), file.getData());

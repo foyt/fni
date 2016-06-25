@@ -68,6 +68,7 @@ public class IllusionEventInviteServlet extends AbstractFileServlet {
   @Inject
   private Mailer mailer;
   
+  @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException ,IOException {
     String term = request.getParameter("term");
     if (StringUtils.isBlank(term) || term.length() < 2) {

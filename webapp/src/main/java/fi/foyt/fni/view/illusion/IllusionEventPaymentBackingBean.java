@@ -195,6 +195,7 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
     return null;
   }
   
+  @Override
   public String getUrlName() {
     return urlName;
   }

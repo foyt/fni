@@ -1,6 +1,7 @@
 package fi.foyt.fni.view.forge;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,6 +9,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -19,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.apache.commons.collections.ComparatorUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -37,6 +41,11 @@ import fi.foyt.fni.session.SessionController;
 public class CKBrowserConnectorServlet extends HttpServlet {
 
   private static final long serialVersionUID = -1L;
+  
+  private static final MaterialType[] ALLOWED_MATERIAL_TYPES = { MaterialType.IMAGE, MaterialType.FOLDER, MaterialType.DROPBOX_ROOT_FOLDER, MaterialType.DROPBOX_FILE, MaterialType.DROPBOX_FOLDER };
+
+  @Inject
+  private Logger logger;
 
   @Inject
   private MaterialController materialController;
@@ -50,7 +59,7 @@ public class CKBrowserConnectorServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     if (!sessionController.isLoggedIn()) {
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+      sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
 
@@ -58,22 +67,19 @@ public class CKBrowserConnectorServlet extends HttpServlet {
     if (folderId != null) {
       Folder parentFolder = materialController.findFolderById(folderId);
       if (!materialPermissionController.hasAccessPermission(sessionController.getLoggedUser(), parentFolder)) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        sendError(response, HttpServletResponse.SC_FORBIDDEN);
         return;
       }
     }
 
     Action action = Action.valueOf(request.getParameter("action"));
-
-    switch (action) {
-    case LIST_MATERIALS:
+    if (action == Action.LIST_MATERIALS) {
       try {
         handleListMaterials(request, response);
       } catch (UnsupportedEncodingException e) {
-        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         return;
       }
-      break;
     }
   }
 
@@ -98,7 +104,14 @@ public class CKBrowserConnectorServlet extends HttpServlet {
     if (!rootFolder) {
       Long grandParentId = parentFolder.getParentFolder() == null ? null : parentFolder.getParentFolder().getId();
       String title = grandParentId == null ? ExternalLocales.getText(request.getLocale(), "forge.ckconnector.homeFolder") : parentFolder.getParentFolder().getTitle();
-      materialBeans.add(createMaterialBean(grandParentId, title, contextPath + "/materials/" + parentFolder.getPath(), "ParentFolder", "up", parentFolder.getModified(), 0, parentFolder.getCreator()));
+      materialBeans.add(createMaterialBean(
+          grandParentId, 
+          title, 
+          String.format("%s/materials/%s", contextPath, parentFolder.getPath()), 
+          "ParentFolder", 
+          "up", 
+          parentFolder.getModified(),
+          parentFolder.getCreator()));
     }
 
     List<Material> materials = null;
@@ -108,8 +121,11 @@ public class CKBrowserConnectorServlet extends HttpServlet {
         materials = materialController.listMaterialsByFolder(loggedUser, parentFolder);
       break;
       case IMAGE:
-        materials = materialController.listMaterialsByFolderAndTypes(loggedUser, parentFolder, allowedMaterialTypes);
+        materials = materialController.listMaterialsByFolderAndTypes(loggedUser, parentFolder, Arrays.asList(ALLOWED_MATERIAL_TYPES));
       break;
+      default:
+        sendError(response, HttpServletResponse.SC_BAD_REQUEST, String.format("Invalid dialog parameter value %s", dialog));
+        return;
     }
 
     if (materials != null) {
@@ -117,26 +133,22 @@ public class CKBrowserConnectorServlet extends HttpServlet {
   
       for (Material material : materials) {
         boolean folder = material instanceof Folder;
-  
-        switch (dialog) {
-        case LINK:
+        if (dialog == Dialog.LINK) {
           if (folder) {
             materialBeans.add(createMaterialBean(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Folder",
-                getIcon(material), material.getModified(), 0, material.getCreator()));
+                getIcon(material), material.getModified(), material.getCreator()));
           } else {
             materialBeans.add(createMaterialBean(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Normal",
-                getIcon(material), material.getModified(), 0, material.getCreator()));
+                getIcon(material), material.getModified(), material.getCreator()));
           }
-          break;
-        case IMAGE:
+        } else if (dialog == Dialog.IMAGE) {
           if (folder) {
             materialBeans.add(createMaterialBean(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Folder",
-                getIcon(material), material.getModified(), 0, material.getCreator()));
+                getIcon(material), material.getModified(), material.getCreator()));
           } else {
             materialBeans.add(createMaterialBean(material.getId(), material.getTitle(), contextPath + "/materials/" + material.getPath(), "Normal",
-                getIcon(material), material.getModified(), 0, material.getCreator()));
+                getIcon(material), material.getModified(), material.getCreator()));
           }
-          break;
         }
       }
     }
@@ -160,25 +172,48 @@ public class CKBrowserConnectorServlet extends HttpServlet {
     if (material instanceof Folder) {
       return "folder";
     }
-
-    switch (material.getType()) {
-    case DOCUMENT:
-      return "document";
-    case FILE:
-      return "file";
-    case IMAGE:
-      return "image";
-    case PDF:
-      return "pdf";
-    case VECTOR_IMAGE:
-      return "vectorimage";
-    default:
-      return "file";
+    
+    return getIcon(material.getType());
+  }
+  
+  private String getIcon(MaterialType materialType) {
+    switch (materialType) {
+      case DOCUMENT:
+        return "document";
+      case FILE:
+        return "file";
+      case IMAGE:
+        return "image";
+      case PDF:
+        return "pdf";
+      case VECTOR_IMAGE:
+        return "vectorimage";
+      default:
+        return "file";
     }
   }
 
-  private MaterialBean createMaterialBean(Long id, String name, String path, String type, String icon, Date date, long size, User creator) {
+  private MaterialBean createMaterialBean(Long id, String name, String path, String type, String icon, Date date, User creator) {
     return new MaterialBean(id, name, path, type, icon, new SimpleDateFormat("dd.MM.yyyy HH:mm").format(date), creator.getFullName());
+  }
+  
+  protected void sendError(HttpServletResponse response, int status) {
+    sendError(response, status, null);
+  }
+  
+  protected void sendError(HttpServletResponse response, int status, String message) {
+    response.setStatus(status);
+    if (StringUtils.isNotBlank(message)) {
+      PrintWriter writer;
+      try {
+        writer = response.getWriter();
+        writer.write(message);
+        writer.flush();
+      } catch (IOException e) {
+        logger.log(Level.SEVERE, "Failed to send error", e);
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      }
+    }
   }
 
   public class MaterialBean {
@@ -232,9 +267,6 @@ public class CKBrowserConnectorServlet extends HttpServlet {
     private String date;
     private String creator;
   }
-
-  private List<MaterialType> allowedMaterialTypes = Arrays
-      .asList(MaterialType.IMAGE, MaterialType.FOLDER, MaterialType.DROPBOX_ROOT_FOLDER, MaterialType.DROPBOX_FILE, MaterialType.DROPBOX_FOLDER);
 
   private enum Action {
     LIST_MATERIALS
