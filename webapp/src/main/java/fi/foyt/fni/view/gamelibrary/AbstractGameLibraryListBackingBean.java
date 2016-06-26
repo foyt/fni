@@ -93,7 +93,7 @@ public abstract class AbstractGameLibraryListBackingBean {
   }
   
   public boolean hasAuthors(Publication publication) {
-    return getPublicationAuthors(publication).size() > 0;
+    return !getPublicationAuthors(publication).isEmpty();
   }
   
   public boolean hasSingleAuthor(Publication publication) {

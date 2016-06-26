@@ -393,7 +393,7 @@ public class GameLibraryShoppingCartBackingBean implements Serializable {
 	}
 	
 	public boolean getHasItems() {
-		return getShoppingCartItems().size() > 0;
+		return !getShoppingCartItems().isEmpty();
 	}
 
 	public boolean getCanProceedToCheckout() {

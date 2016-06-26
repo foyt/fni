@@ -144,11 +144,11 @@ public class GameLibraryManageBackingBean {
 	public boolean isRemovable(Long publicationId) {
 		Publication publication = publicationController.findPublicationById(publicationId);
 
-		if (orderController.listOrdersByPublication(publication).size() > 0) {
+		if (!orderController.listOrdersByPublication(publication).isEmpty()) {
 			return false;
 		}
 		
-		if (shoppingCartController.listShoppingCartsByPublication(publication).size() > 0) {
+		if (!shoppingCartController.listShoppingCartsByPublication(publication).isEmpty()) {
 			return false;
 		}
 		

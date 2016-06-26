@@ -124,11 +124,11 @@ public class StoreManageBackingBean {
   public boolean isRemovable(Long productId) {
     StoreProduct storeProduct = storeProductController.findStoreProductById(productId);
     
-    if (orderController.listOrdersByPublication(storeProduct).size() > 0) {
+    if (!orderController.listOrdersByPublication(storeProduct).isEmpty()) {
       return false;
     }
     
-    if (shoppingCartController.listShoppingCartsByPublication(storeProduct).size() > 0) {
+    if (!shoppingCartController.listShoppingCartsByPublication(storeProduct).isEmpty()) {
       return false;
     }
     

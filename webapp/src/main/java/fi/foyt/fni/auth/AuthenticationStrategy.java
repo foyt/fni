@@ -79,7 +79,7 @@ public abstract class AuthenticationStrategy {
       	throw new MultipleEmailAccountsException();
       }
       
-      if (user == null && (emailUsers == null || emailUsers.size() == 0)) {
+      if (user == null && (emailUsers == null || emailUsers.isEmpty())) {
         if (loggedUser != null) {
           user = loggedUser;
         } else {

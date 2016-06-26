@@ -100,7 +100,7 @@ public class UsersProfileBackingBean {
 		this.fullName = fullNameBuilder.toString();
 		this.about = user.getAbout();
 		this.publishedPublications = publicationController.listPublishedPublicationsByAuthor(user);
-		this.hasGameLibraryPublications = publishedPublications.size() > 0;
+		this.hasGameLibraryPublications = !publishedPublications.isEmpty();
 		
 		List<IllusionEvent> events = illusionEventController.listPublishedEventsByUserAndRole(user, IllusionEventParticipantRole.ORGANIZER);
 		Collections.sort(events, new Comparator<IllusionEvent>() {
@@ -189,7 +189,7 @@ public class UsersProfileBackingBean {
 	}
 	
 	public boolean publicationHasImages(Publication publication) {
-		return publicationController.listPublicationImagesByPublication(publication).size() > 0;
+		return !publicationController.listPublicationImagesByPublication(publication).isEmpty();
 	}
 
 	public List<GameLibraryTag> getPublicationTags(Publication publication) {

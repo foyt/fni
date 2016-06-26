@@ -78,7 +78,7 @@ public class IllusionEventParticipantsBackingBean extends AbstractIllusionEventB
   @Deferred
   @IgnorePostback
   public void setDefaults() {
-    selectParticipant(approvalPending != null && approvalPending.size() > 0 ? approvalPending.get(0) : participants.size() > 0 ? participants.get(0) : organizers.get(0));
+    selectParticipant(approvalPending != null && !approvalPending.isEmpty() ? approvalPending.get(0) : !participants.isEmpty() ? participants.get(0) : organizers.get(0));
   }
   
   @Override

@@ -150,7 +150,7 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
         Map<String, Object> extensions = null;
         
         List<MaterialRevisionSetting> revisionSettings = materialController.listDocumentRevisionSettings(documentRevision);
-        if (revisionSettings.size() > 0) {
+        if (!revisionSettings.isEmpty()) {
           properties = new HashMap<>();
           for (MaterialRevisionSetting revisionSetting : revisionSettings) {
             String settingKey = revisionSetting.getKey().getName();

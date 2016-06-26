@@ -113,7 +113,7 @@ public class YahooAuthenticationStrategy extends OAuthAuthenticationStrategy {
         emails.add((String) emailObject.get("handle"));
       }
       
-      String sourceId = emails.size() > 0 ? emails.get(0) : givenName + (StringUtils.isNotBlank(familyName) ? ' ' + familyName : "");
+      String sourceId = !emails.isEmpty() ? emails.get(0) : givenName + (StringUtils.isNotBlank(familyName) ? ' ' + familyName : "");
       
       return loginUser(AuthSource.YAHOO, sourceId, accessToken.getToken(), accessToken.getSecret(), expires, guid.getValue(), emails, familyName, givenName, nickname, null, grantedScopes);
     } catch (IOException e) {

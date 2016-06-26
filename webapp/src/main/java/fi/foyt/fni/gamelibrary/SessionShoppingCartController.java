@@ -129,7 +129,7 @@ public class SessionShoppingCartController implements Serializable {
 			return true;
 		}
 		
-		return getShoppingCartItems().size() == 0;
+		return getShoppingCartItems().isEmpty();
 	}
 	
 	public void deleteShoppingCart() {
