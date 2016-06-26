@@ -1,7 +1,6 @@
 package fi.foyt.fni.drive;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -17,9 +16,7 @@ import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.drive.DriveScopes;
 
 @ApplicationScoped
-public class SystemGoogleDriveCredentials implements Serializable {
-  
-  private static final long serialVersionUID = -7571174639569905090L;
+public class SystemGoogleDriveCredentials {
   
   @Inject
   private Logger logger;
