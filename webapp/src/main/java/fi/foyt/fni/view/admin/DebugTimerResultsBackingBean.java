@@ -21,7 +21,7 @@ import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.debug.DebugTimerResults;
-import fi.foyt.fni.debug.DebugTimerResults.RequestStats;
+import fi.foyt.fni.debug.RequestStats;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
@@ -100,11 +100,7 @@ public class DebugTimerResultsBackingBean {
     for (RequestStats stat : stats) {
       try {
         if (!map.containsKey(stat.getView())) {
-          try {
-            map.put(stat.getView(), (RequestStats) stat.clone());
-          } catch (CloneNotSupportedException e) {
-            logger.log(Level.SEVERE, "Cloning failed", e);
-          } 
+          map.put(stat.getView(), new RequestStats(stat));
         } else {
           RequestStats existing = map.get(stat.getView());
           existing.setRequestMills((existing.getRequestMills() + stat.getRequestMills()) / 2);  
