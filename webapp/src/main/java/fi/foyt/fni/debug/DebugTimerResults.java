@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -41,9 +42,10 @@ public class DebugTimerResults implements Serializable {
         return (int) ((int) o2.getTotal() - o1.getTotal());
       }
     });
-     
-    for (Method method : calls.keySet()) {
-      List<Long> times = calls.get(method);
+    
+    for (Entry<Method,List<Long>> entry : calls.entrySet()) {
+      Method method = entry.getKey();
+      List<Long> times = entry.getValue();
 
       long avg = 0;
       long total = 0;

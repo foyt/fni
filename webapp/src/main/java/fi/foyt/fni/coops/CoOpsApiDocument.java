@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
@@ -272,10 +273,10 @@ public class CoOpsApiDocument extends AbstractCoOpsApiImpl {
     }
     
     if (extensions != null) {
-      for (String extension : extensions.keySet()) {
+      for (Entry<String, Object> entry : extensions.entrySet()) {
         try {
-          String value = objectMapper.writeValueAsString(extensions.get(extension));
-          materialController.createDocumentRevisionSetting(documentRevision, "extension." + extension, value);
+          String value = objectMapper.writeValueAsString(entry.getValue());
+          materialController.createDocumentRevisionSetting(documentRevision, "extension." + entry.getKey(), value);
         } catch (IOException e) {
           throw new CoOpsInternalErrorException(e);
         }

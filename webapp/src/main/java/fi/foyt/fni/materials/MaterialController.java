@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -414,14 +416,15 @@ public class MaterialController {
   }
   
   public void setCharacterSheetMeta(CharacterSheet sheet, CharacterSheetMeta meta) {
-    for (String name : meta.keySet()) {
-      CharacterSheetMetaField field = meta.get(name);
-     
-      CharacterSheetEntry entry = characterSheetEntryDAO.findBySheetAndName(sheet, name);
-      if (entry == null) {
+    for (Entry<String,CharacterSheetMetaField> entry : meta.entrySet()) {
+      String name = entry.getKey();
+      CharacterSheetMetaField field = entry.getValue();
+      
+      CharacterSheetEntry characterSheetEntry = characterSheetEntryDAO.findBySheetAndName(sheet, name);
+      if (characterSheetEntry == null) {
         characterSheetEntryDAO.create(sheet, name, field.getType());
       } else {
-        characterSheetEntryDAO.updateType(entry, field.getType());
+        characterSheetEntryDAO.updateType(characterSheetEntry, field.getType());
       }
     }
   }

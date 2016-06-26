@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,9 +36,9 @@ public class FormReader {
     }
     
     Map<String, FormOptionField> fields = getOptionFields();
-    
-    for (String fieldName : fields.keySet()) {
-      FormOptionField optionField = fields.get(fieldName);
+    for (Entry<String,FormOptionField> entry : fields.entrySet()) {
+      String fieldName = entry.getKey();
+      FormOptionField optionField = entry.getValue();
       if ("email".equalsIgnoreCase(optionField.getType())) {
         return fieldName;
       }
@@ -94,8 +96,9 @@ public class FormReader {
     List<String> result = new ArrayList<>();
     
     Map<String, FormSchemaProperty> schemaProperties = getSchemaProperties();
-    for (String fieldName : schemaProperties.keySet()) {
-      FormSchemaProperty schemaProperty = schemaProperties.get(fieldName);
+    for (Entry<String,FormSchemaProperty> entry : schemaProperties.entrySet()) {
+      String fieldName = entry.getKey();
+      FormSchemaProperty schemaProperty = entry.getValue();
       if (Boolean.TRUE.equals(schemaProperty.getRequired())) {
         result.add(fieldName);
       }
@@ -120,8 +123,10 @@ public class FormReader {
   
   public String findOptionFieldNameById(String id) {
     Map<String, FormOptionField> optionFields = getOptionFields();
-    for (String fieldName : optionFields.keySet()) {
-      FormOptionField optionField = optionFields.get(fieldName);
+    
+    for (Entry<String,FormOptionField> entry : optionFields.entrySet()) {
+      String fieldName = entry.getKey();
+      FormOptionField optionField = entry.getValue();
       if (id.equals(optionField.getId())) {
         return fieldName;
       }

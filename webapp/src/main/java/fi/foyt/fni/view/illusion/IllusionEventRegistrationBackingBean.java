@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -287,10 +289,11 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
     
     try {
       Map<String, Object> answerData = (new ObjectMapper()).readValue(getAnswers(), new TypeReference<Map<String, Object>>() {});
-      for (String key : answerData.keySet()) {
+      for (Entry<String,Object> entry : answerData.entrySet()) {
+        String key = entry.getKey();
+        Object answerObject = entry.getValue();
+
         String answer = null;
-        
-        Object answerObject = answerData.get(key);
         if (answerObject instanceof List) {
           answer = StringUtils.join((List<?>) answerObject, ",");
         } else {

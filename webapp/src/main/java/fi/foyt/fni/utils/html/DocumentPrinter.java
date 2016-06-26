@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Element;
@@ -33,10 +35,11 @@ public class DocumentPrinter {
         classNames = Arrays.asList(StringUtils.split(classes, ' '));
       }
     }
-
-    for (String rule : printerMap.keySet()) {
+    
+    for (Entry<String,NodePrinter> entry : printerMap.entrySet()) {
+      String rule = entry.getKey();
       if ((rule.charAt(0) == '.') && (classNames != null) && (classNames.contains(rule.substring(1)))) {
-        return printerMap.get(rule);
+        return entry.getValue();
       }
     }
 

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -880,8 +881,9 @@ public class IllusionEventController {
   }
 
   public void saveRegistrationFormAnswers(IllusionEventRegistrationForm form, IllusionEventParticipant participant, Map<String, String> answers) {
-    for (String fieldName : answers.keySet()) {
-      String value = answers.get(fieldName);
+    for (Entry<String,String> entry : answers.entrySet()) {
+      String fieldName = entry.getKey();
+      String value = entry.getValue();
       
       IllusionEventRegistrationFormField field = illusionEventRegistrationFormFieldDAO.findByFormAndName(form, fieldName);
       if (field == null) {

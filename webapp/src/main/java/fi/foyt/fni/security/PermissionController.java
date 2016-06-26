@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -80,8 +82,10 @@ public class PermissionController {
   private List<UserRole> rolesUserRoles(List<Role> roles) {
     List<UserRole> result = new ArrayList<>();
     
-    for (UserRole userRole : userRoleMap.keySet()) {
-      Role[] userRoleRoles = userRoleMap.get(userRole);
+    for (Entry<UserRole,Role[]> entry : userRoleMap.entrySet()) {
+      UserRole userRole = entry.getKey();
+      Role[] userRoleRoles = entry.getValue();
+
       for (Role role : roles) {
         if (ArrayUtils.contains(userRoleRoles, role)) {
           result.add(userRole);
