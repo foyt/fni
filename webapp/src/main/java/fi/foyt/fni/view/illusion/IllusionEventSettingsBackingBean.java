@@ -319,7 +319,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     this.paymentMode = paymentMode;
   }
 
-  public String save() throws Exception {
+  public String save() {
     IllusionEventType type = illusionEventController.findTypeById(getTypeId());
     IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
     

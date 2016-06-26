@@ -1,5 +1,6 @@
 package fi.foyt.fni.view.illusion;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
@@ -21,6 +22,8 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.ocpsoft.rewrite.annotation.Join;
 
 import fi.foyt.fni.illusion.IllusionEventController;
+import fi.foyt.fni.jsf.NavigationController;
+import fi.foyt.fni.larpkalenteri.LarpKalenteriEventMissingException;
 import fi.foyt.fni.larpkalenteri.UnsupportedTypeException;
 import fi.foyt.fni.persistence.model.illusion.Genre;
 import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
@@ -51,6 +54,9 @@ public class IllusionCreateEventBackingBean {
 
   @Inject
   private IllusionEventController illusionEventController;
+  
+  @Inject
+  private NavigationController navigationController;
 
   @PostConstruct
   public void init() {
@@ -227,7 +233,7 @@ public class IllusionCreateEventBackingBean {
     this.genreIds = genreIds;
   }
   
-  public String save() throws Exception {
+  public String save() {
     if (StringUtils.isBlank(getName())) {
       FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.createEvent.nameRequired"));
       return null;
@@ -284,6 +290,12 @@ public class IllusionCreateEventBackingBean {
       } catch (UnsupportedTypeException e) {
         logger.log(Level.SEVERE, "Unsupported type", e);
         FacesUtils.addPostRedirectMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.createEvent.eventTypeNotSynchronizableToLarpKalenteri", type.getName()));
+      } catch (IOException e) {
+        logger.log(Level.SEVERE, "Failed to synchronize event into Larp-kalenteri", e);
+        return navigationController.internalError(); 
+      } catch (LarpKalenteriEventMissingException e) {
+        logger.log(Level.SEVERE, "Failed to synchronize event into Larp-kalenteri", e);
+        return navigationController.internalError(); 
       }
     }
 

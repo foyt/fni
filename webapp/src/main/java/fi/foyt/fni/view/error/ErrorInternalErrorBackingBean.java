@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 @Stateless
 public class ErrorInternalErrorBackingBean {
   
-  public void preRenderListener() throws Throwable {
+  public void preRenderListener() {
     FacesContext facesContext = FacesContext.getCurrentInstance();
     ExternalContext externalContext = facesContext.getExternalContext();
     externalContext.setResponseStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
