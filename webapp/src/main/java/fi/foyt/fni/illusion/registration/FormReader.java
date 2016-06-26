@@ -182,7 +182,7 @@ public class FormReader {
       return objectMapper.readValue(formJson, Form.class);
     } catch (Exception e) {
       parseError = e;
-      Logger.getLogger(getClass().getName()).log(Level.SEVERE, String.format("Could not parse registration form"), e);
+      Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Could not parse registration form", e);
       return null;
     }
   }
