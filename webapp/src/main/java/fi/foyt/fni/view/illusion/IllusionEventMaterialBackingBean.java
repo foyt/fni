@@ -92,10 +92,8 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
       return navigationController.accessDenied();
     }
     
-    if (participant.getRole() != IllusionEventParticipantRole.ORGANIZER) {
-      if (!illusionEvent.getPublished()) {
-        return navigationController.accessDenied();
-      }
+    if ((participant.getRole() != IllusionEventParticipantRole.ORGANIZER) && (!!illusionEvent.getPublished())) {
+      return navigationController.accessDenied();
     }
     
     if ((participant != null) && (participant.getRole() == IllusionEventParticipantRole.INVITED)) {

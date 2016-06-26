@@ -35,9 +35,8 @@ public class DocumentPrinter {
     }
 
     for (String rule : printerMap.keySet()) {
-      if ((rule.charAt(0) == '.') && (classNames != null)) {
-        if (classNames.contains(rule.substring(1)))
-          return printerMap.get(rule);
+      if ((rule.charAt(0) == '.') && (classNames != null) && (classNames.contains(rule.substring(1)))) {
+        return printerMap.get(rule);
       }
     }
 

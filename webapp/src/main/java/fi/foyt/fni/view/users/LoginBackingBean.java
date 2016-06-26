@@ -264,7 +264,7 @@ public class LoginBackingBean {
 					String fromName = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_NAME);
 					String fromMail = systemSettingsController.getSetting(SystemSettingKey.SYSTEM_MAILER_MAIL);
 					
-					if (StringUtils.isNotBlank(fromMail) && StringUtils.isNotBlank(fromMail)) {
+					if (StringUtils.isNotBlank(fromMail) && StringUtils.isNotBlank(fromName)) {
 		        mailer.sendMail(fromMail, fromName, getRegisterEmail(), user.getFullName(), mailTitle, mailContent, "text/plain");
   					FacesUtils.addMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("users.login.verificationEmailSent"));
 					} else {

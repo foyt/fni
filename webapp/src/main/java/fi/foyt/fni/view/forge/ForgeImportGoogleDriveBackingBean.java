@@ -124,10 +124,8 @@ public class ForgeImportGoogleDriveBackingBean {
       }
       
       for (File file : fileList.getItems()) {
-        if (!file.getMimeType().equals(GoogleDriveType.FORM.getMimeType())) {
-          if (materialController.findGoogleDocumentByCreatorAndDocumentId(loggedUser, file.getId()) == null) {
-            files.add(file);
-          }
+        if (!file.getMimeType().equals(GoogleDriveType.FORM.getMimeType()) && (materialController.findGoogleDocumentByCreatorAndDocumentId(loggedUser, file.getId()) == null)) {
+          files.add(file);
         }
       }
 
@@ -168,10 +166,8 @@ public class ForgeImportGoogleDriveBackingBean {
 
 	public void importFiles() throws IOException {
     Folder parentFolder = parentFolderId != null ? materialController.findFolderById(parentFolderId) : null;
-    if (parentFolder != null) {
-      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
-        throw new ForbiddenException();
-      }
+    if ((parentFolder != null) && (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder))) {
+      throw new ForbiddenException();
     }
     
 	  String accountUser = System.getProperty("fni-google-drive.accountUser");

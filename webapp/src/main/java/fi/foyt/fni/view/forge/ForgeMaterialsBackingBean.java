@@ -217,10 +217,8 @@ public class ForgeMaterialsBackingBean {
     User loggedUser = sessionController.getLoggedUser();
     Folder parentFolder = folderId != null ? materialController.findFolderById(folderId) : null;
 
-    if (parentFolder != null) {
-      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
-        return navigationController.accessDenied();
-      }
+    if ((parentFolder != null) && (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder))) {
+      return navigationController.accessDenied();
     }
     
     String title = FacesUtils.getLocalizedValue("forge.index.untitledDocument");
@@ -236,10 +234,8 @@ public class ForgeMaterialsBackingBean {
     User loggedUser = sessionController.getLoggedUser();
     Folder parentFolder = folderId != null ? materialController.findFolderById(folderId) : null;
     
-    if (parentFolder != null) {
-      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
-        return navigationController.accessDenied();
-      }
+    if ((parentFolder != null) && (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder))) {
+      return navigationController.accessDenied();
     }
     
     String title = FacesUtils.getLocalizedValue("forge.index.untitledVectorImage");
@@ -254,10 +250,8 @@ public class ForgeMaterialsBackingBean {
     User loggedUser = sessionController.getLoggedUser();
     Folder parentFolder = folderId != null ? materialController.findFolderById(folderId) : null;
 
-    if (parentFolder != null) {
-      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
-        return navigationController.accessDenied();
-      }
+    if ((parentFolder != null) && (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder))) {
+      return navigationController.accessDenied();
     }
     
     String title = FacesUtils.getLocalizedValue("forge.index.untitledBookDesign");
@@ -273,10 +267,8 @@ public class ForgeMaterialsBackingBean {
     User loggedUser = sessionController.getLoggedUser();
     Folder parentFolder = folderId != null ? materialController.findFolderById(folderId) : null;
     
-    if (parentFolder != null) {
-      if (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder)) {
-        return navigationController.accessDenied();
-      }
+    if ((parentFolder != null) && (!materialPermissionController.hasModifyPermission(sessionController.getLoggedUser(), parentFolder))) {
+      return navigationController.accessDenied();
     }
     
     String title = FacesUtils.getLocalizedValue("forge.index.untitledCharacterSheet");

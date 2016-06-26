@@ -108,11 +108,9 @@ public class DriveManager {
 
 	public TypedData exportFile(Drive drive, File file, String format) throws IOException {
 		Map<String, String> exportLinks = file.getExportLinks();
-		if (exportLinks != null) {
-			if (exportLinks.containsKey(format)) {
-				String exportLink = exportLinks.get(format);
-				return downloadUrl(drive, exportLink);
-			}
+		if ((exportLinks != null) && exportLinks.containsKey(format)) {
+			String exportLink = exportLinks.get(format);
+			return downloadUrl(drive, exportLink);
 		}
 		
 		return null;
@@ -143,12 +141,10 @@ public class DriveManager {
 		PermissionList permissionList = listPermissions(drive, fileId);
 		List<Permission> items = permissionList.getItems();
 		for (Permission item : items) {
-			if ("user".equals(item.getType())) {
-				if (email.equals(item.getValue())) {
-					for (String role : roles) {
-						if (role.equals(item.getRole())) {
-							return true;
-						}
+			if (("user".equals(item.getType())) && (email.equals(item.getValue()))) {
+				for (String role : roles) {
+					if (role.equals(item.getRole())) {
+						return true;
 					}
 				}
 			}

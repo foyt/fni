@@ -55,14 +55,11 @@ public abstract class OAuthAuthenticationStrategy extends AuthenticationStrategy
       }
       
       String authUrl = service.getAuthorizationUrl(requestToken);
-      
-      if (isV1) {
-        if (StringUtils.isNotBlank(getCallbackUrl())) {
-          try {
-            authUrl += "&oauth_callback=" + URLEncoder.encode(getCallbackUrl(), "UTF-8");
-          } catch (UnsupportedEncodingException e) {
-          	throw new ConfigurationErrorException(e);
-          }
+      if (isV1 && StringUtils.isNotBlank(getCallbackUrl())) {
+        try {
+          authUrl += "&oauth_callback=" + URLEncoder.encode(getCallbackUrl(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+        	throw new ConfigurationErrorException(e);
         }
       }
       

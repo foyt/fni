@@ -103,12 +103,10 @@ public class UserRestServices {
       return Response.status(Response.Status.BAD_REQUEST).entity("Email address is required").build();
     }
     
-    if (!generateCredentials) {
-      if (StringUtils.isBlank(password)) {
-        return Response.status(Response.Status.BAD_REQUEST).entity("password is required when generateCredentials is set to false").build();
-      }
+    if (!generateCredentials && StringUtils.isBlank(password)) {
+      return Response.status(Response.Status.BAD_REQUEST).entity("password is required when generateCredentials is set to false").build();
     }
-    
+  
     Locale locale = null;
     try {
       locale = LocaleUtils.toLocale(entity.getLocale());

@@ -161,11 +161,9 @@ public class UsersProfileBackingBean {
 	}
 	
 	private String prepareContactField(String value) {
-	  if (StringUtils.isNotBlank(value)) {
-	    if ((!StringUtils.startsWith(value, "http://")) && (!StringUtils.startsWith(value, "https://"))) {
-	      return "http://" + value;
-	    }
-	  }
+    if (StringUtils.isNotBlank(value) && (!StringUtils.startsWith(value, "http://")) && (!StringUtils.startsWith(value, "https://"))) {
+      return "http://" + value;
+    }
 	  
     return value;
   }

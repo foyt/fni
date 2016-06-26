@@ -76,10 +76,8 @@ public class GameLibraryPublicationBackingBean {
         throw new UnauthorizedException();
       }
 
-      if (!publication.getCreator().getId().equals(sessionController.getLoggedUserId())) {
-        if (!sessionController.hasLoggedUserRole(Role.GAME_LIBRARY_MANAGER)) {
-          return navigationController.accessDenied();
-        }
+      if ((!publication.getCreator().getId().equals(sessionController.getLoggedUserId())) && (!sessionController.hasLoggedUserRole(Role.GAME_LIBRARY_MANAGER))) {
+        return navigationController.accessDenied();
       }
     }
     
@@ -113,12 +111,9 @@ public class GameLibraryPublicationBackingBean {
     this.description = StringUtils.isBlank(description) ? "" : description.replace("\n", "<br/>");
     this.creativeCommonsLicence = CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
     this.commentCount = publication.getForumTopic() != null ? forumController.countPostsByTopic(publication.getForumTopic()) : null;
-    
-    if (publication instanceof BookPublication) {
-      downloadable = ((BookPublication) publication).getDownloadableFile() != null;
-      purchasable = ((BookPublication) publication).getPrintableFile() != null;
-      pageNumbers = ((BookPublication) publication).getNumberOfPages();
-    }
+    this.downloadable = publication.getDownloadableFile() != null;
+    this.purchasable = publication.getPrintableFile() != null;
+    this.pageNumbers = publication.getNumberOfPages();
     
     return null;
   }
@@ -164,7 +159,7 @@ public class GameLibraryPublicationBackingBean {
   }
   
   public boolean getHasAuthors() {
-    return getPublicationAuthors().size() > 0;
+    return !getPublicationAuthors().isEmpty();
   }
   
   public boolean getHasSingleAuthor() {

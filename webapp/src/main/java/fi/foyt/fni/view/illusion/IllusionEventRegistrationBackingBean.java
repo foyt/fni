@@ -87,10 +87,8 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     illusionEventNavigationController.setEventUrlName(getUrlName());
     
-    if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
-      if (!illusionEvent.getPublished()) {
-        return navigationController.accessDenied();
-      }
+    if ((!illusionEvent.getPublished()) && ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER))) {
+      return navigationController.accessDenied();
     }
 
     IllusionEventRegistrationForm form = illusionEventController.findEventRegistrationForm(illusionEvent);
@@ -135,10 +133,8 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
     User user = sessionController.getLoggedUser();
 
     if (user != null) {
-      if (participant != null) {
-        if (!hasPermissionToJoin(participant)) {
-          return navigationController.accessDenied();
-        }
+      if ((participant != null) && (!hasPermissionToJoin(participant))) {
+        return navigationController.accessDenied();
       }
       
       Map<String, String> answers = illusionEventController.loadRegistrationFormAnswers(form, participant);
@@ -277,10 +273,8 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
       participant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
     }
     
-    if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
-      if (!event.getPublished()) {
-        return navigationController.accessDenied();
-      }
+    if ((!event.getPublished()) && ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER))) {
+      return navigationController.accessDenied();
     }
     
     IllusionEventRegistrationForm form = illusionEventController.findEventRegistrationForm(event);

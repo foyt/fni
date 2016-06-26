@@ -97,10 +97,8 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
     
     published = illusionEvent.getPublished();
     
-    if (!published) {
-      if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
-        return navigationController.accessDenied();
-      }
+    if ((!published) && ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER))) {
+      return navigationController.accessDenied();
     }
 
     IllusionEventFolder folder = illusionEvent.getFolder();
@@ -161,27 +159,25 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
   @RequestAction
   @Deferred
   public void showWarnings() {
-    if (!"true".equals(getIgnoreMessages())) {
-      if (memberRole != null) {
-        switch (memberRole) {
-          case BANNED:
-            FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.event.bannedMessage"));
-          break;
-          case PENDING_APPROVAL:
-            FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.event.pendingApprovalMessage"));
-          break;
-          case WAITING_PAYMENT:
-            FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.event.waitingPaymentMessage"));
-          break;
-          case ORGANIZER:
-            if (!published) {
-              FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.event.unpublishedMessage"));
-            }
-          break;
-          default:
-          break;
-        }
-      }      
+    if ((!"true".equals(getIgnoreMessages())) && (memberRole != null)) {
+      switch (memberRole) {
+        case BANNED:
+          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.event.bannedMessage"));
+        break;
+        case PENDING_APPROVAL:
+          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.event.pendingApprovalMessage"));
+        break;
+        case WAITING_PAYMENT:
+          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.event.waitingPaymentMessage"));
+        break;
+        case ORGANIZER:
+          if (!published) {
+            FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.event.unpublishedMessage"));
+          }
+        break;
+        default:
+        break;
+      }    
     }
   }
   

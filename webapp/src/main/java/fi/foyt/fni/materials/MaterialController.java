@@ -623,18 +623,16 @@ public class MaterialController {
           
           if (internal) {
             Material material = findMaterialByCompletePath(src);
-            if (materialPermissionController.hasAccessPermission(user, material)) {
-              if (material.getType() == MaterialType.IMAGE) {
-                Image image = (Image) material;
+            if ((material.getType() == MaterialType.IMAGE) && materialPermissionController.hasAccessPermission(user, material)) {
+              Image image = (Image) material;
 
-                StringBuilder srcBuilder = new StringBuilder()
-                  .append("data:")
-                  .append(image.getContentType())
-                  .append(";base64,")
-                  .append(new String(Base64.encodeBase64(image.getData())));
-                
-                imageElement.setAttribute("src", srcBuilder.toString());
-              }
+              StringBuilder srcBuilder = new StringBuilder()
+                .append("data:")
+                .append(image.getContentType())
+                .append(";base64,")
+                .append(new String(Base64.encodeBase64(image.getData())));
+              
+              imageElement.setAttribute("src", srcBuilder.toString());
             }
           }
           
@@ -707,7 +705,7 @@ public class MaterialController {
   
   public Document setDocumentTags(Document document, List<Tag> tags) {
     List<MaterialTag> removeTags = null;
-    if (tags.size() > 0) {
+    if (!tags.isEmpty()) {
       removeTags = materialTagDAO.listByMaterialAndTagsNotIn(document, tags);
     } else {
       removeTags = materialTagDAO.listByMaterial(document);
@@ -871,7 +869,7 @@ public class MaterialController {
   
   public Image setImageTags(Image image, List<Tag> tags) {
     List<MaterialTag> removeTags = null;
-    if (tags.size() > 0) {
+    if (!tags.isEmpty()) {
       removeTags = materialTagDAO.listByMaterialAndTagsNotIn(image, tags);
     } else {
       removeTags = materialTagDAO.listByMaterial(image);
@@ -1252,10 +1250,8 @@ public class MaterialController {
     for (Object[] resultRow : resultRows) {
       Float score = (Float) resultRow[0];
       Material material = (Material) resultRow[1];
-      if (material != null) {
-        if (materialPermissionController.isPublic(user, material) || materialPermissionController.hasAccessPermission(user, material)) {
-          result.add(new SearchResult<Material>(material, material.getTitle(), material.getPath(), material.getTitle(), null, score));
-        }
+      if ((material != null) && (materialPermissionController.isPublic(user, material) || materialPermissionController.hasAccessPermission(user, material))) {
+        result.add(new SearchResult<Material>(material, material.getTitle(), material.getPath(), material.getTitle(), null, score));
       }
     }
 
@@ -1295,10 +1291,8 @@ public class MaterialController {
       Float score = (Float) resultRow[0];
       MaterialTag materialTag = (MaterialTag) resultRow[1];
       Material material = materialTag.getMaterial();
-      if (material != null) {
-        if (materialPermissionController.isPublic(user, material) || materialPermissionController.hasAccessPermission(user, material)) {
-          result.add(new SearchResult<Material>(material, material.getTitle(), material.getPath(), material.getTitle(), null, score));
-        }
+      if ((material != null) && (materialPermissionController.isPublic(user, material) || materialPermissionController.hasAccessPermission(user, material))) {
+        result.add(new SearchResult<Material>(material, material.getTitle(), material.getPath(), material.getTitle(), null, score));
       }
     }
 
@@ -1568,11 +1562,10 @@ public class MaterialController {
         }
       }
 
-      if (material != null) {
-        if (urlMaterial != null && urlMaterial.getId().equals(material.getId()))
-          return urlName;
+      if ((material != null) && (urlMaterial != null && urlMaterial.getId().equals(material.getId()))) {
+        return urlName;
       }
-
+      
       urlName = baseName + '_' + (++i);
     } while (true);
   }
@@ -1999,7 +1992,7 @@ public class MaterialController {
     Language language = null;
     try {
       guessedLanguages = LanguageUtils.getGuessedLanguages(data, 0.2);
-      if (guessedLanguages.size() > 0) {
+      if (!guessedLanguages.isEmpty()) {
         String languageCode = guessedLanguages.get(0).getLanguageCode();
         language = languageDAO.findByIso2(languageCode);
       }

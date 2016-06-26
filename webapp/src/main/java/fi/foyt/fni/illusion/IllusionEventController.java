@@ -345,17 +345,15 @@ public class IllusionEventController {
   }
 
   public IllusionEvent updateEventDomain(IllusionEvent illusionEvent, String domain) {
-    if (StringUtils.isNotBlank(domain)) {
-      if (illusionEvent.getOAuthClient() == null) {
-        String clientId = UUID.randomUUID().toString();
-        String clientSecret = UUID.randomUUID().toString();
-  
-        String redirectUrl = new StringBuilder(systemSettingsController.getHostUrl(domain, false, true)).append(
-            "/login/?return=1&loginMethod=ILLUSION_INTERNAL").toString();
-  
-        OAuthClient oAuthClient = oAuthController.createUserClient(illusionEvent.getName(), clientId, clientSecret, redirectUrl);
-        illusionEventDAO.updateOAuthClient(illusionEvent, oAuthClient);
-      }
+    if (StringUtils.isNotBlank(domain) && (illusionEvent.getOAuthClient() == null)) {
+      String clientId = UUID.randomUUID().toString();
+      String clientSecret = UUID.randomUUID().toString();
+
+      String redirectUrl = new StringBuilder(systemSettingsController.getHostUrl(domain, false, true)).append(
+          "/login/?return=1&loginMethod=ILLUSION_INTERNAL").toString();
+
+      OAuthClient oAuthClient = oAuthController.createUserClient(illusionEvent.getName(), clientId, clientSecret, redirectUrl);
+      illusionEventDAO.updateOAuthClient(illusionEvent, oAuthClient);
     }
 
     return illusionEventDAO.updateDomain(illusionEvent, StringUtils.isNotBlank(domain) ? domain : null);
@@ -812,11 +810,9 @@ public class IllusionEventController {
       String organizerEmail = userController.getUserPrimaryEmail(organizer);
       Long locationDropDown = larpKalenteriEvent.getLocationDropDown();
       
-      if (locationLat != null && locationLon != null) {
-        if (!StringUtils.equals(larpKalenteriEvent.getLocation(), event.getLocation())) {
-          AVIProperties aviProperties = new AVIResolver().query(locationLat, locationLon);
-          locationDropDown = larpKalenteriClient.translateAVI(aviProperties);
-        }
+      if ((locationLat != null) && (locationLon != null) && (!StringUtils.equals(larpKalenteriEvent.getLocation(), event.getLocation()))) {
+        AVIProperties aviProperties = new AVIResolver().query(locationLat, locationLon);
+        locationDropDown = larpKalenteriClient.translateAVI(aviProperties);
       }
       
       larpKalenteriEvent = larpKalenteriClient.updateEvent(

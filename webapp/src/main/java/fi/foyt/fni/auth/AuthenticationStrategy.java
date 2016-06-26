@@ -93,11 +93,9 @@ public abstract class AuthenticationStrategy {
     			// Existing account with given e-mail was found, so we attach this new identity to that account.
     			user = emailUsers.get(0);
       		
-      		if (loggedUser != null) {
+      		if ((loggedUser != null) && (!loggedUser.getId().equals(user.getId()))) {
       			// If user was already logged in and we found user by email which does not match a logged user, its a conflict.
-      			if (!loggedUser.getId().equals(user.getId())) {
-      				throw new EmailDoesNotMatchLoggedUserException();
-      			}
+    				throw new EmailDoesNotMatchLoggedUserException();
       		}
       	} else {
       		// If user is already logged in with another identity we try to attach 

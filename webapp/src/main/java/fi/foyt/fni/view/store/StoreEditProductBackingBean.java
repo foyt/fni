@@ -59,7 +59,7 @@ public class StoreEditProductBackingBean {
     }
     
     tagSelectItems = createTagSelectItems(sessionController.getLocale());
-    if (tagSelectItems.size() > 0 && tagSelectItems.get(1).getSelectItems().length > 0) {
+    if (!tagSelectItems.isEmpty() && tagSelectItems.get(1).getSelectItems().length > 0) {
       addExistingTag = (String) tagSelectItems.get(1).getSelectItems()[0].getValue();
     }
     
@@ -151,10 +151,8 @@ public class StoreEditProductBackingBean {
       tag = StringUtils.lowerCase(StringUtils.trim(getAddNewTag()));
     }
     
-    if (StringUtils.isNotBlank(tag)) {
-      if (!tags.contains(tag)) {
-        tags.add(tag);
-      }
+    if (StringUtils.isNotBlank(tag) && !tags.contains(tag)) {
+      tags.add(tag);
     }
   }
   

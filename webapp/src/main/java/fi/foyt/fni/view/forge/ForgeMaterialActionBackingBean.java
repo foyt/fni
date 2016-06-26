@@ -195,10 +195,8 @@ public class ForgeMaterialActionBackingBean {
 	  } else {
 	    User loggedUser = sessionController.getLoggedUser();
   	  Folder parentFolder = getParentFolderId() != null ? materialController.findFolderById(getParentFolderId()) : null;
-  	  if (parentFolder != null) {
-  	    if (!materialPermissionController.hasModifyPermission(loggedUser, parentFolder)) {
-  	      throw new UnauthorizedException();
-  	    }
+  	  if ((parentFolder != null) && (!materialPermissionController.hasModifyPermission(loggedUser, parentFolder))) {
+	      throw new UnauthorizedException();
   	  }
   	  
 	    Folder folder = materialController.createFolder(parentFolder, getNewFolderName(), loggedUser);

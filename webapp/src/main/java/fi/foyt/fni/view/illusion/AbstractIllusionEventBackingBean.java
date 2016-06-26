@@ -144,19 +144,17 @@ public abstract class AbstractIllusionEventBackingBean {
       modelBuilder.addPage(page);
     }
     
-    if (sessionController.isLoggedIn()) {
-      if (participant != null) {
-        if (participant.getRole() == IllusionEventParticipantRole.ORGANIZER) {
-          modelBuilder
-            .addAdminPage(IllusionEventPage.Static.MANAGE_PAGES, "/manage-pages", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.pages"))
-            .addAdminPage(IllusionEventPage.Static.PARTICIPANTS, "/participants", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.participants"))
-            .addAdminPage(IllusionEventPage.Static.GROUPS, "/groups", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.groups"))
-            .addAdminPage(IllusionEventPage.Static.SETTINGS, "/settings", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.settings"))
-            .addAdminPage(IllusionEventPage.Static.MANAGE_TEMPLATES, "/manage-templates", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.manageTemplates")); 
-        }
-        
-        modelBuilder.setUserInfo(sessionController.getLoggedUser(), participant);
+    if (sessionController.isLoggedIn() && (participant != null)) {
+      if (participant.getRole() == IllusionEventParticipantRole.ORGANIZER) {
+        modelBuilder
+          .addAdminPage(IllusionEventPage.Static.MANAGE_PAGES, "/manage-pages", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.pages"))
+          .addAdminPage(IllusionEventPage.Static.PARTICIPANTS, "/participants", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.participants"))
+          .addAdminPage(IllusionEventPage.Static.GROUPS, "/groups", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.groups"))
+          .addAdminPage(IllusionEventPage.Static.SETTINGS, "/settings", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.settings"))
+          .addAdminPage(IllusionEventPage.Static.MANAGE_TEMPLATES, "/manage-templates", ExternalLocales.getText(sessionController.getLocale(), "illusion.eventNavigation.manageTemplates")); 
       }
+      
+      modelBuilder.setUserInfo(sessionController.getLoggedUser(), participant);
     }
     
     return modelBuilder

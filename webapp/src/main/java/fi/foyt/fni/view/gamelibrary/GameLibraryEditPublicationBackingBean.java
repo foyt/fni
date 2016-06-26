@@ -123,11 +123,7 @@ public class GameLibraryEditPublicationBackingBean {
 			authorNames.add(author.getAuthor().getFullName());
 		}
 		
-		if (publication instanceof BookPublication) {
-			BookPublication bookPublication = (BookPublication) publication;
-			numberOfPages = bookPublication.getNumberOfPages();
-		}
-		
+		numberOfPages = publication.getNumberOfPages();
 		CreativeCommonsLicense creativeCommonsLicense = CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
 		if (creativeCommonsLicense != null) {
 	    licenseType = LicenseType.CREATIVE_COMMONS;

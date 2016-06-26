@@ -408,10 +408,8 @@ public class IllusionRestServices {
       return Response.status(Status.BAD_REQUEST).entity("XmppRoom can not be changed").build();
     }
     
-    if (StringUtils.isNotBlank(entity.getDomain())) {
-      if (!illusionEventController.isEventAllowedDomain(entity.getDomain())) {
-        return Response.status(Status.BAD_REQUEST).entity(String.format("Invalid domain name: %s", entity.getDomain())).build();
-      } 
+    if (StringUtils.isNotBlank(entity.getDomain()) && (!illusionEventController.isEventAllowedDomain(entity.getDomain()))) {
+      return Response.status(Status.BAD_REQUEST).entity(String.format("Invalid domain name: %s", entity.getDomain())).build();
     }
 
     User user = null;
@@ -597,17 +595,15 @@ public class IllusionRestServices {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    if (!event.getPublished()) {
-      if ((accessToken == null) || (accessToken.getClient().getType() != OAuthClientType.SERVICE)) {
-        if (sessionController.isLoggedIn()) {
-          if (!isLoggedUserEventOrganizer(event)) {
-            return Response.status(Status.FORBIDDEN).build();
-          }
-        } else {
-          return Response.status(Status.UNAUTHORIZED).build();
+    if ((!event.getPublished()) && ((accessToken == null) || (accessToken.getClient().getType() != OAuthClientType.SERVICE))) {
+      if (sessionController.isLoggedIn()) {
+        if (!isLoggedUserEventOrganizer(event)) {
+          return Response.status(Status.FORBIDDEN).build();
         }
-      }      
-    }
+      } else {
+        return Response.status(Status.UNAUTHORIZED).build();
+      }
+    } 
     
     return Response.ok(createRestModel(participant)).build();
   }
@@ -633,15 +629,13 @@ public class IllusionRestServices {
       return Response.status(Status.NOT_FOUND).build();
     }
     
-    if (!event.getPublished()) {
-      if ((accessToken == null) || (accessToken.getClient().getType() != OAuthClientType.SERVICE)) {
-        if (sessionController.isLoggedIn()) {
-          if (!isLoggedUserEventOrganizer(event)) {
-            return Response.status(Status.FORBIDDEN).build();
-          }
-        } else {
-          return Response.status(Status.UNAUTHORIZED).build();
+    if ((!event.getPublished()) && ((accessToken == null) || (accessToken.getClient().getType() != OAuthClientType.SERVICE))) {
+      if (sessionController.isLoggedIn()) {
+        if (!isLoggedUserEventOrganizer(event)) {
+          return Response.status(Status.FORBIDDEN).build();
         }
+      } else {
+        return Response.status(Status.UNAUTHORIZED).build();
       }
     }
     
@@ -839,7 +833,7 @@ public class IllusionRestServices {
       return Response.status(Status.NOT_FOUND).entity(String.format("Group %d not found", groupId)).build();
     }
     
-    if (group.getEvent().equals(eventId)) {
+    if (!group.getEvent().getId().equals(eventId)) {
       return Response.status(Status.NOT_FOUND).entity(String.format("Group %d does not belong to event %d", groupId, eventId)).build();
     }
     
@@ -936,11 +930,9 @@ public class IllusionRestServices {
     }
     
     IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
-    if (!isParticipantOrganizer(loggedParticipant)) {
-      if (loggedParticipant == null || (!loggedParticipant.getId().equals(participant.getId()))) {
-        return Response.status(Status.FORBIDDEN).build(); 
-      }
-    }   
+    if ((!isParticipantOrganizer(loggedParticipant)) && (loggedParticipant == null || (!loggedParticipant.getId().equals(participant.getId())))) {
+      return Response.status(Status.FORBIDDEN).build(); 
+    }
     
     IllusionEventFolder illusionEventFolder = illusionEventMaterialController.getIllusionEventFolder(material);
     if (illusionEventFolder != null) {
@@ -1003,11 +995,9 @@ public class IllusionRestServices {
     }
     
     IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
-    if (!isParticipantOrganizer(loggedParticipant)) {
-      if (loggedParticipant == null || (!loggedParticipant.getId().equals(participant.getId()))) {
-        return Response.status(Status.FORBIDDEN).build(); 
-      }
-    }   
+    if ((!isParticipantOrganizer(loggedParticipant)) && (loggedParticipant == null || (!loggedParticipant.getId().equals(participant.getId())))) {
+      return Response.status(Status.FORBIDDEN).build(); 
+    }
     
     IllusionEventFolder illusionEventFolder = illusionEventMaterialController.getIllusionEventFolder(material);
     if (illusionEventFolder != null) {
@@ -1134,10 +1124,8 @@ public class IllusionRestServices {
     }
     
     IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, sessionController.getLoggedUser());
-    if (!isParticipantOrganizer(loggedParticipant)) {
-      if (loggedParticipant == null || (!loggedParticipant.getId().equals(participant.getId()))) {
-        return Response.status(Status.FORBIDDEN).build(); 
-      }
+    if ((!isParticipantOrganizer(loggedParticipant)) && (loggedParticipant == null || (!loggedParticipant.getId().equals(participant.getId())))) {
+      return Response.status(Status.FORBIDDEN).build(); 
     }   
     
     IllusionEventFolder illusionEventFolder = illusionEventMaterialController.getIllusionEventFolder(material);

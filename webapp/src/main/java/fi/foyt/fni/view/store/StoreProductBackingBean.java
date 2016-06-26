@@ -59,10 +59,9 @@ public class StoreProductBackingBean {
         return navigationController.accessDenied();
       }
 
-      if (!storeProduct.getCreator().getId().equals(sessionController.getLoggedUserId())) {
-        if (!sessionController.hasLoggedUserRole(Role.STORE_MANAGER)) {
-          return navigationController.accessDenied();
-        }
+      boolean isCreator = storeProduct.getCreator().getId().equals(sessionController.getLoggedUserId());
+      if (!isCreator && !sessionController.hasLoggedUserRole(Role.STORE_MANAGER)) {
+        return navigationController.accessDenied();
       }
     }
     

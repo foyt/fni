@@ -25,7 +25,7 @@ public class PatchResult {
 	
 	public boolean allApplied() {
 		for (boolean patchApplied : applied) {
-			if (patchApplied == false)
+			if (!patchApplied)
 				return false;
 		}
 		

@@ -100,7 +100,7 @@ public class PostiDeliveryMethod implements DeliveryMethod {
 
 	@Override
 	public Double getPrice(Double weight, int width, int height, int depth, String countryCode) {
-		if ((width == 0) && (height == 0) && (depth == 0) && (weight == 0d)) {
+		if ((width == 0) && (height == 0) && (depth == 0) && ((weight == null) || (weight.doubleValue() == 0d))) {
 			return 0d;
 		}
 		

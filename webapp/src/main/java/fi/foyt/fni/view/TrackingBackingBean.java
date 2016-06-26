@@ -23,7 +23,7 @@ public class TrackingBackingBean {
 	public void init() {
 	  piwikUrl = systemSettingsController.getSetting(SystemSettingKey.PIWIK_URL);
 	  piwikSiteId = systemSettingsController.getSetting(SystemSettingKey.PIWIK_SITEID); 
-	  piwikEnabled = StringUtils.isNotBlank(piwikSiteId) && StringUtils.isNotBlank(piwikSiteId);
+	  piwikEnabled = StringUtils.isNotBlank(piwikUrl) && StringUtils.isNotBlank(piwikSiteId);
 	  googleAnalyticsId = systemSettingsController.getSetting(SystemSettingKey.GOOGLE_ANALYTICS_TRACKING_ID); 
 	  googleAnalyticsEnabled = StringUtils.isNotBlank(googleAnalyticsId);
 	}

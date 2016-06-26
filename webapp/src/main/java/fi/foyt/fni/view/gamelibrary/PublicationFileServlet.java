@@ -64,12 +64,11 @@ public class PublicationFileServlet extends AbstractFileServlet {
 				return;
 			}
 			
-			if (!bookPublication.getCreator().getId().equals(sessionController.getLoggedUserId())) {
-  			if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
-          sendError(response, HttpServletResponse.SC_FORBIDDEN);
-		  		return;
-			  }
-			}
+			boolean isCreator = bookPublication.getCreator().getId().equals(sessionController.getLoggedUserId());
+			if (!isCreator && !sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
+        sendError(response, HttpServletResponse.SC_FORBIDDEN);
+	  		return;
+		  }
 		}
 		
 		// BookPublication does not have a file, send 404

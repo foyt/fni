@@ -100,13 +100,11 @@ public class MaterialRestServices {
       user = sessionController.getLoggedUser();
     }
     
-    if (!materialPermissionController.isPublic(user, material)) {
-      if (!materialPermissionController.hasAccessPermission(user, material)) {
-        if (user == null) {
-          return Response.status(Status.UNAUTHORIZED).build();
-        } else {
-          return Response.status(Status.FORBIDDEN).build();
-        }
+    if ((!materialPermissionController.isPublic(user, material)) && (!materialPermissionController.hasAccessPermission(user, material))) {
+      if (user == null) {
+        return Response.status(Status.UNAUTHORIZED).build();
+      } else {
+        return Response.status(Status.FORBIDDEN).build();
       }
     }
     

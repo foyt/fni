@@ -89,10 +89,8 @@ public class IllusionEventPageBackingBean extends AbstractIllusionEventBackingBe
       return navigationController.notFound();
     }
     
-    if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
-      if (!illusionEvent.getPublished()) {
-        return navigationController.accessDenied();
-      }
+    if ((!illusionEvent.getPublished()) && ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER))) {
+      return navigationController.accessDenied();
     }
 
     if ((participant != null) && (participant.getRole() == IllusionEventParticipantRole.INVITED)) {
