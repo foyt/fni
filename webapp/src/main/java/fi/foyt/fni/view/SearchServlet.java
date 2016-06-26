@@ -6,18 +6,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.lucene.queryParser.ParseException;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -35,9 +36,12 @@ import fi.foyt.fni.utils.search.SearchResult;
 
 @WebServlet(urlPatterns = "/search/", name = "search")
 @Transactional
-public class SearchServlet extends HttpServlet {
+public class SearchServlet extends AbstractServlet {
 
 	private static final long serialVersionUID = 5027578435195813091L;
+	
+	@Inject
+	private Logger logger;
 
 	@Inject
 	private PublicationController publicationController;
@@ -61,7 +65,7 @@ public class SearchServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String queryText = request.getParameter("q");
 		if (StringUtils.isBlank(queryText)) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			sendError(response, HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 		
@@ -82,7 +86,7 @@ public class SearchServlet extends HttpServlet {
 				if (source != null) {
 				  sources.add(source);
 				} else {
-					response.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+					sendError(response, HttpServletResponse.SC_NOT_IMPLEMENTED);
 					return;
 				}
 			}
@@ -97,17 +101,21 @@ public class SearchServlet extends HttpServlet {
 
 			response.setContentType("application/json");
 			
-			ObjectMapper objectMapper = new ObjectMapper();
-			ServletOutputStream outputStream = response.getOutputStream();
 			try {
-				outputStream.write(objectMapper.writeValueAsBytes(results));
-			} finally {
-				outputStream.flush();
-			}
+	      ObjectMapper objectMapper = new ObjectMapper();
+	      ServletOutputStream outputStream = response.getOutputStream();
+	      try {
+	        outputStream.write(objectMapper.writeValueAsBytes(results));
+	      } finally {
+	        outputStream.flush();
+	      }
+      } catch (IOException e) {
+        logger.log(Level.FINEST, "IOException occurred on servlet", e);
+      }
 			
 			response.setStatus(HttpServletResponse.SC_OK);
 		} catch (ParseException e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
 	}

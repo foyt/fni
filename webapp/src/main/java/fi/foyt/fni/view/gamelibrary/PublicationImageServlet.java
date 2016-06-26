@@ -60,26 +60,26 @@ public class PublicationImageServlet extends AbstractFileServlet {
 		// PublicationImageId could not be resolved, send 404
 		Long publicationImageId = getPathId(request);
 		if (publicationImageId == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			sendError(response, HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
 		// PublicationImage was not found, send 404
 		PublicationImage publicationImage = publicationController.findPublicationImageById(publicationImageId);
 		if (publicationImage == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			sendError(response, HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 		
 		if (!publicationImage.getPublication().getPublished()) {
 			if (!sessionController.isLoggedIn()) {
-				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+				sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
 				return;
 			}
 
       if (!publicationImage.getCreator().getId().equals(sessionController.getLoggedUserId())) {
   			if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
-  				response.sendError(HttpServletResponse.SC_FORBIDDEN);
+  				sendError(response, HttpServletResponse.SC_FORBIDDEN);
   				return;
   			}
       }
@@ -106,7 +106,7 @@ public class PublicationImageServlet extends AbstractFileServlet {
   				data = ImageUtils.resizeImage(data, width != null ? width : -1, height != null ? height : -1, null);
   			} catch (IOException e) {
   	      logger.log(Level.SEVERE, "Failed to resize image", e);
-  				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to resize image");
+  				sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to resize image");
   				return;
   			}
   		}
@@ -118,13 +118,17 @@ public class PublicationImageServlet extends AbstractFileServlet {
 		response.setHeader("ETag", eTag);
 		response.setDateHeader("Last-Modified", lastModified);
 		response.setDateHeader("Expires", System.currentTimeMillis() + DEFAULT_EXPIRE_TIME);
-
-		ServletOutputStream outputStream = response.getOutputStream();
+		
 		try {
-			outputStream.write(data.getData());
-		} finally {
-			outputStream.flush();
-		}
+	    ServletOutputStream outputStream = response.getOutputStream();
+	    try {
+	      outputStream.write(data.getData());
+	    } finally {
+	      outputStream.flush();
+	    }
+    } catch (IOException e) {
+      logger.log(Level.FINEST, "IOException occurred on servlet", e);
+    }
 	}
 
 	@Override
@@ -132,24 +136,24 @@ public class PublicationImageServlet extends AbstractFileServlet {
 		User loggedUser = sessionController.getLoggedUser();
 		Long publicationId = getPathId(request);
 		if (publicationId == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			sendError(response, HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
 		Publication publication = publicationController.findPublicationById(publicationId);
 		if (publication == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			sendError(response, HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 		
 		if (!publication.getPublished()) {
 			if (!sessionController.isLoggedIn()) {
-				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+				sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
 				return;
 			}
 			
 			if (!sessionController.hasLoggedUserPermission(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)) {
-				response.sendError(HttpServletResponse.SC_FORBIDDEN);
+				sendError(response, HttpServletResponse.SC_FORBIDDEN);
 				return;
 			}
 		}
@@ -195,21 +199,25 @@ public class PublicationImageServlet extends AbstractFileServlet {
 
 		} catch (FileUploadException e) {
       logger.log(Level.SEVERE, "File uploading failed", e);
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return;
 		}
 
 		response.setContentType("application/json");
-
-		PrintWriter writer = response.getWriter();
+		
 		try {
-			ObjectMapper mapper = new ObjectMapper();
-			Map<String, List<UploadResultItem>> result = new HashMap<>();
-			result.put("files", resultItems);
-			mapper.writeValue(writer, result);
-		} finally {
-			writer.flush();
-		}
+	    PrintWriter writer = response.getWriter();
+	    try {
+	      ObjectMapper mapper = new ObjectMapper();
+	      Map<String, List<UploadResultItem>> result = new HashMap<>();
+	      result.put("files", resultItems);
+	      mapper.writeValue(writer, result);
+	    } finally {
+	      writer.flush();
+	    }
+    } catch (IOException e) {
+      logger.log(Level.FINEST, "IOException occurred on servlet", e);
+    }
 	}
 
 	private String createETag(Date modified, Integer width, Integer height) {

@@ -1,7 +1,6 @@
 package fi.foyt.fni.view.forge;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,13 +15,11 @@ import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.apache.commons.collections.ComparatorUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -35,10 +32,11 @@ import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.view.AbstractServlet;
 
 @WebServlet(urlPatterns = "/forge/ckbrowserconnector/", name = "forge-ckbrowser")
 @Transactional
-public class CKBrowserConnectorServlet extends HttpServlet {
+public class CKBrowserConnectorServlet extends AbstractServlet {
 
   private static final long serialVersionUID = -1L;
   
@@ -71,7 +69,7 @@ public class CKBrowserConnectorServlet extends HttpServlet {
         return;
       }
     }
-
+    
     Action action = Action.valueOf(request.getParameter("action"));
     if (action == Action.LIST_MATERIALS) {
       try {
@@ -80,6 +78,8 @@ public class CKBrowserConnectorServlet extends HttpServlet {
         logger.log(Level.SEVERE, "Unsupported encoding", e);
         sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         return;
+      } catch (IOException e) {
+        logger.log(Level.FINEST, "IOException occurred on servlet", e);
       }
     }
   }
@@ -196,25 +196,6 @@ public class CKBrowserConnectorServlet extends HttpServlet {
 
   private MaterialBean createMaterialBean(Long id, String name, String path, String type, String icon, Date date, User creator) {
     return new MaterialBean(id, name, path, type, icon, new SimpleDateFormat("dd.MM.yyyy HH:mm").format(date), creator.getFullName());
-  }
-  
-  protected void sendError(HttpServletResponse response, int status) {
-    sendError(response, status, null);
-  }
-  
-  protected void sendError(HttpServletResponse response, int status, String message) {
-    response.setStatus(status);
-    if (StringUtils.isNotBlank(message)) {
-      PrintWriter writer;
-      try {
-        writer = response.getWriter();
-        writer.write(message);
-        writer.flush();
-      } catch (IOException e) {
-        logger.log(Level.SEVERE, "Failed to send error", e);
-        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      }
-    }
   }
 
   public class MaterialBean {

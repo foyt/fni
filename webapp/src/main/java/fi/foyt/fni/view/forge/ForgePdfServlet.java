@@ -8,7 +8,6 @@ import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -26,10 +25,11 @@ import fi.foyt.fni.persistence.model.materials.Document;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.TypedData;
+import fi.foyt.fni.view.AbstractServlet;
 
 @WebServlet(urlPatterns = "/forge/pdf/*", name = "forge-pdf")
 @Transactional
-public class ForgePdfServlet extends HttpServlet {
+public class ForgePdfServlet extends AbstractServlet {
 
 	private static final long serialVersionUID = -1L;
 	
@@ -50,26 +50,26 @@ public class ForgePdfServlet extends HttpServlet {
 		String pathInfo = request.getPathInfo();
 		String documentIdStr = StringUtils.removeStart(pathInfo, "/");
 		if (!StringUtils.isNumeric(documentIdStr)) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
 			return;
 		}
 		
 		Long documentId = NumberUtils.createLong(documentIdStr);
 		Document document = materialController.findDocumentById(documentId);
 		if (document == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not Found");
+		  sendError(response, HttpServletResponse.SC_NOT_FOUND, "Not Found");
 			return;
 		}
     
     User loggedUser = sessionController.getLoggedUser();
     if (!materialPermissionController.isPublic(loggedUser, document)) {
       if (loggedUser == null) {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
         return;
       }
       
       if (!materialPermissionController.hasAccessPermission(loggedUser, document)) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        sendError(response, HttpServletResponse.SC_FORBIDDEN);
         return;
       }
     }
@@ -83,12 +83,12 @@ public class ForgePdfServlet extends HttpServlet {
 			pdfData = materialController.printDocumentAsPdf(contextPath, baseUrl, sessionController.getLoggedUser(), document);
 		} catch (DocumentException | ParserConfigurationException | SAXException e) {
       logger.log(Level.SEVERE, "Failed to print document as PDF", e);
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
+      sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
 			return;
 		}
 		
 		if (pdfData == null) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
+		  sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
 			return;
 		}
 
@@ -98,11 +98,16 @@ public class ForgePdfServlet extends HttpServlet {
 
 		response.setContentType(pdfData.getContentType());
 
-		ServletOutputStream outputStream = response.getOutputStream();
 		try {
-			outputStream.write(pdfData.getData());
-		} finally {
-			outputStream.flush();
-		}
+  		ServletOutputStream outputStream = response.getOutputStream();
+  		try {
+  			outputStream.write(pdfData.getData());
+  		} finally {
+  			outputStream.flush();
+  		}
+    } catch (IOException e) {
+      logger.log(Level.FINEST, "IOException occurred on servlet", e);
+    }
+		
 	}
 }

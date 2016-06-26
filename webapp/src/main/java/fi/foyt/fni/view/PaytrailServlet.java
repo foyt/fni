@@ -1,6 +1,8 @@
 package fi.foyt.fni.view;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -24,6 +26,9 @@ import fi.foyt.paytrail.PaytrailService;
 public class PaytrailServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	
+	@Inject
+	private Logger logger;
 
 	@Inject
 	private PaytrailService paytrailService;
@@ -37,17 +42,21 @@ public class PaytrailServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = getPathAction(request);
-		switch (action) {
-			case "success":
-				handleSuccess(request, response);
-			break;
-			case "failure":
-				handleFailure(request, response);
-			break;
-			case "notify":
-				handleSuccess(request, response);
-			break;
-		}
+		try {
+	    switch (action) {
+	      case "success":
+	        handleSuccess(request, response);
+	      break;
+	      case "failure":
+	        handleFailure(request, response);
+	      break;
+	      case "notify":
+	        handleSuccess(request, response);
+	      break;
+	    }
+    } catch (IOException e) {
+      logger.log(Level.FINEST, "IOException occurred on servlet", e);
+    }
 	}
 
 	private void handleFailure(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -61,37 +61,37 @@ public class IllusionEventMailServlet extends AbstractFileServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	  String pathInfo = request.getPathInfo();
     if (StringUtils.isBlank(pathInfo)) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
     String[] pathItems = StringUtils.removeStart(pathInfo, "/").split("/");
     if (pathItems.length != 1) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
     String eventUrlName = pathItems[0];
     if (StringUtils.isBlank(eventUrlName)) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
     if (!sessionController.isLoggedIn()) {
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+      sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
 
     User loggedUser = sessionController.getLoggedUser();
     IllusionEvent event = illusionEventController.findIllusionEventByUrlName(eventUrlName);
     if (event == null) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
     IllusionEventParticipant loggedParticipant = illusionEventController.findIllusionEventParticipantByEventAndUser(event, loggedUser);
     if ((loggedParticipant == null)||(loggedParticipant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
-      response.sendError(HttpServletResponse.SC_FORBIDDEN);
+      sendError(response, HttpServletResponse.SC_FORBIDDEN);
       return;
     }
 

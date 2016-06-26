@@ -1,6 +1,9 @@
 package fi.foyt.fni.view.forge;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -20,12 +23,16 @@ import fi.foyt.fni.persistence.model.materials.BookDesign;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.TypedData;
+import fi.foyt.fni.view.AbstractServlet;
 
 @WebServlet ( urlPatterns = "/forge/bookDesignPdf/*", name = "forge-book-design-pdf")
 @Transactional
-public class ForgeBookDesignPdfServlet extends HttpServlet {
+public class ForgeBookDesignPdfServlet extends AbstractServlet {
 
 	private static final long serialVersionUID = -1L;
+	
+	@Inject
+  private Logger logger;
 	
 	@Inject
 	private MaterialController materialController;
@@ -41,26 +48,26 @@ public class ForgeBookDesignPdfServlet extends HttpServlet {
 		String pathInfo = request.getPathInfo();
 		String bookDesignIdStr = StringUtils.removeStart(pathInfo, "/");
 		if (!StringUtils.isNumeric(bookDesignIdStr)) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
+		  sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
 			return;
 		}
 		
 		Long bookDesignId = NumberUtils.createLong(bookDesignIdStr);
 		BookDesign bookDesign = materialController.findBookDesign(bookDesignId);
 		if (bookDesign == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not Found");
+		  sendError(response, HttpServletResponse.SC_NOT_FOUND, "Not Found");
 			return;
 		}
     
     User loggedUser = sessionController.getLoggedUser();
     if (!materialPermissionController.isPublic(loggedUser, bookDesign)) {
       if (loggedUser == null) {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
         return;
       }
       
       if (!materialPermissionController.hasAccessPermission(loggedUser, bookDesign)) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        sendError(response, HttpServletResponse.SC_FORBIDDEN);
         return;
       }
     }
@@ -70,7 +77,7 @@ public class ForgeBookDesignPdfServlet extends HttpServlet {
 		
 		TypedData pdfData = materialController.printBookDesignAsPdf(sessionController.getLoggedUser(), bookDesign);
 		if (pdfData == null) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
 			return;
 		}
 
@@ -80,11 +87,15 @@ public class ForgeBookDesignPdfServlet extends HttpServlet {
 
 		response.setContentType(pdfData.getContentType());
 
-		ServletOutputStream outputStream = response.getOutputStream();
 		try {
-			outputStream.write(pdfData.getData());
-		} finally {
-			outputStream.flush();
-		}
+  		ServletOutputStream outputStream = response.getOutputStream();
+  		try {
+  			outputStream.write(pdfData.getData());
+  		} finally {
+  			outputStream.flush();
+  		}
+    } catch (IOException e) {
+      logger.log(Level.FINEST, "IOException occurred on servlet", e);
+    }
 	}
 }

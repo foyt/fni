@@ -8,11 +8,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -29,12 +30,16 @@ import fi.foyt.fni.persistence.model.materials.Material;
 import fi.foyt.fni.persistence.model.materials.MaterialType;
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
+import fi.foyt.fni.view.AbstractServlet;
 
 @WebServlet(urlPatterns = "/forge/folderbrowser/", name = "forge-folderbrowser")
 @Transactional
-public class FolderBrowserServlet extends HttpServlet {
+public class FolderBrowserServlet extends AbstractServlet {
 
 	private static final long serialVersionUID = -1L;
+	
+	@Inject
+  private Logger logger;
 	
 	@Inject
 	private MaterialPermissionController materialPermissionController;
@@ -48,7 +53,7 @@ public class FolderBrowserServlet extends HttpServlet {
   @Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (!sessionController.isLoggedIn()) {
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+			sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
 			return;
 		}
 		
@@ -106,13 +111,16 @@ public class FolderBrowserServlet extends HttpServlet {
     result.put("parents", parents);
 		
 		response.setContentType("application/json");
-
-    PrintWriter printWriter = response.getWriter();
     try {
-      ObjectMapper objectMapper = new ObjectMapper();      
-      objectMapper.writeValue(printWriter, result);
-    } finally {
-      printWriter.flush();
+      PrintWriter printWriter = response.getWriter();
+      try {
+        ObjectMapper objectMapper = new ObjectMapper();      
+        objectMapper.writeValue(printWriter, result);
+      } finally {
+        printWriter.flush();
+      }
+    } catch (IOException e) {
+      logger.log(Level.FINEST, "IOException occurred on servlet", e);
     }
 	}
   

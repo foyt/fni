@@ -24,7 +24,7 @@ import fi.foyt.fni.utils.servlet.RequestUtils;
 
 @WebServlet ( urlPatterns = "/materials/*", name = "materials")
 @Transactional
-public class MaterialsServlet extends HttpServlet {
+public class MaterialsServlet extends AbstractServlet {
   
 	private static final long serialVersionUID = -5739692573670665390L;
   private static final long DEFAULT_EXPIRE_TIME = 1000 * 60 * 60;
@@ -45,19 +45,19 @@ public class MaterialsServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Material material = materialController.findMaterialByCompletePath(RequestUtils.stripCtxPath(request.getContextPath(), request.getRequestURI()));
 		if (material == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			sendError(response, HttpServletResponse.SC_NOT_FOUND);
 			return;
     }
 
     User loggedUser = sessionController.getLoggedUser();
     if (!(materialPermissionController.isPublic(loggedUser, material) || materialPermissionController.hasAccessPermission(loggedUser, material))) {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN);
+			sendError(response, HttpServletResponse.SC_FORBIDDEN);
 			return;
     }
 
     String eTag = createETag(material);
     long lastModified = material.getModified().getTime();
-    if (!RequestUtils.isModifiedSince(request, lastModified, eTag)) {
+    if (!isModifiedSince(request, lastModified, eTag)) {
       response.setHeader("ETag", eTag);
       response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
       return;
@@ -66,14 +66,14 @@ public class MaterialsServlet extends HttpServlet {
     FileData data;
     try {
       data = materialController.getMaterialData(request.getContextPath(), sessionController.getLoggedUser(), material);
-    } catch (GeneralSecurityException e) {
+    } catch (IOException | GeneralSecurityException e) {
       logger.log(Level.SEVERE, "Could not retrieve material data because of a general security error", e);
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     }
 		
     if (data == null) {
-  		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+  		sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
   		return;
     }
     
@@ -87,12 +87,16 @@ public class MaterialsServlet extends HttpServlet {
 
 		response.setContentType(data.getContentType());
 		if (data.getData() != null) {
-  		ServletOutputStream outputStream = response.getOutputStream();
-  		try {
-  			outputStream.write(data.getData());
-  		} finally {
-  			outputStream.flush();
-  		}
+		  try {
+		    ServletOutputStream outputStream = response.getOutputStream();
+	      try {
+	        outputStream.write(data.getData());
+	      } finally {
+	        outputStream.flush();
+	      }
+      } catch (IOException e) {
+        logger.log(Level.FINEST, "IOException occurred on servlet", e);
+      }
 		}
 	}
 

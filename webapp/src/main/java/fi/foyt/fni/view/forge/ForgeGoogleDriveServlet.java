@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -26,10 +25,11 @@ import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.servlet.RequestUtils;
+import fi.foyt.fni.view.AbstractServlet;
 
 @WebServlet(urlPatterns = "/forge/gdrive/*", name = "forge-googledrive")
 @Transactional
-public class ForgeGoogleDriveServlet extends HttpServlet {
+public class ForgeGoogleDriveServlet extends AbstractServlet {
 
 	private static final long serialVersionUID = -1L;
 	private static final long DEFAULT_EXPIRE_TIME = 1000 * 60 * 60;
@@ -51,26 +51,26 @@ public class ForgeGoogleDriveServlet extends HttpServlet {
 		String pathInfo = request.getPathInfo();
 		String googleDocumentIdStr = StringUtils.removeStart(pathInfo, "/");
 		if (!StringUtils.isNumeric(googleDocumentIdStr)) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
 			return;
 		}
 		
 		Long googleDocumentId = NumberUtils.createLong(googleDocumentIdStr);
 		GoogleDocument googleDocument = materialController.findGoogleDocumentById(googleDocumentId);
 		if (googleDocument == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not Found");
+		  sendError(response, HttpServletResponse.SC_NOT_FOUND, "Not Found");
 			return;
 		}
 		
 		User loggedUser = sessionController.getLoggedUser();
 		if (!materialPermissionController.isPublic(loggedUser, googleDocument)) {
 		  if (loggedUser == null) {
-	      response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+		    sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
 	      return;
 	    }
 		  
 		  if (!materialPermissionController.hasAccessPermission(loggedUser, googleDocument)) {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+		    sendError(response, HttpServletResponse.SC_FORBIDDEN);
         return;
 		  }
 		}
@@ -78,23 +78,27 @@ public class ForgeGoogleDriveServlet extends HttpServlet {
     String eTag = createETag(googleDocument.getModified());
 		long lastModified = googleDocument.getModified().getTime();
 
-    if (!RequestUtils.isModifiedSince(request, lastModified, eTag)) {
-      response.setHeader("ETag", eTag); // Required in 304.
-      response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-      return;
-    }
+		try {
+      if (!RequestUtils.isModifiedSince(request, lastModified, eTag)) {
+        response.setHeader("ETag", eTag); // Required in 304.
+        response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+        return;
+      }
+		} catch (IOException e) {
+		  logger.log(Level.FINEST, "IOException occurred while resolving while resolving last modified", e);
+		}
 		
 		TypedData data;
 		try {
 			data = materialController.getGoogleDocumentData(googleDocument);
 		} catch (MalformedURLException | GeneralSecurityException e) {
 	    logger.log(Level.SEVERE, "Failed to load google document data", e);
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
+	    sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
 			return;
 		}
 		
 		if (data == null) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
+		  sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Error");
 			return;
 		}
 
@@ -103,12 +107,16 @@ public class ForgeGoogleDriveServlet extends HttpServlet {
     response.setDateHeader("Last-Modified", lastModified);
     response.setDateHeader("Expires", System.currentTimeMillis() + DEFAULT_EXPIRE_TIME);
     
-		ServletOutputStream outputStream = response.getOutputStream();
-		try {
-			outputStream.write(data.getData());
-		} finally {
-			outputStream.flush();
-		}
+    try {
+  		ServletOutputStream outputStream = response.getOutputStream();
+  		try {
+  			outputStream.write(data.getData());
+  		} finally {
+  			outputStream.flush();
+  		}
+    } catch (IOException e) {
+      logger.log(Level.FINEST, "IOException occurred on servlet", e);
+    }
 	}
 
   private String createETag(Date modified) {

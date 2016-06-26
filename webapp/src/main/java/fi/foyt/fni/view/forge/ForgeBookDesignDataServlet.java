@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -22,10 +21,11 @@ import fi.foyt.fni.persistence.model.materials.BookDesign;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.data.FileData;
+import fi.foyt.fni.view.AbstractServlet;
 
 @WebServlet ( urlPatterns = "/forge/bookDesignData/*", name = "forge-book-design-data")
 @Transactional
-public class ForgeBookDesignDataServlet extends HttpServlet {
+public class ForgeBookDesignDataServlet extends AbstractServlet {
   
 	private static final long serialVersionUID = -5739692573670665390L;
 
@@ -43,14 +43,14 @@ public class ForgeBookDesignDataServlet extends HttpServlet {
 	  String pathInfo = request.getPathInfo();
     String bookDesignIdStr = StringUtils.removeStart(pathInfo, "/");
     if (!StringUtils.isNumeric(bookDesignIdStr)) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
+      sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
       return;
     }
     
     Long bookDesignId = NumberUtils.createLong(bookDesignIdStr);
     BookDesign bookDesign = materialController.findBookDesign(bookDesignId);
     if (bookDesign == null) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not Found");
+      sendError(response, HttpServletResponse.SC_NOT_FOUND, "Not Found");
       return;
     }
     
@@ -60,29 +60,35 @@ public class ForgeBookDesignDataServlet extends HttpServlet {
       return;
     }
     
-    FileData data;
+    FileData data = null;
     try {
       data = materialController.getMaterialData(request.getContextPath(), null, bookDesign);
+    } catch (IOException e) {
+      logger.log(Level.FINEST, "IOException occurred on servlet", e);
     } catch (GeneralSecurityException e) {
-      logger.log(Level.SEVERE, "Could not retrieve material data because of a general security error", e);
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      logger.log(Level.SEVERE, "Could not retrieve material data", e);
+      sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       return;
     }
 	
     if (data == null) {
-  		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+  		sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
   		return;
     }
-    
-		response.setContentType(data.getContentType());
-		if (data.getData() != null) {
-  		ServletOutputStream outputStream = response.getOutputStream();
-  		try {
-  			outputStream.write(data.getData());
-  		} finally {
-  			outputStream.flush();
+      
+    try {
+  		response.setContentType(data.getContentType());
+  		if (data.getData() != null) {
+    		ServletOutputStream outputStream = response.getOutputStream();
+    		try {
+    			outputStream.write(data.getData());
+    		} finally {
+    			outputStream.flush();
+    		}
   		}
-		}
+    } catch (IOException e) {
+      logger.log(Level.FINEST, "IOException occurred on servlet", e);
+    }
 	}
 	
 }

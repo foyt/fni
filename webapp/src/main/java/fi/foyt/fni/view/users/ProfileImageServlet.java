@@ -53,13 +53,13 @@ public class ProfileImageServlet extends AbstractFileServlet {
 	  Long userId = getPathId(request);
     // user id could not be resolved, send 404
     if (userId == null) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
 	  
 	  User user = userController.findUserById(userId);
     if (user == null) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
 		
@@ -67,7 +67,7 @@ public class ProfileImageServlet extends AbstractFileServlet {
 		Integer height = NumberUtils.createInteger(request.getParameter("height"));
 		
 		if ((width == null)||(height == null)) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Width and height parameters are mandatory");
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Width and height parameters are mandatory");
 			return;
 		}
 		
@@ -85,16 +85,16 @@ public class ProfileImageServlet extends AbstractFileServlet {
 				
 				String gravatarUrl = getGravatar(protocol, user, Math.max(width, height));
 				if (StringUtils.isBlank(gravatarUrl)) {
-		      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+		      sendError(response, HttpServletResponse.SC_NOT_FOUND);
 		      return;
 				} else {
-  			  response.sendRedirect(gravatarUrl);
+  			  sendRedirect(response, gravatarUrl);
 	  		  return;
 				}
 		}
 		
     if (profileImage == null) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
 
@@ -111,7 +111,7 @@ public class ProfileImageServlet extends AbstractFileServlet {
 			profileImage = ImageUtils.resizeImage(profileImage, width, height, null);
 		} catch (IOException e) {
 		  logger.log(Level.WARNING, "Failed to resize image", e);
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to resize image");
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to resize image");
 			return;
 		}
 
@@ -120,12 +120,16 @@ public class ProfileImageServlet extends AbstractFileServlet {
 		response.setDateHeader("Last-Modified", lastModified);
 		response.setDateHeader("Expires", System.currentTimeMillis() + DEFAULT_EXPIRE_TIME);
 
-		ServletOutputStream outputStream = response.getOutputStream();
 		try {
-			outputStream.write(profileImage.getData());
-		} finally {
-			outputStream.flush();
-		}
+	    ServletOutputStream outputStream = response.getOutputStream();
+	    try {
+	      outputStream.write(profileImage.getData());
+	    } finally {
+	      outputStream.flush();
+	    }
+    } catch (IOException e) {
+      logger.log(Level.FINEST, "IOException occurred on servlet", e);
+    }
 	}
 
 	private String getGravatar(String protocol, User user, int size) {
@@ -154,14 +158,14 @@ public class ProfileImageServlet extends AbstractFileServlet {
 		// UserId could not be resolved, send 404
 		Long userId = getPathId(request);
 		if (userId == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			sendError(response, HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
 		// User was not found, send 404
 		User user = userController.findUserById(userId);
 		if (user == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			sendError(response, HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
@@ -174,7 +178,8 @@ public class ProfileImageServlet extends AbstractFileServlet {
 			for (FileItem item : items) {
 				if (!item.isFormField()) {
 					if (file != null) {
-						throw new ServletException("Multiple files found from request");
+					  sendError(response, HttpServletResponse.SC_BAD_GATEWAY, "Multiple files found from request");
+					  return;
 					} else {
 						file = new TypedData(item.get(), item.getContentType());
 					}
@@ -182,7 +187,7 @@ public class ProfileImageServlet extends AbstractFileServlet {
 			}
 			
 			if (file == null) {
-			  response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing file");
+			  sendError(response, HttpServletResponse.SC_BAD_REQUEST, "Missing file");
 	      return;
 			}
 
@@ -190,7 +195,7 @@ public class ProfileImageServlet extends AbstractFileServlet {
 			userController.updateProfileImageSource(loggedUser, UserProfileImageSource.FNI);
 		} catch (FileUploadException e) {
       logger.log(Level.SEVERE, "File uploading failed", e);
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return;
 		}
 	}

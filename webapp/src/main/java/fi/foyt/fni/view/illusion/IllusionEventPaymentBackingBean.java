@@ -344,7 +344,7 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
           .redirect(result.getUrl());
         return null;
       } catch (IOException e) {
-        logger.log(Level.SEVERE, "Failed to rediect");
+        logger.log(Level.SEVERE, "Failed to rediect", e);
         return navigationController.internalError();
       }
     } else {

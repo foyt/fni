@@ -3,6 +3,8 @@ package fi.foyt.fni.view.illusion;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -34,6 +36,9 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
 	private static final long serialVersionUID = 8109481247044843102L;
 	
   private final static String GRAVATAR_URL = "://www.gravatar.com/avatar/";
+  
+  @Inject
+  private Logger logger;
 
 	@Inject
 	private UserController userController;
@@ -45,18 +50,18 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	  String pathInfo = request.getPathInfo();
 	  if (StringUtils.isBlank(pathInfo)) {
-	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+	    sendError(response, HttpServletResponse.SC_NOT_FOUND);
 	    return;
 	  }
 	  
 	  String[] pathItems = StringUtils.removeStart(pathInfo, "/").split("/");
 	  if (pathItems.length != 2) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+	    sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
 	  
 	  if (StringUtils.isBlank(pathItems[0]) || !StringUtils.isNumeric(pathItems[1])) {
-	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+	    sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
 	  
@@ -65,30 +70,30 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
 	  
 	  Integer size = NumberUtils.createInteger(request.getParameter("size"));
     if (size == null) {
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Size parameters is mandatory");
+      sendError(response, HttpServletResponse.SC_BAD_REQUEST, "Size parameters is mandatory");
       return;
     }
 	  
 	  IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(eventUrlName);
 	  if (illusionEvent == null) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+	    sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
 	  
 	  IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
 	  if (participant == null) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+	    sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
 	  
     IllusionEvent event = illusionEventController.findIllusionEventByUrlName(eventUrlName);
     if (event == null) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
     if (!event.getId().equals(participant.getEvent().getId())) {
-      response.sendError(HttpServletResponse.SC_FORBIDDEN);
+      sendError(response, HttpServletResponse.SC_FORBIDDEN);
       return;
     }
     
@@ -111,14 +116,14 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
             }
             
             String gravatarUrl = getGravatar(protocol, user, size);
-            response.sendRedirect(gravatarUrl);
+            sendRedirect(response, gravatarUrl);
             return;
         }
       }      
     }
     
     if (profileImage == null) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
@@ -132,20 +137,36 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
 	    return;
 	  }
 	  
-    BufferedImage avatarImage = ImageUtils.readBufferedImage(profileImage);
+	  BufferedImage avatarImage = null;
+	  
+	  try {
+	    avatarImage = ImageUtils.readBufferedImage(profileImage);
+	  } catch (IOException e) {
+	    logger.log(Level.SEVERE, "Failed to read image", e);
+	    sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to read image");
+	    return;
+	  }
+	  
     if (avatarImage == null) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
       
     int cropSize = Math.min(avatarImage.getWidth(), avatarImage.getHeight());
     BufferedImage croppedImage = avatarImage.getSubimage(0, 0, cropSize, cropSize);
-    BufferedImage resizedImage = ImageUtils.resizeImage(croppedImage, size, size, null);
+    BufferedImage resizedImage = null;
     
-    imageData = ImageUtils.writeBufferedImage(resizedImage);
+    try {
+      resizedImage = ImageUtils.resizeImage(croppedImage, size, size, null);
+      imageData = ImageUtils.writeBufferedImage(resizedImage);
+    } catch (IOException e) {
+      logger.log(Level.SEVERE, "Failed to resize image", e);
+      sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to resize image");
+      return;
+    }
     
     if (imageData == null) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }      
 
@@ -154,11 +175,15 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
     response.setDateHeader("Last-Modified", lastModified);
     response.setDateHeader("Expires", System.currentTimeMillis() + DEFAULT_EXPIRE_TIME);
 
-    ServletOutputStream outputStream = response.getOutputStream();
     try {
-      outputStream.write(imageData.getData());
-    } finally {
-      outputStream.flush();
+      ServletOutputStream outputStream = response.getOutputStream();
+      try {
+        outputStream.write(imageData.getData());
+      } finally {
+        outputStream.flush();
+      }
+    } catch (IOException e) {
+      logger.log(Level.FINEST, "IOException occurred on servlet", e);
     }
 	}
 
@@ -166,18 +191,18 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	  String pathInfo = request.getPathInfo();
     if (StringUtils.isBlank(pathInfo)) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
     String[] pathItems = StringUtils.removeStart(pathInfo, "/").split("/");
     if (pathItems.length != 2) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
     if (StringUtils.isBlank(pathItems[0]) || !StringUtils.isNumeric(pathItems[1])) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
@@ -186,30 +211,30 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
 
     IllusionEvent event = illusionEventController.findIllusionEventByUrlName(eventUrlName);
     if (event == null) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     
 	  String dataParam = request.getParameter("data");
 	  if (StringUtils.isBlank(dataParam)) {
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Data parameter is mandatory");
+      sendError(response, HttpServletResponse.SC_BAD_REQUEST, "Data parameter is mandatory");
       return;
 	  }
 	  
 	  if (!StringUtils.startsWith(dataParam, "data:")) {
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Data parameter is invalid");
+      sendError(response, HttpServletResponse.SC_BAD_REQUEST, "Data parameter is invalid");
       return;
 	  }
 	  
 	  String[] dataParts = StringUtils.stripStart(dataParam, "data:").split(";base64,", 2);
 	  if (dataParts.length != 2) {
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Data parameter is invalid");
+      sendError(response, HttpServletResponse.SC_BAD_REQUEST, "Data parameter is invalid");
       return; 
 	  }
 	  
 	  IllusionEventParticipant participant = illusionEventController.findIllusionEventParticipantById(participantId);
 	  if (participant == null) {
-	    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+	    sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
     

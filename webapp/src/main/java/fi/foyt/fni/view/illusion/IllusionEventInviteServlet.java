@@ -92,9 +92,9 @@ public class IllusionEventInviteServlet extends AbstractFileServlet {
       return;
     }
     
+    List<Map<String, String>> results = new ArrayList<>();
+    
     try {
-      List<Map<String, String>> results = new ArrayList<>();
-      
       for (SearchResult<User> searchResult : userController.searchUsers(term, 20)) {
         String email = userController.getUserPrimaryEmail(searchResult.getEntity());
         String name = userController.getUserDisplayNameWithMail(searchResult.getEntity());
@@ -105,33 +105,37 @@ public class IllusionEventInviteServlet extends AbstractFileServlet {
         
         results.add(result);
       }
+    } catch (ParseException e) {
+      logger.log(Level.SEVERE, "Failed to parse search request", e);
+      sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return;
+    }
       
+    try {
       response.setContentType("application/json");
       ServletOutputStream outputStream = response.getOutputStream();
       (new ObjectMapper()).writeValue(outputStream, results);
       outputStream.flush();
-      
-    } catch (ParseException e) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      return;
+    } catch (IOException e) {
+      logger.log(Level.FINEST, "IOException occurred on servlet", e);
     }
   };
   
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	  if (!sessionController.isLoggedIn()) {
-      response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+      sendError(response, HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
 
 	  IllusionEvent event = findEvent(request.getPathInfo());
 	  if (event == null) {
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      sendError(response, HttpServletResponse.SC_NOT_FOUND);
       return;
 	  }
 	  
 	  if (!hasUserPermission(sessionController.getLoggedUser(), event)) {
-      response.sendError(HttpServletResponse.SC_FORBIDDEN);
+      sendError(response, HttpServletResponse.SC_FORBIDDEN);
       return;
 	  }
 	  

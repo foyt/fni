@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -12,9 +11,11 @@ import javax.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import fi.foyt.fni.view.AbstractServlet;
+
 @WebServlet(urlPatterns = "/forge/binary/*", name = "forge-binary")
 @Transactional
-public class ForgeBinaryServlet extends HttpServlet {
+public class ForgeBinaryServlet extends AbstractServlet {
 
 	private static final long serialVersionUID = -1L;
 	
@@ -23,18 +24,18 @@ public class ForgeBinaryServlet extends HttpServlet {
 		String pathInfo = StringUtils.removeStart(request.getPathInfo(), "/");
 		String[] pathElements = pathInfo.split("/", 2);
 		if (pathElements.length != 2) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
 			return;
 		}
 		
 		if (!StringUtils.isNumeric(pathElements[0])) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Invalid request");
 			return;
 		}
 		
 		Long ownerId = NumberUtils.createLong(pathElements[0]);
 		if (ownerId == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, "Not Found");
+			sendError(response, HttpServletResponse.SC_NOT_FOUND, "Not Found");
 			return;
 		}
 

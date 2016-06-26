@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -138,7 +139,7 @@ public class PublicationFileServlet extends AbstractFileServlet {
 		// BookPublication was not found, send 404
 		BookPublication bookPublication = publicationController.findBookPublicationById(publicationId);
 		if (bookPublication == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			sendError(response, HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 		
@@ -151,7 +152,8 @@ public class PublicationFileServlet extends AbstractFileServlet {
 			for (FileItem item : items) {
 				if (!item.isFormField()) {
 					if (file != null) {
-					  throw new ServletException("Multiple files found from request");
+					  sendError(response, HttpServletResponse.SC_BAD_REQUEST, "Multiple files found from request");
+					  return;
 					} else {
 						file = new TypedData(item.get(), item.getContentType());
 					}
@@ -163,12 +165,12 @@ public class PublicationFileServlet extends AbstractFileServlet {
 			}
       
       if (file == null) {
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing file");
+        sendError(response, HttpServletResponse.SC_BAD_REQUEST, "Missing file");
         return;
       }
       
 			if (fileType == null) {
-			  response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			  sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         return;
 			}
 			
@@ -181,7 +183,7 @@ public class PublicationFileServlet extends AbstractFileServlet {
         break;
 			}
 
-			response.sendRedirect(new StringBuilder()
+			sendRedirect(response, new StringBuilder()
   		  .append(request.getContextPath())
   		  .append("/gamelibrary/manage/")
   		  .toString()
@@ -189,7 +191,7 @@ public class PublicationFileServlet extends AbstractFileServlet {
 			
 		} catch (FileUploadException e) {
 		  logger.log(Level.SEVERE, "File uploading failed", e);
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 			return;
 		}
 	}
