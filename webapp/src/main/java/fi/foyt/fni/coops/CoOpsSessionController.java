@@ -19,7 +19,7 @@ import fi.foyt.fni.persistence.model.users.User;
 @Stateless
 public class CoOpsSessionController {
   
-  private static final long SESSION_TIMEOUT = 10 * 1000;
+  private static final long SESSION_TIMEOUT = 1000L * 10;
   
   @Inject
   private Event<CoOpsSessionCloseEvent> sessionCloseEvent;

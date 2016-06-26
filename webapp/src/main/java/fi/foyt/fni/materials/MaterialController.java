@@ -173,7 +173,7 @@ public class MaterialController {
 
   private static final String MATERIALS_PATH = "materials";
   private static final long DEFAULT_MATERIAL_SIZE = 2048;
-  private static final long DEFAULT_QUOTA = 1024 * 1024 * 10;
+  private static final long DEFAULT_QUOTA = 1024L * 1024L * 10;
   private static final String DOCUMENT_TEMPLATE = "<!DOCTYPE HTML><html><head><meta charset=\"UTF-8\"><title>{0}</title><link rel=\"StyleSheet\" href=\"{1}\"/></head><body>{2}</body></html>";
 
   @Inject

@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
@@ -27,7 +26,7 @@ import fi.foyt.fni.utils.servlet.RequestUtils;
 public class MaterialsServlet extends AbstractServlet {
   
 	private static final long serialVersionUID = -5739692573670665390L;
-  private static final long DEFAULT_EXPIRE_TIME = 1000 * 60 * 60;
+  private static final long DEFAULT_EXPIRE_TIME = 1000L * 60 * 60;
 
 	@Inject
 	private Logger logger;

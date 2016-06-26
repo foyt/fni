@@ -122,7 +122,7 @@ public class ForumEditPostBackingBean {
   public void save() throws IOException {
     ForumPost forumPost = forumController.findForumPostById(postId);
     forumController.updateForumPostContent(forumPost, getPostContent());
-    long page = Math.round(Math.floor(forumController.getIndexOfPostInTopic(forumPost) / ForumTopicBackingBean.POST_PER_PAGE));
+    long page = Math.round(Math.floor(((double) forumController.getIndexOfPostInTopic(forumPost)) / ForumTopicBackingBean.POST_PER_PAGE));
 
     FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
       .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())

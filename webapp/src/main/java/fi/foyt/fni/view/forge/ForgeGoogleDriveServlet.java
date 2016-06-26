@@ -32,7 +32,7 @@ import fi.foyt.fni.view.AbstractServlet;
 public class ForgeGoogleDriveServlet extends AbstractServlet {
 
 	private static final long serialVersionUID = -1L;
-	private static final long DEFAULT_EXPIRE_TIME = 1000 * 60 * 60;
+	private static final long DEFAULT_EXPIRE_TIME = 1000L * 60 * 60;
 	
 	@Inject
   private Logger logger;
