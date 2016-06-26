@@ -607,42 +607,7 @@ public class MaterialController {
       NodeList imageList = XPathAPI.selectNodeList(domDocument, "//img");
       for (int i = 0, l = imageList.getLength(); i < l; i++) {
         Element imageElement = (Element) imageList.item(i);
-        String src = imageElement.getAttribute("src");
-        
-        try {
-          boolean internal = false;
-          
-          if (src.startsWith("http://") || src.startsWith("https://")) {
-            if (src.startsWith(baseUrl)) {
-              src = RequestUtils.stripCtxPath(contextPath, src.substring(baseUrl.length()));  
-              internal = true;
-            } else {
-              internal = false;
-            }
-          } else {
-            src = RequestUtils.stripCtxPath(contextPath, src);
-            internal = true;
-          }
-          
-          if (internal) {
-            Material material = findMaterialByCompletePath(src);
-            if ((material.getType() == MaterialType.IMAGE) && materialPermissionController.hasAccessPermission(user, material)) {
-              Image image = (Image) material;
-
-              StringBuilder srcBuilder = new StringBuilder()
-                .append("data:")
-                .append(image.getContentType())
-                .append(";base64,")
-                .append(new String(Base64.encodeBase64(image.getData())));
-              
-              imageElement.setAttribute("src", srcBuilder.toString());
-            }
-          }
-          
-        } catch (Exception e) {
-          logger.log(Level.WARNING, "Failed to embed image as base64", e);
-          // If anything goes wrong we just leave this img "as is".
-        }
+        embedPdfImage(contextPath, baseUrl, user, imageElement);
       }
     } catch (Exception e) {
       logger.log(Level.WARNING, "Failed process document", e);
@@ -658,13 +623,51 @@ public class MaterialController {
     
     return new TypedData(pdfStream.toByteArray(), "application/pdf");
   }
+
+  private void embedPdfImage(String contextPath, String baseUrl, User user, Element imageElement) {
+    String src = imageElement.getAttribute("src");
+    
+    try {
+      boolean internal = false;
+      
+      if (src.startsWith("http://") || src.startsWith("https://")) {
+        if (src.startsWith(baseUrl)) {
+          src = RequestUtils.stripCtxPath(contextPath, src.substring(baseUrl.length()));  
+          internal = true;
+        } else {
+          internal = false;
+        }
+      } else {
+        src = RequestUtils.stripCtxPath(contextPath, src);
+        internal = true;
+      }
+      
+      if (internal) {
+        Material material = findMaterialByCompletePath(src);
+        if ((material.getType() == MaterialType.IMAGE) && materialPermissionController.hasAccessPermission(user, material)) {
+          Image image = (Image) material;
+
+          StringBuilder srcBuilder = new StringBuilder()
+            .append("data:")
+            .append(image.getContentType())
+            .append(";base64,")
+            .append(new String(Base64.encodeBase64(image.getData())));
+          
+          imageElement.setAttribute("src", srcBuilder.toString());
+        }
+      }
+      
+    } catch (Exception e) {
+      logger.log(Level.WARNING, "Failed to embed image as base64", e);
+      // If anything goes wrong we just leave this img "as is".
+    }
+  }
   
   private org.w3c.dom.Document tidyForPdf(String title, String bodyContent) throws ParserConfigurationException, IOException, SAXException {
     String documentHtml = HtmlUtils.getAsHtmlText(title, bodyContent);
     String cleanedHtml = null;
     
-    ByteArrayOutputStream tidyStream = new ByteArrayOutputStream();
-    try {
+    try (ByteArrayOutputStream tidyStream = new ByteArrayOutputStream()) {
       Tidy tidy = new Tidy();
       tidy.setInputEncoding("UTF-8");
       tidy.setOutputEncoding("UTF-8");
@@ -672,13 +675,7 @@ public class MaterialController {
       tidy.setNumEntities(false);
       tidy.setXmlOut(true);
       tidy.setXHTML(true);
-
       cleanedHtml = HtmlUtils.printDocument(tidy.parseDOM(new StringReader(documentHtml), null));
-    } catch (Exception e) {
-      throw e;
-    } finally {
-      tidyStream.flush();
-      tidyStream.close();
     }
     
     InputStream documentStream = new ByteArrayInputStream(cleanedHtml.getBytes("UTF-8"));
