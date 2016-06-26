@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.ocpsoft.rewrite.exception.RewriteException;
 
 public class ExceptionHandler extends ExceptionHandlerWrapper {
-
+  
   private final javax.faces.context.ExceptionHandler wrapped;
 
   public ExceptionHandler(final javax.faces.context.ExceptionHandler wrapped) {
@@ -51,7 +51,6 @@ public class ExceptionHandler extends ExceptionHandlerWrapper {
         } else {
           externalContext.setResponseStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
           renderView("/error/internal-error.jsf");
-          exception.printStackTrace();
         }
       } finally {
         queuedEventIterator.remove();
