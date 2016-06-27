@@ -1,6 +1,7 @@
 package fi.foyt.fni.gamelibrary;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -153,7 +154,7 @@ public class PublicationController {
 	
 	public List<SearchResult<Publication>> searchPublications(String text, Integer maxHits) throws ParseException {
 		if (StringUtils.isBlank(text)) {
-			return null;
+			return Collections.emptyList();
 		}
 		
 		List<SearchResult<Publication>> result = new ArrayList<>();

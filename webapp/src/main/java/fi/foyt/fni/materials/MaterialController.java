@@ -2228,7 +2228,7 @@ public class MaterialController {
       return materialCopy.getAllowedTargets();
     }
     
-    return null;
+    return new MaterialType[0];
   }
   
   private MaterialCopy<?> getCopyOperation(MaterialType type) {

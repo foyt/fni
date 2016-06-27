@@ -3,6 +3,7 @@ package fi.foyt.fni.view;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -137,7 +138,7 @@ public class SearchServlet extends AbstractServlet {
       break;
 		}
 		
-		return null;
+		return Collections.emptyList();
 	}
 	
 	private List<Map<String, Object>> searchGameLibrary(String queryText, int maxHits) throws ParseException {

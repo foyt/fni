@@ -48,7 +48,7 @@ public class DropboxAuthenticationStrategy extends OAuthAuthenticationStrategy {
 
 	@Override
 	protected String[] getRequiredScopes() {
-		return null;
+		return new String[0];
 	}
   
   @Override

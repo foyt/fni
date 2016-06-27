@@ -60,7 +60,7 @@ public class YahooAuthenticationStrategy extends OAuthAuthenticationStrategy {
 
 	@Override
 	protected String[] getRequiredScopes() {
-		return null;
+		return new String[0];
 	}
 
   
