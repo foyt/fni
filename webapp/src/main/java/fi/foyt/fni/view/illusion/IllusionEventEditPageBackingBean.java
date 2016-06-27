@@ -55,7 +55,7 @@ public class IllusionEventEditPageBackingBean extends AbstractIllusionEventBacki
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
     illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.MANAGE_PAGES);
     illusionEventNavigationController.setEventUrlName(getUrlName());
-    IllusionEventDocument page = null;
+    IllusionEventDocument page;
     
     if (StringUtils.isNumeric(getPageId())) {
       Long documentId = NumberUtils.createLong(getPageId());

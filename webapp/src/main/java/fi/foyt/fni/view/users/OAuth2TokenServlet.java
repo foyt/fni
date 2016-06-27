@@ -54,7 +54,7 @@ public class OAuth2TokenServlet extends AbstractServlet {
         return;
       }
 
-      OAuthResponse authResponse = null;
+      OAuthResponse authResponse;
       Long expires = (System.currentTimeMillis() / 1000l) + TOKEN_EXPIRES;
       OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
       String accessToken = oauthIssuerImpl.accessToken();

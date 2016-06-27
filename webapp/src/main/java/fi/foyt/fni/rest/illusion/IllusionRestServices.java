@@ -205,7 +205,7 @@ public class IllusionRestServices {
       return Response.status(Status.BAD_REQUEST).entity("joinMode could not be found").build();
     }
     
-    User user = null;
+    User user;
     if (!sessionController.isLoggedIn()) {
       if (accessToken == null) {
         return Response.status(Status.UNAUTHORIZED).build();
@@ -412,7 +412,7 @@ public class IllusionRestServices {
       return Response.status(Status.BAD_REQUEST).entity(String.format("Invalid domain name: %s", entity.getDomain())).build();
     }
 
-    User user = null;
+    User user;
     if (!sessionController.isLoggedIn()) {
       if (accessToken == null) {
         return Response.status(Status.UNAUTHORIZED).build();
@@ -426,8 +426,6 @@ public class IllusionRestServices {
       if (user == null) {
         return Response.status(Status.FORBIDDEN).entity("Client does not have an service user").build();
       }
-    } else {
-      user = sessionController.getLoggedUser();
     }
     
     Double signUpFee = entity.getSignUpFee();
@@ -545,7 +543,7 @@ public class IllusionRestServices {
       return Response.status(Status.BAD_REQUEST).entity("User is already a participant in this event").build();
     }
     
-    IllusionEventParticipant participant = null;
+    IllusionEventParticipant participant;
     if (entity.getDisplayName() == null) {
       participant = illusionEventController.createIllusionEventParticipant(user, event, entity.getDisplayName(), entity.getRole());
     } else {
@@ -866,7 +864,7 @@ public class IllusionRestServices {
       return Response.status(Status.NOT_FOUND).build(); 
     }
     
-    User user = null;
+    User user;
     
     if (!sessionController.isLoggedIn()) {
       if (accessToken == null) {
@@ -1009,7 +1007,7 @@ public class IllusionRestServices {
       return Response.status(Status.BAD_REQUEST).build();
     }
     
-    List<fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting> result = null;
+    List<fi.foyt.fni.persistence.model.illusion.IllusionEventMaterialParticipantSetting> result;
     
     if (keyName == null) {
       result = illusionEventMaterialController.listParticipantSettingByMaterialAndParticipant(material, participant);

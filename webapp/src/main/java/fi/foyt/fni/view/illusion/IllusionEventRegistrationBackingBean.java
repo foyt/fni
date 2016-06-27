@@ -293,7 +293,7 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
         String key = entry.getKey();
         Object answerObject = entry.getValue();
 
-        String answer = null;
+        String answer;
         if (answerObject instanceof List) {
           answer = StringUtils.join((List<?>) answerObject, ",");
         } else {

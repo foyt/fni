@@ -492,7 +492,7 @@ public class MaterialRestServices {
       return Response.status(Status.NOT_FOUND).entity("Not Found").build();
     }
     
-    User user = null;
+    User user;
     if (!sessionController.isLoggedIn()) {
       if (accessToken.getClient().getType() != OAuthClientType.SERVICE) {
         return Response.status(Status.FORBIDDEN).entity(String.format("Invalid client type %s", accessToken.getClient().getType().toString())).build();
@@ -530,7 +530,7 @@ public class MaterialRestServices {
       return Response.status(Status.NOT_FOUND).entity("Not Found").build();
     }
     
-    User user = null;
+    User user;
     if (!sessionController.isLoggedIn()) {
       if (accessToken.getClient().getType() != OAuthClientType.SERVICE) {
         return Response.status(Status.FORBIDDEN).entity(String.format("Invalid client type %s", accessToken.getClient().getType().toString())).build();

@@ -122,7 +122,7 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
     String contextPath =  httpServletRequest.getContextPath();
     String materialUrl = contextPath + "/materials/" + material.getPath();
     if (material.getType() == MaterialType.CHARACTER_SHEET) {
-      String key = null;
+      String key;
       
       synchronized (this) {
         IllusionEventMaterialParticipantSetting webSocketKeySetting = illusionEventMaterialController.findParticipantSettingByMaterialAndParticipantAndKey(material, participant, IllusionEventMaterialParticipantSettingKey.WEBSOCKET_KEY);
@@ -136,7 +136,7 @@ public class IllusionEventMaterialBackingBean extends AbstractIllusionEventBacki
       materialUrl += "?contextPath=" + contextPath + "&participantId=" + participant.getId() + "&eventId=" + illusionEvent.getId() + "&materialId=" + material.getId() + "&key=" + key;
     }
     
-    EmbedType materialEmbedType = null;
+    EmbedType materialEmbedType;
     
     switch (material.getType()) {
       case IMAGE:

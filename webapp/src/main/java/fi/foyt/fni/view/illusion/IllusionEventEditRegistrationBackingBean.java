@@ -125,7 +125,7 @@ public class IllusionEventEditRegistrationBackingBean extends AbstractIllusionEv
     
     FormReader formReader = new FormReader(formData);
     if (formReader.getForm() == null) {
-      String message = null;
+      String message;
       
       if ((formReader.getParseError() instanceof JsonMappingException) && (formReader.getParseError().getCause() instanceof JsonParseException)) {
         message = ((JsonParseException) formReader.getParseError().getCause()).getOriginalMessage();

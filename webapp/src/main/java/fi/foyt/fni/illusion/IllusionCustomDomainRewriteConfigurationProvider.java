@@ -272,7 +272,7 @@ public class IllusionCustomDomainRewriteConfigurationProvider extends HttpConfig
 
     @Override
     public boolean evaluateHttp(HttpServletRewrite event, EvaluationContext context) {
-      String hostName = null;
+      String hostName;
 
       if (event instanceof HttpOutboundServletRewrite) {
         hostName = event.getAddress().getDomain();

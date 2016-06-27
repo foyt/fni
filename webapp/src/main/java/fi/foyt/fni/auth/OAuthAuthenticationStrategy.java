@@ -29,7 +29,7 @@ public abstract class OAuthAuthenticationStrategy extends AuthenticationStrategy
   private SessionController sessionController;
   
   public String authorize(String... extraScopes) throws ConfigurationErrorException {
-    String[] scopes = null;
+    String[] scopes;
     String[] requiredScopes = getRequiredScopes();
 
     if (requiredScopes != null && requiredScopes.length > 0) {

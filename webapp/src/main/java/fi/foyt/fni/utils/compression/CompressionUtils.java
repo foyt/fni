@@ -17,7 +17,7 @@ public class CompressionUtils {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     
     final byte[] buffer = new byte[1024];
-    int n = 0;
+    int n;
     while (-1 != (n = gzInputStream.read(buffer))) {
       outputStream.write(buffer, 0, n);
     }
@@ -52,7 +52,7 @@ public class CompressionUtils {
     BZip2CompressorInputStream compressorInputStream = new BZip2CompressorInputStream(inputStream);
     
     final byte[] buffer = new byte[1024];
-    int n = 0;
+    int n;
     while (-1 != (n = compressorInputStream.read(buffer))) {
       outputStream.write(buffer, 0, n);
     }

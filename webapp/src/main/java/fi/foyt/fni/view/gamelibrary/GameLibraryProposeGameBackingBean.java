@@ -255,7 +255,7 @@ public class GameLibraryProposeGameBackingBean {
   }
 
   public synchronized String send() throws IOException, MessagingException {
-    TypedData imageData = null;
+    TypedData imageData;
 
     if (StringUtils.isNotBlank(getImageFileId())) {
       byte[] fileData = sessionTempController.getTempFileData(getImageFileId());

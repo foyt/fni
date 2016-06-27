@@ -137,7 +137,7 @@ public class UserRestServices {
       userController.createUserEmail(user, email, Boolean.FALSE);
     }
     
-    String unencryptedPassword = null;
+    String unencryptedPassword;
     if (generateCredentials) {
       unencryptedPassword = RandomStringUtils.randomAlphanumeric(8);
     } else {

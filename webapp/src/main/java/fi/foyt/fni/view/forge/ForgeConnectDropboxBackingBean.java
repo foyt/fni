@@ -55,7 +55,7 @@ public class ForgeConnectDropboxBackingBean {
       DropboxRootFolder dropboxRootFolder = dropboxController.findDropboxRootFolderByUser(loggedUser);
       if (dropboxRootFolder == null) {
         String title = FacesUtils.getLocalizedValue("forge.dropboxConnect.rootFolderName");
-        dropboxRootFolder = dropboxController.createDropboxRootFolder(loggedUser, title);
+        dropboxController.createDropboxRootFolder(loggedUser, title);
         FacesUtils.addPostRedirectMessage(FacesMessage.SEVERITY_INFO, FacesUtils.getLocalizedValue("forge.dropboxConnect.connectedMessage"));
       }
       

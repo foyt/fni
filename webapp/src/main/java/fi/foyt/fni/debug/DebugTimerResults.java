@@ -47,7 +47,6 @@ public class DebugTimerResults implements Serializable {
       Method method = entry.getKey();
       List<Long> times = entry.getValue();
 
-      long avg = 0;
       long total = 0;
       long min = Long.MAX_VALUE;
       long max = Long.MIN_VALUE;
@@ -58,7 +57,7 @@ public class DebugTimerResults implements Serializable {
         max = Math.max(max, time);
       }
 
-      avg = total / times.size();
+      long avg = total / times.size();
       String methodName = method.getDeclaringClass().getSimpleName() + '.' + method.getName();
 
       methodStats.add(new MethodStats(methodName, method.toString(), times.size(), avg, min, max, total, total));

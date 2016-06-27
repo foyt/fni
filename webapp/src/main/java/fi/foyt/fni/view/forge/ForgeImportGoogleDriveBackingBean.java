@@ -113,7 +113,7 @@ public class ForgeImportGoogleDriveBackingBean {
       return "/users/login.jsf?faces-redirect=true&loginMethod=GOOGLE&redirectUrl=" + URLEncoder.encode(redirectUrl, "UTF-8") + "&extraScopes=" +  REQUIRED_SCOPE;
     } else {
       Drive drive = driveManager.getDrive(driveManager.getAccessTokenCredential(userToken.getToken()));
-      FileList fileList = null;
+      FileList fileList;
       root = folderId == null;
       files = new ArrayList<File>();
       

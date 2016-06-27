@@ -29,8 +29,8 @@ public class AboutBackingBean {
     Matcher matcher = pattern.matcher(text);
     while (matcher.find()) {
       String[] parts = matcher.group(1).split("\\|");
-      String href = null;
-      String linkText = null;
+      String href;
+      String linkText;
       
       if (parts.length == 1) {
         href = linkText = parts[0];

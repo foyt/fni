@@ -92,7 +92,7 @@ public class DropboxAuthenticationStrategy extends OAuthAuthenticationStrategy {
   
   private static String[] splitNames(String displayName) {
     int lastNameIndex = displayName.lastIndexOf(' ');
-    String firstName = "";
+    String firstName;
     String lastName = "";
     
     if (lastNameIndex > -1) {

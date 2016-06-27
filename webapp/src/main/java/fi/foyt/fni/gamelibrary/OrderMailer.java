@@ -87,7 +87,7 @@ public class OrderMailer {
           double tax = totalCosts - (totalCosts / (1 + (vatPercent / 100)));
           
           String taxAmount = currencyInstance.format(tax);
-          String vatText = null;
+          String vatText;
           
           if (!systemSettingsController.isVatRegistered()) {
             vatText = getLocalizedValue(locale, "gamelibrary.mail.notVatRegistered");
@@ -162,7 +162,7 @@ public class OrderMailer {
           double tax = totalCosts - (totalCosts / (1 + (vatPercent / 100)));
           
           String taxAmount = currencyInstance.format(tax);
-          String vatText = null;
+          String vatText;
           
           if (!systemSettingsController.isVatRegistered()) {
             vatText = getLocalizedValue(locale, "gamelibrary.mail.notVatRegistered");

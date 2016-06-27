@@ -94,7 +94,7 @@ public class ForumPostFollowerMailer {
     
     ForumTopic topic = forumPost.getTopic();
     IllusionEvent event = illusionEventController.findEventByForumTopic(topic);
-    String link = null;
+    String link;
     
     if (event == null) {
       long pageCount = Math.round(Math.ceil(new Double(forumController.countPostsByTopic(topic)) / ForumTopicBackingBean.POST_PER_PAGE));

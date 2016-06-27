@@ -207,7 +207,7 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
   public String proceedToPayment() {
     User user = sessionController.getLoggedUser();
     IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
-    IllusionEventParticipant participant = null;
+    IllusionEventParticipant participant;
     
     if (user == null) {
       participant = illusionEventController.findParticipantByEventAndAccessCode(illusionEvent, getAccessCode());

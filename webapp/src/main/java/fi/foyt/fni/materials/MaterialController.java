@@ -538,7 +538,7 @@ public class MaterialController {
       String oldPath = document.getPath();
       PermaLink permaLink = permaLinkDAO.findByPath(oldPath);
       if (permaLink == null) {
-        permaLink = permaLinkDAO.create(document, oldPath);
+        permaLinkDAO.create(document, oldPath);
       }
 
       materialDAO.updateUrlName(document, newUrlName, modifier);
@@ -628,7 +628,7 @@ public class MaterialController {
     String src = imageElement.getAttribute("src");
     
     try {
-      boolean internal = false;
+      boolean internal;
       
       if (src.startsWith("http://") || src.startsWith("https://")) {
         if (src.startsWith(baseUrl)) {
@@ -704,7 +704,7 @@ public class MaterialController {
   }
   
   public Document setDocumentTags(Document document, List<Tag> tags) {
-    List<MaterialTag> removeTags = null;
+    List<MaterialTag> removeTags;
     if (!tags.isEmpty()) {
       removeTags = materialTagDAO.listByMaterialAndTagsNotIn(document, tags);
     } else {
@@ -778,7 +778,7 @@ public class MaterialController {
   public TypedData getGoogleDocumentData(GoogleDocument googleDocument) throws MalformedURLException, IOException, GeneralSecurityException {
     Drive systemDrive = driveManager.getDrive(systemGoogleDriveCredentials.getSystemCredential());
     File file = driveManager.getFile(systemDrive, googleDocument.getDocumentId());
-    TypedData typedData = null;
+    TypedData typedData;
     String mimeType = googleDocument.getMimeType();
     
     if (GoogleDriveType.DOCUMENT.getMimeType().equals(mimeType)) {
@@ -868,7 +868,7 @@ public class MaterialController {
   }
   
   public Image setImageTags(Image image, List<Tag> tags) {
-    List<MaterialTag> removeTags = null;
+    List<MaterialTag> removeTags;
     if (!tags.isEmpty()) {
       removeTags = materialTagDAO.listByMaterialAndTagsNotIn(image, tags);
     } else {
@@ -937,7 +937,7 @@ public class MaterialController {
       String oldPath = vectorImage.getPath();
       PermaLink permaLink = permaLinkDAO.findByPath(oldPath);
       if (permaLink == null) {
-        permaLink = permaLinkDAO.create(vectorImage, oldPath);
+        permaLinkDAO.create(vectorImage, oldPath);
       }
 
       materialDAO.updateUrlName(vectorImage, newUrlName, modifier);
@@ -1031,7 +1031,7 @@ public class MaterialController {
               String path = (String) metaData.get("path");
               String[] parents = path.split("/");
 
-              Folder parentFolder = null;
+              Folder parentFolder;
               if (parents.length == 2) {
                 parentFolder = dropboxRootFolder;
               } else {
@@ -1530,7 +1530,7 @@ public class MaterialController {
       return urlName;
 
     String baseName = urlName;
-    Material urlMaterial = null;
+    Material urlMaterial;
     int i = 0;
     do {
       if (parentFolder == null) {
@@ -1541,7 +1541,7 @@ public class MaterialController {
 
       if (urlMaterial == null) {
         if (material != null) {
-          String path = null;
+          String path;
 
           if (material.getParentFolder() != null)
             path = material.getParentFolder().getPath() + '/' + urlName;
@@ -1688,7 +1688,7 @@ public class MaterialController {
     String oldPath = material.getPath();
     PermaLink permaLink = permaLinkDAO.findByPath(oldPath);
     if (permaLink == null) {
-      permaLink = permaLinkDAO.create(material, oldPath);
+      permaLinkDAO.create(material, oldPath);
     }
   }
 

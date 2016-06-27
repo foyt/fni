@@ -55,7 +55,7 @@ public class SessionShoppingCartController implements Serializable {
 			return shoppingCartDAO.findById(shoppingCartId);
 		} else {
 			// We do not have a shopping cart for this session
-			ShoppingCart shoppingCart = null;
+			ShoppingCart shoppingCart;
 			
 			String sessionId = ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).getId();
 			
