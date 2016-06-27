@@ -2,11 +2,10 @@ package fi.foyt.fni.security;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -30,7 +29,7 @@ public class PermissionController {
   
   @PostConstruct
   public void init() {
-    userRoleMap = new HashMap<>();
+    userRoleMap = new EnumMap<>(UserRole.class);
     userRoleMap.put(UserRole.ADMINISTRATOR, new Role[] { Role.USER, Role.ILLUSION_USER, Role.ILLUSION_MANAGER, Role.MATERIAL_USER, Role.FORUM_ADMIN, Role.GAME_LIBRARY_MANAGER, Role.STORE_MANAGER, Role.SYSTEM_ADMINISTRATOR });
     userRoleMap.put(UserRole.LIBRARIAN, new Role[] { Role.USER, Role.ILLUSION_USER, Role.ILLUSION_MANAGER, Role.MATERIAL_USER, Role.FORUM_USER, Role.GAME_LIBRARY_MANAGER });
     userRoleMap.put(UserRole.USER, new Role[] { Role.USER, Role.ILLUSION_USER, Role.ILLUSION_MANAGER, Role.MATERIAL_USER, Role.FORUM_USER, Role.GAME_LIBRARY_USER });
