@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Currency;
 import java.util.List;
+import java.util.logging.Logger;
+
+import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -92,6 +95,9 @@ public class PostiDeliveryMethod implements DeliveryMethod {
 		}))
 		
 	};
+	
+	@Inject
+	private Logger logger;
   
 	@Override
 	public Currency getCurrency() {
@@ -252,6 +258,9 @@ public class PostiDeliveryMethod implements DeliveryMethod {
 		  		return "deliveryMethodPostiMaxiLetterName";
 		  	case PARCEL:
 		  	  return "deliveryMethodPostiParcelName";
+        default:
+          logger.severe(String.format("Unknown pack type %s", deliveryMethod.getPackType()));
+        break;
 		  }
 		}
 		
@@ -270,6 +279,9 @@ public class PostiDeliveryMethod implements DeliveryMethod {
 		  		return "deliveryMethodPostiMaxiLetterInfo";
 		  	case PARCEL:
 		  	  return "deliveryMethodPostiParcelInfo";
+        default:
+          logger.severe(String.format("Unknown pack type %s", deliveryMethod.getPackType()));
+        break;
 		  }
 		}
 		

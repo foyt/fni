@@ -100,6 +100,8 @@ public class LarpKalenteriClient {
         case "6": // Lapland AVI
           return 7l;
         case "7": // State Department of Åland
+        default:
+          return 8l;
       }
     }
     

@@ -53,6 +53,9 @@ public class PaytrailServlet extends HttpServlet {
 	      case "notify":
 	        handleSuccess(request, response);
 	      break;
+        default:
+          logger.severe(String.format("Unknown action %s", action));
+        break;
 	    }
     } catch (IOException e) {
       logger.log(Level.FINEST, "IOException occurred on servlet", e);
@@ -92,6 +95,9 @@ public class PaytrailServlet extends HttpServlet {
             orderController.updateOrderAsPaid(order);
             response.sendRedirect(request.getContextPath() + getIllusionRedirectUrl(order));
 			    break;
+          default:
+            logger.severe(String.format("Unknown order type %s", order.getType().toString()));
+          break;
 			  }
 
 			} else {

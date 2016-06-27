@@ -117,6 +117,10 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
         case WAITING_PAYMENT:
           return String.format("/illusion/event.jsf?faces-redirect=true&urlName=%s", getUrlName());
         case INVITED:
+        break;
+        default:
+          logger.severe(String.format("Unknown role %s", participant.getRole().toString()));
+        break;
       }
     }
 
@@ -210,6 +214,10 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
         case WAITING_PAYMENT:
           return String.format("/illusion/event.jsf?urlName=%s&faces-redirect=true", getUrlName());
         case INVITED:
+        break;
+        default:
+          logger.severe(String.format("Unknown role %s", participant.getRole().toString()));
+        break;
       }
     }
     
@@ -232,6 +240,9 @@ public class IllusionEventRegistrationBackingBean extends AbstractIllusionEventB
         if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.INVITED)) {
           return navigationController.accessDenied();
         }
+      break;
+      default:
+        logger.severe(String.format("Unknown join mode %s", illusionEvent.getJoinMode().toString()));
       break;
     }
     

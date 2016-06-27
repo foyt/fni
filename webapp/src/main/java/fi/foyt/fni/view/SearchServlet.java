@@ -132,6 +132,9 @@ public class SearchServlet extends AbstractServlet {
 				return searchForum(queryText, maxHits);
 			case USERS:
 				return searchUsers(queryText, maxHits);
+      default:
+        logger.severe(String.format("Unknown source %s", source.toString()));
+      break;
 		}
 		
 		return null;

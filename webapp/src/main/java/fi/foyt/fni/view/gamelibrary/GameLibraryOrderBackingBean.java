@@ -105,9 +105,9 @@ public class GameLibraryOrderBackingBean {
   			return FacesUtils.getLocalizedValue("gamelibrary.order.statusWaitingDelivery");
   		case PAID:
   			return FacesUtils.getLocalizedValue("gamelibrary.order.statusPaid");
+  	  default:
+  	    return "";
   	}
-
-		return "";
 	}
 
 	public Address getDeliveryAddress() {

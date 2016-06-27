@@ -118,6 +118,9 @@ public class IllusionEventAvatarServlet extends AbstractFileServlet {
             String gravatarUrl = getGravatar(protocol, user, size);
             sendRedirect(response, gravatarUrl);
             return;
+          default:
+            logger.severe(String.format("Unknown profile image source %s", user.getProfileImageSource().toString()));
+          break;
         }
       }      
     }

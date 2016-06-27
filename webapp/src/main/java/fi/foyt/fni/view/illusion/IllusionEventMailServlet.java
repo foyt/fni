@@ -147,6 +147,9 @@ public class IllusionEventMailServlet extends AbstractFileServlet {
         participants.addAll(illusionEventController.listIllusionEventParticipantsByEventAndRole(event, IllusionEventParticipantRole.ORGANIZER));
         participants.addAll(illusionEventController.listIllusionEventParticipantsByEventAndRole(event, IllusionEventParticipantRole.INVITED));
       break;
+      default:
+        logger.severe(String.format("Unknown recipient type %s", recipients));
+      break;
     }
     
     if (StringUtils.startsWith(recipients, "GROUP_")) {

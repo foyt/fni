@@ -290,10 +290,7 @@ public class IllusionCreateEventBackingBean {
       } catch (UnsupportedTypeException e) {
         logger.log(Level.SEVERE, "Unsupported type", e);
         FacesUtils.addPostRedirectMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.createEvent.eventTypeNotSynchronizableToLarpKalenteri", type.getName()));
-      } catch (IOException e) {
-        logger.log(Level.SEVERE, "Failed to synchronize event into Larp-kalenteri", e);
-        return navigationController.internalError(); 
-      } catch (LarpKalenteriEventMissingException e) {
+      } catch (LarpKalenteriEventMissingException | IOException e) {
         logger.log(Level.SEVERE, "Failed to synchronize event into Larp-kalenteri", e);
         return navigationController.internalError(); 
       }

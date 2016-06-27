@@ -322,6 +322,9 @@ public class GameLibraryProposeGameBackingBean {
       case OTHER:
         license = getLicenseOther();
       break;
+      default:
+        logger.severe(String.format("Unknown license type %s", getLicenseType().toString()));
+      break;
     }
     
     List<GameLibraryTag> gameLibraryTags = new ArrayList<>();

@@ -146,6 +146,9 @@ public class CharacterSheetWebSocket {
         case "ping":
           client.getAsyncRemote().sendText(objectMapper.writeValueAsString(new Message("pong", "{}")));
         break;
+        default:
+          logger.severe(String.format("Unknown message type %s", message.getType()));
+        break;
       }
     } catch (IOException e) {
       logger.log(Level.SEVERE, "Internal server error", e);

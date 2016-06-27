@@ -35,7 +35,7 @@ public class DebugTimerFilter implements Filter {
     chain.doFilter(request, response);
     
     if (request instanceof HttpServletRequest) {
-      String view = ((HttpServletRequest) request).getRequestURI().toString();
+      String view = ((HttpServletRequest) request).getRequestURI();
       Map<Method, List<Long>> calls = debugTimerCollector.getCalls();
       long endTime = System.currentTimeMillis();
       debugTimerResults.addRequestStats(view, calls, endTime - startTime);

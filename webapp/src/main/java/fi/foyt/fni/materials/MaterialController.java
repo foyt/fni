@@ -1617,9 +1617,11 @@ public class MaterialController {
         return "book-designs";
       case BOOK_TEMPLATE:
         return "book-templates";
+      default:
+        logger.severe(String.format("Unknown material type %s", type.toString()));
+        return "todo";
     }
   
-    return "todo";
   }
   
   public String getMaterialIcon(MaterialType type) {
@@ -1658,6 +1660,9 @@ public class MaterialController {
         return "book-design";
       case BOOK_TEMPLATE:
         return "book-template";
+      default:
+        logger.severe(String.format("Unknown material type %s", type.toString()));
+      break;
     }
 
     return null;
@@ -1907,32 +1912,35 @@ public class MaterialController {
       }
     } else {
       switch (mimeType.getBaseType()) {
-      case "application/pdf":
-        return uploadPdf(parentFolder, user, fileData);
-      case "text/plain":
-        return uploadText(parentFolder, user, fileData);
-      case "text/html":
-      case "application/xhtml+xml":
-        return uploadHtml(parentFolder, user, fileData);
-      case "application/vnd.oasis.opendocument.text":
-      case "application/vnd.sun.xml.writer":
-      case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-      case "application/msword":
-      case "application/x-mswrite":
-      case "application/rtf":
-      case "text/richtext":
-        return uploadDocument(parentFolder, user, fileData);
-      case "application/vnd.openxmlformats-officedocument.presentationml.slideshow":
-      case "application/vnd.ms-powerpoint":
-        // TODO: Warning: presentation
-        return uploadDocument(parentFolder, user, fileData);
-      case "application/vnd.ms-excel":
-      case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-      case "application/vnd.oasis.opendocument.spreadsheet":
-      case "text/csv":
-      case "text/tab-separated-values":
-        // TODO: Warning, spreadsheet
-        return uploadDocument(parentFolder, user, fileData);
+        case "application/pdf":
+          return uploadPdf(parentFolder, user, fileData);
+        case "text/plain":
+          return uploadText(parentFolder, user, fileData);
+        case "text/html":
+        case "application/xhtml+xml":
+          return uploadHtml(parentFolder, user, fileData);
+        case "application/vnd.oasis.opendocument.text":
+        case "application/vnd.sun.xml.writer":
+        case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        case "application/msword":
+        case "application/x-mswrite":
+        case "application/rtf":
+        case "text/richtext":
+          return uploadDocument(parentFolder, user, fileData);
+        case "application/vnd.openxmlformats-officedocument.presentationml.slideshow":
+        case "application/vnd.ms-powerpoint":
+          // TODO: Warning: presentation
+          return uploadDocument(parentFolder, user, fileData);
+        case "application/vnd.ms-excel":
+        case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+        case "application/vnd.oasis.opendocument.spreadsheet":
+        case "text/csv":
+        case "text/tab-separated-values":
+          // TODO: Warning, spreadsheet
+          return uploadDocument(parentFolder, user, fileData);
+        default:
+          logger.severe(String.format("Unknown mime type %s", mimeType.getBaseType()));
+        break;
       }
     }
 
@@ -2055,6 +2063,9 @@ public class MaterialController {
       case ILLUSION_FOLDER:
       case ILLUSION_GROUP_FOLDER:
       case BOOK_TEMPLATE:
+      break;
+      default:
+        logger.severe(String.format("Unknown material type %s", material.getType().toString()));
       break;
     }
     

@@ -200,6 +200,9 @@ public class BlogController {
 	  	case MONTHLY:
 	  		blogCategoryDAO.updateNextSync(blogCategory, DateUtils.addMonths(now, 1));
 	  	break;
+      default:
+        logger.severe(String.format("Unknown sync enum value %s", blogCategory.getSync().toString()));
+      break;
 	  }
 	}
 

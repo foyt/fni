@@ -59,6 +59,9 @@ public class OrderStatusChangeListener {
   		    break;
   		    case GAMELIBRARY_BOOK:
   		    break;
+          default:
+            logger.severe(String.format("Unknown order type %s", order.getType().toString()));
+          break;
   		  }
   		} else {
   			logger.severe("Tried to lift illusion group member role to participant for non-existing order");

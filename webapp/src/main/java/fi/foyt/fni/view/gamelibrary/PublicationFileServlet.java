@@ -180,6 +180,9 @@ public class PublicationFileServlet extends AbstractFileServlet {
         case PRINTABLE:
           publicationController.setBookPublicationPrintableFile(bookPublication, file.getData(), file.getContentType(), loggedUser);
         break;
+        default:
+          logger.severe(String.format("Unknown file type %s", fileType.toString()));
+        break;
 			}
 
 			sendRedirect(response, new StringBuilder()

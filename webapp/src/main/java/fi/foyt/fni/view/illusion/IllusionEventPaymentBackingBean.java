@@ -131,6 +131,10 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
         return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
       case WAITING_PAYMENT:
       case INVITED:
+      break;
+      default:
+        logger.severe(String.format("Unknown role %s", participant.getRole().toString()));
+      break;
     }
 
     String currentPageId = IllusionEventPage.Static.INDEX.name();
@@ -235,6 +239,10 @@ public class IllusionEventPaymentBackingBean extends AbstractIllusionEventBackin
         return "/illusion/event.jsf?faces-redirect=true&urlName=" + getUrlName();
       case WAITING_PAYMENT:
       case INVITED:
+      break;
+      default:
+        logger.severe(String.format("Unknown role %s", participant.getRole().toString()));
+      break;
     }
     
     ObjectMapper objectMapper = new ObjectMapper();

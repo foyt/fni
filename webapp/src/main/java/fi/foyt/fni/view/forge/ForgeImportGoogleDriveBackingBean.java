@@ -233,10 +233,10 @@ public class ForgeImportGoogleDriveBackingBean {
 	    case "application/vnd.google-apps.spreadsheet":
 	      return "spreadsheet";
 	    case "application/vnd.google-apps.drawing":
-	      return "drawing";	      
+	      return "drawing";
+      default:
+        return "file";
 	  }
-	  
-	  return "file";
 	}
 
 	private boolean root;

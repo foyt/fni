@@ -92,6 +92,9 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
         break;
         case ORGANIZER:
         break;
+        default:
+          logger.severe(String.format("Unknown member role %s", memberRole.toString()));
+        break;
       }
     }
     
@@ -131,6 +134,8 @@ public class IllusionEventBackingBean extends AbstractIllusionEventBackingBean {
             if (eventDocument != null) {
               content = eventDocument.getData();
             }
+          break;
+          default:
           break;
         }
         

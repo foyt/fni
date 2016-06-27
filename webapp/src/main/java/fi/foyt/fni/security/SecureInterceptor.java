@@ -116,7 +116,7 @@ public class SecureInterceptor implements Serializable {
     }
     
 		Map<String, String> parameters = new HashMap<>();
-		SecurityParams params = getAnnotation(method, object, SecurityParams.class); // method.getAnnotation(SecurityParams.class);
+		SecurityParams params = getAnnotation(method, object, SecurityParams.class);
 		if (params != null) {
   		for (SecurityParam param : params.value()) {
   		  String value = (String) resolveParameter(object, param.value());

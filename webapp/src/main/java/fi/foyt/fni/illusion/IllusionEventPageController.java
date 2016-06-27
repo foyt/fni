@@ -97,6 +97,9 @@ public class IllusionEventPageController {
           }
         }
       break;
+      default:
+        logger.severe(String.format("Unknown visibility %s", visibility.toString()));
+      break;
     }
 
     return false;

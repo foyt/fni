@@ -91,6 +91,9 @@ public class ProfileImageServlet extends AbstractFileServlet {
   			  sendRedirect(response, gravatarUrl);
 	  		  return;
 				}
+      default:
+        logger.severe(String.format("Unknown image source %s", profileImageSource.toString()));
+      break;
 		}
 		
     if (profileImage == null) {
