@@ -52,7 +52,7 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
     return bookPublication;
 	}
 
-  public List<BookPublication> listByPublished(Boolean published) {
+  public List<BookPublication> listByPublishedOrderByName(Boolean published) {
     EntityManager entityManager = getEntityManager();
 
     CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -62,6 +62,7 @@ public class BookPublicationDAO extends GenericDAO<BookPublication> {
     criteria.where(
       criteriaBuilder.equal(root.get(BookPublication_.published), published)
     );
+    criteria.orderBy(criteriaBuilder.asc(root.get(BookPublication_.name)));
     
     return entityManager.createQuery(criteria).getResultList();
   }
