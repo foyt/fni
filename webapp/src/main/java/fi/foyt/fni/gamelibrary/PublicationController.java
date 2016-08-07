@@ -116,11 +116,11 @@ public class PublicationController {
 	}
 
 	public List<BookPublication> listUnpublishedBooks() {
-		return bookPublicationDAO.listByPublished(Boolean.FALSE);
+		return bookPublicationDAO.listByPublishedOrderByName(Boolean.FALSE);
 	}
 	
 	public List<BookPublication> listPublishedBooks() {
-		return bookPublicationDAO.listByPublished(Boolean.TRUE);
+		return bookPublicationDAO.listByPublishedOrderByName(Boolean.TRUE);
 	}
 	
 	public List<Publication> listPublishedPublicationsByCreator(User creator) {
