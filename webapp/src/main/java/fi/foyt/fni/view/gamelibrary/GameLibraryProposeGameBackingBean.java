@@ -42,7 +42,6 @@ import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.data.TypedData;
 import fi.foyt.fni.utils.faces.FacesUtils;
 import fi.foyt.fni.utils.images.ImageUtils;
-import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 
 @RequestScoped
 @Named
@@ -83,8 +82,7 @@ public class GameLibraryProposeGameBackingBean {
   @Deferred
   public void defaults() {
     languageId = systemSettingsController.getDefaultLanguage().getId();
-    creativeCommonsCommercial = CreativeCommonsCommercial.YES;
-    creativeCommonsDerivatives = CreativeCommonsDerivatives.SHARE_ALIKE;
+    license = "https://creativecommons.org/licenses/by-sa/4.0/";
     authorsShare = 0d;
   }
   
@@ -124,38 +122,6 @@ public class GameLibraryProposeGameBackingBean {
   
   public void setLanguageId(Long languageId) {
     this.languageId = languageId;
-  }
-  
-  public LicenseType getLicenseType() {
-    return licenseType;
-  }
-  
-  public void setLicenseType(LicenseType licenseType) {
-    this.licenseType = licenseType;
-  }
-
-  public CreativeCommonsDerivatives getCreativeCommonsDerivatives() {
-    return creativeCommonsDerivatives;
-  }
-  
-  public void setCreativeCommonsDerivatives(CreativeCommonsDerivatives creativeCommonsDerivatives) {
-    this.creativeCommonsDerivatives = creativeCommonsDerivatives;
-  }
-  
-  public CreativeCommonsCommercial getCreativeCommonsCommercial() {
-    return creativeCommonsCommercial;
-  }
-  
-  public void setCreativeCommonsCommercial(CreativeCommonsCommercial creativeCommonsCommercial) {
-    this.creativeCommonsCommercial = creativeCommonsCommercial;
-  }
-  
-  public String getLicenseOther() {
-    return licenseOther;
-  }
-  
-  public void setLicenseOther(String licenseOther) {
-    this.licenseOther = licenseOther;
   }
   
   public String getTags() {
@@ -253,8 +219,16 @@ public class GameLibraryProposeGameBackingBean {
   public String getExistingTags() {
     return existingTags;
   }
+  
+  public String getLicense() {
+    return license;
+  }
+  
+  public void setLicense(String license) {
+    this.license = license;
+  }
 
-  public synchronized String send() throws IOException, MessagingException {
+  public String send() throws IOException, MessagingException {
     TypedData imageData = null;
 
     if (StringUtils.isNotBlank(getImageFileId())) {
@@ -296,33 +270,8 @@ public class GameLibraryProposeGameBackingBean {
       FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("gamelibrary.proposegame.pdfFileRequiredMessage"));
       return null;
     }
-
-    if (StringUtils.isNotBlank(getDownloadableContentType()) && !StringUtils.equals(getDownloadableContentType(), "application/pdf")) {
-      FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("gamelibrary.proposegame.invalidDownloadablePdfTypeMessage"));
-      return null;
-    }
-    
-    if (StringUtils.isNotBlank(getPrintableContentType()) && !StringUtils.equals(getPrintableContentType(), "application/pdf")) {
-      FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("gamelibrary.proposegame.invalidPrintablePdfTypeMessage"));
-      return null;
-    }
     
     Language language = systemSettingsController.findLanguageById(getLanguageId());
-    
-    String license = null;
-    
-    switch (getLicenseType()) {
-      case CREATIVE_COMMONS:
-        boolean derivatives = getCreativeCommonsDerivatives() != CreativeCommonsDerivatives.NO;
-        boolean shareAlike = getCreativeCommonsDerivatives() == CreativeCommonsDerivatives.SHARE_ALIKE;
-        boolean commercial = getCreativeCommonsCommercial() == CreativeCommonsCommercial.YES;
-        license = CreativeCommonsUtils.createLicenseUrl(true, derivatives, shareAlike, commercial);
-      break;
-      case OTHER:
-        license = getLicenseOther();
-      break;
-    }
-    
     List<GameLibraryTag> gameLibraryTags = new ArrayList<>();
     
     for (String tag : StringUtils.split(tags, ',')) {
@@ -334,7 +283,7 @@ public class GameLibraryProposeGameBackingBean {
       gameLibraryTags.add(gameLibraryTag);
     }
     
-    BookPublication publication = publicationController.createBookPublication(sessionController.getLoggedUser(), getName(), getDescription(), 0d, getAuthorsShare(), null, null, null, null, null, null, license, gameLibraryTags, language);
+    BookPublication publication = publicationController.createBookPublication(sessionController.getLoggedUser(), getName(), getDescription(), 0d, getAuthorsShare(), null, null, null, null, null, null, getLicense(), gameLibraryTags, language);
     
     if (StringUtils.isNotBlank(getDownloadableFileId())) {
       byte[] fileData = sessionTempController.getTempFileData(getDownloadableFileId());
@@ -353,7 +302,7 @@ public class GameLibraryProposeGameBackingBean {
     
     return "/gamelibrary/publication.jsf?faces-redirect=true&urlName=" + publication.getUrlName();
   }
-  
+
   private void sendNotifications(BookPublication publication) throws MessagingException {
     boolean success = false;
     
@@ -399,12 +348,9 @@ public class GameLibraryProposeGameBackingBean {
 	private String name;
 	private String description;
   private Long languageId;
-  private LicenseType licenseType;
 	private List<Language> languages;
 	private String existingTags;
-	private CreativeCommonsDerivatives creativeCommonsDerivatives;
-	private CreativeCommonsCommercial creativeCommonsCommercial;
-	private String licenseOther;
+	private String license;
 	private String tags;
 	private String downloadableFileId;
   private String downloadableFileName;
@@ -416,20 +362,5 @@ public class GameLibraryProposeGameBackingBean {
 	private String imageFileName;
 	private String imageContentType;
 	private Double authorsShare;
-  
- 	public enum LicenseType {
-		CREATIVE_COMMONS,
-		OTHER
-	}
- 	
- 	public enum CreativeCommonsDerivatives {
- 		YES,
- 		NO,
- 		SHARE_ALIKE
- 	}
- 	
- 	public enum CreativeCommonsCommercial {
- 		YES,
- 		NO
- 	}
+
 }

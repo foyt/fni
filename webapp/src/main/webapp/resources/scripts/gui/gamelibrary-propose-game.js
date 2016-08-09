@@ -45,6 +45,12 @@
     $('form').submit(function () {
       $('input[type="file"]').remove();
     });
+    
+    $('.license')
+      .licenseSelector({
+        locale: LOCALE == 'fi' ? 'fi' : 'en'
+      });
+
   });
   
   $(document).on('change', '.gamelibrary-propose-game-license-select', function (event) {

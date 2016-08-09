@@ -1,10 +1,12 @@
 @import "vars";
 @import "compass";
 @import "styles";
+@import "//static.forgeandillusion.net/libs/font-awesome/4.6.3/css/font-awesome.min.css";
 
 .gamelibrary-propose-game-form-section input[type="text"], 
 .gamelibrary-propose-game-form-section input[type="number"], 
-.gamelibrary-propose-game-form-section input[type="file"], 
+.gamelibrary-propose-game-form-section input[type="file"],  
+.gamelibrary-propose-game-form-section input[type="url"], 
 .gamelibrary-propose-game-form-section textarea, 
 .gamelibrary-propose-game-form-section select,
 .gamelibrary-propose-game-form-section .tagsinput {
@@ -18,17 +20,58 @@
   height: 120px;
 }
 
+.gamelibrary-propose-game-form-section .creative-commons-attribute {
+}
+
+.gamelibrary-propose-game-form-section-license .hint {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 14px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  display: block;
+
+  &:before {
+    content: "";
+    -moz-osx-font-smoothing: grayscale;
+    display: inline-block;
+    font-family: FontAwesome;
+    font-feature-settings: normal;
+    font-kerning: auto;
+    font-language-override: normal;
+    font-size: inherit;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-style: normal;
+    font-synthesis: weight style;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    text-rendering: auto;
+    padding-right: 5px;
+  }
+}
+
+.gamelibrary-propose-game-form-section .creative-commons-attribute {
+  white-space: nowrap;
+}
+
+.gamelibrary-propose-game-form-section .creative-commons-attribute label {
+  margin-left: 8px;
+  margin-right: 8px;
+  font-weight: normal;
+}
+
+.gamelibrary-propose-game-form-section .creative-commons-container>label {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: block;
+}
+
 .gamelibrary-propose-game-form-section label {
   font-size: 13px;
   font-family: $default-font;
   font-weight: bold;
-}
-
-.gamelibrary-propose-game-form-section-cc td label {
-  margin-left: 8px;
-  margin-right: 8px;
-  font-weight: normal;
-  text-transform: uppercase;
 }
 
 .info {
