@@ -28,7 +28,7 @@
   margin-top: 5px;
   display: block;
 
-  &:before {
+  &::before {
     content: "";
     -moz-osx-font-smoothing: grayscale;
     display: inline-block;
@@ -51,12 +51,12 @@
 
 .gamelibrary-propose-game-form-section .creative-commons-attribute {
   white-space: nowrap;
-}
-
-.gamelibrary-propose-game-form-section .creative-commons-attribute label {
-  margin-left: 8px;
-  margin-right: 8px;
-  font-weight: normal;
+  
+  label {
+    margin-left: 8px;
+    margin-right: 8px;
+    font-weight: normal;
+  }
 }
 
 .gamelibrary-propose-game-form-section .creative-commons-container>label {
