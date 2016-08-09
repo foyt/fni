@@ -16,6 +16,7 @@
   
   <ui:define name="scripts">
     <script defer="defer" type="text/javascript" src="/scripts/gui/gamelibrary-edit-publication.js"/>
+    <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/jquery.license-selector/0.0.5p/jquery.license-selector.min.js"/>
   </ui:define>
   
   <ui:define name="styles">
@@ -147,37 +148,12 @@
             </div>
           </div>
           
-          <div class="flex-row field">
+          <div class="flex-row field license-field">
             <div class="lg-flex-cell-3 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <label>#{locales['gamelibrary.editPublication.licenseLabel']}</label>
             </div>
             <div class="lg-flex-cell-7 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-            
-              <div>
-                <h:selectOneMenu value="#{gameLibraryEditPublicationBackingBean.licenseType}" requiredMessage="#{locales['gamelibrary.editPublication.licenseRequired']}">
-                  <f:selectItems value="#{gameLibraryEditPublicationBackingBean.licenseSelectItems}"/>
-                </h:selectOneMenu>
-                
-                <div class="gamelibrary-edit-publication-license-cc-container" style="#{gameLibraryEditPublicationBackingBean.licenseType eq 'CREATIVE_COMMONS' ? '' : 'display: none'}"> 
-                  <label>#{locales['gamelibrary.editPublication.licenseCreativeCommonsAllowModifications']}</label>
-                  <h:selectOneRadio value="#{gameLibraryEditPublicationBackingBean.creativeCommonsDerivatives}">
-                    <f:selectItems value="#{gameLibraryEditPublicationBackingBean.creativeCommonsDerivativesSelectItems}"/>
-                  </h:selectOneRadio>
-                  
-                  <label>#{locales['gamelibrary.editPublication.licenseCreativeCommonsAllowCommercial']}</label>
-                  <h:selectOneRadio value="#{gameLibraryEditPublicationBackingBean.creativeCommonsCommercial}">
-                    <f:selectItems value="#{gameLibraryEditPublicationBackingBean.creativeCommonsCommercialSelectItems}"/>
-                  </h:selectOneRadio>
-                </div>
-     
-                <div class="gamelibrary-edit-publication-license-other" style="#{gameLibraryEditPublicationBackingBean.licenseType eq 'OTHER' ? '' : 'display: none'}">   
-                  <label>#{locales['gamelibrary.editPublication.linkToLicense']}</label>
-                  <div>
-                    <input type="text" jsf:value="#{gameLibraryEditPublicationBackingBean.licenseOther}"/>
-                  </div>
-                </div>
-              </div>
-            
+              <input class="license" type="url" name="license" jsf:value="#{gameLibraryEditPublicationBackingBean.license}"/>
             </div>
           </div>
           

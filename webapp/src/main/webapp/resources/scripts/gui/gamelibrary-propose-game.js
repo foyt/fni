@@ -1,4 +1,6 @@
 (function() {
+  /* global LOCALE */
+  
   'use strict';
   
   function checkLicense() {

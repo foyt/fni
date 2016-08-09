@@ -1,4 +1,6 @@
 (function() {
+  /* global LOCALE */
+  
   'use strict';
   
   $(document).on('click', '.tag a', function (event) {
@@ -13,6 +15,13 @@
 
     $('input[name="' + prefix + ':remove-author-id' + '"]').val($(this).data('author-id'));
     $('input[name="' + prefix + ':remove-author-command-button' + '"]').click();
+  });
+  
+  $(document).ready(function () {
+    $('.license')
+      .licenseSelector({
+        locale: LOCALE == 'fi' ? 'fi' : 'en'
+      });
   });
 
 }).call(this);
