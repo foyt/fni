@@ -4,23 +4,26 @@
   xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html" 
   xmlns:jsf="http://xmlns.jcp.org/jsf"
-  template="/WEB-INF/templates/gridbase.xhtml">
+  template="/WEB-INF/templates/gridbase-s.xhtml">
 
   <ui:define name="page-title">
-    <h:outputFormat value="#{locales['gamelibrary.editPublication.pageTitle']}">
-      <f:param value="#{gameLibraryEditPublicationBackingBean.name}"/>
-    </h:outputFormat>
+    <title>
+      <h:outputFormat value="#{locales['gamelibrary.editPublication.pageTitle']}">
+        <f:param value="#{gameLibraryEditPublicationBackingBean.name}"/>
+      </h:outputFormat>
+    </title>
   </ui:define>
   
-  <ui:define name="view-scripts">
-    <!-- View scripts -->
-    
-    <h:outputScript name="scripts/gui/gamelibrary-edit-publication.js"/>
+  <ui:define name="scripts">
+    <script defer="defer" type="text/javascript" src="/scripts/gui/gamelibrary-edit-publication.js"/>
   </ui:define>
   
-  <ui:define name="view-stylesheets">
-    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
-    <h:outputStylesheet library="novus" name="css/gamelibrary-edit-publication.css"/>
+  <ui:define name="styles">
+    <link rel="StyleSheet" href="/theme/css/common.css"></link>
+    <link rel="StyleSheet" href="/theme/css/fonts.css"></link>
+    <link rel="StyleSheet" href="/theme/css/flex-menu.css"></link>
+    <link rel="StyleSheet" href="//static.forgeandillusion.net/libs/fni-flexgrid/1.0.3/flexgrid.css"></link>
+    <link rel="StyleSheet" href="/theme/css/gamelibrary-edit-publication.css"></link>
   </ui:define>
 
   <ui:define name="grid-content">
@@ -124,7 +127,6 @@
                 <div class="flex-cell-full">
                   <h:selectOneMenu value="#{gameLibraryEditPublicationBackingBean.addExistingTag}">
                     <f:selectItems value="#{gameLibraryEditPublicationBackingBean.tagSelectItems}" />
-                    <f:ajax execute="@form" render="@form"/>
                   </h:selectOneMenu>
                   
                   <div class="new-tag-container" style="#{gameLibraryEditPublicationBackingBean.addExistingTag eq '_NEW_' ? '' : 'display: none'}">
@@ -154,7 +156,6 @@
               <div>
                 <h:selectOneMenu value="#{gameLibraryEditPublicationBackingBean.licenseType}" requiredMessage="#{locales['gamelibrary.editPublication.licenseRequired']}">
                   <f:selectItems value="#{gameLibraryEditPublicationBackingBean.licenseSelectItems}"/>
-                  <f:ajax execute="@form" render="@form"/>
                 </h:selectOneMenu>
                 
                 <div class="gamelibrary-edit-publication-license-cc-container" style="#{gameLibraryEditPublicationBackingBean.licenseType eq 'CREATIVE_COMMONS' ? '' : 'display: none'}"> 
