@@ -1,7 +1,5 @@
 package fi.foyt.fni.test.ui.base.gamelibrary;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
 import fi.foyt.fni.test.DefineSqlSet;
