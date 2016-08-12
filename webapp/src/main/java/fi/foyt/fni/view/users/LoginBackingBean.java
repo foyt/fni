@@ -41,9 +41,11 @@ import fi.foyt.fni.auth.InvalidCredentialsException;
 import fi.foyt.fni.auth.MultipleEmailAccountsException;
 import fi.foyt.fni.auth.OAuthAuthenticationStrategy;
 import fi.foyt.fni.auth.UserNotConfirmedException;
+import fi.foyt.fni.illusion.IllusionEventController;
 import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.mail.Mailer;
 import fi.foyt.fni.persistence.model.auth.AuthSource;
+import fi.foyt.fni.persistence.model.illusion.IllusionEvent;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.persistence.model.users.PasswordResetKey;
 import fi.foyt.fni.persistence.model.users.User;
@@ -89,6 +91,9 @@ public class LoginBackingBean {
 	@Inject
 	private AuthenticationController authenticationController;
 
+  @Inject
+  private IllusionEventController illusionEventController;
+
 	@Inject
 	private SystemSettingsController systemSettingsController;
 
@@ -116,7 +121,12 @@ public class LoginBackingBean {
   	    }
   	  } else {
   	    if (!systemSettingsController.getSiteHost().equals(request.getServerName())) {
-  	      return handleExternalLogin(AuthSource.ILLUSION_INTERNAL);
+  	      IllusionEvent illusionEvent = illusionEventController.findIllusionEventByDomain(request.getServerName());
+  	      if (illusionEvent != null) {
+            return handleExternalLogin(AuthSource.ILLUSION_INTERNAL);
+  	      } else {
+  	        navigationController.notFound();
+  	      }
   	    }
   	  }
       

@@ -122,7 +122,9 @@ public abstract class OAuthAuthenticationStrategy extends AuthenticationStrategy
     String callbackUrl = getCallbackUrl();
     
     if (StringUtils.isBlank(apiKey) || StringUtils.isBlank(apiSecret) || StringUtils.isBlank(callbackUrl)) {
-      logger.log(Level.WARNING, "Could not create OAuthService because apiKey, apiSecret or callbackUrl was missing");
+      String apiClass = getApi().getClass().getName();
+      String message = String.format("Could not create OAuthService because apiKey (%s), apiSecret (%s) or callbackUrl (%s) was missing. Using API %s", apiKey, apiSecret, callbackUrl, apiClass);
+      logger.log(Level.WARNING, message);
       return null;
     } else {
       ServiceBuilder serviceBuilder = new ServiceBuilder().provider(getApi())
