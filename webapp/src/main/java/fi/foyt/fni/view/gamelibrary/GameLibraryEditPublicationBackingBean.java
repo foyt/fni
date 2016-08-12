@@ -40,8 +40,6 @@ import fi.foyt.fni.users.FirstNameComparator;
 import fi.foyt.fni.users.LastNameComparator;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.faces.FacesUtils;
-import fi.foyt.fni.utils.licenses.CreativeCommonsLicense;
-import fi.foyt.fni.utils.licenses.CreativeCommonsUtils;
 
 @RequestScoped
 @Named
@@ -73,11 +71,8 @@ public class GameLibraryEditPublicationBackingBean {
   @RequestAction
 	@Deferred
 	public String load() {
-		licenseSelectItems = createLicenseSelectItems();
 		tagSelectItems = createTagSelectItems();
 		authorSelectItems = createAuthorSelectItems();
-		creativeCommonsDerivativesSelectItems = createCreativeCommonsDerivativesSelectItems();
-		creativeCommonsCommercialSelectItems = createCreativeCommsonCommercialSelectItems();
 		languageSelectItems = createLanguageSelectItems();
 		
 		if (tagSelectItems.size() > 0 && tagSelectItems.get(1).getSelectItems().length > 0) {
@@ -122,23 +117,7 @@ public class GameLibraryEditPublicationBackingBean {
 			numberOfPages = bookPublication.getNumberOfPages();
 		}
 		
-		CreativeCommonsLicense creativeCommonsLicense = CreativeCommonsUtils.parseLicenseUrl(publication.getLicense());
-		licenseType =	creativeCommonsLicense != null ? LicenseType.CREATIVE_COMMONS : LicenseType.OTHER;
-		switch (licenseType) {
-			case CREATIVE_COMMONS:
-				creativeCommonsDerivatives = creativeCommonsLicense.getDerivatives() 
-				  ? creativeCommonsLicense.getShareAlike() 
-				  		? CreativeCommonsDerivatives.SHARE_ALIKE : CreativeCommonsDerivatives.YES 
-				  : CreativeCommonsDerivatives.NO;
-				creativeCommonsCommercial = creativeCommonsLicense.getCommercial() ? CreativeCommonsCommercial.YES : CreativeCommonsCommercial.NO;
-				licenseOther = "";
-			break;
-			case OTHER:
-				creativeCommonsDerivatives = CreativeCommonsDerivatives.YES;
-				creativeCommonsCommercial = CreativeCommonsCommercial.YES;
-				licenseOther = publication.getLicense();
-			break;
-		}
+		license = publication.getLicense();
 	}
   
   private List<SelectItem> createLanguageSelectItems() {
@@ -233,37 +212,13 @@ public class GameLibraryEditPublicationBackingBean {
 		this.numberOfPages = numberOfPages;
 	}
 	
-	public LicenseType getLicenseType() {
-		return licenseType;
-	}
+	public String getLicense() {
+    return license;
+  }
 	
-	public void setLicenseType(LicenseType licenseType) {
-		this.licenseType = licenseType;
-	}
-	
-	public CreativeCommonsDerivatives getCreativeCommonsDerivatives() {
-		return creativeCommonsDerivatives;
-	}
-	
-	public void setCreativeCommonsDerivatives(CreativeCommonsDerivatives creativeCommonsDerivatives) {
-		this.creativeCommonsDerivatives = creativeCommonsDerivatives;
-	}
-	
-	public CreativeCommonsCommercial getCreativeCommonsCommercial() {
-		return creativeCommonsCommercial;
-	}
-	
-	public void setCreativeCommonsCommercial(CreativeCommonsCommercial creativeCommonsCommercial) {
-		this.creativeCommonsCommercial = creativeCommonsCommercial;
-	}
-	
-	public String getLicenseOther() {
-		return licenseOther;
-	}
-	
-	public void setLicenseOther(String licenseOther) {
-		this.licenseOther = licenseOther;
-	}
+	public void setLicense(String license) {
+    this.license = license;
+  }
 	
 	public List<String> getTags() {
 		return tags;
@@ -329,24 +284,12 @@ public class GameLibraryEditPublicationBackingBean {
 		this.removeAuthorId = removeAuthorId;
 	}
 	
-	public List<SelectItem> getLicenseSelectItems() {
-		return licenseSelectItems;
-	}
-	
 	public List<SelectItemGroup> getTagSelectItems() {
 		return tagSelectItems;
 	}
 	
 	public List<SelectItem> getAuthorSelectItems() {
 		return authorSelectItems;
-	}
-	
-	public List<SelectItem> getCreativeCommonsCommercialSelectItems() {
-		return creativeCommonsCommercialSelectItems;
-	}
-	
-	public List<SelectItem> getCreativeCommonsDerivativesSelectItems() {
-		return creativeCommonsDerivativesSelectItems;
 	}
 	
 	public List<SelectItem> getLanguageSelectItems() {
@@ -387,19 +330,7 @@ public class GameLibraryEditPublicationBackingBean {
 		Publication publication = publicationController.findPublicationById(publicationId);
 		if (publication instanceof BookPublication) {
 		  BookPublication bookPublication = (BookPublication) publication;
-		  String license = null;
-		  
-		  switch (getLicenseType()) {
-				case CREATIVE_COMMONS:
-					boolean derivatives = getCreativeCommonsDerivatives() != CreativeCommonsDerivatives.NO;
-					boolean shareAlike = getCreativeCommonsDerivatives() == CreativeCommonsDerivatives.SHARE_ALIKE;
-					boolean commercial = getCreativeCommonsCommercial() == CreativeCommonsCommercial.YES;
-					license = CreativeCommonsUtils.createLicenseUrl(true, derivatives, shareAlike, commercial);
-				break;
-				case OTHER:
-					license = getLicenseOther();
-				break;
-			}
+		  String license = getLicense();
 		  
 		  List<GameLibraryTag> tags = new ArrayList<>();
 		  List<User> authors = new ArrayList<User>();
@@ -433,13 +364,6 @@ public class GameLibraryEditPublicationBackingBean {
 		} else {
 			throw new FaceletException("Not implemented");
 		}
-	}
-	
-	private List<SelectItem> createLicenseSelectItems() {
-		List<SelectItem> licenseSelectItems = new ArrayList<>();
-		licenseSelectItems.add(new SelectItem(LicenseType.CREATIVE_COMMONS, FacesUtils.getLocalizedValue("gamelibrary.editPublication.licenseCreativeCommons")));
-		licenseSelectItems.add(new SelectItem(LicenseType.OTHER, FacesUtils.getLocalizedValue("gamelibrary.editPublication.licenseOther")));
-		return licenseSelectItems;
 	}
 	
 	private List<SelectItemGroup> createTagSelectItems() {
@@ -477,25 +401,6 @@ public class GameLibraryEditPublicationBackingBean {
 		
 		return result;
 	}
-
-	private List<SelectItem> createCreativeCommonsDerivativesSelectItems() {
-		List<SelectItem> result = new ArrayList<>(); 
-		
-		result.add(new SelectItem(CreativeCommonsDerivatives.YES, FacesUtils.getLocalizedValue("gamelibrary.editPublication.licenseCreativeCommonsAllowModificationsYes")));
-		result.add(new SelectItem(CreativeCommonsDerivatives.NO, FacesUtils.getLocalizedValue("gamelibrary.editPublication.licenseCreativeCommonsAllowModificationsNo")));
-		result.add(new SelectItem(CreativeCommonsDerivatives.SHARE_ALIKE, FacesUtils.getLocalizedValue("gamelibrary.editPublication.licenseCreativeCommonsAllowModificationsShare")));
-
-		return result;
-	}
-	
-	private List<SelectItem> createCreativeCommsonCommercialSelectItems() {
-		List<SelectItem> result = new ArrayList<>(); 
-	
-		result.add(new SelectItem(CreativeCommonsCommercial.YES, FacesUtils.getLocalizedValue("gamelibrary.editPublication.licenseCreativeCommonsAllowCommercialYes")));
-		result.add(new SelectItem(CreativeCommonsCommercial.NO, FacesUtils.getLocalizedValue("gamelibrary.editPublication.licenseCreativeCommonsAllowCommercialNo")));
-
-		return result;
-	}
 	
 	private Long languageId;
 	private String name;
@@ -506,10 +411,7 @@ public class GameLibraryEditPublicationBackingBean {
 	private Integer height;
 	private Integer depth;
 	private Integer numberOfPages;
-	private LicenseType licenseType;
-	private CreativeCommonsDerivatives creativeCommonsDerivatives;
-	private CreativeCommonsCommercial creativeCommonsCommercial;
-	private String licenseOther;
+	private String license;
 	private List<String> tags;
 	private String addExistingTag;
 	private String addNewTag;
@@ -518,27 +420,8 @@ public class GameLibraryEditPublicationBackingBean {
 	private Long removeAuthorId;
 	private List<Long> authorIds;
 	private List<String> authorNames;
-
-	private List<SelectItem> creativeCommonsDerivativesSelectItems;
-	private List<SelectItem> creativeCommonsCommercialSelectItems;
-	private List<SelectItem> licenseSelectItems;
  	private List<SelectItemGroup> tagSelectItems;
  	private List<SelectItem> authorSelectItems;
  	private List<SelectItem> languageSelectItems;
- 	
- 	public enum LicenseType {
-		CREATIVE_COMMONS,
-		OTHER
-	}
- 	
- 	public enum CreativeCommonsDerivatives {
- 		YES,
- 		NO,
- 		SHARE_ALIKE
- 	}
- 	
- 	public enum CreativeCommonsCommercial {
- 		YES,
- 		NO
- 	}
+
 }

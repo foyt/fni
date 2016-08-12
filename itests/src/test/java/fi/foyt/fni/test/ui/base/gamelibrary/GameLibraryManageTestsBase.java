@@ -1,7 +1,5 @@
 package fi.foyt.fni.test.ui.base.gamelibrary;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
 import fi.foyt.fni.test.DefineSqlSet;
@@ -39,7 +37,8 @@ public class GameLibraryManageTestsBase extends AbstractUITest {
   public void testLibrarian() throws Exception {
     loginInternal("librarian@foyt.fi", "pass");
     navigate("/gamelibrary/manage/", true);
-    assertEquals("Game Library - Management", getWebDriver().getTitle());
+    waitTitle("Game Library - Management");
+    assertTitle("Game Library - Management");
   }
 
   @Test
