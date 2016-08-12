@@ -201,9 +201,11 @@ public class GameLibraryProposeGameTestsBase extends AbstractUITest {
       waitAndSendKeys(".gamelibrary-propose-game-form-name", "My awesome game");
       waitAndSendKeys(".gamelibrary-propose-game-form-description", "This game is just pretty awesome");
       waitAndSendKeys(".gamelibrary-propose-game-form-authors-share", "5");
-      clickSelector(".gamelibrary-propose-game-form-creative-commons-derivatives input[value='SHARE_ALIKE']");
-      clickSelector(".gamelibrary-propose-game-form-creative-commons-commercial input[value='NO']");
       
+      selectSelectBoxByValue(".gamelibrary-propose-game-form-section-license .type", "cc-3.0");
+      waitAndClick(".gamelibrary-propose-game-form-section-license .creative-commons-container[data-type-id='cc-3.0'] input[data-attribute='sa']");
+      waitAndClick(".gamelibrary-propose-game-form-section-license .creative-commons-container[data-type-id='cc-3.0'] input[data-attribute='nc']");
+
       waitAndSendKeys(".gamelibrary-propose-game-form-section-image input[name='file']", testPng.getAbsolutePath());
       waitForSelectorPresent(".gamelibrary-propose-game-form-section-image .upload-field-file-name");
       assertSelectorCount(".gamelibrary-propose-game-form-section-image .upload-field-file-name", 1);
@@ -251,8 +253,8 @@ public class GameLibraryProposeGameTestsBase extends AbstractUITest {
       waitAndSendKeys(".gamelibrary-propose-game-form-name", "My awesome game");
       waitAndSendKeys(".gamelibrary-propose-game-form-description", "This game is just pretty awesome");
       waitAndSendKeys(".gamelibrary-propose-game-form-authors-share", "5");
-      selectSelectBoxByValue(".gamelibrary-propose-game-license-select", "OTHER");
-      waitAndSendKeys(".gamelibrary-propose-game-form-section-otherlicense input", "http://mylicense.example.com/test");
+      selectSelectBoxByValue(".gamelibrary-propose-game-form-section-license .type", "link");
+      waitAndSendKeys(".gamelibrary-propose-game-form-section-license .license", "http://mylicense.example.com/test");
       
       waitAndSendKeys(".gamelibrary-propose-game-form-section-image input[name='file']", testPng.getAbsolutePath());
       waitForSelectorPresent(".gamelibrary-propose-game-form-section-image .upload-field-file-name");

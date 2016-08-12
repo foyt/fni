@@ -5,28 +5,31 @@
   xmlns:h="http://java.sun.com/jsf/html" 
   xmlns:jsf="http://xmlns.jcp.org/jsf"
   xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
-  template="/WEB-INF/templates/gridbase.xhtml">
-
-  <ui:define name="page-title">#{locales['gamelibrary.proposegame.pageTitle']}</ui:define>
+  template="/WEB-INF/templates/gridbase-s.xhtml">
   
-  <ui:define name="view-scripts">
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.3/jquery.tagsinput.min.js"/>
-    <script type="text/javascript" src="//static.forgeandillusion.net/libs/blueimp-file-upload/9.12.1/jquery.fileupload.min.js"/>
-    <script type="text/javascript" src="//static.forgeandillusion.net/libs/blueimp-file-upload/9.12.1/jquery.iframe-transport.min.js"/>
-    <script type="text/javascript" src="/scripts/uploadfield/uploadfield.js"/>
-
-    <!-- View scripts -->
-    
-    <h:outputScript name="scripts/gui/gamelibrary-propose-game.js"/>
+  <ui:define name="title">
+    <title>#{locales['gamelibrary.proposegame.pageTitle']}</title>
   </ui:define>
   
-  <ui:define name="view-stylesheets">
+  <ui:define name="scripts">
+    <script defer="defer" type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.3/jquery.tagsinput.min.js"/>
+    <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/blueimp-file-upload/9.12.1/jquery.fileupload.min.js"/>
+    <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/blueimp-file-upload/9.12.1/jquery.iframe-transport.min.js"/>
+    <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/jquery.license-selector/0.0.5p2/jquery.license-selector.min.js"/>
+    <script defer="defer" type="text/javascript" src="/scripts/uploadfield/uploadfield.js"/>
+    <script defer="defer" type="text/javascript" src="/scripts/gui/gamelibrary-propose-game.js"/>
+  </ui:define>
+  
+  <ui:define name="styles">
+    <link rel="StyleSheet" href="/theme/css/common.css"></link>
+    <link rel="StyleSheet" href="/theme/css/fonts.css"></link>
+    <link rel="StyleSheet" href="/theme/css/flex-menu.css"></link>
+    <link rel="StyleSheet" href="//static.forgeandillusion.net/libs/fni-flexgrid/1.0.3/flexgrid.css"></link>
     <link rel="StyleSheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
     <link rel="StyleSheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.3/jquery.tagsinput.css"/>
-    <h:outputStylesheet library="novus" name="css/flex-menu.css"/>
-    <h:outputStylesheet library="novus" name="css/gamelibrary-propose-game.css"/>
-    <h:outputStylesheet library="novus" name="css/gamelibrary-common.css"/>
-    <h:outputStylesheet library="novus" name="css/gamelibrary.css"/>
+    <link rel="StyleSheet" href="/theme/css/gamelibrary-propose-game.css"></link>
+    <link rel="StyleSheet" href="/theme/css/gamelibrary-common.css"></link>
+    <link rel="StyleSheet" href="/theme/css/gamelibrary.css"></link>
   </ui:define>
 
   <ui:define name="grid-content">
@@ -122,61 +125,12 @@
             </div>
           </div>
           
-          <div class="flex-row gamelibrary-propose-game-form-section">
+          <div class="flex-row flex-min gamelibrary-propose-game-form-section gamelibrary-propose-game-form-section-license">
             <div class="lg-flex-cell-4 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
               <h:outputLabel value="#{locales['gamelibrary.proposegame.licenseLabel']}" />
             </div>
             <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-              <h:selectOneMenu value="#{gameLibraryProposeGameBackingBean.licenseType}" styleClass="gamelibrary-propose-game-license-select" p:required="required">
-                <f:selectItem itemValue="CREATIVE_COMMONS" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommons']}"/>
-                <f:selectItem itemValue="OTHER" itemLabel="#{locales['gamelibrary.proposegame.licenseOther']}"/>
-              </h:selectOneMenu>
-            </div>
-          </div>
-          
-          <div class="flex-row gamelibrary-propose-game-form-section gamelibrary-propose-game-form-section-cc">
-            <div class="lg-flex-cell-4 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-hide"></div>
-            <div class="lg-flex-cell-12 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-              <div class="flex-row">
-                <div class="flex-cell-full">
-                  <h:outputLabel value="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowModifications']}" />
-                </div>
-              </div>
-              
-              <div class="flex-row">
-                <div class="flex-cell-full">
-                  <h:selectOneRadio styleClass="gamelibrary-propose-game-form-creative-commons-derivatives" value="#{gameLibraryProposeGameBackingBean.creativeCommonsDerivatives}" p:required="required">
-                    <f:selectItem itemValue="YES" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowModificationsYes']}"/>
-                    <f:selectItem itemValue="NO" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowModificationsNo']}"/>
-                    <f:selectItem itemValue="SHARE_ALIKE" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowModificationsShare']}"/>
-                  </h:selectOneRadio>
-                </div>
-              </div>
-
-              <div class="flex-row">
-                <div class="flex-cell-full">
-                  <h:outputLabel value="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowCommercial']}" />
-                </div>
-              </div>
-              
-              <div class="flex-row">
-                <div class="flex-cell-full">
-                  <h:selectOneRadio styleClass="gamelibrary-propose-game-form-creative-commons-commercial" value="#{gameLibraryProposeGameBackingBean.creativeCommonsCommercial}" p:required="required">
-                    <f:selectItem itemValue="YES" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowCommercialYes']}"/>
-                    <f:selectItem itemValue="NO" itemLabel="#{locales['gamelibrary.proposegame.licenseCreativeCommonsAllowCommercialNo']}"/>
-                  </h:selectOneRadio>
-                </div>
-              </div>
-              
-            </div>
-          </div>
-          
-          <div class="flex-row gamelibrary-propose-game-form-section gamelibrary-propose-game-form-section-otherlicense">
-            <div class="lg-flex-cell-4 lg-flex-cell-first md-flex-cell-6 md-flex-cell-first sm-flex-cell-full">
-              <h:outputLabel value="#{locales['gamelibrary.proposegame.linkToLicense']}" />
-            </div>
-            <div class="lg-flex-cell-6 lg-flex-cell-last md-flex-cell-10 md-flex-cell-last sm-flex-cell-full">
-              <input class="gamelibrary-propose-game-form-license-other" type="text" jsf:value="#{gameLibraryProposeGameBackingBean.licenseOther}" required="required"/>
+              <input class="license" type="url" name="license" jsf:value="#{gameLibraryProposeGameBackingBean.license}"/>
             </div>
           </div>
           
