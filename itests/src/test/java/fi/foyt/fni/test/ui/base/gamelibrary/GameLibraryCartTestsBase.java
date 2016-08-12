@@ -66,7 +66,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
       waitForSelectorPresent(".gamelibrary-order-status");
       scrollIntoView(".gamelibrary-order-status");
       
-      assertSelectorText(".gamelibrary-order-status", "Status: Paid, Waiting for Delivery", true, true);
+      waitAndAssertSelectorText(".gamelibrary-order-status", "Status: Paid, Waiting for Delivery", true, true);
       assertSelectorText(".gamelibrary-order-customer-name", firstName + " " + lastName, true, true);
       assertSelectorText(".gamelibrary-order-customer-email", email, true, true);
       assertSelectorText(".gamelibrary-order-customer-mobile", mobile, true, true);
