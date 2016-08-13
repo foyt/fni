@@ -646,6 +646,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void scrollWaitAndClick(String selector) {
+    waitForSelectorPresent(selector);
     scrollIntoView(selector);
     waitSelectorToBeClickable(selector);
     clickSelector(selector);
