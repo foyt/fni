@@ -56,7 +56,7 @@ public class StoreListTestsBase extends AbstractUITest {
   private void testProductDetails(String productSelector, String productId, String path, String title, String[] tags, String description, 
       String price, String commentUrl, int comments) {
 
-    assertSelectorText(String.format("%s h3 a", productSelector), title, true, true);
+    waitAndAssertSelectorText(String.format("%s h3 a", productSelector), title, true, true);
     assertEquals(getAppUrl(true) + path, getWebDriver().findElement(By.cssSelector(productSelector + " h3 a")).getAttribute("href"));
 
     for (int i = 0, l = tags.length; i < l; i++) {
