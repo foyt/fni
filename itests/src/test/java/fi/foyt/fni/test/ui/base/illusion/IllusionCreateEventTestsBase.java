@@ -243,6 +243,8 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
 
     waitForUrlMatches(".*/illusion/event/" + name);
     navigate("/illusion/event/" + name + "/settings");
+
+    waitPresent(".illusion-event-settings-image-url");
     assertSelectorValue(".illusion-event-settings-image-url", imageUrl);
     
     deleteIllusionEventByUrl(name);
