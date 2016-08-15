@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>fi.foyt.fni</groupId>
   <artifactId>itests</artifactId>
-  <version>3.3.10-SNAPSHOT</version>
+  <version>3.3.10</version>
   <packaging>jar</packaging>
   <name>Forge &amp; Illusion - itests</name>
   <description>Forge &amp; Illusion - Integration tests</description>
@@ -68,7 +68,7 @@
     <developerConnection>scm:git:git@github.com:foyt/fni.git</developerConnection>
     <url>git@github.com:foyt/fni.git</url>
     <connection>scm:git:git@github.com:foyt/fni.git</connection>
-    <tag>HEAD</tag>
+    <tag>3.3.10</tag>
   </scm>
 
   <dependencies>
