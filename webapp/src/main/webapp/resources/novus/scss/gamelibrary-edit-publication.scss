@@ -1,6 +1,7 @@
 @import "vars";
 @import "compass";
 @import "styles";
+@import "//static.forgeandillusion.net/libs/font-awesome/4.6.3/css/font-awesome.min.css";
 
 h3 {
   @include header-3;
@@ -9,6 +10,7 @@ h3 {
 
 .field input[type="text"], 
 .field input[type="number"], 
+.field input[type="url"],  
 .field textarea, 
 .field select {
   font-size: 14px;
@@ -25,15 +27,6 @@ h3 {
   font-size: 13px;
   font-family: $default-font;
   font-weight: bold;
-}
-
-.gamelibrary-edit-publication-license-cc-container table label {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-.gamelibrary-edit-publication-license-cc-container td {
-  white-space: nowrap;
 }
 
 .tag, .author {
@@ -106,4 +99,43 @@ h3 {
   color: #eee;
   background: #aaa;
   cursor: default;
+}
+
+.license-field .hint {
+  color: $default-color;
+  font-family: $default-font;
+  font-size: 14px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  display: block;
+
+  &::before {
+    content: "";
+    -moz-osx-font-smoothing: grayscale;
+    display: inline-block;
+    font-family: FontAwesome;
+    font-feature-settings: normal;
+    font-kerning: auto;
+    font-language-override: normal;
+    font-size: inherit;
+    font-size-adjust: none;
+    font-stretch: normal;
+    font-style: normal;
+    font-synthesis: weight style;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    text-rendering: auto;
+    padding-right: 5px;
+  }
+}
+
+.field .creative-commons-attribute {
+  white-space: nowrap;
+
+  label {
+    margin-left: 8px;
+    margin-right: 8px;
+    font-weight: normal;
+  }
 }

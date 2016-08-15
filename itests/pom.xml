@@ -59,6 +59,9 @@
     <!-- Apache Oltu -->
     
     <apache-oltu.version>1.0.0</apache-oltu.version>
+    
+    <it.skipserverstop>false</it.skipserverstop>
+    <it.skipdatabasedrop>false</it.skipdatabasedrop>    
   </properties>
 
   <scm>
@@ -326,6 +329,7 @@
                 <configuration>
                   <type>DROP</type>
                   <force>true</force>
+                  <skip>${it.skipdatabasedrop}</skip>
                 </configuration>
               </execution>
             </executions>
@@ -524,6 +528,9 @@
                 <goals>
                   <goal>stop</goal>
                 </goals>
+                <configuration>
+                  <skip>${it.skipserverstop}</skip>
+                </configuration>
               </execution>
             </executions>
           </plugin>
@@ -770,6 +777,7 @@
                 <configuration>
                   <type>DROP</type>
                   <force>true</force>
+                  <skip>${it.skipdatabasedrop}</skip>
                 </configuration>
               </execution>
             </executions>
@@ -969,6 +977,9 @@
                 <goals>
                   <goal>stop</goal>
                 </goals>
+                <configuration>
+                  <skip>${it.skipserverstop}</skip>
+                </configuration>
               </execution>
             </executions>
           </plugin>
@@ -1225,6 +1236,7 @@
                 <configuration>
                   <type>DROP</type>
                   <force>true</force>
+                  <skip>${it.skipdatabasedrop}</skip>
                 </configuration>
               </execution>
             </executions>
@@ -1423,6 +1435,9 @@
                 <goals>
                   <goal>stop</goal>
                 </goals>
+                <configuration>
+                  <skip>${it.skipserverstop}</skip>
+                </configuration>
               </execution>
             </executions>
           </plugin>
@@ -1863,6 +1878,9 @@
                 <goals>
                   <goal>stop</goal>
                 </goals>
+                <configuration>
+                  <skip>${it.skipserverstop}</skip>
+                </configuration>
               </execution>
             </executions>
           </plugin>
