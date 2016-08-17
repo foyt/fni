@@ -1,13 +1,13 @@
 package fi.foyt.fni.rest.forum.model;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 public class ForumPost {
 
   public ForumPost() {
   }
 
-  public ForumPost(Long id, Long topicId, String content, DateTime modified, DateTime created, Long authorId, Long views) {
+  public ForumPost(Long id, Long topicId, String content, ZonedDateTime modified, ZonedDateTime created, Long authorId, Long views) {
     super();
     this.id = id;
     this.topicId = topicId;
@@ -62,11 +62,11 @@ public class ForumPost {
    * 
    * @return last time when the post was removed
    */
-  public DateTime getModified() {
+  public ZonedDateTime getModified() {
     return modified;
   }
 
-  public void setModified(DateTime modified) {
+  public void setModified(ZonedDateTime modified) {
     this.modified = modified;
   }
 
@@ -75,11 +75,11 @@ public class ForumPost {
    * 
    * @return when the post was created
    */
-  public DateTime getCreated() {
+  public ZonedDateTime getCreated() {
     return created;
   }
 
-  public void setCreated(DateTime created) {
+  public void setCreated(ZonedDateTime created) {
     this.created = created;
   }
 
@@ -112,8 +112,8 @@ public class ForumPost {
   private Long id;
   private Long topicId;
   private String content;
-  private DateTime modified;
-  private DateTime created;
+  private ZonedDateTime modified;
+  private ZonedDateTime created;
   private Long authorId;
   private Long views;
 }

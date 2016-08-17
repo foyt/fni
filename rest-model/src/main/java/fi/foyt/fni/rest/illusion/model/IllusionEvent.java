@@ -1,8 +1,7 @@
 package fi.foyt.fni.rest.illusion.model;
 
+import java.time.ZonedDateTime;
 import java.util.List;
-
-import org.joda.time.DateTime;
 
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
 
@@ -11,9 +10,9 @@ public class IllusionEvent {
   public IllusionEvent() {
   }
   
-  public IllusionEvent(Long id, Boolean published, String name, String description, DateTime created, String urlName, String xmppRoom, IllusionEventJoinMode joinMode,
+  public IllusionEvent(Long id, Boolean published, String name, String description, ZonedDateTime created, String urlName, String xmppRoom, IllusionEventJoinMode joinMode,
       String signUpFeeText, Double signUpFee, String signUpFeeCurrency, String location, Integer ageLimit, Boolean beginnerFriendly, String imageUrl, Long typeId,
-      DateTime signUpStartDate, DateTime signUpEndDate, String domain, DateTime start, DateTime end, List<Long> genreIds) {
+      ZonedDateTime signUpStartDate, ZonedDateTime signUpEndDate, String domain, ZonedDateTime start, ZonedDateTime end, List<Long> genreIds) {
     this.id = id;
     this.published = published;
     this.name = name;
@@ -96,11 +95,11 @@ public class IllusionEvent {
    * 
    * @return event's creation time in ISO 8601 format
    */
-  public DateTime getCreated() {
+  public ZonedDateTime getCreated() {
     return created;
   }
   
-  public void setCreated(DateTime created) {
+  public void setCreated(ZonedDateTime created) {
     this.created = created;
   }
 
@@ -255,11 +254,11 @@ public class IllusionEvent {
    * 
    * @return event's sign-up start date in ISO 8601 format
    */
-  public DateTime getSignUpStartDate() {
+  public ZonedDateTime getSignUpStartDate() {
     return signUpStartDate;
   }
   
-  public void setSignUpStartDate(DateTime signUpStartDate) {
+  public void setSignUpStartDate(ZonedDateTime signUpStartDate) {
     this.signUpStartDate = signUpStartDate;
   }
 
@@ -268,11 +267,11 @@ public class IllusionEvent {
    * 
    * @return event's sign-up end date in ISO 8601 format
    */
-  public DateTime getSignUpEndDate() {
+  public ZonedDateTime getSignUpEndDate() {
     return signUpEndDate;
   }
   
-  public void setSignUpEndDate(DateTime signUpEndDate) {
+  public void setSignUpEndDate(ZonedDateTime signUpEndDate) {
     this.signUpEndDate = signUpEndDate;
   }
 
@@ -294,11 +293,11 @@ public class IllusionEvent {
    * 
    * @return event's start time in ISO 8601 format
    */
-  public DateTime getStart() {
+  public ZonedDateTime getStart() {
     return start;
   }
   
-  public void setStart(DateTime start) {
+  public void setStart(ZonedDateTime start) {
     this.start = start;
   }
 
@@ -307,11 +306,11 @@ public class IllusionEvent {
    * 
    * @return event's end time in ISO 8601 format
    */
-  public DateTime getEnd() {
+  public ZonedDateTime getEnd() {
     return end;
   }
   
-  public void setEnd(DateTime end) {
+  public void setEnd(ZonedDateTime end) {
     this.end = end;
   }
   
@@ -332,7 +331,7 @@ public class IllusionEvent {
   private Boolean published;
   private String name;
   private String description;
-  private DateTime created;
+  private ZonedDateTime created;
   private String urlName;
   private String xmppRoom;
   private IllusionEventJoinMode joinMode;
@@ -344,10 +343,10 @@ public class IllusionEvent {
   private Boolean beginnerFriendly;
   private String imageUrl;
   private Long typeId;
-  private DateTime signUpStartDate;
-  private DateTime signUpEndDate;
+  private ZonedDateTime signUpStartDate;
+  private ZonedDateTime signUpEndDate;
   private String domain;
-  private DateTime start;
-  private DateTime end;
+  private ZonedDateTime start;
+  private ZonedDateTime end;
   private List<Long> genreIds;
 }

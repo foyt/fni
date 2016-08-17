@@ -2,6 +2,9 @@ package fi.foyt.fni.view.illusion;
 
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
@@ -18,8 +21,6 @@ import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 
@@ -393,27 +394,30 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
     if (time == null) {
       return null;
     }
-
-    DateTimeFormatter formatter = ISODateTimeFormat.date();
-    return formatter.print(time.getTime());
+    
+    return DateTimeFormatter.ISO_DATE.format(time.toInstant());
   }
 
   private String formatDateTime(Date time) {
     if (time == null) {
       return null;
     }
-
-    DateTimeFormatter formatter = ISODateTimeFormat.dateTimeNoMillis();
-    return formatter.print(time.getTime());
+    
+    return DateTimeFormatter.ISO_DATE_TIME.format(time.toInstant());
   }
 
   private Date parseDate(String iso) {
     if (StringUtils.isBlank(iso)) {
       return null;
     }
+    
+    TemporalAccessor temporalAccessor = DateTimeFormatter.ISO_DATE_TIME.parse(iso);
+    if (temporalAccessor != null) {
+      ZonedDateTime dateTime = ZonedDateTime.from(temporalAccessor);
+      return Date.from(dateTime.toInstant());
+    } 
 
-    DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
-    return parser.parseDateTime(iso).toDate();
+    return null;
   }
   
   public String getHandlingFeeText() {

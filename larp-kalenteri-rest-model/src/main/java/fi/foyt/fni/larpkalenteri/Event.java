@@ -1,16 +1,15 @@
 package fi.foyt.fni.larpkalenteri;
 
 
+import java.time.ZonedDateTime;
 import java.util.List;
-
-import org.joda.time.DateTime;
 
 public class Event {
   
   public Event() {
   }
   
-  public Event(Long id, String name, String type, DateTime start, DateTime end, String textDate, DateTime signUpStart, DateTime signUpEnd, Long locationDropDown,
+  public Event(Long id, String name, String type, ZonedDateTime start, ZonedDateTime end, String textDate, ZonedDateTime signUpStart, ZonedDateTime signUpEnd, Long locationDropDown,
       String location, String iconURL, List<String> genres, String cost, Integer ageLimit, Boolean beginnerFriendly, String storyDescription,
       String infoDescription, String organizerName, String organizerEmail, String link1, String link2, Status status, String password, Boolean eventFull,
       Boolean invitationOnly, Boolean languageFree, Long illusionId) {
@@ -68,19 +67,19 @@ public class Event {
     this.type = type;
   }
 
-  public DateTime getStart() {
+  public ZonedDateTime getStart() {
     return start;
   }
 
-  public void setStart(DateTime start) {
+  public void setStart(ZonedDateTime start) {
     this.start = start;
   }
 
-  public DateTime getEnd() {
+  public ZonedDateTime getEnd() {
     return end;
   }
 
-  public void setEnd(DateTime end) {
+  public void setEnd(ZonedDateTime end) {
     this.end = end;
   }
 
@@ -92,19 +91,19 @@ public class Event {
     this.textDate = textDate;
   }
 
-  public DateTime getSignUpStart() {
+  public ZonedDateTime getSignUpStart() {
     return signUpStart;
   }
 
-  public void setSignUpStart(DateTime signUpStart) {
+  public void setSignUpStart(ZonedDateTime signUpStart) {
     this.signUpStart = signUpStart;
   }
 
-  public DateTime getSignUpEnd() {
+  public ZonedDateTime getSignUpEnd() {
     return signUpEnd;
   }
 
-  public void setSignUpEnd(DateTime signUpEnd) {
+  public void setSignUpEnd(ZonedDateTime signUpEnd) {
     this.signUpEnd = signUpEnd;
   }
 
@@ -263,11 +262,11 @@ public class Event {
   private Long id;
   private String name;
   private String type;
-  private DateTime start;
-  private DateTime end;
+  private ZonedDateTime start;
+  private ZonedDateTime end;
   private String textDate;
-  private DateTime signUpStart;
-  private DateTime signUpEnd;
+  private ZonedDateTime signUpStart;
+  private ZonedDateTime signUpEnd;
   private Long locationDropDown;
   private String location;
   private String iconURL;

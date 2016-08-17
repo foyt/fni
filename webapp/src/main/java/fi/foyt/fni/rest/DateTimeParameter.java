@@ -1,20 +1,26 @@
 package fi.foyt.fni.rest;
 
 import java.io.Serializable;
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 
 public class DateTimeParameter implements Serializable {
   
   private static final long serialVersionUID = 1L;
 
   public DateTimeParameter(String dateString) {
-    dateTime = ISODateTimeFormat.dateTimeParser().parseDateTime(dateString);
+    TemporalAccessor temporalAccessor = DateTimeFormatter.ISO_DATE_TIME.parse(dateString);
+    if (temporalAccessor != null) {
+      dateTime = ZonedDateTime.from(temporalAccessor);
+    } else {
+      dateTime = null;
+    }
   }
 
-  public DateTime getDateTime() {
+  public ZonedDateTime getDateTime() {
     return dateTime;
   }
 
-  private final DateTime dateTime;
+  private final ZonedDateTime dateTime;
 }

@@ -1,5 +1,6 @@
 package fi.foyt.fni.view.index;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,7 +15,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.joda.time.DateTime;
 import org.ocpsoft.rewrite.annotation.Join;
 
 import fi.foyt.fni.blog.BlogController;
@@ -66,9 +66,9 @@ public class IndexViewBackingBean {
 		illusionEvents = createEventPojos(illusionEventController.listNextIllusionEvents(MAX_ILLUSION_EVENTS));
 		latestBlogEntries = blogController.listBlogEntries(MAX_LATEST_ENTRIES);
 	  
-    DateTime lastPostDate = blogController.getLastBlogDate();
+    ZonedDateTime lastPostDate = blogController.getLastBlogDate();
     if (lastPostDate != null) {
-      newsArchiveMonth = lastPostDate.getMonthOfYear();
+      newsArchiveMonth = lastPostDate.getMonthValue();
       newsArchiveYear = lastPostDate.getYear();
     }
     

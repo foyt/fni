@@ -1,5 +1,8 @@
 package fi.foyt.fni.view.illusion;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
@@ -14,8 +17,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.ocpsoft.rewrite.annotation.Join;
 
 import fi.foyt.fni.illusion.IllusionEventController;
@@ -289,8 +290,12 @@ public class IllusionCreateEventBackingBean {
       return null;
     }
 
-    DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
-    return parser.parseDateTime(iso).toDate();
+    TemporalAccessor temporalAccessor = DateTimeFormatter.ISO_DATE_TIME.parse(iso);
+    if (temporalAccessor != null) {
+      return Date.from(ZonedDateTime.from(temporalAccessor).toInstant());
+    } 
+    
+    return null;
   }
 
   private String name;

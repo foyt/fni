@@ -4,14 +4,15 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Test;
 
 import com.icegreen.greenmail.util.GreenMail;
@@ -116,7 +117,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("id[0]", is(2) )
       .body("name[0]", is("Open"))
       .body("description[0]", is("Event for automatic testing (Open)"))
-      .body("created[0]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("created[0]", is(toDateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
       .body("urlName[0]", is("open"))
       .body("xmppRoom[0]", is("open@bogustalk.net"))
       .body("joinMode[0]", is("OPEN"))
@@ -127,17 +128,17 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("beginnerFriendly[0]", is((Boolean) null))
       .body("imageUrl[0]", is((String) null))
       .body("typeId[0]", is((Long) null))
-      .body("signUpStartDate[0]", is((DateTime) null))
-      .body("signUpEndDate[0]", is((DateTime) null))
+      .body("signUpStartDate[0]", is((ZonedDateTime) null))
+      .body("signUpEndDate[0]", is((ZonedDateTime) null))
       .body("domain[0]", is((String) null))
-      .body("start[0]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
-      .body("end[0]", is(new DateTime(2010, 1, 2, 0, 0, 0, 0).toString()))
+      .body("start[0]", is(toDateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("end[0]", is(toDateTime(2010, 1, 2, 0, 0, 0, 0).toString()))
       .body("genreIds[0].size()", is(0))
       
       .body("id[1]", is(3) )
       .body("name[1]", is("Approve"))
       .body("description[1]", is("Event for automatic testing (Approve)"))
-      .body("created[1]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("created[1]", is(toDateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
       .body("urlName[1]", is("approve"))
       .body("xmppRoom[1]", is("approve@bogustalk.net"))
       .body("joinMode[1]", is("APPROVE"))
@@ -148,17 +149,17 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("beginnerFriendly[1]", is((Boolean) null))
       .body("imageUrl[1]", is((String) null))
       .body("typeId[1]", is((Long) null))
-      .body("signUpStartDate[1]", is((DateTime) null))
-      .body("signUpEndDate[1]", is((DateTime) null))
+      .body("signUpStartDate[1]", is((ZonedDateTime) null))
+      .body("signUpEndDate[1]", is((ZonedDateTime) null))
       .body("domain[1]", is((String) null))
-      .body("start[1]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
-      .body("end[1]", is(new DateTime(2010, 1, 2, 0, 0, 0, 0).toString()))
+      .body("start[1]", is(toDateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("end[1]", is(toDateTime(2010, 1, 2, 0, 0, 0, 0).toString()))
       .body("genreIds[1].size()", is(0))
       
       .body("id[2]", is(4) )
       .body("name[2]", is("Invite Only"))
       .body("description[2]", is("Event for automatic testing (Invite Only)"))
-      .body("created[2]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("created[2]", is(toDateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
       .body("urlName[2]", is("invite"))
       .body("xmppRoom[2]", is("invite@bogustalk.net"))
       .body("joinMode[2]", is("INVITE_ONLY"))
@@ -169,27 +170,26 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("beginnerFriendly[2]", is((Boolean) null))
       .body("imageUrl[2]", is((String) null))
       .body("typeId[2]", is((Long) null))
-      .body("signUpStartDate[2]", is((DateTime) null))
-      .body("signUpEndDate[2]", is((DateTime) null))
+      .body("signUpStartDate[2]", is((ZonedDateTime) null))
+      .body("signUpEndDate[2]", is((ZonedDateTime) null))
       .body("domain[2]", is((String) null))
-      .body("start[2]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
-      .body("end[2]", is(new DateTime(2010, 1, 2, 0, 0, 0, 0).toString()))
+      .body("start[2]", is(toDateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("end[2]", is(toDateTime(2010, 1, 2, 0, 0, 0, 0).toString()))
       .body("genreIds[2].size()", is(0));
   }
      
   @Test
   @SqlSets({"basic-users", "events-upcoming"})
   public void testEventListByDates() {
-    DateTime startTime = new DateTime();
-    DateTime endTime = new DateTime();
+    ZonedDateTime startTime = ZonedDateTime.now();
+    ZonedDateTime endTime = ZonedDateTime.now();
     endTime.plusDays(3);
     
-    DateTimeFormatter formatter = ISODateTimeFormat.dateTime();
-    DateTimeFormatter parser = ISODateTimeFormat.dateTimeParser();
-    
+    DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+
     Response response = givenJson()
-      .queryParam("minTime", formatter.print(startTime))
-      .queryParam("maxTime", formatter.print(endTime))
+      .queryParam("minTime", formatter.format(startTime))
+      .queryParam("maxTime", formatter.format(endTime))
       .get("/illusion/events/");
     
     response.then().statusCode(200);
@@ -201,8 +201,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       String startPath = String.format("start[%s]", i);
       String endPath = String.format("end[%s]", i);
       
-      DateTime eventStart = parser.parseDateTime(response.body().jsonPath().getString(startPath));
-      DateTime eventEnd = parser.parseDateTime(response.body().jsonPath().getString(endPath));
+      ZonedDateTime eventStart = parseZonedDateTime(response.body().jsonPath().getString(startPath));
+      ZonedDateTime eventEnd = parseZonedDateTime(response.body().jsonPath().getString(endPath));
       
       assertTrue(String.format("eventStart (%s) should before filter range end (%s)", eventStart, endTime), eventStart.isBefore(endTime));
       assertTrue(String.format("eventEnd (%s) should before filter range start (%s)", eventEnd, startTime), eventEnd.isBefore(startTime));
@@ -256,7 +256,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("id", is(2) )
       .body("name", is("Open"))
       .body("description", is("Event for automatic testing (Open)"))
-      .body("created", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("created", is(toDateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
       .body("urlName", is("open"))
       .body("xmppRoom", is("open@bogustalk.net"))
       .body("joinMode", is("OPEN"))
@@ -267,11 +267,11 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("beginnerFriendly", is((Boolean) null))
       .body("imageUrl", is((String) null))
       .body("typeId", is((Long) null))
-      .body("signUpStartDate", is((DateTime) null))
-      .body("signUpEndDate", is((DateTime) null))
+      .body("signUpStartDate", is((ZonedDateTime) null))
+      .body("signUpEndDate", is((ZonedDateTime) null))
       .body("domain", is((String) null))
-      .body("start", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
-      .body("end", is(new DateTime(2010, 1, 2, 0, 0, 0, 0).toString()))
+      .body("start", is(toDateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("end", is(toDateTime(2010, 1, 2, 0, 0, 0, 0).toString()))
       .body("genreIds.size()", is(0));
   }
   
@@ -279,7 +279,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   @SqlSets({"basic-users","service-client", "illusion-basic"})
   public void testEventCreate() throws Exception {
     IllusionEvent event = new IllusionEvent(null, Boolean.TRUE, "Test Event", "Event for testing", null, null, null, IllusionEventJoinMode.OPEN, 
-        null, null, null, "Twilight zone", 16, Boolean.TRUE, null, 1l, null, null, null, new DateTime(2015, 6, 7, 0, 0, 0, 0), new DateTime(2015, 6, 7, 0, 0, 0, 0), new ArrayList<Long>());
+        null, null, null, "Twilight zone", 16, Boolean.TRUE, null, 1l, null, null, null, toDateTime(2015, 6, 7, 0, 0, 0, 0), toDateTime(2015, 6, 7, 0, 0, 0, 0), new ArrayList<Long>());
     
     Response response = givenJson(createServiceToken())
       .body(event)
@@ -302,8 +302,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("beginnerFriendly", is(event.getBeginnerFriendly()))
       .body("imageUrl", is((String) null))
       .body("typeId", is(event.getTypeId().intValue()))
-      .body("signUpStartDate", is((DateTime) null))
-      .body("signUpEndDate", is((DateTime) null))
+      .body("signUpStartDate", is((ZonedDateTime) null))
+      .body("signUpEndDate", is((ZonedDateTime) null))
       .body("domain", is((String) null))
       .body("start", is(event.getStart().toString()))
       .body("end", is(event.getEnd().toString()))
@@ -315,15 +315,15 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     deleteIllusionEventByUrl(urlName);
     deleteIllusionFolderByUser("servicetest@foyt.fi");
   }
-  
+
   @Test
   @SqlSets({"basic-users", "service-client", "illusion-basic" })
   public void testEventPublish() throws Exception {
     String token = createServiceToken();
     
     IllusionEvent event = new IllusionEvent(null, Boolean.FALSE, "To be published", "Event to be published", null, null, null, IllusionEventJoinMode.OPEN, 
-        null, null, null, "Location", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
-        null, new DateTime(2015, 6, 7, 8, 9, 0, 0), new DateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
+        null, null, null, "Location", 16, Boolean.TRUE, null, 1l, toDateTime(2015, 6, 7, 8, 9, 10, 11), toDateTime(2015, 7, 8, 9, 10, 11, 12), 
+        null, toDateTime(2015, 6, 7, 8, 9, 0, 0), toDateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
     
     Response createResponse = givenJson(token)
       .body(event)
@@ -365,8 +365,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     String token = createServiceToken();
     
     IllusionEvent event = new IllusionEvent(null, Boolean.TRUE, "To be published", "Event to be published", null, null, null, IllusionEventJoinMode.OPEN, 
-        null, null, null, "Location", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
-        null, new DateTime(2015, 6, 7, 8, 9, 0, 0), new DateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
+        null, null, null, "Location", 16, Boolean.TRUE, null, 1l, toDateTime(2015, 6, 7, 8, 9, 10, 11), toDateTime(2015, 7, 8, 9, 10, 11, 12), 
+        null, toDateTime(2015, 6, 7, 8, 9, 0, 0), toDateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
     
     Response createResponse = givenJson(token)
       .body(event)
@@ -408,8 +408,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     String token = createServiceToken();
     
     IllusionEvent createEvent = new IllusionEvent(null, Boolean.TRUE, "To be modified", "Event to be modified", null, null, null, IllusionEventJoinMode.OPEN, 
-        null, null, null, "Unmodified location", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
-        null, new DateTime(2015, 6, 7, 8, 9, 0, 0), new DateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
+        null, null, null, "Unmodified location", 16, Boolean.TRUE, null, 1l, toDateTime(2015, 6, 7, 8, 9, 10, 11), toDateTime(2015, 7, 8, 9, 10, 11, 12), 
+        null, toDateTime(2015, 6, 7, 8, 9, 0, 0), toDateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
     
     Response createResponse = givenJson(token)
       .body(createEvent)
@@ -444,8 +444,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     
     IllusionEvent updateEvent = new IllusionEvent(id, Boolean.TRUE, "Changed", "Changed description", null, null, null, IllusionEventJoinMode.APPROVE, 
         null, 5.30, "EUR", "Central Park", 18, Boolean.FALSE, "http://www.fake.com/image.png", 2l, 
-        new DateTime(2020, 6, 7, 0, 0, 0, 0), new DateTime(2020, 7, 8, 0, 0, 0, 0), "www.customized.com", 
-        new DateTime(2020, 9, 7, 0, 0, 0, 0), new DateTime(2020, 10, 8, 0, 0, 0, 0), Arrays.asList(2l));
+        toDateTime(2020, 6, 7, 0, 0, 0, 0), toDateTime(2020, 7, 8, 0, 0, 0, 0), "www.customized.com", 
+        toDateTime(2020, 9, 7, 0, 0, 0, 0), toDateTime(2020, 10, 8, 0, 0, 0, 0), Arrays.asList(2l));
     
     givenJson(token)
       .body(updateEvent)
@@ -473,8 +473,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("beginnerFriendly", is(updateEvent.getBeginnerFriendly()))
       .body("imageUrl", is(updateEvent.getImageUrl()))
       .body("typeId", is(updateEvent.getTypeId().intValue()))
-      .body("signUpStartDate", sameInstant(updateEvent.getSignUpStartDate()))
-      .body("signUpEndDate", sameInstant(updateEvent.getSignUpEndDate()))
+      .body("signUpStartDate", sameInstant(updateEvent.getSignUpStartDate().toInstant()))
+      .body("signUpEndDate", sameInstant(updateEvent.getSignUpEndDate().toInstant()))
       .body("domain", is(updateEvent.getDomain()))
       .body("start", is(updateEvent.getStart().toString()))
       .body("end", is(updateEvent.getEnd().toString()))
@@ -491,8 +491,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   @SqlSets({"basic-users", "service-client", "illusion-basic"})
   public void testEventCreateWithDatesAndTimes() throws Exception {
     IllusionEvent event = new IllusionEvent(null, Boolean.TRUE, "Test Event", "Event for testing", null, null, null, IllusionEventJoinMode.OPEN, 
-        null, null, null, "Twilight zone", 16, Boolean.TRUE, null, 1l, new DateTime(2015, 6, 7, 8, 9, 10, 11), new DateTime(2015, 7, 8, 9, 10, 11, 12), 
-        null, new DateTime(2015, 6, 7, 8, 9, 0, 0), new DateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
+        null, null, null, "Twilight zone", 16, Boolean.TRUE, null, 1l, toDateTime(2015, 6, 7, 8, 9, 10, 11), toDateTime(2015, 7, 8, 9, 10, 11, 12), 
+        null, toDateTime(2015, 6, 7, 8, 9, 0, 0), toDateTime(2015, 1, 2, 3, 4, 0, 0), new ArrayList<Long>());
     
     Response response = givenJson(createServiceToken())
       .body(event)
@@ -801,15 +801,15 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("id[0]", is(20100))
       .body("topicId[0]", is(20000))
       .body("content[0]", is("message #1"))
-      .body("modified[0]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
-      .body("created[0]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("modified[0]", is(toDateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("created[0]", is(toDateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
       .body("authorId[0]", is(2))
       .body("views[0]", is(0))
       .body("id[1]", is(20101))
       .body("topicId[1]", is(20000))
       .body("content[1]", is("message #2"))
-      .body("modified[1]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
-      .body("created[1]", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("modified[1]", is(toDateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("created[1]", is(toDateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
       .body("authorId[1]", is(2))
       .body("views[1]", is(0));
   }
@@ -824,8 +824,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("id", is(20100))
       .body("topicId", is(20000))
       .body("content", is("message #1"))
-      .body("modified", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
-      .body("created", is(new DateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("modified", is(toDateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
+      .body("created", is(toDateTime(2010, 1, 1, 0, 0, 0, 0).toString()))
       .body("authorId", is(2))
       .body("views", is(0));
   }
@@ -968,7 +968,18 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .then()
       .statusCode(200);
   }
-  
-  
+
+  private ZonedDateTime toDateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour, int secondOfMinute, int millisOfSecond) {
+    return ZonedDateTime.of(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, 0, ZoneId.systemDefault());
+  }
+
+  private ZonedDateTime parseZonedDateTime(String text) {
+    TemporalAccessor temporalAccessor = DateTimeFormatter.ISO_DATE_TIME.parse(text);
+    if (temporalAccessor == null) {
+      return null;
+    }
+    
+    return ZonedDateTime.from(temporalAccessor);
+  }
   
 }

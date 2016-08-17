@@ -1,5 +1,7 @@
 package fi.foyt.fni.view.index;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +11,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.joda.time.DateTime;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
@@ -38,15 +39,16 @@ public class NewsViewBackingBean {
 		blogEntries = blogController.listBlogEntriesByYearAndMonth(getYear(), getMonth() - 1);
 		months = new ArrayList<>();
 		
-		DateTime firstDate = blogController.getFirstBlogDate();
-		DateTime lastDate = blogController.getLastBlogDate();
+		ZonedDateTime firstDate = blogController.getFirstBlogDate();
+		ZonedDateTime lastDate = blogController.getLastBlogDate();
 		if (firstDate != null && lastDate != null) {
-		  DateTime currentMonth = new DateTime(lastDate.getYear(), lastDate.getMonthOfYear(), 1, 0, 0, 0, 0);
+		  ZonedDateTime currentMonth = ZonedDateTime.of(lastDate.getYear(), lastDate.getMonthValue(), 1, 0, 0, 0, 0, ZoneId.systemDefault());
   		
   		while (currentMonth.isAfter(firstDate)) {
-  		  int postCount = blogController.countBlogEntriesByCreatedBetween(currentMonth.toDate(), currentMonth.plusMonths(1).toDate()).intValue();
+  		  int postCount = blogController.countBlogEntriesByCreatedBetween(toDate(currentMonth), toDate(currentMonth.plusMonths(1))).intValue();
   		  if (postCount > 0) {
-  	      months.add(new Month(currentMonth, postCount));
+  		    Date date = toDate(currentMonth);
+  	      months.add(new Month(date, currentMonth.getYear(), currentMonth.getMonthValue(), postCount));
   		  }
   		  
   		  currentMonth = currentMonth.minusMonths(1);
@@ -54,7 +56,15 @@ public class NewsViewBackingBean {
 		}
 	}
 	
-	public Integer getYear() {
+	private Date toDate(ZonedDateTime dateTime) {
+	  if (dateTime == null) {
+	    return null;
+	  }
+	  
+	  return Date.from(dateTime.toInstant());
+  }
+
+  public Integer getYear() {
     return year;
   }
 	
@@ -87,11 +97,11 @@ public class NewsViewBackingBean {
 	
 	public class Month {
 	  
-	  public Month(DateTime dateTime, int postCount) {
-      this.date = dateTime.toDate();
+	  public Month(Date date, int year, int month, int postCount) {
+      this.date = date;
       this.postCount = postCount;
-      this.month = dateTime.getMonthOfYear();
-      this.year = dateTime.getYear();
+      this.month = month;
+      this.year = year;
     }
 	  
 	  public Date getDate() {
