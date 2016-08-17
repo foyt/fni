@@ -38,7 +38,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 
 import fi.foyt.fni.larpkalenteri.AVIResolver.AVIProperties;
 import fi.foyt.fni.larpkalenteri.Event.Status;
@@ -325,7 +325,7 @@ public class LarpKalenteriClient {
   
   private ObjectMapper createObjectMapper() {
     ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.registerModule(new JodaModule());
+    objectMapper.registerModule(new JSR310Module());
     objectMapper.configure(com.fasterxml.jackson.databind.SerializationFeature.
         WRITE_DATES_AS_TIMESTAMPS , false);
     return objectMapper;

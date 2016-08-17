@@ -352,8 +352,20 @@
     <!-- Jackson -->
     
     <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+        
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <scope>provided</scope>
+    </dependency>
+      
+    <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
-      <artifactId>jackson-datatype-joda</artifactId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
     </dependency>
 
     <!-- WebSockets -->
@@ -487,7 +499,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.jboss.resteasy.resteasy-jackson2-provider, org.apache.httpcomponents, org.joda.time</Dependencies>
+              <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.jboss.resteasy.resteasy-jackson2-provider, org.apache.httpcomponents, org.joda.time, com.fasterxml.jackson.core.jackson-annotations, com.fasterxml.jackson.core.jackson-databind</Dependencies>
             </manifestEntries>
           </archive>
           

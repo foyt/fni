@@ -116,7 +116,7 @@
     
     <!-- Jackson -->
     
-    <jackson-datatype-joda.version>2.3.0</jackson-datatype-joda.version>
+    <jackson-datatype-jsr310.version>2.3.2</jackson-datatype-jsr310.version>
     
     <!-- CSS Parser -->
     
@@ -366,9 +366,9 @@
       
       <dependency>
         <groupId>com.fasterxml.jackson.datatype</groupId>
-        <artifactId>jackson-datatype-joda</artifactId>
-        <version>${jackson-datatype-joda.version}</version>
-      </dependency> 
+        <artifactId>jackson-datatype-jsr310</artifactId>
+        <version>${jackson-datatype-jsr310.version}</version>
+      </dependency>
     
       <dependency>
         <groupId>org.jglue.cdi-unit</groupId>
