@@ -116,7 +116,6 @@
     
     <!-- Jackson -->
     
-    <jackson.version>1.9.13</jackson.version>
     <jackson-datatype-joda.version>2.3.0</jackson-datatype-joda.version>
     
     <!-- CSS Parser -->
@@ -364,18 +363,6 @@
       </dependency>
     
       <!-- Jackson -->
-      
-      <dependency>
-        <groupId>org.codehaus.jackson</groupId>
-        <artifactId>jackson-mapper-asl</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.codehaus.jackson</groupId>
-        <artifactId>jackson-core-asl</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>  
       
       <dependency>
         <groupId>com.fasterxml.jackson.datatype</groupId>

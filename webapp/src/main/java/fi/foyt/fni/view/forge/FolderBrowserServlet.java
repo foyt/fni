@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.math.NumberUtils;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fi.foyt.fni.i18n.ExternalLocales;
 import fi.foyt.fni.materials.MaterialController;

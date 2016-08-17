@@ -340,20 +340,6 @@
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-highlighter</artifactId>
     </dependency>
-
-    <!-- Jackson -->
-
-    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-core-asl</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-asl</artifactId>
-      <scope>provided</scope>
-    </dependency>
     
     <!-- RESTEasy -->
     
@@ -501,7 +487,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.codehaus.jackson.jackson-core-asl, org.codehaus.jackson.jackson-mapper-asl, org.jboss.resteasy.resteasy-jackson2-provider, org.apache.httpcomponents, org.joda.time</Dependencies>
+              <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.jboss.resteasy.resteasy-jackson2-provider, org.apache.httpcomponents, org.joda.time</Dependencies>
             </manifestEntries>
           </archive>
           
