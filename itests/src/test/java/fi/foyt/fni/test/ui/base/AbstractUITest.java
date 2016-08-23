@@ -804,6 +804,20 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
       "};", index, data, data);
     
     executeScript(script);
+    
+    waitCKEditorContents(index, contents);
+  }
+  
+  protected void waitCKEditorContents(int index, String contents) {
+    String script = String.format(
+      "var instance = CKEDITOR && CKEDITOR.instances ? CKEDITOR.instances[Object.keys(CKEDITOR.instances)[%d]] : null; " +
+      "return instance ? instance.getData() : null;", index);
+    
+    new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
+      public Boolean apply(WebDriver driver) {
+        return ((JavascriptExecutor) driver).executeScript(script).equals(contents);
+      }
+    });
   }
   
   private String sessionId;

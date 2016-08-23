@@ -2,9 +2,11 @@ package fi.foyt.fni.view.illusion;
 
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
@@ -79,51 +81,56 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
 
   @Override
   public String init(IllusionEvent illusionEvent, IllusionEventParticipant participant) {
-    if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
-      return navigationController.accessDenied();
+    try {
+      if ((participant == null) || (participant.getRole() != IllusionEventParticipantRole.ORGANIZER)) {
+        return navigationController.accessDenied();
+      }
+  
+      illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.SETTINGS);
+      illusionEventNavigationController.setEventUrlName(getUrlName());
+      
+      published = illusionEvent.getPublished();
+      name = illusionEvent.getName();
+      description = illusionEvent.getDescription();
+      location = illusionEvent.getLocation();
+      joinMode = illusionEvent.getJoinMode();
+      start = formatDateTime(illusionEvent.getStart());
+      end = formatDateTime(illusionEvent.getEnd());
+      domain = illusionEvent.getDomain();
+      ageLimit = illusionEvent.getAgeLimit();
+      imageUrl = illusionEvent.getImageUrl();
+      beginnerFriendly = illusionEvent.getBeginnerFriendly();
+      signUpStartDate = formatDate(illusionEvent.getSignUpStartDate());
+      signUpEndDate = formatDate(illusionEvent.getSignUpEndDate());
+      typeId = illusionEvent.getType() != null ? illusionEvent.getType().getId() : null;
+      genreIds = new ArrayList<Long>();
+      signUpFeeCurrency = illusionEvent.getSignUpFeeCurrency() != null ? illusionEvent.getSignUpFeeCurrency().getCurrencyCode() : null;
+      signUpFeeText = illusionEvent.getSignUpFeeText();
+      paymentMode = illusionEvent.getPaymentMode();
+      
+      larpKalenteriSync = StringUtils.isNotBlank(illusionEventController.getSetting(illusionEvent, IllusionEventSettingKey.LARP_KALENTERI_ID));
+      handlingFeeText = formatCurrency(
+        systemSettingsController.getCurrencySetting(SystemSettingKey.ILLUSION_EVENT_PAYMENT_HANDLING_FEE_CURRENCY), 
+        systemSettingsController.getDoubleSetting(SystemSettingKey.ILLUSION_EVENT_PAYMENT_HANDLING_FEE));
+  
+      List<IllusionEventGenre> eventGenres = illusionEventController.listIllusionEventGenres(illusionEvent);
+      for (IllusionEventGenre eventGenre : eventGenres) {
+        genreIds.add(eventGenre.getGenre().getId());
+      }
+      
+      List<IllusionEventType> eventTypes = illusionEventController.listTypes();
+      typeSelectItems = new ArrayList<>(eventTypes.size());
+      for (IllusionEventType eventType : eventTypes) {
+        typeSelectItems.add(new SelectItem(eventType.getId(), eventType.getName()));
+      }
+  
+      genres = illusionEventController.listGenres();
+      
+      return null;
+    } catch (Exception e) {
+      logger.log(Level.SEVERE, "Unexpected error", e);
+      throw e;
     }
-
-    illusionEventNavigationController.setSelectedPage(IllusionEventPage.Static.SETTINGS);
-    illusionEventNavigationController.setEventUrlName(getUrlName());
-    
-    published = illusionEvent.getPublished();
-    name = illusionEvent.getName();
-    description = illusionEvent.getDescription();
-    location = illusionEvent.getLocation();
-    joinMode = illusionEvent.getJoinMode();
-    start = formatDateTime(illusionEvent.getStart());
-    end = formatDateTime(illusionEvent.getEnd());
-    domain = illusionEvent.getDomain();
-    ageLimit = illusionEvent.getAgeLimit();
-    imageUrl = illusionEvent.getImageUrl();
-    beginnerFriendly = illusionEvent.getBeginnerFriendly();
-    signUpStartDate = formatDate(illusionEvent.getSignUpStartDate());
-    signUpEndDate = formatDate(illusionEvent.getSignUpEndDate());
-    typeId = illusionEvent.getType() != null ? illusionEvent.getType().getId() : null;
-    genreIds = new ArrayList<Long>();
-    signUpFeeCurrency = illusionEvent.getSignUpFeeCurrency() != null ? illusionEvent.getSignUpFeeCurrency().getCurrencyCode() : null;
-    signUpFeeText = illusionEvent.getSignUpFeeText();
-    paymentMode = illusionEvent.getPaymentMode();
-    
-    larpKalenteriSync = StringUtils.isNotBlank(illusionEventController.getSetting(illusionEvent, IllusionEventSettingKey.LARP_KALENTERI_ID));
-    handlingFeeText = formatCurrency(
-      systemSettingsController.getCurrencySetting(SystemSettingKey.ILLUSION_EVENT_PAYMENT_HANDLING_FEE_CURRENCY), 
-      systemSettingsController.getDoubleSetting(SystemSettingKey.ILLUSION_EVENT_PAYMENT_HANDLING_FEE));
-
-    List<IllusionEventGenre> eventGenres = illusionEventController.listIllusionEventGenres(illusionEvent);
-    for (IllusionEventGenre eventGenre : eventGenres) {
-      genreIds.add(eventGenre.getGenre().getId());
-    }
-    
-    List<IllusionEventType> eventTypes = illusionEventController.listTypes();
-    typeSelectItems = new ArrayList<>(eventTypes.size());
-    for (IllusionEventType eventType : eventTypes) {
-      typeSelectItems.add(new SelectItem(eventType.getId(), eventType.getName()));
-    }
-
-    genres = illusionEventController.listGenres();
-    
-    return null;
   }
   
   private String formatCurrency(Currency currency, Double value) {
@@ -318,76 +325,81 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
   }
 
   public String save() throws Exception {
-    IllusionEventType type = illusionEventController.findTypeById(getTypeId());
-    IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
-    
-    String signUpFeeText = getSignUpFeeText();
-    Currency signUpFeeCurrency = null;
-    Double signUpFee = null;
-
-    if (StringUtils.isNotBlank(signUpFeeText)) {
-      signUpFeeCurrency = Currency.getInstance(getSignUpFeeCurrency());
-    }
-    
-    if (getPaymentMode() == IllusionEventPaymentMode.JOIN) {
-      if (StringUtils.isBlank(signUpFeeText)) {
-        FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.paymentTypeJoinFeeRequired"));
-        return null;
+    try {
+      IllusionEventType type = illusionEventController.findTypeById(getTypeId());
+      IllusionEvent illusionEvent = illusionEventController.findIllusionEventByUrlName(getUrlName());
+      
+      String signUpFeeText = getSignUpFeeText();
+      Currency signUpFeeCurrency = null;
+      Double signUpFee = null;
+  
+      if (StringUtils.isNotBlank(signUpFeeText)) {
+        signUpFeeCurrency = Currency.getInstance(getSignUpFeeCurrency());
       }
       
-      signUpFee = NumberUtils.toDouble(signUpFeeText);
+      if (getPaymentMode() == IllusionEventPaymentMode.JOIN) {
+        if (StringUtils.isBlank(signUpFeeText)) {
+          FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.paymentTypeJoinFeeRequired"));
+          return null;
+        }
+        
+        signUpFee = NumberUtils.toDouble(signUpFeeText);
+        
+        if (!(signUpFee > 0)) {
+          FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.signUpFeeInvalid"));
+          return null;
+        }
+      }
+  
+      illusionEventController.updateIllusionEventName(illusionEvent, getName());
+      illusionEventController.updateIllusionEventDescription(illusionEvent, getDescription());
+      illusionEventController.updateIllusionEventJoinMode(illusionEvent, getJoinMode());
+      illusionEventController.updateIllusionEventStart(illusionEvent, parseDateTime(getStart()));
+      illusionEventController.updateIllusionEventEnd(illusionEvent, parseDateTime(getEnd()));
+      illusionEventController.updateIllusionEventLocation(illusionEvent, getLocation());
+      illusionEventController.updateIllusionEventType(illusionEvent, type);
+      illusionEventController.updateIllusionEventSignUpTimes(illusionEvent, parseDate(getSignUpStartDate()), parseDate(getSignUpEndDate()));
+      illusionEventController.updateIllusionEventAgeLimit(illusionEvent, getAgeLimit());
+      illusionEventController.updateIllusionEventBeginnerFriendly(illusionEvent, getBeginnerFriendly());
+      illusionEventController.updateIllusionEventImageUrl(illusionEvent, getImageUrl());
+      illusionEventController.updateEventSignUpFee(illusionEvent, signUpFeeText, signUpFee, signUpFeeCurrency, getPaymentMode());
       
-      if (!(signUpFee > 0)) {
-        FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.signUpFeeInvalid"));
+      if (StringUtils.isNotBlank(getDomain()) && !illusionEventController.isEventAllowedDomain(getDomain())) {
+        FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.customDomainInvalid"));
         return null;
+      } else {
+        illusionEventController.updateEventDomain(illusionEvent, getDomain());
       }
-    }
-
-    illusionEventController.updateIllusionEventName(illusionEvent, getName());
-    illusionEventController.updateIllusionEventDescription(illusionEvent, getDescription());
-    illusionEventController.updateIllusionEventJoinMode(illusionEvent, getJoinMode());
-    illusionEventController.updateIllusionEventStart(illusionEvent, parseDate(getStart()));
-    illusionEventController.updateIllusionEventEnd(illusionEvent, parseDate(getEnd()));
-    illusionEventController.updateIllusionEventLocation(illusionEvent, getLocation());
-    illusionEventController.updateIllusionEventType(illusionEvent, type);
-    illusionEventController.updateIllusionEventSignUpTimes(illusionEvent, parseDate(getSignUpStartDate()), parseDate(getSignUpEndDate()));
-    illusionEventController.updateIllusionEventAgeLimit(illusionEvent, getAgeLimit());
-    illusionEventController.updateIllusionEventBeginnerFriendly(illusionEvent, getBeginnerFriendly());
-    illusionEventController.updateIllusionEventImageUrl(illusionEvent, getImageUrl());
-    illusionEventController.updateEventSignUpFee(illusionEvent, signUpFeeText, signUpFee, signUpFeeCurrency, getPaymentMode());
-    
-    if (StringUtils.isNotBlank(getDomain()) && !illusionEventController.isEventAllowedDomain(getDomain())) {
-      FacesUtils.addMessage(javax.faces.application.FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.customDomainInvalid"));
-      return null;
-    } else {
-      illusionEventController.updateEventDomain(illusionEvent, getDomain());
-    }
-    
-    List<Genre> genres = new ArrayList<>();
-    
-    for (Long genreId : genreIds) {
-      Genre genre = illusionEventController.findGenreById(genreId);
-      genres.add(genre);
-    }
-    
-    illusionEventController.updateEventGenres(illusionEvent, genres);
-    illusionEventController.updatePublished(illusionEvent, getPublished());
-    
-    if (getLarpKalenteriSync()) {
-      try {
-        illusionEventController.updateLarpKalenteriEvent(illusionEvent, getLocationLat(), getLocationLon());
-      } catch (IOException e) {
-        logger.log(Level.SEVERE, "Failed to synchronize event into Larp-kalenteri", e);
-      } catch (LarpKalenteriEventMissingException e) {
-        FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.eventRemovedFromLarpKalenteri", type.getName()));
-      } catch (UnsupportedTypeException e) {
-        FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.eventTypeNotSynchronizableToLarpKalenteri", type.getName()));
+      
+      List<Genre> genres = new ArrayList<>();
+      
+      for (Long genreId : genreIds) {
+        Genre genre = illusionEventController.findGenreById(genreId);
+        genres.add(genre);
       }
-    } else {
-      illusionEventController.setSetting(illusionEvent, IllusionEventSettingKey.LARP_KALENTERI_ID, null);
+      
+      illusionEventController.updateEventGenres(illusionEvent, genres);
+      illusionEventController.updatePublished(illusionEvent, getPublished());
+      
+      if (getLarpKalenteriSync()) {
+        try {
+          illusionEventController.updateLarpKalenteriEvent(illusionEvent, getLocationLat(), getLocationLon());
+        } catch (IOException e) {
+          logger.log(Level.SEVERE, "Failed to synchronize event into Larp-kalenteri", e);
+        } catch (LarpKalenteriEventMissingException e) {
+          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.eventRemovedFromLarpKalenteri", type.getName()));
+        } catch (UnsupportedTypeException e) {
+          FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("illusion.eventSettings.eventTypeNotSynchronizableToLarpKalenteri", type.getName()));
+        }
+      } else {
+        illusionEventController.setSetting(illusionEvent, IllusionEventSettingKey.LARP_KALENTERI_ID, null);
+      }
+      
+      return "/illusion/event-settings.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
+    } catch (Exception e) {
+      logger.log(Level.SEVERE, "Unexpected error", e);
+      throw e;
     }
-    
-    return "/illusion/event-settings.jsf?faces-redirect=true&urlName=" + illusionEvent.getUrlName();
   }
 
   private String formatDate(Date time) {
@@ -395,7 +407,9 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
       return null;
     }
     
-    return DateTimeFormatter.ISO_DATE.format(time.toInstant());
+    Instant instant = Instant.ofEpochMilli(time.getTime());
+    ZonedDateTime dateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
+    return DateTimeFormatter.ISO_DATE.format(dateTime.toLocalDate());
   }
 
   private String formatDateTime(Date time) {
@@ -403,21 +417,28 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
       return null;
     }
     
-    return DateTimeFormatter.ISO_DATE_TIME.format(time.toInstant());
+    Instant instant = Instant.ofEpochMilli(time.getTime());
+    ZonedDateTime dateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
+    return DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(dateTime);
   }
 
-  private Date parseDate(String iso) {
+  private static Date parseDateTime(String iso) {
     if (StringUtils.isBlank(iso)) {
       return null;
     }
     
-    TemporalAccessor temporalAccessor = DateTimeFormatter.ISO_DATE_TIME.parse(iso);
-    if (temporalAccessor != null) {
-      ZonedDateTime dateTime = ZonedDateTime.from(temporalAccessor);
-      return Date.from(dateTime.toInstant());
-    } 
-
-    return null;
+    DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+    ZonedDateTime dateTime = ZonedDateTime.parse(iso, formatter);
+    return Date.from(dateTime.toInstant());
+  }
+  
+  private static Date parseDate(String iso) {
+    if (StringUtils.isBlank(iso)) {
+      return null;
+    }
+    
+    LocalDate localDate = LocalDate.parse(iso, DateTimeFormatter.ISO_DATE);
+    return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
   }
   
   public String getHandlingFeeText() {
