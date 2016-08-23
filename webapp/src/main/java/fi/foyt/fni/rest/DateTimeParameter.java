@@ -1,7 +1,7 @@
 package fi.foyt.fni.rest;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 
@@ -12,15 +12,15 @@ public class DateTimeParameter implements Serializable {
   public DateTimeParameter(String dateString) {
     TemporalAccessor temporalAccessor = DateTimeFormatter.ISO_DATE_TIME.parse(dateString);
     if (temporalAccessor != null) {
-      dateTime = ZonedDateTime.from(temporalAccessor);
+      dateTime = OffsetDateTime.from(temporalAccessor);
     } else {
       dateTime = null;
     }
   }
 
-  public ZonedDateTime getDateTime() {
+  public OffsetDateTime getDateTime() {
     return dateTime;
   }
 
-  private final ZonedDateTime dateTime;
+  private final OffsetDateTime dateTime;
 }

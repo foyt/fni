@@ -14,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -635,12 +636,16 @@ public abstract class AbstractTest {
     return greenMail;
   }
   
-  protected ZonedDateTime getDate(int year, int monthOfYear, int dayOfMonth, ZoneId zone) {
+  protected ZonedDateTime getZonedDate(int year, int monthOfYear, int dayOfMonth, ZoneId zone) {
     return ZonedDateTime.of(monthOfYear, monthOfYear, dayOfMonth, 0, 0, 0, 0, zone);
   }
   
-  protected ZonedDateTime getDate(int year, int monthOfYear, int dayOfMonth) {
-    return getDate(year, monthOfYear, dayOfMonth, ZoneId.systemDefault());
+  protected ZonedDateTime getZonedDate(int year, int monthOfYear, int dayOfMonth) {
+    return getZonedDate(year, monthOfYear, dayOfMonth, ZoneId.systemDefault());
+  }
+  
+  protected OffsetDateTime getDate(int year, int monthOfYear, int dayOfMonth) {
+    return getZonedDate(year, monthOfYear, dayOfMonth).toOffsetDateTime();
   }
 
   private class DefinedSqlSet {

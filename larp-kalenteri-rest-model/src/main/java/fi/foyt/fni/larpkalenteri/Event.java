@@ -1,7 +1,7 @@
 package fi.foyt.fni.larpkalenteri;
 
 
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public class Event {
@@ -9,7 +9,7 @@ public class Event {
   public Event() {
   }
   
-  public Event(Long id, String name, String type, ZonedDateTime start, ZonedDateTime end, String textDate, ZonedDateTime signUpStart, ZonedDateTime signUpEnd, Long locationDropDown,
+  public Event(Long id, String name, String type, OffsetDateTime start, OffsetDateTime end, String textDate, OffsetDateTime signUpStart, OffsetDateTime signUpEnd, Long locationDropDown,
       String location, String iconURL, List<String> genres, String cost, Integer ageLimit, Boolean beginnerFriendly, String storyDescription,
       String infoDescription, String organizerName, String organizerEmail, String link1, String link2, Status status, String password, Boolean eventFull,
       Boolean invitationOnly, Boolean languageFree, Long illusionId) {
@@ -67,19 +67,19 @@ public class Event {
     this.type = type;
   }
 
-  public ZonedDateTime getStart() {
+  public OffsetDateTime getStart() {
     return start;
   }
 
-  public void setStart(ZonedDateTime start) {
+  public void setStart(OffsetDateTime start) {
     this.start = start;
   }
 
-  public ZonedDateTime getEnd() {
+  public OffsetDateTime getEnd() {
     return end;
   }
 
-  public void setEnd(ZonedDateTime end) {
+  public void setEnd(OffsetDateTime end) {
     this.end = end;
   }
 
@@ -91,19 +91,19 @@ public class Event {
     this.textDate = textDate;
   }
 
-  public ZonedDateTime getSignUpStart() {
+  public OffsetDateTime getSignUpStart() {
     return signUpStart;
   }
 
-  public void setSignUpStart(ZonedDateTime signUpStart) {
+  public void setSignUpStart(OffsetDateTime signUpStart) {
     this.signUpStart = signUpStart;
   }
 
-  public ZonedDateTime getSignUpEnd() {
+  public OffsetDateTime getSignUpEnd() {
     return signUpEnd;
   }
 
-  public void setSignUpEnd(ZonedDateTime signUpEnd) {
+  public void setSignUpEnd(OffsetDateTime signUpEnd) {
     this.signUpEnd = signUpEnd;
   }
 
@@ -262,11 +262,11 @@ public class Event {
   private Long id;
   private String name;
   private String type;
-  private ZonedDateTime start;
-  private ZonedDateTime end;
+  private OffsetDateTime start;
+  private OffsetDateTime end;
   private String textDate;
-  private ZonedDateTime signUpStart;
-  private ZonedDateTime signUpEnd;
+  private OffsetDateTime signUpStart;
+  private OffsetDateTime signUpEnd;
   private Long locationDropDown;
   private String location;
   private String iconURL;

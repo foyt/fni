@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -185,7 +186,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
     ZonedDateTime endTime = ZonedDateTime.now();
     endTime.plusDays(3);
     
-    DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+    DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
     Response response = givenJson()
       .queryParam("minTime", formatter.format(startTime))
@@ -969,8 +970,13 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .statusCode(200);
   }
 
-  private ZonedDateTime toDateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour, int secondOfMinute, int millisOfSecond) {
+  private ZonedDateTime toZonedDateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour, int secondOfMinute, int millisOfSecond) {
     return ZonedDateTime.of(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, 0, ZoneId.systemDefault());
+  }
+
+  private OffsetDateTime toDateTime(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour, int secondOfMinute, int millisOfSecond) {
+    ZonedDateTime zonedDateTime = toZonedDateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute, millisOfSecond);
+    return zonedDateTime.toOffsetDateTime();
   }
 
   private ZonedDateTime parseZonedDateTime(String text) {

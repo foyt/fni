@@ -6,7 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -269,7 +269,7 @@ public class IllusionRestServices {
     return Response.ok(createRestModel(event)).build();
   }
 
-  private Date toDate(ZonedDateTime dateTime) {
+  private Date toDate(OffsetDateTime dateTime) {
     if (dateTime == null) {
       return null;
     }
@@ -1725,8 +1725,8 @@ public class IllusionRestServices {
   private fi.foyt.fni.rest.illusion.model.IllusionEvent createRestModel(IllusionEvent illusionEvent) {
     String signUpFeeCurrency = illusionEvent.getSignUpFeeCurrency() != null ? illusionEvent.getSignUpFeeCurrency().getCurrencyCode() : null;
     Long typeId = illusionEvent.getType() != null ? illusionEvent.getType().getId() : null;
-    ZonedDateTime signUpStartDate = getDateAsDateTime(illusionEvent.getSignUpStartDate());
-    ZonedDateTime signUpEndDate = getDateAsDateTime(illusionEvent.getSignUpEndDate());
+    OffsetDateTime signUpStartDate = getDateAsDateTime(illusionEvent.getSignUpStartDate());
+    OffsetDateTime signUpEndDate = getDateAsDateTime(illusionEvent.getSignUpEndDate());
     String signUpFeeText = illusionEvent.getSignUpFeeText();
     
     List<IllusionEventGenre> genres = illusionEventController.listIllusionEventGenres(illusionEvent);
@@ -1736,8 +1736,8 @@ public class IllusionRestServices {
       genreIds.add(genre.getGenre().getId());
     }
     
-    ZonedDateTime start = getDateAsDateTime(illusionEvent.getStart());
-    ZonedDateTime end = getDateAsDateTime(illusionEvent.getEnd());
+    OffsetDateTime start = getDateAsDateTime(illusionEvent.getStart());
+    OffsetDateTime end = getDateAsDateTime(illusionEvent.getEnd());
     
     return new fi.foyt.fni.rest.illusion.model.IllusionEvent(illusionEvent.getId(), illusionEvent.getPublished(), illusionEvent.getName(), illusionEvent.getDescription(), 
         getDateAsDateTime(illusionEvent.getCreated()), illusionEvent.getUrlName(), illusionEvent.getXmppRoom(), illusionEvent.getJoinMode(), signUpFeeText,
@@ -1759,12 +1759,12 @@ public class IllusionRestServices {
     return new fi.foyt.fni.rest.illusion.model.IllusionEventParticipant(participant.getId(), participant.getUser().getId(), participant.getRole(), participant.getDisplayName());
   }
   
-  private ZonedDateTime getDateAsDateTime(Date date) {
+  private OffsetDateTime getDateAsDateTime(Date date) {
     if (date == null) {
       return null;
     }
     
-    return ZonedDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
+    return OffsetDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
   }
   
   private ForumPost[] createRestModel(fi.foyt.fni.persistence.model.forum.ForumPost... forumPosts) {
@@ -1806,8 +1806,8 @@ public class IllusionRestServices {
   }
   
   private ForumPost createRestModel(fi.foyt.fni.persistence.model.forum.ForumPost forumPost) {
-    ZonedDateTime modified = getDateAsDateTime(forumPost.getModified());
-    ZonedDateTime created = getDateAsDateTime(forumPost.getCreated());
+    OffsetDateTime modified = getDateAsDateTime(forumPost.getModified());
+    OffsetDateTime created = getDateAsDateTime(forumPost.getCreated());
     
     return new ForumPost(forumPost.getId(), forumPost.getTopic().getId(), forumPost.getContent(), 
         modified, created, forumPost.getAuthor().getId(), forumPost.getViews()); 

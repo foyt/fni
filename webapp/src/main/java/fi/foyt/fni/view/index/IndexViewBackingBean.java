@@ -1,6 +1,6 @@
 package fi.foyt.fni.view.index;
 
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -66,7 +66,7 @@ public class IndexViewBackingBean {
 		illusionEvents = createEventPojos(illusionEventController.listNextIllusionEvents(MAX_ILLUSION_EVENTS));
 		latestBlogEntries = blogController.listBlogEntries(MAX_LATEST_ENTRIES);
 	  
-    ZonedDateTime lastPostDate = blogController.getLastBlogDate();
+    OffsetDateTime lastPostDate = blogController.getLastBlogDate();
     if (lastPostDate != null) {
       newsArchiveMonth = lastPostDate.getMonthValue();
       newsArchiveYear = lastPostDate.getYear();

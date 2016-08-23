@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -129,7 +129,7 @@ public class LarpKalenteriClient {
     return createEvent(name, type, getDateTime(start), getDateTime(end), textDate, getDateTime(signUpStart), getDateTime(signUpEnd), locationDropDown, location, iconURL, genres, cost, ageLimit, beginnerFriendly, storyDescription, infoDescription, organizerName, organizerEmail, link1, link2, status, password, eventFull, invitationOnly, languageFree, illusionId);
   }
   
-  public Event createEvent(String name, String type, ZonedDateTime start, ZonedDateTime end, String textDate, ZonedDateTime signUpStart, ZonedDateTime signUpEnd, Long locationDropDown,
+  public Event createEvent(String name, String type, OffsetDateTime start, OffsetDateTime end, String textDate, OffsetDateTime signUpStart, OffsetDateTime signUpEnd, Long locationDropDown,
       String location, String iconURL, List<String> genres, String cost, Integer ageLimit, Boolean beginnerFriendly, String storyDescription,
       String infoDescription, String organizerName, String organizerEmail, String link1, String link2, Status status, String password, Boolean eventFull,
       Boolean invitationOnly, Boolean languageFree, Long illusionId) throws IOException {
@@ -155,7 +155,7 @@ public class LarpKalenteriClient {
         invitationOnly, languageFree, illusionId);
   }
 
-  public Event updateEvent(Long id, String name, String type, ZonedDateTime start, ZonedDateTime end, String textDate, ZonedDateTime signUpStart, ZonedDateTime signUpEnd, Long locationDropDown,
+  public Event updateEvent(Long id, String name, String type, OffsetDateTime start, OffsetDateTime end, String textDate, OffsetDateTime signUpStart, OffsetDateTime signUpEnd, Long locationDropDown,
       String location, String iconURL, List<String> genres, String cost, Integer ageLimit, Boolean beginnerFriendly, String storyDescription,
       String infoDescription, String organizerName, String organizerEmail, String link1, String link2, Status status, String password, Boolean eventFull,
       Boolean invitationOnly, Boolean languageFree, Long illusionId) throws IOException {
@@ -316,12 +316,12 @@ public class LarpKalenteriClient {
     return accessToken;
   }
   
-  private ZonedDateTime getDateTime(Date date) {
+  private OffsetDateTime getDateTime(Date date) {
     if (date == null) {
       return null;
     }
     
-    return ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    return OffsetDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
   }
   
   private ObjectMapper createObjectMapper() {

@@ -1,7 +1,7 @@
 package fi.foyt.fni.view.index;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,11 +39,11 @@ public class NewsViewBackingBean {
 		blogEntries = blogController.listBlogEntriesByYearAndMonth(getYear(), getMonth() - 1);
 		months = new ArrayList<>();
 		
-		ZonedDateTime firstDate = blogController.getFirstBlogDate();
-		ZonedDateTime lastDate = blogController.getLastBlogDate();
+		LocalDate firstDate = blogController.getFirstBlogDate().toLocalDateTime().toLocalDate();
+		LocalDate lastDate = blogController.getLastBlogDate().toLocalDateTime().toLocalDate();
 		if (firstDate != null && lastDate != null) {
-		  ZonedDateTime currentMonth = ZonedDateTime.of(lastDate.getYear(), lastDate.getMonthValue(), 1, 0, 0, 0, 0, ZoneId.systemDefault());
-  		
+		  LocalDate currentMonth = LocalDate.of(lastDate.getYear(), lastDate.getMonthValue(), 1);
+		  
   		while (currentMonth.isAfter(firstDate)) {
   		  int postCount = blogController.countBlogEntriesByCreatedBetween(toDate(currentMonth), toDate(currentMonth.plusMonths(1))).intValue();
   		  if (postCount > 0) {
@@ -56,12 +56,12 @@ public class NewsViewBackingBean {
 		}
 	}
 	
-	private Date toDate(ZonedDateTime dateTime) {
+	private Date toDate(LocalDate dateTime) {
 	  if (dateTime == null) {
 	    return null;
 	  }
 	  
-	  return Date.from(dateTime.toInstant());
+	  return Date.from(dateTime.atStartOfDay(ZoneId.systemDefault()).toInstant());
   }
 
   public Integer getYear() {

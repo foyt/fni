@@ -3,7 +3,7 @@ package fi.foyt.fni.blog;
 import java.io.IOException;
 import java.net.URL;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -71,22 +71,22 @@ public class BlogController {
     return blogEntryDAO.listByCreatedGreaterOrEqualAndCreatedLessOrEqualSortByCreated(after, before);
   }
   
-  public ZonedDateTime getFirstBlogDate() {
+  public OffsetDateTime getFirstBlogDate() {
     Date date = blogEntryDAO.minBlogDate();
     if (date == null) {
       return null;
     }
     
-    return ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    return OffsetDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
   }
   
-  public ZonedDateTime getLastBlogDate() {
+  public OffsetDateTime getLastBlogDate() {
     Date date = blogEntryDAO.maxBlogDate();
     if (date == null) {
       return null;
     }
     
-    return ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    return OffsetDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
   }
 
   public Long countBlogEntriesByCreatedBetween(Date after, Date before) {
