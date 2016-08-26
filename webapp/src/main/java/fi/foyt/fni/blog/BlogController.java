@@ -34,6 +34,7 @@ import fi.foyt.fni.persistence.model.blog.BlogCategory;
 import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogEntryTag;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
+import fi.foyt.fni.utils.time.DateTimeUtils;
 
 public class BlogController {
 	
@@ -77,7 +78,7 @@ public class BlogController {
       return null;
     }
     
-    return OffsetDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    return DateTimeUtils.toOffsetDateTime(date);
   }
   
   public OffsetDateTime getLastBlogDate() {
@@ -86,7 +87,7 @@ public class BlogController {
       return null;
     }
     
-    return OffsetDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    return DateTimeUtils.toOffsetDateTime(date);
   }
 
   public Long countBlogEntriesByCreatedBetween(Date after, Date before) {
