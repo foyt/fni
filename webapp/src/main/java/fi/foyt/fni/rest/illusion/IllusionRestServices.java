@@ -4,8 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.ZoneId;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,6 +78,7 @@ import fi.foyt.fni.rest.illusion.model.IllusionEventGroup;
 import fi.foyt.fni.rest.illusion.model.IllusionEventMaterialParticipantSetting;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.users.UserController;
+import fi.foyt.fni.utils.time.DateTimeUtils;
 
 @Path("/illusion")
 @Produces(MediaType.APPLICATION_JSON)
@@ -274,7 +273,7 @@ public class IllusionRestServices {
       return null;
     }
     
-    return Date.from(dateTime.toInstant());
+    return DateTimeUtils.toDate(dateTime);
   }
 
   /**
@@ -1764,7 +1763,7 @@ public class IllusionRestServices {
       return null;
     }
     
-    return OffsetDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
+    return DateTimeUtils.toOffsetDateTime(date);
   }
   
   private ForumPost[] createRestModel(fi.foyt.fni.persistence.model.forum.ForumPost... forumPosts) {

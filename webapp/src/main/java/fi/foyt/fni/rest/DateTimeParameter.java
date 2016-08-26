@@ -2,20 +2,15 @@ package fi.foyt.fni.rest;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
+
+import fi.foyt.fni.utils.time.DateTimeUtils;
 
 public class DateTimeParameter implements Serializable {
   
   private static final long serialVersionUID = 1L;
 
   public DateTimeParameter(String dateString) {
-    TemporalAccessor temporalAccessor = DateTimeFormatter.ISO_DATE_TIME.parse(dateString);
-    if (temporalAccessor != null) {
-      dateTime = OffsetDateTime.from(temporalAccessor);
-    } else {
-      dateTime = null;
-    }
+    dateTime = DateTimeUtils.parseIsoOffsetDateTime(dateString);
   }
 
   public OffsetDateTime getDateTime() {

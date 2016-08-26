@@ -2,11 +2,6 @@ package fi.foyt.fni.view.illusion;
 
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
@@ -48,6 +43,7 @@ import fi.foyt.fni.security.SecurityContext;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
 import fi.foyt.fni.utils.faces.FacesUtils;
+import fi.foyt.fni.utils.time.DateTimeUtils;
 
 @RequestScoped
 @Named
@@ -407,9 +403,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
       return null;
     }
     
-    Instant instant = Instant.ofEpochMilli(time.getTime());
-    ZonedDateTime dateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
-    return DateTimeFormatter.ISO_DATE.format(dateTime.toLocalDate());
+    return DateTimeUtils.formatIsoLocalDate(time);
   }
 
   private String formatDateTime(Date time) {
@@ -417,9 +411,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
       return null;
     }
     
-    Instant instant = Instant.ofEpochMilli(time.getTime());
-    ZonedDateTime dateTime = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
-    return DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(dateTime);
+    return DateTimeUtils.formatIsoOffsetDateTime(time);
   }
 
   private static Date parseDateTime(String iso) {
@@ -427,9 +419,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
       return null;
     }
     
-    DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-    ZonedDateTime dateTime = ZonedDateTime.parse(iso, formatter);
-    return Date.from(dateTime.toInstant());
+    return DateTimeUtils.toDate(DateTimeUtils.parseIsoOffsetDateTime(iso));
   }
   
   private static Date parseDate(String iso) {
@@ -437,8 +427,7 @@ public class IllusionEventSettingsBackingBean extends AbstractIllusionEventBacki
       return null;
     }
     
-    LocalDate localDate = LocalDate.parse(iso, DateTimeFormatter.ISO_DATE);
-    return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    return DateTimeUtils.toDate(DateTimeUtils.parseIsoLocalDate(iso));
   }
   
   public String getHandlingFeeText() {

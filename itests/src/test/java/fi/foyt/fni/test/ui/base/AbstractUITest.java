@@ -809,13 +809,15 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void waitCKEditorContents(int index, String contents) {
+    String expected = StringUtils.trim(StringUtils.replace(contents, "\n", ""));
     String script = String.format(
       "var instance = CKEDITOR && CKEDITOR.instances ? CKEDITOR.instances[Object.keys(CKEDITOR.instances)[%d]] : null; " +
       "return instance ? instance.getData() : null;", index);
     
     new WebDriverWait(getWebDriver(), 60).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver driver) {
-        return ((JavascriptExecutor) driver).executeScript(script).equals(contents);
+        String result = StringUtils.trim(StringUtils.replace((String) ((JavascriptExecutor) driver).executeScript(script), "\n", ""));
+        return StringUtils.equals(result, expected);
       }
     });
   }

@@ -3,7 +3,6 @@ package fi.foyt.fni.larpkalenteri;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.ZoneId;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,6 +44,7 @@ import fi.foyt.fni.larpkalenteri.AVIResolver.AVIProperties;
 import fi.foyt.fni.larpkalenteri.Event.Status;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.utils.time.DateTimeUtils;
 
 @ApplicationScoped
 public class LarpKalenteriClient {
@@ -321,7 +321,7 @@ public class LarpKalenteriClient {
       return null;
     }
     
-    return OffsetDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    return DateTimeUtils.toOffsetDateTime(date);
   }
   
   private ObjectMapper createObjectMapper() {

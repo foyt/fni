@@ -1,7 +1,7 @@
 package fi.foyt.fni.view.index;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +18,7 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 import fi.foyt.fni.blog.BlogController;
 import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
+import fi.foyt.fni.utils.time.DateTimeUtils;
 
 @RequestScoped
 @Named
@@ -39,8 +40,8 @@ public class NewsViewBackingBean {
 		blogEntries = blogController.listBlogEntriesByYearAndMonth(getYear(), getMonth() - 1);
 		months = new ArrayList<>();
 		
-		LocalDate firstDate = blogController.getFirstBlogDate().toLocalDateTime().toLocalDate();
-		LocalDate lastDate = blogController.getLastBlogDate().toLocalDateTime().toLocalDate();
+		LocalDate firstDate = toLocalDate(blogController.getFirstBlogDate());
+		LocalDate lastDate = toLocalDate(blogController.getLastBlogDate());
 		if (firstDate != null && lastDate != null) {
 		  LocalDate currentMonth = LocalDate.of(lastDate.getYear(), lastDate.getMonthValue(), 1);
 		  
@@ -56,12 +57,20 @@ public class NewsViewBackingBean {
 		}
 	}
 	
+	private LocalDate toLocalDate(OffsetDateTime dateTime) {
+	  if (dateTime == null) {
+	    return null;
+	  }
+	  
+	  return dateTime.toLocalDateTime().toLocalDate(); 
+	}
+	
 	private Date toDate(LocalDate dateTime) {
 	  if (dateTime == null) {
 	    return null;
 	  }
 	  
-	  return Date.from(dateTime.atStartOfDay(ZoneId.systemDefault()).toInstant());
+	  return DateTimeUtils.toDate(dateTime);
   }
 
   public Integer getYear() {

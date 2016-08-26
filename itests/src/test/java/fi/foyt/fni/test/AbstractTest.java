@@ -637,7 +637,7 @@ public abstract class AbstractTest {
   }
   
   protected ZonedDateTime getZonedDate(int year, int monthOfYear, int dayOfMonth, ZoneId zone) {
-    return ZonedDateTime.of(monthOfYear, monthOfYear, dayOfMonth, 0, 0, 0, 0, zone);
+    return ZonedDateTime.of(year, monthOfYear, dayOfMonth, 0, 0, 0, 0, zone);
   }
   
   protected ZonedDateTime getZonedDate(int year, int monthOfYear, int dayOfMonth) {
