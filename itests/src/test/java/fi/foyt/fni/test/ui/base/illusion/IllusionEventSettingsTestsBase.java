@@ -21,7 +21,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import fi.foyt.fni.larpkalenteri.Event;
@@ -349,7 +349,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(12345l, 
@@ -384,7 +384,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
           .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-              .registerModule(new JodaModule())
+              .registerModule(new JSR310Module())
               .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
               .writeValueAsString(new Event(12345l, 
                 "Open Event", "2", 
@@ -418,7 +418,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         .withStatus(200)
         .withHeader("Content-Type", "application/json")
         .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-            .registerModule(new JodaModule())
+            .registerModule(new JSR310Module())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .writeValueAsString(new Event(12345l, 
               "Open Event", "2", 
@@ -471,7 +471,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(12345l, 
@@ -506,7 +506,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
           .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-              .registerModule(new JodaModule())
+              .registerModule(new JSR310Module())
               .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
               .writeValueAsString(new Event(12345l, 
                 "Open Event", "2", 
@@ -540,7 +540,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         .withStatus(200)
         .withHeader("Content-Type", "application/json")
         .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-            .registerModule(new JodaModule())
+            .registerModule(new JSR310Module())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .writeValueAsString(new Event(12345l, 
               "Open Event", "2", 
@@ -594,7 +594,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(12345l, 
@@ -629,7 +629,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
           .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-              .registerModule(new JodaModule())
+              .registerModule(new JSR310Module())
               .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
               .writeValueAsString(new Event(12345l, 
                 "Open Event", "2", 
@@ -663,7 +663,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         .withStatus(200)
         .withHeader("Content-Type", "application/json")
         .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-            .registerModule(new JodaModule())
+            .registerModule(new JSR310Module())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .writeValueAsString(new Event(12345l, 
               "Open Event", "2", 
@@ -719,7 +719,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(null, 
@@ -750,7 +750,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         1l));
 
     String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper())
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .writeValueAsString(new Event(123l, 
         "Open Event", "2", 
@@ -810,7 +810,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(null, 
@@ -841,7 +841,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         1l));
 
     String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper())
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .writeValueAsString(new Event(123l, 
         "Open Event", "2", 
@@ -903,7 +903,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(null, 
@@ -934,7 +934,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         1l));
 
     String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper())
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .writeValueAsString(new Event(123l, 
         "Open Event", "2", 
@@ -996,7 +996,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(12345l, 
@@ -1031,7 +1031,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
           .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-              .registerModule(new JodaModule())
+              .registerModule(new JSR310Module())
               .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
               .writeValueAsString(new Event(12345l, 
                 "Open Event", "2", 
@@ -1065,7 +1065,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         .withStatus(200)
         .withHeader("Content-Type", "application/json")
         .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-            .registerModule(new JodaModule())
+            .registerModule(new JSR310Module())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .writeValueAsString(new Event(12345l, 
               "Open Event", "2", 
@@ -1119,7 +1119,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(12345l, 
@@ -1154,7 +1154,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
           .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-              .registerModule(new JodaModule())
+              .registerModule(new JSR310Module())
               .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
               .writeValueAsString(new Event(12345l, 
                 "Open Event", "2", 
@@ -1188,7 +1188,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         .withStatus(200)
         .withHeader("Content-Type", "application/json")
         .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-            .registerModule(new JodaModule())
+            .registerModule(new JSR310Module())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .writeValueAsString(new Event(12345l, 
               "Open Event", "2", 

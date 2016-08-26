@@ -2,6 +2,8 @@ package fi.foyt.fni.blog;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,7 +18,6 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.joda.time.DateTime;
 
 import com.rometools.rome.feed.synd.SyndCategory;
 import com.rometools.rome.feed.synd.SyndEntry;
@@ -33,6 +34,7 @@ import fi.foyt.fni.persistence.model.blog.BlogCategory;
 import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogEntryTag;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
+import fi.foyt.fni.utils.time.DateTimeUtils;
 
 public class BlogController {
 	
@@ -70,14 +72,22 @@ public class BlogController {
     return blogEntryDAO.listByCreatedGreaterOrEqualAndCreatedLessOrEqualSortByCreated(after, before);
   }
   
-  public DateTime getFirstBlogDate() {
+  public OffsetDateTime getFirstBlogDate() {
     Date date = blogEntryDAO.minBlogDate();
-    return date != null ? new DateTime(date.getTime()) : null;
+    if (date == null) {
+      return null;
+    }
+    
+    return DateTimeUtils.toOffsetDateTime(date);
   }
   
-  public DateTime getLastBlogDate() {
+  public OffsetDateTime getLastBlogDate() {
     Date date = blogEntryDAO.maxBlogDate();
-    return date != null ? new DateTime(date.getTime()) : null;
+    if (date == null) {
+      return null;
+    }
+    
+    return DateTimeUtils.toOffsetDateTime(date);
   }
 
   public Long countBlogEntriesByCreatedBetween(Date after, Date before) {

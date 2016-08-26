@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fi.foyt.fni.persistence.model.users.User;
 import fi.foyt.fni.session.SessionController;

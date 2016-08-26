@@ -21,8 +21,8 @@
 
     <!-- Maven -->
 
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
   
     <!-- Selenium -->
 
@@ -54,7 +54,7 @@
     
     <!-- Jackson -->
     
-    <jackson-datatype-joda.version>2.3.0</jackson-datatype-joda.version>
+    <jackson-datatype-jsr310.version>2.3.2</jackson-datatype-jsr310.version>
     
     <!-- Apache Oltu -->
     
@@ -87,16 +87,14 @@
       <scope>test</scope>
       <version>${project.version}</version>
     </dependency>
-    
-    <!-- Jackson -->
-    
+      
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
-      <artifactId>jackson-datatype-joda</artifactId>
-      <version>${jackson-datatype-joda.version}</version>
+      <artifactId>jackson-datatype-jsr310</artifactId>
       <scope>test</scope>
-    </dependency> 
-
+      <version>${jackson-datatype-jsr310.version}</version>
+    </dependency>
+    
     <!-- Apache Oltu -->
     
     <dependency>

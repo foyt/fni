@@ -18,7 +18,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import fi.foyt.fni.larpkalenteri.Event;
@@ -364,7 +364,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     String description = "description";
     
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(null, 
@@ -396,7 +396,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
         null));
     
     String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(234l, 
@@ -477,7 +477,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     String description = "description";
     
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(null, 
@@ -509,7 +509,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
         null));
     
     String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(234l, 
@@ -593,7 +593,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     String description = "description";
     
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(null, 
@@ -625,7 +625,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
         null));
     
     String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JSR310Module())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(234l, 

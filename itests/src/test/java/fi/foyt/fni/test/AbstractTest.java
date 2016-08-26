@@ -14,6 +14,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,8 +30,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -635,12 +636,16 @@ public abstract class AbstractTest {
     return greenMail;
   }
   
-  protected DateTime getDate(int year, int monthOfYear, int dayOfMonth, DateTimeZone zone) {
-    return new DateTime(year, monthOfYear, dayOfMonth, 0, 0, 0, 0, zone);
+  protected ZonedDateTime getZonedDate(int year, int monthOfYear, int dayOfMonth, ZoneId zone) {
+    return ZonedDateTime.of(year, monthOfYear, dayOfMonth, 0, 0, 0, 0, zone);
   }
   
-  protected DateTime getDate(int year, int monthOfYear, int dayOfMonth) {
-    return getDate(year, monthOfYear, dayOfMonth, DateTimeZone.getDefault());
+  protected ZonedDateTime getZonedDate(int year, int monthOfYear, int dayOfMonth) {
+    return getZonedDate(year, monthOfYear, dayOfMonth, ZoneId.systemDefault());
+  }
+  
+  protected OffsetDateTime getDate(int year, int monthOfYear, int dayOfMonth) {
+    return getZonedDate(year, monthOfYear, dayOfMonth).toOffsetDateTime();
   }
 
   private class DefinedSqlSet {

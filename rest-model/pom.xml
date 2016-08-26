@@ -12,21 +12,14 @@
   </parent>
   
   <dependencies>
-  
-    <!-- Joda -->
-    
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    
+   
     <!-- FnI -->
 
     <dependency>
       <groupId>fi.foyt.fni</groupId>
       <artifactId>persistence</artifactId>
     </dependency>
+    
   </dependencies>
   
   

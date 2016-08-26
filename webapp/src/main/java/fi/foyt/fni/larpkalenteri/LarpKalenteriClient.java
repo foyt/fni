@@ -3,6 +3,7 @@ package fi.foyt.fni.larpkalenteri;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,18 +33,18 @@ import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
-import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 
 import fi.foyt.fni.larpkalenteri.AVIResolver.AVIProperties;
 import fi.foyt.fni.larpkalenteri.Event.Status;
 import fi.foyt.fni.persistence.model.system.SystemSettingKey;
 import fi.foyt.fni.system.SystemSettingsController;
+import fi.foyt.fni.utils.time.DateTimeUtils;
 
 @ApplicationScoped
 public class LarpKalenteriClient {
@@ -128,7 +129,7 @@ public class LarpKalenteriClient {
     return createEvent(name, type, getDateTime(start), getDateTime(end), textDate, getDateTime(signUpStart), getDateTime(signUpEnd), locationDropDown, location, iconURL, genres, cost, ageLimit, beginnerFriendly, storyDescription, infoDescription, organizerName, organizerEmail, link1, link2, status, password, eventFull, invitationOnly, languageFree, illusionId);
   }
   
-  public Event createEvent(String name, String type, DateTime start, DateTime end, String textDate, DateTime signUpStart, DateTime signUpEnd, Long locationDropDown,
+  public Event createEvent(String name, String type, OffsetDateTime start, OffsetDateTime end, String textDate, OffsetDateTime signUpStart, OffsetDateTime signUpEnd, Long locationDropDown,
       String location, String iconURL, List<String> genres, String cost, Integer ageLimit, Boolean beginnerFriendly, String storyDescription,
       String infoDescription, String organizerName, String organizerEmail, String link1, String link2, Status status, String password, Boolean eventFull,
       Boolean invitationOnly, Boolean languageFree, Long illusionId) throws IOException {
@@ -154,7 +155,7 @@ public class LarpKalenteriClient {
         invitationOnly, languageFree, illusionId);
   }
 
-  public Event updateEvent(Long id, String name, String type, DateTime start, DateTime end, String textDate, DateTime signUpStart, DateTime signUpEnd, Long locationDropDown,
+  public Event updateEvent(Long id, String name, String type, OffsetDateTime start, OffsetDateTime end, String textDate, OffsetDateTime signUpStart, OffsetDateTime signUpEnd, Long locationDropDown,
       String location, String iconURL, List<String> genres, String cost, Integer ageLimit, Boolean beginnerFriendly, String storyDescription,
       String infoDescription, String organizerName, String organizerEmail, String link1, String link2, Status status, String password, Boolean eventFull,
       Boolean invitationOnly, Boolean languageFree, Long illusionId) throws IOException {
@@ -315,17 +316,17 @@ public class LarpKalenteriClient {
     return accessToken;
   }
   
-  private DateTime getDateTime(Date date) {
+  private OffsetDateTime getDateTime(Date date) {
     if (date == null) {
       return null;
     }
     
-    return new DateTime(date);
+    return DateTimeUtils.toOffsetDateTime(date);
   }
   
   private ObjectMapper createObjectMapper() {
     ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.registerModule(new JodaModule());
+    objectMapper.registerModule(new JSR310Module());
     objectMapper.configure(com.fasterxml.jackson.databind.SerializationFeature.
         WRITE_DATES_AS_TIMESTAMPS , false);
     return objectMapper;
