@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionAttribute;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -19,6 +21,7 @@ import org.ocpsoft.rewrite.annotation.Join;
 public class AboutBackingBean {
   
   @PostConstruct
+  @TransactionAttribute (TransactionAttributeType.NOT_SUPPORTED)
   public void init() {
     this.pattern = Pattern.compile("\\[(.*?)\\]");
   }

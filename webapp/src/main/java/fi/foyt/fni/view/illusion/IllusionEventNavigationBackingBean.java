@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -35,6 +37,7 @@ public class IllusionEventNavigationBackingBean {
   private IllusionEventNavigationController illusionEventNavigationController;
   
   @PostConstruct
+  @TransactionAttribute (TransactionAttributeType.REQUIRES_NEW)
   public void init() {
     administrationVisible = false;
     
