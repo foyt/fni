@@ -74,20 +74,6 @@
       <artifactId>jboss-jsf-api_2.2_spec</artifactId>
       <scope>provided</scope>
     </dependency>
-
-    <!-- RESTEasy -->
-
-    <dependency>
-      <groupId>org.jboss.resteasy</groupId>
-      <artifactId>jaxrs-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jboss.resteasy</groupId>
-      <artifactId>resteasy-jaxrs</artifactId>
-      <scope>provided</scope>
-    </dependency>
     
     <!-- Hibernate -->
     
@@ -108,34 +94,16 @@
       <artifactId>hibernate-search-orm</artifactId>
       <scope>provided</scope>
     </dependency>
-  
+    
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-search-engine</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-entitymanager</artifactId>
-      <scope>provided</scope>
-    </dependency>
-  
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-search-analyzers</artifactId>
-      <scope>provided</scope>
-    </dependency>
-  
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-search-infinispan</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-core</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-memory</artifactId>
       <scope>provided</scope>
     </dependency>
 
@@ -144,11 +112,11 @@
       <artifactId>hibernate-validator</artifactId>
       <scope>provided</scope>
     </dependency>
-
+    
     <!-- Xalan -->
 
     <dependency>
-      <groupId>org.apache.xalan</groupId>
+      <groupId>xalan</groupId>
       <artifactId>xalan</artifactId>
       <scope>provided</scope>
     </dependency>
@@ -316,7 +284,7 @@
 
     <dependency>
       <groupId>com.google.http-client</groupId>
-      <artifactId>google-http-client-jackson</artifactId>
+      <artifactId>google-http-client-jackson2</artifactId>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
@@ -334,7 +302,25 @@
       </exclusions>
     </dependency>
 
-    <!-- Lucene Highlighter -->
+    <!-- Lucene -->
+
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-queryparser</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-queries</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.lucene</groupId>
@@ -366,13 +352,14 @@
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <!-- WebSockets -->
     
     <dependency>
       <groupId>org.jboss.spec.javax.websocket</groupId>
-      <artifactId>jboss-websocket-api_1.0_spec</artifactId>
+      <artifactId>jboss-websocket-api_1.1_spec</artifactId>
       <scope>provided</scope>
     </dependency>
 
@@ -464,7 +451,7 @@
       <plugin>
          <groupId>com.github.warmuuh</groupId>
          <artifactId>libsass-maven-plugin</artifactId>
-         <version>0.2.2-libsass_3.3.3 </version>
+         <version>0.2.4-libsass_3.3.4</version>
          <executions>
             <execution>
                <id>sassProcessSource</id>
@@ -491,7 +478,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Dependencies>org.hibernate.search.orm services, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.jboss.resteasy.resteasy-jackson2-provider, org.apache.httpcomponents, com.fasterxml.jackson.core.jackson-annotations, com.fasterxml.jackson.core.jackson-databind</Dependencies>
+              <Dependencies>org.hibernate, org.hibernate.infinispan, org.hibernate.search.orm, org.hibernate.search.engine, org.hibernate.validator, org.apache.lucene, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.jboss.resteasy.resteasy-jackson2-provider, org.apache.httpcomponents, com.fasterxml.jackson.core.jackson-annotations, com.fasterxml.jackson.core.jackson-databind, com.fasterxml.jackson.datatype.jackson-datatype-jsr310</Dependencies>
             </manifestEntries>
           </archive>
           

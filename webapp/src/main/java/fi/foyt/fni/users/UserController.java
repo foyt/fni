@@ -13,10 +13,9 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.util.Version;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 
@@ -170,8 +169,8 @@ public class UserController implements Serializable {
 
     queryStringBuilder.append(")");
 
-    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-    QueryParser parser = new QueryParser(Version.LUCENE_35, "", analyzer);
+    Analyzer analyzer = new StandardAnalyzer();
+    QueryParser parser = new QueryParser("", analyzer);
 
     Query luceneQuery = parser.parse(queryStringBuilder.toString());
     FullTextQuery query = (FullTextQuery) fullTextEntityManager.createFullTextQuery(luceneQuery, UserEmail.class);
@@ -221,8 +220,8 @@ public class UserController implements Serializable {
 
     queryStringBuilder.append(") AND +(archived:false)");
 
-    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-    QueryParser parser = new QueryParser(Version.LUCENE_35, "", analyzer);
+    Analyzer analyzer = new StandardAnalyzer();
+    QueryParser parser = new QueryParser("", analyzer);
 
     Query luceneQuery = parser.parse(queryStringBuilder.toString());
     FullTextQuery query = (FullTextQuery) fullTextEntityManager.createFullTextQuery(luceneQuery, User.class);

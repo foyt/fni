@@ -55,11 +55,11 @@
   <properties>
     <!-- WildFly -->
 
-    <version.jboss.bom>8.1.0.Final</version.jboss.bom>
+    <wildfly-spec-api.version>10.1.0.Final</wildfly-spec-api.version>
 
     <!-- Lucene Highlighter -->
 
-    <lucene-highlighter.version>3.6.2</lucene-highlighter.version>
+    <lucene-highlighter.version>5.3.1</lucene-highlighter.version>
 
     <!-- PrettyFaces -->
 
@@ -67,19 +67,15 @@
 
     <!-- Scribe -->
 
-    <scribe.version>1.3.5</scribe.version>
+    <scribe.version>1.3.7</scribe.version>
     
     <!-- flying saucer -->
     
-    <flying-saucer-pdf-itext5.version>9.0.6</flying-saucer-pdf-itext5.version>
+    <flying-saucer-pdf-itext5.version>9.0.9</flying-saucer-pdf-itext5.version>
     
     <!-- Diff Match Patch -->
     
     <diff_match_patch.version>1.1</diff_match_patch.version>
-    
-    <!-- CNGram -->
-    
-    <cngram.version>1.0-0.060327</cngram.version>
     
     <!-- JTidy -->
     
@@ -87,12 +83,8 @@
     
     <!-- Google Drive -->
     
-    <google-api-services-drive.version>v2-rev126-1.18.0-rc</google-api-services-drive.version>
-    <google-http-client-jackson.version>1.18.0-rc</google-http-client-jackson.version>
-
-    <!-- Xalan -->
-
-    <xalan.version>2.7.1-1.jbossorg</xalan.version>
+    <google-api-services-drive.version>v2-rev234-1.21.0</google-api-services-drive.version>
+    <google-http-client-jackson2.version>1.22.0</google-http-client-jackson2.version>
 
     <!-- Paytrail -->
 
@@ -100,7 +92,7 @@
 
     <!-- Rome -->
 
-    <rome.version>1.5.1</rome.version>
+    <rome.version>1.7.0</rome.version>
     
     <!-- JDom -->
 
@@ -108,27 +100,22 @@
 
     <!-- Apache Commons -->
 
-    <commons-lang3.version>3.2.1</commons-lang3.version>
-    <commons-fileupload.version>1.3.1</commons-fileupload.version>
-    <commons-compress.version>1.8.1</commons-compress.version>
+    <commons-lang3.version>3.4</commons-lang3.version>
+    <commons-fileupload.version>1.3.2</commons-fileupload.version>
+    <commons-compress.version>1.12</commons-compress.version>
     <commons-io.version>2.4</commons-io.version>
-    <commons-collections.version>3.2.1</commons-collections.version>
-    
-    <!-- Jackson -->
-    
-    <jackson-datatype-jsr310.version>2.3.2</jackson-datatype-jsr310.version>
     
     <!-- CSS Parser -->
     
-    <cssparser.version>0.9.14</cssparser.version>
+    <cssparser.version>0.9.20</cssparser.version>
     
     <!-- Apache Oltu -->
     
-    <apache-oltu.version>1.0.0</apache-oltu.version>
+    <apache-oltu.version>1.0.2</apache-oltu.version>
     
     <!-- Jade -->
     
-    <jade4j.version>0.4.2</jade4j.version>
+    <jade4j.version>1.2.3</jade4j.version>
     
     <!-- CoOps -->
               
@@ -136,11 +123,11 @@
     
     <!-- POI -->
     
-    <poi.version>3.11</poi.version>
+    <poi.version>3.14</poi.version>
     
     <!-- CDI-unit -->
     
-    <cdi-unit.version>3.1.0</cdi-unit.version>
+    <cdi-unit.version>3.1.4</cdi-unit.version>
   </properties>
 
   <dependencyManagement>
@@ -149,7 +136,7 @@
       <dependency>    
         <groupId>org.wildfly</groupId>
         <artifactId>wildfly-spec-api</artifactId>
-        <version>${version.jboss.bom}</version>
+        <version>${wildfly-spec-api.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>    
@@ -214,12 +201,6 @@
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>${commons-io.version}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>commons-collections</groupId>
-        <artifactId>commons-collections</artifactId>
-        <version>${commons-collections.version}</version>
       </dependency>
       
       <!-- PrettyFaces -->
@@ -298,8 +279,8 @@
 
       <dependency>
         <groupId>com.google.http-client</groupId>
-        <artifactId>google-http-client-jackson</artifactId>
-        <version>${google-http-client-jackson.version}</version>
+        <artifactId>google-http-client-jackson2</artifactId>
+        <version>${google-http-client-jackson2.version}</version>
       </dependency>
 
       <!-- Rome -->
@@ -316,14 +297,6 @@
         <groupId>org.jdom</groupId>
         <artifactId>jdom</artifactId>
         <version>${jdom.version}</version>
-      </dependency>
-
-      <!-- Xalan -->
-
-      <dependency>
-        <groupId>org.apache.xalan</groupId>
-        <artifactId>xalan</artifactId>
-        <version>${xalan.version}</version>
       </dependency>
 
       <!-- CSS Parser -->
@@ -360,14 +333,6 @@
         <groupId>de.neuland-bfi</groupId>
         <artifactId>jade4j</artifactId>
         <version>${jade4j.version}</version>
-      </dependency>
-    
-      <!-- Jackson -->
-      
-      <dependency>
-        <groupId>com.fasterxml.jackson.datatype</groupId>
-        <artifactId>jackson-datatype-jsr310</artifactId>
-        <version>${jackson-datatype-jsr310.version}</version>
       </dependency>
     
       <dependency>

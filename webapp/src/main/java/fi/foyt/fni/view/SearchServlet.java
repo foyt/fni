@@ -18,7 +18,7 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryparser.classic.ParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fi.foyt.fni.forum.ForumController;

@@ -38,10 +38,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.util.Version;
 import org.apache.xpath.XPathAPI;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -1235,8 +1234,8 @@ public class MaterialController {
 
     queryStringBuilder.append(")");
 
-    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-    QueryParser parser = new QueryParser(Version.LUCENE_35, "", analyzer);
+    Analyzer analyzer = new StandardAnalyzer();
+    QueryParser parser = new QueryParser("", analyzer);
 
     Query luceneQuery = parser.parse(queryStringBuilder.toString());
     FullTextQuery query = (FullTextQuery) fullTextEntityManager.createFullTextQuery(luceneQuery, 
@@ -1279,8 +1278,8 @@ public class MaterialController {
 
     queryStringBuilder.append(")");
 
-    Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-    QueryParser parser = new QueryParser(Version.LUCENE_35, "", analyzer);
+    Analyzer analyzer = new StandardAnalyzer();
+    QueryParser parser = new QueryParser("", analyzer);
 
     Query luceneQuery = parser.parse(queryStringBuilder.toString());
     FullTextQuery query = (FullTextQuery) fullTextEntityManager.createFullTextQuery(luceneQuery, MaterialTag.class);
