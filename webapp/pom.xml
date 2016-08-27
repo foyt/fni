@@ -12,7 +12,7 @@
   </parent>
 
   <dependencies>
-
+  
     <!-- Servlet -->
 
     <dependency>
@@ -118,6 +118,12 @@
     <dependency>
       <groupId>xalan</groupId>
       <artifactId>xalan</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
       <scope>provided</scope>
     </dependency>
 
@@ -321,6 +327,12 @@
       <artifactId>lucene-queries</artifactId>
       <scope>provided</scope>
     </dependency>
+    
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-analyzers-common</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.lucene</groupId>
@@ -478,7 +490,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Dependencies>org.hibernate, org.hibernate.infinispan, org.hibernate.search.orm, org.hibernate.search.engine, org.hibernate.validator, org.apache.lucene, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.jboss.resteasy.resteasy-jackson2-provider, org.apache.httpcomponents, com.fasterxml.jackson.core.jackson-annotations, com.fasterxml.jackson.core.jackson-databind, com.fasterxml.jackson.datatype.jackson-datatype-jsr310</Dependencies>
+              <Dependencies>org.hibernate, org.hibernate.infinispan, org.hibernate.search.orm, org.hibernate.search.engine, org.hibernate.validator, org.apache.lucene, org.apache.commons.io, org.apache.commons.collections, org.apache.commons.codec, org.jboss.resteasy.resteasy-jackson2-provider, org.apache.httpcomponents, com.fasterxml.jackson.core.jackson-annotations, com.fasterxml.jackson.core.jackson-databind, com.fasterxml.jackson.datatype.jackson-datatype-jsr310, org.slf4j</Dependencies>
             </manifestEntries>
           </archive>
           
