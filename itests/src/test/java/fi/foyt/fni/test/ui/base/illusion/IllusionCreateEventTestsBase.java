@@ -14,11 +14,10 @@ import java.util.Arrays;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import fi.foyt.fni.larpkalenteri.Event;
@@ -364,7 +363,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     String description = "description";
     
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JSR310Module())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(null, 
@@ -396,7 +395,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
         null));
     
     String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JSR310Module())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(234l, 
@@ -453,7 +452,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     assertNotificationStartsWith("warning", "Event is not published");
     
     verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
-      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+      .withRequestBody(equalToJson(requestBody, true, true))    
     );
     
     navigate(String.format("/illusion/event/%s/settings", urlName));
@@ -477,7 +476,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     String description = "description";
     
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JSR310Module())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(null, 
@@ -509,7 +508,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
         null));
     
     String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JSR310Module())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(234l, 
@@ -568,7 +567,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     assertNotificationStartsWith("warning", "Event is not published");
     
     verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
-      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+      .withRequestBody(equalToJson(requestBody, true, true))    
     );
     
     navigate(String.format("/illusion/event/%s/settings", urlName));
@@ -593,7 +592,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     String description = "description";
     
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JSR310Module())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(null, 
@@ -625,7 +624,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
         null));
     
     String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JSR310Module())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(234l, 
@@ -685,7 +684,7 @@ public class IllusionCreateEventTestsBase extends AbstractIllusionUITest {
     assertNotificationStartsWith("warning", "Event is not published");
     
     verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
-      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+      .withRequestBody(equalToJson(requestBody, true, true))    
     );
     
     navigate(String.format("/illusion/event/%s/settings", urlName));

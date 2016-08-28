@@ -21,7 +21,7 @@ import org.junit.Before;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.config.ObjectMapperConfig;
 import com.jayway.restassured.config.RestAssuredConfig;
@@ -43,7 +43,7 @@ public class AbstractRestTest extends AbstractTest {
         @Override
         public ObjectMapper create(@SuppressWarnings("rawtypes") Class cls, String charset) {
           ObjectMapper objectMapper = new ObjectMapper();
-          objectMapper.registerModule(new JSR310Module());
+          objectMapper.registerModule(new JavaTimeModule());
           objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
           return objectMapper;
         }

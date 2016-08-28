@@ -117,7 +117,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("id[0]", is(2) )
       .body("name[0]", is("Open"))
       .body("description[0]", is("Event for automatic testing (Open)"))
-      .body("created[0]", is(toDateTime(2010, 1, 1, 0, 0, 0).toString()))
+      .body("created[0]", sameInstant(toDateTime(2010, 1, 1, 0, 0, 0).toInstant()))
       .body("urlName[0]", is("open"))
       .body("xmppRoom[0]", is("open@bogustalk.net"))
       .body("joinMode[0]", is("OPEN"))
@@ -131,14 +131,14 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("signUpStartDate[0]", is((ZonedDateTime) null))
       .body("signUpEndDate[0]", is((ZonedDateTime) null))
       .body("domain[0]", is((String) null))
-      .body("start[0]", is(toDateTime(2010, 1, 1, 0, 0, 0).toString()))
-      .body("end[0]", is(toDateTime(2010, 1, 2, 0, 0, 0).toString()))
+      .body("start[0]", sameInstant(toDateTime(2010, 1, 1, 0, 0, 0).toInstant()))
+      .body("end[0]", sameInstant(toDateTime(2010, 1, 2, 0, 0, 0).toInstant()))
       .body("genreIds[0].size()", is(0))
       
       .body("id[1]", is(3) )
       .body("name[1]", is("Approve"))
       .body("description[1]", is("Event for automatic testing (Approve)"))
-      .body("created[1]", is(toDateTime(2010, 1, 1, 0, 0, 0).toString()))
+      .body("created[1]", sameInstant(toDateTime(2010, 1, 1, 0, 0, 0).toInstant()))
       .body("urlName[1]", is("approve"))
       .body("xmppRoom[1]", is("approve@bogustalk.net"))
       .body("joinMode[1]", is("APPROVE"))
@@ -152,14 +152,14 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("signUpStartDate[1]", is((ZonedDateTime) null))
       .body("signUpEndDate[1]", is((ZonedDateTime) null))
       .body("domain[1]", is((String) null))
-      .body("start[1]", is(toDateTime(2010, 1, 1, 0, 0, 0).toString()))
-      .body("end[1]", is(toDateTime(2010, 1, 2, 0, 0, 0).toString()))
+      .body("start[1]", sameInstant(toDateTime(2010, 1, 1, 0, 0, 0).toInstant()))
+      .body("end[1]", sameInstant(toDateTime(2010, 1, 2, 0, 0, 0).toInstant()))
       .body("genreIds[1].size()", is(0))
       
       .body("id[2]", is(4) )
       .body("name[2]", is("Invite Only"))
       .body("description[2]", is("Event for automatic testing (Invite Only)"))
-      .body("created[2]", is(toDateTime(2010, 1, 1, 0, 0, 0).toString()))
+      .body("created[2]", sameInstant(toDateTime(2010, 1, 1, 0, 0, 0).toInstant()))
       .body("urlName[2]", is("invite"))
       .body("xmppRoom[2]", is("invite@bogustalk.net"))
       .body("joinMode[2]", is("INVITE_ONLY"))
@@ -173,8 +173,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("signUpStartDate[2]", is((ZonedDateTime) null))
       .body("signUpEndDate[2]", is((ZonedDateTime) null))
       .body("domain[2]", is((String) null))
-      .body("start[2]", is(toDateTime(2010, 1, 1, 0, 0, 0).toString()))
-      .body("end[2]", is(toDateTime(2010, 1, 2, 0, 0, 0).toString()))
+      .body("start[2]", sameInstant(toDateTime(2010, 1, 1, 0, 0, 0).toInstant()))
+      .body("end[2]", sameInstant(toDateTime(2010, 1, 2, 0, 0, 0).toInstant()))
       .body("genreIds[2].size()", is(0));
   }
      
@@ -793,6 +793,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   @Test
   @SqlSets({"basic-users", "user-client", "illusion-basic", "event", "event-participant", "event-forum", "event-forum-visible", "event-forum-posts"})
   public void testListPosts() {
+    
+    
     givenJson("access-token")
       .get("/illusion/events/{EVENTID}/forumPosts", 1)
       .then()
@@ -801,15 +803,15 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("id[0]", is(20100))
       .body("topicId[0]", is(20000))
       .body("content[0]", is("message #1"))
-      .body("modified[0]", is(toDateTime(2010, 1, 1, 0, 0, 0).toString()))
-      .body("created[0]", is(toDateTime(2010, 1, 1, 0, 0, 0).toString()))
+      .body("modified[0]", sameInstant(toDateTime(2010, 1, 1, 0, 0, 0).toInstant()))
+      .body("created[0]", sameInstant(toDateTime(2010, 1, 1, 0, 0, 0).toInstant()))
       .body("authorId[0]", is(2))
       .body("views[0]", is(0))
       .body("id[1]", is(20101))
       .body("topicId[1]", is(20000))
       .body("content[1]", is("message #2"))
-      .body("modified[1]", is(toDateTime(2010, 1, 1, 0, 0, 0).toString()))
-      .body("created[1]", is(toDateTime(2010, 1, 1, 0, 0, 0).toString()))
+      .body("modified[1]", sameInstant(toDateTime(2010, 1, 1, 0, 0, 0).toInstant()))
+      .body("created[1]", sameInstant(toDateTime(2010, 1, 1, 0, 0, 0).toInstant()))
       .body("authorId[1]", is(2))
       .body("views[1]", is(0));
   }
@@ -824,8 +826,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("id", is(20100))
       .body("topicId", is(20000))
       .body("content", is("message #1"))
-      .body("modified", is(toDateTime(2010, 1, 1, 0, 0, 0).toString()))
-      .body("created", is(toDateTime(2010, 1, 1, 0, 0, 0).toString()))
+      .body("modified", sameInstant(toDateTime(2010, 1, 1, 0, 0, 0).toInstant()))
+      .body("created", sameInstant(toDateTime(2010, 1, 1, 0, 0, 0).toInstant()))
       .body("authorId", is(2))
       .body("views", is(0));
   }
