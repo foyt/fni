@@ -256,7 +256,7 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("id", is(2) )
       .body("name", is("Open"))
       .body("description", is("Event for automatic testing (Open)"))
-      .body("created", is(toDateTime(2010, 1, 1, 0, 0, 0).toString()))
+      .body("created", sameInstant(toDateTime(2010, 1, 1, 0, 0, 0).toInstant()))
       .body("urlName", is("open"))
       .body("xmppRoom", is("open@bogustalk.net"))
       .body("joinMode", is("OPEN"))
@@ -270,8 +270,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("signUpStartDate", is((ZonedDateTime) null))
       .body("signUpEndDate", is((ZonedDateTime) null))
       .body("domain", is((String) null))
-      .body("start", is(toDateTime(2010, 1, 1, 0, 0, 0).toString()))
-      .body("end", is(toDateTime(2010, 1, 2, 0, 0, 0).toString()))
+      .body("start", sameInstant(toDateTime(2010, 1, 1, 0, 0, 0).toInstant()))
+      .body("end", sameInstant(toDateTime(2010, 1, 2, 0, 0, 0).toInstant()))
       .body("genreIds.size()", is(0));
   }
   
@@ -305,8 +305,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("signUpStartDate", is((ZonedDateTime) null))
       .body("signUpEndDate", is((ZonedDateTime) null))
       .body("domain", is((String) null))
-      .body("start", is(event.getStart().toString()))
-      .body("end", is(event.getEnd().toString()))
+      .body("start", sameInstant(event.getStart().toInstant()))
+      .body("end", sameInstant(event.getEnd().toInstant()))
       .body("genreIds.size()", is(0))
       .statusCode(200);
     
@@ -431,11 +431,11 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("beginnerFriendly", is(createEvent.getBeginnerFriendly()))
       .body("imageUrl", is((String) null))
       .body("typeId", is(createEvent.getTypeId().intValue()))
-      .body("signUpStartDate", is(createEvent.getSignUpStartDate().toString()))
-      .body("signUpEndDate", is(createEvent.getSignUpEndDate().toString()))
+      .body("signUpStartDate", sameInstant(createEvent.getSignUpStartDate().toInstant()))
+      .body("signUpEndDate", sameInstant(createEvent.getSignUpEndDate().toInstant()))
       .body("domain", is((String) null))
-      .body("start", is(createEvent.getStart().toString()))
-      .body("end", is(createEvent.getEnd().toString()))
+      .body("start", sameInstant(createEvent.getStart().toInstant()))
+      .body("end", sameInstant(createEvent.getEnd().toInstant()))
       .body("genreIds.size()", is(0))
       .statusCode(200);
     
@@ -476,8 +476,8 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("signUpStartDate", sameInstant(updateEvent.getSignUpStartDate().toInstant()))
       .body("signUpEndDate", sameInstant(updateEvent.getSignUpEndDate().toInstant()))
       .body("domain", is(updateEvent.getDomain()))
-      .body("start", is(updateEvent.getStart().toString()))
-      .body("end", is(updateEvent.getEnd().toString()))
+      .body("start", sameInstant(updateEvent.getStart().toInstant()))
+      .body("end", sameInstant(updateEvent.getEnd().toInstant()))
       .body("genreIds.size()", is(1))
       .statusCode(200);
 
@@ -515,11 +515,11 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
       .body("beginnerFriendly", is(event.getBeginnerFriendly()))
       .body("imageUrl", is((String) null))
       .body("typeId", is(event.getTypeId().intValue()))
-      .body("signUpStartDate", is(event.getSignUpStartDate().toString()))
-      .body("signUpEndDate", is(event.getSignUpEndDate().toString()))
+      .body("signUpStartDate", sameInstant(event.getSignUpStartDate().toInstant()))
+      .body("signUpEndDate", sameInstant(event.getSignUpEndDate().toInstant()))
       .body("domain", is((String) null))
-      .body("start", is(event.getStart().toString()))
-      .body("end", is(event.getEnd().toString()))
+      .body("start", sameInstant(event.getStart().toInstant()))
+      .body("end", sameInstant(event.getEnd().toInstant()))
       .body("genreIds.size()", is(0))
       .statusCode(200);
     

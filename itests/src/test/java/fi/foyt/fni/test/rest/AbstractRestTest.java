@@ -71,11 +71,11 @@ public class AbstractRestTest extends AbstractTest {
   }
 
   protected String createServiceToken() throws OAuthSystemException, OAuthProblemException {
-    return createServiceToken("client-id", "client-secret", getAppUrl(true) + "/fake-redirect");
+    return createServiceToken("client-id", "client-secret", getAppUrl() + "/fake-redirect");
   }
 
   protected String createServiceToken(String clientId, String clientSecet, String redirectURI) throws OAuthSystemException, OAuthProblemException {
-    String tokenEndpoint = getAppUrl(true) + "/oauth2/token";
+    String tokenEndpoint = getAppUrl() + "/oauth2/token";
 
     OAuthClientRequest request = OAuthClientRequest.tokenLocation(tokenEndpoint).setGrantType(GrantType.CLIENT_CREDENTIALS).setClientId(clientId)
         .setClientSecret(clientSecet).setRedirectURI(redirectURI).buildQueryMessage();

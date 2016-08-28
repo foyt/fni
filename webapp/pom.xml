@@ -340,7 +340,19 @@
     </dependency>
     
     <!-- RESTEasy -->
-    
+  
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jaxrs</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.spec.javax.ws.rs</groupId>
+      <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-jackson2-provider</artifactId>
@@ -407,6 +419,13 @@
     <dependency>
       <groupId>org.jglue.cdi-unit</groupId>
       <artifactId>cdi-unit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.jboss.weld.se</groupId>
+      <artifactId>weld-se</artifactId>
+      <version>2.3.5.Final</version>
       <scope>test</scope>
     </dependency>
     
