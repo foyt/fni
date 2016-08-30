@@ -183,10 +183,6 @@
         <it.jdbc.username>sa</it.jdbc.username>
         <it.jdbc.password>sa</it.jdbc.password>
         <it.hibernate.dialect>org.hibernate.dialect.H2Dialect</it.hibernate.dialect>
-        <it.keystore>${project.build.directory}/fnici.keystore</it.keystore>
-        <it.truststore>${project.build.directory}/fnici.truststore</it.truststore>
-        <it.keystorepass>keystorepass</it.keystorepass>
-        <it.truststorepass>truststorepass</it.truststorepass>
         <it.properties.file>src/test/resources/it.properties</it.properties.file>
         <it.files.pdf>${project.basedir}/test.pdf</it.files.pdf>
         <it.files.png>${project.basedir}/test.png</it.files.png>
@@ -253,10 +249,6 @@
                 <java.util.logging.config.file>${project.basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                 <jboss.home>${wildfly.home}</jboss.home>
                 <module.path>${wildfly.home}/modules</module.path>
-                <javax.net.ssl.keyStore>${it.keystore}</javax.net.ssl.keyStore>
-                <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
-                <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
-                <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
                 <it.project.version>${project.version}</it.project.version>
                 <it.selenium.version>${selenium-java.version}</it.selenium.version>
                 <it.verifyclean>${it.verifyclean}</it.verifyclean>
@@ -383,107 +375,6 @@
           </plugin>
 
           <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>keytool-maven-plugin</artifactId>
-            <version>${keytool-maven-plugin.version}</version>
-            <executions>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>keystoreclean</id>
-                <goals>
-                  <goal>clean</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>truststoreclean</id>
-                <goals>
-                  <goal>clean</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.truststore}</keystore>
-                </configuration>
-              </execution>
-              <execution> 
-                <phase>pre-integration-test</phase>
-                <id>genkey</id>
-                <goals>
-                  <goal>generateKeyPair</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                  <dname>cn=${it.host}, ou=None, L=Test, ST=Test, o=Test, c=TE</dname>
-                  <storepass>${it.keystorepass}</storepass>
-                  <alias>${it.host}</alias>
-                  <keyalg>RSA</keyalg>
-                  <keysize>2048</keysize>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>exportkey</id>
-                <goals>
-                  <goal>exportCertificate</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                  <alias>${it.host}</alias>
-                  <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>${it.keystorepass}</storepass>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>importkey-keystore</id>
-                <goals>
-                  <goal>importCertificate</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                  <alias>root</alias>
-                  <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>${it.keystorepass}</storepass>
-                  <noprompt>true</noprompt>
-                  <trustcacerts>true</trustcacerts>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>importkey-truststore</id>
-                <goals>
-                  <goal>importCertificate</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.truststore}</keystore>
-                  <alias>${it.host}</alias>
-                  <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>${it.truststorepass}</storepass>
-                  <noprompt>true</noprompt>
-                  <trustcacerts>true</trustcacerts>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>importkey-jre-truststore</id>
-                <goals>
-                  <goal>importKeystore</goal>
-                </goals>
-                <configuration>
-                  <srckeystore>${java.home}/lib/security/cacerts</srckeystore>
-                  <srcstorepass>changeit</srcstorepass>
-                  <destkeystore>${it.truststore}</destkeystore>
-                  <deststorepass>${it.truststorepass}</deststorepass>
-                  <noprompt>true</noprompt>
-                  <trustcacerts>true</trustcacerts>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-
-          <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <version>1.5.0</version>
@@ -502,13 +393,7 @@
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
                   </dependency>
-                </dependencies>
-                <systemProperties>
-                  <javax.net.ssl.keyStore>${it.keystore}</javax.net.ssl.keyStore>
-                  <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
-                  <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
-                  <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
-              </systemProperties>                
+                </dependencies>                
               </container>
               <configuration>
                 <properties>
@@ -625,10 +510,6 @@
         <it.jdbc.username>sa</it.jdbc.username>
         <it.jdbc.password>sa</it.jdbc.password>
         <it.hibernate.dialect>org.hibernate.dialect.H2Dialect</it.hibernate.dialect>
-        <it.keystore>${project.build.directory}/fnici.keystore</it.keystore>
-        <it.truststore>${project.build.directory}/fnici.truststore</it.truststore>
-        <it.keystorepass>keystorepass</it.keystorepass>
-        <it.truststorepass>truststorepass</it.truststorepass>
         <it.properties.file>src/test/resources/it.properties</it.properties.file>
         <it.files.pdf>${project.basedir}/test.pdf</it.files.pdf>
         <it.files.png>${project.basedir}/test.png</it.files.png>
@@ -697,10 +578,6 @@
                 <java.util.logging.config.file>${project.basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                 <jboss.home>${wildfly.home}</jboss.home>
                 <module.path>${wildfly.home}/modules</module.path>
-                <javax.net.ssl.keyStore>${it.keystore}</javax.net.ssl.keyStore>
-                <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
-                <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
-                <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
                 <it.project.version>${project.version}</it.project.version>
                 <it.selenium.version>${selenium-java.version}</it.selenium.version>
                 <it.verifyclean>${it.verifyclean}</it.verifyclean>
@@ -828,107 +705,6 @@
           </plugin>
           
           <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>keytool-maven-plugin</artifactId>
-            <version>${keytool-maven-plugin.version}</version>
-            <executions>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>keystoreclean</id>
-                <goals>
-                  <goal>clean</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>truststoreclean</id>
-                <goals>
-                  <goal>clean</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.truststore}</keystore>
-                </configuration>
-              </execution>
-              <execution> 
-                <phase>pre-integration-test</phase>
-                <id>genkey</id>
-                <goals>
-                  <goal>generateKeyPair</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                  <dname>cn=${it.host}, ou=None, L=Test, ST=Test, o=Test, c=TE</dname>
-                  <storepass>${it.keystorepass}</storepass>
-                  <alias>${it.host}</alias>
-                  <keyalg>RSA</keyalg>
-                  <keysize>2048</keysize>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>exportkey</id>
-                <goals>
-                  <goal>exportCertificate</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                  <alias>${it.host}</alias>
-                  <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>${it.keystorepass}</storepass>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>importkey-keystore</id>
-                <goals>
-                  <goal>importCertificate</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                  <alias>root</alias>
-                  <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>${it.keystorepass}</storepass>
-                  <noprompt>true</noprompt>
-                  <trustcacerts>true</trustcacerts>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>importkey-truststore</id>
-                <goals>
-                  <goal>importCertificate</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.truststore}</keystore>
-                  <alias>${it.host}</alias>
-                  <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>${it.truststorepass}</storepass>
-                  <noprompt>true</noprompt>
-                  <trustcacerts>true</trustcacerts>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>importkey-jre-truststore</id>
-                <goals>
-                  <goal>importKeystore</goal>
-                </goals>
-                <configuration>
-                  <srckeystore>${java.home}/lib/security/cacerts</srckeystore>
-                  <srcstorepass>changeit</srcstorepass>
-                  <destkeystore>${it.truststore}</destkeystore>
-                  <deststorepass>${it.truststorepass}</deststorepass>
-                  <noprompt>true</noprompt>
-                  <trustcacerts>true</trustcacerts>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-
-          <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <version>1.5.0</version>
@@ -947,13 +723,7 @@
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
                   </dependency>
-                </dependencies>
-                <systemProperties>
-                  <javax.net.ssl.keyStore>${it.keystore}</javax.net.ssl.keyStore>
-                  <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
-                  <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
-                  <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
-                </systemProperties>                
+                </dependencies>               
               </container>
               <configuration>
                 <properties>
@@ -1072,10 +842,6 @@
         <it.jdbc.username>sa</it.jdbc.username>
         <it.jdbc.password>sa</it.jdbc.password>
         <it.hibernate.dialect>org.hibernate.dialect.H2Dialect</it.hibernate.dialect>
-        <it.keystore>${project.build.directory}/fnici.keystore</it.keystore>
-        <it.truststore>${project.build.directory}/fnici.truststore</it.truststore>
-        <it.keystorepass>keystorepass</it.keystorepass>
-        <it.truststorepass>truststorepass</it.truststorepass>
         <it.properties.file>src/test/resources/it.properties</it.properties.file>
         <it.browser>chrome</it.browser>
         <it.browser.version>45</it.browser.version>
@@ -1146,10 +912,6 @@
                 <java.util.logging.config.file>${project.basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                 <jboss.home>${wildfly.home}</jboss.home>
                 <module.path>${wildfly.home}/modules</module.path>
-                <javax.net.ssl.keyStore>${it.keystore}</javax.net.ssl.keyStore>
-                <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
-                <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
-                <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
                 <it.project.version>${project.version}</it.project.version>
                 <it.selenium.version>${selenium-java.version}</it.selenium.version>
                 <it.verifyclean>${it.verifyclean}</it.verifyclean>
@@ -1284,107 +1046,6 @@
           </plugin>
           
           <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>keytool-maven-plugin</artifactId>
-            <version>${keytool-maven-plugin.version}</version>
-            <executions>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>keystoreclean</id>
-                <goals>
-                  <goal>clean</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>truststoreclean</id>
-                <goals>
-                  <goal>clean</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.truststore}</keystore>
-                </configuration>
-              </execution>
-              <execution> 
-                <phase>pre-integration-test</phase>
-                <id>genkey</id>
-                <goals>
-                  <goal>generateKeyPair</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                  <dname>cn=${it.host}, ou=None, L=Test, ST=Test, o=Test, c=TE</dname>
-                  <storepass>${it.keystorepass}</storepass>
-                  <alias>${it.host}</alias>
-                  <keyalg>RSA</keyalg>
-                  <keysize>2048</keysize>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>exportkey</id>
-                <goals>
-                  <goal>exportCertificate</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                  <alias>${it.host}</alias>
-                  <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>${it.keystorepass}</storepass>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>importkey-keystore</id>
-                <goals>
-                  <goal>importCertificate</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                  <alias>root</alias>
-                  <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>${it.keystorepass}</storepass>
-                  <noprompt>true</noprompt>
-                  <trustcacerts>true</trustcacerts>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>importkey-truststore</id>
-                <goals>
-                  <goal>importCertificate</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.truststore}</keystore>
-                  <alias>${it.host}</alias>
-                  <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>${it.truststorepass}</storepass>
-                  <noprompt>true</noprompt>
-                  <trustcacerts>true</trustcacerts>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>importkey-jre-truststore</id>
-                <goals>
-                  <goal>importKeystore</goal>
-                </goals>
-                <configuration>
-                  <srckeystore>${java.home}/lib/security/cacerts</srckeystore>
-                  <srcstorepass>changeit</srcstorepass>
-                  <destkeystore>${it.truststore}</destkeystore>
-                  <deststorepass>${it.truststorepass}</deststorepass>
-                  <noprompt>true</noprompt>
-                  <trustcacerts>true</trustcacerts>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-
-          <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <version>1.5.0</version>
@@ -1403,13 +1064,7 @@
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
                   </dependency>
-                </dependencies>
-                <systemProperties>
-                  <javax.net.ssl.keyStore>${it.keystore}</javax.net.ssl.keyStore>
-                  <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
-                  <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
-                  <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
-                </systemProperties>                
+                </dependencies>              
               </container>
               <configuration>
                 <properties>
@@ -1526,10 +1181,6 @@
         <it.jdbc.username>sa</it.jdbc.username>
         <it.jdbc.password>sa</it.jdbc.password>
         <it.hibernate.dialect>org.hibernate.dialect.H2Dialect</it.hibernate.dialect>
-        <it.keystore>${project.build.directory}/fnici.keystore</it.keystore>
-        <it.truststore>${project.build.directory}/fnici.truststore</it.truststore>
-        <it.keystorepass>keystorepass</it.keystorepass>
-        <it.truststorepass>truststorepass</it.truststorepass>
         <it.properties.file>src/test/resources/it-travis.properties</it.properties.file>
         <it.browser>chrome</it.browser>
         <it.browser.version>45</it.browser.version>
@@ -1599,10 +1250,6 @@
                 <java.util.logging.config.file>${project.basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
                 <jboss.home>${wildfly.home}</jboss.home>
                 <module.path>${wildfly.home}/modules</module.path>
-                <javax.net.ssl.keyStore>${it.keystore}</javax.net.ssl.keyStore>
-                <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
-                <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
-                <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
                 <it.project.version>${project.version}</it.project.version>
                 <it.selenium.version>${selenium-java.version}</it.selenium.version>
                 <it.verifyclean>${it.verifyclean}</it.verifyclean>
@@ -1724,107 +1371,6 @@
           </plugin>
           
           <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>keytool-maven-plugin</artifactId>
-            <version>${keytool-maven-plugin.version}</version>
-            <executions>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>keystoreclean</id>
-                <goals>
-                  <goal>clean</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>truststoreclean</id>
-                <goals>
-                  <goal>clean</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.truststore}</keystore>
-                </configuration>
-              </execution>
-              <execution> 
-                <phase>pre-integration-test</phase>
-                <id>genkey</id>
-                <goals>
-                  <goal>generateKeyPair</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                  <dname>cn=${it.host}, ou=None, L=Test, ST=Test, o=Test, c=TE</dname>
-                  <storepass>${it.keystorepass}</storepass>
-                  <alias>${it.host}</alias>
-                  <keyalg>RSA</keyalg>
-                  <keysize>2048</keysize>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>exportkey</id>
-                <goals>
-                  <goal>exportCertificate</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                  <alias>${it.host}</alias>
-                  <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>${it.keystorepass}</storepass>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>importkey-keystore</id>
-                <goals>
-                  <goal>importCertificate</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.keystore}</keystore>
-                  <alias>root</alias>
-                  <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>${it.keystorepass}</storepass>
-                  <noprompt>true</noprompt>
-                  <trustcacerts>true</trustcacerts>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>importkey-truststore</id>
-                <goals>
-                  <goal>importCertificate</goal>
-                </goals>
-                <configuration>
-                  <keystore>${it.truststore}</keystore>
-                  <alias>${it.host}</alias>
-                  <file>${project.build.directory}/fnici.crt</file>
-                  <storepass>${it.truststorepass}</storepass>
-                  <noprompt>true</noprompt>
-                  <trustcacerts>true</trustcacerts>
-                </configuration>
-              </execution>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <id>importkey-jre-truststore</id>
-                <goals>
-                  <goal>importKeystore</goal>
-                </goals>
-                <configuration>
-                  <srckeystore>${java.home}/lib/security/cacerts</srckeystore>
-                  <srcstorepass>changeit</srcstorepass>
-                  <destkeystore>${it.truststore}</destkeystore>
-                  <deststorepass>${it.truststorepass}</deststorepass>
-                  <noprompt>true</noprompt>
-                  <trustcacerts>true</trustcacerts>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-
-          <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <version>1.5.0</version>
@@ -1843,13 +1389,7 @@
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
                   </dependency>
-                </dependencies>
-                <systemProperties>
-                  <javax.net.ssl.keyStore>${it.keystore}</javax.net.ssl.keyStore>
-                  <javax.net.ssl.keyStorePassword>${it.keystorepass}</javax.net.ssl.keyStorePassword>
-                  <javax.net.ssl.trustStore>${it.truststore}</javax.net.ssl.trustStore>
-                  <javax.net.ssl.trustStorePassword>${it.truststorepass}</javax.net.ssl.trustStorePassword>
-                </systemProperties>                
+                </dependencies>              
               </container>
               <configuration>
                 <properties>
