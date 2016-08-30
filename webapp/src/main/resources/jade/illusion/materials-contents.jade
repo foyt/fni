@@ -13,7 +13,7 @@ div.flex-row
             div(class="flex-row illusion-list-row flex-align-items-center illusion-event-material",data-id=material.id)
               div(class="lg-flex-cell-15 lg-flex-cell-first md-flex-cell-14 md-flex-cell-first sm-flex-cell-12 sm-flex-cell-first")
                 if material.viewable
-                  a(href=eventUrl + '/materials/' + material.path, class= illusion-list-item")
+                  a(href=eventUrl + '/materials/' + material.path, class="illusion-list-item")
                     =material.title
                 else
                   a(href=siteUrl + material.downloadUrl, class="illusion-list-item")
