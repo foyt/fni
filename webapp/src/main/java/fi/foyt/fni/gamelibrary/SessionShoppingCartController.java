@@ -1,13 +1,12 @@
 package fi.foyt.fni.gamelibrary;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Observes;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 
 import fi.foyt.fni.persistence.dao.gamelibrary.OrderDAO;
 import fi.foyt.fni.persistence.dao.gamelibrary.OrderItemDAO;
@@ -24,7 +23,6 @@ import fi.foyt.fni.session.Login;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.session.UserSessionEvent;
 import fi.foyt.fni.users.UserController;
-import java.io.Serializable;
 
 @SessionScoped
 public class SessionShoppingCartController implements Serializable {
@@ -56,9 +54,6 @@ public class SessionShoppingCartController implements Serializable {
 		} else {
 			// We do not have a shopping cart for this session
 			ShoppingCart shoppingCart = null;
-			
-			String sessionId = ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).getId();
-			
 			if (sessionController.isLoggedIn()) {
 				// If user is logged in we try to find existing cart by user 
 				User loggedUser = sessionController.getLoggedUser();
@@ -71,7 +66,7 @@ public class SessionShoppingCartController implements Serializable {
 			} else {
 				// If user is not yet logged in we have no option but to create new cart
 				Date now = new Date();
-				shoppingCart = shoppingCartDAO.create(null, sessionId, null, null, now, now);
+				shoppingCart = shoppingCartDAO.create(null, sessionController.getSessionId(), null, null, now, now);
 			}
 			
 			shoppingCartId = shoppingCart.getId();

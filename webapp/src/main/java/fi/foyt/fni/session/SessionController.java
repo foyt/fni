@@ -10,6 +10,7 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,8 +40,11 @@ public class SessionController implements Serializable {
   
   @Inject
 	private PermissionController permissionController;
-
-	@Inject
+  
+  @Inject
+  private HttpSession session;
+	
+  @Inject
 	@Login
 	private Event<UserSessionEvent> loginEvent;
 	
@@ -196,6 +200,10 @@ public class SessionController implements Serializable {
   
   public void setLoginScopes(String[] loginScopes) {
     this.loginScopes = loginScopes;
+  }
+  
+  public String getSessionId() {
+    return session.getId();
   }
   
   private Long loggedUserId;
