@@ -51,7 +51,7 @@ public class MenuTestsBase extends AbstractUITest {
     WebElement aboutMenuContact = getWebDriver().findElement(By.cssSelector(".menu-about-list>li:nth-child(9)>a"));
     WebElement aboutMenuAcknowledgements = getWebDriver().findElement(By.cssSelector(".menu-about-list>li:nth-child(10)>a"));
 
-    String appUrl = getAppUrl(true);
+    String appUrl = getAppUrl();
     
     assertEquals("Our Vision", aboutMenuVision.getText());
     assertEquals(String.format("%s/about#vision", appUrl), stripLinkJSessionId(aboutMenuVision.getAttribute("href")));

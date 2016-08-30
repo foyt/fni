@@ -15,14 +15,14 @@ public class GameLibraryOrderManagementTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testLoginRedirect() throws Exception {
-    testLoginRequired("/gamelibrary/ordermanagement/", true);
+    testLoginRequired("/gamelibrary/ordermanagement/");
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testUnauthorized() throws Exception {
     loginInternal("user@foyt.fi", "pass");
-    testAccessDenied("/gamelibrary/ordermanagement/", true);
+    testAccessDenied("/gamelibrary/ordermanagement/");
   }
 
   @Test

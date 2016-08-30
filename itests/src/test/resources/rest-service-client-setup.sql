@@ -11,6 +11,6 @@ values
 insert into 
   OAuthClient (id, clientId, clientSecret, name, type, redirectUrl, serviceUser_id)
 values 
-  (100, 'client-id', 'client-secret', 'test-service-client', 'SERVICE', 'https://dev.forgeandillusion.net:8443/fake-redirect', 100);
+  (100, 'client-id', 'client-secret', 'test-service-client', 'SERVICE', 'http://dev.forgeandillusion.net:8080/fake-redirect', 100);
   
   

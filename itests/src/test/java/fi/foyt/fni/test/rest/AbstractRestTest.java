@@ -36,7 +36,7 @@ public class AbstractRestTest extends AbstractTest {
   @Before
   public void setupRestAssured() {
     RestAssured.baseURI = getAppUrl() + "/rest";
-    RestAssured.port = getPortHttps();
+    RestAssured.port = getPortHttp();
 
     RestAssured.config = RestAssuredConfig.config().objectMapperConfig(
       ObjectMapperConfig.objectMapperConfig().jackson2ObjectMapperFactory(new Jackson2ObjectMapperFactory() {

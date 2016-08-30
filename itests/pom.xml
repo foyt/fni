@@ -567,6 +567,7 @@
                       <command>/system-property=fni-google-drive.accountUser:add(value="${it.googleDrive.accountUser}")</command>
                       <command>/system-property=fni-host:add(value="${it.host}")</command>
                       <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
+                      <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/system-property=it-test:add(value="true")</command>
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                     </commands>
@@ -1012,6 +1013,7 @@
                       <command>/system-property=fni-google-drive.accountUser:add(value="${it.googleDrive.accountUser}")</command>
                       <command>/system-property=fni-host:add(value="${it.host}")</command>
                       <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
+                      <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/system-property=it-test:add(value="true")</command>
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                     </commands>
@@ -1466,6 +1468,7 @@
                       <command>/system-property=fni-google-drive.accountUser:add(value="${it.googleDrive.accountUser}")</command>
                       <command>/system-property=fni-host:add(value="${it.host}")</command>
                       <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
+                      <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/system-property=it-test:add(value="true")</command>
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                     </commands>
@@ -1905,6 +1908,7 @@
                       <command>/system-property=fni-google-drive.accountUser:add(value="${it.googleDrive.accountUser}")</command>
                       <command>/system-property=fni-host:add(value="${it.host}")</command>
                       <command>/system-property=fni-http-port:add(value="${it.port.http}")</command>
+                      <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/system-property=it-test:add(value="true")</command>
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                     </commands>

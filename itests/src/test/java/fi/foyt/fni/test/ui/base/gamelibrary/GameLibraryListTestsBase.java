@@ -67,36 +67,29 @@ public class GameLibraryListTestsBase extends AbstractUITest {
 
   @Test
   @SqlSets ("basic-gamelibrary")
-  public void testHttps() {
-    getWebDriver().get(getAppUrl() + "/gamelibrary/");
-    assertTrue(getWebDriver().getCurrentUrl().startsWith("https://"));
-  }
-
-  @Test
-  @SqlSets ("basic-gamelibrary")
   public void testTagNotFound() {
-    testNotFound("/gamelibrary/tags/bogus", true);
-    testNotFound("/gamelibrary/tags/~", true);
-    testNotFound("/gamelibrary/tags/12345", true);
-    testNotFound("/gamelibrary/tags/-1", true);
-    testNotFound("/gamelibrary/tags/", true);
+    testNotFound("/gamelibrary/tags/bogus");
+    testNotFound("/gamelibrary/tags/~");
+    testNotFound("/gamelibrary/tags/12345");
+    testNotFound("/gamelibrary/tags/-1");
+    testNotFound("/gamelibrary/tags/");
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testPublicationNotFound() {
-    testNotFound("/gamelibrary/bogus", true);
-    testNotFound("/gamelibrary/~", true);
-    testNotFound("/gamelibrary/12345", true);
-    testNotFound("/gamelibrary/-1", true);
+    testNotFound("/gamelibrary/bogus");
+    testNotFound("/gamelibrary/~");
+    testNotFound("/gamelibrary/12345");
+    testNotFound("/gamelibrary/-1");
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testMiniCartTexts() {
-    navigate("/gamelibrary/", true);
+    navigate("/gamelibrary/");
     assertSelectorText(".mini-shopping-cart-title", "SHOPPING CART", true, true);
-    assertEquals(getAppUrl(true) + "/gamelibrary/cart/", getWebDriver().findElement(By.cssSelector(".mini-shopping-cart-view")).getAttribute("href"));
+    assertEquals(getAppUrl() + "/gamelibrary/cart/", getWebDriver().findElement(By.cssSelector(".mini-shopping-cart-view")).getAttribute("href"));
     assertSelectorText(".mini-shopping-cart-empty","Shopping cart is empty", true, true);
     assertSelectorText(".mini-shopping-cart-summary label","Total", true, true);
     assertSelectorText(".mini-shopping-cart-summary span","EUR0.00", true, true);
@@ -105,8 +98,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testMostRecentList() {
-    acceptCookieDirective();
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/");
+    navigate("/gamelibrary/");
     
     assertSelectorCount(".gamelibrary-publication", 3);
 
@@ -123,30 +115,30 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testProposeLinkNotLogged() throws UnsupportedEncodingException {
-    navigate("/gamelibrary/", true);
+    navigate("/gamelibrary/");
     waitTitle("Forge & Illusion - Game Library");
     waitForSelectorPresent(".gamelibrary-propose-game-link");
     assertSelectorText(".gamelibrary-propose-game-link", "Login to propose a game to the Library", true, true);
     String redirectUrl = URLEncoder.encode((getCtxPath() != null ? '/' + getCtxPath() : "") + "/gamelibrary/proposegame/", "UTF-8");
-    assertEquals(getAppUrl(true) + "/login/?redirectUrl=" + redirectUrl, getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getAttribute("href"));
+    assertEquals(getAppUrl() + "/login/?redirectUrl=" + redirectUrl, getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getAttribute("href"));
   }
   
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testProposeLinkLogged() {
     loginInternal("user@foyt.fi", "pass");
-    navigate("/gamelibrary/", true);
+    navigate("/gamelibrary/");
     waitTitle("Forge & Illusion - Game Library");
     waitForSelectorPresent(".gamelibrary-propose-game-link");
     assertSelectorText(".gamelibrary-propose-game-link", "Propose a game to the Library", true, true);
-    assertEquals(getAppUrl(true) + "/gamelibrary/proposegame/", getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getAttribute("href"));
+    assertEquals(getAppUrl() + "/gamelibrary/proposegame/", getWebDriver().findElement(By.cssSelector(".gamelibrary-propose-game-link")).getAttribute("href"));
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testTagList() {
     acceptCookieDirective();
-    getWebDriver().get(getAppUrl(true) + "/gamelibrary/tags/test");
+    getWebDriver().get(getAppUrl() + "/gamelibrary/tags/test");
 
     testPublicationDetails(".gamelibrary-publication[data-index='0']", SIMPLE_ID, SIMPLE_PATH, SIMPLE_TITLE, SIMPLE_TAGS, SIMPLE_DESC, SIMPLE_PRICE,
         SIMPLE_PAGES, SIMPLE_AUTHOR_NAMES, SIMPLE_AUTHOR_IDS, SIMPLE_LICENSE, SIMPLE_PURCHASABLE, SIMPLE_COMMENT_URL, SIMPLE_COMMENTS);
@@ -159,7 +151,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testPublicationDetailsSimple() {
     acceptCookieDirective();
-    getWebDriver().get(getAppUrl(true) + SIMPLE_PATH);
+    getWebDriver().get(getAppUrl() + SIMPLE_PATH);
     testPublicationDetails(".gamelibrary-publication", SIMPLE_ID, SIMPLE_PATH, SIMPLE_TITLE, SIMPLE_TAGS, SIMPLE_DESC, SIMPLE_PRICE, SIMPLE_PAGES, SIMPLE_AUTHOR_NAMES,
         SIMPLE_AUTHOR_IDS, SIMPLE_LICENSE, SIMPLE_PURCHASABLE, SIMPLE_COMMENT_URL, SIMPLE_COMMENTS);
   }
@@ -168,7 +160,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testPublicationDetailsBySaAndRus() {
     acceptCookieDirective();
-    getWebDriver().get(getAppUrl(true) + BYSARUS_PATH);
+    getWebDriver().get(getAppUrl() + BYSARUS_PATH);
     testPublicationDetails(".gamelibrary-publication", BYSARUS_ID, BYSARUS_PATH, BYSARUS_TITLE, BYSARUS_TAGS, BYSARUS_DESC, BYSARUS_PRICE, BYSARUS_PAGES, BYSARUS_AUTHOR_NAMES,
         BYSARUS_AUTHOR_IDS, BYSARUS_LICENSE, BYSARUS_PURCHASABLE, BYSARUS_COMMENT_URL, BYSARUS_COMMENTS);
   }
@@ -177,7 +169,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testPublicationDetailsUmlaut() {
     acceptCookieDirective();
-    getWebDriver().get(getAppUrl(true) + UML_PATH);
+    getWebDriver().get(getAppUrl() + UML_PATH);
     testPublicationDetails(".gamelibrary-publication", UML_ID, UML_PATH, UML_TITLE, UML_TAGS, UML_DESC, UML_PRICE, UML_PAGES, UML_AUTHOR_NAMES, UML_AUTHOR_IDS, UML_LICENSE,
         UML_PURCHASABLE, UML_COMMENT_URL, UML_COMMENTS);
   }
@@ -187,7 +179,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
 //    CreativeCommonsLicense creativeCommonsLicense = CreativeCommonsUtils.parseLicenseUrl(license);
 
     assertSelectorText(String.format("%s h3 a", publicationSelector), title, true, true);
-    assertEquals(getAppUrl(true) + path, getWebDriver().findElement(By.cssSelector(publicationSelector + " h3 a")).getAttribute("href"));
+    assertEquals(getAppUrl() + path, getWebDriver().findElement(By.cssSelector(publicationSelector + " h3 a")).getAttribute("href"));
 
     for (int i = 0, l = tags.length; i < l; i++) {
       String tag = tags[i];
@@ -214,11 +206,11 @@ public class GameLibraryListTestsBase extends AbstractUITest {
         Long authorId = authorIds[i];
         WebElement authorLink = authorLinks.get(i);
         assertEquals(authorLink.getText().toUpperCase(), authorName.toUpperCase());
-        assertEquals(authorLink.getAttribute("href"), getAppUrl(true) + "/profile/" + authorId);
+        assertEquals(authorLink.getAttribute("href"), getAppUrl() + "/profile/" + authorId);
       }
     }
 
-    assertEquals(getAppUrl(true) + "/gamelibrary/publicationFiles/" + publicationId, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-action-download-pdf"))
+    assertEquals(getAppUrl() + "/gamelibrary/publicationFiles/" + publicationId, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-action-download-pdf"))
         .getAttribute("href"));
 
     if (purchasable) {
@@ -239,7 +231,7 @@ public class GameLibraryListTestsBase extends AbstractUITest {
 //    }
 
     assertSelectorText(String.format("%s .gamelibrary-publication-comments", publicationSelector), String.format("COMMENTS (%d)", comments), true, true);
-    assertEquals(getAppUrl(true) + "/forum/" + commentUrl, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-comments")).getAttribute("href"));
+    assertEquals(getAppUrl() + "/forum/" + commentUrl, getWebDriver().findElement(By.cssSelector(publicationSelector + " .gamelibrary-publication-comments")).getAttribute("href"));
     
     if (!"microsoftedge".equals(getBrowser())) {
       // FIXME: These tests do not work on ms edge

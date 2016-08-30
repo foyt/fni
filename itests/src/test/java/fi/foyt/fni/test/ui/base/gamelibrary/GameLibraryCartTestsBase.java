@@ -19,7 +19,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
 
   @Test
   public void testEmptyCart() throws Exception {
-    navigate("/gamelibrary/cart/", true);
+    navigate("/gamelibrary/cart/");
     waitTitle("Forge & Illusion - Game Library");
     assertSelectorText(".gamelibrary-cart-empty-message", "Shopping Cart is Empty", true, true);
     assertSelectorDisabled(".gamelibrary-cart-submit");
@@ -41,14 +41,14 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
       
       acceptCookieDirective();
       
-      navigate("/gamelibrary/testbook_1", true);
+      navigate("/gamelibrary/testbook_1");
      
       // We have to wait for share button animation to end
       Thread.sleep(500);
       
       waitAndClick(".gamelibrary-publication-action-add-to-cart");
       waitForSelectorCount(".mini-shopping-cart-item", 1);
-      navigate("/gamelibrary/cart/", true);
+      navigate("/gamelibrary/cart/");
       waitTitle("Forge & Illusion - Game Library");
   
       getWebDriver().findElement(By.id("cart-form:payerFirstName")).sendKeys(firstName);
@@ -112,21 +112,21 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
         notes = "Tama on automaattinen testitilaus";
       }
       
-      navigate("/gamelibrary/testbook_1", true);
+      navigate("/gamelibrary/testbook_1");
      
       // We have to wait for share button animation to end
       Thread.sleep(500);
       
       waitAndClick(".gamelibrary-publication-action-add-to-cart");
       waitForSelectorCount(".mini-shopping-cart-item", 1);
-      navigate("/gamelibrary/pangram_fi", true);
+      navigate("/gamelibrary/pangram_fi");
       
       // We have to wait for share button animation to end
       Thread.sleep(500);
       
       waitAndClick(".gamelibrary-publication-action-add-to-cart");
       waitForSelectorCount(".mini-shopping-cart-item", 2);
-      navigate("/gamelibrary/cart/", true);
+      navigate("/gamelibrary/cart/");
       waitTitle("Forge & Illusion - Game Library");
       
       waitAndClick(String.format(".gamelibrary-cart-item[data-item-index='%d'] .gamelibrary-cart-action-inc-count", 0));
@@ -178,21 +178,21 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
   public void testCartDelete() throws Exception {
     acceptCookieDirective();
     
-    navigate("/gamelibrary/testbook_1", true);
+    navigate("/gamelibrary/testbook_1");
     
     // We have to wait for share button animation to end
     Thread.sleep(500);
     
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
     waitForSelectorCount(".mini-shopping-cart-item", 1);
-    navigate("/gamelibrary/pangram_fi", true);
+    navigate("/gamelibrary/pangram_fi");
 
     // We have to wait for share button animation to end
     Thread.sleep(500);
 
     waitAndClick(".gamelibrary-publication-action-add-to-cart");
     waitForSelectorCount(".mini-shopping-cart-item", 2);
-    navigate("/gamelibrary/cart/", true);
+    navigate("/gamelibrary/cart/");
     waitTitle("Forge & Illusion - Game Library");
 
     assertSelectorText(".gamelibrary-cart-summary-field-total-value", "EUR17.50", true, true);
@@ -237,14 +237,14 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
           acceptCookieDirective();
           loginInternal(email, password);
           
-          navigate("/gamelibrary/testbook_1", true);
+          navigate("/gamelibrary/testbook_1");
           
           // We have to wait for share button animation to end
           Thread.sleep(500);
   
           waitAndClick(".gamelibrary-publication-action-add-to-cart");
           waitForSelectorCount(".mini-shopping-cart-item", 1);
-          navigate("/gamelibrary/cart/", true);
+          navigate("/gamelibrary/cart/");
           waitTitle("Forge & Illusion - Game Library");
           
           assertEquals(firstName, getWebDriver().findElement(By.id("cart-form:payerFirstName")).getAttribute("value"));
@@ -274,7 +274,7 @@ public class GameLibraryCartTestsBase extends AbstractUITest {
           logout();
           loginInternal(email, password);
   
-          navigate("/gamelibrary/cart/", true);
+          navigate("/gamelibrary/cart/");
           waitTitle("Forge & Illusion - Game Library");
           
           assertEquals(firstName, getWebDriver().findElement(By.id("cart-form:payerFirstName")).getAttribute("value"));
