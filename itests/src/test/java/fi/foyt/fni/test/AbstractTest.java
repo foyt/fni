@@ -235,12 +235,8 @@ public abstract class AbstractTest {
   }
 
   protected String getAppUrl() {
-    return getAppUrl(false);
-  }
-
-  protected String getAppUrl(boolean secure) {
     String ctxPath = getCtxPath();
-    return String.format("%s%s:%d%s", secure ? "https://" : "http://", getHost(), secure ? getPortHttps() : getPortHttp(), ctxPath != null ? "/" + ctxPath : "");
+    return String.format("%s%s:%d%s", "http://", getHost(), getPortHttp(), ctxPath != null ? "/" + ctxPath : "");
   }
 
   protected String getSeleniumVersion() {
@@ -586,18 +582,18 @@ public abstract class AbstractTest {
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "FACEBOOK_APISECRET",
         getFacebookApiSecret());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "FACEBOOK_CALLBACKURL",
-        getAppUrl(true) + "/login/?return=1&loginMethod=FACEBOOK");
+        getAppUrl() + "/login/?return=1&loginMethod=FACEBOOK");
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_APIKEY", getGoogleApiKey());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_APISECRET",
         getGoogleApiSecret());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_CALLBACKURL",
-        getAppUrl(true) + "/login/?return=1&loginMethod=GOOGLE");
+        getAppUrl() + "/login/?return=1&loginMethod=GOOGLE");
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_ROOT", "sandbox");
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_APIKEY", getDropboxApiKey());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_APISECRET",
         getDropboxApiSecret());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_CALLBACKURL",
-        getAppUrl(true) + "/login/?return=1&loginMethod=DROPBOX");
+        getAppUrl() + "/login/?return=1&loginMethod=DROPBOX");
   }
 
   protected void purgeOAuthSettings() throws Exception {

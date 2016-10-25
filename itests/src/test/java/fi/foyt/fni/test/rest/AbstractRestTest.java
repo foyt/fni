@@ -21,7 +21,7 @@ import org.junit.Before;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.config.ObjectMapperConfig;
 import com.jayway.restassured.config.RestAssuredConfig;
@@ -36,14 +36,14 @@ public class AbstractRestTest extends AbstractTest {
   @Before
   public void setupRestAssured() {
     RestAssured.baseURI = getAppUrl() + "/rest";
-    RestAssured.port = getPortHttps();
+    RestAssured.port = getPortHttp();
 
     RestAssured.config = RestAssuredConfig.config().objectMapperConfig(
       ObjectMapperConfig.objectMapperConfig().jackson2ObjectMapperFactory(new Jackson2ObjectMapperFactory() {
         @Override
         public ObjectMapper create(@SuppressWarnings("rawtypes") Class cls, String charset) {
           ObjectMapper objectMapper = new ObjectMapper();
-          objectMapper.registerModule(new JSR310Module());
+          objectMapper.registerModule(new JavaTimeModule());
           objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
           return objectMapper;
         }
@@ -71,11 +71,11 @@ public class AbstractRestTest extends AbstractTest {
   }
 
   protected String createServiceToken() throws OAuthSystemException, OAuthProblemException {
-    return createServiceToken("client-id", "client-secret", getAppUrl(true) + "/fake-redirect");
+    return createServiceToken("client-id", "client-secret", getAppUrl() + "/fake-redirect");
   }
 
   protected String createServiceToken(String clientId, String clientSecet, String redirectURI) throws OAuthSystemException, OAuthProblemException {
-    String tokenEndpoint = getAppUrl(true) + "/oauth2/token";
+    String tokenEndpoint = getAppUrl() + "/oauth2/token";
 
     OAuthClientRequest request = OAuthClientRequest.tokenLocation(tokenEndpoint).setGrantType(GrantType.CLIENT_CREDENTIALS).setClientId(clientId)
         .setClientSecret(clientSecet).setRedirectURI(redirectURI).buildQueryMessage();

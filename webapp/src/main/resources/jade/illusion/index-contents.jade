@@ -4,7 +4,7 @@ include common
 div.flex-row
   div.flex-cell-full.index-box.no-margin-top.no-margin-bottom
     .illusion-event-index-text
-      !={indexText}
+      !=indexText
     if (!user) && ((joinMode == 'OPEN')||(joinMode == 'APPROVE'))
       div.illusion-event-join
         if (joinMode == 'OPEN')||(ref == 'inv')

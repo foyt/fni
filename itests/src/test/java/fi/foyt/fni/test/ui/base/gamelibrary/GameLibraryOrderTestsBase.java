@@ -15,37 +15,37 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testAccessKey() throws Exception {
-    navigateAndWait("/gamelibrary/orders/1?key=bogus-access-key", true);
+    navigateAndWait("/gamelibrary/orders/1?key=bogus-access-key");
     testOrderDetails();
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testInvalidAccessKey() throws Exception {
-    testAccessDenied("/gamelibrary/orders/1?key=invalid-access-key", true);
+    testAccessDenied("/gamelibrary/orders/1?key=invalid-access-key");
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testNotFound() throws Exception {
-    testNotFound("/gamelibrary/orders/~", true);
-    testNotFound("/gamelibrary/orders/-1", true);
-    testNotFound("/gamelibrary/orders/", true);
-    testNotFound("/gamelibrary/orders/asd", true);
+    testNotFound("/gamelibrary/orders/~");
+    testNotFound("/gamelibrary/orders/-1");
+    testNotFound("/gamelibrary/orders/");
+    testNotFound("/gamelibrary/orders/asd");
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testAccessDenied() throws Exception {
     loginInternal("guest@foyt.fi", "pass");
-    testAccessDenied("/gamelibrary/orders/1", true);
+    testAccessDenied("/gamelibrary/orders/1");
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testUser() throws Exception {
     loginInternal("user@foyt.fi", "pass");
-    navigateAndWait("/gamelibrary/orders/1", true);
+    navigateAndWait("/gamelibrary/orders/1");
     testOrderDetails();
   }
 
@@ -53,7 +53,7 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testLibrarian() throws Exception {
     loginInternal("librarian@foyt.fi", "pass");
-    navigateAndWait("/gamelibrary/orders/1", true);
+    navigateAndWait("/gamelibrary/orders/1");
     testOrderDetails();
   }
 
@@ -61,7 +61,7 @@ public class GameLibraryOrderTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testAdmin() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
-    navigateAndWait("/gamelibrary/orders/1", true);
+    navigateAndWait("/gamelibrary/orders/1");
     testOrderDetails();
   }
 

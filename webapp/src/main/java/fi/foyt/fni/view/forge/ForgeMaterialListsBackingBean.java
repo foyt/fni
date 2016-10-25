@@ -2,6 +2,8 @@ package fi.foyt.fni.view.forge;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
@@ -14,6 +16,7 @@ import fi.foyt.fni.security.LoggedIn;
 public class ForgeMaterialListsBackingBean {
 
   @PostConstruct
+  @TransactionAttribute (TransactionAttributeType.NOT_SUPPORTED)
   public void init() {
     setMaterialsOpen(true);
     setLastViewedOpen(true);

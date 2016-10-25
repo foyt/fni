@@ -3,7 +3,6 @@ package fi.foyt.fni.blog;
 import java.io.IOException;
 import java.net.URL;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -36,6 +36,7 @@ import fi.foyt.fni.persistence.model.blog.BlogEntryTag;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
 import fi.foyt.fni.utils.time.DateTimeUtils;
 
+@Dependent
 public class BlogController {
 	
 	@Inject

@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionAttribute;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -62,6 +64,7 @@ public class ForgeFolderBackingBean extends AbstractForgeMaterialViewBackingBean
   private NavigationController navigationController;
   
   @PostConstruct
+  @TransactionAttribute (TransactionAttributeType.NOT_SUPPORTED)
   public void init() {
     folders = new ArrayList<>();
   }

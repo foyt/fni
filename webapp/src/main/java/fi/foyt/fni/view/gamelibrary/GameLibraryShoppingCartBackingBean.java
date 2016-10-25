@@ -8,7 +8,6 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -18,6 +17,7 @@ import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.delivery.DeliveryMehtodsController;
 import fi.foyt.fni.delivery.DeliveryMethod;
@@ -79,8 +79,8 @@ public class GameLibraryShoppingCartBackingBean implements Serializable {
 	@Inject
 	private PaytrailService paytrailService;
 
-	@PostConstruct
-	public void init() {
+	@RequestAction
+	public String init() {
 		countrySelectItems = new ArrayList<>();
 /**
     // TODO: Enable other countries
@@ -120,6 +120,8 @@ public class GameLibraryShoppingCartBackingBean implements Serializable {
 				payerCountryId = address.getCountry().getId();
 			}
 		}
+		
+		return null;
 	}
 
 	public String incItemCount(ShoppingCartItemBean item) {

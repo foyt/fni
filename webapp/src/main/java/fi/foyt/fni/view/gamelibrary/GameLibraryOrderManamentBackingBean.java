@@ -2,7 +2,6 @@ package fi.foyt.fni.view.gamelibrary;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -34,18 +33,15 @@ public class GameLibraryOrderManamentBackingBean {
   @Inject
   private NavigationController navigationController;
   
-  @PostConstruct
-  public void init() {
+  @RequestAction
+  public String init() {
     ordersNew = orderController.listOrdersByStatus(OrderStatus.NEW);
     ordersCanceled = orderController.listOrdersByStatus(OrderStatus.CANCELED);
     ordersPaid = orderController.listOrdersByStatus(OrderStatus.PAID);
     ordersWaitingForDelivery = orderController.listOrdersByStatus(OrderStatus.WAITING_FOR_DELIVERY);
     ordersShipped = orderController.listOrdersByStatus(OrderStatus.SHIPPED);
     ordersDelivered = orderController.listOrdersByStatus(OrderStatus.DELIVERED);
-  }
-  
-  @RequestAction
-  public String load() {
+    
     return null;
   }
 

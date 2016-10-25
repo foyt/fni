@@ -39,7 +39,7 @@ public class LoginTestsBase extends AbstractUITest {
 
   @Test
   public void testTitle() {
-    testTitle("/login", "Login", true);
+    testTitle("/login", "Login");
   }
 
   @Test
@@ -63,7 +63,7 @@ public class LoginTestsBase extends AbstractUITest {
   @Test
   public void testRegisterMandatories() {
     acceptCookieDirective();
-    navigate("/login/", true);
+    navigate("/login/");
     waitTitle("Login");
     clickSelector(".user-register-button");
     waitForNotification();
@@ -75,7 +75,7 @@ public class LoginTestsBase extends AbstractUITest {
   @Test
   public void testRegisterPasswordMismatch() {
     acceptCookieDirective();
-    navigate("/login/", true);
+    navigate("/login/");
     
     waitAndSendKeys(".user-register-first-name", "Register");
     waitAndSendKeys(".user-register-last-name", "Tester");
@@ -94,7 +94,7 @@ public class LoginTestsBase extends AbstractUITest {
     
     GreenMail greenMail = startSmtpServer();
     try {
-      navigate("/login/", true);
+      navigate("/login/");
       
       waitAndSendKeys(".user-register-first-name", "Register");
       waitAndSendKeys(".user-register-last-name", "Tester");
@@ -118,7 +118,7 @@ public class LoginTestsBase extends AbstractUITest {
   
   @Test
   public void testResetPasswordIncorrectEmail() {
-    navigate("/login/", true);
+    navigate("/login/");
     waitTitle("Login");
     waitAndClick(".users-login-forgot-password-link");
     waitForSelectorPresent(".ui-dialog");
@@ -133,7 +133,7 @@ public class LoginTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic")
   public void testResetPasswordInvalidEmail() {
-    navigate("/login/", true);
+    navigate("/login/");
     waitTitle("Login");
 
     waitAndClick(".users-login-forgot-password-link");
@@ -154,7 +154,7 @@ public class LoginTestsBase extends AbstractUITest {
   public void testResetPassword() throws MessagingException {
     GreenMail greenMail = startSmtpServer();
     try {
-      navigate("/login/", true);
+      navigate("/login/");
       waitTitle("Login");
       waitAndClick(".users-login-forgot-password-link");
       waitForSelectorPresent(".ui-dialog");

@@ -21,13 +21,13 @@ public class ResourceOwnerPasswordCredentialsTestIT extends AbstractRestTest {
   @Test
   @SqlSets("service-client")
   public void testServiceAccountToken() throws OAuthSystemException, OAuthProblemException {
-    String tokenEndpoint = getAppUrl(true) + "/oauth2/token";
+    String tokenEndpoint = getAppUrl() + "/oauth2/token";
 
     OAuthClientRequest request = OAuthClientRequest.tokenLocation(tokenEndpoint)
         .setGrantType(GrantType.CLIENT_CREDENTIALS)
         .setClientId("client-id")
         .setClientSecret("client-secret")
-        .setRedirectURI(getAppUrl(true) + "/fake-redirect")
+        .setRedirectURI(getAppUrl() + "/fake-redirect")
         .buildQueryMessage();
     
     OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());    

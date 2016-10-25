@@ -44,21 +44,25 @@ public class AVIResolver {
   
   private String executeQuery(String queryDocument) throws IOException {
     DefaultHttpClient client = new DefaultHttpClient();
-    HttpPost httpPost = new HttpPost(URL);
-    httpPost.setEntity(new StringEntity(queryDocument));
-    
-    HttpResponse response = client.execute(httpPost);
-    
-    HttpEntity entity = response.getEntity();
     try {
-      int status = response.getStatusLine().getStatusCode();
-      if (status == 200) {
-        return IOUtils.toString(entity.getContent(), "UTF-8");
+      HttpPost httpPost = new HttpPost(URL);
+      httpPost.setEntity(new StringEntity(queryDocument));
+      
+      HttpResponse response = client.execute(httpPost);
+      
+      HttpEntity entity = response.getEntity();
+      try {
+        int status = response.getStatusLine().getStatusCode();
+        if (status == 200) {
+          return IOUtils.toString(entity.getContent(), "UTF-8");
+        }
+  
+        throw new IOException(String.format("Server returned error code %d", status));
+      } finally {
+        EntityUtils.consume(entity);
       }
-
-      throw new IOException(String.format("Server returned error code %d", status));
     } finally {
-      EntityUtils.consume(entity);
+      client.close();
     }
   }
   

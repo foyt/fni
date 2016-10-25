@@ -158,9 +158,9 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void loginInternal(String email, String password) {
-    String loginUrl = getAppUrl(true) + "/login/";
+    String loginUrl = getAppUrl() + "/login/";
     if (!StringUtils.startsWith(getWebDriver().getCurrentUrl(), loginUrl)) {
-      navigateAndWait("/login/", true);
+      navigateAndWait("/login/");
     }
     
     scrollWaitAndType(".user-login-email", email);
@@ -175,7 +175,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
 
   protected void loginFacebook() {
     acceptCookieDirective();
-    navigate("/login/", true);
+    navigate("/login/");
     waitForSelectorVisible(".user-login-external-facebook");
     clickSelector(".user-login-external-facebook");
     waitForSelectorVisible("*[name='login']");
@@ -188,7 +188,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void loginGoogle() {
-    navigate("/login/", true);
+    navigate("/login/");
     waitAndClick(".user-login-external-google");
     waitAndClick("#Email");
     typeSelectorInputValue("#Email", getGoogleUsername());
@@ -484,11 +484,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void navigate(String path) {
-    navigate(path, false);
-  }
-  
-  protected void navigate(String path, Boolean secure) {
-    String url = String.format("%s%s", getAppUrl(secure), path);
+    String url = String.format("%s%s", getAppUrl(), path);
     int i = 0;
     
     while (!tryNavigate(url)) {
@@ -512,12 +508,8 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
 
   protected void navigateAndWait(String path) {
-    navigateAndWait(path, false);
-  }
-
-  protected void navigateAndWait(String path, Boolean secure) {
-    navigate(path, secure);
-    String url = String.format("%s%s", getAppUrl(secure), path);
+    navigate(path);
+    String url = String.format("%s%s", getAppUrl(), path);
     waitForUrl(url);
   }
 
@@ -530,33 +522,20 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void testLoginRequired(String path) throws UnsupportedEncodingException {
-    testLoginRequired(path, false);  
-  }
-  
-  protected void testLoginRequired(String path, boolean secure) throws UnsupportedEncodingException {
-    navigate(path, secure);
+    navigate(path);
     String ctxPath = getCtxPath();
-    String expectedUrl = getAppUrl(true) + "/login/?redirectUrl=" + URLEncoder.encode(ctxPath != null ? "/" + ctxPath + path : path, "UTF-8");
-    waitForUrlMatches("https://.*");
-    assertEquals(expectedUrl, getWebDriver().getCurrentUrl());
+    String expectedUrl = getAppUrl() + "/login/?redirectUrl=" + URLEncoder.encode(ctxPath != null ? "/" + ctxPath + path : path, "UTF-8");
+    waitForUrl(expectedUrl);
   }
   
   protected void testAccessDenied(String path) {
-    testAccessDenied(path, false);
-  }
-  
-  protected void testAccessDenied(String path, boolean secure) {
-    navigate(path, secure);
+    navigate(path);
     waitTitle("Access Denied!");
     assertEquals("Access Denied!", getWebDriver().getTitle());
   }
 
   protected void testTitle(String view, String expectedTitle) {
-    testTitle(view, expectedTitle, false);
-  }
-  
-  protected void testTitle(String view, String expectedTitle, boolean secure) {
-    navigate(view, secure);
+    navigate(view);
     testTitle(expectedTitle);
   }
 
@@ -674,11 +653,7 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
   }
   
   protected void testNotFound(String path) {
-    testNotFound(path, false);
-  }
-  
-  protected void testNotFound(String path, boolean secure) {
-    navigate(path, secure);
+    navigate(path);
     waitTitle("Page Not Found!");
     assertEquals("Page Not Found!", getWebDriver().getTitle());
   }

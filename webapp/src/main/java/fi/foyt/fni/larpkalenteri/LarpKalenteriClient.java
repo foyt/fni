@@ -38,7 +38,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import fi.foyt.fni.larpkalenteri.AVIResolver.AVIProperties;
 import fi.foyt.fni.larpkalenteri.Event.Status;
@@ -201,26 +201,30 @@ public class LarpKalenteriClient {
     }
     
     DefaultHttpClient client = new DefaultHttpClient();
-    HttpGet httpGet = new HttpGet(url);
-    httpGet.setHeader("Accept", " application/json");
-    httpGet.setHeader("Authorization", String.format("Bearer %s", accessToken));
-    
-    HttpResponse response = client.execute(httpGet);
-    
-    HttpEntity entity = response.getEntity();
     try {
-      int status = response.getStatusLine().getStatusCode();
-      if (status == 204) {
-        return null;
-      } else if (status == 200) {
-        return unmarshalEntity(entity.getContent(), typeReference);
-      }
-
-      throw new IOException(String.format("Server returned error code %d", status));
+      HttpGet httpGet = new HttpGet(url);
+      httpGet.setHeader("Accept", " application/json");
+      httpGet.setHeader("Authorization", String.format("Bearer %s", accessToken));
       
+      HttpResponse response = client.execute(httpGet);
+      
+      HttpEntity entity = response.getEntity();
+      try {
+        int status = response.getStatusLine().getStatusCode();
+        if (status == 204) {
+          return null;
+        } else if (status == 200) {
+          return unmarshalEntity(entity.getContent(), typeReference);
+        }
+  
+        throw new IOException(String.format("Server returned error code %d", status));
+        
+      } finally {
+        EntityUtils.consume(entity);
+      } 
     } finally {
-      EntityUtils.consume(entity);
-    } 
+      client.close();
+    }
   }
   
   @SuppressWarnings("unchecked")
@@ -235,28 +239,32 @@ public class LarpKalenteriClient {
     String data = marshalEntity(payload);
     
     DefaultHttpClient client = new DefaultHttpClient();
-    HttpPost httpPost = new HttpPost(url);
-    httpPost.setHeader("Content-Type", "application/json; charset=UTF-8");
-    httpPost.setHeader("Accept", "application/json; charset=UTF-8");
-    httpPost.setHeader("Accept-Charset", "UTF-8");
-    httpPost.setHeader("Authorization", String.format("Bearer %s", accessToken));
-    httpPost.setEntity(new StringEntity(data, ContentType.create("application/json", "UTF-8")));
-
-    HttpResponse response = client.execute(httpPost);
-    
-    HttpEntity entity = response.getEntity();
     try {
-      int status = response.getStatusLine().getStatusCode();
-      if (status == 204) {
-        return null;
-      } else if (status == 200) {
-        return (T) unmarshalEntity(entity.getContent(), payload.getClass());
+      HttpPost httpPost = new HttpPost(url);
+      httpPost.setHeader("Content-Type", "application/json; charset=UTF-8");
+      httpPost.setHeader("Accept", "application/json; charset=UTF-8");
+      httpPost.setHeader("Accept-Charset", "UTF-8");
+      httpPost.setHeader("Authorization", String.format("Bearer %s", accessToken));
+      httpPost.setEntity(new StringEntity(data, ContentType.create("application/json", "UTF-8")));
+  
+      HttpResponse response = client.execute(httpPost);
+      
+      HttpEntity entity = response.getEntity();
+      try {
+        int status = response.getStatusLine().getStatusCode();
+        if (status == 204) {
+          return null;
+        } else if (status == 200) {
+          return (T) unmarshalEntity(entity.getContent(), payload.getClass());
+        }
+        
+        throw new IOException(String.format("Server returned error code %d", status));
+        
+      } finally {
+        EntityUtils.consume(entity);
       }
-      
-      throw new IOException(String.format("Server returned error code %d", status));
-      
     } finally {
-      EntityUtils.consume(entity);
+      client.close();
     }
   }
   
@@ -271,28 +279,32 @@ public class LarpKalenteriClient {
     
     String data = marshalEntity(payload);
     DefaultHttpClient client = new DefaultHttpClient();
-    HttpPut httpPut = new HttpPut(url);
-    httpPut.setHeader("Content-Type", "application/json; charset=UTF-8");
-    httpPut.setHeader("Accept", "application/json; charset=UTF-8");
-    httpPut.setHeader("Accept-Charset", "UTF-8");
-    httpPut.setHeader("Authorization", String.format("Bearer %s", accessToken));
-    httpPut.setEntity(new StringEntity(data, ContentType.create("application/json", "UTF-8")));
-    
-    HttpResponse response = client.execute(httpPut);
-    
-    HttpEntity entity = response.getEntity();
     try {
-      int status = response.getStatusLine().getStatusCode();
-      if (status == 204) {
-        return null;
-      } else if (status == 200) {
-        return (T) unmarshalEntity(entity.getContent(), payload.getClass());
+      HttpPut httpPut = new HttpPut(url);
+      httpPut.setHeader("Content-Type", "application/json; charset=UTF-8");
+      httpPut.setHeader("Accept", "application/json; charset=UTF-8");
+      httpPut.setHeader("Accept-Charset", "UTF-8");
+      httpPut.setHeader("Authorization", String.format("Bearer %s", accessToken));
+      httpPut.setEntity(new StringEntity(data, ContentType.create("application/json", "UTF-8")));
+      
+      HttpResponse response = client.execute(httpPut);
+      
+      HttpEntity entity = response.getEntity();
+      try {
+        int status = response.getStatusLine().getStatusCode();
+        if (status == 204) {
+          return null;
+        } else if (status == 200) {
+          return (T) unmarshalEntity(entity.getContent(), payload.getClass());
+        }
+        
+        throw new IOException(String.format("Server returned error code %d (%s)", status, IOUtils.toString(entity.getContent())));
+        
+      } finally {
+        EntityUtils.consume(entity);
       }
-      
-      throw new IOException(String.format("Server returned error code %d (%s)", status, IOUtils.toString(entity.getContent())));
-      
     } finally {
-      EntityUtils.consume(entity);
+      client.close();
     }
   }
 
@@ -326,7 +338,7 @@ public class LarpKalenteriClient {
   
   private ObjectMapper createObjectMapper() {
     ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.registerModule(new JSR310Module());
+    objectMapper.registerModule(new JavaTimeModule());
     objectMapper.configure(com.fasterxml.jackson.databind.SerializationFeature.
         WRITE_DATES_AS_TIMESTAMPS , false);
     return objectMapper;

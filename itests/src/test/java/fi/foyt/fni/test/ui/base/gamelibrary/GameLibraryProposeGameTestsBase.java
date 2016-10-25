@@ -33,7 +33,7 @@ public class GameLibraryProposeGameTestsBase extends AbstractUITest {
 
   @Test
   public void testLoginRedirect() throws Exception {
-    testLoginRequired("/gamelibrary/proposegame/", true);
+    testLoginRequired("/gamelibrary/proposegame/");
   }
   
   @Test
@@ -47,7 +47,7 @@ public class GameLibraryProposeGameTestsBase extends AbstractUITest {
   @SqlSets ("basic-users")
   public void testDesc() {
     loginInternal("user@foyt.fi", "pass");
-    navigate("/gamelibrary/proposegame/", true);
+    navigate("/gamelibrary/proposegame/");
     waitTitle("Forge & Illusion - Game Library");
     assertSelectorTextIgnoreCase(".view-header-description-title", "PROPOSE A GAME TO THE LIBRARY");
   }
@@ -63,7 +63,7 @@ public class GameLibraryProposeGameTestsBase extends AbstractUITest {
     GreenMail greenMail = startSmtpServer();
     try {
       loginInternal("user@foyt.fi", "pass");
-      navigate("/gamelibrary/proposegame/", true);
+      navigate("/gamelibrary/proposegame/");
       
       File testPng = getTestPng();
       File testPdf = getTestPdf();
@@ -139,7 +139,7 @@ public class GameLibraryProposeGameTestsBase extends AbstractUITest {
     GreenMail greenMail = startSmtpServer();
     try {
       loginInternal("user@foyt.fi", "pass");
-      navigate("/gamelibrary/proposegame/", true);
+      navigate("/gamelibrary/proposegame/");
       
       File testPng = getTestPng();
       File testPdf = getTestPdf();
@@ -193,7 +193,7 @@ public class GameLibraryProposeGameTestsBase extends AbstractUITest {
     GreenMail greenMail = startSmtpServer();
     try {
       loginInternal("user@foyt.fi", "pass");
-      navigate("/gamelibrary/proposegame/", true);
+      navigate("/gamelibrary/proposegame/");
       
       File testPng = getTestPng();
       File testPdf = getTestPdf();
@@ -245,7 +245,7 @@ public class GameLibraryProposeGameTestsBase extends AbstractUITest {
     GreenMail greenMail = startSmtpServer();
     try {
       loginInternal("user@foyt.fi", "pass");
-      navigate("/gamelibrary/proposegame/", true);
+      navigate("/gamelibrary/proposegame/");
       
       File testPng = getTestPng();
       File testPdf = getTestPdf();

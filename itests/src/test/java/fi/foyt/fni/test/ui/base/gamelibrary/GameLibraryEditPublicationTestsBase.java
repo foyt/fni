@@ -18,14 +18,14 @@ public class GameLibraryEditPublicationTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testLoginRedirect() throws Exception {
-    testLoginRequired(TEST_URL, true);
+    testLoginRequired(TEST_URL);
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testUnauthorized() throws Exception {
     loginInternal("user@foyt.fi", "pass");
-    testAccessDenied(TEST_URL, true);
+    testAccessDenied(TEST_URL);
   }
 
   @Test

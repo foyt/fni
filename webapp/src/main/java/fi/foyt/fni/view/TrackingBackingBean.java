@@ -2,6 +2,8 @@ package fi.foyt.fni.view;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -20,6 +22,7 @@ public class TrackingBackingBean {
 	private SystemSettingsController systemSettingsController;
 	
 	@PostConstruct
+	@TransactionAttribute (TransactionAttributeType.REQUIRES_NEW)
 	public void init() {
 	  piwikUrl = systemSettingsController.getSetting(SystemSettingKey.PIWIK_URL);
 	  piwikSiteId = systemSettingsController.getSetting(SystemSettingKey.PIWIK_SITEID); 

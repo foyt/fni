@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.LocaleUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import fi.foyt.fni.persistence.dao.common.CountryDAO;
@@ -168,9 +169,11 @@ public class SystemSettingsController {
   }
   
   public String getHostUrl(String host, boolean secure, boolean includeContextPath) {
-    int port = secure ? getSiteHttpsPort() : getSiteHttpPort();
-    String scheme = secure ? "https" : "http";
-    boolean dropPort = secure ? port == 443 : port == 80;
+    boolean useSecure = secure && !StringUtils.equals(System.getProperty("it-test"), "true"); 
+    
+    int port = useSecure ? getSiteHttpsPort() : getSiteHttpPort();
+    String scheme = useSecure ? "https" : "http";
+    boolean dropPort = useSecure ? port == 443 : port == 80;
     
     StringBuilder resultBuilder = new StringBuilder();
     

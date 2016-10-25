@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -59,6 +61,7 @@ public class SessionBackingBean {
 	private HttpServletRequest request;
   
   @PostConstruct
+  @TransactionAttribute (TransactionAttributeType.NOT_SUPPORTED)
   public void init() {
     Map<String, String> dateFormats = new HashMap<>();
     Map<String, String> timeFormats = new HashMap<>();

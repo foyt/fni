@@ -15,21 +15,21 @@ public class StoreManageTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-users")
   public void testLoginRedirect() throws Exception {
-    testLoginRequired("/store/manage/", true);
+    testLoginRequired("/store/manage/");
   }
 
   @Test
   @SqlSets ("basic-users")
   public void testUnauthorized() throws Exception {
     loginInternal("user@foyt.fi", "pass");
-    testAccessDenied("/store/manage/", true);
+    testAccessDenied("/store/manage/");
   }
 
   @Test
   @SqlSets ("basic-users")
   public void testAdmin() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
-    navigate("/store/manage/", true);
+    navigate("/store/manage/");
     waitTitle("Store - Management");
     assertTitle("Store - Management");
   }
