@@ -2,7 +2,8 @@
 
 if [[ $start_sc_tunnel = true ]]; then
   echo "Stopping Sauce Connect"
-  daemon -n sc --stop
+  killall sc
+  wait $(pgrep ps) 
 fi;
 
 for f in itests/target/*.png; do curl --form "fileupload=@$f" http://uploads.im/api?upload; done
