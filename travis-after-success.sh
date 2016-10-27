@@ -1,7 +1,9 @@
 #!/bin/bash
 
 if [[ $start_sc_tunnel = true ]]; then
+  echo "Stopping Sauce Connect"
   killall sc
+  killall -9 sc
 fi;
 
 if [[ ($deploy = true) && ($perform_release = "true") ]]; then
