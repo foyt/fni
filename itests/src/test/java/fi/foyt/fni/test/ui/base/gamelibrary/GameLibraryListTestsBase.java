@@ -1,7 +1,6 @@
 package fi.foyt.fni.test.ui.base.gamelibrary;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

@@ -9,6 +9,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class DateTimeUtils {
+  
+  private DateTimeUtils() {
+  }
 
   public static String formatIsoDate(LocalDate localDate) {
     return DateTimeFormatter.ISO_DATE.format(localDate);
