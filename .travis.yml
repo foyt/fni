@@ -7,6 +7,10 @@ cache:
   - itests/.cargo
   - itests/.phantomjs
   - $HOME/.m2
+addons:
+  apt:
+    packages:
+    - daemon 
 before_install:
 - openssl aes-256-cbc -K $encrypted_594de081de2f_key -iv $encrypted_594de081de2f_iv -in travis-encrypted.tar.enc -out travis-encrypted.tar -d
 - tar xvf travis-encrypted.tar

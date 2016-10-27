@@ -2,8 +2,7 @@
 
 if [[ $start_sc_tunnel = true ]]; then
   echo "Stopping Sauce Connect"
-  killall sc
-  killall -9 sc
+  daemon -n sc --stop
 fi;
 
 if [[ ($deploy = true) && ($perform_release = "true") ]]; then
