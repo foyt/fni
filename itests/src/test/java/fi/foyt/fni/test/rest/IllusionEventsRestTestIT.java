@@ -15,7 +15,6 @@ import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.junit.Test;
 
-import com.icegreen.greenmail.util.GreenMail;
 import com.jayway.restassured.response.Response;
 
 import fi.foyt.fni.persistence.model.illusion.IllusionEventJoinMode;
@@ -700,50 +699,45 @@ public class IllusionEventsRestTestIT extends AbstractRestTest {
   @Test
   @SqlSets({"basic-users", "service-client", "illusion-basic", "event", "event-participant" })
   public void testUpdateParticipant() throws Exception {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      String token = createServiceToken();
-      
-      IllusionEventParticipant createParticipant = new IllusionEventParticipant(null, 1l, IllusionEventParticipantRole.PENDING_APPROVAL);
-      
-      Response response = givenJson(token)
-        .body(createParticipant)
-        .post("/illusion/events/{EVENTID}/participants", 1l);    
-      response.then()
-        .statusCode(200);
-      
-      Long id = response.body().jsonPath().getLong("id");
-      givenJson(createServiceToken())
-        .get("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
-        .then()
-        .statusCode(200)
-        .body("id", not(is((Long) null)))
-        .body("role", is("PENDING_APPROVAL"))
-        .body("userId", is(1));
-      
-      IllusionEventParticipant updateParticipant = new IllusionEventParticipant(id, createParticipant.getUserId(), IllusionEventParticipantRole.ORGANIZER);
-      
-      givenJson(token)
-        .body(updateParticipant)
-        .put("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
-        .then()
-        .statusCode(204);
-      
-      givenJson(createServiceToken())
-        .get("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
-        .then()
-        .statusCode(200)
-        .body("id", is(id.intValue()))
-        .body("role", is("ORGANIZER"))
-        .body("userId", is(1));
-      
-      givenJson(token)
-        .delete("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
-        .then()
-        .statusCode(204);
-    } finally {
-      greenMail.stop();
-    } 
+    String token = createServiceToken();
+    
+    IllusionEventParticipant createParticipant = new IllusionEventParticipant(null, 1l, IllusionEventParticipantRole.PENDING_APPROVAL);
+    
+    Response response = givenJson(token)
+      .body(createParticipant)
+      .post("/illusion/events/{EVENTID}/participants", 1l);    
+    response.then()
+      .statusCode(200);
+    
+    Long id = response.body().jsonPath().getLong("id");
+    givenJson(createServiceToken())
+      .get("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+      .then()
+      .statusCode(200)
+      .body("id", not(is((Long) null)))
+      .body("role", is("PENDING_APPROVAL"))
+      .body("userId", is(1));
+    
+    IllusionEventParticipant updateParticipant = new IllusionEventParticipant(id, createParticipant.getUserId(), IllusionEventParticipantRole.ORGANIZER);
+    
+    givenJson(token)
+      .body(updateParticipant)
+      .put("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+      .then()
+      .statusCode(204);
+    
+    givenJson(createServiceToken())
+      .get("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+      .then()
+      .statusCode(200)
+      .body("id", is(id.intValue()))
+      .body("role", is("ORGANIZER"))
+      .body("userId", is(1));
+    
+    givenJson(token)
+      .delete("/illusion/events/{EVENTID}/participants/{ID}", 1l, id)
+      .then()
+      .statusCode(204);
   }
   
   @Test

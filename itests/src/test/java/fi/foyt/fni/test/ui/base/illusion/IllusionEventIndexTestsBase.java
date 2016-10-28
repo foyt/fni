@@ -10,7 +10,6 @@ import javax.mail.MessagingException;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
-import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 
 import fi.foyt.fni.test.DefineSqlSet;
@@ -109,53 +108,44 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-event-oai")
   public void testJoinOpenNotLoggedIn() {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      navigate("/illusion/event/open");
-      waitForSelectorPresent(".illusion-event-join-button");
-      assertSelectorClickable(".illusion-event-join-button");
-      clickSelector(".illusion-event-join-button");
-      waitForUrlMatches(".*/login.*");
-      assertLogin();
-      loginInternal("user@foyt.fi", "pass");
-      assertUrlMatches(".*/illusion/event/open");
-      assertSelectorCount(".illusion-event-navigation>a", 1);
-      assertSelectorNotPresent(".illusion-event-join-button");
-      assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
-      assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
-    } finally {
-      greenMail.stop();
-    }
+
+    navigate("/illusion/event/open");
+    waitForSelectorPresent(".illusion-event-join-button");
+    assertSelectorClickable(".illusion-event-join-button");
+    clickSelector(".illusion-event-join-button");
+    waitForUrlMatches(".*/login.*");
+    assertLogin();
+    loginInternal("user@foyt.fi", "pass");
+    assertUrlMatches(".*/illusion/event/open");
+    assertSelectorCount(".illusion-event-navigation>a", 1);
+    assertSelectorNotPresent(".illusion-event-join-button");
+    assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
+    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
   }
 
   @Test
   @SqlSets ("illusion-event-oai")
   public void testJoinApproveNotLoggedIn() throws MessagingException {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      navigate("/illusion/event/approve");
-      assertSelectorClickable(".illusion-event-join-button");
-      clickSelector(".illusion-event-join-button");
-      waitForUrlMatches(".*/login.*");
-      assertLogin();
-      loginInternal("user@foyt.fi", "pass");
-      assertUrlMatches(".*/illusion/event/approve.*");
-      waitForNotification();
+    navigate("/illusion/event/approve");
+    assertSelectorClickable(".illusion-event-join-button");
+    clickSelector(".illusion-event-join-button");
+    waitForUrlMatches(".*/login.*");
+    assertLogin();
+    loginInternal("user@foyt.fi", "pass");
+    assertUrlMatches(".*/illusion/event/approve.*");
+    waitForNotification();
 
-      navigate("/illusion/event/approve");
-      assertNotification("warning", "Waiting for event organizer to accept your request...");
-      assertEquals(2, greenMail.getReceivedMessages().length);
+    navigate("/illusion/event/approve");
+    assertNotification("warning", "Waiting for event organizer to accept your request...");
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
 
-      String mail1Body = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertEquals("Illusion - Registration to event Approve", greenMail.getReceivedMessages()[0].getSubject());
-      assertTrue(mail1Body, StringUtils.startsWithIgnoreCase(mail1Body, "<p>Hi Test,"));
+    String mail1Body = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertEquals("Illusion - Registration to event Approve", getGreenMail().getReceivedMessages()[0].getSubject());
+    assertTrue(mail1Body, StringUtils.startsWithIgnoreCase(mail1Body, "<p>Hi Test,"));
 
-      String mail2Body = GreenMailUtil.getBody(greenMail.getReceivedMessages()[1]);
-      assertEquals("Illusion - Registration to event Approve", greenMail.getReceivedMessages()[1].getSubject());
-      assertTrue(mail2Body, StringUtils.startsWithIgnoreCase(mail2Body, "<p>Hi Test,"));
-    } finally {
-      greenMail.stop();
-    } 
+    String mail2Body = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[1]);
+    assertEquals("Illusion - Registration to event Approve", getGreenMail().getReceivedMessages()[1].getSubject());
+    assertTrue(mail2Body, StringUtils.startsWithIgnoreCase(mail2Body, "<p>Hi Test,"));
   }
   
   @Test
@@ -168,48 +158,38 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-event-oai")
   public void testJoinOpenLoggedIn() {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      loginInternal("user@foyt.fi", "pass");
-      navigate("/illusion/event/open");
-      assertSelectorClickable(".illusion-event-join-button");
-      clickSelector(".illusion-event-join-button");
-      waitForSelectorNotPresent(".illusion-event-join-button");
-      assertSelectorCount(".illusion-event-navigation>a", 1);
-      assertSelectorNotPresent(".illusion-event-join-button");
-      assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
-      assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
-    } finally {
-      greenMail.stop();
-    }
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/illusion/event/open");
+    assertSelectorClickable(".illusion-event-join-button");
+    clickSelector(".illusion-event-join-button");
+    waitForSelectorNotPresent(".illusion-event-join-button");
+    assertSelectorCount(".illusion-event-navigation>a", 1);
+    assertSelectorNotPresent(".illusion-event-join-button");
+    assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
+    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
   }
 
   @Test
   @SqlSets ("illusion-event-oai")
   public void testJoinApproveLoggedIn() throws MessagingException {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      loginInternal("user@foyt.fi", "pass");
-      navigate("/illusion/event/approve");
-      waitForSelectorPresent(".illusion-event-join-button");
-      assertSelectorClickable(".illusion-event-join-button");
-      clickSelector(".illusion-event-join-button");
-      assertUrlMatches(".*/illusion/event/approve.*");
-      waitForNotification();
-      navigate("/illusion/event/approve");
-      assertNotification("warning", "Waiting for event organizer to accept your request...");
-      assertEquals(2, greenMail.getReceivedMessages().length);
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/illusion/event/approve");
+    waitForSelectorPresent(".illusion-event-join-button");
+    assertSelectorClickable(".illusion-event-join-button");
+    clickSelector(".illusion-event-join-button");
+    assertUrlMatches(".*/illusion/event/approve.*");
+    waitForNotification();
+    navigate("/illusion/event/approve");
+    assertNotification("warning", "Waiting for event organizer to accept your request...");
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
 
-      String mail1Body = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertEquals("Illusion - Registration to event Approve", greenMail.getReceivedMessages()[0].getSubject());
-      assertTrue(mail1Body, StringUtils.startsWithIgnoreCase(mail1Body, "<p>Hi Test,"));
+    String mail1Body = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertEquals("Illusion - Registration to event Approve", getGreenMail().getReceivedMessages()[0].getSubject());
+    assertTrue(mail1Body, StringUtils.startsWithIgnoreCase(mail1Body, "<p>Hi Test,"));
 
-      String mail2Body = GreenMailUtil.getBody(greenMail.getReceivedMessages()[1]);
-      assertEquals("Illusion - Registration to event Approve", greenMail.getReceivedMessages()[1].getSubject());
-      assertTrue(mail2Body, StringUtils.startsWithIgnoreCase(mail2Body, "<p>Hi Test,"));
-    } finally {
-      greenMail.stop();
-    } 
+    String mail2Body = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[1]);
+    assertEquals("Illusion - Registration to event Approve", getGreenMail().getReceivedMessages()[1].getSubject());
+    assertTrue(mail2Body, StringUtils.startsWithIgnoreCase(mail2Body, "<p>Hi Test,"));
   }
   
   @Test
@@ -264,22 +244,17 @@ public class IllusionEventIndexTestsBase extends AbstractIllusionUITest {
   @Test
   @SqlSets ("illusion-event-custom")
   public void testCustomDomainJoinOpenLoggedIn() {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      loginInternal("user@foyt.fi", "pass");
-      getWebDriver().get(getCustomEventUrl());
-      
-      waitAndClick(".illusion-event-join-button");
-      waitForSelectorNotPresent(".illusion-event-join-button");
-      waitTitle("Illusion - Open Event");
-  
-      assertSelectorCount(".illusion-event-navigation>a", 1);
-      assertSelectorNotPresent(".illusion-event-join-button");
-      assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
-      assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
-    } finally {
-      greenMail.stop();
-    }
+    loginInternal("user@foyt.fi", "pass");
+    getWebDriver().get(getCustomEventUrl());
+    
+    waitAndClick(".illusion-event-join-button");
+    waitForSelectorNotPresent(".illusion-event-join-button");
+    waitTitle("Illusion - Open Event");
+
+    assertSelectorCount(".illusion-event-navigation>a", 1);
+    assertSelectorNotPresent(".illusion-event-join-button");
+    assertSelectorNotPresent(".illusion-event-navigation-admin-menu");
+    assertSelectorTextIgnoreCase(".illusion-event-navigation-item-active", "front page");
   }
   
   @Test

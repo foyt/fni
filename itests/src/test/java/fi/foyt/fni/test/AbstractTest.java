@@ -45,6 +45,8 @@ public abstract class AbstractTest {
   @Rule
   public TestName testName = new TestName();
   
+  private GreenMail greenMail = new GreenMail(new ServerSetup(getSmtpPort(), "localhost", ServerSetup.PROTOCOL_SMTP));
+
   @Before
   public void printName(){
     System.out.println(String.format("> %s", testName.getMethodName()));
@@ -59,7 +61,20 @@ public abstract class AbstractTest {
       .then()
       .statusCode(200);
   }
-
+  
+  @Before
+  public void startGreenMail() {
+    getGreenMail().start(); 
+  }
+  
+  @After
+  public void stopGreenMail() {
+    getGreenMail().stop(); 
+  }
+  
+  protected GreenMail getGreenMail() {
+    return greenMail;
+  }
   
   protected void reindexHibernateSearch() {
     given()
@@ -624,12 +639,6 @@ public abstract class AbstractTest {
     for (Long userId : userIds) {
       deleteUser(userId);
     }
-  }
-
-  protected GreenMail startSmtpServer() {
-    GreenMail greenMail = new GreenMail(new ServerSetup(getSmtpPort(), "localhost", ServerSetup.PROTOCOL_SMTP));
-    greenMail.start();
-    return greenMail;
   }
   
   protected ZonedDateTime getZonedDate(int year, int monthOfYear, int dayOfMonth, ZoneId zone) {
