@@ -3,7 +3,6 @@
 if [[ $start_sc_tunnel = true ]]; then
   echo "Stopping Sauce Connect"
   killall sc
-  wait $(pgrep ps) 
 fi;
 
 if [[ ($deploy = true) && ($perform_release = "true") ]]; then
