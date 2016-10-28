@@ -455,6 +455,8 @@
                       <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/system-property=it-test:add(value="true")</command>
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
+                      <command>/subsystem=logging/logger=org.ocpsoft.rewrite.faces.NavigatingInvocationResultHandler:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.hibernate.search.batchindexing.impl.SimpleIndexingProgressMonitor:add(level=WARN)</command>
                     </commands>
                   </before-deployment>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
@@ -786,6 +788,8 @@
                       <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/system-property=it-test:add(value="true")</command>
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
+                      <command>/subsystem=logging/logger=org.ocpsoft.rewrite.faces.NavigatingInvocationResultHandler:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.hibernate.search.batchindexing.impl.SimpleIndexingProgressMonitor:add(level=WARN)</command>
                     </commands>
                   </before-deployment>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
@@ -1126,6 +1130,8 @@
                       <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/system-property=it-test:add(value="true")</command>
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
+                      <command>/subsystem=logging/logger=org.ocpsoft.rewrite.faces.NavigatingInvocationResultHandler:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.hibernate.search.batchindexing.impl.SimpleIndexingProgressMonitor:add(level=WARN)</command>
                     </commands>
                   </before-deployment>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
@@ -1451,6 +1457,8 @@
                       <command>/system-property=fni-https-port:add(value="${it.port.https}")</command>
                       <command>/system-property=it-test:add(value="true")</command>
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
+                      <command>/subsystem=logging/logger=org.ocpsoft.rewrite.faces.NavigatingInvocationResultHandler:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.hibernate.search.batchindexing.impl.SimpleIndexingProgressMonitor:add(level=WARN)</command>
                     </commands>
                   </before-deployment>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
