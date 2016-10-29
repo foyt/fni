@@ -48,6 +48,16 @@ public abstract class AbstractTest {
   private GreenMail greenMail = new GreenMail(new ServerSetup(getSmtpPort(), "localhost", ServerSetup.PROTOCOL_SMTP));
 
   @Before
+  public void logName(){
+    given()
+      .baseUri(getAppUrl() + "/rest")
+      .header("Authorization", "Bearer systemtoken")
+      .get(String.format("/system/log?text=%s", testName.getMethodName()))
+      .then()
+      .statusCode(200);
+  }
+  
+  @Before
   public void printName(){
     System.out.println(String.format("> %s", testName.getMethodName()));
   }
@@ -175,7 +185,7 @@ public abstract class AbstractTest {
     for (TestSql testSql : testSqls) {
       InputStream sqlStream = classLoader.getResourceAsStream(testSql.getFile());
       try {
-        String statements = IOUtils.toString(sqlStream);
+        String statements = IOUtils.toString(sqlStream, "UTF-8");
         StringBuffer statementBuffer = new StringBuffer();
         
         Matcher matcher = paramPattern.matcher(statements);
@@ -379,7 +389,7 @@ public abstract class AbstractTest {
     ClassLoader classLoader = getClass().getClassLoader();
     InputStream sqlStream = classLoader.getResourceAsStream(file);
     try {
-      String statements = IOUtils.toString(sqlStream);
+      String statements = IOUtils.toString(sqlStream, "UTF-8");
       if (StringUtils.isNotBlank(statements)) {
         // Tokenization regex from https://github.com/otavanopisto/muikku/blob/master/muikku-core-plugins/src/test/java/fi/muikku/plugins/workspace/test/ui/SeleniumTestBase.java
         for (String statement : statements.split(";(?=([^\']*\'[^\']*\')*[^\']*$)")) {

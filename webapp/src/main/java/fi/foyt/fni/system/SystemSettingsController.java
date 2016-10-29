@@ -169,7 +169,7 @@ public class SystemSettingsController {
   }
   
   public String getHostUrl(String host, boolean secure, boolean includeContextPath) {
-    boolean useSecure = secure && !StringUtils.equals(System.getProperty("it-test"), "true"); 
+    boolean useSecure = secure && !getTestMode(); 
     
     int port = useSecure ? getSiteHttpsPort() : getSiteHttpPort();
     String scheme = useSecure ? "https" : "http";
@@ -191,5 +191,9 @@ public class SystemSettingsController {
     }
     
     return resultBuilder.toString();
+  }
+  
+  public boolean getTestMode() {
+    return StringUtils.equals(System.getProperty("it-test"), "true");
   }
 }
