@@ -26,7 +26,7 @@
   
     <!-- Selenium -->
 
-    <selenium-java.version>3.0.1</selenium-java.version>
+    <selenium-java.version>2.53.1</selenium-java.version>
     
     <!-- Saucelabs JUnit -->
     
