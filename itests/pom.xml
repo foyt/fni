@@ -26,7 +26,7 @@
   
     <!-- Selenium -->
 
-    <selenium-java.version>2.53.1</selenium-java.version>
+    <selenium-java.version>3.0.1</selenium-java.version>
     
     <!-- Saucelabs JUnit -->
     
@@ -457,6 +457,12 @@
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                       <command>/subsystem=logging/logger=org.ocpsoft.rewrite.faces.NavigatingInvocationResultHandler:add(level=WARN)</command>
                       <command>/subsystem=logging/logger=org.hibernate.search.batchindexing.impl.SimpleIndexingProgressMonitor:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.jboss.as.clustering.infinispan:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.ocpsoft.rewrite.servlet.RewriteFilter:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.wildfly.extension.undertow:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.jboss.as.connector.subsystems.datasources:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.jboss.as.ejb3.deployment:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.hibernate.search.store.impl.DirectoryProviderHelper:add(level=WARN)</command>
                     </commands>
                   </before-deployment>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
@@ -655,7 +661,6 @@
                   <type>CREATE</type>
                 </configuration>
               </execution>
-              
               <execution> 
                 <id>drop-db-after-test</id>
                 <phase>post-integration-test</phase>
@@ -790,6 +795,12 @@
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                       <command>/subsystem=logging/logger=org.ocpsoft.rewrite.faces.NavigatingInvocationResultHandler:add(level=WARN)</command>
                       <command>/subsystem=logging/logger=org.hibernate.search.batchindexing.impl.SimpleIndexingProgressMonitor:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.jboss.as.clustering.infinispan:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.ocpsoft.rewrite.servlet.RewriteFilter:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.wildfly.extension.undertow:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.jboss.as.connector.subsystems.datasources:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.jboss.as.ejb3.deployment:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.hibernate.search.store.impl.DirectoryProviderHelper:add(level=WARN)</command>
                     </commands>
                   </before-deployment>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
@@ -1132,6 +1143,12 @@
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                       <command>/subsystem=logging/logger=org.ocpsoft.rewrite.faces.NavigatingInvocationResultHandler:add(level=WARN)</command>
                       <command>/subsystem=logging/logger=org.hibernate.search.batchindexing.impl.SimpleIndexingProgressMonitor:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.jboss.as.clustering.infinispan:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.ocpsoft.rewrite.servlet.RewriteFilter:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.wildfly.extension.undertow:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.jboss.as.connector.subsystems.datasources:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.jboss.as.ejb3.deployment:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.hibernate.search.store.impl.DirectoryProviderHelper:add(level=WARN)</command>
                     </commands>
                   </before-deployment>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
@@ -1459,6 +1476,12 @@
                       <command>/subsystem=logging/logger=org.jboss.resteasy.core.ExceptionHandler:add(level=SEVERE)</command>
                       <command>/subsystem=logging/logger=org.ocpsoft.rewrite.faces.NavigatingInvocationResultHandler:add(level=WARN)</command>
                       <command>/subsystem=logging/logger=org.hibernate.search.batchindexing.impl.SimpleIndexingProgressMonitor:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.jboss.as.clustering.infinispan:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.ocpsoft.rewrite.servlet.RewriteFilter:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.wildfly.extension.undertow:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.jboss.as.connector.subsystems.datasources:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.jboss.as.ejb3.deployment:add(level=WARN)</command>
+                      <command>/subsystem=logging/logger=org.hibernate.search.store.impl.DirectoryProviderHelper:add(level=WARN)</command>
                     </commands>
                   </before-deployment>
                   <filename>../../webapp/target/webapp-${project.version}.war</filename>
