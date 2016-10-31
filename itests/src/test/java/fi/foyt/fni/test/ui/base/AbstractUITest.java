@@ -112,7 +112,6 @@ public class AbstractUITest extends fi.foyt.fni.test.ui.AbstractUITest implement
     capabilities.setCapability("video-upload-on-pass", false);
     capabilities.setCapability("capture-html", true);
     capabilities.setCapability("timeZone", "Universal");
-    capabilities.setCapability("seleniumVersion", getSeleniumVersion());
     capabilities.setCapability("commandTimeout", 600);
 
     if (getSauceTunnelId() != null) {
