@@ -352,6 +352,7 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
     waitForSelectorPresent(".menu-tools-account");
     assertLoggedIn();
     
+    waitMailsReceived(getGreenMail(), 2);
     assertEquals(2, getGreenMail().getReceivedMessages().length);
 
     String registrantMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
