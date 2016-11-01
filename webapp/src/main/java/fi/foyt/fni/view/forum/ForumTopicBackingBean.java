@@ -28,8 +28,6 @@ import fi.foyt.fni.persistence.model.forum.ForumPost;
 import fi.foyt.fni.persistence.model.forum.ForumTopic;
 import fi.foyt.fni.persistence.model.users.Permission;
 import fi.foyt.fni.persistence.model.users.User;
-import fi.foyt.fni.security.LoggedIn;
-import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.security.SecurityController;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.utils.faces.FacesUtils;
@@ -38,13 +36,11 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Stateful
 @Named
 @Join (path = "/forum/{forumUrlName}/{topicUrlName}", to = "/forum/topic.jsf")
+@SuppressWarnings("squid:S3306")
 public class ForumTopicBackingBean {
   
-  @Inject
-  private Logger logger;
-
   public static final int POST_PER_PAGE = 15;
-
+  
   @Parameter
   @Matches ("[a-z0-9_.-]{1,}")
   private String forumUrlName;
@@ -55,6 +51,9 @@ public class ForumTopicBackingBean {
   
   @Parameter
   private Integer page;
+
+  @Inject
+  private Logger logger;
 
 	@Inject
 	private ForumController forumController;
@@ -67,22 +66,35 @@ public class ForumTopicBackingBean {
 
   @Inject
   private NavigationController navigationController;
+  
+  private List<Integer> pages;
+  private Forum forum;
+  private Long topicId;
+  private String topicSubject;
+  private String topicAuthorName;
+  private Long topicAuthorId;
+  private Date topicCreated;
+  private List<ForumPost> posts;
+  private String reply;
+  private long postCount;
 	
 	@RequestAction
 	public String load() {
-		if (page == null) {
+	  if (page == null) {
 			page = 0;
 		}
+	  
+	  page = Math.max(page, 0);
 		
-		forum = forumController.findForumByUrlName(getForumUrlName());
+	  forum = forumController.findForumByUrlName(getForumUrlName());
 		if (forum == null) {
 		  return navigationController.notFound();
 		}   
-		
+
 		if (!forum.getCategory().getVisible()) {
       return navigationController.notFound();
     }
-		
+    
 		ForumTopic topic = forumController.findForumTopicByForumAndUrlName(forum, topicUrlName);
     if (topic == null) {
       return navigationController.notFound();
@@ -93,12 +105,10 @@ public class ForumTopicBackingBean {
     topicAuthorId = topic.getAuthor().getId();
     topicAuthorName = topic.getAuthor().getFullName();
     topicCreated = topic.getCreated();
-    postCount = Math.round(Math.ceil(new Double(forumController.countPostsByTopic(topic)) / POST_PER_PAGE));
-    
+    postCount = Math.round(Math.ceil((double) forumController.countPostsByTopic(topic)) / POST_PER_PAGE);
+
     long pageCount = getPostCount();
-		
 		posts = forumController.listPostsByTopic(topic, page * POST_PER_PAGE, POST_PER_PAGE);
-		
 		pages = new ArrayList<>();
 		for (int i = 0; i < pageCount; i++) {
 			pages.add(i);
@@ -108,7 +118,7 @@ public class ForumTopicBackingBean {
 		for (ForumPost post : posts) {
 		  forumController.updatePostViews(post, post.getViews() + 1);
 		}
-		    
+
     if (sessionController.isLoggedIn()) {
       // If user has never been in forum, we mark everything read
       User loggedUser = sessionController.getLoggedUser();
@@ -118,7 +128,7 @@ public class ForumTopicBackingBean {
         forumController.markForumTopicRead(topic, loggedUser); 
       }
     }
-		
+
 		return null;
 	}
 	
@@ -202,17 +212,25 @@ public class ForumTopicBackingBean {
     }
 	}
 	
-	@LoggedIn
-	@Secure (Permission.FORUM_POST_CREATE)
-	public void postReply() {
+	public String postReply() {
+	  if (!sessionController.isLoggedIn()) {
+	    return navigationController.requireLogin();
+	  }
+    
+	  if (!sessionController.hasLoggedUserPermission(Permission.FORUM_POST_CREATE)) {
+	    return navigationController.accessDenied();
+	  }
+       
 		String content = StringUtils.strip(getReply());
 		if (StringUtils.isEmpty(content)) {
 			FacesUtils.addMessage(FacesMessage.SEVERITY_WARN, FacesUtils.getLocalizedValue("forum.topic.contentRequired"));
+			return null;
 		} else {
 		  ForumTopic topic = forumController.findForumTopicById(getTopicId());
   		User author = sessionController.getLoggedUser();
   		ForumPost post = forumController.createForumPost(topic, author, content);
-
+  		Long pageCount = Math.round(Math.ceil(((double) getPostCount() + 1) / POST_PER_PAGE));
+  		
   		try {
         FacesContext.getCurrentInstance().getExternalContext().redirect(new StringBuilder()
           .append(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath())
@@ -221,13 +239,15 @@ public class ForumTopicBackingBean {
           .append('/')
           .append(topic.getUrlName())
           .append("?page=")
-          .append(getPostCount() - 1)
+          .append(pageCount - 1)
           .append("#p")
           .append(post.getId())
           .toString());
       } catch (IOException e) {
         logger.log(Level.SEVERE, "Failed to redirect user to new post", e);
       }
+  		
+      return null;
 		}
 	}
 	
@@ -240,15 +260,21 @@ public class ForumTopicBackingBean {
 	  return forumController.isWatchingTopic(sessionController.getLoggedUser(), topic);
 	}
 	
-	@LoggedIn
-  public String watchTopic() {
+	public String watchTopic() {
+	  if (!sessionController.isLoggedIn()) {
+      return navigationController.requireLogin();
+    }
+	  
 	  ForumTopic topic = forumController.findForumTopicById(getTopicId());
     forumController.addTopicWatcher(sessionController.getLoggedUser(), topic);
     return "pretty:forum-topic";
   }
 	
-	@LoggedIn
-  public String stopWatchingTopic() {
+	public String stopWatchingTopic() {
+	  if (!sessionController.isLoggedIn()) {
+      return navigationController.requireLogin();
+    }
+  
     ForumTopic topic = forumController.findForumTopicById(getTopicId());
     forumController.removeTopicWatcher(sessionController.getLoggedUser(), topic);
     return "pretty:forum-topic";
@@ -257,15 +283,4 @@ public class ForumTopicBackingBean {
 	private long getPostCount() {
 		return postCount;
 	}
-	
-	private List<Integer> pages;
-	private Forum forum;
-	private Long topicId;
-	private String topicSubject;
-	private String topicAuthorName;
-	private Long topicAuthorId;
-	private Date topicCreated;
-	private List<ForumPost> posts;
-	private String reply;
-	private long postCount;
 }

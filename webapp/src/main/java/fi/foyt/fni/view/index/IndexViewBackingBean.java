@@ -1,5 +1,6 @@
 package fi.foyt.fni.view.index;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -7,15 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.joda.time.DateTime;
 import org.ocpsoft.rewrite.annotation.Join;
+import org.ocpsoft.rewrite.annotation.RequestAction;
 
 import fi.foyt.fni.blog.BlogController;
 import fi.foyt.fni.forum.ForumController;
@@ -59,16 +59,16 @@ public class IndexViewBackingBean {
   @Inject
 	private IllusionEventController illusionEventController;
 	
-	@PostConstruct
-	public void init() {
+	@RequestAction
+	public String init() {
 		latestGameLibraryPublications = publicationController.listRecentBookPublications(MAX_GAME_LIBRARY_PUBLICATIONS);
 		latestForumTopics = forumController.listLatestForumTopics(MAX_FORUM_TOPICS);
 		illusionEvents = createEventPojos(illusionEventController.listNextIllusionEvents(MAX_ILLUSION_EVENTS));
 		latestBlogEntries = blogController.listBlogEntries(MAX_LATEST_ENTRIES);
 	  
-    DateTime lastPostDate = blogController.getLastBlogDate();
+    OffsetDateTime lastPostDate = blogController.getLastBlogDate();
     if (lastPostDate != null) {
-      newsArchiveMonth = lastPostDate.getMonthOfYear();
+      newsArchiveMonth = lastPostDate.getMonthValue();
       newsArchiveYear = lastPostDate.getYear();
     }
     
@@ -83,6 +83,8 @@ public class IndexViewBackingBean {
     for (BookPublication latestGameLibraryPublication : latestGameLibraryPublications) {
       publicationTags.put(latestGameLibraryPublication.getId(), gameLibraryTagController.listPublicationGameLibraryTags(latestGameLibraryPublication));
     }
+    
+    return null;
 	}
 	
 	public List<BlogEntry> getLatestBlogEntries() {

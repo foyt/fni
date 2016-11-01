@@ -3,6 +3,9 @@ package fi.foyt.fni.test.rest;
 import static com.jayway.restassured.RestAssured.given;
 import static org.junit.Assert.assertNotNull;
 
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
@@ -14,13 +17,11 @@ import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.joda.time.base.AbstractInstant;
-import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Before;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.config.ObjectMapperConfig;
 import com.jayway.restassured.config.RestAssuredConfig;
@@ -35,14 +36,14 @@ public class AbstractRestTest extends AbstractTest {
   @Before
   public void setupRestAssured() {
     RestAssured.baseURI = getAppUrl() + "/rest";
-    RestAssured.port = getPortHttps();
+    RestAssured.port = getPortHttp();
 
     RestAssured.config = RestAssuredConfig.config().objectMapperConfig(
       ObjectMapperConfig.objectMapperConfig().jackson2ObjectMapperFactory(new Jackson2ObjectMapperFactory() {
         @Override
         public ObjectMapper create(@SuppressWarnings("rawtypes") Class cls, String charset) {
           ObjectMapper objectMapper = new ObjectMapper();
-          objectMapper.registerModule(new JodaModule());
+          objectMapper.registerModule(new JavaTimeModule());
           objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
           return objectMapper;
         }
@@ -70,11 +71,11 @@ public class AbstractRestTest extends AbstractTest {
   }
 
   protected String createServiceToken() throws OAuthSystemException, OAuthProblemException {
-    return createServiceToken("client-id", "client-secret", getAppUrl(true) + "/fake-redirect");
+    return createServiceToken("client-id", "client-secret", getAppUrl() + "/fake-redirect");
   }
 
   protected String createServiceToken(String clientId, String clientSecet, String redirectURI) throws OAuthSystemException, OAuthProblemException {
-    String tokenEndpoint = getAppUrl(true) + "/oauth2/token";
+    String tokenEndpoint = getAppUrl() + "/oauth2/token";
 
     OAuthClientRequest request = OAuthClientRequest.tokenLocation(tokenEndpoint).setGrantType(GrantType.CLIENT_CREDENTIALS).setClientId(clientId)
         .setClientSecret(clientSecet).setRedirectURI(redirectURI).buildQueryMessage();
@@ -89,8 +90,8 @@ public class AbstractRestTest extends AbstractTest {
     return response.getAccessToken();
   }
 
-  protected static Matcher<AbstractInstant> sameInstant(final AbstractInstant instant) {
-    return new BaseMatcher<AbstractInstant>(){
+  protected static Matcher<Instant> sameInstant(final Instant instant) {
+    return new BaseMatcher<Instant>(){
 
       @Override
       public void describeTo(Description description) {
@@ -104,10 +105,10 @@ public class AbstractRestTest extends AbstractTest {
         }
         
         if (item instanceof String) {
-          item = ISODateTimeFormat.dateTimeParser().parseDateTime((String) item);
+          item = Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse((String) item));
         }
         
-        if (!(item instanceof AbstractInstant)) {
+        if (!(item instanceof Instant)) {
           return false;
         }
         
@@ -115,7 +116,7 @@ public class AbstractRestTest extends AbstractTest {
           return false;
         }
         
-        return ((AbstractInstant) item).getMillis() == instant.getMillis();
+        return ((Instant) item).getEpochSecond() == instant.getEpochSecond();
       }
       
     };

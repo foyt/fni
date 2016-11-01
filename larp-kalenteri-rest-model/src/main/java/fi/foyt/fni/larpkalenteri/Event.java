@@ -1,16 +1,15 @@
 package fi.foyt.fni.larpkalenteri;
 
 
+import java.time.OffsetDateTime;
 import java.util.List;
-
-import org.joda.time.DateTime;
 
 public class Event {
   
   public Event() {
   }
   
-  public Event(Long id, String name, String type, DateTime start, DateTime end, String textDate, DateTime signUpStart, DateTime signUpEnd, Long locationDropDown,
+  public Event(Long id, String name, String type, OffsetDateTime start, OffsetDateTime end, String textDate, OffsetDateTime signUpStart, OffsetDateTime signUpEnd, Long locationDropDown,
       String location, String iconURL, List<String> genres, String cost, Integer ageLimit, Boolean beginnerFriendly, String storyDescription,
       String infoDescription, String organizerName, String organizerEmail, String link1, String link2, Status status, String password, Boolean eventFull,
       Boolean invitationOnly, Boolean languageFree, Long illusionId) {
@@ -68,19 +67,19 @@ public class Event {
     this.type = type;
   }
 
-  public DateTime getStart() {
+  public OffsetDateTime getStart() {
     return start;
   }
 
-  public void setStart(DateTime start) {
+  public void setStart(OffsetDateTime start) {
     this.start = start;
   }
 
-  public DateTime getEnd() {
+  public OffsetDateTime getEnd() {
     return end;
   }
 
-  public void setEnd(DateTime end) {
+  public void setEnd(OffsetDateTime end) {
     this.end = end;
   }
 
@@ -92,19 +91,19 @@ public class Event {
     this.textDate = textDate;
   }
 
-  public DateTime getSignUpStart() {
+  public OffsetDateTime getSignUpStart() {
     return signUpStart;
   }
 
-  public void setSignUpStart(DateTime signUpStart) {
+  public void setSignUpStart(OffsetDateTime signUpStart) {
     this.signUpStart = signUpStart;
   }
 
-  public DateTime getSignUpEnd() {
+  public OffsetDateTime getSignUpEnd() {
     return signUpEnd;
   }
 
-  public void setSignUpEnd(DateTime signUpEnd) {
+  public void setSignUpEnd(OffsetDateTime signUpEnd) {
     this.signUpEnd = signUpEnd;
   }
 
@@ -263,11 +262,11 @@ public class Event {
   private Long id;
   private String name;
   private String type;
-  private DateTime start;
-  private DateTime end;
+  private OffsetDateTime start;
+  private OffsetDateTime end;
   private String textDate;
-  private DateTime signUpStart;
-  private DateTime signUpEnd;
+  private OffsetDateTime signUpStart;
+  private OffsetDateTime signUpEnd;
   private Long locationDropDown;
   private String location;
   private String iconURL;

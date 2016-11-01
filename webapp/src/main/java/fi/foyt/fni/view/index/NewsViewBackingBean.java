@@ -1,5 +1,7 @@
 package fi.foyt.fni.view.index;
 
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +11,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.joda.time.DateTime;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Parameter;
 import org.ocpsoft.rewrite.annotation.RequestAction;
@@ -17,6 +18,7 @@ import org.ocpsoft.rewrite.annotation.RequestAction;
 import fi.foyt.fni.blog.BlogController;
 import fi.foyt.fni.persistence.model.blog.BlogEntry;
 import fi.foyt.fni.persistence.model.blog.BlogTag;
+import fi.foyt.fni.utils.time.DateTimeUtils;
 
 @RequestScoped
 @Named
@@ -38,15 +40,16 @@ public class NewsViewBackingBean {
 		blogEntries = blogController.listBlogEntriesByYearAndMonth(getYear(), getMonth() - 1);
 		months = new ArrayList<>();
 		
-		DateTime firstDate = blogController.getFirstBlogDate();
-		DateTime lastDate = blogController.getLastBlogDate();
+		LocalDate firstDate = toLocalDate(blogController.getFirstBlogDate());
+		LocalDate lastDate = toLocalDate(blogController.getLastBlogDate());
 		if (firstDate != null && lastDate != null) {
-		  DateTime currentMonth = new DateTime(lastDate.getYear(), lastDate.getMonthOfYear(), 1, 0, 0, 0, 0);
-  		
+		  LocalDate currentMonth = LocalDate.of(lastDate.getYear(), lastDate.getMonthValue(), 1);
+		  
   		while (currentMonth.isAfter(firstDate)) {
-  		  int postCount = blogController.countBlogEntriesByCreatedBetween(currentMonth.toDate(), currentMonth.plusMonths(1).toDate()).intValue();
+  		  int postCount = blogController.countBlogEntriesByCreatedBetween(toDate(currentMonth), toDate(currentMonth.plusMonths(1))).intValue();
   		  if (postCount > 0) {
-  	      months.add(new Month(currentMonth, postCount));
+  		    Date date = toDate(currentMonth);
+  	      months.add(new Month(date, currentMonth.getYear(), currentMonth.getMonthValue(), postCount));
   		  }
   		  
   		  currentMonth = currentMonth.minusMonths(1);
@@ -54,7 +57,23 @@ public class NewsViewBackingBean {
 		}
 	}
 	
-	public Integer getYear() {
+	private LocalDate toLocalDate(OffsetDateTime dateTime) {
+	  if (dateTime == null) {
+	    return null;
+	  }
+	  
+	  return dateTime.toLocalDateTime().toLocalDate(); 
+	}
+	
+	private Date toDate(LocalDate dateTime) {
+	  if (dateTime == null) {
+	    return null;
+	  }
+	  
+	  return DateTimeUtils.toDate(dateTime);
+  }
+
+  public Integer getYear() {
     return year;
   }
 	
@@ -87,11 +106,11 @@ public class NewsViewBackingBean {
 	
 	public class Month {
 	  
-	  public Month(DateTime dateTime, int postCount) {
-      this.date = dateTime.toDate();
+	  public Month(Date date, int year, int month, int postCount) {
+      this.date = date;
       this.postCount = postCount;
-      this.month = dateTime.getMonthOfYear();
-      this.year = dateTime.getYear();
+      this.month = month;
+      this.year = year;
     }
 	  
 	  public Date getDate() {

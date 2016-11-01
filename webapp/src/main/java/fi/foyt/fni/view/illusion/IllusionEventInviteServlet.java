@@ -21,8 +21,8 @@ import javax.transaction.Transactional;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.lucene.queryParser.ParseException;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.apache.lucene.queryparser.classic.ParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fi.foyt.fni.auth.AuthenticationController;
 import fi.foyt.fni.i18n.ExternalLocales;

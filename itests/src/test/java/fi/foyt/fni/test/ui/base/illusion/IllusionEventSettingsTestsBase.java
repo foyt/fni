@@ -17,11 +17,10 @@ import java.util.Arrays;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import fi.foyt.fni.larpkalenteri.Event;
@@ -349,7 +348,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(12345l, 
@@ -384,7 +383,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
           .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-              .registerModule(new JodaModule())
+              .registerModule(new JavaTimeModule())
               .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
               .writeValueAsString(new Event(12345l, 
                 "Open Event", "2", 
@@ -418,7 +417,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         .withStatus(200)
         .withHeader("Content-Type", "application/json")
         .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-            .registerModule(new JodaModule())
+            .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .writeValueAsString(new Event(12345l, 
               "Open Event", "2", 
@@ -457,7 +456,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     
     verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))
-      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+      .withRequestBody(equalToJson(requestBody, true, true))    
     );
 
     assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
@@ -471,7 +470,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(12345l, 
@@ -506,7 +505,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
           .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-              .registerModule(new JodaModule())
+              .registerModule(new JavaTimeModule())
               .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
               .writeValueAsString(new Event(12345l, 
                 "Open Event", "2", 
@@ -540,7 +539,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         .withStatus(200)
         .withHeader("Content-Type", "application/json")
         .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-            .registerModule(new JodaModule())
+            .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .writeValueAsString(new Event(12345l, 
               "Open Event", "2", 
@@ -580,7 +579,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     
     verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))
-      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+      .withRequestBody(equalToJson(requestBody, true, true))    
     );
 
     assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
@@ -594,7 +593,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(12345l, 
@@ -629,7 +628,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
           .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-              .registerModule(new JodaModule())
+              .registerModule(new JavaTimeModule())
               .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
               .writeValueAsString(new Event(12345l, 
                 "Open Event", "2", 
@@ -663,7 +662,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         .withStatus(200)
         .withHeader("Content-Type", "application/json")
         .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-            .registerModule(new JodaModule())
+            .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .writeValueAsString(new Event(12345l, 
               "Open Event", "2", 
@@ -705,7 +704,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     
     verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))
-      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+      .withRequestBody(equalToJson(requestBody, true, true))    
     );
 
     assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
@@ -719,7 +718,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(null, 
@@ -750,7 +749,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         1l));
 
     String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper())
-      .registerModule(new JodaModule())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .writeValueAsString(new Event(123l, 
         "Open Event", "2", 
@@ -796,7 +795,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     
     verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
-      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+      .withRequestBody(equalToJson(requestBody, true, true))    
     );
 
     assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
@@ -810,7 +809,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(null, 
@@ -841,7 +840,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         1l));
 
     String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper())
-      .registerModule(new JodaModule())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .writeValueAsString(new Event(123l, 
         "Open Event", "2", 
@@ -889,7 +888,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigateAndWait("/illusion/event/openevent/settings");
     
     verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
-      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+      .withRequestBody(equalToJson(requestBody, true, true))    
     );
 
     assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
@@ -903,7 +902,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(null, 
@@ -934,7 +933,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         1l));
 
     String responseBody = (new com.fasterxml.jackson.databind.ObjectMapper())
-      .registerModule(new JodaModule())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .writeValueAsString(new Event(123l, 
         "Open Event", "2", 
@@ -982,7 +981,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     
     verify(1, postRequestedFor(urlEqualTo("/rest/events/"))
-      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+      .withRequestBody(equalToJson(requestBody, true, true))    
     );
 
     assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
@@ -996,7 +995,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(12345l, 
@@ -1031,7 +1030,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
           .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-              .registerModule(new JodaModule())
+              .registerModule(new JavaTimeModule())
               .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
               .writeValueAsString(new Event(12345l, 
                 "Open Event", "2", 
@@ -1065,7 +1064,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         .withStatus(200)
         .withHeader("Content-Type", "application/json")
         .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-            .registerModule(new JodaModule())
+            .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .writeValueAsString(new Event(12345l, 
               "Open Event", "2", 
@@ -1105,7 +1104,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     
     verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))
-      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+      .withRequestBody(equalToJson(requestBody, true, true))    
     );
 
     assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");
@@ -1119,7 +1118,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     stubLarpKalenteriGenres();
 
     String requestBody = (new com.fasterxml.jackson.databind.ObjectMapper()
-      .registerModule(new JodaModule())
+      .registerModule(new JavaTimeModule())
       .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
       .setSerializationInclusion(Include.NON_NULL))
       .writeValueAsString(new Event(12345l, 
@@ -1154,7 +1153,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
           .withStatus(200)
           .withHeader("Content-Type", "application/json")
           .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-              .registerModule(new JodaModule())
+              .registerModule(new JavaTimeModule())
               .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
               .writeValueAsString(new Event(12345l, 
                 "Open Event", "2", 
@@ -1188,7 +1187,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
         .withStatus(200)
         .withHeader("Content-Type", "application/json")
         .withBody((new com.fasterxml.jackson.databind.ObjectMapper())
-            .registerModule(new JodaModule())
+            .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .writeValueAsString(new Event(12345l, 
               "Open Event", "2", 
@@ -1228,7 +1227,7 @@ public class IllusionEventSettingsTestsBase extends AbstractIllusionUITest {
     navigate("/illusion/event/openevent/settings");
     
     verify(1, putRequestedFor(urlEqualTo("/rest/events/12345"))
-      .withRequestBody(equalToJson(requestBody, JSONCompareMode.LENIENT))    
+      .withRequestBody(equalToJson(requestBody, true, true))    
     );
 
     assertSelectorPresent(".illusion-create-event-larp-kalenteri:checked");

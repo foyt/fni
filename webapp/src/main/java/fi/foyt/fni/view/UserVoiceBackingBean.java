@@ -2,6 +2,8 @@ package fi.foyt.fni.view;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -20,6 +22,7 @@ public class UserVoiceBackingBean {
 	private SystemSettingsController systemSettingsController;
 	
 	@PostConstruct
+	@TransactionAttribute (TransactionAttributeType.REQUIRES_NEW)
 	public void init() {
 		clientKey = systemSettingsController.getSetting(SystemSettingKey.USERVOICE_CLIENT_KEY);
 	}

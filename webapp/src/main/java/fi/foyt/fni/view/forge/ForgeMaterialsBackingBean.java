@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -46,6 +48,7 @@ public class ForgeMaterialsBackingBean {
   private NavigationController navigationController;
 
   @PostConstruct
+  @TransactionAttribute (TransactionAttributeType.NOT_SUPPORTED)
   public void init() {
     materialStarred = new HashMap<>();
     materialDownlodable = new HashMap<>();

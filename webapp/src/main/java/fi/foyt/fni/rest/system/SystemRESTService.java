@@ -1,5 +1,8 @@
 package fi.foyt.fni.rest.system;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManagerFactory;
@@ -8,6 +11,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -33,6 +37,9 @@ public class SystemRESTService {
   
   @PersistenceUnit
   private EntityManagerFactory entityManagerFactory;
+  
+  @Inject
+  private Logger logger;
 
   @Inject
   private SystemSettingsController systemSettingsController;
@@ -105,4 +112,19 @@ public class SystemRESTService {
     return Response.ok("ok").build();
   }
   
+  @GET
+  @Path ("/log")
+  @Produces (MediaType.TEXT_PLAIN)
+  @Security (
+    allowService = true,
+    scopes = { }
+  ) 
+  public Response flushCaches(@QueryParam ("text") String text) {
+    if (!systemSettingsController.getTestMode()) {
+      return Response.status(Status.FORBIDDEN).build();
+    }
+    
+    logger.log(Level.INFO, text);
+    return Response.ok("ok").build();
+  }
 }

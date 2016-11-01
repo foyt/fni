@@ -22,21 +22,21 @@ public class GameLibraryManageTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testLoginRedirect() throws Exception {
-    testLoginRequired("/gamelibrary/manage/", true);
+    testLoginRequired("/gamelibrary/manage/");
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testUnauthorized() throws Exception {
     loginInternal("user@foyt.fi", "pass");
-    testAccessDenied("/gamelibrary/manage/", true);
+    testAccessDenied("/gamelibrary/manage/");
   }
 
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testLibrarian() throws Exception {
     loginInternal("librarian@foyt.fi", "pass");
-    navigate("/gamelibrary/manage/", true);
+    navigate("/gamelibrary/manage/");
     waitTitle("Game Library - Management");
     assertTitle("Game Library - Management");
   }
@@ -45,7 +45,7 @@ public class GameLibraryManageTestsBase extends AbstractUITest {
   @SqlSets ("basic-gamelibrary")
   public void testAdmin() throws Exception {
     loginInternal("admin@foyt.fi", "pass");
-    navigate("/gamelibrary/manage/", true);
+    navigate("/gamelibrary/manage/");
     waitTitle("Game Library - Management");
     assertTitle("Game Library - Management");
   }

@@ -39,29 +39,33 @@ public class PdfServiceClient {
   public TypedData getURLAsPdf(String url, Map<String, Object> options) {
     try {
       DefaultHttpClient client = new DefaultHttpClient();
-      HttpPost httpPost = new HttpPost(serviceUrl + "/pdf");
-      httpPost.setHeader("Content-Type", "application/json");
-      httpPost.setHeader("Authorization", serviceAuth);
-      
-      PdfRequest pdfRequest = new PdfRequest(url, options);
-      String payload = (new ObjectMapper()).writeValueAsString(pdfRequest);
-      httpPost.setEntity(new StringEntity(payload));
-      
-      HttpResponse response = client.execute(httpPost);
-      
-      HttpEntity entity = response.getEntity();
       try {
-        int status = response.getStatusLine().getStatusCode();
-        if (status == 200) {
-          byte[] content = IOUtils.toByteArray(entity.getContent());
-          String contentType = entity.getContentType().getValue();
-          
-          return new TypedData(content, contentType);
-        } else {
-          logger.log(Level.WARNING, String.format("Pdf service returned %d (%s)", status, IOUtils.toString(entity.getContent())));
+        HttpPost httpPost = new HttpPost(serviceUrl + "/pdf");
+        httpPost.setHeader("Content-Type", "application/json");
+        httpPost.setHeader("Authorization", serviceAuth);
+        
+        PdfRequest pdfRequest = new PdfRequest(url, options);
+        String payload = (new ObjectMapper()).writeValueAsString(pdfRequest);
+        httpPost.setEntity(new StringEntity(payload));
+        
+        HttpResponse response = client.execute(httpPost);
+        
+        HttpEntity entity = response.getEntity();
+        try {
+          int status = response.getStatusLine().getStatusCode();
+          if (status == 200) {
+            byte[] content = IOUtils.toByteArray(entity.getContent());
+            String contentType = entity.getContentType().getValue();
+            
+            return new TypedData(content, contentType);
+          } else {
+            logger.log(Level.WARNING, String.format("Pdf service returned %d (%s)", status, IOUtils.toString(entity.getContent())));
+          }
+        } finally {
+          EntityUtils.consume(entity);
         }
       } finally {
-        EntityUtils.consume(entity);
+        client.close();
       }
     } catch (IOException e) {
       logger.log(Level.SEVERE, "Failed to convert url %s into pdf");

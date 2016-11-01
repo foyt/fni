@@ -26,14 +26,14 @@ public class StoreCartTestsBase extends AbstractUITest {
     String addressPostalOffice = "Town of Test";
     String notes = "This is an automated test order";
     
-    navigate("/store/test_product_1", true);
+    navigate("/store/test_product_1");
     
     // We have to wait for share button animation to end
     Thread.sleep(500);
     
     waitAndClick(".store-product-action-add-to-cart");
     waitForSelectorCount(".mini-shopping-cart-item", 1);
-    navigate("/gamelibrary/cart/", true);
+    navigate("/gamelibrary/cart/");
     waitTitle("Forge & Illusion - Game Library");
     
     scrollWaitAndType(".payerFirstName", firstName);
@@ -91,7 +91,7 @@ public class StoreCartTestsBase extends AbstractUITest {
       notes = "Tama on automaattinen testitilaus";
     }
     
-    navigate("/store/", true);
+    navigate("/store/");
     
     // We have to wait for share button animation to end
     Thread.sleep(500);
@@ -105,7 +105,7 @@ public class StoreCartTestsBase extends AbstractUITest {
     waitAndClick(".store-product[data-index='1'] .store-product-action-add-to-cart");
     waitForSelectorCount(".mini-shopping-cart-item", 2);
     
-    navigate("/gamelibrary/cart/", true);
+    navigate("/gamelibrary/cart/");
     waitTitle("Forge & Illusion - Game Library");
 
     waitAndClick(String.format(".gamelibrary-cart-item[data-item-index='%d'] .gamelibrary-cart-action-inc-count", 0));

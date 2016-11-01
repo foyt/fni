@@ -18,8 +18,8 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.lucene.queryParser.ParseException;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.apache.lucene.queryparser.classic.ParseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fi.foyt.fni.forum.ForumController;
 import fi.foyt.fni.gamelibrary.PublicationController;

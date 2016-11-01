@@ -110,7 +110,7 @@ public class SecureInterceptor implements Serializable {
 		}
 
     if (contextParameter == null) {
-      logger.warning("Could not resolve @SecurityContext value in method " + method.toGenericString());
+      logger.finest(String.format("Could not resolve @SecurityContext value in method %s", method.toGenericString()));
     }
     
 		Map<String, String> parameters = new HashMap<>();

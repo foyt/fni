@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 
 import fi.foyt.fni.test.DefineSqlSet;
@@ -39,7 +38,7 @@ public class LoginTestsBase extends AbstractUITest {
 
   @Test
   public void testTitle() {
-    testTitle("/login", "Login", true);
+    testTitle("/login", "Login");
   }
 
   @Test
@@ -63,7 +62,7 @@ public class LoginTestsBase extends AbstractUITest {
   @Test
   public void testRegisterMandatories() {
     acceptCookieDirective();
-    navigate("/login/", true);
+    navigate("/login/");
     waitTitle("Login");
     clickSelector(".user-register-button");
     waitForNotification();
@@ -75,7 +74,7 @@ public class LoginTestsBase extends AbstractUITest {
   @Test
   public void testRegisterPasswordMismatch() {
     acceptCookieDirective();
-    navigate("/login/", true);
+    navigate("/login/");
     
     waitAndSendKeys(".user-register-first-name", "Register");
     waitAndSendKeys(".user-register-last-name", "Tester");
@@ -91,34 +90,30 @@ public class LoginTestsBase extends AbstractUITest {
   @Test
   public void testRegister() throws MessagingException {
     acceptCookieDirective();
+  
+    navigate("/login/");
     
-    GreenMail greenMail = startSmtpServer();
-    try {
-      navigate("/login/", true);
-      
-      waitAndSendKeys(".user-register-first-name", "Register");
-      waitAndSendKeys(".user-register-last-name", "Tester");
-      waitAndSendKeys(".user-register-email", "register.tester@foyt.fi");
-      waitAndSendKeys(".user-register-password1", "qwe");
-      waitAndSendKeys(".user-register-password2", "qwe");
-      waitAndClick(".user-register-button");
-      
-      waitForNotification();
-      assertNotificationStartsWith("info", "Verification Email Has Been Sent");
+    waitAndSendKeys(".user-register-first-name", "Register");
+    waitAndSendKeys(".user-register-last-name", "Tester");
+    waitAndSendKeys(".user-register-email", "register.tester@foyt.fi");
+    waitAndSendKeys(".user-register-password1", "qwe");
+    waitAndSendKeys(".user-register-password2", "qwe");
+    waitAndClick(".user-register-button");
+    
+    waitForNotification();
+    assertNotificationStartsWith("info", "Verification Email Has Been Sent");
 
-      assertEquals(1, greenMail.getReceivedMessages().length);
+    assertEquals(1, getGreenMail().getReceivedMessages().length);
 
-      String mailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertEquals("Welcome to Forge & Illusion", greenMail.getReceivedMessages()[0].getSubject());
-      assertTrue(mailBody, StringUtils.startsWithIgnoreCase(mailBody, "Welcome to the world of"));
-    } finally {
-      greenMail.stop();
-    } 
+    String mailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertEquals("Welcome to Forge & Illusion", getGreenMail().getReceivedMessages()[0].getSubject());
+    assertTrue(mailBody, StringUtils.startsWithIgnoreCase(mailBody, "Welcome to the world of"));
+
   }
   
   @Test
   public void testResetPasswordIncorrectEmail() {
-    navigate("/login/", true);
+    navigate("/login/");
     waitTitle("Login");
     waitAndClick(".users-login-forgot-password-link");
     waitForSelectorPresent(".ui-dialog");
@@ -133,7 +128,7 @@ public class LoginTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic")
   public void testResetPasswordInvalidEmail() {
-    navigate("/login/", true);
+    navigate("/login/");
     waitTitle("Login");
 
     waitAndClick(".users-login-forgot-password-link");
@@ -152,29 +147,24 @@ public class LoginTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic")
   public void testResetPassword() throws MessagingException {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      navigate("/login/", true);
-      waitTitle("Login");
-      waitAndClick(".users-login-forgot-password-link");
-      waitForSelectorPresent(".ui-dialog");
+    navigate("/login/");
+    waitTitle("Login");
+    waitAndClick(".users-login-forgot-password-link");
+    waitForSelectorPresent(".ui-dialog");
 
-      assertEquals("Forgot password", getWebDriver().findElement(By.cssSelector(".ui-dialog-title")).getText());
-      assertEquals("Enter your email address to the field below and we will send you a password reset link", getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog p")).getText());
-      
-      getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog input[name=\"email\"]")).sendKeys("user@foyt.fi");
-      getWebDriver().findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
-      
-      waitForNotification();
-      assertNotificationStartsWith("info", "Password reset e-mail has been sent into user@foyt.fi. Click link on the e-mail to reset your password.");
-      
-      assertEquals(1, greenMail.getReceivedMessages().length);
-      String mailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertEquals("Forge & Illusion password reset", greenMail.getReceivedMessages()[0].getSubject());
-      assertTrue(mailBody, StringUtils.startsWithIgnoreCase(mailBody, "<p>You have requested for password reset"));
-    } finally {
-      greenMail.stop();
-    } 
+    assertEquals("Forgot password", getWebDriver().findElement(By.cssSelector(".ui-dialog-title")).getText());
+    assertEquals("Enter your email address to the field below and we will send you a password reset link", getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog p")).getText());
+    
+    getWebDriver().findElement(By.cssSelector(".users-forgot-password-dialog input[name=\"email\"]")).sendKeys("user@foyt.fi");
+    getWebDriver().findElement(By.cssSelector(".ui-dialog-buttonpane .ok-button")).click();
+    
+    waitForNotification();
+    assertNotificationStartsWith("info", "Password reset e-mail has been sent into user@foyt.fi. Click link on the e-mail to reset your password.");
+    
+    assertEquals(1, getGreenMail().getReceivedMessages().length);
+    String mailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertEquals("Forge & Illusion password reset", getGreenMail().getReceivedMessages()[0].getSubject());
+    assertTrue(mailBody, StringUtils.startsWithIgnoreCase(mailBody, "<p>You have requested for password reset"));
   }
   
   @Test

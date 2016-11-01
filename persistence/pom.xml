@@ -36,20 +36,15 @@
        <groupId>org.hibernate</groupId>
        <artifactId>hibernate-search-orm</artifactId>
     </dependency>
-  
+    
+    <dependency>
+       <groupId>org.hibernate</groupId>
+       <artifactId>hibernate-search-engine</artifactId>
+    </dependency>
+    
     <dependency>
        <groupId>org.hibernate</groupId>
        <artifactId>hibernate-entitymanager</artifactId>
-    </dependency>
-  
-    <dependency>
-       <groupId>org.hibernate</groupId>
-       <artifactId>hibernate-search-analyzers</artifactId>
-    </dependency>
-  
-    <dependency>
-       <groupId>org.hibernate</groupId>
-       <artifactId>hibernate-search-infinispan</artifactId>
     </dependency>
 
     <dependency>
@@ -61,17 +56,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
-        <configuration>
-          <source>${maven.compiler.source}</source>
-          <target>${maven.compiler.target}</target>
-          <encoding>${project.build.sourceEncoding}</encoding>
-        </configuration>
-      </plugin>
-      
       <plugin>
         <groupId>org.bsc.maven</groupId>
         <artifactId>maven-processor-plugin</artifactId>

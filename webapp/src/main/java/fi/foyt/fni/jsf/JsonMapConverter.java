@@ -11,7 +11,7 @@ import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @FacesConverter(value = "fi.foyt.fni.jsf.JsonMapConverter")
 public class JsonMapConverter implements Converter {

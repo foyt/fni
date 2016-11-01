@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.icegreen.greenmail.util.GreenMail;
-
 import fi.foyt.fni.persistence.model.users.UserSettingKey;
 import fi.foyt.fni.test.DefineSqlSet;
 import fi.foyt.fni.test.DefineSqlSets;
@@ -84,68 +82,52 @@ public class ForumTopicTestsBase extends AbstractUITest {
   @Test
   @SqlSets ({"basic-users", "forum-basic", "forum-watchers" })
   public void testPostDefaultNotification() throws Exception {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      loginInternal("user@foyt.fi", "pass");
-      navigate("/forum/1_topic_forum/single_topic");
-      assertSelectorVisible(".forum-topic-post-editor-container");
-      scrollIntoView(".forum-topic-post-editor-container");
-      waitForSelectorVisible(".forum-topic-post-editor-container .cke_wysiwyg_frame");
-      setCKEditorContents(0, "<p>Test post</p>");
-      scrollWaitAndClick(".forum-topic-post-send-container input[type='submit']"); 
-      waitForSelectorCount(".post", 2);
-      
-      assertEquals(1, greenMail.getReceivedMessages().length);
-      assertEquals("Notification about forum post", greenMail.getReceivedMessages()[0].getSubject());
-      
-    } finally {
-      greenMail.stop();
-    } 
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/forum/1_topic_forum/single_topic");
+    assertSelectorVisible(".forum-topic-post-editor-container");
+    scrollIntoView(".forum-topic-post-editor-container");
+    waitForSelectorVisible(".forum-topic-post-editor-container .cke_wysiwyg_frame");
+    setCKEditorContents(0, "<p>Test post</p>");
+    scrollWaitAndClick(".forum-topic-post-send-container input[type='submit']"); 
+    waitForSelectorCount(".post", 2);
+    
+    assertEquals(1, getGreenMail().getReceivedMessages().length);
+    assertEquals("Notification about forum post", getGreenMail().getReceivedMessages()[0].getSubject());
   }
   
   @Test
   @SqlSets ({"basic-users", "forum-basic", "forum-watchers" })
   public void testPostNotificationsDisabled() throws Exception {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      setForumNotificationsEmailSetting(4, Boolean.FALSE);
-      
-      loginInternal("user@foyt.fi", "pass");
-      navigate("/forum/1_topic_forum/single_topic");
-      assertSelectorVisible(".forum-topic-post-editor-container");
-      scrollIntoView(".forum-topic-post-editor-container");
-      waitForSelectorVisible(".forum-topic-post-editor-container .cke_wysiwyg_frame");
-      setCKEditorContents(0, "<p>Test post</p>");
-      scrollWaitAndClick(".forum-topic-post-send-container input[type='submit']"); 
-      waitForSelectorCount(".post", 2);
-      
-      assertEquals(0, greenMail.getReceivedMessages().length);
-    } finally {
-      greenMail.stop();
-    } 
+    setForumNotificationsEmailSetting(4, Boolean.FALSE);
+    
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/forum/1_topic_forum/single_topic");
+    assertSelectorVisible(".forum-topic-post-editor-container");
+    scrollIntoView(".forum-topic-post-editor-container");
+    waitForSelectorVisible(".forum-topic-post-editor-container .cke_wysiwyg_frame");
+    setCKEditorContents(0, "<p>Test post</p>");
+    scrollWaitAndClick(".forum-topic-post-send-container input[type='submit']"); 
+    waitForSelectorCount(".post", 2);
+    
+    assertEquals(0, getGreenMail().getReceivedMessages().length);
   }
   
   @Test
   @SqlSets ({"basic-users", "forum-basic", "forum-watchers" })
   public void testPostNotificationsEnabled() throws Exception {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      setForumNotificationsEmailSetting(4, Boolean.TRUE);
-      
-      loginInternal("user@foyt.fi", "pass");
-      navigate("/forum/1_topic_forum/single_topic");
-      assertSelectorVisible(".forum-topic-post-editor-container");
-      scrollIntoView(".forum-topic-post-editor-container");
-      waitForSelectorVisible(".forum-topic-post-editor-container .cke_wysiwyg_frame");
-      setCKEditorContents(0, "<p>Test post</p>");
-      scrollWaitAndClick(".forum-topic-post-send-container input[type='submit']"); 
-      waitForSelectorCount(".post", 2);
-      
-      assertEquals(1, greenMail.getReceivedMessages().length);
-      assertEquals("Notification about forum post", greenMail.getReceivedMessages()[0].getSubject());
-    } finally {
-      greenMail.stop();
-    } 
+    setForumNotificationsEmailSetting(4, Boolean.TRUE);
+    
+    loginInternal("user@foyt.fi", "pass");
+    navigate("/forum/1_topic_forum/single_topic");
+    assertSelectorVisible(".forum-topic-post-editor-container");
+    scrollIntoView(".forum-topic-post-editor-container");
+    waitForSelectorVisible(".forum-topic-post-editor-container .cke_wysiwyg_frame");
+    setCKEditorContents(0, "<p>Test post</p>");
+    scrollWaitAndClick(".forum-topic-post-send-container input[type='submit']"); 
+    waitForSelectorCount(".post", 2);
+    
+    assertEquals(1, getGreenMail().getReceivedMessages().length);
+    assertEquals("Notification about forum post", getGreenMail().getReceivedMessages()[0].getSubject());
   }
   
   private void setForumNotificationsEmailSetting(long userId, Boolean value) throws Exception {

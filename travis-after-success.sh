@@ -1,6 +1,7 @@
 #!/bin/bash
 
 if [[ $start_sc_tunnel = true ]]; then
+  echo "Stopping Sauce Connect"
   killall sc
 fi;
 

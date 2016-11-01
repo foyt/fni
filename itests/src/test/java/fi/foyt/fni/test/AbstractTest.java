@@ -14,6 +14,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,8 +30,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.ClientProtocolException;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -44,6 +45,18 @@ public abstract class AbstractTest {
   @Rule
   public TestName testName = new TestName();
   
+  private GreenMail greenMail = new GreenMail(new ServerSetup(getSmtpPort(), "localhost", ServerSetup.PROTOCOL_SMTP));
+
+  @Before
+  public void logName(){
+    given()
+      .baseUri(getAppUrl() + "/rest")
+      .header("Authorization", "Bearer systemtoken")
+      .get(String.format("/system/log?text=%s", testName.getMethodName()))
+      .then()
+      .statusCode(200);
+  }
+  
   @Before
   public void printName(){
     System.out.println(String.format("> %s", testName.getMethodName()));
@@ -58,7 +71,20 @@ public abstract class AbstractTest {
       .then()
       .statusCode(200);
   }
-
+  
+  @Before
+  public void startGreenMail() {
+    getGreenMail().start(); 
+  }
+  
+  @After
+  public void stopGreenMail() {
+    getGreenMail().stop(); 
+  }
+  
+  protected GreenMail getGreenMail() {
+    return greenMail;
+  }
   
   protected void reindexHibernateSearch() {
     given()
@@ -159,7 +185,7 @@ public abstract class AbstractTest {
     for (TestSql testSql : testSqls) {
       InputStream sqlStream = classLoader.getResourceAsStream(testSql.getFile());
       try {
-        String statements = IOUtils.toString(sqlStream);
+        String statements = IOUtils.toString(sqlStream, "UTF-8");
         StringBuffer statementBuffer = new StringBuffer();
         
         Matcher matcher = paramPattern.matcher(statements);
@@ -234,12 +260,8 @@ public abstract class AbstractTest {
   }
 
   protected String getAppUrl() {
-    return getAppUrl(false);
-  }
-
-  protected String getAppUrl(boolean secure) {
     String ctxPath = getCtxPath();
-    return String.format("%s%s:%d%s", secure ? "https://" : "http://", getHost(), secure ? getPortHttps() : getPortHttp(), ctxPath != null ? "/" + ctxPath : "");
+    return String.format("%s%s:%d%s", "http://", getHost(), getPortHttp(), ctxPath != null ? "/" + ctxPath : "");
   }
 
   protected String getSeleniumVersion() {
@@ -367,7 +389,7 @@ public abstract class AbstractTest {
     ClassLoader classLoader = getClass().getClassLoader();
     InputStream sqlStream = classLoader.getResourceAsStream(file);
     try {
-      String statements = IOUtils.toString(sqlStream);
+      String statements = IOUtils.toString(sqlStream, "UTF-8");
       if (StringUtils.isNotBlank(statements)) {
         // Tokenization regex from https://github.com/otavanopisto/muikku/blob/master/muikku-core-plugins/src/test/java/fi/muikku/plugins/workspace/test/ui/SeleniumTestBase.java
         for (String statement : statements.split(";(?=([^\']*\'[^\']*\')*[^\']*$)")) {
@@ -585,18 +607,18 @@ public abstract class AbstractTest {
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "FACEBOOK_APISECRET",
         getFacebookApiSecret());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "FACEBOOK_CALLBACKURL",
-        getAppUrl(true) + "/login/?return=1&loginMethod=FACEBOOK");
+        getAppUrl() + "/login/?return=1&loginMethod=FACEBOOK");
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_APIKEY", getGoogleApiKey());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_APISECRET",
         getGoogleApiSecret());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "GOOGLE_CALLBACKURL",
-        getAppUrl(true) + "/login/?return=1&loginMethod=GOOGLE");
+        getAppUrl() + "/login/?return=1&loginMethod=GOOGLE");
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_ROOT", "sandbox");
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_APIKEY", getDropboxApiKey());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_APISECRET",
         getDropboxApiSecret());
     executeSql("insert into SystemSetting (id, settingKey, value) values ((select max(id) + 1 from SystemSetting), ?, ?)", "DROPBOX_CALLBACKURL",
-        getAppUrl(true) + "/login/?return=1&loginMethod=DROPBOX");
+        getAppUrl() + "/login/?return=1&loginMethod=DROPBOX");
   }
 
   protected void purgeOAuthSettings() throws Exception {
@@ -628,19 +650,17 @@ public abstract class AbstractTest {
       deleteUser(userId);
     }
   }
-
-  protected GreenMail startSmtpServer() {
-    GreenMail greenMail = new GreenMail(new ServerSetup(getSmtpPort(), "localhost", ServerSetup.PROTOCOL_SMTP));
-    greenMail.start();
-    return greenMail;
+  
+  protected ZonedDateTime getZonedDate(int year, int monthOfYear, int dayOfMonth, ZoneId zone) {
+    return ZonedDateTime.of(year, monthOfYear, dayOfMonth, 0, 0, 0, 0, zone);
   }
   
-  protected DateTime getDate(int year, int monthOfYear, int dayOfMonth, DateTimeZone zone) {
-    return new DateTime(year, monthOfYear, dayOfMonth, 0, 0, 0, 0, zone);
+  protected ZonedDateTime getZonedDate(int year, int monthOfYear, int dayOfMonth) {
+    return getZonedDate(year, monthOfYear, dayOfMonth, ZoneId.systemDefault());
   }
   
-  protected DateTime getDate(int year, int monthOfYear, int dayOfMonth) {
-    return getDate(year, monthOfYear, dayOfMonth, DateTimeZone.getDefault());
+  protected OffsetDateTime getDate(int year, int monthOfYear, int dayOfMonth) {
+    return getZonedDate(year, monthOfYear, dayOfMonth).toOffsetDateTime();
   }
 
   private class DefinedSqlSet {

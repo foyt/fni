@@ -44,10 +44,10 @@ public class ForgeConnectDropboxTestsBase extends AbstractUITest {
     
     waitForUrlMatches("^https://www.dropbox.com/1/oauth/authorize.*");
    
-    waitAndClick("#login-content input[type=\"email\"]");
-    typeSelectorInputValue("#login-content input[type=\"email\"]", getDropboxUsername());
-    waitAndClick("#login-content input[type=\"password\"]");
-    typeSelectorInputValue("#login-content input[type=\"password\"]", getDropboxPassword());
+    waitAndClick("input[type=\"email\"]");
+    typeSelectorInputValue("input[type=\"email\"]", getDropboxUsername());
+    waitAndClick("input[type=\"password\"]");
+    typeSelectorInputValue("input[type=\"password\"]", getDropboxPassword());
     waitAndClick(".login-button");
     waitAndClick("*[name='allow_access']");
     waitTitle("Forge");

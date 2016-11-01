@@ -53,11 +53,11 @@ public class IndexTestsBase extends AbstractUITest {
   @Test
   @SqlSets ("basic-gamelibrary")
   public void testPublicationTags() throws Exception {
-    navigate("/", true);
+    navigate("/");
     List<WebElement> tagLinks = findElementsBySelector(".publications .tag");
     for (WebElement tagLink : tagLinks) {
       String tag = tagLink.getText().toLowerCase();
-      String expectedHref = String.format("%s/gamelibrary/tags/%s", getAppUrl(true), URLEncoder.encode(tag, "UTF-8").replaceAll("\\+", "%20"));
+      String expectedHref = String.format("%s/gamelibrary/tags/%s", getAppUrl(), URLEncoder.encode(tag, "UTF-8").replaceAll("\\+", "%20"));
       assertEquals(expectedHref, tagLink.getAttribute("href"));
     }
   }

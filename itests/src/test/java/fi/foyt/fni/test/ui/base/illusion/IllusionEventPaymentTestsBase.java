@@ -90,80 +90,75 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
       })
   })
   public void testApprovePaymentNotLoggedIn() throws Exception {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      navigate("/illusion/event/approve");
-      
-      // User fills the registration form
-      
-      waitAndClick(".illusion-event-join-button");
-      waitAndSendKeys("input[name='firstname']", "Automatic");
-      waitAndSendKeys("input[name='lastname']", "Tester");
-      waitAndSendKeys("input[name='email']", "automatic.tester@example.com");
-      waitAndClick(".alpaca-form-button-register");
-      waitForNotification();
-      assertNotification("warning", "Waiting for event organizer to accept your request...");
-      
-      assertLoggedIn();
-      
-      assertEquals(2, greenMail.getReceivedMessages().length);
+    navigate("/illusion/event/approve");
+    
+    // User fills the registration form
+    
+    waitAndClick(".illusion-event-join-button");
+    waitAndSendKeys("input[name='firstname']", "Automatic");
+    waitAndSendKeys("input[name='lastname']", "Tester");
+    waitAndSendKeys("input[name='email']", "automatic.tester@example.com");
+    waitAndClick(".alpaca-form-button-register");
+    waitForNotification();
+    assertNotification("warning", "Waiting for event organizer to accept your request...");
+    
+    assertLoggedIn();
+    
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
 
-      String registrantMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertEquals("Illusion - Registration to event Approve", greenMail.getReceivedMessages()[0].getSubject());
-      assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Automatic,"));
+    String registrantMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertEquals("Illusion - Registration to event Approve", getGreenMail().getReceivedMessages()[0].getSubject());
+    assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Automatic,"));
 
-      String organizerMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[1]);
-      assertEquals("Illusion - Registration to event Approve", greenMail.getReceivedMessages()[1].getSubject());
-      assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
-      
-      logout();
-      greenMail.reset();
+    String organizerMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[1]);
+    assertEquals("Illusion - Registration to event Approve", getGreenMail().getReceivedMessages()[1].getSubject());
+    assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
+    
+    logout();
+    getGreenMail().reset();
 
-      // Simulate organizer acceptance by changing role
-      updateEventParticipantRole(3l, "automatic.tester@example.com", IllusionEventParticipantRole.WAITING_PAYMENT);
+    // Simulate organizer acceptance by changing role
+    updateEventParticipantRole(3l, "automatic.tester@example.com", IllusionEventParticipantRole.WAITING_PAYMENT);
 
-      // User receives payment link
-      assertEquals(1, greenMail.getReceivedMessages().length);
-      String acceptMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertTrue(StringUtils.contains(acceptMailBody, "Event organizer has accepted your request"));
-      
-      Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
-      Matcher matcher = pattern.matcher(acceptMailBody);
-      assertTrue(matcher.matches());
-      String paymentLink = matcher.group(3);
-      assertNotNull(paymentLink);
-      
-      greenMail.reset();
-      
-      // User clicks the payment link and pays the sign-up fee
-      getWebDriver().get(paymentLink);
-      
-      waitForSelectorVisible(".payerCompany");
-      assertSelectorValue(".payerFirstName", "Automatic");
-      assertSelectorValue(".payerLastName", "Tester");
-      assertSelectorValue(".payerEmail", "automatic.tester@example.com");
-      waitAndSendKeys(".payerMobile", "+358 12 345 6789");
-      waitAndSendKeys(".payerStreetAddress", "Tester street 123");
-      waitAndSendKeys(".payerPostalCode", "12345");
-      waitAndSendKeys(".payerPostalOffice", "Test");
-      waitAndSendKeys(".notes", "This is an automated test");
-      
-      assertLoggedIn();
+    // User receives payment link
+    assertEquals(1, getGreenMail().getReceivedMessages().length);
+    String acceptMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertTrue(StringUtils.contains(acceptMailBody, "Event organizer has accepted your request"));
+    
+    Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
+    Matcher matcher = pattern.matcher(acceptMailBody);
+    assertTrue(matcher.matches());
+    String paymentLink = matcher.group(3);
+    assertNotNull(paymentLink);
+    
+    getGreenMail().reset();
+    
+    // User clicks the payment link and pays the sign-up fee
+    getWebDriver().get(paymentLink);
+    
+    waitForSelectorVisible(".payerCompany");
+    assertSelectorValue(".payerFirstName", "Automatic");
+    assertSelectorValue(".payerLastName", "Tester");
+    assertSelectorValue(".payerEmail", "automatic.tester@example.com");
+    waitAndSendKeys(".payerMobile", "+358 12 345 6789");
+    waitAndSendKeys(".payerStreetAddress", "Tester street 123");
+    waitAndSendKeys(".payerPostalCode", "12345");
+    waitAndSendKeys(".payerPostalOffice", "Test");
+    waitAndSendKeys(".notes", "This is an automated test");
+    
+    assertLoggedIn();
 
-      scrollWaitAndClick(".proceed-to-payment");
-      acceptPaytrailPayment();
-      
-      waitMailsReceived(greenMail, 2);
-      assertEquals(2, greenMail.getReceivedMessages().length);
-      
-      assertEquals("automatic.tester@example.com", ((InternetAddress) greenMail.getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[0].getSubject());
-      
-      assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment received for event %s", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
-    } finally {
-      greenMail.stop();
-    }    
+    scrollWaitAndClick(".proceed-to-payment");
+    acceptPaytrailPayment();
+    
+    waitMailsReceived(getGreenMail(), 2);
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
+    
+    assertEquals("automatic.tester@example.com", ((InternetAddress) getGreenMail().getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment for event %s received", "Approve"), getGreenMail().getReceivedMessages()[0].getSubject());
+    
+    assertEquals("admin@foyt.fi", ((InternetAddress) getGreenMail().getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment received for event %s", "Approve"), getGreenMail().getReceivedMessages()[1].getSubject());
   }
 
   @Test
@@ -179,86 +174,81 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
     }
   )
   public void testApprovePaymentLoggedIn() throws Exception {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      loginInternal("user@foyt.fi", "pass");
-      
-      navigate("/illusion/event/approve");
-      
-      // User fills the registration form
-      waitAndClick(".illusion-event-join-button");
+    loginInternal("user@foyt.fi", "pass");
+    
+    navigate("/illusion/event/approve");
+    
+    // User fills the registration form
+    waitAndClick(".illusion-event-join-button");
 
-      waitForSelectorVisible("input[name='firstname']");
-      assertSelectorValue("input[name='firstname']", "Test");
-      assertSelectorValue("input[name='lastname']", "User");
-      assertSelectorValue("input[name='email']", "user@foyt.fi");
-      
-      waitAndClick(".alpaca-form-button-register");
-      waitForNotification();
-      assertNotification("warning", "Waiting for event organizer to accept your request...");
-      
-      assertLoggedIn();
-      
-      assertEquals(2, greenMail.getReceivedMessages().length);
+    waitForSelectorVisible("input[name='firstname']");
+    assertSelectorValue("input[name='firstname']", "Test");
+    assertSelectorValue("input[name='lastname']", "User");
+    assertSelectorValue("input[name='email']", "user@foyt.fi");
+    
+    waitAndClick(".alpaca-form-button-register");
+    waitForNotification();
+    assertNotification("warning", "Waiting for event organizer to accept your request...");
+    
+    assertLoggedIn();
+    
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
 
-      String registrantMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertEquals("Illusion - Registration to event Approve", greenMail.getReceivedMessages()[0].getSubject());
-      assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Test,"));
+    String registrantMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertEquals("Illusion - Registration to event Approve", getGreenMail().getReceivedMessages()[0].getSubject());
+    assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Test,"));
 
-      String organizerMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[1]);
-      assertEquals("Illusion - Registration to event Approve", greenMail.getReceivedMessages()[1].getSubject());
-      assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
-      
-      logout();
-      greenMail.reset();
+    String organizerMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[1]);
+    assertEquals("Illusion - Registration to event Approve", getGreenMail().getReceivedMessages()[1].getSubject());
+    assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
+    
+    logout();
+    getGreenMail().reset();
 
-      // Simulate organizer acceptance by changing role
-      updateEventParticipantRole(3l, "user@foyt.fi", IllusionEventParticipantRole.WAITING_PAYMENT);
+    // Simulate organizer acceptance by changing role
+    updateEventParticipantRole(3l, "user@foyt.fi", IllusionEventParticipantRole.WAITING_PAYMENT);
 
-      loginInternal("user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
 
-      // User receives payment link
-      assertEquals(1, greenMail.getReceivedMessages().length);
-      String acceptMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertTrue(StringUtils.contains(acceptMailBody, "Event organizer has accepted your request"));
-      
-      Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
-      Matcher matcher = pattern.matcher(acceptMailBody);
-      assertTrue(matcher.matches());
-      String paymentLink = matcher.group(3);
-      assertNotNull(paymentLink);
-      
-      greenMail.reset();
-      
-      // User clicks the payment link and pays the sign-up fee
-      getWebDriver().get(paymentLink);
-      
-      waitForSelectorVisible(".payerCompany");
-      assertSelectorValue(".payerFirstName", "Test");
-      assertSelectorValue(".payerLastName", "User");
-      assertSelectorValue(".payerEmail", "user@foyt.fi");
-      waitAndSendKeys(".payerMobile", "+358 12 345 6789");
-      waitAndSendKeys(".payerStreetAddress", "Tester street 123");
-      waitAndSendKeys(".payerPostalCode", "12345");
-      waitAndSendKeys(".payerPostalOffice", "Test");
-      waitAndSendKeys(".notes", "This is an automated test");
-      
-      assertLoggedIn();
+    // User receives payment link
+    assertEquals(1, getGreenMail().getReceivedMessages().length);
+    String acceptMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertTrue(StringUtils.contains(acceptMailBody, "Event organizer has accepted your request"));
+    
+    Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
+    Matcher matcher = pattern.matcher(acceptMailBody);
+    assertTrue(matcher.matches());
+    String paymentLink = matcher.group(3);
+    assertNotNull(paymentLink);
+    
+    getGreenMail().reset();
+    
+    // User clicks the payment link and pays the sign-up fee
+    getWebDriver().get(paymentLink);
+    
+    waitForSelectorVisible(".payerCompany");
+    assertSelectorValue(".payerFirstName", "Test");
+    assertSelectorValue(".payerLastName", "User");
+    assertSelectorValue(".payerEmail", "user@foyt.fi");
+    waitAndSendKeys(".payerMobile", "+358 12 345 6789");
+    waitAndSendKeys(".payerStreetAddress", "Tester street 123");
+    waitAndSendKeys(".payerPostalCode", "12345");
+    waitAndSendKeys(".payerPostalOffice", "Test");
+    waitAndSendKeys(".notes", "This is an automated test");
+    
+    assertLoggedIn();
 
-      scrollWaitAndClick(".proceed-to-payment");
-      acceptPaytrailPayment();
-      
-      waitMailsReceived(greenMail, 2);
-      assertEquals(2, greenMail.getReceivedMessages().length);
-      
-      assertEquals("user@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[0].getSubject());
-      
-      assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment received for event %s", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
-    } finally {
-      greenMail.stop();
-    }    
+    scrollWaitAndClick(".proceed-to-payment");
+    acceptPaytrailPayment();
+    
+    waitMailsReceived(getGreenMail(), 2);
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
+    
+    assertEquals("user@foyt.fi", ((InternetAddress) getGreenMail().getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment for event %s received", "Approve"), getGreenMail().getReceivedMessages()[0].getSubject());
+    
+    assertEquals("admin@foyt.fi", ((InternetAddress) getGreenMail().getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment received for event %s", "Approve"), getGreenMail().getReceivedMessages()[1].getSubject());
   }
   
   @Test
@@ -273,69 +263,65 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
     }
   )
   public void testOpenPaymentNotLoggedIn() throws Exception {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      navigate("/illusion/event/open");
-      
-      // User fills the registration form
-      
-      waitAndClick(".illusion-event-join-button");
-      waitAndSendKeys("input[name='firstname']", "Automatic");
-      waitAndSendKeys("input[name='lastname']", "Tester");
-      waitAndSendKeys("input[name='email']", "automatic.tester@example.com");
-      waitAndClick(".alpaca-form-button-register");
-      
-      waitForSelectorPresent(".menu-tools-account");
-      assertLoggedIn();
-      
-      assertEquals(2, greenMail.getReceivedMessages().length);
+    navigate("/illusion/event/open");
+    
+    // User fills the registration form
+    
+    waitAndClick(".illusion-event-join-button");
+    waitAndSendKeys("input[name='firstname']", "Automatic");
+    waitAndSendKeys("input[name='lastname']", "Tester");
+    waitAndSendKeys("input[name='email']", "automatic.tester@example.com");
+    waitAndClick(".alpaca-form-button-register");
+    
+    waitForSelectorPresent(".menu-tools-account");
+    assertLoggedIn();
+    
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
 
-      String registrantMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertEquals("Illusion - Registration to event Open", greenMail.getReceivedMessages()[0].getSubject());
-      assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Automatic,"));
+    String registrantMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertEquals("Illusion - Registration to event Open", getGreenMail().getReceivedMessages()[0].getSubject());
+    assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Automatic,"));
 
-      String organizerMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[1]);
-      assertEquals("Illusion - Registration to event Open", greenMail.getReceivedMessages()[1].getSubject());
-      assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
-      
-      // Participant receives payment link in registration mail
-      Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
-      Matcher matcher = pattern.matcher(registrantMailBody);
-      assertTrue(matcher.matches());
-      String paymentLink = matcher.group(3);
-      assertNotNull(paymentLink);
-      
-      greenMail.reset();
-      
-      // User clicks the payment link and pays the sign-up fee
-      getWebDriver().get(paymentLink);
-      
-      waitForSelectorVisible(".payerCompany");
-      assertSelectorValue(".payerFirstName", "Automatic");
-      assertSelectorValue(".payerLastName", "Tester");
-      assertSelectorValue(".payerEmail", "automatic.tester@example.com");
-      waitAndSendKeys(".payerMobile", "+358 12 345 6789");
-      waitAndSendKeys(".payerStreetAddress", "Tester street 123");
-      waitAndSendKeys(".payerPostalCode", "12345");
-      waitAndSendKeys(".payerPostalOffice", "Test");
-      waitAndSendKeys(".notes", "This is an automated test");
+    String organizerMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[1]);
+    assertEquals("Illusion - Registration to event Open", getGreenMail().getReceivedMessages()[1].getSubject());
+    assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
+    
+    // Participant receives payment link in registration mail
+    Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
+    Matcher matcher = pattern.matcher(registrantMailBody);
+    assertTrue(matcher.matches());
+    String paymentLink = matcher.group(3);
+    assertNotNull(paymentLink);
+    
+    getGreenMail().reset();
+    
+    // User clicks the payment link and pays the sign-up fee
+    getWebDriver().get(paymentLink);
+    
+    waitForSelectorVisible(".payerCompany");
+    assertSelectorValue(".payerFirstName", "Automatic");
+    assertSelectorValue(".payerLastName", "Tester");
+    assertSelectorValue(".payerEmail", "automatic.tester@example.com");
+    waitAndSendKeys(".payerMobile", "+358 12 345 6789");
+    waitAndSendKeys(".payerStreetAddress", "Tester street 123");
+    waitAndSendKeys(".payerPostalCode", "12345");
+    waitAndSendKeys(".payerPostalOffice", "Test");
+    waitAndSendKeys(".notes", "This is an automated test");
 
-      assertLoggedIn();
+    assertLoggedIn();
 
-      scrollWaitAndClick(".proceed-to-payment");
-      acceptPaytrailPayment();
-      
-      waitMailsReceived(greenMail, 2);
-      assertEquals(2, greenMail.getReceivedMessages().length);
-      
-      assertEquals("automatic.tester@example.com", ((InternetAddress) greenMail.getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[0].getSubject());
-      
-      assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment received for event %s", "Open"), greenMail.getReceivedMessages()[1].getSubject());
-    } finally {
-      greenMail.stop();
-    }    
+    scrollWaitAndClick(".proceed-to-payment");
+    acceptPaytrailPayment();
+    
+    waitMailsReceived(getGreenMail(), 2);
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
+    
+    assertEquals("automatic.tester@example.com", ((InternetAddress) getGreenMail().getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment for event %s received", "Open"), getGreenMail().getReceivedMessages()[0].getSubject());
+    
+    assertEquals("admin@foyt.fi", ((InternetAddress) getGreenMail().getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment received for event %s", "Open"), getGreenMail().getReceivedMessages()[1].getSubject());
+
   }
   
   @Test
@@ -350,72 +336,68 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
     }
   )
   public void testOpenPaymentLoggedIn() throws Exception {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      loginInternal("user@foyt.fi", "pass");
-      
-      navigate("/illusion/event/open");
-      
-      // User fills the registration form
-      
-      waitAndClick(".illusion-event-join-button");
-      waitForSelectorVisible("input[name='firstname']");
-      assertSelectorValue("input[name='firstname']", "Test");
-      assertSelectorValue("input[name='lastname']", "User");
-      assertSelectorValue("input[name='email']", "user@foyt.fi");
-      waitAndClick(".alpaca-form-button-register");
-      
-      waitForSelectorPresent(".menu-tools-account");
-      assertLoggedIn();
-      
-      assertEquals(2, greenMail.getReceivedMessages().length);
+    loginInternal("user@foyt.fi", "pass");
+    
+    navigate("/illusion/event/open");
+    
+    // User fills the registration form
+    
+    waitAndClick(".illusion-event-join-button");
+    waitForSelectorVisible("input[name='firstname']");
+    assertSelectorValue("input[name='firstname']", "Test");
+    assertSelectorValue("input[name='lastname']", "User");
+    assertSelectorValue("input[name='email']", "user@foyt.fi");
+    waitAndClick(".alpaca-form-button-register");
+    
+    waitForSelectorPresent(".menu-tools-account");
+    assertLoggedIn();
+    
+    waitMailsReceived(getGreenMail(), 2);
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
 
-      String registrantMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertEquals("Illusion - Registration to event Open", greenMail.getReceivedMessages()[0].getSubject());
-      assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Test,"));
+    String registrantMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertEquals("Illusion - Registration to event Open", getGreenMail().getReceivedMessages()[0].getSubject());
+    assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Test,"));
 
-      String organizerMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[1]);
-      assertEquals("Illusion - Registration to event Open", greenMail.getReceivedMessages()[1].getSubject());
-      assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
-      
-      // Participant receives payment link in registration mail
-      Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
-      Matcher matcher = pattern.matcher(registrantMailBody);
-      assertTrue(matcher.matches());
-      String paymentLink = matcher.group(3);
-      assertNotNull(paymentLink);
-      
-      greenMail.reset();
-      
-      // User clicks the payment link and pays the sign-up fee
-      getWebDriver().get(paymentLink);
-      
-      waitForSelectorVisible(".payerCompany");
-      assertSelectorValue(".payerFirstName", "Test");
-      assertSelectorValue(".payerLastName", "User");
-      assertSelectorValue(".payerEmail", "user@foyt.fi");
-      waitAndSendKeys(".payerMobile", "+358 12 345 6789");
-      waitAndSendKeys(".payerStreetAddress", "Tester street 123");
-      waitAndSendKeys(".payerPostalCode", "12345");
-      waitAndSendKeys(".payerPostalOffice", "Test");
-      waitAndSendKeys(".notes", "This is an automated test");
-      
-      assertLoggedIn();
+    String organizerMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[1]);
+    assertEquals("Illusion - Registration to event Open", getGreenMail().getReceivedMessages()[1].getSubject());
+    assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
+    
+    // Participant receives payment link in registration mail
+    Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
+    Matcher matcher = pattern.matcher(registrantMailBody);
+    assertTrue(matcher.matches());
+    String paymentLink = matcher.group(3);
+    assertNotNull(paymentLink);
+    
+    getGreenMail().reset();
+    
+    // User clicks the payment link and pays the sign-up fee
+    getWebDriver().get(paymentLink);
+    
+    waitForSelectorVisible(".payerCompany");
+    assertSelectorValue(".payerFirstName", "Test");
+    assertSelectorValue(".payerLastName", "User");
+    assertSelectorValue(".payerEmail", "user@foyt.fi");
+    waitAndSendKeys(".payerMobile", "+358 12 345 6789");
+    waitAndSendKeys(".payerStreetAddress", "Tester street 123");
+    waitAndSendKeys(".payerPostalCode", "12345");
+    waitAndSendKeys(".payerPostalOffice", "Test");
+    waitAndSendKeys(".notes", "This is an automated test");
+    
+    assertLoggedIn();
 
-      scrollWaitAndClick(".proceed-to-payment");
-      acceptPaytrailPayment();
-      
-      waitMailsReceived(greenMail, 2);
-      assertEquals(2, greenMail.getReceivedMessages().length);
-      
-      assertEquals("user@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[0].getSubject());
-      
-      assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment received for event %s", "Open"), greenMail.getReceivedMessages()[1].getSubject());
-    } finally {
-      greenMail.stop();
-    }    
+    scrollWaitAndClick(".proceed-to-payment");
+    acceptPaytrailPayment();
+    
+    waitMailsReceived(getGreenMail(), 2);
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
+    
+    assertEquals("user@foyt.fi", ((InternetAddress) getGreenMail().getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment for event %s received", "Open"), getGreenMail().getReceivedMessages()[0].getSubject());
+    
+    assertEquals("admin@foyt.fi", ((InternetAddress) getGreenMail().getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment received for event %s", "Open"), getGreenMail().getReceivedMessages()[1].getSubject());
   }
   
   @Test
@@ -431,213 +413,196 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
     }
   )
   public void testInvitePaymentNotLoggedIn() throws Exception {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      createEventParticipant(4l, 2l, IllusionEventParticipantRole.INVITED);
-      loginInternal("user@foyt.fi", "pass");
-      
-      navigate("/illusion/event/invite/dojoin");
+    createEventParticipant(4l, 2l, IllusionEventParticipantRole.INVITED);
+    loginInternal("user@foyt.fi", "pass");
+    
+    navigate("/illusion/event/invite/dojoin");
 
-      // User fills the registration form
-      waitForSelectorVisible("input[name='firstname']");
-      assertSelectorValue("input[name='firstname']", "Test");
-      assertSelectorValue("input[name='lastname']", "User");
-      assertSelectorValue("input[name='email']", "user@foyt.fi");
-      waitAndClick(".alpaca-form-button-register");
-      waitMailsReceived(greenMail, 2);
-      
-      assertEquals(2, greenMail.getReceivedMessages().length);
+    // User fills the registration form
+    waitForSelectorVisible("input[name='firstname']");
+    assertSelectorValue("input[name='firstname']", "Test");
+    assertSelectorValue("input[name='lastname']", "User");
+    assertSelectorValue("input[name='email']", "user@foyt.fi");
+    waitAndClick(".alpaca-form-button-register");
+    waitMailsReceived(getGreenMail(), 2);
+    
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
 
-      String registrantMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertEquals("Illusion - Registration to event Invite Only", greenMail.getReceivedMessages()[0].getSubject());
-      assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Test,"));
+    String registrantMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertEquals("Illusion - Registration to event Invite Only", getGreenMail().getReceivedMessages()[0].getSubject());
+    assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Test,"));
 
-      String organizerMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[1]);
-      assertEquals("Illusion - Registration to event Invite Only", greenMail.getReceivedMessages()[1].getSubject());
-      assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
+    String organizerMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[1]);
+    assertEquals("Illusion - Registration to event Invite Only", getGreenMail().getReceivedMessages()[1].getSubject());
+    assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
 
-      // Participant receives payment link in registration mail
-      Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
-      Matcher matcher = pattern.matcher(registrantMailBody);
-      assertTrue(matcher.matches());
-      String paymentLink = matcher.group(3);
-      assertNotNull(paymentLink);
-      
-      greenMail.reset();
-      
-      // User clicks the payment link and pays the sign-up fee
-      getWebDriver().get(paymentLink);
-      
-      waitForSelectorVisible(".payerCompany");
-      assertSelectorValue(".payerFirstName", "Test");
-      assertSelectorValue(".payerLastName", "User");
-      assertSelectorValue(".payerEmail", "user@foyt.fi");
-      waitAndSendKeys(".payerMobile", "+358 12 345 6789");
-      waitAndSendKeys(".payerStreetAddress", "Tester street 123");
-      waitAndSendKeys(".payerPostalCode", "12345");
-      waitAndSendKeys(".payerPostalOffice", "Test");
-      waitAndSendKeys(".notes", "This is an automated test");
-      
-      assertLoggedIn();
+    // Participant receives payment link in registration mail
+    Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
+    Matcher matcher = pattern.matcher(registrantMailBody);
+    assertTrue(matcher.matches());
+    String paymentLink = matcher.group(3);
+    assertNotNull(paymentLink);
+    
+    getGreenMail().reset();
+    
+    // User clicks the payment link and pays the sign-up fee
+    getWebDriver().get(paymentLink);
+    
+    waitForSelectorVisible(".payerCompany");
+    assertSelectorValue(".payerFirstName", "Test");
+    assertSelectorValue(".payerLastName", "User");
+    assertSelectorValue(".payerEmail", "user@foyt.fi");
+    waitAndSendKeys(".payerMobile", "+358 12 345 6789");
+    waitAndSendKeys(".payerStreetAddress", "Tester street 123");
+    waitAndSendKeys(".payerPostalCode", "12345");
+    waitAndSendKeys(".payerPostalOffice", "Test");
+    waitAndSendKeys(".notes", "This is an automated test");
+    
+    assertLoggedIn();
 
-      scrollWaitAndClick(".proceed-to-payment");
-      acceptPaytrailPayment();
-      
-      waitMailsReceived(greenMail, 2);
-      assertEquals(2, greenMail.getReceivedMessages().length);
+    scrollWaitAndClick(".proceed-to-payment");
+    acceptPaytrailPayment();
+    
+    waitMailsReceived(getGreenMail(), 2);
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
 
-      assertEquals("user@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Invite Only"), greenMail.getReceivedMessages()[0].getSubject());
-      
-      assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment received for event %s", "Invite Only"), greenMail.getReceivedMessages()[1].getSubject());
-      
-    } finally {
-      greenMail.stop();
-    }    
+    assertEquals("user@foyt.fi", ((InternetAddress) getGreenMail().getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment for event %s received", "Invite Only"), getGreenMail().getReceivedMessages()[0].getSubject());
+    
+    assertEquals("admin@foyt.fi", ((InternetAddress) getGreenMail().getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment received for event %s", "Invite Only"), getGreenMail().getReceivedMessages()[1].getSubject());
   }
 
   @Test
   @SqlSets ({"basic-users", "illusion-basic", "illusion-paid-events"})
   public void testFormlessOpenPaymentLoggedIn() throws Exception {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      loginInternal("user@foyt.fi", "pass");
-      
-      navigate("/illusion/event/open");
-      
-      // User fills the registration form
-      waitAndClick(".illusion-event-join-button");
+    loginInternal("user@foyt.fi", "pass");
+    
+    navigate("/illusion/event/open");
+    
+    // User fills the registration form
+    waitAndClick(".illusion-event-join-button");
 
-      waitMailsReceived(greenMail, 2);
-      assertEquals(2, greenMail.getReceivedMessages().length);
+    waitMailsReceived(getGreenMail(), 2);
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
 
-      String registrantMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertEquals("Illusion - Registration to event Open", greenMail.getReceivedMessages()[0].getSubject());
-      assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Test,"));
+    String registrantMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertEquals("Illusion - Registration to event Open", getGreenMail().getReceivedMessages()[0].getSubject());
+    assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Test,"));
 
-      String organizerMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[1]);
-      assertEquals("Illusion - Registration to event Open", greenMail.getReceivedMessages()[1].getSubject());
-      assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
+    String organizerMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[1]);
+    assertEquals("Illusion - Registration to event Open", getGreenMail().getReceivedMessages()[1].getSubject());
+    assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
 
-      // Participant receives payment link in registration mail
-      Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
-      Matcher matcher = pattern.matcher(registrantMailBody);
-      assertTrue(matcher.matches());
-      String paymentLink = matcher.group(3);
-      assertNotNull(paymentLink);
-      
-      logout();
-      greenMail.reset();
+    // Participant receives payment link in registration mail
+    Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
+    Matcher matcher = pattern.matcher(registrantMailBody);
+    assertTrue(matcher.matches());
+    String paymentLink = matcher.group(3);
+    assertNotNull(paymentLink);
+    
+    logout();
+    getGreenMail().reset();
 
-      loginInternal("user@foyt.fi", "pass");
-      
-      // User clicks the payment link and pays the sign-up fee
-      getWebDriver().get(paymentLink);
-      
-      waitForSelectorVisible(".payerCompany");
-      assertSelectorValue(".payerFirstName", "Test");
-      assertSelectorValue(".payerLastName", "User");
-      assertSelectorValue(".payerEmail", "user@foyt.fi");
-      waitAndSendKeys(".payerMobile", "+358 12 345 6789");
-      waitAndSendKeys(".payerStreetAddress", "Tester street 123");
-      waitAndSendKeys(".payerPostalCode", "12345");
-      waitAndSendKeys(".payerPostalOffice", "Test");
-      waitAndSendKeys(".notes", "This is an automated test");
-      
-      scrollWaitAndClick(".proceed-to-payment");
-      acceptPaytrailPayment();
-      
-      waitMailsReceived(greenMail, 2);
-      assertEquals(2, greenMail.getReceivedMessages().length);
+    loginInternal("user@foyt.fi", "pass");
+    
+    // User clicks the payment link and pays the sign-up fee
+    getWebDriver().get(paymentLink);
+    
+    waitForSelectorVisible(".payerCompany");
+    assertSelectorValue(".payerFirstName", "Test");
+    assertSelectorValue(".payerLastName", "User");
+    assertSelectorValue(".payerEmail", "user@foyt.fi");
+    waitAndSendKeys(".payerMobile", "+358 12 345 6789");
+    waitAndSendKeys(".payerStreetAddress", "Tester street 123");
+    waitAndSendKeys(".payerPostalCode", "12345");
+    waitAndSendKeys(".payerPostalOffice", "Test");
+    waitAndSendKeys(".notes", "This is an automated test");
+    
+    scrollWaitAndClick(".proceed-to-payment");
+    acceptPaytrailPayment();
+    
+    waitMailsReceived(getGreenMail(), 2);
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
 
-      assertEquals("user@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[0].getSubject());
-      
-      assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment received for event %s", "Open"), greenMail.getReceivedMessages()[1].getSubject());
-      
-    } finally {
-      greenMail.stop();
-    }    
+    assertEquals("user@foyt.fi", ((InternetAddress) getGreenMail().getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment for event %s received", "Open"), getGreenMail().getReceivedMessages()[0].getSubject());
+    
+    assertEquals("admin@foyt.fi", ((InternetAddress) getGreenMail().getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment received for event %s", "Open"), getGreenMail().getReceivedMessages()[1].getSubject());
   }
 
   @Test
   @SqlSets ({"basic-users", "user-client", "illusion-basic", "illusion-paid-events"})
   public void testFormlessApprovedPaymentLoggedIn() throws Exception {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      loginInternal("user@foyt.fi", "pass");
-      
-      navigate("/illusion/event/approve");
-      
-      // User fills the registration form
-      waitAndClick(".illusion-event-join-button");
-      waitForNotification();
-      assertNotification("warning", "Waiting for event organizer to accept your request...");
-      
-      assertLoggedIn();
-      
-      assertEquals(2, greenMail.getReceivedMessages().length);
+    loginInternal("user@foyt.fi", "pass");
+    
+    navigate("/illusion/event/approve");
+    
+    // User fills the registration form
+    waitAndClick(".illusion-event-join-button");
+    waitForNotification();
+    assertNotification("warning", "Waiting for event organizer to accept your request...");
+    
+    assertLoggedIn();
+    
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
 
-      String registrantMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertEquals("Illusion - Registration to event Approve", greenMail.getReceivedMessages()[0].getSubject());
-      assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Test,"));
+    String registrantMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertEquals("Illusion - Registration to event Approve", getGreenMail().getReceivedMessages()[0].getSubject());
+    assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Test,"));
 
-      String organizerMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[1]);
-      assertEquals("Illusion - Registration to event Approve", greenMail.getReceivedMessages()[1].getSubject());
-      assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
-      
-      logout();
-      greenMail.reset();
+    String organizerMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[1]);
+    assertEquals("Illusion - Registration to event Approve", getGreenMail().getReceivedMessages()[1].getSubject());
+    assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
+    
+    logout();
+    getGreenMail().reset();
 
-      // Simulate organizer acceptance by changing role
-      updateEventParticipantRole(3l, "user@foyt.fi", IllusionEventParticipantRole.WAITING_PAYMENT);
+    // Simulate organizer acceptance by changing role
+    updateEventParticipantRole(3l, "user@foyt.fi", IllusionEventParticipantRole.WAITING_PAYMENT);
 
-      loginInternal("user@foyt.fi", "pass");
+    loginInternal("user@foyt.fi", "pass");
 
-      // User receives payment link
-      assertEquals(1, greenMail.getReceivedMessages().length);
-      String acceptMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertTrue(StringUtils.contains(acceptMailBody, "Event organizer has accepted your request"));
-      
-      Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
-      Matcher matcher = pattern.matcher(acceptMailBody);
-      assertTrue(matcher.matches());
-      String paymentLink = matcher.group(3);
-      assertNotNull(paymentLink);
-      
-      greenMail.reset();
-      
-      // User clicks the payment link and pays the sign-up fee
-      getWebDriver().get(paymentLink);
-      
-      waitForSelectorVisible(".payerCompany");
-      assertSelectorValue(".payerFirstName", "Test");
-      assertSelectorValue(".payerLastName", "User");
-      assertSelectorValue(".payerEmail", "user@foyt.fi");
-      waitAndSendKeys(".payerMobile", "+358 12 345 6789");
-      waitAndSendKeys(".payerStreetAddress", "Tester street 123");
-      waitAndSendKeys(".payerPostalCode", "12345");
-      waitAndSendKeys(".payerPostalOffice", "Test");
-      waitAndSendKeys(".notes", "This is an automated test");
-      
-      assertLoggedIn();
+    // User receives payment link
+    assertEquals(1, getGreenMail().getReceivedMessages().length);
+    String acceptMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertTrue(StringUtils.contains(acceptMailBody, "Event organizer has accepted your request"));
+    
+    Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
+    Matcher matcher = pattern.matcher(acceptMailBody);
+    assertTrue(matcher.matches());
+    String paymentLink = matcher.group(3);
+    assertNotNull(paymentLink);
+    
+    getGreenMail().reset();
+    
+    // User clicks the payment link and pays the sign-up fee
+    getWebDriver().get(paymentLink);
+    
+    waitForSelectorVisible(".payerCompany");
+    assertSelectorValue(".payerFirstName", "Test");
+    assertSelectorValue(".payerLastName", "User");
+    assertSelectorValue(".payerEmail", "user@foyt.fi");
+    waitAndSendKeys(".payerMobile", "+358 12 345 6789");
+    waitAndSendKeys(".payerStreetAddress", "Tester street 123");
+    waitAndSendKeys(".payerPostalCode", "12345");
+    waitAndSendKeys(".payerPostalOffice", "Test");
+    waitAndSendKeys(".notes", "This is an automated test");
+    
+    assertLoggedIn();
 
-      scrollWaitAndClick(".proceed-to-payment");
-      acceptPaytrailPayment();
-      
-      waitMailsReceived(greenMail, 2);
-      assertEquals(2, greenMail.getReceivedMessages().length);
-      
-      assertEquals("user@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Approve"), greenMail.getReceivedMessages()[0].getSubject());
-      
-      assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment received for event %s", "Approve"), greenMail.getReceivedMessages()[1].getSubject());
-    } finally {
-      greenMail.stop();
-    }    
+    scrollWaitAndClick(".proceed-to-payment");
+    acceptPaytrailPayment();
+    
+    waitMailsReceived(getGreenMail(), 2);
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
+    
+    assertEquals("user@foyt.fi", ((InternetAddress) getGreenMail().getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment for event %s received", "Approve"), getGreenMail().getReceivedMessages()[0].getSubject());
+    
+    assertEquals("admin@foyt.fi", ((InternetAddress) getGreenMail().getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment received for event %s", "Approve"), getGreenMail().getReceivedMessages()[1].getSubject());
   }
   
   @Test
@@ -653,74 +618,68 @@ public class IllusionEventPaymentTestsBase extends AbstractIllusionUITest {
     }
   )
   public void testOpenPaymentNotLoggedInCustomDomain() throws Exception {
-    GreenMail greenMail = startSmtpServer();
-    try {
-      getWebDriver().get(getCustomEventUrl());
-      
-      // User fills the registration form
-      
-      waitAndClick(".illusion-event-join-button");
-      waitAndSendKeys("input[name='firstname']", "Automatic");
-      waitAndSendKeys("input[name='lastname']", "Tester");
-      waitAndSendKeys("input[name='email']", "automatic.tester@example.com");
-      waitAndClick(".alpaca-form-button-register");
+    getWebDriver().get(getCustomEventUrl());
+    
+    // User fills the registration form
+    
+    waitAndClick(".illusion-event-join-button");
+    waitAndSendKeys("input[name='firstname']", "Automatic");
+    waitAndSendKeys("input[name='lastname']", "Tester");
+    waitAndSendKeys("input[name='email']", "automatic.tester@example.com");
+    waitAndClick(".alpaca-form-button-register");
 
-      waitForSelectorPresent(".menu-tools-account");
-      assertLoggedIn();
-      
-      assertEquals(2, greenMail.getReceivedMessages().length);
+    waitForSelectorPresent(".menu-tools-account");
+    assertLoggedIn();
+    
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
 
-      String registrantMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[0]);
-      assertEquals("Illusion - Registration to event Open", greenMail.getReceivedMessages()[0].getSubject());
-      assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Automatic,"));
+    String registrantMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[0]);
+    assertEquals("Illusion - Registration to event Open", getGreenMail().getReceivedMessages()[0].getSubject());
+    assertTrue(registrantMailBody, StringUtils.startsWithIgnoreCase(registrantMailBody, "<p>Hi Automatic,"));
 
-      String organizerMailBody = GreenMailUtil.getBody(greenMail.getReceivedMessages()[1]);
-      assertEquals("Illusion - Registration to event Open", greenMail.getReceivedMessages()[1].getSubject());
-      assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
-      
-      // Participant receives payment link in registration mail
-      Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
-      Matcher matcher = pattern.matcher(registrantMailBody);
-      assertTrue(matcher.matches());
-      String paymentLink = matcher.group(3);
-      assertNotNull(paymentLink);
-      
-      greenMail.reset();
-      
-      // User clicks the payment link and pays the sign-up fee
-      getWebDriver().get(paymentLink);
-      assertTrue(StringUtils.startsWith(paymentLink, String.format("http://%s", AbstractIllusionUITest.CUSTOM_EVENT_HOST)));
-      
-      waitForSelectorVisible(".payerCompany");
-      assertSelectorValue(".payerFirstName", "Automatic");
-      assertSelectorValue(".payerLastName", "Tester");
-      assertSelectorValue(".payerEmail", "automatic.tester@example.com");
-      waitAndSendKeys(".payerMobile", "+358 12 345 6789");
-      waitAndSendKeys(".payerStreetAddress", "Tester street 123");
-      waitAndSendKeys(".payerPostalCode", "12345");
-      waitAndSendKeys(".payerPostalOffice", "Test");
-      waitAndSendKeys(".notes", "This is an automated test");
-      
-      assertLoggedIn();
+    String organizerMailBody = GreenMailUtil.getBody(getGreenMail().getReceivedMessages()[1]);
+    assertEquals("Illusion - Registration to event Open", getGreenMail().getReceivedMessages()[1].getSubject());
+    assertTrue(organizerMailBody, StringUtils.startsWithIgnoreCase(organizerMailBody, "<p>Hi Test,"));
+    
+    // Participant receives payment link in registration mail
+    Pattern pattern = Pattern.compile("(.*)(<a href=\")(.*)(\".*)", Pattern.DOTALL);
+    Matcher matcher = pattern.matcher(registrantMailBody);
+    assertTrue(matcher.matches());
+    String paymentLink = matcher.group(3);
+    assertNotNull(paymentLink);
+    
+    getGreenMail().reset();
+    
+    // User clicks the payment link and pays the sign-up fee
+    getWebDriver().get(paymentLink);
+    assertTrue(StringUtils.startsWith(paymentLink, String.format("http://%s", AbstractIllusionUITest.CUSTOM_EVENT_HOST)));
+    
+    waitForSelectorVisible(".payerCompany");
+    assertSelectorValue(".payerFirstName", "Automatic");
+    assertSelectorValue(".payerLastName", "Tester");
+    assertSelectorValue(".payerEmail", "automatic.tester@example.com");
+    waitAndSendKeys(".payerMobile", "+358 12 345 6789");
+    waitAndSendKeys(".payerStreetAddress", "Tester street 123");
+    waitAndSendKeys(".payerPostalCode", "12345");
+    waitAndSendKeys(".payerPostalOffice", "Test");
+    waitAndSendKeys(".notes", "This is an automated test");
+    
+    assertLoggedIn();
 
-      scrollWaitAndClick(".proceed-to-payment");
-      acceptPaytrailPayment();
-      
-      waitMailsReceived(greenMail, 2);
-      assertEquals(2, greenMail.getReceivedMessages().length);
-      
-      assertEquals("automatic.tester@example.com", ((InternetAddress) greenMail.getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment for event %s received", "Open"), greenMail.getReceivedMessages()[0].getSubject());
-      
-      assertEquals("admin@foyt.fi", ((InternetAddress) greenMail.getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
-      assertEquals(String.format("Payment received for event %s", "Open"), greenMail.getReceivedMessages()[1].getSubject());
-      waitForUrlMatches(String.format("http://%s", AbstractIllusionUITest.CUSTOM_EVENT_HOST) + ".*");
-      
-      assertTrue(StringUtils.startsWith(getWebDriver().getCurrentUrl(), String.format("http://%s", AbstractIllusionUITest.CUSTOM_EVENT_HOST)));
-      
-    } finally {
-      greenMail.stop();
-    }    
+    scrollWaitAndClick(".proceed-to-payment");
+    acceptPaytrailPayment();
+    
+    waitMailsReceived(getGreenMail(), 2);
+    assertEquals(2, getGreenMail().getReceivedMessages().length);
+    
+    assertEquals("automatic.tester@example.com", ((InternetAddress) getGreenMail().getReceivedMessages()[0].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment for event %s received", "Open"), getGreenMail().getReceivedMessages()[0].getSubject());
+    
+    assertEquals("admin@foyt.fi", ((InternetAddress) getGreenMail().getReceivedMessages()[1].getAllRecipients()[0]).getAddress());
+    assertEquals(String.format("Payment received for event %s", "Open"), getGreenMail().getReceivedMessages()[1].getSubject());
+    waitForUrlMatches(String.format("http://%s", AbstractIllusionUITest.CUSTOM_EVENT_HOST) + ".*");
+    
+    assertTrue(StringUtils.startsWith(getWebDriver().getCurrentUrl(), String.format("http://%s", AbstractIllusionUITest.CUSTOM_EVENT_HOST)));
   }
   
   @Test
