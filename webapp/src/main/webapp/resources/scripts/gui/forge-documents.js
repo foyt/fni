@@ -7,12 +7,12 @@
     CKEDITOR.plugins.addExternal('ajax', PLUGIN_DIR + '/ajax/');
     CKEDITOR.plugins.addExternal('xml', PLUGIN_DIR + '/xml/');
     CKEDITOR.plugins.addExternal('autogrow', PLUGIN_DIR + '/autogrow/');
-    CKEDITOR.plugins.addExternal('change', '//static.forgeandillusion.net/libs/coops-ckplugins/change/0.1.1/plugin.min.js');
-    CKEDITOR.plugins.addExternal('coops', '//static.forgeandillusion.net/libs/coops-ckplugins/coops/0.1.1/plugin.min.js');
-    CKEDITOR.plugins.addExternal('coops-connector', '//static.forgeandillusion.net/libs/coops-ckplugins/coops-connector/0.1.1/plugin.min.js');
-    CKEDITOR.plugins.addExternal('coops-dmp', '//static.forgeandillusion.net/libs/coops-ckplugins/coops-dmp/0.1.1/plugin.min.js');
-    CKEDITOR.plugins.addExternal('coops-cursors', '//static.forgeandillusion.net/libs/coops-ckplugins/coops-cursors/0.1.1/plugin.min.js');
-    CKEDITOR.plugins.addExternal('coops-sessionevents', '//static.forgeandillusion.net/libs/coops-ckplugins/coops-sessionevents/0.1.1/plugin.min.js');
+    CKEDITOR.plugins.addExternal('change', '//cdn.metatavu.io/libs/coops-ckplugins/change/0.1.1/plugin.min.js');
+    CKEDITOR.plugins.addExternal('coops', '//cdn.metatavu.io/libs/coops-ckplugins/coops/0.1.1/plugin.min.js');
+    CKEDITOR.plugins.addExternal('coops-connector', '//cdn.metatavu.io/libs/coops-ckplugins/coops-connector/0.1.1/plugin.min.js');
+    CKEDITOR.plugins.addExternal('coops-dmp', '//cdn.metatavu.io/libs/coops-ckplugins/coops-dmp/0.1.1/plugin.min.js');
+    CKEDITOR.plugins.addExternal('coops-cursors', '//cdn.metatavu.io/libs/coops-ckplugins/coops-cursors/0.1.1/plugin.min.js');
+    CKEDITOR.plugins.addExternal('coops-sessionevents', '//cdn.metatavu.io/libs/coops-ckplugins/coops-sessionevents/0.1.1/plugin.min.js');
     CKEDITOR.plugins.addExternal('fnidynlist', PLUGIN_DIR + '/fnidynlist/');
     CKEDITOR.plugins.addExternal('fnigenericbrowser', PLUGIN_DIR + '/fnigenericbrowser/');
     
