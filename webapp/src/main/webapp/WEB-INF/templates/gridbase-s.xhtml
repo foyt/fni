@@ -20,10 +20,10 @@
             var TIME_FORMATS = #{sessionBackingBean.timeFormats};
           </script>
           
-          <script type="text/javascript" src="//static.forgeandillusion.net/libs/jquery/2.2.3/jquery.min.js"></script>
-          <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/jquery-ui/1.11.4/jquery-ui.min.js"></script>
-          <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/dustjs-linkedin/2.7.2/dust-full.min.js"></script>
-          <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/dustjs-helpers/1.7.3/dust-helpers.min.js"></script>
+          <script type="text/javascript" src="//cdn.metatavu.io/libs/jquery/2.2.3/jquery.min.js"></script>
+          <script defer="defer" type="text/javascript" src="//cdn.metatavu.io/libs/jquery-ui/1.11.4/jquery-ui.min.js"></script>
+          <script defer="defer" type="text/javascript" src="//cdn.metatavu.io/libs/dustjs-linkedin/2.7.2/dust-full.min.js"></script>
+          <script defer="defer" type="text/javascript" src="//cdn.metatavu.io/libs/dustjs-helpers/1.7.3/dust-helpers.min.js"></script>
           <script defer="defer" type="text/javascript" src="/scripts/gui/dust.js"></script>
 
           <script defer="defer" type="text/javascript" src="/scripts/gui/common.js"></script>
@@ -39,7 +39,7 @@
             <script type="text/javascript">
               window.cookieconsent_options = {"message":"#{locales['cookieconsent.message']}","dismiss":"#{locales['cookieconsent.dismiss']}","learnMore":"#{locales['cookieconsent.learnMore']}","link":"/about#cookies","theme":"dark-bottom"};
             </script>
-            <script defer="defer" type="text/javascript" src="//static.forgeandillusion.net/libs/cookieconsent2/1.0.10/cookieconsent.min.js"></script>
+            <script defer="defer" type="text/javascript" src="//cdn.metatavu.io/libs/cookieconsent2/1.0.10/cookieconsent.min.js"></script>
           </ui:fragment>
           
           <h:outputText rendered="#{browserMonitorBackingBean.enabled}" value="#{browserMonitorBackingBean.script}" escape="false"/>
