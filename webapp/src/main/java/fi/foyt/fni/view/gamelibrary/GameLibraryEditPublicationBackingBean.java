@@ -2,6 +2,7 @@ package fi.foyt.fni.view.gamelibrary;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,6 @@ import javax.faces.view.facelets.FaceletException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.ocpsoft.rewrite.annotation.Join;
 import org.ocpsoft.rewrite.annotation.Matches;
@@ -24,6 +24,7 @@ import org.ocpsoft.rewrite.faces.annotation.IgnorePostback;
 
 import fi.foyt.fni.gamelibrary.GameLibraryTagController;
 import fi.foyt.fni.gamelibrary.PublicationController;
+import fi.foyt.fni.jsf.NavigationController;
 import fi.foyt.fni.persistence.model.common.Language;
 import fi.foyt.fni.persistence.model.gamelibrary.BookPublication;
 import fi.foyt.fni.persistence.model.gamelibrary.GameLibraryTag;
@@ -36,8 +37,6 @@ import fi.foyt.fni.security.LoggedIn;
 import fi.foyt.fni.security.Secure;
 import fi.foyt.fni.session.SessionController;
 import fi.foyt.fni.system.SystemSettingsController;
-import fi.foyt.fni.users.FirstNameComparator;
-import fi.foyt.fni.users.LastNameComparator;
 import fi.foyt.fni.users.UserController;
 import fi.foyt.fni.utils.faces.FacesUtils;
 
@@ -69,6 +68,9 @@ public class GameLibraryEditPublicationBackingBean {
   @Inject
 	private SystemSettingsController systemSettingsController;
   
+  @Inject
+  private NavigationController navigationController;
+  
   private Long languageId;
   private String name;
   private String description;
@@ -94,6 +96,11 @@ public class GameLibraryEditPublicationBackingBean {
   @RequestAction
 	@Deferred
 	public String load() {
+    BookPublication publication = publicationController.findBookPublicationById(publicationId);
+    if (publication == null) {
+      return navigationController.notFound();
+    }
+    
 		tagSelectItems = createTagSelectItems();
 		authorSelectItems = createAuthorSelectItems();
 		languageSelectItems = createLanguageSelectItems();
@@ -110,7 +117,6 @@ public class GameLibraryEditPublicationBackingBean {
   @IgnorePostback
 	public void init() {
 		BookPublication publication = publicationController.findBookPublicationById(publicationId);
-		// TODO: Not found?
 		
 		name = publication.getName();
 		description = publication.getDescription();
@@ -402,21 +408,41 @@ public class GameLibraryEditPublicationBackingBean {
 		return result;
 	}
 	
-	@SuppressWarnings("unchecked")
   private List<SelectItem> createAuthorSelectItems() {
-		List<SelectItem> result = new ArrayList<>(); 
-		List<User> users = userController.listUsers();
+    List<User> users = new ArrayList<>(userController.listUsersSortedByName());
+		List<SelectItem> result = new ArrayList<>(users.size()); 
 		
-    Collections.sort(users, ComparatorUtils.chainedComparator(
-      new LastNameComparator(), 
-      new FirstNameComparator()
-    ));
+		Collections.sort(users, new NullFullNameComparator());
 		
 		for (User user : users) {
-			result.add(new SelectItem(user.getId(), user.getFullName()));
+		  result.add(new SelectItem(user.getId(), userController.getUserDisplayNameWithMail(user, true)));
 		}
 		
 		return result;
 	}
+  
+  private class NullFullNameComparator implements Comparator<User> {
+
+    @Override
+    public int compare(User o1, User o2) {
+      String fullName1 = o1.getFullName();
+      String fullName2 = o2.getFullName();
+      
+      if (fullName1 == fullName2) {
+        return 0;
+      }
+      
+      if (fullName1 == null) {
+        return 1;
+      }
+      
+      if (fullName2 == null) {
+        return -1;
+      }
+      
+      return 0;
+    }
+    
+  }
 
 }
