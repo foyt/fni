@@ -67,6 +67,25 @@ public class UserDAO extends GenericDAO<User> {
     return entityManager.createQuery(criteria).getResultList();
   }
 
+  public List<User> listByArchivedSortByNames(Boolean archived) {
+    EntityManager entityManager = getEntityManager();
+
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<User> criteria = criteriaBuilder.createQuery(User.class);
+    Root<User> root = criteria.from(User.class);
+    criteria.select(root);
+    criteria.where(
+      criteriaBuilder.equal(root.get(User_.archived), archived)
+    );
+    
+    criteria.orderBy(
+      criteriaBuilder.asc(root.get(User_.lastName)),
+      criteriaBuilder.asc(root.get(User_.firstName))
+    );
+    
+    return entityManager.createQuery(criteria).getResultList();
+  }
+
   public User updateFirstName(User user, String firstName) {
     EntityManager entityManager = getEntityManager();
 
