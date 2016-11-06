@@ -47,6 +47,7 @@ import fi.foyt.fni.utils.faces.FacesUtils;
 @Join (path = "/gamelibrary/manage/{publicationId}/edit", to = "/gamelibrary/editpublication.jsf")
 @LoggedIn
 @Secure(Permission.GAMELIBRARY_MANAGE_PUBLICATIONS)
+@SuppressWarnings ("squid:S3306")
 public class GameLibraryEditPublicationBackingBean {
 
   @Parameter
@@ -67,6 +68,28 @@ public class GameLibraryEditPublicationBackingBean {
 
   @Inject
 	private SystemSettingsController systemSettingsController;
+  
+  private Long languageId;
+  private String name;
+  private String description;
+  private Double price;
+  private Double weight;
+  private Integer width;
+  private Integer height;
+  private Integer depth;
+  private Integer numberOfPages;
+  private String license;
+  private List<String> tags;
+  private String addExistingTag;
+  private String addNewTag;
+  private String removeTagText;
+  private Long addAuthorId;
+  private Long removeAuthorId;
+  private List<Long> authorIds;
+  private List<String> authorNames;
+  private List<SelectItemGroup> tagSelectItems;
+  private List<SelectItem> authorSelectItems;
+  private List<SelectItem> languageSelectItems;
 	
   @RequestAction
 	@Deferred
@@ -75,7 +98,7 @@ public class GameLibraryEditPublicationBackingBean {
 		authorSelectItems = createAuthorSelectItems();
 		languageSelectItems = createLanguageSelectItems();
 		
-		if (tagSelectItems.size() > 0 && tagSelectItems.get(1).getSelectItems().length > 0) {
+		if (tagSelectItems.isEmpty() && tagSelectItems.get(1).getSelectItems().length > 0) {
       addExistingTag = (String) tagSelectItems.get(1).getSelectItems()[0].getValue();
     }
 		
@@ -112,11 +135,8 @@ public class GameLibraryEditPublicationBackingBean {
 			authorNames.add(author.getAuthor().getFullName());
 		}
 		
-		if (publication instanceof BookPublication) {
-			BookPublication bookPublication = (BookPublication) publication;
-			numberOfPages = bookPublication.getNumberOfPages();
-		}
-		
+		numberOfPages = publication.getNumberOfPages();
+	
 		license = publication.getLicense();
 	}
   
@@ -125,8 +145,7 @@ public class GameLibraryEditPublicationBackingBean {
     
     List<Language> languages = systemSettingsController.listLanguages();
     for (Language language : languages) {
-      String name = FacesUtils.getLocalizedValue("generic.languages." + language.getISO3());
-      result.add(new SelectItem(language.getId(), name));
+      result.add(new SelectItem(language.getId(), FacesUtils.getLocalizedValue("generic.languages." + language.getISO3())));
     }
     
     return result;
@@ -302,10 +321,8 @@ public class GameLibraryEditPublicationBackingBean {
 		  tag = StringUtils.lowerCase(StringUtils.trim(getAddNewTag()));
 		}
 		
-		if (StringUtils.isNotBlank(tag)) {
-			if (!tags.contains(tag)) {
-				tags.add(tag);
-			}
+		if (StringUtils.isNotBlank(tag) && (!tags.contains(tag))) {
+			tags.add(tag);
 		}
 	}
 	
@@ -330,17 +347,17 @@ public class GameLibraryEditPublicationBackingBean {
 		Publication publication = publicationController.findPublicationById(publicationId);
 		if (publication instanceof BookPublication) {
 		  BookPublication bookPublication = (BookPublication) publication;
-		  String license = getLicense();
 		  
-		  List<GameLibraryTag> tags = new ArrayList<>();
-		  List<User> authors = new ArrayList<User>();
+		  List<GameLibraryTag> publicationTags = new ArrayList<>(getTags().size());
+		  List<User> authors = new ArrayList<>();
 		  
 		  for (String tag : getTags()) {
 		  	GameLibraryTag gameLibraryTag = gameLibraryTagController.findTagByText(tag);
 		  	if (gameLibraryTag == null) {
 		  		gameLibraryTag = gameLibraryTagController.createTag(tag);
 		  	}
-		  	tags.add(gameLibraryTag);
+		  	
+		  	publicationTags.add(gameLibraryTag);
 		  }
 		  
 		  for (Long authorId : getAuthorIds()) {
@@ -356,8 +373,8 @@ public class GameLibraryEditPublicationBackingBean {
 			publicationController.updateWeight(publication, getWeight());
 			publicationController.updateDimensions(publication, getWidth(), getHeight(), getDepth());
 			publicationController.updatePublicationAuthors(publication, authors);
-			publicationController.updateLicense(bookPublication, license);
-			publicationController.updateTags(bookPublication, tags);
+			publicationController.updateLicense(bookPublication, getLicense());
+			publicationController.updateTags(bookPublication, publicationTags);
 			publicationController.updateNumberOfPages(bookPublication, getNumberOfPages());
       publicationController.updatePublicationLanguage(bookPublication, language);
 			publicationController.updatedModified(bookPublication, sessionController.getLoggedUser(), new Date());
@@ -367,12 +384,12 @@ public class GameLibraryEditPublicationBackingBean {
 	}
 	
 	private List<SelectItemGroup> createTagSelectItems() {
-		List<GameLibraryTag> tags = gameLibraryTagController.listGameLibraryTags();
+		List<GameLibraryTag> gameLibraryTags = gameLibraryTagController.listGameLibraryTags();
 		
 		ArrayList<SelectItemGroup> result = new ArrayList<>();
 
 		List<SelectItem> tagItems = new ArrayList<>();
-		for (GameLibraryTag tag : tags) {
+		for (GameLibraryTag tag : gameLibraryTags) {
 			tagItems.add(new SelectItem(tag.getText(), StringUtils.capitalize(tag.getText())));
 		}
 		
@@ -401,27 +418,5 @@ public class GameLibraryEditPublicationBackingBean {
 		
 		return result;
 	}
-	
-	private Long languageId;
-	private String name;
-	private String description;
-	private Double price;
-	private Double weight;
-	private Integer width;
-	private Integer height;
-	private Integer depth;
-	private Integer numberOfPages;
-	private String license;
-	private List<String> tags;
-	private String addExistingTag;
-	private String addNewTag;
-	private String removeTagText;
-	private Long addAuthorId;
-	private Long removeAuthorId;
-	private List<Long> authorIds;
-	private List<String> authorNames;
- 	private List<SelectItemGroup> tagSelectItems;
- 	private List<SelectItem> authorSelectItems;
- 	private List<SelectItem> languageSelectItems;
 
 }
