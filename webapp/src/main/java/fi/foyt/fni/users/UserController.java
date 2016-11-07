@@ -117,6 +117,10 @@ public class UserController implements Serializable {
 	public List<User> listUsers() {
 		return userDAO.listByArchived(Boolean.FALSE);
 	}
+	
+	public List<User> listUsersSortedByName() {
+    return userDAO.listByArchivedSortByNames(Boolean.FALSE);
+  }
   
 	public User updateFirstName(User user, String firstName) {
 		return userDAO.updateFirstName(user, firstName);
@@ -282,22 +286,38 @@ public class UserController implements Serializable {
     
     userDAO.updateArchived(user, Boolean.TRUE);
   }
-	
+  
   public String getUserDisplayName(User user) {
+    return getUserDisplayName(user, false);
+  }
+	
+  public String getUserDisplayName(User user, boolean lastNameFirst) {
     String result = user.getFullName();
     if (StringUtils.isNotBlank(result)) {
-      return result;
+      if (lastNameFirst) {
+        return String.format("%s, %s", user.getLastName(), user.getFirstName()); 
+      } else {
+        return result;
+      }
     }
     
     return "<" + getUserPrimaryEmail(user) + ">";
   }
   
   public String getUserDisplayNameWithMail(User user) {
+    return getUserDisplayNameWithMail(user, false);
+  }
+  
+  public String getUserDisplayNameWithMail(User user, boolean lastNameFirst) {
     String fullName = user.getFullName();
     String email = getUserPrimaryEmail(user);
     
     if (StringUtils.isNotBlank(user.getFullName())) {
-      return String.format("%s <%s>", fullName, email);
+      if (lastNameFirst) {
+        return String.format("%s, %s <%s>", user.getLastName(), user.getFirstName(), email);
+      } else {
+        return String.format("%s <%s>", fullName, email);
+      }
     } 
     
     return String.format("<%s>", email);
