@@ -42,6 +42,9 @@ Create database and database user
     create user 'fni'@'localhost' IDENTIFIED BY 'yourpassword';
     grant all privileges on fni.* to fni@localhost identified by 'yourpassword';
 
+### Install Java
+
+    apt install openjdk-9-jdk
 
 ### Wildfly
 
