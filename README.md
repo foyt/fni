@@ -24,16 +24,16 @@ Register OAuth API keys to following services:
 
 You can set up development version without them but for production use all keys are required.
 
-#### Install and configure MariaDB server
+### Install and configure MariaDB server
 
-Install APT packages
+#### Install APT packages
 
-sudo apt update
-sudo apt install mariadb-server mariadb-client
+    sudo apt update
+    sudo apt install mariadb-server mariadb-client
 
-Secure your newly installed database (optional but recommended)
+#### Secure your newly installed database (optional but recommended)
 
-sudo mysql_secure_installation
+    sudo mysql_secure_installation
 
 ### Wildfly
 
