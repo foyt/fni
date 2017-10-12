@@ -6,7 +6,7 @@ Forge & Illusion is an open platform built for roleplaying and roleplayers. The 
 
 ## Installation
 
-These instructions assume that system is being installed on Ubuntu Linux.
+These instructions assume that system is being installed on Ubuntu Zesty 17.04 Linux.
 
 ### Prerequisites
 
