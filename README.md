@@ -26,14 +26,22 @@ You can set up development version without them but for production use all keys 
 
 ### Install and configure MariaDB server
 
-#### Install APT packages
+Install APT packages
 
     sudo apt update
     sudo apt install mariadb-server mariadb-client
 
-#### Secure your newly installed database (optional but recommended)
+Secure your newly installed database (optional but recommended)
 
     sudo mysql_secure_installation
+    
+Create database and database user
+
+    sudo mysql -u root -p
+    create database fni default character set = utf8mb4 collate = utf8mb4_unicode_ci;
+    create user 'fni'@'localhost' IDENTIFIED BY 'yourpassword';
+    grant all privileges on fni.* to fni@localhost identified by 'yourpassword';
+
 
 ### Wildfly
 
