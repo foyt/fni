@@ -10,7 +10,20 @@ These instructions assume that system is being installed on Ubuntu Linux.
 
 ### Prerequisites
 
-Before installing get Google (https://console.cloud.google.com), Facebook (https://developers.facebook.com/) and Dropbox (https://www.dropbox.com/developers) OAuth API keys. 
+### Database
+
+Get access to a MySQL dump file from current installation.
+
+### OAuth API Keys
+
+Register OAuth API keys to following services:
+
+  - Google (https://console.cloud.google.com)
+  - Facebook (https://developers.facebook.com/)
+  - Dropbox (https://www.dropbox.com/developers) OAuth API keys.
+
+You can set up development version without them but for production use all keys are required.
+
 
 ### Wildfly
 
