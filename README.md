@@ -6,6 +6,8 @@ Forge & Illusion is an open platform built for roleplaying and roleplayers. The 
 
 ## Installation
 
+These instructions assume that system is being installed on Ubuntu.
+
 ### Wildfly
 
 Download an extract wildfly 10.1.0.Final (http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.tar.gz) to some folder (e.g. /opt/wildfly).
