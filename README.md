@@ -8,6 +8,10 @@ Forge & Illusion is an open platform built for roleplaying and roleplayers. The 
 
 These instructions assume that system is being installed on Ubuntu.
 
+### Prerequisites
+
+Before installing get Google (https://console.cloud.google.com), Facebook (https://developers.facebook.com/) and Dropbox (https://www.dropbox.com/developers) OAuth API keys. 
+
 ### Wildfly
 
 Download an extract wildfly 10.1.0.Final (http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.tar.gz) to some folder (e.g. /opt/wildfly).
