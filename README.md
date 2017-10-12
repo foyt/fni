@@ -10,11 +10,11 @@ These instructions assume that system is being installed on Ubuntu Zesty 17.04 L
 
 ### Prerequisites
 
-### Database
+#### Database
 
 Get access to a MySQL dump file from current installation.
 
-### OAuth API Keys
+#### OAuth API Keys
 
 Register OAuth API keys to following services:
 
@@ -24,6 +24,16 @@ Register OAuth API keys to following services:
 
 You can set up development version without them but for production use all keys are required.
 
+#### Install and configure MariaDB server
+
+Install APT packages
+
+sudo apt update
+sudo apt install mariadb-server mariadb-client
+
+Secure your newly installed database (optional but recommended)
+
+sudo mysql_secure_installation
 
 ### Wildfly
 
