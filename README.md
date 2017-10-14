@@ -121,6 +121,10 @@ Add database settings.
      </datasource>
 
 Now you can safely remove default h2 driver and database but before that you need to locate 'urn:jboss:domain:ee:4.0' subsystem and remove datasource -attribute from default-bindings context-service. 
+
+Finally restart wildfly
+
+    sudo service wildfly restart
       
 ### Deploy Forge & Illusion
 
