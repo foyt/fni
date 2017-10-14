@@ -278,6 +278,12 @@ Enable https site
     
 Now you should be able to navigate into the application with your web browser.
 
+### Search data reindex
+
+When your system is up and running, you should reindex Hibernate Search data. You can do this by navigating into following address with web brower:
+
+https://wwww.forgeandillusion.net/admin/reindex-hibernate-search
+
 ### Optimization
 
 For production environment you should tweak memory settings in /opt/wildfly/bin/standalone.conf to match your server.  
