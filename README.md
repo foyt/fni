@@ -40,6 +40,25 @@ Secure your newly installed database (optional but recommended)
 
     sudo mysql_secure_installation
     
+Configure server (replace jed with your favourite editor)
+
+    jed /etc/mysql/mariadb.conf.d/50-server.cnf
+    
+... and Apply following settings
+
+    max_allowed_packet  = 512M
+    max_connections     = 2000
+
+Configure dump (replace jed with your favourite editor)
+
+    jed /etc/mysql/conf.d/mysqldump.cnf
+
+... and Apply following setting:    
+
+    max_allowed_packet      = 512M
+
+
+    
 Create database and database user
 
     sudo mysql -u root -p
