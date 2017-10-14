@@ -202,7 +202,7 @@ Add add following contents:
         client_max_body_size 200M;
     
         location / {
-          proxy_pass http://www.forgeandillusion.net:8080;
+          proxy_pass http://localhost:8080;
           proxy_http_version 1.1;
           proxy_buffering off;
           client_max_body_size 150M;
