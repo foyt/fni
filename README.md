@@ -80,7 +80,7 @@ Import dump file
 
 ### Install Java
 
-    apt install openjdk-9-jdk
+    apt install openjdk-8-jdk
 
 ### Wildfly
 
