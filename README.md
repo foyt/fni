@@ -150,6 +150,18 @@ Add database settings.
          <share-prepared-statements>false</share-prepared-statements>
        </statement>
      </datasource>
+     
+#### Remove https listener
+
+Https is handled by NGINX, so we can remove it from the Wildfly.
+
+To do this, please do following configuration changes:
+
+  - Locate urn:jboss:domain:undertow:3.1 -subsystem and remove redirect-socket="https" from the http-listener
+  - Remove https-listener below
+  - Locate and remove socket-binding management-https 
+
+#### Remove h2
 
 Now you can safely remove default h2 driver and database but before that you need to locate 'urn:jboss:domain:ee:4.0' subsystem and remove datasource -attribute from default-bindings context-service. 
 
