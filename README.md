@@ -128,3 +128,13 @@ Download WAR file and deploy it by copying it into Wildfly deployments folder
 
     wget http://repo1.maven.org/maven2/fi/foyt/fni/webapp/3.3.13/webapp-3.3.13.war -O /opt/wildfly/standalone/deployments/fni.war
 
+### NGINX
+
+Nginx is used as reverse-proxy server for the Forge & Illusion.
+
+#### Install NGINX
+
+    apt install nginx    
+    
+#### Configure NGINX
+
