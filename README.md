@@ -161,8 +161,9 @@ Add add following contents:
       }  
     }
     
-Restart NGINX
- 
+Enable http site
+
+    sudo ln -s /etc/nginx/sites-enabled/www.forgeandillusion.net-http.conf /etc/nginx/sites-available/www.forgeandillusion.net-http.conf
     sudo service nginx restart
     
 #### Configure https
@@ -214,3 +215,8 @@ Add add following contents:
           proxy_read_timeout 1m;
         }
     }
+
+Enable https site
+
+    sudo ln -s /etc/nginx/sites-enabled/www.forgeandillusion.net-https.conf /etc/nginx/sites-available/www.forgeandillusion.net-https.conf
+    sudo service nginx restart
