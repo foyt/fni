@@ -46,8 +46,10 @@ Configure server (replace jed with your favourite editor)
     
 ... and Apply following settings
 
+    lower_case_table_names = 1
     max_allowed_packet  = 512M
     max_connections     = 2000
+    innodb_log_file_size = 512M
 
 Configure dump (replace jed with your favourite editor)
 
@@ -57,7 +59,9 @@ Configure dump (replace jed with your favourite editor)
 
     max_allowed_packet      = 512M
 
+Restart server
 
+    service mariadb restart
     
 Create database and database user
 
