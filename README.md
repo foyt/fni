@@ -46,6 +46,13 @@ Create database and database user
     create database fni default character set = utf8mb4 collate = utf8mb4_unicode_ci;
     create user 'fni'@'localhost' IDENTIFIED BY 'yourpassword';
     grant all privileges on fni.* to fni@localhost identified by 'yourpassword';
+    exit;
+    
+Import dump file
+
+    mysql -u fni -p
+    use fni;
+    source /to/dumpfile.sql;  
 
 ### Install Java
 
