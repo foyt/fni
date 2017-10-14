@@ -263,3 +263,9 @@ Enable https site
 
     sudo ln -s /etc/nginx/sites-enabled/www.forgeandillusion.net-https.conf /etc/nginx/sites-available/www.forgeandillusion.net-https.conf
     sudo service nginx restart
+    
+Now you should be able to navigate into the application with your web browser.
+
+### Optimization
+
+For production environment you should tweak memory settings in /opt/wildfly/bin/standalone.conf to match your server.  
