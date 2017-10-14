@@ -63,3 +63,9 @@ Change wildfly to automatically start on boot
     cp /opt/wildfly/docs/contrib/scripts/init.d/wildfly.conf /etc/default/wildfly
     update-rc.d wildfly defaults 5
       
+### Deplying Forge & Illusion
+
+Download WAR file and deploy it by copying it into Wildfly deployments folder
+
+    wget http://repo1.maven.org/maven2/fi/foyt/fni/webapp/3.3.13/webapp-3.3.13.war -O /opt/wildfly/standalone/deployments/fni.war
+
