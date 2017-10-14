@@ -49,7 +49,7 @@ Configure server (replace jed with your favourite editor)
     lower_case_table_names = 1
     max_allowed_packet  = 512M
     max_connections     = 2000
-    innodb_log_file_size = 512M
+    innodb_log_file_size = 2G
 
 Configure dump (replace jed with your favourite editor)
 
@@ -75,7 +75,8 @@ Import dump file
 
     mysql -u fni -p
     use fni;
-    source /to/dumpfile.sql;  
+    source /to/dumpfile.sql; 
+    show errors;
 
 ### Install Java
 
