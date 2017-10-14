@@ -138,3 +138,27 @@ Nginx is used as reverse-proxy server for the Forge & Illusion.
     
 #### Configure NGINX
 
+Remove default site
+
+    rm /etc/nginx/sites-enabled/default
+    
+Create http fni -site into /etc/nginx/sites-available (replace jed with your favourite editor)
+
+    jed /etc/nginx/sites-available/fni-http.conf
+
+Add add following contents:
+
+    server {
+      listen 80;
+      server_name www.forgeandillusion.net;
+      root /usr/share/nginx/html;
+      location ~ /.well-known {
+        allow all;
+      }
+    
+      location / {
+        return 301 https://$server_name$request_uri;
+      }  
+    }
+    
+    
