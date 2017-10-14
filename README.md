@@ -136,7 +136,7 @@ Nginx is used as reverse-proxy server for the Forge & Illusion.
 
     apt install nginx    
     
-#### Configure NGINX
+#### Configure http
 
 Remove default site
 
@@ -160,6 +160,24 @@ Add add following contents:
         return 301 https://$server_name$request_uri;
       }  
     }
+    
+Restart NGINX
+ 
+    sudo service nginx restart
+    
+#### Configure https
+
+Install Let's encrypt
+
+    sudo apt install python-certbot-nginx
+    
+Create dhparam cert
+
+    sudo openssl dhparam -dsaparam -out /etc/ssl/certs/dhparam.pem 2048
+    
+Obtain SSL Certificate
+
+    sudo certbot --nginx -d www.forgeandillusion.net
     
 Create https fni -site into /etc/nginx/sites-available (replace jed with your favourite editor)
 
