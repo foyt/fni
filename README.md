@@ -61,5 +61,5 @@ Change wildfly to automatically start on boot
 
     cp /opt/wildfly/docs/contrib/scripts/init.d/wildfly-init-debian.sh /etc/init.d/wildfly
     cp /opt/wildfly/docs/contrib/scripts/init.d/wildfly.conf /etc/default/wildfly
-    update-rc.d wildfly defaults
+    update-rc.d wildfly defaults 5
       
