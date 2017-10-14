@@ -125,6 +125,14 @@ Now you can safely remove default h2 driver and database but before that you nee
 Finally restart wildfly
 
     sudo service wildfly restart
+    
+You can check whether service is running by typing
+  
+    sudo service wildfly status
+    
+Logfile can be tailed by 
+
+    sudo tail -f /var/log/wildfly/console.log
       
 ### Deploy Forge & Illusion
 
