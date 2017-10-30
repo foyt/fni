@@ -87,7 +87,7 @@ Import dump file
 Download an extract wildfly 10.1.0.Final (http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.tar.gz) to some folder (e.g. /opt/wildfly).
 
     curl -s http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.tar.gz|tar -xvzC /opt/ && ln -s wildfly-10.1.0.Final /opt/wildfly
-    useradd wildly
+    useradd wildfly
     chown wildfly.wildfly -R /opt/wildfly-10.1.0.Final/
     
 Change wildfly to automatically start on boot
