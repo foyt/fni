@@ -237,6 +237,8 @@ Obtain SSL Certificate
 
     sudo certbot --nginx -d www.forgeandillusion.net
     
+Choose not to redirect HTTP traffic to HTTPS when asked.
+
 Remove Let's encrypt generated contents from /etc/nginx/sites-available/fni-http.conf and create https fni -site into /etc/nginx/sites-available (replace jed with your favourite editor)
 
     jed /etc/nginx/sites-available/fni-https.conf
