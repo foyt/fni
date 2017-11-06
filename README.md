@@ -215,7 +215,7 @@ Add add following contents:
     
 Enable http site
 
-    sudo ln -s /etc/nginx/sites-enabled/www.forgeandillusion.net-http.conf /etc/nginx/sites-available/www.forgeandillusion.net-http.conf
+    sudo ln -s /etc/nginx/sites-enabled/fni-http.conf /etc/nginx/sites-available/fni-http.conf
     sudo service nginx restart
     
 #### Configure https
