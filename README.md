@@ -239,7 +239,30 @@ Obtain SSL Certificate
     
 Choose to redirect HTTP traffic to HTTPS when asked.
 
-Remove Let's encrypt generated contents from /etc/nginx/sites-available/fni-http.conf and create https fni -site into /etc/nginx/sites-available (replace jed with your favourite editor)
+Remove Let's encrypt generated contents from /etc/nginx/sites-available/fni-http.conf.
+
+    sudo rm /etc/nginx/sites-available/fni-http.conf
+
+Recreate the file (replace jed with your favourite editor)
+
+    jed /etc/nginx/sites-available/fni-http.conf
+
+Add add following contents:
+
+    server {
+      listen 80;
+      server_name www.forgeandillusion.net;
+      root /usr/share/nginx/html;
+      location ~ /.well-known {
+        allow all;
+      }
+    
+      location / {
+        return 301 https://$server_name$request_uri;
+      }  
+    }
+
+Create https fni -site into /etc/nginx/sites-available (replace jed with your favourite editor)
 
     jed /etc/nginx/sites-available/fni-https.conf
 
