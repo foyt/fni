@@ -226,6 +226,7 @@ Install Let's encrypt
 
     sudo apt install software-properties-common
     sudo add-apt-repository ppa:certbot/certbot
+    sudo apt update
     sudo apt install python-certbot-nginx
     
 Create dhparam cert
