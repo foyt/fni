@@ -247,7 +247,7 @@ Recreate the file (replace jed with your favourite editor)
 
     jed /etc/nginx/sites-available/fni-http.conf
 
-Add add following contents:
+Add add following contents again:
 
     server {
       listen 80;
