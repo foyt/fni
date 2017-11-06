@@ -277,7 +277,7 @@ Add add following contents:
 
 Enable https site
 
-    sudo ln -s /etc/nginx/sites-enabled/www.forgeandillusion.net-https.conf /etc/nginx/sites-available/www.forgeandillusion.net-https.conf
+    sudo ln -s /etc/nginx/sites-enabled/fni-https.conf /etc/nginx/sites-available/fni-https.conf
     sudo service nginx restart
     
 Now you should be able to navigate into the application with your web browser.
