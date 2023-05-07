@@ -80,13 +80,13 @@ Import dump file
 
 ### Install Java
 
-    apt install openjdk-8-jdk
+    apt install temurin-8-jdk
 
 ### Wildfly
 
-Download an extract wildfly 10.1.0.Final (http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.tar.gz) to some folder (e.g. /opt/wildfly).
+Download an extract wildfly 10.1.0.Final (https://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.tar.gz) to some folder (e.g. /opt/wildfly).
 
-    curl -s http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.tar.gz|tar -xvzC /opt/ && ln -s wildfly-10.1.0.Final /opt/wildfly
+    curl -s https://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.tar.gz|tar -xvzC /opt/ && ln -s wildfly-10.1.0.Final /opt/wildfly
     useradd wildfly
     chown wildfly.wildfly -R /opt/wildfly-10.1.0.Final/
     
@@ -116,7 +116,7 @@ System properties define some global options for the application.
     
 #### Database Driver
 
-Download and extract Wildfly MySQL module:
+Download and extract Wildfly MySQL module (link broken!) to /opt/wildfly/modules/system/layers/base/com/mysql:
 
     curl https://dl.dropboxusercontent.com/s/qxahn0zbze2jfco/mysql-module.tar|tar -xvC /opt/wildfly/
     
@@ -178,7 +178,7 @@ Logfile can be tailed by
 
 Download WAR file and deploy it by copying it into Wildfly deployments folder
 
-    wget http://repo1.maven.org/maven2/fi/foyt/fni/webapp/3.3.13/webapp-3.3.13.war -O /opt/wildfly/standalone/deployments/fni.war
+    wget https://repo1.maven.org/maven2/fi/foyt/fni/webapp/3.3.13/webapp-3.3.13.war -O /opt/wildfly/standalone/deployments/fni.war
 
 ### NGINX
 
@@ -309,7 +309,7 @@ Now you should be able to navigate into the application with your web browser.
 
 When your system is up and running, you should reindex Hibernate Search data. You can do this by navigating into following address with web brower:
 
-https://wwww.forgeandillusion.net/admin/reindex-hibernate-search
+https://www.forgeandillusion.net/admin/reindex-hibernate-search
 
 ### Optimization
 
